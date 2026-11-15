@@ -1,0 +1,62 @@
+{
+  "status": "OFFLINE_QUALIFIED_ROOT_REVIEW_PENDING",
+  "test_count": 4,
+  "tests_tool_reference": "012ad9",
+  "test_seconds": 0.038,
+  "syntax_tool_reference": "171652",
+  "test_scope": [
+    "retained predecessor cohort exit identity including separate forced-exit provenance",
+    "Q installed constructor/current upgrade context with binding fixture",
+    "active or changed task refused before start",
+    "reused generation/cycle refused before publishing selection"
+  ],
+  "not_executed": [
+    "services",
+    "provider",
+    "watch",
+    "OS events"
+  ],
+  "plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\lifecycle-plan.json",
+    "sha256": "f93e1fce2d8e7ee335a116eebcb68b9f449d3fcde0ea4320b8e8acae7dad2d6e",
+    "bytes": 13901
+  },
+  "runtime": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\recovery_context.py",
+      "sha256": "22dea5bcfbeacfb5f7e8d954e77690a78beb46ddc112ea979063a6eae8ecd1fa",
+      "bytes": 5318
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\recovery_observation.py",
+      "sha256": "da569ef87112296b845122e99d1f7fe140f89d8e9b9999cd5287ec5dcd50b04c",
+      "bytes": 12903
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\recovery_connector.py",
+      "sha256": "5ba8c95a727b76ee434e07c086da819e582634416cd931e8e15e42cbda8456b4",
+      "bytes": 8653
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\recovery_nexus.py",
+      "sha256": "1789847ddd2e0a37ae9c0586d39c2e2cb964ca349ac862000e3e9e749e0c3d74",
+      "bytes": 9234
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\cohort_lifecycle.py",
+      "sha256": "c3a50cf8a69093a2d1c37d957cf4f019d2668da7a4ce1ea3cebbe83f015dc28a",
+      "bytes": 6460
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\entry.py",
+      "sha256": "b58fee616199b6eaf104a9fcddaa142155f1442e599a6fd637ce6710600809b1",
+      "bytes": 720
+    }
+  ],
+  "test_source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\test_lifecycle.py",
+    "sha256": "a5769146f1c15c66dfad050c082170f73bb970d41e89d514a70c4f1f9070b7d7",
+    "bytes": 3235
+  },
+  "metadata_delta": "Root requested removal of unused old-installation/predecessor references and exact prepared start/watch/normal-stop/cleanup sequence. Runtime bytes unchanged; no test rerun."
+}

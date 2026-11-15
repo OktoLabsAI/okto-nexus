@@ -1,0 +1,30 @@
+{
+  "observed_utc": "2026-11-15T16:25:46.365008+00:00",
+  "operation": {
+    "operation_id": "op_cc3bd233ed5be1b998354ed986d36624",
+    "session_id": "ses_6cc8d4a0113d28342d31cf843de63ac5",
+    "admission_state": "RESOLVED_TERMINAL"
+  },
+  "last_receipt": {
+    "stage": "CANCELLED",
+    "possible_effect": 1,
+    "retry_safe": 0,
+    "received_at": "2026-11-15T15:52:30.389Z"
+  },
+  "native_request": {
+    "canonical_request_id": "r4request_ea17c53377ddfa36a3c991a0fb92a3cea6c8e3b9379f15748bf3de6da0f29ffd",
+    "source_operation_id": "op_cc3bd233ed5be1b998354ed986d36624",
+    "state": "STALE",
+    "received_at": "2026-11-15T15:45:16.383Z",
+    "expires_at": "2026-11-15T15:47:16.383000+00:00"
+  },
+  "approval": {
+    "approval_id": "r4request_ea17c53377ddfa36a3c991a0fb92a3cea6c8e3b9379f15748bf3de6da0f29ffd",
+    "status": "pending",
+    "decision_revision": 0,
+    "decided_at": null
+  },
+  "canonical_decision_count": 0,
+  "database_access": "mode=ro; explicit columns and exact IDs; no auth/vault/payload",
+  "effects": 0
+}

@@ -1,0 +1,45 @@
+{
+  "status": "OFFLINE_TRANSPORT_DELTA_QUALIFIED",
+  "plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor05-transport-280crl3j\\work-plan.json",
+    "sha256": "cac4e15c1f9bd0e6b1aeb49cb5e60dc95dd6c78880faa4c16923540b7bcd7eb7",
+    "bytes": 17418
+  },
+  "changed_runtime": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor05-transport-280crl3j\\grant_preflight.py",
+    "sha256": "024da54a2854b7512179083befd5f99a1fd6e3bf3c4b7e603adfa9dc9bb37505",
+    "bytes": 2052
+  },
+  "tests": {
+    "tool": "a7c140",
+    "passed": 1,
+    "seconds": 0.001,
+    "source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor05-transport-280crl3j\\test_public_grant_transport.py",
+      "sha256": "0bcf239f3209abd1dc339c15b638001d836141f1c45c0d9810e49350bf6d1951",
+      "bytes": 1638
+    },
+    "scope": "Actual frozen CLIFlow class with synthetic raw transport; api POST refuses before transport, call POST uses canonical PREFIX and only review route."
+  },
+  "installed_constructor": {
+    "tool": "df492e",
+    "result": "PASS",
+    "http_calls": 0,
+    "processes": 0,
+    "paid_namespace_created": false
+  },
+  "prior_failure": {
+    "root_tool": "b1adda",
+    "state": "READ_ONLY_API_REQUIRED_BEFORE_RESERVATION_AND_HTTP_POST",
+    "original_plan_preserved": true
+  },
+  "derivation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor05-transport-280crl3j\\derivation.json",
+    "sha256": "c39670b4db587066c8bfca864aa05e6c31e92e76d2557710552edbc3674725bb",
+    "bytes": 1352
+  },
+  "same_request_ids_no_replay": true,
+  "policy_seed_prompt_unchanged": true,
+  "provider_calls": 0,
+  "service_effects": 0
+}

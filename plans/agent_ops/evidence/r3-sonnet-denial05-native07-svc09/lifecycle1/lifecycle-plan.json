@@ -1,0 +1,291 @@
+{
+  "status": "OFFLINE_PREPARED_PENDING_ROOT_REVIEW_NO_EXECUTION",
+  "scope": "OWN_RECOVERY_LIFECYCLE_NO_CREDENTIAL_OR_PROVIDER",
+  "provider_calls": 0,
+  "force_authorized": false,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "namespace": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+  "installation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\installation-view.json",
+    "sha256": "c6b430043afea0402e93d59f639bdec2551acf112ce804a827f9913e11573c72",
+    "bytes": 1480
+  },
+  "paths": {
+    "server_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+    "operator_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home",
+    "connector_state": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "connector_project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project"
+  },
+  "topology": {
+    "origin": "http://127.0.0.1:58631"
+  },
+  "commands": {
+    "tasks": {
+      "nexus": {
+        "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "exists": null,
+        "absence_observed": false,
+        "digest": "b340b00c0def0503a472333948930ace8877e4379bf51946d2f3c96f95a0e235"
+      },
+      "connector": {
+        "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+        "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+        "exists": null,
+        "absence_observed": false,
+        "digest": "c12aae3497ceb76336f29d3e9f2211733fea86d7ffb8da05568df5f175ae8df3"
+      }
+    },
+    "service_selection_args": [
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "58631",
+      "--project-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "--embedding-mode",
+      "off",
+      "--feature-harness-integrations",
+      "true",
+      "--metrics-mode",
+      "disabled",
+      "--harness-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+    ],
+    "required_parent_path": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+      "C:/Windows/System32",
+      "C:/Program Files/Git/cmd"
+    ],
+    "origin": "http://127.0.0.1:58631",
+    "steps": [
+      {
+        "component": "nexus",
+        "action": "start",
+        "task_name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+          "-X",
+          "utf8",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "start",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "58631",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "true",
+          "--metrics-mode",
+          "disabled",
+          "--harness-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+          "--timeout",
+          "45",
+          "--json"
+        ]
+      },
+      {
+        "component": "nexus",
+        "action": "stop",
+        "task_name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+          "-X",
+          "utf8",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "stop",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "58631",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "true",
+          "--metrics-mode",
+          "disabled",
+          "--harness-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+          "--timeout",
+          "45",
+          "--json"
+        ]
+      }
+    ]
+  },
+  "source_contexts": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-context.json",
+      "sha256": "064376195180e4836fbb00c62d128715488b45341cd103bcabcb888a82ab4b34",
+      "bytes": 5273
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\service-context.json",
+      "sha256": "db99d949b48c5afaf9925143a163881b91fdc379634993f3ab2b9dbf8e67749f",
+      "bytes": 1331
+    }
+  },
+  "runtime_pins": {
+    "recovery_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\recovery_context.py",
+      "sha256": "22dea5bcfbeacfb5f7e8d954e77690a78beb46ddc112ea979063a6eae8ecd1fa",
+      "bytes": 5318
+    },
+    "recovery_observation.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\recovery_observation.py",
+      "sha256": "da569ef87112296b845122e99d1f7fe140f89d8e9b9999cd5287ec5dcd50b04c",
+      "bytes": 12903
+    },
+    "recovery_connector.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\recovery_connector.py",
+      "sha256": "5ba8c95a727b76ee434e07c086da819e582634416cd931e8e15e42cbda8456b4",
+      "bytes": 8653
+    },
+    "recovery_nexus.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\recovery_nexus.py",
+      "sha256": "1789847ddd2e0a37ae9c0586d39c2e2cb964ca349ac862000e3e9e749e0c3d74",
+      "bytes": 9234
+    },
+    "cohort_lifecycle.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\cohort_lifecycle.py",
+      "sha256": "c3a50cf8a69093a2d1c37d957cf4f019d2668da7a4ce1ea3cebbe83f015dc28a",
+      "bytes": 6460
+    },
+    "entry.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\entry.py",
+      "sha256": "b58fee616199b6eaf104a9fcddaa142155f1442e599a6fd637ce6710600809b1",
+      "bytes": 720
+    }
+  },
+  "watch_seconds": 3600,
+  "bounds": {
+    "product_start_stop_seconds": 45,
+    "watch_seconds": 3600,
+    "wrapper": "Child retained until its own terminal result; no kill or replay on delay."
+  },
+  "storage_authority": "Lifecycle does not grant fallback consent or read/import/revoke credentials. Separate recovery executor selection is required. Explicit file backend environment is a selector, not consent.",
+  "migration": "Both canonical package/environment upgrades are already applied and pinned under upgrades. This wrapper does not generate or apply upgrades.",
+  "startup_policy": "Start existing enabled user LogonTrigger tasks once through canonical CLI; no install, task replacement or login event is selected.",
+  "closure": "Select canonical normal stop, retain each parent/launcher/runtime handle until physical exit, then require native inactive and canonical absence. Tasks and own data remain. No uninstall or force command is selected; no DRAINED inference from a new owner.",
+  "sequence": [
+    "nexus prepare",
+    "nexus start",
+    "nexus select",
+    "nexus watch (retained root session)",
+    "connector start",
+    "connector select",
+    "connector watch (retained root session)",
+    "connector stop",
+    "wait connector watch exit proof",
+    "connector cleanup",
+    "nexus stop",
+    "wait nexus watch exit proof",
+    "nexus cleanup"
+  ],
+  "installation_source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\installation.json",
+    "sha256": "0055c57c33616c12ddfe78c12d1d940423c62f437a7722959976b7baf601b880",
+    "bytes": 1883
+  },
+  "package_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\qualification.json",
+    "sha256": "e3707ab935681552d8603a83f48d45064914c0d0babd7107854b9fe8a879f7fa",
+    "bytes": 3551
+  },
+  "upgrades": {
+    "nexus": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-canonical-environment-upgrades\\nexus\\apply-result.json",
+      "sha256": "05d553a81138596bf1c264ea0d2e369a8020826855dfe0b2aa409990859540f9",
+      "bytes": 9927
+    },
+    "connector": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-canonical-environment-upgrades\\connector\\apply-result.json",
+      "sha256": "4ecd26a8e9f8cf2ce438031fbd98a3398e8ed6faf4253173068244bcd2d75f3a",
+      "bytes": 2248
+    }
+  },
+  "completed_profile": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\recovery02-profile-completed.json",
+    "sha256": "f9f92a75f2113a994c01c61a6981c7048508439a66cb723d728c4304cadd3402",
+    "bytes": 1603
+  },
+  "binding_ancestry": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\binding02-plan.json",
+    "sha256": "400724cd74381e58f6efa5cd4feb439c2c21d7108eaf2cad178ebc479618e30c",
+    "bytes": 4931
+  },
+  "binding_guard": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_binding.py",
+    "sha256": "4dfe7f41b3f627daa8aaf2f6b27eca03d8af92f6d0512af94e59c0b02b8daea0",
+    "bytes": 13380
+  },
+  "original_binding_lifecycle": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json",
+    "sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+    "bytes": 13280
+  },
+  "old_exits": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\public\\nexus-exit-proof.json",
+      "sha256": "dd987b71c44363cffe53a1f4b17f7054f7f304b757efbc05ab7da2dd4d27c995",
+      "bytes": 1093
+    },
+    "connector": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-sonnet-authorized-current-force-stop\\public\\exit-proof.json",
+      "sha256": "2b6ac25dcff46e0f963b02562b81ac349f6e7246dc1dc4cae618972cf791e79c",
+      "bytes": 1893
+    }
+  },
+  "old_selections": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\public\\nexus-owner-selection.json",
+      "sha256": "56abaa53ff27b26bcc2e1140753bb1fac4a573bd54bde9ae5fdf366658a6e8a3",
+      "bytes": 1047
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\public\\connector-owner-selection.json",
+      "sha256": "c8dacf24bcf71421de1bfffecbbf864053c3c6c4a55e8ead7dbc1b0ff120b308",
+      "bytes": 1054
+    }
+  },
+  "old_force_provenance": "Connector prior exit proof is observation-only; actual authorized force remains separately curated. No force selected in this new lifecycle.",
+  "profile_ancestry": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home\\terminal\\profiles\\m1-sonnet-remote-recovery02.json",
+    "sha256": "c54b5a33a4d64125745b36755230ca5a79583ab099e72d7ad31c82b0b1cd649c",
+    "bytes": 12420
+  },
+  "work_checkpoint_ancestry": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home\\terminal\\work\\m1-sonnet-remote-recovery02.json",
+    "sha256": "afa8292535268a76a610d262985e73ffa1d202dc71233c388016668be59f376a",
+    "bytes": 2384
+  },
+  "previous_session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+  "notes": [
+    "No install/setup/credential rotation/OS event/provider selection. Existing tasks already upgraded to Q.",
+    "Fresh start reservation per host; exact task/context and prior physical exits required. Select publishes only fresh canonical READY cohort.",
+    "Prior Nexus normal and Connector forced exits retain their true provenance; work settlement is not inferred.",
+    "Canonical45s lifecycle timeout. Wrapper retains child until it exits; no timeout kill/retry. New observers own namespace."
+  ],
+  "force_selection_meaning": "force_authorized=false means no force command is selected by this wrapper; it does not revoke standing user authority for separately selected necessary stops."
+}

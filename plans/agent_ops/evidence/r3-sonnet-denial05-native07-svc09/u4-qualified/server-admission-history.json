@@ -1,0 +1,22 @@
+{
+  "server_admissions_consumed": 3,
+  "native_forwarded_or_uncertain": 2,
+  "rows": [
+    {
+      "request_id": "op_b9a7bc74da0788081adbe51fa62c6598",
+      "server_admission_consumed": true,
+      "native_forwarded_or_uncertain": true
+    },
+    {
+      "request_id": "op_423345383752a6d0b8095d73159d1257",
+      "server_admission_consumed": true,
+      "native_forwarded_or_uncertain": true
+    },
+    {
+      "request_id": "m1-sonnet-remote-useful-05",
+      "server_admission_consumed": true,
+      "native_forwarded_or_uncertain": false,
+      "typed_denial_sha256": "5cd0b049cce78814153fa84bea148310111b44ef9d4658f549cddb105f73ae0d"
+    }
+  ]
+}

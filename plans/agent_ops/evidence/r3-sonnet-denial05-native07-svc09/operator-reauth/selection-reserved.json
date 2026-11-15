@@ -1,0 +1,20 @@
+{
+  "state": "SELECTED_CANONICAL_ACCOUNT_RECOVERY_ONCE",
+  "plan_sha256": "8a536671f52a53d937ff1a2c15089bc664bf8fb2043f86819a1e469ed7460ec9",
+  "preflight": {
+    "account_id": 1,
+    "username": "m1-sonnet-human",
+    "active_sessions": 0,
+    "known_tokens": 144004,
+    "charged_requests": 2,
+    "useful05_reserved": false,
+    "useful05_admitted": false,
+    "operator_metadata": {
+      "format": 1,
+      "origin": "http://127.0.0.1:58631",
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "username": "m1-sonnet-human"
+    }
+  },
+  "provider_calls": 0
+}

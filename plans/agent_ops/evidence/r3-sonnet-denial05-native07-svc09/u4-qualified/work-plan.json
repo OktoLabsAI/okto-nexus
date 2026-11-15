@@ -1,0 +1,290 @@
+{
+  "scope": "TWO_REMOTE_SONNET_WORK_CALLS_NO_SETUP_REPLAY",
+  "model": "sonnet",
+  "request_ids": {
+    "useful": "m1-sonnet-remote-useful-07",
+    "continuation": "m1-sonnet-remote-continuation-08"
+  },
+  "budget": {
+    "limit": 500000,
+    "preventive": 480000,
+    "initial_reserve": 50000,
+    "next_input_multiplier": 2,
+    "next_output_margin": 32000
+  },
+  "root_retains_observers": true,
+  "recovery_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after-denial05-lifecycle-bpnawv63\\lifecycle-plan.json",
+    "sha256": "d81b4b20425f30d879925af7522edb37500f329f44f2dc1d56553ae30f2aded9",
+    "bytes": 14486
+  },
+  "binding_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\binding02-plan.json",
+    "sha256": "400724cd74381e58f6efa5cd4feb439c2c21d7108eaf2cad178ebc479618e30c",
+    "bytes": 4931
+  },
+  "work_runtime_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\work-runtime-freeze.json",
+    "sha256": "95ad3d8f5a2613575b09006dee4f9e1d5a30c71715cfb625983f35d8fc5f2ed2",
+    "bytes": 3115
+  },
+  "prerequisites": {
+    "completed_profile": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\recovery02-profile-completed.json",
+      "sha256": "f9f92a75f2113a994c01c61a6981c7048508439a66cb723d728c4304cadd3402",
+      "bytes": 1603
+    },
+    "rotation_result": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\rotation-import-result.json",
+      "sha256": "6c2aac0f5f96837dca5dd8ece02883cba7c6a56a3625f5780f1c648879b264f5",
+      "bytes": 1270
+    },
+    "canonical_review": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\recovery02-review.json",
+      "sha256": "3dc685af12ef88e39f90ef649528861ca11f81546df673a585cdc4ae7afd059b",
+      "bytes": 7516
+    },
+    "nexus_selection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after-denial05-lifecycle-bpnawv63\\public\\nexus-owner-selection.json",
+      "sha256": "3e9cc91b9ac850a861408bae3f6e856648378cf99703e93b7a84a69d24d985b5",
+      "bytes": 941
+    },
+    "nexus_watch_started": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after-denial05-lifecycle-bpnawv63\\public\\nexus-exit-watch-started.json",
+      "sha256": "d8310baf14b76113047f3f55bdb6636a9906ef918a687cfaa2b59f6173aac205",
+      "bytes": 681
+    },
+    "connector_selection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after-denial05-lifecycle-bpnawv63\\public\\connector-owner-selection.json",
+      "sha256": "dde0d4acb3d5c51a0e9336b49c99025d98da7be5c878d0f8a6a636ea08167388",
+      "bytes": 947
+    },
+    "connector_watch_started": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after-denial05-lifecycle-bpnawv63\\public\\connector-exit-watch-started.json",
+      "sha256": "72f1e79a433c66111228ed63cfca43ae75ba35dd9345c90bf555a4fa56e45fdb",
+      "bytes": 681
+    },
+    "rotation_authority": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\rotation-specific-authorization.json",
+      "sha256": "38e25e9df15e121e5b77261ee45011b15d3cf2786a7669d03edcaa22975be31a",
+      "bytes": 744
+    },
+    "original_failed_transfer": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-transfer-result.json",
+      "sha256": "bcfaf683c8e0bc435b9a1b1e3c9ef731dd3f45d5f9d8b469b4a74e6b91468905",
+      "bytes": 383
+    },
+    "canonical_renewal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\canonical-renewal-projection.json",
+      "sha256": "2f2552549aef8f92be460453da5844906a84ca17d4674dbbe6fdabc47dadb8de",
+      "bytes": 1446
+    }
+  },
+  "runtime_pins": {
+    "work_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\work_context.py",
+      "sha256": "4711c759251f56e5801b42d3ebc2b1808c21c8834cdb18514762b70f9abc53ed",
+      "bytes": 35341
+    },
+    "work-entry.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\work-entry.py",
+      "sha256": "1bc82e2fbc7b3be1c14fa87a5cf0294ca110f2a28b2aff204d07968be204cc46",
+      "bytes": 549
+    },
+    "successor_policy.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\successor_policy.py",
+      "sha256": "4bb25455268bce588177147f17ba9b5550de12105c6aab9415bea0ae4ceae668",
+      "bytes": 4110
+    },
+    "denial_reconciliation.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\denial_reconciliation.py",
+      "sha256": "e0ee26182d84d08a5b6419452221de5626a568b329750e0534495c27a3f55ce1",
+      "bytes": 9650
+    },
+    "grant_preflight.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\grant_preflight.py",
+      "sha256": "2f96241f8c69d23ab059a540cfe2648729311f3ed39065b9874839a60950e70c",
+      "bytes": 1953
+    }
+  },
+  "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+  "profile": "m1-sonnet-remote-recovery02",
+  "operator_profile": "m1-sonnet-human",
+  "agent_id": "m1-sonnet-remote",
+  "candidate_ref": "nexus-install-v1:cf87799010465f0cc6012cf0dec649059684bb5d87e716aa18c0326f7e79e2fa",
+  "project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\deliverables\\remote\\report.json",
+  "input_fixture": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project\\numbers.csv",
+    "sha256": "876c1313400238ba1b78cc54fab94411c28b74d2c592c69422eb89800f634d4b",
+    "bytes": 14
+  },
+  "rtk": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe",
+    "sha256": "941654cc74ced3e773fa0cef43b044a4717c6884a429bfb14db50093defa38fb",
+    "bytes": 9638912
+  },
+  "python_executable": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+    "sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+    "bytes": 254832
+  },
+  "console_helper": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc09-console-watch-y0edb3e0\\console_watch.py",
+    "sha256": "7d23cff5ae6ad32a2d0084ae59cdb35ae61a8a9f60ffcedbf1b941369d0a65fd",
+    "bytes": 10383
+  },
+  "prompts": {
+    "useful": "Read only C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/campaign/connector-project/numbers.csv. Calculate its data row count, sum and SHA-256. Write exactly one JSON object with keys row_count, sum and input_sha256 to C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/campaign/deliverables/remote/report.json. The report directory is precreated outside the approved project writable root but inside this disposable campaign root. Do not change permissions, sandbox, writable roots or global policy. If the actual native policy requires permission, request it through the native mechanism and wait for the human decision. Do not read or write other data paths, use the network, install tools, spawn subagents or retry a denied command using another method. Perform the complete task in exactly one PowerShell tool invocation that runs one noninteractive Python process. Read the CSV, compute row_count/sum/SHA-256 using Python standard-library csv/hashlib/json, write the report and print its JSON in that same process. Do not issue a preliminary Read call or a separate inspection command. Do not use PowerShell Get-FileHash, external modules or shell arithmetic for the computation. Launch Python through the approved absolute RTK executable 'C:/Users/jpamb/AppData/Local/Microsoft/WinGet/Packages/rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe/rtk.exe' proxy 'C:/Users/jpamb/AppData/Local/Temp/r3-status-fixed-campaign-package-ddwnb5vx/venv/Scripts/python.exe' -c '<single-line Python code computed by you>'. Use quoting appropriate to the actual native shell, with no nested PowerShell or shell-expanded variables. The two named executables are approved execution dependencies, not extra data inputs. Compute the result from the CSV; no expected values are supplied. In that same Python process print the computed JSON to stdout after writing it. Include that same computed JSON in your final assistant response so it becomes the canonical result.",
+    "continuation": "Using only the existing canonical result in this same session, state the reported sum once. Do not run another command or write another file."
+  },
+  "normal_stop_argv": {
+    "connector": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "-m",
+      "okto_nexus_connector.cli.main",
+      "--json",
+      "--state-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+      "daemon",
+      "stop",
+      "--timeout",
+      "45"
+    ],
+    "nexus": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus.adapters.inbound.cli.main",
+      "service",
+      "stop",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "58631",
+      "--project-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "--embedding-mode",
+      "off",
+      "--feature-harness-integrations",
+      "true",
+      "--metrics-mode",
+      "disabled",
+      "--harness-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+      "--timeout",
+      "45",
+      "--json"
+    ]
+  },
+  "authority": "Technical binding of existing user permission for authenticated Claude Sonnet with separate200k tokens; no new user hash approval. Root reviews this exact finite selection before work.",
+  "accounting": "144004 tokens, 2 historical Native charges, 3 consumed Server admissions. Only exact typed05 is positively pre-Core/zero native.07/08 always consume Native-or-uncertain slots; Native maximum4, Server maximum5. No old reservation refunded.500k/480k and conservative reserve formula unchanged.",
+  "setup_turn": "Not selected: completed canonical onboarding required and no setup:test or exploratory turn in this workflow.",
+  "permission": "Use actual native permission path only. No fabricated question or personal-policy override; absence of pending permission is recorded honestly.",
+  "svc09": "Root selected one conditional console hook at first actual native question after events worker joined. Existing qualified5s watch self-exits; exact bothcohort/sameop observation before/after; no approval while consoleopen. Invisible window alone inconclusive, not DX40failure. Root separately closes own dashboard. Pending launcher/runtime stays retained and never races profileCLI.",
+  "participant_boundary": "Installed real CLI participant refusal fixture proves authorization negative; actual campaign must retain agent-only transfer and human operator decision provenance. No live credential extraction/abuse probe is selected.",
+  "cleanup": "One exact normal stop per component, noforce; six retained query handles and Root external observers. Unknown worker/physical exit produces explicit parent handoff, never settlement claim.",
+  "restart_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after-denial05-lifecycle-bpnawv63\\lifecycle-plan.json",
+    "sha256": "d81b4b20425f30d879925af7522edb37500f329f44f2dc1d56553ae30f2aded9",
+    "bytes": 14486
+  },
+  "restart_context_source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after-denial05-lifecycle-bpnawv63\\recovery_context.py",
+    "sha256": "22dea5bcfbeacfb5f7e8d954e77690a78beb46ddc112ea979063a6eae8ecd1fa",
+    "bytes": 5318
+  },
+  "predecessor_work_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home\\terminal\\work\\m1-sonnet-remote-recovery02.json",
+    "sha256": "40d3de3808dd2dfb3c19fb208b08c908d92108f7920eaa7f0d5a6c4b171b1846",
+    "bytes": 6061
+  },
+  "predecessor_session_id": "ses_421253fe45b0d98592fede20d45c12b6",
+  "predecessor_paid_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\work-plan.json",
+    "sha256": "0f70f46dd7b4a2cefd083ecf6a83dcea896b1c3b612ed5ff99f073c39ef46be3",
+    "bytes": 14927
+  },
+  "budget_seed": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\budget-seed-approved.json",
+    "sha256": "84030f089c46b9132d9f34ca36b2a6d343c7584e9b5f3b1ef7b8e7906e136d00",
+    "bytes": 22623
+  },
+  "successor": {
+    "namespace": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\paid-work",
+    "new_requests": 2,
+    "global_max_requests": 4,
+    "global_max_server_attempts": 5,
+    "historical_observed_tokens": 144004,
+    "historical_charged_requests": 2,
+    "historical_server_admissions": 3,
+    "old_useful05_consumed_no_replay": true,
+    "old_conditional06_ineligible": true,
+    "no_refund": true,
+    "force_selected": false
+  },
+  "original_binding_lifecycle": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json",
+    "sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+    "bytes": 13280
+  },
+  "predecessor_exit_proofs": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\public\\nexus-exit-proof.json",
+      "sha256": "d2b1274568b9d97ac0582505e802b26549a057ebea82c4069ed91486d07901fb",
+      "bytes": 988
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\public\\connector-exit-proof.json",
+      "sha256": "41b247595c78936094c3bdc90ad03e5dd101c77ca566361418dd983702d44fcf",
+      "bytes": 986
+    }
+  },
+  "successor_candidate": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\candidate.json",
+    "sha256": "9902d5e47b6977af671d89f6adc97fb6278c6aff95412c4156fe6cc509bbc835",
+    "bytes": 4569
+  },
+  "budget_authorization": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\authorization-record.json",
+    "sha256": "dbf5ef56ed1b590aad7abdc159758491ffba960ab391f5f48b678578a833501c",
+    "bytes": 708
+  },
+  "predecessor_historical_references": {
+    "budget_policy_change": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\budget-policy-change.json",
+      "sha256": "f017a3a00f1be58cb151caa2deea760882d49ef556b6bfdbab7f58fc7f7e09fb",
+      "bytes": 1338
+    },
+    "reconciliation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\accounting-reconciliation.json",
+      "sha256": "c94704923503f738937952693d610c65ba00bbdd1c712677a8fbb6a1bece6ab7",
+      "bytes": 6099
+    }
+  },
+  "remote_workspace_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project",
+  "counter_selection": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\root-counter-selection.json",
+    "sha256": "ae785a7b114b8b01418ef1e654a0e09505ff19b6f50847ab5b6664ebc4d4c95d",
+    "bytes": 2075
+  },
+  "typed_denial05": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\typed-denial05.json",
+    "sha256": "5cd0b049cce78814153fa84bea148310111b44ef9d4658f549cddb105f73ae0d",
+    "bytes": 731
+  },
+  "server_admission_history": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\server-admission-history.json",
+    "sha256": "711403ec2ae188b6bebe7b37bd2b67a63f2191b72efd9ee2ad7b461e5d826b62",
+    "bytes": 674
+  }
+}

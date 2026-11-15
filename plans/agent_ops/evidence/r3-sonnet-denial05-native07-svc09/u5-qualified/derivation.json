@@ -1,0 +1,39 @@
+{
+  "source_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\work-plan.json",
+    "sha256": "55aa5e92bfe6eab799177154c228a086dad2b8d504ae9f529158bc694628ccbe",
+    "bytes": 16599
+  },
+  "target_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor05-transport-280crl3j\\work-plan.json",
+    "sha256": "cac4e15c1f9bd0e6b1aeb49cb5e60dc95dd6c78880faa4c16923540b7bcd7eb7",
+    "bytes": 17418
+  },
+  "absent_patterns": [
+    "server-attempt-*.json",
+    "*-reserved.json",
+    "*-admission.json"
+  ],
+  "observed_private_names": [
+    "predecessor-work-checkpoint.json",
+    "sonnet-budget.json"
+  ],
+  "source_changes": [
+    {
+      "name": "grant_preflight.py",
+      "old": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\grant_preflight.py",
+        "sha256": "2f96241f8c69d23ab059a540cfe2648729311f3ed39065b9874839a60950e70c",
+        "bytes": 1953
+      },
+      "new": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor05-transport-280crl3j\\grant_preflight.py",
+        "sha256": "024da54a2854b7512179083befd5f99a1fd6e3bf3c4b7e603adfa9dc9bb37505",
+        "bytes": 2052
+      }
+    }
+  ],
+  "policy_seed_prompt_unchanged": true,
+  "provider_calls": 0,
+  "service_effects": 0
+}

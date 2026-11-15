@@ -1,0 +1,139 @@
+{
+  "status": "OFFLINE_QUALIFIED_ROOT_PAID_REVIEW_PENDING",
+  "provider_calls": 0,
+  "service_effects": 0,
+  "plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\work-plan.json",
+    "sha256": "55aa5e92bfe6eab799177154c228a086dad2b8d504ae9f529158bc694628ccbe",
+    "bytes": 16599
+  },
+  "commands": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\commands.json",
+    "sha256": "2d50f847b65defc31f4442c44b120479f1cebe40e323ce6a253b6da3db79063b",
+    "bytes": 1747
+  },
+  "tests": [
+    {
+      "tool": "d48bc8",
+      "count": 8,
+      "result": "PASS",
+      "seconds": 0.46,
+      "script": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\test_denial_reconciliation.py",
+        "sha256": "747f43c79a81a60f7a5a0976461f618781e06719e23d79b3fac5ff7f607e3628",
+        "bytes": 6095
+      }
+    },
+    {
+      "tool": "30ecfa",
+      "count": 2,
+      "result": "PASS",
+      "seconds": 0.079,
+      "script": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\test_installed_project_scope.py",
+        "sha256": "0f717178e7546d511bc965e9d809bcb1deb289c673cf4b948a93d781e1c4e353",
+        "bytes": 1909
+      },
+      "scope": "Actual installed run_work parser and project guard with synthetic target, no HTTP"
+    },
+    {
+      "tool": "105834",
+      "count": 1,
+      "result": "PASS",
+      "seconds": 0.001,
+      "script": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\test_canonical_grant_preflight.py",
+        "sha256": "22ea2f17fb3a2a5d32ee8fb04fd30a17d66e1a99202edaa27dd37cb32741ef8a",
+        "bytes": 1992
+      }
+    }
+  ],
+  "unique_current_tests": 11,
+  "installed_constructor": {
+    "tool": "c09359",
+    "result": "PASS",
+    "http_calls": 0,
+    "processes": 0,
+    "paid_namespace_created": false,
+    "script": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\qualify_composed_context.py",
+      "sha256": "9289149527a9edd1e2e5ccaefe90b289d2629ce629e3b8ce316ff7b2cc68deb3",
+      "bytes": 727
+    }
+  },
+  "superseded_antecedents": [
+    {
+      "tool": "08531a",
+      "count": 6,
+      "result": "PASS",
+      "scope": "Before explicit original-plan/watch anchor; replaced by8final"
+    },
+    {
+      "tool": "90807f",
+      "count": 2,
+      "result": "PASS",
+      "scope": "Unselected SQL grant proposal; Root chose canonical read-only review instead, not final runtime qualification"
+    }
+  ],
+  "semantics": {
+    "server_admissions_preserved": 3,
+    "native_forwarded_or_uncertain_preserved": 2,
+    "tokens_preserved": 144004,
+    "server_maximum": 5,
+    "native_maximum": 4,
+    "new_native_maximum": 2,
+    "preventive": 480000,
+    "user_limit": 500000,
+    "typed_exception_only": "m1-sonnet-remote-useful-05",
+    "new_uncertain_always_charged": true,
+    "old05_not_replayed": true,
+    "grant_preflight": "Canonical read-only POST authorization review before durable reservation; no issue/recover/checkpoint write; actual Server independently enforces each admission.",
+    "server_attempt_counter": "New sidecar consumes upper-bound slot before dispatch. Until admission acknowledgement this is a conservative attempted admission, not proof of an actual Server admission.",
+    "headroom": "244846 conservative reserve; continuation remains conditional on actual useful cost/input and unchanged formula."
+  },
+  "sources": {
+    "denial_reconciliation.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\denial_reconciliation.py",
+      "sha256": "e0ee26182d84d08a5b6419452221de5626a568b329750e0534495c27a3f55ce1",
+      "bytes": 9650
+    },
+    "grant_preflight.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\grant_preflight.py",
+      "sha256": "2f96241f8c69d23ab059a540cfe2648729311f3ed39065b9874839a60950e70c",
+      "bytes": 1953
+    },
+    "successor_policy.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\successor_policy.py",
+      "sha256": "4bb25455268bce588177147f17ba9b5550de12105c6aab9415bea0ae4ceae668",
+      "bytes": 4110
+    },
+    "work_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\work_context.py",
+      "sha256": "4711c759251f56e5801b42d3ebc2b1808c21c8834cdb18514762b70f9abc53ed",
+      "bytes": 35341
+    },
+    "remote_work.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\remote_work.py",
+      "sha256": "6e37370da21c7626e762e8854d96b5aff914c957f1bf556949f313ee3ac5f65e",
+      "bytes": 14491
+    },
+    "compose_current.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\compose_current.py",
+      "sha256": "a163aa61bbe446cc754e066fea84219b7422e79f2aece39d9c49cbc3173aafe2",
+      "bytes": 6078
+    }
+  },
+  "python": "C:/Users/jpamb/AppData/Local/Temp/r3-status-fixed-campaign-package-ddwnb5vx/venv/Scripts/python.exe",
+  "test_argv_template": [
+    "python",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "script"
+  ],
+  "limitations": [
+    "No new provider turn, service action, broad regression suite or paid acceptance claim.",
+    "Earlier SQL test file is retained only as an unselected antecedent; final runner imports canonical grant_preflight."
+  ]
+}

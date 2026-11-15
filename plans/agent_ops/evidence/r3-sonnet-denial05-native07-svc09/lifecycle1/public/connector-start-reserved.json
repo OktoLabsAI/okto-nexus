@@ -1,0 +1,22 @@
+{
+  "status": "RESERVED_BEFORE_DISPATCH",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus_connector.cli.main",
+    "--non-interactive",
+    "--json",
+    "--state-dir",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "daemon",
+    "start",
+    "--timeout",
+    "45"
+  ],
+  "provider_calls": 0,
+  "lifecycle_plan_sha256": "f93e1fce2d8e7ee335a116eebcb68b9f449d3fcde0ea4320b8e8acae7dad2d6e"
+}

@@ -1,0 +1,16 @@
+{
+  "scope": "OFFLINE_EXACT_RUNTIME_REUSE_NEW_NAMESPACE_AND_PREDECESSOR_PROOFS",
+  "runtime_bytes_equal_to_predecessor": true,
+  "predecessor_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\qualification.json",
+    "sha256": "379d3e4b620567c64723ab7f48f296d6adcec0671dd08a4190e7d3e5a93d21a6",
+    "bytes": 2775
+  },
+  "new_checks": [
+    "All six retained predecessor PID/birth exits0 matched selection exactly; normal no-force receipts",
+    "Current context hashes unchanged, same applied Q installation/task digests",
+    "All runtime bytes copied unchanged; only plan paths/predecessor proofs changed"
+  ],
+  "new_test_suite": false,
+  "service_or_provider_calls": 0
+}

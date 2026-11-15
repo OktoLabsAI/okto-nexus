@@ -7030,16 +7030,19 @@
     },
     "SVC-T09": {
       "requirement": "Fechar terminal e dashboard mantém Server/Connector e execução conforme o contrato de ownership.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr01-detached-process.xml",
         "plans/agent_ops/evidence/pr02-connector-user-service.xml",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/review.json"
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/execution07/public/svc09-console-summary.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/execution07/public/dashboard-after-close-independent.json"
       ],
-      "remaining": "Literal terminal/dashboard closure with admitted work and maintained native ownership remains real campaign.",
-      "remaining_kind": "real_terminal_work_campaign",
-      "result": "Parent launcher exit survival proven for both actual detached processes. Scope/remaining: Literal terminal/dashboard closure with admitted work and maintained native ownership remains real campaign. Actual Sonnet attempt ended with observation fault and normal physical exits; late dashboard closure is not evidence of maintained execution during closure. No promotion."
+      "remaining": "",
+      "remaining_kind": null,
+      "result": "Literal terminal/dashboard closure verified during admitted Native07: real visible console normal exit3 was canonical needs_input; exact operation/scope before/after remained SUBMITTED/DISPATCHED with same cohorts. Root closed actual dashboard; independent after-close observation retained same active operation and all six original handles alive. Later native TTL/cancellation, absent useful report and all-six normal exits remain separately retained. Partial svc09_acceptance:false artifacts are not rewritten; composed evidence completes literal ownership criterion only."
     },
     "SVC-T10": {
       "requirement": "Consulta status/logs/doctor em instância parada não a inicia e não executa inferência.",
@@ -14366,6 +14369,32 @@
       "max_cumulative_admissions": 4,
       "provider_calls_added": 0,
       "acceptance_promoted": false
+    },
+    "r3_sonnet_denial05_native07_svc09": {
+      "status": "NATIVE07_INTERRUPTED_USEFUL_FALSE_SVC09_VERIFIED",
+      "summary": "L1 request05 expired-grant dispatch denial before Core/native consumed Server admission only; original attempt preserved. Temporary operator reauthentication and L2 canonical grant renewal separate. Root explicitly selected dual counters, no blanket refund. U4 failed pre-reservation/pre-HTTP; U5 transport delta1fixture qualified. ActualNative07 interrupted after native TTL; originalfault/cursor104 retained, RO110 confirms36422 tokens, cumulative180426,Native3/Server4. No report or eligible08. All six L1 and L2 physical exits0/no force. Actual console/dashboard closure preserved same admitted operation and six live cohort handles, satisfying only SVC-T09.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/execution07/readonly07-usage-diagnosis.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/execution07/public/paid-work-exit-proof.json"
+      ],
+      "token_limit": 500000,
+      "preventive": 480000,
+      "sonnet_observed_tokens": 180426,
+      "native_admissions": 3,
+      "server_admissions": 4,
+      "current_native_max": 4,
+      "current_server_max": 5,
+      "typed05_only_native_exclusion": true,
+      "continuation08_allowed": false,
+      "proposal_P6": "PENDING_USER_NOT_SELECTED",
+      "scenario_promoted": "SVC-T09",
+      "counts": {
+        "VERIFIED": 127,
+        "IN_PROGRESS": 3,
+        "NOT_RUN": 2
+      },
+      "other_scenarios_and_AC_unchanged": true
     }
   },
   "history": [
@@ -16586,6 +16615,34 @@
       "max_cumulative_admissions": 4,
       "provider_calls_added": 0,
       "acceptance_promoted": false
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_denial05_native07_svc09",
+      "status": "NATIVE07_INTERRUPTED_USEFUL_FALSE_SVC09_VERIFIED",
+      "summary": "L1 request05 expired-grant dispatch denial before Core/native consumed Server admission only; original attempt preserved. Temporary operator reauthentication and L2 canonical grant renewal separate. Root explicitly selected dual counters, no blanket refund. U4 failed pre-reservation/pre-HTTP; U5 transport delta1fixture qualified. ActualNative07 interrupted after native TTL; originalfault/cursor104 retained, RO110 confirms36422 tokens, cumulative180426,Native3/Server4. No report or eligible08. All six L1 and L2 physical exits0/no force. Actual console/dashboard closure preserved same admitted operation and six live cohort handles, satisfying only SVC-T09.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/execution07/readonly07-usage-diagnosis.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/execution07/public/paid-work-exit-proof.json"
+      ],
+      "token_limit": 500000,
+      "preventive": 480000,
+      "sonnet_observed_tokens": 180426,
+      "native_admissions": 3,
+      "server_admissions": 4,
+      "current_native_max": 4,
+      "current_server_max": 5,
+      "typed05_only_native_exclusion": true,
+      "continuation08_allowed": false,
+      "proposal_P6": "PENDING_USER_NOT_SELECTED",
+      "scenario_promoted": "SVC-T09",
+      "counts": {
+        "VERIFIED": 127,
+        "IN_PROGRESS": 3,
+        "NOT_RUN": 2
+      },
+      "other_scenarios_and_AC_unchanged": true
     }
   ],
   "r3_native_bounded_supervisor_execution": {

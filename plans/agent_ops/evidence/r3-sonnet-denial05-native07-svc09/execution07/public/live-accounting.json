@@ -1,0 +1,25 @@
+{
+  "plan_sha256": "cac4e15c1f9bd0e6b1aeb49cb5e60dc95dd6c78880faa4c16923540b7bcd7eb7",
+  "request_id": "m1-sonnet-remote-useful-07",
+  "observed_minimum": 36422,
+  "limit": 500000,
+  "preventive": 480000,
+  "reservations": 1,
+  "active": "op_cc3bd233ed5be1b998354ed986d36624",
+  "faults": [
+    "ACTIVE_OBSERVATION_UNKNOWN",
+    "MONITOR_CONTAINMENT"
+  ],
+  "coverage": false,
+  "can_admit": false,
+  "hard_token_cap_guaranteed": false,
+  "campaign_observed_tokens": 180426,
+  "admission_counters": {
+    "server_admissions": 4,
+    "native_forwarded_or_uncertain": 3,
+    "new_attempts": 1,
+    "new_request_ids": [
+      "m1-sonnet-remote-useful-07"
+    ]
+  }
+}

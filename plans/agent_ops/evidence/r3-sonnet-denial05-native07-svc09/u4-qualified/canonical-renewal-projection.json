@@ -1,0 +1,32 @@
+{
+  "status": "CANONICAL_RENEWAL_CONFIRMED",
+  "root_execution_reference": "apply882fe8 exit0 / reviewe5106e",
+  "source": "Existing canonical checkpoint authorization.result, projected without credentials",
+  "checkpoint_pin": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home\\terminal\\work\\m1-sonnet-remote-recovery02.json",
+    "sha256": "40d3de3808dd2dfb3c19fb208b08c908d92108f7920eaa7f0d5a6c4b171b1846",
+    "bytes": 6061
+  },
+  "grant_id": "grant_3fbf5b1b947f46729770b9daf0287eef",
+  "expires_at": "2026-11-15T16:24:41.207084Z",
+  "max_executions": 3,
+  "actions": [
+    "open",
+    "send",
+    "steer",
+    "interrupt",
+    "close"
+  ],
+  "scope": {
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+    "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+    "workspace_binding_id": "wxb_dfbc76c4e4119893d3ed8b95c91b36f4",
+    "agent_id": "m1-sonnet-remote",
+    "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52",
+    "endpoint_id": "ep_52472d49f9e61034838c6447f0ebb155"
+  },
+  "client_request_id": "authorize_795e604486da4ffe9eea9a9c3ef4d5a0",
+  "request_hash": "sha256:5e641c6767f2aa499890e8eebdfc7d20c8b2bf1513cd1b675687e70b5b0acd1a",
+  "runtime_revalidation": "Canonical read-only authorizations:review before each new work reservation; no issuance or checkpoint write."
+}

@@ -1,0 +1,26 @@
+{
+  "request_id": "m1-sonnet-remote-useful-07",
+  "operation_id": "op_cc3bd233ed5be1b998354ed986d36624",
+  "session_id": "ses_6cc8d4a0113d28342d31cf843de63ac5",
+  "terminal_observed": false,
+  "useful_result_confirmed": false,
+  "summary": {
+    "observed_minimum": 36422,
+    "limit": 500000,
+    "preventive": 480000,
+    "reservations": 1,
+    "active": "op_cc3bd233ed5be1b998354ed986d36624",
+    "faults": [
+      "ACTIVE_OBSERVATION_UNKNOWN",
+      "MONITOR_CONTAINMENT"
+    ],
+    "coverage": false,
+    "can_admit": false,
+    "hard_token_cap_guaranteed": false
+  },
+  "campaign_observed_tokens": 180426,
+  "canonical_succeeded": false,
+  "canonical_executor_stage": null,
+  "state": "OBSERVATION_FAULT",
+  "no_atomic_token_cap_claim": true
+}

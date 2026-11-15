@@ -1,0 +1,59 @@
+{
+  "console": {
+    "status": "CONSOLE_CLOSURE_OBSERVED",
+    "launcher_pid": 43108,
+    "launcher_birth": 134392311168059202,
+    "process_exit_confirmed": true,
+    "exit_code": 3,
+    "visible_before": true,
+    "runtime_physical_exit_confirmed": true,
+    "window_absent_after": true,
+    "watch_observed": true,
+    "svc09_acceptance": false,
+    "campaign_cancel_selected": false,
+    "limit": "Requires independent same-active-operation/both-cohort and actual dashboard closure evidence."
+  },
+  "before": {
+    "operation_id": "op_cc3bd233ed5be1b998354ed986d36624",
+    "scope": {
+      "agent_id": "m1-sonnet-remote",
+      "authorization_revision": 2,
+      "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+      "binding_revision": 1,
+      "configuration_revision": 2,
+      "credential_epoch": 2,
+      "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "session_id": "ses_6cc8d4a0113d28342d31cf843de63ac5",
+      "session_owner_generation": 1,
+      "workspace_binding_id": "wxb_dfbc76c4e4119893d3ed8b95c91b36f4",
+      "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+    },
+    "executor_stage": "SUBMITTED",
+    "admission_state": "DISPATCHED"
+  },
+  "after": {
+    "operation_id": "op_cc3bd233ed5be1b998354ed986d36624",
+    "scope": {
+      "agent_id": "m1-sonnet-remote",
+      "authorization_revision": 2,
+      "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+      "binding_revision": 1,
+      "configuration_revision": 2,
+      "credential_epoch": 2,
+      "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "session_id": "ses_6cc8d4a0113d28342d31cf843de63ac5",
+      "session_owner_generation": 1,
+      "workspace_binding_id": "wxb_dfbc76c4e4119893d3ed8b95c91b36f4",
+      "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+    },
+    "executor_stage": "SUBMITTED",
+    "admission_state": "DISPATCHED"
+  },
+  "same_operation_and_cohorts_active": true,
+  "dashboard_closed_not_inferred": true,
+  "elapsed_seconds": 2.391035999986343,
+  "svc09_acceptance": false,
+  "new_model_requests": 0
+}

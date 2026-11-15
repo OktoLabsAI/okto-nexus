@@ -1,0 +1,104 @@
+{
+  "scope": "OWN_CAMPAIGN_OPERATOR_ACCOUNT_RECOVERY_ONLY",
+  "status": "PREPARED_ROOT_REVIEW_NO_EXECUTION",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+  "operator_metadata": {
+    "format": 1,
+    "origin": "http://127.0.0.1:58631",
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "username": "m1-sonnet-human"
+  },
+  "operator_profile_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home\\terminal\\operators\\m1-sonnet-human.json",
+  "auth_db": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\operator-auth.db",
+  "request_id": "m1-sonnet-remote-useful-05",
+  "lifecycle_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\lifecycle-plan.json",
+    "sha256": "f93e1fce2d8e7ee335a116eebcb68b9f449d3fcde0ea4320b8e8acae7dad2d6e"
+  },
+  "pins": {
+    "source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\operator_recovery.py",
+      "sha256": "6faf40796e6674a1ba15fe0c7d3472bfb7fc95d925f52465c57231a80bbe17d1",
+      "bytes": 6634
+    },
+    "paid_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\work-plan.json",
+      "sha256": "0f70f46dd7b4a2cefd083ecf6a83dcea896b1c3b612ed5ff99f073c39ef46be3"
+    },
+    "installation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\installation.json",
+      "sha256": "0055c57c33616c12ddfe78c12d1d940423c62f437a7722959976b7baf601b880",
+      "bytes": 1883
+    },
+    "operator_auth": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\operator_auth.py",
+      "sha256": "2cccffe44ec27baacdc9b277cc808a22d205377c1bddced46dfbaf67d162dfcc"
+    },
+    "operator_client": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\operator_client.py",
+      "sha256": "95fb2eb022a2d6bdf96e434609bec18a751f5d1246d90de041edc07672163b0d"
+    },
+    "operator_cli": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\operator.py",
+      "sha256": "1cceec163a6e541dd92e49d3ef3525f0aefe6c272f03c5ef05ec33a73e08ef7e"
+    }
+  },
+  "login_argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus.adapters.inbound.cli.main",
+    "operator",
+    "login",
+    "--profile",
+    "m1-sonnet-human",
+    "--server",
+    "http://127.0.0.1:58631",
+    "--username",
+    "m1-sonnet-human",
+    "--password-stdin",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home"
+  ],
+  "status_argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus.adapters.inbound.cli.main",
+    "operator",
+    "status",
+    "--profile",
+    "m1-sonnet-human",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home"
+  ],
+  "exact_effects": [
+    "One canonical local POST /api/v1/operator-auth/account replaces password salt/digest for id1 and same username, resets failures/blocked_until by canonical account replacement, deletes expired sessions (active count must be zero), records password_changed audit.",
+    "One canonical operator login via stdin creates a new session (8h product policy), updates login/failure counters and audit, stores only session token in operator OS vault and same nonsecret profile metadata.",
+    "One canonical operator status verifies session, origin/server/profile. No agent keys/bindings/grants/native accounts/work/provider/OS mutation."
+  ],
+  "restrictions": [
+    "Abort on any active session or account/profile/scope change.",
+    "Password generated only during selected execute and never retained in files/argv/env/output.",
+    "No account or login retry after reservation, including response loss.",
+    "Read-only active-session check immediately before account POST is not a transactional CAS with the HTTP write; this dedicated campaign account must not be concurrently logged into by another actor.",
+    "No paid work in this helper; original useful05 is still eligible only while reserved/admission absent and carry144004/2."
+  ],
+  "predecessor": {
+    "bootstrap_source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\operator_bootstrap.py",
+      "sha256": "3ef371a0bbf47814ad7dcf23004f90ee8714502c08015e18a93439bc9f774e4a"
+    },
+    "actual_bootstrap_result": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\operator-bootstrap-result.json",
+      "sha256": "758c92474cc26526b4f1027f3e39178e6d06a912e6ec47616f1c09311e2c585d"
+    },
+    "lost_password_reason": "Generated only in memory; password=None after bootstrap login. No retained password reference."
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "operations": [
+    {
+      "operation_id": "op_1792f89b9a964b184c4a408712467bb9",
+      "session_id": "ses_421253fe45b0d98592fede20d45c12b6",
+      "action": "runtime.open",
+      "admission_state": "RESOLVED_TERMINAL",
+      "created_at": "2026-11-15T15:01:07.517767+00:00"
+    },
+    {
+      "operation_id": "op_fac0defdf8f8b4c1b95bd8c9f73a6076",
+      "session_id": "ses_421253fe45b0d98592fede20d45c12b6",
+      "action": "turn.submit",
+      "admission_state": "RESOLVED_TERMINAL",
+      "created_at": "2026-11-15T15:01:07.545Z"
+    }
+  ],
+  "receipts": [],
+  "session_schema": [
+    "server_id",
+    "executor_id",
+    "session_id",
+    "binding_id",
+    "workspace_id",
+    "workspace_binding_id",
+    "open_operation_id",
+    "core_owner_ref",
+    "owner_generation",
+    "lifecycle_state",
+    "ownership_proof_json",
+    "stream_epoch",
+    "lease_state",
+    "legacy_session_id",
+    "metadata_json",
+    "local_retirement_json",
+    "local_retirement_revision",
+    "local_journal_name",
+    "containment_reason",
+    "contained_at"
+  ],
+  "event_count": 0,
+  "dispatch": [
+    {
+      "operation_id": "op_1792f89b9a964b184c4a408712467bb9",
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "error": {
+        "code": "PERMISSION_DENIED",
+        "stage": "dispatch",
+        "possible_effect": false,
+        "retry_safe": false
+      },
+      "message_source_literal": "Runtime action is not authorized.",
+      "message_source": [
+        "application\\attention_native.py:109",
+        "application\\attention_native.py:70",
+        "application\\attention_native.py:78",
+        "application\\attention_native.py:93",
+        "application\\execution_native_facts.py:38",
+        "application\\one_shot_runtime.py:171",
+        "application\\runtime_access.py:13"
+      ],
+      "error_keys": [
+        "action",
+        "code",
+        "message",
+        "operation_id",
+        "possible_effect",
+        "retry_safe",
+        "stage"
+      ],
+      "details": {}
+    },
+    {
+      "operation_id": "op_fac0defdf8f8b4c1b95bd8c9f73a6076",
+      "dispatch_state": "RESOLVED_TERMINAL",
+      "error": {
+        "code": "INITIAL_OPEN_FAILED",
+        "stage": "dispatch",
+        "possible_effect": false,
+        "retry_safe": false
+      },
+      "message_source_literal": "The opening failed before its initial message was dispatched.",
+      "message_source": [
+        "application\\execution_initial_turns.py:97"
+      ],
+      "error_keys": [
+        "code",
+        "message",
+        "operation_id",
+        "possible_effect",
+        "retry_safe",
+        "stage"
+      ],
+      "details": {}
+    }
+  ],
+  "session": [
+    {
+      "session_id": "ses_421253fe45b0d98592fede20d45c12b6",
+      "lifecycle_state": "FAILED",
+      "lease_state": "NONE",
+      "stream_epoch": null,
+      "containment_reason": null
+    }
+  ],
+  "agent_metadata": [
+    {
+      "agent_id": "m1-sonnet-remote",
+      "is_active": 1,
+      "api_key_binding_present": 1
+    },
+    {
+      "agent_id": "operator",
+      "is_active": 1,
+      "api_key_binding_present": 0
+    }
+  ],
+  "actor_provenance": [
+    {
+      "operation_id": "op_1792f89b9a964b184c4a408712467bb9",
+      "actor_agent_id": "operator",
+      "subject_agent_id": "m1-sonnet-remote",
+      "recorded_guard_kind": "local-operator"
+    },
+    {
+      "operation_id": "op_fac0defdf8f8b4c1b95bd8c9f73a6076",
+      "actor_agent_id": "operator",
+      "subject_agent_id": "m1-sonnet-remote",
+      "recorded_guard_kind": "local-operator"
+    }
+  ],
+  "grant_schema": [
+    "grant_id",
+    "issuer_agent_id",
+    "actor_agent_id",
+    "credential_binding",
+    "represented_agent_id",
+    "workspace_id",
+    "endpoint_id",
+    "profile_revision",
+    "actions",
+    "expires_at",
+    "revoked_at",
+    "revision",
+    "max_executions",
+    "used_executions",
+    "created_at",
+    "no_expiry",
+    "unlimited_actions"
+  ],
+  "grant_metadata": [
+    {
+      "grant_id": "grant_65493a4efdac48688e2d00be6fd0edb3",
+      "actor_agent_id": "m1-sonnet-remote",
+      "endpoint_id": "ep_52472d49f9e61034838c6447f0ebb155",
+      "actions": "[\"close\", \"interrupt\", \"open\", \"send\", \"steer\"]",
+      "expires_at": "2026-11-15T06:08:51.488158Z",
+      "revoked_at": null,
+      "revision": 1,
+      "max_executions": 3,
+      "used_executions": 2,
+      "no_expiry": 0,
+      "unlimited_actions": 0
+    }
+  ],
+  "core_schema": {
+    "operations": [],
+    "receipts": [],
+    "process_launches": [
+      "server_id",
+      "executor_id",
+      "session_id",
+      "opening_operation_id",
+      "connection_generation",
+      "owner_generation",
+      "platform",
+      "containment",
+      "container_id",
+      "producer_id",
+      "schema_version",
+      "revision",
+      "spawn_claimed",
+      "producer_fenced",
+      "stop_proof"
+    ],
+    "sessions": [],
+    "events": [
+      "server_id",
+      "executor_id",
+      "session_id",
+      "stream_epoch",
+      "sequence",
+      "body"
+    ]
+  },
+  "core_operations": [],
+  "core_launches": [],
+  "core_events": 0,
+  "interpretation": {
+    "primary_dispatch_code": "PERMISSION_DENIED",
+    "follow_up_code": "INITIAL_OPEN_FAILED",
+    "grant_expired_before_admission": true,
+    "no_core_operation_or_process_launch_or_usage_events_observed": true,
+    "new_tokens_observed": 0,
+    "request05_charge_preserved": true,
+    "ledger_known144004_charges2_requires_separate_reserved05_accounting": true,
+    "no_retry_selected": true,
+    "worker_wrapper_terminal": "Root-reported89e9c5 exit1; no claim about service physical exit from this database projection."
+  }
+}

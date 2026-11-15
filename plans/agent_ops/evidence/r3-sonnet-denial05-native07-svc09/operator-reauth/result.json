@@ -1,0 +1,15 @@
+{
+  "status": "CANONICAL_DEDICATED_OPERATOR_REAUTHENTICATED",
+  "account_post_count": 1,
+  "login_cli_count": 1,
+  "operator": {
+    "state": "authenticated",
+    "profile": "m1-sonnet-human",
+    "origin": "http://127.0.0.1:58631",
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9"
+  },
+  "provider_calls": 0,
+  "password_retained": false,
+  "auth_database_raw_or_hash_published": false,
+  "paid_retry_executed": false
+}

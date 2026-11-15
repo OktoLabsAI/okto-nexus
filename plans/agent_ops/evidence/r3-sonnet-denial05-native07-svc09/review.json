@@ -1,0 +1,111 @@
+{
+  "status": "NATIVE07_INTERRUPTED_NO_USEFUL_RESULT_SVC09_OWNERSHIP_VERIFIED",
+  "fixed_plan": {
+    "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+    "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "svc09_literal": "Fechar terminal e dashboard mantém Server/Connector e execução conforme o contrato de ownership.",
+    "line": 835
+  },
+  "chronology": [
+    {
+      "stage": "dedicated_operator_reauthentication_before05",
+      "source": "operator-reauth/result.json",
+      "account_posts": 1,
+      "cli_logins": 1,
+      "scope": "Same own temporary m1-sonnet-human identity; zero active sessions before; ephemeral password not retained; no personal account reset or provider."
+    },
+    {
+      "stage": "L1_request05",
+      "source": "predecessor05/useful05-diagnosis.json",
+      "result": "PERMISSION_DENIED at dispatch from expired grant; INITIAL_OPEN_FAILED follow-up; positive possible_effect:false; zero Core operations/launches/events/stream. One Server admission remains charged; no Native admission or token refund fabricated.",
+      "normal_cleanup": "denial05-cleanup/paid-work-exit-proof.json confirms six physical exits0/no force."
+    },
+    {
+      "stage": "L2_grant_renewal",
+      "source": "u4-qualified/canonical-renewal-projection.json",
+      "result": "Canonical reviewe5106e/apply882fe8; grant3fbf expiry16:24:41/max3/same5actions; original grant preserved.",
+      "antecedent": "Root reports d26147 PROFILE_CONFLICT from wrong project argument before handler; corrected project BROOT then reviewed. Distinct from real05 dispatch denial."
+    },
+    {
+      "stage": "explicit_dual_counters",
+      "source": "u4-qualified/root-counter-selection.json",
+      "result": "Root technical reallocation distinguishes Server3/Native2 carry; only exact positively proved no-effect05 excluded from Native counter. Native max4/Server max5, same500k/pre480k. Not an unchanged interpretation of prior single counter; no old attempt erased or replayed."
+    },
+    {
+      "stage": "U4_preflight",
+      "source": "u5-qualified/qualification.json",
+      "result": "b1adda READ_ONLY_API_REQUIRED_BEFORE_RESERVATION_AND_HTTP_POST; no effect. U5 narrow public-transport delta qualified1fixture a7c140 plus installed constructor no HTTP/process."
+    },
+    {
+      "stage": "Native07",
+      "source": "execution07/public/m1-sonnet-remote-useful-07-result.json",
+      "result": "Original OBSERVATION_FAULT/terminal_observed:false/coverage:false/cursor104 retained. Report absent; useful false;08 ineligible.",
+      "postexit": "execution07/readonly07-usage-diagnosis.json independently replays metadata through110, terminal interrupted at109,36422 tokens including35103 input, coverage true, no mutation of original checkpoint.",
+      "root_observation": "Root reports canonical CANCELLED and approval attempted after120s native TTL. This narrative is separate from the retained original runner result.",
+      "normal_cleanup": "execution07/public/paid-work-exit-proof.json confirms all six L2 physical exits0, no force and no work-settlement claim.",
+      "canonical_final": "Root read-only exact-ID projection5cc787: RESOLVED_TERMINAL/CANCELLED, possible_effect1/retry_safe0; nativeSTALE with120s TTL; approval pending/revision0/no decided_at, canonical_decisions0. Late root selection9000e8 is not an accepted decision.",
+      "canonical_final_source": "execution07/public/root-native07-final-facts.json"
+    }
+  ],
+  "svc09": {
+    "assessment": "VERIFIED",
+    "evidence": [
+      "execution07/public/svc09-console-summary.json",
+      "execution07/public/svc09-console/watch-observation.json",
+      "execution07/public/dashboard-after-close-independent.json",
+      "browser-evidence/dashboard-open-snapshot.yml"
+    ],
+    "facts": "Real dedicated visible console closed by normal process exit; exit3 was canonical needs_input. Before/after preserve exact admitted op/scope in SUBMITTED/DISPATCHED; no cancel selected. Root closed actual own dashboard tab via Playwright; independent subsequent observation preserves same active op and all six original cohort handles alive.",
+    "root_evidence": [
+      "910fa0",
+      "edf69a"
+    ],
+    "ui_provenance": "Browser snapshot proves actual own dashboard opened. Actual close is root tool observation and dashboard_closed_tool field, not inferred from snapshot alone.",
+    "partial_results_preserved": "Original svc09_acceptance:false partial artifacts are immutable; this review combines terminal proof with later independent dashboard proof.",
+    "limits": "Proves ownership across terminal/dashboard closure, not useful output, successful native permission, all future shutdowns or global M1. Later TTL/cancellation and six normal exits remain preserved."
+  },
+  "accounting": {
+    "prior_tokens": 144004,
+    "native07_tokens": 36422,
+    "current_total": 180426,
+    "native_admissions": 3,
+    "server_admissions": 4,
+    "current_native_max": 4,
+    "current_server_max": 5,
+    "token_limit": 500000,
+    "preventive": 480000,
+    "no_reset_or_refund": true,
+    "original_cursor": 104,
+    "postexit_cursor": 110,
+    "continuation08_allowed": false,
+    "atomic_cap_claimed": false
+  },
+  "proposal_after07": {
+    "namespace": "sonnet-after07-proposal-0ls1sihr",
+    "state": "PENDING_USER_NOT_SELECTED",
+    "proposed_native_max": 5,
+    "proposed_server_max": 6,
+    "token_limit_unchanged": 500000,
+    "note": "One extra Native useful request and one conditional continuation reservation; not current authorization or live execution."
+  },
+  "acceptance": {
+    "only_promoted": "SVC-T09",
+    "counts": {
+      "VERIFIED": 127,
+      "IN_PROGRESS": 3,
+      "NOT_RUN": 2
+    },
+    "DX-T40": "unchanged",
+    "DX-T43": "unchanged",
+    "AC-11": "unchanged",
+    "other_AC": "unchanged"
+  },
+  "os_events_executed": false,
+  "root_final_review_pending": false,
+  "root_final_reviews": [
+    "edf69a",
+    "5cc787",
+    "d0255e"
+  ],
+  "publication_authorized": true
+}

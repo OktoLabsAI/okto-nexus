@@ -1,0 +1,59 @@
+{
+  "scope": {
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+    "session_id": "ses_6cc8d4a0113d28342d31cf843de63ac5",
+    "stream_epoch": "stream_c7975de80e537229658098e300a0c840"
+  },
+  "operation_id": "op_cc3bd233ed5be1b998354ed986d36624",
+  "replayed_cursor": 110,
+  "event_types": {
+    "core/harness_configuration": 1,
+    "system:init": 1,
+    "system:status": 1,
+    "stream_event:message_start": 1,
+    "stream_event:content_block_start": 2,
+    "system:thinking_tokens": 6,
+    "stream_event:content_block_delta": 77,
+    "assistant": 2,
+    "stream_event:content_block_stop": 2,
+    "stream_event:message_delta": 1,
+    "stream_event:message_stop": 1,
+    "rate_limit_event": 1,
+    "control_request:can_use_tool": 1,
+    "core.lease_renewed": 7,
+    "control_cancel_request": 1,
+    "control_response:success": 1,
+    "user_echo": 2,
+    "result:error_during_execution": 1,
+    "process_exit": 1
+  },
+  "collector_error": null,
+  "observed_minimum": 36422,
+  "finished": [
+    {
+      "operation_id": "op_cc3bd233ed5be1b998354ed986d36624",
+      "outcome": "interrupted",
+      "tokens": 36422,
+      "input_tokens_including_cache": 35103
+    }
+  ],
+  "terminal_coverage": true,
+  "faults": [],
+  "terminal_events": [
+    {
+      "sequence": 109,
+      "native_type": "result:error_during_execution",
+      "delivery_outcome": "interrupted"
+    }
+  ],
+  "active": null,
+  "old_faults_preserved": [
+    "ACTIVE_OBSERVATION_UNKNOWN",
+    "MONITOR_CONTAINMENT"
+  ],
+  "old_cursor": 104,
+  "old_minimum": 36422,
+  "candidate_campaign_total": 180426,
+  "existing_checkpoint_mutated": false
+}

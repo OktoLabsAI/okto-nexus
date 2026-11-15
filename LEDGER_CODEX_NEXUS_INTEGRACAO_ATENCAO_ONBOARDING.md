@@ -2407,3 +2407,13 @@ No corte histórico destes upgrades sem provedor: **126/4/2**, plano/AC inaltera
 Usuário selecionou **“Autorizar teto total de 500 mil tokens”**, referência call_4b39bde0e4fa44eda87df45f793fd638/question0. Teto atual500.000/preventiva480.000; carry144.004 e2admissões preservados, no máximo2novas (useful05 e continuação06 condicional na mesma sessão),4cumulativas. Sem reset/refund; registros200k anteriores representam seus cortes históricos.
 
 Recibo de autorização não afirma composição sucessora qualificada nem nova execução paga, serviço ou eventoSO.126/4/2 e AC/plano fixo permanecem. [Autorização real e escopo](plans/agent_ops/evidence/r3-canonical-environment-upgrades/subsequent-sonnet-authorization/authorization-projection.json).
+
+## 2026-11-15 — Sonnet05 recusado antes do Native;07 interrompido; ownership SVC-T09 verificado
+
+L1:05 consumiu admissão Server, mas grant expirado recusou dispatch antes de Core/launch/stream/eventos, possible_effect=false. Reautenticação do operador temporário anterior (1POST/1login, senha não retida) e renovação canônica posterior do grant em L2 são eventos distintos. Root selecionou **contadores separados**, preservando Server3/Native2: exceção tipada exclusiva05, sem apagar tentativa, replay ou refund geral. U4 falhou antes de reserva/HTTP; delta de transporte U5 qualificado sem novo efeito.
+
+Native07 chegou a36.422tokens, total **180.426 /500.000**, Native3/Server4; máxima vigente Native4/Server5, preventiva480.000. Original fault/cursor104 intacto; reconciliação RO110 confirma terminal interrupted separadamente. Root relata aprovação após TTL120s e CANCELLED; report ausente/usefulfalse,08 inelegível. L1 e L2 encerraram normalmente com seis saídas físicas0 em cada corte, sem força.
+
+**SVC-T09 VERIFIED**, literal plano835: console real visível encerrou normalmente exit3/needs_input; mesmaop/escopo antes/depois e, após fechamento real do dashboard, observação independente confirmou operação aindaSUBMITTED/DISPATCHED e seis handles das mesmas coortes vivos. Recibos parciais svc09_acceptance=false preservados; a avaliação composta acrescenta a prova posterior do dashboard. CancelamentoTTL posterior permanece falha útil, sem contradizer ownership observado. **127VERIFIED/3IN_PROGRESS/2NOT_RUN**; DX40/DX43/AC11 e demaisAC inalterados.
+
+P6(+1máximoNative e reserva de continuação) permanece **PENDING_USER**, não selecionado, neste corte; nenhum novo efeito/OS. [Evidências, contadores e limites](plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json).

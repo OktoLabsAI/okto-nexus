@@ -1,0 +1,45 @@
+{
+  "kind": "ROOT_TECHNICAL_SELECTION_NOT_NEW_USER_RESPONSE",
+  "user_authorization": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\authorization-record.json",
+    "sha256": "dbf5ef56ed1b590aad7abdc159758491ffba960ab391f5f48b678578a833501c"
+  },
+  "selected_proposal": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\zero-effect-denial05-proposal.json",
+    "sha256": "f27f7e2d57f5e8f702fbe83f6ceeb8d2cb75529fe740d1f97e901ca70e36f27c"
+  },
+  "root_instruction": "Explicit Root selection: preserve three Server admissions including05, Native forwarded-or-uncertain max4 (two historical plus at most07/08); only positive typed05 denial exempt from Native count. Server maximum5. No token refund or original history mutation.",
+  "policy": {
+    "limit": 500000,
+    "preventive": 480000,
+    "native_max": 4,
+    "server_max": 5,
+    "new_native_max": 2
+  },
+  "carry": {
+    "tokens": 144004,
+    "native_historical": 2,
+    "server_historical": 3
+  },
+  "request_ids": {
+    "useful": "m1-sonnet-remote-useful-07",
+    "continuation": "m1-sonnet-remote-continuation-08"
+  },
+  "old_useful05_not_replayable": true,
+  "old_conditional06_ineligible": true,
+  "paid_execution_selected": false,
+  "predecessor_selections": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\public\\nexus-owner-selection.json",
+      "sha256": "ab16b7a0256e8097aeb8b8e19876cb4b94bc3fc51ace118da8d99099fe79bb95"
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\lifecycle\\public\\connector-owner-selection.json",
+      "sha256": "49ccc43370f74c74fa4af5217af81e949ea343251441c696acade84ef1c80fb3"
+    }
+  },
+  "denied_paid_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\work-plan.json",
+    "sha256": "0f70f46dd7b4a2cefd083ecf6a83dcea896b1c3b612ed5ff99f073c39ef46be3"
+  }
+}

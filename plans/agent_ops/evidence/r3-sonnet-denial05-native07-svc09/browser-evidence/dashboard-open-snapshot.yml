@@ -1,0 +1,107 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse navigation" [expanded] [ref=e5] [cursor=pointer]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Home
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces" [selected]
+      - generic [ref=e13]: ● Off
+      - button "Refresh Home" [ref=e14] [cursor=pointer]
+      - button [ref=e19] [cursor=pointer]
+  - generic [ref=e23]:
+    - complementary [ref=e24]:
+      - navigation [ref=e26]:
+        - heading "Observability" [level=3] [ref=e27]
+        - list [ref=e28]:
+          - listitem [ref=e29]:
+            - button "Home" [ref=e30] [cursor=pointer]
+          - listitem [ref=e35]:
+            - button "Attention" [ref=e36] [cursor=pointer]
+          - listitem [ref=e41]:
+            - button "Graph" [ref=e42] [cursor=pointer]
+          - listitem [ref=e51]:
+            - button "Messages" [ref=e52] [cursor=pointer]
+          - listitem [ref=e57]:
+            - button "Handoffs" [ref=e58] [cursor=pointer]
+          - listitem [ref=e62]:
+            - button "Meta-harness" [ref=e63] [cursor=pointer]
+          - listitem [ref=e68]:
+            - button "Events" [ref=e69] [cursor=pointer]
+          - listitem [ref=e73]:
+            - button "Artifacts" [ref=e74] [cursor=pointer]
+          - listitem [ref=e80]:
+            - button "Workspaces" [ref=e81] [cursor=pointer]
+          - listitem [ref=e85]:
+            - button "Agents" [ref=e86] [cursor=pointer]
+          - listitem [ref=e93]:
+            - button "Registry" [ref=e94] [cursor=pointer]
+          - listitem [ref=e100]:
+            - button "Policies" [ref=e101] [cursor=pointer]
+          - listitem [ref=e105]:
+            - button "Guardrails" [ref=e106] [cursor=pointer]
+          - listitem [ref=e110]:
+            - button "Communication" [ref=e111] [cursor=pointer]
+          - listitem [ref=e115]:
+            - button "Approvals" [ref=e116] [cursor=pointer]
+          - listitem [ref=e121]:
+            - button "Runtimes" [ref=e122] [cursor=pointer]
+          - listitem [ref=e127]:
+            - button "Execution log" [ref=e128] [cursor=pointer]
+    - main [ref=e132]:
+      - generic [ref=e134]:
+        - generic [ref=e135]:
+          - generic [ref=e136]:
+            - paragraph [ref=e137]: Workspace overview
+            - heading "Home" [level=1] [ref=e138]
+            - paragraph [ref=e139]: Your agents, harnesses and conversations in one place.
+            - paragraph [ref=e140]: All workspaces · Updates every 15 seconds
+          - button "Refresh overview" [ref=e141] [cursor=pointer]
+        - navigation "Overview shortcuts" [ref=e147]:
+          - button "Graph Connections and handoffs" [ref=e148] [cursor=pointer]:
+            - generic [ref=e156]: Graph
+            - generic [ref=e157]: Connections and handoffs
+          - button "Meta-harness Conversations and sessions" [ref=e158] [cursor=pointer]:
+            - generic [ref=e162]: Meta-harness
+            - generic [ref=e163]: Conversations and sessions
+          - button "Messages Communication history" [ref=e164] [cursor=pointer]:
+            - generic [ref=e168]: Messages
+            - generic [ref=e169]: Communication history
+          - button "Attention Review pending items" [ref=e170] [cursor=pointer]:
+            - generic [ref=e174]: Attention
+            - generic [ref=e175]: Review pending items
+        - generic [ref=e176]:
+          - generic [ref=e177]:
+            - generic [ref=e178]:
+              - generic [ref=e179]:
+                - heading "Agents & activity" [level=2] [ref=e180]
+                - paragraph [ref=e181]: Connected agents and recent activity
+              - button "Open Agents" [ref=e182] [cursor=pointer]
+            - status [ref=e186]: Loading…
+          - generic [ref=e187]:
+            - generic [ref=e188]:
+              - generic [ref=e189]:
+                - heading "Harness sessions" [level=2] [ref=e190]
+                - paragraph [ref=e191]: Your managed conversations
+              - button "Open Meta-harness" [ref=e192] [cursor=pointer]
+            - status [ref=e196]: Loading…
+          - generic [ref=e197]:
+            - generic [ref=e198]:
+              - generic [ref=e199]:
+                - heading "Recent communications" [level=2] [ref=e200]
+                - paragraph [ref=e201]: Latest messages between agents and people
+              - button "Open Messages" [ref=e202] [cursor=pointer]
+            - status [ref=e206]: Loading…
+            - list
+          - generic [ref=e207]:
+            - generic [ref=e208]:
+              - generic [ref=e209]:
+                - heading "Needs attention" [level=2] [ref=e210]
+                - paragraph [ref=e211]: Decisions, questions and results to review
+              - button "Open Attention" [ref=e212] [cursor=pointer]
+            - status [ref=e216]: Loading attention summary…
+            - generic [ref=e217]:
+              - heading "External activity reports" [level=3] [ref=e218]
+              - status [ref=e219]: Loading…
+              - paragraph [ref=e220]: Reported by Herdr or other integrations; separate from managed sessions.
+              - button "Inspect external activity" [ref=e221] [cursor=pointer]

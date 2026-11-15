@@ -1,0 +1,45 @@
+{
+  "commands": {
+    "prepare": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\work-entry.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\work-plan.json",
+      "--expected-plan-sha256",
+      "55aa5e92bfe6eab799177154c228a086dad2b8d504ae9f529158bc694628ccbe",
+      "prepare"
+    ],
+    "useful": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\work-entry.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\work-plan.json",
+      "--expected-plan-sha256",
+      "55aa5e92bfe6eab799177154c228a086dad2b8d504ae9f529158bc694628ccbe",
+      "useful"
+    ],
+    "continuation": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\work-entry.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor04-ygpuek9u\\work-plan.json",
+      "--expected-plan-sha256",
+      "55aa5e92bfe6eab799177154c228a086dad2b8d504ae9f529158bc694628ccbe",
+      "continuation"
+    ]
+  },
+  "paid_execution_selected_by_this_script": false,
+  "continuation_conditional_on_useful_success_and_rechecked_budget": true
+}

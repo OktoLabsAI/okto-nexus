@@ -1,0 +1,88 @@
+{
+  "observed_at": 1794757921.0305092,
+  "operation": {
+    "operation_id": "op_cc3bd233ed5be1b998354ed986d36624",
+    "scope": {
+      "agent_id": "m1-sonnet-remote",
+      "authorization_revision": 2,
+      "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+      "binding_revision": 1,
+      "configuration_revision": 2,
+      "credential_epoch": 2,
+      "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "session_id": "ses_6cc8d4a0113d28342d31cf843de63ac5",
+      "session_owner_generation": 1,
+      "workspace_binding_id": "wxb_dfbc76c4e4119893d3ed8b95c91b36f4",
+      "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+    },
+    "executor_stage": "SUBMITTED",
+    "admission_state": "DISPATCHED"
+  },
+  "cohorts": {
+    "nexus": {
+      "pid": 18908,
+      "generation": "b20494f572b5601e980c21cfcecdcfc3",
+      "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+      "task": {
+        "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "state": 4,
+        "digest": "b340b00c0def0503a472333948930ace8877e4379bf51946d2f3c96f95a0e235"
+      },
+      "component": "nexus",
+      "cohort": {
+        "cycle_id": "b53acebf374f09fcb87a82e9e4a04e70",
+        "phase": "running",
+        "attempts_started": 1,
+        "child_acknowledged": true,
+        "parent": {
+          "pid": 5504,
+          "birth": 134392294987538531
+        },
+        "launcher": {
+          "pid": 46588,
+          "birth": 134392295006784551
+        },
+        "child": {
+          "pid": 18908,
+          "birth": 134392295007311231
+        }
+      },
+      "selected_at": 1794757920.1525743
+    },
+    "connector": {
+      "pid": 7768,
+      "generation": "efb2725714442855c6aa25630b1bf70b",
+      "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+      "task": {
+        "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+        "state": 4,
+        "digest": "c12aae3497ceb76336f29d3e9f2211733fea86d7ffb8da05568df5f175ae8df3"
+      },
+      "component": "connector",
+      "cohort": {
+        "cycle_id": "68d0961787502ee56c76c6d6ac595f87",
+        "phase": "running",
+        "attempts_started": 1,
+        "child_acknowledged": true,
+        "parent": {
+          "pid": 41016,
+          "birth": 134392296114012545
+        },
+        "launcher": {
+          "pid": 54632,
+          "birth": 134392296125514583
+        },
+        "child": {
+          "pid": 7768,
+          "birth": 134392296125732929
+        }
+      },
+      "selected_at": 1794757920.3198206
+    }
+  },
+  "all_six_retained_handles_alive": true,
+  "dashboard_closed_tool": "Playwright browser_tabs.close index1",
+  "no_work_or_decision_selected": true,
+  "prior_observer_failure": "workflow reentry correctly refused predecessor checkpoint change; independent read does not modify it"
+}

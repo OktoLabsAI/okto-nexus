@@ -1,0 +1,72 @@
+{
+  "status": "OFFLINE_COMPOSITION_QUALIFIED_NO_PAID_EXECUTION",
+  "plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\work-plan.json",
+    "sha256": "0f70f46dd7b4a2cefd083ecf6a83dcea896b1c3b612ed5ff99f073c39ef46be3",
+    "bytes": 14927
+  },
+  "budget": {
+    "actual_user_response": "Autorizar teto total de 500 mil tokens",
+    "carry_tokens": 144004,
+    "carry_charges": 2,
+    "limit": 500000,
+    "preventive": 480000,
+    "new_max": 2,
+    "global_max": 4
+  },
+  "qualifications": [
+    {
+      "scope": "initial policy/carry/seal/replay/current200k refusal/500k only authorized",
+      "cases": 6,
+      "tool_reference": "6c5657",
+      "seconds": 0.044,
+      "runtime_unchanged": [
+        "successor_policy.py",
+        "sonnet_usage.py",
+        "remote_work.py"
+      ]
+    },
+    {
+      "scope": "original DONE ancestry/fresh lifecycle imports/exact existing approved seed/remote CONTROL_READY gate",
+      "cases": 4,
+      "tool_reference": "ae8b95",
+      "seconds": 0.051,
+      "prior_overlapping_3_cases_reference": "d8bd1e"
+    },
+    {
+      "scope": "actual composed Q installed Context constructor, subprocess forbidden, no live methods",
+      "tool_reference": "9961e2",
+      "result": "PASS"
+    }
+  ],
+  "headroom": {
+    "original_reserve_formula_unchanged": true,
+    "next_reserve": 244846,
+    "known_plus_reserve": 388850,
+    "continuation_max_new_cost_if_finished_input_max_unchanged": 91150,
+    "last_request_cost": 107698,
+    "two_calls_not_guaranteed": true,
+    "observed_tools_in_prior_3_messages": [
+      "Read",
+      "PowerShell",
+      null
+    ],
+    "tool_metadata_read_reference": "ff934b"
+  },
+  "not_executed": [
+    "paid prepare",
+    "provider",
+    "service lifecycle",
+    "OS events"
+  ],
+  "test_source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\test_current_composition.py",
+    "sha256": "e2fd2f02e12f758442c8b5dcad61a1db5a4a91a634e38e1f5c8914bca5f97615",
+    "bytes": 3768
+  },
+  "constructor_check": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\qualify_composed_context.py",
+    "sha256": "a831ef045039b9b9bfc5da080e959c116e71bfef23a6525f05bf5bc885051735",
+    "bytes": 873
+  }
+}

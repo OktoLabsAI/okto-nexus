@@ -1,0 +1,40 @@
+{
+  "status": "PREPARED_QUALIFIED_ROOT_REVIEW_NO_EFFECT",
+  "plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\operator-recovery-plan.json",
+    "sha256": "8a536671f52a53d937ff1a2c15089bc664bf8fb2043f86819a1e469ed7460ec9",
+    "bytes": 5507
+  },
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\operator_recovery.py",
+    "sha256": "6faf40796e6674a1ba15fe0c7d3472bfb7fc95d925f52465c57231a80bbe17d1",
+    "bytes": 6634
+  },
+  "tests": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\test_operator_recovery.py",
+    "sha256": "ab39f760d8b88956ab6b5bb198021fcc6153ebb1f1c29434cce34654fe7cdea3",
+    "bytes": 2432
+  },
+  "source_test_result": {
+    "count": 2,
+    "result": "PASS",
+    "seconds": 0.145,
+    "tool": "9a815b"
+  },
+  "preserved_initial_failure": {
+    "tool": "625f8b",
+    "result": "2 cleanup errors",
+    "cause": "SQLite Connection context manager did not close Windows handles; source and fixture now explicitly closing."
+  },
+  "actual_readonly_preflight": {
+    "tool": "181d28",
+    "account_id": 1,
+    "username": "m1-sonnet-human",
+    "active_sessions": 0,
+    "known_tokens": 144004,
+    "charged_requests": 2,
+    "useful05_reserved": false,
+    "useful05_admitted": false
+  },
+  "canonical_auth_effects_executed": 0
+}
