@@ -13980,6 +13980,17 @@
         "plans/agent_ops/evidence/r3-session-events-offline-preparation/manifest.json"
       ],
       "acceptance_promoted": false
+    },
+    "r3_post_svc20_paid_context_preparation": {
+      "status": "OFFLINE_PREPARATION_QUALIFIED_NO_SERVICE_OR_PAID_SELECTION",
+      "summary": "Post-SVC20 nine offline PASS and paid Context six delta PASS; independent peer review. One future start only after actual zero-admission SVC20/DONE/epoch2, fresh Connector namespace/dual tags and same Nexus cohort. Product45s timeout is not external wait bound. No fabricated selection, effects or repeated historical closure. Specific approvals pending; scenarios125/5/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-post-svc20-paid-context-preparation/review.json",
+        "plans/agent_ops/evidence/r3-post-svc20-paid-context-preparation/post-svc20/qualification.json",
+        "plans/agent_ops/evidence/r3-post-svc20-paid-context-preparation/paid-context/qualification.json",
+        "plans/agent_ops/evidence/r3-post-svc20-paid-context-preparation/manifest.json"
+      ],
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -15803,6 +15814,19 @@
         "plans/agent_ops/evidence/r3-session-events-offline-preparation/qualification.json",
         "plans/agent_ops/evidence/r3-session-events-offline-preparation/runtime-freeze.json",
         "plans/agent_ops/evidence/r3-session-events-offline-preparation/manifest.json"
+      ],
+      "acceptance_promoted": false
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_post_svc20_paid_context_preparation",
+      "status": "OFFLINE_PREPARATION_QUALIFIED_NO_SERVICE_OR_PAID_SELECTION",
+      "summary": "Post-SVC20 nine offline PASS and paid Context six delta PASS; independent peer review. One future start only after actual zero-admission SVC20/DONE/epoch2, fresh Connector namespace/dual tags and same Nexus cohort. Product45s timeout is not external wait bound. No fabricated selection, effects or repeated historical closure. Specific approvals pending; scenarios125/5/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-post-svc20-paid-context-preparation/review.json",
+        "plans/agent_ops/evidence/r3-post-svc20-paid-context-preparation/post-svc20/qualification.json",
+        "plans/agent_ops/evidence/r3-post-svc20-paid-context-preparation/paid-context/qualification.json",
+        "plans/agent_ops/evidence/r3-post-svc20-paid-context-preparation/manifest.json"
       ],
       "acceptance_promoted": false
     }

@@ -1,0 +1,34 @@
+{
+  "status": "OFFLINE_PREPARATION_QUALIFIED_NO_SERVICE_OR_PAID_SELECTION",
+  "post_svc20": {
+    "tests_passed": 9,
+    "test_tool": "9eb159",
+    "seconds": 3.92,
+    "runtime_freeze_sha256": "0271ec57fa3eab0b46985aec167d9ca9658b98cb9a815bb2b09fb978f27677f6",
+    "qualification_sha256": "11e64c675da6553ac34f2f3b6260ca63c1364e50b16a11037083f01649931621",
+    "peer_review": "PASS_READ_ONLY; published selection follows validation of fresh generation/cycle, exact physical exits, task/migration/DONE/epoch2 and zero admissions/grants.",
+    "wrapper_limit": "Product start timeout45; external child.wait has no deadline. Child remains retained, no retry/force. Not a finite wall-clock claim."
+  },
+  "paid_context": {
+    "final_delta_tests_passed": 6,
+    "test_tool": "3bafd9",
+    "seconds": 1.721,
+    "runtime_freeze_sha256": "709fe085de98889f7cd12bca1fe6363b15592ce477eeb4b7f7e127a6ef692662",
+    "qualification_sha256": "f7ea0ec10ace4aad373631b838b9a13f9bd77a8f33640acd91b19fbdb02a1e86",
+    "peer_review": "PASS_READ_ONLY tool2c8f77. PostContext source/freeze and selected plan pinned; same rotation/DONE/binding scope; fresh Connector dual-tag namespace and unchanged Nexus namespace. Old exit proof cannot replace the new cohort.",
+    "historical_qualifications": "Runtime35 and earlier console11/recovery4 are separate retained evidence; no new broad suite claim."
+  },
+  "prospective_sequence": "Real authorized rotation/import epoch2 and canonical DONE -> SVC20 with zero admissions -> normal Connector stop/exits -> separately selected one start with fresh cohort/watch -> final reviewed paid plan. Current preparation performs none of these actions.",
+  "authority": "Existing authenticated Sonnet200k permission remains; specific plaintext-storage/revocation authorization and disruptive OS-event coordination remain pending. No receipt or actual DONE/cohort fabricated.",
+  "history": "Original transfer remains UNCONFIRMED. Historical PID34276 closure was already consumed and is not selected again.",
+  "provider_calls": 0,
+  "service_actions": 0,
+  "os_events": 0,
+  "scenario_promotion": false,
+  "scenario_counts": {
+    "VERIFIED": 125,
+    "IN_PROGRESS": 5,
+    "NOT_RUN": 2
+  },
+  "retention": "Only allowlisted offline code/tests/qualification/pins. No private stdout, raw DB, credentials, or actual service receipt copied or manufactured."
+}

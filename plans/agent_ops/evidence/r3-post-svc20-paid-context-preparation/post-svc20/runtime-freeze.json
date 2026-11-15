@@ -1,0 +1,55 @@
+{
+  "status": "OFFLINE_QUALIFIED_NO_SELECTION_OR_EFFECT",
+  "files": {
+    "post_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\post_context.py",
+      "sha256": "a51856178367a120d16e7a1e929f34f55d2748fdf89c42b63152abf134369f0e",
+      "bytes": 7912
+    },
+    "post_lifecycle.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\post_lifecycle.py",
+      "sha256": "107760c7d39f91aba0db5f67eea4bef74d78730360226174b198f6c225aec55d",
+      "bytes": 3046
+    },
+    "entry.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\entry.py",
+      "sha256": "e7401ec3509a1c3a40e8a3ca70dca15dac99b37844d0c2733fda5c5b38fe8daa",
+      "bytes": 577
+    },
+    "select_after_svc20.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\select_after_svc20.py",
+      "sha256": "a4bc36589e920e77946396c5aa45ba2b27a6e00e323272b3f1b39a847f074241",
+      "bytes": 2711
+    },
+    "recovery_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_context.py",
+      "sha256": "554eb9e9adc36156df84bc4f833a94ebbea69787e18e8cc1e3875ffaad18d43e",
+      "bytes": 4756
+    },
+    "recovery_connector.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_connector.py",
+      "sha256": "5ba8c95a727b76ee434e07c086da819e582634416cd931e8e15e42cbda8456b4",
+      "bytes": 8653
+    },
+    "recovery_observation.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_observation.py",
+      "sha256": "da569ef87112296b845122e99d1f7fe140f89d8e9b9999cd5287ec5dcd50b04c",
+      "bytes": 12903
+    },
+    "lifecycle-plan.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json",
+      "sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+      "bytes": 13280
+    },
+    "next_connect.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\next_connect.py",
+      "sha256": "510df041d68951366951a4831d3b65c80632dae3c03a11b6be4a50e5543fcfc0",
+      "bytes": 14039
+    }
+  },
+  "future_selection_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\selected-plan.json",
+  "max_start_selections": 1,
+  "reinstall_selected": false,
+  "provider_calls": 0,
+  "scope": "Connector-only namespace after real SVC20; Nexus receipts stay original."
+}

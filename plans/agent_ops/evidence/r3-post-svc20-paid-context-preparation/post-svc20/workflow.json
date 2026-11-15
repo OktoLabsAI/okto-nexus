@@ -1,0 +1,135 @@
+{
+  "status": "PREPARED_PENDING_ACTUAL_SVC20_AND_ROOT_SELECTION",
+  "freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\runtime-freeze.json",
+    "sha256": "0271ec57fa3eab0b46985aec167d9ca9658b98cb9a815bb2b09fb978f27677f6",
+    "bytes": 2794
+  },
+  "future_selector_argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\select_after_svc20.py",
+    "--runtime-freeze-sha256",
+    "0271ec57fa3eab0b46985aec167d9ca9658b98cb9a815bb2b09fb978f27677f6",
+    "--svc20-plan-sha256",
+    "<ACTUAL_REVIEWED_SVC20_PLAN_SHA256>",
+    "--svc20-result-sha256",
+    "<ACTUAL_REVIEWED_PASS_RESULT_SHA256>"
+  ],
+  "actions": {
+    "start": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\entry.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\selected-plan.json",
+      "--expected-plan-sha256",
+      "<ACTUAL_SELECTED_PLAN_SHA256>",
+      "start"
+    ],
+    "select": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\entry.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\selected-plan.json",
+      "--expected-plan-sha256",
+      "<ACTUAL_SELECTED_PLAN_SHA256>",
+      "select"
+    ],
+    "watch": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\entry.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\selected-plan.json",
+      "--expected-plan-sha256",
+      "<ACTUAL_SELECTED_PLAN_SHA256>",
+      "watch"
+    ],
+    "stop": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\entry.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\selected-plan.json",
+      "--expected-plan-sha256",
+      "<ACTUAL_SELECTED_PLAN_SHA256>",
+      "stop"
+    ],
+    "cleanup": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\entry.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\selected-plan.json",
+      "--expected-plan-sha256",
+      "<ACTUAL_SELECTED_PLAN_SHA256>",
+      "cleanup"
+    ],
+    "uninstall": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\entry.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\selected-plan.json",
+      "--expected-plan-sha256",
+      "<ACTUAL_SELECTED_PLAN_SHA256>",
+      "uninstall"
+    ]
+  },
+  "sequence": [
+    "After actual SVC20 PASS and root review, bind its exact immutable plan/result/proofs using selector (metadata only).",
+    "One start. On any failure, preserve reservation and return; never repeat or fabricate success.",
+    "select captures fresh parent/launcher/runtime and validates new generation/cycle before publishing.",
+    "watch retains three real query/synchronize handles, up to3600s; paid composition must pin actual selection/watch-started and check live Nexus watcher separately.",
+    "After separately authorized work has terminal/control reconciliation or no admission: canonical normal stop; wait for watcher exit proof; cleanup then uninstall own task preserving data.",
+    "Unknown owner/receipt/exit remains unconfirmed; no force or inferred work settlement."
+  ],
+  "paid_context_contract": {
+    "source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\post_context.py",
+      "sha256": "a51856178367a120d16e7a1e929f34f55d2748fdf89c42b63152abf134369f0e",
+      "bytes": 7912
+    },
+    "constructor": "Context(selected_plan_path, selected_plan_sha256)",
+    "nexus_context": "X.base; PUBLIC remains R/public",
+    "connector_context": "X; PUBLIC=R/post-svc20/public; PRIVATE=R/post-svc20/private",
+    "tags": [
+      "lifecycle_plan_sha256=8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+      "post_svc20_plan_sha256=<actual selected-plan hash>"
+    ],
+    "receipts": [
+      "connector-start-returned.json",
+      "connector-owner-selection.json",
+      "connector-exit-watch-started.json",
+      "connector-exit-proof.json",
+      "connector-cleanup.json",
+      "connector-final-presence.json"
+    ],
+    "fresh_zero_operation_gate": "Only before new service start; constructor/cleanup do not require historical zero to remain true after separately selected paid work.",
+    "old_install_receipt": "Not copied or synthesized. Existing installation proved by migrated context, same task digest, exact SVC20 physical exits/native inactivity and fresh canonical absence."
+  },
+  "wrapper_wait_boundary": "45 seconds is product wait, not wrapper wall-clock; wrapper retains child until return, no kill/retry."
+}

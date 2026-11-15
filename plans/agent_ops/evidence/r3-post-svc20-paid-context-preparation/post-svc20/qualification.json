@@ -1,0 +1,57 @@
+{
+  "status": "OFFLINE_QUALIFIED_NOT_REAL_SERVICE_EXECUTION",
+  "freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\runtime-freeze.json",
+    "sha256": "0271ec57fa3eab0b46985aec167d9ca9658b98cb9a815bb2b09fb978f27677f6",
+    "bytes": 2794
+  },
+  "tests": {
+    "passed": 9,
+    "failed": 0,
+    "seconds": 3.92,
+    "tool": "9eb159",
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\qualification.xml",
+      "sha256": "b73b46374c4bd1fe608660e27897bdd7ba8653f9c63c4fb69dbdcead74210dad",
+      "bytes": 1090
+    },
+    "source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\test_post_svc20.py",
+      "sha256": "3de42c17a1cf2b6a23d4c859693902fc54d37b44bea3643872eaedb01ae1b560",
+      "bytes": 6383
+    },
+    "command": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\run_tests.py"
+    ]
+  },
+  "scope": [
+    "Actual SQLite schema fixture for active agent/current epoch2; no own live DB accessed.",
+    "Popen/HTTP/Scheduler/native handles all mocked or not called.",
+    "Namespace tags, one-shot pre-effect reservation, second guard no effect, old coorte refuses before save, positive fresh capture.",
+    "Frozen capture/current_ready/watch/cleanup are reused, not requalified as real OS events."
+  ],
+  "ruff": "F PASS after removal of two unused test imports only; production source unchanged after test run.",
+  "syntactic_compile": "all6 own Python files PASS",
+  "actual_effects": {
+    "service": 0,
+    "scheduler": 0,
+    "provider": 0,
+    "HTTP": 0,
+    "credentials": 0,
+    "selected_plan_created": false
+  },
+  "runner": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-svc20\\run_tests.py",
+    "sha256": "675864823e0218975ad9943314821de3d3991f4a65cf10829bd82a1170a5f579",
+    "bytes": 305
+  },
+  "wrapper_wait_boundary": "Product start timeout45 is unchanged; wrapper child.wait has no own deadline and retains its child, without force/replay. No finite wall-clock assertion.",
+  "peer_review": "finish_reader_cache read-only: no remaining blocker; wait-bound limitation explicitly retained."
+}

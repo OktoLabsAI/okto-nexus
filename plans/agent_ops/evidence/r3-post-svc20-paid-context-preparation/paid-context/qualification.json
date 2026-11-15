@@ -1,0 +1,62 @@
+{
+  "status": "SIX_FOCAL_TESTS_PASS_OFFLINE_ONLY",
+  "freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-context-final\\runtime-freeze.json",
+    "sha256": "709fe085de98889f7cd12bca1fe6363b15592ce477eeb4b7f7e127a6ef692662",
+    "bytes": 2506
+  },
+  "tests": {
+    "count": 6,
+    "failures": 0,
+    "seconds": 1.721,
+    "tool": "3bafd9",
+    "new_namespace_cases": 2,
+    "recovery_chain_cases": 4,
+    "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/sonnet-canonical-recovery-proposal-7oq808_t/package/venv/Scripts/python.exe -I -B -X utf8 C:/Users/jpamb/AppData/Local/Temp/m1-sonnet-remote-candidate-2c_4af0t/test_work_recovery_chain.py"
+  },
+  "installed_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv",
+  "installation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\installation.json",
+    "sha256": "a9f03ee93bfff21c5ea3fa530c4c2259180770027a0674c82fbe0fb774fa221c",
+    "bytes": 348124
+  },
+  "ruff": {
+    "selection": "F",
+    "result": "PASS",
+    "tool": "2eb922"
+  },
+  "compile": {
+    "count": 4,
+    "result": "PASS",
+    "tool": "470ac2"
+  },
+  "peer_review": {
+    "agent": "finish_reader_cache",
+    "result": "NO_BLOCKER_READ_ONLY",
+    "tool": "2c8f77"
+  },
+  "coverage": "Installed canonical DONE projection plus receipt-chain refusal; real recovery constructor verifies prefix/pins; synthetic post Context uses actual dual-tag validator; old Connector exit proof cannot replace fresh watcher. No actual completed receipt or selected plan fabricated.",
+  "historical_qualification": {
+    "work_components35_unchanged": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-qualification\\final.json",
+      "sha256": "bc240445e9d5419a6257249e995903157b825eddfdd81c53af6adce8cbae3bfa",
+      "bytes": 2564
+    },
+    "console_context11_previous_bytes": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-context-console-delta\\qualification.json",
+      "sha256": "0800497b33137a55775eff56bc4caa2d2263d754b651abfc375a0695d346a10f",
+      "bytes": 2821
+    },
+    "recovery_chain4_previous_snapshot": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-context-recovery-delta\\qualification.json",
+      "sha256": "96ee28a3b370a57541c9e803bb0e788790bd3d994d2d4d4fa91d2f3e213fe7b8",
+      "bytes": 2068
+    }
+  },
+  "limits": [
+    "Full future paid Context cannot instantiate until actual rotation/review/DONE/SVC20/fresh start-watch receipts exist.",
+    "No paid acceptance, model call, credentials, HTTP, Scheduler or provider process in these tests.",
+    "Legacy compact campaign style retains prior E402/E701/E702 diagnostics; F-only lint scope stated explicitly.",
+    "Original tests/context snapshots remain historical; only six focal cases executed for this final delta."
+  ]
+}

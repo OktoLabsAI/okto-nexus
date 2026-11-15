@@ -2279,3 +2279,9 @@ BASE-06 primeiro uso passa de NOT_RUN para **IN_PROGRESS**, sem promover a taref
 ## 2026-11-15 — Eventos de sessão: preparação offline
 
 Observador durável e helpers de SVC-T18/T21/T29: **29 testes sintéticos PASS / 7 imports instalados**, antecedente25 preservado. Root revisou observador/ACL/publicação atômica; revisão final da execução de lifecycle e coordenação/autorização de eventos disruptivos continuam pendentes. Nenhum login/logout/reboot/shutdown/suspend, install/start ou provedor executado. Owner novo ou observador encerrado não prova DRAINED do trabalho anterior. Escopo/rota adicional de AC14 documentados, sem promoção ou ações silenciosas em homes reais. Cenários **125/5/2** inalterados. [Evidência](plans/agent_ops/evidence/r3-session-events-offline-preparation/review.json).
+
+## 2026-11-15 — Coorte pós-SVC20 e contexto pago preparados
+
+Pós-SVC20: **9 testes offline PASS**; contexto pago final: **6 testes de delta PASS**, revisão independente sem bloqueadores. Retomada única somente após SVC20 real com zero admissões, DONE/epoch2, tarefa/contexto e saídas físicas comprovados. Connector recebe namespace/coorte/observadores novos e tags duplas; Nexus preserva o namespace original. Saída histórica não prova encerramento da nova coorte. Timeout45s do produto não é limite externo do wrapper, que retém o filho sem replay/force.
+
+Nenhum serviço/provedor/eventoSO executado, plano pago selecionado ou recibo fabricado. Ação histórica PID34276 já consumida e não repetida. Autorizações específicas de armazenamento/revogação e coordenação SO permanecem pendentes. **125 VERIFIED /5 IN_PROGRESS /2 NOT_RUN** inalterados. [Evidência e limites](plans/agent_ops/evidence/r3-post-svc20-paid-context-preparation/review.json).
