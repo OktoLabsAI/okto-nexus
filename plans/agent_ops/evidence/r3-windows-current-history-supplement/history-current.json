@@ -1,0 +1,3317 @@
+{
+  "credential_stores_read": false,
+  "cross_database_atomicity_claimed": false,
+  "databases": {
+    "connector-state/executor-journal.db": {
+      "kind": "core",
+      "observed_at": "2026-11-15T11:53:17.384400+00:00",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\executor-journal.db",
+      "tables": {
+        "event_streams": {
+          "count": 2,
+          "rows": [
+            {
+              "acked_sequence": 123,
+              "compacted_sequence": 0,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "next_sequence": 124,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+              "stream_epoch": "stream_c37ca52ea74b92f7c8af59b57da14b53"
+            },
+            {
+              "acked_sequence": 98,
+              "compacted_sequence": 0,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "next_sequence": 99,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73",
+              "stream_epoch": "stream_dbd162d29f87f5656c4f170e045c9846"
+            }
+          ],
+          "sha256": "11637f79264fec8d775409659939f0c50719f13a241eb7aef517936f09f954de"
+        },
+        "operation_actions": {
+          "count": 5,
+          "rows": [
+            {
+              "action": "runtime.open",
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_404077ff1cd80b9b0d5a018448148a71",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            },
+            {
+              "action": "runtime.open",
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_4133ab4f0136fd3391a85cf856a49ea0",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            },
+            {
+              "action": "turn.submit",
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_423345383752a6d0b8095d73159d1257",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 1
+            },
+            {
+              "action": "turn.interrupt",
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_872a18679d85dc81bc912e28240fa7db",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            },
+            {
+              "action": "turn.submit",
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_b9a7bc74da0788081adbe51fa62c6598",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 1
+            }
+          ],
+          "sha256": "7c5ded008089d2e6588ad1abc6d124e5a997c65483fcfeaff14b521d141fd345"
+        },
+        "operations_v2": {
+          "count": 5,
+          "rows": [
+            {
+              "error_code": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_404077ff1cd80b9b0d5a018448148a71",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_4133ab4f0136fd3391a85cf856a49ea0",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_423345383752a6d0b8095d73159d1257",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+              "stage": "SUCCEEDED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_872a18679d85dc81bc912e28240fa7db",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_b9a7bc74da0788081adbe51fa62c6598",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73",
+              "stage": "CANCELLED"
+            }
+          ],
+          "sha256": "6776b569cffe76685edf85c7b8657c816365461869d02e6ad23076287ea1d37b"
+        },
+        "owned_slot_reservations": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "session_claims": {
+          "count": 2,
+          "rows": [
+            {
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_404077ff1cd80b9b0d5a018448148a71",
+              "reconciliation_pending": 1,
+              "release_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44"
+            },
+            {
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_4133ab4f0136fd3391a85cf856a49ea0",
+              "reconciliation_pending": 1,
+              "release_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73"
+            }
+          ],
+          "sha256": "97b00e855ecce465d9694eda46af904205a09c4c2f209d41409c57c6ec374b5b"
+        },
+        "session_lease_state": {
+          "count": 2,
+          "rows": [
+            {
+              "authorization_revision": 2,
+              "configuration_revision": 2,
+              "connection_generation": 7,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "owner_generation": 1,
+              "revoked": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44"
+            },
+            {
+              "authorization_revision": 2,
+              "configuration_revision": 2,
+              "connection_generation": 6,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "owner_generation": 1,
+              "revoked": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73"
+            }
+          ],
+          "sha256": "dc4b7030c110474395d018b2dca15840162614aaee7322c4f8a5e5b8e78895b9"
+        }
+      }
+    },
+    "connector-state/owned-slots.db": {
+      "kind": "slots",
+      "observed_at": "2026-11-15T11:53:17.390546+00:00",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\owned-slots.db",
+      "tables": {
+        "execution_capacity_reservations": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "execution_turn_slots": {
+          "count": 2,
+          "rows": [
+            {
+              "active": 0,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_423345383752a6d0b8095d73159d1257",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44"
+            },
+            {
+              "active": 0,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_b9a7bc74da0788081adbe51fa62c6598",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73"
+            }
+          ],
+          "sha256": "c48eaa86838425aacc3354e346713c0f475e09896747281c16f18242c9bdab15"
+        },
+        "owned_slot_reservations": {
+          "count": 2,
+          "rows": [
+            {
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_404077ff1cd80b9b0d5a018448148a71",
+              "released": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44"
+            },
+            {
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_4133ab4f0136fd3391a85cf856a49ea0",
+              "released": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73"
+            }
+          ],
+          "sha256": "9af85f06f375ba1d4b1804f6ec93bdf03e4ead034a83554ed663a2e6ed09ec4a"
+        }
+      }
+    },
+    "nexus-home/core-runtime/owned-slots.db": {
+      "kind": "slots",
+      "observed_at": "2026-11-15T11:53:17.401118+00:00",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\owned-slots.db",
+      "tables": {
+        "execution_capacity_reservations": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "execution_turn_slots": {
+          "count": 7,
+          "rows": [
+            {
+              "active": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_89eeef12d823de4f2e9a83e87aad76fe",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3"
+            },
+            {
+              "active": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_81de2e90997c1689eb0ec2aaff00e5fb",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc"
+            },
+            {
+              "active": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_8dd7095fbd5e23defbb95a7f0c22ec7e",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531"
+            },
+            {
+              "active": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_92b7ca515e9efa6b38b48a5dce51d560",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69"
+            },
+            {
+              "active": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_d7ee27186ba720011a5c3704196eab09",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611"
+            },
+            {
+              "active": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814"
+            },
+            {
+              "active": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814"
+            }
+          ],
+          "sha256": "d533fbe3d7764f951511c9f2170f69dc5c70005a06ac17a7ba95baa26995ab3a"
+        },
+        "owned_slot_reservations": {
+          "count": 7,
+          "rows": [
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_445324998d692973c2980bdef525ee94",
+              "released": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3"
+            },
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_1d0c95ec862a46530a3b8f37d8a5a878",
+              "released": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc"
+            },
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_44ff278e6726a3571f43db565a186a11",
+              "released": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531"
+            },
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_fa93f7c82a6cb43583ad51992c248024",
+              "released": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69"
+            },
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_b6e5b1ad8c2df100ae062e91007abb1e",
+              "released": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611"
+            },
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+              "released": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247"
+            },
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_f2913d83a8a515bf75d23f589f3aa2b2",
+              "released": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814"
+            }
+          ],
+          "sha256": "a396949c865e86c8891bc70be6e54d1d528f8e15c26e8f95bd8c072065fcfec3"
+        }
+      }
+    },
+    "nexus-home/core-runtime/session-24428a6136a8920a7e2619a2f5f88f3816d7eb2ca41af85bfcc5a0ab719be659.db": {
+      "kind": "core",
+      "observed_at": "2026-11-15T11:53:17.426493+00:00",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-24428a6136a8920a7e2619a2f5f88f3816d7eb2ca41af85bfcc5a0ab719be659.db",
+      "tables": {
+        "event_streams": {
+          "count": 1,
+          "rows": [
+            {
+              "acked_sequence": 78,
+              "compacted_sequence": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "next_sequence": 79,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "stream_epoch": "stream_326601b801c404504ac6f81607cff95e"
+            }
+          ],
+          "sha256": "3364da564172e8611bcb34006d06fef581b2a1532318051c4ddc38de42282db4"
+        },
+        "operation_actions": {
+          "count": 4,
+          "rows": [
+            {
+              "action": "runtime.open",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_44ff278e6726a3571f43db565a186a11",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            },
+            {
+              "action": "turn.submit",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_8dd7095fbd5e23defbb95a7f0c22ec7e",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 1
+            },
+            {
+              "action": "approval.decide",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_c9d0281009001c9dcdbf85cfa18ccbc3",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            },
+            {
+              "action": "approval.decide",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_fbc4560e3aa93c56e1552342f5da0225",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            }
+          ],
+          "sha256": "144f20065d5dbe350f32bfbcee814f39ae36efe6df8f5ca5b97ac2e8a0e847c0"
+        },
+        "operations_v2": {
+          "count": 4,
+          "rows": [
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_44ff278e6726a3571f43db565a186a11",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_8dd7095fbd5e23defbb95a7f0c22ec7e",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "stage": "SUCCEEDED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_c9d0281009001c9dcdbf85cfa18ccbc3",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_fbc4560e3aa93c56e1552342f5da0225",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "stage": "SUBMITTED"
+            }
+          ],
+          "sha256": "92d919495687be51a1c07aa70043c16156f0e12f7343ef2a124709ce5f8b9e8a"
+        },
+        "owned_slot_reservations": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "session_claims": {
+          "count": 1,
+          "rows": [
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_44ff278e6726a3571f43db565a186a11",
+              "reconciliation_pending": 1,
+              "release_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531"
+            }
+          ],
+          "sha256": "a1ac993881c823f143dc55270078a5e4304e5a6d72ac5a58c04f1d7bc3ce4588"
+        },
+        "session_lease_state": {
+          "count": 1,
+          "rows": [
+            {
+              "authorization_revision": 2,
+              "configuration_revision": 2,
+              "connection_generation": 9,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "owner_generation": 1,
+              "revoked": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531"
+            }
+          ],
+          "sha256": "618e604e4768e1fcc079f39f7e5ead7282a971e379d793dd49a34b371e539e6a"
+        }
+      }
+    },
+    "nexus-home/core-runtime/session-36aa66010cd054d92c2cb66a39725d1696fda6ef475f394f774fca4c9912542a.db": {
+      "kind": "core",
+      "observed_at": "2026-11-15T11:53:17.438971+00:00",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-36aa66010cd054d92c2cb66a39725d1696fda6ef475f394f774fca4c9912542a.db",
+      "tables": {
+        "event_streams": {
+          "count": 1,
+          "rows": [
+            {
+              "acked_sequence": 59,
+              "compacted_sequence": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "next_sequence": 60,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "stream_epoch": "stream_1e462c1008551ea070b3c090bc5f73be"
+            }
+          ],
+          "sha256": "16bb1d44c054b08e2a08c635f9c3e04c24a50f3a4f31b89fdf51d34b77f469e5"
+        },
+        "operation_actions": {
+          "count": 3,
+          "rows": [
+            {
+              "action": "turn.interrupt",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_13548cf7bb6e05b147a1bb0d616d7bdf",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            },
+            {
+              "action": "turn.submit",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_92b7ca515e9efa6b38b48a5dce51d560",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 1
+            },
+            {
+              "action": "runtime.open",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_fa93f7c82a6cb43583ad51992c248024",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            }
+          ],
+          "sha256": "d50cd2cdce3e1eba2be55466882482b447c2a4acd51aa9f5e9e9ce016c8bd118"
+        },
+        "operations_v2": {
+          "count": 4,
+          "rows": [
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "core.internal.shutdown_force.1539e54540e873cbe14693a1296c5bf536197fefc5136707ed6da87f4231efa0",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_13548cf7bb6e05b147a1bb0d616d7bdf",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_92b7ca515e9efa6b38b48a5dce51d560",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "stage": "CANCELLED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_fa93f7c82a6cb43583ad51992c248024",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "stage": "SUBMITTED"
+            }
+          ],
+          "sha256": "cc2f46a4dbc2468d2656be10c128d94bcd3c7442760d141a6ecf938509b3ed5a"
+        },
+        "owned_slot_reservations": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "session_claims": {
+          "count": 1,
+          "rows": [
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_fa93f7c82a6cb43583ad51992c248024",
+              "reconciliation_pending": 1,
+              "release_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69"
+            }
+          ],
+          "sha256": "8bab1c7e82b9f97829991315419a01be0240ae26a92ecd839dd5877d7d2355ca"
+        },
+        "session_lease_state": {
+          "count": 1,
+          "rows": [
+            {
+              "authorization_revision": 2,
+              "configuration_revision": 2,
+              "connection_generation": 3,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "owner_generation": 1,
+              "revoked": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69"
+            }
+          ],
+          "sha256": "790c672cd82d2cae5ea639fb42ba194dc9a2b11ebffd853e5d6b607fb274fae9"
+        }
+      }
+    },
+    "nexus-home/core-runtime/session-79e39c08cdf347b203d653fb096fff5bbce258e61ffad19011d782145e67d1b1.db": {
+      "kind": "core",
+      "observed_at": "2026-11-15T11:53:17.468166+00:00",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-79e39c08cdf347b203d653fb096fff5bbce258e61ffad19011d782145e67d1b1.db",
+      "tables": {
+        "event_streams": {
+          "count": 1,
+          "rows": [
+            {
+              "acked_sequence": 67,
+              "compacted_sequence": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "next_sequence": 68,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "stream_epoch": "stream_78c2d182ec9c3424fb63204dd61430ca"
+            }
+          ],
+          "sha256": "d694e889b79d41319c862d1ce6cdac1d663934b00319f381cbe79236dd7c16fa"
+        },
+        "operation_actions": {
+          "count": 3,
+          "rows": [
+            {
+              "action": "runtime.open",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_445324998d692973c2980bdef525ee94",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            },
+            {
+              "action": "turn.interrupt",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_72db9d95830739f6f1e54feb09ad261d",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            },
+            {
+              "action": "turn.submit",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_89eeef12d823de4f2e9a83e87aad76fe",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 1
+            }
+          ],
+          "sha256": "ca52eb4b7f21c5e053bfc7119e74082928b4db8924443fb4913dc2f9f62e5e5e"
+        },
+        "operations_v2": {
+          "count": 3,
+          "rows": [
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_445324998d692973c2980bdef525ee94",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_72db9d95830739f6f1e54feb09ad261d",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_89eeef12d823de4f2e9a83e87aad76fe",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "stage": "CANCELLED"
+            }
+          ],
+          "sha256": "38bd632fe232a8e6dfeeeebc16819e40edbc1659934e1cadd1690560c3024bcb"
+        },
+        "owned_slot_reservations": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "session_claims": {
+          "count": 1,
+          "rows": [
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_445324998d692973c2980bdef525ee94",
+              "reconciliation_pending": 1,
+              "release_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3"
+            }
+          ],
+          "sha256": "df60522143786f472d2413e1c060b49c9482fff08b61bc98751fe5a65f4381c0"
+        },
+        "session_lease_state": {
+          "count": 1,
+          "rows": [
+            {
+              "authorization_revision": 2,
+              "configuration_revision": 2,
+              "connection_generation": 5,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "owner_generation": 1,
+              "revoked": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3"
+            }
+          ],
+          "sha256": "06da1ae77c95829b06ac1f0be6468729f8298191e2536f09e1f924c5b16c1848"
+        }
+      }
+    },
+    "nexus-home/core-runtime/session-8a199d6a40061025c42fc87fe000fb631aec1a46dc14f1bcc3011341ea3518b4.db": {
+      "kind": "core",
+      "observed_at": "2026-11-15T11:53:17.492966+00:00",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-8a199d6a40061025c42fc87fe000fb631aec1a46dc14f1bcc3011341ea3518b4.db",
+      "tables": {
+        "event_streams": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "operation_actions": {
+          "count": 1,
+          "rows": [
+            {
+              "action": "runtime.open",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            }
+          ],
+          "sha256": "77d704799de1e08582f7c4ccfeeb50a576baff3b3a5b2c08c7469da9b6b69f83"
+        },
+        "operations_v2": {
+          "count": 1,
+          "rows": [
+            {
+              "error_code": "PROCESS_LAUNCH_FENCED",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247",
+              "stage": "FAILED"
+            }
+          ],
+          "sha256": "44d1f7bf88fc070c842db26da0aeb4fcd0d2bf4f2a812887445491b6057f773d"
+        },
+        "owned_slot_reservations": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "session_claims": {
+          "count": 1,
+          "rows": [
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+              "reconciliation_pending": 1,
+              "release_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247"
+            }
+          ],
+          "sha256": "a0ad95faea3632dca8d19f5825cae383b64c01110361da4689c0cf86e5c42354"
+        },
+        "session_lease_state": {
+          "count": 1,
+          "rows": [
+            {
+              "authorization_revision": 2,
+              "configuration_revision": 2,
+              "connection_generation": 6,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "owner_generation": 1,
+              "revoked": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247"
+            }
+          ],
+          "sha256": "5b1566db8919248a8ade34b46f71f39ae0eb3c22a94c2645c3ac589809d5a284"
+        }
+      }
+    },
+    "nexus-home/core-runtime/session-b80ecba1683c4e0a09120573b02d9bd38cee5e43aee2b47679044240e69e77b7.db": {
+      "kind": "core",
+      "observed_at": "2026-11-15T11:53:17.516197+00:00",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-b80ecba1683c4e0a09120573b02d9bd38cee5e43aee2b47679044240e69e77b7.db",
+      "tables": {
+        "event_streams": {
+          "count": 1,
+          "rows": [
+            {
+              "acked_sequence": 47,
+              "compacted_sequence": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "next_sequence": 48,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "stream_epoch": "stream_3f0bc8fb93378879b461693bea5ea1bb"
+            }
+          ],
+          "sha256": "4402aacc7c4a25e758194a9357d14adc507ef9962d00cf0218a9ebcfca914241"
+        },
+        "operation_actions": {
+          "count": 3,
+          "rows": [
+            {
+              "action": "runtime.open",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_1d0c95ec862a46530a3b8f37d8a5a878",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            },
+            {
+              "action": "turn.submit",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_81de2e90997c1689eb0ec2aaff00e5fb",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 1
+            },
+            {
+              "action": "turn.interrupt",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_851b83130e83385e1dc2eb47bfe06452",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            }
+          ],
+          "sha256": "16830a72287a677f35d0ec9b15d9452e324686c43396fccac77d52aac95fb267"
+        },
+        "operations_v2": {
+          "count": 4,
+          "rows": [
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "core.internal.shutdown_force.60b6d3cf870018a3398c7eb56dc0bc7ebc3639dd1c7f4f32d9c0efa14b182943",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_1d0c95ec862a46530a3b8f37d8a5a878",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_81de2e90997c1689eb0ec2aaff00e5fb",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "stage": "CANCELLED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_851b83130e83385e1dc2eb47bfe06452",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "stage": "SUBMITTED"
+            }
+          ],
+          "sha256": "25af95447c50b3b929dcec1fa4ed48b7a865ade3218997957cdda18a1d2b40f7"
+        },
+        "owned_slot_reservations": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "session_claims": {
+          "count": 1,
+          "rows": [
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_1d0c95ec862a46530a3b8f37d8a5a878",
+              "reconciliation_pending": 1,
+              "release_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc"
+            }
+          ],
+          "sha256": "9a79b86f4e7bf5a315dbb9faa804d7ec35fb7958525921fce9632025ad2e0d45"
+        },
+        "session_lease_state": {
+          "count": 1,
+          "rows": [
+            {
+              "authorization_revision": 2,
+              "configuration_revision": 2,
+              "connection_generation": 7,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "owner_generation": 1,
+              "revoked": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc"
+            }
+          ],
+          "sha256": "47c150af8a51c52fac48a49fb9e6dd186e542f2f05c8f9ccc7c428d36cbf60d7"
+        }
+      }
+    },
+    "nexus-home/core-runtime/session-c0ccd8b5b3595b49499ff25f4d6f327b3283e610d2eff85588a19bbe1e285072.db": {
+      "kind": "core",
+      "observed_at": "2026-11-15T11:53:17.526160+00:00",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-c0ccd8b5b3595b49499ff25f4d6f327b3283e610d2eff85588a19bbe1e285072.db",
+      "tables": {
+        "event_streams": {
+          "count": 1,
+          "rows": [
+            {
+              "acked_sequence": 76,
+              "compacted_sequence": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "next_sequence": 77,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "stream_epoch": "stream_2ac178bd5f2c0104921ec1f54584cb63"
+            }
+          ],
+          "sha256": "09f65445850f9af538e9a4539e236a1a1e9616f1abba133e9e8abf183f76389c"
+        },
+        "operation_actions": {
+          "count": 4,
+          "rows": [
+            {
+              "action": "turn.submit",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 1
+            },
+            {
+              "action": "turn.submit",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 1
+            },
+            {
+              "action": "runtime.open",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_f2913d83a8a515bf75d23f589f3aa2b2",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            },
+            {
+              "action": "approval.decide",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_4e0df64836ba62465a5f836df480fed8",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            }
+          ],
+          "sha256": "b9f2986ff6c1a229940f97606a910fe2ab06a07970c4a60c09ea0a3f1cc9a55c"
+        },
+        "operations_v2": {
+          "count": 4,
+          "rows": [
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "stage": "SUCCEEDED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "stage": "SUCCEEDED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_f2913d83a8a515bf75d23f589f3aa2b2",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_4e0df64836ba62465a5f836df480fed8",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "stage": "SUBMITTED"
+            }
+          ],
+          "sha256": "cf4a4ad766e8395e4d823411561fe0aa8d8da415655a9ceb4b71f2ebabe6713f"
+        },
+        "owned_slot_reservations": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "session_claims": {
+          "count": 1,
+          "rows": [
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_f2913d83a8a515bf75d23f589f3aa2b2",
+              "reconciliation_pending": 1,
+              "release_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814"
+            }
+          ],
+          "sha256": "86677c9938b5e21709729dff01f552ffcca364aa3a1b4493165ca48af303e4fb"
+        },
+        "session_lease_state": {
+          "count": 1,
+          "rows": [
+            {
+              "authorization_revision": 2,
+              "configuration_revision": 2,
+              "connection_generation": 11,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "owner_generation": 1,
+              "revoked": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814"
+            }
+          ],
+          "sha256": "2fb3964e8a7f61271813f84aef35fb4ec4601b92bdbd0e6b4013d0dd7edb1124"
+        }
+      }
+    },
+    "nexus-home/core-runtime/session-cfe3844e139863e5955ef3c328ec953d2a14c38677bfd3c44e1ff0170ad87b22.db": {
+      "kind": "core",
+      "observed_at": "2026-11-15T11:53:17.552292+00:00",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-cfe3844e139863e5955ef3c328ec953d2a14c38677bfd3c44e1ff0170ad87b22.db",
+      "tables": {
+        "event_streams": {
+          "count": 1,
+          "rows": [
+            {
+              "acked_sequence": 51,
+              "compacted_sequence": 0,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "next_sequence": 52,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "stream_epoch": "stream_e5a3b74158a21953cdaeb22c0e11b870"
+            }
+          ],
+          "sha256": "87ce29340a570eb8c999c10d4e459e09ff6576e0097413ecc9f6acc3e14724d0"
+        },
+        "operation_actions": {
+          "count": 3,
+          "rows": [
+            {
+              "action": "turn.interrupt",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_a7dac52535834052da7facc362f81dc7",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            },
+            {
+              "action": "runtime.open",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_b6e5b1ad8c2df100ae062e91007abb1e",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 0
+            },
+            {
+              "action": "turn.submit",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_d7ee27186ba720011a5c3704196eab09",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "terminal_event_expected": 1
+            }
+          ],
+          "sha256": "436f6122902741b39ae8fa9177e27d9998bd8cd134ebf1adedce796b19ea8371"
+        },
+        "operations_v2": {
+          "count": 4,
+          "rows": [
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "core.internal.shutdown_force.41d01e0b0002bc19efede3a48364c63a3ad75277ca773e7a012af33e2b2e9d46",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_a7dac52535834052da7facc362f81dc7",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_b6e5b1ad8c2df100ae062e91007abb1e",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_d7ee27186ba720011a5c3704196eab09",
+              "possible_effect": 1,
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "stage": "CANCELLED"
+            }
+          ],
+          "sha256": "12c299919766a2dc53de57532f4e3b36e9c26a6c902c3840686505db76643414"
+        },
+        "owned_slot_reservations": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "session_claims": {
+          "count": 1,
+          "rows": [
+            {
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_b6e5b1ad8c2df100ae062e91007abb1e",
+              "reconciliation_pending": 1,
+              "release_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611"
+            }
+          ],
+          "sha256": "56c11dbe23592a20860dc32f6a96e13a2d01643db0ba824b687f32e46cd9ef02"
+        },
+        "session_lease_state": {
+          "count": 1,
+          "rows": [
+            {
+              "authorization_revision": 2,
+              "configuration_revision": 2,
+              "connection_generation": 8,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "owner_generation": 1,
+              "revoked": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611"
+            }
+          ],
+          "sha256": "b3c049c5693993ebf9f0ae1bae45332191a3a5f62d740d0f13b333a83b19a55f"
+        }
+      }
+    },
+    "nexus-home/nexus.db": {
+      "kind": "server",
+      "observed_at": "2026-11-15T11:53:17.372975+00:00",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\nexus.db",
+      "tables": {
+        "execution_event_watermarks": {
+          "count": 8,
+          "rows": [
+            {
+              "committed_contiguous": 67,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "gap_state": "none",
+              "projected_through": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "stream_epoch": "stream_78c2d182ec9c3424fb63204dd61430ca"
+            },
+            {
+              "committed_contiguous": 47,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "gap_state": "none",
+              "projected_through": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "stream_epoch": "stream_3f0bc8fb93378879b461693bea5ea1bb"
+            },
+            {
+              "committed_contiguous": 78,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "gap_state": "none",
+              "projected_through": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "stream_epoch": "stream_326601b801c404504ac6f81607cff95e"
+            },
+            {
+              "committed_contiguous": 59,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "gap_state": "none",
+              "projected_through": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "stream_epoch": "stream_1e462c1008551ea070b3c090bc5f73be"
+            },
+            {
+              "committed_contiguous": 51,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "gap_state": "none",
+              "projected_through": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "stream_epoch": "stream_e5a3b74158a21953cdaeb22c0e11b870"
+            },
+            {
+              "committed_contiguous": 76,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "gap_state": "none",
+              "projected_through": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "stream_epoch": "stream_2ac178bd5f2c0104921ec1f54584cb63"
+            },
+            {
+              "committed_contiguous": 123,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "gap_state": "none",
+              "projected_through": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+              "stream_epoch": "stream_c37ca52ea74b92f7c8af59b57da14b53"
+            },
+            {
+              "committed_contiguous": 98,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "gap_state": "none",
+              "projected_through": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73",
+              "stream_epoch": "stream_dbd162d29f87f5656c4f170e045c9846"
+            }
+          ],
+          "sha256": "2fa244e19b9feb3a2733448f52718775450fd8e9e81c4791a8810820b001b0c6"
+        },
+        "execution_leases": {
+          "count": 58,
+          "rows": [
+            {
+              "applied_at": "2026-11-14T18:12:36.417653+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+              "issued_at": "2026-11-14T18:12:36.298935+00:00",
+              "lease_serial": 1,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T18:14:36.298935+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T18:13:36.380292+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+              "issued_at": "2026-11-14T18:13:36.255849+00:00",
+              "lease_serial": 2,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T18:15:36.255849+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T18:14:49.582304+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+              "issued_at": "2026-11-14T18:14:43.774920+00:00",
+              "lease_serial": 3,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T18:16:43.774920+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T18:15:39.099914+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+              "issued_at": "2026-11-14T18:15:38.895711+00:00",
+              "lease_serial": 4,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T18:17:38.895711+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T18:16:34.620274+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+              "issued_at": "2026-11-14T18:16:34.491934+00:00",
+              "lease_serial": 5,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T18:18:34.491934+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T18:17:39.542830+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+              "issued_at": "2026-11-14T18:17:39.350071+00:00",
+              "lease_serial": 6,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T18:19:39.350071+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T18:18:43.322033+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+              "issued_at": "2026-11-14T18:18:43.072546+00:00",
+              "lease_serial": 7,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T18:20:43.072546+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T21:18:28.888591+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+              "issued_at": "2026-11-14T21:18:28.431036+00:00",
+              "lease_serial": 1,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T21:20:28.431036+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T21:19:31.596707+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+              "issued_at": "2026-11-14T21:19:30.067694+00:00",
+              "lease_serial": 2,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T21:21:30.067694+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T21:20:29.895767+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+              "issued_at": "2026-11-14T21:20:29.439211+00:00",
+              "lease_serial": 3,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T21:22:29.439211+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T21:21:35.106628+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+              "issued_at": "2026-11-14T21:21:28.932454+00:00",
+              "lease_serial": 4,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T21:23:28.932454+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T21:22:30.661120+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+              "issued_at": "2026-11-14T21:22:28.969605+00:00",
+              "lease_serial": 5,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T21:24:28.969605+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T21:23:32.429046+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+              "issued_at": "2026-11-14T21:23:30.604389+00:00",
+              "lease_serial": 6,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T21:25:30.604389+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T21:24:27.405313+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+              "issued_at": "2026-11-14T21:24:26.015041+00:00",
+              "lease_serial": 7,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T21:26:26.015041+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T21:25:30.616261+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+              "issued_at": "2026-11-14T21:25:29.126783+00:00",
+              "lease_serial": 8,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T21:27:29.126783+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T21:26:27.712097+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+              "issued_at": "2026-11-14T21:26:24.580369+00:00",
+              "lease_serial": 9,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T21:28:24.580369+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T23:08:06.671215+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "issued_at": "2026-11-14T23:08:06.595054+00:00",
+              "lease_serial": 1,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T23:10:06.595054+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T23:09:10.857866+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "issued_at": "2026-11-14T23:09:10.777375+00:00",
+              "lease_serial": 2,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T23:11:10.777375+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T23:10:07.649217+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "issued_at": "2026-11-14T23:10:07.413940+00:00",
+              "lease_serial": 3,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T23:12:07.413940+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:28:01.922481+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:28:01.861379+00:00",
+              "lease_serial": 1,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:30:01.861379+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:29:05.038852+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:29:04.537581+00:00",
+              "lease_serial": 2,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:31:04.537581+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:30:03.781140+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:30:03.666700+00:00",
+              "lease_serial": 3,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:32:03.666700+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:31:05.096308+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:31:04.967298+00:00",
+              "lease_serial": 4,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:33:04.967298+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:32:06.587471+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:32:06.509231+00:00",
+              "lease_serial": 5,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:34:06.509231+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:33:02.003816+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:33:01.763251+00:00",
+              "lease_serial": 6,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:35:01.763251+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:34:03.178385+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:34:03.115262+00:00",
+              "lease_serial": 7,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:36:03.115262+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:35:04.961201+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:35:04.546459+00:00",
+              "lease_serial": 8,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:37:04.546459+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:36:03.832716+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:36:03.751412+00:00",
+              "lease_serial": 9,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:38:03.751412+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:36:59.524129+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:36:59.269737+00:00",
+              "lease_serial": 10,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:38:59.269737+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:37:57.556450+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:37:57.380462+00:00",
+              "lease_serial": 11,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:39:57.380462+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:38:55.140718+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:38:54.592688+00:00",
+              "lease_serial": 12,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:40:54.592688+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:39:58.274213+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:39:57.654181+00:00",
+              "lease_serial": 13,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:41:57.654181+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:41:04.002532+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:41:00.479394+00:00",
+              "lease_serial": 14,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:43:00.479394+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:42:01.350826+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:42:00.739947+00:00",
+              "lease_serial": 15,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:44:00.739947+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:43:04.300599+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:43:03.996119+00:00",
+              "lease_serial": 16,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:45:03.996119+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:44:02.943763+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:44:02.586820+00:00",
+              "lease_serial": 17,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:46:02.586820+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T16:45:03.544484+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "issued_at": "2026-11-14T16:45:02.748661+00:00",
+              "lease_serial": 18,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T16:47:02.748661+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T22:28:37.184840+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "issued_at": "2026-11-14T22:28:37.098417+00:00",
+              "lease_serial": 1,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T22:30:37.098417+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T22:29:35.172126+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "issued_at": "2026-11-14T22:29:35.085592+00:00",
+              "lease_serial": 2,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T22:31:35.085592+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T22:30:39.201233+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "issued_at": "2026-11-14T22:30:39.093945+00:00",
+              "lease_serial": 3,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T22:32:39.093945+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T22:31:39.168075+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "issued_at": "2026-11-14T22:31:39.029996+00:00",
+              "lease_serial": 4,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T22:33:39.029996+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T22:32:40.369687+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "issued_at": "2026-11-14T22:32:40.290146+00:00",
+              "lease_serial": 5,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T22:34:40.290146+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T22:33:41.494794+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "issued_at": "2026-11-14T22:33:41.417025+00:00",
+              "lease_serial": 6,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T22:35:41.417025+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T22:34:46.855962+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "issued_at": "2026-11-14T22:34:46.671980+00:00",
+              "lease_serial": 7,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T22:36:46.671980+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T22:35:42.683042+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "issued_at": "2026-11-14T22:35:42.603672+00:00",
+              "lease_serial": 8,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T22:37:42.603672+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T22:36:48.170623+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "issued_at": "2026-11-14T22:36:48.088898+00:00",
+              "lease_serial": 9,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T22:38:48.088898+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T19:12:20.164307+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_167e8f055e0f4444b9a429ca5a4ce686",
+              "issued_at": "2026-11-14T19:12:19.114793+00:00",
+              "lease_serial": 1,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247",
+              "source_grant_revision": 1,
+              "status": "REVOKED",
+              "valid_until_server": "2026-11-14T19:14:19.114793+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T19:13:34.653942+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_167e8f055e0f4444b9a429ca5a4ce686",
+              "issued_at": "2026-11-14T19:13:22.956474+00:00",
+              "lease_serial": 2,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247",
+              "source_grant_revision": 1,
+              "status": "REVOKED",
+              "valid_until_server": "2026-11-14T19:15:22.956474+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T23:56:09.642005+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_5dc474da4bfb4e4288b8ecd82884409b",
+              "issued_at": "2026-11-14T23:56:09.423191+00:00",
+              "lease_serial": 1,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T23:58:09.423191+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T23:57:11.595758+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_5dc474da4bfb4e4288b8ecd82884409b",
+              "issued_at": "2026-11-14T23:57:11.430660+00:00",
+              "lease_serial": 2,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-14T23:59:11.430660+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T23:58:08.455282+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_5dc474da4bfb4e4288b8ecd82884409b",
+              "issued_at": "2026-11-14T23:58:08.332581+00:00",
+              "lease_serial": 3,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-15T00:00:08.332581+00:00"
+            },
+            {
+              "applied_at": "2026-11-14T23:59:07.320922+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_5dc474da4bfb4e4288b8ecd82884409b",
+              "issued_at": "2026-11-14T23:59:07.014871+00:00",
+              "lease_serial": 4,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-15T00:01:07.014871+00:00"
+            },
+            {
+              "applied_at": "2026-11-15T00:00:11.391752+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 1,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "grant_id": "grant_5dc474da4bfb4e4288b8ecd82884409b",
+              "issued_at": "2026-11-15T00:00:11.276727+00:00",
+              "lease_serial": 5,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-15T00:02:11.276727+00:00"
+            },
+            {
+              "applied_at": "2026-11-15T05:40:05.908143+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 2,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "grant_id": "grant_65493a4efdac48688e2d00be6fd0edb3",
+              "issued_at": "2026-11-15T05:40:05.736465+00:00",
+              "lease_serial": 1,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-15T05:42:05.736465+00:00"
+            },
+            {
+              "applied_at": "2026-11-15T05:41:05.835535+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 2,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "grant_id": "grant_65493a4efdac48688e2d00be6fd0edb3",
+              "issued_at": "2026-11-15T05:41:05.738539+00:00",
+              "lease_serial": 2,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-15T05:43:05.738539+00:00"
+            },
+            {
+              "applied_at": "2026-11-15T05:42:05.719344+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 2,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "grant_id": "grant_65493a4efdac48688e2d00be6fd0edb3",
+              "issued_at": "2026-11-15T05:42:05.599507+00:00",
+              "lease_serial": 3,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-15T05:44:05.599507+00:00"
+            },
+            {
+              "applied_at": "2026-11-15T05:43:05.633020+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 2,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "grant_id": "grant_65493a4efdac48688e2d00be6fd0edb3",
+              "issued_at": "2026-11-15T05:43:05.516498+00:00",
+              "lease_serial": 4,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-15T05:45:05.516498+00:00"
+            },
+            {
+              "applied_at": "2026-11-15T05:17:14.634509+00:00",
+              "authorization_revision": 2,
+              "binding_revision": 1,
+              "configuration_revision": 2,
+              "credential_epoch": 2,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "grant_id": "grant_65493a4efdac48688e2d00be6fd0edb3",
+              "issued_at": "2026-11-15T05:17:14.452549+00:00",
+              "lease_serial": 1,
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73",
+              "source_grant_revision": 1,
+              "status": "SUPERSEDED",
+              "valid_until_server": "2026-11-15T05:19:14.452549+00:00"
+            }
+          ],
+          "sha256": "22104e8d53ace41178c769314c256fc5b0af74d71a4dc75d60300c43bc0418af"
+        },
+        "execution_native_actions": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "execution_operations": {
+          "count": 28,
+          "rows": [
+            {
+              "action": "turn.interrupt",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T16:45:09.104402+00:00",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_13548cf7bb6e05b147a1bb0d616d7bdf",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "runtime.open",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T21:18:12.811157+00:00",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_1d0c95ec862a46530a3b8f37d8a5a878",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "turn.submit",
+              "admission_state": "RESOLVED_TERMINAL",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T23:59:21.032315+00:00",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "runtime.open",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T18:12:21.090959+00:00",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_445324998d692973c2980bdef525ee94",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "runtime.open",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T23:08:02.824138+00:00",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_44ff278e6726a3571f43db565a186a11",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "turn.interrupt",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T18:18:17.047601+00:00",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_72db9d95830739f6f1e54feb09ad261d",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "turn.submit",
+              "admission_state": "RESOLVED_TERMINAL",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T21:18:12.849Z",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_81de2e90997c1689eb0ec2aaff00e5fb",
+              "parent_operation_id": "op_1d0c95ec862a46530a3b8f37d8a5a878",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "turn.interrupt",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T21:27:20.755035+00:00",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_851b83130e83385e1dc2eb47bfe06452",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "turn.submit",
+              "admission_state": "RESOLVED_TERMINAL",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T18:12:21.100Z",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_89eeef12d823de4f2e9a83e87aad76fe",
+              "parent_operation_id": "op_445324998d692973c2980bdef525ee94",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "turn.submit",
+              "admission_state": "RESOLVED_TERMINAL",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T23:08:02.829Z",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_8dd7095fbd5e23defbb95a7f0c22ec7e",
+              "parent_operation_id": "op_44ff278e6726a3571f43db565a186a11",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "turn.submit",
+              "admission_state": "RESOLVED_TERMINAL",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T16:27:51.491Z",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_92b7ca515e9efa6b38b48a5dce51d560",
+              "parent_operation_id": "op_fa93f7c82a6cb43583ad51992c248024",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "turn.interrupt",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T22:36:49.947311+00:00",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_a7dac52535834052da7facc362f81dc7",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "runtime.open",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T22:28:32.712171+00:00",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_b6e5b1ad8c2df100ae062e91007abb1e",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "runtime.open",
+              "admission_state": "RESOLVED_TERMINAL",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T19:11:11.382135+00:00",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "turn.submit",
+              "admission_state": "RESOLVED_TERMINAL",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T23:56:00.149Z",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+              "parent_operation_id": "op_f2913d83a8a515bf75d23f589f3aa2b2",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "turn.submit",
+              "admission_state": "RESOLVED_TERMINAL",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T22:28:32.718Z",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_d7ee27186ba720011a5c3704196eab09",
+              "parent_operation_id": "op_b6e5b1ad8c2df100ae062e91007abb1e",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "turn.submit",
+              "admission_state": "RESOLVED_TERMINAL",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T19:11:11.643Z",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_dcd0455d4820f9abd40a57fad32c8fa9",
+              "parent_operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "runtime.open",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T23:56:00.132378+00:00",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_f2913d83a8a515bf75d23f589f3aa2b2",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "runtime.open",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T16:27:51.485356+00:00",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_fa93f7c82a6cb43583ad51992c248024",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "approval.decide",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T23:58:11.490450Z",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_4e0df64836ba62465a5f836df480fed8",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "approval.decide",
+              "admission_state": "RESOLVED_TERMINAL",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T22:29:44.912191Z",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_a2af6ef15a743a59ab2834140425a20f",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "approval.decide",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T23:09:06.494793Z",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_c9d0281009001c9dcdbf85cfa18ccbc3",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "approval.decide",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "created_at": "2026-11-14T23:10:12.047972Z",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_fbc4560e3aa93c56e1552342f5da0225",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "subject_agent_id": "m1v12-local",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "action": "runtime.open",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+              "created_at": "2026-11-15T05:39:57.734678+00:00",
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_404077ff1cd80b9b0d5a018448148a71",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+              "subject_agent_id": "m1-sonnet-remote",
+              "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+            },
+            {
+              "action": "runtime.open",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+              "created_at": "2026-11-15T05:16:59.644411+00:00",
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_4133ab4f0136fd3391a85cf856a49ea0",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73",
+              "subject_agent_id": "m1-sonnet-remote",
+              "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+            },
+            {
+              "action": "turn.submit",
+              "admission_state": "RESOLVED_TERMINAL",
+              "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+              "created_at": "2026-11-15T05:39:57.743Z",
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_423345383752a6d0b8095d73159d1257",
+              "parent_operation_id": "op_404077ff1cd80b9b0d5a018448148a71",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+              "subject_agent_id": "m1-sonnet-remote",
+              "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+            },
+            {
+              "action": "turn.interrupt",
+              "admission_state": "DISPATCHED",
+              "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+              "created_at": "2026-11-15T05:17:46.689893+00:00",
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_872a18679d85dc81bc912e28240fa7db",
+              "parent_operation_id": null,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73",
+              "subject_agent_id": "m1-sonnet-remote",
+              "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+            },
+            {
+              "action": "turn.submit",
+              "admission_state": "RESOLVED_TERMINAL",
+              "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+              "created_at": "2026-11-15T05:16:59.653Z",
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_b9a7bc74da0788081adbe51fa62c6598",
+              "parent_operation_id": "op_4133ab4f0136fd3391a85cf856a49ea0",
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73",
+              "subject_agent_id": "m1-sonnet-remote",
+              "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+            }
+          ],
+          "sha256": "ba6f50b0605d1e65516074e4ea63838a39913bc9e1a987eb462e28e392348043"
+        },
+        "execution_receipts": {
+          "count": 35,
+          "rows": [
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_13548cf7bb6e05b147a1bb0d616d7bdf",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T16:45:10.673Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_1d0c95ec862a46530a3b8f37d8a5a878",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T21:19:30.875Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T23:59:21.482Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+              "possible_effect": 1,
+              "receipt_revision": 2,
+              "received_at": "2026-11-14T23:59:28.506Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUCCEEDED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_445324998d692973c2980bdef525ee94",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T18:13:26.998Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_44ff278e6726a3571f43db565a186a11",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T23:08:15.754Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_72db9d95830739f6f1e54feb09ad261d",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T18:18:17.340Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_81de2e90997c1689eb0ec2aaff00e5fb",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T21:19:37.469Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_81de2e90997c1689eb0ec2aaff00e5fb",
+              "possible_effect": 1,
+              "receipt_revision": 2,
+              "received_at": "2026-11-14T21:27:22.701Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "CANCELLED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_851b83130e83385e1dc2eb47bfe06452",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T21:27:21.880Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_89eeef12d823de4f2e9a83e87aad76fe",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T18:13:29.569Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_89eeef12d823de4f2e9a83e87aad76fe",
+              "possible_effect": 1,
+              "receipt_revision": 2,
+              "received_at": "2026-11-14T18:18:17.807Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "CANCELLED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_8dd7095fbd5e23defbb95a7f0c22ec7e",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T23:08:16.342Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_8dd7095fbd5e23defbb95a7f0c22ec7e",
+              "possible_effect": 1,
+              "receipt_revision": 2,
+              "received_at": "2026-11-14T23:10:22.850Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUCCEEDED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_92b7ca515e9efa6b38b48a5dce51d560",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T16:28:24.682Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_92b7ca515e9efa6b38b48a5dce51d560",
+              "possible_effect": 1,
+              "receipt_revision": 2,
+              "received_at": "2026-11-14T16:45:13.067Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "CANCELLED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_a7dac52535834052da7facc362f81dc7",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T22:36:50.272Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_b6e5b1ad8c2df100ae062e91007abb1e",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T22:28:47.279Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": "PROCESS_LAUNCH_FENCED",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T19:14:06.625Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "FAILED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T23:56:37.065Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+              "possible_effect": 1,
+              "receipt_revision": 2,
+              "received_at": "2026-11-14T23:58:16.552Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUCCEEDED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_d7ee27186ba720011a5c3704196eab09",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T22:28:47.638Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_d7ee27186ba720011a5c3704196eab09",
+              "possible_effect": 1,
+              "receipt_revision": 2,
+              "received_at": "2026-11-14T22:36:50.481Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "CANCELLED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_f2913d83a8a515bf75d23f589f3aa2b2",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T23:56:35.729Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "op_fa93f7c82a6cb43583ad51992c248024",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T16:28:23.590Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_4e0df64836ba62465a5f836df480fed8",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T23:58:11.957Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_c9d0281009001c9dcdbf85cfa18ccbc3",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T23:09:06.868Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "operation_id": "r4op_fbc4560e3aa93c56e1552342f5da0225",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-14T23:10:12.453Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_404077ff1cd80b9b0d5a018448148a71",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-15T05:40:19.248Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_4133ab4f0136fd3391a85cf856a49ea0",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-15T05:17:27.999Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_423345383752a6d0b8095d73159d1257",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-15T05:40:20.200Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_423345383752a6d0b8095d73159d1257",
+              "possible_effect": 1,
+              "receipt_revision": 2,
+              "received_at": "2026-11-15T05:40:37.088Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUCCEEDED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_872a18679d85dc81bc912e28240fa7db",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-15T05:17:47.254Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_b9a7bc74da0788081adbe51fa62c6598",
+              "possible_effect": 1,
+              "receipt_revision": 1,
+              "received_at": "2026-11-15T05:17:29.166Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "SUBMITTED"
+            },
+            {
+              "error_code": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "operation_id": "op_b9a7bc74da0788081adbe51fa62c6598",
+              "possible_effect": 1,
+              "receipt_revision": 2,
+              "received_at": "2026-11-15T05:17:47.895Z",
+              "retry_safe": 0,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "stage": "CANCELLED"
+            }
+          ],
+          "sha256": "ec2a1be14f95b2c3d15cb4cc9190ea2e98c18c871f6e3b8ff5322090fc565b75"
+        },
+        "execution_sessions": {
+          "count": 9,
+          "rows": [
+            {
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "contained_at": null,
+              "containment_reason": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "lease_state": "CLOSED",
+              "lifecycle_state": "CLOSED",
+              "open_operation_id": "op_445324998d692973c2980bdef525ee94",
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+              "stream_epoch": "stream_78c2d182ec9c3424fb63204dd61430ca",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "contained_at": null,
+              "containment_reason": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "lease_state": "CLOSED",
+              "lifecycle_state": "CLOSED",
+              "open_operation_id": "op_1d0c95ec862a46530a3b8f37d8a5a878",
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+              "stream_epoch": "stream_3f0bc8fb93378879b461693bea5ea1bb",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "contained_at": null,
+              "containment_reason": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "lease_state": "CLOSED",
+              "lifecycle_state": "CLOSED",
+              "open_operation_id": "op_44ff278e6726a3571f43db565a186a11",
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+              "stream_epoch": "stream_326601b801c404504ac6f81607cff95e",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "contained_at": null,
+              "containment_reason": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "lease_state": "CLOSED",
+              "lifecycle_state": "CLOSED",
+              "open_operation_id": "op_fa93f7c82a6cb43583ad51992c248024",
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+              "stream_epoch": "stream_1e462c1008551ea070b3c090bc5f73be",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "contained_at": null,
+              "containment_reason": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "lease_state": "CLOSED",
+              "lifecycle_state": "CLOSED",
+              "open_operation_id": "op_b6e5b1ad8c2df100ae062e91007abb1e",
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+              "stream_epoch": "stream_e5a3b74158a21953cdaeb22c0e11b870",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "contained_at": "2026-11-14T19:14:07.899656Z",
+              "containment_reason": "AUTH_EXPIRED",
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "lease_state": "CLOSED",
+              "lifecycle_state": "FAILED",
+              "open_operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247",
+              "stream_epoch": null,
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+              "contained_at": null,
+              "containment_reason": null,
+              "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+              "lease_state": "CLOSED",
+              "lifecycle_state": "CLOSED",
+              "open_operation_id": "op_f2913d83a8a515bf75d23f589f3aa2b2",
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+              "stream_epoch": "stream_2ac178bd5f2c0104921ec1f54584cb63",
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+              "contained_at": null,
+              "containment_reason": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "lease_state": "SUPERSEDED",
+              "lifecycle_state": "READY",
+              "open_operation_id": "op_404077ff1cd80b9b0d5a018448148a71",
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+              "stream_epoch": "stream_c37ca52ea74b92f7c8af59b57da14b53",
+              "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+            },
+            {
+              "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+              "contained_at": null,
+              "containment_reason": null,
+              "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+              "lease_state": "CLOSED",
+              "lifecycle_state": "CLOSED",
+              "open_operation_id": "op_4133ab4f0136fd3391a85cf856a49ea0",
+              "owner_generation": 1,
+              "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+              "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73",
+              "stream_epoch": "stream_dbd162d29f87f5656c4f170e045c9846",
+              "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+            }
+          ],
+          "sha256": "628f440d450a7d30855cc04c5975e797ad5374f07f2000c4103df03425aa53c7"
+        },
+        "execution_tool_claims": {
+          "count": 0,
+          "rows": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "runtime_execution_grants": {
+          "count": 8,
+          "rows": [
+            {
+              "endpoint_id": "ep_663e906815128b840a7e13bda21eb79a",
+              "expires_at": "2026-11-14T18:42:36.153081Z",
+              "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+              "max_executions": 3,
+              "no_expiry": 0,
+              "represented_agent_id": "m1v12-local",
+              "revision": 1,
+              "revoked_at": null,
+              "unlimited_actions": 0,
+              "used_executions": 1,
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "endpoint_id": "ep_663e906815128b840a7e13bda21eb79a",
+              "expires_at": "2026-11-14T22:10:10.862526Z",
+              "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+              "max_executions": 3,
+              "no_expiry": 0,
+              "represented_agent_id": "m1v12-local",
+              "revision": 1,
+              "revoked_at": null,
+              "unlimited_actions": 0,
+              "used_executions": 1,
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "endpoint_id": "ep_663e906815128b840a7e13bda21eb79a",
+              "expires_at": "2026-11-14T20:08:18.408235Z",
+              "grant_id": "grant_167e8f055e0f4444b9a429ca5a4ce686",
+              "max_executions": 3,
+              "no_expiry": 0,
+              "represented_agent_id": "m1v12-local",
+              "revision": 1,
+              "revoked_at": null,
+              "unlimited_actions": 0,
+              "used_executions": 0,
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "endpoint_id": "ep_663e906815128b840a7e13bda21eb79a",
+              "expires_at": "2026-11-14T23:27:07.998684Z",
+              "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+              "max_executions": 3,
+              "no_expiry": 0,
+              "represented_agent_id": "m1v12-local",
+              "revision": 1,
+              "revoked_at": null,
+              "unlimited_actions": 0,
+              "used_executions": 2,
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "endpoint_id": "ep_663e906815128b840a7e13bda21eb79a",
+              "expires_at": "2026-11-15T00:54:28.827225Z",
+              "grant_id": "grant_5dc474da4bfb4e4288b8ecd82884409b",
+              "max_executions": 3,
+              "no_expiry": 0,
+              "represented_agent_id": "m1v12-local",
+              "revision": 1,
+              "revoked_at": null,
+              "unlimited_actions": 0,
+              "used_executions": 2,
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "endpoint_id": "ep_52472d49f9e61034838c6447f0ebb155",
+              "expires_at": "2026-11-15T06:08:51.488158Z",
+              "grant_id": "grant_65493a4efdac48688e2d00be6fd0edb3",
+              "max_executions": 3,
+              "no_expiry": 0,
+              "represented_agent_id": "m1-sonnet-remote",
+              "revision": 1,
+              "revoked_at": null,
+              "unlimited_actions": 0,
+              "used_executions": 2,
+              "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+            },
+            {
+              "endpoint_id": "ep_663e906815128b840a7e13bda21eb79a",
+              "expires_at": "2026-11-14T16:22:02.541642Z",
+              "grant_id": "grant_89bbed009c65458fab96ff9d0a3ffc72",
+              "max_executions": 20,
+              "no_expiry": 0,
+              "represented_agent_id": "m1v12-local",
+              "revision": 1,
+              "revoked_at": null,
+              "unlimited_actions": 0,
+              "used_executions": 0,
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            },
+            {
+              "endpoint_id": "ep_663e906815128b840a7e13bda21eb79a",
+              "expires_at": "2026-11-14T17:26:23.088231Z",
+              "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+              "max_executions": 20,
+              "no_expiry": 0,
+              "represented_agent_id": "m1v12-local",
+              "revision": 1,
+              "revoked_at": null,
+              "unlimited_actions": 0,
+              "used_executions": 1,
+              "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+            }
+          ],
+          "sha256": "0c41b9d1671f1bb663b11cb4d4c793090956129345f06b5ecbcb2fd26f0a7287"
+        }
+      }
+    }
+  },
+  "finished_at": "2026-11-15T11:53:17.552716+00:00",
+  "new_provider_calls": 0,
+  "payloads_read": false,
+  "productive_requests": 0,
+  "started_at": "2026-11-15T11:53:17.300381+00:00",
+  "status": "READ_ONLY_KNOWN_HISTORY"
+}

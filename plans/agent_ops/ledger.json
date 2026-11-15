@@ -14205,6 +14205,25 @@
       "retained_observer_active": false,
       "physical_exit_confirmed": false,
       "acceptance_promoted": false
+    },
+    "r3_windows_current_history_supplement": {
+      "status": "OFFLINE_PREPARED_MANUAL_WINDOW_UNSELECTED",
+      "summary": "4 focused syntheticPASS; readonly11ownDB history projection28ops/35receipts/9sessions/58leases/8grants/8watermarks, not event baseline/atomic snapshot. E29tests+7imports reused unchanged. SVC29 literal3distinct suspend/logout/reboot; shutdown optional, no fourth requirement. No OS/service/provider/grant effects; async window unanswered, no acceptance promotion.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-windows-current-history-supplement/review.json",
+        "plans/agent_ops/evidence/r3-windows-current-history-supplement/qualification.json",
+        "plans/agent_ops/evidence/r3-windows-current-history-supplement/history-current.json",
+        "plans/agent_ops/evidence/r3-windows-current-history-supplement/commands.json",
+        "plans/agent_ops/evidence/r3-windows-current-history-supplement/manifest.json"
+      ],
+      "acceptance_promoted": false,
+      "manual_window_selected": false,
+      "provider_calls": 0,
+      "sonnet_tokens": 144004,
+      "sonnet_authorized_limit": 200000,
+      "sonnet_charged_admissions": 2,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16
     }
   },
   "history": [
@@ -16248,6 +16267,27 @@
       "retained_observer_active": false,
       "physical_exit_confirmed": false,
       "acceptance_promoted": false
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_windows_current_history_supplement",
+      "status": "OFFLINE_PREPARED_MANUAL_WINDOW_UNSELECTED",
+      "summary": "4 focused syntheticPASS; readonly11ownDB history projection28ops/35receipts/9sessions/58leases/8grants/8watermarks, not event baseline/atomic snapshot. E29tests+7imports reused unchanged. SVC29 literal3distinct suspend/logout/reboot; shutdown optional, no fourth requirement. No OS/service/provider/grant effects; async window unanswered, no acceptance promotion.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-windows-current-history-supplement/review.json",
+        "plans/agent_ops/evidence/r3-windows-current-history-supplement/qualification.json",
+        "plans/agent_ops/evidence/r3-windows-current-history-supplement/history-current.json",
+        "plans/agent_ops/evidence/r3-windows-current-history-supplement/commands.json",
+        "plans/agent_ops/evidence/r3-windows-current-history-supplement/manifest.json"
+      ],
+      "acceptance_promoted": false,
+      "manual_window_selected": false,
+      "provider_calls": 0,
+      "sonnet_tokens": 144004,
+      "sonnet_authorized_limit": 200000,
+      "sonnet_charged_admissions": 2,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16
     }
   ],
   "r3_native_bounded_supervisor_execution": {

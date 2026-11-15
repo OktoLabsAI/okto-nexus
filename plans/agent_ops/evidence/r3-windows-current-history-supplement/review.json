@@ -1,0 +1,62 @@
+{
+  "status": "OFFLINE_WINDOWS_EVENT_OBSERVATION_PREPARED_NO_EVENT_SELECTED",
+  "qualification_sha256": "9b40fa56ed80a645136609702db6f8a5229801f77d8f0e2cdf5a491c67653610",
+  "tests": {
+    "unique_passed": 4,
+    "seconds": 0.115,
+    "tool": "529b82",
+    "antecedent": "196653:2pass/2fixture cleanup errors due to unclosed SQLite connections; explicit fixture close corrected. Not product failures.",
+    "reused_E_synthetic_pass": 29,
+    "reused_E_import_checks": 7,
+    "reused_tests_rerun": false
+  },
+  "root_reviews": [
+    "3d2a22",
+    "5322e0",
+    "7ebfd5",
+    "f3a9c7"
+  ],
+  "readonly_history": {
+    "databases": 11,
+    "operations": 28,
+    "receipts": 35,
+    "sessions": 9,
+    "leases": 58,
+    "grants": 8,
+    "watermarks": 8,
+    "native_actions": 0,
+    "tool_claims": 0,
+    "pre_event_baseline": false,
+    "cross_database_atomicity": false,
+    "source_tool": "e9957c",
+    "credential_payload_reads": false
+  },
+  "literal_scope": {
+    "SVC-T18": "Real OS login and correlated own task/cohort required; no boot-without-login inference.",
+    "SVC-T21": "Normal drain/timeout semantics and honest logout/shutdown uncertainty; observer loss or absent receipt never proves physical exit or DRAINED.",
+    "SVC-T29": "Exactly three distinct literal event types: suspend/resume, logout, reboot. Shutdown/power-on is an optional separate observation, not a fourth new requirement.",
+    "original_proposal_wording": "The retained PROPOSTA says four campaigns distinct because it lists optional shutdown as well. This does not expand the fixed SVC-T29 criterion.",
+    "AC13_AC14": "No promotion from preparation or history equality. Real OS event evidence remains missing; this proposes preserved known history without new productive admission, not active-work survival."
+  },
+  "manual_window": {
+    "asked_async_by_root": true,
+    "response_received": false,
+    "selected": false,
+    "automatic_OS_actions": false
+  },
+  "operational_prerequisite": "Current Connector39640/fbc0042 remains pending per separate last-root observation; supplement neither closes it nor expands force authority. Future preparation must use actual current owned cohorts and a selected window; no existing admission/grant or consumed start is replayed.",
+  "preserved_original_E": "Temp/r3-svc-session-events-plan-z5l005u4 unchanged; existing sources/qualification reused by exact dependencies.",
+  "effects": {
+    "services": 0,
+    "os_events": 0,
+    "provider": 0,
+    "grants": 0,
+    "new_productive_requests": 0
+  },
+  "acceptance_promoted": false,
+  "scenario_counts": {
+    "VERIFIED": 126,
+    "IN_PROGRESS": 4,
+    "NOT_RUN": 2
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "manual_os_actions_only": true,
+  "service_control_commands_included": false,
+  "steps": [
+    {
+      "event": "01-suspend-resume",
+      "before_argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+        "before",
+        "--event",
+        "01-suspend-resume"
+      ],
+      "after_argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+        "after",
+        "--event",
+        "01-suspend-resume",
+        "--actual-marker",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\actual-01-suspend-resume.json"
+      ],
+      "assessment_argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+        "assess",
+        "--event",
+        "01-suspend-resume"
+      ]
+    },
+    {
+      "event": "02-sign-out-logon",
+      "before_argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+        "before",
+        "--event",
+        "02-sign-out-logon"
+      ],
+      "after_argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+        "after",
+        "--event",
+        "02-sign-out-logon",
+        "--actual-marker",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\actual-02-sign-out-logon.json"
+      ],
+      "assessment_argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+        "assess",
+        "--event",
+        "02-sign-out-logon"
+      ]
+    },
+    {
+      "event": "03-shutdown-power-on-logon",
+      "before_argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+        "before",
+        "--event",
+        "03-shutdown-power-on-logon"
+      ],
+      "after_argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+        "after",
+        "--event",
+        "03-shutdown-power-on-logon",
+        "--actual-marker",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\actual-03-shutdown-power-on-logon.json"
+      ],
+      "assessment_argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+        "assess",
+        "--event",
+        "03-shutdown-power-on-logon"
+      ]
+    },
+    {
+      "event": "04-restart-logon",
+      "before_argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+        "before",
+        "--event",
+        "04-restart-logon"
+      ],
+      "after_argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+        "after",
+        "--event",
+        "04-restart-logon",
+        "--actual-marker",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\actual-04-restart-logon.json"
+      ],
+      "assessment_argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+        "assess",
+        "--event",
+        "04-restart-logon"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "status": "OFFLINE_PREPARED_CURRENT_HISTORY_MANUAL_EVENTS",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+  "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv",
+  "observer_sources": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4",
+  "homes": {
+    "nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+    "connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state"
+  },
+  "port": 58631,
+  "instance_ids": {
+    "nexus": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "connector": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62"
+  },
+  "tasks": {
+    "nexus": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "connector": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62"
+  },
+  "task_digests": {
+    "nexus": "d8afbd23b644f0128b02a8dc8ab7aa6db36982af7fbabc0b25f8c5ac812a3011",
+    "connector": "ea5d4ee2340054460fb04f0f0c83bf1f5a8dced3380f5b32409a504f9ec465aa"
+  },
+  "python_images": {
+    "C:\\Python313\\pythonw.exe": "2bea4fc941b7d9436afa1be8cb46551c0694deed23b3fec87b969054238be099",
+    "C:\\Python313\\python.exe": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\pythonw.exe": "5a90ff0fc0d283786928daebf2330c6851d3f5c7a89d1113ca2f7a2c05ff2f07"
+  },
+  "read_only_dependencies": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\event_native.py",
+      "sha256": "2e81ec2b62b984ce3337ad7ce13b250a8eaee534376331cb6de97eeacbc28c12"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\event_observer.py",
+      "sha256": "23b506177335e168c087dffce446d99bf024c49a9742ea0a43807459b96667ab"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\installation.json",
+      "sha256": "a9f03ee93bfff21c5ea3fa530c4c2259180770027a0674c82fbe0fb774fa221c"
+    }
+  ],
+  "events": [
+    "01-suspend-resume",
+    "02-sign-out-logon",
+    "03-shutdown-power-on-logon",
+    "04-restart-logon"
+  ],
+  "manual_os_actions_only": true,
+  "os_actions_implemented": false,
+  "service_controls_implemented": false,
+  "provider_calls": 0,
+  "grant_mutations": 0,
+  "new_productive_requests": 0,
+  "preparation_facts": {
+    "nexus": "STOPPED_REPORTED_BY_ROOT",
+    "connector": "DRAINING_PENDING_PID39640_GENERATION_fbc0042be355e83da5bb695a64de4910",
+    "event_window_selected": false,
+    "connector_exit_not_inferred": true
+  },
+  "before_requires": [
+    "Current six process handles and canonical READY for both owned homes",
+    "Root prepares existing tasks only after old Connector physical exit; no replay of prior start",
+    "Selected manual event window; no new admission, connect, setup or provider call"
+  ],
+  "historical_scope": {
+    "server_agents": [
+      "m1v12-local",
+      "m1-sonnet-remote"
+    ],
+    "local_journals": "own core-runtime/session-*.db, max32; allowlisted metadata only",
+    "remote_journal": "own executor-journal.db; allowlisted metadata only",
+    "no_auth_vault_payload_or_personal_config_reads": true
+  },
+  "limits": {
+    "rows_per_table": 2048,
+    "sqlite_seconds_per_database": 5,
+    "retained_watch_seconds": 1800,
+    "after_query_seconds": 180,
+    "os_io_preemption_claimed": false,
+    "cross_database_atomicity_claimed": false
+  }
+}

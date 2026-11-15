@@ -1,0 +1,55 @@
+{
+  "files": [
+    {
+      "path": "commands.json",
+      "sha256": "11ae57cb3037b08e748ccdf5dca7cdb54e685092f6dfdb6897b3f8638180ec0e",
+      "bytes": 6106
+    },
+    {
+      "path": "history-current.json",
+      "sha256": "e19646ed77ec7cf5f4c5562b642f2754f5fec28517e3394bf0ba24b2b50c0622",
+      "bytes": 150050
+    },
+    {
+      "path": "history.py",
+      "sha256": "e3c6c0b9d8dbc352575083128756e1a39e946f389a49c9d8c825423477afe894",
+      "bytes": 7540
+    },
+    {
+      "path": "observe.py",
+      "sha256": "73f5ae19c468045d927d72a55321d1886ea40ee8296767816f10c9f511cfd021",
+      "bytes": 4854
+    },
+    {
+      "path": "plan.json",
+      "sha256": "b4b1e19ae5d172dd754a6020d1341a3b1271b7e962e694dbe2b801c7f1634b26",
+      "bytes": 4246
+    },
+    {
+      "path": "PROPOSTA.md",
+      "sha256": "1e997278540f66096f6680070b7805b19476486b4e44a5f731fef914c5c690a6",
+      "bytes": 6325
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "9b40fa56ed80a645136609702db6f8a5229801f77d8f0e2cdf5a491c67653610",
+      "bytes": 3115
+    },
+    {
+      "path": "README.md",
+      "sha256": "132d92a63e8ebc7f5b5287f3d7d4fa453a23990edae7b1bdffd4ef4d2439b652",
+      "bytes": 1548
+    },
+    {
+      "path": "review.json",
+      "sha256": "273d82e4c76ac80f0f2c83cb2857bad7d128587955cceb889639695d9649c181",
+      "bytes": 2715
+    },
+    {
+      "path": "test_history.py",
+      "sha256": "bee61e80356674c444d380ca2c7125b2a56b0af43f1363aa5aa5d6ccb8c1b914",
+      "bytes": 3668
+    }
+  ],
+  "curation": "Six qualification-pinned sources/documents, qualification and exact allowlisted metadata projection; no private DB or payload copied."
+}

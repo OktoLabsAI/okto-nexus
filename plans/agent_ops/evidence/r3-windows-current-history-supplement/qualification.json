@@ -1,0 +1,85 @@
+{
+  "status": "OFFLINE_QUALIFIED_WITH_READONLY_CURRENT_HISTORY",
+  "final_tests": {
+    "passed": 4,
+    "failed": 0,
+    "seconds": 0.115,
+    "tool": "529b82",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\test_history.py"
+    ]
+  },
+  "antecedent": {
+    "tool": "196653",
+    "passed": 2,
+    "errors": 2,
+    "cause": "Fixture SQLite context manager committed but did not close connections; Windows cleanup failed. Explicit fixture close fixed. No service/provider involved."
+  },
+  "current_history": {
+    "tool": "e9957c",
+    "databases": 11,
+    "canonical_counts": {
+      "execution_event_watermarks": 8,
+      "execution_leases": 58,
+      "execution_native_actions": 0,
+      "execution_operations": 28,
+      "execution_receipts": 35,
+      "execution_sessions": 9,
+      "execution_tool_claims": 0,
+      "runtime_execution_grants": 8
+    },
+    "pin": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\history-current.json",
+      "sha256": "e19646ed77ec7cf5f4c5562b642f2754f5fec28517e3394bf0ba24b2b50c0622"
+    },
+    "read_only": true,
+    "pre_event_baseline": false,
+    "cross_database_atomicity_claimed": false
+  },
+  "compile": "PASS",
+  "source_pins": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\plan.json",
+      "sha256": "b4b1e19ae5d172dd754a6020d1341a3b1271b7e962e694dbe2b801c7f1634b26"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\history.py",
+      "sha256": "e3c6c0b9d8dbc352575083128756e1a39e946f389a49c9d8c825423477afe894"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\observe.py",
+      "sha256": "73f5ae19c468045d927d72a55321d1886ea40ee8296767816f10c9f511cfd021"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\test_history.py",
+      "sha256": "bee61e80356674c444d380ca2c7125b2a56b0af43f1363aa5aa5d6ccb8c1b914"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\PROPOSTA.md",
+      "sha256": "1e997278540f66096f6680070b7805b19476486b4e44a5f731fef914c5c690a6"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\commands.json",
+      "sha256": "11ae57cb3037b08e748ccdf5dca7cdb54e685092f6dfdb6897b3f8638180ec0e"
+    }
+  ],
+  "reused_observer_qualification": {
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4",
+    "synthetic_pass": 29,
+    "installed_imports": 7,
+    "rerun": false
+  },
+  "effects": {
+    "service": 0,
+    "os_events": 0,
+    "provider": 0,
+    "grant_mutations": 0
+  },
+  "acceptance_promotion": false
+}
