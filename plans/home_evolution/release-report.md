@@ -122,3 +122,21 @@ restantes mantêm NOT_RUN, incluindo partes de integração que ainda exigem pro
 Uma instalação e rodada final devem incorporar as correções posteriores ao
 wheel inicial. Campanha HOME-033 continua sem consentimento/execução paga nesta
 fase; nenhum orçamento R3 foi reaproveitado. O controle de apresentação segue OFF.
+
+## Revisão de namespace e último corte instalado
+
+O corte `f948c5d7` passou33 testes instalados de consulta/semântica/pacote, sem
+mudança de2.109 inputs, mais Twine. Evidência em `evidence/pr06-package-final/`.
+Após essa rodada, a revisão de identidade detectou uma colisão de operation_id
+entre executores: a segunda atividade podia desaparecer ao paginar e herdar a
+referência Attention do primeiro executor. Três falhas reproduzidas em SQLite
+foram corrigidas com namespace executor/sessão na chave direta e no join.
+Sete focais passaram; `evidence/pr06-namespaces/` preserva antes/depois.
+
+O delta é exclusivamente de projeção, sem migrations, protocolo, alteração de
+IDs canônicos ou efeitos. Uma qualificação instalada focal incorporará esse
+último corte; não se atribuem esses novos bytes ao wheel anterior. O benchmark
+final1/10/100workers em `measurement-final-workers.json` permanece vinculado ao
+fonte `f948c5d7`:46queries/GET constantes e500ms p95 não atingido em quatro casos.
+O workload só contém handoffs; não foi usado para afirmar latência de operações
+diretas ou de execuções nativas reais.

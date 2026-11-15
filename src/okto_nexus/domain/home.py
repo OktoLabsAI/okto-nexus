@@ -286,7 +286,10 @@ def activity(f, server_id) -> HomeActivity:
             executor_id=f['executor_id'], session_id=f['session_id'], operation_id=f['source_id'])
     # No prompts, result bodies, or tool arguments enter these facts.
     title = f.get('title') or {'handoff': 'Handoff', 'conversation_turn': 'Conversation', 'direct_operation': 'Work request'}[f['kind']]
-    return dict(id='home_' + digest([1, server_id, f['kind'], f['source_id']]), kind=f['kind'], source_ref=ref,
+    identity = [1, server_id, f['kind'], f['source_id']]
+    if f['kind'] == 'direct_operation':
+        identity.extend([f['executor_id'], f['session_id']])
+    return dict(id='home_' + digest(identity), kind=f['kind'], source_ref=ref,
         workspace_id=f['workspace_id'], title=title[:160], title_origin=f.get('title_origin') or 'fallback',
         agent_ids=sorted(set(v for v in f.get('agent_ids', []) if v)), display_state=state,
         state_since=since, last_activity_at=f.get('latest') or f.get('changed') or f.get('created'),

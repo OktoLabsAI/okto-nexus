@@ -1,0 +1,113 @@
+{
+  "status": "PASS_SCOPED_INSTALLED_FINAL",
+  "source_head": "f948c5d784db00ef0e26b2b6c758d5f8e7ab10d5",
+  "build": {
+    "tool_start": "333888",
+    "tool_final": "6efdd0",
+    "command": "rtk proxy <Python3.13> -I -B -X utf8 tools/build_validation_artifacts.py --output C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-final-8u111s8n\\dist",
+    "artifacts": {
+      "okto_nexus-0.3.4-py3-none-any.whl": "a6b8ebfab4fae8b5e3eb5fe0ec047904225ebb550d530556805d91127b800195",
+      "okto_nexus-0.3.4.tar.gz": "0fc577951ccfe0737f49a37d0864a6d20761eaa9e184944d8ef19af658ac1c62"
+    },
+    "build_scope_note": "The helper retains a generic development-build description. Actual input was clean frozen f948c5d7; wheel payloads independently equal current frozen checkout, including freshly compiled Home assets."
+  },
+  "twine": {
+    "wheel": "PASSED",
+    "sdist": "PASSED"
+  },
+  "install": {
+    "python": "3.13.1",
+    "prefix": "C:/Users/jpamb/AppData/Local/Temp/home-r1-installed-package-aq98yeg_/venv313",
+    "method": "force-reinstall --no-deps only exact Nexus wheel; existing isolated dependencies unchanged"
+  },
+  "tests": {
+    "count": 33,
+    "passed": 33,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "files": [
+      "tests/home_evolution/test_home_package.py",
+      "tests/home_evolution/test_home_semantics.py",
+      "tests/home_evolution/test_home_queries.py"
+    ],
+    "input_files": 2109,
+    "changed_inputs": [],
+    "junit_seconds": 154.558,
+    "case_ids": [
+      "tests.home_evolution.test_home_package::test_packaged_operational_home_serves_assets_and_compatible_contract",
+      "tests.home_evolution.test_home_semantics::test_same_agent_two_sessions_keep_running_and_operator_wait_separate[input]",
+      "tests.home_evolution.test_home_semantics::test_information_broadcast_unread_does_not_create_productive_work",
+      "tests.home_evolution.test_home_semantics::test_successful_turn_never_completes_or_verifies_handoff[CLAIMED-result_available_cleanup_pending]",
+      "tests.home_evolution.test_home_semantics::test_successful_turn_never_completes_or_verifies_handoff[VERIFYING-awaiting_verification]",
+      "tests.home_evolution.test_home_semantics::test_same_agent_native_and_external_are_distinct_evidence",
+      "tests.home_evolution.test_home_semantics::test_external_without_canonical_workspace_is_refused_not_inferred",
+      "tests.home_evolution.test_home_semantics::test_overview_omits_credential_prompt_tool_args_and_private_paths",
+      "tests.home_evolution.test_home_semantics::test_handoff_result_reuses_canonical_task_title_without_description[native]",
+      "tests.home_evolution.test_home_semantics::test_handoff_result_reuses_canonical_task_title_without_description[manual]",
+      "tests.home_evolution.test_home_semantics::test_empty_installation_has_no_home_workers_until_worker_registered",
+      "tests.home_evolution.test_home_semantics::test_manual_handoff_presentation_redacts_existing_policy_tokens",
+      "tests.home_evolution.test_home_semantics::test_message_subject_and_result_filename_redact_without_rewriting_ids",
+      "tests.home_evolution.test_home_queries::test_overview_real_fixture_is_read_only_and_scoped",
+      "tests.home_evolution.test_home_queries::test_workspace_pages_are_complete_and_cursor_bound",
+      "tests.home_evolution.test_home_queries::test_operator_authority_not_an_agent_name",
+      "tests.home_evolution.test_home_queries::test_disabled_external_and_failed_work_are_not_empty_success",
+      "tests.home_evolution.test_home_queries::test_exact_target_server_workspace_and_session",
+      "tests.home_evolution.test_home_queries::test_each_page_uses_one_read_uow",
+      "tests.home_evolution.test_home_queries::test_overview_shares_one_attention_projection_statement",
+      "tests.home_evolution.test_home_queries::test_agent_and_external_pages_have_reachable_continuations",
+      "tests.home_evolution.test_home_queries::test_unclaimed_direct_recipient_is_workspace_member_without_presence",
+      "tests.home_evolution.test_home_queries::test_invalid_filter_contract[params0]",
+      "tests.home_evolution.test_home_queries::test_invalid_filter_contract[params1]",
+      "tests.home_evolution.test_home_queries::test_invalid_filter_contract[params2]",
+      "tests.home_evolution.test_home_queries::test_started_event_requires_current_owner_stream_and_nonterminal",
+      "tests.home_evolution.test_home_queries::test_result_preview_seen_and_bounded_artifact_metadata",
+      "tests.home_evolution.test_home_queries::test_business_feed_uses_real_events_not_unread_or_private_payload",
+      "tests.home_evolution.test_home_queries::test_native_delivery_and_handoff_are_one_activity_then_claim_change_separates_history",
+      "tests.home_evolution.test_home_queries::test_direct_delegation_keeps_each_handoff_and_canonical_task_title",
+      "tests.home_evolution.test_home_queries::test_result_artifact_reference_uses_exact_durable_operation_without_paths",
+      "tests.home_evolution.test_home_queries::test_retries_share_handoff_controls_do_not_become_work",
+      "tests.home_evolution.test_home_queries::test_expired_claim_is_unknown_not_a_current_native_activity"
+    ],
+    "pytest_reported_seconds": 155.3,
+    "tool_start": "ee78e9",
+    "tool_final": "cbf5dd"
+  },
+  "payloads": {
+    "wheel_to_checkout_equal": 699,
+    "assets_equal": 7,
+    "served_bundle": "index-fgvI6LZl.js",
+    "installed_origins": {
+      "okto_nexus": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Lib\\site-packages\\okto_nexus",
+        "wheel_sha256": "a6b8ebfab4fae8b5e3eb5fe0ec047904225ebb550d530556805d91127b800195"
+      },
+      "nexus_connector_core": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Lib\\site-packages\\nexus_connector_core",
+        "wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5"
+      },
+      "okto_nexus_connector": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Lib\\site-packages\\okto_nexus_connector",
+        "wheel_sha256": "2b8ce688541a5ae6e9806467569be0743fef6ff607c763f2b93accf0f93e017d"
+      }
+    },
+    "verification": "ci_installed uses -I and independent temporary cwd; compares every package payload of Nexus/Core/Connector to exact pinned wheels before pytest."
+  },
+  "boundary": {
+    "provider_invocation": false,
+    "native_harness_invocation": false,
+    "production_service_control": false,
+    "user_environment_mutation": false,
+    "sqlite_http": "Real temporary SQLite and ASGI/HTTP test app; native peers only synthetic where fixture requires."
+  },
+  "limitations": [
+    "Only three requested changed-area test files ran. Prior CLI17 qualification is an antecedent, not rerun or added to this total.",
+    "No browser behavior or 73-case whole-plan acceptance inferred from installed tests.",
+    "Timings are qualification durations, not Home performance SLO measurements.",
+    "No broad regression suite rerun."
+  ],
+  "warnings": [
+    "Existing Vite large chunk warning; existing setuptools license-table deprecation; pytest warnings retained in test metadata/logs."
+  ],
+  "independent_final_verification": "2f31ea / 1a329f"
+}

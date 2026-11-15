@@ -117,6 +117,11 @@ execução ou conclusão canônica; fonte sem workspace não entra por inferênc
 6. Mesmo agente com várias sessões mantém atividades distintas. Externo nunca
    se funde a nativo por semelhança de identificador.
 
+Na atividade direta, tanto a identidade de apresentação quanto a correlação de
+Attention incluem Server/executor/sessão/operação. Um operation_id reutilizado
+por outro executor não colide em chave React, cursor ou vínculo de ocorrência.
+Essas chaves Home são projeção; não reescrevem IDs nativos ou preferências.
+
 | Fato atual comprovado | display_state | Contador de execução |
 |---|---|---|
 | OPEN sem dependência | awaiting_owner | Não |

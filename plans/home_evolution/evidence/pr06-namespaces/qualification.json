@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "scope": "Home direct-operation identity, keyset completeness and Attention namespace isolation",
+  "source_pins": [
+    {
+      "path": "src/okto_nexus/domain/home.py",
+      "sha256": "d5858ce9222644b7dbe2da13dab6e27c27f632410dc4df3a82166331388c132b"
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "sha256": "f7a20338a6638c1abd3038138c13dc794c5ea7c404bac3284cff4b300343aa6f"
+    },
+    {
+      "path": "tests/home_evolution/test_home_namespaces.py",
+      "sha256": "bcb83f8c08d0778b529bfcf920a122cf6fb449bd3582cb284f2734d9d6619f4b"
+    }
+  ],
+  "runs": [
+    {
+      "name": "before",
+      "sha256": "2350ce5933620dbed20dd5c89e766504b40d1bf8bcb9c1b8be9e58c4b885cb0c",
+      "tests": "3",
+      "failures": "3",
+      "errors": "0",
+      "skipped": "0",
+      "time": "7.226"
+    },
+    {
+      "name": "final",
+      "sha256": "0fc01232cbbfebcdc535921afe3f30a87f8170932fd3c39048e60a0a0b652d54",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "23.308"
+    }
+  ],
+  "before_command": "rtk proxy .venv/Scripts/python.exe C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-direct-namespace-5glqlxd9\\run.py",
+  "final_command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/home_evolution/test_home_namespaces.py tests/home_evolution/test_home_native.py -q --tb=short --junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-direct-namespace-5glqlxd9\\final.xml",
+  "ruff": {
+    "result": "PASS",
+    "tool_ref": "0fcbd2"
+  },
+  "effects": {
+    "provider_calls": 0,
+    "live_service_actions": 0,
+    "os_events": 0
+  },
+  "acceptance": "Root review pending"
+}

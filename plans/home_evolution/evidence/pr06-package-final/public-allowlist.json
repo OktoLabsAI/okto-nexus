@@ -1,0 +1,44 @@
+{
+  "files": [
+    {
+      "path": "build-manifest.json",
+      "sha256": "b255946dbcc3895663ff5f20d169018ffc2675226e6b93a533cedfd94b26d667",
+      "bytes": 91746
+    },
+    {
+      "path": "commands.json",
+      "sha256": "d6d9904416ee6c1a5b9f34a19b04bb7ac4022487f033aba17fbe6cbb132ee17d",
+      "bytes": 2068
+    },
+    {
+      "path": "installed-campaign.json",
+      "sha256": "56bc74354b002e5b9ea7be663d4df81318faf3f3cf43cb551c935902b85f3aed",
+      "bytes": 262115
+    },
+    {
+      "path": "installed-origins.json",
+      "sha256": "18ffc9ac1166eda517a62ee1e923bf544ae704d8cd6a3b5e3bcaf4240428a794",
+      "bytes": 780
+    },
+    {
+      "path": "installed-tests.xml",
+      "sha256": "eeb37ba70f2a353d556225876416f7c3bdd0f71621a868670829b159e32210b4",
+      "bytes": 5072
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "32927446f4047abbf163246ef860ee64e9094b180529a3ead18d68a20735be61",
+      "bytes": 7429
+    },
+    {
+      "path": "REVIEW.md",
+      "sha256": "f8d884cda78ed10fcdf0dd8eb319f0b9e7726a16e7c0ac4bf130ae13acd234d4",
+      "bytes": 956
+    },
+    {
+      "path": "twine.log",
+      "sha256": "c3825634d2c2e1d92e696f0bb2bafeb5e3b5c90083b4f9e39e5e5dc2cec13193",
+      "bytes": 242
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "plan": "plans/home_evolution/source-plan.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
-  "updated_at": "2026-11-15T21:52:32.931653+00:00",
+  "updated_at": "2026-11-15T22:01:42.801570+00:00",
   "scenarios": {
     "HOME-T-A01": {
       "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
@@ -857,27 +857,48 @@
     },
     "HOME-T-H06": {
       "requirement": "Fixtures de 1, 10 e 100 agentes não aumentam queries por agente; consultas e resposta têm limites documentados.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-performance/measurement-final-workers.json",
+        "plans/home_evolution/performance.md",
+        "plans/home_evolution/evidence/pr06-browser/request-rate.json"
+      ],
+      "commit": "f948c5d7",
+      "environment": "Windows11; Python3.13.1/SQLite3.45.3;1/10/100 scoped workers with disposable presence sessions;20 warm samples; concurrent build/browser load allowed",
+      "limitations": [
+        "500ms p95 target NOT MET in all four datasets; see recorded metrics.",
+        "Service/JSON/SQL/pagination measured; browser idle request rate separate, no provider/native load promise."
+      ]
     },
     "HOME-T-H07": {
       "requirement": "Carga de 1.000 atividades abertas e 100.000 eventos preserva paginação; histórico total não é serializado no overview.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-performance/measurement-final-workers.json",
+        "plans/home_evolution/performance.md",
+        "plans/home_evolution/evidence/pr06-browser/request-rate.json"
+      ],
+      "commit": "f948c5d7",
+      "environment": "Windows11; Python3.13.1/SQLite3.45.3;1/10/100 scoped workers with disposable presence sessions;20 warm samples; concurrent build/browser load allowed",
+      "limitations": [
+        "500ms p95 target NOT MET in all four datasets; see recorded metrics.",
+        "Service/JSON/SQL/pagination measured; browser idle request rate separate, no provider/native load promise."
+      ]
     },
     "HOME-T-H08": {
       "requirement": "O ledger registra hardware, dataset, medições p50/p95, tamanho do payload, taxa de requests e eventuais metas não atingidas.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-performance/measurement-final-workers.json",
+        "plans/home_evolution/performance.md",
+        "plans/home_evolution/evidence/pr06-browser/request-rate.json"
+      ],
+      "commit": "f948c5d7",
+      "environment": "Windows11; Python3.13.1/SQLite3.45.3;1/10/100 scoped workers with disposable presence sessions;20 warm samples; concurrent build/browser load allowed",
+      "limitations": [
+        "500ms p95 target NOT MET in all four datasets; see recorded metrics.",
+        "Service/JSON/SQL/pagination measured; browser idle request rate separate, no provider/native load promise."
+      ]
     },
     "HOME-T-I01": {
       "requirement": "Feature da Home nova OFF restaura a experiência anterior sem parar daemon, Core ou Connector.",

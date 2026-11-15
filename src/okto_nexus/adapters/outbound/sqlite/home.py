@@ -98,7 +98,10 @@ WITH links AS MATERIALIZED (
  (SELECT json_group_array(json(item)) FROM home_attention WHERE
  json_extract(item,'$.workspace_id')=json_extract(fact,'$.workspace_id') AND (
  (json_extract(item,'$.source_id')=json_extract(fact,'$.source_id') AND
-  json_extract(item,'$.source_type')=CASE json_extract(fact,'$.kind') WHEN 'handoff' THEN 'handoff' WHEN 'conversation_turn' THEN 'delivery_operation' ELSE 'execution_operation' END)
+  json_extract(item,'$.source_type')=CASE json_extract(fact,'$.kind') WHEN 'handoff' THEN 'handoff' WHEN 'conversation_turn' THEN 'delivery_operation' ELSE 'execution_operation' END
+  AND (json_extract(fact,'$.kind')<>'direct_operation' OR (
+    json_extract(item,'$.executor_id')=json_extract(fact,'$.executor_id') AND
+    json_extract(item,'$.session_id')=json_extract(fact,'$.session_id'))))
  OR (json_extract(item,'$.source_type') IN ('execution_native_request','execution_operation','execution_result','handoff_result') AND EXISTS(SELECT 1 FROM json_each(fact,'$.runtime_refs') ref
   WHERE json_extract(item,'$.operation_id')=json_extract(ref.value,'$.operation_id')
     AND json_extract(item,'$.executor_id')=json_extract(ref.value,'$.executor_id')
