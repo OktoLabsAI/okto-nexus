@@ -1,0 +1,103 @@
+{
+  "status": "ONE_AUTHORIZED_CANONICAL_FORCE_COMPLETED_EXACT_COHORT_EXITED",
+  "authority": {
+    "user_response": "pode fazer a parada que voce precisar do nexus",
+    "scope": "Root clarified Nexus system: Server already stopped, temporary Connector39640/fbc0042 pending. Authorization applied only to necessary stop of this exact current owner.",
+    "authorization_sha256": "ef9c978f46cd1acb0a50a4f6525ab127a9729f5c8d9c195cb1a30d1af0e6779a",
+    "max_force_calls": 1,
+    "actual_force_calls": 1,
+    "consumed": true,
+    "future_force_authorized": false,
+    "token_limit_expansion_authorized": false
+  },
+  "actual_tool_refs": {
+    "fresh_watch_session": 8069,
+    "watch_handshake": "130ee4",
+    "canonical_force_return0": "8f0597",
+    "physical_exit_proof": [
+      "9b5119",
+      "927fdb"
+    ],
+    "post_stop_installed_API": "71026d",
+    "Nexus_CLI_status_antecedent": "f43454 CONFIG_ERROR"
+  },
+  "target": {
+    "pid": 39640,
+    "generation": "fbc0042be355e83da5bb695a64de4910",
+    "cycle_id": "c5964050ef52fa22d53730a8f20872f7"
+  },
+  "effect": {
+    "canonical_command_calls": 1,
+    "returncode": 0,
+    "report_generation": "fbc0042be355e83da5bb695a64de4910",
+    "report_state": "DRAINED",
+    "report_pending": 0,
+    "work_state": "not_checked",
+    "physical_exit_roles": {
+      "parent": {
+        "pid": 55008,
+        "birth": 134391943908467825,
+        "physical_exit": true,
+        "exit_code": 0
+      },
+      "launcher": {
+        "pid": 6424,
+        "birth": 134391943927241880,
+        "physical_exit": true,
+        "exit_code": 0
+      },
+      "child": {
+        "pid": 39640,
+        "birth": 134391943927520347,
+        "physical_exit": true,
+        "exit_code": 0
+      }
+    },
+    "post_stop_nexus": "stopped/NO_SERVICE_OWNER",
+    "post_stop_connector": "stopped/NO_SERVICE_OWNER",
+    "task_integration_removed": false,
+    "data_deleted": false,
+    "database_migration": false,
+    "package_upgrade": false,
+    "provider_calls": 0
+  },
+  "proof_boundaries": [
+    "Fresh three-role PID/birth handles establish this exact cohort exit. Old observer22718 timeout is preserved and is not exit evidence or continuous observation.",
+    "Separate force-result receipt attributes the one canonical force; observation alone never attributes force.",
+    "DRAINED/pending0 is the returned service report. Runtime work_state was not checked; no useful-session success, canonical work settlement, compensation, refund or budget reset follows.",
+    "Tasks remain installed; no uninstall or wholesale data-preservation hash claim is made.",
+    "Previous prepared corrected package/candidate remains unactivated by this stop; no new execution plan or500k gate change."
+  ],
+  "preserved_antecedents": {
+    "old_proposal_sha256": "50b90cfbdb6ead9008b47af3f9f70cd225a4eac163534e29adc294110927f7b6",
+    "old_observer_timeout_sha256": "658ef2f8581e90082c5aa7b34bb6d2667c2bf153fa1ebdb5f95e020c1f572499",
+    "adendum_sha256": "f9e17f6827d28204f3764c3f3456c435b66ec21616c998c1b4bfd4827fd05555",
+    "prior_preparation": "plans/agent_ops/evidence/r3-sonnet-corrected-package-observer-preparation/manifest.json",
+    "prior_timeout_state": "plans/agent_ops/evidence/r3-sonnet-observer-timeout-current-scope/review.json"
+  },
+  "goal_status": "No goal API state transition claimed or performed. Root reported goal still blocked; its resume state is controlled by user/tool, not inferred from this successful stop.",
+  "accounting": {
+    "sonnet_limit": 200000,
+    "sonnet_observed_tokens": 144004,
+    "sonnet_admissions": 2,
+    "proposed500k_authorized": false,
+    "codex_tokens": 579154,
+    "codex_admissions": 16
+  },
+  "scenario_counts": {
+    "VERIFIED": 126,
+    "IN_PROGRESS": 4,
+    "NOT_RUN": 2
+  },
+  "acceptance_promoted": false,
+  "fixed_plan_changed": false,
+  "final_root_review_pending": false,
+  "root_final_review": {
+    "tools": [
+      "aa805c",
+      "adf51d"
+    ],
+    "status": "PASS",
+    "commit_push_authorized": true
+  }
+}

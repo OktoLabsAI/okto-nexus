@@ -14277,6 +14277,31 @@
       "observer_started": false,
       "old_campaign_installation_changed": false,
       "acceptance_promoted": false
+    },
+    "r3_sonnet_authorized_current_force_stop": {
+      "status": "AUTHORIZED_EXACT_STOP_COMPLETE_NO_WORK_SETTLEMENT_CLAIM",
+      "summary": "User-authorized necessary Nexus-system stop clarified to current pending Connector39640/fbc0042/c596. Fresh watcher8069 retained3birthhandles; one canonical force return0 and all3physicalexit0. Installed API71026d bothstopped/NO_SERVICE_OWNER; NexusCLIstatusf43454 CONFIG_ERROR antecedent preserved. DRAINED/pending0 report but work_state not_checked, no useful/settlement/refund. Tasks retained, no delete/upgrade/migration/provider. Force authority consumed for this generation only; no goalstate transition or500k authorization inferred.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/public/force-authorization.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/public/force-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/public/exit-proof.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/public/post-stop-status.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/antecedent-status-diagnostic.json"
+      ],
+      "specific_force_authorization_consumed": true,
+      "actual_force_calls": 1,
+      "physical_exit_confirmed": true,
+      "future_force_authorized": false,
+      "work_settlement_claimed": false,
+      "sonnet_authorized_limit": 200000,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "proposed500k_authorized": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -16399,6 +16424,33 @@
       "force_authorized": false,
       "observer_started": false,
       "old_campaign_installation_changed": false,
+      "acceptance_promoted": false
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_authorized_current_force_stop",
+      "status": "AUTHORIZED_EXACT_STOP_COMPLETE_NO_WORK_SETTLEMENT_CLAIM",
+      "summary": "User-authorized necessary Nexus-system stop clarified to current pending Connector39640/fbc0042/c596. Fresh watcher8069 retained3birthhandles; one canonical force return0 and all3physicalexit0. Installed API71026d bothstopped/NO_SERVICE_OWNER; NexusCLIstatusf43454 CONFIG_ERROR antecedent preserved. DRAINED/pending0 report but work_state not_checked, no useful/settlement/refund. Tasks retained, no delete/upgrade/migration/provider. Force authority consumed for this generation only; no goalstate transition or500k authorization inferred.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/public/force-authorization.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/public/force-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/public/exit-proof.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/public/post-stop-status.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/antecedent-status-diagnostic.json"
+      ],
+      "specific_force_authorization_consumed": true,
+      "actual_force_calls": 1,
+      "physical_exit_confirmed": true,
+      "future_force_authorized": false,
+      "work_settlement_claimed": false,
+      "sonnet_authorized_limit": 200000,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "proposed500k_authorized": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16,
       "acceptance_promoted": false
     }
   ],

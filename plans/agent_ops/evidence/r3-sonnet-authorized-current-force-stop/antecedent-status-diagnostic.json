@@ -1,0 +1,8 @@
+{
+  "provenance": "Root report only; original tool output not manufactured as a local process receipt.",
+  "tool": "f43454",
+  "surface": "Nexus CLI status",
+  "outcome": "CONFIG_ERROR",
+  "interpretation": "This CLI diagnostic did not prove owner absence. Separate installed API inspection71026d produced post-stop-status.json confirming both own instances stopped/NO_SERVICE_OWNER.",
+  "hidden_or_reclassified": false
+}

@@ -1,0 +1,73 @@
+{
+  "observed_at": 1794747121.7551308,
+  "nexus": {
+    "component": "server",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "installed_version": "0.3.3",
+    "active_version": null,
+    "generation": null,
+    "state": "stopped",
+    "ready_for_queries": false,
+    "work_state": "not_checked",
+    "reason": "NO_SERVICE_OWNER",
+    "next_action": "Start the configured instance explicitly. Runtime work has not been inspected.",
+    "effective_configuration": {
+      "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+      "database": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\nexus.db",
+      "bind_host": "127.0.0.1",
+      "port": 58631
+    }
+  },
+  "connector": {
+    "running": false,
+    "pid": null,
+    "transport": "",
+    "address": "",
+    "version": "",
+    "started_at": "",
+    "uptime_seconds": null,
+    "ipc_ok": false,
+    "draining": false,
+    "state": "stopped",
+    "reason": "NO_SERVICE_OWNER",
+    "component": "connector",
+    "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "generation": "",
+    "installed_version": "0.0.12",
+    "active_version": null,
+    "ready_for_queries": false,
+    "remote_link": "not_checked",
+    "work_state": "not_checked",
+    "supervisor": "windows-task-scheduler",
+    "user_service": {
+      "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+      "state": 3,
+      "enabled": true,
+      "last_result": 0,
+      "start_at_login": true,
+      "available_before_login": false,
+      "available_after_logout": false,
+      "supervision": {
+        "state": "stopped",
+        "phase": "stopped",
+        "cycle_id": "c5964050ef52fa22d53730a8f20872f7",
+        "attempts_started": 1,
+        "max_attempts": 4,
+        "next_retry_monotonic": null,
+        "last_exit_code": 0,
+        "parent_state": "exited",
+        "launcher_state": "exited",
+        "child_state": "exited",
+        "child_acknowledged": true,
+        "child_exit_confirmed": true
+      }
+    },
+    "next_action": null,
+    "launch_recovery": null,
+    "upgrade": null,
+    "drain": null
+  },
+  "provider_calls": 0,
+  "control_calls": 0,
+  "data_deletion": false
+}

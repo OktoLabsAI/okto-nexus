@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "C:/Users/jpamb/AppData/Local/Temp/sonnet-canonical-recovery-proposal-7oq808_t/package/venv/Scripts/python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus_connector.cli.main",
+    "--non-interactive",
+    "--json",
+    "--state-dir",
+    "C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/campaign/connector-state",
+    "daemon",
+    "stop",
+    "--timeout",
+    "45",
+    "--force",
+    "--expected-generation",
+    "fbc0042be355e83da5bb695a64de4910"
+  ],
+  "returncode": 0,
+  "stdout": "{\n \"active_version\": null,\n \"address\": \"\",\n \"component\": \"connector\",\n \"drain\": null,\n \"draining\": false,\n \"generation\": \"\",\n \"installed_version\": \"0.0.12\",\n \"instance_id\": \"svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62\",\n \"ipc_ok\": false,\n \"launch_recovery\": null,\n \"next_action\": null,\n \"pid\": null,\n \"ready_for_queries\": false,\n \"reason\": \"NO_SERVICE_OWNER\",\n \"remote_link\": \"not_checked\",\n \"report\": {\n  \"generation\": \"fbc0042be355e83da5bb695a64de4910\",\n  \"outcomes\": {},\n  \"pending\": 0,\n  \"revision\": 1,\n  \"state\": \"DRAINED\"\n },\n \"running\": false,\n \"shutdown_outcome\": \"drained\",\n \"started_at\": \"\",\n \"state\": \"stopped\",\n \"stopped\": true,\n \"supervisor\": \"windows-task-scheduler\",\n \"transport\": \"\",\n \"upgrade\": null,\n \"uptime_seconds\": null,\n \"user_service\": {\n  \"available_after_logout\": false,\n  \"available_before_login\": false,\n  \"enabled\": true,\n  \"last_result\": 0,\n  \"name\": \"OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62\",\n  \"start_at_login\": true,\n  \"state\": 3,\n  \"supervision\": {\n   \"attempts_started\": 1,\n   \"child_acknowledged\": true,\n   \"child_exit_confirmed\": true,\n   \"child_state\": \"exited\",\n   \"cycle_id\": \"c5964050ef52fa22d53730a8f20872f7\",\n   \"last_exit_code\": 0,\n   \"launcher_state\": \"exited\",\n   \"max_attempts\": 4,\n   \"next_retry_monotonic\": null,\n   \"parent_state\": \"exited\",\n   \"phase\": \"stopped\",\n   \"state\": \"stopped\"\n  }\n },\n \"version\": \"\",\n \"was_running\": true,\n \"work_state\": \"not_checked\"\n}\n",
+  "stderr": "",
+  "completed_at": 1794747066.6062183,
+  "actual_canonical_command_calls": 1,
+  "physical_exit_proof_separate": true,
+  "provider_calls": 0
+}

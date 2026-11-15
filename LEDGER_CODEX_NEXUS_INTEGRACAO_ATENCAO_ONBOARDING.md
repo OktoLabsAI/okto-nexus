@@ -2377,3 +2377,11 @@ Composição isolada: Nexus com Home commitada, Connector2b8ce688/Coreea179;988p
 Adendo da mesma coorte39640/fbc0042/c596:2 testes puros PASS e revisão root; prepara handles QUERY/SYNC após timeout22718, sem terminate, captura ou watcher iniciado. Força continua pendente e seu efeito exigiria recibo real separado; proposta/timeout originais preservados. Root73fb7b/12:18:18UTC ainda reportaUNKNOWN, sem saída inferida.
 
 Nenhuma instalação na campanha, setup, novo plano/autorização, serviço ou provedor executado. Sonnet144.004/200.000/2admissões;500.000 apenas proposto, Codex579.154/16 e **126/4/2** inalterados. [Evidência offline e limites](plans/agent_ops/evidence/r3-sonnet-corrected-package-observer-preparation/review.json).
+
+## 2026-11-15 — Parada específica autorizada e concluída; sem settlement de trabalho inferido
+
+Usuário autorizou “pode fazer a parada que voce precisar do nexus”; root esclareceu que Server já estava parado e Connector39640/fbc0042/c596 era o componente pendente. Uma força canônica foi reservada/executada, return0. Novo watcher8069/130ee4 reteve3handles PID/birth; proof9b5119/927fdb confirmou parent55008/launcher6424/runtime39640 com saída física0. Autorização **consumida somente para essa parada**, sem extensão a outra geração.
+
+Inspeção API instalada71026d confirmou ambos stopped/NO_SERVICE_OWNER. Nexus CLIstatusf43454 falhouCONFIG_ERROR: antecedente preservado, não convertido em prova de ausência. Report canônico DRAINED/pending0 tem work_state not_checked; não prova trabalho útil/settlement/compensação/refund. Timeout22718 e proposta anteriores preservados; observação nova não inventa cobertura contínua. Nenhum uninstall, delete, upgrade, migraçãoSQL ou chamada ao provedor.
+
+**126/4/2**, AC/plano/budgets inalterados: Sonnet144.004/200.000/2admissões, Codex579.154/16. Proposta500k e candidato offline não foram autorizados/ativados por essa parada. Estado do goal não foi alterado: root reporta tool ainda blocked, sem alegar active/complete. [Recibos e limites](plans/agent_ops/evidence/r3-sonnet-authorized-current-force-stop/review.json).

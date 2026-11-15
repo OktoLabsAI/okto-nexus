@@ -1,0 +1,57 @@
+{
+  "addendum_sha256": "f9e17f6827d28204f3764c3f3456c435b66ec21616c998c1b4bfd4827fd05555",
+  "original_proposal_sha256": "50b90cfbdb6ead9008b47af3f9f70cd225a4eac163534e29adc294110927f7b6",
+  "expired_observation_sha256": "658ef2f8581e90082c5aa7b34bb6d2667c2bf153fa1ebdb5f95e020c1f572499",
+  "cohort": {
+    "cycle_id": "c5964050ef52fa22d53730a8f20872f7",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 55008,
+      "birth": 134391943908467825
+    },
+    "launcher": {
+      "pid": 6424,
+      "birth": 134391943927241880
+    },
+    "child": {
+      "pid": 39640,
+      "birth": 134391943927520347
+    }
+  },
+  "owner": {
+    "pid": 39640,
+    "generation": "fbc0042be355e83da5bb695a64de4910",
+    "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62"
+  },
+  "task": {
+    "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "state": 4,
+    "digest": "ea5d4ee2340054460fb04f0f0c83bf1f5a8dced3380f5b32409a504f9ec465aa"
+  },
+  "observer": {
+    "pid": 24144,
+    "birth": 134392205840051378
+  },
+  "observation_only": true,
+  "terminate_right": false,
+  "control_calls": 0,
+  "provider_calls": 0,
+  "work_settlement_claimed": false,
+  "force_effect_provenance": "SEPARATE_ROOT_CANONICAL_ACTION_RECEIPT_REQUIRED",
+  "retained_roles": [
+    "parent",
+    "launcher",
+    "child"
+  ],
+  "canonical": {
+    "state": "DRAINING_PENDING",
+    "phase": "waiting",
+    "observation": "UNKNOWN",
+    "force_available": true,
+    "force_requested": false
+  },
+  "bound_seconds": 3600,
+  "observed_at": 1794746986.9299886
+}

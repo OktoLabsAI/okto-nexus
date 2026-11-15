@@ -1,0 +1,65 @@
+{
+  "files": [
+    {
+      "path": "antecedent-status-diagnostic.json",
+      "sha256": "6971e044cdb1c84707c1d26a21969c564aff893eebb791d71368ec246cace387",
+      "bytes": 430
+    },
+    {
+      "path": "execute_authorized_once.py",
+      "sha256": "1c7b67880bf53275a05bf9864067ef101f45392cf4ba31bf3e7e6774223b4288",
+      "bytes": 4505
+    },
+    {
+      "path": "post_stop_status.py",
+      "sha256": "b631a23d967a1d1108ab1c85d079f3c5d2aa45bd9d5240673fbe2abf225a97d5",
+      "bytes": 740
+    },
+    {
+      "path": "public/exit-proof.json",
+      "sha256": "2b6ac25dcff46e0f963b02562b81ac349f6e7246dc1dc4cae618972cf791e79c",
+      "bytes": 1893
+    },
+    {
+      "path": "public/force-authorization.json",
+      "sha256": "ef9c978f46cd1acb0a50a4f6525ab127a9729f5c8d9c195cb1a30d1af0e6779a",
+      "bytes": 431
+    },
+    {
+      "path": "public/force-reservation.json",
+      "sha256": "89a3151b58e1a49b7c1b123f364d03b8be89a6bea3619053eb26cf86da387d7c",
+      "bytes": 2570
+    },
+    {
+      "path": "public/force-result.json",
+      "sha256": "395ff2af64f0ada57e70f297c880e1cca5424f68f89f0ec523276232eb17e304",
+      "bytes": 2425
+    },
+    {
+      "path": "public/post-stop-status.json",
+      "sha256": "5c5cda051501d9cc459fe0b5c4ac672fe67e5ba87d0697c0b74ec88c3c08096e",
+      "bytes": 2401
+    },
+    {
+      "path": "public/watch-started.json",
+      "sha256": "bf47afa653e06ec1b49fe553342d5f4a45a478b44ae5619eca37f507d7765cd0",
+      "bytes": 1711
+    },
+    {
+      "path": "README.md",
+      "sha256": "e857c705ef103f73fe8349f413760c98ec9a9b859b285908f81d0e819bef3967",
+      "bytes": 1618
+    },
+    {
+      "path": "review.json",
+      "sha256": "9a03bb2fe541607cea9bffcc5297c570b44ed7e3dd6f4a6f098459defd6d13e8",
+      "bytes": 4098
+    },
+    {
+      "path": "source-allowlist.json",
+      "sha256": "6ca1caaea66fcb11a81eab60a4f923ff27a85032500d5275355071adb8d83024",
+      "bytes": 3008
+    }
+  ],
+  "curation": "Explicit8-file root allowlist and curator review/diagnostic provenance only. No extra private data or new live query."
+}
