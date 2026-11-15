@@ -2199,3 +2199,36 @@ sem concluir tarefas pai com critérios restantes.
 Evidência: [critério literal](plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json)
 e [companion](plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/closure-companion.json)
 e [avaliação semântica](plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/diagnosis/semantic-assessment.json).
+
+## 2026-11-15 — DX-T43: configuração local real retida, remoto pendente
+
+A execução útil15 de W17 confirma harness local iniciado pelo serviço, permissão
+nativa real e relatório correto. Thread/start reportou modelo/provider/effort,
+cwd, política/reviewer, sandbox/network e referência de instruções. Referência
+não prova conteúdo ou adesão; configuração reportada não prova enforcement universal.
+
+Após a falha PATH de W16, o prompt revisado selecionou RTK/Python absolutos
+pinados, sem mudar ambiente global nem escolher fallback silencioso. A projeção
+anterior omitira a lista de configuração existente no resultado público original;
+a nova evidência a retém sem alterar histórico. Recibo SUBMITTED não é finalizado
+por inferência. **DX-T43 permanece IN_PROGRESS**, com subescopo remoto Connector
+pendente. **125/132 VERIFIED**,5 IN_PROGRESS e2 NOT_RUN;579154/16 inalterados.
+Nenhuma nova execução ou suíte nesta curadoria.
+Evidência: [revisão local](plans/agent_ops/evidence/r3-dx43-local-real-configuration/review.json).
+
+## 2026-11-15 — SVC-T20: próximo connect configurado no Nexus
+
+Uma seleção real do CLI instalado reutilizou perfil concluído, retornou configured/
+work_state=not_submitted e iniciou o serviço READY conforme política documentada.
+Dois GETs de setup, zero tentativas não-GET e zero novas operações de execução.
+Stop normal drained, três handles com saída física0, tarefa ausente e hashes dos
+dados selecionados iguais imediatamente antes/depois do uninstall. Não se afirma
+que todos os bytes da home ficaram iguais durante o startup.
+
+Prova anterior de stop/190s sem ressurreição em ambos hosts reutilizada; nenhum
+novo teste desse intervalo. **SVC-T20 continua IN_PROGRESS**, faltando o próximo
+connect configurado do Connector. Antecedentes NOT_FOUND/identidade ausente
+preservados. **125/132 VERIFIED**,5 IN_PROGRESS e2 NOT_RUN; sem modelo, nova
+reserva ou mudança dos579154 tokens/16 reservas nesta execução.
+Evidência: [resultado](plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/result.json)
+e [escopo](plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/README.md).

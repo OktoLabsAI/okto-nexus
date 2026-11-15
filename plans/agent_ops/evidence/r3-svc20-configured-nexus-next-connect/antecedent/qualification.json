@@ -1,0 +1,45 @@
+{
+  "status": "OFFLINE_FOCAL_QUALIFIED_ROOT_REVIEW_PENDING",
+  "product_service_or_provider_effects": 0,
+  "tests": {
+    "command": [
+      "rtk",
+      "proxy",
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t20-configured-next-connect-athfc_4h\\test_run.py"
+    ],
+    "result": "6 PASS",
+    "seconds_reported": 0.002,
+    "tool_chunk": "fddf38",
+    "scope": "Pure profile/command guards only; no product imports/lifecycle calls"
+  },
+  "offline_command_emission": {
+    "command": [
+      "rtk",
+      "proxy",
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t20-configured-next-connect-athfc_4h\\run.py"
+    ],
+    "returncode": 0,
+    "tool_chunk": "dfd536"
+  },
+  "installed_source_payloads_checked": 7,
+  "plan": {
+    "path": "plan.json",
+    "sha256": "1658d1856f2900ff91589947a694d641dcde1d8bf4013cee3bb584793d71e0d2",
+    "bytes": 11418
+  },
+  "runtime": {
+    "path": "run.py",
+    "sha256": "fc5774cbe1d028849034baf156d6f7bcb06486727ad8fc8ca66e4256f5c97917",
+    "bytes": 8602
+  },
+  "connector": "CONDITIONAL_NO_STATE_FILE_OR_COMPLETED_IDENTITY",
+  "actual_acceptance": false
+}

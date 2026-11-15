@@ -7267,9 +7267,14 @@
         "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json",
         "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/review.json",
         "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/public/qualification.json",
-        "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/preparation/qualification.json"
+        "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/preparation/qualification.json",
+        "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/README.md",
+        "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/result.json",
+        "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/nexus-observation.json",
+        "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/cohort-exit-proof.json",
+        "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/manifest.json"
       ],
-      "remaining": "Configured next-connect policy campaign remains unexercised; current actual evidence qualifies both healthy stops/no resurrection, Nexus service start with NOT_FOUND setup, and Connector missing-identity refusal only.",
+      "remaining": "Configured Connector next-connect policy remains unexercised; actual Nexus configured next-connect now verified without new setup/work operation. Existing both-host normal-stop/no-resurrection evidence remains unchanged.",
       "remaining_kind": "real_service_stop_reconnect_campaign",
       "subscopes": {
         "retained_injected_contract": "VERIFIED",
@@ -7278,10 +7283,12 @@
         "actual_both_hosts_normal_stop_physical_exit": "VERIFIED",
         "actual_both_hosts_190s_no_resurrection": "VERIFIED",
         "actual_connector_missing_identity_connect_refusal": "VERIFIED_SCOPED",
-        "configured_next_connect": "NOT_RUN",
-        "actual_stop_during_backoff": "NOT_RUN"
+        "configured_next_connect": "PARTIAL_NEXUS_VERIFIED_CONNECTOR_PENDING",
+        "actual_stop_during_backoff": "NOT_RUN",
+        "actual_configured_nexus_next_connect": "VERIFIED_SCOPED",
+        "actual_configured_connector_next_connect": "NOT_RUN"
       },
-      "result": "Both installed hosts normal-stopped with drained outcome and physical runtime/launcher/parent exits, then190s without resurrection. Nexus next-connect started a new READY owner but setup returned NOT_FOUND; Connector connect without identity refused without start. Configured next-connect not exercised. Exhausted supervisor cleanup preserves unconfirmed runtime work settlement and retained data."
+      "result": "Both installed hosts previously normal-stopped with physical runtime/launcher/parent exits, then190s without resurrection. New scoped actual Nexus configured next-connect reused completed profile, returned configured/work_state=not_submitted, started selected READY service and created zero execution operations (two setup GETs, zero setup non-GET attempts). Normal stop drained, all3 retained exits0, task absent and selected data hashes equal before/after uninstall. Configured Connector next-connect remains pending; global SVC-T20 stays IN_PROGRESS. Earlier missing-identity/NOT_FOUND outcomes are retained."
     },
     "SVC-T21": {
       "requirement": "Stop pelo CLI conclui drain antes de acionar supervisor; timeout de espera não força término. Logout/shutdown externo registra interrupção/incerteza honestamente.",
@@ -9221,17 +9228,23 @@
         "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json",
-        "plans/agent_ops/evidence/r3-codex-thread-configuration/qualification.json"
+        "plans/agent_ops/evidence/r3-codex-thread-configuration/qualification.json",
+        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/review.json",
+        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/actual-thread-configuration.json",
+        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/reviewed-tool-selection.json",
+        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/prior-service-path-diagnosis.json",
+        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/artifact-manifest.json"
       ],
-      "result": "Host configuration guards remain qualified. The new installed Core event preserves bounded reported model/provider/effort/cwd/policy/reviewer/sandbox/instruction-source metadata from thread start/resume; synthetic Core journal and both consumer pipelines are verified. No new real provider execution or effective-tool/enforcement acceptance is claimed.",
-      "remaining": "Campanha no processo real lançado pelo serviço, local e no host Connector aplicável, comparando instruções/modelo/ferramentas/limites revisados e configurados; registrar configuração shell-only como indisponível sem substituição silenciosa.",
-      "remaining_kind": "real_campaign_not_run",
-      "qualification_limit": "O callback de ambiente e fixture nativa não provam instruções/modelo/ferramentas/limites efetivos do provedor. Configuração apenas no shell não pode ser presumida.",
-      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "result": "Local real service-owned W17 useful15 is now evidenced: reported thread/start configuration, explicitly reviewed pinned RTK/Python paths after service-PATH unavailability, actual native permission and correlated correct report. Reported instruction references are not contents/adherence or universal enforcement. Remote Connector scope remains pending; global DX-T43 stays IN_PROGRESS.",
+      "remaining": "Executar e comparar configuração, ferramentas e políticas revisadas no harness real do host Connector; preservar como desconhecidos campos não observados. Evidência local reportada e resultado útil real retidos, sem inferir conteúdo de instruções, inventário completo ou enforcement universal.",
+      "remaining_kind": "real_remote_configuration_campaign_pending",
+      "qualification_limit": "Metadados reportados pelo harness e permissão/resultado local reais não provam conteúdo pessoal de instruções, inventário completo de ferramentas ou enforcement universal. Recibo native SUBMITTED permanece não final; remoto não executado.",
+      "common_qualification_limit": "A curadoria agora inclui execução real local W17 já encerrada; não executou novo provedor, serviço ou teste. Fixtures anteriores continuam limitadas ao próprio escopo.",
       "verified_contract_subscopes": [
         "reference_only_host_configuration",
         "approved_provider_home_and_materialization_guards",
-        "reported_thread_configuration_installed_event_pipeline"
+        "reported_thread_configuration_installed_event_pipeline",
+        "local_real_service_reported_configuration_and_explicit_tool_paths"
       ]
     },
     "DX-T44": {
@@ -15536,6 +15549,32 @@
         "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/result/report.json",
         "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/diagnosis/semantic-assessment.json",
         "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json"
+      ]
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_dx43_local_real_configuration",
+      "status": "LOCAL_REAL_SUBSCOPE_RETAINED_GLOBAL_DX_T43_IN_PROGRESS",
+      "summary": "Local real service-owned W17 useful15 is now evidenced: reported thread/start configuration, explicitly reviewed pinned RTK/Python paths after service-PATH unavailability, actual native permission and correlated correct report. Reported instruction references are not contents/adherence or universal enforcement. Remote Connector scope remains pending; global DX-T43 stays IN_PROGRESS. Counts remain125/132; no new effects/accounting changes.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/review.json",
+        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/actual-thread-configuration.json",
+        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/reviewed-tool-selection.json",
+        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/prior-service-path-diagnosis.json",
+        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/artifact-manifest.json"
+      ]
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_svc20_configured_nexus_next_connect",
+      "status": "PASS_SCOPED_NEXUS_CONNECTOR_PENDING",
+      "summary": "Both installed hosts previously normal-stopped with physical runtime/launcher/parent exits, then190s without resurrection. New scoped actual Nexus configured next-connect reused completed profile, returned configured/work_state=not_submitted, started selected READY service and created zero execution operations (two setup GETs, zero setup non-GET attempts). Normal stop drained, all3 retained exits0, task absent and selected data hashes equal before/after uninstall. Configured Connector next-connect remains pending; global SVC-T20 stays IN_PROGRESS. Earlier missing-identity/NOT_FOUND outcomes are retained. Counts125/132 unchanged; no provider turn/accounting increment.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/README.md",
+        "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/result.json",
+        "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/nexus-observation.json",
+        "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/cohort-exit-proof.json",
+        "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/manifest.json"
       ]
     }
   ],

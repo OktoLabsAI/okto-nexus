@@ -1,0 +1,44 @@
+{
+  "status": "LOCAL_REAL_SUBSCOPE_RETAINED_GLOBAL_DX_T43_IN_PROGRESS",
+  "requirement": "O harness iniciado pelo serviço usa instruções, modelo, ferramentas e limites efetivos revisados; configuração disponível apenas no shell não é presumida nem substituída silenciosamente.",
+  "fixed_plan": {
+    "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+    "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996"
+  },
+  "local_observed": {
+    "execution": "Actual service-owned Codex 0.157 local useful15, canonical SUCCEEDED/settled, correlated correct report; native permission selected and first recovery CONFIRMED/SUBMITTED.",
+    "reported_configuration": "thread/start/response reports gpt-5.6-terra/openai/medium, project cwd, on-request/user, readOnly/networkAccess=false, and an instruction-source reference.",
+    "tools": "W16 recorded RTK/Python absent from the selected service PATH and native RTK-not-found. W17 explicitly selected pinned absolute RTK/Python in the reviewed prompt; actual useful operation subsequently produced the correct report. No global PATH/config modification or silent fallback selected.",
+    "limits": "Finite reviewed request scope, actual permission boundary, canonical result and existing token/closure evidence. Reported sandbox/network fields are not universal enforcement tests."
+  },
+  "not_claimed": [
+    "personal instruction contents or adherence",
+    "complete effective tool inventory",
+    "universal sandbox/network/policy enforcement",
+    "final completion of native decision receipt inferred from command success",
+    "remote Connector qualification",
+    "new provider execution in this curation",
+    "global DX-T43 verification"
+  ],
+  "remaining": "Actual Connector-owned remote harness configuration/tool/policy comparison remains pending. Missing effective settings stay unknown; do not infer shell inheritance.",
+  "existing_correlated_evidence": [
+    "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json",
+    "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/result/report.json",
+    "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/post-exit/accounting-reconciliation.json",
+    "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/closure-companion.json"
+  ],
+  "source_path_audit": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-rtk-path-udc_bg1y\\projection.json",
+    "sha256": "a80ba1fd2eb71976faaf1dc9413ebc277e73f19625894c2c72ca2530ff8fe948"
+  },
+  "ledger_counts_unchanged": {
+    "VERIFIED": 125,
+    "IN_PROGRESS": 5,
+    "NOT_RUN": 2
+  },
+  "provider_accounting_unchanged": {
+    "tokens": 579154,
+    "charged_reservations": 16
+  },
+  "new_tests_or_effects": []
+}

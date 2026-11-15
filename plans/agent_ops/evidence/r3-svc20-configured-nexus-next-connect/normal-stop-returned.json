@@ -1,0 +1,12 @@
+{
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "stdout_sha256": "1a5f267f4df7e659bbc74f1b5e96e32adcecbd8c2e21d8cf9a502b61b4d5f8ed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "reported": {
+    "state": "stopped",
+    "code": null,
+    "reason": "SHUTDOWN_COMPLETE",
+    "shutdown_outcome": "drained"
+  }
+}

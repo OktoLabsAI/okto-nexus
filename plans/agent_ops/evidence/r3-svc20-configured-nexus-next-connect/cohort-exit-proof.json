@@ -1,0 +1,24 @@
+{
+  "retained_handle": true,
+  "force": false,
+  "processes": {
+    "parent": {
+      "pid": 49572,
+      "birth": 134391757642088353,
+      "exit_code": 0,
+      "physical_exit_confirmed": true
+    },
+    "launcher": {
+      "pid": 52448,
+      "birth": 134391757660023968,
+      "exit_code": 0,
+      "physical_exit_confirmed": true
+    },
+    "child": {
+      "pid": 46640,
+      "birth": 134391757660356796,
+      "exit_code": 0,
+      "physical_exit_confirmed": true
+    }
+  }
+}

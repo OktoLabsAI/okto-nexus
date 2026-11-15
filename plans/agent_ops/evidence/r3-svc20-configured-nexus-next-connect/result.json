@@ -1,0 +1,32 @@
+{
+  "status": "PASS_SCOPED",
+  "configured_next_connect": true,
+  "new_execution_operations": 0,
+  "cohort_exit_confirmed": true,
+  "task_absent": true,
+  "selected_data_retained": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\nexus.db": {
+      "sha256": "915a57effd3b9064cb2c6f141fab9c61f20787dda0f7fc92090f5ab2b6513a99",
+      "bytes": 3805184
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\terminal\\profiles\\m1v12-local.json": {
+      "sha256": "1e9ff97e70281703e042e4f1861d42c9bb0d1145a1efa5d3f60ce1b67776a7a2",
+      "bytes": 8193
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\terminal\\work\\m1v12-local.json": {
+      "sha256": "986dac8d8eaecb1fec17522461e4f69280983b2af188339a1562ca22bad627b3",
+      "bytes": 8044
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project\\numbers.csv": {
+      "sha256": "876c1313400238ba1b78cc54fab94411c28b74d2c592c69422eb89800f634d4b",
+      "bytes": 14
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\deliverables\\local\\report.json": {
+      "sha256": "3b1c3546f5f8bad08d49c576f1e620519719db73c71c1628fec19f2a63fa0885",
+      "bytes": 106
+    }
+  },
+  "scope": "Nexus configured next-connect only; original both-host stop/190s proof reused; Connector remains pending.",
+  "force_used": false,
+  "acceptance_promoted": false
+}

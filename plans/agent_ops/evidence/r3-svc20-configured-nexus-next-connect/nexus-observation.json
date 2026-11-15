@@ -1,0 +1,30 @@
+{
+  "status": "CONFIGURED_NEXT_CONNECT_OBSERVED",
+  "cli_exit_code": 0,
+  "counts": {
+    "setup_get": 2,
+    "setup_non_get_attempts": 0,
+    "observe": 1
+  },
+  "connection": {
+    "state": "configured",
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "agent_id": "m1v12-local",
+    "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+    "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+    "work_state": "not_submitted"
+  },
+  "service": {
+    "state": "ready",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "pid": 46640,
+    "generation": "dc5dd8f2ede3d27c5657e107f9683867"
+  },
+  "native": {
+    "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "state": 4,
+    "definition_digest": "2174af845a9b49d38854c542a9d99bd18321feaa6fd7829bd3800cb974395387"
+  },
+  "acceptance_promoted": false,
+  "limitation": "Root must retain the canonical parent/launcher/runtime cohort and own subsequent lifecycle; this driver neither stops nor uninstalls."
+}

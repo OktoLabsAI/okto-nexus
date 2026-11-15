@@ -1,0 +1,213 @@
+{
+  "format": "svc20.configured-next-connect.offline-v1",
+  "status": "OFFLINE_PREPARED_NOT_EXECUTED_CONNECTOR_CONDITIONAL",
+  "criterion": "SVC-T20: explicit stop does not resurrect; next connect follows documented policy.",
+  "execution_selected": false,
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+  "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv",
+  "installed_connect": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\connect.py",
+  "pins": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+      "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\commands.json",
+      "sha256": "2460ca29055ca3120c2dc0f53de51cf09b3b910e1913db26fff1e73b91a5da76"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\run.py",
+      "sha256": "fc5774cbe1d028849034baf156d6f7bcb06486727ad8fc8ca66e4256f5c97917"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\connect.py",
+      "sha256": "c453fcef829c0b4db774098969d9ea711b4df114390bdfba7a4075a0dbd00665"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_connection.py",
+      "sha256": "24aea30985f954d32f2697913e83bf37f02c4297e1cbc257dd7a9898dacb52f4"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\service.py",
+      "sha256": "06e9c7bd25e64c088377c49cf6b9c34f22b06cf0b36008c1d1ac74d9c63d5d63"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\local.py",
+      "sha256": "3cf442f7c0ad76e8d29a9da8f7659c3568275557fedecaf23e09053b737c9d37"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\commands\\connect.py",
+      "sha256": "c055eeef569ef43bba4aa81a37378e18dd49680154271e74f4ae7c3b0262a7d4"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\commands\\connect_reuse.py",
+      "sha256": "c993d7cdac989d096a6894cd27e6da7ceea42ab3893c9ff50451da31b7b1c0c7"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus_connector\\platform\\paths.py",
+      "sha256": "2902fa2fb635604b9d3284c4538a7efa8f690e631679f3ee7923efe44aba80dd"
+    }
+  ],
+  "wheels": {
+    "okto_nexus-0.3.3-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "bff18ff133b6180ab2d20810cd54ae4abc8650e7c8093caf374afd97692c62f4"
+    },
+    "okto_nexus_connector-0.0.12-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "f9864f13db4c5e6e5afdfd8f28ca5384512a17a1f8efb1897cb3a4d810d43cf4"
+    },
+    "okto_nexus_connector_core-0.0.14-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9"
+    }
+  },
+  "nexus": {
+    "profile_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\terminal\\profiles\\m1v12-local.json",
+    "profile_sha256": "1e9ff97e70281703e042e4f1861d42c9bb0d1145a1efa5d3f60ce1b67776a7a2",
+    "profile_selection": {
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "agent_id": "m1v12-local",
+      "project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a"
+    },
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "task_name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "cli_arguments": [
+      "--profile",
+      "m1v12-local",
+      "--project",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "--no-chat",
+      "--json",
+      "--timeout",
+      "30",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "58631",
+      "--project-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "--embedding-mode",
+      "off",
+      "--feature-harness-integrations",
+      "true",
+      "--metrics-mode",
+      "disabled",
+      "--harness-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+    ],
+    "canonical_argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "-m",
+      "okto_nexus.adapters.inbound.cli.main",
+      "connect",
+      "--profile",
+      "m1v12-local",
+      "--project",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "--no-chat",
+      "--json",
+      "--timeout",
+      "30",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "58631",
+      "--project-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "--embedding-mode",
+      "off",
+      "--feature-harness-integrations",
+      "true",
+      "--metrics-mode",
+      "disabled",
+      "--harness-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+    ],
+    "actual_driver_argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\lifecycle.py",
+      "--execute"
+    ],
+    "driver_scope": "Installed run_connect parser, original service resolution/ensure_running and profile guard/display. Observation-only TerminalConnection rejects setup review/apply/save/non-GET before dispatch.",
+    "current_state": "Configured profile retained; W17 recovery closed normally and removed integration. Actual task/owner absence is revalidated immediately before install.",
+    "scheduled_point": "Selected finite wrapper installs the same owned integration stopped, then this installed connect is its sole startup. Wrapper retains cohort and owns normal cleanup.",
+    "acceptance": "CLI configured/not_submitted with same server/agent/binding/profile, selected task digest unchanged, new canonical READY owner due solely to explicit connect. Pair with retained cohort evidence; no automatic scenario promotion."
+  },
+  "connector": {
+    "status": "CONDITIONAL_NOT_EXECUTABLE_NO_COMPLETED_IDENTITY",
+    "state_directory": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "state_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\state.json",
+    "state_file_exists_observed": false,
+    "canonical_argv": null,
+    "template": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "-m",
+      "okto_nexus_connector.cli.main",
+      "--state-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+      "connect",
+      "--identity",
+      "<existing-completed-identity-alias>",
+      "--request-id",
+      "<same-completed-configure-request-id>"
+    ],
+    "missing": "Legitimate canonical Connector onboarding, selected identity and completed saved request. Bind their actual metadata after remote M1; do not fabricate a state/checkpoint or use connection-config apply as next-connect.",
+    "policy": "Installed connect rejects --json/--non-interactive; reuse resolves selected vault credential and authenticates existing identity, verifies saved binding, starts daemon/reloads state. Omit --start: no runtime/session/work admission.",
+    "no_secret_read_during_preparation": true
+  },
+  "reuse_evidence": {
+    "both_hosts_stop_physical_exit_and_190s_quiet": "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/review.json",
+    "do_not_repeat": [
+      "T19 crashes",
+      "190-second no-resurrection campaign",
+      "setup tests",
+      "provider turns"
+    ]
+  },
+  "bounds": {
+    "connect_timeout_seconds": 30,
+    "installed_ensure_running_max_seconds": 30,
+    "outer_cli_wait_seconds": 180,
+    "timeout_retained_cli_observation_seconds": 7200,
+    "timeout_replay": false,
+    "timeout_kill": false
+  },
+  "exclusions": [
+    "provider/model calls",
+    "new setup/review/Finish/grant",
+    "new work/session",
+    "profile/PATH/provider-home changes",
+    "lifecycle install/stop/uninstall by this runner",
+    "personal credential inspection",
+    "OS disruptive actions",
+    "M1 mutation during preparation"
+  ],
+  "limits": [
+    "Observation of connect is not a new stop/quiet-window qualification.",
+    "CLI timeout leaves outcome unknown and retains its handle; root owns service cohort observation/cleanup.",
+    "Missing Connector identity remains an actual prerequisite, not a synthesized completion.",
+    "A changed legitimate profile/package requires a small reviewed rebind of this preparation, not automatic acceptance."
+  ]
+}

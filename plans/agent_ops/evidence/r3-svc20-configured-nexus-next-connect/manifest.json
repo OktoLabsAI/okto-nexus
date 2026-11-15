@@ -1,0 +1,162 @@
+{
+  "format": "svc20-nexus-next-connect-public-retention-v1",
+  "status": "PASS_SCOPED",
+  "global_svc20_promoted": false,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "f905593d8d8d720cd88657a3d928062f2a559123812f25c625ef2988c11ee71c",
+      "bytes": 2509,
+      "retention": "curation narrative"
+    },
+    {
+      "path": "antecedent/qualification.json",
+      "sha256": "236099a93275eb7b6da40cd600e3b88e7a175e970a065b8154d906f3d2c876a2",
+      "bytes": 1261,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t20-configured-next-connect-athfc_4h\\qualification.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "antecedent/test_run.py",
+      "sha256": "4dca08bfad85db30df5305ae21861a2dedd94fd1513d0876341878b2c303ceb0",
+      "bytes": 1883,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t20-configured-next-connect-athfc_4h\\test_run.py",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "cohort-exit-proof.json",
+      "sha256": "41abe9603ce4c00d9c334ae393bb443164554e750eaf855fdc622510cbef9718",
+      "bytes": 506,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\cohort-exit-proof.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "cohort-selection.json",
+      "sha256": "30eb095c9e1ee13ca8dae813c587480108eb7becd5b706f09d8128864165fe20",
+      "bytes": 845,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\cohort-selection.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "connect-reserved.json",
+      "sha256": "f06606287c971025db2706a8f2e742cacf1e805db1024a69dcc4629ba43f6281",
+      "bytes": 390,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\connect-reserved.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "connect-returned.json",
+      "sha256": "25fc25657594129e7ea30010d80314f4535329e3726c69744addaf9b1441b08a",
+      "bytes": 355,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\connect-returned.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "data-before-uninstall.json",
+      "sha256": "9e01ff7a64a84da4ceb03593a6a8d53b87da3bf1d6bee0bc8ada789178e93530",
+      "bytes": 1128,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\data-before-uninstall.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "execution-selected.json",
+      "sha256": "a49c51459d29fc608726552be3b32f017e6b1fd4a6b227a3f4bb36cb9c974661",
+      "bytes": 152,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\execution-selected.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "install-reserved.json",
+      "sha256": "ae81ca21711a9bd8e113e52e2348a8bb29ca96e90b64944fa349f1b2f865ae94",
+      "bytes": 974,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\install-reserved.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "install-returned.json",
+      "sha256": "18d638d319340d630bccf1aface46b165ae748c95b7c040daa3c8f456199c763",
+      "bytes": 372,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\install-returned.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "lifecycle-plan.json",
+      "sha256": "3153dc6a34ec26c090412e608a4247a6079e29d03fa085c07ac87cb20c293e87",
+      "bytes": 13057,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\lifecycle-plan.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "lifecycle.py",
+      "sha256": "d1b1c02719bdccdbfc308464686bcd2e949212c3a63676ca62d7663f9ea35fde",
+      "bytes": 11860,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\lifecycle.py",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "nexus-observation.json",
+      "sha256": "87107088df11a88c6980c821b777ebe1e518f198b4263218a2bcfe318c0fa014",
+      "bytes": 1094,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\nexus-observation.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "normal-stop-reserved.json",
+      "sha256": "9ae69c8e783302979d935376d194e4814f2a871d718beac4713f67aa9a0ce774",
+      "bytes": 932,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\normal-stop-reserved.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "normal-stop-returned.json",
+      "sha256": "639f9e30967f325a22aa33ea7d63518ea8e822147d345570da699806f10a34b4",
+      "bytes": 372,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\normal-stop-returned.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "plan.json",
+      "sha256": "9eb7e745cf710734dd80c1050abfd151cd178a929e52925210b2eac878cef307",
+      "bytes": 11393,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\plan.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "result.json",
+      "sha256": "202dc97afa13e557b20e41bcc060aa0429343d3b9c889acf203f1f92f351a055",
+      "bytes": 1538,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\result.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "run.py",
+      "sha256": "fc5774cbe1d028849034baf156d6f7bcb06486727ad8fc8ca66e4256f5c97917",
+      "bytes": 8602,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\run.py",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "uninstall-reserved.json",
+      "sha256": "f525b6f6972814cb569207b5bd37f4e12b886821a16edaf09f4b5e0736de17eb",
+      "bytes": 951,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\uninstall-reserved.json",
+      "retention": "byte-identical explicit allowlist"
+    },
+    {
+      "path": "uninstall-returned.json",
+      "sha256": "2ee2bd95d5f72aeba38e75991458ee01f3bb20d7a1a791b311429b42a303cffd",
+      "bytes": 370,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\uninstall-returned.json",
+      "retention": "byte-identical explicit allowlist"
+    }
+  ],
+  "validation": {
+    "explicit_allowlist": true,
+    "source_bytes_verified": true,
+    "json_parsed": true,
+    "credential_value_patterns_found": 0,
+    "forbidden_secret_json_keys_found": 0,
+    "private_files_retained": 0,
+    "result_and_exit_proof_consistent": true
+  }
+}

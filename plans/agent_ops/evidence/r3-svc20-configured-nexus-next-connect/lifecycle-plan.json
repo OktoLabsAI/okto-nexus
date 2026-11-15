@@ -1,0 +1,284 @@
+{
+  "status": "OFFLINE_PREPARED_ROOT_REVIEW_PENDING_NO_EXECUTION",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+  "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "origin": "http://127.0.0.1:58631",
+  "port": 58631,
+  "task": {
+    "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "exists": null,
+    "absence_observed": false
+  },
+  "environment": {
+    "SystemRoot": "C:\\WINDOWS",
+    "WINDIR": "C:\\WINDOWS",
+    "USERPROFILE": "C:\\Users\\jpamb",
+    "HOMEDRIVE": "C:",
+    "HOMEPATH": "\\Users\\jpamb",
+    "APPDATA": "C:\\Users\\jpamb\\AppData\\Roaming",
+    "LOCALAPPDATA": "C:\\Users\\jpamb\\AppData\\Local",
+    "PROGRAMDATA": "C:\\ProgramData",
+    "TEMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp",
+    "TMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp",
+    "PATH": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0;C:\\Windows\\System32;C:\\Program Files\\Git\\cmd",
+    "PYTHONUNBUFFERED": "1",
+    "OKTO_NEXUS_NO_BANNER": "1"
+  },
+  "python_images": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\pythonw.exe": "5a90ff0fc0d283786928daebf2330c6851d3f5c7a89d1113ca2f7a2c05ff2f07",
+    "C:\\Python313\\python.exe": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9",
+    "C:\\Python313\\pythonw.exe": "2bea4fc941b7d9436afa1be8cb46551c0694deed23b3fec87b969054238be099"
+  },
+  "cohort_directory": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16",
+  "commands": {
+    "install": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus.adapters.inbound.cli.main",
+      "service",
+      "install",
+      "--user",
+      "--start-at-login",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "58631",
+      "--project-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "--embedding-mode",
+      "off",
+      "--feature-harness-integrations",
+      "true",
+      "--metrics-mode",
+      "disabled",
+      "--harness-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+      "--timeout",
+      "45",
+      "--json"
+    ],
+    "connect": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\run.py",
+      "--worker"
+    ],
+    "stop": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus.adapters.inbound.cli.main",
+      "service",
+      "stop",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "58631",
+      "--project-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "--embedding-mode",
+      "off",
+      "--feature-harness-integrations",
+      "true",
+      "--metrics-mode",
+      "disabled",
+      "--harness-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+      "--timeout",
+      "45",
+      "--json"
+    ],
+    "uninstall": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus.adapters.inbound.cli.main",
+      "service",
+      "uninstall",
+      "--user",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "58631",
+      "--project-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "--embedding-mode",
+      "off",
+      "--feature-harness-integrations",
+      "true",
+      "--metrics-mode",
+      "disabled",
+      "--harness-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+      "--timeout",
+      "45",
+      "--json"
+    ]
+  },
+  "canonical_connect_argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus.adapters.inbound.cli.main",
+    "connect",
+    "--profile",
+    "m1v12-local",
+    "--project",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+    "--no-chat",
+    "--json",
+    "--timeout",
+    "30",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "58631",
+    "--project-root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+    "--embedding-mode",
+    "off",
+    "--feature-harness-integrations",
+    "true",
+    "--metrics-mode",
+    "disabled",
+    "--harness-root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+  ],
+  "pins": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\lifecycle.py",
+      "sha256": "d1b1c02719bdccdbfc308464686bcd2e949212c3a63676ca62d7663f9ea35fde"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\run.py",
+      "sha256": "fc5774cbe1d028849034baf156d6f7bcb06486727ad8fc8ca66e4256f5c97917"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc20-nexus-next-connect-lifecycle-peq52ndi\\plan.json",
+      "sha256": "9eb7e745cf710734dd80c1050abfd151cd178a929e52925210b2eac878cef307"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\cohort.py",
+      "sha256": "5e5322fe8a1568b23790f5ad02f99ad915a8a882cc913443d543e24c3057771c"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\driver_common.py",
+      "sha256": "a6156573724964085153e9337d9f8b7155035ac7dc68a8a3ecbc585dd099e0c2"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\m1_v14_observation.py",
+      "sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\closure.json",
+      "sha256": "0c4d8032ee6fdc262f1be37971ca992466cce4f94a4c00d33b5736ae1fc30fbf"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\final-presence.json",
+      "sha256": "cce56a20a6c330bd3c290e465fec20390e86058fce5b57e4401f0108c1f1622e"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\nexus-exit-proof.json",
+      "sha256": "4ebd0bd5dc029eb80f03c5f1049ce74c59467db7689d0d988da5e0f938f9466f"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-context.json",
+      "sha256": "c28a8d687a9415ac65f750586d18270754031edb9ea5ba094b1c65c554f38484"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+      "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+    }
+  ],
+  "retained_data": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\nexus.db",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\terminal\\profiles\\m1v12-local.json",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\terminal\\work\\m1v12-local.json",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project\\numbers.csv",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\deliverables\\local\\report.json"
+  ],
+  "sequence": [
+    "Verify W17 closed ancestry/current own task absence/canonical absence/port free.",
+    "Install exact own W16 user-task stopped; no separate start.",
+    "Invoke installed run_connect parser/guard/display with existing done profile, --no-chat --json; no review/apply/save/nonGET in setup facade.",
+    "Capture query/synchronize-only parent/launcher/runtime handles with exact cycle,birth,image pins before any stop.",
+    "Normal canonical stop once, retain all three physical exits and task inactive.",
+    "Count execution_operations unchanged; fingerprint selected existing data only after stopped.",
+    "Canonical uninstall once; prove exact task absent and selected data hashes unchanged."
+  ],
+  "failure": "No replay/kill/force. Failure publishes retained-handle handoff up to7200s; root selects cleanup. An empty cohort never proves exit. No stop while a connect CLI remains in flight.",
+  "observation_limits": {
+    "cli_wait_seconds": 180,
+    "passive_capture_seconds": 180,
+    "canonical_stop_timeout_seconds": 45,
+    "physical_exit_seconds": 30,
+    "native_inactive_seconds": 30,
+    "failure_handoff_seconds": 7200
+  },
+  "effect_scope": {
+    "installed_tasks": 1,
+    "connect_invocations": 1,
+    "explicit_start_invocations": 0,
+    "normal_stop_invocations": 1,
+    "uninstall_invocations": 1,
+    "productive_requests": 0,
+    "provider_tests": 0,
+    "new_setup": 0,
+    "Connector_effects": 0,
+    "OS_session_events": 0
+  },
+  "isolation": "Fresh evidence/selection namespace; reuse only the legitimate closed campaign home/profile. No clone, fabricated configuration or personal service. Run serially with no concurrent M1 use of these homes.",
+  "data_preservation_scope": "Database, selected terminal profile/work checkpoint, CSV and useful report hashes equal across uninstall. Runtime lifecycle receipts/logs legitimately change; no claim that all home bytes remain unchanged across startup.",
+  "qualification": {
+    "reused_worker": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t20-configured-next-connect-athfc_4h\\run.py",
+      "sha256": "fc5774cbe1d028849034baf156d6f7bcb06486727ad8fc8ca66e4256f5c97917"
+    },
+    "prior_six_pure_fixtures": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t20-configured-next-connect-athfc_4h\\qualification.json",
+      "sha256": "236099a93275eb7b6da40cd600e3b88e7a175e970a065b8154d906f3d2c876a2"
+    },
+    "cohort_helper": "Exact W16 qualified capture/cycle/Process functions, unchanged.",
+    "new_lifecycle": "Static syntax/command review only, not executed or claimed tested."
+  },
+  "OS_coordination": {
+    "proposal": "C:/Users/jpamb/AppData/Local/Temp/r3-svc-session-events-plan-z5l005u4/PROPOSTA.md",
+    "not_selected_here": true,
+    "future_user_actions": [
+      "sleep/wake ~60s",
+      "sign-out/sign-in",
+      "shutdown/power-on/sign-in",
+      "restart/sign-in"
+    ],
+    "coordination": "Agree event window after non-disruptive tests or another session; save applications, authorize own temporary logon tasks and normal cleanup, perform each OS event manually only after durable before-record, return with proposal path. Scheduling reply is not OS execution authorization."
+  }
+}
