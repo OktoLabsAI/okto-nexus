@@ -1,0 +1,14 @@
+{
+  "status": "UNCONFIRMED",
+  "producer_exit": null,
+  "consumer_exit": 1,
+  "active_job_processes_after": 0,
+  "forced_owned_cleanup": false,
+  "effect_guard_required": true,
+  "effect_gates_allowed": [
+    "producer",
+    "consumer"
+  ],
+  "public_ipc_readers_joined": true,
+  "amendment_sha256": "e56ae6fc22d5af02adc9687aaa8ee476846c1d7e09e43c030109cf9ec71820cd"
+}

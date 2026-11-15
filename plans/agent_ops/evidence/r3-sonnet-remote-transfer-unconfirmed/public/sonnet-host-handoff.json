@@ -1,0 +1,20 @@
+{
+  "format": "okto.remote-setup-handoff",
+  "version": 1,
+  "bootstrap": {
+    "agent_id": "m1-sonnet-remote",
+    "credential_epoch": 1,
+    "review_revision": "37d5ac60c41c875a7ca1f604ab0cd5aea55d108226a23c2eacdcd75c32d01aa3",
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "setup_run_id": "m1-sonnet-remote-setup-01",
+    "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+  },
+  "child_requests": {
+    "apply": "m1-sonnet-remote-setup-01_apply",
+    "prepare": "m1-sonnet-remote-setup-01_prepare",
+    "realize": "m1-sonnet-remote-setup-01_realize",
+    "register": "m1-sonnet-remote-setup-01_register"
+  },
+  "draft_revision": "2381f69c6b8da11799d103e40c651b6dee6df520db55af355df2bab5ee4e0364",
+  "review_revision": "37d5ac60c41c875a7ca1f604ab0cd5aea55d108226a23c2eacdcd75c32d01aa3"
+}

@@ -1,0 +1,26 @@
+{
+  "scope": "CONNECTOR_FILETIME_REPRESENTATION_COMPATIBILITY_ONLY",
+  "base_freeze_sha256": "6bd4a176b1606ff3aa173e771b9c9a06eb3210dfe167701bdacbc2a060f71dc6",
+  "original_select_failure": "CONNECTOR_COHORT_INCOMPLETE",
+  "original_failure_preserved": true,
+  "changes": "Normalize canonical Connector birth_token to observed birth; retain actual process FILETIME equality, image pins, ACK and all-three exit proofs.",
+  "runtime": {
+    "connector_lifecycle_compat.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\connector_lifecycle_compat.py",
+      "sha256": "35301f6319f14f974f07b7beaa34f7b2704b4b3a344b199fe1e4a7d9be7b369b",
+      "bytes": 8572
+    },
+    "transfer_compat_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer_compat_context.py",
+      "sha256": "b89e28e647ead0e52bb9b2a5a337c799c233159fc37e684b337722adce9632aa",
+      "bytes": 1040
+    },
+    "transfer_compat_entry.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer_compat_entry.py",
+      "sha256": "4d9fc1b937170dcff4b5b73dd4a580ee826ec708e26ae8b158f4448873157541",
+      "bytes": 1403
+    }
+  },
+  "no_install_or_start": true,
+  "no_provider_selected": true
+}

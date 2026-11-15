@@ -1,0 +1,16 @@
+{
+  "returncode": 0,
+  "projection": {
+    "state": "stopped",
+    "reason": "SHUTDOWN_COMPLETE",
+    "generation": null,
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "shutdown_outcome": "drained",
+    "ready_for_queries": false
+  },
+  "stdout_sha256": "fa7bed04973905d4ec5802b40445beac9a8fc6d7b8e039f89239d5dcfdc8e04b",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "completed_at": 1794705870.1616983,
+  "model_admissions": 0,
+  "phase1_plan_sha256": "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b"
+}

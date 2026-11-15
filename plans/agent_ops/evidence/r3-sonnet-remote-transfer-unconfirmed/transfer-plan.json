@@ -1,0 +1,157 @@
+{
+  "phase1_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1-plan.json",
+    "sha256": "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b",
+    "bytes": 10281
+  },
+  "native": {
+    "path": "C:\\Users\\jpamb\\.local\\bin\\claude.exe",
+    "sha256": "5064e6e0572dca86257363ca04d48653eef20ef27f1bd04b504ed7199ed3fd13",
+    "bytes": 367634080,
+    "version": "2.1.323",
+    "version_observation_tool": "8ba30e"
+  },
+  "origin": "http://127.0.0.1:58631",
+  "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+  "operator_profile": "m1-sonnet-human",
+  "profile": "m1-sonnet-remote",
+  "agent_id": "m1-sonnet-remote",
+  "setup_request_id": "m1-sonnet-remote-setup-01",
+  "model": "sonnet",
+  "permission_mode": "default",
+  "effort": "harness_default_report_unknown_if_absent",
+  "global_mcps": "disabled",
+  "provider_home": "C:/Users/jpamb/.claude",
+  "connector_parent_path": [
+    "C:\\Users\\jpamb\\.local\\bin",
+    "C:/Windows/System32",
+    "C:/Program Files/Git/cmd"
+  ],
+  "scope": "OWN_CONNECTOR_LIFECYCLE_AND_EXACT_REMOTE_TRANSFER_NO_WORK",
+  "provider_turns_selected": 0,
+  "paths": {
+    "server_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+    "operator_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home",
+    "connector_state": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "connector_project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project",
+    "project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project"
+  },
+  "canonical_review": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-review.json",
+    "sha256": "24bddfd0a565027e44d8c555901fa5fa0d23a501d513e845cc7d7df0ca8fca32",
+    "bytes": 7266
+  },
+  "runtime_pins": {
+    "transfer_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer_context.py",
+      "sha256": "578b883dbebc52a5ebcd8f23cd7631cbe065beec6be0fe9b32c60ef3f1863031",
+      "bytes": 3217
+    },
+    "transfer_entry.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer_entry.py",
+      "sha256": "78a2425695741533c4b7c665af1a412f69393716e8945f22fdc85c172cc818e9",
+      "bytes": 869
+    },
+    "connector_lifecycle.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\connector_lifecycle.py",
+      "sha256": "d5fc5e760c2cab119d77afbe3c2fe34f814432131098a4ffe43911d33bf7a302",
+      "bytes": 8238
+    },
+    "remote_onboarding.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\remote_onboarding.py",
+      "sha256": "611eef9e93014e7dabb4256a00edcc9e4df864ce401f294cce30adee92b17921",
+      "bytes": 9544
+    }
+  },
+  "protected_transfer": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\protected-transfer\\protected_pty.py",
+    "sha256": "17db496a45ce795518c6b43621b3487a1053ae90eb21e892c92b9c348087d7bf",
+    "bytes": 25764
+  },
+  "protected_dependencies": {
+    "pty_base_python": {
+      "path": "C:\\Python313\\python.exe",
+      "sha256": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9"
+    },
+    "pty_dependency_0": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\OpenConsole.exe",
+      "sha256": "6b2915a9a91c0738346a6c6a7b3ee2b74e26582b0c92b1b16066e72570dddd68"
+    },
+    "pty_dependency_1": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\__init__.py",
+      "sha256": "95a4e2f6c2e308bc9cc9a4183b7c0cbe164d20adaf87fa4ebc64c94f639de10b"
+    },
+    "pty_dependency_2": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\conpty.dll",
+      "sha256": "1f5ffd52ff118db975eeb25bac0051f4ceff3e051313fa03a5afffa9e75ee502"
+    },
+    "pty_dependency_3": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\enums.py",
+      "sha256": "2809bb5c914f93b9cc5b0509c6f60796a97dd9cafacbe636e081caddf7342435"
+    },
+    "pty_dependency_4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\ptyprocess.py",
+      "sha256": "86e70255f06b89d1d173820f88416b124745854f9429241bc9951af7b11c7837"
+    },
+    "pty_dependency_5": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\tests\\__init__.py",
+      "sha256": "7f36fd7039cfb764776ffad687ab2a0e021b890399b4195fb15d5aabe50b4f64"
+    },
+    "pty_dependency_6": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\tests\\test_pty.py",
+      "sha256": "017ba34326d784aaf4b7450aa4d052a9e01fb26e1f1e853fa209db8a87011792"
+    },
+    "pty_dependency_7": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\tests\\test_ptyprocess.py",
+      "sha256": "31e1a9fcffb392c784a748977225a1f456b9e3c85819dbe571a1f2fd6344c17a"
+    },
+    "pty_dependency_8": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty-agent.exe",
+      "sha256": "44467a83d86b6127bc7b876e8b2fb33fa75fde09d9b9ff27c7f8ef84ba969b29"
+    },
+    "pty_dependency_9": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.cp313-win_amd64.pyd",
+      "sha256": "50b107ec1a9393a464071459023e8c6fc4b0f236e97731c31a741dcd56524df8"
+    },
+    "pty_dependency_10": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.dll",
+      "sha256": "5177f321aac2fa85436dd6ec6bfc6d41459d25f5b533aa03349ef513461b4c79"
+    },
+    "pty_dependency_11": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.pyi",
+      "sha256": "f957a7a300afcbcb63219502bef6f9559c3947573a0135c451fb22132219c231"
+    },
+    "owned_job": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\protected-transfer\\owned_job.py",
+      "sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+      "bytes": 3714
+    }
+  },
+  "receiver_delta": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\protected-transfer\\protected_pty.py",
+      "sha256": "480262b72e805f1e3ec26336940135c81430534debe2962922f234f9fc8e090c"
+    },
+    "corrected": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\protected-transfer\\protected_pty.py",
+      "sha256": "17db496a45ce795518c6b43621b3487a1053ae90eb21e892c92b9c348087d7bf",
+      "bytes": 25764
+    },
+    "change": "One UTF8 header literal mojibake replaced by U+2014; every other source byte unchanged. Installed material_sink emits that literal; memory-only synthetic key fixture passed."
+  },
+  "startup_policy": {
+    "installed_task": "Canonical service install creates/enables this own temporary LogonTrigger integration. This is explicitly selected lifecycle scope.",
+    "draft_start_at_login": false,
+    "draft_meaning": "--no-start-at-login preserves current service mode; it does not disable or remove an independently installed integration.",
+    "cleanup": "Normal stop, all3 retained physical exits, native inactive, uninstall task preserving existing data or its prior absence. No service force."
+  },
+  "transfer_scope": {
+    "producer_once": true,
+    "consumer_once": true,
+    "deadline_seconds": 120,
+    "credentials": "Agent key only protected ephemeral producer→consumer; operator profile never sent toConnector; no plaintext fallback/file/argv/log.",
+    "owned_auxiliary_timeout_cleanup": "Qualified protected helper may forcibly contain its OWN transient Job on timeout; this is not service force. Any forced_owned_cleanup makes transfer UNCONFIRMED, not success; own service normal cleanup remains required.",
+    "service_ownership": "Connector prestarted and watched outside auxiliaryJob; same exactcohort required before/aftertransfer. No provider task is submitted by remote bootstrap/Finish; version/protocolprobe sends no turn.",
+    "replay": "No retry/reissue/rotate from an unknown transfer or lost key. Preserve canonical state and root reconcile."
+  }
+}

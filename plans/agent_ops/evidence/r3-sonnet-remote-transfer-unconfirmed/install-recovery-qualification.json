@@ -1,0 +1,38 @@
+{
+  "status": "OFFLINE_SINGLE_INSTALL_RECOVERY_QUALIFIED",
+  "files": {
+    "recover_connector_install.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\recover_connector_install.py",
+      "sha256": "ccab2a86f91ff68ac84799ff754842e08e43fa567b111aaffc77805d6d5afe09"
+    },
+    "test_install_recovery.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\test_install_recovery.py",
+      "sha256": "095e1c9da2383502256346f85363717b7b775c70bb09483dba3aa12aa28687f2"
+    },
+    "run_install_recovery_tests.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\run_install_recovery_tests.py",
+      "sha256": "0bf592b35ba54eb4e61e091c6de3c5d3212375035a902a3f1d04cbef318313a0"
+    },
+    "install-recovery-tests.xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\install-recovery-tests.xml",
+      "sha256": "611fd29233e6595ccbccf1a2d87dde36a11c38b0a229086a51c0c879eb744c3a"
+    }
+  },
+  "tests": 5,
+  "seconds": 4.65,
+  "tool": "3556b4",
+  "original_aborted_stdout_sha256": "78725844d03b6eedc15c140eb3fa1d7540ddcd34302aa22a74e9905fd334c441",
+  "ancestor_freeze_sha256": "6bd4a176b1606ff3aa173e771b9c9a06eb3210dfe167701bdacbc2a060f71dc6",
+  "originals_unchanged": true,
+  "provider_calls": 0,
+  "services_started_by_qualification": 0,
+  "command": [
+    "C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/successor14/work-revision16/package/venv/Scripts/python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\recover_connector_install.py",
+    "--execute"
+  ]
+}

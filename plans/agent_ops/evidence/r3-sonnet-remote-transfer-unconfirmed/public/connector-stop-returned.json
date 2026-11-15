@@ -1,0 +1,15 @@
+{
+  "returncode": 0,
+  "projection": {
+    "state": "stopped",
+    "reason": "NO_SERVICE_OWNER",
+    "pid": null,
+    "generation": "",
+    "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "shutdown_outcome": "drained"
+  },
+  "stdout_sha256": "a2d0e57f193bf5104f126ee5ccaa32b7d64be5d0e141e5d2fd0f217955997d27",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "physical_exit_confirmed": false,
+  "amendment_sha256": "e56ae6fc22d5af02adc9687aaa8ee476846c1d7e09e43c030109cf9ec71820cd"
+}

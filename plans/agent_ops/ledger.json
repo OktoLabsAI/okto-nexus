@@ -13902,6 +13902,23 @@
       "model_admissions": 0,
       "credential_transfers": 0,
       "acceptance_promoted": false
+    },
+    "r3_sonnet_remote_transfer_unconfirmed": {
+      "status": "CLOSED_NORMALLY_TRANSFER_UNCONFIRMED_NO_MODEL",
+      "summary": "Connector positive install abort/JSONExtraData preserved; one explicit noninteractive recovery installed. birth_token observer compatibility preserves ownership proofs. TransferUNCONFIRMED consumer1/materialdelivered_once-unavailable/noimport; installed synthetic pre-key prompt diagnosis retained with actualstderr unavailable. Both services later normalstopped,6retainedexits0,nativeinactive/tasksabsent/portfree/selecteddataequal. No Sonnetmodel; Codex579154/16unchanged, paidheld. No scenario promotion125/5/2.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/transfer-failure-diagnosis.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/public/sonnet-transfer-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/public/connector-exit-proof.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/public/nexus-exit-proof.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/public/connector-final-presence.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/public/final-presence.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/manifest.json"
+      ],
+      "provider_turns_selected": 0,
+      "services_still_live": false,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -15637,6 +15654,25 @@
       ],
       "model_admissions": 0,
       "credential_transfers": 0,
+      "acceptance_promoted": false
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_remote_transfer_unconfirmed",
+      "status": "CLOSED_NORMALLY_TRANSFER_UNCONFIRMED_NO_MODEL",
+      "summary": "Connector positive install abort/JSONExtraData preserved; one explicit noninteractive recovery installed. birth_token observer compatibility preserves ownership proofs. TransferUNCONFIRMED consumer1/materialdelivered_once-unavailable/noimport; installed synthetic pre-key prompt diagnosis retained with actualstderr unavailable. Both services later normalstopped,6retainedexits0,nativeinactive/tasksabsent/portfree/selecteddataequal. No Sonnetmodel; Codex579154/16unchanged, paidheld. No scenario promotion125/5/2.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/transfer-failure-diagnosis.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/public/sonnet-transfer-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/public/connector-exit-proof.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/public/nexus-exit-proof.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/public/connector-final-presence.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/public/final-presence.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/manifest.json"
+      ],
+      "provider_turns_selected": 0,
+      "services_still_live": false,
       "acceptance_promoted": false
     }
   ],

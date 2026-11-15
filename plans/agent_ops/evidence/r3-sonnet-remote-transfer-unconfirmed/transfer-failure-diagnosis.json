@@ -1,0 +1,72 @@
+{
+  "status": "FAILED_TRANSFER_PRE_KEY_INPUT_CONSUMED_BY_UNAPPROVED_VAULT_PROMPT",
+  "method": "Read-only own metadata plus installed pure pre-key validation and synthetic stdin reproduction; no live HTTP, vault open, credential read, replay, rotation, or issue.",
+  "original_failure_preserved": true,
+  "profile_projection": {
+    "state": "awaiting_host",
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "approved_revision": "37d5ac60c41c875a7ca1f604ab0cd5aea55d108226a23c2eacdcd75c32d01aa3",
+    "material_status": "unavailable",
+    "material_delivery": "delivered_once",
+    "current_references": "matching",
+    "final_binding": null
+  },
+  "connector_projection": {
+    "identities": 0,
+    "bindings": 0,
+    "servers": 0,
+    "stage": "drafted",
+    "identity_alias": null
+  },
+  "cause_evidence": "Installed consumer has no keyring backend and no approved fallback. Interactive fallback confirmation precedes credential_stdin, consumes the only input line as a non-yes answer; subsequent read reaches EOF. Installed synthetic reproduction proves this sequence. Actual consumer stderr was intentionally discarded, so its original exception text is unavailable.",
+  "recovery_limit": "Same-request recover returns metadata with material unavailable; no imported identity is present. Never replay/rotate/reissue automatically. Storage capability and protected-input contract must be repaired and qualified before any explicitly selected new credential plan.",
+  "pins": {
+    "transfer-prekey-diagnosis.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-prekey-diagnosis.json",
+      "sha256": "911c5a4336347ed8e6ac75cd83fd2bc08b8156311f2ddec0316629ec33a003d1",
+      "bytes": 728
+    },
+    "diagnose_transfer_prekey.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\diagnose_transfer_prekey.py",
+      "sha256": "f27e3df54d850b99e39555c6727056935f983cda9a682d223fa1f30eba5997a3",
+      "bytes": 2328
+    },
+    "transfer-prekey-synthetic-reproduction.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-prekey-synthetic-reproduction.json",
+      "sha256": "feab837dafabe87e0c82572bf9ef01fd3aea11f64725314d62a689fde132bfdb",
+      "bytes": 228
+    },
+    "transfer-agent-metadata.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-agent-metadata.json",
+      "sha256": "e0a87c37264fe9f3c3ff64144d3f32876aeeedbc29592759338df4ca68024b64",
+      "bytes": 605
+    },
+    "public/sonnet-transfer-result.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-transfer-result.json",
+      "sha256": "bcfaf683c8e0bc435b9a1b1e3c9ef731dd3f45d5f9d8b469b4a74e6b91468905",
+      "bytes": 383
+    },
+    "public/sonnet-host-handoff.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-host-handoff.json",
+      "sha256": "928ba7f125c81dc5f18abd7d2d152dd5c5b0960135cea3f5d80174907b7c32b4",
+      "bytes": 827
+    }
+  },
+  "private_source_checksums_only": {
+    "profile": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home\\terminal\\profiles\\m1-sonnet-remote.json",
+      "sha256": "cf923eab2f577a6d08d219d00efdf84ee4b548aba70a8274806c512a423eaacc",
+      "bytes": 10311
+    },
+    "connector_state": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\state.json",
+      "sha256": "9f534742d5046cbb38e9387ace9323a87f993dddeaa014ea9b076977bd125458",
+      "bytes": 4466
+    }
+  },
+  "provider_turns_selected": 0,
+  "codex_accounting_unchanged": {
+    "tokens": 579154,
+    "reservations": 16
+  }
+}

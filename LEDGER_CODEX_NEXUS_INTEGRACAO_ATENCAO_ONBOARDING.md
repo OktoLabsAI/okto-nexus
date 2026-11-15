@@ -2246,3 +2246,10 @@ e [escopo](plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/READM
 - Efeitos exatos selecionados prospectivamente pelo root; seleção de transferência ainda aguardava o hash final do contexto. **Nenhuma aplicação, transferência de chave, admissão de trabalho ou chamada de modelo é alegada.**
 - Serviço Nexus e observador de coorte da fase1 permanecem ativos; nenhum cleanup ou fechamento de dashboard/console é comprovado por este marco.
 - [Evidência pública e limites](plans/agent_ops/evidence/r3-sonnet-remote-review/review.json). Status inalterados: **125 VERIFIED, 5 IN_PROGRESS e 2 NOT_RUN**.
+
+## 2026-11-15 — Connector instalado; transferência Sonnet não confirmada e fechamento normal
+
+- Preservados o abort positivo/erro JSONExtraData da instalação inicial e a recuperação explícita única com `--non-interactive`. Suplemento do observador normaliza `birth_token`/FILETIME mantendo prova física, imagem, ACK e coorte.
+- Transferência `UNCONFIRMED`: consumidor saiu 1, material entregue uma vez ficou indisponível, perfil `awaiting_host`, zero identidades/bindings importados. Diagnóstico instalado/sintético aponta prompt de fallback do vault consumindo stdin antes da leitura da chave; stderr original não está disponível. Sem replay/rotação/reemissão automática.
+- Fechamento posterior confirmado: stop normal nos dois hosts, seis saídas físicas com código 0, tarefas ausentes, porta livre e dados selecionados preservados no uninstall. Os marcos anteriores permanecem historicamente live; este registro comprova o encerramento posterior.
+- Nenhuma admissão Sonnet/modelo; Codex permanece 579.154 tokens/16 reservas. Trabalho remoto pago continua retido, sem promoção de cenário: **125 VERIFIED / 5 IN_PROGRESS / 2 NOT_RUN**. [Evidência e limites](plans/agent_ops/evidence/r3-sonnet-remote-transfer-unconfirmed/review.json).

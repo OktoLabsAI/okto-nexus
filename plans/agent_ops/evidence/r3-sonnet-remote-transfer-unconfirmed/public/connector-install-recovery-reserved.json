@@ -1,0 +1,42 @@
+{
+  "state": "RESERVED_BEFORE_DISPATCH",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus_connector.cli.main",
+    "--non-interactive",
+    "--json",
+    "--state-dir",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "service",
+    "install"
+  ],
+  "command_sha256": "bea8af9ef1b4501ccf0bfb7d4c0bb19458399650637740aedff9e6895d591b23",
+  "original_stdout_sha256": "78725844d03b6eedc15c140eb3fa1d7540ddcd34302aa22a74e9905fd334c441",
+  "original_positive_abort": {
+    "aborted": true,
+    "installed": false,
+    "json_documents": 2,
+    "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "task_name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62"
+  },
+  "fresh_absence": {
+    "owner": {
+      "state": "stopped",
+      "reason": "NO_SERVICE_OWNER",
+      "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+      "pid": null,
+      "generation": "",
+      "running": false,
+      "ipc_ok": false
+    },
+    "task_absent": true
+  },
+  "provider_calls": 0,
+  "maximum_recovery_install_calls": 1,
+  "amendment_sha256": "e56ae6fc22d5af02adc9687aaa8ee476846c1d7e09e43c030109cf9ec71820cd"
+}

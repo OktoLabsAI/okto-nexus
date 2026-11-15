@@ -1,0 +1,354 @@
+{
+  "format": "sonnet-transfer-unconfirmed-public-retention-v1",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "1d346b34762de7b0f81990751ae19a8813a0ba1bbceb3b2a34d680b0737fa2c2",
+      "bytes": 2071,
+      "source": "curation narrative"
+    },
+    {
+      "path": "connector_lifecycle.py",
+      "sha256": "d5fc5e760c2cab119d77afbe3c2fe34f814432131098a4ffe43911d33bf7a302",
+      "bytes": 8238,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\connector_lifecycle.py"
+    },
+    {
+      "path": "connector_lifecycle_compat.py",
+      "sha256": "35301f6319f14f974f07b7beaa34f7b2704b4b3a344b199fe1e4a7d9be7b369b",
+      "bytes": 8572,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\connector_lifecycle_compat.py"
+    },
+    {
+      "path": "diagnose_transfer_prekey.py",
+      "sha256": "f27e3df54d850b99e39555c6727056935f983cda9a682d223fa1f30eba5997a3",
+      "bytes": 2328,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\diagnose_transfer_prekey.py"
+    },
+    {
+      "path": "install-recovery-qualification.json",
+      "sha256": "ac8673d469cff48d6dbed6cd7d2e2f85d819f0371a48b1cb0c21f4909bcdc5b3",
+      "bytes": 1773,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\install-recovery-qualification.json"
+    },
+    {
+      "path": "install-recovery-tests.xml",
+      "sha256": "611fd29233e6595ccbccf1a2d87dde36a11c38b0a229086a51c0c879eb744c3a",
+      "bytes": 732,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\install-recovery-tests.xml"
+    },
+    {
+      "path": "protected-transfer/owned_job.py",
+      "sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+      "bytes": 3714,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\protected-transfer\\owned_job.py"
+    },
+    {
+      "path": "protected-transfer/protected_pty.py",
+      "sha256": "17db496a45ce795518c6b43621b3487a1053ae90eb21e892c92b9c348087d7bf",
+      "bytes": 25764,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\protected-transfer\\protected_pty.py"
+    },
+    {
+      "path": "public/cleanup.json",
+      "sha256": "9a0c5db21d655b83aa64bbb06c71a4855ad99f9473a83971c0d8b2e17b31c440",
+      "bytes": 840,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\cleanup.json"
+    },
+    {
+      "path": "public/connector-cleanup.json",
+      "sha256": "0316bd1e1e101a963ce75c64ae76830d5894c1392d445a72f7646a79c935e3bb",
+      "bytes": 833,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-cleanup.json"
+    },
+    {
+      "path": "public/connector-exit-proof.json",
+      "sha256": "b057022f34b2dd7f8bdb6ecb8696668662b51eae135bdf5ac387ee7d6893b37e",
+      "bytes": 983,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-exit-proof.json"
+    },
+    {
+      "path": "public/connector-exit-watch-started.json",
+      "sha256": "9bce8a44a34098c19443dfd93414ec048e0702e8d3e487c088623c7693ec964d",
+      "bytes": 677,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-exit-watch-started.json"
+    },
+    {
+      "path": "public/connector-final-presence.json",
+      "sha256": "a4fb8b543e26b0d07e954e73c788bd47a00db3fbc33187412d91932f314f702e",
+      "bytes": 431,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-final-presence.json"
+    },
+    {
+      "path": "public/connector-install-recovery-reserved.json",
+      "sha256": "3bdc6f71022ba06e26e3dff78e575dbed0ac93b079501b26230813aa7c637db3",
+      "bytes": 1463,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-install-recovery-reserved.json"
+    },
+    {
+      "path": "public/connector-install-recovery-returned.json",
+      "sha256": "3cff6c9a65ac6b79e993d74e618c236e2b078e5311cfb3c935dbc86ff5333c9d",
+      "bytes": 1123,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-install-recovery-returned.json"
+    },
+    {
+      "path": "public/connector-install-reserved.json",
+      "sha256": "98c03c0f061317e5d7f3f008ea489be1a47737d4c774e18b066daedc4f3cdbf0",
+      "bytes": 575,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-install-reserved.json"
+    },
+    {
+      "path": "public/connector-install-returned.json",
+      "sha256": "cb71d9ad7b7f9aa45a09a114fcaa62b041a977a5612ff9701114bfdf63e4c4f8",
+      "bytes": 1891,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-install-returned.json"
+    },
+    {
+      "path": "public/connector-owner-selection.json",
+      "sha256": "98d59008af9a53c10c58006fc7062873992257266277a8cdc0c2c4b4baa91e0e",
+      "bytes": 945,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-owner-selection.json"
+    },
+    {
+      "path": "public/connector-start-reserved.json",
+      "sha256": "18c7663caacb7f2dba71f5a56dff185a665300d96cbee83ebaf08ba590ed3ddc",
+      "bytes": 601,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-start-reserved.json"
+    },
+    {
+      "path": "public/connector-start-returned.json",
+      "sha256": "4a5641c7c5b47247fb7e5f315857c24f67f77ee68384512f1f35e2a0fae6057e",
+      "bytes": 563,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-start-returned.json"
+    },
+    {
+      "path": "public/connector-stop-reserved.json",
+      "sha256": "69606dd2c96ce856b6221d146b270933a0405a11a39ffe5ff944714ae5b41085",
+      "bytes": 600,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-stop-reserved.json"
+    },
+    {
+      "path": "public/connector-stop-returned.json",
+      "sha256": "3bf133c7e26ffecff9e0d9ca15fe80e91a8a519d69160742f15298716f5e4618",
+      "bytes": 582,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-stop-returned.json"
+    },
+    {
+      "path": "public/connector-uninstall-reserved.json",
+      "sha256": "fa33e489f617b1c0a23a6aa622af7862dbbc52590b04d0c220a2dbcf2dc63c08",
+      "bytes": 577,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-uninstall-reserved.json"
+    },
+    {
+      "path": "public/connector-uninstall-returned.json",
+      "sha256": "671aeee3b21894d4309f42098df6a8f8196da20837445e4c1dba13dc2c22f33b",
+      "bytes": 350,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\connector-uninstall-returned.json"
+    },
+    {
+      "path": "public/final-presence.json",
+      "sha256": "c443f9676c95888816373672581f9f8cc3a9358fbe4ed0ba63a7a769c5881bed",
+      "bytes": 430,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\final-presence.json"
+    },
+    {
+      "path": "public/nexus-exit-proof.json",
+      "sha256": "04977d937435d079111700151edfca1946d3408ffdb01fc8bfa56dfbc461e265",
+      "bytes": 985,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\nexus-exit-proof.json"
+    },
+    {
+      "path": "public/sonnet-host-handoff.json",
+      "sha256": "928ba7f125c81dc5f18abd7d2d152dd5c5b0960135cea3f5d80174907b7c32b4",
+      "bytes": 827,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-host-handoff.json"
+    },
+    {
+      "path": "public/sonnet-review-selection.json",
+      "sha256": "e90b0dd827ffbd4bf254cc432f6f885ea228ff19f9981eda6b3f5f16356c9e73",
+      "bytes": 363,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-review-selection.json"
+    },
+    {
+      "path": "public/sonnet-transfer-reserved.json",
+      "sha256": "9451f9e4f831bdc6ac7639a5d4a611b3cd45d5dfc5e387cb6ffd9823656c7486",
+      "bytes": 252,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-transfer-reserved.json"
+    },
+    {
+      "path": "public/sonnet-transfer-result.json",
+      "sha256": "bcfaf683c8e0bc435b9a1b1e3c9ef731dd3f45d5f9d8b469b4a74e6b91468905",
+      "bytes": 383,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-transfer-result.json"
+    },
+    {
+      "path": "public/stop-reserved.json",
+      "sha256": "b21d2a16cea148f4b2dc82951692c18b6f9cf1e226e5dc7544649ea8f2072e1a",
+      "bytes": 1049,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\stop-reserved.json"
+    },
+    {
+      "path": "public/stop-returned.json",
+      "sha256": "fa9c17446c29cd4a7ef36656d4a29a5da8bd750a133dcd7255bc693e337bf536",
+      "bytes": 630,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\stop-returned.json"
+    },
+    {
+      "path": "public/uninstall-reserved.json",
+      "sha256": "2bffedbadf61af9625271595e0417a251a2b24d95104b9c6fcedb9ee7179dff1",
+      "bytes": 1071,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\uninstall-reserved.json"
+    },
+    {
+      "path": "public/uninstall-returned.json",
+      "sha256": "443776fd28b1c7a45d977a2fa9050aed0763c744afdf4a0400475856ab209e01",
+      "bytes": 597,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\uninstall-returned.json"
+    },
+    {
+      "path": "recover_connector_install.py",
+      "sha256": "ccab2a86f91ff68ac84799ff754842e08e43fa567b111aaffc77805d6d5afe09",
+      "bytes": 6563,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\recover_connector_install.py"
+    },
+    {
+      "path": "remote_onboarding.py",
+      "sha256": "611eef9e93014e7dabb4256a00edcc9e4df864ce401f294cce30adee92b17921",
+      "bytes": 9544,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\remote_onboarding.py"
+    },
+    {
+      "path": "review.json",
+      "sha256": "500a74563829bd65420842e31f42fe143be0a428e8a12de4d3fc19c8cf72f1ca",
+      "bytes": 2915,
+      "source": "curation narrative/root report"
+    },
+    {
+      "path": "run_install_recovery_tests.py",
+      "sha256": "0bf592b35ba54eb4e61e091c6de3c5d3212375035a902a3f1d04cbef318313a0",
+      "bytes": 325,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\run_install_recovery_tests.py"
+    },
+    {
+      "path": "run_transfer_tests.py",
+      "sha256": "fb57ae43fb637694b96b9c1b1755a38d4a586c6977407c3ea15f0f3b6b81fcc8",
+      "bytes": 309,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\run_transfer_tests.py"
+    },
+    {
+      "path": "test_install_recovery.py",
+      "sha256": "095e1c9da2383502256346f85363717b7b775c70bb09483dba3aa12aa28687f2",
+      "bytes": 3879,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\test_install_recovery.py"
+    },
+    {
+      "path": "test_transfer.py",
+      "sha256": "47c16de452b52897c05ffd6d75cee65fd838c0199a03921440e0694fbc339c7e",
+      "bytes": 4688,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\test_transfer.py"
+    },
+    {
+      "path": "test_transfer_compat.py",
+      "sha256": "a563cb99fad14dd086afc20d31376432fb1a437de3b57cb61e20054434cbaa0d",
+      "bytes": 1923,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\test_transfer_compat.py"
+    },
+    {
+      "path": "transfer-agent-metadata.json",
+      "sha256": "e0a87c37264fe9f3c3ff64144d3f32876aeeedbc29592759338df4ca68024b64",
+      "bytes": 605,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-agent-metadata.json"
+    },
+    {
+      "path": "transfer-compat-manifest.json",
+      "sha256": "ed386d567114b7314887036d3ce043188b8f1a1d53854d374b8810122e8c9aad",
+      "bytes": 1335,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-compat-manifest.json"
+    },
+    {
+      "path": "transfer-compat-qualification.json",
+      "sha256": "0f5ec241c72f8e28b4e0f0b4b408f488a71fc3e832428439c028d760d9db6496",
+      "bytes": 230,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-compat-qualification.json"
+    },
+    {
+      "path": "transfer-failure-diagnosis.json",
+      "sha256": "da64693697e3e2bf3c9383c080d9c959a3de775876ef5b5f869845c645425fbe",
+      "bytes": 3938,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-failure-diagnosis.json"
+    },
+    {
+      "path": "transfer-freeze.json",
+      "sha256": "6bd4a176b1606ff3aa173e771b9c9a06eb3210dfe167701bdacbc2a060f71dc6",
+      "bytes": 3258,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-freeze.json"
+    },
+    {
+      "path": "transfer-plan.json",
+      "sha256": "e56ae6fc22d5af02adc9687aaa8ee476846c1d7e09e43c030109cf9ec71820cd",
+      "bytes": 9020,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-plan.json"
+    },
+    {
+      "path": "transfer-prekey-diagnosis.json",
+      "sha256": "911c5a4336347ed8e6ac75cd83fd2bc08b8156311f2ddec0316629ec33a003d1",
+      "bytes": 728,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-prekey-diagnosis.json"
+    },
+    {
+      "path": "transfer-prekey-synthetic-reproduction.json",
+      "sha256": "feab837dafabe87e0c82572bf9ef01fd3aea11f64725314d62a689fde132bfdb",
+      "bytes": 228,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-prekey-synthetic-reproduction.json"
+    },
+    {
+      "path": "transfer-qualification.json",
+      "sha256": "3e7c797a735dee2e7d7a929d5c5fab4a4182e818eba620335ff34088ae50dce3",
+      "bytes": 933,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-qualification.json"
+    },
+    {
+      "path": "transfer-tests.xml",
+      "sha256": "528d1945c9ffc518bc1cd8d69cac7c47086a8a41b1932781bc8e19ec45d2618d",
+      "bytes": 1055,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-tests.xml"
+    },
+    {
+      "path": "transfer-workflow.json",
+      "sha256": "8adee9af6da5193550cc1b32acc2132f9ec8d3d787f28d127b46587459eb3462",
+      "bytes": 5665,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-workflow.json"
+    },
+    {
+      "path": "transfer_compat_context.py",
+      "sha256": "b89e28e647ead0e52bb9b2a5a337c799c233159fc37e684b337722adce9632aa",
+      "bytes": 1040,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer_compat_context.py"
+    },
+    {
+      "path": "transfer_compat_entry.py",
+      "sha256": "4d9fc1b937170dcff4b5b73dd4a580ee826ec708e26ae8b158f4448873157541",
+      "bytes": 1403,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer_compat_entry.py"
+    },
+    {
+      "path": "transfer_context.py",
+      "sha256": "578b883dbebc52a5ebcd8f23cd7631cbe065beec6be0fe9b32c60ef3f1863031",
+      "bytes": 3217,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer_context.py"
+    },
+    {
+      "path": "transfer_entry.py",
+      "sha256": "78a2425695741533c4b7c665af1a412f69393716e8945f22fdc85c172cc818e9",
+      "bytes": 869,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer_entry.py"
+    }
+  ],
+  "checks": {
+    "source_pins": "PASS",
+    "json_secret_patterns": "PASS",
+    "private_files": 0,
+    "six_exit_proofs": "PASS",
+    "absence_and_data_preserved": "PASS"
+  }
+}

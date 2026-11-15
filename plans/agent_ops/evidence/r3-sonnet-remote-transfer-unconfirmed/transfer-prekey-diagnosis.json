@@ -1,0 +1,25 @@
+{
+  "method": "READ_ONLY_INSTALLED_PRE_KEY_VALIDATION_NO_VAULT_RESOLVE_NO_HTTP",
+  "stages": {
+    "validate_handoff": {
+      "status": "PASS",
+      "elapsed_seconds": 0.002070500049740076
+    },
+    "check_choices": {
+      "status": "PASS",
+      "elapsed_seconds": 2.5500019546598196e-05
+    },
+    "validate_local": {
+      "status": "PASS",
+      "elapsed_seconds": 5.158484400017187
+    }
+  },
+  "identities_count": 0,
+  "bindings_count": 0,
+  "setup_stage": "drafted",
+  "identity_alias_present": false,
+  "vault_backend_names": [],
+  "fallback_approved": false,
+  "consumer_env_forces_file_vault": false,
+  "source_sha256": "f27e3df54d850b99e39555c6727056935f983cda9a682d223fa1f30eba5997a3"
+}

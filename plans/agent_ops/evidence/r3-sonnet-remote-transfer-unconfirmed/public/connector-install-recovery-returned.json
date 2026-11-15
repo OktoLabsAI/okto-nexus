@@ -1,0 +1,24 @@
+{
+  "returncode": 0,
+  "stdout_sha256": "2a14148152beb5a3f69a41c7a9d83bacc6efab0a5c0f5c435bfb057444913280",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "command_sha256": "bea8af9ef1b4501ccf0bfb7d4c0bb19458399650637740aedff9e6895d591b23",
+  "original_stdout_sha256": "78725844d03b6eedc15c140eb3fa1d7540ddcd34302aa22a74e9905fd334c441",
+  "original_aborted": true,
+  "original_wrapper_failure": "JSONExtraData",
+  "provider_calls": 0,
+  "source": "EXPLICIT_NONINTERACTIVE_RECOVERY",
+  "status": "RECOVERY_INSTALLED_CONFIRMED",
+  "projection": {
+    "installed": true
+  },
+  "canonical_observation": {
+    "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "task_name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "task_enabled": true,
+    "task_active": false,
+    "task_digest": "f2701fa53876af4640f5828a7487d96b985a935ccc4dfc7e62953b49d5b67318",
+    "state": "installed"
+  },
+  "amendment_sha256": "e56ae6fc22d5af02adc9687aaa8ee476846c1d7e09e43c030109cf9ec71820cd"
+}

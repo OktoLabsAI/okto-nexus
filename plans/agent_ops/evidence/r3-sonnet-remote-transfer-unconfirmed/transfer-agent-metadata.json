@@ -1,0 +1,21 @@
+{
+  "method": "SQLITE_MODE_RO_QUERY_ONLY_EXACT_HANDOFF_AGENT_METADATA_ONLY",
+  "agent": {
+    "agent_id": "m1-sonnet-remote",
+    "role": "Project assistant",
+    "is_active": 1,
+    "created_at": "2026-11-15T01:11:45.431986Z",
+    "last_seen_at": null
+  },
+  "revisions": [
+    {
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "agent_id": "m1-sonnet-remote",
+      "credential_epoch": 1
+    }
+  ],
+  "handoff_credential_epoch": 1,
+  "last_seen_is_not_key_last_used": true,
+  "secret_columns_read": false,
+  "api_key_last_used_available_in_selected_schema": false
+}

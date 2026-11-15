@@ -1,0 +1,64 @@
+{
+  "status": "CLOSED_NORMALLY_TRANSFER_UNCONFIRMED_NO_MODEL",
+  "initial_install": {
+    "positive_abort": true,
+    "wrapper_error": "JSONExtraData",
+    "original_success": false,
+    "recovery": "One explicitly selected --non-interactive install after positive no-effect/absence proof; original reservation and labeled recovery provenance retained."
+  },
+  "cohort_compatibility": {
+    "original_select_failure": "CONNECTOR_COHORT_INCOMPLETE",
+    "repair": "Canonical birth_token representation normalized to physical FILETIME birth; image/ACK/cycle/all3 physical proofs retained. No reinstall or restart from this compatibility change."
+  },
+  "transfer": {
+    "status": "UNCONFIRMED",
+    "consumer_exit": 1,
+    "producer_exit": null,
+    "active_auxiliary_job_processes_after": 0,
+    "forced_owned_cleanup": false,
+    "canonical_material_delivery": "delivered_once",
+    "material_status": "unavailable",
+    "connector_identities": 0,
+    "connector_bindings": 0,
+    "profile_state": "awaiting_host",
+    "credential_epoch": 1,
+    "no_automatic_replay_rotation_reissue": true
+  },
+  "diagnosis": "Installed pre-key validations passed. No keyring backend/fallback approval; installed synthetic reproduction shows fallback confirmation consumes the only stdin line before credential read, then EOF/VALIDATION_ERROR. Actual consumer stderr was discarded, so exact original exception text is unavailable. This distinction is preserved in transfer-failure-diagnosis.json.",
+  "closure": {
+    "normal_stop_both_returncode": 0,
+    "all_six_retained_process_exits": 0,
+    "both_native_inactive": true,
+    "both_tasks_absent": true,
+    "server_port_free": true,
+    "selected_data_preserved_across_uninstall": true,
+    "force_used": false,
+    "services_still_live": false
+  },
+  "root_reported_tools": {
+    "connector_stop": "59443/a33565",
+    "connector_exit_watch": "70789/0d2d5b",
+    "connector_cleanup": "06fdce",
+    "connector_uninstall": "12377/c1522b",
+    "nexus_stop": "47046/1f2fc3",
+    "nexus_exit_watch": "32142/584da7",
+    "nexus_cleanup": "1573c4",
+    "nexus_uninstall": "55874/2722e8",
+    "browser": "Root closed only own isolated tab1; tab0 preserved. No work was active, so this is not SVC09 acceptance."
+  },
+  "provider_turns_selected": 0,
+  "codex_accounting_unchanged": {
+    "tokens": 579154,
+    "reservations": 16
+  },
+  "sonnet_admitted": false,
+  "paid_work_remains_held": true,
+  "acceptance_promoted": false,
+  "scenario_counts": {
+    "VERIFIED": 125,
+    "IN_PROGRESS": 5,
+    "NOT_RUN": 2
+  },
+  "historical_live_milestones": "Earlier phase1/review ledgers accurately describe their then-live state; this later closure supersedes current presence without rewriting historical evidence.",
+  "curation": "Explicit immutable preparation, public projections and sanitized diagnosis only. No private stdout, raw database/profile, credential value or nonce copied."
+}

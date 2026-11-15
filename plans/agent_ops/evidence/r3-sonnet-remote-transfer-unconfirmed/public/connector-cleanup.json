@@ -1,0 +1,32 @@
+{
+  "cohort": {
+    "cycle_id": "f5c546a91b89fcde9d3c9e7878ca9340",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 40844,
+      "birth": 134391782885676828
+    },
+    "launcher": {
+      "pid": 39136,
+      "birth": 134391782958761057
+    },
+    "child": {
+      "pid": 45204,
+      "birth": 134391782960825552
+    }
+  },
+  "native_inactive": true,
+  "canonical_absence": {
+    "state": "stopped",
+    "reason": "NO_SERVICE_OWNER",
+    "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "pid": null,
+    "generation": "",
+    "running": false,
+    "ipc_ok": false
+  },
+  "work_settlement_claimed": false,
+  "amendment_sha256": "e56ae6fc22d5af02adc9687aaa8ee476846c1d7e09e43c030109cf9ec71820cd"
+}
