@@ -1,0 +1,36 @@
+{
+  "format": 1,
+  "connector_commit": "a8bd48bdc6d6e835c55eb601a7e7fa316453aa7b",
+  "archive": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-connector-reconciliation-wheel-6pb8bst4\\connector-source.tar",
+    "sha256": "f9779592bb98aeab11714aaed110715d9a68a105c379dc1816a9a8d65ba5c775",
+    "bytes": 3072000
+  },
+  "wheel": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-connector-reconciliation-wheel-6pb8bst4\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+    "sha256": "2b8ce688541a5ae6e9806467569be0743fef6ff607c763f2b93accf0f93e017d",
+    "bytes": 402747
+  },
+  "source_date_epoch": "1767225600",
+  "build_python": "C:\\Python313\\python.exe",
+  "build_versions": {
+    "build": "1.5.0",
+    "setuptools": "84.0.0",
+    "wheel": "0.45.1"
+  },
+  "dependencies_copied_from": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\venv",
+  "new_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-connector-reconciliation-wheel-6pb8bst4\\venv",
+  "core_wheel_unchanged": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+    "sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+    "bytes": 556849
+  },
+  "nexus_backend_wheel_unchanged": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+    "sha256": "0f3e87555885926a9334ba9e9a63b3a369ddcc6914b0a1cd41c3da7d71831ab5",
+    "bytes": 3943111
+  },
+  "live_campaign_modified": false,
+  "provider_invoked": false,
+  "published": false
+}

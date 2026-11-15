@@ -6,7 +6,7 @@ This includes explicit, bounded PowerShell native permission approval/denial;
 it does not bypass operator decisions or persist permission suggestions.
 
 Installed qualification: 48 Core, 44 Nexus and 6 unique Connector cases passed.
-The Connector CI wheel is built from `165a01f9c2acbc8e40388706f86534434968ed72`
+The Connector CI wheel in this qualification was built from `165a01f9c2acbc8e40388706f86534434968ed72`
 (including vault consent reload and pre-readiness drain fixes), SHA-256 `75f28674d175bec1a8797299a8e255834d5216510e0917aa33e8680171ca7b0b`.
 Nexus backend qualification uses archived commit `9a3675dde09b3c6d939af5b480ed807eb538902d`;
 the subsequent Home UI milestone is independent. See `qualification-core-497ee2/`
