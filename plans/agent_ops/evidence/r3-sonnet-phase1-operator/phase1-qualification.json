@@ -1,0 +1,32 @@
+{
+  "status": "OFFLINE_SCOPED_PASS",
+  "tests": {
+    "count": 8,
+    "seconds": 2.67,
+    "tool": "7c9799",
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1-tests.xml",
+      "sha256": "a5e6896d92628aa7e5c8c347254eb6a7e3e68925be548afdd2b1d2604087b90d",
+      "bytes": 940
+    }
+  },
+  "actual_context_gate": "PASS with final plan/current own installed W16 prefix; no service query/effect",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+  "sys_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv",
+  "source_test_imports": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t",
+  "compile_count": 6,
+  "runtime_directories_absent": true,
+  "provider_calls": 0,
+  "service_actions": 0,
+  "root_source_review": [
+    "43cb8d",
+    "b7f1e6",
+    "2c7043"
+  ],
+  "reuse": "Qualified observation/handles/ACL/bootstrap source functions; integrated one-shot/lifecycle guards covered by8 fixtures. No full suite/build/probe rerun.",
+  "limitations": [
+    "Final live canonical status/owner/account identity must still pass",
+    "No model or Connector execution is available in phase1",
+    "CLI actual returncodes and uncertainty preserved; no auto replay or force"
+  ]
+}

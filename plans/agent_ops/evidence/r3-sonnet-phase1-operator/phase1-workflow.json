@@ -1,0 +1,138 @@
+{
+  "status": "ROOT_EXECUTION_ONLY_AFTER_FINAL_PIN_REVIEW",
+  "commands": {
+    "prepare": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1-plan.json",
+      "--expected-plan-sha256",
+      "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b",
+      "prepare"
+    ],
+    "install": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1-plan.json",
+      "--expected-plan-sha256",
+      "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b",
+      "install"
+    ],
+    "start": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1-plan.json",
+      "--expected-plan-sha256",
+      "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b",
+      "start"
+    ],
+    "select": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1-plan.json",
+      "--expected-plan-sha256",
+      "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b",
+      "select"
+    ],
+    "watch": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1-plan.json",
+      "--expected-plan-sha256",
+      "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b",
+      "watch"
+    ],
+    "bootstrap": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1-plan.json",
+      "--expected-plan-sha256",
+      "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b",
+      "bootstrap"
+    ],
+    "stop": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1-plan.json",
+      "--expected-plan-sha256",
+      "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b",
+      "stop"
+    ],
+    "cleanup": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1-plan.json",
+      "--expected-plan-sha256",
+      "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b",
+      "cleanup"
+    ],
+    "uninstall": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1-plan.json",
+      "--expected-plan-sha256",
+      "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b",
+      "uninstall"
+    ]
+  },
+  "serial_start": [
+    "prepare",
+    "install",
+    "start",
+    "select",
+    "watch(background root-retained)",
+    "bootstrap"
+  ],
+  "normal_cleanup": [
+    "stop",
+    "wait same watch physical3exit",
+    "cleanup",
+    "uninstall"
+  ],
+  "on_failure": "Preserve reservation/returned evidence; no duplicate CLI/account/login/provider. If normalstop remainsdraining or observertimesout, stopclaimunconfirmed/rootreconcile; no force.",
+  "phase2": "Must use separate frozen files/context and reference this exact phase1 plan; never modify active phase1 bytes."
+}

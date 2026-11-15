@@ -2232,3 +2232,10 @@ preservados. **125/132 VERIFIED**,5 IN_PROGRESS e2 NOT_RUN; sem modelo, nova
 reserva ou mudança dos579154 tokens/16 reservas nesta execução.
 Evidência: [resultado](plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/result.json)
 e [escopo](plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/README.md).
+
+## 2026-11-15 — Sonnet remoto: serviço e operador, sem modelo
+
+- Serviço Nexus próprio chegou a READY; bootstrap canônico autenticou `m1-sonnet-human` com uma criação de conta e um login, sem admissão de modelo.
+- A preparação direta com import isolado falhou antes de efeitos; o launcher corrigido e pinado concluiu a preparação. Falha preservada como relato atribuído ao root, sem recibo retroativo.
+- Serviço e observador de coorte (sessão root 32142) continuam ativos neste marco. **Nenhuma limpeza ou saída física é alegada.** Connector remoto, trabalho útil/continuação e fechamento de console/dashboard não são comprovados por esta fase.
+- [Evidência pública e limites](plans/agent_ops/evidence/r3-sonnet-phase1-operator/review.json). Nenhum cenário promovido: **125 VERIFIED, 5 IN_PROGRESS e 2 NOT_RUN**, inalterados.

@@ -1,0 +1,16 @@
+{
+  "returncode": 0,
+  "projection": {
+    "state": "ready",
+    "reason": null,
+    "pid": 38640,
+    "generation": "030c6b0b5ca03e4fcba6c78692fb4033",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "ready_for_queries": true
+  },
+  "stdout_sha256": "c7159c0bdef62b2c37a95027062d41f8a1787a47db817f48358804ae2f901181",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "completed_at": 1794703278.3457315,
+  "model_admissions": 0,
+  "phase1_plan_sha256": "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b"
+}

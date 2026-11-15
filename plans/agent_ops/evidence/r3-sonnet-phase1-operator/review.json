@@ -1,0 +1,39 @@
+{
+  "status": "PHASE1_OPERATOR_AUTHENTICATED_SERVICE_LIVE",
+  "service_cleanup_claimed": false,
+  "model_admissions": 0,
+  "account_post_count": 1,
+  "login_cli_count": 1,
+  "operator_profile": "m1-sonnet-human",
+  "acceptance_promoted": false,
+  "scenario_counts": {
+    "VERIFIED": 125,
+    "IN_PROGRESS": 5,
+    "NOT_RUN": 2
+  },
+  "root_reported_tool_history": {
+    "initial_direct_prepare": {
+      "tool": "69ccc9",
+      "outcome": "ModuleNotFoundError request_context under isolated import; failed before effects"
+    },
+    "corrected_launcher_prepare": "46b256",
+    "install": "5da82e",
+    "start": "7f759e",
+    "select": "d80d64",
+    "watch": {
+      "tool": "ae677e",
+      "session": 32142,
+      "state": "STILL_LIVE_AT_ROOT_HANDOFF",
+      "later_root_confirmation": "81eed8"
+    },
+    "bootstrap": "50eac4"
+  },
+  "history_evidence_limit": "Tool IDs/outcome of initial failure are root-reported provenance, not fabricated execution receipts. Retained public outputs establish the successful phase1 steps.",
+  "limits": [
+    "Server/cohort observer remain live at this milestone; no stop/uninstall/physical-exit proof claimed.",
+    "Remote Connector binding/setup/useful/continuation are not established by operator bootstrap.",
+    "No Sonnet/Codex model turn or token reservation increment from these phase1 steps.",
+    "No SVC09 dashboard/console closure or global M1/DX40 acceptance claimed.",
+    "Only explicit public/source allowlist retained; no private directory, raw stdout, DB, credentials or nonce."
+  ]
+}

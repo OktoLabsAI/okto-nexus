@@ -1,0 +1,21 @@
+{
+  "sources": {
+    "observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\m1_v14_observation.py",
+      "sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10"
+    },
+    "cohort": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\cohort.py",
+      "sha256": "5e5322fe8a1568b23790f5ad02f99ad915a8a882cc913443d543e24c3057771c"
+    },
+    "acl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\driver_common.py",
+      "sha256": "5e83c1ae4e07e64b3c76211bbceb6187bc1637091206f60c488ef7a93a9a734f"
+    },
+    "bootstrap": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\operator_bootstrap.py",
+      "sha256": "b6540c0b6e2cf473cadad87fda06b5849449e25a364c633ab003838824acc4c6"
+    }
+  },
+  "scope": "Exact AST function source reuse; bootstrap only literal alias and explicit Python UTF8 flags changed. Wrapper integration separately qualified."
+}

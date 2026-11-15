@@ -13873,6 +13873,22 @@
         "DX-T39"
       ],
       "operational_continuation_sum_check": "FAIL"
+    },
+    "r3_sonnet_phase1_operator": {
+      "status": "PHASE1_OPERATOR_AUTHENTICATED_SERVICE_LIVE",
+      "summary": "Own Nexus READY and m1-sonnet-human operator authenticated (account1/login1/model0). Initial isolated import failure before effects retained as root report; corrected pinned launcher succeeded. Service and retained cohort observer session32142 still live; no cleanup or remote/model acceptance claimed. Counts125/5/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-phase1-operator/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-phase1-operator/public/operator-bootstrap-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-phase1-operator/public/start-returned.json",
+        "plans/agent_ops/evidence/r3-sonnet-phase1-operator/public/nexus-exit-watch-started.json",
+        "plans/agent_ops/evidence/r3-sonnet-phase1-operator/manifest.json"
+      ],
+      "model_admissions": 0,
+      "account_posts": 1,
+      "login_cli_calls": 1,
+      "service_cleanup_claimed": false,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -15576,6 +15592,24 @@
         "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/cohort-exit-proof.json",
         "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/manifest.json"
       ]
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_phase1_operator",
+      "status": "PHASE1_OPERATOR_AUTHENTICATED_SERVICE_LIVE",
+      "summary": "Own Nexus READY and m1-sonnet-human operator authenticated (account1/login1/model0). Initial isolated import failure before effects retained as root report; corrected pinned launcher succeeded. Service and retained cohort observer session32142 still live; no cleanup or remote/model acceptance claimed. Counts125/5/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-phase1-operator/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-phase1-operator/public/operator-bootstrap-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-phase1-operator/public/start-returned.json",
+        "plans/agent_ops/evidence/r3-sonnet-phase1-operator/public/nexus-exit-watch-started.json",
+        "plans/agent_ops/evidence/r3-sonnet-phase1-operator/manifest.json"
+      ],
+      "model_admissions": 0,
+      "account_posts": 1,
+      "login_cli_calls": 1,
+      "service_cleanup_claimed": false,
+      "acceptance_promoted": false
     }
   ],
   "r3_native_bounded_supervisor_execution": {

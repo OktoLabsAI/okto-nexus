@@ -1,0 +1,266 @@
+{
+  "scope": "OWN_NEXUS_LIFECYCLE_OPERATOR_ONLY_NO_PROVIDER",
+  "provider_calls": 0,
+  "force_authorized": false,
+  "status": "OFFLINE_QUALIFIED_ROOT_REVIEWED_NO_EFFECTS_YET",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "commands": {
+    "tasks": {
+      "nexus": {
+        "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "exists": null,
+        "absence_observed": false
+      },
+      "connector": {
+        "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+        "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+        "exists": null,
+        "absence_observed": false
+      }
+    },
+    "service_selection_args": [
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "58631",
+      "--project-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "--embedding-mode",
+      "off",
+      "--feature-harness-integrations",
+      "true",
+      "--metrics-mode",
+      "disabled",
+      "--harness-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+    ],
+    "required_parent_path": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+      "C:/Windows/System32",
+      "C:/Program Files/Git/cmd"
+    ],
+    "origin": "http://127.0.0.1:58631",
+    "steps": [
+      {
+        "component": "nexus",
+        "action": "install",
+        "task_name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-X",
+          "utf8",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "install",
+          "--user",
+          "--start-at-login",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "58631",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "true",
+          "--metrics-mode",
+          "disabled",
+          "--harness-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+          "--timeout",
+          "45",
+          "--json"
+        ]
+      },
+      {
+        "component": "nexus",
+        "action": "start",
+        "task_name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-X",
+          "utf8",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "start",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "58631",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "true",
+          "--metrics-mode",
+          "disabled",
+          "--harness-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+          "--timeout",
+          "45",
+          "--json"
+        ]
+      },
+      {
+        "component": "nexus",
+        "action": "stop",
+        "task_name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-X",
+          "utf8",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "stop",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "58631",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "true",
+          "--metrics-mode",
+          "disabled",
+          "--harness-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+          "--timeout",
+          "45",
+          "--json"
+        ]
+      },
+      {
+        "component": "nexus",
+        "action": "uninstall",
+        "task_name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-X",
+          "utf8",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "uninstall",
+          "--user",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "58631",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "true",
+          "--metrics-mode",
+          "disabled",
+          "--harness-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+          "--timeout",
+          "45",
+          "--json"
+        ]
+      }
+    ]
+  },
+  "topology": {
+    "origin": "http://127.0.0.1:58631"
+  },
+  "installation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+    "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+  },
+  "package_pins": {
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe"
+  },
+  "paths": {
+    "server_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+    "operator_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home",
+    "connector_state": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "connector_project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project"
+  },
+  "operator_bootstrap": {
+    "username": "m1-sonnet-human",
+    "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home"
+  },
+  "execution_bundle": {
+    "operator_profile": "m1-sonnet-human"
+  },
+  "expected_server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+  "service_context": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-context.json",
+    "sha256": "c28a8d687a9415ac65f750586d18270754031edb9ea5ba094b1c65c554f38484"
+  },
+  "predecessor": {
+    "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-svc20-configured-nexus-next-connect\\result.json",
+    "sha256": "202dc97afa13e557b20e41bcc060aa0429343d3b9c889acf203f1f92f351a055"
+  },
+  "startup": {
+    "cli_seconds": 45,
+    "passive_ready_seconds": 180,
+    "positive_failure_refused": true
+  },
+  "lifecycle_selections": [
+    "prepare",
+    "install",
+    "start",
+    "select",
+    "watch",
+    "bootstrap",
+    "stop",
+    "cleanup",
+    "uninstall"
+  ],
+  "watch_seconds": 3600,
+  "bootstrap_seconds": 120,
+  "runtime_pins": {
+    "request_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\request_context.py",
+      "sha256": "c840a43bf0e80c919fdab3fc1cbedc84595411de414522372f013ef7369af809",
+      "bytes": 3642
+    },
+    "phase1.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1.py",
+      "sha256": "9dace6cb524327185c4ca7f2daf5ecae4c3ca22ed48a0ba7a8cf2ee2fd24c583",
+      "bytes": 9231
+    },
+    "reused_observation.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\reused_observation.py",
+      "sha256": "9f15dbc9b764c6760936bdaba3d071156b0714e481bec69eca6f246de7db427c",
+      "bytes": 12902
+    },
+    "operator_bootstrap.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\operator_bootstrap.py",
+      "sha256": "3ef371a0bbf47814ad7dcf23004f90ee8714502c08015e18a93439bc9f774e4a",
+      "bytes": 6210
+    }
+  },
+  "account_guard": "Canonical configured=false/local=true required to create; configured=true permits only canonical status of existing exact own operator profile, never rotate/reset. No provider auth file access.",
+  "authority": "Technical root selection under existing user authority. No new human hash approval. Phase1 cannot select provider setup/test/send/answer."
+}

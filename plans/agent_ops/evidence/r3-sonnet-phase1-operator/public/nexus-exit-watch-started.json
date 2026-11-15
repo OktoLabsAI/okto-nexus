@@ -1,0 +1,31 @@
+{
+  "cohort": {
+    "cycle_id": "2f01e62a962aa3f55ef9d1c40f9c7498",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 48368,
+      "birth": 134391768650172971
+    },
+    "launcher": {
+      "pid": 37488,
+      "birth": 134391768667422316
+    },
+    "child": {
+      "pid": 38640,
+      "birth": 134391768667718855
+    }
+  },
+  "retained_roles": [
+    "parent",
+    "launcher",
+    "child"
+  ],
+  "observer": {
+    "pid": 51432,
+    "birth": 134391768940811267
+  },
+  "terminate_right": false,
+  "phase1_plan_sha256": "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b"
+}
