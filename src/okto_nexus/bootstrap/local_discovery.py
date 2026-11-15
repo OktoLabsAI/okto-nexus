@@ -16,7 +16,7 @@ class LocalDiscoveryConfiguration:
                     pi_node=self.pi_node)
 
 
-def split_discovery_args(args):
+def split_discovery_args(args, *, require_paths=True):
     """Keep discovery approval on the local owner CLI, before serve starts."""
     roots, values, rest = [], {}, []
     flags = {'--harness-root', '--pi-install-root', '--pi-node'}
@@ -39,8 +39,8 @@ def split_discovery_args(args):
             path = Path(raw)
             if not raw or not path.is_absolute():
                 raise ValueError()
-            path = path.resolve(strict=True)
-            if not (path.is_file() if flag == '--pi-node' else path.is_dir()):
+            path = path.resolve(strict=require_paths)
+            if require_paths and not (path.is_file() if flag == '--pi-node' else path.is_dir()):
                 raise ValueError()
         except (OSError, ValueError):
             raise OktoNexusError(ErrorCode.CONFIG_ERROR,

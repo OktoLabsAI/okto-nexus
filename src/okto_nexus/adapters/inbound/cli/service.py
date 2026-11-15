@@ -61,7 +61,7 @@ def run_service(argv: list[str]) -> int:
         parser.error('--timeout must be greater than 0 and at most 300 seconds')
     try:
         port, host, project_root, log_level, rest = _split_serve_args(remaining, os.environ)
-        discovery, rest = split_discovery_args(rest)
+        discovery, rest = split_discovery_args(rest, require_paths=args.action != 'status')
         config = load_config(os.environ, rest)
         if args.action == 'logs':
             # Diagnostic access remains possible with an unavailable old Python
@@ -152,7 +152,7 @@ def _show_logs(service, args):
 def resolve_local_service(remaining, *, action="connect"):
     """Resolve the same saved context for service controls and onboarding."""
     port, host, project_root, log_level, rest = _split_serve_args(remaining, os.environ)
-    discovery, rest = split_discovery_args(rest)
+    discovery, rest = split_discovery_args(rest, require_paths=action != 'status')
     config = load_config(os.environ, rest)
     explicit_fields = load_config({}, rest)._explicit_fields
     saved = config.home_dir.resolve() / CONTEXT_NAME
@@ -170,7 +170,9 @@ def resolve_local_service(remaining, *, action="connect"):
         environment = previous['environment']
         port, host, project_root, log_level, rest = _split_serve_args(
             previous['arguments'] + remaining, environment)
-        discovery, rest = split_discovery_args(rest)
+        # Status observes the owner even when a saved discovery installation
+        # disappeared. Starting or changing it still requires existing paths.
+        discovery, rest = split_discovery_args(rest, require_paths=action != 'status')
         config = load_config(environment, rest)
         if 'settings_pinned_fields' in previous:
             config._explicit_fields = frozenset(previous['settings_pinned_fields']) | explicit_fields
