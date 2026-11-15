@@ -178,3 +178,13 @@ Next dependencies: PR-01 implements SVC-01…04. PR-02 extends/reuses supervisor
 and Connector. PR-03 supplies the preset and complete terminal cycle. Full
 provider, real service-manager and later Herdr campaign gates stay open until
 executed with the required authorization and environment.
+
+## 2026-11-15 — BASE-06 actual stage consolidation (historical baseline preserved)
+
+The earlier NOT_RUN/provider-authorization and platform statements above describe the original baseline, not current execution. Windows Server/Connector service lifecycles and local first useful provider work have since run. The fixed plan245 asks to measure stages; it does not impose an uninterrupted clean stopwatch or one unchanged package across all historical work.
+
+Measured v12 product-wheel install: **12.9945733s**, or **58.1911667s** through verification (dependencies/download/build excluded). W17 recovery on the reused W16 package: service registration **10.7141757s**, start **37.3520083s**, authorization review **13.9927521s**, apply **13.4243622s** (recorded wall endpoints including wrapper overhead, no clock-step bound). Useful15 reached the validated report in **148.2299977s monotonic**; wrapper153.9653945s. Same-session continuation wrapper24.2673459s returned a real response; its extra semantic sum check failed and remains failed.
+
+These are valid labelled stage measurements. Historical installation-to-useful wall time includes debugging, retries, changed packages and human waits; no intervals are silently subtracted. W16/R package-install durations remain unknown, not replaced by service registration, mtimes or HTTP liveness7.811s. Neither missing old clocks nor package heterogeneity creates a requirement to reinstall or repeat local paid work.
+
+Local first-use measurement is established within this scope. BASE-06 remains IMPLEMENTED because the remote complete useful terminal cycle (line247) is still missing: onboarding DONE and actual failed attempts do not establish useful report/continuation. No task/AC/scenario acceptance is promoted. [Measurements, exact source hashes and remaining scope](evidence/r3-base06-stage-measurement-consolidation/review.json).

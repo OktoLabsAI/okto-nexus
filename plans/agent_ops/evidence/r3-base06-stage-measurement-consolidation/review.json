@@ -1,0 +1,48 @@
+{
+  "status": "LOCAL_FIRST_USE_STAGE_MEASUREMENT_CONSOLIDATED_REMOTE_CYCLE_PENDING",
+  "fixed_plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "literal_lines": [
+    245,
+    247,
+    313
+  ],
+  "interpretation": "Measure actual stages between installation and first useful session. The fixed plan does not require a clean stopwatch, one unchanged package across the entire development trajectory, or an uninterrupted automated path. Distinct historical stages are valid when labelled; package-install duration must not be renamed service-registration duration.",
+  "local_scope": "Windows/codex_app_server lifecycle and first useful W17 recovery request15 measured; native permission and installed same-session continuation are retained in DX-T39 evidence. Continuation semantic sum assertion failed, preserved separately from literal DX39.",
+  "wall_trajectory": {
+    "v12_package_install_start_to_W17_useful_recorded_UTC_seconds": 31757.052639484406,
+    "start_utc": "2026-11-14T15:09:04.989093+00:00",
+    "end_wall_epoch": 1794700702.0417325,
+    "scope": "Historical elapsed wall-clock trajectory includes debugging, retries, package changes and human waits. Not same-package benchmark, not pure processing latency; wall-clock adjustment bound unavailable. No cross-process monotonic assumption.",
+    "w17_service_registration_start_to_useful_finished_wall_seconds": 349.9255392551422,
+    "w17_scope": "Same reused W16 package; includes service registration/start, selection/observer setup, canonical grant review/apply, root waits and useful result. Not package installation duration."
+  },
+  "valid_measurements": {
+    "product_wheel_install_v12_seconds": 12.9945733,
+    "product_install_and_verification_v12_seconds": 58.1911667,
+    "W17_useful_monotonic_seconds": 148.2299977,
+    "W17_continuation_monotonic_seconds": 19.5509071
+  },
+  "remaining_literal": "Remote useful result and the corresponding complete terminal cycle (line247) remain unproven: useful01 interrupted; useful03 canonical SUCCEEDED but report absent/useful false, and no continuation. Actual onboarding DONE/lifecycle and failure stages already exist; they do not establish remote useful completion.",
+  "historical_measurement_limits": [
+    "W16/R package installation start/end clocks were not recorded; report unknown, do not invent mtime durations.",
+    "Earlier 7.811s measures HTTP liveness only.",
+    "Measured W17 stage wall intervals include wrapper/validation overhead; no clock-step bound recorded.",
+    "Do not require gratuitous reinstall, new local paid run or homogeneous package stopwatch to repair historical missing clocks.",
+    "Future independently authorized remote useful/continuation may complete the remaining route; record only actual available stage clocks."
+  ],
+  "unchanged": {
+    "scenario_counts": {
+      "VERIFIED": 126,
+      "IN_PROGRESS": 4,
+      "NOT_RUN": 2
+    },
+    "BASE-06_status": "IMPLEMENTED",
+    "AC01_AC11": "UNCHANGED",
+    "codex_tokens": 579154,
+    "codex_admissions": 16,
+    "sonnet_tokens": 144004,
+    "sonnet_admissions": 2
+  },
+  "new_services_provider_tests": 0,
+  "method": "Read fixed plan, retained public audit/results and exact own metadata sources; rechecked16 existing timing source hashes. Only allowlisted timing/package metadata projected. No mtime, raw private output, credentials or new SQL."
+}

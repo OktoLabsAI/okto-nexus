@@ -662,26 +662,30 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "rtk proxy .venv/Scripts/python.exe scripts/measure_agent_ops_baseline.py",
         "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json",
-        "plans/agent_ops/evidence/r3-binding02-svc20-preparation-base06-timing/base06/audit.json"
+        "plans/agent_ops/evidence/r3-binding02-svc20-preparation-base06-timing/base06/audit.json",
+        "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json"
       ],
-      "result": "Medição parcial retida: instalação dos wheels v12 12,9945733s (58,1911667s com verificação) e resultado útil W17 148,2299977s. Não formam intervalo homogêneo do pacote atual; 7,811s permanece somente liveness HTTP.",
+      "result": "Etapas reais consolidadas: v12 product-wheel install12,9945733s/verification58,1911667s; W17 service registration10,714s/start37,352s/review13,993s/apply13,424s; useful report148,2299977s monotonic and real continuation24,267s wrapper wall. Local first-use measurement established in labelled scope. No homogeneous-package/clean-stopwatch requirement is imposed.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Cláusula própria da linha245, não M1 herdado por associação. Pode integrar a mesma campanha M1 autorizada, sem campanha redundante."
+        "Cláusula própria da linha245, não M1 herdado por associação. Pode integrar a mesma campanha M1 autorizada, sem campanha redundante.",
+        "Current-stage timings need explicit context, not an invented same-package or clean-stopwatch gate; no numerical SLA. Historical missing clocks remain unknown."
       ],
       "subscopes": {
         "inventory": "VERIFIED",
         "foreground_liveness_measurement": "VERIFIED",
-        "provider_first_use_measurement": "IN_PROGRESS"
+        "provider_first_use_measurement": "IN_PROGRESS",
+        "local_first_use_stage_measurement": "VERIFIED",
+        "remote_complete_useful_terminal_cycle": "IN_PROGRESS"
       },
       "reconciliation": {
-        "current_implementation": "Three-repo lifecycle/storage/config/vault map and first Windows/codex_app_server target exist; disposable initial liveness 7.811s is recorded separately. Partial actual installation and useful-result timings retained in plans/agent_ops/evidence/r3-binding02-svc20-preparation-base06-timing/base06/audit.json.",
-        "remaining": "Trajetória remota e etapas do pacote corrente ainda parciais; relógios históricos de instalação W16/R ausentes. Não inferir duração por mtime ou misturar pacotes/boots. Sem promoção AC01/AC11.",
+        "current_implementation": "Original lifecycle/platform map plus real Windows Server/Connector campaigns and measured local useful terminal cycle. Distinct historical stage scopes and clocks are consolidated; package-install and service-registration are not conflated.",
+        "remaining": "Literal line247 remote useful result and complete terminal cycle remain unproven (real onboarding/failed attempts retained). Historical W16/R installation clocks are unknown but do not impose a new homogeneous/clean timing requirement or gratuitous reinstall/local provider rerun.",
         "remaining_kind": "real_provider_campaign",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
       },
-      "remaining_evidence": "Medir as etapas de primeiro uso útil no harness suportado e contexto escolhidos; preservar os tempos e pré-requisitos reais. Nenhuma nova infraestrutura de lifecycle é pedida.",
+      "remaining_evidence": "Retain the already measured stages and their scope; finish the existing authorized remote useful/continuation route when possible, recording actual available timestamps and failures without inventing missing historical clocks.",
       "contract_reconciliation": {
         "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
@@ -14174,6 +14178,15 @@
       "sonnet_charged_admissions": 2,
       "codex_tokens": 579154,
       "codex_charged_admissions": 16
+    },
+    "r3_base06_stage_measurement_consolidation": {
+      "status": "LOCAL_MEASUREMENT_ESTABLISHED_REMOTE_LITERAL_ROUTE_PENDING",
+      "summary": "Measure actual stages between installation and first useful session. The fixed plan does not require a clean stopwatch, one unchanged package across the entire development trajectory, or an uninterrupted automated path. Distinct historical stages are valid when labelled; package-install duration must not be renamed service-registration duration. Remote useful result and the corresponding complete terminal cycle (line247) remain unproven: useful01 interrupted; useful03 canonical SUCCEEDED but report absent/useful false, and no continuation. Actual onboarding DONE/lifecycle and failure stages already exist; they do not establish remote useful completion.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json",
+        "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/timing-projection.json"
+      ],
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -16186,6 +16199,17 @@
       "sonnet_charged_admissions": 2,
       "codex_tokens": 579154,
       "codex_charged_admissions": 16
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_base06_stage_measurement_consolidation",
+      "status": "LOCAL_MEASUREMENT_ESTABLISHED_REMOTE_LITERAL_ROUTE_PENDING",
+      "summary": "Measure actual stages between installation and first useful session. The fixed plan does not require a clean stopwatch, one unchanged package across the entire development trajectory, or an uninterrupted automated path. Distinct historical stages are valid when labelled; package-install duration must not be renamed service-registration duration. Remote useful result and the corresponding complete terminal cycle (line247) remain unproven: useful01 interrupted; useful03 canonical SUCCEEDED but report absent/useful false, and no continuation. Actual onboarding DONE/lifecycle and failure stages already exist; they do not establish remote useful completion.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json",
+        "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/timing-projection.json"
+      ],
+      "acceptance_promoted": false
     }
   ],
   "r3_native_bounded_supervisor_execution": {

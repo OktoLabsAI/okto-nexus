@@ -2343,3 +2343,9 @@ Core497ee2b7 corrige reconhecimento de permissão nativa PowerShell, preservando
 **126 VERIFIED /4 IN_PROGRESS /2 NOT_RUN**, sem promoção; Codex579.154/16 e Sonnet144.004/2 inalterados. Parada Connector incerta permanece pendente no corte anterior; este marco não autoriza força nem declara saída.
 
 Integração dos consumidores em ambiente isolado: **98 casos distintos instalados PASS (Core48/Nexus44/Connector6)**. Nexus42 e Connector4 passes inalterados vieram das rodadas anteriores; reruns finais cobriram apenas dois casos corrigidos por consumidor. Falhas de fixture e XML anteriores preservados; os48 casos Core fonte/instalado se sobrepõem e não são96 únicos. Backend Nexus testado é o arquivo anterior à Home, qualificada separadamente. Vendors atualizados não alteram ambientes da campanha já executada. [Qualificação instalada](plans/agent_ops/evidence/r3-core-powershell-consumer-integration/review.json).
+
+## 2026-11-15 — BASE-06: medidas por etapa consolidadas, sem novo critério de cronômetro
+
+Plano245 exige medir etapas, não uma instalação homogênea ou intervalo limpo sem investigação. Retidos v12 install12,9945733s/verification58,1911667s e W17 registration10,714s/start37,352s/review13,993s/apply13,424s; útil validado148,2299977s monotonic e continuação real24,267s wrapper wall. Tempos wall incluem overhead e não têm limite de ajuste do relógio. Pacotes/escopos identificados, sem soma disfarçada ou mtime.
+
+Subescopo local de medição confirmado; BASE-06 permanece IMPLEMENTED somente pela rota remota útil/completa ainda não comprovada (247). Clocks históricos W16/R ausentes são limitação declarada, não obrigação de reinstalação ou nova campanha local. Intervalo histórico com debugging/esperas permanece identificado como tal; nenhum objetivo numérico novo. **126/4/2**, AC01/AC11 e budgets inalterados. [Auditoria finita](plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json).

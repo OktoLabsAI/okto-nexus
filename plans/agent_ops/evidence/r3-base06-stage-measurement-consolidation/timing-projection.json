@@ -1,0 +1,207 @@
+{
+  "original_audit": {
+    "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-binding02-svc20-preparation-base06-timing\\base06\\audit.json",
+    "sha256": "e0b5eede66b9ac10ad1046bcc5c497e12dba46f39628c3f01941d3f1ffc3cc4c"
+  },
+  "amendment": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\amendment.json",
+    "sha256": "2ba49c00992fe3dfcc5b286bb3d685c65b6927b5014474a1aacbf792d341d5ed"
+  },
+  "installation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+    "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+  },
+  "package_reused": true,
+  "package_wheels": {
+    "okto_nexus-0.3.3-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "bff18ff133b6180ab2d20810cd54ae4abc8650e7c8093caf374afd97692c62f4"
+    },
+    "okto_nexus_connector-0.0.12-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "f9864f13db4c5e6e5afdfd8f28ca5384512a17a1f8efb1897cb3a4d810d43cf4"
+    },
+    "okto_nexus_connector_core-0.0.14-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9"
+    }
+  },
+  "useful": {
+    "source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\m1v17-local-useful-15-result.json",
+      "sha256": "5ff53a1ded00a783b1a2eaa5ac8f4f12dfce3e08446fca3fa273356f3d92b234"
+    },
+    "request_id": "m1v17-local-useful-15",
+    "started": 1794700553.8157349,
+    "finished": 1794700702.0417325,
+    "started_monotonic_ns": 329049774416600,
+    "finished_monotonic_ns": 329198000413700,
+    "useful_confirmed_monotonic_ns": 329198004414300,
+    "useful_result_confirmed": true
+  },
+  "continuation": {
+    "source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\m1v17-local-continuation-16-result.json",
+      "sha256": "c67aebef09bcaebc227ab6af0391177b6677b315909985994877ee13f0a12302"
+    },
+    "request_id": "m1v17-local-continuation-16",
+    "started": 1794700755.901025,
+    "finished": 1794700775.451935,
+    "started_monotonic_ns": 329251859709900,
+    "finished_monotonic_ns": 329271410617000
+  },
+  "measured_stages": [
+    {
+      "stage": "v12 offline installation of three product wheels",
+      "seconds": 12.9945733,
+      "clock": "monotonic_ns",
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\installation-result.json",
+        "sha256": "e1e088bffd759679ed19376718ea7a17f0657165931c45b7158c941f78603e3d"
+      },
+      "exclusions": "Dependencies, download/build, approval waiting were outside this existing installer; do not relabel full environment acquisition."
+    },
+    {
+      "stage": "v12 install start through payload/import/pip-check verification",
+      "seconds": 58.1911667,
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\installation-result.json",
+        "sha256": "e1e088bffd759679ed19376718ea7a17f0657165931c45b7158c941f78603e3d"
+      }
+    },
+    {
+      "stage": "W17 recovery useful15 dispatch selection through canonical success plus report validation",
+      "seconds": 148.2299977,
+      "clock": "monotonic_ns same wrapper process",
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\m1v17-local-useful-15-result.json",
+        "sha256": "5ff53a1ded00a783b1a2eaa5ac8f4f12dfce3e08446fca3fa273356f3d92b234"
+      },
+      "useful_confirmed_monotonic_ns": 329198004414300
+    },
+    {
+      "stage": "lifecycle-nexus-install",
+      "start_wall_epoch": 1794700352.1161933,
+      "end_wall_epoch": 1794700362.830369,
+      "wall_difference_seconds": 10.714175701141357,
+      "precision": "Recorded wall-clock endpoint difference; includes wrapper/validation overhead, not monotonic stage duration. No clock-step bound recorded.",
+      "sources": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\lifecycle-nexus-install.reserved.json",
+          "sha256": "44083352671bdf6c43d76b7f9d7854672360378c610b0333359f7dcd29a6be8a"
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\lifecycle-nexus-install.returned.json",
+          "sha256": "61d8431ee45ae39aef07c2ff08b4bcf302ac3c281477a8b227f83871625c3968"
+        }
+      ]
+    },
+    {
+      "stage": "lifecycle-nexus-start",
+      "start_wall_epoch": 1794700384.0862107,
+      "end_wall_epoch": 1794700421.438219,
+      "wall_difference_seconds": 37.35200834274292,
+      "precision": "Recorded wall-clock endpoint difference; includes wrapper/validation overhead, not monotonic stage duration. No clock-step bound recorded.",
+      "sources": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\lifecycle-nexus-start.reserved.json",
+          "sha256": "a7a00ef0cc6bf79e4327d9af47f0067cacc1496c6a89885b1418b0423b01f64f"
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\lifecycle-nexus-start.returned.json",
+          "sha256": "f907b7f81bb41baa55d51219f31efaaa00b2a53674f54496ed5be2a6d267ae9f"
+        }
+      ]
+    },
+    {
+      "stage": "authorize_local-review",
+      "start_wall_epoch": 1794700456.934306,
+      "end_wall_epoch": 1794700470.927058,
+      "wall_difference_seconds": 13.992752075195312,
+      "precision": "Recorded wall-clock endpoint difference; includes wrapper/validation overhead, not monotonic stage duration. No clock-step bound recorded.",
+      "sources": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\authorize_local-review.reserved.json",
+          "sha256": "299d801c4822ac4892204623029b5abb52052449f50ed7a15628cb57cdee2ab6"
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\authorize_local-review.returned.json",
+          "sha256": "71a8348a46ff2e6ac81a200f4252458ca7ce1f1903b6861f203677fd42ee0e12"
+        }
+      ]
+    },
+    {
+      "stage": "authorize_local-apply",
+      "start_wall_epoch": 1794700515.8629298,
+      "end_wall_epoch": 1794700529.287292,
+      "wall_difference_seconds": 13.424362182617188,
+      "precision": "Recorded wall-clock endpoint difference; includes wrapper/validation overhead, not monotonic stage duration. No clock-step bound recorded.",
+      "sources": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\authorize_local-apply.reserved.json",
+          "sha256": "2389a546aebe61c3b840d43d0580aebee913e70218868f7a5751a4ef41e7ef5e"
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\authorize_local-apply.returned.json",
+          "sha256": "f4b08fd6d987000028743209d1ed7c95c0e1eaa58fe005a29d26ac56ec76ae5f"
+        }
+      ]
+    },
+    {
+      "stage": "work-local-useful",
+      "start_wall_epoch": 1794700548.7735145,
+      "end_wall_epoch": 1794700702.738909,
+      "wall_difference_seconds": 153.96539449691772,
+      "precision": "Recorded wall-clock endpoint difference; includes wrapper/validation overhead, not monotonic stage duration. No clock-step bound recorded.",
+      "sources": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\work-local-useful.reserved.json",
+          "sha256": "7fee23a149e00c2b82dc5b822c3d1ace01fa07ffe3f2945f94154941fdf72062"
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\work-local-useful.returned.json",
+          "sha256": "a218e7f8ec69fff73c558d34189ccbd61bc8722ca9bdbc83ca572433d64fc89c"
+        }
+      ]
+    },
+    {
+      "stage": "work-local-continuation",
+      "start_wall_epoch": 1794700751.963093,
+      "end_wall_epoch": 1794700776.230439,
+      "wall_difference_seconds": 24.267345905303955,
+      "precision": "Recorded wall-clock endpoint difference; includes wrapper/validation overhead, not monotonic stage duration. No clock-step bound recorded.",
+      "sources": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\work-local-continuation.reserved.json",
+          "sha256": "7d15f4d48e31e1e5f19c52bf42e95c7399733ae3d40e2de9c6af5f6871935dea"
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\work-local-continuation.returned.json",
+          "sha256": "dc82db51d8c21af6c04cfd93b7409891aec396aad3a41338662bfc3b7d989cf2"
+        }
+      ]
+    }
+  ],
+  "missing_historical_clocks": [
+    {
+      "stage": "W16 package installation start/end",
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+        "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+      },
+      "reason": "Manifest records identity/payload verification, no start/end clocks. W17 reuses this prefix."
+    },
+    {
+      "stage": "R package installation start/end",
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\installation.json",
+        "sha256": "a9f03ee93bfff21c5ea3fa530c4c2259180770027a0674c82fbe0fb774fa221c"
+      },
+      "reason": "Manifest records identity/payload verification, no start/end clocks."
+    },
+    {
+      "stage": "R upgrade/draft stage durations",
+      "reason": "Public reserved/returned receipts retain outcomes and hashes but no elapsed timestamps. Tool-call elapsed is diagnostic orchestration time only, not a retained complete stage clock."
+    }
+  ]
+}
