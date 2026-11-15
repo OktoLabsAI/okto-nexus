@@ -2393,3 +2393,17 @@ Diagnóstico somente resolução confirmou --harness-root absoluto salvo cujo di
 Esclarecimento que supersede apenas a interpretação estreita de6ba: “pode fazer a parada que voce precisar do nexus” autoriza as paradas necessárias do sistema Nexus nesta tarefa de forma persistente. **Uma chamada** era o limite técnico daquela reserva/execução, não expiração da autorização humana. Cada novo efeito revalida alvo próprio/geração/necessidade; PID novo sozinho não exige repetir confirmação. Recibos e histórico originais permanecem intactos. Não autoriza processos/contas alheios, eventos do SO, aumento500k ou admissão de provedor fora do headroom vigente; nenhuma nova parada foi selecionada/executada neste marco.
 
 126/4/2, plano/AC e budgets inalterados: Sonnet144.004/200.000/2admissões, Codex579.154/16. Nenhum goal active/complete inferido.
+
+## 2026-11-15 — Upgrades canônicos Connector/Nexus e restauração exata do Codex, sem start
+
+Connector: plano revisado e **uma aplicação canônica**, sem retry, para o pacote isolado qualificado. Contexto novo db99d949; tarefa alterou somente execução, preservando principal/triggers. Resultado stopped/PID null/tarefa inativa; seis arquivos SQLite byteiguais e migration_state=not_run_by_upgrade. Não prova reconciliação runtime, readiness, settlement ou trabalho útil.
+
+Codex0.157.0 genuíno restaurado ao caminho literal original que faltava, com48 hashes finais iguais e contexto Nexus intacto. Primeira tentativa recusou metadado de diretório vazio bin/ antes de publicar; falha e correção restrita retidas. Um download reutilizado, sem sobrescrita, execução nativa, chamada a serviço/provedor ou edição manual do contexto. Após restauração, Nexus recebeu sua própria aplicação canônica única, sem retry/start: contexto06437619, stopped/PID null/tarefa inativa, principal/triggers preservados,30 arquivos explícitos de dados/journal byteiguais e48 hashes de descoberta reconferidos; migration_state=not_run_by_upgrade. Inventário inicial do plano incluiu hash opaco de operator-auth.db sem decodificação; hash omitido publicamente, originais privados preservados e aplicação exclui auth/vault.
+
+No corte histórico destes upgrades sem provedor: **126/4/2**, plano/AC inalterados, Sonnet144.004/200.000/2admissões e Codex579.154/16. Autorização posterior500k é registrada separadamente; não houve novo turno pago ou eventoSO nesta etapa. [Recibos públicos e limites](plans/agent_ops/evidence/r3-canonical-environment-upgrades/review.json).
+
+## 2026-11-15 — Autorização explícita posterior: teto total Sonnet500 mil
+
+Usuário selecionou **“Autorizar teto total de 500 mil tokens”**, referência call_4b39bde0e4fa44eda87df45f793fd638/question0. Teto atual500.000/preventiva480.000; carry144.004 e2admissões preservados, no máximo2novas (useful05 e continuação06 condicional na mesma sessão),4cumulativas. Sem reset/refund; registros200k anteriores representam seus cortes históricos.
+
+Recibo de autorização não afirma composição sucessora qualificada nem nova execução paga, serviço ou eventoSO.126/4/2 e AC/plano fixo permanecem. [Autorização real e escopo](plans/agent_ops/evidence/r3-canonical-environment-upgrades/subsequent-sonnet-authorization/authorization-projection.json).

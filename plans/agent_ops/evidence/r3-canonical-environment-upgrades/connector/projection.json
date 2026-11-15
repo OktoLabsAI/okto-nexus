@@ -1,0 +1,56 @@
+{
+  "exit_code": 0,
+  "plan_exists": true,
+  "selected_files_unchanged": true,
+  "selected_file_hashes_before": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\service-context.json": "d53a6f24b771efb418597b8fb91143c2b28efacad1df4f51e389741254f7bb21",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\service-installation.json": "7a8d4b726e34db5fb14e9c95efe2fea105ef2abbdab46e80411d4651a1470048",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\service-control.json": "da02e85ed9bf590ec455e91d4d3305281761d91ca3ca101a0b3cfc5a27b4a228",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\service-run.json": "76f9c7d554c437f17eed7f3604fc3eb7d543d0aedd754e1fea2d204ecf8dfddb",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\service-upgrade.json": "2430f81b64ce1a04296fe6cf5bb3d8cac6565bb8c852cb49d2df2b61bb5d5c28",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\run\\shutdown.json": "58d865d0788ff47e06bdedc2c1c4e6a9c1bcd3f46aa1d74ecfdc6b98cd64695b"
+  },
+  "selected_file_hashes_after": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\service-context.json": "d53a6f24b771efb418597b8fb91143c2b28efacad1df4f51e389741254f7bb21",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\service-installation.json": "7a8d4b726e34db5fb14e9c95efe2fea105ef2abbdab46e80411d4651a1470048",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\service-control.json": "da02e85ed9bf590ec455e91d4d3305281761d91ca3ca101a0b3cfc5a27b4a228",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\service-run.json": "76f9c7d554c437f17eed7f3604fc3eb7d543d0aedd754e1fea2d204ecf8dfddb",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\service-upgrade.json": "2430f81b64ce1a04296fe6cf5bb3d8cac6565bb8c852cb49d2df2b61bb5d5c28",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\run\\shutdown.json": "58d865d0788ff47e06bdedc2c1c4e6a9c1bcd3f46aa1d74ecfdc6b98cd64695b"
+  },
+  "preflight": {
+    "installed_payloads_equal": 988,
+    "source_generation": "fbc0042be355e83da5bb695a64de4910",
+    "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "native_task_name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "native_state": 3,
+    "native_active": false,
+    "native_digest": "ea5d4ee2340054460fb04f0f0c83bf1f5a8dced3380f5b32409a504f9ec465aa",
+    "canonical_state": "stopped",
+    "canonical_pid": null,
+    "physical_exit_proof_sha256": "2b6ac25dcff46e0f963b02562b81ac349f6e7246dc1dc4cae618972cf791e79c",
+    "installation_sha256": "0055c57c33616c12ddfe78c12d1d940423c62f437a7722959976b7baf601b880",
+    "private_acl_current_user_only": true
+  },
+  "stdout_sha256": "5049fe227232e90da975355786e7d98112cb54d21645c082c5c78354fd6f9a1e",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "applied": false,
+  "service_started": false,
+  "provider_invoked": false,
+  "plan_revision": "25cc51658102b07ff00a0dd7d5cbad5d75935f839e85c80a4004295130fcb0f1",
+  "plan_sha256": "fda3a078426da7bc836456a791c0df1167b455062ae66359aefd970ec72c2d7b",
+  "private_plan_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-connector-canonical-upgrade-plan-7y_m2cip\\private\\connector-upgrade-plan.json",
+  "source_generation": "fbc0042be355e83da5bb695a64de4910",
+  "source_version": "0.0.12",
+  "source_core_version": "0.0.14",
+  "target_version": "0.0.12",
+  "target_core_version": "0.0.14",
+  "target_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv",
+  "target_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+  "source_native_digest": "ea5d4ee2340054460fb04f0f0c83bf1f5a8dced3380f5b32409a504f9ec465aa",
+  "task_shape": {
+    "actions": 1,
+    "triggers": 1,
+    "principals": 1
+  }
+}

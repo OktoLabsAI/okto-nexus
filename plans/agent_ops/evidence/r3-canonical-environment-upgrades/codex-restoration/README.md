@@ -1,0 +1,13 @@
+# Exact Codex 0.157.0 payload restoration
+
+The original selected discovery root had disappeared. The registered original archive/source directory was absent; the currently installed npm Codex package was0.169.0 with different bytes and was not substituted. The public historical manifests provided the complete authentic0.157.0 payload and alias rules.
+
+The exact GitHub release ZIP was downloaded once:160862984bytes, SHA256 `6c74e2019583cc16e55f79161ef795c8ff712709ad9ed832b3a5b87a7eacdef6`. All47 archive files match the recorded names, sizes and SHA256 hashes. The only added file is `codex.exe`, byte-identical to `codex-x86_64-pc-windows-msvc.exe`, yielding the same48-file manifest as the original discovery preparation.
+
+First attempt stopped before extraction/publication because its validator rejected the authentic empty `bin/` directory entry, which is not a parent of any payload file. Its source, reservation, archive proof and failure are preserved under `history/`. Read-only archive inspection found47files and6directories; only `bin/` was outside the payload ancestors, with zero uncompressed/compressed size and mode0. Root approved the narrower correction: ignore this exact empty directory metadata alongside the known ancestor directories. No extra file or empty directory was created from it. Attempt2 reused the verified ZIP and did not download again.
+
+The second attempt verified exact absolute source/target, every existing path component against reparse/symlink, Temp containment, same filesystem, and target absence. It streamed extraction into a new staging directory, verified47hashes, created the single alias, verified48hashes, then performed a same-filesystem Windows directory rename that refuses replacing an existing target. It rehashed the published48files afterwards.
+
+Final result: `C:/Users/jpamb/AppData/Local/Temp/m1-native-discovery-iyoo0rs3/codex-0.157.0` is restored. The Nexus service-context file SHA256 was and remains `b4eaee8c2106f8130fe66d2818e563df709861acb459461310247f1fcab46d43`. No context/receipt edit, Codex execution (including version), credential/configuration read, service action, provider call or OS event occurred. This restoration does not qualify or execute a subsequent service upgrade or model turn.
+
+Tool history: first run d195c0/session73672, c5b9c9 exit1 after successful archive verification; safe failure c2e982; archive directory diagnosis1fe1fd. Authorized attempt2 b94494/80e0fe/session56481, staged48verified2eb088, successful publication fa9a4a exit0; final proofs ca9c1f. The ZIP and binaries remain outside the public allowlist. Only code, public payload manifests, hash-only context proof and execution summaries are retained.

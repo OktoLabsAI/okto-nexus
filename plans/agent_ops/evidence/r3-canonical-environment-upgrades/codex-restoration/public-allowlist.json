@@ -1,0 +1,86 @@
+{
+  "source_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-codex0157-restore-attempt2-60na9ol4",
+  "files": [
+    {
+      "path": "archive-proof.json",
+      "sha256": "be10ac6c2f1e2f3065c31ab82f4988a1147d8fdc4ccc4ae65dc4bcb28eadc4f2",
+      "bytes": 443
+    },
+    {
+      "path": "commands.json",
+      "sha256": "5258a9e76bdfb7244ab94cc973682fbc52e9d387dffeeef1dfa1073cd6faeee9",
+      "bytes": 701
+    },
+    {
+      "path": "destination-manifest.json",
+      "sha256": "043aef7cb9da43554fa6628471ab84d903dba1598ec4296ec2f2f66363525125",
+      "bytes": 5690
+    },
+    {
+      "path": "history/archive-proof.json",
+      "sha256": "a252d89222b5e9968f7216cbba670eddfad934fb9a73c531d7653bbfd75e9664",
+      "bytes": 372
+    },
+    {
+      "path": "history/failure.json",
+      "sha256": "4d3b590a80fc04a892ff92ccf7832d4d4e718688d2bf849a674cc0c602facac5",
+      "bytes": 236
+    },
+    {
+      "path": "history/restoration-reserved.json",
+      "sha256": "b9eea5bcb1c4854306302ed71ee078a7291b8895293bcdab2f3d84da1b3f32e8",
+      "bytes": 385
+    },
+    {
+      "path": "history/restore.py",
+      "sha256": "5ef4bf4ac300d3aa458278f8a636dd458a8ad639a07ffdbf95756ec9034876f1",
+      "bytes": 10595
+    },
+    {
+      "path": "history/source-manifest.json",
+      "sha256": "55d116df0dc28c7a10d1f3bf92849b3df2360e6327123f423e4b8458203f926a",
+      "bytes": 11993
+    },
+    {
+      "path": "prepare_attempt2.py",
+      "sha256": "7d9067d160a0ab57cefb4f5d2fc246a00f233985b00ea4a2d3cc3ba4f4120c74",
+      "bytes": 1317
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "cea72be48712ee93a122e448b1b8fbe60cd370e6ce9fdc138e65cb9186a5ca80",
+      "bytes": 1490
+    },
+    {
+      "path": "README.md",
+      "sha256": "78b0d4808c49168b89d039b1118d484530e5d435cb13ab616da34669701cfb14",
+      "bytes": 2711
+    },
+    {
+      "path": "restoration-reserved.json",
+      "sha256": "48a1d35de584fa693cc2a2af84c53af725460b7985caaa44095395b62e903ccb",
+      "bytes": 394
+    },
+    {
+      "path": "restore.py",
+      "sha256": "9e4198639c77d857b2e1786dd797143a4aee071fb0819f3189824eb84e1080e0",
+      "bytes": 10015
+    },
+    {
+      "path": "result.json",
+      "sha256": "81baa99192abe33ae079dc13dfe74a79f36f41113d401ecd3207a8cf6111eb7f",
+      "bytes": 799
+    },
+    {
+      "path": "source-manifest.json",
+      "sha256": "55d116df0dc28c7a10d1f3bf92849b3df2360e6327123f423e4b8458203f926a",
+      "bytes": 11993
+    }
+  ],
+  "excluded": [
+    "ZIP",
+    "payload binaries",
+    "raw service context",
+    "auth/configuration data"
+  ]
+}

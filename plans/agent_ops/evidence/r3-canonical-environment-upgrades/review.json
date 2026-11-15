@@ -1,0 +1,115 @@
+{
+  "status": "BOTH_CANONICAL_UPGRADES_APPLIED_ONCE_NOT_STARTED_CODEX_RESTORED",
+  "connector": {
+    "source": "connector/apply-result.json",
+    "plan_revision": "25cc51658102b07ff00a0dd7d5cbad5d75935f839e85c80a4004295130fcb0f1",
+    "selection_count": 1,
+    "result": "APPLIED_ONCE_CONFIRMED_NOT_STARTED",
+    "context_sha256": "db99d949b48c5afaf9925143a163881b91fdc379634993f3ab2b9dbf8e67749f",
+    "canonical_state": "stopped",
+    "canonical_pid": null,
+    "native_active": false,
+    "sql_files_unchanged": 6,
+    "migration_state": "not_run_by_upgrade",
+    "tools": [
+      "490566",
+      "834488",
+      "17b22c"
+    ],
+    "root_reviews": [
+      "f05577",
+      "77989d"
+    ]
+  },
+  "limits": {
+    "no_start_or_provider": true,
+    "no_runtime_reconciliation_claim": true,
+    "no_work_settlement_claim": true,
+    "no_acceptance_promotion": true,
+    "scenario_counts": {
+      "VERIFIED": 126,
+      "IN_PROGRESS": 4,
+      "NOT_RUN": 2
+    },
+    "sonnet": {
+      "limit": 200000,
+      "observed_tokens": 144004,
+      "admissions": 2,
+      "proposed_500000_authorized": false
+    },
+    "codex": {
+      "observed_tokens": 579154,
+      "admissions": 16
+    },
+    "os_events_executed": false,
+    "budget_snapshot_scope": "Historical cutoff: both zero-provider upgrades completed before the later explicit 500000-token authorization. The later authorization will be represented by its separate public receipt; no new paid turn inferred."
+  },
+  "curation": "Only explicit allowlisted public metadata and scripts; no private upgrade plan, raw XML, environment, credentials, databases, binaries or ZIPs.",
+  "root_final_review_pending": false,
+  "codex_restoration": {
+    "result": "ACTUAL_EXACT_ARTIFACT_RESTORATION_CONFIRMED",
+    "source": "codex-restoration/result.json",
+    "result_sha256": "81baa99192abe33ae079dc13dfe74a79f36f41113d401ecd3207a8cf6111eb7f",
+    "qualified_hashes": 48,
+    "source_payload_files": 47,
+    "archive_sha256": "6c74e2019583cc16e55f79161ef795c8ff712709ad9ed832b3a5b87a7eacdef6",
+    "original_failure": "UNEXPECTED_ARCHIVE_DIRECTORY: authentic empty bin/ metadata; failed before publication. Retained, correction constrained to directory metadata; no second download.",
+    "actual_exit_code": 0,
+    "tool": "fa9a4a",
+    "context_unchanged": true,
+    "native_executions": 0,
+    "service_calls": 0,
+    "provider_calls": 0,
+    "manual_context_edits": false,
+    "overwrite": false,
+    "qualification_sha256": "cea72be48712ee93a122e448b1b8fbe60cd370e6ce9fdc138e65cb9186a5ca80"
+  },
+  "nexus_upgrade": {
+    "result": "APPLIED_ONCE_CONFIRMED_NOT_STARTED",
+    "source": "nexus/apply-result.json",
+    "plan_revision": "5cb3154e06ce592f9d0ff3749575bd26b06116233ca90006ed3f490d59ed6264",
+    "selection_count": 1,
+    "tool": "3a1059",
+    "context_sha256": "064376195180e4836fbb00c62d128715488b45341cd103bcabcb888a82ab4b34",
+    "canonical_state": "stopped",
+    "canonical_pid": null,
+    "native_active": false,
+    "native_execution_only_change": true,
+    "principal_triggers_preserved": true,
+    "explicit_data_journal_files_unchanged": 30,
+    "auth_vault_excluded": true,
+    "discovery_hashes_reverified": 48,
+    "candidate_payloads": 988,
+    "migration_state": "not_run_by_upgrade",
+    "plan_inventory_antecedent": "Initial suffix-based hash inventory included one opaque hash of own operator-auth.db without SQL decode. The hash is omitted from public projection; private originals preserved. Apply used explicit data/journal allowlist excluding auth/vault."
+  },
+  "subsequent_actual_authorization": {
+    "source": "subsequent-sonnet-authorization/authorization-projection.json",
+    "sha256": "90e4bb15eca594562d8099499e80b67f09ee29a1c36acb385972c8725ae622d0",
+    "user_response": "Autorizar teto total de 500 mil tokens",
+    "response_reference": "call_4b39bde0e4fa44eda87df45f793fd638/question0/userreply",
+    "current_total_limit": 500000,
+    "preventive": 480000,
+    "carry_tokens": 144004,
+    "charged_admissions": 2,
+    "max_cumulative_admissions": 4,
+    "max_new_admissions": 2,
+    "new_ids": [
+      "useful05",
+      "conditional_same_session_continuation06"
+    ],
+    "new_provider_calls": 0,
+    "historical_rows_unchanged": true,
+    "os_events_authorized_or_executed_here": false,
+    "composed_successor_execution_qualification_claimed": false
+  },
+  "root_final_reviews": [
+    "caff65",
+    "46febf",
+    "9bfcf2",
+    "a39f5f",
+    "a4e5f8",
+    "58a65c"
+  ],
+  "publication_authorized": true
+}

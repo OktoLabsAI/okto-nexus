@@ -1,0 +1,144 @@
+{
+  "payloads_equal": 988,
+  "restored_files": 48,
+  "restore_result_sha256": "81baa99192abe33ae079dc13dfe74a79f36f41113d401ecd3207a8cf6111eb7f",
+  "restore_manifest_sha256": "043aef7cb9da43554fa6628471ab84d903dba1598ec4296ec2f2f66363525125",
+  "physical_exit_proof_sha256": "dd987b71c44363cffe53a1f4b17f7054f7f304b757efbc05ab7da2dd4d27c995",
+  "source_generation": "f8d19439521b499275eee719e97c8e12",
+  "canonical_state": "stopped",
+  "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+  "native_state": 3,
+  "native_active": false,
+  "native_digest": "d8afbd23b644f0128b02a8dc8ab7aa6db36982af7fbabc0b25f8c5ac812a3011",
+  "selected_hashes_before": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-context.json": "b4eaee8c2106f8130fe66d2818e563df709861acb459461310247f1fcab46d43",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-installation.json": "de87d2722b136c331e15d3ab64d42a0fad890b72004250c037963509cc8b4c5b",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-control.json": "84b7d196dcea27fb6c4a11c99f36b33a6fa53507a89bee8c259a1a51e4194e17",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-run.json": "d33cbfbe898f060a0d4134c66a917e66ad4b072c4b38b2f36b4c4feece13d8aa",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-upgrade.json": "d92cb303e48bbea00ee0fa71a18c3710f2cc2096663b1390f3f94483875dcf1a",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-shutdown.json": "b3f6d4bcf343826000eccbc42d68750e1579542f6f0b3c189eefbe9c6a8c74c7"
+  },
+  "sql_before": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\connection-tests\\ed79098b86064d12bccaa8f4f8cb24a9\\journal.db": {
+      "sha256": "947dac8290f64a465b02db7b20b092b68af70d95b4c1215ac5daaafbbfa82b66",
+      "bytes": 192512
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\connection-tests\\ed79098b86064d12bccaa8f4f8cb24a9\\journal.db-shm": {
+      "sha256": "35a06561445e2c6218bd3278ab3a838d7fe5a23d3006c5a16ace3a5110d199c7",
+      "bytes": 32768
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\connection-tests\\ed79098b86064d12bccaa8f4f8cb24a9\\journal.db-wal": {
+      "sha256": "efdfed379029b40138ce2f4d008174ea21ba7a8dc788af88ebc977db1a8f329b",
+      "bytes": 1071232
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\owned-slots.db": {
+      "sha256": "7606ae9ed1f78568ef762ce906dbefd560ee168c278d368be8a438ab0dcbf983",
+      "bytes": 131072
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\owned-slots.db-shm": {
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\owned-slots.db-wal": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-24428a6136a8920a7e2619a2f5f88f3816d7eb2ca41af85bfcc5a0ab719be659.db": {
+      "sha256": "5baf1517e1931f1475d05133d7a7465c211dac6ca7dd26b6b14cfedabbdfd0e2",
+      "bytes": 307200
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-24428a6136a8920a7e2619a2f5f88f3816d7eb2ca41af85bfcc5a0ab719be659.db-shm": {
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-24428a6136a8920a7e2619a2f5f88f3816d7eb2ca41af85bfcc5a0ab719be659.db-wal": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-36aa66010cd054d92c2cb66a39725d1696fda6ef475f394f774fca4c9912542a.db": {
+      "sha256": "57abe5183cb94d886179c9a80f25537b10c5c240f6d0e425cc09bc2b48be57a0",
+      "bytes": 262144
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-36aa66010cd054d92c2cb66a39725d1696fda6ef475f394f774fca4c9912542a.db-shm": {
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-36aa66010cd054d92c2cb66a39725d1696fda6ef475f394f774fca4c9912542a.db-wal": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-79e39c08cdf347b203d653fb096fff5bbce258e61ffad19011d782145e67d1b1.db": {
+      "sha256": "bd64415ca596571778d262c5cbc8dee9879c7bb0a76805652f7eb356fc3f9012",
+      "bytes": 270336
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-79e39c08cdf347b203d653fb096fff5bbce258e61ffad19011d782145e67d1b1.db-shm": {
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-79e39c08cdf347b203d653fb096fff5bbce258e61ffad19011d782145e67d1b1.db-wal": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-8a199d6a40061025c42fc87fe000fb631aec1a46dc14f1bcc3011341ea3518b4.db": {
+      "sha256": "528a3e9575ac0ebe10cb351641aa3eac43ad7203cefffd7f5f9df9bb9897f2f9",
+      "bytes": 163840
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-8a199d6a40061025c42fc87fe000fb631aec1a46dc14f1bcc3011341ea3518b4.db-shm": {
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-8a199d6a40061025c42fc87fe000fb631aec1a46dc14f1bcc3011341ea3518b4.db-wal": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-b80ecba1683c4e0a09120573b02d9bd38cee5e43aee2b47679044240e69e77b7.db": {
+      "sha256": "4a61d44facfad64603d3831a169302f29fcb585b03ea4d11f7b3362990f79ac3",
+      "bytes": 245760
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-b80ecba1683c4e0a09120573b02d9bd38cee5e43aee2b47679044240e69e77b7.db-shm": {
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-b80ecba1683c4e0a09120573b02d9bd38cee5e43aee2b47679044240e69e77b7.db-wal": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-c0ccd8b5b3595b49499ff25f4d6f327b3283e610d2eff85588a19bbe1e285072.db": {
+      "sha256": "afa024b3eb78603b0d6484a189ca5ff433c55cf411f7869ae21164594d6526ba",
+      "bytes": 286720
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-c0ccd8b5b3595b49499ff25f4d6f327b3283e610d2eff85588a19bbe1e285072.db-shm": {
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-c0ccd8b5b3595b49499ff25f4d6f327b3283e610d2eff85588a19bbe1e285072.db-wal": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-cfe3844e139863e5955ef3c328ec953d2a14c38677bfd3c44e1ff0170ad87b22.db": {
+      "sha256": "1d1e218ce458428288c81630e2b9ec2b3ca01b17461a75d27ed83d732c54feb0",
+      "bytes": 245760
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-cfe3844e139863e5955ef3c328ec953d2a14c38677bfd3c44e1ff0170ad87b22.db-shm": {
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\core-runtime\\session-cfe3844e139863e5955ef3c328ec953d2a14c38677bfd3c44e1ff0170ad87b22.db-wal": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\nexus.db": {
+      "sha256": "6682b30a4bc03c829ffabc37bd45eda9851ff05c030db9dab88fcd5fa5a65600",
+      "bytes": 4280320
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\nexus.db-shm": {
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\nexus.db-wal": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "projection_note": "Original SQL hash inventory also included own operator-auth.db as opaque bytes, without SQL/query/decode/secret values. That hash is excluded here; original retained privately. Future inventory must exclude authentication stores."
+}

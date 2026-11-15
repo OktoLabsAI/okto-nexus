@@ -1,0 +1,21 @@
+{
+  "status": "CANONICAL_NEXUS_UPGRADE_PLAN_PREPARED_NOT_APPLIED",
+  "actual_result_tool": "646c6d",
+  "cli_exit_code": 0,
+  "plan_revision": "5cb3154e06ce592f9d0ff3749575bd26b06116233ca90006ed3f490d59ed6264",
+  "private_plan_sha256": "98b7a71d86b7d882cca4737d2270a4e894694bef5282c0b3b304f42b6355d961",
+  "source_generation": "f8d19439521b499275eee719e97c8e12",
+  "restored_payload_files": 48,
+  "installed_payloads": 988,
+  "native_inactive": true,
+  "physical_exit_roles": 3,
+  "selected_files_unchanged": true,
+  "data_journal_files_unchanged": 30,
+  "original_private_projection_hashes": {
+    "preflight.json": "9f0b93b5937fb70e321f6d617321cb5343eee886335058202f9af275ce5aca8d",
+    "projection.json": "6ced5d8f0d59c98a09b9096a3bb7bab7cdf2403f569dd32ae4f349c4f701dff0"
+  },
+  "projection_sha256": "12bf970be8fb2ae2a68d7d7e0ae64c624a8b81d74e6755d276ab0369e1112bd4",
+  "boundary": "No apply/start/stop/provider/Codex process; only canonical installed-Python package probe and private plan creation. All context/data hashes unchanged. Not work settlement or acceptance.",
+  "scope_note": "Own operator-auth.db was included only in opaque hash inventory by suffix; no SQL/query/decoding or secret value exported. Original hash retained private and excluded from public projections."
+}

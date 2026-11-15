@@ -1,0 +1,16 @@
+{
+  "explicit_user_approval": true,
+  "user_response": "Autorizar teto total de 500 mil tokens",
+  "response_reference": "call_4b39bde0e4fa44eda87df45f793fd638/question0/userreply",
+  "proposal_sha256": "17ab2a9929849ac2dc3033e20a2a7c7c3860da21a25337b827a4ea6198dbd58a",
+  "policy": {
+    "limit": 500000,
+    "preventive": 480000,
+    "max_requests": 4
+  },
+  "carry_tokens": 144004,
+  "charged_requests": 2,
+  "new_requests_max": 2,
+  "scope": "Same authenticated Claude CLI account, Sonnet; useful05 and conditional same-session continuation06. No historical reset or refund.",
+  "root_selection": "Explicit user answer accepted by root; no separate hash/signature requested from user."
+}

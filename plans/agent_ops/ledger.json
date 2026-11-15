@@ -14326,6 +14326,46 @@
       "acceptance_promoted": false,
       "unique_test_cases": 12,
       "source_and_installed_cases_overlap": true
+    },
+    "r3_canonical_connector_upgrade_and_codex_restoration": {
+      "status": "BOTH_CANONICAL_UPGRADES_APPLIED_ONCE_NOT_STARTED_CODEX_RESTORED",
+      "summary": "Canonical Connector upgrade applied exactly once to qualified isolated environment, no retry/start/provider; context db99d949, native task execution-only delta with principal/triggers preserved, stopped/PID null/task inactive, six SQLite files unchanged and migration not_run_by_upgrade. Genuine Codex0.157.0 restored to original missing literal path with48 final hashes and Nexus context unchanged; initial empty-bin metadata validation failure preserved. No native execution. After restoration, Nexus canonical upgrade separately applied once without retry/start; context06437619, stopped/PID null/task inactive, execution-only change preserves principal/triggers,30 explicit data/journal files unchanged,48 discovery hashes reverified,migration not_run_by_upgrade. Initial plan inventory opaque authDB hash omitted publicly; apply excludes auth/vault.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/review.json",
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/connector/apply-result.json",
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/codex-restoration/qualification.json",
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/nexus/apply-result.json"
+      ],
+      "connector_apply_count": 1,
+      "new_starts": 0,
+      "provider_calls": 0,
+      "live_sql_migration": false,
+      "acceptance_promoted": false,
+      "sonnet_authorized_limit": 200000,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "proposed500k_authorized": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16,
+      "nexus_apply_count": 1,
+      "budget_snapshot_scope": "Historical upgrade cutoff before later explicit500000 authorization; all upgrade effects had zero provider calls."
+    },
+    "r3_sonnet_explicit_total500k_authorization": {
+      "status": "USER_AUTHORIZED_BUDGET_ONLY_NO_NEW_EXECUTION",
+      "summary": "After zero-provider canonical upgrades, user explicitly selected total500000tokens. Preventive480000; carry144004/two charged admissions preserved; max two new useful05/conditional same-session continuation06, max four cumulative. No history reset/refund, new paid call, service start, OS event or composed-successor qualification inferred.",
+      "response_reference": "call_4b39bde0e4fa44eda87df45f793fd638/question0/userreply",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/subsequent-sonnet-authorization/authorization-projection.json",
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/subsequent-sonnet-authorization/authorization-record.json"
+      ],
+      "sonnet_authorized_limit": 500000,
+      "preventive": 480000,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "max_new_admissions": 2,
+      "max_cumulative_admissions": 4,
+      "provider_calls_added": 0,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -16502,6 +16542,50 @@
       "acceptance_promoted": false,
       "unique_test_cases": 12,
       "source_and_installed_cases_overlap": true
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_canonical_connector_upgrade_and_codex_restoration",
+      "status": "BOTH_CANONICAL_UPGRADES_APPLIED_ONCE_NOT_STARTED_CODEX_RESTORED",
+      "summary": "Canonical Connector upgrade applied exactly once to qualified isolated environment, no retry/start/provider; context db99d949, native task execution-only delta with principal/triggers preserved, stopped/PID null/task inactive, six SQLite files unchanged and migration not_run_by_upgrade. Genuine Codex0.157.0 restored to original missing literal path with48 final hashes and Nexus context unchanged; initial empty-bin metadata validation failure preserved. No native execution. After restoration, Nexus canonical upgrade separately applied once without retry/start; context06437619, stopped/PID null/task inactive, execution-only change preserves principal/triggers,30 explicit data/journal files unchanged,48 discovery hashes reverified,migration not_run_by_upgrade. Initial plan inventory opaque authDB hash omitted publicly; apply excludes auth/vault.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/review.json",
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/connector/apply-result.json",
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/codex-restoration/qualification.json",
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/nexus/apply-result.json"
+      ],
+      "connector_apply_count": 1,
+      "new_starts": 0,
+      "provider_calls": 0,
+      "live_sql_migration": false,
+      "acceptance_promoted": false,
+      "sonnet_authorized_limit": 200000,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "proposed500k_authorized": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16,
+      "nexus_apply_count": 1,
+      "budget_snapshot_scope": "Historical upgrade cutoff before later explicit500000 authorization; all upgrade effects had zero provider calls."
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_explicit_total500k_authorization",
+      "status": "USER_AUTHORIZED_BUDGET_ONLY_NO_NEW_EXECUTION",
+      "summary": "After zero-provider canonical upgrades, user explicitly selected total500000tokens. Preventive480000; carry144004/two charged admissions preserved; max two new useful05/conditional same-session continuation06, max four cumulative. No history reset/refund, new paid call, service start, OS event or composed-successor qualification inferred.",
+      "response_reference": "call_4b39bde0e4fa44eda87df45f793fd638/question0/userreply",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/subsequent-sonnet-authorization/authorization-projection.json",
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/subsequent-sonnet-authorization/authorization-record.json"
+      ],
+      "sonnet_authorized_limit": 500000,
+      "preventive": 480000,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "max_new_admissions": 2,
+      "max_cumulative_admissions": 4,
+      "provider_calls_added": 0,
+      "acceptance_promoted": false
     }
   ],
   "r3_native_bounded_supervisor_execution": {

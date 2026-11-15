@@ -1,0 +1,19 @@
+{
+  "status": "APPLIED_ONCE_CONFIRMED_NOT_STARTED",
+  "plan_allowlist_sha256": "2add3b6939c752f22e19a5ee28b9d4d0f47618220c81b5e83845f17b877e200c",
+  "plan_revision": "25cc51658102b07ff00a0dd7d5cbad5d75935f839e85c80a4004295130fcb0f1",
+  "apply_result_sha256": "4ecd26a8e9f8cf2ce438031fbd98a3398e8ed6faf4253173068244bcd2d75f3a",
+  "selection_count": 1,
+  "cli_exit_code": 0,
+  "candidate_payloads": 988,
+  "sql_files_unchanged": 6,
+  "canonical_state": "stopped",
+  "pid": null,
+  "native_active": false,
+  "native_execution_only_change": true,
+  "principal_triggers_preserved": true,
+  "migration_state": "not_run_by_upgrade",
+  "provider_calls": 0,
+  "start_selected": false,
+  "scope": "Canonical same-version environment replacement only. Does not establish runtime reconciliation, new owner readiness, native work settlement or acceptance."
+}

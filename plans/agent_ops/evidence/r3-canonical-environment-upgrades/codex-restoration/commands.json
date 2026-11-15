@@ -1,0 +1,26 @@
+{
+  "first_attempt": [
+    "rtk",
+    "proxy",
+    "python",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-codex0157-restore-sqmdsq70\\restore.py"
+  ],
+  "second_preparation": [
+    "rtk",
+    "proxy",
+    "python",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-codex0157-restore-attempt2-60na9ol4\\prepare_attempt2.py"
+  ],
+  "second_attempt": [
+    "rtk",
+    "proxy",
+    "python",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-codex0157-restore-attempt2-60na9ol4\\restore.py"
+  ],
+  "result": "RESTORED_48_EXACT_FILES",
+  "repeat_allowed": false,
+  "note": "Historical executed commands; do not replay against restored destination."
+}

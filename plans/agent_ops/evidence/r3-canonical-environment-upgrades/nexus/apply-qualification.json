@@ -1,0 +1,22 @@
+{
+  "status": "APPLIED_ONCE_CONFIRMED_NOT_STARTED",
+  "plan_allowlist_sha256": "ed0e6559d49acc9156ac866969a3e4d7e1b1da5b4798da6889fd2d140ed2173e",
+  "plan_revision": "5cb3154e06ce592f9d0ff3749575bd26b06116233ca90006ed3f490d59ed6264",
+  "apply_result_sha256": "05d553a81138596bf1c264ea0d2e369a8020826855dfe0b2aa409990859540f9",
+  "actual_result_tool": "3a1059",
+  "selection_count": 1,
+  "cli_exit_code": 0,
+  "candidate_payloads": 988,
+  "discovery_files_reverified": 48,
+  "explicit_data_journal_files_unchanged": 30,
+  "auth_vault_excluded": true,
+  "canonical_state": "stopped",
+  "pid": null,
+  "native_active": false,
+  "native_execution_only_change": true,
+  "principal_triggers_preserved": true,
+  "migration_state": "not_run_by_upgrade",
+  "provider_calls": 0,
+  "start_selected": false,
+  "scope": "Canonical same-version Nexus environment replacement only. Does not establish runtime reconciliation, new owner readiness, native work settlement or acceptance."
+}

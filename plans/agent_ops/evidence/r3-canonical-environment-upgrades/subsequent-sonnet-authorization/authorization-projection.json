@@ -1,0 +1,20 @@
+{
+  "status": "USER_AUTHORIZED_BUDGET_ONLY_NO_EXECUTION",
+  "response_reference": "call_4b39bde0e4fa44eda87df45f793fd638/question0/userreply",
+  "user_response": "Autorizar teto total de 500 mil tokens",
+  "policy": {
+    "limit": 500000,
+    "preventive": 480000,
+    "max_requests": 4
+  },
+  "carry_tokens": 144004,
+  "charged_requests": 2,
+  "new_requests_max": 2,
+  "authorization_record_sha256": "dbf5ef56ed1b590aad7abdc159758491ffba960ab391f5f48b678578a833501c",
+  "approved_seed_sha256": "84030f089c46b9132d9f34ca36b2a6d343c7584e9b5f3b1ef7b8e7906e136d00",
+  "original_history_sha256": "1b379ea80bad6020808fe1b5fbdf5919b756dbe573b2bfe757400e5958bd6d97",
+  "historical_rows_unchanged": true,
+  "services_started": 0,
+  "provider_calls": 0,
+  "os_events": 0
+}

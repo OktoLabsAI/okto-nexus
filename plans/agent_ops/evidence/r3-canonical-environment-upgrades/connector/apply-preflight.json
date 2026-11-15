@@ -1,0 +1,46 @@
+{
+  "plan_revision": "25cc51658102b07ff00a0dd7d5cbad5d75935f839e85c80a4004295130fcb0f1",
+  "private_plan_sha256": "fda3a078426da7bc836456a791c0df1167b455062ae66359aefd970ec72c2d7b",
+  "changed_context_fields": [
+    "environment_fingerprint",
+    "environment_prefix",
+    "executable"
+  ],
+  "unchanged_other_context_fields": true,
+  "candidate_probe_equal": true,
+  "payloads_equal": 988,
+  "canonical_state": "stopped",
+  "canonical_pid": null,
+  "native_state": 3,
+  "native_active": false,
+  "source_generation": "fbc0042be355e83da5bb695a64de4910",
+  "source_native_digest": "ea5d4ee2340054460fb04f0f0c83bf1f5a8dced3380f5b32409a504f9ec465aa",
+  "context_before_sha256": "d53a6f24b771efb418597b8fb91143c2b28efacad1df4f51e389741254f7bb21",
+  "sql_before": {
+    "executor-journal.db": {
+      "sha256": "828cfb3fc77dc57f940e99f8e717a82fa9bbd549549868cc474b9378cb5acd4c",
+      "bytes": 458752
+    },
+    "owned-slots.db": {
+      "sha256": "698a794ab86126e5855d76bafa24c505e1850705c691abbb65c28b401f9274b7",
+      "bytes": 131072
+    },
+    "state.r4-events.sqlite3": {
+      "sha256": "6f4e3864d291bf6c4e14e02d066272c09ac3f5e205f3a447f39b3ada2ce98020",
+      "bytes": 20480
+    },
+    "state.r4-publications.sqlite3": {
+      "sha256": "22d8dcba8148a7b669be7899a15b8f6fb629cf819255b820d5fdfb2f0f7669bb",
+      "bytes": 36864
+    },
+    "state.r4-session-releases.sqlite3": {
+      "sha256": "61f06c9866524e00ff3dd5820fc0937fe0a7646c1873c71d77136171c5c21dbf",
+      "bytes": 28672
+    },
+    "state.r4-tickets.sqlite3": {
+      "sha256": "3687506db17057721706847b41ae81e76c9fcbb94437b05fc53e30aa3145f2a5",
+      "bytes": 12288
+    }
+  },
+  "operation": "ONE_CANONICAL_UPGRADE_APPLY_NO_START"
+}

@@ -1,0 +1,57 @@
+{
+  "plan_revision": "25cc51658102b07ff00a0dd7d5cbad5d75935f839e85c80a4004295130fcb0f1",
+  "effect_selected": true,
+  "retry_performed": false,
+  "start_selected": false,
+  "provider_invoked": false,
+  "exit_code": 0,
+  "cli_projection": {
+    "applied": true,
+    "changed": true,
+    "plan_revision": "25cc51658102b07ff00a0dd7d5cbad5d75935f839e85c80a4004295130fcb0f1",
+    "migration_state": "not_run_by_upgrade",
+    "target_version": "0.0.12"
+  },
+  "context_equals_target": true,
+  "context_after_sha256": "db99d949b48c5afaf9925143a163881b91fdc379634993f3ab2b9dbf8e67749f",
+  "target_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv",
+  "canonical_state": "stopped",
+  "canonical_pid": null,
+  "native_state": 3,
+  "native_active": false,
+  "native_execution_only_change": true,
+  "native_digest": "c12aae3497ceb76336f29d3e9f2211733fea86d7ffb8da05568df5f175ae8df3",
+  "migration_state": "not_run_by_upgrade",
+  "completed_state": "committed",
+  "sql_after": {
+    "executor-journal.db": {
+      "sha256": "828cfb3fc77dc57f940e99f8e717a82fa9bbd549549868cc474b9378cb5acd4c",
+      "bytes": 458752
+    },
+    "owned-slots.db": {
+      "sha256": "698a794ab86126e5855d76bafa24c505e1850705c691abbb65c28b401f9274b7",
+      "bytes": 131072
+    },
+    "state.r4-events.sqlite3": {
+      "sha256": "6f4e3864d291bf6c4e14e02d066272c09ac3f5e205f3a447f39b3ada2ce98020",
+      "bytes": 20480
+    },
+    "state.r4-publications.sqlite3": {
+      "sha256": "22d8dcba8148a7b669be7899a15b8f6fb629cf819255b820d5fdfb2f0f7669bb",
+      "bytes": 36864
+    },
+    "state.r4-session-releases.sqlite3": {
+      "sha256": "61f06c9866524e00ff3dd5820fc0937fe0a7646c1873c71d77136171c5c21dbf",
+      "bytes": 28672
+    },
+    "state.r4-tickets.sqlite3": {
+      "sha256": "3687506db17057721706847b41ae81e76c9fcbb94437b05fc53e30aa3145f2a5",
+      "bytes": 12288
+    }
+  },
+  "sql_unchanged": true,
+  "receipt_context_matches": true,
+  "status": "APPLIED_ONCE_CONFIRMED_NOT_STARTED",
+  "apply.stdout_sha256": "a894d2eb772f116d37563e3ba1257e29f848b3492f0cd4d9f296876e7ab2a65e",
+  "apply.stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

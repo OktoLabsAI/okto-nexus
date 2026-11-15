@@ -1,0 +1,23 @@
+{
+  "status": "CANONICAL_UPGRADE_PLAN_PREPARED_NOT_APPLIED",
+  "exit_code": 0,
+  "actual_result_tool": "490566",
+  "preflight_payloads": 988,
+  "physical_exit_roles": 3,
+  "task_inactive": true,
+  "selected_files_unchanged": true,
+  "plan_revision": "25cc51658102b07ff00a0dd7d5cbad5d75935f839e85c80a4004295130fcb0f1",
+  "private_plan_sha256": "fda3a078426da7bc836456a791c0df1167b455062ae66359aefd970ec72c2d7b",
+  "projection_sha256": "ea261e41062e2f71dfab2c2952bb113794c82a33728b131cf23e1d6bcbe692ea",
+  "source_generation": "fbc0042be355e83da5bb695a64de4910",
+  "same_version_replacement": true,
+  "public_exclusions": [
+    "private plan body",
+    "native task XML",
+    "target token",
+    "environment",
+    "stdout raw"
+  ],
+  "effects": "Only canonical upgrade-plan/probe and isolated plan-file creation. No apply/start/stop/provider/OS lifecycle effects.",
+  "next_step": "Root review of exact plan before any upgrade-apply. This artifact is not execution authorization for apply."
+}

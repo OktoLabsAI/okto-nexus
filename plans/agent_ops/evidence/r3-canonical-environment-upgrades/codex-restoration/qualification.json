@@ -1,0 +1,44 @@
+{
+  "status": "ACTUAL_EXACT_ARTIFACT_RESTORATION_CONFIRMED",
+  "original_failure": {
+    "code": "UNEXPECTED_ARCHIVE_DIRECTORY",
+    "tool": "c5b9c9",
+    "exit_code": 1,
+    "before_publication": true,
+    "cause": "Authentic empty bin/ entry excluded by initial directory validator",
+    "archive_validated": true
+  },
+  "correction": "Only empty bin/ metadata ignored in addition to declared file ancestors; unchanged exact47file manifest and48finalhashes.",
+  "actual_final": {
+    "tool": "fa9a4a",
+    "session": 56481,
+    "exit_code": 0,
+    "files": 48,
+    "result": {
+      "sha256": "81baa99192abe33ae079dc13dfe74a79f36f41113d401ecd3207a8cf6111eb7f",
+      "bytes": 799
+    },
+    "destination_manifest": {
+      "sha256": "043aef7cb9da43554fa6628471ab84d903dba1598ec4296ec2f2f66363525125",
+      "bytes": 5690
+    },
+    "context_unchanged": true
+  },
+  "scope": {
+    "downloads": 1,
+    "second_download": false,
+    "native_executions": 0,
+    "service_calls": 0,
+    "provider_calls": 0,
+    "auth_read": false,
+    "manual_context_edits": false,
+    "overwrite": false,
+    "atomic_directory_publication": true
+  },
+  "retained_archive": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-codex0157-restore-sqmdsq70\\codex-x86_64-pc-windows-msvc.exe.zip",
+    "bytes": 160862984,
+    "sha256": "6c74e2019583cc16e55f79161ef795c8ff712709ad9ed832b3a5b87a7eacdef6"
+  },
+  "installed_or_provider_qualification_added": false
+}
