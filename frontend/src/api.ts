@@ -1291,13 +1291,15 @@ export const api = {
   runtimeOperations: (after?: string) => call<{
     items: RuntimeOperationRow[]; has_more: boolean; next_operation_id: string | null;
   }>(`/api/v1/harness/outbox?limit=50${after ? `&after_operation_id=${encodeURIComponent(after)}` : ""}`),
-  graph: (workspace: string, windowHours = 24) =>
+  graph: (workspace: string, windowHours = 24, signal?: AbortSignal) =>
     call<GraphSnapshot>(
       `/api/v1/graph?workspace=${encodeURIComponent(workspace)}&window_hours=${windowHours}`,
+      {signal},
     ),
-  messages: (params: Record<string, string>) =>
+  messages: (params: Record<string, string>, signal?: AbortSignal) =>
     call<{ items: MessageRow[]; page: number; page_size: number; total: number }>(
       `/api/v1/messages?${new URLSearchParams(params)}`,
+      {signal},
     ),
   message: (messageId: string, signal?: AbortSignal) =>
     call<MessageRow>(`/api/v1/messages/${encodeURIComponent(messageId)}`, {signal}),

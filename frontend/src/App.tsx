@@ -17,6 +17,7 @@ import {
   Files,
   FolderOpen,
   HelpCircle,
+  House,
   Info,
   KanbanSquare,
   Lock,
@@ -67,6 +68,7 @@ import {
 } from "./operatorUnread";
 import { useTheme } from "./hooks/useTheme";
 import { GraphView } from "./views/GraphView";
+import { HomeView } from "./views/HomeView";
 import { AgentsView } from "./views/AgentsView";
 import { MessagesView } from "./views/MessagesView";
 import { HandoffsView } from "./views/HandoffsView";
@@ -94,6 +96,7 @@ import {
 import type { WorkspaceListItem } from "./api";
 
 const VIEWS = [
+  { name: "Home", icon: House },
   { name: "Attention", icon: Bell },
   { name: "Graph", icon: Waypoints },
   { name: "Messages", icon: MessagesSquare },
@@ -200,7 +203,17 @@ function Dashboard({
   localOpen: boolean;
 }) {
   const { theme, toggle } = useTheme();
-  const [view, setViewState] = useState<View>("Graph");
+  const [view, setViewState] = useState<View>("Home");
+  const [narrow, setNarrow] = useState(() => window.matchMedia('(max-width: 767px)').matches);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 767px)');
+    const resize = () => { setNarrow(media.matches); setMobileMenuOpen(false); };
+    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') setMobileMenuOpen(false); };
+    media.addEventListener('change', resize);
+    window.addEventListener('keydown', escape);
+    return () => { media.removeEventListener('change', resize); window.removeEventListener('keydown', escape); };
+  }, []);
   const settingsPending = useRef(false);
   const onSettingsPending = useCallback((pending: boolean) => {settingsPending.current = pending;}, []);
   const mayLeaveSettings = () => !settingsPending.current || window.confirm('Discard unsaved settings and leave this page?');
@@ -217,12 +230,14 @@ function Dashboard({
         setVisitBaseline(readSeenMarker());
       }
       setViewState(next);
+      setMobileMenuOpen(false);
     }
   }, []);
   const [info, setInfo] = useState<NexusInfo | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(
     () => localStorage.getItem("okto-nexus-sidebar") !== "closed",
   );
+  const navigationOpen = narrow ? mobileMenuOpen : sidebarOpen;
   const [workspaces, setWorkspaces] = useState<WorkspaceListItem[]>([]);
   // True once GET /workspaces answered, so an empty list is not mistaken for
   // "not loaded yet" when the saved scope is checked.
@@ -381,11 +396,13 @@ function Dashboard({
     if (!memoryEnabled && view === "Memory") setView("Graph");
   }, [memoryEnabled, view]);
 
-  const toggleSidebar = () =>
+  const toggleSidebar = () => {
+    if (narrow) { setMobileMenuOpen(open => !open); return; }
     setSidebarOpen((open) => {
       localStorage.setItem("okto-nexus-sidebar", open ? "closed" : "open");
       return !open;
     });
+  };
 
   // Dedupe: a Live tick that fetches an UNCHANGED snapshot must not touch
   // state at all - otherwise every SSE event rebuilds the whole Sigma scene
@@ -603,7 +620,7 @@ function Dashboard({
     <div className="h-screen overflow-hidden flex flex-col bg-surface-50 dark:bg-surface-950">
       {/* Header FIRST, full-width above the sidebar (the Pulse App shell) */}
       <header
-        className="flex items-center gap-3 px-4 py-2 shrink-0
+        className="flex flex-wrap items-center gap-2 sm:gap-3 px-4 py-2 shrink-0
           border-b border-surface-200/50 dark:border-gray-800/60
           bg-white/80 dark:bg-black/90 backdrop-blur-md relative z-20"
       >
@@ -611,21 +628,24 @@ function Dashboard({
           className="p-1.5 text-surface-400 hover:text-surface-600 dark:hover:text-surface-300
             hover:bg-surface-100 dark:hover:bg-white/10 rounded-lg transition-colors"
           onClick={toggleSidebar}
-          title={sidebarOpen ? "Collapse menu" : "Expand menu"}
+          title={navigationOpen ? "Collapse menu" : "Expand menu"}
+          aria-label={navigationOpen ? "Collapse navigation" : "Expand navigation"}
+          aria-expanded={navigationOpen}
+          aria-controls="dashboard-navigation"
           data-testid="sidebar-toggle"
         >
           <PanelLeft size={18} />
         </button>
         <BrandMark />
-        <span className="text-sm text-surface-500 dark:text-surface-400">
+        <span className="text-sm text-surface-500 dark:text-surface-400 truncate min-w-0">
           / {view}
         </span>
-        <div className="ml-auto flex items-center gap-2 text-xs">
+        <div className="ml-auto w-full sm:w-auto min-w-0 flex items-center gap-2 text-xs">
           <select
             value={workspace}
             onChange={(e) => pickWorkspace(e.target.value)}
             className="rounded-lg border border-surface-200 dark:border-surface-700
-              bg-white dark:bg-surface-800 px-2 py-1.5 max-w-[240px] text-xs
+              bg-white dark:bg-surface-800 px-2 py-1.5 min-w-0 flex-1 sm:flex-none max-w-[240px] text-xs
               focus:outline-none focus:ring-2 focus:ring-accent-500/40"
             title="Workspace scope"
           >
@@ -791,13 +811,17 @@ function Dashboard({
         </div>
       )}
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 min-h-0 overflow-hidden relative">
+      {narrow && mobileMenuOpen && <button className="absolute inset-0 z-20 bg-black/30"
+        aria-label="Close navigation" onClick={() => setMobileMenuOpen(false)} />}
       {/* Navigation sidebar (the Pulse Sidebar grammar) */}
       <aside
-        className={`backdrop-blur-md bg-surface-50/80 dark:bg-surface-900/80
+        id="dashboard-navigation"
+        aria-hidden={!navigationOpen}
+        className={`absolute inset-y-0 left-0 z-30 md:static backdrop-blur-md bg-surface-50 dark:bg-surface-900
           border-r border-surface-200/50 dark:border-surface-700/30
           flex flex-col overflow-hidden transition-all duration-300 ease-in-out
-          ${sidebarOpen ? "w-56" : "w-0 border-r-0"}`}
+          ${navigationOpen ? "w-56" : "w-0 border-r-0 invisible"}`}
         data-testid="nav-sidebar"
       >
         <div className="w-56 flex flex-col h-full">
@@ -859,6 +883,8 @@ function Dashboard({
       </aside>
 
       <main className="flex-1 min-w-0 overflow-hidden">
+          {view === 'Home' && <HomeView key={workspace} workspace={workspace}
+            refreshTick={refreshTick} attention={attention.state} onRefreshAttention={attention.refresh} onNavigate={setView} />}
           {view === 'Attention' && <AttentionView
             state={{...attention.state, notice: attention.state.notice ?? attentionNavigationNotice}}
             filters={attention.filters} onFiltersChange={attention.setFilters}
