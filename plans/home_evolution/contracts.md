@@ -16,11 +16,14 @@ Rotas sob o envelope atual `/api/v1`, `Cache-Control: no-store`:
 - `GET /home/overview?workspace_id=&agent_id=&state=&limit_work=10&limit_attention=3&limit_results=6&limit_agents=6`.
 - `GET /home/work?...&cursor=&limit=` e `GET /home/results?...&cursor=&limit=`.
 - `GET /home/activity?...&cursor=&limit=` para o feed de eventos de negócio.
+- `GET /home/agents?...&cursor=&limit=` e `GET /home/external?...&cursor=&limit=`
+  completam a paginação interna desses blocos. Extensão de leitura registrada
+  na PR-01: os limites propostos não podem virar truncamento irrecuperável.
 - Resolver GET de alvo tipado/serializado, sem comando, para revalidar referência
   exata e workspace antes de compor os componentes canônicos de detalhe.
 
 `workspace_id` omitido significa Todos; o frontend não envia o sentinela `all`.
-Filtros são validados e aplicados antes de contar/agrupar/paginar. Não aceitar
+Filtros são validados e aplicados antes de contar/agrupar/paginar. Workspace e agente valem para todos os blocos; state corresponde ao controle visível Work state e filtra atividades/contadores de trabalho. Não traduzimos CLAIMED ou RUNNING em estado de resultado, presença, Attention ou observação externa. Esses blocos mantêm suas dimensões canônicas e seu próprio estado/freshness. Não aceitar
 parâmetros duplicados, cursores de outro escopo ou referências incompatíveis.
 O mesmo operador autorizado pode ler Todos, sem duplicação por join.
 

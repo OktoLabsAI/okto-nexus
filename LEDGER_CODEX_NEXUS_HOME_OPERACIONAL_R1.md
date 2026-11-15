@@ -51,3 +51,12 @@ As [medidas locais](plans/home_evolution/performance.md) e o
 datasets e limites. Há sete advisories dev/build no lock existente, sem caminho
 de exploração demonstrado no produto estático; não foi aplicado autofix.
 O próximo marco é PR-01, a projeção operacional autorizada e paginada.
+# Marco de foundation da Home
+
+DTOs/adapter GET, alvos tipados, apresentação, controller e hook implementados.
+Qualificação final focal: 26 testes Node únicos PASS; TypeScript integrado PASS.
+Os testes exercitam relógio e promessas controlados, incluindo duas correções
+encontradas na auditoria: feed que sumia após refresh e páginas descartadas ao
+fechar drawer sem alteração de revisão. Evidência em
+`plans/home_evolution/evidence/pr05-foundation/final-qualification.json`.
+Este marco não qualifica DOM, backend, pacote, provedor ou os 73 cenários.

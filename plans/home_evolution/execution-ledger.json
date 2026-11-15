@@ -4,7 +4,7 @@
   "original_source": "C:\\Users\\jpamb\\Downloads\\PLANO_CODEX_NEXUS_HOME_OPERACIONAL_R1.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
   "created_at": "2026-11-15T20:14:32.568756+00:00",
-  "updated_at": "2026-11-15T20:35:39.483289+00:00",
+  "updated_at": "2026-11-15T21:10:57.842392+00:00",
   "status": "IN_PROGRESS",
   "baseline": {
     "previous_branch": "feature/v0.3.3",
@@ -52,7 +52,7 @@
       "evidence": []
     },
     "PR-02": {
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "tasks": [
         "HOME-011",
         "HOME-012",
@@ -63,7 +63,7 @@
       "evidence": []
     },
     "PR-03": {
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "tasks": [
         "HOME-016",
         "HOME-017",
@@ -74,7 +74,7 @@
       "evidence": []
     },
     "PR-04": {
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "tasks": [
         "HOME-021",
         "HOME-022",
@@ -84,7 +84,7 @@
       "evidence": []
     },
     "PR-05": {
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "tasks": [
         "HOME-025",
         "HOME-026",
@@ -94,7 +94,9 @@
         "HOME-030",
         "HOME-031"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json"
+      ]
     },
     "PR-06": {
       "status": "TODO",
@@ -199,7 +201,7 @@
       "pr": "PR-01",
       "implementation": "Consultar trabalho iniciado por operador e por agentes; agregar handoff, entrega e operações com correlação comprovada; preservar tentativas e sessões como detalhes.",
       "acceptance": "Atividades estáveis, sem duplicação por abertura de sessão, steer, retries ou publicação de resultado.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -210,7 +212,7 @@
       "pr": "PR-01",
       "implementation": "Filtrar antes de contar; separar conectividade global e atuação no workspace; contadores sobre o conjunto autorizado, não sobre a página.",
       "acceptance": "Totais, lista e escopo consistentes no mesmo snapshot; desconhecido não é zero.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -221,7 +223,7 @@
       "pr": "PR-01",
       "implementation": "Consumir projeções da Attention e referências de decisões nativas; respeitar prioridade, adiamento, destinatário e feature desabilitada.",
       "acceptance": "Home recebe itens concretos e ações previstas sem criar outra fila de aprovações.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -232,7 +234,7 @@
       "pr": "PR-01",
       "implementation": "Consultar resultados, respostas e metadados de artefatos; classificar conclusão de turno versus entrega de handoff e erro de limpeza.",
       "acceptance": "Resultados básicos disponíveis já no M1; nenhuma necessidade de ler todos os payloads.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -243,7 +245,7 @@
       "pr": "PR-01",
       "implementation": "Adicionar /api/v1/home/overview e paginação por bloco, ou extensão equivalente; autenticação atual, limites, cache privado/no-store, revisão e respostas parciais explícitas.",
       "acceptance": "Testes HTTP reais, validação de parâmetros, 401/403 tratados e ausência de efeitos de execução nos GETs.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -254,7 +256,7 @@
       "pr": "PR-02",
       "implementation": "Refatorar HomeView/HomeOverview; cabeçalho compacto, resumo, Precisa de você, Em andamento, Resultados e Agentes conectados. Rebaixar atalhos grandes.",
       "acceptance": "A mesma Home, não uma segunda rota concorrente; leitura útil em desktop e mobile.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -265,7 +267,7 @@
       "pr": "PR-02",
       "implementation": "Cartões/linhas por atividade, agrupamento opcional por agente e expansão de tentativas/sessões; rótulos legíveis, motivo e tempo no estado.",
       "acceptance": "Uma identidade com sessões distintas não recebe um status único enganoso; warm/idle fora de Em andamento.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -276,7 +278,7 @@
       "pr": "PR-02",
       "implementation": "Extrair componentes de apresentação existentes; mostrar até três ocorrências prioritárias com contexto e abrir a inspeção atual.",
       "acceptance": "Uma decisão pendente abre o registro exato; não é necessário esperar um novo drawer para o M1.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -287,7 +289,7 @@
       "pr": "PR-02",
       "implementation": "Resumo de resposta, resultado e artefato com referências exatas; visualização usa controles existentes e não marca visto em massa.",
       "acceptance": "É possível localizar e abrir uma entrega pela Home, sem procurar outra vez na tela de destino.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -298,7 +300,7 @@
       "pr": "PR-02",
       "implementation": "Preservar workspace selecionado; usar nomes existentes; filtros rápidos de atenção/estado/agente e estados zero-agente, sem trabalho, parcial, forbidden e stale.",
       "acceptance": "Zero agentes indica Conectar agente pelo fluxo plug and play; falha de leitura não mostra onboarding falso.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -309,7 +311,7 @@
       "pr": "PR-03",
       "implementation": "Criar HomeTarget/OperationalTarget para handoff, operação, sessão, mensagem, aprovação, resultado e observação; validar escopo e resolver no servidor.",
       "acceptance": "Links, voltar/avançar e reabertura apontam ao mesmo objeto; URLs não carregam segredo ou conteúdo.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -320,7 +322,7 @@
       "pr": "PR-03",
       "implementation": "Extrair composição de AttentionInspection sem trocar as máquinas de estado internas; desktop lateral e mobile em camada acessível.",
       "acceptance": "Mesmos formulários/serviços de ApprovalInspection, HandoffInspection e runtime; uma única camada ativa.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -331,7 +333,7 @@
       "pr": "PR-03",
       "implementation": "Responder, aprovar/negar, verificar, inspecionar recuperação e interromper somente quando o contrato atual permite; revalidar antes do envio.",
       "acceptance": "Conflitos e resultado incerto permanecem visíveis; não há approve genérico, retry-all ou ação por inferência.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -342,7 +344,7 @@
       "pr": "PR-03",
       "implementation": "Extrair composer existente; distinguir Nova tarefa (handoff) de Conversar (mensagem); continuar somente na sessão explicitamente correlacionada.",
       "acceptance": "Operador nunca personifica agente; encerramento/revogação da sessão exige novo contexto explícito, não fallback silencioso.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -353,7 +355,7 @@
       "pr": "PR-03",
       "implementation": "Não remontar formulários em refresh; confirmar descarte na troca de alvo/workspace quando necessário; manter seleção, scroll e ação em curso.",
       "acceptance": "SSE, filtros, Escape e botão Voltar não apagam uma resposta digitada nem redirecionam uma decisão.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -364,7 +366,7 @@
       "pr": "PR-04",
       "implementation": "Agrupar somente relações explícitas entre resultado, resposta e artefatos; manter autores, revisão, origem e metadados separados.",
       "acceptance": "Uma entrega com três arquivos não parece quatro trabalhos; ausência de correlação não é preenchida com heurística.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -375,7 +377,7 @@
       "pr": "PR-04",
       "implementation": "Para result_unseen, reutilizar a preferência da Attention por ocorrência/revisão. Para fontes sem esse contrato, mostrar Recentes, sem contador novo fictício.",
       "acceptance": "Home não altera watermark temporal global nem ACK de inbox; visualização em uma ocorrência não oculta outra.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -386,7 +388,7 @@
       "pr": "PR-04",
       "implementation": "Carregar conteúdo sob demanda, com componentes existentes, limites, sanitização e autorização de origem.",
       "acceptance": "Resumo não expõe payload confidencial; HTML e outros artefatos não ganham execução privilegiada.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -397,7 +399,7 @@
       "pr": "PR-04",
       "implementation": "Depois de resposta/decisão, mostrar registro da decisão separado de aplicação no runtime; depois de entrega, permitir continuar com identidade e escopo corretos.",
       "acceptance": "Ação enviada não equivale a aplicada; interação mantém correlação e recupera a mesma operação após resposta perdida.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -408,10 +410,14 @@
       "pr": "PR-05",
       "implementation": "Documentar eventos que invalidam cada bloco, mudanças que só ocorrem por passagem do tempo e retenção de eventos.",
       "acceptance": "Matriz fonte→evento→fallback→TTL; nenhuma confiança em SSE para mudanças sem evento comprovado.",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json"
+      ],
+      "tests": [
+        "26 unique deterministic frontend foundation tests PASS; integrated TypeScript PASS; DOM and integrated acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-026": {
@@ -419,10 +425,14 @@
       "pr": "PR-05",
       "implementation": "Reutilizar stream do shell; debounce com teto, uma requisição em voo por escopo, cancelamento/geração de requests, reread após reconnect e fallback limitado.",
       "acceptance": "Sem nova conexão SSE por cartão; fonte antiga não substitui resposta de escopo novo.",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json"
+      ],
+      "tests": [
+        "26 unique deterministic frontend foundation tests PASS; integrated TypeScript PASS; DOM and integrated acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-027": {
@@ -430,10 +440,14 @@
       "pr": "PR-05",
       "implementation": "Cursores opacos por filtro/escopo/ordem e invalidação explícita; timestamps do servidor, atualidade por bloco e refresh no vencimento.",
       "acceptance": "Não há skips/duplicatas silenciosos; transport live não transforma fonte stale em current.",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json"
+      ],
+      "tests": [
+        "26 unique deterministic frontend foundation tests PASS; integrated TypeScript PASS; DOM and integrated acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-028": {
@@ -441,7 +455,7 @@
       "pr": "PR-05",
       "implementation": "Selecionar mudanças de negócio em templates determinísticos; agrupar bursts só quando não ocultar distinções, decisões ou falhas.",
       "acceptance": "Feed limitado e correlacionado; sem tokens, heartbeats ou LLM resumindo a operação.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -452,7 +466,7 @@
       "pr": "PR-05",
       "implementation": "Incorporar projeção externa existente no bloco de agentes/atividade e em Attention; separar reportado/inferido, atual/stale e execução gerenciada.",
       "acceptance": "Herdr done nunca completa handoff, libera slot ou soma como sucesso nativo; ausência da feature não bloqueia Home.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -463,7 +477,7 @@
       "pr": "PR-05",
       "implementation": "Teclado, leitor de tela, contraste, focus restore, pause visual e largura mobile; textos seguem o idioma/padrão do frontend.",
       "acceptance": "Fluxo completo sem mouse; atualizações não roubam foco; pausa visual não pausa agentes nem remove validação de segurança.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -474,7 +488,7 @@
       "pr": "PR-05",
       "implementation": "EXPLAIN QUERY PLAN, índices aditivos necessários, contagens paginadas, payload e taxas de requests em fixtures pequenas e ampliadas.",
       "acceptance": "Sem N+1 por agente/cartão; metas medidas com ambiente documentado, não alegadas por inspeção.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -597,6 +611,18 @@
       "at": "2026-11-15T20:35:39.483289+00:00",
       "event": "PR-00 complete: source-backed specifications and fixture baseline qualified. 6 fixture tests,3 README tests,154 frontend baseline tests PASS;73 new Home scenarios remain NOT_RUN.",
       "next": "PR-01 read projection and API; PR-02 presentation may proceed against the frozen contract."
+    },
+    {
+      "at": "2026-11-15T20:45:45.220873+00:00",
+      "event": "PR-01 contract clarification: add GET /home/agents and /home/external with the same bounded/cursor/auth contract, so has_more never leads to an inaccessible remainder. Attention pagination stays canonical. No execution action added."
+    },
+    {
+      "at": "2026-11-15T20:55:13.318747+00:00",
+      "event": "Parallel implementation started for read model, operational UI, canonical details, results and refresh/performance. No product scenario promoted to PASS. Baseline commits c5ad279e and 4ec8dd3c pushed."
+    },
+    {
+      "at": "2026-11-15T21:10:57.842392+00:00",
+      "event": "Frontend foundation milestone: 26 unique focal tests PASS and integrated TypeScript PASS. Feed refresh and unchanged-revision paging corrected. HOME-025/026/027 IMPLEMENTED pending integrated acceptance; no full scenario promoted."
     }
   ]
 }

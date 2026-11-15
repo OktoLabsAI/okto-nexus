@@ -1051,7 +1051,7 @@ export class ApiError extends Error {
   }
 }
 
-async function call<T>(
+export async function call<T>(
   path: string,
   init: RequestInit = {},
 ): Promise<T> {

@@ -1,0 +1,13 @@
+{
+  "status": "PASS_FOCAL_CONTROLLER_ONLY",
+  "change": "Retain loaded feed as stale during overview refresh, then replace its first page in the single GET queue; never replay old cursor.",
+  "cases": 16,
+  "failures": 0,
+  "tool": "b9e525",
+  "command": "rtk proxy node --test --test-reporter=junit tests/homeR1Controller.test.mjs",
+  "original_qualification_sha256": "9a3c81b0cc47cf22830351f4e214d2e10fad84ff2072e0c6fcde377e1b0edc22",
+  "artifact_sha256": "5116040879a586c2d82d0e70adae47e0d6187bae77f3719e2c9dd5b40c371227",
+  "no_backend_or_browser_execution": true,
+  "intermediate_source_snapshot_retained": false,
+  "limitation": "Intermediate 16-case result only; final source bytes qualified by final-qualification.json 26 cases."
+}

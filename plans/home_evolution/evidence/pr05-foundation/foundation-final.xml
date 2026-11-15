@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="Home adapter uses canonical envelope/auth headers, GET-only no-store, encoded filters and opaque target" time="0.126383" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Api.test.mjs"/>
+	<testcase name="canonical 401 expiry is preserved and an aborted old response cannot expire a new session" time="0.005688" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Api.test.mjs"/>
+	<testcase name="bursts coalesce while pending and never exceed one read/second" time="0.019039" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="scope generation clears protected state and ignores late old reads without overlap" time="0.003355" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="401 clears visible and paused data and blocks refresh until a new identity" time="0.002878" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="403 clears visible and paused data and blocks refresh until a new identity" time="0.001783" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="partial failure retains only same-scope stale block, never successful empty or stale forbidden data" time="0.007189" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="visual pause keeps published identity and accepts newest snapshot only when applied" time="0.002051" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="pagination deduplicates immutable IDs; conflict resets via coherent overview instead of replaying cursor" time="0.003684" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="fallback and source TTL refresh independently of live stream; hidden events reduce work then wake" time="0.008030" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="reconnect/gap invalidate, unrelated events do not, and disposal removes timers" time="0.002671" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="wrong-server response is not admitted into the current cache" time="0.001448" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="Attention pagination reuses canonical category/state/seen cursor contract, not Home display-state" time="0.001664" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="external generations remain distinct during paginated append and never change native results" time="0.001135" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="invalidation matrix and scope keys distinguish external, attention, origin and identity" time="0.000535" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="time spent reading does not extend source TTL by another full interval" time="0.001252" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="business feed pages use actual id/kind/agent_id projection and retain distinct records" time="0.001382" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="overview refresh retains loaded feed as stale then revalidates first page without old cursor" time="0.001770" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="modal pause retains expanded pages only for same revision, resets changed revisions, and never crosses scope" time="0.002969" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="opaque IDs roundtrip canonically without title/path/content and without delimiter aliases" time="0.055855" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Navigation.test.mjs"/>
+	<testcase name="resolver rejects mismatched workspace/server before request and changed result afterward" time="0.002074" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Navigation.test.mjs"/>
+	<testcase name="canonical inspector requires resolved actor and never guesses latest or turns external into execution" time="0.001008" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Navigation.test.mjs"/>
+	<testcase name="claim, native acceptance, execution and unknown remain distinct" time="0.003691" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Presentation.test.mjs"/>
+	<testcase name="result success keeps independent cleanup and verification; keys ignore titles" time="0.002134" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Presentation.test.mjs"/>
+	<testcase name="external activity is always reported and stale working never becomes native running" time="0.001548" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Presentation.test.mjs"/>
+	<testcase name="business feed templates hide tokens/heartbeat and retain decision/failure distinctions" time="0.001382" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Presentation.test.mjs"/>
+	<!-- tests 26 -->
+	<!-- suites 0 -->
+	<!-- pass 26 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 2178.3349 -->
+</testsuites>

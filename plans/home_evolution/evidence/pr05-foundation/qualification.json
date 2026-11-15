@@ -1,0 +1,104 @@
+{
+  "status": "PASS",
+  "scope": "HOME-R1 PR05 frontend foundation only",
+  "unique_tests": 24,
+  "source_pins": {
+    "frontend/src/api.ts": "3a655f80be7308efd99dab7e67c07db481ed179edbdc585334601dd430b432a7",
+    "frontend/src/homeTypes.ts": "ddda0c419625310acfc236e74ffe3b38f308a16a75c4d39eb88bf06fc13ba34a",
+    "frontend/src/homeApi.ts": "fe5b2b8cda788ec38f1359037009f0adb5167a6042487e89006145da31358eb7",
+    "frontend/src/homePresentation.ts": "3611a807a7892e47d1604d85fb2893208788063f30feec62f6267a9e25c9e2e1",
+    "frontend/src/homeNavigation.ts": "f8f49082d09eb83bc53f931d96811fe62eeec127e51d175014f95d1292c6ebe5",
+    "frontend/src/homeController.ts": "b9acec20a5a8ca401d7006ea23701d1582ad2b6b7bcd6a1d398eb4108d8cea27",
+    "frontend/src/hooks/useHomeOverview.ts": "8605095c5e7030c7cde9ce0aeb72f0e3dbdc0bdf959e2e0cfa50b045a55c90af",
+    "frontend/tests/homeR1Support.mjs": "cdc1b9bffa9311709af0401cf70f3bb97d2b8f011528c96d163f90b12567ecb5",
+    "frontend/tests/homeR1Api.test.mjs": "b7aba20c4024c7984911dc5cdf81d6862bd1bd69355c6e005b6a684fd781770f",
+    "frontend/tests/homeR1Controller.test.mjs": "26b8df1a96e3adf52bcfd25e623aa0ed1d35fbed95d312a13ffec3b4e55b6914",
+    "frontend/tests/homeR1Navigation.test.mjs": "2e1a0f59c8f05c22bd1c9fd59643c3cd6fd2a5d080884e7da9d0bc5dbd370a3f",
+    "frontend/tests/homeR1Presentation.test.mjs": "3c9d4585ecb6a937e9b1adc221e6ac99cb5ec34f54392d90b1652b849ba6bf10"
+  },
+  "commands": [
+    "rtk proxy node --test --test-reporter=junit tests/homeR1Controller.test.mjs tests/homeR1Api.test.mjs tests/homeR1Navigation.test.mjs tests/homeR1Presentation.test.mjs",
+    "rtk proxy node --test --test-reporter=junit tests/homeR1Presentation.test.mjs",
+    "rtk proxy npx tsc --noEmit"
+  ],
+  "cwd": "frontend",
+  "results": {
+    "full_node": {
+      "artifact": "node.xml",
+      "exit_code": 0,
+      "tool": "822ee7",
+      "cases": 24
+    },
+    "presentation_final": {
+      "artifact": "presentation-final.xml",
+      "exit_code": 0,
+      "tool": "53ff09",
+      "cases": 4,
+      "subset_not_additive": true,
+      "reason": "Absent external report now labels evidence unknown instead of inferring reported."
+    },
+    "typescript": {
+      "exit_code": 0,
+      "tool": "daf983",
+      "scope": "Integrated frontend compilation. Followed only by presentation string fallback correction, covered by its four final tests."
+    }
+  },
+  "antecedents": [
+    "First focal 16 PASS, then adapter 2 PASS and incremental cases; counts overlap final 24.",
+    "Integration tsc initially reported 5 UI call-site errors after aligning feed id/kind/agent_id and nullable resolved agent to actual backend; UI owner corrected them, final tsc passed."
+  ],
+  "coverage": [
+    "single-flight and pending invalidation",
+    "rate limit and debounce",
+    "scope/identity late-response refusal",
+    "401/403 protected-cache clearing",
+    "partial unavailable versus empty",
+    "visual pause",
+    "opaque pagination/conflict reset",
+    "TTL and hidden/resume",
+    "reconnect",
+    "server scope refusal",
+    "canonical Attention filters/cursor",
+    "external instance generation identity",
+    "business feed shape",
+    "typed target canonical serialization/resolution",
+    "existing API envelope/auth behavior",
+    "truthful labels"
+  ],
+  "not_claimed": [
+    "HTTP integration against running Server",
+    "DOM behavior or accessibility",
+    "browser/mobile layout",
+    "focus/scroll/draft browser retention",
+    "Home performance SLA",
+    "full 73-case acceptance",
+    "provider or runtime execution"
+  ],
+  "production_delta_outside_owned_new_files": "frontend/src/api.ts: export existing call function only",
+  "test_names": [
+    "401 clears visible and paused data and blocks refresh until a new identity",
+    "403 clears visible and paused data and blocks refresh until a new identity",
+    "Attention pagination reuses canonical category/state/seen cursor contract, not Home display-state",
+    "Home adapter uses canonical envelope/auth headers, GET-only no-store, encoded filters and opaque target",
+    "bursts coalesce while pending and never exceed one read/second",
+    "business feed pages use actual id/kind/agent_id projection and retain distinct records",
+    "business feed templates hide tokens/heartbeat and retain decision/failure distinctions",
+    "canonical 401 expiry is preserved and an aborted old response cannot expire a new session",
+    "canonical inspector requires resolved actor and never guesses latest or turns external into execution",
+    "claim, native acceptance, execution and unknown remain distinct",
+    "external activity is always reported and stale working never becomes native running",
+    "external generations remain distinct during paginated append and never change native results",
+    "fallback and source TTL refresh independently of live stream; hidden events reduce work then wake",
+    "invalidation matrix and scope keys distinguish external, attention, origin and identity",
+    "opaque IDs roundtrip canonically without title/path/content and without delimiter aliases",
+    "pagination deduplicates immutable IDs; conflict resets via coherent overview instead of replaying cursor",
+    "partial failure retains only same-scope stale block, never successful empty or stale forbidden data",
+    "reconnect/gap invalidate, unrelated events do not, and disposal removes timers",
+    "resolver rejects mismatched workspace/server before request and changed result afterward",
+    "result success keeps independent cleanup and verification; keys ignore titles",
+    "scope generation clears protected state and ignores late old reads without overlap",
+    "time spent reading does not extend source TTL by another full interval",
+    "visual pause keeps published identity and accepts newest snapshot only when applied",
+    "wrong-server response is not admitted into the current cache"
+  ]
+}
