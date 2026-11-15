@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus.adapters.inbound.cli.main",
+    "connect",
+    "--operator-profile",
+    "m1-sonnet-human",
+    "--profile",
+    "m1-sonnet-remote-recovery02",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home",
+    "--json",
+    "--no-chat",
+    "--approve",
+    "794361098eefd200c0d099d359a682f56e97b15bb85900b7d065d3d527722535",
+    "--timeout",
+    "1",
+    "--setup-receipt-output",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\recovery02-host-handoff.json"
+  ],
+  "provider_calls": 0,
+  "state": "RESERVED_BEFORE_CLI",
+  "binding_plan_sha256": "400724cd74381e58f6efa5cd4feb439c2c21d7108eaf2cad178ebc479618e30c",
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

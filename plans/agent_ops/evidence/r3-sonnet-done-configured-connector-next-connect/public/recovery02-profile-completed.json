@@ -1,0 +1,29 @@
+{
+  "profile_sha256": "c54b5a33a4d64125745b36755230ca5a79583ab099e72d7ad31c82b0b1cd649c",
+  "profile": "m1-sonnet-remote-recovery02",
+  "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+  "remote_scope": {
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+    "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+    "agent_id": "m1-sonnet-remote",
+    "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52",
+    "workspace_binding_id": "wxb_dfbc76c4e4119893d3ed8b95c91b36f4",
+    "adapter_id": "claude_stream",
+    "candidate_ref": "nexus-install-v1:cf87799010465f0cc6012cf0dec649059684bb5d87e716aa18c0326f7e79e2fa"
+  },
+  "current_credential_epoch": 2,
+  "rotation_import_result_pin": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\rotation-import-result.json",
+    "sha256": "6c2aac0f5f96837dca5dd8ece02883cba7c6a56a3625f5780f1c648879b264f5"
+  },
+  "canonical_review_pin": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\recovery02-review.json",
+    "sha256": "3dc685af12ef88e39f90ef649528861ca11f81546df673a585cdc4ae7afd059b"
+  },
+  "profile_review_revision": "794361098eefd200c0d099d359a682f56e97b15bb85900b7d065d3d527722535",
+  "material_status": "reuse_existing",
+  "provider_calls": 0,
+  "binding_plan_sha256": "400724cd74381e58f6efa5cd4feb439c2c21d7108eaf2cad178ebc479618e30c",
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

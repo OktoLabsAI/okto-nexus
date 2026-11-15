@@ -2307,3 +2307,11 @@ A autorização específica para PID36068/geração8b35799e foi consumida em uma
 Start único retornou READY em PID48048/geração95716251. O observador36713 falhou na captura antes de watch-started; somente a observação foi repetida, sessão39662, mesma coorte. Nexus teve observador rearmado para a mesma coorte com os recibos expirados arquivados. No corte deste marco, serviços ativos, sem cleanup/saída das novas coortes alegados. Falha preflight host-resume2 por watch ausente preservada; binding/execução em movimento excluídos.
 
 Sonnet0 chamadas produtivas; Codex579.154/16 inalterado. **125 VERIFIED /5 IN_PROGRESS /2 NOT_RUN**, sem promoção. [Evidência pública e limites](plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/review.json).
+
+## 2026-11-15 — DONE remoto e SVC-T20 verificado nos dois hosts
+
+Recovery02 concluiu DONE canônico, reuse_existing/epoch2 e escopo vinculado; o mesmo REALIZE foi recuperado após probe confirmado e restart com consentimento atual. Falha original e recovery1 awaiting_inventory preservadas, sem reclassificação retroativa.
+
+Connector configurado: stop normal/três saídas físicas, connect instalado reutilizando DONE/binding e iniciando nova coorte do daemon, zero operações novas/grants iguais, stop final normal/três saídas físicas0. Tarefa permaneceu instalada/inativa e Nexus na mesma coorte READY no corte do marco. Sem force ou provedor nesta execução. Evidências prévias Nexus configured next-connect e ambos hosts190s sem ressurreição completam o critério literal; o intervalo não foi repetido.
+
+**Somente SVC-T20 → VERIFIED: 126 VERIFIED /4 IN_PROGRESS /2 NOT_RUN.** Stop durante backoff permanece subcaso NOT_RUN, sem novo requisito ou promoção de tarefa-pai/AC/DX40/M1. Sonnet0 chamadas produtivas; Codex579.154/16 inalterado. Pós-SVC20 em movimento excluído. [Evidência pública e decisão](plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/review.json).

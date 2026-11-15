@@ -1,0 +1,100 @@
+{
+  "status": "REAL_DONE_AND_CONFIGURED_CONNECTOR_NEXT_CONNECT_VERIFIED",
+  "date": "2026-11-15",
+  "criterion": {
+    "id": "SVC-T20",
+    "literal": "Stop explícito não aciona autorressurreição; próximo connect segue a política documentada.",
+    "fixed_plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "decision": "VERIFIED",
+    "basis": [
+      "Existing both-host healthy normal stop and 190-second no-resurrection actual evidence.",
+      "Existing actual configured Nexus next-connect reused DONE profile without execution operations.",
+      "Current configured Connector next-connect reused DONE setup02/binding; actual new daemon cohort; normal stop before and after, all three physical exits per cohort; zero operations and unchanged grants."
+    ],
+    "scope_note": "No new criterion requiring stop during backoff is added; that retained subcase remains NOT_RUN. No parent task/completion criterion promoted automatically."
+  },
+  "binding": {
+    "profile": "m1-sonnet-remote-recovery02",
+    "canonical_state": "done",
+    "credential_epoch": 2,
+    "material_status": "reuse_existing",
+    "scope_fields": 8,
+    "completed_sha256": "f9f92a75f2113a994c01c61a6981c7048508439a66cb723d728c4304cadd3402",
+    "host_recovery2": "Same REALIZE checkpoint after explicit confirmed probe and consent-correct restart; original failure and recovery1 awaiting_inventory retained.",
+    "provider_calls": 0
+  },
+  "svc20": {
+    "status": "PASS_SCOPED",
+    "configured_next_connect": true,
+    "new_execution_operations": 0,
+    "same_binding_grants": true,
+    "both_connector_cohorts_exited": true,
+    "connector_task_retained_inactive": true,
+    "nexus_same_ready_cohort": true,
+    "force_used": false,
+    "productive_start_selected": false,
+    "provider_calls_selected": 0,
+    "paid_context_invalidated_by_generation_change": true,
+    "next_connect_plan_sha256": "6741e52f0f7f1ebde969014ba874be44e943c0590914440e677e53bbd8ea00f9"
+  },
+  "actual_evidence_checks": {
+    "initial_stop_cli": 0,
+    "configured_connect_cli": 0,
+    "final_stop_cli": 0,
+    "initial_all3_exit0": true,
+    "final_all3_exit0": true,
+    "old_cohort_absence_before_connect": true,
+    "next_connect_changed_generation_and_cycle": true,
+    "task_definition_unchanged_and_inactive_at_end": true,
+    "new_setup": false,
+    "productive_runtime_started": false,
+    "daemon_service_started_by_connect": true,
+    "http_methods": [
+      "GET"
+    ],
+    "new_execution_operations": 0,
+    "same_binding_grants": true,
+    "quiet_190_repeated": false
+  },
+  "prior_evidence": [
+    {
+      "path": "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/review.json",
+      "sha256": "301e4d5746c38943daddae475f4c678acc2507cee531b148b90a18aae00854c6"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/public/qualification.json",
+      "sha256": "c690fb7abcbf73773f42664864514aecf9c5bb1ccd52180fef0737dbcda6fc57"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/result.json",
+      "sha256": "202dc97afa13e557b20e41bcc060aa0429343d3b9c889acf203f1f92f351a055"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/cohort-exit-proof.json",
+      "sha256": "41abe9603ce4c00d9c334ae393bb443164554e750eaf855fdc622510cbef9718"
+    }
+  ],
+  "root_execution_refs": {
+    "done_validation": "8dea1d",
+    "svc20_session": 35409,
+    "svc20_terminal_tool": "8f7205",
+    "exit_code": 0
+  },
+  "limits": {
+    "historical_cut": "After SVC20 final normal stop; subsequent post-svc20 start/paid-context work excluded.",
+    "connector_task_retained_inactive_not_uninstalled": true,
+    "nexus_remained_ready_same_cohort": true,
+    "sonnet_productive_calls": 0,
+    "codex_tokens": 579154,
+    "codex_charged_admissions": 16,
+    "global_M1_pass": false,
+    "other_acceptance_unchanged": true,
+    "scenario_counts": {
+      "VERIFIED": 126,
+      "IN_PROGRESS": 4,
+      "NOT_RUN": 2
+    },
+    "private_data_copied": false,
+    "original_UNCONFIRMED_transfer_and_prior_force_history_preserved": true
+  }
+}

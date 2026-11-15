@@ -1,0 +1,70 @@
+{
+  "status": "OFFLINE_ZERO_ADMISSION_BRANCH_QUALIFIED_NO_EXECUTION",
+  "final_tests": {
+    "passed": 5,
+    "failed": 0,
+    "seconds": 0.249,
+    "tool": "cfb0a9",
+    "command": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\test_next_connect.py"
+    ]
+  },
+  "antecedents": [
+    {
+      "tool": "6dd794",
+      "passed": 1,
+      "errors": 3,
+      "cause": "SQLite context manager did not close connections; Windows fixture cleanup WinError32. Corrected using contextlib.closing."
+    },
+    {
+      "tool": "b6e182",
+      "passed": 4,
+      "seconds": 0.476,
+      "limitation": "Earlier terminal-receipt gate was insufficient settlement evidence; superseded, not accepted for execution."
+    },
+    {
+      "tool": "a73ba5",
+      "failed": 1,
+      "cause": "New test insertion misplaced the previous pending-receipt assertion into another fixture. No operation row in that fixture; corrected assertion placement."
+    }
+  ],
+  "source_pins": {
+    "next_connect.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\next_connect.py",
+      "sha256": "510df041d68951366951a4831d3b65c80632dae3c03a11b6be4a50e5543fcfc0"
+    },
+    "select_after_done.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\select_after_done.py",
+      "sha256": "5890498a4911b4101e5d36f0c0d974f60321d882627b65e9b2940feeb86be2b4"
+    },
+    "test_next_connect.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\test_next_connect.py",
+      "sha256": "b73474835114466a44d9aaae3d02696a07d9d93dc5e78c6b8d4b1d285e6c722b"
+    }
+  },
+  "tests_scope": "Actual installed Connector parser plus synthetic DONE/epoch2, zero-operation refusal of SUCCEEDED/RUNNING/unknown, retained handoff when post-connect cohort was never captured.",
+  "future_order": [
+    "actual DONE with epoch2/import chain",
+    "zero execution operations",
+    "canonical stop and retained physical proof",
+    "configured connect without --start",
+    "new cohort capture and unchanged operation/grant counters",
+    "normal final stop",
+    "separate future start/watchers and fresh paid Context before any inference"
+  ],
+  "post_paid_branch": "HELD_NO_SETTLEMENT_COMPANION; terminal receipt is not session release.",
+  "known_limits": [
+    "No actual DONE or selection fabricated.",
+    "No service, HTTP, provider or OS effect executed.",
+    "Zero-admission selection does not require a paid settlement companion.",
+    "New Connector generation invalidates the old paid Context; fresh guards/watchers required.",
+    "Existing quiet190 evidence is reused; no repeated quiet interval or stop-during-backoff claim.",
+    "Selector-only prospective order metadata added after tests; no executable gate changed."
+  ],
+  "secret_reads": 0
+}

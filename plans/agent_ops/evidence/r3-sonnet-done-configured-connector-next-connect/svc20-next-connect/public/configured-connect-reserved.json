@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\next_connect.py",
+    "--plan",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\selected-plan.json",
+    "--expected-plan-sha256",
+    "6741e52f0f7f1ebde969014ba874be44e943c0590914440e677e53bbd8ea00f9",
+    "worker"
+  ],
+  "force_used": false,
+  "next_connect_plan_sha256": "6741e52f0f7f1ebde969014ba874be44e943c0590914440e677e53bbd8ea00f9"
+}

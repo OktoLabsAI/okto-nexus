@@ -1,0 +1,12 @@
+{
+  "tool": "6dd794",
+  "tests": 4,
+  "passed": 1,
+  "errors": 3,
+  "reason": "SQLite connection context manager does not close handles; Windows fixture cleanup WinError32. Runtime read connection also needed explicit close.",
+  "effects": "Synthetic fixture databases only; no services/HTTP/provider",
+  "source_hashes": {
+    "next_connect.py": "a762722c46beb8745cb7bbccb89495e55fbcdce71cb3aff31ed4aa40055ba1bc",
+    "test_next_connect.py": "17f7a211f47c90bc23bdab8429138656088d6698816c4fdafab9cd6dc27637af"
+  }
+}

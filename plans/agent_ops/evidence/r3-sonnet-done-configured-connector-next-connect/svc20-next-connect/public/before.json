@@ -1,0 +1,48 @@
+{
+  "connector": {
+    "pid": 48048,
+    "generation": "95716251b58cfa1aea136956af5e4845",
+    "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "task": {
+      "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+      "state": 4,
+      "digest": "ea5d4ee2340054460fb04f0f0c83bf1f5a8dced3380f5b32409a504f9ec465aa"
+    },
+    "component": "connector",
+    "cohort": {
+      "cycle_id": "6cb9cea66c9c99453a3588f965028d24",
+      "phase": "running",
+      "attempts_started": 1,
+      "child_acknowledged": true,
+      "parent": {
+        "pid": 15404,
+        "birth": 134391926820210158
+      },
+      "launcher": {
+        "pid": 47120,
+        "birth": 134391926849345256
+      },
+      "child": {
+        "pid": 48048,
+        "birth": 134391926849891332
+      }
+    },
+    "selected_at": 1794719437.3506956
+  },
+  "accounting": {
+    "operation_ids": [],
+    "operation_count": 0,
+    "terminal_stages": [],
+    "grants": [
+      [
+        "grant_65493a4efdac48688e2d00be6fd0edb3",
+        1,
+        3,
+        0,
+        "2026-11-15T06:08:51.488158Z",
+        null
+      ]
+    ]
+  },
+  "next_connect_plan_sha256": "6741e52f0f7f1ebde969014ba874be44e943c0590914440e677e53bbd8ea00f9"
+}

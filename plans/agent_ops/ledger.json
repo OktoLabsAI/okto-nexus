@@ -7256,7 +7256,7 @@
     },
     "SVC-T20": {
       "requirement": "Stop explícito não aciona autorressurreição; próximo connect segue a política documentada.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr01-detached-process.xml",
         "plans/agent_ops/evidence/pr01-start-stop.xml",
@@ -7273,10 +7273,17 @@
         "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/result.json",
         "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/nexus-observation.json",
         "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/cohort-exit-proof.json",
-        "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/manifest.json"
+        "plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/public/recovery02-profile-completed.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/svc20-next-connect/public/result.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/svc20-next-connect/public/configured-connect-observed.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/svc20-next-connect/public/initial-stop-exit-proof.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/svc20-next-connect/public/final-stop-exit-proof.json"
       ],
-      "remaining": "Configured Connector next-connect policy remains unexercised; actual Nexus configured next-connect now verified without new setup/work operation. Existing both-host normal-stop/no-resurrection evidence remains unchanged.",
-      "remaining_kind": "real_service_stop_reconnect_campaign",
+      "remaining": "",
+      "remaining_kind": null,
       "subscopes": {
         "retained_injected_contract": "VERIFIED",
         "finite_empty_windows_campaign": "PARTIAL",
@@ -7284,12 +7291,12 @@
         "actual_both_hosts_normal_stop_physical_exit": "VERIFIED",
         "actual_both_hosts_190s_no_resurrection": "VERIFIED",
         "actual_connector_missing_identity_connect_refusal": "VERIFIED_SCOPED",
-        "configured_next_connect": "PARTIAL_NEXUS_VERIFIED_CONNECTOR_PENDING",
+        "configured_next_connect": "VERIFIED_BOTH_HOSTS",
         "actual_stop_during_backoff": "NOT_RUN",
         "actual_configured_nexus_next_connect": "VERIFIED_SCOPED",
-        "actual_configured_connector_next_connect": "NOT_RUN"
+        "actual_configured_connector_next_connect": "VERIFIED_SCOPED"
       },
-      "result": "Both installed hosts previously normal-stopped with physical runtime/launcher/parent exits, then190s without resurrection. New scoped actual Nexus configured next-connect reused completed profile, returned configured/work_state=not_submitted, started selected READY service and created zero execution operations (two setup GETs, zero setup non-GET attempts). Normal stop drained, all3 retained exits0, task absent and selected data hashes equal before/after uninstall. Configured Connector next-connect remains pending; global SVC-T20 stays IN_PROGRESS. Earlier missing-identity/NOT_FOUND outcomes are retained."
+      "result": "Both hosts normal-stopped with retained parent/launcher/runtime physical exits and190s without resurrection in the retained actual campaign. Configured Nexus next-connect previously reused DONE profile with zero execution operations. Configured Connector next-connect now reused recovery02 DONE/epoch2/binding, started a new daemon cohort, made only setup GET observations, and changed no operation/grant counters. Initial and final normal stops each confirmed all3 physical exits0; exact task remained installed/inactive, Nexus same READY cohort. Literal SVC-T20 verified. Historical failed/missing-identity attempts retained; stop-during-backoff subcase remains NOT_RUN, no new requirement inferred."
     },
     "SVC-T21": {
       "requirement": "Stop pelo CLI conclui drain antes de acionar supervisor; timeout de espera não força término. Logout/shutdown externo registra interrupção/incerteza honestamente.",
@@ -14042,6 +14049,25 @@
       "future_force_authorized": false,
       "codex_tokens": 579154,
       "codex_charged_admissions": 16
+    },
+    "r3_sonnet_done_configured_connector_next_connect": {
+      "status": "DONE_AND_SVC_T20_VERIFIED",
+      "summary": "Canonical recovery02 DONE/epoch2; configured Connector next-connect PASS_SCOPED with zero operations/grant changes, normal stop/all3 exits before and after. Combined with existing Nexus configured next-connect and both-host190s no-resurrection evidence, only SVC-T20 VERIFIED.126/4/2; Sonnet productive0, no DX40/M1 promotion. Subsequent post-SVC20 state excluded.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/public/recovery02-profile-completed.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/svc20-next-connect/public/result.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/svc20-next-connect/public/configured-connect-observed.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/svc20-next-connect/public/initial-stop-exit-proof.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/svc20-next-connect/public/final-stop-exit-proof.json"
+      ],
+      "acceptance_promoted": [
+        "SVC-T20"
+      ],
+      "provider_turns": 0,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16
     }
   },
   "history": [
@@ -15935,6 +15961,27 @@
       "force_authorization_consumed": true,
       "canonical_force_calls": 1,
       "future_force_authorized": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_done_configured_connector_next_connect",
+      "status": "DONE_AND_SVC_T20_VERIFIED",
+      "summary": "Canonical recovery02 DONE/epoch2; configured Connector next-connect PASS_SCOPED with zero operations/grant changes, normal stop/all3 exits before and after. Combined with existing Nexus configured next-connect and both-host190s no-resurrection evidence, only SVC-T20 VERIFIED.126/4/2; Sonnet productive0, no DX40/M1 promotion. Subsequent post-SVC20 state excluded.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/public/recovery02-profile-completed.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/svc20-next-connect/public/result.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/svc20-next-connect/public/configured-connect-observed.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/svc20-next-connect/public/initial-stop-exit-proof.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/svc20-next-connect/public/final-stop-exit-proof.json"
+      ],
+      "acceptance_promoted": [
+        "SVC-T20"
+      ],
+      "provider_turns": 0,
       "codex_tokens": 579154,
       "codex_charged_admissions": 16
     }

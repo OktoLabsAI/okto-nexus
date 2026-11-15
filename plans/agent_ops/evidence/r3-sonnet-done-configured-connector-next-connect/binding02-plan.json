@@ -1,0 +1,92 @@
+{
+  "profile": "m1-sonnet-remote-recovery02",
+  "setup_request_id": "m1-sonnet-remote-setup-02",
+  "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+  "agent_id": "m1-sonnet-remote",
+  "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52",
+  "operator_profile": "m1-sonnet-human",
+  "scope": "CANONICAL_REUSE_EPOCH_TWO_BINDING_AND_DONE_NO_WORK",
+  "actions": [
+    "review",
+    "bootstrap",
+    "host-prepare",
+    "operator-decide",
+    "host-finish",
+    "complete"
+  ],
+  "paths": {
+    "server_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+    "operator_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home",
+    "connector_state": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "connector_project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project"
+  },
+  "lifecycle_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json",
+    "sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+    "bytes": 13280
+  },
+  "rotation_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-plan.json",
+    "sha256": "5e9b827c0141d95c9b6d88cf7fec47344325449a1d85a25b43f989256e92e2c2",
+    "bytes": 8984
+  },
+  "draft": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\recovery02-connector-draft.json",
+    "sha256": "7f74ac249fca3025bea5fee01eeaebdfe035f01915e1c069b2b1feac4c517ace",
+    "bytes": 1009
+  },
+  "pins": {
+    "entry": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_binding.py",
+      "sha256": "4dfe7f41b3f627daa8aaf2f6b27eca03d8af92f6d0512af94e59c0b02b8daea0",
+      "bytes": 13380
+    },
+    "draft_guard": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_onboarding.py",
+      "sha256": "80507ce77129f4b47ef218d341914b38c88759aeef980df8c2f9bf24d0cc5a97",
+      "bytes": 8052
+    },
+    "context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_context.py",
+      "sha256": "554eb9e9adc36156df84bc4f833a94ebbea69787e18e8cc1e3875ffaad18d43e",
+      "bytes": 4756
+    },
+    "draft_validated": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\draft02-validated.json",
+      "sha256": "af4a1aec53a37d3dc47685618e410781a5528c24f3beb56b8935c610b1ef4a18",
+      "bytes": 1921
+    },
+    "old_failed_transfer": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-transfer-result.json",
+      "sha256": "bcfaf683c8e0bc435b9a1b1e3c9ef731dd3f45d5f9d8b469b4a74e6b91468905",
+      "bytes": 383
+    },
+    "installed_fix": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\qualification.json",
+      "sha256": "27d573aeeb98d6fb0320a4ef07ed945ff322fb1202d04680d871e57a8fc1c479",
+      "bytes": 2432
+    }
+  },
+  "prospective_rotation_import_result": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\rotation-import-result.json",
+  "prospective_completed_receipt": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\recovery02-profile-completed.json",
+  "policy": {
+    "new_identity": false,
+    "new_credential": false,
+    "credential_stdin": false,
+    "reuse_identity_alias": "m1-sonnet-remote",
+    "required_credential_epoch": 2,
+    "provider_work_calls": 0,
+    "setup_test": false,
+    "automatic_retry": false,
+    "operator_apply_observation_seconds": 1,
+    "host_installation_protocol_probe": "Only if selected by the canonical retained host onboarding pipeline; no project task."
+  },
+  "authority": "Root-selected prospective canonical completion under standing remote scope. Runtime refuses until specifically authorized rotation/import has actually completed and Root selects the canonical review SHA.",
+  "transition_notes": [
+    "Bootstrap returns awaiting_host with public handoff; no one-shot material is issued for reuse_existing.",
+    "Host prepare returns after pending canonical approval. Do not infer Finish from daemon liveness.",
+    "Operator decision leaves awaiting_finish unless already committed.",
+    "Host finish explicitly resumes the retained host request, or records its already-persisted done result.",
+    "Complete invokes the same operator profile and requires canonical configured result plus DONE profile and correlated APPROVED binding/Finish."
+  ]
+}

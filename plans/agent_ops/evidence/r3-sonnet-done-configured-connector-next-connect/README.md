@@ -1,0 +1,9 @@
+# DONE remoto e próximo connect configurado do Connector
+
+O perfil recovery02 chegou a DONE canônico, material reuse_existing/epoch2 e oito campos de escopo vinculados ao recibo público. A recuperação do host reutilizou o mesmo checkpoint REALIZE após probe confirmado e restart com consentimento atual; preserva a falha original e a tentativa anterior awaiting_inventory. Nenhuma nova chave ou chamada produtiva foi selecionada neste marco.
+
+SVC-T20 exige literalmente: “Stop explícito não aciona autorressurreição; próximo connect segue a política documentada.” A evidência retida de ambos os hosts já comprovou stop saudável e 190 segundos sem ressurreição; o Nexus configurado passou em marco anterior. Agora o Connector configurado também passou: stop normal com três saídas físicas, ausência canônica/tarefa inativa, um connect instalado que reutilizou DONE/binding e iniciou nova coorte do daemon, zero operações novas/grants inalterados, seguido de stop normal e outras três saídas físicas com código0. runtime_started=false significa nenhum runtime produtivo, não ausência de daemon. O intervalo190s não foi repetido.
+
+Somente SVC-T20 passa a VERIFIED: **126 VERIFIED / 4 IN_PROGRESS / 2 NOT_RUN**. Stop durante backoff continua subcaso não executado, sem transformar esse detalhe em requisito adicional do critério literal. Nenhuma tarefa-pai, AC, DX40 ou M1 global promovido.
+
+No corte deste marco, a tarefa Connector permanecia instalada/inativa e Nexus permanecia READY na mesma coorte. O novo start pós-SVC20 e o contexto pago posterior não foram coletados. Sonnet0 chamadas produtivas; Codex579.154 tokens/16 admissões inalterados. Fontes/testes/qualificação são retenção, sem nova execução de suíte. A falha inicial de fixture da preparação SVC20 permanece separada da qualificação final e do resultado real. Nenhum private/vault/segredo/transcript incluído.

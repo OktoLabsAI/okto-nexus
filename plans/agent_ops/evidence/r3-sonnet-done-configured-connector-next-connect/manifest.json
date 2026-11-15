@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "scope": "EXPLICIT_PUBLIC_AND_SOURCE_ALLOWLIST",
+  "files": [
+    {
+      "path": "host_prepare_recovery2.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\host_prepare_recovery2.py",
+      "sha256": "b7ee79dfc4b2028c926549cf712ccf59d38ec0c06bf2ee4e1ae373d2ad1ee080",
+      "bytes": 6942
+    },
+    {
+      "path": "binding_service_environment.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\binding_service_environment.py",
+      "sha256": "0ab9bb4e075be1305256c3391fa3bd9f85d43c71a7732993736b2b783a7cd384",
+      "bytes": 1245
+    },
+    {
+      "path": "binding02-plan.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\binding02-plan.json",
+      "sha256": "400724cd74381e58f6efa5cd4feb439c2c21d7108eaf2cad178ebc479618e30c",
+      "bytes": 4931
+    },
+    {
+      "path": "recovery_binding.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_binding.py",
+      "sha256": "4dfe7f41b3f627daa8aaf2f6b27eca03d8af92f6d0512af94e59c0b02b8daea0",
+      "bytes": 13380
+    },
+    {
+      "path": "public/recovery02-profile-completed.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\recovery02-profile-completed.json",
+      "sha256": "f9f92a75f2113a994c01c61a6981c7048508439a66cb723d728c4304cadd3402",
+      "bytes": 1603
+    },
+    {
+      "path": "public/binding02-bootstrap-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-bootstrap-reserved.json",
+      "sha256": "546d407881fa47cafd09f7e33f568ab7f2dc02d8afccf7ab2f41efbbab47c777",
+      "bytes": 1047
+    },
+    {
+      "path": "public/binding02-bootstrap-result.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-bootstrap-result.json",
+      "sha256": "7f97d379455ce47949c1119d5505a6892bc8058bfa658343343bd74a7b061e07",
+      "bytes": 550
+    },
+    {
+      "path": "public/binding02-bootstrap-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-bootstrap-returned.json",
+      "sha256": "2e4b5e91b56c9c4ac2ba678a1756875656aa4f2b0697b06a4c78a4ce20f70450",
+      "bytes": 415
+    },
+    {
+      "path": "public/binding02-complete-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-complete-reserved.json",
+      "sha256": "f7087152e8eafd094081e2d2c18df303c16c2260597018b28b9f7797cc9fbae3",
+      "bytes": 795
+    },
+    {
+      "path": "public/binding02-complete-result.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-complete-result.json",
+      "sha256": "11c310e5407ccee123c3e249ce22e279dd910d53e92fc63fe473792dfe9446d9",
+      "bytes": 541
+    },
+    {
+      "path": "public/binding02-complete-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-complete-returned.json",
+      "sha256": "9b76a60642b61da07b19b98003c38175065e4c8a962fe453f67f80934b85076e",
+      "bytes": 415
+    },
+    {
+      "path": "public/binding02-host-finish-result.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-host-finish-result.json",
+      "sha256": "d33d4fad14d61d6f9d9fbbd503aef0abe53bde352d30fddbbf5945f8f261a2c1",
+      "bytes": 552
+    },
+    {
+      "path": "public/binding02-host-prepare-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-host-prepare-reserved.json",
+      "sha256": "4a5d0f780322c898c132109ba9c9e27183deab9db9f22d5f71272e8f1fbfdba5",
+      "bytes": 855
+    },
+    {
+      "path": "public/binding02-host-prepare-result.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-host-prepare-result.json",
+      "sha256": "eb957430fe33ed2a0a6dcbd25782eced6d5de2ebc0a77bc574366964b5b4e451",
+      "bytes": 1189
+    },
+    {
+      "path": "public/binding02-host-prepare-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-host-prepare-returned.json",
+      "sha256": "ab80c84461e71b758fd6634992ea0fff63a1acaed7312aa1315fed0cd4cb4bb4",
+      "bytes": 415
+    },
+    {
+      "path": "public/binding02-hostprepare-recovery1-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-hostprepare-recovery1-reserved.json",
+      "sha256": "f9ec10eba6f59544c9c1f714780093093479db94b3243c7eaa11f6c444fc1c54",
+      "bytes": 1064
+    },
+    {
+      "path": "public/binding02-hostprepare-recovery1-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-hostprepare-recovery1-returned.json",
+      "sha256": "810626d28d704c2921e2f038c9461b2b58e81ef456f17df713cab1f35df60f91",
+      "bytes": 624
+    },
+    {
+      "path": "public/binding02-hostprepare-recovery2-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-hostprepare-recovery2-reserved.json",
+      "sha256": "8f19e741447d4328bf55c79577a79b98bba8fc953e3bc22da27987525567d4a9",
+      "bytes": 1173
+    },
+    {
+      "path": "public/binding02-hostprepare-recovery2-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-hostprepare-recovery2-returned.json",
+      "sha256": "88edf8b23d9967693e26533e8811b21ea8afb6f3eb35e9321ac3888dd9f6b03b",
+      "bytes": 733
+    },
+    {
+      "path": "public/binding02-operator-decide-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-operator-decide-reserved.json",
+      "sha256": "f7087152e8eafd094081e2d2c18df303c16c2260597018b28b9f7797cc9fbae3",
+      "bytes": 795
+    },
+    {
+      "path": "public/binding02-operator-decide-result.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-operator-decide-result.json",
+      "sha256": "d33d4fad14d61d6f9d9fbbd503aef0abe53bde352d30fddbbf5945f8f261a2c1",
+      "bytes": 552
+    },
+    {
+      "path": "public/binding02-operator-decide-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-operator-decide-returned.json",
+      "sha256": "cd81bd9d220c6ea02b181909a3a3a34f28c60924c32f65a8898bfff4ea859b21",
+      "bytes": 415
+    },
+    {
+      "path": "public/binding02-review-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-review-reserved.json",
+      "sha256": "094dfa0f34573cb307f492389df2a788a09083566e725f0f502e5e6c76b0eeb6",
+      "bytes": 1046
+    },
+    {
+      "path": "public/binding02-review-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\binding02-review-returned.json",
+      "sha256": "7902280d2962c64ea134a5d8e899d9bed6ce2ba0cd65e2fcb863e0d50f9adbfa",
+      "bytes": 415
+    },
+    {
+      "path": "svc20-next-connect/selected-plan.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\selected-plan.json",
+      "sha256": "6741e52f0f7f1ebde969014ba874be44e943c0590914440e677e53bbd8ea00f9",
+      "bytes": 3296
+    },
+    {
+      "path": "svc20-next-connect/next_connect.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\next_connect.py",
+      "sha256": "510df041d68951366951a4831d3b65c80632dae3c03a11b6be4a50e5543fcfc0",
+      "bytes": 14039
+    },
+    {
+      "path": "svc20-next-connect/select_after_done.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\select_after_done.py",
+      "sha256": "5890498a4911b4101e5d36f0c0d974f60321d882627b65e9b2940feeb86be2b4",
+      "bytes": 3600
+    },
+    {
+      "path": "svc20-next-connect/qualification.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\qualification.json",
+      "sha256": "8df9265fe04e2107590c05e7a8f6544ac120c71fe5b909e10778beb7879febab",
+      "bytes": 3166
+    },
+    {
+      "path": "svc20-next-connect/initial-qualification-failure.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\initial-qualification-failure.json",
+      "sha256": "b5800f84a405cf1e6bb8d9aaca8b004c23edcc32c615a72673c74efd79a40d5a",
+      "bytes": 528
+    },
+    {
+      "path": "svc20-next-connect/test_next_connect.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\test_next_connect.py",
+      "sha256": "b73474835114466a44d9aaae3d02696a07d9d93dc5e78c6b8d4b1d285e6c722b",
+      "bytes": 5711
+    },
+    {
+      "path": "svc20-next-connect/public/after-connect-cohort.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\after-connect-cohort.json",
+      "sha256": "ed538701bf9d9404071f4ac9d9ab309a44e1a570a5f76f63311b37d535076605",
+      "bytes": 952
+    },
+    {
+      "path": "svc20-next-connect/public/before.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\before.json",
+      "sha256": "92d2662009564c79b8535df6a61af0200bde9f8942051b8c62b3b7640e1cae11",
+      "bytes": 1321
+    },
+    {
+      "path": "svc20-next-connect/public/configured-connect-observed.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\configured-connect-observed.json",
+      "sha256": "3f6df5f8be3d082e34ba15265c7a23c20bffdbe3e79dbfd9eab39725d7d5d5ad",
+      "bytes": 375
+    },
+    {
+      "path": "svc20-next-connect/public/configured-connect-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\configured-connect-reserved.json",
+      "sha256": "760c5493ae3bb059329f7768a39d6b2d75e9c36c35468d59af4e4357bdd40ce4",
+      "bytes": 715
+    },
+    {
+      "path": "svc20-next-connect/public/configured-connect-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\configured-connect-returned.json",
+      "sha256": "eeb01e4d503d8cff40771b0ee8c8af041975f86ed779ac63a875c4ef9b6570c3",
+      "bytes": 300
+    },
+    {
+      "path": "svc20-next-connect/public/final-stop-exit-proof.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\final-stop-exit-proof.json",
+      "sha256": "f05026a35e5923abf559ff6a4a5776c831cafb2461412f9fa2b033b72b651491",
+      "bytes": 953
+    },
+    {
+      "path": "svc20-next-connect/public/final-stop-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\final-stop-reserved.json",
+      "sha256": "2b5886ef353eb7e31bda0c9b9ebc4281aa17b919ca3ca2a155c30c717e378a98",
+      "bytes": 585
+    },
+    {
+      "path": "svc20-next-connect/public/final-stop-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\final-stop-returned.json",
+      "sha256": "ce9e6766f078bc6075e44cf1e26af7416a87009df91ded305024660c5a802faf",
+      "bytes": 300
+    },
+    {
+      "path": "svc20-next-connect/public/initial-stop-exit-proof.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\initial-stop-exit-proof.json",
+      "sha256": "1f328032f401b2fae4ae3fd07ead67d272daf8a99d0aee98988ab231a1e8ff58",
+      "bytes": 953
+    },
+    {
+      "path": "svc20-next-connect/public/initial-stop-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\initial-stop-reserved.json",
+      "sha256": "2b5886ef353eb7e31bda0c9b9ebc4281aa17b919ca3ca2a155c30c717e378a98",
+      "bytes": 585
+    },
+    {
+      "path": "svc20-next-connect/public/initial-stop-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\initial-stop-returned.json",
+      "sha256": "241ec9d915564f5742d2808781b9feb4670e912e2206e4f6f8a981a6349ef29c",
+      "bytes": 300
+    },
+    {
+      "path": "svc20-next-connect/public/result.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\result.json",
+      "sha256": "f474856994d28d0800001422407a4b040926e23b5b72b935fc280259285e0c61",
+      "bytes": 511
+    },
+    {
+      "path": "svc20-next-connect/public/stopped-before-next-connect.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\svc20-next-connect\\public\\stopped-before-next-connect.json",
+      "sha256": "4553096083a0a4263bc9cc67a18cbf3ca66c2c9e83db05786a6ad70659c4e268",
+      "bytes": 249
+    },
+    {
+      "path": "review.json",
+      "source": "curation",
+      "sha256": "341766164c92da2f93a423a8d784bf69a8d13a0f445250793a21724257f0a5f0",
+      "bytes": 4161
+    },
+    {
+      "path": "README.md",
+      "source": "curation",
+      "sha256": "1c422f91ad2d119e29c228ce82a9f8c4d77610c5bde37022f159c041681f10f3",
+      "bytes": 1929
+    }
+  ],
+  "excluded": [
+    "private outputs",
+    "real profile contents",
+    "vault and credentials",
+    "provider transcripts",
+    "post-svc20 moving state"
+  ]
+}
