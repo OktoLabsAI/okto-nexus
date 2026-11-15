@@ -4,7 +4,7 @@
   "original_source": "C:\\Users\\jpamb\\Downloads\\PLANO_CODEX_NEXUS_HOME_OPERACIONAL_R1.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
   "created_at": "2026-11-15T20:14:32.568756+00:00",
-  "updated_at": "2026-11-15T21:16:13.464397+00:00",
+  "updated_at": "2026-11-15T21:21:05.500622+00:00",
   "status": "IN_PROGRESS",
   "baseline": {
     "previous_branch": "feature/v0.3.3",
@@ -49,7 +49,9 @@
         "HOME-009",
         "HOME-010"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ]
     },
     "PR-02": {
       "status": "IN_PROGRESS",
@@ -196,10 +198,15 @@
       "pr": "PR-01",
       "implementation": "Criar HomeOverviewService e HomeOverviewQueries, ou equivalentes existentes, com contratos tipados; nenhuma dependência direta do frontend em SQL/runtime.",
       "acceptance": "Portas, modelos e testes de import boundary; nomenclatura proposta reconciliada com o repositório.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "tests": [
+        "30 unique scoped backend tests and 5 independent boundary tests PASS; final integrated browser/package/provider acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-006": {
@@ -207,10 +214,15 @@
       "pr": "PR-01",
       "implementation": "Consultar trabalho iniciado por operador e por agentes; agregar handoff, entrega e operações com correlação comprovada; preservar tentativas e sessões como detalhes.",
       "acceptance": "Atividades estáveis, sem duplicação por abertura de sessão, steer, retries ou publicação de resultado.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "tests": [
+        "30 unique scoped backend tests and 5 independent boundary tests PASS; final integrated browser/package/provider acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-007": {
@@ -218,10 +230,15 @@
       "pr": "PR-01",
       "implementation": "Filtrar antes de contar; separar conectividade global e atuação no workspace; contadores sobre o conjunto autorizado, não sobre a página.",
       "acceptance": "Totais, lista e escopo consistentes no mesmo snapshot; desconhecido não é zero.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "tests": [
+        "30 unique scoped backend tests and 5 independent boundary tests PASS; final integrated browser/package/provider acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-008": {
@@ -229,10 +246,15 @@
       "pr": "PR-01",
       "implementation": "Consumir projeções da Attention e referências de decisões nativas; respeitar prioridade, adiamento, destinatário e feature desabilitada.",
       "acceptance": "Home recebe itens concretos e ações previstas sem criar outra fila de aprovações.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "tests": [
+        "30 unique scoped backend tests and 5 independent boundary tests PASS; final integrated browser/package/provider acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-009": {
@@ -240,10 +262,15 @@
       "pr": "PR-01",
       "implementation": "Consultar resultados, respostas e metadados de artefatos; classificar conclusão de turno versus entrega de handoff e erro de limpeza.",
       "acceptance": "Resultados básicos disponíveis já no M1; nenhuma necessidade de ler todos os payloads.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "tests": [
+        "30 unique scoped backend tests and 5 independent boundary tests PASS; final integrated browser/package/provider acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-010": {
@@ -251,10 +278,15 @@
       "pr": "PR-01",
       "implementation": "Adicionar /api/v1/home/overview e paginação por bloco, ou extensão equivalente; autenticação atual, limites, cache privado/no-store, revisão e respostas parciais explícitas.",
       "acceptance": "Testes HTTP reais, validação de parâmetros, 401/403 tratados e ausência de efeitos de execução nos GETs.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "tests": [
+        "30 unique scoped backend tests and 5 independent boundary tests PASS; final integrated browser/package/provider acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-011": {
@@ -337,10 +369,15 @@
       "pr": "PR-03",
       "implementation": "Criar HomeTarget/OperationalTarget para handoff, operação, sessão, mensagem, aprovação, resultado e observação; validar escopo e resolver no servidor.",
       "acceptance": "Links, voltar/avançar e reabertura apontam ao mesmo objeto; URLs não carregam segredo ou conteúdo.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "tests": [
+        "30 unique scoped backend tests and 5 independent boundary tests PASS; final integrated browser/package/provider acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-017": {
@@ -408,10 +445,15 @@
       "pr": "PR-04",
       "implementation": "Agrupar somente relações explícitas entre resultado, resposta e artefatos; manter autores, revisão, origem e metadados separados.",
       "acceptance": "Uma entrega com três arquivos não parece quatro trabalhos; ausência de correlação não é preenchida com heurística.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "tests": [
+        "30 unique scoped backend tests and 5 independent boundary tests PASS; final integrated browser/package/provider acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-022": {
@@ -419,10 +461,15 @@
       "pr": "PR-04",
       "implementation": "Para result_unseen, reutilizar a preferência da Attention por ocorrência/revisão. Para fontes sem esse contrato, mostrar Recentes, sem contador novo fictício.",
       "acceptance": "Home não altera watermark temporal global nem ACK de inbox; visualização em uma ocorrência não oculta outra.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "tests": [
+        "30 unique scoped backend tests and 5 independent boundary tests PASS; final integrated browser/package/provider acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-023": {
@@ -430,10 +477,15 @@
       "pr": "PR-04",
       "implementation": "Carregar conteúdo sob demanda, com componentes existentes, limites, sanitização e autorização de origem.",
       "acceptance": "Resumo não expõe payload confidencial; HTML e outros artefatos não ganham execução privilegiada.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "tests": [
+        "30 unique scoped backend tests and 5 independent boundary tests PASS; final integrated browser/package/provider acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-024": {
@@ -578,7 +630,7 @@
       "pr": "PR-06",
       "implementation": "Guia curto da Home, estados e limites; docs do contrato, capturas sem dados privados, troubleshooting e evidências.",
       "acceptance": "Nenhuma documentação confunde sessão aberta, conexão, entrega, execução, resultado e verificação.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -673,6 +725,10 @@
     {
       "at": "2026-11-15T21:16:13.464397+00:00",
       "event": "UI PR02/03/04 submitted as one coherent shared-composer/inspection implementation. 28 focal and 196 integrated frontend tests PASS; build PASS. Browser preliminary six checks PASS, final pinned backend rerun pending. Foundation pushed c5294a30."
+    },
+    {
+      "at": "2026-11-15T21:21:05.500622+00:00",
+      "event": "Backend and boundary milestone: 30+5 unique scoped tests PASS. Actual active-artifact-header failure fixed and retained as antecedent. No migration/provider/runtime effect. UI pushed d46b9e0b; package/browser/real campaign pending."
     }
   ]
 }

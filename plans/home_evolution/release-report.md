@@ -71,3 +71,25 @@ incluindo escopo, alvo exato, rascunho/foco/seleção,360px, fallback e403. São
 rodada preliminar contra o servidor iniciado antes das últimas mudanças backend;
 repetição com fontes finais pinadas é necessária. Ver
 `evidence/pr06-browser/preliminary.json`; não substituir por testes SSR.
+
+## PR-01 — projeção autorizada e fronteiras
+
+APIs Homev1 paginam trabalho/resultados/atividade/agentes/observação e resolvem
+alvos exatos. Um UoW de leitura fixa relógio e configuração; consultas batch
+reutilizam a ocorrência Attention e sua autorização. A projeção não depende de
+mensagem operator, preserva claims históricos e distingue aceitação, início
+confirmado, resultado, verificação e cleanup. No overview, uma materialização
+SQL local à statement compartilha Attention; falha mantém os blocos honestos.
+
+Qualificação backend:30 casos únicos PASS (28 Home +2 regressões Attention),
+Ruff/diff-check PASS, conforme `evidence/pr01/qualification.json`. Outros5 casos
+SQLite/ASGI em `evidence/pr06-boundaries/qualification.json` verificam visto
+isolado, autorização e entrega de artefato ativo. A falha real inicial de HTML
+inline foi corrigida nos headers canônicos: attachment para HTML/SVG/XHTML,
+sandbox, nosniff e no-store; storage e autorização existentes preservados.
+
+Não há migration, novo scheduler, chamada de provedor ou efeito de runtime.
+O estado filtrável corresponde a Work state; workspace/agente valem para todos
+os blocos, cujas dimensões nativas não são traduzidas arbitrariamente. A medida
+ampliada ainda excede500ms p95; os relatórios de custo não declaram SLO aprovado.
+Esses testes usam SQLite real e HTTP ASGI em processo, não harness ou browser.

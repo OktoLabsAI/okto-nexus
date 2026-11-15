@@ -883,6 +883,12 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     app.state.observation_correlations = ObservationCorrelationService(observations=app.state.observations,
         repository=deps.repos.observation_correlations, facts=SqliteObservationCorrelationFacts())
     app.state.observation_correlation_proof = NativeObservationCorrelationProof(app.state)
+    from ....application.home import HomeOverviewService
+    from ...outbound.sqlite.home import SqliteHomeQueries
+    app.state.home = HomeOverviewService(factory=deps.connection_factory,
+        access=build_execution_access(deps), queries=SqliteHomeQueries(),
+        attention=app.state.attention, observations=app.state.observations,
+        clock=deps.clock, config=deps.config)
     app.state.workspace_analytics = workspace_analytics
     app.state.workspace_list = workspace_list
     app.state.workspace_health = workspace_health
@@ -959,6 +965,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     app.include_router(routes.build_router(), prefix="/api/v1")
     from .attention import build_router as attention_router
     app.include_router(attention_router(), prefix="/api/v1")
+    from .home import build_router as home_router
+    app.include_router(home_router(), prefix="/api/v1")
     from .observations import management_router as observation_management_router, publish_router as observation_publish_router
     app.include_router(observation_management_router(), prefix="/api/v1")
     app.include_router(observation_publish_router(), prefix="/v1")

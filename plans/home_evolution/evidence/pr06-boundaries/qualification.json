@@ -1,0 +1,65 @@
+{
+  "status": "PASS_FOCAL_BOUNDARIES_AFTER_CONFIRMED_FIX",
+  "scenarios": [
+    "D05",
+    "D06",
+    "D07"
+  ],
+  "unique_final_tests": 5,
+  "initial": {
+    "raw_source_sha256": "f128c9d2914109a9e406fb6b399d45c3127d838fc8d3a65a8ba0d90356cccc63",
+    "public_projection_sha256": "68a1d69f521f446962e52ce18731e4fe5a7b4d3c848281116d9dd1b518947da6",
+    "tests": 3,
+    "failures": 1,
+    "duration_seconds": 17.709,
+    "terminal_tool": "9f48aa",
+    "assertion_tool": "e8ffb1",
+    "exit_code": 1,
+    "source_snapshot_retained": false
+  },
+  "final": {
+    "raw_source_sha256": "9d52e00aa34587f3de3bcb7ca834322c93a0f0c86ddf0c2ecada184fdcb8b0d8",
+    "public_projection_sha256": "674f2bed58518aeacd91606e893a52b1196a9048e52308140062c1a20fd5a8ec",
+    "tests": 5,
+    "failures": 0,
+    "duration_seconds": 32.727,
+    "terminal_tool": "4ceb34",
+    "exit_code": 0,
+    "pytest_reported_seconds": 39.93
+  },
+  "commands": [
+    "rtk proxy .venv/Scripts/python.exe -m pytest tests/home_evolution/test_home_boundaries.py -q --tb=short --junitxml=C:/Users/jpamb/AppData/Local/Temp/home-boundaries-final.xml",
+    "rtk proxy ruff check --select F tests/home_evolution/test_home_boundaries.py"
+  ],
+  "ruff": {
+    "tool": "4f91e0",
+    "exit_code": 0,
+    "note": "Initial .venv python -m ruff had no module (30e9d2). Existing system ruff used; no installation."
+  },
+  "source_pins": {
+    "tests/home_evolution/test_home_boundaries.py": "9b375d71902a83ed05476efee88d3540339309b49563cde2d85ce5282e6f3e0f",
+    "tests/home_evolution/test_home_http.py": "3d42e2d758cd3b39e265db23272dd8bd0b147018ccb3698c25ffbdc8e474cd96",
+    "tests/home_evolution/test_home_queries.py": "7f680e62e6576324cde2a0beebe36fd4863b35c424d170c2eb6fa53168f8657c",
+    "tests/home_evolution/fixtures.py": "de3898c335382729a1f0236d60e226c03e469e546853b9c9d54823d0d3364615",
+    "src/okto_nexus/adapters/inbound/http/routes.py": "c51b4f4f031c3b85fc49772c7bb032a8ebe2a854bfdff3682d72535c570683c5",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "63e683325b210f902be82051c06ccae797ee72cd8d5cbeb2553b2b3f64b06301",
+    "src/okto_nexus/application/home.py": "ad24ddfa5488708587c7bfe553f439919a29bb0c9d2023fff9544ec4d407e2d9",
+    "src/okto_nexus/application/artifacts.py": "4d3848acff8796c6359d50f975348faa6219bfd26c77da7dd026bcc374e2d622"
+  },
+  "contract": {
+    "D05_D06": "Real migrated SQLite: overview, result page and exact target resolve leave canonical rows/inbox and seen state unchanged; explicit mark_seen affects only selected occurrence, not another page or workspace.",
+    "D07": "Actual managed-store uploads and ASGI middleware: worker key cannot read artifact; wrong workspace is 404; HTML/SVG/XHTML content must not execute with operator origin privilege; nosniff required.",
+    "A04_D04_reused_not_recounted": [
+      "tests/home_evolution/test_home_http.py::test_real_agent_and_monitor_keys_cannot_read_home_as_operator",
+      "tests/home_evolution/test_home_queries.py::test_result_artifact_reference_uses_exact_durable_operation_without_paths"
+    ]
+  },
+  "limits": [
+    "Synthetic handoff/result fixture facts; no native/provider execution.",
+    "ASGI TestClient in process, not a socket server or real browser JavaScript execution.",
+    "No claim of all 73 scenarios passing.",
+    "Raw antecedent traceback includes ephemeral test-only credential in fixture repr and remains outside public curation. Public XML is an allowlisted projection.",
+    "Starlette TestClient httpx deprecation warning retained as environment limitation."
+  ],
+  "product_fix_owner": "finish_reader_cache; canonical artifact content route headers only; no storage/auth bypass"
+}

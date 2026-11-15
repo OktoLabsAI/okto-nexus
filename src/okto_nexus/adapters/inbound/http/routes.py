@@ -2405,11 +2405,18 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
         encoded_filename = quote(filename, safe="")
+        active_document = media_type.split(';', 1)[0].strip().lower() in {
+            'text/html', 'application/xhtml+xml', 'image/svg+xml',
+        }
+        disposition = 'attachment' if active_document else 'inline'
         return Response(
             content=payload,
             media_type=media_type,
             headers={
-                "Content-Disposition": (f"inline; filename*=UTF-8''{encoded_filename}")
+                "Content-Disposition": (f"{disposition}; filename*=UTF-8''{encoded_filename}"),
+                "Content-Security-Policy": "sandbox; default-src 'none'; base-uri 'none'; form-action 'none'",
+                "X-Content-Type-Options": "nosniff",
+                "Cache-Control": "no-store",
             },
         )
 
