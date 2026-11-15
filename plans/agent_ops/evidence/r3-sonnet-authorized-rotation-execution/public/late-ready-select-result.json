@@ -1,0 +1,15 @@
+{
+  "status": "SAME_OWNER_READY_OBSERVED",
+  "owner_selection_sha256": "ef487c22ebd0d1641178105f0d3405381e7f5494b6486465120c18c5e583fb56",
+  "original_start_returned_sha256": "53fdf4268ee39c680d6d9a612108e6ca91559186ce86781c564914252782b6e9",
+  "original_start_cli_returncode": 3,
+  "original_failure_preserved": true,
+  "generation": "a59778be231e827fdbfd95ec947e5103",
+  "cycle_id": "83385b0dffad1b22ee9fdd49842429ca",
+  "service_actions": 0,
+  "provider_calls": 0,
+  "restart_or_start_retry": false,
+  "physical_exit_claimed": false,
+  "next_step": "Separate original canonical watch selection.",
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

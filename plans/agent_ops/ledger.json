@@ -13991,6 +13991,22 @@
         "plans/agent_ops/evidence/r3-post-svc20-paid-context-preparation/manifest.json"
       ],
       "acceptance_promoted": false
+    },
+    "r3_sonnet_authorized_rotation_execution": {
+      "status": "AUTHORIZED_ROTATION_IMPORTED_ONCE_EPOCH2_SERVICES_LIVE_NO_MODEL",
+      "summary": "Specific user authorization recorded; one canonical rotation and protected import epoch1→2, producer/consumer0/job0/readersjoined/no force, plaintext ACL verified. StartupCLI3 preserved, same-owner lateREADY without start replay; pre-context argparse failure preserved and additive2PASS compat used. Both services/observers live, no cleanup or model turn. Binding artifacts excluded;125/5/2 unchanged. OS window unscheduled.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/public/rotation-specific-authorization.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/public/rotation-import-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/public/start-returned.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/public/late-ready-select-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/supplements/rotation-cli-compat-qualification.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/manifest.json"
+      ],
+      "acceptance_promoted": false,
+      "provider_turns": 0,
+      "services_still_live": true
     }
   },
   "history": [
@@ -15829,6 +15845,24 @@
         "plans/agent_ops/evidence/r3-post-svc20-paid-context-preparation/manifest.json"
       ],
       "acceptance_promoted": false
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_authorized_rotation_execution",
+      "status": "AUTHORIZED_ROTATION_IMPORTED_ONCE_EPOCH2_SERVICES_LIVE_NO_MODEL",
+      "summary": "Specific user authorization recorded; one canonical rotation and protected import epoch1→2, producer/consumer0/job0/readersjoined/no force, plaintext ACL verified. StartupCLI3 preserved, same-owner lateREADY without start replay; pre-context argparse failure preserved and additive2PASS compat used. Both services/observers live, no cleanup or model turn. Binding artifacts excluded;125/5/2 unchanged. OS window unscheduled.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/public/rotation-specific-authorization.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/public/rotation-import-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/public/start-returned.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/public/late-ready-select-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/supplements/rotation-cli-compat-qualification.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/manifest.json"
+      ],
+      "acceptance_promoted": false,
+      "provider_turns": 0,
+      "services_still_live": true
     }
   ],
   "r3_native_bounded_supervisor_execution": {

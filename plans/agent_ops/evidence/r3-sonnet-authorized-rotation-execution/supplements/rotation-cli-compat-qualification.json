@@ -1,0 +1,35 @@
+{
+  "status": "ADDITIVE_CLI_COMPAT_OFFLINE_QUALIFIED",
+  "tests": {
+    "passed": 2,
+    "seconds": 0.01,
+    "tool": "ea1cbe",
+    "effects": 0
+  },
+  "files": {
+    "rotation_cli_compat.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_cli_compat.py",
+      "sha256": "cd0f72edb2e3a03e1dff78cfef9db5b6a970052ad5630a7a43a3aa8143207eb1"
+    },
+    "test_rotation_cli_compat.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_rotation_cli_compat.py",
+      "sha256": "3e070bb79f9611f6a8e0804c57ad1592b623fe47ed166a17b3d52390cdc18b89"
+    },
+    "rotation_executor.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_executor.py",
+      "sha256": "a038e1f4ff6b614d8f9d4cb598ce687735070b7339e43f7730e459af49cf7cb1"
+    },
+    "rotation_producer.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_producer.py",
+      "sha256": "6e3f548810135082ccbcc0484342393c8d280aa87319824308deea43abec95a4"
+    }
+  },
+  "original_failure": {
+    "tool": "1dda67",
+    "error_type": "AttributeError",
+    "root_observation": "bf763d: no storage-consent-reserved or result; no transfer selected",
+    "cause": "argparse creates authorization_sha256; frozen load_context accessed authorization_sha before Context construction",
+    "originals_preserved": true
+  },
+  "scope": "Only parser attribute spelling and producer entry substitution; original Context and producer/transfer effects reused. Compat SHA propagated to producer; no approval/storage/provider invocation in tests."
+}

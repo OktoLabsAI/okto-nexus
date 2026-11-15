@@ -2285,3 +2285,11 @@ Observador durável e helpers de SVC-T18/T21/T29: **29 testes sintéticos PASS /
 Pós-SVC20: **9 testes offline PASS**; contexto pago final: **6 testes de delta PASS**, revisão independente sem bloqueadores. Retomada única somente após SVC20 real com zero admissões, DONE/epoch2, tarefa/contexto e saídas físicas comprovados. Connector recebe namespace/coorte/observadores novos e tags duplas; Nexus preserva o namespace original. Saída histórica não prova encerramento da nova coorte. Timeout45s do produto não é limite externo do wrapper, que retém o filho sem replay/force.
 
 Nenhum serviço/provedor/eventoSO executado, plano pago selecionado ou recibo fabricado. Ação histórica PID34276 já consumida e não repetida. Autorizações específicas de armazenamento/revogação e coordenação SO permanecem pendentes. **125 VERIFIED /5 IN_PROGRESS /2 NOT_RUN** inalterados. [Evidência e limites](plans/agent_ops/evidence/r3-post-svc20-paid-context-preparation/review.json).
+
+## 2026-11-15 — Rotação autorizada e importação única Sonnet epoch2
+
+Autorização específica do usuário registrada: revogação da chave perdida e armazenamento plaintext no arquivo próprio com ACL usuário+SYSTEM. Rotação/importação únicas confirmadas epoch1→2, produtor/consumidor0, job0, leitores unidos, sem force. Nenhum segredo/vault/rawprivate foi publicado.
+
+Start Nexus original retornou3/SERVICE_UNREACHABLE e permanece falho; observação posterior qualificou READY na mesma geração/ciclo, sem repetir start. Causa do transporte não determinada. Primeira tentativa de armazenamento falhou antes de Context/reserva por atributo argparse incorreto; compatibilidade aditiva com2 testes PASS preservou fontes congeladas e efeitos originais. Ambos serviços/observadores permanecem vivos neste marco, sem cleanup/saída física alegados.
+
+Transferência antiga UNCONFIRMED preservada; nenhum artefato de binding em andamento ou turno de provedor incluído. Janela SO ainda não agendada e force não autorizado. **125 VERIFIED /5 IN_PROGRESS /2 NOT_RUN**, sem promoção. [Evidência pública](plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/review.json).

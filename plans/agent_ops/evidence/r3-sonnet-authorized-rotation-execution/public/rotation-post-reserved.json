@@ -1,0 +1,12 @@
+{
+  "status": "RESERVED_BEFORE_POST",
+  "method": "POST",
+  "path": "/api/v1/agents/m1-sonnet-remote/regenerate-key",
+  "agent_id": "m1-sonnet-remote",
+  "expected_pre_rotation_epoch": 1,
+  "max_attempts": 1,
+  "atomic_compare_and_swap": false,
+  "rotation_plan_sha256": "5e9b827c0141d95c9b6d88cf7fec47344325449a1d85a25b43f989256e92e2c2",
+  "authorization_receipt_sha256": "38e25e9df15e121e5b77261ee45011b15d3cf2786a7669d03edcaa22975be31a",
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

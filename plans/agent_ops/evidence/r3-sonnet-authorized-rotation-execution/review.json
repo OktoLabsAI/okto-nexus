@@ -1,0 +1,86 @@
+{
+  "status": "AUTHORIZED_ROTATION_IMPORTED_ONCE_EPOCH2_SERVICES_LIVE_NO_MODEL",
+  "actual_rotation": {
+    "root_tool": "1d662e",
+    "wrapper_returncode": 0,
+    "post_count": 1,
+    "consumer_count": 1,
+    "old_epoch": 1,
+    "current_epoch": 2,
+    "result_sha256": "6c2aac0f5f96837dca5dd8ece02883cba7c6a56a3625f5780f1c648879b264f5",
+    "producer_exit": 0,
+    "consumer_exit": 0,
+    "active_job_processes_after": 0,
+    "readers_joined": true,
+    "forced_cleanup": false
+  },
+  "authorization": {
+    "receipt_sha256": "38e25e9df15e121e5b77261ee45011b15d3cf2786a7669d03edcaa22975be31a",
+    "specific_storage_and_revocation": "AUTHORIZED_BY_USER",
+    "plaintext_storage": "Actual file backend, not encryption; exact owned path with user+SYSTEM ACL verified.",
+    "os_event_window": "NOT_YET_SCHEDULED",
+    "force_service_stop_authorized": false
+  },
+  "startup": {
+    "original_cli_returncode": 3,
+    "reason": "SERVICE_UNREACHABLE",
+    "observation_error": "transient_transport",
+    "original_start_returned_sha256": "53fdf4268ee39c680d6d9a612108e6ca91559186ce86781c564914252782b6e9",
+    "original_private_stdout_reference_only_sha256": "634642eb521d7a17e05661f06eb9c72fea08a8adf52ade86da97c51f51b2dab2",
+    "later_same_owner_ready": true,
+    "late_ready_tool": "8ef7ec",
+    "no_start_replay": true,
+    "generation": "a59778be231e827fdbfd95ec947e5103",
+    "cycle_id": "83385b0dffad1b22ee9fdd49842429ca",
+    "cause_limit": "Original transport failure cause not established. Later READY is new observation, not rewriting the failed CLI result.",
+    "preexecution_review_fix": "Initial additive validator expected a state key absent from qualified identity-only selection; root8caf28 caught it before execution. Removed that test, preserved capture READY checks."
+  },
+  "compatibility": {
+    "initial_tool": "1dda67",
+    "initial_error": "AttributeError",
+    "before_context": true,
+    "root_absence_observation": "bf763d: no storage-consent-reserved/result and no transfer selected",
+    "cause": "Frozen argparse creates authorization_sha256 but load_context read authorization_sha.",
+    "additive_wrapper": "Parser spelling fixed; original Context/effect code/source pins retained. Producer argv changes only entry wrapper and propagated compat SHA.",
+    "offline_tests_passed": 2,
+    "offline_test_tool": "ea1cbe",
+    "approve_storage_tool": "57c565",
+    "approve_storage_returncode": 0
+  },
+  "operator": {
+    "root_tool": "6f94a4",
+    "status": "authenticated",
+    "profile": "m1-sonnet-human",
+    "origin": "http://127.0.0.1:58631",
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "provenance": "Root execution report; no reconstructed raw CLI receipt or credential copied."
+  },
+  "service_state": {
+    "nexus": "LIVE_READY",
+    "connector": "LIVE_READY",
+    "root_retained_watch_sessions": [
+      62571,
+      64647
+    ],
+    "extra_startup_watch_session": 59024,
+    "cleanup_claimed": false,
+    "physical_exit_claimed": false,
+    "provenance": "Root live observation at rotation milestone; watch-started receipts retained, not future liveness guarantee."
+  },
+  "boundaries": {
+    "old_failed_transfer": "UNCONFIRMED_PRESERVED",
+    "old_profile_replay": false,
+    "binding_completion": "NOT_CLAIMED_IN_THIS_MILESTONE",
+    "binding_artifacts_copied": 0,
+    "provider_turns": 0,
+    "agent_service_actions": 0,
+    "os_events": 0
+  },
+  "scenario_counts": {
+    "VERIFIED": 125,
+    "IN_PROGRESS": 5,
+    "NOT_RUN": 2
+  },
+  "acceptance_promoted": false,
+  "retention": "Explicit public artifacts and additive source/tests only; no vault, raw private stdout, DB, token, key, cookie, nonce, or credential value copied."
+}

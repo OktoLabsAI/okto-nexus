@@ -1,0 +1,42 @@
+{
+  "status": "ROTATED_ONCE_IMPORTED_ONCE",
+  "agent_id": "m1-sonnet-remote",
+  "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+  "old_epoch": 1,
+  "current_epoch": 2,
+  "rotation_post_count": 1,
+  "consumer_count": 1,
+  "protected_transfer": {
+    "status": "TRANSFERRED_ONCE",
+    "producer_exit": 0,
+    "consumer_exit": 0,
+    "active_job_processes_after": 0,
+    "forced_owned_cleanup": false,
+    "effect_guard_required": true,
+    "effect_gates_allowed": [
+      "producer",
+      "consumer"
+    ],
+    "public_ipc_readers_joined": true
+  },
+  "acl": [
+    {
+      "name": "connector-state",
+      "exact_user_system_full_control": true
+    },
+    {
+      "name": "vault",
+      "exact_user_system_full_control": true
+    },
+    {
+      "name": "secrets.json",
+      "exact_user_system_full_control": true
+    }
+  ],
+  "original_transfer_preserved_unconfirmed": true,
+  "old_profile_replayed": false,
+  "provider_turns": 0,
+  "rotation_plan_sha256": "5e9b827c0141d95c9b6d88cf7fec47344325449a1d85a25b43f989256e92e2c2",
+  "authorization_receipt_sha256": "38e25e9df15e121e5b77261ee45011b15d3cf2786a7669d03edcaa22975be31a",
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

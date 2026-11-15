@@ -1,0 +1,7 @@
+# Authorized Sonnet agent rotation and import
+
+The user's specific storage/revocation authorization was recorded. One canonical rotation revoked the lost epoch1 credential and one protected PTY import established epoch2. Producer/consumer exits are0, owned job process count0, readers joined and no forced cleanup. The actual file vault remains plaintext, protected by verified current-user and SYSTEM ACL; no encryption claim is made. Credential bytes and vault files are excluded here.
+
+Original Nexus start returned3/SERVICE_UNREACHABLE. Later qualified observation found the same generation/cycle READY; no start was replayed and the original failure stays intact. Its transport cause is not established. The first storage command failed before Context/reservation due the argparse attribute spelling; an additive two-test-qualified wrapper preserves frozen effect code and redirects only the producer entry. A pre-execution late-ready validator mistake was also caught and corrected before effects.
+
+Both services and their retained observers remain live at this milestone. No cleanup or physical exit is claimed. The original lost transfer remains UNCONFIRMED. Binding is progressing independently and none of its moving artifacts is included. No provider turn, OS event or agent-selected lifecycle effect. OS event scheduling remains pending, and force is not authorized. Scenarios remain125 VERIFIED/5 IN_PROGRESS/2 NOT_RUN.
