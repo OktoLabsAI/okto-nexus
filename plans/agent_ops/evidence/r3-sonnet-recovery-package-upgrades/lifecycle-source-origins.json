@@ -1,0 +1,52 @@
+{
+  "recovery_observation.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\reused_observation.py",
+    "source_sha256": "9f15dbc9b764c6760936bdaba3d071156b0714e481bec69eca6f246de7db427c",
+    "replacements": [
+      [
+        "from request_context import ",
+        "from recovery_context import "
+      ]
+    ]
+  },
+  "recovery_nexus.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1.py",
+    "source_sha256": "9dace6cb524327185c4ca7f2daf5ecae4c3ca22ed48a0ba7a8cf2ee2fd24c583",
+    "replacements": [
+      [
+        "from request_context import ",
+        "from recovery_context import "
+      ],
+      [
+        "from reused_observation import ",
+        "from recovery_observation import "
+      ],
+      [
+        "pin(X.P['service_context'])",
+        "X.require_migrated('nexus')"
+      ]
+    ]
+  },
+  "recovery_connector.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\connector_lifecycle_compat.py",
+    "source_sha256": "35301f6319f14f974f07b7beaa34f7b2704b4b3a344b199fe1e4a7d9be7b369b",
+    "replacements": [
+      [
+        "from request_context import ",
+        "from recovery_context import "
+      ],
+      [
+        "from reused_observation import ",
+        "from recovery_observation import "
+      ],
+      [
+        "X.require_ready();canonical_absence(X,'connector')",
+        "X.require_nexus_ready();X.require_migrated('connector');canonical_absence(X,'connector')"
+      ],
+      [
+        "'--json',\n        '--state-dir'",
+        "'--non-interactive','--json',\n        '--state-dir'"
+      ]
+    ]
+  }
+}

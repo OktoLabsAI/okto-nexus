@@ -1,0 +1,32 @@
+{
+  "roundtrip": true,
+  "status": "PASS",
+  "scope": "NEW_TEMP_SYNTHETIC_ONLY",
+  "real_own_vault_touched": false,
+  "temporary_and_final_acl_checks": [
+    {
+      "path_role": "temporary",
+      "exact_current_user_system_full_control": true,
+      "inherited": true
+    },
+    {
+      "path_role": "final",
+      "exact_current_user_system_full_control": true,
+      "inherited": true
+    },
+    {
+      "path_role": "temporary",
+      "exact_current_user_system_full_control": true,
+      "inherited": true
+    },
+    {
+      "path_role": "final",
+      "exact_current_user_system_full_control": true,
+      "inherited": true
+    }
+  ],
+  "sentinel_removed": true,
+  "file_empty_after_removal": true,
+  "source_sha256": "16138d07a8b3db03b0e3e09776a3484767f5168315eec901098fa1e9258ac6e0",
+  "helper_sha256": "9f15dbc9b764c6760936bdaba3d071156b0714e481bec69eca6f246de7db427c"
+}

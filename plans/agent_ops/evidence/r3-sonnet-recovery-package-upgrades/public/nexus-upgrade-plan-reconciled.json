@@ -1,0 +1,39 @@
+{
+  "status": "CANONICAL_PLAN_RECONCILED_ORIGINAL_WRAPPER_FAILED",
+  "document_sha256": "3bd9ed7335ac8d802cda19b08d641466a57d45eb794c766acec88a7cb922d11b",
+  "stdout_sha256": "88eeb181643307b8b29e75f34f3269de60f812f8d981d8546aa47daa3183ff31",
+  "original_reservation_sha256": "b20e6e9136ac67243e2a2089518bba1845a5a88b6207dcef25b5236c4f05156c",
+  "compat_sha256": "c67b46ae4f422ea04058268a39d5c1381f84373f1651ccb361b000768b3a1745",
+  "review": {
+    "component": "server",
+    "plan_revision": "75695aaf19ceb65fa85f762f74fe1b9da1e1e9d763b4bfc24fe809381716439c",
+    "source_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+    "target_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "source_generation": "030c6b0b5ca03e4fcba6c78692fb4033",
+    "candidate_package": {
+      "version": "0.3.3",
+      "digest": "08e40b7d71d5ff9f598259779a6320b9393a729e48012b074d11547f9b34d424"
+    },
+    "candidate_core": {
+      "version": "0.0.14",
+      "digest": "5e95cee4ba36ad7f10c2a638c46d5a8cac2c4daac41117d123cf78c12ea75930"
+    },
+    "unchanged_execution_scope": true,
+    "task_absent": true,
+    "model_admissions": 0,
+    "campaign_component": "nexus"
+  },
+  "original_wrapper": {
+    "exit_code": 1,
+    "code": "UPGRADE_SCOPE_CHANGED",
+    "root_tool": "db7921"
+  },
+  "child_exit_code_derived_from_frozen_control_flow": 0,
+  "direct_child_exit_receipt_available": false,
+  "child_exit_evidence": "Derived from frozen migration control flow and root tool db7921: validate_upgrade is invoked only inside returncode==0; UPGRADE_SCOPE_CHANGED is its exact first failed guard. No original returned receipt was written.",
+  "upgrade_plan_reexecuted": false,
+  "apply_selected": false,
+  "provider_calls": 0,
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

@@ -1,0 +1,64 @@
+{
+  "status": "OFFLINE_CONTEXT_DELTA_PASS_PENDING_PEER_AND_VALID_TRANSFER",
+  "files": {
+    "work_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work_context.py",
+      "sha256": "fa243be2b59298181ac4bc6ca08926be96235f6e17cfab8273575b0c28b5e5ea",
+      "bytes": 27015
+    },
+    "test_work_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\test_work_context.py",
+      "sha256": "7167fe9ecd5c50dfa6b64c53e40ab678f618e64a62ea779e566379306a0a9349",
+      "bytes": 11249
+    },
+    "work-entry.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-entry.py",
+      "sha256": "1bc82e2fbc7b3be1c14fa87a5cf0294ca110f2a28b2aff204d07968be204cc46",
+      "bytes": 549
+    },
+    "build_work_plan.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\build_work_plan.py",
+      "sha256": "91d240a37e30aa28ead1bdda00ce5d70f4de56b67c16aa0d990b92c802545585",
+      "bytes": 7099
+    }
+  },
+  "tests": {
+    "passed": 11,
+    "failures": 0,
+    "seconds": 2.833,
+    "tool": "08fb4c",
+    "new_cases": 3,
+    "antecedent_final_eleven": "a48ab9"
+  },
+  "ruff": {
+    "selection": "F",
+    "status": "PASS",
+    "tool": "e93807",
+    "default_selection": "177 E402/E701/E702 style findings in compact campaign sources; no formatting rewrite selected",
+    "default_selection_tool": "f5be13"
+  },
+  "compile": {
+    "files": 4,
+    "status": "PASS"
+  },
+  "prior_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-context-qualification.json",
+    "sha256": "065ac896feb97aae907f69eec1bd6f09ee4039709b8490331ac007cbc9d7c4dc",
+    "bytes": 1898
+  },
+  "frozen_components": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-runtime-freeze.json",
+    "sha256": "35850ec563750ef62d4086aa3ffa266532003b9b36ebec2d7abfd1588f94fcc3",
+    "bytes": 4171
+  },
+  "contract": [
+    "Every helper exception after retained Popen becomes PendingWorker, including metadata/evidence IO failures.",
+    "A stopped launcher is never proof that its runtime exited. Require exact runtime PID, parent and birth plus retained handle exit.",
+    "Missing or mismatched runtime identity remains unknown; no parallel profile/control command.",
+    "Context close retains its own runner for up to 7200 seconds observing the console only, with no new control. Timeout remains UNKNOWN.",
+    "Existing service observers remain separate from the console observer; neither implies provider settlement."
+  ],
+  "provider_calls": 0,
+  "service_actions": 0,
+  "builder_executed": false
+}

@@ -13930,6 +13930,20 @@
         "plans/agent_ops/evidence/r3-credential-stdin-consent-fix/manifest.json"
       ],
       "acceptance_promoted": false
+    },
+    "r3_sonnet_recovery_package_upgrades": {
+      "status": "PACKAGE_QUALIFIED_BOTH_CANONICAL_UPGRADES_APPLIED_SERVICES_NOT_STARTED",
+      "summary": "New isolated package1002payloads/9installed consentPASS; producer/executor11+syntheticPTY/ACL and console11 qualified. Real prepare and canonical upgrades both applied with tasks/owners absent. Nexus original plan wrapper failure preserved; additive server-label reconciliation, no plan regeneration or fabricated original receipt. No install/start/rotation/import/provider. Specific plaintext/revocation authorization pending; original transfer remainsUNCONFIRMED; statuses125/5/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/rotation-qualification.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/public/nexus-upgrade-plan-reconciled.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/public/nexus-upgrade-apply-returned.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/public/connector-upgrade-apply-returned.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/manifest.json"
+      ],
+      "acceptance_promoted": false,
+      "provider_calls": 0
     }
   },
   "history": [
@@ -15698,6 +15712,22 @@
         "plans/agent_ops/evidence/r3-credential-stdin-consent-fix/manifest.json"
       ],
       "acceptance_promoted": false
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_recovery_package_upgrades",
+      "status": "PACKAGE_QUALIFIED_BOTH_CANONICAL_UPGRADES_APPLIED_SERVICES_NOT_STARTED",
+      "summary": "New isolated package1002payloads/9installed consentPASS; producer/executor11+syntheticPTY/ACL and console11 qualified. Real prepare and canonical upgrades both applied with tasks/owners absent. Nexus original plan wrapper failure preserved; additive server-label reconciliation, no plan regeneration or fabricated original receipt. No install/start/rotation/import/provider. Specific plaintext/revocation authorization pending; original transfer remainsUNCONFIRMED; statuses125/5/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/rotation-qualification.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/public/nexus-upgrade-plan-reconciled.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/public/nexus-upgrade-apply-returned.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/public/connector-upgrade-apply-returned.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/manifest.json"
+      ],
+      "acceptance_promoted": false,
+      "provider_calls": 0
     }
   ],
   "r3_native_bounded_supervisor_execution": {

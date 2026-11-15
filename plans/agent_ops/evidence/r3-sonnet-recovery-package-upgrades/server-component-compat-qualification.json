@@ -1,0 +1,32 @@
+{
+  "status": "ADDITIVE_COMPAT_OFFLINE_QUALIFIED_PENDING_ROOT_REVIEW",
+  "original_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json",
+    "sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+    "bytes": 13280
+  },
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_server_component_compat.py",
+    "sha256": "c67b46ae4f422ea04058268a39d5c1381f84373f1651ccb361b000768b3a1745",
+    "bytes": 5293
+  },
+  "tests": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_server_component_compat.py",
+    "sha256": "f6cdc626d3911e9ce301b85474e520ce339dbeea7030bb070e040b08c2339502",
+    "bytes": 1401
+  },
+  "test_result": {
+    "passed": 3,
+    "seconds": 0.141,
+    "tool": "69ee72",
+    "scope": "Only validation alias/component/scope guards; no product command or service"
+  },
+  "historical_failure": {
+    "wrapper_exit": 1,
+    "code": "UPGRADE_SCOPE_CHANGED",
+    "root_tool": "db7921",
+    "original_return_receipt": false,
+    "child_exit_zero_is_derived_not_direct": true
+  },
+  "effects": 0
+}

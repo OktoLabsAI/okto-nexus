@@ -1,0 +1,54 @@
+{
+  "status": "INSTALLED_CONSENT_DELTA_PASS",
+  "counts": {
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "elapsed_seconds": 6.49,
+  "run_tool": "0816c8",
+  "completion_tool": "d8343a",
+  "installation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\installation.json",
+    "sha256": "a9f03ee93bfff21c5ea3fa530c4c2259180770027a0674c82fbe0fb774fa221c",
+    "bytes": 348124
+  },
+  "module_origins": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\module-origins.json",
+    "sha256": "31262661d9f10f14bd445d683d87e15ab84150db49fc36540a3e647da3e0a774",
+    "bytes": 985
+  },
+  "xml": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\installed.xml",
+    "sha256": "ac7f0a5a0b0b33a43505d50cdf0cb3c705ad2d64d1145e95b374660f8520060c",
+    "bytes": 1484
+  },
+  "test": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\test_installed_credential_stdin_consent.py",
+    "sha256": "591fde75185901d84d0c3ee408264bf19c6809bb1738160f36af9c2762c8ef6c",
+    "bytes": 6724
+  },
+  "runner": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\run_installed_credential_stdin_consent.py",
+    "sha256": "5f2062caf0d6ea4944155798033054b8ceae3ba98421088657f7a382721747b4",
+    "bytes": 1433
+  },
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\run_installed_credential_stdin_consent.py"
+  ],
+  "product_origin": "New installed prefix; no repository source injection.",
+  "source_commit": "28e80939",
+  "tests_scope": "Synthetic state/draft/handoff plus installed CLI entrypoints and credential reader. HTTP replaced before connection; fake credential only.",
+  "network_connections": 0,
+  "service_actions": 0,
+  "provider_calls": 0,
+  "personal_credential_reads": 0,
+  "package_mutated": false,
+  "remaining_paid_binding": "Require actual rotation/import result and canonical DONE recovery profile/binding with same server/agent and credential epoch2. Old transfer UNCONFIRMED remains immutable. No paid builder or provider selected."
+}

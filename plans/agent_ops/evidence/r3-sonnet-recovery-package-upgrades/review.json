@@ -1,0 +1,94 @@
+{
+  "status": "PACKAGE_QUALIFIED_BOTH_CANONICAL_UPGRADES_APPLIED_SERVICES_NOT_STARTED",
+  "package": {
+    "installed_payloads_verified": 1002,
+    "root_tool": "985220",
+    "connector_commit": "28e8093997849ba47a018e5d4728f8b3535be4b1",
+    "installation_sha256": "a9f03ee93bfff21c5ea3fa530c4c2259180770027a0674c82fbe0fb774fa221c",
+    "unchanged_nexus_and_core": true
+  },
+  "qualification": {
+    "installed_consent": {
+      "passed": 9,
+      "completion_tool": "d8343a"
+    },
+    "producer_executor_fixtures": {
+      "passed": 11
+    },
+    "synthetic_actual_pty": "PASS; sentinel only, installed material sink, no HTTP/model",
+    "file_acl_canary": "PASS; separate synthetic state, final and temporary file ACL, sentinel removed",
+    "lifecycle_fixtures": 7,
+    "server_component_adapter_fixtures": 3,
+    "console_context_fixtures": 11,
+    "peer_review": "PASS for consent source, console post-launch retention and rotation executor after lexical reparse guard correction. These counts are distinct qualification groups, not full acceptance suites."
+  },
+  "actual_upgrade_sequence": {
+    "prepare": {
+      "tool": "bbd5ae",
+      "old_tasks_absent": true,
+      "selected_data_equal": true
+    },
+    "nexus_plan": {
+      "original_wrapper_exit": 1,
+      "code": "UPGRADE_SCOPE_CHANGED",
+      "tool": "db7921",
+      "cause": "Campaign label nexus differs from canonical component server.",
+      "original_return_receipt_created": false,
+      "child_exit_zero_evidence": "Derived from frozen control flow and exact raised guard; no direct child receipt available.",
+      "reconciliation_tool": "ec3942",
+      "plan_regenerated": false
+    },
+    "connector_plan": {
+      "wrapper_exit": 0,
+      "tool": "a80aaa"
+    },
+    "nexus_apply": {
+      "session": 47095,
+      "tool": "4aa590",
+      "exit_code": 0,
+      "revision": "75695aaf19ceb65fa85f762f74fe1b9da1e1e9d763b4bfc24fe809381716439c"
+    },
+    "connector_apply": {
+      "session": 63804,
+      "tool": "79ae22",
+      "exit_code": 0,
+      "revision": "1ab9f629325eb9ef8e549c7dede2e71a09257dcd20b945ff0a5cde1efce74727"
+    },
+    "post_apply": "Both wrappers revalidated task absence and canonical owner absence; exact target contexts were compared and hashed. No raw upgrade documents or context environment bodies are retained here."
+  },
+  "exception_authorization": {
+    "status": "QUESTION_PENDING_AT_THIS_MILESTONE",
+    "specific_receipt_created": false,
+    "plaintext_storage_consent_selected": false,
+    "key_revocation_or_rotation_selected": false
+  },
+  "not_executed": [
+    "new service install",
+    "new service start",
+    "real file-vault credential storage",
+    "key rotation",
+    "credential import",
+    "Sonnet setup/model/work"
+  ],
+  "original_transfer_preserved": "UNCONFIRMED; no replay or retroactive success.",
+  "codex_accounting_unchanged": {
+    "tokens": 579154,
+    "reservations": 16
+  },
+  "sonnet_admissions": 0,
+  "acceptance_promoted": false,
+  "scenario_counts": {
+    "VERIFIED": 125,
+    "IN_PROGRESS": 5,
+    "NOT_RUN": 2
+  },
+  "curation": "Explicit public projections and qualified source/test manifests only; excludes private output, raw upgrade documents, context environment bodies, tokens, nonce and key values.",
+  "root_rotation_freeze_verification": {
+    "tool": "c9415b",
+    "pins": 15,
+    "mismatches": 0,
+    "rotation_plan_sha256": "5e9b827c0141d95c9b6d88cf7fec47344325449a1d85a25b43f989256e92e2c2",
+    "rotation_freeze_sha256": "7e24348777097ac94397602301c179c995b6e97f624e4716ae52b5b213bcdb90",
+    "specific_authorization_pending": true
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "state": "RESERVED_BEFORE_DISPATCH",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus_connector.cli.main",
+    "--non-interactive",
+    "--json",
+    "--state-dir",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "service",
+    "upgrade-apply",
+    "--plan-file",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\private\\connector-upgrade-plan.json",
+    "--expected-revision",
+    "1ab9f629325eb9ef8e549c7dede2e71a09257dcd20b945ff0a5cde1efce74727"
+  ],
+  "model_admissions": 0,
+  "force_used": false,
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

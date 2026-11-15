@@ -1,0 +1,30 @@
+{
+  "returncode": 0,
+  "projection": {
+    "plan_revision": "1ab9f629325eb9ef8e549c7dede2e71a09257dcd20b945ff0a5cde1efce74727"
+  },
+  "stdout_sha256": "c22716251889f8a644a810e326c2c2275839f3c5ef5996ada3c8ebf892097bac",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "wrapper_exit_confirmed": true,
+  "review": {
+    "component": "connector",
+    "plan_revision": "1ab9f629325eb9ef8e549c7dede2e71a09257dcd20b945ff0a5cde1efce74727",
+    "source_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+    "target_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "source_generation": "a394ca5fa3f36d932d3ab6e4a6cf94e9",
+    "candidate_package": {
+      "version": "0.0.12",
+      "digest": "4bbbf26202e040c09181c9b8baa87bcf01630b89c5b6ba53faed99d2480fb2e5"
+    },
+    "candidate_core": {
+      "version": "0.0.14",
+      "digest": "5e95cee4ba36ad7f10c2a638c46d5a8cac2c4daac41117d123cf78c12ea75930"
+    },
+    "unchanged_execution_scope": true,
+    "task_absent": true,
+    "model_admissions": 0
+  },
+  "document_sha256": "440ef1352b65ad2817f495df9e4c194b6d2c8c2492a032fd480b738272e581d8",
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

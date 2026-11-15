@@ -1,0 +1,150 @@
+{
+  "status": "PROPOSED_NOT_SELECTED_NO_LIVE_EFFECTS",
+  "scope": "Same own canonical identity/workspace; explicit revocation of lost epoch1 key, protected replacement import, new remote setup root selecting existing objects. Old failed transfer is never replayed.",
+  "authority_boundary": "Original transfer plan excluded file plaintext storage and retry/reissue/rotate after unknown/lost transfer. This is a new concrete exception proposal, not implicit replay authorization. Root will obtain the specific storage/revocation selection before real effects.",
+  "basis": {
+    "diagnosis": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-failure-diagnosis.json",
+      "sha256": "da64693697e3e2bf3c9383c080d9c959a3de775876ef5b5f869845c645425fbe",
+      "bytes": 3938
+    },
+    "old_transfer_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-plan.json",
+      "sha256": "e56ae6fc22d5af02adc9687aaa8ee476846c1d7e09e43c030109cf9ec71820cd",
+      "bytes": 9020
+    },
+    "old_failed_transfer": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-transfer-result.json",
+      "sha256": "bcfaf683c8e0bc435b9a1b1e3c9ef731dd3f45d5f9d8b469b4a74e6b91468905",
+      "bytes": 383
+    },
+    "old_handoff": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-host-handoff.json",
+      "sha256": "928ba7f125c81dc5f18abd7d2d152dd5c5b0960135cea3f5d80174907b7c32b4",
+      "bytes": 827
+    },
+    "windows_synthetic_canary": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-keyring-canary-dw9av9bu\\canary-result.json",
+      "sha256": "181f6c5eae2ddcbd4242c685b65d681e90f08cf6c3ef84ca637d24913ccaa600",
+      "bytes": 788
+    }
+  },
+  "identity": {
+    "agent_id": "m1-sonnet-remote",
+    "credential_epoch": 1,
+    "review_revision": "37d5ac60c41c875a7ca1f604ab0cd5aea55d108226a23c2eacdcd75c32d01aa3",
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "setup_run_id": "m1-sonnet-remote-setup-01",
+    "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52"
+  },
+  "new_setup_run_id": "m1-sonnet-remote-setup-02",
+  "new_profile": "m1-sonnet-remote-recovery02",
+  "identity_alias": "m1-sonnet-remote",
+  "storage_recommended": {
+    "backend": "restricted-file",
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\vault\\secrets.json",
+    "plaintext": true,
+    "encrypted": false,
+    "boundary": "Protected Windows ACL on ownstate/vault before any real material; only current-user SID and SYSTEM full control, protected DACL. Parent directory and temporary files must inherit same restricted ACL; reject reparse points. Verify effective ACL after atomic replacement.",
+    "environment": {
+      "OKTO_NEXUS_CONNECTOR_VAULT": "file"
+    },
+    "approval_method": "Installed canonical _approve_fallback invoked separately with credential_stdin=False and affirmative input selected explicitly by root; persists only own StateStore preference. No manual checkpoint editing, credential input, HTTP or identity creation in this step.",
+    "secret_scope": "Only replacement canonical agent key for own m1-sonnet-remote identity. No operator password/session, Claude account credentials, or personal auth file is copied.",
+    "retention": "Normal stop/uninstall preserves own data including this file; no secure-deletion claim. Credential stays valid until later explicitly selected revoke/rotation."
+  },
+  "alternative_os_backend": {
+    "packages_local": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-keyring-canary-dw9av9bu\\dependencies.json",
+    "synthetic_canary": "PASS; unique SERVICE+username only, stored/resolved/deleted, no personal entries read.",
+    "limitation": "Production KeyringVault SERVICE is fixed okto-nexus-connector; Windows backend internally reads and can relocate the existing SERVICE target before writing a different username. Not selected under no-personal-credential-read boundary; no arbitrary product change proposed."
+  },
+  "ordered_steps": [
+    {
+      "step": 1,
+      "action": "Build own package from committed Connector stdin/fallback fix plus unchanged Nexus/Core; pin installed sources, own prefix and dependencies; preserve W16 unchanged.",
+      "gate": "Installed negative test: unapproved fallback+credential_stdin refuses BEFORE reading input or HTTP. Positive installed test: separately approved own fallback accepts credential input. No broad suite rerun."
+    },
+    {
+      "step": 2,
+      "action": "Own isolated restricted-file synthetic canary with identical ACL helper and installed vault: store/read exact sentinela/remove; assert file+temp ACL and no sibling/personal path effects.",
+      "gate": "Successful canary is prerequisite to any real key rotation; not inferred from OS backend canary."
+    },
+    {
+      "step": 3,
+      "action": "Canonical environment migration/install/start for two own services using new package, exact prior normal-cleanup proofs; retain parent/launcher/runtime handles and watcher for both. Revalidate operator profile via current canonical identity/status.",
+      "gate": "New generation READY, own tasks and package pins; both old tasks absent before install. No model calls."
+    },
+    {
+      "step": 4,
+      "action": "Separately select/record own restricted-file storage consent and protect ownstate/vault ACL, then canonical fallback approval.",
+      "gate": "No existing identity/secret for selected alias, no real key read; preference true and ACL exact before rotation."
+    },
+    {
+      "step": 5,
+      "action": "ONE canonical operator POST /api/v1/agents/m1-sonnet-remote/regenerate-key through installed OperatorProfile(own operator-home,m1-sonnet-human).client(). Reserve durably before request.",
+      "effects": "Immediately invalidate lost epoch1 key, receive replacement once. Same identity/workspace, no admin role change, no model. Endpoint has no idempotent request ID/CAS: compare exact prestate epoch1/active/empty bindings, then one shot only; lost reply blocks, never repeat.",
+      "delivery": "Keep response api_key only in protected process memory and anonymous stdin pipe; no argv/env/raw log/temp plaintext outside approved vault. Use installed identity add --non-interactive --json --state-dir STATE --server ORIGIN --alias m1-sonnet-remote --agent m1-sonnet-remote --credential-stdin. Public receipt only IDs/epoch/result/hashes.",
+      "gate": "Own consumer PID/Job, immutable argv/env, no prompt, no operator credentials given to consumer; canonical /me must match exact agent/server before vault store. Unknown result never authorizes new rotation."
+    },
+    {
+      "step": 6,
+      "action": "New canonical Connector draft m1-sonnet-remote-setup-02 using same executable/provider-home/project/settings; new operator profile m1-sonnet-remote-recovery02 with --agent m1-sonnet-remote --workspace-id ws_1b0930e4c25dddad2ad1d11d903d6a52 --remote-draft DRAFT --operator-profile m1-sonnet-human --plan.",
+      "gate": "Review selects identity.mode=select, workspace.mode=select, credential.mode=reuse_existing and actual current epoch, no new identity/workspace/key. Old setup01 cannot be revised across epoch change (BOOTSTRAP_CREDENTIAL_CHANGED). Preserve old profile/handoff/failure."
+    },
+    {
+      "step": 7,
+      "action": "Select exact new canonical review. Start operator connect --approve REVISION --setup-receipt-output NEW_HANDOFF --no-chat --timeout110; once new handoff exists, ONE Connector connect --setup-receipt NEW_HANDOFF --alias m1-sonnet-remote --no-start-at-login --non-interactive (global flag before command), WITHOUT credential-stdin.",
+      "delivery": "No second key transfer: installed consumer resolves only newly imported own file-vault handle. Producer reuse_existing issues no key. Keep same bounded two-child ownership and normal cleanup.",
+      "gate": "Both actual exit0, profile DONE, actual binding scope/harness/config/model Sonnet verified, explicit completed-recovery companion ties old UNCONFIRMED receipt to new results; never overwrite TRANSFERRED_ONCE history."
+    },
+    {
+      "step": 8,
+      "action": "Only after completed onboarding and separately reviewed paid-context pins, allow prospective useful+continuation Sonnet work.",
+      "gate": "200k hard observed/150k preventive; 50k reservation+observed margin; maximum2workcalls, conditional setup slot only if canonically necessary. No Codex budget or old M1 guard rewritten. Root owns actual execution."
+    }
+  ],
+  "command_templates": {
+    "connector_prefix": [
+      "NEW_PINNED_PYTHON",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "-m",
+      "okto_nexus_connector.cli.main",
+      "--non-interactive",
+      "--json",
+      "--state-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state"
+    ],
+    "identity_import_suffix": [
+      "identity",
+      "add",
+      "--server",
+      "http://127.0.0.1:58631",
+      "--alias",
+      "m1-sonnet-remote",
+      "--agent",
+      "m1-sonnet-remote",
+      "--credential-stdin"
+    ],
+    "operator_rotation_api": {
+      "method": "POST",
+      "path": "/api/v1/agents/m1-sonnet-remote/regenerate-key",
+      "body": null,
+      "max_attempts": 1
+    }
+  },
+  "not_ready_until": [
+    "Connector fix commit + new installed package pins",
+    "restricted-file synthetic ACL canary PASS",
+    "specific storage/revocation selection",
+    "finite recovery runner and installed test reviewed"
+  ],
+  "executed_effects": {
+    "rotation": false,
+    "credential_import": false,
+    "services": false,
+    "provider": false
+  }
+}

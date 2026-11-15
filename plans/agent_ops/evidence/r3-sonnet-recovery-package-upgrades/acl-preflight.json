@@ -1,0 +1,56 @@
+{
+  "method": "READ_ONLY_OWN_PATH_DACL_METADATA_NO_SECRET_CONTENT",
+  "paths": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+      "exists": true,
+      "reparse_point": false,
+      "protected_dacl": true,
+      "ace_count": 2,
+      "aces": [
+        {
+          "principal": "current_user",
+          "allowed_principal": true,
+          "type": 0,
+          "flags": 3,
+          "full_access": true
+        },
+        {
+          "principal": "SYSTEM",
+          "allowed_principal": true,
+          "type": 0,
+          "flags": 3,
+          "full_access": true
+        }
+      ]
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\vault",
+      "exists": true,
+      "reparse_point": false,
+      "protected_dacl": false,
+      "ace_count": 2,
+      "aces": [
+        {
+          "principal": "current_user",
+          "allowed_principal": true,
+          "type": 0,
+          "flags": 19,
+          "full_access": true
+        },
+        {
+          "principal": "SYSTEM",
+          "allowed_principal": true,
+          "type": 0,
+          "flags": 19,
+          "full_access": true
+        }
+      ]
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\vault\\secrets.json",
+      "exists": false
+    }
+  ],
+  "mutations": false
+}

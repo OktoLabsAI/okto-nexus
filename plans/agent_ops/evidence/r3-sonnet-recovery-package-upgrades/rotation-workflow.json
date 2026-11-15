@@ -1,0 +1,42 @@
+{
+  "status": "PREPARED_REQUIRES_SPECIFIC_USER_EXCEPTION_SELECTION",
+  "rotation_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-plan.json",
+    "sha256": "5e9b827c0141d95c9b6d88cf7fec47344325449a1d85a25b43f989256e92e2c2",
+    "bytes": 8984
+  },
+  "authorization_receipt_not_created": true,
+  "commands": {
+    "approve_storage": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_executor.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-plan.json",
+      "--expected-plan-sha256",
+      "5e9b827c0141d95c9b6d88cf7fec47344325449a1d85a25b43f989256e92e2c2",
+      "--authorization-sha256",
+      "ACTUAL_SPECIFIC_AUTHORIZATION_RECEIPT_SHA256",
+      "approve-storage"
+    ],
+    "rotate_import_once": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_executor.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-plan.json",
+      "--expected-plan-sha256",
+      "5e9b827c0141d95c9b6d88cf7fec47344325449a1d85a25b43f989256e92e2c2",
+      "--authorization-sha256",
+      "ACTUAL_SPECIFIC_AUTHORIZATION_RECEIPT_SHA256",
+      "transfer"
+    ]
+  },
+  "prerequisite": "Use new lifecycle namespace install/start/select/watch for both components after approved migration; old consumed reservations cannot satisfy new guards. Root/user exception receipt is the final gate for storage/rotation."
+}

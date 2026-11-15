@@ -1,0 +1,85 @@
+{
+  "status": "FROZEN_ROTATION_RECOVERY_PREPARATION_NOT_AUTHORIZED_FOR_REAL_EFFECTS",
+  "files": {
+    "rotation_producer.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_producer.py",
+      "sha256": "6e3f548810135082ccbcc0484342393c8d280aa87319824308deea43abec95a4",
+      "bytes": 2388
+    },
+    "rotation_executor.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_executor.py",
+      "sha256": "a038e1f4ff6b614d8f9d4cb598ce687735070b7339e43f7730e459af49cf7cb1",
+      "bytes": 12471
+    },
+    "rotation-plan.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-plan.json",
+      "sha256": "5e9b827c0141d95c9b6d88cf7fec47344325449a1d85a25b43f989256e92e2c2",
+      "bytes": 8984
+    },
+    "rotation-workflow.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-workflow.json",
+      "sha256": "37d789ba4c84924c6e202dcd8f26260f3c9bfe8430d4cb4d250db2d09b82908e",
+      "bytes": 2003
+    },
+    "rotation-qualification.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-qualification.json",
+      "sha256": "13526ae288a05734381ef654631647d65dd4f0072a4bd47929efe3491e309b74",
+      "bytes": 4370
+    },
+    "test_rotation_producer.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_rotation_producer.py",
+      "sha256": "a269d631ea07dae29d24e94c9aa55e25cc5c8126869f6768209e814bf5668092",
+      "bytes": 2385
+    },
+    "test_rotation_executor.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_rotation_executor.py",
+      "sha256": "0a57c30d81eaefb4ef79625cb580dba593452a38890c5a0370b78228690b509f",
+      "bytes": 3681
+    },
+    "proposal.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\proposal.json",
+      "sha256": "fca808a23bd322d9948fa89e539a3ff079bb80cfdc24fb6d8caecc7c5a2b9842",
+      "bytes": 12261
+    },
+    "proposal.initial.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\proposal.initial.json",
+      "sha256": "b0fb832201d54de5ecda1696cc44fa9c5eb2271f7ddbbe56d9fa967da47f7be9",
+      "bytes": 9935
+    },
+    "RECUPERACAO.md": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\RECUPERACAO.md",
+      "sha256": "f5b06671d71b3e1155bdab350e6ed4be23e2911761e26bfb71bed6ce8daee39f",
+      "bytes": 7760
+    },
+    "acl-preflight.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\acl-preflight.json",
+      "sha256": "5508ec91b3316056ba45f46f9f4042216c0265dcb29089d33c4e1cc71f71d94c",
+      "bytes": 1499
+    },
+    "run_file_canary.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\run_file_canary.py",
+      "sha256": "16138d07a8b3db03b0e3e09776a3484767f5168315eec901098fa1e9258ac6e0",
+      "bytes": 2649
+    },
+    "package/installation.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\installation.json",
+      "sha256": "a9f03ee93bfff21c5ea3fa530c4c2259180770027a0674c82fbe0fb774fa221c",
+      "bytes": 348124
+    },
+    "package/build-provenance.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\build-provenance.json",
+      "sha256": "e5d1fbcca77d360017223ebf5a3248e24d04691d6ecbcb277bd623fc33a20732",
+      "bytes": 1450
+    },
+    "root-package-verification.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\root-package-verification.json",
+      "sha256": "d372fad146e6cd387cbd1df0aef42ae88d19ae0abfbe857cc080dc33dbcb477c",
+      "bytes": 629
+    }
+  },
+  "peer_review": "finish_reader_cache read-only final: no blocker; no new tests or effects by peer.",
+  "specific_exception_receipt_created": false,
+  "provider_calls": 0,
+  "real_rotation_or_import": false,
+  "old_transfer_failure_preserved": true
+}

@@ -1,0 +1,14 @@
+{
+  "status": "PASS_READ_ONLY_PACKAGE_COMPARISON",
+  "installed_files_checked": 1002,
+  "changed_sources_equal_archive_wheel_installed": [
+    "okto_nexus_connector/cli/commands/connect.py",
+    "okto_nexus_connector/cli/commands/connect_setup.py",
+    "okto_nexus_connector/cli/commands/identity.py"
+  ],
+  "old_installation_manifest_unchanged": true,
+  "installation_sha256": "a9f03ee93bfff21c5ea3fa530c4c2259180770027a0674c82fbe0fb774fa221c",
+  "provenance_sha256": "e5d1fbcca77d360017223ebf5a3248e24d04691d6ecbcb277bd623fc33a20732",
+  "functional_tests_claimed": false,
+  "service_or_provider_actions": false
+}

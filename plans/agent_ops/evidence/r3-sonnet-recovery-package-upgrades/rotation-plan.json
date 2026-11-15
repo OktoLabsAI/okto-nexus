@@ -1,0 +1,161 @@
+{
+  "scope": "EXPLICIT_OWN_FILE_STORAGE_AND_ONE_EPOCH_ONE_KEY_ROTATION_NO_PROVIDER",
+  "agent_id": "m1-sonnet-remote",
+  "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+  "origin": "http://127.0.0.1:58631",
+  "max_rotation_attempts": 1,
+  "atomic_compare_and_swap": false,
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+  "paths": {
+    "server_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+    "connector_state": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "operator_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home"
+  },
+  "plaintext_file_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state\\vault\\secrets.json",
+  "authorization_receipt": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\rotation-specific-authorization.json",
+  "runtime_pins": {
+    "rotation_producer.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_producer.py",
+      "sha256": "6e3f548810135082ccbcc0484342393c8d280aa87319824308deea43abec95a4",
+      "bytes": 2388
+    },
+    "rotation_executor.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_executor.py",
+      "sha256": "a038e1f4ff6b614d8f9d4cb598ce687735070b7339e43f7730e459af49cf7cb1",
+      "bytes": 12471
+    }
+  },
+  "lifecycle_context": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_context.py",
+    "sha256": "554eb9e9adc36156df84bc4f833a94ebbea69787e18e8cc1e3875ffaad18d43e",
+    "bytes": 4756
+  },
+  "lifecycle_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json",
+    "sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+    "bytes": 13280
+  },
+  "acl_helper": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_observation.py",
+    "sha256": "da569ef87112296b845122e99d1f7fe140f89d8e9b9999cd5287ec5dcd50b04c",
+    "bytes": 12903
+  },
+  "protected_transfer": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\protected-transfer\\protected_pty.py",
+    "sha256": "17db496a45ce795518c6b43621b3487a1053ae90eb21e892c92b9c348087d7bf",
+    "bytes": 25764
+  },
+  "protected_dependencies": {
+    "pty_base_python": {
+      "path": "C:\\Python313\\python.exe",
+      "sha256": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9"
+    },
+    "pty_dependency_0": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\OpenConsole.exe",
+      "sha256": "6b2915a9a91c0738346a6c6a7b3ee2b74e26582b0c92b1b16066e72570dddd68"
+    },
+    "pty_dependency_1": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\__init__.py",
+      "sha256": "95a4e2f6c2e308bc9cc9a4183b7c0cbe164d20adaf87fa4ebc64c94f639de10b"
+    },
+    "pty_dependency_2": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\conpty.dll",
+      "sha256": "1f5ffd52ff118db975eeb25bac0051f4ceff3e051313fa03a5afffa9e75ee502"
+    },
+    "pty_dependency_3": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\enums.py",
+      "sha256": "2809bb5c914f93b9cc5b0509c6f60796a97dd9cafacbe636e081caddf7342435"
+    },
+    "pty_dependency_4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\ptyprocess.py",
+      "sha256": "86e70255f06b89d1d173820f88416b124745854f9429241bc9951af7b11c7837"
+    },
+    "pty_dependency_5": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\tests\\__init__.py",
+      "sha256": "7f36fd7039cfb764776ffad687ab2a0e021b890399b4195fb15d5aabe50b4f64"
+    },
+    "pty_dependency_6": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\tests\\test_pty.py",
+      "sha256": "017ba34326d784aaf4b7450aa4d052a9e01fb26e1f1e853fa209db8a87011792"
+    },
+    "pty_dependency_7": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\tests\\test_ptyprocess.py",
+      "sha256": "31e1a9fcffb392c784a748977225a1f456b9e3c85819dbe571a1f2fd6344c17a"
+    },
+    "pty_dependency_8": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty-agent.exe",
+      "sha256": "44467a83d86b6127bc7b876e8b2fb33fa75fde09d9b9ff27c7f8ef84ba969b29"
+    },
+    "pty_dependency_9": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.cp313-win_amd64.pyd",
+      "sha256": "50b107ec1a9393a464071459023e8c6fc4b0f236e97731c31a741dcd56524df8"
+    },
+    "pty_dependency_10": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.dll",
+      "sha256": "5177f321aac2fa85436dd6ec6bfc6d41459d25f5b533aa03349ef513461b4c79"
+    },
+    "pty_dependency_11": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.pyi",
+      "sha256": "f957a7a300afcbcb63219502bef6f9559c3947573a0135c451fb22132219c231"
+    },
+    "owned_job": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\protected-transfer\\owned_job.py",
+      "sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+      "bytes": 3714
+    }
+  },
+  "basis": {
+    "original_transfer_unconfirmed": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-transfer-result.json",
+      "sha256": "bcfaf683c8e0bc435b9a1b1e3c9ef731dd3f45d5f9d8b469b4a74e6b91468905",
+      "bytes": 383
+    },
+    "original_transfer_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-plan.json",
+      "sha256": "e56ae6fc22d5af02adc9687aaa8ee476846c1d7e09e43c030109cf9ec71820cd",
+      "bytes": 9020
+    },
+    "old_handoff": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-host-handoff.json",
+      "sha256": "928ba7f125c81dc5f18abd7d2d152dd5c5b0960135cea3f5d80174907b7c32b4",
+      "bytes": 827
+    },
+    "diagnosis": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\transfer-failure-diagnosis.json",
+      "sha256": "da64693697e3e2bf3c9383c080d9c959a3de775876ef5b5f869845c645425fbe",
+      "bytes": 3938
+    },
+    "acl_synthetic_canary": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-file-vault-canary-aw2v0wwx\\result.json",
+      "sha256": "9a5801eecefa7f379a48c5b0d4852ca57909a88ef8e79a057b49180ab39aeaa7",
+      "bytes": 913
+    },
+    "installed_consent_qualification": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\qualification.json",
+      "sha256": "27d573aeeb98d6fb0320a4ef07ed945ff322fb1202d04680d871e57a8fc1c479",
+      "bytes": 2432
+    },
+    "new_package": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\installation.json",
+      "sha256": "a9f03ee93bfff21c5ea3fa530c4c2259180770027a0674c82fbe0fb774fa221c",
+      "bytes": 348124
+    },
+    "package_root_verification": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\root-package-verification.json",
+      "sha256": "d372fad146e6cd387cbd1df0aef42ae88d19ae0abfbe857cc080dc33dbcb477c",
+      "bytes": 629
+    }
+  },
+  "no_http_retry": true,
+  "unknown_response_policy": "Preserve reservation and original failure. No second rotation, producer, or import; reconcile only.",
+  "auxiliary_cleanup": "Reuse qualified own Job containment only; any forced transient cleanup means UNCONFIRMED. No service force authorized.",
+  "future_onboarding": {
+    "new_setup_run_id": "m1-sonnet-remote-setup-02",
+    "profile": "m1-sonnet-remote-recovery02",
+    "identity_mode": "select",
+    "credential_mode": "reuse_existing",
+    "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52",
+    "old_setup_unchanged": true
+  },
+  "provider_turns_selected": 0
+}

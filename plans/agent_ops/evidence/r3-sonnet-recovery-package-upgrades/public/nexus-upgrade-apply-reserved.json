@@ -1,0 +1,24 @@
+{
+  "state": "RESERVED_BEFORE_DISPATCH",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus.adapters.inbound.cli.main",
+    "service",
+    "upgrade-apply",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+    "--json",
+    "--plan-file",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\private\\nexus-upgrade-plan.json",
+    "--expected-revision",
+    "75695aaf19ceb65fa85f762f74fe1b9da1e1e9d763b4bfc24fe809381716439c"
+  ],
+  "model_admissions": 0,
+  "force_used": false,
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

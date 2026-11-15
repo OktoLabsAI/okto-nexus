@@ -1,0 +1,37 @@
+{
+  "status": "OFFLINE_BUILDER_PREPARED_AWAITING_CONNECTOR_COMMIT",
+  "package_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package",
+  "reuse_dependency_preparer": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\prepare_dependencies.py",
+    "sha256": "516cb28092c12a67733a9c6a0e73333aa724a7fc7d936c99203d27c2f9132359"
+  },
+  "reuse_installer_template": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\install_packages.py",
+    "sha256": "5ec1e80f16c12bbf0d3c9df3224ecbaa4a8466b6da35c354b77e9fb251d99320"
+  },
+  "unchanged_wheels": {
+    "okto_nexus-0.3.3-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "bff18ff133b6180ab2d20810cd54ae4abc8650e7c8093caf374afd97692c62f4"
+    },
+    "okto_nexus_connector_core-0.0.14-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9"
+    }
+  },
+  "connector_repo": "D:/Projetos/Techridy/okto-nexus-connector",
+  "connector_commit": null,
+  "no_new_keyring_dependency": true,
+  "services_provider_and_real_credentials": false,
+  "qualification_scope": [
+    "installed stdin-unapproved-refuses-before-read/http",
+    "installed approved fallback + synthetic input import path",
+    "source/wheel/installed byte equality for changed Connector files",
+    "payload manifest and own prefix",
+    "canonical package inspection within unchanged60s bound"
+  ],
+  "file_acl_canary": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-file-vault-canary-aw2v0wwx\\result.json",
+    "sha256": "9a5801eecefa7f379a48c5b0d4852ca57909a88ef8e79a057b49180ab39aeaa7"
+  }
+}

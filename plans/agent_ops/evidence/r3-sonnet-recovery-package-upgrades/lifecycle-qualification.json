@@ -1,0 +1,107 @@
+{
+  "status": "OFFLINE_QUALIFIED_ROOT_REVIEW_PENDING_EXECUTION",
+  "plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json",
+    "sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+    "bytes": 13280
+  },
+  "workflow": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-workflow.json",
+    "sha256": "7277f6932b2d1d5e4210421e53f9a1ae22d8b2873a529a825917683608dc9920",
+    "bytes": 1792
+  },
+  "runtime": {
+    "recovery_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_context.py",
+      "sha256": "554eb9e9adc36156df84bc4f833a94ebbea69787e18e8cc1e3875ffaad18d43e",
+      "bytes": 4756
+    },
+    "recovery_lifecycle.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_lifecycle.py",
+      "sha256": "eee1d0b61b9c44f7a793bfe28631c2ba48368276d82facabb21f86fc0b83b9e4",
+      "bytes": 9774
+    },
+    "recovery_entry.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_entry.py",
+      "sha256": "f74477f57d35a7aa28f607c550ece2e5a700b2485260d411794a312e0afad6f3",
+      "bytes": 1590
+    },
+    "recovery_observation.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_observation.py",
+      "sha256": "da569ef87112296b845122e99d1f7fe140f89d8e9b9999cd5287ec5dcd50b04c",
+      "bytes": 12903
+    },
+    "recovery_nexus.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_nexus.py",
+      "sha256": "1789847ddd2e0a37ae9c0586d39c2e2cb964ca349ac862000e3e9e749e0c3d74",
+      "bytes": 9234
+    },
+    "recovery_connector.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_connector.py",
+      "sha256": "5ba8c95a727b76ee434e07c086da819e582634416cd931e8e15e42cbda8456b4",
+      "bytes": 8653
+    }
+  },
+  "sources_reused": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-source-origins.json",
+    "sha256": "0677895aee9e7a98432bbcd28429b31f46e15831f1b34f3312bb6ef383180bf9",
+    "bytes": 1742
+  },
+  "tests": {
+    "passed": 7,
+    "seconds": 0.289,
+    "tool": "52eb77",
+    "argv": [
+      "rtk",
+      "proxy",
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-m",
+      "unittest",
+      "-v",
+      "test_recovery_lifecycle"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t",
+    "test_source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_recovery_lifecycle.py",
+      "sha256": "35547f623b865e6686c86835e7b41b375f99292fd6acff7ae32ccb6aa4bc33d5",
+      "bytes": 5894
+    },
+    "scope": "Synthetic namespace/write-once receipts, two-host ready contract, exact migration scope/package, explicit revision, noninteractive install and canonical FILETIME. No live services or credentials."
+  },
+  "installed_entry": {
+    "status": "PASS",
+    "tool": "3de1a1",
+    "script": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\qualify_lifecycle_entry.py",
+      "sha256": "99b03d30ae0f4543886f4f703ab5c5ca2812162488204a02129b0bb4140e1a56",
+      "bytes": 980
+    },
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "flags": [
+      "-I",
+      "-B",
+      "-X",
+      "utf8"
+    ],
+    "scope": "Actual new-prefix context construction,6runtimepins/AST and command Python equality only; no status/CLI product invoked."
+  },
+  "entry_help": {
+    "status": "PASS",
+    "tool": "6125ae",
+    "actual_entry": "recovery_entry.py --help"
+  },
+  "service_actions": 0,
+  "scheduler_queries": 0,
+  "provider_calls": 0,
+  "preparation_action_executed": false,
+  "migration_plans_generated": false,
+  "limitations": [
+    "No real lifecycle or migration acceptance yet.",
+    "Both real upgrade documents still require exact root revision selection before apply.",
+    "Credential storage consent/rotation/import remain a separate executor and authority selection.",
+    "Original helpers retain bounded3600second service observers; timeout never proves physical exit."
+  ]
+}

@@ -1,0 +1,352 @@
+{
+  "format": "sonnet-recovery-qualified-upgrades-public-retention-v1",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "1a238dc7c398a039d279d1c7061a18ef496dc27a604370d4a06ce22a3e047995",
+      "bytes": 2045,
+      "source": "curation narrative"
+    },
+    {
+      "path": "RECUPERACAO.md",
+      "sha256": "f5b06671d71b3e1155bdab350e6ed4be23e2911761e26bfb71bed6ce8daee39f",
+      "bytes": 7760,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\RECUPERACAO.md"
+    },
+    {
+      "path": "acl-preflight.json",
+      "sha256": "5508ec91b3316056ba45f46f9f4042216c0265dcb29089d33c4e1cc71f71d94c",
+      "bytes": 1499,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\acl-preflight.json"
+    },
+    {
+      "path": "build_package.py",
+      "sha256": "7147155f1407c04b78a0a5780a20d02709fc04ee773472b381d858d05fd0f5a6",
+      "bytes": 2980,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\build_package.py"
+    },
+    {
+      "path": "canaries/actual_synthetic_pty.json",
+      "sha256": "e71463468c99b0880356ddb04356bd4afb9e5569704ed76b0002c4da793ff6b7",
+      "bytes": 496,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-rotation-pty-canary-ze31xgz3\\result.json"
+    },
+    {
+      "path": "canaries/file_acl_canary.json",
+      "sha256": "9a5801eecefa7f379a48c5b0d4852ca57909a88ef8e79a057b49180ab39aeaa7",
+      "bytes": 913,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-file-vault-canary-aw2v0wwx\\result.json"
+    },
+    {
+      "path": "console-context/build_work_plan.py",
+      "sha256": "91d240a37e30aa28ead1bdda00ce5d70f4de56b67c16aa0d990b92c802545585",
+      "bytes": 7099,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-context-console-delta\\build_work_plan.py"
+    },
+    {
+      "path": "console-context/qualification.json",
+      "sha256": "0800497b33137a55775eff56bc4caa2d2263d754b651abfc375a0695d346a10f",
+      "bytes": 2821,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-context-console-delta\\qualification.json"
+    },
+    {
+      "path": "console-context/test_work_context.py",
+      "sha256": "7167fe9ecd5c50dfa6b64c53e40ab678f618e64a62ea779e566379306a0a9349",
+      "bytes": 11249,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-context-console-delta\\test_work_context.py"
+    },
+    {
+      "path": "console-context/work-entry.py",
+      "sha256": "1bc82e2fbc7b3be1c14fa87a5cf0294ca110f2a28b2aff204d07968be204cc46",
+      "bytes": 549,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-context-console-delta\\work-entry.py"
+    },
+    {
+      "path": "console-context/work_context.py",
+      "sha256": "fa243be2b59298181ac4bc6ca08926be96235f6e17cfab8273575b0c28b5e5ea",
+      "bytes": 27015,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-context-console-delta\\work_context.py"
+    },
+    {
+      "path": "installed-consent/installed.xml",
+      "sha256": "ac7f0a5a0b0b33a43505d50cdf0cb3c705ad2d64d1145e95b374660f8520060c",
+      "bytes": 1484,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\installed.xml"
+    },
+    {
+      "path": "installed-consent/module-origins.json",
+      "sha256": "31262661d9f10f14bd445d683d87e15ab84150db49fc36540a3e647da3e0a774",
+      "bytes": 985,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\module-origins.json"
+    },
+    {
+      "path": "installed-consent/qualification.json",
+      "sha256": "27d573aeeb98d6fb0320a4ef07ed945ff322fb1202d04680d871e57a8fc1c479",
+      "bytes": 2432,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\qualification.json"
+    },
+    {
+      "path": "installed-consent/run_installed_credential_stdin_consent.py",
+      "sha256": "5f2062caf0d6ea4944155798033054b8ceae3ba98421088657f7a382721747b4",
+      "bytes": 1433,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\run_installed_credential_stdin_consent.py"
+    },
+    {
+      "path": "installed-consent/test_installed_credential_stdin_consent.py",
+      "sha256": "591fde75185901d84d0c3ee408264bf19c6809bb1738160f36af9c2762c8ef6c",
+      "bytes": 6724,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\test_installed_credential_stdin_consent.py"
+    },
+    {
+      "path": "lifecycle-plan.json",
+      "sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+      "bytes": 13280,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json"
+    },
+    {
+      "path": "lifecycle-qualification.json",
+      "sha256": "c94dd771b40e4046fd61031f64bfce0a7fd8b88698f30347f95cfed566cd9ffe",
+      "bytes": 4544,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-qualification.json"
+    },
+    {
+      "path": "lifecycle-source-origins.json",
+      "sha256": "0677895aee9e7a98432bbcd28429b31f46e15831f1b34f3312bb6ef383180bf9",
+      "bytes": 1742,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-source-origins.json"
+    },
+    {
+      "path": "lifecycle-workflow.json",
+      "sha256": "7277f6932b2d1d5e4210421e53f9a1ae22d8b2873a529a825917683608dc9920",
+      "bytes": 1792,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-workflow.json"
+    },
+    {
+      "path": "package-build-plan.json",
+      "sha256": "d29f55cdf976c6fbba940d2d2c650ecbb62169f973f2e42b738c3898c44505b6",
+      "bytes": 2107,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package-build-plan.json"
+    },
+    {
+      "path": "package/build-provenance.json",
+      "sha256": "e5d1fbcca77d360017223ebf5a3248e24d04691d6ecbcb277bd623fc33a20732",
+      "bytes": 1450,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\build-provenance.json"
+    },
+    {
+      "path": "package/installation.json",
+      "sha256": "a9f03ee93bfff21c5ea3fa530c4c2259180770027a0674c82fbe0fb774fa221c",
+      "bytes": 348124,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\installation.json"
+    },
+    {
+      "path": "proposal.initial.json",
+      "sha256": "b0fb832201d54de5ecda1696cc44fa9c5eb2271f7ddbbe56d9fa967da47f7be9",
+      "bytes": 9935,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\proposal.initial.json"
+    },
+    {
+      "path": "proposal.json",
+      "sha256": "fca808a23bd322d9948fa89e539a3ff079bb80cfdc24fb6d8caecc7c5a2b9842",
+      "bytes": 12261,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\proposal.json"
+    },
+    {
+      "path": "public/connector-upgrade-apply-reserved.json",
+      "sha256": "8634fb9dc92f133ede89f91f2af4cee611177950cd25e9252e8ab21cfb9f6535",
+      "bytes": 880,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\connector-upgrade-apply-reserved.json"
+    },
+    {
+      "path": "public/connector-upgrade-apply-returned.json",
+      "sha256": "37d7b75d03c74713f74e32bdda2e2dc3bb0c8c4c3d2ed074a84da7e253d3643a",
+      "bytes": 564,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\connector-upgrade-apply-returned.json"
+    },
+    {
+      "path": "public/connector-upgrade-plan-reserved.json",
+      "sha256": "34f2ea4fe88b41874700aa971f7a2e47eb85697d9a4fbfb47e3f04f985bca8cf",
+      "bytes": 920,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\connector-upgrade-plan-reserved.json"
+    },
+    {
+      "path": "public/connector-upgrade-plan-returned.json",
+      "sha256": "8dece29b9839fb326fe38a3f342cf32d2bf8b38df76739a030a821a9add412ef",
+      "bytes": 1525,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\connector-upgrade-plan-returned.json"
+    },
+    {
+      "path": "public/nexus-upgrade-apply-reserved.json",
+      "sha256": "5b63679a95596d043515ff298917b45406f883a47a29475fecaf28b362f51965",
+      "bytes": 847,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\nexus-upgrade-apply-reserved.json"
+    },
+    {
+      "path": "public/nexus-upgrade-apply-returned.json",
+      "sha256": "9ddffdf316f37dfaa7e925095c2d550e8cbf036311a60240ec6f234419c13d58",
+      "bytes": 688,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\nexus-upgrade-apply-returned.json"
+    },
+    {
+      "path": "public/nexus-upgrade-plan-reconciled.json",
+      "sha256": "3e34347a4f516985fd06ac61dc132963286b7d128490594d9095141a32107d01",
+      "bytes": 2115,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\nexus-upgrade-plan-reconciled.json"
+    },
+    {
+      "path": "public/nexus-upgrade-plan-reserved.json",
+      "sha256": "b20e6e9136ac67243e2a2089518bba1845a5a88b6207dcef25b5236c4f05156c",
+      "bytes": 887,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\nexus-upgrade-plan-reserved.json"
+    },
+    {
+      "path": "public/preparation.json",
+      "sha256": "eba9de25a649a3415f50226600e99e146dbc6c11523f8ac357df7fef20d2e08c",
+      "bytes": 274,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\preparation.json"
+    },
+    {
+      "path": "qualify_lifecycle_entry.py",
+      "sha256": "99b03d30ae0f4543886f4f703ab5c5ca2812162488204a02129b0bb4140e1a56",
+      "bytes": 980,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\qualify_lifecycle_entry.py"
+    },
+    {
+      "path": "recovery_connector.py",
+      "sha256": "5ba8c95a727b76ee434e07c086da819e582634416cd931e8e15e42cbda8456b4",
+      "bytes": 8653,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_connector.py"
+    },
+    {
+      "path": "recovery_context.py",
+      "sha256": "554eb9e9adc36156df84bc4f833a94ebbea69787e18e8cc1e3875ffaad18d43e",
+      "bytes": 4756,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_context.py"
+    },
+    {
+      "path": "recovery_entry.py",
+      "sha256": "f74477f57d35a7aa28f607c550ece2e5a700b2485260d411794a312e0afad6f3",
+      "bytes": 1590,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_entry.py"
+    },
+    {
+      "path": "recovery_lifecycle.py",
+      "sha256": "eee1d0b61b9c44f7a793bfe28631c2ba48368276d82facabb21f86fc0b83b9e4",
+      "bytes": 9774,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_lifecycle.py"
+    },
+    {
+      "path": "recovery_nexus.py",
+      "sha256": "1789847ddd2e0a37ae9c0586d39c2e2cb964ca349ac862000e3e9e749e0c3d74",
+      "bytes": 9234,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_nexus.py"
+    },
+    {
+      "path": "recovery_observation.py",
+      "sha256": "da569ef87112296b845122e99d1f7fe140f89d8e9b9999cd5287ec5dcd50b04c",
+      "bytes": 12903,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_observation.py"
+    },
+    {
+      "path": "recovery_server_component_compat.py",
+      "sha256": "c67b46ae4f422ea04058268a39d5c1381f84373f1651ccb361b000768b3a1745",
+      "bytes": 5293,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_server_component_compat.py"
+    },
+    {
+      "path": "review.json",
+      "sha256": "482bfe6ce49d8a39adc4acd5a15ba7d3a8bab7de3ef499f5817ea7d504ea6de1",
+      "bytes": 3599,
+      "source": "curation/root reports and public projections"
+    },
+    {
+      "path": "root-package-verification.json",
+      "sha256": "d372fad146e6cd387cbd1df0aef42ae88d19ae0abfbe857cc080dc33dbcb477c",
+      "bytes": 629,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\root-package-verification.json"
+    },
+    {
+      "path": "root_verify_package.py",
+      "sha256": "e9f97e2f117bf7d7b5395090f7aec49ccd0c9b0b0aa38b70fcb109d624c02457",
+      "bytes": 2409,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\root_verify_package.py"
+    },
+    {
+      "path": "rotation-freeze.json",
+      "sha256": "7e24348777097ac94397602301c179c995b6e97f624e4716ae52b5b213bcdb90",
+      "bytes": 4454,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-freeze.json"
+    },
+    {
+      "path": "rotation-plan.json",
+      "sha256": "5e9b827c0141d95c9b6d88cf7fec47344325449a1d85a25b43f989256e92e2c2",
+      "bytes": 8984,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-plan.json"
+    },
+    {
+      "path": "rotation-qualification.json",
+      "sha256": "13526ae288a05734381ef654631647d65dd4f0072a4bd47929efe3491e309b74",
+      "bytes": 4370,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-qualification.json"
+    },
+    {
+      "path": "rotation-workflow.json",
+      "sha256": "37d789ba4c84924c6e202dcd8f26260f3c9bfe8430d4cb4d250db2d09b82908e",
+      "bytes": 2003,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-workflow.json"
+    },
+    {
+      "path": "rotation_executor.py",
+      "sha256": "a038e1f4ff6b614d8f9d4cb598ce687735070b7339e43f7730e459af49cf7cb1",
+      "bytes": 12471,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_executor.py"
+    },
+    {
+      "path": "rotation_producer.py",
+      "sha256": "6e3f548810135082ccbcc0484342393c8d280aa87319824308deea43abec95a4",
+      "bytes": 2388,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_producer.py"
+    },
+    {
+      "path": "run_file_canary.py",
+      "sha256": "16138d07a8b3db03b0e3e09776a3484767f5168315eec901098fa1e9258ac6e0",
+      "bytes": 2649,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\run_file_canary.py"
+    },
+    {
+      "path": "server-component-compat-qualification.json",
+      "sha256": "45be1821a9721d9a0e3b4c2a3da79e889ebe3bbcfebe85dc9657df6d2aeed4f2",
+      "bytes": 1254,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\server-component-compat-qualification.json"
+    },
+    {
+      "path": "test_recovery_lifecycle.py",
+      "sha256": "35547f623b865e6686c86835e7b41b375f99292fd6acff7ae32ccb6aa4bc33d5",
+      "bytes": 5894,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_recovery_lifecycle.py"
+    },
+    {
+      "path": "test_rotation_executor.py",
+      "sha256": "0a57c30d81eaefb4ef79625cb580dba593452a38890c5a0370b78228690b509f",
+      "bytes": 3681,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_rotation_executor.py"
+    },
+    {
+      "path": "test_rotation_producer.py",
+      "sha256": "a269d631ea07dae29d24e94c9aa55e25cc5c8126869f6768209e814bf5668092",
+      "bytes": 2385,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_rotation_producer.py"
+    },
+    {
+      "path": "test_server_component_compat.py",
+      "sha256": "f6cdc626d3911e9ce301b85474e520ce339dbeea7030bb070e040b08c2339502",
+      "bytes": 1401,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_server_component_compat.py"
+    }
+  ],
+  "checks": {
+    "frozen_sources": "PASS",
+    "public_secret_pattern_scan": "PASS",
+    "private_raw_documents_copied": 0
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "status": "REVIEW_COMMANDS_ONLY_NOT_EXECUTED",
+  "prefix": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_entry.py",
+    "--plan",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json",
+    "--expected-plan-sha256",
+    "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+  ],
+  "single_action_suffixes": [
+    [
+      "both",
+      "prepare"
+    ],
+    [
+      "nexus",
+      "upgrade-plan"
+    ],
+    [
+      "nexus",
+      "install"
+    ],
+    [
+      "nexus",
+      "start"
+    ],
+    [
+      "nexus",
+      "select"
+    ],
+    [
+      "nexus",
+      "watch"
+    ],
+    [
+      "nexus",
+      "stop"
+    ],
+    [
+      "nexus",
+      "cleanup"
+    ],
+    [
+      "nexus",
+      "uninstall"
+    ],
+    [
+      "connector",
+      "upgrade-plan"
+    ],
+    [
+      "connector",
+      "install"
+    ],
+    [
+      "connector",
+      "start"
+    ],
+    [
+      "connector",
+      "select"
+    ],
+    [
+      "connector",
+      "watch"
+    ],
+    [
+      "connector",
+      "stop"
+    ],
+    [
+      "connector",
+      "cleanup"
+    ],
+    [
+      "connector",
+      "uninstall"
+    ]
+  ],
+  "upgrade_apply_suffix": [
+    "--upgrade-revision",
+    "EXACT_REVISION_RETURNED_AND_REVIEWED_FOR_THIS_COMPONENT",
+    "COMPONENT",
+    "upgrade-apply"
+  ],
+  "no_automatic_batch_execution": true,
+  "old_namespace_never_written": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t"
+}

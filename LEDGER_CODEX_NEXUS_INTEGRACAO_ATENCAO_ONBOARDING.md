@@ -2257,3 +2257,9 @@ e [escopo](plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/READM
 ## 2026-11-15 — Proteção de stdin no consentimento do Connector
 
 Connector `28e8093997849ba47a018e5d4728f8b3535be4b1` recusa fallback de arquivo sem aprovação prévia antes de prompt, vault ou leitura de `--credential-stdin`; backend disponível, consentimento persistido e reutilização da identidade mantêm seu comportamento. Resposta interativa negativa também interrompe a retomada antes do vault. Qualificação de fonte: **16 PASS**, revisão independente sem bloqueadores. Não equivale a validação de novo pacote instalado ou replay real; a transferência anterior permanece `UNCONFIRMED`, sem recuperação do material consumido. Nenhuma chamada de provedor, ação de serviço ou promoção: **125 VERIFIED / 5 IN_PROGRESS / 2 NOT_RUN**. [Evidência e limites](plans/agent_ops/evidence/r3-credential-stdin-consent-fix/review.json).
+
+## 2026-11-15 — Pacote de recuperação qualificado e upgrades canônicos aplicados
+
+Novo pacote isolado: 1.002 payloads verificados e 9 testes instalados do consentimento PASS; 11 fixtures do produtor/executor, canários sintéticos PTY/ACL e 11 fixtures do contexto de console qualificados. Preparação e upgrades reais dos dois contextos concluídos, sem tarefas ou owners ativos. A falha original do wrapper Nexus `UPGRADE_SCOPE_CHANGED` foi preservada; suplemento aditivo valida o componente canônico `server` sem regenerar plano ou fabricar recibo original. Ambas aplicações retornaram 0/applied=true.
+
+Nenhum install/start novo, armazenamento real de credencial, rotação/importação ou chamada de provedor. Pergunta específica sobre arquivo plaintext/revogação pendente neste marco, sem recibo de autorização. A transferência antiga continua `UNCONFIRMED`; Codex 579.154/16 inalterado, Sonnet zero. Sem promoção: **125 VERIFIED / 5 IN_PROGRESS / 2 NOT_RUN**. [Evidência e limites](plans/agent_ops/evidence/r3-sonnet-recovery-package-upgrades/review.json).

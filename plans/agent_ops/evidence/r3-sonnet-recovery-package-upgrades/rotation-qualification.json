@@ -1,0 +1,101 @@
+{
+  "status": "OFFLINE_QUALIFIED_NO_REAL_ROTATION_OR_IMPORT",
+  "runtime": {
+    "rotation_producer.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_producer.py",
+      "sha256": "6e3f548810135082ccbcc0484342393c8d280aa87319824308deea43abec95a4",
+      "bytes": 2388
+    },
+    "rotation_executor.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation_executor.py",
+      "sha256": "a038e1f4ff6b614d8f9d4cb598ce687735070b7339e43f7730e459af49cf7cb1",
+      "bytes": 12471
+    },
+    "rotation-plan.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-plan.json",
+      "sha256": "5e9b827c0141d95c9b6d88cf7fec47344325449a1d85a25b43f989256e92e2c2",
+      "bytes": 8984
+    },
+    "rotation-workflow.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\rotation-workflow.json",
+      "sha256": "37d789ba4c84924c6e202dcd8f26260f3c9bfe8430d4cb4d250db2d09b82908e",
+      "bytes": 2003
+    }
+  },
+  "tests": {
+    "producer": {
+      "count": 6,
+      "passed": 6,
+      "tool": "06196c",
+      "command": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_rotation_producer.py"
+      ]
+    },
+    "executor": {
+      "count": 5,
+      "passed": 5,
+      "tool": "dd76a8",
+      "command": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-X",
+        "utf8",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_rotation_executor.py"
+      ]
+    }
+  },
+  "test_sources": {
+    "test_rotation_producer.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_rotation_producer.py",
+      "sha256": "a269d631ea07dae29d24e94c9aa55e25cc5c8126869f6768209e814bf5668092",
+      "bytes": 2385
+    },
+    "test_rotation_executor.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_rotation_executor.py",
+      "sha256": "0a57c30d81eaefb4ef79625cb580dba593452a38890c5a0370b78228690b509f",
+      "bytes": 3681
+    }
+  },
+  "actual_synthetic_pty": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-rotation-pty-canary-ze31xgz3\\result.json",
+    "sha256": "e71463468c99b0880356ddb04356bd4afb9e5569704ed76b0002c4da793ff6b7",
+    "bytes": 496
+  },
+  "file_acl_canary": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-file-vault-canary-aw2v0wwx\\result.json",
+    "sha256": "9a5801eecefa7f379a48c5b0d4852ca57909a88ef8e79a057b49180ab39aeaa7",
+    "bytes": 913
+  },
+  "installed_product_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\qualification.json",
+    "sha256": "27d573aeeb98d6fb0320a4ef07ed945ff322fb1202d04680d871e57a8fc1c479",
+    "bytes": 2432
+  },
+  "package_root_verification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\root-package-verification.json",
+    "sha256": "d372fad146e6cd387cbd1df0aef42ae88d19ae0abfbe857cc080dc33dbcb477c",
+    "bytes": 629
+  },
+  "method": "No product source injection. New installed package. Unit fixtures fake HTTP/consumer; actual PTY sentinel only. Read-only actual own SQL epoch metadata; no credential columns.",
+  "antecedents_preserved": [
+    {
+      "tool": "972771",
+      "status": "FAILED_RO_QUERY",
+      "cause": "Initial diagnostic guard assumed execution_bindings.agent_id; corrected to canonical join agent_endpoints before qualification. No DB mutation."
+    },
+    {
+      "tool": "d4ac46",
+      "status": "PASS_RO_QUERY",
+      "actual_epoch": 1
+    }
+  ],
+  "secret_material_persisted_by_qualification": false,
+  "specific_authorization_receipt_created": false,
+  "real_service_or_provider_effects": false
+}

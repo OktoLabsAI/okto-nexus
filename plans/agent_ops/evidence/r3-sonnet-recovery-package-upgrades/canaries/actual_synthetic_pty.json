@@ -1,0 +1,22 @@
+{
+  "status": "TRANSFERRED_ONCE",
+  "producer_exit": 0,
+  "consumer_exit": 0,
+  "active_job_processes_after": 0,
+  "forced_owned_cleanup": false,
+  "effect_guard_required": true,
+  "effect_gates_allowed": [
+    "producer",
+    "consumer"
+  ],
+  "public_ipc_readers_joined": true,
+  "synthetic_only": true,
+  "http_calls": 0,
+  "provider_calls": 0,
+  "production_producer_function": true,
+  "installed_material_sink": true,
+  "phases": [
+    "producer",
+    "consumer"
+  ]
+}
