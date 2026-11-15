@@ -1,0 +1,1240 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="21" failures="0" skipped="0" tests="21" time="4.440" timestamp="2026-11-15T09:00:44.592704-03:00" hostname="Alienware_m15"><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_no_prior_release_retires_after_exact_accepted_cycle_and_replays" time="0.066"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_no_prior_release_retires_0')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x0000012649D7E5C0&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_accepted_reconciliation_fences_late_direct_release[False]" time="0.065"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_accepted_reconciliation_f0')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x0000012649D38E50&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_accepted_reconciliation_fences_late_direct_release[True]" time="0.055"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_accepted_reconciliation_f1')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x0000012649D3BB50&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_direct_release_winning_transaction_keeps_original_path" time="0.057"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_direct_release_winning_tr0')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x0000012649D2A5C0&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_unaccepted_cycle_never_creates_checkpoint[cycle]" time="0.058"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_unaccepted_cycle_never_cr0')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x0000012649CE0F40&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_unaccepted_cycle_never_creates_checkpoint[generation]" time="0.057"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_unaccepted_cycle_never_cr1')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x0000012649CE3A60&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_unaccepted_cycle_never_creates_checkpoint[cursor]" time="0.058"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_unaccepted_cycle_never_cr2')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x0000012649CD64D0&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_unaccepted_cycle_never_creates_checkpoint[incomplete]" time="0.048"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_unaccepted_cycle_never_cr3')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x0000012649D5CE50&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_unaccepted_cycle_never_creates_checkpoint[blocked]" time="0.053"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_unaccepted_cycle_never_cr4')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x0000012649D5F6A0&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_changed_observation_is_not_a_release_proof[epoch]" time="0.065"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_changed_observation_is_no0')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x0000012649CAE020&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_changed_observation_is_not_a_release_proof[owner]" time="0.056"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_changed_observation_is_no1')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x0000012649BF0C70&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_changed_observation_is_not_a_release_proof[state]" time="0.059"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_changed_observation_is_no2')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x0000012649BF3970&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_changed_observation_is_not_a_release_proof[watermark]" time="0.057"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_changed_observation_is_no3')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x000001264B55A3E0&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_changed_observation_is_not_a_release_proof[server]" time="0.052"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_changed_observation_is_no4')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x000001264B4E8B80&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_current_owner_or_watermark_change_keeps_claim_unknown[unfenced]" time="0.055"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_current_owner_or_watermar0')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x000001264B4EB2E0&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_current_owner_or_watermark_change_keeps_claim_unknown[unproven]" time="0.050"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_current_owner_or_watermar1')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x000001264B4F9A80&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_current_owner_or_watermark_change_keeps_claim_unknown[new_owner]" time="0.064"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_current_owner_or_watermar2')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x000001264B548220&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_current_owner_or_watermark_change_keeps_claim_unknown[new_opening]" time="0.054"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_current_owner_or_watermar3')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x000001264B54A980&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_current_owner_or_watermark_change_keeps_claim_unknown[new_event]" time="0.053"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_current_owner_or_watermar4')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x000001264B5D1120&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_crash_between_stores_reopens_and_retries_exact_proof[claim]" time="0.053"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_crash_between_stores_reop0')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x000001264B5D3880&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase><testcase classname="tests.unit.test_reconciliation_checkpoint" name="test_crash_between_stores_reopens_and_retries_exact_proof[marker]" time="0.066"><error message="failed on setup with &quot;nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10945/test_crash_between_stores_reop1')
+
+    @pytest.fixture
+    async def checkpoint(tmp_path):
+        original = request()
+        ack, observations = evidence(original)
+        opening = next(iter(observations.values()))['opening']
+        state = StateStore(tmp_path/'state.json')
+        state.save(ConnectorState(connector_id='connector'))
+        host = CoreRuntimeHost(tmp_path,None)
+        journal = await host.ensure_history_journal()
+        key = SessionKey(opening['server_id'],opening['executor_id'],opening['session_id'])
+        op = OperationKey(key.server_id,key.executor_id,opening['operation_id'])
+        launch = ProcessLaunchIdentity(key,op.operation_id,opening['connection_generation'],
+            opening['session_owner_generation'],'win32','windows_job',
+            'Global\\nexus-core-'+'a'*32,'b'*32)
+        await journal.admit(op,'intent',key.session_id,claim_session=True,effect_imminent=True,
+            connection_generation=launch.connection_generation,session_owner_generation=launch.owner_generation,
+            process_launch_identity=launch,action='runtime.open',terminal_event_expected=False)
+        await journal.record_receipt(op,OperationReceipt(op.operation_id,'intent','SUBMITTED',True,False,key.session_id))
+        record = await journal.get_process_launch(key)
+        for action in ('claim','fence','stop'):
+&gt;           record = await journal.transition_process_launch(launch,expected_revision=record.revision,
+                action=action,**({'stop_proof':'CONTAINER_STOPPED'} if action=='stop' else {}))
+
+tests\unit\test_reconciliation_checkpoint.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:185: in transition_process_launch
+    return await self._run(write, urgent=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\journal.py:1788: in _run
+    return await future
+           ^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\offloop.py:176: in _execute
+    result = work(self._resource)
+             ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+db = &lt;sqlite3.Connection object at 0x000001264B546020&gt;
+
+    def write(db):
+        db.execute('BEGIN IMMEDIATE')
+        try:
+            old = _read(db, identity.key)
+            if old is None:
+                raise CoreError('PROCESS_LAUNCH_UNKNOWN', 'process_launch')
+            if old.identity != identity:
+                raise CoreError('PROCESS_LAUNCH_CONFLICT', 'process_launch')
+            updated = transition_launch(old, expected_revision=expected_revision,
+                                        action=action, stop_proof=stop_proof)
+            if action == 'claim':
+                operation = db.execute('SELECT possible_effect,stage FROM operations_v2 WHERE '
+                    'server_id=? AND executor_id=? AND operation_id=?',
+                    (identity.key.server_id, identity.key.executor_id,
+                     identity.opening_operation_id)).fetchone()
+                if operation is None or not operation[0] or operation[1] != 'SUBMISSION_STARTED':
+&gt;                   raise CoreError('PROCESS_LAUNCH_NOT_ADMITTED', 'process_launch', retry_safe=True)
+E                   nexus_connector_core.models.CoreError: PROCESS_LAUNCH_NOT_ADMITTED
+
+C:\Users\jpamb\AppData\Local\Temp\r3-core-consumer-integration-h_elhexb\venv\Lib\site-packages\nexus_connector_core\process_launch_storage.py:170: CoreError</error></testcase></testsuite></testsuites>

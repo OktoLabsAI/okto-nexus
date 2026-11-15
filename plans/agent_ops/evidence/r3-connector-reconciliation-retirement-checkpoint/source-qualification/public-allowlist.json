@@ -1,0 +1,79 @@
+{
+  "files": [
+    {
+      "path": "run.py",
+      "sha256": "2a5a01344f0ac467f396e47022fbf4d32b999d4a9261056d4cdb200c9632696a",
+      "bytes": 1091
+    },
+    {
+      "path": "test_reproduction.py",
+      "sha256": "30bde7141ba6e6b80153fe48cf7738bb75da2a09e62c37079b1f068f956e968a",
+      "bytes": 2312
+    },
+    {
+      "path": "origins.json",
+      "sha256": "95766dbe106540a7fbffd8d9e80db241a3f74f9c6818d8c6d1305ea8864d7d20",
+      "bytes": 316
+    },
+    {
+      "path": "reproduction.xml",
+      "sha256": "268ba53105c0b76863b67c9e9d42c86908b04a99c67a7302bc90f68eab833ec5",
+      "bytes": 756
+    },
+    {
+      "path": "run_fix.py",
+      "sha256": "c80bcd0ef099c0b66bd6e2c1cb6a9a74bd8b19f47db79606cbac8ad64b4251a9",
+      "bytes": 847
+    },
+    {
+      "path": "initial-24pass-21fixtureerrors.xml",
+      "sha256": "90a505461f74cab082c5b4676bbbaded2c516830d2f81057a826718f7280f702",
+      "bytes": 119259
+    },
+    {
+      "path": "second-21fixtureerrors.xml",
+      "sha256": "3889204f9b0e8fde4987e1ee71856ec8a42d634dfc06ee831e6bae3b07651815",
+      "bytes": 88657
+    },
+    {
+      "path": "new-21pass.xml",
+      "sha256": "b835d3a157e79d95d75da8ad17bb6884acb5e62229fcf2e9e5333e34a8100970",
+      "bytes": 3354
+    },
+    {
+      "path": "fix-final.xml",
+      "sha256": "3e00f01f27364eb5ca089ca5f18281000c6a6509689aed6a5e53cfcaecaa1659",
+      "bytes": 545
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "0cd5dc612559b23dc3601c1d616936bd8cf8c31c54c57b7c0339b5dbcd78d303",
+      "bytes": 3871
+    },
+    {
+      "path": "source/src/okto_nexus_connector/services/r4_reconciliation.py",
+      "sha256": "54d1c7739153fd25f70629438bc30310d264a1cfb23a5daaf19b30cba0916c21",
+      "bytes": 21985
+    },
+    {
+      "path": "source/src/okto_nexus_connector/services/r4_session_release.py",
+      "sha256": "72724d947b6e01c84a73d556e64a70a85b157552d3267d44f5a0f54d527d7b98",
+      "bytes": 13485
+    },
+    {
+      "path": "source/src/okto_nexus_connector/storage/r4_session_releases.py",
+      "sha256": "f80c8a06bd0ffc48d42ff5835ec0d83a45b303126765d0f27d094b0d217396c3",
+      "bytes": 24848
+    },
+    {
+      "path": "source/tests/unit/test_reconciliation_checkpoint.py",
+      "sha256": "eaa80b10cac6c2b92a234567ab641a1193ec49ae126d180ab0138ca2dc1d8ea5",
+      "bytes": 11765
+    },
+    {
+      "path": "source/tests/unit/test_session_release_recovery.py",
+      "sha256": "2f5845395f97dedb4b21afc5abc1e5ea1d7904fa54a4c0fe0a02d0c11fdb4501",
+      "bytes": 13346
+    }
+  ]
+}

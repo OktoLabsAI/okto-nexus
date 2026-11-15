@@ -1,0 +1,45 @@
+{
+  "status": "OFFLINE_POLICY_CANDIDATE_ONLY_NOT_EXECUTABLE_NOT_AUTHORIZED",
+  "qualification_sha256": "c14ae8962861bc37ee88bcc6a336a5fd5a179fd52954cb31175ae2051dea31d8",
+  "pure_tests": {
+    "unique_passed": 6,
+    "seconds": 0.044,
+    "context_constructed": false
+  },
+  "root_review_tools": [
+    "525b5f",
+    "85d12d",
+    "881a05",
+    "1b1d8d"
+  ],
+  "current_authority": {
+    "limit": 200000,
+    "observed_tokens": 144004,
+    "charged_requests": 2,
+    "next_reserve": 244846,
+    "next_admission": "REFUSED_HEADROOM"
+  },
+  "proposed_only": {
+    "limit": 500000,
+    "preventive": 480000,
+    "new_requests_maximum": 2,
+    "cumulative_requests_maximum": 4,
+    "explicit_user_response_received": false,
+    "real_authorization_record_created": false
+  },
+  "composition": {
+    "selected_plan_exists": false,
+    "current_corrected_campaign_package_qualified": false,
+    "fresh_cohorts_or_cleanup_claimed": false,
+    "new_provider_or_service_effects": 0
+  },
+  "historical_usage": "Carry144004/two charges preserved, no refund, reset or false settlement. Source46/installed24 correction is separately qualified; it does not make this paid composition ready.",
+  "acceptance_promoted": false,
+  "excluded": "No historical-budget/private raw/auth records or approved seed copied.",
+  "final_documentation_root_review": {
+    "ledger_diff_tool": "1b017d",
+    "candidate_review_tool": "5e185b",
+    "fixed_plan_hash_tool": "f84bfe",
+    "commit_push_authorized": true
+  }
+}

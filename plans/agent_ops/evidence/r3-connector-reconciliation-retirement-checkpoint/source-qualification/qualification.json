@@ -1,0 +1,60 @@
+{
+  "format": 1,
+  "classification": "OFFLINE_SOURCE_FIX_QUALIFIED_NO_LIVE_CHANGE",
+  "cause": "Accepted reconciliation without a prior direct session.release row did not retain a retirement checkpoint. The older claim could remain pending after restart; conservative Core drain then correctly reports UNKNOWN.",
+  "live_scope_limit": "Current native launch without producer fence/positive stop proof remains UNKNOWN. No assertion of physical exit or proof of the exact sole live blocker.",
+  "live_input_basis": "Parent/remaining read-only projections only: old/current claims pending, slots released, streams ACKed, release outbox empty; no campaign SQL read by this qualification.",
+  "source_equivalence": "Core7810f3b9 to497ee2b7 drain/runtime/journal unchanged; Connector28e80939 to165a01f9 core_host/r4_reconciliation/r4_session_release/r4_execution unchanged.",
+  "fix": "Store typed accepted-reconciliation proof separately in existing release store schema6; revalidate exact immutable claim/generations, launch fence/CONTAINER_STOPPED and stream/watermark before idempotent retirement. Direct-release path retained; late direct prepare fenced.",
+  "canonical_live_alternative": "Existing operator drain forbids replacement control connection. Restarting Nexus alone cannot trigger reconciliation on the already-draining Connector; no direct checkpoint edit or forged tombstone is authorized.",
+  "source_pins": {
+    "src/okto_nexus_connector/services/r4_reconciliation.py": "54d1c7739153fd25f70629438bc30310d264a1cfb23a5daaf19b30cba0916c21",
+    "src/okto_nexus_connector/services/r4_session_release.py": "72724d947b6e01c84a73d556e64a70a85b157552d3267d44f5a0f54d527d7b98",
+    "src/okto_nexus_connector/storage/r4_session_releases.py": "f80c8a06bd0ffc48d42ff5835ec0d83a45b303126765d0f27d094b0d217396c3",
+    "tests/unit/test_reconciliation_checkpoint.py": "eaa80b10cac6c2b92a234567ab641a1193ec49ae126d180ab0138ca2dc1d8ea5",
+    "tests/unit/test_session_release_recovery.py": "2f5845395f97dedb4b21afc5abc1e5ea1d7904fa54a4c0fe0a02d0c11fdb4501"
+  },
+  "reproduction": {
+    "tests": 4,
+    "passed": 4,
+    "failures": 0,
+    "errors": 0
+  },
+  "regressions": {
+    "tests": 45,
+    "passed": 24,
+    "failures": 0,
+    "errors": 21
+  },
+  "fixture_iteration": {
+    "tests": 21,
+    "passed": 0,
+    "failures": 0,
+    "errors": 21
+  },
+  "new_initial_pass": {
+    "tests": 21,
+    "passed": 21,
+    "failures": 0,
+    "errors": 0
+  },
+  "ack_snapshot_delta": {
+    "tests": 2,
+    "passed": 2,
+    "failures": 0,
+    "errors": 0
+  },
+  "ack_snapshot_delta_repeated_regressions": 1,
+  "unique_fixed_cases": 46,
+  "unique_fixed_passed": 46,
+  "fixture_errors_preserved": "Initial fixture skipped RECEIVED_DURABLE\u2192SUBMISSION_STARTED; second recorded SUBMITTED before process claim. Fixed fixture follows admitted\u2192claim/fence/stop\u2192receipt; no product workaround.",
+  "lint": "Ruff --select F PASS; git diff --check PASS",
+  "runner_python": "C:/Users/jpamb/AppData/Local/Temp/r3-core-consumer-integration-h_elhexb/venv/Scripts/python.exe",
+  "qualification_kind": "Connector source via explicit sys.path; installed Core497ee2. No services/native processes/provider/credentials or campaign mutations.",
+  "commands": [
+    "rtk proxy <runner_python> -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-drain-empty-release-repro-mzi64hni\\run.py",
+    "rtk proxy <runner_python> -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-drain-empty-release-repro-mzi64hni\\run_fix.py",
+    "rtk proxy <runner_python> -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-drain-empty-release-repro-mzi64hni\\run_fix.py --new-only",
+    "rtk proxy <runner_python> -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-drain-empty-release-repro-mzi64hni\\run_fix.py --race-only"
+  ]
+}

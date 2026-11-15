@@ -1,0 +1,45 @@
+{
+  "status": "PREPARED_ONLY_DO_NOT_EXECUTE_CAMPAIGN",
+  "offline_test": [
+    "rtk",
+    "proxy",
+    "C:/Users/jpamb/AppData/Local/Temp/sonnet-canonical-recovery-proposal-7oq808_t/package/venv/Scripts/python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\test_successor_policy.py"
+  ],
+  "select_after_actual_answer_and_fresh_composition": [
+    "rtk",
+    "proxy",
+    "C:/Users/jpamb/AppData/Local/Temp/sonnet-canonical-recovery-proposal-7oq808_t/package/venv/Scripts/python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\select_plan.py",
+    "--authorization-record",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\authorization-record.json",
+    "--reviewed-composition",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\fresh-composition.json",
+    "--expected-composition-sha256",
+    "<ROOT_REVIEWED_FRESH_COMPOSITION_SHA256>"
+  ],
+  "future_paid_argv_template": [
+    "rtk",
+    "proxy",
+    "<CORRECTED_INSTALLATION_PYTHON>",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\work-entry.py",
+    "--plan",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\work-plan.json",
+    "--expected-plan-sha256",
+    "<SELECTED_WORK_PLAN_SHA256>",
+    "<prepare|useful|continuation>"
+  ],
+  "note": "Placeholders cannot be finalized before the missing actual package/cohort facts; no command here performs lifecycle startup."
+}

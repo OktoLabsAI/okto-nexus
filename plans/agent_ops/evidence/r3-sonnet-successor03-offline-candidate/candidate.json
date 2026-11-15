@@ -1,0 +1,96 @@
+{
+  "status": "OFFLINE_CANDIDATE_AUTHORIZATION_AND_FRESH_PACKAGE_COHORTS_PENDING",
+  "proposal": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\remaining-sonnet-budget-proposal.json",
+    "sha256": "17ab2a9929849ac2dc3033e20a2a7c7c3860da21a25337b827a4ea6198dbd58a",
+    "bytes": 2232
+  },
+  "original_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\work-plan.json",
+    "sha256": "03513d2fe91153a55b2aade1cf290bcafdd133a60306e68145344be18ff3ffe6",
+    "bytes": 13591
+  },
+  "original_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\qualification.json",
+    "sha256": "7a4b16d390ecba19f47edb33e906289454cb7ae5ac21b2cdc9135617eba2b1b5",
+    "bytes": 3484
+  },
+  "history": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor03-offline-hkf9e8i2\\historical-budget.json",
+    "sha256": "1b379ea80bad6020808fe1b5fbdf5919b756dbe573b2bfe757400e5958bd6d97",
+    "bytes": 22230
+  },
+  "history_source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\paid-work\\private\\sonnet-budget.json",
+    "sha256": "1b379ea80bad6020808fe1b5fbdf5919b756dbe573b2bfe757400e5958bd6d97",
+    "bytes": 22230
+  },
+  "accounting": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\paid-work\\public\\live-accounting.json",
+    "sha256": "19da6656d6edb6d955af83c6dd3992ca599f60d5154868c8b3b6ec4e9f460235",
+    "bytes": 379
+  },
+  "outcome": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\paid-work\\public\\m1-sonnet-remote-useful-03-result.json",
+    "sha256": "ae22ce32808c882788d301938aaeea6c4d5ee2f2c16e30773cc97f990dcf066b",
+    "bytes": 652
+  },
+  "carry_tokens": 144004,
+  "charged_requests": 2,
+  "proposed_policy": {
+    "limit": 500000,
+    "preventive": 480000,
+    "max_requests": 4
+  },
+  "currently_authorized_limit": 200000,
+  "new_requests_max": 2,
+  "request_ids": {
+    "useful": "m1-sonnet-remote-useful-05",
+    "continuation": "m1-sonnet-remote-continuation-06"
+  },
+  "original_source_pins": {
+    "work_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\work_context.py",
+      "sha256": "c2ca65a1db22e64f24c6e23500541dbcf023015ef638505277ac47f5de4ac90b",
+      "bytes": 33124
+    },
+    "work-entry.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\work-entry.py",
+      "sha256": "1bc82e2fbc7b3be1c14fa87a5cf0294ca110f2a28b2aff204d07968be204cc46",
+      "bytes": 549
+    },
+    "remote_work.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\remote_work.py",
+      "sha256": "2169257de78c29413ffb298310264ba6650623d4e4b03c4fad0568d9f816cea9",
+      "bytes": 14137
+    },
+    "observe_active.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\observe_active.py",
+      "sha256": "ae83c7a81546325f74762794b5878b85b9e41f4e0225cd364724e41cddce155b",
+      "bytes": 4903
+    },
+    "activecontrol.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\activecontrol.py",
+      "sha256": "96d8545ea322e5224e426eaa101b015d5f3d50d902fb7b4046a02e508d6c6045",
+      "bytes": 2853
+    },
+    "request_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\request_context.py",
+      "sha256": "c840a43bf0e80c919fdab3fc1cbedc84595411de414522372f013ef7369af809",
+      "bytes": 3642
+    },
+    "reused_observation.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\reused_observation.py",
+      "sha256": "9f15dbc9b764c6760936bdaba3d071156b0714e481bec69eca6f246de7db427c",
+      "bytes": 12902
+    },
+    "sonnet_usage.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\sonnet_usage.py",
+      "sha256": "1242e24688d1edd3d2476425e0d16d291cd171740ed47e08074b3aa13976eccd",
+      "bytes": 16568
+    }
+  },
+  "authorization_record_created": false,
+  "services_provider_effects": 0,
+  "prepared_work_plan": false
+}

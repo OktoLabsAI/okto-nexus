@@ -1,0 +1,80 @@
+{
+  "status": "OFFLINE_SOURCE_AND_INSTALLED_WHEEL_QUALIFIED_CURRENT_LIVE_UNKNOWN",
+  "scope": "Connector accepted-reconciliation retirement checkpoint when no prior direct session.release outbox row exists. Schema6 stores a typed proof separately and revalidates immutable claim/generations, launch fence/CONTAINER_STOPPED and stream/watermark before idempotent retirement. Direct-release path preserved.",
+  "qualification_source_sha256": "0cd5dc612559b23dc3601c1d616936bd8cf8c31c54c57b7c0339b5dbcd78d303",
+  "distinct_source_fix_tests": 46,
+  "new_tests": 22,
+  "regressions": 24,
+  "separate_diagnostic_reproduction_tests": 4,
+  "counting": "Initial regression run24pass/21fixtureerrors; later21pass; final2pass contains1 repeated regression+1 new ACK snapshot case. Total46 unique fixed cases, not sum of every run. Diagnostic reproduction4 is separate.",
+  "fixture_failure_history": "First fixtures skipped RECEIVED_DURABLE→SUBMISSION_STARTED; second set SUBMITTED before process claim. Corrected fixture ordering follows admitted→claim/fence/stop→receipt; no workaround in product or live state.",
+  "current_live_owner_not_resolved": true,
+  "current_live_scope": "Connector39640/fbc0042 remains pending per last root canonical observation. Historical claim gap reproduced; no claim that this is the sole current live blocker. Current native launch has no producer fence/positive stop proof. Offline fix cannot assert death or DRAINED.",
+  "old_campaign_installation_changed": false,
+  "no_live_database_migration": true,
+  "force_authority_expanded": false,
+  "acceptance_promoted": false,
+  "fixed_plan_changed": false,
+  "counts": {
+    "VERIFIED": 126,
+    "IN_PROGRESS": 4,
+    "NOT_RUN": 2
+  },
+  "sonnet": {
+    "observed_tokens": 144004,
+    "charged_admissions": 2,
+    "authorized_limit": 200000,
+    "proposed500k_authorized": false
+  },
+  "remaining_publication_gates": [],
+  "preliminary_root_review": {
+    "tool": "b97666",
+    "scope_and_counts": "PASS",
+    "publication_pending": "New wheel qualification/hashes and final root review"
+  },
+  "latest_root_operational_observation": {
+    "canonical_status_tool": "19e81e",
+    "following_clock_utc": "2026-11-15 12:07:27 UTC",
+    "pid": 39640,
+    "generation": "fbc0042be355e83da5bb695a64de4910",
+    "drain": "DRAINING_PENDING_UNKNOWN",
+    "force_requested": false,
+    "physical_exit_inferred": false,
+    "provenance": "Root tool report only; curator performed no live query."
+  },
+  "source_commit": "a8bd48bdc6d6e835c55eb601a7e7fa316453aa7b",
+  "schema_compatibility": {
+    "from": 5,
+    "to": 6,
+    "old_reader_accepts_schema6": false,
+    "binary_in_place_rollback_compatible_claimed": false,
+    "live_migration_performed": false,
+    "note": "An older reader rejects user_version6. Do not present an in-place binary downgrade as compatible; offline fixtures do not migrate the current campaign database."
+  },
+  "installed_qualification_report": {
+    "passed": 24,
+    "new": 22,
+    "regressions": 2,
+    "seconds": 4.734,
+    "root_xml_review_tool": "c4d765",
+    "overlap": "All24 installed cases are a subset of source46; not70 unique cases.",
+    "qualification_sha256": "c915d73f065985363b4a38d0bcc6ec96d514e74ef98a370dee5bd264ec9ed72f",
+    "wheel_sha256": "2b8ce688541a5ae6e9806467569be0743fef6ff607c763f2b93accf0f93e017d",
+    "payloads_equal": 988
+  },
+  "vendor_commit": "0922961487284e3b6a00a79017ec56b327709ccd",
+  "vendor_root_reviews": [
+    "d0d182",
+    "7da3e8",
+    "c4d765",
+    "e8900f",
+    "e7aff6",
+    "ceff89"
+  ],
+  "final_documentation_root_review": {
+    "ledger_diff_tool": "1b017d",
+    "candidate_review_tool": "5e185b",
+    "fixed_plan_hash_tool": "f84bfe",
+    "commit_push_authorized": true
+  }
+}

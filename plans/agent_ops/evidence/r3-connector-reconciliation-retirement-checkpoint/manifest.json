@@ -1,0 +1,130 @@
+{
+  "files": [
+    {
+      "path": "installed-qualification/build-provenance.json",
+      "sha256": "a2684e696da8570a585bfc3427fad4ebc142b81a779d625c981520fedd929a3c",
+      "bytes": 1697
+    },
+    {
+      "path": "installed-qualification/build.py",
+      "sha256": "04178daff5c2c5c9fa1829b4cc1ed80584acd63dfe97e6b98d0e826778b0cf6b",
+      "bytes": 2518
+    },
+    {
+      "path": "installed-qualification/installed.xml",
+      "sha256": "aae29c9a78b87c84d7a83bc9710b3203cfeac4edf602bbf0eabdcecc6b361ece",
+      "bytes": 3803
+    },
+    {
+      "path": "installed-qualification/origins.json",
+      "sha256": "9664d3e9606bfaabd6620906930df4bd35b6185a91b40e3d17398b39940b839b",
+      "bytes": 560
+    },
+    {
+      "path": "installed-qualification/public-allowlist.json",
+      "sha256": "eee66e515c7ec203bb3fa2e138b004dcb16ab331b2eb14d136a90049c4610b1f",
+      "bytes": 951
+    },
+    {
+      "path": "installed-qualification/qualification.json",
+      "sha256": "c915d73f065985363b4a38d0bcc6ec96d514e74ef98a370dee5bd264ec9ed72f",
+      "bytes": 1295
+    },
+    {
+      "path": "installed-qualification/run_installed.py",
+      "sha256": "bd112c9f157072175a48139b102be2cb6b469f0ee30fecf2f6cc36d1b86904b5",
+      "bytes": 1583
+    },
+    {
+      "path": "README.md",
+      "sha256": "00e44a8696c7c57ff5392c0918ad4a88d8ae1a84c6434ca5fdcd468f51d36d3c",
+      "bytes": 1915
+    },
+    {
+      "path": "review.json",
+      "sha256": "12ec1cf830915e52269811937bfdf8d75342d55d8c049c415bc92ab82bcb9daa",
+      "bytes": 3809
+    },
+    {
+      "path": "source-qualification/fix-final.xml",
+      "sha256": "3e00f01f27364eb5ca089ca5f18281000c6a6509689aed6a5e53cfcaecaa1659",
+      "bytes": 545
+    },
+    {
+      "path": "source-qualification/initial-24pass-21fixtureerrors.xml",
+      "sha256": "90a505461f74cab082c5b4676bbbaded2c516830d2f81057a826718f7280f702",
+      "bytes": 119259
+    },
+    {
+      "path": "source-qualification/new-21pass.xml",
+      "sha256": "b835d3a157e79d95d75da8ad17bb6884acb5e62229fcf2e9e5333e34a8100970",
+      "bytes": 3354
+    },
+    {
+      "path": "source-qualification/origins.json",
+      "sha256": "95766dbe106540a7fbffd8d9e80db241a3f74f9c6818d8c6d1305ea8864d7d20",
+      "bytes": 316
+    },
+    {
+      "path": "source-qualification/public-allowlist.json",
+      "sha256": "70f0af93f10b9afe49c7b565a5104a18fbfb4c4985616ec25e7b19d0286e627a",
+      "bytes": 2583
+    },
+    {
+      "path": "source-qualification/qualification.json",
+      "sha256": "0cd5dc612559b23dc3601c1d616936bd8cf8c31c54c57b7c0339b5dbcd78d303",
+      "bytes": 3871
+    },
+    {
+      "path": "source-qualification/reproduction.xml",
+      "sha256": "268ba53105c0b76863b67c9e9d42c86908b04a99c67a7302bc90f68eab833ec5",
+      "bytes": 756
+    },
+    {
+      "path": "source-qualification/run.py",
+      "sha256": "2a5a01344f0ac467f396e47022fbf4d32b999d4a9261056d4cdb200c9632696a",
+      "bytes": 1091
+    },
+    {
+      "path": "source-qualification/run_fix.py",
+      "sha256": "c80bcd0ef099c0b66bd6e2c1cb6a9a74bd8b19f47db79606cbac8ad64b4251a9",
+      "bytes": 847
+    },
+    {
+      "path": "source-qualification/second-21fixtureerrors.xml",
+      "sha256": "3889204f9b0e8fde4987e1ee71856ec8a42d634dfc06ee831e6bae3b07651815",
+      "bytes": 88657
+    },
+    {
+      "path": "source-qualification/source/src/okto_nexus_connector/services/r4_reconciliation.py",
+      "sha256": "54d1c7739153fd25f70629438bc30310d264a1cfb23a5daaf19b30cba0916c21",
+      "bytes": 21985
+    },
+    {
+      "path": "source-qualification/source/src/okto_nexus_connector/services/r4_session_release.py",
+      "sha256": "72724d947b6e01c84a73d556e64a70a85b157552d3267d44f5a0f54d527d7b98",
+      "bytes": 13485
+    },
+    {
+      "path": "source-qualification/source/src/okto_nexus_connector/storage/r4_session_releases.py",
+      "sha256": "f80c8a06bd0ffc48d42ff5835ec0d83a45b303126765d0f27d094b0d217396c3",
+      "bytes": 24848
+    },
+    {
+      "path": "source-qualification/source/tests/unit/test_reconciliation_checkpoint.py",
+      "sha256": "eaa80b10cac6c2b92a234567ab641a1193ec49ae126d180ab0138ca2dc1d8ea5",
+      "bytes": 11765
+    },
+    {
+      "path": "source-qualification/source/tests/unit/test_session_release_recovery.py",
+      "sha256": "2f5845395f97dedb4b21afc5abc1e5ea1d7904fa54a4c0fe0a02d0c11fdb4501",
+      "bytes": 13346
+    },
+    {
+      "path": "source-qualification/test_reproduction.py",
+      "sha256": "30bde7141ba6e6b80153fe48cf7738bb75da2a09e62c37079b1f068f956e968a",
+      "bytes": 2312
+    }
+  ],
+  "curation": "Explicit source15+installed6 allowlists and their manifests; source/tests/failure XML retained. No wheel, environment, real DB, credential or live control copied/executed."
+}

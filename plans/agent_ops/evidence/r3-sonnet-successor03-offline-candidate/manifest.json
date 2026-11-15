@@ -1,0 +1,95 @@
+{
+  "files": [
+    {
+      "path": "activecontrol.py",
+      "sha256": "96d8545ea322e5224e426eaa101b015d5f3d50d902fb7b4046a02e508d6c6045",
+      "bytes": 2853
+    },
+    {
+      "path": "candidate.json",
+      "sha256": "9902d5e47b6977af671d89f6adc97fb6278c6aff95412c4156fe6cc509bbc835",
+      "bytes": 4569
+    },
+    {
+      "path": "commands.json",
+      "sha256": "f9a2fdc1df25d5eaf331c41ea258e5afcc3cc901c2cbaaf1025a516a6b42ce4b",
+      "bytes": 1714
+    },
+    {
+      "path": "observe_active.py",
+      "sha256": "ae83c7a81546325f74762794b5878b85b9e41f4e0225cd364724e41cddce155b",
+      "bytes": 4903
+    },
+    {
+      "path": "prepare_candidate.py",
+      "sha256": "0e33e2e3ab210a9bfa7a07d2a80abc773822d9adf2152cee67e6e03c4e2148fd",
+      "bytes": 4943
+    },
+    {
+      "path": "public-allowlist.json",
+      "sha256": "3ba401a09f3a22ada70d470f7c68ae9fbb41348190e16d223efb7d05f3aceee4",
+      "bytes": 2798
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "c14ae8962861bc37ee88bcc6a336a5fd5a179fd52954cb31175ae2051dea31d8",
+      "bytes": 4743
+    },
+    {
+      "path": "README.md",
+      "sha256": "4bb120abd6ce32e40735123a14726370dd877d370f2082f7fd805597430d49a4",
+      "bytes": 4036
+    },
+    {
+      "path": "remote_work.py",
+      "sha256": "4a1b6d0bdbba891ee6d2763a4d8dc92415bac87b64928597566b46fedc120b4e",
+      "bytes": 14410
+    },
+    {
+      "path": "request_context.py",
+      "sha256": "c840a43bf0e80c919fdab3fc1cbedc84595411de414522372f013ef7369af809",
+      "bytes": 3642
+    },
+    {
+      "path": "reused_observation.py",
+      "sha256": "9f15dbc9b764c6760936bdaba3d071156b0714e481bec69eca6f246de7db427c",
+      "bytes": 12902
+    },
+    {
+      "path": "review.json",
+      "sha256": "99fc31fac56435a9bdfa4190c5104fd32f93feeae0867e2824349cca07e9c15c",
+      "bytes": 1534
+    },
+    {
+      "path": "select_plan.py",
+      "sha256": "1a0c7bcdf70e66768912b471653e154d8e8d86ef64a44543dc6eeccbf5f387f6",
+      "bytes": 4533
+    },
+    {
+      "path": "sonnet_usage.py",
+      "sha256": "33508153240906b7f0fc27f112b04d4e15e06ef3cf70531a556f99015902da48",
+      "bytes": 17225
+    },
+    {
+      "path": "successor_policy.py",
+      "sha256": "adea2a6aeadc8282632b6b4a3dc6a1ac5fb671de3e10a64acc4ad9fb71989791",
+      "bytes": 4110
+    },
+    {
+      "path": "test_successor_policy.py",
+      "sha256": "0d198c9ef98eae23f8afc91ce6315ca047c4d0da4ed3d5c4b757468ebe2e62ca",
+      "bytes": 4918
+    },
+    {
+      "path": "work-entry.py",
+      "sha256": "1bc82e2fbc7b3be1c14fa87a5cf0294ca110f2a28b2aff204d07968be204cc46",
+      "bytes": 549
+    },
+    {
+      "path": "work_context.py",
+      "sha256": "c7a2db4a73cc8b0f7f8dcc02680081bc9100b6f6d95ec8463b9c68d1fb4a58e1",
+      "bytes": 32704
+    }
+  ],
+  "curation": "Exact16-file explicit public allowlist plus allowlist/review; no runtime/auth/private data."
+}

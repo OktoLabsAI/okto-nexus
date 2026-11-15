@@ -1,0 +1,16 @@
+{
+  "format": 1,
+  "status": "INSTALLED_FOCAL_PASS",
+  "tests": 24,
+  "failed": 0,
+  "skipped": 0,
+  "cases": "22 reconciliation checkpoint cases + 2 existing direct/recovery/background regressions",
+  "source_commit": "a8bd48bdc6d6e835c55eb601a7e7fa316453aa7b",
+  "wheel_sha256": "2b8ce688541a5ae6e9806467569be0743fef6ff607c763f2b93accf0f93e017d",
+  "source_qualification_sha256": "0cd5dc612559b23dc3601c1d616936bd8cf8c31c54c57b7c0339b5dbcd78d303",
+  "build_provenance_sha256": "a2684e696da8570a585bfc3427fad4ebc142b81a779d625c981520fedd929a3c",
+  "origin_sha256": "9664d3e9606bfaabd6620906930df4bd35b6185a91b40e3d17398b39940b839b",
+  "command": "rtk proxy C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-connector-reconciliation-wheel-6pb8bst4\\venv\\Scripts\\python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-connector-reconciliation-wheel-6pb8bst4\\run_installed.py",
+  "boundary": "Tests import actual installed Connector/Core/Nexus packages under own prefix; every payload compared to wheel. Synthetic journals/ACKs only; no native process/service/provider/credentials or campaign writes.",
+  "live_status_not_changed": "Existing Connector remains old package; this qualification neither installs into live campaign nor asserts cleanup or SVC21 acceptance."
+}

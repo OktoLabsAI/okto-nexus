@@ -14224,6 +14224,41 @@
       "sonnet_charged_admissions": 2,
       "codex_tokens": 579154,
       "codex_charged_admissions": 16
+    },
+    "r3_connector_reconciliation_retirement_checkpoint": {
+      "status": "OFFLINE_SOURCE_AND_ISOLATED_INSTALLED_FIX_QUALIFIED",
+      "summary": "Connector missing-outbox accepted-reconciliation retirement checkpoint schema6, source a8bd48bd.46 unique source cases (22new+24regression), separate4 diagnostic reproductions; isolated installed24 (22new+2regression) overlap source46. Fixture failures preserved. Old reader rejects schema6; no in-place downgrade compatibility claim. Current Connector39640/fbc0042 remains UNKNOWN per root12:07:27UTC, no live migration or physical-exit claim.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-connector-reconciliation-retirement-checkpoint/review.json",
+        "plans/agent_ops/evidence/r3-connector-reconciliation-retirement-checkpoint/source-qualification/qualification.json",
+        "plans/agent_ops/evidence/r3-connector-reconciliation-retirement-checkpoint/installed-qualification/qualification.json",
+        "plans/agent_ops/evidence/r3-connector-reconciliation-retirement-checkpoint/manifest.json"
+      ],
+      "source_commit": "a8bd48bdc6d6e835c55eb601a7e7fa316453aa7b",
+      "acceptance_promoted": false,
+      "current_live_unknown_resolved": false,
+      "old_campaign_modified": false,
+      "force_authority_expanded": false,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "sonnet_authorized_limit": 200000,
+      "installed_wheel_sha256": "2b8ce688541a5ae6e9806467569be0743fef6ff607c763f2b93accf0f93e017d",
+      "installed_qualification_sha256": "c915d73f065985363b4a38d0bcc6ec96d514e74ef98a370dee5bd264ec9ed72f",
+      "vendor_commit": "0922961487284e3b6a00a79017ec56b327709ccd"
+    },
+    "r3_sonnet_successor03_offline_candidate": {
+      "status": "OFFLINE_CANDIDATE_ONLY_AUTHORIZATION_AND_COMPOSITION_PENDING",
+      "summary": "Six pure policy tests, no lifecycle Context/provider/service. Current200k/carry144004/two charges preserved; next reserve244846 refuses. Proposed500k/pre480k/max4total only, explicit user response pending, no real authority record/selected work plan/fresh corrected campaign composition.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-successor03-offline-candidate/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-successor03-offline-candidate/qualification.json",
+        "plans/agent_ops/evidence/r3-sonnet-successor03-offline-candidate/manifest.json"
+      ],
+      "current_authorized_limit": 200000,
+      "observed_tokens": 144004,
+      "charged_requests": 2,
+      "proposed_limit_authorized": false,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -16288,6 +16323,45 @@
       "sonnet_charged_admissions": 2,
       "codex_tokens": 579154,
       "codex_charged_admissions": 16
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_connector_reconciliation_retirement_checkpoint",
+      "status": "OFFLINE_SOURCE_AND_ISOLATED_INSTALLED_FIX_QUALIFIED",
+      "summary": "Connector missing-outbox accepted-reconciliation retirement checkpoint schema6, source a8bd48bd.46 unique source cases (22new+24regression), separate4 diagnostic reproductions; isolated installed24 (22new+2regression) overlap source46. Fixture failures preserved. Old reader rejects schema6; no in-place downgrade compatibility claim. Current Connector39640/fbc0042 remains UNKNOWN per root12:07:27UTC, no live migration or physical-exit claim.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-connector-reconciliation-retirement-checkpoint/review.json",
+        "plans/agent_ops/evidence/r3-connector-reconciliation-retirement-checkpoint/source-qualification/qualification.json",
+        "plans/agent_ops/evidence/r3-connector-reconciliation-retirement-checkpoint/installed-qualification/qualification.json",
+        "plans/agent_ops/evidence/r3-connector-reconciliation-retirement-checkpoint/manifest.json"
+      ],
+      "source_commit": "a8bd48bdc6d6e835c55eb601a7e7fa316453aa7b",
+      "acceptance_promoted": false,
+      "current_live_unknown_resolved": false,
+      "old_campaign_modified": false,
+      "force_authority_expanded": false,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "sonnet_authorized_limit": 200000,
+      "installed_wheel_sha256": "2b8ce688541a5ae6e9806467569be0743fef6ff607c763f2b93accf0f93e017d",
+      "installed_qualification_sha256": "c915d73f065985363b4a38d0bcc6ec96d514e74ef98a370dee5bd264ec9ed72f",
+      "vendor_commit": "0922961487284e3b6a00a79017ec56b327709ccd"
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_successor03_offline_candidate",
+      "status": "OFFLINE_CANDIDATE_ONLY_AUTHORIZATION_AND_COMPOSITION_PENDING",
+      "summary": "Six pure policy tests, no lifecycle Context/provider/service. Current200k/carry144004/two charges preserved; next reserve244846 refuses. Proposed500k/pre480k/max4total only, explicit user response pending, no real authority record/selected work plan/fresh corrected campaign composition.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-successor03-offline-candidate/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-successor03-offline-candidate/qualification.json",
+        "plans/agent_ops/evidence/r3-sonnet-successor03-offline-candidate/manifest.json"
+      ],
+      "current_authorized_limit": 200000,
+      "observed_tokens": 144004,
+      "charged_requests": 2,
+      "proposed_limit_authorized": false,
+      "acceptance_promoted": false
     }
   ],
   "r3_native_bounded_supervisor_execution": {
