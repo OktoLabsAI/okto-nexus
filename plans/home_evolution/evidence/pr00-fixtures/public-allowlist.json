@@ -1,0 +1,35 @@
+{
+  "files": {
+    "antecedents.json": {
+      "sha256": "581a09477ee92b93490c7753375a8e75b4328b62b680ab9c5858506997078f1d",
+      "bytes": 1563
+    },
+    "baseline.json": {
+      "sha256": "817ab66fae1c4b6be423e3e57a9f4f00ee40b1dea3098d1b02d232279433eaf6",
+      "bytes": 1793
+    },
+    "final.xml": {
+      "sha256": "c9c7cb50751edac4132b71c7d1975b5d489d8ee124448d9adbfb2e19db66e708",
+      "bytes": 2849
+    },
+    "qualification.json": {
+      "sha256": "2cb66d2bcdcb06e9d9ef306d8e349d4418817c0515e525fac5806f4a0b0c62fe",
+      "bytes": 3348
+    },
+    "qualified.xml": {
+      "sha256": "ceeca277334546fa800d444cffe9e259fdbd04206b9fb672a78c5d8184bfbdc4",
+      "bytes": 2853
+    },
+    "README.md": {
+      "sha256": "40d040eccba62e8238dee2ab96aa4722823c82cc712d65e1e3fb166903a325ae",
+      "bytes": 2874
+    }
+  },
+  "excludes": [
+    "SQLite databases",
+    "OBS tokens",
+    "message bodies",
+    "event payloads",
+    "raw initial traceback"
+  ]
+}

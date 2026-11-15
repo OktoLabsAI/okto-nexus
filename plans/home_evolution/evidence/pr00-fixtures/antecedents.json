@@ -1,0 +1,28 @@
+{
+  "initial_pytest": {
+    "sha256": "b7f0bd379c4cd8964fbd7b0c87cad5f0323e124468088bd27da70bbffc8f6c86",
+    "retained_outside_repository": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-pr00-initial-nibd576j\\initial.xml",
+    "failures": 1,
+    "errors": 5,
+    "reason": "Fixture OBS subject lacked required availability binding marker. Added fake fixture-only marker; product unchanged.",
+    "test_nodeids": [
+      "test_global_identity_and_abc_activity_without_operator_messages",
+      "test_attempts_remain_distinct_from_work_and_session",
+      "test_observation_ttl_uses_clock_without_mutating_history",
+      "test_success_does_not_erase_cleanup_or_revoked_identity",
+      "test_current_graph_baseline_is_read_only",
+      "test_scale_100_agents_1000_inputs_100000_events_is_bounded_read"
+    ]
+  },
+  "intermediate_pytest": {
+    "artifact": "final.xml",
+    "passed": 6,
+    "unique_final_test_cases_not_additive": true
+  },
+  "lint_antecedents": [
+    "No ruff module in project venv; existing standalone ruff used without installation.",
+    "Fixture import triggered F401/F811; changed to pytest plugin registration. Final Ruff F passed."
+  ],
+  "curation_antecedent": "Path.replace across D: and C: refused with WinError 17 before movement. Retention uses copy, hash equality and deletion of only the copied initial XML; no tests rerun.",
+  "final_pytest_warning": "Module home_evolution.fixtures already imported before pytest plugin assertion rewriting. Fixture module has no assert statements; six tests pass."
+}

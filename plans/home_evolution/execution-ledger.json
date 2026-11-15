@@ -1,0 +1,602 @@
+{
+  "schema_version": 1,
+  "plan": "plans/home_evolution/source-plan.md",
+  "original_source": "C:\\Users\\jpamb\\Downloads\\PLANO_CODEX_NEXUS_HOME_OPERACIONAL_R1.md",
+  "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
+  "created_at": "2026-11-15T20:14:32.568756+00:00",
+  "updated_at": "2026-11-15T20:35:39.483289+00:00",
+  "status": "IN_PROGRESS",
+  "baseline": {
+    "previous_branch": "feature/v0.3.3",
+    "previous_head": "7e0cec1ed896d21667e5e6d6ee4246ce06e2c5ef",
+    "current_branch": "feature/v0.3.4",
+    "merged_baseline": "970fd3de",
+    "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+    "plan_reference": "4ba6fa40383a4157eb0fe5e1b9a943bf112a089b",
+    "main_drift": "Three independent test/CI commits merged without dropping the existing R3 work.",
+    "home_source_drift": "Eight central files match the inspected plan reference.",
+    "impacted_repositories": [
+      "nexus"
+    ],
+    "core_connector_change_required": false
+  },
+  "versions": {
+    "nexus": "0.3.4",
+    "connector": "0.0.12",
+    "core": "0.0.14"
+  },
+  "milestones": {
+    "PR-00": {
+      "status": "VERIFIED",
+      "tasks": [
+        "HOME-001",
+        "HOME-002",
+        "HOME-003",
+        "HOME-004"
+      ],
+      "evidence": [
+        "plans/home_evolution/release-report.md",
+        "plans/home_evolution/evidence/pr00-fixtures/qualification.json"
+      ]
+    },
+    "PR-01": {
+      "status": "IN_PROGRESS",
+      "tasks": [
+        "HOME-005",
+        "HOME-006",
+        "HOME-007",
+        "HOME-008",
+        "HOME-009",
+        "HOME-010"
+      ],
+      "evidence": []
+    },
+    "PR-02": {
+      "status": "TODO",
+      "tasks": [
+        "HOME-011",
+        "HOME-012",
+        "HOME-013",
+        "HOME-014",
+        "HOME-015"
+      ],
+      "evidence": []
+    },
+    "PR-03": {
+      "status": "TODO",
+      "tasks": [
+        "HOME-016",
+        "HOME-017",
+        "HOME-018",
+        "HOME-019",
+        "HOME-020"
+      ],
+      "evidence": []
+    },
+    "PR-04": {
+      "status": "TODO",
+      "tasks": [
+        "HOME-021",
+        "HOME-022",
+        "HOME-023",
+        "HOME-024"
+      ],
+      "evidence": []
+    },
+    "PR-05": {
+      "status": "TODO",
+      "tasks": [
+        "HOME-025",
+        "HOME-026",
+        "HOME-027",
+        "HOME-028",
+        "HOME-029",
+        "HOME-030",
+        "HOME-031"
+      ],
+      "evidence": []
+    },
+    "PR-06": {
+      "status": "TODO",
+      "tasks": [
+        "HOME-032",
+        "HOME-033",
+        "HOME-034",
+        "HOME-035",
+        "HOME-036"
+      ],
+      "evidence": []
+    }
+  },
+  "tasks": {
+    "HOME-001": {
+      "title": "Reconciliar checkout e implementação",
+      "pr": "PR-00",
+      "implementation": "Registrar branch, HEAD, working tree, versão e Home atual. Comparar com o SHA de referência; preservar alterações do usuário e registrar diferenças, sem checkout destrutivo.",
+      "acceptance": "baseline.md com arquivos reais e dependências; nenhuma suposição silenciosa sobre main ou feature.",
+      "status": "VERIFIED",
+      "files": [
+        "plans/home_evolution/baseline.md"
+      ],
+      "evidence": [
+        "plans/home_evolution/baseline.md"
+      ],
+      "tests": [
+        "Executed git fetch/status/log/diff; eight reference source paths matched; main three test commits integrated without destructive checkout."
+      ],
+      "limitations": []
+    },
+    "HOME-002": {
+      "title": "Mapear origens e autorização",
+      "pr": "PR-00",
+      "implementation": "Rastrear handoffs, entregas lógicas, operações, recibos, perguntas, artefatos, atenção, observação e workspace até as consultas/controles atuais.",
+      "acceptance": "source-map.md com permissões, correlação, atualidade, cobertura de SSE e lacunas por origem.",
+      "status": "VERIFIED",
+      "files": [
+        "plans/home_evolution/source-map.md"
+      ],
+      "evidence": [
+        "plans/home_evolution/source-map.md"
+      ],
+      "tests": [
+        "Manual source-backed backend/frontend boundary review; auth, correlation and two existing SSE surfaces inspected."
+      ],
+      "limitations": []
+    },
+    "HOME-003": {
+      "title": "Congelar semântica de apresentação",
+      "pr": "PR-00",
+      "implementation": "Implementar ou especificar funções puras de classificação, agrupamento, identificadores e contadores. Registrar ADR sobre estado de visualização de resultados.",
+      "acceptance": "Contrato versionado e tabela de casos; OPEN, CLAIMED, SUBMITTED, RUNNING e resultado incerto continuam distintos.",
+      "status": "VERIFIED",
+      "files": [
+        "plans/home_evolution/contracts.md",
+        "plans/home_evolution/adr-result-view-state.md"
+      ],
+      "evidence": [
+        "plans/home_evolution/contracts.md",
+        "plans/home_evolution/adr-result-view-state.md"
+      ],
+      "tests": [
+        "Manual specification review against actual canonical ports/controls and fixed invariants; no future product test claimed."
+      ],
+      "limitations": []
+    },
+    "HOME-004": {
+      "title": "Preparar fixtures e baseline de experiência",
+      "pr": "PR-00",
+      "implementation": "Criar fixtures mínimas para um agente, cooperação A→B→C, múltiplas sessões, fonte stale, resultado com cleanup e autorização revogada. Instrumentar tempos e navegação sem conteúdo privado.",
+      "acceptance": "Fixtures reproduzíveis e medidas locais de referência; nenhum número de produção inventado.",
+      "status": "VERIFIED",
+      "files": [
+        "plans/home_evolution/evidence/pr00-fixtures/qualification.json",
+        "plans/home_evolution/evidence/pr00-fixtures/qualified.xml",
+        "plans/home_evolution/performance.md"
+      ],
+      "evidence": [
+        "plans/home_evolution/evidence/pr00-fixtures/qualification.json",
+        "plans/home_evolution/evidence/pr00-fixtures/qualified.xml",
+        "plans/home_evolution/performance.md"
+      ],
+      "tests": [
+        "Six actual SQLite fixture tests PASS plus current query timing; not new Home acceptance."
+      ],
+      "limitations": []
+    },
+    "HOME-005": {
+      "title": "Criar a fronteira de leitura da Home",
+      "pr": "PR-01",
+      "implementation": "Criar HomeOverviewService e HomeOverviewQueries, ou equivalentes existentes, com contratos tipados; nenhuma dependência direta do frontend em SQL/runtime.",
+      "acceptance": "Portas, modelos e testes de import boundary; nomenclatura proposta reconciliada com o repositório.",
+      "status": "IN_PROGRESS",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-006": {
+      "title": "Projetar trabalho canônico",
+      "pr": "PR-01",
+      "implementation": "Consultar trabalho iniciado por operador e por agentes; agregar handoff, entrega e operações com correlação comprovada; preservar tentativas e sessões como detalhes.",
+      "acceptance": "Atividades estáveis, sem duplicação por abertura de sessão, steer, retries ou publicação de resultado.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-007": {
+      "title": "Implementar escopo e agregações",
+      "pr": "PR-01",
+      "implementation": "Filtrar antes de contar; separar conectividade global e atuação no workspace; contadores sobre o conjunto autorizado, não sobre a página.",
+      "acceptance": "Totais, lista e escopo consistentes no mesmo snapshot; desconhecido não é zero.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-008": {
+      "title": "Integrar pendências existentes",
+      "pr": "PR-01",
+      "implementation": "Consumir projeções da Attention e referências de decisões nativas; respeitar prioridade, adiamento, destinatário e feature desabilitada.",
+      "acceptance": "Home recebe itens concretos e ações previstas sem criar outra fila de aprovações.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-009": {
+      "title": "Projetar resultados resumidos",
+      "pr": "PR-01",
+      "implementation": "Consultar resultados, respostas e metadados de artefatos; classificar conclusão de turno versus entrega de handoff e erro de limpeza.",
+      "acceptance": "Resultados básicos disponíveis já no M1; nenhuma necessidade de ler todos os payloads.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-010": {
+      "title": "Publicar APIs e contratos de erro",
+      "pr": "PR-01",
+      "implementation": "Adicionar /api/v1/home/overview e paginação por bloco, ou extensão equivalente; autenticação atual, limites, cache privado/no-store, revisão e respostas parciais explícitas.",
+      "acceptance": "Testes HTTP reais, validação de parâmetros, 401/403 tratados e ausência de efeitos de execução nos GETs.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-011": {
+      "title": "Evoluir o layout existente",
+      "pr": "PR-02",
+      "implementation": "Refatorar HomeView/HomeOverview; cabeçalho compacto, resumo, Precisa de você, Em andamento, Resultados e Agentes conectados. Rebaixar atalhos grandes.",
+      "acceptance": "A mesma Home, não uma segunda rota concorrente; leitura útil em desktop e mobile.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-012": {
+      "title": "Construir lista de trabalho",
+      "pr": "PR-02",
+      "implementation": "Cartões/linhas por atividade, agrupamento opcional por agente e expansão de tentativas/sessões; rótulos legíveis, motivo e tempo no estado.",
+      "acceptance": "Uma identidade com sessões distintas não recebe um status único enganoso; warm/idle fora de Em andamento.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-013": {
+      "title": "Mostrar atenção compacta",
+      "pr": "PR-02",
+      "implementation": "Extrair componentes de apresentação existentes; mostrar até três ocorrências prioritárias com contexto e abrir a inspeção atual.",
+      "acceptance": "Uma decisão pendente abre o registro exato; não é necessário esperar um novo drawer para o M1.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-014": {
+      "title": "Mostrar resultados iniciais",
+      "pr": "PR-02",
+      "implementation": "Resumo de resposta, resultado e artefato com referências exatas; visualização usa controles existentes e não marca visto em massa.",
+      "acceptance": "É possível localizar e abrir uma entrega pela Home, sem procurar outra vez na tela de destino.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-015": {
+      "title": "Resolver estados vazios e filtros",
+      "pr": "PR-02",
+      "implementation": "Preservar workspace selecionado; usar nomes existentes; filtros rápidos de atenção/estado/agente e estados zero-agente, sem trabalho, parcial, forbidden e stale.",
+      "acceptance": "Zero agentes indica Conectar agente pelo fluxo plug and play; falha de leitura não mostra onboarding falso.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-016": {
+      "title": "Generalizar referência tipada de navegação",
+      "pr": "PR-03",
+      "implementation": "Criar HomeTarget/OperationalTarget para handoff, operação, sessão, mensagem, aprovação, resultado e observação; validar escopo e resolver no servidor.",
+      "acceptance": "Links, voltar/avançar e reabertura apontam ao mesmo objeto; URLs não carregam segredo ou conteúdo.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-017": {
+      "title": "Reaproveitar inspeções no painel de detalhes",
+      "pr": "PR-03",
+      "implementation": "Extrair composição de AttentionInspection sem trocar as máquinas de estado internas; desktop lateral e mobile em camada acessível.",
+      "acceptance": "Mesmos formulários/serviços de ApprovalInspection, HandoffInspection e runtime; uma única camada ativa.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-018": {
+      "title": "Conectar ações canônicas",
+      "pr": "PR-03",
+      "implementation": "Responder, aprovar/negar, verificar, inspecionar recuperação e interromper somente quando o contrato atual permite; revalidar antes do envio.",
+      "acceptance": "Conflitos e resultado incerto permanecem visíveis; não há approve genérico, retry-all ou ação por inferência.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-019": {
+      "title": "Adicionar pedido e continuidade contextual",
+      "pr": "PR-03",
+      "implementation": "Extrair composer existente; distinguir Nova tarefa (handoff) de Conversar (mensagem); continuar somente na sessão explicitamente correlacionada.",
+      "acceptance": "Operador nunca personifica agente; encerramento/revogação da sessão exige novo contexto explícito, não fallback silencioso.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-020": {
+      "title": "Proteger rascunhos, foco e navegação",
+      "pr": "PR-03",
+      "implementation": "Não remontar formulários em refresh; confirmar descarte na troca de alvo/workspace quando necessário; manter seleção, scroll e ação em curso.",
+      "acceptance": "SSE, filtros, Escape e botão Voltar não apagam uma resposta digitada nem redirecionam uma decisão.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-021": {
+      "title": "Agrupar entregas correlacionadas",
+      "pr": "PR-04",
+      "implementation": "Agrupar somente relações explícitas entre resultado, resposta e artefatos; manter autores, revisão, origem e metadados separados.",
+      "acceptance": "Uma entrega com três arquivos não parece quatro trabalhos; ausência de correlação não é preenchida com heurística.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-022": {
+      "title": "Reutilizar visto por ocorrência/revisão",
+      "pr": "PR-04",
+      "implementation": "Para result_unseen, reutilizar a preferência da Attention por ocorrência/revisão. Para fontes sem esse contrato, mostrar Recentes, sem contador novo fictício.",
+      "acceptance": "Home não altera watermark temporal global nem ACK de inbox; visualização em uma ocorrência não oculta outra.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-023": {
+      "title": "Abrir resultados e artefatos com segurança",
+      "pr": "PR-04",
+      "implementation": "Carregar conteúdo sob demanda, com componentes existentes, limites, sanitização e autorização de origem.",
+      "acceptance": "Resumo não expõe payload confidencial; HTML e outros artefatos não ganham execução privilegiada.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-024": {
+      "title": "Concluir a interação contextual",
+      "pr": "PR-04",
+      "implementation": "Depois de resposta/decisão, mostrar registro da decisão separado de aplicação no runtime; depois de entrega, permitir continuar com identidade e escopo corretos.",
+      "acceptance": "Ação enviada não equivale a aplicada; interação mantém correlação e recupera a mesma operação após resposta perdida.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-025": {
+      "title": "Auditar sinais de invalidação",
+      "pr": "PR-05",
+      "implementation": "Documentar eventos que invalidam cada bloco, mudanças que só ocorrem por passagem do tempo e retenção de eventos.",
+      "acceptance": "Matriz fonte→evento→fallback→TTL; nenhuma confiança em SSE para mudanças sem evento comprovado.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-026": {
+      "title": "Compartilhar e limitar atualização",
+      "pr": "PR-05",
+      "implementation": "Reutilizar stream do shell; debounce com teto, uma requisição em voo por escopo, cancelamento/geração de requests, reread após reconnect e fallback limitado.",
+      "acceptance": "Sem nova conexão SSE por cartão; fonte antiga não substitui resposta de escopo novo.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-027": {
+      "title": "Tratar paginação, revisão e relógio",
+      "pr": "PR-05",
+      "implementation": "Cursores opacos por filtro/escopo/ordem e invalidação explícita; timestamps do servidor, atualidade por bloco e refresh no vencimento.",
+      "acceptance": "Não há skips/duplicatas silenciosos; transport live não transforma fonte stale em current.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-028": {
+      "title": "Adicionar feed legível",
+      "pr": "PR-05",
+      "implementation": "Selecionar mudanças de negócio em templates determinísticos; agrupar bursts só quando não ocultar distinções, decisões ou falhas.",
+      "acceptance": "Feed limitado e correlacionado; sem tokens, heartbeats ou LLM resumindo a operação.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-029": {
+      "title": "Consolidar observação externa sem misturar garantias",
+      "pr": "PR-05",
+      "implementation": "Incorporar projeção externa existente no bloco de agentes/atividade e em Attention; separar reportado/inferido, atual/stale e execução gerenciada.",
+      "acceptance": "Herdr done nunca completa handoff, libera slot ou soma como sucesso nativo; ausência da feature não bloqueia Home.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-030": {
+      "title": "Validar acessibilidade e responsividade",
+      "pr": "PR-05",
+      "implementation": "Teclado, leitor de tela, contraste, focus restore, pause visual e largura mobile; textos seguem o idioma/padrão do frontend.",
+      "acceptance": "Fluxo completo sem mouse; atualizações não roubam foco; pausa visual não pausa agentes nem remove validação de segurança.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-031": {
+      "title": "Medir e otimizar custo",
+      "pr": "PR-05",
+      "implementation": "EXPLAIN QUERY PLAN, índices aditivos necessários, contagens paginadas, payload e taxas de requests em fixtures pequenas e ampliadas.",
+      "acceptance": "Sem N+1 por agente/cartão; metas medidas com ambiente documentado, não alegadas por inspeção.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-032": {
+      "title": "Executar matriz integrada",
+      "pr": "PR-06",
+      "implementation": "Unidade, repositório, HTTP, componente e navegador; testar flags, tenant/operador atual, escopos, sessão, revogação e concorrência.",
+      "acceptance": "Relatório liga cada cenário às evidências; testes Node/static não são vendidos como e2e de navegador.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-033": {
+      "title": "Executar campanha real isolada",
+      "pr": "PR-06",
+      "implementation": "Um harness já qualificado e um fluxo local; remoto/multiagente e Herdr conforme ambientes disponíveis, sempre com consentimento e dados descartáveis.",
+      "acceptance": "Evidência de pedido, atividade, pergunta/decisão e resultado; registrar explicitamente o que ficou NOT_RUN.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-034": {
+      "title": "Implementar rollout e reversão",
+      "pr": "PR-06",
+      "implementation": "Controle independente da nova apresentação; retorno à Home anterior sem parar processos, revogar grants ou desfazer migrações.",
+      "acceptance": "Desabilitar Home nova mantém daemon, CLI, Attention e controles originais operantes.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-035": {
+      "title": "Publicar documentação e diagnóstico",
+      "pr": "PR-06",
+      "implementation": "Guia curto da Home, estados e limites; docs do contrato, capturas sem dados privados, troubleshooting e evidências.",
+      "acceptance": "Nenhuma documentação confunde sessão aberta, conexão, entrega, execução, resultado e verificação.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    },
+    "HOME-036": {
+      "title": "Revisar contrato e critérios do produto",
+      "pr": "PR-06",
+      "implementation": "Revisão final de drift, segurança, interação e UX; confirmar primeiro valor e opcionabilidade do dashboard.",
+      "acceptance": "Gate M3 decidido com evidências, baseline atualizado e limitações explícitas; sem deploy automático em produção.",
+      "status": "TODO",
+      "files": [],
+      "evidence": [],
+      "tests": [],
+      "limitations": []
+    }
+  },
+  "invariants": {
+    "HOME-INV-01": {
+      "requirement": "Dashboard continua opcional: instalar, conectar, pedir, acompanhar, responder e obter resultado pelo terminal não ganha etapa web obrigatória.",
+      "status": "TODO",
+      "evidence": []
+    },
+    "HOME-INV-02": {
+      "requirement": "Server mantém autoridade de coordenação; Core executa; Connector hospeda execução remota. Esta frente não exige mudança de protocolo desses componentes por padrão.",
+      "status": "TODO",
+      "evidence": []
+    },
+    "HOME-INV-03": {
+      "requirement": "A Home lê/projeta fatos canônicos. Não mantém outra fila, máquina de estados de execução, scheduler ou agente interpretando eventos.",
+      "status": "TODO",
+      "evidence": []
+    },
+    "HOME-INV-04": {
+      "requirement": "Abrir, recarregar, filtrar ou expandir a Home não inicia inferência, aprova, completa trabalho, reivindica handoff, reconhece inbox ou amplia grant.",
+      "status": "TODO",
+      "evidence": []
+    },
+    "HOME-INV-05": {
+      "requirement": "Conectividade, presença, atividade, capacidade, admissão, aceitação nativa, resultado e verificação permanecem conceitos separados.",
+      "status": "TODO",
+      "evidence": []
+    },
+    "HOME-INV-06": {
+      "requirement": "Permissões de leitura de cada fonte valem para resumos, contadores, prévias, detalhes e links. Uma referência visível não concede capacidade de ação.",
+      "status": "TODO",
+      "evidence": []
+    },
+    "HOME-INV-07": {
+      "requirement": "Ações continuam nas APIs existentes, com revisão, correlação, idempotência e revalidação atuais. Resultado desconhecido não autoriza replay.",
+      "status": "TODO",
+      "evidence": []
+    },
+    "HOME-INV-08": {
+      "requirement": "Identidade de agente é persistente e pode ter múltiplas sessões. A unidade primária da Home é uma atividade lógica, não o agent_id isolado.",
+      "status": "TODO",
+      "evidence": []
+    },
+    "HOME-INV-09": {
+      "requirement": "Observação externa é identificada como reportada/inferida, com validade e origem. Não prova execução gerenciada nem conclusão de tarefa.",
+      "status": "TODO",
+      "evidence": []
+    },
+    "HOME-INV-10": {
+      "requirement": "Desabilitar a nova Home não muda nenhum desses contratos nem interfere nos agentes em execução.",
+      "status": "TODO",
+      "evidence": []
+    }
+  },
+  "history": [
+    {
+      "at": "2026-11-15T20:14:32.568756+00:00",
+      "event": "HOME-R1 initialized independently of completed R3; all new scenarios NOT_RUN. No prior test waiver/provider quota is inherited."
+    },
+    {
+      "at": "2026-11-15T20:35:39.483289+00:00",
+      "event": "PR-00 complete: source-backed specifications and fixture baseline qualified. 6 fixture tests,3 README tests,154 frontend baseline tests PASS;73 new Home scenarios remain NOT_RUN.",
+      "next": "PR-01 read projection and API; PR-02 presentation may proceed against the frozen contract."
+    }
+  ]
+}

@@ -1,0 +1,592 @@
+{
+  "schema_version": 1,
+  "plan": "plans/home_evolution/source-plan.md",
+  "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
+  "updated_at": "2026-11-15T20:14:32.568756+00:00",
+  "scenarios": {
+    "HOME-T-A01": {
+      "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-A02": {
+      "requirement": "Todos os projetos é uma união autorizada, sem duplicar agente, handoff ou entrega por join.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-A03": {
+      "requirement": "Um agente global sem vínculo ou atividade autorizada em A não aparece como atuante em A.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-A04": {
+      "requirement": "Uma credencial de agente ou monitor não herda acesso de operador à Home.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-A05": {
+      "requirement": "Revogação/logout remove payloads protegidos da lista, drawer e caches; o histórico do browser não os restaura.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-A06": {
+      "requirement": "Troca A→B com resposta lenta de A não mistura dados, contadores ou formulários.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-A07": {
+      "requirement": "Referência de alvo incompatível com workspace é recusada, mesmo quando o ID existe.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-A08": {
+      "requirement": "Ocorrências Server-wide são identificadas separadamente e não atribuídas a todos os projetos por conveniência.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-B01": {
+      "requirement": "Sessão aberta sem turno não conta como execução em andamento.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-B02": {
+      "requirement": "Instância one-shot aquecida, processo iniciando ou cleanup isolado não contam como novo trabalho produtivo.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-B03": {
+      "requirement": "CLAIMED sem evidência nativa mostra Assumido, não Executando.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-B04": {
+      "requirement": "SUBMITTED/native accepted sem RUNNING mostra aceitação, não conclusão nem execução confirmada.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-B05": {
+      "requirement": "Um handoff com runtime.start, turn.submit, steer e retries aparece uma vez na lista principal.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-B06": {
+      "requirement": "Tentativas são preservadas em detalhe e resultados de tentativa antiga não completam tentativa atual.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-B07": {
+      "requirement": "Fluxo A→B sem mensagem do operator aparece na Home.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-B08": {
+      "requirement": "Um agente com dois turnos/sessões mostra ambos com estados próprios, inclusive um bloqueado e outro executando.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-B09": {
+      "requirement": "Mensagem informativa/broadcast não vira tarefa ou posição de fila por estar unread.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-B10": {
+      "requirement": "Totais vêm do conjunto autorizado completo; paginação, limite de preview ou falha parcial não reduzem o total para o tamanho visível.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-C01": {
+      "requirement": "Pergunta destinada ao operador abre o pedido nativo exato e mantém suas opções/tipos.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-C02": {
+      "requirement": "Pergunta destinada a outro agente permite acompanhamento, não personificação nem resposta em nome do agente.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-C03": {
+      "requirement": "Aprovação expirada ou já decidida por outro cliente deixa de aceitar decisão ao revalidar.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-C04": {
+      "requirement": "Duplo clique e resposta HTTP perdida recuperam a mesma intenção/operação, sem dupla decisão.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-C05": {
+      "requirement": "Decisão registrada aparece separada de decisão aplicada pelo harness.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-C06": {
+      "requirement": "Resultado incerto oferece inspeção e recuperação canônica, nunca retry automático.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-C07": {
+      "requirement": "Item adiado continua visível no trabalho quando pertinente, mas não reaparece como prioridade em cada refresh.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-C08": {
+      "requirement": "Marcar visto não aprova, cancela, conclui ou reconhece inbox; novo episódio/revisão preserva sua própria atenção.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-C09": {
+      "requirement": "Attention desabilitada não impede uso dos controles canônicos originais; bloco explicita indisponibilidade.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-C10": {
+      "requirement": "Interromper usa a sessão/turno selecionados e contrato atual; não encerra todos os processos do agente.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-D01": {
+      "requirement": "Turno SUCCEEDED sem handoff_complete não aparece como handoff concluído.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-D02": {
+      "requirement": "Entrega em VERIFYING é apresentada como aguardando verificação, não como aceita.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-D03": {
+      "requirement": "Resultado produtivo bem-sucedido com cleanup pendente mantém sucesso e pendência técnica separados.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-D04": {
+      "requirement": "Resposta, resultado e artefatos explicitamente relacionados formam uma entrega legível, sem multiplicar tarefas.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-D05": {
+      "requirement": "Abrir Home ou mostrar preview não avança o marcador temporal global de mensagens novas.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-D06": {
+      "requirement": "Abrir/ver uma ocorrência não marca outra fora da página ou em outro projeto como vista.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-D07": {
+      "requirement": "Conteúdo de artefato exige autorização própria; HTML não executa com privilégios do dashboard.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-D08": {
+      "requirement": "Continuar conversa usa o contexto confirmado; sessão fechada/revogada não é substituída silenciosamente nem atribui fala ao agente original.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-E01": {
+      "requirement": "Resultado commitado antes de o cliente assinar SSE aparece no primeiro snapshot.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-E02": {
+      "requirement": "Evento entre snapshot e assinatura/reconexão não é perdido; lacuna de retenção provoca ressincronização.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-E03": {
+      "requirement": "Eventos duplicados ou fora de ordem não duplicam cartões nem fazem estados regredir.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-E04": {
+      "requirement": "Burst de eventos gera atualização agrupada com teto, não uma consulta por token.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-E05": {
+      "requirement": "Stream conectado com fonte externa expirada mantém badge stale da fonte.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-E06": {
+      "requirement": "Expiração de autorização, TTL de observação e prazo de atenção sem evento explícito são atualizados por relógio/fallback.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-E07": {
+      "requirement": "Falha de um bloco preserva outros blocos e mostra falha; 401/403 limpam o protegido.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-E08": {
+      "requirement": "Duas abas podem observar; uma decisão concorrente resulta em conflito claro na aba antiga.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-E09": {
+      "requirement": "Aba em background reduz trabalho; voltar revalida antes de habilitar ações sensíveis.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-E10": {
+      "requirement": "Pausa de atualização visual não pausa agentes, não amplia autoridade e não permite confirmar um estado antigo sem revisão atual.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-F01": {
+      "requirement": "Sem agentes, a Home oferece o onboarding plug and play existente, não formulários avançados.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-F02": {
+      "requirement": "Com um agente conectado sem trabalho, a Home oferece pedido/conversa e não uma grade vazia de métricas.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-F03": {
+      "requirement": "Clicar num item abre seu registro, não uma página genérica para procurar novamente.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-F04": {
+      "requirement": "Fechar drawer preserva filtros, página, expansão e posição de scroll.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-F05": {
+      "requirement": "Refresh com resposta digitada não remonta formulário, perde foco ou muda destinatário.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-F06": {
+      "requirement": "Troca de projeto/alvo com rascunho solicita descarte quando necessário; logout limpa dados protegidos.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-F07": {
+      "requirement": "Voltar/avançar/deep link revalidam alvo e autorização; referência inexistente tem saída clara.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-F08": {
+      "requirement": "Home utiliza os mesmos nomes de workspace, harness, temas e convenções linguísticas do dashboard.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-G01": {
+      "requirement": "Somente reporte externo working não é contado como execução gerenciada autorizada.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-G02": {
+      "requirement": "Done do Herdr é atividade externa finalizada, não task success, ACK, claim release ou handoff_complete.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-G03": {
+      "requirement": "Reportes expirados passam a desconhecido/desatualizado, nunca idle por suposição.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-G04": {
+      "requirement": "Mesmo agent_id com sessão nativa e observação externa permanece distinguível; deduplicação exige associação comprovada.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-G05": {
+      "requirement": "Observação sem workspace confiável não é incluída por inferência no projeto selecionado.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-G06": {
+      "requirement": "Herdr ausente/desconectado ou publicação desabilitada não bloqueia Home nem modifica runtime/MCP.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-H01": {
+      "requirement": "Teclado percorre filtros, cards, drawer e ações; foco retorna ao item ou a um destino estável.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-H02": {
+      "requirement": "Leitor de tela recebe avisos úteis agrupados, não todo stream; estado não depende só de cor.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-H03": {
+      "requirement": "Layout a 360 px, zoom 200% e desktop mantém ações acessíveis e sem overflow horizontal obrigatório.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-H04": {
+      "requirement": "GETs da Home não criam mensagens, claims, grants, sessões, ACKs ou decisões; metadados de autenticação preexistentes são avaliados separadamente.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-H05": {
+      "requirement": "Resumo omite credenciais, prompts completos, argumentos de ferramentas e paths privados; deep links não incluem segredos.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-H06": {
+      "requirement": "Fixtures de 1, 10 e 100 agentes não aumentam queries por agente; consultas e resposta têm limites documentados.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-H07": {
+      "requirement": "Carga de 1.000 atividades abertas e 100.000 eventos preserva paginação; histórico total não é serializado no overview.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-H08": {
+      "requirement": "O ledger registra hardware, dataset, medições p50/p95, tamanho do payload, taxa de requests e eventuais metas não atingidas.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-I01": {
+      "requirement": "Feature da Home nova OFF restaura a experiência anterior sem parar daemon, Core ou Connector.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-I02": {
+      "requirement": "Migrations aditivas preservam histórico e não exigem remoção de tabelas para reverter apresentação.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-I03": {
+      "requirement": "Todo o ciclo padrão pelo terminal continua funcionando sem qualquer visita à Home.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-I04": {
+      "requirement": "Build empacotado inclui frontend correto e os contratos compatíveis, sem depender de dev server.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    },
+    "HOME-T-I05": {
+      "requirement": "Campanhas simuladas, navegador e harness real são registradas separadamente; cenário não executado fica NOT_RUN.",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "commit": null,
+      "environment": null,
+      "limitations": []
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "scope": "HOME-R1 PR-00 fixtures/current query baseline only",
+  "test_count_unique": 6,
+  "elapsed_seconds": 17.415,
+  "command": "rtk proxy .venv\\Scripts\\python.exe -B -X utf8 -m pytest tests/home_evolution/test_baseline_fixture.py -q -o junit_family=legacy --junitxml=plans/home_evolution/evidence/pr00-fixtures/qualified.xml",
+  "lint_command": "rtk proxy ruff check tests/home_evolution --select F",
+  "lint_exit_code": 0,
+  "runtime": {
+    "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+    "executable": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "pytest": "9.1.1",
+    "distribution_metadata": "0.3.3",
+    "source_origin": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\__init__.py",
+    "note": "Existing venv dependencies, editable checkout source. Not a rebuilt or installed new-version package qualification."
+  },
+  "source_pins": {
+    "tests/home_evolution/__init__.py": "b779f6f7e08d65f9eb047e0de23b62ee613eaaf97973d7ff1bbebfaf51d2a180",
+    "tests/home_evolution/fixtures.py": "de3898c335382729a1f0236d60e226c03e469e546853b9c9d54823d0d3364615",
+    "tests/home_evolution/test_baseline_fixture.py": "112799ccf8beeddb2aa740ce2c96906a7a04efa409ec13b5ab41b47632a7206e",
+    "tests/conftest.py": "76bd626b5de50b565e4f8f1fb81b112b47a41b40778e8e34a26b60da1928f8a0",
+    "tests/fake_clock.py": "c7387e166870b3bf2fe5d2a079ec55e57303dd68e760fc206bcc732f84021960",
+    "src/okto_nexus/application/observability.py": "ad044ff78378c4d5556cde4ab11f256075b0b52282cacf9e3b6c1402709250a0",
+    "src/okto_nexus/application/observations.py": "b6c700014d023976f5adb0a384d5f6e10d3bb2e73029d9061a46b6a126bab893",
+    "src/okto_nexus/adapters/outbound/sqlite/observability_repo.py": "3eadb1e4a5c10861955d7778e46abe4b76a1d63537814ab42eece25a3e06a131",
+    "src/okto_nexus/adapters/outbound/sqlite/identity_repo.py": "b1395fb44aeaa502792532343c11ac98e6b953afee7c0bfdf01a880dcc6af742",
+    "src/okto_nexus/adapters/outbound/sqlite/connection.py": "b5225dca599c4028a7f89cce7e9d49086ce21a973d0c356d64b8e1f0362eb989"
+  },
+  "migrations": {
+    "files": 167,
+    "manifest_sha256": "2afaae057f8bc274435ee93105e499eb581807150ec277649a9e2b2e680fe93b"
+  },
+  "boundaries": {
+    "real_migrated_sqlite": true,
+    "temporary_fixture_data_only": true,
+    "native_runtime": false,
+    "provider": false,
+    "http": false,
+    "browser": false,
+    "os_events": false,
+    "dependency_installation": false,
+    "product_edits": false,
+    "new_home_acceptance": false
+  },
+  "test_nodeids": [
+    "tests.home_evolution.test_baseline_fixture::test_global_identity_and_abc_activity_without_operator_messages",
+    "tests.home_evolution.test_baseline_fixture::test_attempts_remain_distinct_from_work_and_session",
+    "tests.home_evolution.test_baseline_fixture::test_observation_ttl_uses_clock_without_mutating_history",
+    "tests.home_evolution.test_baseline_fixture::test_success_does_not_erase_cleanup_or_revoked_identity",
+    "tests.home_evolution.test_baseline_fixture::test_current_graph_baseline_is_read_only",
+    "tests.home_evolution.test_baseline_fixture::test_scale_100_agents_1000_inputs_100000_events_is_bounded_read"
+  ]
+}
