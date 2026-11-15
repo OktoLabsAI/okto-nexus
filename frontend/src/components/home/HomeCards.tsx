@@ -57,7 +57,7 @@ export function HomeBlock<T>({title, section, stale, children, empty, onMore, lo
 function WorkspaceLabel({id}: {id: string | null}) {const name = useWorkspaceName(id);return <span title={id || undefined}>{id ? name : 'Server-wide'}</span>;}
 export function WorkRow({item, onOpen}: {item: HomeActivity; onOpen: (target: HomeTarget) => void}) {
   return <li className="py-3 min-w-0" data-home-item={item.id}>
-    <div className="flex justify-between gap-3"><h3 className="font-medium text-sm break-words">{item.title}</h3>
+    <div className="flex justify-between gap-3"><h3 className="font-medium text-sm break-words min-w-0">{item.title}</h3>
       {item.detail_target && <button type="button" className={`btn btn-secondary shrink-0 ${homeFocus}`} aria-label={`Inspect ${item.title}`} onClick={() => onOpen(item.detail_target!)}><ArrowUpRight size={15}/></button>}</div>
     <p className="text-sm mt-1">{homeStateLabel(item.display_state)}{item.evidence_status === 'unknown' ? ' · Evidence unknown' : ''}</p>
     {item.reason && <p className="text-xs text-surface-500 mt-1 break-words">{item.reason}</p>}

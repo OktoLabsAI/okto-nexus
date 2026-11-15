@@ -84,3 +84,14 @@ o pacote inicial não contém as correções posteriores. Há37cenários PASS no
 escopo específico das provas e36NOT_RUN. O objetivo completo ainda não foi dado
 como concluído. Campanha real, teste humano e os limites de acessibilidade
 seguem explícitos; a nova apresentação permanece OFF até a decisão M3.
+
+## Qualificação final de namespace e navegador
+
+O corte namespace passou4 testes instalados;23 casos canônicos executados
+qualificaram decisões e preferências via APIs/CAS com peers sintéticos. Zoom
+real200% passou no Chrome. Corrigidos overflow de título em360px e isolamento
+de freshness por seção.18 focais Node e build passaram. A contagem atual é
+50PASS/23NOT_RUN; os totais anteriores são históricos. Evidências em
+`plans/home_evolution/evidence/pr06-{canonical-reuse,package-namespaces,browser-final}`.
+Pacote final com o delta estático e campanha local continuam separados;
+nenhum novo consentimento pago ou execução de provedor ocorreu nesta etapa.

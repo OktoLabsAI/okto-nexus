@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "scope": "Existing canonical API/application contract reuse; not Home DOM or real-harness acceptance",
+  "invocation": {
+    "python": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "argv": [
+      "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor",
+      "tests/execution_r4/test_native_decisions.py::test_public_cas_records_exactly_one_application_and_replay",
+      "tests/execution_r4/test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation",
+      "tests/execution_r4/test_native_decisions.py::test_two_interfaces_race_for_one_canonical_decision",
+      "tests/execution_r4/test_native_decisions.py::test_sensitive_input_is_retained_in_memory_and_explicitly_resupplied_after_loss",
+      "tests/execution_r4/test_native_decisions.py::test_lost_input_is_reported_without_inventing_a_native_receipt",
+      "tests/test_attention_api.py::test_preferences_are_shared_between_devices_cas_and_independent_from_resolution",
+      "tests/test_attention_api.py::test_feature_off_is_explicit_and_leaves_original_paths_and_domain_intact",
+      "tests/test_attention_api.py::test_operator_key_rotation_is_checked_after_warm_http_auth",
+      "tests/test_attention_external.py::test_completion_stays_historical_unseen_after_ttl_without_becoming_task_success",
+      "-q",
+      "--tb=short",
+      "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-canonical-reuse-xz65j2_2\\raw.xml"
+    ]
+  },
+  "command": "rtk proxy .venv/Scripts/python.exe C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-canonical-reuse-xz65j2_2\\run.py",
+  "totals": {
+    "tests": "23",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "67.394"
+  },
+  "cases": [
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_question_listing_and_decision_belong_to_originating_interlocutor[input]",
+      "seconds": 4.146,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_question_listing_and_decision_belong_to_originating_interlocutor[agent_input]",
+      "seconds": 2.473,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_question_listing_and_decision_belong_to_originating_interlocutor[nonblocking_input]",
+      "seconds": 2.813,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_public_cas_records_exactly_one_application_and_replay[approve-accept-CONFIRMED]",
+      "seconds": 2.85,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_public_cas_records_exactly_one_application_and_replay[deny-decline-DENIED]",
+      "seconds": 2.994,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_invalid_or_stale_decision_cannot_create_an_operation[subject]",
+      "seconds": 2.709,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_invalid_or_stale_decision_cannot_create_an_operation[other]",
+      "seconds": 2.974,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_invalid_or_stale_decision_cannot_create_an_operation[hash]",
+      "seconds": 2.646,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_invalid_or_stale_decision_cannot_create_an_operation[revision]",
+      "seconds": 2.576,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_invalid_or_stale_decision_cannot_create_an_operation[cas]",
+      "seconds": 3.15,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_invalid_or_stale_decision_cannot_create_an_operation[scope]",
+      "seconds": 2.498,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_invalid_or_stale_decision_cannot_create_an_operation[generation]",
+      "seconds": 2.518,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_invalid_or_stale_decision_cannot_create_an_operation[expired]",
+      "seconds": 2.476,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_invalid_or_stale_decision_cannot_create_an_operation[terminal]",
+      "seconds": 2.993,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_invalid_or_stale_decision_cannot_create_an_operation[grant]",
+      "seconds": 2.738,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_invalid_or_stale_decision_cannot_create_an_operation[profile]",
+      "seconds": 2.731,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_two_interfaces_race_for_one_canonical_decision",
+      "seconds": 2.978,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_sensitive_input_is_retained_in_memory_and_explicitly_resupplied_after_loss[input]",
+      "seconds": 2.98,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_lost_input_is_reported_without_inventing_a_native_receipt[input]",
+      "seconds": 2.94,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.test_attention_api",
+      "name": "test_preferences_are_shared_between_devices_cas_and_independent_from_resolution",
+      "seconds": 4.822,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.test_attention_api",
+      "name": "test_feature_off_is_explicit_and_leaves_original_paths_and_domain_intact",
+      "seconds": 2.081,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.test_attention_api",
+      "name": "test_operator_key_rotation_is_checked_after_warm_http_auth",
+      "seconds": 2.631,
+      "result": "PASS"
+    },
+    {
+      "classname": "tests.test_attention_external",
+      "name": "test_completion_stays_historical_unseen_after_ttl_without_becoming_task_success",
+      "seconds": 1.226,
+      "result": "PASS"
+    }
+  ],
+  "sources": [
+    {
+      "path": "tests/execution_r4/test_native_decisions.py",
+      "sha256": "3c790a408f966403969897a4c647949720e059ddf02013e13ae87eb9f3da3228"
+    },
+    {
+      "path": "tests/execution_r4/test_open_bootstrap.py",
+      "sha256": "9dd81f3b017105a0023e37d66ae1b457d05330c11597012bddf240cd617c7ae2"
+    },
+    {
+      "path": "tests/execution_r4/test_ns09.py",
+      "sha256": "6c38dae214d5c33229720ad23e83e7d558e2d134500e14124680c7ffe80da462"
+    },
+    {
+      "path": "tests/execution_r4/test_session_capabilities.py",
+      "sha256": "49d3c933ccbc01d9ad3ab3d338cee9781ce77a3aa32b4884b3804c2d23e3b0e3"
+    },
+    {
+      "path": "tests/test_attention_api.py",
+      "sha256": "3b21f99d943bc2d6519ef6e2cf2b29270b79221fdc9ec6bf56a68bbf09493cae"
+    },
+    {
+      "path": "tests/test_attention_external.py",
+      "sha256": "b644255f7464dde7245452fa93a50732700f07c826b5e0455807e8e56f9114e3"
+    },
+    {
+      "path": "tests/test_observation_service.py",
+      "sha256": "7858a9c31e4604678028c6adca00bffbd5e8ac78f51e8cc6f4e6592b206210a0"
+    }
+  ],
+  "temporary_raw_evidence": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-canonical-reuse-xz65j2_2\\raw.xml",
+      "sha256": "e9f345f14ba3e2c3e64d8d7fe192c831a8e1006fe5c11286e3605b26dfedc4e9"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-canonical-reuse-xz65j2_2\\raw.log",
+      "sha256": "8f60d80dfabc1e616590a1933bddfb796855a7c2fb168e875c571a790d12ffe6"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-canonical-reuse-xz65j2_2\\run.py",
+      "sha256": "aadc5c48dc3b663e110d5bd7f52d4e499bcb1950c415a4817b43a1cc44aa6143"
+    }
+  ],
+  "reviewed_fixture_boundaries": [
+    "ManualDispatchFixture has no-op start/stop",
+    "Selected peer is a synthetic byte file, never executed",
+    "WSS/HTTP peer is in-process TestClient, no real network/provider",
+    "begin_execution_send constructs/authorizes a frame; selected tests do not run Core",
+    "Native events and lease-applied frames are synthetic fixture input",
+    "Attention bootstrap disables harness integrations and candidate discovery",
+    "External observation application uses synthetic SQLite and simulated clock"
+  ],
+  "effects": {
+    "provider_calls": 0,
+    "live_service_actions": 0,
+    "os_events": 0
+  },
+  "acceptance": "Root review pending; no automatic Home scenario promotion"
+}

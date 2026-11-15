@@ -2,8 +2,8 @@
 # ruff: noqa: F811 -- imported fixture dependency names
 import pytest
 
-from tests.home_evolution.fixtures import home_scenario as home_scenario, OPERATOR
-from tests.home_evolution.test_home_queries import service as service
+from .fixtures import home_scenario as home_scenario, OPERATOR
+from .test_home_queries import service as service
 
 
 def clone(c, table, row, **changes):

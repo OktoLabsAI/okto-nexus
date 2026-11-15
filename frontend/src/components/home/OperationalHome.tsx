@@ -112,9 +112,10 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   const changed = () => {refresh();onAttentionChanged();};
   const preference = async (item: AttentionOccurrence, seen?: boolean) => {
     const before = current.current, snap = before.snapshot;
-    const rows = [...(snap?.attention.items ?? []), ...(snap?.results.items.flatMap(result => result.attention ? [result.attention] : []) ?? [])];
+    const fresh = (section: 'attention'|'results') => snap?.[section].status === 'ready' && !before.staleSections.includes(section);
+    const rows = [...(fresh('attention') ? snap!.attention.items : []), ...(fresh('results') ? snap!.results.items.flatMap(result => result.attention ? [result.attention] : []) : [])];
     const canonical = rows.find(row => row.attention_id === item.attention_id);
-    if (!snap || before.status !== 'ready' || before.paused || !canonical || canonical.source_revision !== item.source_revision ||
+    if (!snap || !['ready', 'stale'].includes(before.status) || before.paused || !canonical || canonical.source_revision !== item.source_revision ||
         canonical.seen_state.revision !== item.seen_state.revision || locks.current.has(item.attention_id)) {setNotice('Refresh this occurrence before changing its viewing preference.');return;}
     locks.current.add(item.attention_id);setPending([...locks.current]);setNotice('');
     try {
@@ -123,7 +124,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     } catch {if (mounted.current && current.current.generation === before.generation) setNotice('The viewing preference could not be confirmed. Refreshing the canonical occurrence; it will not be replayed.');}
     finally {locks.current.delete(item.attention_id);if (mounted.current && current.current.generation === before.generation) {setPending([...locks.current]);changed();}}
   };
-  const isStale = (section: 'work'|'attention'|'results'|'agents'|'external_activity') => state.status !== 'ready' || state.staleSections.includes(section) || state.paused;
+  const isStale = (section: 'work'|'attention'|'results'|'agents'|'external_activity') => !['ready', 'stale'].includes(state.status) || state.staleSections.includes(section) || state.paused;
   const quiet = !agentFilter && !stateFilter && isQuietHome(snapshot, state.status !== 'ready' || state.staleSections.some(section => ['work','results','attention','agents','external_activity'].includes(section)));
   const agentsBlock = snapshot && <HomeBlock title="Agents" section={snapshot.agents} stale={isStale('agents')} onMore={() => loadMore('agents')} loadingMore={state.loadingMore === 'agents'} empty="No visible agents in this scope."><ul className="divide-y divide-surface-200 dark:divide-surface-700">{snapshot.agents.items.map(item => <AgentRow key={item.agent_id} item={item}/>)}</ul></HomeBlock>;
   return <PageContainer testId="operational-home" className="space-y-5">

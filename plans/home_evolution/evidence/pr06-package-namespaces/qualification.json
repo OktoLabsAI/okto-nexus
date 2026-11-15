@@ -1,0 +1,70 @@
+{
+  "status": "PASS_INSTALLED_NAMESPACE_DELTA",
+  "source_head": "d730cf962e480662fb191bacd34a9e03b9b7ddb5",
+  "artifacts": {
+    "okto_nexus-0.3.4-py3-none-any.whl": "c41f00cb3d1702df351c2e15ebee8c14c3eb238b67b7631a1604a8d7ec8df190",
+    "okto_nexus-0.3.4.tar.gz": "a9e647822e22d3735c9c6290f69a0f6552cf3ae82cf695bb01fe3b6617ee1fba"
+  },
+  "preserved_initial_failure": {
+    "tool": "b26e86/b965df",
+    "exit_code": 2,
+    "phase": "pytest collection",
+    "cause": "New test used absolute tests.home_evolution imports unavailable under isolated -I; changed only two imports to relative fixture paths. No product/wheel change, reinstall or rebuild for retry.",
+    "initial_xml": "initial-collection-error.xml"
+  },
+  "tests": {
+    "passed": 4,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "files": [
+      "tests/home_evolution/test_home_package.py",
+      "tests/home_evolution/test_home_namespaces.py"
+    ],
+    "case_ids": [
+      "tests.home_evolution.test_home_package::test_packaged_operational_home_serves_assets_and_compatible_contract",
+      "tests.home_evolution.test_home_namespaces::test_direct_operation_namespace[ids]",
+      "tests.home_evolution.test_home_namespaces::test_direct_operation_namespace[pagination]",
+      "tests.home_evolution.test_home_namespaces::test_execution_attention_does_not_cross_executor_namespace"
+    ],
+    "junit_seconds": 8.739
+  },
+  "build": {
+    "command": "tools/build_validation_artifacts.py --output C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-namespaces-l8urr8ev\\dist",
+    "fresh_typescript_vite": true,
+    "twine_wheel": "PASSED",
+    "twine_sdist": "PASSED",
+    "tool_start": "ccb953",
+    "description_note": "Helper generic development-build wording retained; actual source was frozen clean d730cf96."
+  },
+  "verification": {
+    "isolated_python": "3.13.1 -I",
+    "prefix": "C:/Users/jpamb/AppData/Local/Temp/home-r1-installed-package-aq98yeg_/venv313",
+    "independent_cwd": true,
+    "site_packages_origins_and_all_three_wheel_payloads_compared": true,
+    "nexus_payloads_equal_checkout": 699,
+    "assets_equal": 7,
+    "input_files": 2110,
+    "changed_inputs": [],
+    "install": "force-reinstall --no-deps Nexus wheel only"
+  },
+  "antecedents": {
+    "package_final_33_sha256": "32927446f4047abbf163246ef860ee64e9094b180529a3ead18d68a20735be61",
+    "preserved_unchanged": true,
+    "cli_17_not_repeated": true,
+    "previous_33_not_repeated": true
+  },
+  "boundary": {
+    "provider": false,
+    "native_harness": false,
+    "production_service": false,
+    "user_environment": false,
+    "fixture_data": "Temporary real SQLite and HTTP handlers; no paid/native campaign."
+  },
+  "limits": [
+    "Four installed tests qualify only namespace delta and packaged Home resources, not the complete plan.",
+    "No test totals are added to antecedents.",
+    "Durations are not performance SLO measurements.",
+    "Existing Vite chunk-size, setuptools license-table and Starlette/httpx warnings retained; no dependency upgrade."
+  ]
+}

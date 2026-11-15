@@ -2,7 +2,7 @@
   "schema_version": 1,
   "plan": "plans/home_evolution/source-plan.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
-  "updated_at": "2026-11-15T22:01:42.801570+00:00",
+  "updated_at": "2026-11-15T23:09:19.461860+00:00",
   "scenarios": {
     "HOME-T-A01": {
       "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
@@ -279,35 +279,59 @@
     },
     "HOME-T-C03": {
       "requirement": "Aprovação expirada ou já decidida por outro cliente deixa de aceitar decisão ao revalidar.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
     },
     "HOME-T-C04": {
       "requirement": "Duplo clique e resposta HTTP perdida recuperam a mesma intenção/operação, sem dupla decisão.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
     },
     "HOME-T-C05": {
       "requirement": "Decisão registrada aparece separada de decisão aplicada pelo harness.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
     },
     "HOME-T-C06": {
       "requirement": "Resultado incerto oferece inspeção e recuperação canônica, nunca retry automático.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
     },
     "HOME-T-C07": {
       "requirement": "Item adiado continua visível no trabalho quando pertinente, mas não reaparece como prioridade em cada refresh.",
@@ -330,19 +354,31 @@
     },
     "HOME-T-C08": {
       "requirement": "Marcar visto não aprova, cancela, conclui ou reconhece inbox; novo episódio/revisão preserva sua própria atenção.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
     },
     "HOME-T-C09": {
       "requirement": "Attention desabilitada não impede uso dos controles canônicos originais; bloco explicita indisponibilidade.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
     },
     "HOME-T-C10": {
       "requirement": "Interromper usa a sessão/turno selecionados e contrato atual; não encerra todos os processos do agente.",
@@ -724,11 +760,17 @@
     },
     "HOME-T-G02": {
       "requirement": "Done do Herdr é atividade externa finalizada, não task success, ACK, claim release ou handoff_complete.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
     },
     "HOME-T-G03": {
       "requirement": "Reportes expirados passam a desconhecido/desatualizado, nunca idle por suposição.",
@@ -813,11 +855,18 @@
     },
     "HOME-T-H03": {
       "requirement": "Layout a 360 px, zoom 200% e desktop mantém ações acessíveis e sem overflow horizontal obrigatório.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/results.json",
+        "plans/home_evolution/evidence/pr06-browser-final/qualification.json"
+      ],
+      "commit": "d730cf96 + final static UI delta",
+      "environment": "Isolated own Chrome157 persistent test profile, native Settings zoom200%, real browser1440/720 physical viewport",
+      "limitations": [
+        "Own browser profile restored to100% and closed.",
+        "Measured720/360CSS px, DPR2, visual scale1, CSS zoom1; real keyboard composer/draft/close and drawer reflow.",
+        "This is not actual screen-reader speech or human comprehension evidence."
+      ]
     },
     "HOME-T-H04": {
       "requirement": "GETs da Home não criam mensagens, claims, grants, sessões, ACKs ou decisões; metadados de autenticação preexistentes são avaliados separadamente.",
@@ -918,19 +967,33 @@
     },
     "HOME-T-I03": {
       "requirement": "Todo o ciclo padrão pelo terminal continua funcionando sem qualquer visita à Home.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-package/qualification.json",
+        "plans/home_evolution/evidence/pr06-package-final/qualification.json",
+        "plans/home_evolution/evidence/pr06-package-namespaces/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Python3.13 -I independent cwd; actual installed wheel, real CLI/HTTP and synthetic native peers; no provider",
+      "limitations": [
+        "17 full CLI antecedents,33 corrected-package antecedents,4 namespace delta cases are separate cuts; counts overlap, do not add.",
+        "Real local harness remains separately consented HOME-033."
+      ]
     },
     "HOME-T-I04": {
       "requirement": "Build empacotado inclui frontend correto e os contratos compatíveis, sem depender de dev server.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-package/qualification.json",
+        "plans/home_evolution/evidence/pr06-package-final/qualification.json",
+        "plans/home_evolution/evidence/pr06-package-namespaces/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Python3.13 -I independent cwd; actual installed wheel, real CLI/HTTP and synthetic native peers; no provider",
+      "limitations": [
+        "17 full CLI antecedents,33 corrected-package antecedents,4 namespace delta cases are separate cuts; counts overlap, do not add.",
+        "Real local harness remains separately consented HOME-033."
+      ]
     },
     "HOME-T-I05": {
       "requirement": "Campanhas simuladas, navegador e harness real são registradas separadamente; cenário não executado fica NOT_RUN.",

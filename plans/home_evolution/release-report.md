@@ -140,3 +140,22 @@ final1/10/100workers em `measurement-final-workers.json` permanece vinculado ao
 fonte `f948c5d7`:46queries/GET constantes e500ms p95 não atingido em quatro casos.
 O workload só contém handoffs; não foi usado para afirmar latência de operações
 diretas ou de execuções nativas reais.
+
+## Consolidação após namespace e qualificação visual
+
+A qualificação instalada focal do namespace passou4 testes no wheel
+`c41f00cb…`, com2.110 inputs imutáveis e bytes dos3 pacotes conferidos; ver
+`evidence/pr06-package-namespaces/`. Uma correção de import relativo no próprio
+teste permite coleta isolada `-I`. Outros23 casos canônicos executados em
+`evidence/pr06-canonical-reuse/` qualificam APIs/CAS com peers sintéticos,
+sem serem apresentados como decisões de modelo real.
+
+A contagem atual substitui os totais históricos anteriores:50PASS/23NOT_RUN,
+com o menor nível e os limites indicados no test-ledger. Zoom real200% agora
+passou no Chrome em perfil de teste próprio. Foram corrigidos o overflow de
+título longo em360px e a marcação global de desatualizado quando somente uma
+fonte falha. As seções frescas preservam ações; uma seção parcial mantém suas
+ações bloqueadas.18 focais Node e build passaram; evidência em
+`evidence/pr06-browser-final/`. A fala de leitor de tela e a compreensão humana
+em10segundos continuam sem prova. O último wheel ainda será recomposto com
+esse delta estático antes de preparar a campanha paga para consentimento.

@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "source_head_before_uncommitted_ui_delta": "d730cf96",
+  "source_pins": {
+    "frontend/src/components/home/OperationalHome.tsx": "f136752a8368cfc5a84a412cbaea46fc894fdcd13ba6b3122a625c18b5915a5e",
+    "frontend/src/components/home/HomeCards.tsx": "f5ee8712b09e7efad227064ecd400a24867fe52db58cf35a2ae26e4c3ac5c412",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "e8150999921b4b98ea57d91c089af366339349bae64ad61328dc27d6fbe21ae0",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-B1y9k7ms.js": "ef0f753aed953cea6b6d331a7113f03ebfdfef99426a40cf93c743aadb73344f",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-DLLWG07d.css": "9927743dbdf57181c1b0f62454cf0ca6b5c2132ed7f51f3e4dcff58eec044d2f"
+  },
+  "node_focal": {
+    "cases": 18,
+    "passed": 18,
+    "exit_code": 0
+  },
+  "build": {
+    "exit_code": 0,
+    "modules": 2169,
+    "warning": "Existing bundle >500kB"
+  },
+  "browser_fixture": {
+    "synthetic": true,
+    "read_only": true,
+    "backend_started_before_later_projection_fixes": true,
+    "no_provider": true
+  },
+  "limitations": [
+    "Native zoom measures real Chrome Settings scale, not CSS zoom.",
+    "Live region DOM evidence is separate from actual screen-reader speech.",
+    "Long title uses controlled GET envelope; preference POST was intercepted, no real mutation.",
+    "Fixture backend was started before later projection fixes; these cases assert final static frontend only.",
+    "Earlier unsuccessful source-failure probes modified the envelope root rather than data; not acceptance evidence. Final test modifies data."
+  ]
+}
