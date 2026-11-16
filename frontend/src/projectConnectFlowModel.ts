@@ -36,6 +36,18 @@ function code(error: unknown): string {return error && typeof error === 'object'
 const message = (error: unknown) => error instanceof Error ? error.message : String(error);
 const newId = (prefix: string) => prefix + Array.from(crypto.getRandomValues(new Uint8Array(16)), n => n.toString(16).padStart(2,'0')).join('');
 const MAX_PAGES=32;
+function presetAuthorization(value:ProjectPresetOverview['configuration']['authorization']):ConnectionConfiguration['authorization'] {
+  // The public Core preset includes explicit unlimited flags. The portable UI
+  // configuration uses nulls; preserve their exact meaning before strict parsing.
+  if(!value||Object.keys(value).sort().join()!=='actions,minutes,no_expiry,unlimited_actions')
+    throw new Error('The canonical project authorization is unconfirmed.');
+  for(const [name,flag] of [['minutes','no_expiry'],['actions','unlimited_actions']] as const) {
+    const n=value[name];
+    if((n!==null&&(!Number.isInteger(n)||n<0))||typeof value[flag]!=='boolean'||value[flag]!== (n===null||n===0))
+      throw new Error('The canonical project authorization flags contradict its limits.');
+  }
+  return {minutes:value.minutes===0?null:value.minutes,actions:value.actions===0?null:value.actions};
+}
 const identityFields=['server_id','executor_id','binding_id','endpoint_id','agent_id','workspace_id','workspace_binding_id'] as const;
 function identifier(value:unknown):value is string{return typeof value==='string'&&value.length>0&&value.length<=160&&!/[\u0000-\u001f\u007f]/.test(value);}
 function sameScope(value:Record<string,string>,expected:Record<string,string>){return value!==null&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).sort().join('|')===Object.keys(expected).sort().join('|')&&Object.keys(expected).every(key=>value[key]===expected[key]);}
@@ -219,7 +231,7 @@ export class ProjectConnectModel {
     if(local.length!==1)throw new Error('This Server has no unique local executor. Use the Connector on its execution host.');
     const configuration:ConnectionConfiguration={format:'okto-nexus-connection',version:1,adapter_id:'',execution_location:'local',
       workspace_root:'',workspace_label:this.state.workspace?.display_name||'Project',provider_home:null,secret_bindings:{},alias:'',automatic_reply:true,
-      ...clone(this.state.preset.configuration)};
+      ...clone(this.state.preset.configuration),authorization:presetAuthorization(this.state.preset.configuration.authorization)};
     this.set({phase:'configure',agentId:agent,draft,executorId:local[0].executor_id,executorLabel:local[0].label||'Nexus Server',configuration});
     await this.loadOptions();
     await this.loadPaths();

@@ -2512,7 +2512,8 @@
         "T-ONB-04"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
+        "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
@@ -2669,7 +2670,9 @@
         "T-CLI-21",
         "T-QUAL-02"
       ],
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json"
+      ],
       "limitations": []
     },
     {
@@ -2853,7 +2856,9 @@
         "T-SVC-04",
         "T-REL-01"
       ],
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json"
+      ],
       "limitations": []
     },
     {

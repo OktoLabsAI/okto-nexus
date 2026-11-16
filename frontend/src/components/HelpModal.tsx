@@ -68,7 +68,8 @@ const SECTIONS: Section[] = [
         </P>
         <H>Connect your first agent</H>
         <P>
-          Open the connection guide from the header menu, or run
+          Choose Connect agent on Home or Conversations to resume an existing
+          project connection or add another harness, or run
           <code>okto-nexus connect</code> in your project terminal. The dashboard
           is optional. For an independently running MCP client, use the MCP
           credentials guide; for another computer, use the Connector guide.

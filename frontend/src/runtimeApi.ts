@@ -6,7 +6,9 @@ export interface ProjectPresetOverview {
   origin: {id: string; revision: number};
   identity: {role: string; permissions: Record<string, unknown>; defaults_hash: string};
   configuration: Pick<import('./connectionConfiguration').ConnectionConfiguration,
-    'runtime_enabled' | 'session_policy' | 'harness_settings' | 'tool_access' | 'authorization'>;
+    'runtime_enabled' | 'session_policy' | 'harness_settings' | 'tool_access'> & {
+      authorization: {minutes:number|null; actions:number|null; no_expiry:boolean; unlimited_actions:boolean};
+    };
   effects: string[];
 }
 

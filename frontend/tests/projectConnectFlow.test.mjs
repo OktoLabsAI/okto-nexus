@@ -24,7 +24,7 @@ const {ProjectConnectModel,connectCheckpointKey,connectorDraftCommand}=load(new 
 const {ProjectConnectFlow}=load(new URL('../src/components/onboarding/ProjectConnectFlow.tsx',import.meta.url));
 const workspace={workspace_id:'logical-project',display_name:'Fixture project'};
 const preset={format_version:1,origin:{id:'project-generalist',revision:7},identity:{role:'Project assistant',permissions:{messages:{send_direct:true},limits:{messages_per_minute:43,max_recipients:6}},defaults_hash:'sha256:'+'f'.repeat(64)},
-  configuration:{runtime_enabled:true,session_policy:'per_sender',harness_settings:{},tool_access:'ask',authorization:{minutes:17,actions:9}},effects:['A temporary model test may incur provider usage.','Finish saves the reviewed connection.']};
+  configuration:{runtime_enabled:true,session_policy:'per_sender',harness_settings:{},tool_access:'ask',authorization:{minutes:17,actions:9,no_expiry:false,unlimited_actions:false}},effects:['A temporary model test may incur provider usage.','Finish saves the reviewed connection.']};
 const draft={baseline:{runtime_revision:2,execution_revision:3,defaults_revision:4,binding_revision:null,endpoint_revision:null},runtime_policy:{},agent_creation_defaults:preset.identity,
   native_decision_policy:{value:false,source:'default',editable:true,revision:'a'.repeat(64),can_initialize:true}};
 const row=(adapter='codex_app_server',binding='binding-1')=>({server_id:'server-1',binding_id:binding,executor_id:'executor-1',endpoint_id:'endpoint-1',workspace_binding_id:'wxb-1',agent_id:'existing-agent',workspace_id:workspace.workspace_id,
@@ -63,6 +63,33 @@ function fixture(patch={}) {
 async function reviewed(f,adapter='codex_app_server') {
   const model=f.model();await model.initialize();await model.add();model.selectInstallation('candidate-'+adapter);model.review();return model;
 }
+
+test('real canonical preset flags normalize without relaxing portable configuration validation',async()=>{
+  for(const authorization of [
+    {minutes:60,no_expiry:false,actions:20,unlimited_actions:false},
+    {minutes:0,no_expiry:true,actions:0,unlimited_actions:true},
+    {minutes:null,no_expiry:true,actions:null,unlimited_actions:true},
+  ]) {
+    const f=fixture({async projectPreset(){return {...clone(preset),configuration:{...clone(preset.configuration),authorization}};}});
+    const model=await reviewed(f);
+    assert.equal(model.getSnapshot().phase,'review');
+    assert.deepEqual(model.getSnapshot().request.configuration.authorization,
+      {minutes:authorization.minutes||null,actions:authorization.actions||null});
+    assert.equal(f.calls.some(c=>['testSetup','finishSetup'].includes(c.name)),false);
+    model.dispose();
+  }
+  for(const authorization of [
+    {minutes:60,no_expiry:true,actions:20,unlimited_actions:false},
+    {minutes:60,no_expiry:false,actions:null,unlimited_actions:false},
+    {minutes:60,no_expiry:false,actions:20,unlimited_actions:false,foreign:true},
+  ]) {
+    const f=fixture({async projectPreset(){return {...clone(preset),configuration:{...clone(preset.configuration),authorization}};}});
+    const model=f.model();await model.initialize();await model.add();
+    assert.match(model.getSnapshot().error,/authorization/);
+    assert.equal(f.calls.some(c=>['testSetup','finishSetup'].includes(c.name)),false);
+    model.dispose();
+  }
+});
 
 test('new identity uses existing operator inventory and reviewed preset; no creation/test before consent',async()=>{
   const f=fixture(),model=await reviewed(f);
