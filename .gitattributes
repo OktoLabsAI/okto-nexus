@@ -150,3 +150,5 @@ plans/home_evolution/source-plan.md -text -whitespace
 plans/home_evolution/evidence/** -text -whitespace
 # The human-preview manifest pins the exact validation-script bytes.
 tests/home_evolution/browser_human_preview.js -text
+# UI-R1 inputs and evidence retain their original byte hashes.
+NEXUS_UI_R1/** -text -whitespace

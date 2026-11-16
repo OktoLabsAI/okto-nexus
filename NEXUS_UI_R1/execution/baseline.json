@@ -1,0 +1,69 @@
+{
+  "at": "2026-11-16T17:40:49.698375+00:00",
+  "input_hashes": {
+    "PLANO_CODEX_NEXUS_UI_SIMPLIFICADA_HOME_ONBOARDING_R1.md": "25e209c78536b233accc8723af4db384036aa38884c566b9e539556b04c807ce",
+    "NEXUS_UI_EXECUTION_LEDGER_R1.json": "b5b8b7c3179aea2979f1bfbdce98ee638c1abf341c8ab23690d6c1196365ca28",
+    "PROMPT_CODEX_NEXUS_UI_R1.md": "15b2afb2a52e90df2bcbf5228981bd02fc56311c540e77240ad1b19f126a4bad",
+    "LEIA_PRIMEIRO.md": "f6d1b493522eab244d68e7086d20fec76b804fadfbbd85c25d1fb6738c068624"
+  },
+  "original_ledger_copy": "NEXUS_UI_R1\\execution\\input-ledger.json",
+  "initial_observation": {
+    "nexus_branch": "feature/v0.3.4",
+    "nexus_head": "856c7f459d16719aa7dfa54c3dc64c85199cf563",
+    "nexus_status": "?? NEXUS_UI_R1/",
+    "connector_clean": true,
+    "core_clean": true
+  },
+  "repositories": {
+    "nexus": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+      "branch": "feature/v0.3.5",
+      "head": "856c7f459d16719aa7dfa54c3dc64c85199cf563",
+      "status": "M .gitattributes\n?? NEXUS_UI_R1/",
+      "version_before_bump": "0.3.4",
+      "dependencies": [
+        "okto-nexus-connector-core==0.0.14",
+        "mcp>=1.0,<2",
+        "pydantic>=2"
+      ],
+      "analysis_reference": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "main_commits_not_in_head": "",
+      "post_reference_commits": "856c7f459d16719aa7dfa54c3dc64c85199cf563 test(home): qualify current desktop and mobile layout\n219c1528e29df1e5c0a555f1c41e2adf79801e99 docs(home): reconcile acceptance ledgers with final evidence\n0985409adb6e319d1ea1aef1d5d7c4eec0fe9d1f chore(home): retain final package and performance qualification",
+      "runtime_diff_from_reference": ""
+    },
+    "connector": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector",
+      "branch": "feature/v0.0.13",
+      "head": "a8bd48bdc6d6e835c55eb601a7e7fa316453aa7b",
+      "status": "",
+      "version_before_bump": "0.0.12",
+      "dependencies": [
+        "okto-nexus-connector-core==0.0.14",
+        "websockets>=15,<18",
+        "httpx>=0.27,<1",
+        "pywin32; sys_platform == 'win32'"
+      ],
+      "analysis_reference": "a8bd48bdc6d6e835c55eb601a7e7fa316453aa7b",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "main_commits_not_in_head": "",
+      "post_reference_commits": "",
+      "runtime_diff_from_reference": ""
+    },
+    "core": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core",
+      "branch": "feature/v0.0.14",
+      "head": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "status": "",
+      "version_before_bump": "0.0.14",
+      "dependencies": [
+        "rfc8785==0.1.4",
+        "jsonschema==4.26.0",
+        "mcp>=1.30,<2",
+        "anyio>=4.5,<5"
+      ],
+      "analysis_reference": null
+    }
+  },
+  "effects": "Only inspection and writing this evidence; no product/service/provider/authentication action."
+}

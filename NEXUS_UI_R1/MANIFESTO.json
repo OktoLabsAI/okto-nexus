@@ -1,0 +1,42 @@
+{
+  "package_id": "NEXUS-UI-R1",
+  "created_date": "2026-11-16",
+  "purpose": "Plano executável; não contém implementação nem testes executados do Nexus.",
+  "counts": {
+    "requirements": 18,
+    "tasks": 47,
+    "test_scenarios": 145,
+    "incremental_prs": 9
+  },
+  "structural_validation": {
+    "unique_ids": true,
+    "all_references_resolved": true,
+    "acyclic_dependencies": true,
+    "all_requirements_linked": true,
+    "all_tests_linked": true,
+    "markdown_json_counts_match": true
+  },
+  "product_tests_executed": false,
+  "files": [
+    {
+      "name": "PLANO_CODEX_NEXUS_UI_SIMPLIFICADA_HOME_ONBOARDING_R1.md",
+      "bytes": 152029,
+      "sha256": "25e209c78536b233accc8723af4db384036aa38884c566b9e539556b04c807ce"
+    },
+    {
+      "name": "NEXUS_UI_EXECUTION_LEDGER_R1.json",
+      "bytes": 126261,
+      "sha256": "b5b8b7c3179aea2979f1bfbdce98ee638c1abf341c8ab23690d6c1196365ca28"
+    },
+    {
+      "name": "PROMPT_CODEX_NEXUS_UI_R1.md",
+      "bytes": 3519,
+      "sha256": "15b2afb2a52e90df2bcbf5228981bd02fc56311c540e77240ad1b19f126a4bad"
+    },
+    {
+      "name": "LEIA_PRIMEIRO.md",
+      "bytes": 2634,
+      "sha256": "f6d1b493522eab244d68e7086d20fec76b804fadfbbd85c25d1fb6738c068624"
+    }
+  ]
+}
