@@ -1,0 +1,35 @@
+{
+  "status": "LAYOUT_ACCEPTANCE_PASS_WITH_PARTIAL_EXTENDED_PROBE",
+  "source_product_head": "3d95aad8",
+  "evidence_baseline_head": "219c1528e29df1e5c0a555f1c41e2adf79801e99",
+  "bundle": "index-Dcu4bArB.js",
+  "checks_passed": 2,
+  "checks_not_completed": [
+    "Server pagination with real GET and final action hit-test",
+    "quiet project on final rerun"
+  ],
+  "home011_promoted": true,
+  "test_ledger_unchanged": "71 PASS / 2 NOT_RUN",
+  "cleanup": {
+    "browser_session": "home-r1-mobile-hit-final",
+    "browser_pid": 28024,
+    "browser_close_exit_code": 0,
+    "pid_absent": true,
+    "fixture_exec_session": 16273,
+    "fixture_exit_code": 0,
+    "fixture_port": 60891
+  },
+  "antecedent_cleanup": {
+    "browser_pid": 44528,
+    "close_exit_code": 0,
+    "pid_absent": true,
+    "fixture_exit_code": 0
+  },
+  "limits": [
+    "Domain-valid pre-authorized Server query-port contract projection; not an actual global producer or invalid NULL database row.",
+    "No UI POST/provider call or real service/account use.",
+    "Initial geometry-only four PASS retained as antecedent, not acceptance: screenshot showed navigation overlay.",
+    "Final clean mobile screenshot and hit-test prove two layout checks only; no speech/native zoom claim."
+  ],
+  "acceptance_decision": "HOME011 literal acceptance is same Home route and useful desktop/mobile reading: both layouts pass on current bundle, including mobile readable Server/counters/Needs you, no horizontal overflow and unoccluded keyboard action. Pagination is an additional incomplete probe, not required for this layout acceptance; prior paging qualification stays separate."
+}

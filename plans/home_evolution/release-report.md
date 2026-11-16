@@ -8,6 +8,18 @@ Essa contagem descreve os níveis de prova de cada cenário; não significa que
 a campanha real ou o gate M3 foram concluídos. **M3 não foi aprovado e a Home
 clássica continua padrão.**
 
+Submissão: [PR #137 em rascunho](https://github.com/OktoLabsAI/okto-nexus/pull/137),
+de `feature/v0.3.4` para `feature/v0.3.3`, isolando HOME-R1 da base R3 anterior.
+Evidências finais enviadas em `0985409a`; consolidação dos ledgers em `219c1528`.
+
+O [focal de layout atual](evidence/pr13-mobile-server-layout/qualification.json)
+confirmou leitura em desktop e360px, sem overflow horizontal, com ação alcançada
+por teclado e hit-test sem sobreposição. A captura inicial com menu sobreposto
+permanece antecedente. A repetição não produziu GET no passo adicional de
+paginação; esse passo não recebeu PASS nem substitui a prova anterior de
+paginação. Usou o mesmo bundleDcu4, sem POST, provedor ou mudanças no produto;
+o aceite de layout fica separado de uma recertificação de todos os fluxos.
+
 O wheel0.3.4 SHA256
 `c1c45e2a3dc8b9f0bed348ddc2d09ab4d0afccbaae2b8c19253fdcaf4980b759`
 e o sdist passaram Twine. A qualificação instalada executou12/12 focais

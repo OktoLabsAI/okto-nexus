@@ -4,7 +4,7 @@
   "original_source": "C:\\Users\\jpamb\\Downloads\\PLANO_CODEX_NEXUS_HOME_OPERACIONAL_R1.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
   "created_at": "2026-11-15T20:14:32.568756+00:00",
-  "updated_at": "2026-11-16T17:14:44.402380+00:00",
+  "updated_at": "2026-11-16T17:30:57.199690+00:00",
   "status": "IN_PROGRESS",
   "baseline": {
     "previous_branch": "feature/v0.3.3",
@@ -60,7 +60,7 @@
       ]
     },
     "PR-02": {
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "tasks": [
         "HOME-011",
         "HOME-012",
@@ -75,7 +75,8 @@
         "plans/home_evolution/evidence/pr09-completion-audit/proposal.json",
         "plans/home_evolution/evidence/pr10-package-server-final/qualification.json",
         "plans/home_evolution/evidence/pr08-server-attention-backend/qualification.json",
-        "plans/home_evolution/evidence/pr08-server-attention-browser/qualification.json"
+        "plans/home_evolution/evidence/pr08-server-attention-browser/qualification.json",
+        "plans/home_evolution/evidence/pr13-mobile-server-layout/qualification.json"
       ]
     },
     "PR-03": {
@@ -413,7 +414,7 @@
       "pr": "PR-02",
       "implementation": "Refatorar HomeView/HomeOverview; cabeçalho compacto, resumo, Precisa de você, Em andamento, Resultados e Agentes conectados. Rebaixar atalhos grandes.",
       "acceptance": "A mesma Home, não uma segunda rota concorrente; leitura útil em desktop e mobile.",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "files": [
         "frontend/src/components/home/OperationalHome.tsx",
         "frontend/src/components/home/HomeCards.tsx"
@@ -423,14 +424,21 @@
         "plans/home_evolution/evidence/pr08-server-attention-browser/qualification.json",
         "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json",
         "plans/home_evolution/evidence/pr10-package-server-final/qualification.json",
-        "plans/home_evolution/evidence/pr11-human-preview/qualification.json"
+        "plans/home_evolution/evidence/pr11-human-preview/qualification.json",
+        "plans/home_evolution/evidence/pr13-mobile-server-layout/qualification.json"
       ],
       "tests": [
-        "28 scoped frontend tests and TypeScript/Vite build PASS; integrated npm test 196 PASS; final DOM acceptance pending."
+        "Historical UI baseline:28 scoped frontend tests and TypeScript/Vite build PASS; integrated npm test196 PASS. Current layout acceptance is qualified separately below.",
+        "Current Dcu4 real GET browser: same Home route at1440 and360 CSS px; readable Server/counters/Needs you, no horizontal overflow and unoccluded keyboard control (focus only, no POST). Extended paging rerun incomplete and not promoted."
       ],
       "limitations": [
-        "Desktop Server-lane/new installed cut is qualified; prior360px/native200% proofs remain their explicit earlier cuts. Conservatively no blanket current mobile variant recertification is claimed."
-      ]
+        "360 CSS-pixel layout only; no new native200percent zoom or spoken AT claim. Extended paging/quiet rerun incomplete; independent earlier paging/quiet qualifications remain separately scoped. Domain-valid pre-authorized projection contract, not live global producer."
+      ],
+      "acceptance_review": {
+        "source_cut": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+        "decision": "HOME011 literal acceptance is same Home route and useful desktop/mobile reading: both layouts pass on current bundle, including mobile readable Server/counters/Needs you, no horizontal overflow and unoccluded keyboard action. Pagination is an additional incomplete probe, not required for this layout acceptance; prior paging qualification stays separate.",
+        "scope": "Two literal layout checks PASS; extended probe partial, no false paging PASS."
+      }
     },
     "HOME-012": {
       "title": "Construir lista de trabalho",
@@ -1315,10 +1323,15 @@
       "at": "2026-11-16T17:14:44.402380+00:00",
       "event": "Conservative final evidence consolidation: current A08 SQLite/HTTP/Server browser and12 installed cases resolve cited read-contract gaps; scoped task acceptances reviewed individually. HOME011 remains IMPLEMENTED rather than claiming a blanket new mobile recertification; HOME030/032/033/034/036 remain conditional. HOME031 measurement/noN+1 acceptance qualified with independent HTTP p95 and preserved large service miss.71PASS/2NOT_RUN unchanged; no human, AT, real campaign, live continuity or M3 approval fabricated.",
       "source_cut": "3d95aad8"
+    },
+    {
+      "at": "2026-11-16T17:29:22.775642+00:00",
+      "event": "HOME011 literal same-route desktop/mobile layout qualified on current Dcu4 bundle with360px no-overflow and actual keyboard hit-test; PR02 verified. Extended paging rerun remains explicitly incomplete; no test-scenario promotion,71PASS/2NOT_RUN unchanged. Own browser and fixture exited normally.",
+      "source_cut": "3d95aad8"
     }
   ],
   "qualification_snapshot": {
-    "at": "2026-11-16T17:14:44.402380+00:00",
+    "at": "2026-11-16T17:29:22.775642+00:00",
     "status": "IN_PROGRESS_M3_NOT_APPROVED",
     "qualified_product_source": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
     "qualified_final_wheel": "c1c45e2a3dc8b9f0bed348ddc2d09ab4d0afccbaae2b8c19253fdcaf4980b759",
@@ -1328,8 +1341,8 @@
       "NOT_RUN": 2
     },
     "task_status_counts": {
-      "VERIFIED": 30,
-      "IMPLEMENTED": 3,
+      "VERIFIED": 31,
+      "IMPLEMENTED": 2,
       "IN_PROGRESS": 2,
       "TODO": 1
     },
@@ -1340,7 +1353,8 @@
       "plans/home_evolution/evidence/pr10-package-server-final/qualification.json",
       "plans/home_evolution/evidence/pr08-performance-final/qualification.json",
       "plans/home_evolution/evidence/pr12-http-performance/qualification.json",
-      "plans/home_evolution/evidence/pr11-human-preview/qualification.json"
+      "plans/home_evolution/evidence/pr11-human-preview/qualification.json",
+      "plans/home_evolution/evidence/pr13-mobile-server-layout/qualification.json"
     ],
     "remaining_boundaries": [
       "H02 actual screen-reader output",
