@@ -1,0 +1,45 @@
+{
+  "status": "PASS_FIVE_EMPTY_HOME_CHECKS_ONLY",
+  "scenario": "T-HOME-03",
+  "checks_passed": 5,
+  "bundle": "index-CIXUIG91.js",
+  "js_sha256": "0de41929962e2b23b65a30920d607ea2fc853db62bba859b40c78add287cafc1",
+  "canonical_empty": "Own authorized ui04-empty workspace; actual ready exact entries0 and pre-filter connections0; seven sources ready",
+  "negative_case": "Existing ws connections2 remains2 after harness filter yields entries0; no onboarding and New request enabled",
+  "mutation_requests": [],
+  "page_errors": [],
+  "console_errors": [],
+  "source_pin_drift": [],
+  "antecedents": "Harness list input has combobox semantics; then own initScript access to aboutblank localStorage raised during cleanup. Fixed selectors/protocol guard and used a fresh own browser; final raw result has no exceptions. Product unchanged during these runner fixes.",
+  "limits": [
+    "Does not requalify the previous27 browser checks on this cut",
+    "Partial/stale/unknown inventory exclusion is Node/source evidence, not additional browser cases",
+    "Live-viewer403 with active draft remains NOT_RUN; no404 was presented as403; no new fixture opened for that case",
+    "No provider/native/AT/200percent zoom qualification"
+  ],
+  "cleanup": {
+    "browser_pid": 59000,
+    "browser_close_exit": 0,
+    "fixture_exit": 0,
+    "pid_absent": true,
+    "port": 55059,
+    "port_absent": true,
+    "shared_context": "WSS/lifespan generator and factory closed normally",
+    "tools": [
+      "9986e7",
+      "0f96c8",
+      "49eeab"
+    ]
+  },
+  "sha256": {
+    "antecedent-aboutblank-init-output.txt": "f79ba84125111fd7fae6575b51ae723536c1108e7c64fd65cdec406d7c3a1d75",
+    "antecedent-datalist-role-output.txt": "699535f3b5dd3af7637a97c898fb638582ad826ca219ee718a6008e97c858b95",
+    "canonical-empty-first-harness.png": "e62ef9e852d628932e22ddb3d62921431c1be87c8fd527b329e04cd8876ebb93",
+    "empty-fixture.py": "4fb8f883db7e805f780d2fc221b8c0dc7c557897a7f358916350fe876787924b",
+    "empty-probe.js": "6827c42b7ef26344e5eba1fb91f518d6b3973f6bbf455ec3f9450985c868f6df",
+    "filtered-empty-existing-connections.png": "274ffc3746f08f07ac32c571305c19823d65296053d888fc3d4770d331b9b503",
+    "output.txt": "8a97d3295087f1b1f37aab9ab72fd35afae48ae6a0a3f15dbefd0d1e1ec97afb",
+    "ready.json": "7f00847069841a306b9999ae3690ac45dab44870d2615d07a26ad7abd7e04460",
+    "results.json": "1c769e7939006a339aec51921f7b3a1653031f3183e18ce4b6bc00d0dcf9beaf"
+  }
+}

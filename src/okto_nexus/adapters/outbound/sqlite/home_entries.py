@@ -288,7 +288,8 @@ class SqliteHomeEntryRelations:
             entry = passive_record(connection)
             entry.connection = connection
             entries.append(entry)
-        return EntryRelations(entries, server_attention, status)
+        return EntryRelations(entries, server_attention, status,
+            connection_count=len(connections) if status['connections'] == 'ready' else None)
 
     def external(self, uow, *, scope, server_id, now, config, observations, relations, check_budget):
         """Read the canonical complete observation source in this same UoW.

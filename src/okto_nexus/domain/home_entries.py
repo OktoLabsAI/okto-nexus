@@ -83,6 +83,9 @@ class EntryRelations:
     entries: list[EntryRecord]
     server_attention: list[dict[str, object]]
     source_status: dict[str, SourceState]
+    # Authorized workspace inventory, before presentation filters and paging.
+    # None is unknown, including adapters that do not supply this evidence.
+    connection_count: int | None = None
 
     @property
     def total_is_exact(self):

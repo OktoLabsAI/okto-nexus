@@ -1630,7 +1630,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
-        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json"
+        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json",
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
       ],
       "limitations": [
         "Scoped local filesystem/CLI/HTTP/SQLite tests with synthetic lifecycle/setup-test peer; real provider and two different native harnesses not certified. UI016 qualification remains separate."
@@ -1667,7 +1668,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
-        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json"
+        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json",
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
       ],
       "limitations": [
         "Scoped local filesystem/CLI/HTTP/SQLite tests with synthetic lifecycle/setup-test peer; real provider and two different native harnesses not certified. UI016 qualification remains separate."
@@ -1746,7 +1748,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
-        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json"
+        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json",
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
       ],
       "limitations": [
         "Lifecycle/discovery/version/provider setup-test are synthetic; no real harness binary, provider login, paid inference, personal credentials or installation.",
@@ -1788,7 +1791,8 @@
         "T-CLI-21"
       ],
       "evidence": [
-        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json"
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
       ],
       "limitations": [
         "Lifecycle/discovery/version/provider setup-test are synthetic; no real harness binary, provider login, paid inference, personal credentials or installation.",
@@ -2059,7 +2063,8 @@
         "T-HOME-03"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json"
+        "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json",
+        "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
@@ -2134,7 +2139,8 @@
         "T-RESULT-05"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json"
+        "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json",
+        "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
@@ -2249,8 +2255,14 @@
         "T-HOME-10",
         "T-LIVE-06"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json"
+      ],
+      "limitations": [
+        "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos."
+      ]
     },
     {
       "id": "UI-029",
@@ -2477,8 +2489,13 @@
         "T-ATTN-04",
         "T-SEC-03"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json"
+      ],
+      "limitations": [
+        "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos."
+      ]
     },
     {
       "id": "UI-035",
@@ -2757,8 +2774,13 @@
         "T-PERF-02",
         "T-PERF-04"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json"
+      ],
+      "limitations": [
+        "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos."
+      ]
     },
     {
       "id": "UI-042",
@@ -3507,15 +3529,20 @@
     },
     {
       "id": "T-HOME-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Vários trabalhos, pendências e resultados.",
       "when": "Abrir Home padrão.",
       "expected": "Uma única região principal de acompanhamento, sem seis listas paralelas.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json"
+      ],
       "tasks": [
         "UI-023",
         "UI-028"
+      ],
+      "limitations": [
+        "Escopo e cortes exatos constam dos relatorios; nao qualifica provider/native/AT ou lifecycle fora dos asserts."
       ]
     },
     {
@@ -3532,27 +3559,38 @@
     },
     {
       "id": "T-HOME-03",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Sem agentes e dados carregados com sucesso.",
       "when": "Abrir Home.",
       "expected": "Uma ação conectar primeiro agente; sem grade de zeros.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/empty-CIXUIG91/qualification.json"
+      ],
       "tasks": [
         "UI-023"
+      ],
+      "limitations": [
+        "Escopo e cortes exatos constam dos relatorios; nao qualifica provider/native/AT ou lifecycle fora dos asserts."
       ]
     },
     {
       "id": "T-HOME-04",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Duas sessões do mesmo Codex.",
       "when": "Expandir e abrir cada sessão.",
       "expected": "Contextos distintos identificados, sem navegação para novo menu.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json"
+      ],
       "tasks": [
         "UI-024",
         "UI-028"
+      ],
+      "limitations": [
+        "Escopo e cortes exatos constam dos relatorios; nao qualifica provider/native/AT ou lifecycle fora dos asserts."
       ]
     },
     {
@@ -3674,15 +3712,20 @@
     },
     {
       "id": "T-PANEL-04",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Atividade com mais de uma sessão vinculada.",
       "when": "Acompanhar.",
       "expected": "Seletor explícito de contexto/host; nenhum primeiro item automático ambíguo.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json"
+      ],
       "tasks": [
         "UI-024",
         "UI-029"
+      ],
+      "limitations": [
+        "Escopo e cortes exatos constam dos relatorios; nao qualifica provider/native/AT ou lifecycle fora dos asserts."
       ]
     },
     {
@@ -3786,15 +3829,20 @@
     },
     {
       "id": "T-ATTN-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/browser",
       "given": "Pergunta ao operador em sessão ativa.",
       "when": "Clicar Responder.",
       "expected": "Abrir formulário canônico exato com opções/tipos originais.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json"
+      ],
       "tasks": [
         "UI-008",
         "UI-026"
+      ],
+      "limitations": [
+        "Escopo e cortes exatos constam dos relatorios; nao qualifica provider/native/AT ou lifecycle fora dos asserts."
       ]
     },
     {
@@ -3824,15 +3872,20 @@
     },
     {
       "id": "T-ATTN-04",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/browser",
       "given": "Duas abas/duplo clique para mesma decisão.",
       "when": "Enviar simultaneamente.",
       "expected": "CAS/idempotência atuais preservam uma decisão efetiva.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json"
+      ],
       "tasks": [
         "UI-031",
         "UI-034"
+      ],
+      "limitations": [
+        "Escopo e cortes exatos constam dos relatorios; nao qualifica provider/native/AT ou lifecycle fora dos asserts."
       ]
     },
     {
@@ -4008,15 +4061,20 @@
     },
     {
       "id": "T-CLI-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI/integrado",
       "given": "Projeto novo com único harness qualificado.",
       "when": "connect interativo.",
       "expected": "Sugerir seleção/revisão curta; nenhum nome de profile obrigatório.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
+      ],
       "tasks": [
         "UI-004",
         "UI-012"
+      ],
+      "limitations": [
+        "Escopo e cortes exatos constam dos relatorios; nao qualifica provider/native/AT ou lifecycle fora dos asserts."
       ]
     },
     {
@@ -4064,15 +4122,20 @@
     },
     {
       "id": "T-CLI-05",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI",
       "given": "Há uma conexão e nenhum seletor explícito.",
       "when": "connect.",
       "expected": "Oferecer Retomar/Adicionar/Cancelar em vez de adoção ou criação silenciosa.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
+      ],
       "tasks": [
         "UI-004",
         "UI-012"
+      ],
+      "limitations": [
+        "Escopo e cortes exatos constam dos relatorios; nao qualifica provider/native/AT ou lifecycle fora dos asserts."
       ]
     },
     {
@@ -4089,14 +4152,19 @@
     },
     {
       "id": "T-CLI-07",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI",
       "given": "--profile existente e --client incompatível.",
       "when": "Invocar connect.",
       "expected": "Recusar substituição explícita com orientação; sem criar outra conexão inesperada.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
+      ],
       "tasks": [
         "UI-012"
+      ],
+      "limitations": [
+        "Escopo e cortes exatos constam dos relatorios; nao qualifica provider/native/AT ou lifecycle fora dos asserts."
       ]
     },
     {
@@ -4195,14 +4263,19 @@
     },
     {
       "id": "T-CLI-15",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI",
       "given": "Perfil com escritor ativo.",
       "when": "Tentar retomar em outro terminal.",
       "expected": "PROFILE_BUSY/caminho canônico; não remover lock ou clonar como workaround.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
+      ],
       "tasks": [
         "UI-013"
+      ],
+      "limitations": [
+        "Escopo e cortes exatos constam dos relatorios; nao qualifica provider/native/AT ou lifecycle fora dos asserts."
       ]
     },
     {
@@ -4966,6 +5039,10 @@
     {
       "at": "2026-11-16T21:13:42.973584+00:00",
       "event": "UI035 finalclient CdDUCMon:295Node/build,22focals,1HTTP refusal and real-browser reload/edit PASS. Full synthetic two-harness connections retain dfy cut; no native session/provider promotion. Definitive refusal, controlled input and restored context display fixed; no DB migration/personal install/paid call."
+    },
+    {
+      "at": "2026-11-16T21:27:53.691930+00:00",
+      "event": "Home empty guard uses additive backend prefilter canonical connection inventory, same authorized UoW/noextraSQL.297Node/build,2inventoryPython and5realbrowserchecksPASS;17pages/relatedPASS with separately corrected own test-oracle failure. Firstconnection/filteredempty distinguished.3CLI focals PASS realHTTP with inertpeer; no personal service/provider. Browser 19+8 earlier cuts preserved."
     }
   ],
   "risk_acceptances": [],

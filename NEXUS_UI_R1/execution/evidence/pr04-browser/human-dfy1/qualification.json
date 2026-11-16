@@ -1,0 +1,67 @@
+{
+  "status": "NOT_QUALIFIED_LIVE_AUTHORITY_BECAME_STALE",
+  "bundle": "index-dfy1_5aT.js",
+  "preflight": {
+    "operator": {
+      "status": 200,
+      "items": 1
+    },
+    "subject": {
+      "status": 200,
+      "items": 0
+    },
+    "other": {
+      "status": 200,
+      "items": 0
+    }
+  },
+  "origin": "intact base fixture; NO execution_domain_deliveries or runtime_handoff_binding added",
+  "browser_form_available": false,
+  "completed_guard_checks": 0,
+  "native_decision_posts": [],
+  "db_summary": {
+    "decisions": 0,
+    "decide_operations": 0,
+    "deliveries": 0,
+    "stages": []
+  },
+  "two_tab_cas": "NOT_RUN; no human answer form became available in this browser run",
+  "observed_pre_browser": {
+    "tool": "b2bbb8",
+    "kind": "native_question_pending",
+    "allowed_actions": [
+      "inspect_approval",
+      "respond_native"
+    ]
+  },
+  "observed_browser": "Canonical approval inspection only; no current actionable occurrence; native-approval-input form absent",
+  "later_comparison": "Both actual Attention and Home entries preview stale with inspect_approval only; no Home-only discrepancy established",
+  "diagnostic_limit": "Exact require_live failing authority dependency was not captured; no inferred expiry cause or product bug asserted",
+  "source_pin_drift": [
+    "src/okto_nexus/adapters/inbound/http/static/index.html"
+  ],
+  "source_pin_missing_after_new_build": [
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-dfy1_5aT.js"
+  ],
+  "cleanup": {
+    "browser_close_exit": 0,
+    "fixture_exit": 0,
+    "own_browser_pid": 35408,
+    "pid_absent": true,
+    "port": 52649,
+    "port_absent": true,
+    "tools": [
+      "c60e5a",
+      "37f355",
+      "c17c73"
+    ]
+  },
+  "sha256": {
+    "authority-compare.json": "3b52be60fadb374ef45c4ed85fc00e28ba841a63030cedd87bdd24658e5daa3c",
+    "final-db.json": "df7ea1df162aa0a0ae3eb19d83635bd400290f3f36b2085c4fb86af02aa06280",
+    "human-failure.png": "1c11f642e6aeba4a933611ff06f8140405ee75650317c312a625a54948bab8f3",
+    "output.txt": "6dc8144e28a0097a25b12c1ae572a36f186d09cd61278c0e34f53f5a01117341",
+    "ready.json": "070b66595b0af9cef92a6c69a47931fe39e457080bdad8f4828465f6942ff963",
+    "results.json": "83e8105b09a2df624ef4cd4bdf53231627373cbf2984bbc871a45640de5bcb45"
+  }
+}

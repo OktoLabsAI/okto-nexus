@@ -1,0 +1,16 @@
+{
+  "status": "PASS_SCOPED_CLI_CONTRACT_FOCALS",
+  "scenarios": ["T-CLI-01", "T-CLI-05", "T-CLI-07", "T-CLI-15"],
+  "command": "Owned Temp Python3.13, checkout src first on sys.path, pytest test_terminal_multi_harness.py::test_single_observed_harness_needs_no_profile_and_existing_connection_offers_all_intents plus test_connection_picker.py::test_explicit_client_conflict_and_legacy_new_flag_do_not_overwrite and ::test_changed_addition_choices_refused_and_profile_busy_preserves_intent -q",
+  "result": {"passed": 3, "seconds": 11.36, "exit_code": 0, "tool_ref": "e3afe1"},
+  "ruff": {"exit_code": 0, "tool_ref": "f76b53"},
+  "facts": [
+    "Real CLI parser, canonical HTTP/SQLite review/Test/Finish with one inert Codex candidate and no --client/--profile; generated profile commits, with no profile prompt.",
+    "The same single connection then offers Resume, Add and Cancel. Cancel preserves the complete canonical snapshot, original profile bytes and synthetic test count.",
+    "Explicit incompatible client produces PROFILE_CONFLICT with actionable guidance, without overwrite.",
+    "A real held profile lock produces PROFILE_BUSY and preserves retained intent bytes."
+  ],
+  "antecedent": "The new integration initially supplied an unnecessary numeric harness choice; the sole canonical candidate is already selected, so explicit consent was refused and state remained review. Corrected input supplies only consent. No product change was required.",
+  "limitations": ["Lifecycle, version and setup-test peers are synthetic; no real harness, provider, process/supervisor or personal credentials were used.", "PROFILE_BUSY is a real lock boundary, not a two-terminal lifecycle campaign."],
+  "product_changes": 0
+}

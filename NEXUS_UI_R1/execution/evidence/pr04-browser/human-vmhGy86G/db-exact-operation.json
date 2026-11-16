@@ -1,0 +1,26 @@
+{
+  "operation": {
+    "operation_id": "r4op_75e676d9471699e4cae01767b40aacd3",
+    "action": "input.provide",
+    "actor_agent_id": "operator",
+    "subject_agent_id": "subject",
+    "session_id": "ses_84c759810c99e54a76863906c902ecf9"
+  },
+  "matching_operations": 1,
+  "matching_outbox": 1,
+  "decisions": 1,
+  "leases": [
+    {
+      "lease_serial": 1,
+      "status": "SUPERSEDED",
+      "valid_until_server": "2026-11-16T20:57:11.590974+00:00",
+      "applied_at": "2026-11-16T20:55:11.590974+00:00"
+    },
+    {
+      "lease_serial": 2,
+      "status": "SUPERSEDED",
+      "valid_until_server": "2026-11-16T20:57:11.590974+00:00",
+      "applied_at": "2026-11-16T20:55:11.590974+00:00"
+    }
+  ]
+}

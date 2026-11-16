@@ -291,26 +291,32 @@ def test_server_changed_during_review_refuses_before_apply_and_preserves_reserva
     assert not any(isinstance(c, tuple) and c[0] == 'apply' for c in b.calls)
 
 
-def test_explicit_client_conflict_and_legacy_new_flag_do_not_overwrite(boundary):
+def test_explicit_client_conflict_and_legacy_new_flag_do_not_overwrite(boundary, capsys):
     b = boundary
     old = existing(b)
     before = old.read_bytes()
     assert b.run('--profile', 'legacy', '--client', 'claude', '--json') == 3
+    refusal = json.loads(capsys.readouterr().out)
+    assert refusal['code'] == 'PROFILE_CONFLICT'
+    assert 'existing choices or a new named profile' in refusal['message']
     assert b.run('--new-connection', '--profile', 'legacy', '--json') == 3
     assert old.read_bytes() == before
     assert not (b.home / 'terminal/connection-intents').exists()
 
 
-def test_changed_addition_choices_refused_and_profile_busy_preserves_intent(boundary):
+def test_changed_addition_choices_refused_and_profile_busy_preserves_intent(boundary, capsys):
     b = boundary
     assert b.run('--new-connection', '--profile', 'new', '--client', 'codex', '--plan', '--json') == 0
     path = b.home / 'terminal/profiles/new.json'
     before = path.read_bytes()
     assert b.run('--new-connection', '--profile', 'new', '--client', 'claude', '--json') == 3
+    capsys.readouterr()
     lock = ExclusiveFileLock(path.with_suffix('.guard'))
     lock.acquire()
     try:
         assert b.run('--profile', 'new', '--json') == 3
+        refusal = json.loads(capsys.readouterr().out)
+        assert refusal['code'] == 'PROFILE_BUSY' and refusal['state'] == 'refused'
     finally:
         lock.release()
     assert path.read_bytes() == before

@@ -1,0 +1,28 @@
+{
+  "status": "PARTIAL_EXPECTED_FIXTURE_ERRORS",
+  "bundle": "index-CIRJLndB.js",
+  "checks_passed": 12,
+  "page_errors": 0,
+  "mutations": 0,
+  "expected_console_errors": 2,
+  "expected_error": "Canonical404 for cloned nonnull event epochs without matching retained watermarks; fixture incompleteness, never claimed successful captured history",
+  "cleanup": {
+    "first_browser_pid": 22636,
+    "second_browser_pid": 18520,
+    "browser_close_exit": [
+      0,
+      0
+    ],
+    "fixture_exit": [
+      0,
+      0
+    ],
+    "pids_absent": true,
+    "ports_absent": [
+      49754,
+      54453
+    ]
+  },
+  "later_agent_key_attempt": "No completed result; question_waiting_for_agent is correct under injected agent_key, not local operator. Own beforeunload handled and session closed. Not used to qualify dirty controls.",
+  "next_cut_guard": "Restart refused old expected bundle after compiled static changed; no browser launched for that attempt."
+}

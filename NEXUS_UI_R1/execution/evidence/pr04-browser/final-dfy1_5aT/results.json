@@ -1,0 +1,620 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "exact frozen JS loaded",
+      "status": "PASS"
+    },
+    {
+      "name": "single primary Follow-up region",
+      "status": "PASS"
+    },
+    {
+      "name": "multi-session activity starts without latest heuristic",
+      "status": "PASS",
+      "sessions": [
+        "Choose a session",
+        "ses_70158fe9d067bd0725eb27489fc45943 · ws · exe_af140ff800c81ba05c874f3f58b7816a",
+        "ui04-second-exact-session · ws · exe_af140ff800c81ba05c874f3f58b7816a"
+      ]
+    },
+    {
+      "name": "passive session selection creates no dirty guard",
+      "status": "PASS",
+      "session": "ses_70158fe9d067bd0725eb27489fc45943"
+    },
+    {
+      "name": "one output and one dialog for exact session",
+      "status": "PASS",
+      "session": "ses_70158fe9d067bd0725eb27489fc45943"
+    },
+    {
+      "name": "passive session selection creates no dirty guard",
+      "status": "PASS",
+      "session": "ui04-second-exact-session"
+    },
+    {
+      "name": "one output and one dialog for exact session",
+      "status": "PASS",
+      "session": "ui04-second-exact-session"
+    },
+    {
+      "name": "live Home display pauses while context is open",
+      "status": "PASS"
+    },
+    {
+      "name": "close restores opening control focus",
+      "status": "PASS"
+    },
+    {
+      "name": "no-turn exact session has one passive output and one dialog",
+      "status": "PASS",
+      "target": {
+        "kind": "session",
+        "server_id": "srv_a8589c4733c7abcb1e67c1f4871801ce",
+        "executor_id": "exe_af140ff800c81ba05c874f3f58b7816a",
+        "workspace_id": "ws",
+        "session_id": "ui04-no-turn-session"
+      }
+    },
+    {
+      "name": "human native question dirty session switch",
+      "status": "NOT_RUN",
+      "reason": "Shared canonical fixture produces agent-origin question addressed to subject; recipient was not rewritten to fabricate human controls."
+    },
+    {
+      "name": "Escape dirty guard keeps real composer draft",
+      "status": "PASS"
+    },
+    {
+      "name": "explicit discard closes unsent composer without mutation",
+      "status": "PASS"
+    },
+    {
+      "name": "360px panel retains horizontal layout and reachable close",
+      "status": "PASS",
+      "geometry": {
+        "viewport": 360,
+        "documentWidth": 360,
+        "dialogWidth": 360,
+        "bodyWidth": 360,
+        "bodyScroll": 360
+      },
+      "hit": true
+    },
+    {
+      "name": "read-only browser made no canonical mutation",
+      "status": "PASS",
+      "mutations": []
+    },
+    {
+      "name": "frontend has no runtime errors",
+      "status": "PASS",
+      "pageErrors": [],
+      "consoleErrors": []
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/assets/index-dfy1_5aT.js"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/assets/index-CXFy-VnM.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/stream?view=attention&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/stream?"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22handoff_id%22%3A%22ui-handoff-0%22%2C%22kind%22%3A%22handoff%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22handoff_id%22%3A%22ui-handoff-0%22%2C%22kind%22%3A%22handoff%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/handoffs?handoff_id=ui-handoff-0&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ses_70158fe9d067bd0725eb27489fc45943%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ses_70158fe9d067bd0725eb27489fc45943%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943?executor_id=exe_af140ff800c81ba05c874f3f58b7816a"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943?executor_id=exe_af140ff800c81ba05c874f3f58b7816a"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943/events?executor_id=exe_af140ff800c81ba05c874f3f58b7816a&after_sequence=0&limit=100"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943?executor_id=exe_af140ff800c81ba05c874f3f58b7816a"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/bindings/binding"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-second-exact-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-second-exact-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-second-exact-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-second-exact-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-second-exact-session/events?executor_id=exe_af140ff800c81ba05c874f3f58b7816a&after_sequence=0&limit=100"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-second-exact-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/bindings/binding"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-second-exact-session/events?executor_id=exe_af140ff800c81ba05c874f3f58b7816a&after_sequence=0&limit=100&stream_epoch=native-epoch"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session/events?executor_id=exe_af140ff800c81ba05c874f3f58b7816a&after_sequence=0&limit=100"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/bindings/binding"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22handoff_id%22%3A%22ui-handoff-0%22%2C%22kind%22%3A%22handoff%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22handoff_id%22%3A%22ui-handoff-0%22%2C%22kind%22%3A%22handoff%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/handoffs?handoff_id=ui-handoff-0&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ses_70158fe9d067bd0725eb27489fc45943%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ses_70158fe9d067bd0725eb27489fc45943%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943?executor_id=exe_af140ff800c81ba05c874f3f58b7816a"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943?executor_id=exe_af140ff800c81ba05c874f3f58b7816a"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943/events?executor_id=exe_af140ff800c81ba05c874f3f58b7816a&after_sequence=0&limit=100"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943?executor_id=exe_af140ff800c81ba05c874f3f58b7816a"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/bindings/binding"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg"
+    }
+  ],
+  "responses": [
+    {
+      "url": "http://127.0.0.1:63560/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/info",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/stream?",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/graph?workspace=ws&window_hours=24",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/stream?view=attention&workspace=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?state=active&seen=all",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/graph?workspace=ws&window_hours=24",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&limit=10&preview=3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?state=active&seen=all",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22handoff_id%22%3A%22ui-handoff-0%22%2C%22kind%22%3A%22handoff%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22handoff_id%22%3A%22ui-handoff-0%22%2C%22kind%22%3A%22handoff%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/agents",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/handoffs?handoff_id=ui-handoff-0&workspace=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ses_70158fe9d067bd0725eb27489fc45943%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ses_70158fe9d067bd0725eb27489fc45943%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/bindings/binding",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943/events?executor_id=exe_af140ff800c81ba05c874f3f58b7816a&after_sequence=0&limit=100",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-second-exact-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-second-exact-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-second-exact-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-second-exact-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-second-exact-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-second-exact-session/events?executor_id=exe_af140ff800c81ba05c874f3f58b7816a&after_sequence=0&limit=100",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/bindings/binding",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-second-exact-session/events?executor_id=exe_af140ff800c81ba05c874f3f58b7816a&after_sequence=0&limit=100&stream_epoch=native-epoch",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session/events?executor_id=exe_af140ff800c81ba05c874f3f58b7816a&after_sequence=0&limit=100",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/bindings/binding",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/agents",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22handoff_id%22%3A%22ui-handoff-0%22%2C%22kind%22%3A%22handoff%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22handoff_id%22%3A%22ui-handoff-0%22%2C%22kind%22%3A%22handoff%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/handoffs?handoff_id=ui-handoff-0&workspace=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/agents",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ses_70158fe9d067bd0725eb27489fc45943%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ses_70158fe9d067bd0725eb27489fc45943%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ses_70158fe9d067bd0725eb27489fc45943/events?executor_id=exe_af140ff800c81ba05c874f3f58b7816a&after_sequence=0&limit=100",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/bindings/binding",
+      "status": 200
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "bundle": "index-dfy1_5aT.js",
+  "remaining": [
+    "agent-origin transition",
+    "result canonical panel",
+    "browser history dirty guard",
+    "real backend403 cleanup",
+    "native200percent zoom"
+  ],
+  "scope": "UI028/034/041 partial focal only; no provider, AT speech, native execution or release qualification"
+}

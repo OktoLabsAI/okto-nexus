@@ -47,6 +47,42 @@ def stable_agent(deps, agent_id):
     return row
 
 
+def test_single_observed_harness_needs_no_profile_and_existing_connection_offers_all_intents(
+        terminal, local_setup, tmp_path, monkeypatch, capsys):
+    t = terminal
+    local_setup[2].portal.call(t.app.state.embedded_inventory_owner.refresh)
+    assert {item.adapter_id for item in t.app.state.embedded_inventory_owner.candidates} == {'codex_app_server'}
+    home = tmp_path / 'single-cli-home'
+    service = SimpleNamespace(adapter=SimpleNamespace(home=home, host='127.0.0.1', port=1),
+        inspect=lambda: dict(state='ready', instance_id='synthetic-existing-instance'),
+        ensure_running=lambda **kwargs: dict(state='ready', instance_id='synthetic-existing-instance'))
+    monkeypatch.setattr(connect, 'resolve_local_service', lambda args: service)
+    monkeypatch.setattr(connect, 'LocalOperatorHTTP', lambda **kwargs: t.call)
+    monkeypatch.setattr(connect.sys, 'stdin', SimpleNamespace(isatty=lambda: True))
+    prompts, answers = [], iter(['y'])
+
+    def choose(prompt):
+        prompts.append(prompt)
+        return next(answers)
+
+    monkeypatch.setattr('builtins.input', choose)
+    command = ['--home', str(home), '--project', t.selection['project'], '--no-chat']
+    assert connect.run_connect(command) == 0
+    path, = (home / 'terminal/profiles').glob('*.json')
+    connection = read_json(path)
+    assert connection['state'] == 'done'
+    assert connection['result']['binding']['adapter_id'] == 'codex_app_server'
+    assert all('profile' not in prompt.lower() for prompt in prompts)
+    before, profile_bytes = snapshot(t.deps), path.read_bytes()
+    turns = tuple(t.turns)
+    capsys.readouterr()
+    answers = iter(['c'])
+    assert connect.run_connect(command + ['--plan']) == 0
+    output = capsys.readouterr().out
+    assert 'Resume codex' in output and 'a. Add another connection' in output and 'c. Cancel' in output
+    assert path.read_bytes() == profile_bytes and snapshot(t.deps) == before and tuple(t.turns) == turns
+
+
 def test_two_distinct_harnesses_share_project_keep_custom_a_and_recover_b_finish(
         two_harnesses, local_setup, tmp_path, monkeypatch, capsys):
     t = two_harnesses

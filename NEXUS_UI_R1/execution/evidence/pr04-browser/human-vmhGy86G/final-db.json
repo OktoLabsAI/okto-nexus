@@ -1,0 +1,590 @@
+{
+  "summary": {
+    "decisions": 1,
+    "decide_operations": 0,
+    "deliveries": 0,
+    "stages": []
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-vmhGy86G.js"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-CXFy-VnM.css"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents/subject/runtime-executions/op_7ad43e616bf323190b6aaad640c78138"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/bindings/binding"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    }
+  ]
+}

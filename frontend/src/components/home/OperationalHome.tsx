@@ -2,7 +2,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {Pause, Play, Plus, RefreshCw} from 'lucide-react';
 import {api, type WorkspaceListItem} from '../../api';
 import type {AttentionAction, AttentionOccurrence} from '../../attentionTypes';
-import type {HomeTarget, HomeEntryDisplayState, HomeQuickFilter} from '../../homeTypes';
+import type {HomeTarget, HomeEntryDisplayState, HomeQuickFilter,HomeEntryPage,HomeEntryGroup} from '../../homeTypes';
 import {homeEntryPageKey,type HomeInvalidation,type HomeStreamStatus} from '../../homeController';
 import {useHomeOverview} from '../../hooks/useHomeOverview';
 import {decodeHomeTarget, encodeHomeTarget} from '../../homeNavigation';
@@ -17,6 +17,16 @@ import type {HomeEntrySelection} from '../../homeEntryInspection';
 type Panel = {kind: 'request'} | {kind: 'target'; target: HomeTarget; continuation?: boolean;entrySelection?:HomeEntrySelection}
   | {kind: 'attention'; item: AttentionOccurrence; action: AttentionAction};
 const states: HomeEntryDisplayState[] = ['running', 'awaiting_owner', 'claimed', 'queued', 'native_accepted', 'awaiting_operator', 'awaiting_agent', 'awaiting_dependency', 'awaiting_verification', 'outcome_unknown','configured','connected','idle','offline','stale'];
+/** Only the authorized pre-filter inventory can prove the first-connection case. */
+export function isFirstHarnessEmpty(page:HomeEntryPage<HomeEntryGroup>|null,stale=false,filtered=false):boolean {
+  if(!page||stale||filtered||!isQuietEntries(page)||page.partition!=='groups')return false;
+  const scope=page.scope,count=page.inventory?.connections;
+  return page.source_status.connections==='ready'&&
+    ['work','results','attention','connections','sessions','correlations','external'].every(key=>['ready','disabled'].includes(page.source_status[key]))&&
+    scope.quick==='active'&&scope.include_recent_results===true&&
+    !scope.agent_id&&!scope.state&&!scope.harness&&!scope.host&&
+    count?.unit==='connections'&&count.total_is_exact===true&&count.value===0;
+}
 export function OperationalHome({workspace, workspaces, identityKey, refreshTick, latestEvent, streamStatus, onNavigate,
   onAttentionChanged, onSetupAgent, registerLeaveGuard}: {
   workspace: string; workspaces: WorkspaceListItem[]; identityKey: string; refreshTick: number;
@@ -131,6 +141,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     !['ready','partial'].includes(snapshot.status)||['forbidden','disabled','error'].includes(state.status);
   const quiet=isQuietEntries(snapshot,blocked);
   const filtered=!!(quick||agentFilter||stateFilter||harnessFilter||hostFilter);
+  const firstHarness=isFirstHarnessEmpty(snapshot,blocked||state.status!=='ready',filtered);
   const clearFilters=()=>{setQuick(undefined);setAgentFilter('');setAgentDraft('');setStateFilter('');setHarnessFilter('');setHarnessDraft('');setHostFilter('');setHostDraft('');};
   const passiveLabels:Record<string,string>={configured:'Configured',connected:'Connected',idle:'No work in progress',offline:'Offline',stale:'Information out of date'};
   return <PageContainer testId="operational-home" className="space-y-5">
@@ -138,8 +149,8 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
       <div><h1 ref={heading} tabIndex={-1} className="text-2xl font-semibold">Home</h1>
         <p className="text-sm text-surface-500 mt-1">{workspace==='all'?'All workspaces':workspaceName} · Follow work, questions and deliveries</p></div>
       <div className="flex flex-wrap gap-2">
-        <button type="button" className={`btn btn-primary ${homeFocus}`} onClick={()=>open({kind:'request'})} disabled={!snapshot||['forbidden','disabled'].includes(state.status)}><Plus size={15}/> New request</button>
-        <button type="button" className={`btn btn-secondary ${homeFocus}`} onClick={onSetupAgent} disabled={state.status==='forbidden'}>Connect agent</button>
+        <button type="button" className={`btn btn-primary ${homeFocus}`} onClick={()=>open({kind:'request'})} disabled={firstHarness||!snapshot||['forbidden','disabled'].includes(state.status)}><Plus size={15}/> New request</button>
+        {!firstHarness&&<button type="button" className={`btn btn-secondary ${homeFocus}`} onClick={onSetupAgent} disabled={state.status==='forbidden'}>Connect agent</button>}
         <button type="button" className={`btn btn-secondary ${homeFocus}`} onClick={refresh} disabled={state.loading||!!state.entryLoading}><RefreshCw size={15}/> Refresh</button>
         <button type="button" className={`btn btn-secondary ${homeFocus}`} aria-pressed={manualPause} onClick={()=>setManualPause(value=>!value)}>{manualPause?<Play size={15}/>:<Pause size={15}/>} {manualPause?'Resume display':'Pause display'}</button>
       </div>
@@ -179,7 +190,11 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
         <p className="text-xs text-surface-500">{(['activities','sessions','occurrences','results'] as const).filter(key=>(snapshot.summary[key]?.value??0)>0).map(key=>`${snapshot.summary[key].value} ${snapshot.summary[key].unit}`).join(' · ')}</p>
         {snapshot.status!=='ready'&&<p role="status" className="text-sm text-surface-500">Some information is incomplete or unavailable. Totals may be unknown; refresh before acting.</p>}
         {snapshot.coverage.result_tracking!=='ready'&&<p className="text-xs text-surface-500">Some result viewing states are untracked. Those deliveries are labeled recent.</p>}
-        {quiet&&<div className="panel p-5"><p className="font-medium">No matching activity{filtered?' for these filters':''}.</p><p className="text-sm text-surface-500 mt-2">Use New request to ask for work, or Connect agent to add a collaborator.</p></div>}
+        {quiet&&<div className="panel p-5">{firstHarness?<>
+          <p className="font-medium">Connect your first harness</p>
+          <p className="text-sm text-surface-500 mt-2">Connect a collaborator to start work in this project.</p>
+          <button type="button" className={`btn btn-primary mt-3 ${homeFocus}`} onClick={onSetupAgent}>Connect your first harness</button>
+        </>:<><p className="font-medium">No matching activity{filtered?' for these filters':''}.</p><p className="text-sm text-surface-500 mt-2">Use New request to ask for work, or Connect agent to add a collaborator.</p></>}</div>}
         {!snapshot.items.length&&!quiet&&<p role="status" className="panel p-5">Tracking information is incomplete. Refresh to load this scope.</p>}
         <ul className="space-y-3">{snapshot.items.map(group=><HomeEntryGroupCard key={group.id} group={group} page={state.entryChildren[group.id]}
           expanded={!!expanded[group.id]} onExpand={()=>{const next={...expanded,[group.id]:!expanded[group.id]};holdOrder(listFocused||Object.values(next).some(Boolean));setExpanded(next);}}

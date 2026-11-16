@@ -1,0 +1,23 @@
+{
+  "status": "PASS_SCOPED_FIRST_CONNECTION_AND_FILTERED_EMPTY",
+  "tasks": ["UI-023", "UI-025", "UI-028"],
+  "scenario": "T-HOME-03",
+  "backend": "Additive pre-presentation-filter connection inventory from the same authorized, complete canonical SQLite source; no extra query or migration. Unknown on failed/unsupported sources. Inventory participates in material revision.",
+  "client": "Only a fresh complete default scope with proven zero connections and zero entries offers the first-harness CTA. Filtered, stale, partial and unknown pages cannot prove first use.",
+  "runs": {
+    "frontend_full": {"passed": 297, "duration_ms": 6809.9094, "exit_code": 0, "tool_ref": "e282f6"},
+    "build": {"exit_code": 0, "session": 65675, "tool_ref": "fa11a5", "bundle": "index-CIXUIG91.js", "sha256": "0de41929962e2b23b65a30920d607ea2fc853db62bba859b40c78add287cafc1"},
+    "new_backend_focals": {"passed": 2, "seconds": 7.15, "exit_code": 0, "tool_ref": "8b1495"},
+    "existing_pages_and_related": {"passed": 17, "scope": "Same combined 19-node run: the two new nodes had one PASS and one test-authoring failure (wrong copied SQLite column); all17 existing nodes passed. Corrected new2 passed separately. Not a single19green run.", "tool_ref": "3d9d5b"},
+    "focused_ruff": {"exit_code": 0, "tool_ref": "9b5fb6"},
+    "browser": {"passed_checks": 5, "evidence": "NEXUS_UI_R1/execution/evidence/pr04-browser/empty-CIXUIG91/qualification.json"}
+  },
+  "migrations": 0,
+  "provider_calls": 0,
+  "regression_limits": [
+    "Prior Home/browser27 checks retain their own bundle cuts; this focal does not relabel them as rerun on CIXUIG91.",
+    "Installed-package qualification for the four Python metadata changes is reported separately in pr08-installed-qualification.json.",
+    "Known-disabled observational sources are explicit; unavailable sources cannot become a successful empty state."
+  ],
+  "rollback": "Revert the optional inventory field and welcome predicate together, rebuilding assets. Persisted connections, profiles and execution state require no change."
+}

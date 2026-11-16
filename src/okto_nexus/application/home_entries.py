@@ -48,6 +48,7 @@ class HomeEntriesService:
                 value.update(version=1, scope=scope, server_id=server, generated_at=now,
                     snapshot_id=None, revision=None, partition=partition, group_id=group_id,
                     entry_id=entry_id, source_status={'entries': value['status']},
+                    inventory=dict(connections=dict(value=None, total_is_exact=False, unit='connections')),
                     coverage={'result_tracking': 'unknown'},
                     summary={key: dict(value=None, total_is_exact=False,
                         unit='results' if key == 'unseen_results' else key)

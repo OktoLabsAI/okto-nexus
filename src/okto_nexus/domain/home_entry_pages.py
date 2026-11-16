@@ -151,7 +151,7 @@ def revision(relations, check_budget):
             value[name].sort(key=lambda row: (row[key], canonical(row)))
         entries.append(value)
     result = digest(dict(entries=entries, server_attention=sorted(relations.server_attention, key=lambda row: row['attention_id']),
-                         source_status=relations.source_status))
+                         source_status=relations.source_status, connection_count=relations.connection_count))
     check_budget()
     return result
 
@@ -313,6 +313,9 @@ def page(relations, *, scope, server_id, principal, now, partition='groups', gro
         group_id=group_id, entry_id=entry_id, status='ready' if exact else 'partial',
         source_status=relations.source_status, items=items, total=len(keyed) if exact else None,
         total_is_exact=exact, has_more=more,
+        inventory=dict(connections=dict(value=relations.connection_count,
+            total_is_exact=relations.connection_count is not None,
+            unit='connections')),
         coverage=dict(result_tracking='unknown' if relations.source_status.get('attention') != 'ready' else 'partial' if tracking_unknown else 'ready'),
         next_cursor=cursor_encode(binding, material_revision, list(chosen[-1][0])) if more else None,
         as_of=now, next_refresh_at=refresh_at,

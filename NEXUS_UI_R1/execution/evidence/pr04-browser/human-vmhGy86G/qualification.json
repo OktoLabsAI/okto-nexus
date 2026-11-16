@@ -1,0 +1,75 @@
+{
+  "status": "PASS_SCOPED_HUMAN_GUARDS_AND_TWO_TAB_CAS",
+  "checks_passed": 8,
+  "bundle": "index-vmhGy86G.js",
+  "js_sha256": "e4a1b963969fe42a195a904fe8238b0e5e9c927f67e97d47ba9db0eac2b926c8",
+  "preflight": {
+    "operator": {
+      "status": 200,
+      "items": 1
+    },
+    "subject": {
+      "status": 200,
+      "items": 0
+    },
+    "other": {
+      "status": 200,
+      "items": 0
+    }
+  },
+  "native_decision_posts": 2,
+  "actual_statuses": [
+    202,
+    409
+  ],
+  "page_errors": [],
+  "db_exact_operation": {
+    "operation_id": "r4op_75e676d9471699e4cae01767b40aacd3",
+    "action": "input.provide",
+    "actor_agent_id": "operator",
+    "subject_agent_id": "subject",
+    "session_id": "ses_84c759810c99e54a76863906c902ecf9"
+  },
+  "matching_operations": 1,
+  "matching_outbox": 1,
+  "decisions": 1,
+  "native_application": "NOT_EXECUTED; canonical CONFIRMED plus DISPATCH_PENDING, possible_effect false; no provider/native executable",
+  "heartbeat_count": 16,
+  "current_authority_checks": 20,
+  "peer_thread_stopped": true,
+  "peer_errors": [
+    {
+      "kind": "peer_failed",
+      "error": "'valid_until_server'"
+    }
+  ],
+  "limitation": "Canonical lease renew/applied completed before logging KeyError for absent wire valid_until_server; heartbeat worker ended then. No continuous180s renewal qualification. Original fixed controlled clock retained, no TTL/grant/budget/recipient SQL bypass.",
+  "source_pin_drift": [],
+  "cleanup": {
+    "browser_pid": 60848,
+    "browser_close_exit": 0,
+    "fixture_exit": 0,
+    "pid_absent": true,
+    "port": 53807,
+    "port_absent": true,
+    "thread_joined": true,
+    "tools": [
+      "e27b1a",
+      "5cf928",
+      "b6b155"
+    ]
+  },
+  "sha256": {
+    "db-exact-operation.json": "0d6e02d4d9c588cf9b0df3a16771b521d487e76211a5d2589f358369f8c5c8ff",
+    "final-db.json": "b8af4875411c750bda642373b8f72562b0b12cd09a1cc4138ec052f3d743fdb0",
+    "human-canonical-dispatch-pending.png": "41753a660f5a012fc3a8bc5b93db83172e0ffb42682ebb79848d87962a3892f9",
+    "human-fixture.py": "e017e34595bb76cbe23c8497d9f2e553143b9851fe40c2c8ca01c7cef20cc2cb",
+    "human-live-fixture.py": "f5f0a34dc0763074ea8b3553393b155657f05b2f4c03d89aa61193e5328a613a",
+    "human-probe.js": "230845306bf2623a35e4d942aa987c3fdf59d02c8cf4e8ec9c56d320b47148d0",
+    "human-reviewed-before-submit.png": "05177d9bed2133cb363c2541e771736c091f9d8d0fef9bae31d3d9c0e4791947",
+    "liveness.json": "76da21b1eb9ea1bf3aa01238a1ea26ca4b3f25efb5ba416d1f12e28bcdeb36d7",
+    "output.txt": "74c0f1da297a8bd6682561353878a7d44587602761201c4e9314ed42ecbe9748",
+    "ready.json": "e75655d1214283b6081c3019c0a08bbb75869c7d911c77f2864fdc3756ab8e38",
+    "results.json": "db0044abbf2aa8e148413d97968c926db65f6df2225580ad84226639c2dae4c3"
+  }
+}

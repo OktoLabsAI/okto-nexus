@@ -1,0 +1,314 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "browser Back closes exact passive context without replacement",
+      "status": "PASS",
+      "targetURL": "http://127.0.0.1:63560/?home_target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D"
+    },
+    {
+      "name": "browser Back dirty guard preserves real composer draft",
+      "status": "PASS"
+    },
+    {
+      "name": "native 200% browser zoom",
+      "status": "NOT_RUN",
+      "before": {
+        "innerWidth": 1440,
+        "ratio": 1
+      },
+      "after": {
+        "innerWidth": 1440,
+        "ratio": 1
+      },
+      "reason": "Keyboard shortcut did not establish a verified native200% zoom level; viewport/CSS are not substituted."
+    },
+    {
+      "name": "canonical other-agent403 clears protected Home entries",
+      "status": "PASS"
+    },
+    {
+      "name": "fence probe has no mutations or page exceptions",
+      "status": "PASS",
+      "errors": []
+    }
+  ],
+  "responses": [
+    {
+      "url": "http://127.0.0.1:63560/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/assets/index-dfy1_5aT.js",
+      "status": 304
+    },
+    {
+      "url": "http://127.0.0.1:63560/assets/index-CXFy-VnM.css",
+      "status": 304
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/logos/nexus-wordmark-light.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/logos/nexus-wordmark-dark.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/info",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/graph?workspace=ws&window_hours=24",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/stream?",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/stream?view=attention&workspace=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?state=active&seen=all",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/graph?workspace=ws&window_hours=24",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&limit=10&preview=3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?state=active&seen=all",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&limit=10&preview=3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/bindings/binding",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session/events?executor_id=exe_af140ff800c81ba05c874f3f58b7816a&after_sequence=0&limit=100",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/agents",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3",
+      "status": 403
+    }
+  ],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:63560/",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/assets/index-dfy1_5aT.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/assets/index-CXFy-VnM.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/operator-auth/status",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/logos/nexus-wordmark-light.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/logos/nexus-wordmark-dark.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/info",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/graph?workspace=ws&window_hours=24",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/workspaces",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?workspace_id=ws",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?state=active&seen=all",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&limit=10&preview=3",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/stream?view=attention&workspace=ws",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/stream?",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/operator/unread-count",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?workspace_id=ws",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/attention/summary?state=active&seen=all",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/graph?workspace=ws&window_hours=24",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&limit=10&preview=3",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_af140ff800c81ba05c874f3f58b7816a%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_a8589c4733c7abcb1e67c1f4871801ce%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/me",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session/events?executor_id=exe_af140ff800c81ba05c874f3f58b7816a&after_sequence=0&limit=100",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_af140ff800c81ba05c874f3f58b7816a",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/runtime-management/connections/bindings/binding",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/logos/nexus-icon.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/agents",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3",
+      "method": "GET"
+    }
+  ],
+  "errors": [],
+  "scope": "Home read denial after passive panel closed; does not qualify live viewer403 or native AT/zoom"
+}

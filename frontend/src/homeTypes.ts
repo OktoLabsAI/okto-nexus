@@ -119,5 +119,6 @@ export interface HomeEntryPage<T> extends Omit<HomeSection<T>, 'revision'> {
   revision:string|null; partition:HomeEntryPartition; group_id:string|null; entry_id:string|null;
   event_cursor:number; event_low_watermark:number|null; source_status:Record<string,HomeSectionStatus>;
   coverage:{result_tracking:'unknown'|'partial'|'ready'}; summary:HomeEntrySummary;
+  inventory?:{connections:{value:number|null;total_is_exact:boolean;unit:'connections'}};
   server_attention:Pick<HomeSection<AttentionOccurrence>,'status'|'items'|'total'|'total_is_exact'|'has_more'>;
 }
