@@ -10,6 +10,7 @@ import {MessageDetail} from './MessageDetailModal';
 import {RuntimePolicy} from './RuntimePolicy';
 import {RuntimeRecovery} from './RuntimeRecovery';
 import {ExternalObservationInspection} from './ExternalObservations';
+import {HomeSessionInspection} from './home/HomeSessionInspection';
 
 export function AttentionInspection({item, action, onClose, onChanged, refreshKey}: {
   item: AttentionOccurrence; action: AttentionAction; onClose: () => void; onChanged: () => void; refreshKey?: string;
@@ -56,6 +57,14 @@ export function CanonicalInspection({target, item, action, onClose, onChanged, r
       {target.kind === 'unavailable' && <p role="status">{target.reason}</p>}
       {loading && <p role="status">Loading canonical record…</p>}
       {error && <p role="alert">{error}</p>}
+      {target.kind === 'session' && <HomeSessionInspection key={targetKey} context={target.context}/>}
+      {target.kind === 'connection' && <section aria-label="Connection context" className="space-y-2 text-sm">
+        <h3 className="font-semibold">Connection · Read only</h3>
+        <p>Saved context only. Configuration does not establish session readiness or permission to execute.</p>
+        <dl>{(['agent_id','workspace_id','executor_id','binding_id','workspace_binding_id'] as const).map(key=><div key={key}>
+          <dt className="text-surface-500">{key.replaceAll('_',' ')}</dt><dd className="break-all">{target.context[key]}</dd>
+        </div>)}</dl>
+      </section>}
       {target.kind === 'external_observation' && <ExternalObservationInspection key={targetKey} target={target} refreshKey={refreshKey}
         completionEpisode={item?.kind === 'external_completion_unseen' ? item.external_observation : undefined} />}
       {target.kind === 'approval' && <ApprovalInspection key={targetKey} approvalId={target.id} workspace={target.workspace}

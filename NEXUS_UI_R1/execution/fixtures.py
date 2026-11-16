@@ -158,8 +158,11 @@ def _read_facts(deps, resolution):
         c.execute("INSERT INTO handoffs(handoff_id,workspace_id,from_agent_id,target,visibility,status,created_at,updated_at) VALUES('ui-unassigned','ws','subject',?,'eligible','OPEN',?,?)",
                   ('{"strategy":"broadcast"}', now, now))
         opening = c.execute("SELECT * FROM execution_operations WHERE action='runtime.open'").fetchone()
+        second_scope = dict(json.loads(opening['expected_revisions_json']),
+                            binding_id='ui-binding-2', session_id='ui-session-2')
         _copy(c, "execution_operations", opening, operation_id="ui-open-2", binding_id="ui-binding-2",
-              session_id="ui-session-2", admission_state="RESOLVED_TERMINAL")
+              session_id="ui-session-2", admission_state="RESOLVED_TERMINAL",
+              expected_revisions_json=json.dumps(second_scope))
         session = c.execute("SELECT * FROM execution_sessions WHERE session_id=?", (scope["session_id"],)).fetchone()
         _copy(c, "execution_sessions", session, session_id="ui-session-2", binding_id="ui-binding-2",
               open_operation_id="ui-open-2", lifecycle_state="CLOSED", lease_state="CLOSED",
@@ -167,7 +170,8 @@ def _read_facts(deps, resolution):
         turn = c.execute("SELECT * FROM execution_operations WHERE action='turn.submit'").fetchone()
         for operation, stage in (("ui-unknown", "OUTCOME_UNKNOWN"), ("ui-success", "SUCCEEDED")):
             _copy(c, "execution_operations", turn, operation_id=operation, binding_id="ui-binding-2",
-                  session_id="ui-session-2", admission_state="RESOLVED_TERMINAL")
+                  session_id="ui-session-2", admission_state="RESOLVED_TERMINAL",
+                  expected_revisions_json=json.dumps(second_scope))
             c.execute("INSERT INTO execution_receipts(server_id,executor_id,operation_id,receipt_revision,intent_hash,stage,possible_effect,retry_safe,received_at) VALUES(?,?,?,1,?,?,1,0,?)",
                       (scope["server_id"], scope["executor_id"], operation, turn["intent_hash"], stage, now))
         c.execute("INSERT INTO execution_session_containment(server_id,executor_id,session_id,owner_generation,opening_operation_id,opening_intent_hash,request_json,state,recorded_at) VALUES(?,?,'ui-session-2',1,'ui-open-2',?,'{}','REQUESTED',?)",

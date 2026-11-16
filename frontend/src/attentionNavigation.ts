@@ -1,7 +1,10 @@
 import type {AttentionAction, AttentionOccurrence} from './attentionTypes';
 import type {api as canonicalApi, ApprovalDetail} from './api';
+import type {HomeSessionContext, HomeConnectionContext} from './homeTypes';
 
 export type AttentionTarget =
+  | {kind: 'session'; context: HomeSessionContext}
+  | {kind: 'connection'; context: HomeConnectionContext}
   | {kind: 'approval'; id: string; workspace: string | null; decide: boolean}
   | {kind: 'handoff'; id: string; workspace: string; verify: boolean}
   | {kind: 'message'; id: string; workspace: string | null}
@@ -75,6 +78,8 @@ type AttentionReadApi = Pick<typeof canonicalApi, 'approvalDetail' | 'handoffs' 
 /** Only existing canonical inspection methods are accepted; opening never submits work. */
 export async function readAttentionReference(api: AttentionReadApi, target: AttentionTarget, signal?: AbortSignal) {
   switch (target.kind) {
+    case 'session':
+    case 'connection': throw new Error('Use the exact passive context reader for this target.');
     case 'external_observation': {
       if (!Number.isSafeInteger(target.generation) || target.generation <= 0)
         throw Object.assign(new Error('The selected generation cannot be verified.'), {code: 'OBSERVATION_SELECTION_CHANGED'});

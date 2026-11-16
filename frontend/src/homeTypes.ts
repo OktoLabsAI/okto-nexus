@@ -13,6 +13,8 @@ interface HomeTargetBase { server_id: string; workspace_id: string | null }
 export type HomeTarget =
   | (HomeTargetBase & { kind: 'handoff'; handoff_id: string })
   | (HomeTargetBase & { kind: 'execution' | 'result'; executor_id: string; session_id: string; operation_id: string })
+  | (HomeTargetBase & { kind: 'session'; workspace_id: string; executor_id: string; session_id: string })
+  | (HomeTargetBase & { kind: 'connection'; workspace_id: string; executor_id: string; binding_id: string; agent_id: string })
   | (HomeTargetBase & { kind: 'message'; message_id: string })
   | (HomeTargetBase & { kind: 'approval'; approval_id: string })
   | (HomeTargetBase & { kind: 'external_observation'; source_id: string; observed_instance_id: string; generation: number });
@@ -69,4 +71,13 @@ export type HomeSectionName = 'work' | 'attention' | 'results' | 'agents' | 'ext
 export interface HomeResolvedTarget {
   version: 1; target: HomeTarget; available: boolean; source_revision: string;
   agent_id?: string | null; reason_code?: string; observed_at?: string;
+  session_context?: HomeSessionContext;
+  connection_context?: HomeConnectionContext;
+}
+export interface HomeConnectionContext {
+  server_id: string; executor_id: string; workspace_id: string;
+  binding_id: string; workspace_binding_id: string; agent_id: string;
+}
+export interface HomeSessionContext extends HomeConnectionContext {
+  session_id: string; lifecycle_state: string;
 }

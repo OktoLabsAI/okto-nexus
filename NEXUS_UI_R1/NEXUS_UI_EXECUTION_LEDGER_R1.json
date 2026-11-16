@@ -1864,7 +1864,7 @@
       "id": "UI-019",
       "pr": "PR-03",
       "title": "Adicionar sessões sem operação aos alvos tipados",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-003",
         "UI-017"
@@ -1892,8 +1892,14 @@
         "T-SCOPE-02",
         "T-NAV-10"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr03-session-viewer-qualification.json"
+      ],
+      "limitations": [
+        "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
+        "Existing RuntimeTerminal useLayoutEffect emits expected SSR warning; no browser speech or human comprehension result.",
+        "Source targets/viewer do not close unified Home or UI/Connector onboarding gates."
+      ]
     },
     {
       "id": "UI-020",
@@ -2206,7 +2212,7 @@
       "id": "UI-029",
       "pr": "PR-05",
       "title": "Extrair viewer de sessão reutilizável",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-019"
       ],
@@ -2232,8 +2238,14 @@
         "T-PANEL-05",
         "T-PANEL-06"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr03-session-viewer-qualification.json"
+      ],
+      "limitations": [
+        "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
+        "Existing RuntimeTerminal useLayoutEffect emits expected SSR warning; no browser speech or human comprehension result.",
+        "Source targets/viewer do not close unified Home or UI/Connector onboarding gates."
+      ]
     },
     {
       "id": "UI-030",
@@ -4794,6 +4806,10 @@
     {
       "at": "2026-11-16T18:42:09.684410+00:00",
       "event": "Local CLI session-intent and two-adapter canonical fixture milestones:18unit/6HTTP/1two-adapter test, scopes separated. Exact context and durable recovery proved with synthetic executables; no real provider/service claim. Mandatory UI/Connector and joint gate still open."
+    },
+    {
+      "at": "2026-11-16T19:06:05.006257+00:00",
+      "event": "Exact session/connection target and shared passive terminal viewer implemented.13HTTP/SQLite and34focalNode, full236frontend/build passed. Historical binding-rotation discrepancy fixed against canonical session API. Mounted browser and joint onboarding still separate; fixture historical-context delta preserves original PR00 source/measurement in commit2cc70419."
     }
   ],
   "risk_acceptances": [],

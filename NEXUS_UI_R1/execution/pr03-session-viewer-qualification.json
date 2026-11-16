@@ -1,0 +1,75 @@
+{
+  "status": "IMPLEMENTED_PASSIVE_CONTEXT_VIEWER_PENDING_MOUNTED_BROWSER",
+  "at": "2026-11-16T19:06:05.006257+00:00",
+  "tasks": [
+    "UI-019",
+    "UI-029"
+  ],
+  "source_sha256_working_tree": {
+    "src/okto_nexus/domain/home.py": "d66e48da255f20adb47b107eca3e7ac9d115fd6275d45f5e29ee004d1a53c3f2",
+    "src/okto_nexus/application/home.py": "33d6e8a65ef0feb18e9128b37728d7e82aed930517cd6b74225bbaf25de4cb43",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "67079e23ab7e357595a30eb880c3182d277adb68e7283bf2969553e2970467a2",
+    "frontend/src/homeTypes.ts": "17c07677a3c5d0dabaa06223df1b9d58d7e25aad7923beb4ae7d28c6f428c080",
+    "frontend/src/homeNavigation.ts": "5974cd4bac8de418bb1584c62b31791a5ba643e73dbf09af2997fba5787d6499",
+    "frontend/src/attentionNavigation.ts": "3872cc7130acb169653ffba98c4310d82bd68f902ee73a730f5a99c56afc6d0b",
+    "frontend/src/homeSessionInspection.ts": "3708da0adee2759e010a477881dd92483afd3bd47dbb2e65d5a7e54e5584d552",
+    "frontend/src/components/AttentionInspection.tsx": "5ff26bd6ae724fa9aa71fc786114cf44730685e6eaeaad2a088a0c413cc73fb6",
+    "frontend/src/components/SessionExecutionPanel.tsx": "6782c986260192142850261d93ea86a46260d2ef53cd9a1e5a64183f5d846521",
+    "frontend/src/components/home/HomeSessionInspection.tsx": "acff960a6009a6a97aecb195a3023faffbd9c88d07793b34621f20ebdf419826",
+    "frontend/src/components/SessionTerminalModal.tsx": "631590257ed37217f3d3343efac9fb7a0ba1b9fe8a9baaf85f995b27d7d860ba",
+    "frontend/src/components/RuntimeEventStream.tsx": "7c30cf8ac64f0035ee9875207cdc2425a33e3ce31d430e0837d10eccb5be6b7d",
+    "frontend/src/components/RuntimeSessionTail.tsx": "80a20c788f007113af61fd7a69f02f1ba6b3eedad77439a1da4b1da730bc93bf",
+    "frontend/src/components/RuntimeHistory.tsx": "a8c7e0874c4177f990de6ad60c71a6feaf3f503e49b46a121bc82257dd7ccf90",
+    "frontend/src/components/RuntimeTerminal.tsx": "5b7489d8a3c60e9d41f9252067bbb22beef1f9aea323faa937415fc2fee86398",
+    "tests/ui_simplification/test_home_session_targets.py": "44ba04d4e32ce586eb9e0a4426d474a05b7b098b530a52427e6914081b18043d",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "tests/ui_simplification/test_fixtures.py": "0aa009d225815330a32d2c7cd6314bea9b0469591491b951a331c7d1ad8dc0a3"
+  },
+  "python": {
+    "passed": 13,
+    "tool_ref": "42d2db",
+    "scope": "canonical HTTP/SQLite exact targets; operator and agent403; historical binding rotation and retained committed events"
+  },
+  "node_focal": {
+    "passed": 34,
+    "tool_ref": "cdd43a"
+  },
+  "frontend_complete": {
+    "tests": 236,
+    "passed": 236,
+    "exit_code": 0,
+    "duration_ms": 6570.0466,
+    "tool_ref": "b6346a"
+  },
+  "build": {
+    "exit_code": 0,
+    "session": 92386,
+    "tool_refs": [
+      "59a0e5",
+      "78cc0c"
+    ],
+    "bundle": "index-q_qn7UPA.js",
+    "css": "index-CqPDZl5S.css"
+  },
+  "scope": [
+    "Session/connection targets additive; no operation invented or most-recent session selection.",
+    "Historical session resolves by original runtime.open subject and persisted session/workspace binding, rather than current replacement binding.",
+    "Shared read-only SessionExecutionPanel extracted; standalone wrapper retains its maximizer, embedded terminal never creates another dialog.",
+    "Observer abort/access loss clears session output without stopping execution; no new execution controls granted by IDs."
+  ],
+  "fixture_delta": {
+    "antecedent_commit": "2cc70419",
+    "antecedent_qualification": "NEXUS_UI_R1/execution/pr00-fixture-qualification.json",
+    "change": "Synthetic historical expected_revisions_json now matches its own session/binding/WXB tuple; no new admission/grant. Prior54SQL/10510B measurement remains its original cut.",
+    "current_compatibility_fixture_cases_pass": 6,
+    "no_new_pr00_sample": true
+  },
+  "limitations": [
+    "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
+    "Existing RuntimeTerminal useLayoutEffect emits expected SSR warning; no browser speech or human comprehension result.",
+    "Source targets/viewer do not close unified Home or UI/Connector onboarding gates."
+  ],
+  "migrations": 0,
+  "provider_calls": 0,
+  "rollback": "Revert additive target/viewer commits; original operation targets, standalone wrapper and old APIs remain compatible."
+}

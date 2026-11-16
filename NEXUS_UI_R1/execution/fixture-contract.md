@@ -190,3 +190,32 @@ intenção retomar/adicionar. Esses pontos definem quais construtores e stores a
 fixture final deve usar. Não foi criado `fixtures.py` com um DTO antecipado nem
 foram escritos testes que apenas repetiriam esse DTO. Nenhum cenário novo foi
 promovido e nenhuma qualificação anterior foi descartada.
+
+## Delta de coerência histórica para UI-020/029
+
+A qualificação UI-005/PR00 foi preservada no commit `2cc70419`, incluindo
+`pr00-fixture-qualification.json` e os hashes/medição antecedentes de54
+statements/10.510 bytes. Esse commit recupera a fonte exata da amostra; ela não
+é reatribuída às fontes posteriores.
+
+Após revisão de UI-019, `fixtures.py::_read_facts` passou a gravar
+`expected_revisions_json` da abertura/turns históricos com os mesmos
+`ui-session-2`/`ui-binding-2` de suas colunas. O helper `copy_session` dos testes
+também atualiza o session_id do scope copiado. São ajustes nos fatos sintéticos
+próprios para inspeção exata; não criam admissão, lease, autoridade ou execução
+nativa para a segunda sessão. Novos focais e hashes serão reportados como delta
+separado; o antecedente PR00 permanece imutável.
+
+Delta executado: `rtk proxy .venv\Scripts\python.exe -m pytest
+tests/ui_simplification/test_fixtures.py
+tests/ui_simplification/test_entry_relations.py
+tests/ui_simplification/test_entry_layer_boundary.py -q -k
+"not single_current_baseline_sample"`:20 PASS,1 deselected,53.70s
+(tool `c68e33`, terminal0). Inclui os6 focais de fixture com assert novo do
+scope de abertura,13 de relações e1 de fronteira de camadas. Nenhuma amostra
+UI-005 foi repetida. SHA256 atual da fixture:
+`7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20`;
+teste de fixture:
+`0aa009d225815330a32d2c7cd6314bea9b0469591491b951a331c7d1ad8dc0a3`;
+helper/teste de relações:
+`b3f4ced0c15ac5fc4060aa954713602fb889752eaa16f97861625f25bbb010fc`.

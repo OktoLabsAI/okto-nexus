@@ -51,6 +51,10 @@ def test_one_installation_two_exact_connections_sessions(scenario):
             row = c.execute("SELECT s.*,e.agent_id FROM execution_sessions s JOIN execution_bindings b USING(server_id,executor_id,binding_id) JOIN agent_endpoints e USING(endpoint_id) WHERE s.session_id=?", (session_id,)).fetchone()
             assert tuple(row[k] for k in ("server_id", "executor_id", "binding_id", "workspace_id", "workspace_binding_id", "agent_id")) == (
                 fact.server_id, fact.executor_id, fact.binding_id, fact.workspace_id, fact.workspace_binding_id, fact.agent_id)
+            opening = c.execute('SELECT expected_revisions_json FROM execution_operations WHERE operation_id=?',
+                                (row['open_operation_id'],)).fetchone()
+            scope = json.loads(opening[0])
+            assert (scope['session_id'], scope['binding_id']) == (session_id, fact.binding_id)
         assert c.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 2
         assert c.execute("SELECT COUNT(*) FROM execution_sessions WHERE lifecycle_state='READY'").fetchone()[0] == 1
         assert s.sessions[0] != s.sessions[1]

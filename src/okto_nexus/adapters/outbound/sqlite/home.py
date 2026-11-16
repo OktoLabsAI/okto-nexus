@@ -447,6 +447,30 @@ class SqliteHomeQueries:
             sql = 'SELECT workspace_id,message_id,from_agent_id AS agent_id,created_at FROM messages WHERE message_id=:message_id'
         elif kind == 'approval':
             sql = 'SELECT workspace_id,approval_id,status,created_at,decided_at FROM approvals WHERE approval_id=:approval_id'
+        elif kind == 'session':
+            # Historical scope belongs to the admitted opening and session, not
+            # a binding's current endpoint/workspace after reconfiguration.
+            # This is read metadata only and never establishes current control.
+            sql = '''SELECT s.server_id,s.executor_id,s.workspace_id,s.session_id,s.binding_id,
+              s.workspace_binding_id,o.subject_agent_id AS agent_id,s.lifecycle_state,s.owner_generation,s.lease_state,s.stream_epoch,
+              json_extract(o.expected_revisions_json,'$.binding_revision') AS binding_revision,
+              w.revision AS workspace_binding_revision
+              FROM execution_sessions s
+              JOIN execution_operations o ON o.server_id=s.server_id AND o.executor_id=s.executor_id
+                AND o.session_id=s.session_id AND o.operation_id=s.open_operation_id AND o.action='runtime.open'
+              JOIN execution_workspace_bindings w ON w.server_id=s.server_id AND w.executor_id=s.executor_id
+                AND w.workspace_binding_id=s.workspace_binding_id AND w.workspace_id=s.workspace_id
+              WHERE s.server_id=:server_id AND s.executor_id=:executor_id AND s.session_id=:session_id
+                AND o.workspace_id=s.workspace_id AND o.binding_id=s.binding_id'''
+        elif kind == 'connection':
+            sql = '''SELECT b.server_id,b.executor_id,w.workspace_id,b.binding_id,b.workspace_binding_id,
+              ep.agent_id,b.binding_revision,w.revision AS workspace_binding_revision
+              FROM execution_bindings b
+              JOIN execution_workspace_bindings w ON w.server_id=b.server_id AND w.executor_id=b.executor_id
+                AND w.workspace_binding_id=b.workspace_binding_id
+              JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id AND ep.workspace_id=w.workspace_id
+              WHERE b.server_id=:server_id AND b.executor_id=:executor_id
+                AND b.binding_id=:binding_id AND ep.agent_id=:agent_id'''
         elif kind in ('execution', 'result'):
             sql = '''SELECT o.workspace_id,o.subject_agent_id AS agent_id,o.admission_state,s.lifecycle_state,
               s.owner_generation,COALESCE(r.receipt_revision,0) AS receipt_revision
