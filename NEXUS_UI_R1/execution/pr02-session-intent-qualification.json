@@ -1,0 +1,60 @@
+{
+  "status": "PASS_SCOPED_CLI_SESSION_AND_TWO_ADAPTER_INTENTS",
+  "at": "2026-11-16T18:42:09.684410+00:00",
+  "source_sha256_working_tree": {
+    "src/okto_nexus/adapters/inbound/cli/work.py": "d6053eedf0c1985c7ff3ef95fd0ebc1238e1b7b168ee091692767e9edcc4883f",
+    "src/okto_nexus/adapters/inbound/cli/session_picker.py": "dd0d9d072657c3cef45105064d9e0ecbaca2eef8d5284fdbf77ac73ce5bca76a",
+    "tests/execution_r4/test_terminal_session_picker.py": "3356b6204047494f3971759e042e14dd11fbb915d430ada473f9b5859f1b130a",
+    "tests/execution_r4/test_terminal_work.py": "805f8f1f1166d896adc992aac168038aba2ced53780c3c804dead28b4660baf3",
+    "tests/execution_r4/test_terminal_multi_harness.py": "2370c85b6ee7858c06ecba717e381958bf806cbb9a9477d299e5559b6eafb184"
+  },
+  "environment": "Owned qualified Temp venv313 with checkout Nexus/src explicitly first; Core0.0.14 installed there, no install changes",
+  "runs": [
+    {
+      "scope": "session picker unit and JSON boundary",
+      "passed": 18,
+      "seconds": 1.22,
+      "exit_code": 0,
+      "tool_ref": "76ce35"
+    },
+    {
+      "nodes": [
+        "tests/execution_r4/test_terminal_work.py"
+      ],
+      "selection": "interactive_session_choice or interactive_unknown_admission or leaving_interactive or interactive_cli_request or cli_submission_resume",
+      "passed": 6,
+      "seconds": 39.14,
+      "session": 34815,
+      "exit_code": 0,
+      "tool_ref": "6b8b9e"
+    },
+    {
+      "nodes": [
+        "tests/execution_r4/test_terminal_multi_harness.py"
+      ],
+      "passed": 1,
+      "seconds": 14.41,
+      "session": 40335,
+      "exit_code": 0,
+      "tool_refs": [
+        "789b2e",
+        "e454ea"
+      ]
+    }
+  ],
+  "semantics": [
+    "Unknown work/control recovery precedes session selection; observe/exit never admits or chooses a sister session.",
+    "Zero sessions waits for explicit request; one offers Continue/New; multiple require exact choice; closed/partial inventory never guesses latest.",
+    "Explicit session/new-session/resume JSON paths do not prompt; ambiguous JSON send without durable reference returns selection_required.",
+    "Two distinct inert Codex/Claude candidates configure via canonical CLI/HTTP/SQLite in the same logical workspace without invented profile.",
+    "A role/metadata/rate-limit and canonical custom model remain; model update revoked exactly one grant and reconnect does not reissue it.",
+    "B Finish response loss recovers same identity/setup intent/receipt without another setup test. Cancel third review before test preserves canonical data."
+  ],
+  "boundaries": [
+    "Lifecycle/discovery/version/provider setup-test are synthetic; no real harness binary, provider login, paid inference, personal credentials or installation.",
+    "No claim of actual Windows lifecycle/service continuity; UI and Connector journeys still pending.",
+    "Initial integration5PASS/1FAIL used insufficient test synchronization; corrected by initial-turn canonical receipt wait, no arbitrary sleep or product change."
+  ],
+  "rollback": "Revert new work/session-picker code; legacy explicit session/new-session/resume and existing checkpoint format retained. Preserve uncertain work records.",
+  "migrations": 0
+}

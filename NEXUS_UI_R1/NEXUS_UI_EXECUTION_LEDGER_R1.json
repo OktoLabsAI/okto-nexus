@@ -66,7 +66,7 @@
       "id": "PR-02",
       "title": "Seletor local obrigatório retomar/adicionar",
       "milestone": "M1",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "tasks": [
         "UI-011",
         "UI-012",
@@ -1674,7 +1674,7 @@
       "id": "UI-014",
       "pr": "PR-02",
       "title": "Separar seleção de sessão de recuperação de envio",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-012",
         "UI-013"
@@ -1701,14 +1701,20 @@
         "T-CLI-19",
         "T-PANEL-03"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json"
+      ],
+      "limitations": [
+        "Lifecycle/discovery/version/provider setup-test are synthetic; no real harness binary, provider login, paid inference, personal credentials or installation.",
+        "No claim of actual Windows lifecycle/service continuity; UI and Connector journeys still pending.",
+        "Initial integration5PASS/1FAIL used insufficient test synchronization; corrected by initial-turn canonical receipt wait, no arbitrary sleep or product change."
+      ]
     },
     {
       "id": "UI-015",
       "pr": "PR-02",
       "title": "Implementar seleção explícita para scripts sem prompts",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-013",
         "UI-014"
@@ -1735,14 +1741,20 @@
         "T-CLI-13",
         "T-SVC-04"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json"
+      ],
+      "limitations": [
+        "Lifecycle/discovery/version/provider setup-test are synthetic; no real harness binary, provider login, paid inference, personal credentials or installation.",
+        "No claim of actual Windows lifecycle/service continuity; UI and Connector journeys still pending.",
+        "Initial integration5PASS/1FAIL used insufficient test synchronization; corrected by initial-turn canonical receipt wait, no arbitrary sleep or product change."
+      ]
     },
     {
       "id": "UI-016",
       "pr": "PR-02",
       "title": "Testar o segundo harness e retomada ponta a ponta sintética",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-015",
         "UI-005"
@@ -1771,8 +1783,14 @@
         "T-CLI-20",
         "T-CLI-21"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json"
+      ],
+      "limitations": [
+        "Lifecycle/discovery/version/provider setup-test are synthetic; no real harness binary, provider login, paid inference, personal credentials or installation.",
+        "No claim of actual Windows lifecycle/service continuity; UI and Connector journeys still pending.",
+        "Initial integration5PASS/1FAIL used insufficient test synchronization; corrected by initial-turn canonical receipt wait, no arbitrary sleep or product change."
+      ]
     },
     {
       "id": "UI-017",
@@ -3904,15 +3922,21 @@
     },
     {
       "id": "T-CLI-04",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI/integrado",
       "given": "Codex configurado no projeto.",
       "when": "Adicionar Claude pelo picker.",
       "expected": "Novo profile/identidade sugeridos e persistidos; Codex inalterado.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+      ],
       "tasks": [
         "UI-012",
         "UI-016"
+      ],
+      "limitations": [
+        "Canonical CLI/HTTP/SQLite with synthetic candidates/lifecycle/setup-test peer, not real provider/harness or service."
       ]
     },
     {
@@ -3954,15 +3978,21 @@
     },
     {
       "id": "T-CLI-08",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI/HTTP",
       "given": "Resposta de Finish foi perdida.",
       "when": "Retomar a mesma solicitação.",
       "expected": "Mesmo receipt, agent_id e binding; sem novo teste ou grant.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+      ],
       "tasks": [
         "UI-013",
         "UI-016"
+      ],
+      "limitations": [
+        "Canonical CLI/HTTP/SQLite with synthetic candidates/lifecycle/setup-test peer, not real provider/harness or service."
       ]
     },
     {
@@ -4054,75 +4084,111 @@
     },
     {
       "id": "T-CLI-16",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI/HTTP",
       "given": "Envio pendente de resolução.",
       "when": "work resume ou retomada no connect.",
       "expected": "Recuperar intenção exata antes de pedir sessão nova.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+      ],
       "tasks": [
         "UI-014"
+      ],
+      "limitations": [
+        "Canonical CLI/HTTP/SQLite with synthetic candidates/lifecycle/setup-test peer, not real provider/harness or service."
       ]
     },
     {
       "id": "T-CLI-17",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI/HTTP",
       "given": "Uma sessão compatível lembrada.",
       "when": "Selecionar continuar.",
       "expected": "Apresentar contexto correto; nada produtivo enviado antes do pedido.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+      ],
       "tasks": [
         "UI-014"
+      ],
+      "limitations": [
+        "Canonical CLI/HTTP/SQLite with synthetic candidates/lifecycle/setup-test peer, not real provider/harness or service."
       ]
     },
     {
       "id": "T-CLI-18",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI/HTTP",
       "given": "Várias sessões autorizadas na conexão.",
       "when": "Continuar contexto.",
       "expected": "Escolha explícita; --session-id é respeitado e verificado.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+      ],
       "tasks": [
         "UI-014"
+      ],
+      "limitations": [
+        "Canonical CLI/HTTP/SQLite with synthetic candidates/lifecycle/setup-test peer, not real provider/harness or service."
       ]
     },
     {
       "id": "T-CLI-19",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI/HTTP",
       "given": "Sessão fechada/grant incompatível.",
       "when": "Retomar.",
       "expected": "Histórico ou recusa; nova sessão/autoridade requer intenção e revisão próprias.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+      ],
       "tasks": [
         "UI-014"
+      ],
+      "limitations": [
+        "Canonical CLI/HTTP/SQLite with synthetic candidates/lifecycle/setup-test peer, not real provider/harness or service."
       ]
     },
     {
       "id": "T-CLI-20",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI",
       "given": "Usuário cancela picker/revisão antes do teste.",
       "when": "Cancelar.",
       "expected": "Nenhum agente/binding/grant/trabalho novo; declarar se serviço já permaneceu ativo.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+      ],
       "tasks": [
         "UI-016"
+      ],
+      "limitations": [
+        "Canonical CLI/HTTP/SQLite with synthetic candidates/lifecycle/setup-test peer, not real provider/harness or service."
       ]
     },
     {
       "id": "T-CLI-21",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI/HTTP",
       "given": "Agente teve papel/modelo/permissões customizados.",
       "when": "Reconectar e adicionar outro agente.",
       "expected": "O primeiro mantém suas escolhas; o novo usa apenas o preset consentido.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+      ],
       "tasks": [
         "UI-016",
         "UI-039"
+      ],
+      "limitations": [
+        "Canonical CLI/HTTP/SQLite with synthetic candidates/lifecycle/setup-test peer, not real provider/harness or service."
       ]
     },
     {
@@ -4724,6 +4790,10 @@
     {
       "at": "2026-11-16T18:29:58.234235+00:00",
       "event": "Shell implementation qualified at scoped levels:228Node/build and17browser checks, not all stage acceptances. Five fully covered navigation scenarios PASS; other partial/untested cases retain NOT_RUN. Prior Home/real-harness/AT gates not waived. No paid inference or installation change."
+    },
+    {
+      "at": "2026-11-16T18:42:09.684410+00:00",
+      "event": "Local CLI session-intent and two-adapter canonical fixture milestones:18unit/6HTTP/1two-adapter test, scopes separated. Exact context and durable recovery proved with synthetic executables; no real provider/service claim. Mandatory UI/Connector and joint gate still open."
     }
   ],
   "risk_acceptances": [],

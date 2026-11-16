@@ -132,39 +132,67 @@ def watch(flow, *, timeout=300, as_json=False, interactive=False, session_id=Non
         time.sleep(min(.5, max(0, deadline - time.monotonic())))
 
 
-def chat(flow, *, timeout=300):
+def chat(flow, *, timeout=300, session_id=None):
+    from .session_picker import SessionSelection, choose_session, recover_before_selection, pending_slots
     print('Enter project work. Commands: /status, /watch, /resume, /sessions, /answer ID, /authorize, /interrupt, /close, /new TEXT, /quit.')
     print('Leaving this terminal ends observation; the service retains the session and work.')
-    try:
-        display(flow.observe())
-    except ConnectionError as error:
-        display({'state': 'unconfirmed', 'code': error.code, 'message': error.message})
+    if not recover_before_selection(flow, display, read=input):
+        return 0
+    if session_id is not None:
+        current = flow.session(flow.binding(), session_id)
+        if not current['control_available']:
+            raise ConnectionError('SESSION_UNAVAILABLE', 'This selected session cannot continue. Inspect it or explicitly request a new context.')
+        selection = SessionSelection(session_id)
+    else:
+        selection = choose_session(flow, read=input)
+    if selection is None:
+        return 0
+    if selection.session_id:
+        display(flow.observe(session_id=selection.session_id))
     while True:
         try:
+            if pending_slots(flow):
+                if not recover_before_selection(flow, display, read=input):
+                    return 0
+                selection = choose_session(flow, read=input)
+                if selection is None:
+                    return 0
             text = input('nexus> ').strip()
             if not text:
                 continue
             if text == '/quit':
                 return 0
             if text in ('/status', '/sessions'):
-                display(flow.observe() if text == '/status' else flow.sessions())
+                display((flow.observe(session_id=selection.session_id) if selection.session_id else
+                    {'state': 'new_session_not_opened'}) if text == '/status' else flow.sessions())
             elif text == '/watch':
-                watch(flow, timeout=timeout, interactive=True)
+                if selection.session_id:
+                    watch(flow, timeout=timeout, interactive=True, session_id=selection.session_id)
+                else:
+                    display({'state': 'new_session_not_opened'})
             elif text == '/resume':
                 display(flow.resume())
+                selection = SessionSelection(flow.document.get('session_id'))
                 watch(flow, timeout=timeout, interactive=True)
             elif text.startswith('/answer '):
-                decide_interactively(flow, text.removeprefix('/answer ').strip())
+                if not selection.session_id:
+                    raise ConnectionError('SESSION_REQUIRED', 'Select an existing session before answering its request.')
+                decide_interactively(flow, text.removeprefix('/answer ').strip(), session_id=selection.session_id)
             elif text == '/authorize':
                 authorize_interactively(flow)
             elif text in ('/interrupt', '/close'):
-                flow.submit(action=text[1:])
+                if not selection.session_id:
+                    raise ConnectionError('SESSION_REQUIRED', 'A new conversation has no session to control.')
+                flow.submit(action=text[1:], session_id=selection.session_id)
                 watch(flow, timeout=timeout, interactive=True, slot_name='control')
             elif text.startswith('/') and not text.startswith('/new '):
                 print('Unknown command. Use /quit to leave or type a project request.')
             else:
                 new = text.startswith('/new ')
-                flow.submit(text.removeprefix('/new ') if new else text, new_session=new)
+                flow.submit(text.removeprefix('/new ') if new else text,
+                    session_id=None if new else selection.session_id,
+                    new_session=new or selection.new_session)
+                selection = SessionSelection(flow.document.get('session_id'))
                 watch(flow, timeout=timeout, interactive=True)
         except EOFError:
             return 0
@@ -331,7 +359,19 @@ def run_work(argv):
             raise ConnectionError('PROFILE_CONFLICT', 'This profile belongs to another project directory.')
         slot = 'control' if args.control else 'work'
         if action == 'chat':
-            return chat(flow, timeout=args.timeout)
+            return chat(flow, timeout=args.timeout, session_id=args.session_id)
+        if (action == 'send' and not args.session_id and not args.new_session
+                and not flow.document.get('session_id')):
+            from .session_picker import session_inventory, pending_slots
+            if not pending_slots(flow):
+                sessions = session_inventory(flow)
+                if sessions:
+                    display(dict(state='selection_required', reason='session_selection_required',
+                        effects_started=False, choices=[dict(session_id=row['scope']['session_id'],
+                            executor_id=row['scope']['executor_id'], workspace_id=row['scope']['workspace_id'],
+                            lifecycle_state=row.get('lifecycle_state'), control_available=row.get('control_available'))
+                            for row in sessions]), args.json)
+                    return 3
         if action in ('send', 'steer', 'interrupt', 'close'):
             value = flow.submit(args.message, action=action, session_id=args.session_id,
                 new_session=args.new_session, client_intent_id=args.request_id, target_turn_id=args.target_turn_id)

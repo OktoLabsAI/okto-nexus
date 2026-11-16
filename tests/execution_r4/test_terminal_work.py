@@ -241,6 +241,44 @@ def complete(t, operation, text='Canonical project result'):
     return turn
 
 
+def test_interactive_session_choice_only_observes_exact_authorized_session(work, monkeypatch):
+    from okto_nexus.adapters.inbound.cli import work as cli
+    t = work
+    operation = t.flow.submit('Synthetic retained conversation')
+    complete(t, operation)
+    rows = t.flow.sessions()['sessions']
+    chosen = operation['scope']['session_id']
+    position = next(i for i, row in enumerate(rows, 1) if row['scope']['session_id'] == chosen)
+    before = deepcopy(t.flow.document), deepcopy(t.native.native.sent), t.native.opens
+    t.calls.clear()
+    values = iter([str(position), '/status', '/quit'])
+    monkeypatch.setattr('builtins.input', lambda prompt: next(values))
+    assert cli.chat(t.flow) == 0
+    assert (t.flow.document, t.native.native.sent, t.native.opens) == before
+    assert t.calls and all(method == 'GET' for method, _ in t.calls)
+    assert any('/runtime/sessions/' + chosen + '?' in path for _, path in t.calls)
+
+
+def test_interactive_unknown_admission_recovers_original_before_session_choice(work, monkeypatch):
+    from okto_nexus.adapters.inbound.cli import work as cli
+    t = work
+    t.fault.after = '/runtime/operations'
+    with pytest.raises(ConnectionError):
+        t.flow.submit('Synthetic original intent', client_intent_id='recover-original')
+    wait_receipt(t.setup, {'operation_id': t.flow.document['work']['submission']['operation_id']})
+    receipt = t.flow.api('GET', '/runtime/intents/recover-original')
+    wait_receipt(t.setup, {'operation_id': receipt['initial_turn_operation_id']})
+    before = deepcopy(t.native.native.sent), t.native.opens
+    t.calls.clear()
+    values = iter(['o', 'r', '1', '/quit'])
+    monkeypatch.setattr('builtins.input', lambda prompt: next(values))
+    assert cli.chat(t.flow) == 0
+    assert t.flow.document['work']['client_intent_id'] == 'recover-original'
+    assert t.flow.document['work']['state'] == 'admitted'
+    assert (t.native.native.sent, t.native.opens) == before
+    assert all(method == 'GET' for method, _ in t.calls)
+
+
 def test_send_result_reopen_continue_and_close_share_canonical_session(work):
     t = work
     operation = t.flow.submit('Private project request', client_intent_id='terminal-first')
