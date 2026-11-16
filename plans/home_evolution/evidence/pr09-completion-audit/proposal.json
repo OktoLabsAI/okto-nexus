@@ -1,0 +1,693 @@
+{
+  "schema_version": 1,
+  "kind": "READ_ONLY_COMPLETION_AUDIT_PROPOSAL_NOT_LEDGER_MUTATION",
+  "at": "2026-11-16T15:17:47.821188+00:00",
+  "observed_head": "6b3e8e862ddf537305a582cc0c880be97bea1155",
+  "objective": "Implement the full immutable HOME-R1 plan and maintain its new ledger; do not redefine completion around existing passes.",
+  "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
+  "audit_sources": {
+    "source_plan": "plans/home_evolution/source-plan.md",
+    "execution_ledger": "plans/home_evolution/execution-ledger.json",
+    "test_ledger": "plans/home_evolution/test-ledger.json",
+    "user_guide": "docs/operational-home.md"
+  },
+  "tasks": {
+    "HOME-001": {
+      "title": "Reconciliar checkout e implementação",
+      "acceptance": "baseline.md com arquivos reais e dependências; nenhuma suposição silenciosa sobre main ou feature.",
+      "ledger_status_observed": "VERIFIED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/baseline.md"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": []
+    },
+    "HOME-002": {
+      "title": "Mapear origens e autorização",
+      "acceptance": "source-map.md com permissões, correlação, atualidade, cobertura de SSE e lacunas por origem.",
+      "ledger_status_observed": "VERIFIED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/source-map.md"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Update the source map with the new Home project/Server partition before final documentation publication; its baseline description is historical."
+      ]
+    },
+    "HOME-003": {
+      "title": "Congelar semântica de apresentação",
+      "acceptance": "Contrato versionado e tabela de casos; OPEN, CLAIMED, SUBMITTED, RUNNING e resultado incerto continuam distintos.",
+      "ledger_status_observed": "VERIFIED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/contracts.md",
+        "plans/home_evolution/adr-result-view-state.md"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Final additive server_attention contract should be checked against the packaged cut; no silent version/schema assumption."
+      ]
+    },
+    "HOME-004": {
+      "title": "Preparar fixtures e baseline de experiência",
+      "acceptance": "Fixtures reproduzíveis e medidas locais de referência; nenhum número de produção inventado.",
+      "ledger_status_observed": "VERIFIED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr00-fixtures/qualification.json",
+        "plans/home_evolution/performance.md"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Historical reference measurements are not a new-cut performance claim."
+      ]
+    },
+    "HOME-005": {
+      "title": "Criar a fronteira de leitura da Home",
+      "acceptance": "Portas, modelos e testes de import boundary; nomenclatura proposta reconciliada com o repositório.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Current A08 port/domain/application delta requires final backend qualification."
+      ]
+    },
+    "HOME-006": {
+      "title": "Projetar trabalho canônico",
+      "acceptance": "Atividades estáveis, sem duplicação por abertura de sessão, steer, retries ou publicação de resultado.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-scope/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr06-namespaces/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Current A08 shared SQL statement regression must finish; prior dedup/current-claim/namespace assertions are concrete."
+      ]
+    },
+    "HOME-007": {
+      "title": "Implementar escopo e agregações",
+      "acceptance": "Totais, lista e escopo consistentes no mesmo snapshot; desconhecido não é zero.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-scope/qualification.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json"
+      ],
+      "missing_acceptance": [
+        "Current Server-wide partition acceptance awaits completed current-backend/browser evidence."
+      ],
+      "scope_and_current_cut_rechecks": [
+        "Do not attribute injected contract occurrences to an actual global producer."
+      ]
+    },
+    "HOME-008": {
+      "title": "Integrar pendências existentes",
+      "acceptance": "Home recebe itens concretos e ações previstas sem criar outra fila de aprovações.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-native-browser/input-and-conflict.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Fresh A08 proof must preserve both canonical Attention partitions and their independent paging/CAS."
+      ]
+    },
+    "HOME-009": {
+      "title": "Projetar resultados resumidos",
+      "acceptance": "Resultados básicos disponíveis já no M1; nenhuma necessidade de ler todos os payloads.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Bounded previews, exact artifact references, canonical task titles and actual result opening qualified at stated cuts; current common SQL regression still applies."
+      ]
+    },
+    "HOME-010": {
+      "title": "Publicar APIs e contratos de erro",
+      "acceptance": "Testes HTTP reais, validação de parâmetros, 401/403 tratados e ausência de efeitos de execução nos GETs.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "New /home/attention and /home/server-attention routes require final current HTTP/auth/closed-parameter qualification."
+      ]
+    },
+    "HOME-011": {
+      "title": "Evoluir o layout existente",
+      "acceptance": "A mesma Home, não uma segunda rota concorrente; leitura útil em desktop e mobile.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/results.json",
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Current Server lane must pass built-browser layout/empty-state tests; same Home route and prior360/200percent proofs remain scoped antecedents."
+      ]
+    },
+    "HOME-012": {
+      "title": "Construir lista de trabalho",
+      "acceptance": "Uma identidade com sessões distintas não recebe um status único enganoso; warm/idle fora de Em andamento.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-scope/qualification.json",
+        "plans/home_evolution/evidence/pr06-namespaces/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Actual SQL warm/OPENING/cleanup, multiple operations/sessions and claim grouping, not live provider execution."
+      ]
+    },
+    "HOME-013": {
+      "title": "Mostrar atenção compacta",
+      "acceptance": "Uma decisão pendente abre o registro exato; não é necessário esperar um novo drawer para o M1.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-native-browser/input-and-conflict.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Operator question opens exact record in installed D4 browser; current added Server lane needs fresh built-browser qualification."
+      ]
+    },
+    "HOME-014": {
+      "title": "Mostrar resultados iniciais",
+      "acceptance": "É possível localizar e abrir uma entrega pela Home, sem procurar outra vez na tela de destino.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Result opening is real browser/ASGI, with synthetic canonical data; no production delivery claim."
+      ]
+    },
+    "HOME-015": {
+      "title": "Resolver estados vazios e filtros",
+      "acceptance": "Zero agentes indica Conectar agente pelo fluxo plug and play; falha de leitura não mostra onboarding falso.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-extra/postfix-results.json",
+        "plans/home_evolution/evidence/pr07-browser/a06-counters.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Current quiet-project plus Server incident combination must be checked in the new bundle."
+      ]
+    },
+    "HOME-016": {
+      "title": "Generalizar referência tipada de navegação",
+      "acceptance": "Links, voltar/avançar e reabertura apontam ao mesmo objeto; URLs não carregam segredo ou conteúdo.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr06-browser-extra/postfix-results.json",
+        "plans/home_evolution/evidence/pr07-browser/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Targets, history and revocation are concretely tested; routed403/logout is browser-consumer proof with separate canonical auth tests."
+      ]
+    },
+    "HOME-017": {
+      "title": "Reaproveitar inspeções no painel de detalhes",
+      "acceptance": "Mesmos formulários/serviços de ApprovalInspection, HandoffInspection e runtime; uma única camada ativa.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-native-browser/typed-form.json",
+        "plans/home_evolution/evidence/pr07-browser/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Existing CanonicalInspection/native input controls and one native dialog layer qualified; no provider application inferred."
+      ]
+    },
+    "HOME-018": {
+      "title": "Conectar ações canônicas",
+      "acceptance": "Conflitos e resultado incerto permanecem visíveis; não há approve genérico, retry-all ou ação por inferência.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-native-browser/input-and-conflict.json",
+        "plans/home_evolution/evidence/pr07-interrupt/qualification.json",
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Real202/409 UI conflict, exact interrupt/native-turn isolation and canonical unknown-outcome recovery are distinct executed cuts."
+      ]
+    },
+    "HOME-019": {
+      "title": "Adicionar pedido e continuidade contextual",
+      "acceptance": "Operador nunca personifica agente; encerramento/revogação da sessão exige novo contexto explícito, não fallback silencioso.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr07-native-browser/other-agent.json",
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Shared composer/continuation contracts and refusal paths are tested; no successful paid continuation claimed or required by those negative guards."
+      ]
+    },
+    "HOME-020": {
+      "title": "Proteger rascunhos, foco e navegação",
+      "acceptance": "SSE, filtros, Escape e botão Voltar não apagam uma resposta digitada nem redirecionam uma decisão.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-browser/a06-counters.json",
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Dirty-modal navigation uses the actual native modal workflow, not a forced click through inert background. Logout POST is intercepted at the consumer layer."
+      ]
+    },
+    "HOME-021": {
+      "title": "Agrupar entregas correlacionadas",
+      "acceptance": "Uma entrega com três arquivos não parece quatro trabalhos; ausência de correlação não é preenchida com heurística.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr07-scope/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Real durable IDs/retries/artifact links and paged union; no heuristic parent inferred."
+      ]
+    },
+    "HOME-022": {
+      "title": "Reutilizar visto por ocorrência/revisão",
+      "acceptance": "Home não altera watermark temporal global nem ACK de inbox; visualização em uma ocorrência não oculta outra.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Added Server preference path/canonical occurrence CAS must be verified in current backend/browser; older project preferences are already qualified."
+      ]
+    },
+    "HOME-023": {
+      "title": "Abrir resultados e artefatos com segurança",
+      "acceptance": "Resumo não expõe payload confidencial; HTML e outros artefatos não ganham execução privilegiada.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Actual authorized uploads/download boundaries, HTML/SVG/XHTML headers and recognized secret redaction; no universal PII-detector promise."
+      ]
+    },
+    "HOME-024": {
+      "title": "Concluir a interação contextual",
+      "acceptance": "Ação enviada não equivale a aplicada; interação mantém correlação e recupera a mesma operação após resposta perdida.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Recorded decision versus dispatch/provider application is explicit in actual UI; same-intent recovery and no automatic replay have direct tests."
+      ]
+    },
+    "HOME-025": {
+      "title": "Auditar sinais de invalidação",
+      "acceptance": "Matriz fonte→evento→fallback→TTL; nenhuma confiança em SSE para mudanças sem evento comprovado.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/source-map.md",
+        "plans/home_evolution/evidence/pr07-stream/qualification.json",
+        "plans/home_evolution/evidence/pr07-stream-boundary/qualification.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Source map should describe Server partition and current invalidation family; current fallback has Node qualification but final built-browser cut pending."
+      ]
+    },
+    "HOME-026": {
+      "title": "Compartilhar e limitar atualização",
+      "acceptance": "Sem nova conexão SSE por cartão; fonte antiga não substitui resposta de escopo novo.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr07-stream-boundary/qualification.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "A08 changes the same serialized queue;210Node includes fresh Server paging/source failure/generation tests, final integrated browser is pending."
+      ]
+    },
+    "HOME-027": {
+      "title": "Tratar paginação, revisão e relógio",
+      "acceptance": "Não há skips/duplicatas silenciosos; transport live não transforma fonte stale em current.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-stream/qualification.json",
+        "plans/home_evolution/evidence/pr07-stream-boundary/qualification.json",
+        "plans/home_evolution/evidence/pr06-visibility-revalidation/qualification.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Current added Server cursor/revision/freshness needs final integrated cut; existing TCP gap and live-stream TTL proofs remain scoped."
+      ]
+    },
+    "HOME-028": {
+      "title": "Adicionar feed legível",
+      "acceptance": "Feed limitado e correlacionado; sem tokens, heartbeats ou LLM resumindo a operação.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "SQL business-event feed and pure label allowlist have executed assertions; no token stream or LLM summarization."
+      ]
+    },
+    "HOME-029": {
+      "title": "Consolidar observação externa sem misturar garantias",
+      "acceptance": "Herdr done nunca completa handoff, libera slot ou soma como sucesso nativo; ausência da feature não bloqueia Home.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr07-stream/qualification.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Actual observation TTL/history facts and live-status/expiry controller combination tested; telemetry is not native execution/capacity/completion."
+      ]
+    },
+    "HOME-030": {
+      "title": "Validar acessibilidade e responsividade",
+      "acceptance": "Fluxo completo sem mouse; atualizações não roubam foco; pausa visual não pausa agentes nem remove validação de segurança.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-browser/qualification.json",
+        "plans/home_evolution/evidence/pr06-browser-final/results.json",
+        "plans/home_evolution/evidence/pr06-browser-extra/postfix-results.json"
+      ],
+      "missing_acceptance": [
+        "H02 actual screen-reader output is unverified."
+      ],
+      "scope_and_current_cut_rechecks": [
+        "Keyboard, focus,360px,native200percent zoom and DOM ARIA batches are executed proofs at their cuts. Reduced-motion CSS exists, but no new browser preference assertion was executed by this RO audit."
+      ]
+    },
+    "HOME-031": {
+      "title": "Medir e otimizar custo",
+      "acceptance": "Sem N+1 por agente/cartão; metas medidas com ambiente documentado, não alegadas por inspeção.",
+      "ledger_status_observed": "IN_PROGRESS",
+      "recommended_status_at_audit": "IN_PROGRESS",
+      "evidence": [
+        "plans/home_evolution/performance.md",
+        "plans/home_evolution/evidence/pr05-performance/measurement-final-workers.json",
+        "plans/home_evolution/evidence/pr08-server-attention-backend/cost-unscoped-antecedent.json",
+        "plans/home_evolution/evidence/pr08-server-attention-backend/cost-first-hint-cut-antecedent.json"
+      ],
+      "missing_acceptance": [
+        "Final A08 query cut needs its own recorded measurements/EXPLAIN and comparison or explicit justified limit decision; four earlier datasets missed500ms p95."
+      ],
+      "scope_and_current_cut_rechecks": [
+        "Old1/10/100worker/1000activity/100000event dataset measurements and both five-sample A08 antecedents are not final-cut SLO evidence."
+      ]
+    },
+    "HOME-032": {
+      "title": "Executar matriz integrada",
+      "acceptance": "Relatório liga cada cenário às evidências; testes Node/static não são vendidos como e2e de navegador.",
+      "ledger_status_observed": "IN_PROGRESS",
+      "recommended_status_at_audit": "IN_PROGRESS",
+      "evidence": [
+        "plans/home_evolution/test-ledger.json",
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "plans/home_evolution/evidence/pr07-stream-boundary/qualification.json",
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json"
+      ],
+      "missing_acceptance": [
+        "A08/current broad backend/browser/package qualification pending; H02 and I01 remain NOT_RUN."
+      ],
+      "scope_and_current_cut_rechecks": [
+        "Matriz70PASS/3NOT_RUN observed. Suite counts alone do not close IDs. Existing cut-qualified API/SQLite/Node/TCP/browser evidence remains separate."
+      ]
+    },
+    "HOME-033": {
+      "title": "Executar campanha real isolada",
+      "acceptance": "Evidência de pedido, atividade, pergunta/decisão e resultado; registrar explicitamente o que ficou NOT_RUN.",
+      "ledger_status_observed": "TODO",
+      "recommended_status_at_audit": "TODO",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-campaign-proposal/PROPOSTA.md",
+        "plans/home_evolution/evidence/pr06-campaign-proposal/INDEX.md"
+      ],
+      "missing_acceptance": [
+        "No actual new HOME033 provider campaign consent receipt or execution; request/activity/question-decision/result campaign evidence absent."
+      ],
+      "scope_and_current_cut_rechecks": [
+        "27 offline driver cases and inert candidate are preparation. D4 candidate must be rebound to final qualified A08 artifact before requesting/executing against new bytes; preserve namespace/budget/ancestor."
+      ]
+    },
+    "HOME-034": {
+      "title": "Implementar rollout e reversão",
+      "acceptance": "Desabilitar Home nova mantém daemon, CLI, Attention e controles originais operantes.",
+      "ledger_status_observed": "IMPLEMENTED",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json",
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json"
+      ],
+      "missing_acceptance": [
+        "I01 continuity of live daemon/Core/Connector during useful work and feature toggle not executed."
+      ],
+      "scope_and_current_cut_rechecks": [
+        "Actual classic/operational toggle has0mutations; this proves presentation separation, not live-process continuity. Default classic is still correct while M3 is not qualified."
+      ]
+    },
+    "HOME-035": {
+      "title": "Publicar documentação e diagnóstico",
+      "acceptance": "Nenhuma documentação confunde sessão aberta, conexão, entrega, execução, resultado e verificação.",
+      "ledger_status_observed": "VERIFIED",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/contracts.md",
+        "plans/home_evolution/adr-result-view-state.md",
+        "plans/home_evolution/performance.md",
+        "plans/home_evolution/release-report.md",
+        "plans/home_evolution/evidence/pr06-browser-final/results.json"
+      ],
+      "missing_acceptance": [],
+      "scope_and_current_cut_rechecks": [
+        "Guide docs/operational-home.md now describes Server scope and optional dashboard clearly. Existing PNG captures are synthetic360/native200percent antecedents; add final Server capture and final-cut diagnostics when available. Historical release-report sections must not masquerade as current totals."
+      ]
+    },
+    "HOME-036": {
+      "title": "Revisar contrato e critérios do produto",
+      "acceptance": "Gate M3 decidido com evidências, baseline atualizado e limitações explícitas; sem deploy automático em produção.",
+      "ledger_status_observed": "IN_PROGRESS",
+      "recommended_status_at_audit": "IN_PROGRESS",
+      "evidence": [
+        "plans/home_evolution/release-report.md",
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "plans/home_evolution/evidence/pr06-package-ui-final/qualification.json"
+      ],
+      "missing_acceptance": [
+        "M3 decision must incorporate final A08 regression/browser/package/performance, H02/I01, HOME033 and actual10-second comprehension test with unfamiliar person."
+      ],
+      "scope_and_current_cut_rechecks": [
+        "No production deploy is authorized or needed. A deferred/not-qualified release gate is not proof that the complete requested objective has been achieved."
+      ]
+    }
+  },
+  "invariants": {
+    "HOME-INV-01": {
+      "requirement": "Dashboard continua opcional: instalar, conectar, pedir, acompanhar, responder e obter resultado pelo terminal não ganha etapa web obrigatória.",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-package/qualification.json"
+      ],
+      "scope": "Installed terminal lifecycle uses synthetic native peers, not personal provider credentials; real campaign remains separate."
+    },
+    "HOME-INV-02": {
+      "requirement": "Server mantém autoridade de coordenação; Core executa; Connector hospeda execução remota. Esta frente não exige mudança de protocolo desses componentes por padrão.",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/baseline.md",
+        "plans/home_evolution/contracts.md"
+      ],
+      "scope": "No required Core/Connector protocol change is demonstrated; version bumps in those repositories are not fabricated."
+    },
+    "HOME-INV-03": {
+      "requirement": "A Home lê/projeta fatos canônicos. Não mantém outra fila, máquina de estados de execução, scheduler ou agente interpretando eventos.",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json"
+      ],
+      "scope": "A08 remains read/query/controller-only; final current backend read-only qualification pending."
+    },
+    "HOME-INV-04": {
+      "requirement": "Abrir, recarregar, filtrar ou expandir a Home não inicia inferência, aprova, completa trabalho, reivindica handoff, reconhece inbox ou amplia grant.",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json"
+      ],
+      "scope": "Existing read paths and browser opening are passive; current added Server GET/inspection must finish its own no-effects proof."
+    },
+    "HOME-INV-05": {
+      "requirement": "Conectividade, presença, atividade, capacidade, admissão, aceitação nativa, resultado e verificação permanecem conceitos separados.",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr07-scope/qualification.json"
+      ],
+      "scope": "Canonical technical/warm/claimed/native-start/result/verification distinctions have actual SQL/Node assertions."
+    },
+    "HOME-INV-06": {
+      "requirement": "Permissões de leitura de cada fonte valem para resumos, contadores, prévias, detalhes e links. Uma referência visível não concede capacidade de ação.",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr07-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-native-browser/other-agent.json"
+      ],
+      "scope": "Current added Server read partition must preserve canonical authorization. Browser routed logout proves consumer clearing, not a fresh real-auth logout backend action."
+    },
+    "HOME-INV-07": {
+      "requirement": "Ações continuam nas APIs existentes, com revisão, correlação, idempotência e revalidação atuais. Resultado desconhecido não autoriza replay.",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-interrupt/qualification.json",
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json"
+      ],
+      "scope": "Exact scope/CAS/nonrecipient refusal, interruption isolation and unknown-response nonreplay have executed evidence; no native application of recorded decision assumed."
+    },
+    "HOME-INV-08": {
+      "requirement": "Identidade de agente é persistente e pode ter múltiplas sessões. A unidade primária da Home é uma atividade lógica, não o agent_id isolado.",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-namespaces/qualification.json",
+        "plans/home_evolution/evidence/pr07-scope/qualification.json"
+      ],
+      "scope": "Distinct executor/session/operation namespace and logical activity grouping are asserted, not inferred from agent status."
+    },
+    "HOME-INV-09": {
+      "requirement": "Observação externa é identificada como reportada/inferida, com validade e origem. Não prova execução gerenciada nem conclusão de tarefa.",
+      "recommended_status_at_audit": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-stream/qualification.json",
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json"
+      ],
+      "scope": "Live stream cannot renew stale external evidence, and Herdr completion never becomes native task success."
+    },
+    "HOME-INV-10": {
+      "requirement": "Desabilitar a nova Home não muda nenhum desses contratos nem interfere nos agentes em execução.",
+      "recommended_status_at_audit": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json"
+      ],
+      "scope": "Actual presentation toggle is proven, but live-cohort continuity is I01 and remains unverified."
+    }
+  },
+  "gates": {
+    "M1": {
+      "status": "IMPLEMENTED_PENDING_CURRENT_A08_CUT",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-scope/qualification.json",
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json"
+      ],
+      "gap": "Earlier real SQL/browser proves agent-to-agent work, concrete attention and results. Current added Server partition backend/browser/package must finish; shortcuts redesign alone would not satisfy M1."
+    },
+    "M2": {
+      "status": "QUALIFIED_AT_D4_SYNTHETIC_CUT_PENDING_CURRENT_INTEGRATION",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-interrupt/qualification.json",
+        "plans/home_evolution/evidence/pr07-browser/qualification.json"
+      ],
+      "gap": "Exact contextual controls and decision conflicts are qualified with canonical synthetic peers; no personal/native provider campaign or successful paid continuation inferred."
+    },
+    "M3": {
+      "status": "NOT_QUALIFIED",
+      "evidence": [
+        "plans/home_evolution/test-ledger.json",
+        "plans/home_evolution/performance.md",
+        "plans/home_evolution/evidence/pr06-campaign-proposal/PROPOSTA.md"
+      ],
+      "gap": "Current A08 final regression/browser/package/performance; actual H02 screen-reader output; I01 live cohort/presentation continuity; HOME033 consented real local campaign; comprehension test by a person unfamiliar with internal screens. Keep classic default; no production deployment."
+    }
+  },
+  "non_numbered_requirements": {
+    "human_comprehension_approximately_10_seconds": "NOT_RUN; cannot substitute an AI source review or screenshot assertion for an unfamiliar person.",
+    "overview_p95_500ms": "NOT_MET_IN_PRIOR_FOUR_DATASETS; final A08 measurements must be identified separately. Targets may only be adjusted with recorded justification/baseline/comparison, not silently waived.",
+    "initial_useful_render_2seconds": "Prior single browser sample1124ms, not render p95; scope and source cut remain explicit.",
+    "bounded_initial_payload": "Prior11,172B max plus limits10work/3attention/6results; current added Server lane needs final payload accounting.",
+    "query_count_independent_of_agents": "Prior constant46SQL/GET on four workloads; A08 antecedents show50 but are explicitly not final cut. No N+1 claim for the new cut without measurement.",
+    "reduced_motion": "Existing global CSS has prefers-reduced-motion rule. This RO audit does not claim a fresh actual browser reduced-motion test.",
+    "screenshots": "Existing synthetic360px and real200percent zoom PNGs at evidence/pr06-browser-final; final Server lane capture not yet present at audit time.",
+    "telemetry": "No new external product telemetry consent is inferred. Current work must remain free of prompt/response/path/key/privateID telemetry.",
+    "core_connector": "No change required by demonstrated contracts; repositories should remain clean/synchronized rather than receive invented protocol changes.",
+    "commits_pushes": "Parent owns final commit/push and clean/synchronized confirmation for all outstanding changes before final delivery. This audit does not mutate Git or assert that the tree is currently clean."
+  },
+  "conclusion": "NOT COMPLETE. This is a requirement-by-requirement proposal, not a blanket product acceptance, release gate approval or authorization for a campaign. Pending work is concrete; old greens or plausible code do not establish its completion."
+}
