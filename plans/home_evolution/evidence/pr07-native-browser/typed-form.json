@@ -1,0 +1,38 @@
+{
+  "id": "HOME-T-C01",
+  "status": "PASS",
+  "kind": "typed elicitation form",
+  "request": "r4request_a432b44faeb924b5d8292d3dd79e15caf99fc918c33fc92b3499edeb4d187131",
+  "number": {
+    "type": "number",
+    "min": "1",
+    "max": "5",
+    "step": "1",
+    "required": true,
+    "value": ""
+  },
+  "boolean": {
+    "required": true,
+    "value": "",
+    "options": [
+      {
+        "value": "",
+        "label": "Choose a value"
+      },
+      {
+        "value": "true",
+        "label": "Yes"
+      },
+      {
+        "value": "false",
+        "label": "No"
+      }
+    ]
+  },
+  "note": {
+    "type": "text",
+    "required": false,
+    "value": ""
+  },
+  "mutationRequests": []
+}

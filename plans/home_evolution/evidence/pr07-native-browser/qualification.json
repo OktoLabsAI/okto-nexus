@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "at": "2026-11-16T14:47:07.207974+00:00",
+  "product_cut": {
+    "source_head": "fa2e4215",
+    "wheel_sha256": "7e1563622f4becb21cc62b6182cb4683c7546861256c355c16bb9aa78efa87ff",
+    "bundle": "index-D4dmKnLh.js",
+    "installed": "isolated Python313 site-packages, -I -B -X utf8; no root/src injection"
+  },
+  "cases": 4,
+  "scenarios": [
+    "HOME-T-C01",
+    "HOME-T-C02",
+    "HOME-T-E08"
+  ],
+  "final_tool_refs": {
+    "input_and_conflict": "d1ab54",
+    "typed_form": "916dc1",
+    "other_agent": "14ec08",
+    "ruff": "bb2386"
+  },
+  "runtime_pins": {
+    "native-question-ready6.json": {
+      "installed_product": true,
+      "frozen_time": "2026-11-16T14:40:56.825690Z",
+      "source_pins": {
+        "src/okto_nexus/application/home.py": "ad24ddfa5488708587c7bfe553f439919a29bb0c9d2023fff9544ec4d407e2d9",
+        "src/okto_nexus/adapters/outbound/sqlite/home.py": "f7a20338a6638c1abd3038138c13dc794c5ea7c404bac3284cff4b300343aa6f",
+        "src/okto_nexus/application/execution_native_decisions.py": "81110658b06514b867420cea7756f21e43648f5e8bcfbb6485d3b05aa35df644",
+        "src/okto_nexus/adapters/inbound/http/static/index.html": "ee780df0f18b68738e0294e17944379878a42bace9393467355763d7feccfc53"
+      }
+    },
+    "native-question-ready-form.json": {
+      "installed_product": true,
+      "frozen_time": "2026-11-16T14:42:20.372854Z",
+      "source_pins": {
+        "src/okto_nexus/application/home.py": "ad24ddfa5488708587c7bfe553f439919a29bb0c9d2023fff9544ec4d407e2d9",
+        "src/okto_nexus/adapters/outbound/sqlite/home.py": "f7a20338a6638c1abd3038138c13dc794c5ea7c404bac3284cff4b300343aa6f",
+        "src/okto_nexus/application/execution_native_decisions.py": "81110658b06514b867420cea7756f21e43648f5e8bcfbb6485d3b05aa35df644",
+        "src/okto_nexus/adapters/inbound/http/static/index.html": "ee780df0f18b68738e0294e17944379878a42bace9393467355763d7feccfc53"
+      }
+    },
+    "native-question-ready-agent.json": {
+      "installed_product": true,
+      "frozen_time": "2026-11-16T14:43:47.017672Z",
+      "source_pins": {
+        "src/okto_nexus/application/home.py": "ad24ddfa5488708587c7bfe553f439919a29bb0c9d2023fff9544ec4d407e2d9",
+        "src/okto_nexus/adapters/outbound/sqlite/home.py": "f7a20338a6638c1abd3038138c13dc794c5ea7c404bac3284cff4b300343aa6f",
+        "src/okto_nexus/application/execution_native_decisions.py": "81110658b06514b867420cea7756f21e43648f5e8bcfbb6485d3b05aa35df644",
+        "src/okto_nexus/adapters/inbound/http/static/index.html": "ee780df0f18b68738e0294e17944379878a42bace9393467355763d7feccfc53"
+      }
+    }
+  },
+  "test_pins": {
+    "tests/home_evolution/browser_native_questions_fixture.py": "ad748d032653c5efdc082e9f6bb300c7dbdf368836dab8c208e009d20983fe5f",
+    "tests/home_evolution/browser_native_questions_setup.js": "7872f922c67ae7f2939f1ccd1c66ee8b5d0d9a063dceedd007bce6ce740a4002",
+    "tests/home_evolution/browser_native_questions.js": "454c0365ed347317be50f703ecd2151d7b653557124d8a18d4dde6373fd30f1d",
+    "tests/home_evolution/browser_native_questions_types.js": "2c933f3c87f8701cd33b3ee37da8403aec0b839317ca60f6a2df1ab9e020aff0",
+    "tests/home_evolution/browser_native_questions_agent.js": "d21f4ed9402fef112050cd687063b17ef737fccd4c701445002c4a07e4ca7efc"
+  },
+  "cleanup": {
+    "input_fixture_exit": 0,
+    "input_fixture_exit_tool": "cc3cb9",
+    "form_fixture_exit": 0,
+    "form_fixture_exit_tool": "d9354f",
+    "agent_fixture_exit": 0,
+    "agent_fixture_exit_tool": "9b71c8",
+    "browser_own_closed": true,
+    "browser_close_tools": [
+      "bb27fb",
+      "efa19c",
+      "3d70d4"
+    ],
+    "normal_stop_files": true,
+    "forced_process_termination": false
+  },
+  "effects": {
+    "provider_calls": 0,
+    "native_executables": 0,
+    "personal_authentication": false,
+    "canonical_decision_posts": 2,
+    "canonical_operator_refusal_posts": 1,
+    "fabricated_post_responses": 0,
+    "testclient_lifespan_synthetic_host": true,
+    "tcp_lifespan": false
+  },
+  "limitations": [
+    "Synthetic admitted remote peer and native event ingress, actual HTTP/CAS and built browser; not a live native harness campaign.",
+    "Consistently fixed server/browser Date; no lease/expiry qualification claimed.",
+    "Antecedent product cut before Server-wide Attention work; no claim about those newer sources or future final package.",
+    "No user browser tabs/profiles, Windows session events or personal credentials accessed."
+  ]
+}

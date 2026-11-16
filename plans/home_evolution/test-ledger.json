@@ -2,7 +2,7 @@
   "schema_version": 1,
   "plan": "plans/home_evolution/source-plan.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
-  "updated_at": "2026-11-16T14:38:08.667977+00:00",
+  "updated_at": "2026-11-16T14:51:47.453094+00:00",
   "scenarios": {
     "HOME-T-A01": {
       "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
@@ -315,19 +315,35 @@
     },
     "HOME-T-C01": {
       "requirement": "Pergunta destinada ao operador abre o pedido nativo exato e mantém suas opções/tipos.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json"
+      ],
+      "commit": "93cae0e3 + browser native qualification of installed fa2/D4 cut",
+      "environment": "Actual built Chromium and installed Nexus7e156/fa2/D4 with synthetic admitted peer/native ingress, real HTTP/CAS and ephemeral operator identity",
+      "limitations": [
+        "Antecedent cut before A08 Server lane changes.",
+        "No native executable, provider inference, personal auth or lease/expiry qualification."
+      ],
+      "tests": [
+        "Exact native request options and typed form controls preserved"
+      ]
     },
     "HOME-T-C02": {
       "requirement": "Pergunta destinada a outro agente permite acompanhamento, não personificação nem resposta em nome do agente.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json"
+      ],
+      "commit": "93cae0e3 + browser native qualification of installed fa2/D4 cut",
+      "environment": "Actual built Chromium and installed Nexus7e156/fa2/D4 with synthetic admitted peer/native ingress, real HTTP/CAS and ephemeral operator identity",
+      "limitations": [
+        "Antecedent cut before A08 Server lane changes.",
+        "No native executable, provider inference, personal auth or lease/expiry qualification."
+      ],
+      "tests": [
+        "Other-agent request inspect-only, no answer/deny controls, operator POST403 preserves pending"
+      ]
     },
     "HOME-T-C03": {
       "requirement": "Aprovação expirada ou já decidida por outro cliente deixa de aceitar decisão ao revalidar.",
@@ -723,11 +739,19 @@
     },
     "HOME-T-E08": {
       "requirement": "Duas abas podem observar; uma decisão concorrente resulta em conflito claro na aba antiga.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json"
+      ],
+      "commit": "93cae0e3 + browser native qualification of installed fa2/D4 cut",
+      "environment": "Actual built Chromium and installed Nexus7e156/fa2/D4 with synthetic admitted peer/native ingress, real HTTP/CAS and ephemeral operator identity",
+      "limitations": [
+        "Antecedent cut before A08 Server lane changes.",
+        "No native executable, provider inference, personal auth or lease/expiry qualification."
+      ],
+      "tests": [
+        "Two real browser tabs canonical decision POST202/409 with visible conflict and no replay"
+      ]
     },
     "HOME-T-E09": {
       "requirement": "Aba em background reduz trabalho; voltar revalida antes de habilitar ações sensíveis.",

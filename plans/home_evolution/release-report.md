@@ -248,3 +248,15 @@ global atual nas famílias canônicas; isso não elimina o requisito de partiç�
 Backend e interface estão sendo corrigidos, sem criar produtor fictício nem
 inserir NULL em tabelas que o proíbem. O pacote/candidato D4 passa a antecedente
 até qualificar esse delta; a campanha paga não foi iniciada.
+
+## Perguntas nativas e concorrência no navegador
+
+Quatro checks reais no wheel instalado7e156/fa2/bundleD4 qualificaram C01/C02/E08:
+pedido e opções exatos, múltipla seleção e formulário tipado sem resposta
+implícita; pergunta para outro agente com acompanhamento somente leitura e
+tentativa do operador recusada403; duas abas com POSTs canônicos reais202/409 e
+motivo de conflito visível. Não houve stub de sucesso em POST. As fixtures usam
+peer/ingress sintéticos e identidade efêmera, sem executável nativo, inferência
+ou conta pessoal. Servidores e browsers próprios encerraram; os três servidores
+finais tiveram saída0. Prova antecede A08 e não é atribuída ao futuro pacote.
+Ver `evidence/pr07-native-browser/`. Ledger:70PASS/3NOT_RUN (A08/H02/I01).
