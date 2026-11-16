@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "scope": "Home worker counts exclude reserved human operator, without altering Graph/global agents",
+  "predecessor_qualification_sha256": "ae09c47d1bc2ebfb06dfcc532c2bc386684c79252dab4039d798ec271795845b",
+  "before_source_sha256": "6b1c110ca5af49acb0ff71160a90375282f16abcca2fd31fdbef4266797f12ac",
+  "source_pins": [
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "sha256": "ed0f9c882d06aeb05cc868a2f69fd33464f461a9fa25a7d1092effc332607459"
+    },
+    {
+      "path": "tests/home_evolution/test_home_semantics.py",
+      "sha256": "c421cc41e433860d949e3d3f02636722a002873580e6eade4ea1af52a6cf2808"
+    },
+    {
+      "path": "tests/home_evolution/test_home_queries.py",
+      "sha256": "48ea97f6f704428886c92dadb0f9edf2a1eab502bb7ab7f13a3596f9aff18349"
+    }
+  ],
+  "runs": [
+    {
+      "name": "operator-before",
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/home_evolution/test_home_semantics.py -q --tb=short -k empty_installation --junitxml=plans/home_evolution/evidence/pr06-semantics/operator-before.xml",
+      "xml": "operator-before.xml",
+      "sha256": "304e313ce7010670c451d1cb06e55932d6b72c89ec1bbb18daa39cc31b7357f4",
+      "tests": "1",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "23.728"
+    },
+    {
+      "name": "operator-final",
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/home_evolution/test_home_semantics.py tests/home_evolution/test_home_queries.py -q --tb=short -k 'empty_installation or agent_and_external_pages or unclaimed_direct' --junitxml=plans/home_evolution/evidence/pr06-semantics/operator-final.xml",
+      "xml": "operator-final.xml",
+      "sha256": "66d2311098b691d4bdf56175a590a8cf7b94dec9e4484283b544953ddb04543e",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "34.204"
+    }
+  ],
+  "static_check": {
+    "command": "rtk proxy ruff check src/okto_nexus/adapters/outbound/sqlite/home.py tests/home_evolution/test_home_semantics.py tests/home_evolution/test_home_queries.py",
+    "result": "PASS",
+    "tool_ref": "3e0027"
+  },
+  "counts_note": "Three final cases; direct-recipient case is an existing regression. Earlier 9+5 passes retain their earlier source pins.",
+  "effects": {
+    "provider_calls": 0,
+    "live_service_actions": 0,
+    "os_events": 0
+  },
+  "acceptance": "Root review pending; no scenario promotion by implementer"
+}

@@ -4,6 +4,9 @@ from ....domain.attention import stamp
 from .observations_repo import CURRENT_FACTS_SQL, current_facts
 from . import observation_correlation_projection
 
+# Observation instances require a canonical non-null workspace.
+WORKSPACE_BOUND = True
+
 
 _FIELDS = '''observed_instance_id source_id workspace_id external_instance_ref generation created_at updated_at
     agent_id source_kind registration_ref registration_hash revision enabled revoked_at source_created_at

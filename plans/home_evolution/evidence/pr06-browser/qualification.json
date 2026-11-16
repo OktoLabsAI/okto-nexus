@@ -1,0 +1,29 @@
+{
+  "status": "PASS_SELECTED_BROWSER_CHECKS",
+  "checks": "checks.json",
+  "source_pins": {
+    "tests/home_evolution/browser_fixture.py": "8a86251b05cb88a546a292ae93671b91d88359d2ef12a582aeb3a2611c97f97d",
+    "tests/home_evolution/browser_checks.js": "1c785273ee94e101a674a556c96438948b8c930499deba0997b2d136a2b4167b",
+    "src/okto_nexus/application/home.py": "ad24ddfa5488708587c7bfe553f439919a29bb0c9d2023fff9544ec4d407e2d9",
+    "src/okto_nexus/domain/home.py": "731b9248adf6564b3353dac891e7a4db61143ecdfd2fd9e27485baadd9a6f5fa",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "63e683325b210f902be82051c06ccae797ee72cd8d5cbeb2553b2b3f64b06301",
+    "src/okto_nexus/adapters/inbound/http/home.py": "41d51cbb0d63091ddce429698fae5203404e4a280cbf89462d3184187bf7398e",
+    "src/okto_nexus/adapters/inbound/http/routes.py": "c51b4f4f031c3b85fc49772c7bb032a8ebe2a854bfdff3682d72535c570683c5",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "5a81b6ae47979cc9dc3dd8c4a6dbf055a4f4a59f4739dd9698f91eebef6a9cbf"
+  },
+  "frontend_outputs": "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+  "base_commit": "bff71b13",
+  "transport": "real localhost socket; actual built frontend and GET APIs",
+  "dataset": "17 handoffs in two workspaces; productive native/provider facts absent; mutation middleware405; runtime lifespan off",
+  "limits": [
+    "Seven selected checks; not full73-case or provider campaign acceptance.",
+    "403 is deliberately routed; actual account revocation and screen-reader speech not claimed.",
+    "True browser200percent zoom shortcut was attempted but did not change Chromium scale; remains NOT_RUN.",
+    "Initial read-only fixture shutdown exited after serving but temporary-directory cleanup hit a Windows handle. Final fixture retains home until parent verifies process exit and removes only that synthetic path."
+  ],
+  "reproduction": [
+    "rtk proxy .venv/Scripts/python.exe -B -X utf8 tests/home_evolution/browser_fixture.py --stop-file <test-output>/stop --ready-file <test-output>/ready.json",
+    "Playwright isolated context with local operational presentation enabled; browser_run_code_unsafe filename=tests/home_evolution/browser_checks.js"
+  ],
+  "screenshot": "desktop.png"
+}

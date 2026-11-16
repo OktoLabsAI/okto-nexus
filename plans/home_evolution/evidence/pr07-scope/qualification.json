@@ -1,0 +1,61 @@
+{
+  "scope": "Synthetic migrated SQLite and real ASGI router/middleware; loopback trusted operator. No credential authentication, TCP listener, native runtime, provider or OS event.",
+  "production_changes": false,
+  "tests": 5,
+  "passed": 5,
+  "failed": 0,
+  "seconds": 16.29,
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/home_evolution/test_home_final_scope.py -q --junitxml=C:/Users/jpamb/AppData/Local/Temp/home-pr07-scope-final.xml",
+  "python": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+  "python_sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+  "ruff": "rtk proxy ruff check tests/home_evolution/test_home_final_scope.py",
+  "source_pins": {
+    "tests/home_evolution/test_home_final_scope.py": "2e9caeee9393cdc891ebae37c87da6acc76350dc013fd57e6fff3c6c7f91b9ce",
+    "tests/home_evolution/fixtures.py": "de3898c335382729a1f0236d60e226c03e469e546853b9c9d54823d0d3364615",
+    "tests/home_evolution/test_home_queries.py": "48ea97f6f704428886c92dadb0f9edf2a1eab502bb7ab7f13a3596f9aff18349",
+    "tests/home_evolution/test_home_http.py": "3d42e2d758cd3b39e265db23272dd8bd0b147018ccb3698c25ffbdc8e474cd96",
+    "src/okto_nexus/application/home.py": "ad24ddfa5488708587c7bfe553f439919a29bb0c9d2023fff9544ec4d407e2d9",
+    "src/okto_nexus/domain/home.py": "d5858ce9222644b7dbe2da13dab6e27c27f632410dc4df3a82166331388c132b",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "f7a20338a6638c1abd3038138c13dc794c5ea7c404bac3284cff4b300343aa6f",
+    "src/okto_nexus/adapters/inbound/http/home.py": "41d51cbb0d63091ddce429698fae5203404e4a280cbf89462d3184187bf7398e",
+    "src/okto_nexus/domain/attention.py": "301330c30662e16a5367a256122ab07b557b8244f78ceeb86b889dcb88f9df85",
+    "src/okto_nexus/adapters/outbound/sqlite/attention.py": "b2d9b879294c88519468447416ff2ac8daf37eb61514cb9fd0d62293e21001ce",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_native.py": "a64785ea381a98ee8de5cf3838cb18dc7bc15456b3b751ac27c00d304ce63fdb",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py": "e310161608400339ce550005b936ccb15ff1a906acb9fe2ca3d949d26bfa9dcd",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py": "3fdc1b596ce21bb794b5efdbe539d562d9a4c44644f415c11d1f874db1806927",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_results.py": "beb11e27f8b7064f7f6401b657881492627d8db94ef030e6e5f644775754d141",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py": "329f5fb38f0108946cc93de8aef0b091bfedd132afe089be83f5718e2ea0933a",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_external.py": "1237a40c626c29f4a6b6bb5b13365e52d08b63a6357b56dff3bc6b2b87113718"
+  },
+  "candidates": {
+    "HOME-T-A01": {
+      "status": "PASS",
+      "proof": "test_home_final_scope.py:48; same A sessions in both workspaces, B-only completed result/eligible verification/business event; entire A work/results/attention/agents/external sections and summary unchanged, B result and actionable counter increase; A feed excludes B event."
+    },
+    "HOME-T-A02": {
+      "status": "PASS",
+      "proof": "test_home_final_scope.py:75; every worker has repeated sessions in both workspaces, three linked retry operations plus original delivery/handoff. Actual HTTP keyset pages (limit 2) for work/results/agents exactly equal scoped set union and totals; one logical linked handoff with four attempts, no duplicate delivery card."
+    },
+    "HOME-T-B02": {
+      "status": "PASS",
+      "proof": "test_home_final_scope.py:105; runtime.open + SUBMITTED only, READY warm/OPENING/READY with containment REQUESTED. No turn.submit, no changes to productive work/results/running/waiting counters. Technical Attention is not prohibited."
+    },
+    "HOME-T-A08": {
+      "status": "NOT_RUN",
+      "gap": "No canonical Server-wide producer identified in current Attention source families. Nullable domain DTO alone is not a genuine occurrence and cannot prove Home end-to-end separation. No impossible NULL source row, unavailable installation, or HTTP 409 is substituted for this requirement.",
+      "references": [
+        "src/okto_nexus/domain/attention.py:71",
+        "src/okto_nexus/adapters/outbound/sqlite/attention.py:15",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py:130",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py:11",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_native.py:49"
+      ]
+    }
+  },
+  "limits": [
+    "Synthetic read-model evidence, not actual native one-shot execution.",
+    "HTTP router uses the real Home service over migrated scenario SQLite; no real provider or issued key.",
+    "Global event cursor/observation metadata is not falsely required to stay unchanged after B events.",
+    "No ledger status changed by this agent."
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "HOME-T-C01",
+      "status": "PASS",
+      "request": "r4request_b59566df844f16bb6811beaf277cabe884f8a74cfe4052711f1a48a1737e15f4",
+      "presentation": {
+        "multiple": true,
+        "options": [
+          "Continue",
+          "Stop",
+          "Write another answer"
+        ]
+      }
+    },
+    {
+      "id": "HOME-T-E08",
+      "status": "PASS",
+      "accepted": 202,
+      "stale": 409,
+      "conflict": "Error: The native request already has a decision or is no longer pending.",
+      "posts": [
+        {
+          "approval": "r4request_b59566df844f16bb6811beaf277cabe884f8a74cfe4052711f1a48a1737e15f4",
+          "revision": 1,
+          "decision": "approve",
+          "response": {
+            "answers": {
+              "question": {
+                "answers": [
+                  "Stop"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "approval": "r4request_b59566df844f16bb6811beaf277cabe884f8a74cfe4052711f1a48a1737e15f4",
+          "revision": 1,
+          "decision": "approve",
+          "response": {
+            "answers": {
+              "question": {
+                "answers": [
+                  "Continue"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "Real built Home, actual HTTP/CAS and synthetic canonical ingress; no provider application claim"
+}

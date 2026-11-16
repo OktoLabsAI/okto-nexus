@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "bc011dda80367c2f54bf040c7a6f01f4da93775c369cf6508ad0307a43a160d9"
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "b89884914efeb2061c98a03ffaaebd7b2eb8d610b33b8fc5fe80348c67d72b75"
+    },
+    {
+      "path": "backend-tests.xml",
+      "sha256": "32e8b63149cf39b86898b777dc21b2df29059069d80c036f9381e7b660b0a106"
+    },
+    {
+      "path": "backend-final-delta.xml",
+      "sha256": "fab128bd0451fb8dcde44ecd56d7f804b45cb196069aa84d19a1559db0e0b9b3"
+    },
+    {
+      "path": "attention-regressions.xml",
+      "sha256": "e9c97aba3b72e5e1e3d4388f42817084ba1a7d61495c36dc42a4eb07591b4991"
+    }
+  ]
+}

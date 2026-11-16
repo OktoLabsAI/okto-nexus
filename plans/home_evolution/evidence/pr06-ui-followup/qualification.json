@@ -1,0 +1,63 @@
+{
+  "scope": "H02 repeated coalesced announcement and F01/F02 known idle layout follow-up; no runtime/provider effects",
+  "source_files": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\src\\components\\home\\HomeCards.tsx",
+      "sha256": "4822027ddfbd11efb1d6aa58a200cf558bacfc7cd0da12b41de2577d692d101b",
+      "bytes": 12446
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\src\\components\\home\\OperationalHome.tsx",
+      "sha256": "c08f24ba94ca025f0308cdff0eab886397d1279b607a4ff8e144a3a508c76ae8",
+      "bytes": 19601
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\tests\\homeUI.test.mjs",
+      "sha256": "162c9cf86f1072dfcfac49c9896073328f448bbd9a1d5066a21f4a26c26b9cd5",
+      "bytes": 12752
+    }
+  ],
+  "qualification": {
+    "home_ui_node": {
+      "passed": 18,
+      "new": 2,
+      "prior": 16,
+      "tool_ref": "a63f9a",
+      "scope": "real React SSR render/callback and pure known-empty predicates; no DOM announcement claim"
+    },
+    "typecheck_and_build": {
+      "status": "PASS",
+      "tool_ref": "986806",
+      "commands": "tsc -b and Vite production build",
+      "modules": 2169,
+      "seconds": 35.46
+    },
+    "browser": {
+      "owner": "/root/v11_preparation",
+      "qualification": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-extra-browser\\postfix-qualification.json",
+        "sha256": "783dd2ef130f2cf559969ca3c0a016fdc77256e7579871de6cef2d4b15b00dae",
+        "bytes": 3039
+      },
+      "allowlist": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-extra-browser\\postfix-public-allowlist.json",
+        "sha256": "26f53307deb9606fe91eb7b3aa4fd890b4cae09e8019ffcf282c198ca42497d3",
+        "bytes": 1656
+      },
+      "scope": "actual DOM with synthetic GET fixture; H02 two bursts/generation cancellation, F01/F02 and partial/unavailable/disabled guards, narrow keyboard/focus/layout"
+    }
+  },
+  "bundles": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\inbound\\http\\static\\assets\\index-DLLWG07d.css",
+      "sha256": "9927743dbdf57181c1b0f62454cf0ca6b5c2132ed7f51f3e4dcff58eec044d2f",
+      "bytes": 109714
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\inbound\\http\\static\\assets\\index-fgvI6LZl.js",
+      "sha256": "855abecc8a4504100a189e76aacfe193b2d2dff1cd7d4db6c19250f419d225a7",
+      "bytes": 1399992
+    }
+  ],
+  "provenance_limit": "Prior integrated196 and installed17 apply to their pinned antecedent. This follow-up does not retroactively change those artifacts or claim the old installed wheel contains the new UI. No new integrated or installed rerun performed."
+}

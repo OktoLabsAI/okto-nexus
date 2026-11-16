@@ -1,0 +1,113 @@
+{
+  "nativeZoomFinalCurrent": {
+    "status": "PASS",
+    "scope": "own persistent Chrome test profile; native Settings zoom, no CSS scaling or user profile",
+    "desktop": {
+      "cssWidth": 720,
+      "ratio": 2,
+      "visualScale": 1,
+      "cssZoom": "1",
+      "documentWidth": 720,
+      "containerWidth": 720,
+      "containerScrollWidth": 720
+    },
+    "mobileAt200": {
+      "cssWidth": 360,
+      "ratio": 2,
+      "visualScale": 1,
+      "cssZoom": "1",
+      "documentWidth": 360,
+      "containerWidth": 360,
+      "containerScrollWidth": 360
+    },
+    "drawer": {
+      "clientWidth": 360,
+      "scrollWidth": 360,
+      "bodyClient": 360,
+      "bodyScroll": 360
+    },
+    "focusRestored": true,
+    "bundle": [
+      "/assets/index-B1y9k7ms.js"
+    ],
+    "browserVersion": "157.0.8103.51",
+    "nativeZoomRestored": true,
+    "ownBrowserClosed": true
+  },
+  "homeLongTitleFinalCurrent": {
+    "status": "PASS",
+    "metrics": {
+      "viewport": 360,
+      "container": 360,
+      "scrollWidth": 360,
+      "workRows": [
+        {
+          "width": 241,
+          "height": 140,
+          "right": 274,
+          "textLength": 160
+        },
+        {
+          "width": 136.0625,
+          "height": 29,
+          "right": 169.0625,
+          "textLength": 21
+        }
+      ],
+      "bundle": [
+        "/assets/index-B1y9k7ms.js"
+      ]
+    },
+    "fixture": "Controlled GET title160; real built frontend; full text wraps; no provider"
+  },
+  "homeLongTitleProbe": {
+    "viewport": 360,
+    "container": 360,
+    "scrollWidth": 1590,
+    "workRows": [
+      {
+        "width": 1503.90625,
+        "right": 1536.90625
+      },
+      {
+        "width": 136.0625,
+        "right": 169.0625
+      }
+    ]
+  },
+  "homePartialFreshFinal": {
+    "status": "PASS",
+    "before": {
+      "work": "Work\n16\n\nCurrent snapshot · Nov 15, 08:07 PM\n\nReview the integration\n\nAwaiting owner\n\nA, B · Orion workspace\n\nIn this state since Nov 15, 06:22 PM\n\nValidate the response\n\nClaimed\n\nB, C · Orion workspace\n\nIn this state since Nov 15, 06:22 PM\n\nVerify the delivery\n\nAwaiting verification\n\nA, C · Orion workspace\n\nIn this state since Nov 15, 06:22 PM\n\nLyra: independent request\n\nAwaiting owner\n\nA, C · Lyra workspace\n\nIn this state since Nov 15, 06:22 PM\n\nReview batch item 01\n\nAwaiting owner\n\nA, worker-0 · Orion workspace\n\nIn this state since Nov 15, 06:22 PM\n\nReview batch item 02\n\nAwaiting owner\n\nA, worker-1 · Orion workspace\n\nIn this state since Nov 15, 06:22 PM\n\nReview batch item 03\n\nAwaiting owner\n\nA, worker-2 · Orion workspace\n\nIn this state since Nov 15, 06:22 PM\n\nReview batch item 04\n\nAwaiting owner\n\nA, worker-3 · Orion workspace\n\nIn this state since Nov 15, 06:22 PM\n\nReview batch item 05\n\nAwaiting owner\n\nA, worker-4 · Orion workspace\n\nIn this state since Nov 15, 06:22 PM\n\nReview batch item 06\n\nAwaiting owner\n\nA, worker-5 · Orion workspace\n\nIn this state since Nov 15, 06:22 PM\n\nShowing 10 of 16.\n\nLoad more work",
+      "results": "Results\n1\n\nCurrent snapshot · Nov 15, 08:07 PM\n\nHandoff result\n\nCOMPLETED · verification COMPLETED · Unseen\n\nA · Orion workspace · Nov 15, 06:22 PM\n\nOpen result\nMark seen",
+      "disabled": false,
+      "external": "External reports\nTotal unknown\n\nOut of date · last authorized snapshot · Nov 15, 08:07 PM\n\nUnavailable. SYNTHETIC SOURCE UNAVAILABLE"
+    },
+    "after": {
+      "results": "Results\n1\n\nOut of date · last authorized snapshot · Nov 15, 08:07 PM\n\nHandoff result\n\nCOMPLETED · verification COMPLETED · Unseen\n\nA · Orion workspace · Nov 15, 06:22 PM\n\nOpen result\nMark seen",
+      "disabled": true
+    },
+    "sent": [
+      {
+        "path": "/api/v1/attention/att_d3323016c4b271ea6b8e6dbed86cc6aac050284db70de3aae7d9bceeac53eee8/seen",
+        "body": {
+          "seen": true,
+          "source_revision": "53291a82abbb8c6c994452725a9a7a8dee15af17aeb9076c8134c0a2b79b4bc7",
+          "preference_revision": 0
+        }
+      }
+    ],
+    "expected": {
+      "path": "/api/v1/attention/att_d3323016c4b271ea6b8e6dbed86cc6aac050284db70de3aae7d9bceeac53eee8/seen",
+      "body": {
+        "seen": true,
+        "source_revision": "53291a82abbb8c6c994452725a9a7a8dee15af17aeb9076c8134c0a2b79b4bc7",
+        "preference_revision": 0
+      }
+    },
+    "scope": "Synthetic GET section failure in actual envelope, intercepted POST; no real mutation or provider",
+    "bundle": [
+      "/assets/index-B1y9k7ms.js"
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "stage": "twine",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:/Users/jpamb/AppData/Roaming/Python/Python313/Scripts/twine.exe",
+      "check",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-final-8u111s8n\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-final-8u111s8n\\dist\\okto_nexus-0.3.4.tar.gz"
+    ],
+    "started_at": "2026-11-15T22:00:27.166901+00:00",
+    "ended_at": "2026-11-15T22:00:36.329939+00:00",
+    "exit_code": 0
+  },
+  {
+    "stage": "install",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "-m",
+      "pip",
+      "install",
+      "--force-reinstall",
+      "--no-deps",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-final-8u111s8n\\dist\\okto_nexus-0.3.4-py3-none-any.whl"
+    ],
+    "started_at": "2026-11-15T22:00:36.350668+00:00",
+    "ended_at": "2026-11-15T22:01:14.302764+00:00",
+    "exit_code": 0
+  },
+  {
+    "stage": "installed-tests",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+      "test",
+      "--wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-final-8u111s8n\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+      "--output",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-final-8u111s8n\\installed",
+      "--tests",
+      "tests/home_evolution/test_home_package.py",
+      "tests/home_evolution/test_home_semantics.py",
+      "tests/home_evolution/test_home_queries.py"
+    ],
+    "started_at": "2026-11-15T22:01:14.304456+00:00",
+    "ended_at": "2026-11-15T22:04:28.951859+00:00",
+    "exit_code": 0
+  }
+]

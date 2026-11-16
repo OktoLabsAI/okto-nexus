@@ -47,3 +47,6 @@ frontend/tsconfig.tsbuildinfo
 
 # Local dashboard test server data, logs and generated artifacts
 .nexus-policy-guardrail-test/
+
+# Browser automation scratch; publish only curated, synthetic evidence in plans.
+.playwright-mcp/

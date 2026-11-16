@@ -1,0 +1,78 @@
+[
+  {
+    "stage": "build",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\build_validation_artifacts.py",
+      "--output",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-ui-final-svjjgq53\\dist"
+    ],
+    "started_at": "2026-11-15T23:15:37.268405+00:00",
+    "ended_at": "2026-11-15T23:16:33.735913+00:00",
+    "exit_code": 0
+  },
+  {
+    "stage": "twine",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:/Users/jpamb/AppData/Roaming/Python/Python313/Scripts/twine.exe",
+      "check",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-ui-final-svjjgq53\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-ui-final-svjjgq53\\dist\\okto_nexus-0.3.4.tar.gz"
+    ],
+    "started_at": "2026-11-15T23:16:33.736727+00:00",
+    "ended_at": "2026-11-15T23:16:34.909460+00:00",
+    "exit_code": 0
+  },
+  {
+    "stage": "install",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "-m",
+      "pip",
+      "install",
+      "--force-reinstall",
+      "--no-deps",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-ui-final-svjjgq53\\dist\\okto_nexus-0.3.4-py3-none-any.whl"
+    ],
+    "started_at": "2026-11-15T23:16:34.910388+00:00",
+    "ended_at": "2026-11-15T23:16:44.083962+00:00",
+    "exit_code": 0
+  },
+  {
+    "stage": "installed-tests",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+      "test",
+      "--wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-ui-final-svjjgq53\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+      "--output",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-ui-final-svjjgq53\\installed",
+      "--tests",
+      "tests/home_evolution/test_home_package.py"
+    ],
+    "started_at": "2026-11-15T23:16:44.084552+00:00",
+    "ended_at": "2026-11-15T23:16:54.841936+00:00",
+    "exit_code": 0
+  }
+]

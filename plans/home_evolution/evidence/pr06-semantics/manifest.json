@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "before.xml",
+      "sha256": "21b99c5ea92d3f0455ad5f4238bee500b32b58d833c4402b39c08dcae95069f0",
+      "size_bytes": 1951
+    },
+    {
+      "path": "final.xml",
+      "sha256": "f72cea03d9c7708625db7b717620736e9b82d9d92832cfdddd8178107a7796b1",
+      "size_bytes": 1689
+    },
+    {
+      "path": "operator-before.xml",
+      "sha256": "304e313ce7010670c451d1cb06e55932d6b72c89ec1bbb18daa39cc31b7357f4",
+      "size_bytes": 655
+    },
+    {
+      "path": "operator-final.xml",
+      "sha256": "66d2311098b691d4bdf56175a590a8cf7b94dec9e4484283b544953ddb04543e",
+      "size_bytes": 698
+    },
+    {
+      "path": "operator-qualification.json",
+      "sha256": "5771e7ba3f9228b67a0dcf22f25cfb507a757d7484fb66e12675763bbcf227c8",
+      "size_bytes": 2536
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "ae09c47d1bc2ebfb06dfcc532c2bc386684c79252dab4039d798ec271795845b",
+      "size_bytes": 3324
+    },
+    {
+      "path": "README.md",
+      "sha256": "0e907e77f84bef295469555af7e4da3565c557cba2128771b9850383ce38b712",
+      "size_bytes": 4078
+    },
+    {
+      "path": "redaction-before.xml",
+      "sha256": "6b1bdbe0ee5d77bd8dca2f3e87c890479b25c231e1a2177feb1f17e2f36dcd6c",
+      "size_bytes": 1665
+    },
+    {
+      "path": "redaction-confirmed.xml",
+      "sha256": "eb0d8c060686f7ed49eb21d4d95d7c11574948d654924410d0546655d95c661d",
+      "size_bytes": 1033
+    },
+    {
+      "path": "redaction-final.xml",
+      "sha256": "150931bb646092d303f82c93b97746831508331b93cfb4a2649b6941b052974f",
+      "size_bytes": 1701
+    },
+    {
+      "path": "redaction-fixture-final.xml",
+      "sha256": "fe1c3a4ac13c1263d5826a5ea51e2c037d8085b068ae81f8e851b9b79c485007",
+      "size_bytes": 973
+    },
+    {
+      "path": "redaction-qualification.json",
+      "sha256": "9ddbab4dd3b0cf2f9be624c22cc69ade1f9924ae019c7d1b38c176d2084e3925",
+      "size_bytes": 2575
+    },
+    {
+      "path": "result-regressions.xml",
+      "sha256": "c194476bd48df8e24f8a37ec2a2b3e0cfa565ea5f883239138a7fb80b97503f6",
+      "size_bytes": 987
+    }
+  ]
+}

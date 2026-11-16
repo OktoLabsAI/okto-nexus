@@ -1,0 +1,61 @@
+[
+  {
+    "stage": "twine",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:/Users/jpamb/AppData/Roaming/Python/Python313/Scripts/twine.exe",
+      "check",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-namespaces-l8urr8ev\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-namespaces-l8urr8ev\\dist\\okto_nexus-0.3.4.tar.gz"
+    ],
+    "started_at": "2026-11-15T22:12:03.363014+00:00",
+    "ended_at": "2026-11-15T22:12:04.677421+00:00",
+    "exit_code": 0
+  },
+  {
+    "stage": "install",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "-m",
+      "pip",
+      "install",
+      "--force-reinstall",
+      "--no-deps",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-namespaces-l8urr8ev\\dist\\okto_nexus-0.3.4-py3-none-any.whl"
+    ],
+    "started_at": "2026-11-15T22:12:04.678682+00:00",
+    "ended_at": "2026-11-15T22:12:15.222497+00:00",
+    "exit_code": 0
+  },
+  {
+    "stage": "installed-tests",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+      "test",
+      "--wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-namespaces-l8urr8ev\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+      "--output",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-namespaces-l8urr8ev\\installed",
+      "--tests",
+      "tests/home_evolution/test_home_package.py",
+      "tests/home_evolution/test_home_namespaces.py"
+    ],
+    "started_at": "2026-11-15T22:12:15.223361+00:00",
+    "ended_at": "2026-11-15T22:12:23.385573+00:00",
+    "exit_code": 2
+  }
+]

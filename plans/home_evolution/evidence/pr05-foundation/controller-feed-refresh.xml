@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="bursts coalesce while pending and never exceed one read/second" time="0.016330" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="scope generation clears protected state and ignores late old reads without overlap" time="0.003123" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="401 clears visible and paused data and blocks refresh until a new identity" time="0.002453" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="403 clears visible and paused data and blocks refresh until a new identity" time="0.001534" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="partial failure retains only same-scope stale block, never successful empty or stale forbidden data" time="0.004688" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="visual pause keeps published identity and accepts newest snapshot only when applied" time="0.001975" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="pagination deduplicates immutable IDs; conflict resets via coherent overview instead of replaying cursor" time="0.003160" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="fallback and source TTL refresh independently of live stream; hidden events reduce work then wake" time="0.006963" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="reconnect/gap invalidate, unrelated events do not, and disposal removes timers" time="0.001909" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="wrong-server response is not admitted into the current cache" time="0.001481" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="Attention pagination reuses canonical category/state/seen cursor contract, not Home display-state" time="0.001475" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="external generations remain distinct during paginated append and never change native results" time="0.001190" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="invalidation matrix and scope keys distinguish external, attention, origin and identity" time="0.000442" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="time spent reading does not extend source TTL by another full interval" time="0.000792" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="business feed pages use actual id/kind/agent_id projection and retain distinct records" time="0.001702" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="overview refresh retains loaded feed as stale then revalidates first page without old cursor" time="0.001973" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<!-- tests 16 -->
+	<!-- suites 0 -->
+	<!-- pass 16 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 1568.3905 -->
+</testsuites>

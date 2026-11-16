@@ -1,0 +1,42 @@
+{
+  "status": "PREPARED_NOT_AUTHORIZED",
+  "candidate": {
+    "path": "candidate-server-final.json",
+    "sha256": "6181fd0029f1eb023d226f168f6d00b60baad2cfe92e12b3850592a36fecc189",
+    "bytes": 250640
+  },
+  "authorize_only_after_actual_consent": "rtk proxy \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe\" -I -B -X utf8 \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6/bind_plan.py\" authorize --candidate \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6/candidate-server-final.json\" --candidate-sha256 6181fd0029f1eb023d226f168f6d00b60baad2cfe92e12b3850592a36fecc189 --user-response-reference <ACTUAL_USER_RESPONSE_REFERENCE> --acknowledges-delayed-usage-overshoot --output \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6/actual-authorization.json\"",
+  "driver_prefix_after_authorization": "rtk proxy \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe\" -I -B -X utf8 \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6/driver.py\" --plan \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6/candidate-server-final.json\" --plan-sha256 6181fd0029f1eb023d226f168f6d00b60baad2cfe92e12b3850592a36fecc189 --authorization \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6/actual-authorization.json\" --authorization-sha256 <ACTUAL_AUTH_SHA>",
+  "actions": [
+    "prepare",
+    "install",
+    "start",
+    "watch (retained concurrently)",
+    "review",
+    "setup --review-revision <actual>",
+    "useful (observes; real native permission/toggle by Root in parallel)",
+    "verify-report",
+    "close",
+    "Home exact CLOSED continuation rejection (browser)",
+    "cleanup"
+  ],
+  "candidate_unchanged_by_authorization": true,
+  "do_not_recreate_namespace": true,
+  "ancestor_candidates": [
+    {
+      "path": "candidate.json",
+      "sha256": "5a8c72d04e9e4adc426173dd14971ef28c6dec599af2bfea42b5deaf61012c40"
+    },
+    {
+      "path": "candidate-final-ui.json",
+      "sha256": "cbb2a45ba9cc99833b5af881abc8415c4c7d355c436d6e05e8cfab4288fdd6af"
+    }
+  ],
+  "qualified_package": {
+    "wheel_sha256": "c1c45e2a3dc8b9f0bed348ddc2d09ab4d0afccbaae2b8c19253fdcaf4980b759",
+    "qualification_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\home_evolution\\evidence\\pr10-package-server-final\\qualification.json",
+    "qualification_sha256": "629985a6e8d40149f6d89e47f0633afdbc6e133f9886a0d8195a9a7ab6c18b42",
+    "source_commit": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+    "static_bundle": "index-Dcu4bArB.js"
+  }
+}

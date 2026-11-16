@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites>
+  <testsuite name="HOME-R1 installed Server attention and package" tests="12" failures="0" errors="0" skipped="0" time="47.715">
+    <testcase classname="tests.home_evolution.test_home_server_attention" name="test_server_lane_separate_from_all_project_counters_and_filters" time="3.768" />
+    <testcase classname="tests.home_evolution.test_home_server_attention" name="test_both_attention_lanes_page_without_crossing_scope_server_or_revision" time="2.411" />
+    <testcase classname="tests.home_evolution.test_home_server_attention" name="test_http_server_lane_scope_echo_and_closed_read_only_routes" time="9.205" />
+    <testcase classname="tests.home_evolution.test_home_server_attention" name="test_disabled_or_failed_canonical_source_is_not_false_empty_server_lane" time="2.405" />
+    <testcase classname="tests.home_evolution.test_home_server_attention" name="test_existing_migrated_sources_have_no_fabricated_server_incident" time="2.534" />
+    <testcase classname="tests.home_evolution.test_home_server_attention" name="test_global_preference_reuses_canonical_cas_and_keeps_project_sources_unchanged" time="4.447" />
+    <testcase classname="tests.home_evolution.test_home_server_attention" name="test_server_projection_failure_keeps_other_sections_honest_and_authorization_denial_fatal" time="2.416" />
+    <testcase classname="tests.home_evolution.test_home_server_attention" name="test_home_hint_never_prunes_undeclared_or_unbound_canonical_global_source[None]" time="2.297" />
+    <testcase classname="tests.home_evolution.test_home_server_attention" name="test_home_hint_never_prunes_undeclared_or_unbound_canonical_global_source[False]" time="3.108" />
+    <testcase classname="tests.home_evolution.test_home_server_attention" name="test_workspace_bound_sources_keep_pushdown_and_classic_attention_is_unchanged" time="2.752" />
+    <testcase classname="tests.home_evolution.test_home_server_attention" name="test_logical_handoff_sender_filter_preserves_receivers_native_question[input]" time="6.646" />
+    <testcase classname="tests.home_evolution.test_home_package" name="test_packaged_operational_home_serves_assets_and_compatible_contract" time="5.726" />
+  </testsuite>
+</testsuites>

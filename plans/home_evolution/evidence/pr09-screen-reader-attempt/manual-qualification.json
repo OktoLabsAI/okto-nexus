@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "dom_http_status": "PASS",
+  "spoken_screen_reader_status": "NOT_RUN",
+  "qualified_at_utc": "2026-11-16T16:56:59.237941+00:00",
+  "actual_narrator_launched": false,
+  "gui_windows_controlled": false,
+  "speech_or_personal_history_captured": false,
+  "source_head": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+  "bundle": [
+    "/assets/index-Dcu4bArB.js"
+  ],
+  "tested_command": "rtk proxy .venv/Scripts/python.exe <manual_probe.py> --first-delay 30 --pulse-gap 20 --duration 80 --ready-file <ownTemp>/ready.json --stop-file <ownTemp>/stop",
+  "tested_runner_sha256": "f6f7e7a1ee15f472b0ce7a8e170a8d0ec9e61846caa6a70d54901560a211373b",
+  "final_runner_sha256": "c06e2b55784fcc31d802094db3c088238d037b2d642b81b2ff447f69e0ffe055",
+  "only_default_arguments_changed": true,
+  "runtime_ast_equivalent_after_default_normalization": true,
+  "tested_parser_defaults": {
+    "--first-delay": 15,
+    "--pulse-gap": 15,
+    "--duration": 90
+  },
+  "final_parser_defaults": {
+    "--first-delay": 45,
+    "--pulse-gap": 20,
+    "--duration": 90
+  },
+  "tested_schedule_seconds": [
+    30.0,
+    50.0
+  ],
+  "final_default_schedule_seconds": [
+    45,
+    65
+  ],
+  "duration_limit_seconds": 90,
+  "default_stop_request_seconds": 85,
+  "shutdown_grace_seconds": 5,
+  "fixture_http_read_only": true,
+  "fixture_pulses": 2,
+  "new_work_ids": [
+    "home_ba7e943896518f0c15565cdf796df1fca882e19ce8bda24bf16e3d6be203eaa3",
+    "home_879bfdd5c9ae5edf939a6258ea3b96d84ddee0be025351708dc0c4ea2ebed046"
+  ],
+  "announcements": [
+    {
+      "text": "Home updated. New work, attention or results are available.",
+      "at": 10774.600000023842
+    },
+    {
+      "text": "Home updated. New work, attention or results are available.",
+      "at": 30950.5
+    }
+  ],
+  "focus": {
+    "value": "A",
+    "focused": true,
+    "selection": [
+      0,
+      1
+    ]
+  },
+  "home_gets": 5,
+  "post_requests": 0,
+  "provider_calls": 0,
+  "native_runtime_started": false,
+  "cleanup": {
+    "runner_exec_session": 47628,
+    "runner_physical_exit_code": 0,
+    "runner_exit_tool_ref": "4a9f50",
+    "auto_stop_elapsed_seconds": 75.274,
+    "browser_still_open_at_runner_exit": {
+      "pageClosed": false,
+      "visibility": "visible",
+      "announcementCount": 2,
+      "url": "http://127.0.0.1:57831/"
+    },
+    "browser_close_exit_code": 0,
+    "browser_close_tool_ref": "70185c",
+    "browser_pid_49424_absent": true,
+    "browser_pid_tool_ref": "9338ef",
+    "forced_stop": false
+  },
+  "antecedent": {
+    "runner_exec_session": 92233,
+    "runner_exit_code": 0,
+    "normal_auto_stop_elapsed_seconds": 50.363,
+    "schedule_seconds": [
+      22,
+      34
+    ],
+    "dom_status": "TIMEOUT_WAITING_FOR_TWO_ANNOUNCEMENTS",
+    "reason": "First pulse committed before the classic browser finished opening and before the operational Home observer baseline. The single remaining announcement is not a product or spoken-AT failure.",
+    "observed_dom": {
+      "announcements": [
+        {
+          "text": "Home updated. New work, attention or results are available.",
+          "at": 8881.800000011921
+        }
+      ],
+      "titles": [
+        "Screen reader probe 2",
+        "Screen reader probe 1",
+        "Review the integration",
+        "Validate the response",
+        "Verify the delivery",
+        "Review batch item 01",
+        "Review batch item 02",
+        "Review batch item 03",
+        "Review batch item 04",
+        "Review batch item 05"
+      ]
+    },
+    "protocol_adjustment": "Pre-open own browser; validate30/50/80 focal. Increase final manual defaults to45/65/90 and keep Chrome active until after second pulse."
+  },
+  "limits": [
+    "DOM and actual SQLite/HTTP only: no human or assistive-technology speech observation.",
+    "No DOM item insertion, route.fulfill GET, fake POST success, host service, provider, real data or user-window control.",
+    "Two valid task/handoff copies and real business events are out-of-band fixture writes; visiting Home remains read-only.",
+    "H02 must retain NOT_RUN at actual spoken-reader layer until independently observed."
+  ],
+  "duration91_rejected_before_fixture_creation": {
+    "tool_ref": "c9ea8f",
+    "rtk_exit_code": 1
+  },
+  "shutdown_transport_evidence": {
+    "tool_ref": "5a93b9",
+    "both_production_sse_clients_reconnect_from_event_id2_after_server_exit": true,
+    "expected_console_errors_after_auto_stop": true,
+    "dom_observation_window_before_stop_had_no_page_errors": true
+  }
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="7.226" timestamp="2026-11-15T19:06:04.572741-03:00" hostname="Alienware_m15"><testcase classname="" name="test_direct_operation_namespace[ids]" time="1.656"><failure message="AssertionError: assert 1 == 2&#10; +  where 1 = len({'home_7c9dfd9282141e533d8d810c8a527ba452dc400e3e1227d972617456c200701b'})">C:\Users\jpamb\AppData\Local\Temp\home-direct-namespace-5glqlxd9\test_home_namespaces.py:38: in test_direct_operation_namespace
+    assert len({i['id'] for i in view['items']})==2
+E   AssertionError: assert 1 == 2
+E    +  where 1 = len({'home_7c9dfd9282141e533d8d810c8a527ba452dc400e3e1227d972617456c200701b'})</failure></testcase><testcase classname="" name="test_direct_operation_namespace[pagination]" time="1.669"><failure message="AssertionError: assert 1 == 0&#10; +  where 1 = len([{'agent_ids': ['A', 'B'], 'attempt_count': 1, 'attention_refs': [], 'detail_target': {'executor_id': 'fixture-executor', 'kind': 'execution', 'operation_id': 'fixture-success', 'server_id': 'fixture-server', ...}, ...}])&#10; +  and   0 = len([])">C:\Users\jpamb\AppData\Local\Temp\home-direct-namespace-5glqlxd9\test_home_namespaces.py:43: in test_direct_operation_namespace
+    assert len(first['items'])==len(second['items'])==1
+E   AssertionError: assert 1 == 0
+E    +  where 1 = len([{'agent_ids': ['A', 'B'], 'attempt_count': 1, 'attention_refs': [], 'detail_target': {'executor_id': 'fixture-executor', 'kind': 'execution', 'operation_id': 'fixture-success', 'server_id': 'fixture-server', ...}, ...}])
+E    +  and   0 = len([])</failure></testcase><testcase classname="" name="test_execution_attention_does_not_cross_executor_namespace" time="1.320"><failure message="AssertionError: assert ['att_5666422...bb423fb516b4'] == []&#10;  &#10;  Left contains one more item: 'att_56664228d92b35d1047e1d4af5cb3e5337b847b3ccac5ec4c5fabb423fb516b4'&#10;  Use -v to get more diff">C:\Users\jpamb\AppData\Local\Temp\home-direct-namespace-5glqlxd9\test_home_namespaces.py:54: in test_execution_attention_does_not_cross_executor_namespace
+    assert rows['second-executor']['attention_refs']==[]
+E   AssertionError: assert ['att_5666422...bb423fb516b4'] == []
+E     
+E     Left contains one more item: 'att_56664228d92b35d1047e1d4af5cb3e5337b847b3ccac5ec4c5fabb423fb516b4'
+E     Use -v to get more diff</failure></testcase></testsuite></testsuites>

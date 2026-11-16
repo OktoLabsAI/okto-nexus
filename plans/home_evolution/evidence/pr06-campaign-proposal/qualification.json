@@ -1,0 +1,115 @@
+{
+  "schema_version": 2,
+  "status": "OFFLINE_INERT_CANDIDATE_READY_FOR_ROOT_REVIEW_AND_NEW_PAID_CONSENT",
+  "final_tests": {
+    "passed": 27,
+    "tests": 27,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "elapsed_seconds": 1.6276779000181705,
+    "installed_product_boundary_mocked": true,
+    "provider_calls": 0,
+    "service_actions": 0,
+    "source_path_injection_for_product": false
+  },
+  "final_test_tool": "fcea2b",
+  "ruff_F_tool": "f53480",
+  "tests_count": "27 unique final tests; prior19/22 and intermediate27 overlap, not additive",
+  "preserved_fixture_failures": {
+    "initial_run": "6a3186; fixture work_args + real RO connection close fixed",
+    "inert_delta": "bea919; fake Driver missed native candidate fields in two new tests; fixed without product change",
+    "xml": "inert-delta-fixture-errors.xml"
+  },
+  "peer_findings_fixed": [
+    "Use mounted runtime-options contract, with real route-table test; local executable SHA proof separately labeled",
+    "Common post-reservation containment for quick invalid/oversize CLI output and nonterminal setup outcome",
+    "No family-only authority: candidate SHA + campaign UUID + root all required",
+    "Grant proof compares seven scope dimensions and at least600s expiry headroom"
+  ],
+  "candidate": {
+    "path": "candidate.json",
+    "sha256": "5a8c72d04e9e4adc426173dd14971ef28c6dec599af2bfea42b5deaf61012c40",
+    "bytes": 249959
+  },
+  "candidate_projection": {
+    "path": "candidate-projection.json",
+    "sha256": "9b5beb0b7c72a7c67fc1e39a062a1d3fd1f6a463ae5f351f6a61b967b6ba96ac",
+    "bytes": 2748
+  },
+  "candidate_creation_tool": "898e7f",
+  "inert_execution_refusal_tool": "1d7453",
+  "candidate_runtime_root_exists": false,
+  "last_delta": "actual user authorization receipt only; no candidate/home/package/namespace rewrite",
+  "runtime": [
+    {
+      "path": "driver.py",
+      "sha256": "485de9675df7226b65e95679dd64b574295061623990cd8f2355ccbb0cff9ccd",
+      "bytes": 42017
+    },
+    {
+      "path": "usage.py",
+      "sha256": "62f9e1261a2248ca78b66212f7fa38cb3af90d618c4f2db0021c20e252935b87",
+      "bytes": 5390
+    },
+    {
+      "path": "own_process.py",
+      "sha256": "90e1c3869c877b61553af4f86f20cc25282a91143f0a68b998911d3a92bff588",
+      "bytes": 2636
+    },
+    {
+      "path": "bind_plan.py",
+      "sha256": "52e098060f35e663f5a9141dd25f5735ab88561c740bf34b9d70261eb359f314",
+      "bytes": 9043
+    }
+  ],
+  "tests": [
+    {
+      "path": "test_driver.py",
+      "sha256": "4dfa6457e0e8ad382c8b44b8f219b81a8713c0935ba234aedc8ac7cc2912da1c",
+      "bytes": 25114
+    },
+    {
+      "path": "run_tests.py",
+      "sha256": "78923f3bf45f290ddcc344a6a8078b1e9aa5f53371e13d5c0bada8a87a9058b8",
+      "bytes": 1728
+    },
+    {
+      "path": "final.xml",
+      "sha256": "9344efd603c8bb962761f3501983374f29f1a9dbe1af87b70560d1190a0efe29",
+      "bytes": 156
+    },
+    {
+      "path": "test-result.json",
+      "sha256": "fb0710e88feb541afca373efbefbe671a086f37831154fd3a7394dd04ffe348e",
+      "bytes": 273
+    },
+    {
+      "path": "parser-origins.json",
+      "sha256": "49d387ae9fa27f3f811997c65ea3ad24d9c7dbab478f42d5e3770e139847222d",
+      "bytes": 1228
+    }
+  ],
+  "package": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-namespaces-l8urr8ev\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+    "sha256": "c41f00cb3d1702df351c2e15ebee8c14c3eb238b67b7631a1604a8d7ec8df190"
+  },
+  "installed_payload_pins": 883,
+  "package_qualification_sha256": "9ef6d9f05190bab8cfe2c6b944cbee17dc3dae0907f14386a3daa70800e80b8d",
+  "actual_effects": {
+    "product_cli_actions": 0,
+    "provider_calls": 0,
+    "native_executables_launched": 0,
+    "credential_or_personal_config_files_read": 0,
+    "real_campaign_databases_read": 0,
+    "windows_session_actions": 0,
+    "text_candidate_created": true
+  },
+  "limits": [
+    "Observed token ceiling is not atomic billing enforcement.",
+    "Question/decision only if actually emitted; no fabricated question or third paid call.",
+    "Browser observations of toggle/closed-session refusal require actual execution after consent.",
+    "Ambient native account/config/MCP/instructions may apply; no personal config scan or isolation claim.",
+    "Original source pins in antecedent22 metadata describe the pre-review implementation, not these current runtime bytes."
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "scope": "E09 controller wake freshness; no Home DOM/provider claim",
+  "sources": [
+    {
+      "path": "frontend/src/homeController.ts",
+      "sha256": "548a73ab4fe4b17396f540e974ed25475b02e35848222aafe76aae550c227ae1"
+    },
+    {
+      "path": "frontend/tests/homeR1Controller.test.mjs",
+      "sha256": "ac4c46a28e150bfbbc4c1a3c72169b5ffbf882b8dd7fd73ce321702177f4be1a"
+    }
+  ],
+  "runs": [
+    {
+      "name": "e09-before",
+      "sha256": "6c76eb7660a9000ba86d98f9db444af0db408dcadfc86adf5aaabea441c14cb5",
+      "tests": 1,
+      "failures": 1,
+      "cases": [
+        {
+          "name": "returning from background fences sensitive sections until the fresh GET completes",
+          "seconds": "0.004665"
+        }
+      ]
+    },
+    {
+      "name": "controller-final",
+      "sha256": "6db9cf270d950ee65c0af8cf9f219c0d1855281642b7b25d0f3b6f3271d2f7b5",
+      "tests": 11,
+      "failures": 0,
+      "cases": [
+        {
+          "name": "scope generation clears protected state and ignores late old reads without overlap",
+          "seconds": "0.007832"
+        },
+        {
+          "name": "401 clears visible and paused data and blocks refresh until a new identity",
+          "seconds": "0.001383"
+        },
+        {
+          "name": "403 clears visible and paused data and blocks refresh until a new identity",
+          "seconds": "0.000949"
+        },
+        {
+          "name": "visual pause keeps published identity and accepts newest snapshot only when applied",
+          "seconds": "0.000658"
+        },
+        {
+          "name": "pagination deduplicates immutable IDs; conflict resets via coherent overview instead of replaying cursor",
+          "seconds": "0.002368"
+        },
+        {
+          "name": "fallback and source TTL refresh independently of live stream; hidden events reduce work then wake",
+          "seconds": "0.001768"
+        },
+        {
+          "name": "returning from background fences sensitive sections until the fresh GET completes",
+          "seconds": "0.000830"
+        },
+        {
+          "name": "reconnect/gap invalidate, unrelated events do not, and disposal removes timers",
+          "seconds": "0.002865"
+        },
+        {
+          "name": "time spent reading does not extend source TTL by another full interval",
+          "seconds": "0.000925"
+        },
+        {
+          "name": "modal pause retains expanded pages only for same revision, resets changed revisions, and never crosses scope",
+          "seconds": "0.001384"
+        },
+        {
+          "name": "external activity is always reported and stale working never becomes native running",
+          "seconds": "0.001832"
+        }
+      ]
+    },
+    {
+      "name": "e09-active-before",
+      "sha256": "8a856b6e6b9f62fdc25255a9063268df07be193ed91a170a4ced43451a84de2e",
+      "tests": 1,
+      "failures": 1,
+      "cases": [
+        {
+          "name": "a GET begun in background cannot clear the wake revalidation fence",
+          "seconds": "0.005624"
+        }
+      ]
+    },
+    {
+      "name": "controller-confirmed",
+      "sha256": "c2215f0e3b78c8e5f6e740b32e72f24578a576799113212862555944a370a378",
+      "tests": 12,
+      "failures": 0,
+      "cases": [
+        {
+          "name": "scope generation clears protected state and ignores late old reads without overlap",
+          "seconds": "0.004689"
+        },
+        {
+          "name": "401 clears visible and paused data and blocks refresh until a new identity",
+          "seconds": "0.000928"
+        },
+        {
+          "name": "403 clears visible and paused data and blocks refresh until a new identity",
+          "seconds": "0.000742"
+        },
+        {
+          "name": "visual pause keeps published identity and accepts newest snapshot only when applied",
+          "seconds": "0.000505"
+        },
+        {
+          "name": "pagination deduplicates immutable IDs; conflict resets via coherent overview instead of replaying cursor",
+          "seconds": "0.002189"
+        },
+        {
+          "name": "fallback and source TTL refresh independently of live stream; hidden events reduce work then wake",
+          "seconds": "0.001366"
+        },
+        {
+          "name": "returning from background fences sensitive sections until the fresh GET completes",
+          "seconds": "0.002260"
+        },
+        {
+          "name": "a GET begun in background cannot clear the wake revalidation fence",
+          "seconds": "0.000707"
+        },
+        {
+          "name": "reconnect/gap invalidate, unrelated events do not, and disposal removes timers",
+          "seconds": "0.001304"
+        },
+        {
+          "name": "time spent reading does not extend source TTL by another full interval",
+          "seconds": "0.000678"
+        },
+        {
+          "name": "modal pause retains expanded pages only for same revision, resets changed revisions, and never crosses scope",
+          "seconds": "0.001285"
+        },
+        {
+          "name": "external activity is always reported and stale working never becomes native running",
+          "seconds": "0.001330"
+        }
+      ]
+    }
+  ],
+  "final_tool_ref": "4a6f17",
+  "diff_check": {
+    "result": "PASS",
+    "tool_ref": "d4526d"
+  },
+  "final_command": "rtk proxy node --test --test-name-pattern=\"scope generation|401 clears|403 clears|visual pause|pagination deduplicates|fallback and source TTL|returning from background|GET begun in background|reconnect/gap|time spent reading|external activity is always|modal pause\" --test-reporter=junit --test-reporter-destination=C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-final-audit-m32jn1y_\\controller-confirmed.xml tests/homeR1Controller.test.mjs tests/homeR1Presentation.test.mjs",
+  "workdir": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend",
+  "effects": {
+    "provider_calls": 0,
+    "live_service_actions": 0,
+    "os_events": 0
+  },
+  "acceptance": "Root review pending"
+}

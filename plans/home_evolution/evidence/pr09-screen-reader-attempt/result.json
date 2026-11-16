@@ -1,0 +1,15 @@
+{
+  "status": "NOT_RUN",
+  "scenario": "HOME-T-H02",
+  "reason": "Windows native Computer Use bridge unavailable before any app action",
+  "inventory": {"preinstalled_narrator_exe": true, "standard_nvda_exe": false, "reader_processes_observed_before_attempt": 0, "tool_ref": "4df62b"},
+  "attempts": [
+    {"api": "node_repl @oai/sky list_apps", "result": "Computer Use native pipe is unavailable: failed to connect native pipe: O sistema não pode encontrar o arquivo especificado. (os error 2)"},
+    {"api": "node_repl @oai/sky list_apps retry after2s", "result": "same native pipe unavailable error"},
+    {"api": "cua_repl listApps", "result": "same native pipe unavailable error"}
+  ],
+  "effects": {"native_app_launched": false, "narrator_settings_changed": false, "user_window_controlled": false, "speech_captured": false},
+  "available_prior_evidence": "pr06-browser-extra DOM live-region grouping and scope cancellation; not actual assistive-technology speech",
+  "official_speech_recap_reference": "https://support.microsoft.com/en-us/accessibility/windows/narrator/chapter-2-narrator-basics",
+  "next_requirement": "Restore the supported native Computer Use bridge or obtain a real local Narrator Speech Recap observation for the synthetic Home; no custom Windows input helper was spawned."
+}

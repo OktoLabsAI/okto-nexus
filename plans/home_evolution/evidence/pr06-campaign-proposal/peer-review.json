@@ -1,0 +1,31 @@
+{
+  "status": "READ_ONLY_PEER_NO_REMAINING_MATERIAL_BLOCKER_IN_REVIEWED_DELTA",
+  "candidate_sha256": "5a8c72d04e9e4adc426173dd14971ef28c6dec599af2bfea42b5deaf61012c40",
+  "runtime_freeze_sha256": "6162ea6049a3041071b9e39e4c8fff8d86b60ca38185e105d76023238ac9f329",
+  "verification_tool": "00d96e",
+  "freeze_file_pins_equal": true,
+  "candidate_runtime_pins_equal": true,
+  "campaign_root_exists": false,
+  "resolved_findings": [
+    "inventory_for uses the dashboard-mounted runtime-options contract. The candidate reference/revision is checked against canonical output; local executable SHA is explicitly separate from server-reported fields.",
+    "setup and useful share contained_admission. Post-reservation invalid JSON and nonterminal setup now close admissions, preserve consumed reservation, select cleanup once, and report an explicit unconfirmed handoff if cleanup fails.",
+    "Authorization overlay binds candidate SHA, exact campaign UUID, exact root, exact policy and actual user-response reference. The former family-only reuse path is absent. Driver rejects missing authorization before product or credential access.",
+    "Fresh grant proof compares seven binding dimensions and requires more than 600 seconds expiry headroom plus four remaining runtime actions. It reviews an existing grant; it does not issue one automatically."
+  ],
+  "reviewed_contracts": [
+    "Mounted dashboard route allowlist and TerminalConnection.options new-agent subject selection",
+    "Core installation_ref pure canonical path derivation",
+    "ConnectionTest journal namespace and mandatory productive setup turn",
+    "TerminalWork original intent/session and canonical decision/control paths",
+    "Existing CLI parser tests intercepted at product boundary; actual native execution was not tested",
+    "Observed Codex usage subsets, journal coverage/one-turn bound, persisted two-call reservations and no refund/replay",
+    "Query/synchronize-only PID/birth/image cohort capture and generation-bound canonical cleanup"
+  ],
+  "limits": [
+    "The author reports 27 offline passing tests. Peer read their meaningful cases and evidence but did not rerun them.",
+    "200000 is an observed token limit with preventive150000 and reserve50000, not an atomic provider billing cap; delayed usage can overshoot.",
+    "Existing native account/model/instructions may apply. This is not personal-configuration isolation and does not prove a native permission will occur.",
+    "Unconfirmed cleanup is not physical exit. Root must retain the independent watcher and handle the explicit handoff; no new admission or replay is allowed.",
+    "No inference, native harness, product CLI handler, authentication, service, scheduled task or OS event was executed by this peer review. No source or candidate was edited."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "elapsed_ms": 15569,
+  "requests": [
+    {
+      "path": "/api/v1/home/overview",
+      "at_ms": 14
+    },
+    {
+      "path": "/api/v1/home/overview",
+      "at_ms": 15021
+    }
+  ],
+  "requests_per_second": 0.12846040208105852,
+  "minimum_start_spacing_ms": 15007,
+  "events_injected": 0,
+  "visibility": "foreground",
+  "stream": "existing shell streams; no new EventSource",
+  "scope": "one browser page; real loopback synthetic fixture; no provider"
+}

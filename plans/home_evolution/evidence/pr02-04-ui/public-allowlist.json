@@ -1,0 +1,20 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "914ea22c7d6b812b95c358d187254c19c7018cf375d9bd0ef8ee53a7c43bc62d",
+      "bytes": 1008
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "941aea43be11736482c57add2db66a6a1fabae5807e146f837a71018a093e3ac",
+      "bytes": 6048
+    }
+  ],
+  "excludes": [
+    "private runtime state",
+    "user content",
+    "credentials",
+    "raw HTTP payloads"
+  ]
+}

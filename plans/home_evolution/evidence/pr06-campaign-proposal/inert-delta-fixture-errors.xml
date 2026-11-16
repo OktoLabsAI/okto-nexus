@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="home033-offline-driver" tests="27" failures="0" errors="2" skipped="0" time="1.78553940000711"><testcase name="test_driver.PureDriverTests.test_paid_fast_invalid_json_enters_cleanup_without_retry"><failure>Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\home-r1-local-driver-6t4xonw6\test_driver.py", line 156, in test_paid_fast_invalid_json_enters_cleanup_without_retry
+    with self.assertRaisesRegex(ValueError,'CLI_OUTPUT_UNCONFIRMED'):self.d.setup('review')
+                                                                     ~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\home-r1-local-driver-6t4xonw6\driver.py", line 80, in call
+    return function(self,*args,**kwargs)
+  File "C:\Users\jpamb\AppData\Local\Temp\home-r1-local-driver-6t4xonw6\driver.py", line 407, in setup
+    code,value=self.cli('setup',['connect','--approve',review_revision,'--timeout','300',*self.connect_args()],monitor=monitor)
+                                                                                          ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\jpamb\AppData\Local\Temp\home-r1-local-driver-6t4xonw6\driver.py", line 282, in connect_args
+    '--client','codex','--candidate-ref',self.p['codex_candidate_ref'],'--project',str(self.root/'workspace'),'--provider-home',self.p['provider_home'],
+                                         ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'codex_candidate_ref'
+</failure></testcase><testcase name="test_driver.PureDriverTests.test_paid_fast_nonterminal_setup_also_enters_cleanup"><failure>Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\home-r1-local-driver-6t4xonw6\test_driver.py", line 170, in test_paid_fast_nonterminal_setup_also_enters_cleanup
+    with self.assertRaisesRegex(ValueError,'SETUP_NOT_COVERED'):self.d.setup('review')
+                                                                ~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\home-r1-local-driver-6t4xonw6\driver.py", line 80, in call
+    return function(self,*args,**kwargs)
+  File "C:\Users\jpamb\AppData\Local\Temp\home-r1-local-driver-6t4xonw6\driver.py", line 407, in setup
+    code,value=self.cli('setup',['connect','--approve',review_revision,'--timeout','300',*self.connect_args()],monitor=monitor)
+                                                                                          ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\jpamb\AppData\Local\Temp\home-r1-local-driver-6t4xonw6\driver.py", line 282, in connect_args
+    '--client','codex','--candidate-ref',self.p['codex_candidate_ref'],'--project',str(self.root/'workspace'),'--provider-home',self.p['provider_home'],
+                                         ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'codex_candidate_ref'
+</failure></testcase></testsuite>

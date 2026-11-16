@@ -1,0 +1,1261 @@
+{
+  "schema_version": 1,
+  "plan": "plans/home_evolution/source-plan.md",
+  "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
+  "updated_at": "2026-11-16T17:14:44.402380+00:00",
+  "scenarios": {
+    "HOME-T-A01": {
+      "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-scope/qualification.json"
+      ],
+      "commit": "af3ad382 + test-only scoped qualification",
+      "environment": "Migrated disposable SQLite and real ASGI Home routes, operator context, no provider/native/runtime service",
+      "limitations": [
+        "Synthetic canonical rows; no native harness execution."
+      ],
+      "tests": [
+        "test_project_a_unchanged_when_same_agent_adds_b_work_attention_and_results"
+      ]
+    },
+    "HOME-T-A02": {
+      "requirement": "Todos os projetos é uma união autorizada, sem duplicar agente, handoff ou entrega por join.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-scope/qualification.json"
+      ],
+      "commit": "af3ad382 + test-only scoped qualification",
+      "environment": "Migrated disposable SQLite and real ASGI Home routes, operator context, no provider/native/runtime service",
+      "limitations": [
+        "Synthetic canonical rows; no native harness execution."
+      ],
+      "tests": [
+        "test_all_projects_is_exact_paged_union_despite_repeated_memberships_and_links"
+      ]
+    },
+    "HOME-T-A03": {
+      "requirement": "Um agente global sem vínculo ou atividade autorizada em A não aparece como atuante em A.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Global agent excluded from workspace fixture."
+      ],
+      "tests": [
+        "Q:test_overview_real_fixture_is_read_only_and_scoped"
+      ]
+    },
+    "HOME-T-A04": {
+      "requirement": "Uma credencial de agente ou monitor não herda acesso de operador à Home.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Real issued agent and monitor keys refused by actual ASGI Home endpoint; no fake operator context."
+      ],
+      "tests": [
+        "HTTP:test_real_agent_and_monitor_keys_cannot_read_home_as_operator"
+      ]
+    },
+    "HOME-T-A05": {
+      "requirement": "Revogação/logout remove payloads protegidos da lista, drawer e caches; o histórico do browser não os restaura.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-browser/results.json"
+      ],
+      "commit": "7c34b4d8 + recovered browser qualification; production cut fa2e4215/D4",
+      "environment": "Actual built Chromium App and own synthetic SQLite/HTTP fixture, controlled late GET, routed403/logout boundary, real history/keyboard",
+      "limitations": [
+        "Historical product cut before A08 Server lane changes.",
+        "Logout response is browser-routed; form explicitly discarded before Sign out.",
+        "H01 covers the recorded keyboard route, not all native sensitive controls; no AT speech."
+      ],
+      "tests": [
+        "403/logout history cannot restore protected Home"
+      ]
+    },
+    "HOME-T-A06": {
+      "requirement": "Troca A→B com resposta lenta de A não mistura dados, contadores ou formulários.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-browser/results.json",
+        "plans/home_evolution/evidence/pr07-browser/a06-counters.json"
+      ],
+      "commit": "7c34b4d8 + recovered browser qualification; production cut fa2e4215/D4",
+      "environment": "Actual built Chromium App and own synthetic SQLite/HTTP fixture, controlled late GET, routed403/logout boundary, real history/keyboard",
+      "limitations": [
+        "Historical product cut before A08 Server lane changes.",
+        "Logout response is browser-routed; form explicitly discarded before Sign out.",
+        "H01 covers the recorded keyboard route, not all native sensitive controls; no AT speech."
+      ],
+      "tests": [
+        "Late A response cannot change B counters/work/form/scope/focus/selection"
+      ]
+    },
+    "HOME-T-A07": {
+      "requirement": "Referência de alvo incompatível com workspace é recusada, mesmo quando o ID existe.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Wrong server/workspace/session refused by resolver tests."
+      ],
+      "tests": [
+        "Q:test_exact_target_server_workspace_and_session",
+        "NAV"
+      ]
+    },
+    "HOME-T-A08": {
+      "requirement": "Ocorrências Server-wide são identificadas separadamente e não atribuídas a todos os projetos por conveniência.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr08-server-attention-backend/qualification.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json",
+        "plans/home_evolution/evidence/pr08-server-attention-browser/qualification.json",
+        "plans/home_evolution/evidence/pr10-package-server-final/qualification.json"
+      ],
+      "commit": "3d95aad8",
+      "environment": "Real SQLite/HTTP and built Dcu4 Chromium, valid nullable-workspace domain occurrences at authorized projection port; no global producer invented",
+      "limitations": [
+        "Current canonical families remain workspace-bound; global test facts exercise the read contract, not a new live Server incident producer."
+      ],
+      "tests": [
+        "11 backend cases plus source-scoped native receiver proof",
+        "210 complete frontend tests including Server lane",
+        "6 browser checks with 22 canonical GETs, separate counts/pages, real CAS200/409, quiet/pause/partial403"
+      ]
+    },
+    "HOME-T-B01": {
+      "requirement": "Sessão aberta sem turno não conta como execução em andamento.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Open sessions in fixture do not count running."
+      ],
+      "tests": [
+        "Q:test_overview_real_fixture_is_read_only_and_scoped"
+      ]
+    },
+    "HOME-T-B02": {
+      "requirement": "Instância one-shot aquecida, processo iniciando ou cleanup isolado não contam como novo trabalho produtivo.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-scope/qualification.json"
+      ],
+      "commit": "af3ad382 + test-only scoped qualification",
+      "environment": "Migrated disposable SQLite and real ASGI Home routes, operator context, no provider/native/runtime service",
+      "limitations": [
+        "Synthetic canonical rows; no native harness execution."
+      ],
+      "tests": [
+        "test_technical_open_or_cleanup_without_turn_is_not_productive_work [READY, OPENING, cleanup]"
+      ]
+    },
+    "HOME-T-B03": {
+      "requirement": "CLAIMED sem evidência nativa mostra Assumido, não Executando.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "tests/home_evolution/browser_fixture.py",
+        "plans/home_evolution/evidence/pr06-browser-final/results.json",
+        "frontend/tests/homeR1Presentation.test.mjs"
+      ],
+      "commit": "fa2e4215",
+      "environment": "Windows11; actual migrated SQLite/ASGI and deterministic Node controller/presentation plus synthetic built-browser fixture where referenced; exact smallest asserted contract layer",
+      "limitations": [
+        "Synthetic migrated facts and actual browser rendering; no native-harness execution claim."
+      ],
+      "tests": [
+        "Real browser fixture creates a CLAIMED handoff without native operations; retained rendered Work text says Claimed for Validate the response. Presentation labels distinguish claimed/running."
+      ]
+    },
+    "HOME-T-B04": {
+      "requirement": "SUBMITTED/native accepted sem RUNNING mostra aceitação, não conclusão nem execução confirmada.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Receipt accepted without started/progress not running."
+      ],
+      "tests": [
+        "Q:test_started_event_requires_current_owner_stream_and_nonterminal"
+      ]
+    },
+    "HOME-T-B05": {
+      "requirement": "Um handoff com runtime.start, turn.submit, steer e retries aparece uma vez na lista principal.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Real SQLite deduplicates delivery/history links, groups two submits and excludes steer/close controls. Synthetic canonical facts, no real native attempt claim."
+      ],
+      "tests": [
+        "Q:test_retries_share_handoff_controls_do_not_become_work",
+        "Q:test_native_delivery_and_handoff_are_one_activity_then_claim_change_separates_history"
+      ]
+    },
+    "HOME-T-B06": {
+      "requirement": "Tentativas são preservadas em detalhe e resultados de tentativa antiga não completam tentativa atual.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Prior claim remains historical; new claim receives no prior runtime refs, expired current claim does not invent current activity."
+      ],
+      "tests": [
+        "Q:test_native_delivery_and_handoff_are_one_activity_then_claim_change_separates_history",
+        "Q:test_expired_claim_is_unknown_not_a_current_native_activity"
+      ]
+    },
+    "HOME-T-B07": {
+      "requirement": "Fluxo A→B sem mensagem do operator aparece na Home.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "A-to-B and B-to-C source/recipient and distinct IDs explicitly asserted without operator message."
+      ],
+      "tests": [
+        "Q:test_direct_delegation_keeps_each_handoff_and_canonical_task_title"
+      ]
+    },
+    "HOME-T-B08": {
+      "requirement": "Um agente com dois turnos/sessões mostra ambos com estados próprios, inclusive um bloqueado e outro executando.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/redaction-qualification.json"
+      ],
+      "commit": null,
+      "environment": "Real migrated SQLite/ASGI, synthetic facts; no provider",
+      "limitations": [
+        "Focused semantic assertions; no native/provider outcome inferred."
+      ]
+    },
+    "HOME-T-B09": {
+      "requirement": "Mensagem informativa/broadcast não vira tarefa ou posição de fila por estar unread.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/redaction-qualification.json"
+      ],
+      "commit": null,
+      "environment": "Real migrated SQLite/ASGI, synthetic facts; no provider",
+      "limitations": [
+        "Focused semantic assertions; no native/provider outcome inferred."
+      ]
+    },
+    "HOME-T-B10": {
+      "requirement": "Totais vêm do conjunto autorizado completo; paginação, limite de preview ou falha parcial não reduzem o total para o tamanho visível.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Totals and pending classification computed before page."
+      ],
+      "tests": [
+        "Q:test_workspace_pages_are_complete_and_cursor_bound",
+        "N:test_pending_classification_is_counted_before_page_and_preserves_recipient"
+      ]
+    },
+    "HOME-T-C01": {
+      "requirement": "Pergunta destinada ao operador abre o pedido nativo exato e mantém suas opções/tipos.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json"
+      ],
+      "commit": "93cae0e3 + browser native qualification of installed fa2/D4 cut",
+      "environment": "Actual built Chromium and installed Nexus7e156/fa2/D4 with synthetic admitted peer/native ingress, real HTTP/CAS and ephemeral operator identity",
+      "limitations": [
+        "Antecedent cut before A08 Server lane changes.",
+        "No native executable, provider inference, personal auth or lease/expiry qualification."
+      ],
+      "tests": [
+        "Exact native request options and typed form controls preserved"
+      ]
+    },
+    "HOME-T-C02": {
+      "requirement": "Pergunta destinada a outro agente permite acompanhamento, não personificação nem resposta em nome do agente.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json"
+      ],
+      "commit": "93cae0e3 + browser native qualification of installed fa2/D4 cut",
+      "environment": "Actual built Chromium and installed Nexus7e156/fa2/D4 with synthetic admitted peer/native ingress, real HTTP/CAS and ephemeral operator identity",
+      "limitations": [
+        "Antecedent cut before A08 Server lane changes.",
+        "No native executable, provider inference, personal auth or lease/expiry qualification."
+      ],
+      "tests": [
+        "Other-agent request inspect-only, no answer/deny controls, operator POST403 preserves pending"
+      ]
+    },
+    "HOME-T-C03": {
+      "requirement": "Aprovação expirada ou já decidida por outro cliente deixa de aceitar decisão ao revalidar.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
+    },
+    "HOME-T-C04": {
+      "requirement": "Duplo clique e resposta HTTP perdida recuperam a mesma intenção/operação, sem dupla decisão.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
+    },
+    "HOME-T-C05": {
+      "requirement": "Decisão registrada aparece separada de decisão aplicada pelo harness.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
+    },
+    "HOME-T-C06": {
+      "requirement": "Resultado incerto oferece inspeção e recuperação canônica, nunca retry automático.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
+    },
+    "HOME-T-C07": {
+      "requirement": "Item adiado continua visível no trabalho quando pertinente, mas não reaparece como prioridade em cada refresh.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Actual canonical snooze removes Needs-you priority while same pending native work remains awaiting_operator."
+      ],
+      "tests": [
+        "N:test_snooze_changes_needs_you_not_the_pending_work_state"
+      ]
+    },
+    "HOME-T-C08": {
+      "requirement": "Marcar visto não aprova, cancela, conclui ou reconhece inbox; novo episódio/revisão preserva sua própria atenção.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
+    },
+    "HOME-T-C09": {
+      "requirement": "Attention desabilitada não impede uso dos controles canônicos originais; bloco explicita indisponibilidade.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
+    },
+    "HOME-T-C10": {
+      "requirement": "Interromper usa a sessão/turno selecionados e contrato atual; não encerra todos os processos do agente.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-interrupt/qualification.json"
+      ],
+      "commit": "b82a36f2 + test-only interrupt scope qualification",
+      "environment": "Real migrated SQLite/ASGI/Core admission with two own Python JSON-RPC fake peers; no provider or real account",
+      "limitations": [
+        "Home target resolution and canonical command boundary, not browser click.",
+        "Both fake peers physically exited with actual codes1/1; no exit0 claim."
+      ],
+      "tests": [
+        "test_home_exact_target_interrupt_leaves_sibling_turn_and_process_alive"
+      ]
+    },
+    "HOME-T-D01": {
+      "requirement": "Turno SUCCEEDED sem handoff_complete não aparece como handoff concluído.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/redaction-qualification.json"
+      ],
+      "commit": null,
+      "environment": "Real migrated SQLite/ASGI, synthetic facts; no provider",
+      "limitations": [
+        "Focused semantic assertions; no native/provider outcome inferred."
+      ]
+    },
+    "HOME-T-D02": {
+      "requirement": "Entrega em VERIFYING é apresentada como aguardando verificação, não como aceita.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/redaction-qualification.json"
+      ],
+      "commit": null,
+      "environment": "Real migrated SQLite/ASGI, synthetic facts; no provider",
+      "limitations": [
+        "Focused semantic assertions; no native/provider outcome inferred."
+      ]
+    },
+    "HOME-T-D03": {
+      "requirement": "Resultado produtivo bem-sucedido com cleanup pendente mantém sucesso e pendência técnica separados.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Success and pending cleanup represented separately."
+      ],
+      "tests": [
+        "Q:test_overview_real_fixture_is_read_only_and_scoped",
+        "UI:result preview is escaped and outcome, cleanup and unseen tracking remain separate"
+      ]
+    },
+    "HOME-T-D04": {
+      "requirement": "Resposta, resultado e artefatos explicitamente relacionados formam uma entrega legível, sem multiplicar tarefas.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Real artifact/runtime_result joined to exact canonical operation; preview and allowlisted artifact metadata, private path excluded. Synthetic result facts."
+      ],
+      "tests": [
+        "Q:test_result_artifact_reference_uses_exact_durable_operation_without_paths"
+      ]
+    },
+    "HOME-T-D05": {
+      "requirement": "Abrir Home ou mostrar preview não avança o marcador temporal global de mensagens novas.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Actual SQLite read/resolve preserve canonical messages, message_deliveries, handoffs, operations/receipts/results/grants and seen values. Browser local unread timestamp remains separate module."
+      ],
+      "tests": [
+        "BOUND:test_home_reads_and_exact_seen_preserve_unread_other_page_other_workspace_and_canonical_facts",
+        "UI:result opening never marks seen or silently continues"
+      ]
+    },
+    "HOME-T-D06": {
+      "requirement": "Abrir/ver uma ocorrência não marca outra fora da página ou em outro projeto como vista.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Exact occurrence becomes seen; other-page occurrence and separate-workspace result/attention unchanged. No inbox ACK or canonical mutation."
+      ],
+      "tests": [
+        "BOUND:test_home_reads_and_exact_seen_preserve_unread_other_page_other_workspace_and_canonical_facts"
+      ]
+    },
+    "HOME-T-D07": {
+      "requirement": "Conteúdo de artefato exige autorização própria; HTML não executa com privilégios do dashboard.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Initial real inline-HTML security FAIL was corrected. Final ASGI active-document headers, managed payload, 403/404 scope and no-sniff checked. Does not claim actual browser JavaScript execution experiment."
+      ],
+      "tests": [
+        "BOUND:test_artifact_reference_never_grants_agent_read_or_cross_workspace_access",
+        "BOUND:test_html_artifact_cannot_execute_with_operator_origin_privileges[html/svg/xhtml]",
+        "UI:result preview is escaped and outcome, cleanup and unseen tracking remain separate",
+        "UI:late artifact content is never downloaded after access or mount invalidation"
+      ]
+    },
+    "HOME-T-D08": {
+      "requirement": "Continuar conversa usa o contexto confirmado; sessão fechada/revogada não é substituída silenciosamente nem atribui fala ao agente original.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Real canonical API calls mocked at transport, no native invocation."
+      ],
+      "tests": [
+        "UI:canonical continuation reads only the selected session and binding",
+        "UI:closed or draining continuation never looks up another session",
+        "UI:recipient and binding mismatch refuse rather than falling back",
+        "UI:revalidation compares every scope dimension before a continuation command"
+      ]
+    },
+    "HOME-T-E01": {
+      "requirement": "Resultado commitado antes de o cliente assinar SSE aparece no primeiro snapshot.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "tests/home_evolution/test_home_queries.py",
+        "frontend/tests/homeR1Controller.test.mjs",
+        "frontend/src/hooks/useHomeOverview.ts"
+      ],
+      "commit": "fa2e4215",
+      "environment": "Windows11; actual migrated SQLite/ASGI and deterministic Node controller/presentation plus synthetic built-browser fixture where referenced; exact smallest asserted contract layer",
+      "limitations": [
+        "Compositional SQL/controller proof of initial-snapshot behavior, not a new live SSE campaign."
+      ],
+      "tests": [
+        "The first real Home read returns a result committed by fixture setup. Controller configure starts the overview read without waiting for SSE, and the hook receives stream hints separately."
+      ]
+    },
+    "HOME-T-E02": {
+      "requirement": "Evento entre snapshot e assinatura/reconexão não é perdido; lacuna de retenção provoca ressincronização.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-stream-boundary/qualification.json",
+        "plans/home_evolution/evidence/pr07-stream/qualification.json"
+      ],
+      "commit": "74066b1b + real stream boundary test",
+      "environment": "Real loopback Uvicorn/SSE, migrated SQLite, Node production HomeController and actual fetch HTTP; own fixture processes exit0",
+      "limitations": [
+        "No React/browser EventSource lifecycle or native/provider execution claimed."
+      ],
+      "tests": [
+        "test_commit_subscription_reconnect_and_retention_gap_refresh_real_home [commit-before-subscribe, disconnect/reconnect, real retention-gap]"
+      ]
+    },
+    "HOME-T-E03": {
+      "requirement": "Eventos duplicados ou fora de ordem não duplicam cartões nem fazem estados regredir.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-stream/qualification.json",
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json"
+      ],
+      "commit": "ce49cd4e + test-only stream qualification",
+      "environment": "Deterministic Node controller/presentation with fake-clock barriers; complementary real SQLite TTL evidence referenced by final audit",
+      "limitations": [
+        "No actual SSE transport or React lifecycle is claimed."
+      ],
+      "tests": [
+        "E03 duplicate and out-of-order hints cannot replay activity states over newer canonical snapshots"
+      ]
+    },
+    "HOME-T-E04": {
+      "requirement": "Burst de eventos gera atualização agrupada com teto, não uma consulta por token.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Deterministic fake-clock queue; not a production performance claim."
+      ],
+      "tests": [
+        "CTRL:bursts coalesce while pending and never exceed one read/second"
+      ]
+    },
+    "HOME-T-E05": {
+      "requirement": "Stream conectado com fonte externa expirada mantém badge stale da fonte.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-stream/qualification.json",
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json"
+      ],
+      "commit": "ce49cd4e + test-only stream qualification",
+      "environment": "Deterministic Node controller/presentation with fake-clock barriers; complementary real SQLite TTL evidence referenced by final audit",
+      "limitations": [
+        "No actual SSE transport or React lifecycle is claimed."
+      ],
+      "tests": [
+        "E05 a continuously live stream does not renew external TTL or replace stale reported work with native activity"
+      ]
+    },
+    "HOME-T-E06": {
+      "requirement": "Expiração de autorização, TTL de observação e prazo de atenção sem evento explícito são atualizados por relógio/fallback.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "frontend/tests/homeR1Controller.test.mjs",
+        "tests/test_attention_authority.py",
+        "tests/test_attention_native.py",
+        "tests/test_attention_api.py",
+        "tests/home_evolution/test_baseline_fixture.py"
+      ],
+      "commit": "fa2e4215",
+      "environment": "Windows11; actual migrated SQLite/ASGI and deterministic Node controller/presentation plus synthetic built-browser fixture where referenced; exact smallest asserted contract layer",
+      "limitations": [
+        "Compositional server-clock and controller-clock proof; authorization mutations are synthetic fixture data, not real credentials."
+      ],
+      "tests": [
+        "Rerun real grant expiry without writes, native request expiry without lifecycle mutation, snooze expiry, and observation TTL; deterministic controller refreshes at source deadlines or bounded fallback without an event."
+      ]
+    },
+    "HOME-T-E07": {
+      "requirement": "Falha de um bloco preserva outros blocos e mostra falha; 401/403 limpam o protegido.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Controller 401/403 parameter cases also clear state."
+      ],
+      "tests": [
+        "Q:test_disabled_external_and_failed_work_are_not_empty_success",
+        "CTRL:partial failure retains only same-scope stale block, never successful empty or stale forbidden data"
+      ]
+    },
+    "HOME-T-E08": {
+      "requirement": "Duas abas podem observar; uma decisão concorrente resulta em conflito claro na aba antiga.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json"
+      ],
+      "commit": "93cae0e3 + browser native qualification of installed fa2/D4 cut",
+      "environment": "Actual built Chromium and installed Nexus7e156/fa2/D4 with synthetic admitted peer/native ingress, real HTTP/CAS and ephemeral operator identity",
+      "limitations": [
+        "Antecedent cut before A08 Server lane changes.",
+        "No native executable, provider inference, personal auth or lease/expiry qualification."
+      ],
+      "tests": [
+        "Two real browser tabs canonical decision POST202/409 with visible conflict and no replay"
+      ]
+    },
+    "HOME-T-E09": {
+      "requirement": "Aba em background reduz trabalho; voltar revalida antes de habilitar ações sensíveis.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "plans/home_evolution/evidence/pr06-visibility-revalidation/qualification.json",
+        "frontend/tests/homeR1Controller.test.mjs",
+        "frontend/src/components/home/OperationalHome.tsx"
+      ],
+      "commit": "fa2e4215",
+      "environment": "Windows11; actual migrated SQLite/ASGI and deterministic Node controller/presentation plus synthetic built-browser fixture where referenced; exact smallest asserted contract layer",
+      "limitations": [
+        "Controller tests plus existing per-section stale consumers; not a repeated browser/background campaign."
+      ],
+      "tests": [
+        "New fake-GET barriers prove wake immediately marks sections stale, pending pre-wake GET cannot clear the fence, and only post-wake completion restores readiness; concurrency remains one."
+      ]
+    },
+    "HOME-T-E10": {
+      "requirement": "Pausa de atualização visual não pausa agentes, não amplia autoridade e não permite confirmar um estado antigo sem revisão atual.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "frontend/tests/homeR1Controller.test.mjs",
+        "frontend/tests/homeUI.test.mjs",
+        "frontend/src/components/home/OperationalHome.tsx",
+        "frontend/src/homeController.ts"
+      ],
+      "commit": "fa2e4215",
+      "environment": "Windows11; actual migrated SQLite/ASGI and deterministic Node controller/presentation plus synthetic built-browser fixture where referenced; exact smallest asserted contract layer",
+      "limitations": [
+        "Presentation/controller/API-boundary proof; no running real agent was paused or used for this qualification."
+      ],
+      "tests": [
+        "Visual pause retains the displayed snapshot while GETs continue; paused is an explicit stale-control predicate. Existing tests disable stale preference/continuation controls. Controller API surface is read-only and has no producer/lifecycle action."
+      ]
+    },
+    "HOME-T-F01": {
+      "requirement": "Sem agentes, a Home oferece o onboarding plug and play existente, não formulários avançados.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-extra/postfix-qualification.json",
+        "plans/home_evolution/evidence/pr06-browser-extra/qualification.json"
+      ],
+      "commit": null,
+      "environment": "Actual isolated Chromium; controlled GET response fixtures, built frontend; no provider",
+      "limitations": [
+        "GET response fixtures explicit; H03 true zoom and actual screen-reader speech not claimed."
+      ]
+    },
+    "HOME-T-F02": {
+      "requirement": "Com um agente conectado sem trabalho, a Home oferece pedido/conversa e não uma grade vazia de métricas.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-extra/postfix-qualification.json",
+        "plans/home_evolution/evidence/pr06-browser-extra/qualification.json"
+      ],
+      "commit": null,
+      "environment": "Actual isolated Chromium; controlled GET response fixtures, built frontend; no provider",
+      "limitations": [
+        "GET response fixtures explicit; H03 true zoom and actual screen-reader speech not claimed."
+      ]
+    },
+    "HOME-T-F03": {
+      "requirement": "Clicar num item abre seu registro, não uma página genérica para procurar novamente.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser/checks.json",
+        "plans/home_evolution/evidence/pr06-browser/qualification.json"
+      ],
+      "commit": "bff71b13",
+      "environment": "Real Chromium/loopback HTTP and built assets; synthetic fixture; no provider",
+      "limitations": [
+        "Selected actual browser checks; no provider inference or user comprehension claim."
+      ]
+    },
+    "HOME-T-F04": {
+      "requirement": "Fechar drawer preserva filtros, página, expansão e posição de scroll.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser/checks.json",
+        "plans/home_evolution/evidence/pr06-browser/qualification.json"
+      ],
+      "commit": "bff71b13",
+      "environment": "Real Chromium/loopback HTTP and built assets; synthetic fixture; no provider",
+      "limitations": [
+        "Selected actual browser checks; no provider inference or user comprehension claim."
+      ]
+    },
+    "HOME-T-F05": {
+      "requirement": "Refresh com resposta digitada não remonta formulário, perde foco ou muda destinatário.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser/checks.json",
+        "plans/home_evolution/evidence/pr06-browser/qualification.json"
+      ],
+      "commit": "bff71b13",
+      "environment": "Real Chromium/loopback HTTP and built assets; synthetic fixture; no provider",
+      "limitations": [
+        "Selected actual browser checks; no provider inference or user comprehension claim."
+      ]
+    },
+    "HOME-T-F06": {
+      "requirement": "Troca de projeto/alvo com rascunho solicita descarte quando necessário; logout limpa dados protegidos.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-browser/results.json"
+      ],
+      "commit": "7c34b4d8 + recovered browser qualification; production cut fa2e4215/D4",
+      "environment": "Actual built Chromium App and own synthetic SQLite/HTTP fixture, controlled late GET, routed403/logout boundary, real history/keyboard",
+      "limitations": [
+        "Historical product cut before A08 Server lane changes.",
+        "Logout response is browser-routed; form explicitly discarded before Sign out.",
+        "H01 covers the recorded keyboard route, not all native sensitive controls; no AT speech."
+      ],
+      "tests": [
+        "Actual modal Keep/Discard protects project/target replacement"
+      ]
+    },
+    "HOME-T-F07": {
+      "requirement": "Voltar/avançar/deep link revalidam alvo e autorização; referência inexistente tem saída clara.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-extra/postfix-qualification.json",
+        "plans/home_evolution/evidence/pr06-browser-extra/qualification.json"
+      ],
+      "commit": null,
+      "environment": "Actual isolated Chromium; controlled GET response fixtures, built frontend; no provider",
+      "limitations": [
+        "GET response fixtures explicit; H03 true zoom and actual screen-reader speech not claimed."
+      ]
+    },
+    "HOME-T-F08": {
+      "requirement": "Home utiliza os mesmos nomes de workspace, harness, temas e convenções linguísticas do dashboard.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-extra/postfix-qualification.json",
+        "plans/home_evolution/evidence/pr06-browser-extra/qualification.json"
+      ],
+      "commit": null,
+      "environment": "Actual isolated Chromium; controlled GET response fixtures, built frontend; no provider",
+      "limitations": [
+        "GET response fixtures explicit; H03 true zoom and actual screen-reader speech not claimed."
+      ]
+    },
+    "HOME-T-G01": {
+      "requirement": "Somente reporte externo working não é contado como execução gerenciada autorizada.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "External/native state not merged in controller or labels."
+      ],
+      "tests": [
+        "PRES",
+        "CTRL:external generations remain distinct during paginated append and never change native results"
+      ]
+    },
+    "HOME-T-G02": {
+      "requirement": "Done do Herdr é atividade externa finalizada, não task success, ACK, claim release ou handoff_complete.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Current canonical application/ASGI/SQLite and shared native-decision contracts;23 synthetic peer/fixture cases executed; no provider",
+      "limitations": [
+        "Canonical contract reuse and exact target wiring qualified; not a claim of a live-model question or two physical browser decision tabs."
+      ]
+    },
+    "HOME-T-G03": {
+      "requirement": "Reportes expirados passam a desconhecido/desatualizado, nunca idle por suposição.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Pure labels and canonical TTL fixture."
+      ],
+      "tests": [
+        "EXT:test_expiration_is_passive_and_stale_recurs_after_recovery",
+        "PRES"
+      ]
+    },
+    "HOME-T-G04": {
+      "requirement": "Mesmo agent_id com sessão nativa e observação externa permanece distinguível; deduplicação exige associação comprovada.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/redaction-qualification.json"
+      ],
+      "commit": null,
+      "environment": "Real migrated SQLite/ASGI, synthetic facts; no provider",
+      "limitations": [
+        "Focused semantic assertions; no native/provider outcome inferred."
+      ]
+    },
+    "HOME-T-G05": {
+      "requirement": "Observação sem workspace confiável não é incluída por inferência no projeto selecionado.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/redaction-qualification.json"
+      ],
+      "commit": null,
+      "environment": "Real migrated SQLite/ASGI, synthetic facts; no provider",
+      "limitations": [
+        "Focused semantic assertions; no native/provider outcome inferred."
+      ]
+    },
+    "HOME-T-G06": {
+      "requirement": "Herdr ausente/desconectado ou publicação desabilitada não bloqueia Home nem modifica runtime/MCP.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "OBS disabled does not remove work/results."
+      ],
+      "tests": [
+        "Q:test_disabled_external_and_failed_work_are_not_empty_success"
+      ]
+    },
+    "HOME-T-H01": {
+      "requirement": "Teclado percorre filtros, cards, drawer e ações; foco retorna ao item ou a um destino estável.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-browser/results.json"
+      ],
+      "commit": "7c34b4d8 + recovered browser qualification; production cut fa2e4215/D4",
+      "environment": "Actual built Chromium App and own synthetic SQLite/HTTP fixture, controlled late GET, routed403/logout boundary, real history/keyboard",
+      "limitations": [
+        "Historical product cut before A08 Server lane changes.",
+        "Logout response is browser-routed; form explicitly discarded before Sign out.",
+        "H01 covers the recorded keyboard route, not all native sensitive controls; no AT speech."
+      ],
+      "tests": [
+        "Keyboard filters/cards/drawer/composer mode and restored focus"
+      ]
+    },
+    "HOME-T-H02": {
+      "requirement": "Leitor de tela recebe avisos úteis agrupados, não todo stream; estado não depende só de cor.",
+      "status": "NOT_RUN",
+      "evidence": [
+        "plans/home_evolution/evidence/pr09-screen-reader-attempt/result.json",
+        "plans/home_evolution/evidence/pr09-screen-reader-attempt/manual-qualification.json"
+      ],
+      "commit": "3d95aad8 + evidence-only preparation",
+      "environment": "Windows11; synthetic canonical SQLite/HTTP and own Chromium where referenced; unexecuted real-world boundary remains explicit",
+      "limitations": [
+        "Supported native bridge failed before Narrator launch. No real screen-reader speech or Speech Recap observation exists; manual probe is prepared, not a human result."
+      ],
+      "tests": [
+        "Two real SQLite pulse IDs yield two grouped DOM announcements with focus preserved; this is DOM/HTTP only."
+      ]
+    },
+    "HOME-T-H03": {
+      "requirement": "Layout a 360 px, zoom 200% e desktop mantém ações acessíveis e sem overflow horizontal obrigatório.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/results.json",
+        "plans/home_evolution/evidence/pr06-browser-final/qualification.json"
+      ],
+      "commit": "d730cf96 + final static UI delta",
+      "environment": "Isolated own Chrome157 persistent test profile, native Settings zoom200%, real browser1440/720 physical viewport",
+      "limitations": [
+        "Own browser profile restored to100% and closed.",
+        "Measured720/360CSS px, DPR2, visual scale1, CSS zoom1; real keyboard composer/draft/close and drawer reflow.",
+        "This is not actual screen-reader speech or human comprehension evidence."
+      ]
+    },
+    "HOME-T-H04": {
+      "requirement": "GETs da Home não criam mensagens, claims, grants, sessões, ACKs ou decisões; metadados de autenticação preexistentes são avaliados separadamente.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Actual canonical rows unchanged and write=False UOW; read browser subset sent no mutations. Authentication metadata outside domain-read assertion."
+      ],
+      "tests": [
+        "BOUND:test_home_reads_and_exact_seen_preserve_unread_other_page_other_workspace_and_canonical_facts",
+        "Q:test_each_page_uses_one_read_uow",
+        "Q:test_overview_shares_one_attention_projection_statement",
+        "HTTP:test_overview_and_every_page_http_contract",
+        "BROWSER:mutationRequests=[]"
+      ]
+    },
+    "HOME-T-H05": {
+      "requirement": "Resumo omite credenciais, prompts completos, argumentos de ferramentas e paths privados; deep links não incluem segredos.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/redaction-qualification.json"
+      ],
+      "commit": null,
+      "environment": "Real migrated SQLite/ASGI, synthetic facts; no provider",
+      "limitations": [
+        "Focused semantic assertions; no native/provider outcome inferred."
+      ]
+    },
+    "HOME-T-H06": {
+      "requirement": "Fixtures de 1, 10 e 100 agentes não aumentam queries por agente; consultas e resposta têm limites documentados.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-performance/measurement-final-workers.json",
+        "plans/home_evolution/performance.md",
+        "plans/home_evolution/evidence/pr06-browser/request-rate.json",
+        "plans/home_evolution/evidence/pr08-performance-final/qualification.json",
+        "plans/home_evolution/evidence/pr12-http-performance/qualification.json",
+        "plans/home_evolution/evidence/pr11-human-preview/qualification.json"
+      ],
+      "commit": "3d95aad8",
+      "environment": "Windows11.26300; Python3.13.1/SQLite3.45.3,16logicalCPU/34073251840B RAM.1/10/100 workers plus reserved human; separate20-warm-sample service and real HTTP experiments.",
+      "limitations": [
+        "Earlier four service misses remain historical. Current service p95 large case673.91ms still misses500ms; current HTTP p95 four datasets281.28/227.64/289.28/450.32ms meet only the local endpoint target.",
+        "Separate source/HTTP processes, cache/observation paths and timings are not paired overhead measurements. No production SLO or native-operation/transcript workload claim.",
+        "One cache-disabled initial-view sample is not p95 or actual unfamiliar-human comprehension; independent UI request-rate evidence remains separately scoped."
+      ],
+      "tests": [
+        "46SQL and one read UoW per request independent of worker/card count;0writes.",
+        "Service large dataset paginates1000 distinct activities over11 pages with100000 events; overview bounded.",
+        "HTTP84 total requests,20 measured warm samples/dataset after a warmup; response<=11477B; actual source/hardware/method and raw samples recorded."
+      ]
+    },
+    "HOME-T-H07": {
+      "requirement": "Carga de 1.000 atividades abertas e 100.000 eventos preserva paginação; histórico total não é serializado no overview.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-performance/measurement-final-workers.json",
+        "plans/home_evolution/performance.md",
+        "plans/home_evolution/evidence/pr06-browser/request-rate.json",
+        "plans/home_evolution/evidence/pr08-performance-final/qualification.json",
+        "plans/home_evolution/evidence/pr12-http-performance/qualification.json",
+        "plans/home_evolution/evidence/pr11-human-preview/qualification.json"
+      ],
+      "commit": "3d95aad8",
+      "environment": "Windows11.26300; Python3.13.1/SQLite3.45.3,16logicalCPU/34073251840B RAM.1/10/100 workers plus reserved human; separate20-warm-sample service and real HTTP experiments.",
+      "limitations": [
+        "Earlier four service misses remain historical. Current service p95 large case673.91ms still misses500ms; current HTTP p95 four datasets281.28/227.64/289.28/450.32ms meet only the local endpoint target.",
+        "Separate source/HTTP processes, cache/observation paths and timings are not paired overhead measurements. No production SLO or native-operation/transcript workload claim.",
+        "One cache-disabled initial-view sample is not p95 or actual unfamiliar-human comprehension; independent UI request-rate evidence remains separately scoped."
+      ],
+      "tests": [
+        "46SQL and one read UoW per request independent of worker/card count;0writes.",
+        "Service large dataset paginates1000 distinct activities over11 pages with100000 events; overview bounded.",
+        "HTTP84 total requests,20 measured warm samples/dataset after a warmup; response<=11477B; actual source/hardware/method and raw samples recorded."
+      ]
+    },
+    "HOME-T-H08": {
+      "requirement": "O ledger registra hardware, dataset, medições p50/p95, tamanho do payload, taxa de requests e eventuais metas não atingidas.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-performance/measurement-final-workers.json",
+        "plans/home_evolution/performance.md",
+        "plans/home_evolution/evidence/pr06-browser/request-rate.json",
+        "plans/home_evolution/evidence/pr08-performance-final/qualification.json",
+        "plans/home_evolution/evidence/pr12-http-performance/qualification.json",
+        "plans/home_evolution/evidence/pr11-human-preview/qualification.json"
+      ],
+      "commit": "3d95aad8",
+      "environment": "Windows11.26300; Python3.13.1/SQLite3.45.3,16logicalCPU/34073251840B RAM.1/10/100 workers plus reserved human; separate20-warm-sample service and real HTTP experiments.",
+      "limitations": [
+        "Earlier four service misses remain historical. Current service p95 large case673.91ms still misses500ms; current HTTP p95 four datasets281.28/227.64/289.28/450.32ms meet only the local endpoint target.",
+        "Separate source/HTTP processes, cache/observation paths and timings are not paired overhead measurements. No production SLO or native-operation/transcript workload claim.",
+        "One cache-disabled initial-view sample is not p95 or actual unfamiliar-human comprehension; independent UI request-rate evidence remains separately scoped."
+      ],
+      "tests": [
+        "46SQL and one read UoW per request independent of worker/card count;0writes.",
+        "Service large dataset paginates1000 distinct activities over11 pages with100000 events; overview bounded.",
+        "HTTP84 total requests,20 measured warm samples/dataset after a warmup; response<=11477B; actual source/hardware/method and raw samples recorded."
+      ]
+    },
+    "HOME-T-I01": {
+      "requirement": "Feature da Home nova OFF restaura a experiência anterior sem parar daemon, Core ou Connector.",
+      "status": "NOT_RUN",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json",
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json",
+        "plans/home_evolution/evidence/pr06-campaign-proposal/peer-server-final.json"
+      ],
+      "commit": "3d95aad8 + evidence-only preparation",
+      "environment": "Windows11; synthetic canonical SQLite/HTTP and own Chromium where referenced; unexecuted real-world boundary remains explicit",
+      "limitations": [
+        "No useful running real daemon/Core/Connector cohort was observed across the feature toggle. HOME033 remains unexecuted; presentation separation alone does not qualify live continuity."
+      ],
+      "tests": [
+        "Actual presentation toggles send0mutations and preserve original controls in the scoped synthetic UI cuts."
+      ]
+    },
+    "HOME-T-I02": {
+      "requirement": "Migrations aditivas preservam histórico e não exigem remoção de tabelas para reverter apresentação.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "src/okto_nexus/adapters/outbound/sqlite/home.py",
+        "tests/home_evolution/test_home_queries.py"
+      ],
+      "commit": "fa2e4215",
+      "environment": "Windows11; actual migrated SQLite/ASGI and deterministic Node controller/presentation plus synthetic built-browser fixture where referenced; exact smallest asserted contract layer",
+      "limitations": [
+        "No new additive migration needed qualification; existing historical migrations were not rerun as an upgrade campaign. Reverting presentation needs no table removal."
+      ],
+      "tests": [
+        "git diff --name-only c5ad279e -- src/okto_nexus/migrations is empty (tool51be65); Home adds no migration or persistent schema/cache. Real Home reads are read-only."
+      ]
+    },
+    "HOME-T-I03": {
+      "requirement": "Todo o ciclo padrão pelo terminal continua funcionando sem qualquer visita à Home.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-package/qualification.json",
+        "plans/home_evolution/evidence/pr06-package-final/qualification.json",
+        "plans/home_evolution/evidence/pr06-package-namespaces/qualification.json"
+      ],
+      "commit": "d730cf96",
+      "environment": "Python3.13 -I independent cwd; actual installed wheel, real CLI/HTTP and synthetic native peers; no provider",
+      "limitations": [
+        "17 full CLI antecedents,33 corrected-package antecedents,4 namespace delta cases are separate cuts; counts overlap, do not add.",
+        "Real local harness remains separately consented HOME-033."
+      ]
+    },
+    "HOME-T-I04": {
+      "requirement": "Build empacotado inclui frontend correto e os contratos compatíveis, sem depender de dev server.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-package/qualification.json",
+        "plans/home_evolution/evidence/pr06-package-final/qualification.json",
+        "plans/home_evolution/evidence/pr06-package-namespaces/qualification.json",
+        "plans/home_evolution/evidence/pr10-package-server-final/qualification.json"
+      ],
+      "commit": "3d95aad8",
+      "environment": "Python3.13 -I, independent cwd, actual final c1c45e2a wheel and Dcu4 static resources; three installed package origins/payloads verified",
+      "limitations": [
+        "Previous17/33/4/1 cuts remain antecedents;12 final cases do not rerun the full terminal lifecycle or constitute a provider campaign."
+      ],
+      "tests": [
+        "12 final installed cases:11 Server/project/native-context contract cases plus packaged asset/API contract. Twine wheel/sdist passed;2116 inputs unchanged."
+      ]
+    },
+    "HOME-T-I05": {
+      "requirement": "Campanhas simuladas, navegador e harness real são registradas separadamente; cenário não executado fica NOT_RUN.",
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-audit/matrix-final-proposal.json",
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "commit": "60069bc5",
+      "environment": "Windows11; real migrated SQLite/ASGI and deterministic frontend Node/SSR; smallest asserted contract layer, not native/provider/browser campaign",
+      "limitations": [
+        "Evidence explicitly distinguishes SQLite/ASGI, SSR, real preliminary DOM and selected-but-unexecuted installed campaign. Audit does not turn fixture facts into native outcomes."
+      ],
+      "tests": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "BROWSER",
+        "plans/home_evolution/evidence/pr06-package/selection.json"
+      ]
+    }
+  }
+}

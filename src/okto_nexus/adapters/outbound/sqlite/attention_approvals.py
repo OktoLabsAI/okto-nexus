@@ -1,5 +1,8 @@
 """One metadata query for canonical approval review and retained history."""
 
+# approvals.workspace_id is NOT NULL; projection preserves that exact scope.
+WORKSPACE_BOUND = True
+
 
 SOURCE_SQL = """
 WITH selected AS MATERIALIZED (

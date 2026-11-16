@@ -1,0 +1,49 @@
+{
+  "status": "PASS_READ_ONLY_FINAL_SERVER_REBIND_PEER",
+  "at": "2026-11-16T16:25:18.293485+00:00",
+  "candidate_sha256": "6181fd0029f1eb023d226f168f6d00b60baad2cfe92e12b3850592a36fecc189",
+  "ancestor_candidate_sha256": "cbb2a45ba9cc99833b5af881abc8415c4c7d355c436d6e05e8cfab4288fdd6af",
+  "changed_top_level_keys": [
+    "package",
+    "technical_rebind"
+  ],
+  "immutable_scope_policy_request_ids_source_pins_native_refs_equal": true,
+  "campaign_id": "home-r1-local-codex-bc1d3f18e856",
+  "port": 62817,
+  "policy": {
+    "max_calls": 2,
+    "observed_limit": 200000,
+    "preventive": 150000,
+    "reserve": 50000
+  },
+  "driver_sha256": "485de9675df7226b65e95679dd64b574295061623990cd8f2355ccbb0cff9ccd",
+  "runtime_source_pins_verified": 7,
+  "python_pin_verified": true,
+  "installed_payloads_verified": 883,
+  "nexus_wheel_site_packages_payloads_compared": 699,
+  "static_resources_compared": 7,
+  "wheel_sha256": "c1c45e2a3dc8b9f0bed348ddc2d09ab4d0afccbaae2b8c19253fdcaf4980b759",
+  "source_head": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+  "static_bundle": "index-Dcu4bArB.js",
+  "qualification_sha256": "629985a6e8d40149f6d89e47f0633afdbc6e133f9886a0d8195a9a7ab6c18b42",
+  "qualified_installed_tests": 12,
+  "qualified_unchanged_inputs": 2116,
+  "campaign_root_exists": false,
+  "authorization_exists": false,
+  "reservations": 0,
+  "recorded_actual_refusal": {
+    "tool_ref": "7b0a9c",
+    "code": "NEW_PAID_CONSENT_REQUIRED",
+    "driver_exit_code": 1,
+    "product_import_attempts": [],
+    "effect_attempts": [],
+    "source_reviewed": true,
+    "rerun_by_peer": false
+  },
+  "limits": [
+    "This peer imported no product module, invoked no product handler, provider, service, native executable or candidate Python.",
+    "Only technical manifests, installed payload/wheel/Python bytes and owned-path existence were read. No personal provider-home/auth/config file was read.",
+    "Native descriptors/fingerprints are unchanged from the ancestor; native executable bytes were verified by the author rebind qualification, not reopened or executed by this peer.",
+    "Original27 offline tests were not rerun or added to this review. No actual consent or paid campaign is implied."
+  ]
+}

@@ -1,0 +1,473 @@
+{
+  "status": "PASS",
+  "humanAssessmentPerformed": false,
+  "tenSecondHumanAssessment": "NOT_RUN",
+  "captureProvenance": {
+    "attempt": 2,
+    "completeSamplesRetained": 1,
+    "priorAttempt": {
+      "toolRef": "02e443",
+      "status": "PASS_WITH_TRUNCATED_CLI_OUTPUT",
+      "timingsRetained": false
+    }
+  },
+  "source": "Standard browser_fixture.py, no contract Server injection or modified seed data",
+  "scope": {
+    "workspace_id": "home-alpha"
+  },
+  "canonical": {
+    "summary": {
+      "running": {
+        "value": 0,
+        "total_is_exact": true,
+        "label": "Running",
+        "unit": "activities"
+      },
+      "waiting_start": {
+        "value": 14,
+        "total_is_exact": true,
+        "label": "Waiting to start",
+        "unit": "activities"
+      },
+      "needs_you": {
+        "value": 0,
+        "total_is_exact": true,
+        "label": "Needs you",
+        "unit": "occurrences"
+      },
+      "results": {
+        "value": 1,
+        "total_is_exact": true,
+        "label": "New results",
+        "unit": "results"
+      },
+      "external": {
+        "value": null,
+        "total_is_exact": false,
+        "label": "External activity",
+        "unit": "external_instances"
+      }
+    },
+    "workTotal": 15,
+    "attentionTotal": 0,
+    "resultTotal": 1,
+    "serverAttentionTotal": 0,
+    "work": [
+      {
+        "id": "home_c16bb3b198463d66053d823dbe55e4f5ff91241f565fc68e723591efcb95fc2c",
+        "title": "Review the integration",
+        "state": "awaiting_owner",
+        "agentIds": [
+          "A",
+          "B"
+        ]
+      },
+      {
+        "id": "home_fdb73bafbf8560ce2f83828dbf7994630eea5ffa70f8e1f5684db295b7fd70ac",
+        "title": "Validate the response",
+        "state": "claimed",
+        "agentIds": [
+          "B",
+          "C"
+        ]
+      },
+      {
+        "id": "home_b7de7992316ecb8657daa3752daa399c0db4ec266df2ffb0e780b9c5ccc41b09",
+        "title": "Verify the delivery",
+        "state": "awaiting_verification",
+        "agentIds": [
+          "A",
+          "C"
+        ]
+      },
+      {
+        "id": "home_0274daeb6f29ec44c83a3054275d93417a0eed93e4fac6ce1f7cadb5c23cb960",
+        "title": "Review batch item 01",
+        "state": "awaiting_owner",
+        "agentIds": [
+          "A",
+          "worker-0"
+        ]
+      },
+      {
+        "id": "home_2cab84e64193d92afff595937957ae9f313a20bdcd886090d6fec2e84f054a7e",
+        "title": "Review batch item 02",
+        "state": "awaiting_owner",
+        "agentIds": [
+          "A",
+          "worker-1"
+        ]
+      },
+      {
+        "id": "home_259781682bc9b709f6bd3c4d46285d64ed49a878b2b71011b967bad64955b184",
+        "title": "Review batch item 03",
+        "state": "awaiting_owner",
+        "agentIds": [
+          "A",
+          "worker-2"
+        ]
+      },
+      {
+        "id": "home_a9bf7e4a73dc49b488115a5144ad34b9bdb75a05034e3a8a01e0cb6d10d88676",
+        "title": "Review batch item 04",
+        "state": "awaiting_owner",
+        "agentIds": [
+          "A",
+          "worker-3"
+        ]
+      },
+      {
+        "id": "home_ca998702d1a0c108161e94c18bbef06bcec8625d18f170118136f39442037c67",
+        "title": "Review batch item 05",
+        "state": "awaiting_owner",
+        "agentIds": [
+          "A",
+          "worker-4"
+        ]
+      },
+      {
+        "id": "home_77b1177d877c57b983f32b571496671bbbf9135a2262abf55b79593e37f2e185",
+        "title": "Review batch item 06",
+        "state": "awaiting_owner",
+        "agentIds": [
+          "A",
+          "worker-5"
+        ]
+      },
+      {
+        "id": "home_78a8358eaad80d8d0ec6a0b417e06b9a31e23e66067198abd275ff0351139f25",
+        "title": "Review batch item 07",
+        "state": "awaiting_owner",
+        "agentIds": [
+          "A",
+          "worker-6"
+        ]
+      }
+    ],
+    "results": [
+      {
+        "id": "result_09db6ab180bedfb0d4cd8f1f62ad4d5f4e7c0f07e5bccfaabd637635e19545d9",
+        "title": "Document the result",
+        "outcome": "COMPLETED",
+        "viewState": "unseen"
+      }
+    ]
+  },
+  "firstFold": {
+    "viewport": {
+      "width": 1440,
+      "height": 1100
+    },
+    "counters": [
+      {
+        "label": "Running",
+        "value": "0",
+        "text": "Running\n0\n\nactivities",
+        "box": {
+          "top": 438,
+          "bottom": 544,
+          "height": 106,
+          "inViewport": true,
+          "fullyInViewport": true
+        }
+      },
+      {
+        "label": "Waiting to start",
+        "value": "14",
+        "text": "Waiting to start\n14\n\nactivities",
+        "box": {
+          "top": 438,
+          "bottom": 544,
+          "height": 106,
+          "inViewport": true,
+          "fullyInViewport": true
+        }
+      },
+      {
+        "label": "Needs you",
+        "value": "0",
+        "text": "Needs you\n0\n\noccurrences",
+        "box": {
+          "top": 438,
+          "bottom": 544,
+          "height": 106,
+          "inViewport": true,
+          "fullyInViewport": true
+        }
+      },
+      {
+        "label": "New results",
+        "value": "1",
+        "text": "New results\n1\n\nresults",
+        "box": {
+          "top": 438,
+          "bottom": 544,
+          "height": 106,
+          "inViewport": true,
+          "fullyInViewport": true
+        }
+      }
+    ],
+    "work": [
+      {
+        "id": "home_c16bb3b198463d66053d823dbe55e4f5ff91241f565fc68e723591efcb95fc2c",
+        "title": "Review the integration",
+        "text": "Review the integration\n\nAwaiting owner\n\nA, B · Orion workspace\n\nIn this state since Nov 16, 01:24 PM",
+        "box": {
+          "top": 795,
+          "bottom": 908,
+          "height": 113,
+          "inViewport": true,
+          "fullyInViewport": true
+        }
+      },
+      {
+        "id": "home_fdb73bafbf8560ce2f83828dbf7994630eea5ffa70f8e1f5684db295b7fd70ac",
+        "title": "Validate the response",
+        "text": "Validate the response\n\nClaimed\n\nB, C · Orion workspace\n\nIn this state since Nov 16, 01:24 PM",
+        "box": {
+          "top": 908,
+          "bottom": 1022,
+          "height": 114,
+          "inViewport": true,
+          "fullyInViewport": true
+        }
+      },
+      {
+        "id": "home_b7de7992316ecb8657daa3752daa399c0db4ec266df2ffb0e780b9c5ccc41b09",
+        "title": "Verify the delivery",
+        "text": "Verify the delivery\n\nAwaiting verification\n\nA, C · Orion workspace\n\nIn this state since Nov 16, 01:24 PM",
+        "box": {
+          "top": 1022,
+          "bottom": 1136,
+          "height": 114,
+          "inViewport": true,
+          "fullyInViewport": false
+        }
+      },
+      {
+        "id": "home_0274daeb6f29ec44c83a3054275d93417a0eed93e4fac6ce1f7cadb5c23cb960",
+        "title": "Review batch item 01",
+        "text": "Review batch item 01\n\nAwaiting owner\n\nA, worker-0 · Orion workspace\n\nIn this state since Nov 16, 01:24 PM",
+        "box": {
+          "top": 1136,
+          "bottom": 1250,
+          "height": 114,
+          "inViewport": false,
+          "fullyInViewport": false
+        }
+      },
+      {
+        "id": "home_2cab84e64193d92afff595937957ae9f313a20bdcd886090d6fec2e84f054a7e",
+        "title": "Review batch item 02",
+        "text": "Review batch item 02\n\nAwaiting owner\n\nA, worker-1 · Orion workspace\n\nIn this state since Nov 16, 01:24 PM",
+        "box": {
+          "top": 1250,
+          "bottom": 1364,
+          "height": 114,
+          "inViewport": false,
+          "fullyInViewport": false
+        }
+      },
+      {
+        "id": "home_259781682bc9b709f6bd3c4d46285d64ed49a878b2b71011b967bad64955b184",
+        "title": "Review batch item 03",
+        "text": "Review batch item 03\n\nAwaiting owner\n\nA, worker-2 · Orion workspace\n\nIn this state since Nov 16, 01:24 PM",
+        "box": {
+          "top": 1364,
+          "bottom": 1478,
+          "height": 114,
+          "inViewport": false,
+          "fullyInViewport": false
+        }
+      },
+      {
+        "id": "home_a9bf7e4a73dc49b488115a5144ad34b9bdb75a05034e3a8a01e0cb6d10d88676",
+        "title": "Review batch item 04",
+        "text": "Review batch item 04\n\nAwaiting owner\n\nA, worker-3 · Orion workspace\n\nIn this state since Nov 16, 01:24 PM",
+        "box": {
+          "top": 1478,
+          "bottom": 1592,
+          "height": 114,
+          "inViewport": false,
+          "fullyInViewport": false
+        }
+      },
+      {
+        "id": "home_ca998702d1a0c108161e94c18bbef06bcec8625d18f170118136f39442037c67",
+        "title": "Review batch item 05",
+        "text": "Review batch item 05\n\nAwaiting owner\n\nA, worker-4 · Orion workspace\n\nIn this state since Nov 16, 01:24 PM",
+        "box": {
+          "top": 1592,
+          "bottom": 1706,
+          "height": 114,
+          "inViewport": false,
+          "fullyInViewport": false
+        }
+      },
+      {
+        "id": "home_77b1177d877c57b983f32b571496671bbbf9135a2262abf55b79593e37f2e185",
+        "title": "Review batch item 06",
+        "text": "Review batch item 06\n\nAwaiting owner\n\nA, worker-5 · Orion workspace\n\nIn this state since Nov 16, 01:24 PM",
+        "box": {
+          "top": 1706,
+          "bottom": 1820,
+          "height": 114,
+          "inViewport": false,
+          "fullyInViewport": false
+        }
+      },
+      {
+        "id": "home_78a8358eaad80d8d0ec6a0b417e06b9a31e23e66067198abd275ff0351139f25",
+        "title": "Review batch item 07",
+        "text": "Review batch item 07\n\nAwaiting owner\n\nA, worker-6 · Orion workspace\n\nIn this state since Nov 16, 01:24 PM",
+        "box": {
+          "top": 1820,
+          "bottom": 1934,
+          "height": 114,
+          "inViewport": false,
+          "fullyInViewport": false
+        }
+      }
+    ],
+    "results": [
+      {
+        "id": "result_09db6ab180bedfb0d4cd8f1f62ad4d5f4e7c0f07e5bccfaabd637635e19545d9",
+        "title": "Document the result",
+        "text": "Document the result\n\nCOMPLETED · verification COMPLETED · Unseen\n\nA · Orion workspace · Nov 16, 01:24 PM\n\nOpen result\nMark seen",
+        "box": {
+          "top": 629,
+          "bottom": 755,
+          "height": 126,
+          "inViewport": true,
+          "fullyInViewport": true
+        }
+      }
+    ],
+    "needsYou": {
+      "text": "Needs you\n0\n\nCurrent snapshot · Nov 16, 01:24 PM\n\nNo matching attention occurrences. Work may still be running or waiting elsewhere.",
+      "box": {
+        "top": 564,
+        "bottom": 710,
+        "height": 146,
+        "inViewport": true,
+        "fullyInViewport": true
+      }
+    },
+    "server": {
+      "text": "Server\n0\n\nCurrent snapshot · Nov 16, 01:24 PM\n\nNo active server-wide attention.",
+      "box": {
+        "top": 272,
+        "bottom": 418,
+        "height": 146,
+        "inViewport": true,
+        "fullyInViewport": true
+      }
+    },
+    "documentWidth": 1440,
+    "contentWidth": 1152
+  },
+  "performanceSample": {
+    "sampleCount": 1,
+    "httpCacheDisabled": true,
+    "firstWorkDOM": {
+      "at": 1533.300000011921,
+      "title": "Review the integration"
+    },
+    "firstUsefulFrameOpportunityMs": 1539,
+    "homeResources": [
+      {
+        "path": "/api/v1/home/overview",
+        "query": "?workspace_id=home-alpha",
+        "startTimeMs": 300.69999998807907,
+        "responseEndMs": 1499,
+        "durationMs": 1198.300000011921,
+        "transferSize": 12964,
+        "encodedBodySize": 12664,
+        "decodedBodySize": 12664
+      }
+    ],
+    "navigation": [
+      {
+        "startTimeMs": 0,
+        "domContentLoadedMs": 237.80000001192093,
+        "transferSize": 772
+      }
+    ]
+  },
+  "overviewRequests": [
+    {
+      "path": "/api/v1/home/overview",
+      "query": "?workspace_id=home-alpha",
+      "status": 200,
+      "timing": {
+        "startTime": 1794846289334.329,
+        "domainLookupStart": -1,
+        "domainLookupEnd": -1,
+        "connectStart": -1,
+        "secureConnectionStart": -1,
+        "connectEnd": -1,
+        "requestStart": 404.463,
+        "responseStart": 1196.812,
+        "responseEnd": 1198.369
+      }
+    },
+    {
+      "path": "/api/v1/home/overview",
+      "query": "?workspace_id=home-alpha",
+      "status": 200,
+      "timing": {
+        "startTime": 1794846290569.69,
+        "domainLookupStart": -1,
+        "domainLookupEnd": -1,
+        "connectStart": -1,
+        "secureConnectionStart": -1,
+        "connectEnd": -1,
+        "requestStart": 0.361,
+        "responseStart": 284.083,
+        "responseEnd": 285.448
+      }
+    }
+  ],
+  "scroll": {
+    "before": [
+      {
+        "tag": "MAIN",
+        "clientHeight": 1051,
+        "scrollHeight": 1051,
+        "scrollTop": 0
+      },
+      {
+        "tag": "DIV",
+        "clientHeight": 2223,
+        "scrollHeight": 2223,
+        "scrollTop": 0
+      }
+    ],
+    "after": [
+      {
+        "tag": "MAIN",
+        "clientHeight": 1051,
+        "scrollHeight": 1051,
+        "scrollTop": 0
+      },
+      {
+        "tag": "DIV",
+        "clientHeight": 2223,
+        "scrollHeight": 2223,
+        "scrollTop": 0
+      }
+    ]
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "mutationRequests": [],
+  "bundle": [
+    "/assets/index-Dcu4bArB.js"
+  ],
+  "limitations": [
+    "One complete cache-disabled navigation sample retained after an earlier truncated-output capture; not p95 or a controlled cold OS/SQLite-cache benchmark.",
+    "The DOM mark and two subsequent animation frames indicate render/frame opportunities, not human comprehension or a physical-paint measurement.",
+    "No human participant was simulated. Running0 and Claimed remain distinct."
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "qualified_at_utc": "2026-11-16T15:20:52.580518+00:00",
+  "checks": 6,
+  "execution": {
+    "tool_ref": "serverCanonicalRun via write_stdin session95395",
+    "cli_terminal_exit_code": 0,
+    "browser_bundle": "index-Dcu4bArB.js",
+    "canonical_summary_and_page_gets": 22,
+    "canonical_unfiltered_baseline_total": 16,
+    "contract_probe_items": 14,
+    "home_project_actionable_counts": {
+      "home-alpha": 4,
+      "home-beta": 4,
+      "all": 8
+    },
+    "server_count": 6,
+    "server_ids_have_null_workspace": true,
+    "application_page_errors": 0,
+    "console_expected_errors": [
+      "One explicitly routed Home403; no unexpected500/503 on the final run."
+    ],
+    "console_tool_ref": "bf56e7"
+  },
+  "source_snapshot": {
+    "path": "source-pins.json",
+    "sha256": "1085001ab03c561ce3a869b6687939d9b14a1b6eeb616e783b80a3069d32408b",
+    "ready_import_pins": 8,
+    "total_pinned_files": 26,
+    "server_runtime_files_unchanged_since_ready": true,
+    "client_source_exactly_compared_to_retained_executed_cli_code": true
+  },
+  "canonical_mutations": {
+    "fake_post_success": false,
+    "real_ui_seen_status": 200,
+    "real_stale_cas_status": 409,
+    "successful_preference_revisions": [
+      0,
+      1
+    ],
+    "project_facts_items_totals_revisions_unchanged": true,
+    "unrelated_post_requests": 0
+  },
+  "cleanup": {
+    "browser_session": "home-r1-server-canonical-final",
+    "browser_pid": 51580,
+    "close_command_exit_code": 0,
+    "close_tool_ref": "3adbcf",
+    "owned_browser_pid_absent": true,
+    "absence_tool_ref": "bff723",
+    "fixture_exec_session": 68120,
+    "fixture_terminal_exit_code": 0,
+    "fixture_exit_tool_ref": "bc9d99",
+    "force_kill_used": false,
+    "user_browser_touched": false
+  },
+  "antecedent": {
+    "tool_ref": "81b0d4",
+    "home_checks_passed": 5,
+    "application_page_errors": 0,
+    "final_clean_qualification": false,
+    "reason": "The SQL-unit ContractItems relation exposed only filtered and asserted no workspace filters. The full App also calls canonical Summary, which needs viewing and scoped filters; this test-only harness produced500/503 on that consumer.",
+    "correction": "Browser-only subclass exposes canonical_existing/viewing/filtered, preserves production source filters/hints, applies all canonical filters to pre-authorized contract extras, and keeps real canonical preference storage. Shared application clocks fixed to seed timestamp. Default5s query budget unchanged. No product code fix or POST response stub.",
+    "antecedent_browser_pid_absent": true,
+    "antecedent_fixture_exit_code": 0,
+    "antecedent_cleanup_tool_ref": "ced881"
+  },
+  "scope": "A08 defensive projection/browser contract using domain-valid pre-authorized query-port occurrences, real migrated SQLite/HTTP/Home pagination and canonical preference CAS; no current global producer is claimed.",
+  "limitations": [
+    "No invalid NULL-workspace database rows or new global producer were created. Global rows enter only the canonical test query-port contract.",
+    "Partial Server freshness and403 are routed GET-consumer fault probes, not a real authorization revocation.",
+    "No provider, native harness, real authentication or production data.",
+    "Canonical Summary/page filters are compared to the authorized unfiltered fixture baseline, including existing legitimate watch rows.",
+    "Screenshots show synthetic Home state. No assertion about sidebar badge transition timing is made."
+  ]
+}

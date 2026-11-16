@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "cases": 5,
+  "provenance": {
+    "prior_execution_tool_ref": "aebdd5",
+    "recovery": "Existing completed results recovered after prior agent interruption; not rerun. Exact script is contained in retained CLI persisted-run transcript; live result was stored in test-only localStorage to survive CLI beforeunload interruption.",
+    "results_sha256": "4e8eca8bbfb80fb83c61b604a4f39923224a2fca8dc1b140f66928bd1ce683ca",
+    "source_pins_match_current_checkout": true
+  },
+  "source_pins": {
+    "tests/home_evolution/browser_fixture.py": "8a86251b05cb88a546a292ae93671b91d88359d2ef12a582aeb3a2611c97f97d",
+    "tests/home_evolution/browser_checks.js": "1c785273ee94e101a674a556c96438948b8c930499deba0997b2d136a2b4167b",
+    "src/okto_nexus/application/home.py": "ad24ddfa5488708587c7bfe553f439919a29bb0c9d2023fff9544ec4d407e2d9",
+    "src/okto_nexus/domain/home.py": "d5858ce9222644b7dbe2da13dab6e27c27f632410dc4df3a82166331388c132b",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "f7a20338a6638c1abd3038138c13dc794c5ea7c404bac3284cff4b300343aa6f",
+    "src/okto_nexus/adapters/inbound/http/home.py": "41d51cbb0d63091ddce429698fae5203404e4a280cbf89462d3184187bf7398e",
+    "src/okto_nexus/adapters/inbound/http/routes.py": "c51b4f4f031c3b85fc49772c7bb032a8ebe2a854bfdff3682d72535c570683c5",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "ee780df0f18b68738e0294e17944379878a42bace9393467355763d7feccfc53",
+    "tests/home_evolution/browser_final_identity.js": "6e0276509c298441d632dc4ed4976e2a1ce531b7b7a12906b54fe5300540a3bd",
+    "frontend/src/components/home/OperationalHome.tsx": "f136752a8368cfc5a84a412cbaea46fc894fdcd13ba6b3122a625c18b5915a5e",
+    "frontend/src/components/home/HomeCards.tsx": "f5ee8712b09e7efad227064ecd400a24867fe52db58cf35a2ae26e4c3ac5c412",
+    "frontend/src/components/home/HomeInspection.tsx": "43c95cff45f59d0016934353e2ac3a30e2e1c44987d90d06917c6cf2556db5d0",
+    "frontend/src/homeController.ts": "548a73ab4fe4b17396f540e974ed25475b02e35848222aafe76aae550c227ae1",
+    "frontend/src/hooks/useHomeOverview.ts": "8605095c5e7030c7cde9ce0aeb72f0e3dbdc0bdf959e2e0cfa50b045a55c90af",
+    "frontend/src/App.tsx": "b813ed0eff4e71c69ca7127f95f23ddcf18e6d26742e3d569258d2f7f3f00408",
+    "tests/home_evolution/browser_final_identity_counters.js": "efef64ca3290899217ca3c675425839437489705dd5c9681422a1c9b43da32b4"
+  },
+  "effects": {
+    "provider_calls": 0,
+    "native_runtime_started": false,
+    "real_authentication_used": false,
+    "backend_mutation_requests": 0,
+    "intercepted_logout_posts": 1
+  },
+  "cleanup_recovery": {
+    "observed_at_utc": "2026-11-16T14:25:08.6232366Z",
+    "tool_ref": "4a973c",
+    "browser_pid_47624_present": false,
+    "own_port_57008_listener_count": 0,
+    "own_fixture_command_process_count": 0,
+    "original_exit_code_known": false,
+    "actions": "Read-only observation only; no service restart, process stop or deletion performed."
+  },
+  "recommendations": {
+    "HOME-T-A05": "PASS at browser-consumer level with routed403/auth logout and real history; canonical authorization separately qualified.",
+    "HOME-T-A06": "PASS: explicit B counters before/after late real A response remain equal, differ from A, and B work/form/scope/focus/selection stay unchanged. See focused supplement.",
+    "HOME-T-F06": "PASS for actual modal workflow: close offers Keep/Discard, background stays inert, explicit discard precedes exact new workspace/target.",
+    "HOME-T-H01": "PASS for keyboard route through filters/cards/drawer/composer actions/focus; not every native sensitive control."
+  },
+  "limitations": [
+    "The logout POST is fulfilled in browser; no actual backend logout or real account mutation.",
+    "The draft is explicitly discarded before Sign out. This does not prove sign-out of a still-dirty visible form.",
+    "No native permission decision, real screen-reader speech, actual provider or blanket73-scenario certification.",
+    "Beforeunload dialog was accepted by explicit handler; no product guard was bypassed with forced clicks or DOM mutation.",
+    "Current physical absence is verified, but original fixture/browser exit code was not retained and is unknown."
+  ],
+  "supplement": {
+    "path": "a06-counters.json",
+    "sha256": "a4368507c993d15c31c4d8b1c6e61095089e7db721d033fb89cada9f94372349",
+    "status": "PASS",
+    "cases": 1
+  }
+}

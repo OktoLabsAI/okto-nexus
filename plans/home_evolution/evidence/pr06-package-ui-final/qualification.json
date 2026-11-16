@@ -1,0 +1,69 @@
+{
+  "status": "PASS_INSTALLED_FINAL_UI_FOCAL",
+  "source_head": "fa2e4215e47db25ed884c7fe001bfedb0cd9fcb3",
+  "build_manifest_head": "fa2e4215e47db25ed884c7fe001bfedb0cd9fcb3",
+  "artifacts": {
+    "okto_nexus-0.3.4-py3-none-any.whl": "7e1563622f4becb21cc62b6182cb4683c7546861256c355c16bb9aa78efa87ff",
+    "okto_nexus-0.3.4.tar.gz": "7c804b0c2181b607a381ef28e4cd3be4f1279fe4b56fc0ec628e8b9346164e7e"
+  },
+  "wheel_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-ui-final-svjjgq53\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+  "tests": {
+    "passed": 1,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "case_ids": [
+      "tests.home_evolution.test_home_package::test_packaged_operational_home_serves_assets_and_compatible_contract"
+    ],
+    "junit_seconds": 4.072
+  },
+  "build": {
+    "fresh_typescript_vite": true,
+    "static_bundle": "index-D4dmKnLh.js",
+    "twine_wheel": "PASSED",
+    "twine_sdist": "PASSED",
+    "helper_metadata_note": "Generic development-build description is retained; input snapshot independently binds the frozen production/test/docs source."
+  },
+  "verification": {
+    "python": "3.13.1 -I",
+    "prefix": "C:/Users/jpamb/AppData/Local/Temp/home-r1-installed-package-aq98yeg_/venv313",
+    "independent_cwd": true,
+    "three_site_packages_origins_and_wheel_payloads_compared": true,
+    "nexus_payloads_equal_checkout": 699,
+    "static_resources_equal": 7,
+    "test_input_files": 2110,
+    "full_pipeline_input_files": 2110,
+    "changed_inputs": [],
+    "install": "Nexus only --force-reinstall --no-deps"
+  },
+  "antecedents": [
+    {
+      "path": "plans\\home_evolution\\evidence\\pr06-package\\qualification.json",
+      "sha256": "e2d72c78c33a9549ff011c2b4016b64ddc91a6fd1abf55dd2f5852e99fdafd51",
+      "rerun": false
+    },
+    {
+      "path": "plans\\home_evolution\\evidence\\pr06-package-final\\qualification.json",
+      "sha256": "32927446f4047abbf163246ef860ee64e9094b180529a3ead18d68a20735be61",
+      "rerun": false
+    },
+    {
+      "path": "plans\\home_evolution\\evidence\\pr06-package-namespaces\\qualification.json",
+      "sha256": "9ef6d9f05190bab8cfe2c6b944cbee17dc3dae0907f14386a3daa70800e80b8d",
+      "rerun": false
+    }
+  ],
+  "boundary": {
+    "provider_calls": 0,
+    "native_harness_launches": 0,
+    "production_service_actions": 0,
+    "real_authentication_actions": 0,
+    "user_or_shared_environment_mutation": false,
+    "test_fixture": "Disposable SQLite and in-process ASGI only"
+  },
+  "limitations": [
+    "One installed packaged-resource/HTTP contract case; not all73 scenarios or HOME033 real-harness acceptance.",
+    "Previous CLI17/33/4 installed cuts are retained separately, not rerun or added to this total.",
+    "No latency/SLO claim. Existing packaging/chunk-size warnings are not repaired by this qualification."
+  ]
+}

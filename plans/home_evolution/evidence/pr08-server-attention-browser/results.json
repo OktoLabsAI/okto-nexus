@@ -1,0 +1,285 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "Canonical shared relation keeps Summary, page filters and Server preferences compatible",
+      "status": "PASS",
+      "detail": {
+        "baselineTotal": 16,
+        "contractProbeItems": 14,
+        "realRequests": [
+          {
+            "endpoint": "summary",
+            "query": {},
+            "total": 16,
+            "status": 200
+          },
+          {
+            "endpoint": "page",
+            "query": {},
+            "total": 16,
+            "status": 200
+          },
+          {
+            "endpoint": "summary",
+            "query": {
+              "workspace_id": "home-alpha"
+            },
+            "total": 6,
+            "status": 200
+          },
+          {
+            "endpoint": "page",
+            "query": {
+              "workspace_id": "home-alpha"
+            },
+            "total": 6,
+            "status": 200
+          },
+          {
+            "endpoint": "summary",
+            "query": {
+              "workspace_id": "home-beta"
+            },
+            "total": 4,
+            "status": 200
+          },
+          {
+            "endpoint": "page",
+            "query": {
+              "workspace_id": "home-beta"
+            },
+            "total": 4,
+            "status": 200
+          },
+          {
+            "endpoint": "summary",
+            "query": {
+              "agent_id": "not-A"
+            },
+            "total": 0,
+            "status": 200
+          },
+          {
+            "endpoint": "page",
+            "query": {
+              "agent_id": "not-A"
+            },
+            "total": 0,
+            "status": 200
+          },
+          {
+            "endpoint": "summary",
+            "query": {
+              "category": "watch"
+            },
+            "total": 5,
+            "status": 200
+          },
+          {
+            "endpoint": "page",
+            "query": {
+              "category": "watch"
+            },
+            "total": 5,
+            "status": 200
+          },
+          {
+            "endpoint": "summary",
+            "query": {
+              "kind": "runtime_recovery_attention"
+            },
+            "total": 14,
+            "status": 200
+          },
+          {
+            "endpoint": "page",
+            "query": {
+              "kind": "runtime_recovery_attention"
+            },
+            "total": 14,
+            "status": 200
+          },
+          {
+            "endpoint": "summary",
+            "query": {
+              "priority": "20"
+            },
+            "total": 15,
+            "status": 200
+          },
+          {
+            "endpoint": "page",
+            "query": {
+              "priority": "20"
+            },
+            "total": 15,
+            "status": 200
+          },
+          {
+            "endpoint": "summary",
+            "query": {
+              "state": "expired"
+            },
+            "total": 0,
+            "status": 200
+          },
+          {
+            "endpoint": "page",
+            "query": {
+              "state": "expired"
+            },
+            "total": 0,
+            "status": 200
+          },
+          {
+            "endpoint": "summary",
+            "query": {
+              "state": "all"
+            },
+            "total": 16,
+            "status": 200
+          },
+          {
+            "endpoint": "page",
+            "query": {
+              "state": "all"
+            },
+            "total": 16,
+            "status": 200
+          },
+          {
+            "endpoint": "summary",
+            "query": {
+              "seen": "seen"
+            },
+            "total": 0,
+            "status": 200
+          },
+          {
+            "endpoint": "page",
+            "query": {
+              "seen": "seen"
+            },
+            "total": 0,
+            "status": 200
+          },
+          {
+            "endpoint": "summary",
+            "query": {
+              "seen": "unseen"
+            },
+            "total": 16,
+            "status": 200
+          },
+          {
+            "endpoint": "page",
+            "query": {
+              "seen": "unseen"
+            },
+            "total": 16,
+            "status": 200
+          }
+        ],
+        "canonicalViews": "viewing + filtered",
+        "queryBudgetSeconds": 5
+      }
+    },
+    {
+      "name": "Server scope remains separate from project counters and filters",
+      "status": "PASS",
+      "detail": {
+        "summaries": {
+          "home-alpha": 4,
+          "home-beta": 4,
+          "all": 8
+        },
+        "serverTotal": 6,
+        "globalWorkspaceNull": true,
+        "filterIndependence": true
+      }
+    },
+    {
+      "name": "Project and Server pagination use independent real endpoints and canonical IDs",
+      "status": "PASS",
+      "detail": {
+        "serverIds": [
+          "att_216b820aad5249bab5b4fdf7f87a5bdc2a70c172d5bd193bc6ff78c84c8794f8",
+          "att_5af1e4f3b873c106cd186cc48e83660cc2ddc3857ee7597d8b989024be900d51",
+          "att_bc72133c7d0e05fea72832e61da774c8daeb657a7957c8e084b492224b9848b1",
+          "att_c2ce4adb6040ee4d13748e9c3d894b2cedbde24cfb19d4a664f5a8ef5ea60ba1",
+          "att_d8a9a4ec121231a88ff7b36fcc1801ec3de7ac05e40d5564ff9f8e70775e6ecb",
+          "att_f1d2d2fd36642284d074d9b78170d48456a9b00c9e4557830296fcd6bc198c16"
+        ],
+        "projectIds": [
+          "att_87c4c310b1691452dbde2602a838030ae73abc8787d69e6801ca0fd2d99e5500",
+          "att_8eceddcb1baef0f6774b0b06a51abcd0adec4918faccea631527102b6b8136bf",
+          "att_9f762c90a69d7690b01928bbccfd4cc40e82025c6c88cab6d7780f526d80c9eb",
+          "att_c620f1645ffc8ea7adfe60fa8df08b28bd697002d65c8871b59bc86c07cb898b"
+        ],
+        "countersUnchanged": true
+      }
+    },
+    {
+      "name": "Real canonical seen CAS changes only the selected Server occurrence; pause fences controls",
+      "status": "PASS",
+      "detail": {
+        "attentionId": "att_216b820aad5249bab5b4fdf7f87a5bdc2a70c172d5bd193bc6ff78c84c8794f8",
+        "sourceRevision": "df246b770851abed188eae4f0dbfdbdf7355aa1a7ff363d7faab1da7eb1fc017",
+        "preferenceRevisionBefore": 0,
+        "preferenceRevisionAfter": 1,
+        "seenPostStatus": 200,
+        "oldCasStatus": 409,
+        "projectSectionsUnchanged": true,
+        "pauseDisabled": true
+      }
+    },
+    {
+      "name": "Quiet project still exposes the independent Server lane",
+      "status": "PASS",
+      "detail": {
+        "quietWelcome": true,
+        "serverPreview": 3,
+        "projectCounterGridAbsent": true
+      }
+    },
+    {
+      "name": "Server partial freshness disables its controls; current project stays usable;403 clears protected lanes",
+      "status": "PASS",
+      "detail": {
+        "partialServerDisabled": true,
+        "freshProjectUsable": true,
+        "allProtectedItemsCleared": true,
+        "routedGetFaultsOnly": true
+      }
+    }
+  ],
+  "pageMutationRequests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/attention/att_216b820aad5249bab5b4fdf7f87a5bdc2a70c172d5bd193bc6ff78c84c8794f8/seen",
+      "body": {
+        "seen": true,
+        "source_revision": "df246b770851abed188eae4f0dbfdbdf7355aa1a7ff363d7faab1da7eb1fc017",
+        "preference_revision": 0
+      }
+    }
+  ],
+  "directHttpProbes": [
+    {
+      "method": "POST",
+      "path": "/api/v1/attention/att_216b820aad5249bab5b4fdf7f87a5bdc2a70c172d5bd193bc6ff78c84c8794f8/seen",
+      "expected": "stale captured CAS",
+      "status": 409
+    }
+  ],
+  "pageErrors": [],
+  "bundle": [
+    "/assets/index-Dcu4bArB.js"
+  ],
+  "scope": "Domain-valid pre-authorized query-port contract items; real Home SQL/HTTP and canonical preference CAS. No global producer or NULL-workspace DB row was invented.",
+  "limits": [
+    "Partial freshness and403 are routed GET-consumer fault probes. No POST success was stubbed.",
+    "No native harness, provider, credentials or production data."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "files": {
+    "qualification.json": "a64318fb4a996fc775162b108d67a86530a3f42c06a085102844b379a7241583"
+  },
+  "source_pins": {
+    "frontend/src/homeTypes.ts": "6791b1b967e9f53eba05677ba2c7f7f7278fe85ad1a99fe924033ffddfafb5ff",
+    "frontend/src/homeApi.ts": "e753a2408b358f0d49dd86c11fa2dff75786f332cafed5fd0330ef6b92c3d9af",
+    "frontend/src/homeController.ts": "880d15c3b4315d8155cb53fb67169ed1db264d17e8977b1b3aa05bbe1b8b66a6",
+    "frontend/src/components/home/OperationalHome.tsx": "aeecaba0298525e81cc085b09ba407cd7cf134f13c510025582f5d542e3fddd8",
+    "frontend/src/components/home/HomeCards.tsx": "62a71dfb655dc3b230c717d9247efe962368b25470a545037b3ca5c1676d1455",
+    "frontend/tests/homeR1Support.mjs": "1c88449434669233384d7a393a4fc0697b3d88a1a24684816f213aeeffe89fb5",
+    "frontend/tests/homeR1Controller.test.mjs": "72582b96d99e441a61782524257e961856ddab6368b94d5d7efacf61f2e0961f",
+    "frontend/tests/homeR1Api.test.mjs": "4fdcc033a4baa53e188ea054f4f78628552b168a0c85d8e7a5c88e03ca85351d",
+    "frontend/tests/homeUI.test.mjs": "78b002f30f7f68d61c746cfbc10a6edf681935d3f98a7873394147690dea0465"
+  }
+}

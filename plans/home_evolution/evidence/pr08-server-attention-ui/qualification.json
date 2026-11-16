@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "qualified_at_utc": "2026-11-16T14:44:46.242811+00:00",
+  "source_pins": {
+    "frontend/src/homeTypes.ts": "6791b1b967e9f53eba05677ba2c7f7f7278fe85ad1a99fe924033ffddfafb5ff",
+    "frontend/src/homeApi.ts": "e753a2408b358f0d49dd86c11fa2dff75786f332cafed5fd0330ef6b92c3d9af",
+    "frontend/src/homeController.ts": "880d15c3b4315d8155cb53fb67169ed1db264d17e8977b1b3aa05bbe1b8b66a6",
+    "frontend/src/components/home/OperationalHome.tsx": "aeecaba0298525e81cc085b09ba407cd7cf134f13c510025582f5d542e3fddd8",
+    "frontend/src/components/home/HomeCards.tsx": "62a71dfb655dc3b230c717d9247efe962368b25470a545037b3ca5c1676d1455",
+    "frontend/tests/homeR1Support.mjs": "1c88449434669233384d7a393a4fc0697b3d88a1a24684816f213aeeffe89fb5",
+    "frontend/tests/homeR1Controller.test.mjs": "72582b96d99e441a61782524257e961856ddab6368b94d5d7efacf61f2e0961f",
+    "frontend/tests/homeR1Api.test.mjs": "4fdcc033a4baa53e188ea054f4f78628552b168a0c85d8e7a5c88e03ca85351d",
+    "frontend/tests/homeUI.test.mjs": "78b002f30f7f68d61c746cfbc10a6edf681935d3f98a7873394147690dea0465"
+  },
+  "commands": [
+    {
+      "command": "rtk proxy node --test tests/homeR1Controller.test.mjs tests/homeR1Api.test.mjs tests/homeUI.test.mjs",
+      "cwd": "frontend",
+      "tests": 49,
+      "passed": 49,
+      "failed": 0,
+      "exit_code": 0,
+      "tool_ref": "4a3579"
+    },
+    {
+      "command": "rtk proxy npx tsc -b --pretty false",
+      "cwd": "frontend",
+      "exit_code": 0,
+      "tool_ref": "5688f6"
+    },
+    {
+      "command": "rtk npm test",
+      "cwd": "frontend",
+      "tests": 210,
+      "passed": 210,
+      "failed": 0,
+      "exit_code": 0,
+      "tool_ref": "d92940"
+    },
+    {
+      "command": "rtk git diff --check -- <nine owned frontend files>",
+      "exit_code": 0,
+      "tool_ref": "37c8f3"
+    }
+  ],
+  "new_cases": [
+    "project and Server attention have separate read-only Home cursor endpoints",
+    "Server and project attention paginate independently by canonical attention_id without changing project counters",
+    "Server failure and TTL remain section-scoped, while Server paging authorization loss clears every protected section",
+    "Server pages are generation-bound, paused reads do not publish, and page conflicts refresh both partitions",
+    "Server lane remains explicitly separate from a quiet project and enters announcement identity tracking",
+    "Server viewing preferences use the captured canonical ID and both revisions, with stale or changed occurrences fenced"
+  ],
+  "contract": {
+    "overview_field": "server_attention: HomeSection<AttentionOccurrence>, required",
+    "project_page": "GET /api/v1/home/attention",
+    "server_page": "GET /api/v1/home/server-attention",
+    "scope_echo": "workspace/agent/state echoed for generation fence, while Server content is independent of selected project filters",
+    "pagination": "Separate Home cursors/revisions; canonical attention_id dedup; server page limit20",
+    "preferences": "Canonical Attention IDs and source/preference CAS revisions; stale/paused/changed scope fenced; original action APIs unchanged",
+    "presentation": "Server lane outside project quiet/empty condition; no contribution to project counters; source freshness and errors remain independent",
+    "refresh": "Existing serialized Home queue,15s fallback/sourceTTL, pause/revocation/generation fences; no new stream"
+  },
+  "antecedent": {
+    "tool_ref": "f10a7c",
+    "tests": 43,
+    "passed": 41,
+    "failed": 2,
+    "reason": "Two old Node expectations still required mixed canonical Attention API filters/cursor and old invalidation list. Updated to the intentional partitioned Home read facade; product identity/CAS controls not relaxed."
+  },
+  "limitations": [
+    "These are Node/controller/API-envelope/SSR/callback tests, not actual browser or backend SQL qualification.",
+    "No genuine global producer, DB NULL insertion, native harness, provider or real authentication was introduced.",
+    "No static Vite bundle was built; final browser/package cut remains Root work after backend integration.",
+    "Counts overlap:49 focal are included in210 full frontend tests; do not add them."
+  ]
+}

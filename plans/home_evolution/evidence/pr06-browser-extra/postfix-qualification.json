@@ -1,0 +1,55 @@
+{
+  "status": "PASS_SCOPED_BROWSER_FIXTURES",
+  "date": "2026-11-15",
+  "bundle": "index-fgvI6LZl.js",
+  "cases": 6,
+  "case_breakdown": "H02 repeat bursts/generation cancellation; F01; F02; partial/unavailable/disabled quiet guards",
+  "result_sha256": "58c659021d6bd561c09e9d9ff1aeaf26366775f29c38bed44c8b69336b3fc5f1",
+  "antecedent_qualification_sha256": "4fb67d926a114276618bc84b3c0c03e4baa70e766b28b634bf27fec62cb7c682",
+  "sources": {
+    "frontend/src/components/home/OperationalHome.tsx": "c08f24ba94ca025f0308cdff0eab886397d1279b607a4ff8e144a3a508c76ae8",
+    "frontend/src/components/home/HomeCards.tsx": "4822027ddfbd11efb1d6aa58a200cf558bacfc7cd0da12b41de2577d692d101b",
+    "frontend/src/homePresentation.ts": "3611a807a7892e47d1604d85fb2893208788063f30feec62f6267a9e25c9e2e1",
+    "frontend/src/homeController.ts": "9149382ddd29565ae320e1e02910cfeaa88c81d49d4edf9573906fc2b6558233",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-fgvI6LZl.js": "855abecc8a4504100a189e76aacfe193b2d2dff1cd7d4db6c19250f419d225a7",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-DLLWG07d.css": "9927743dbdf57181c1b0f62454cf0ca6b5c2132ed7f51f3e4dcff58eec044d2f"
+  },
+  "actual_tools": {
+    "browser_open": "ab6010",
+    "initialize": "49aaa3",
+    "h02": "2d618c",
+    "quiet_final": "b146fe",
+    "screenshot_unobscured": "484fce",
+    "browser_close": "5c1809"
+  },
+  "preserved_attempts": [
+    {
+      "tool": "e44058/5fd78e",
+      "classification": "TEST_EXPECTATION_MISMATCH",
+      "reason": "Partial is labelled Out of date / last authorized snapshot by controller; total unknown and quiet refusal already correct. Only assertion changed; product unchanged.",
+      "source_sha256": "05e3a7b2e56c5b1679d5fab1ecbaae300e30558d6444ff5b2faf1c0e223c5e1d"
+    },
+    {
+      "tool": "d1c925",
+      "classification": "SHELL_QUOTING_ERROR",
+      "effect": "No fixture or product edit executed; subsequent standalone script applied test correction."
+    }
+  ],
+  "zoom": {
+    "case": "H03",
+    "status": "NOT_RUN",
+    "tool": "a82f12",
+    "reason": "chrome://settings/appearance unavailable in isolated browser context; tool requires persistent context. No CSS/emulation substituted for native browser zoom."
+  },
+  "limits": [
+    "GET fixtures on synthetic read-only HTTP server; no native producer, setup or model invocation.",
+    "Backend human operator exclusion is separate real ASGI proof; these fixtures do not prove backend filtering.",
+    "H02 proves DOM live-region transitions only, not screen-reader speech or human usability.",
+    "F02 360px width and keyboard request drawer/focus verified; initial sidebar-open screenshot preserved and supplemental unobscured image is separate.",
+    "Prior eight scoped passes remain antecedent results, not repeated here; no whole 73-case acceptance inference."
+  ],
+  "product_edits_by_this_run": false,
+  "repo_writes": false,
+  "browser_session": "home-r1-extra",
+  "own_browser_closed": true
+}

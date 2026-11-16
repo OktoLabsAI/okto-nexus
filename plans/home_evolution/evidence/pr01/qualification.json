@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-15T21:17:39.832490+00:00",
+  "scope": "HOME-R1 PR01 backend source and in-process synthetic HTTP/SQLite qualification; acceptance selection belongs to Root",
+  "production_effects": false,
+  "provider_calls": 0,
+  "os_events": 0,
+  "sql_migrations": 0,
+  "source_files": {
+    "src/okto_nexus/domain/home.py": "731b9248adf6564b3353dac891e7a4db61143ecdfd2fd9e27485baadd9a6f5fa",
+    "src/okto_nexus/application/home.py": "ad24ddfa5488708587c7bfe553f439919a29bb0c9d2023fff9544ec4d407e2d9",
+    "src/okto_nexus/application/home_ports.py": "a720ab495026bb4c85e671076f72cbdb85207b228682d0a80751bcbf0d22938b",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "63e683325b210f902be82051c06ccae797ee72cd8d5cbeb2553b2b3f64b06301",
+    "src/okto_nexus/adapters/inbound/http/home.py": "41d51cbb0d63091ddce429698fae5203404e4a280cbf89462d3184187bf7398e",
+    "src/okto_nexus/adapters/inbound/http/app.py": "fd79935280525d0510b254b16bbad6ffc305cac552e63d2628b11501fea9ece9",
+    "src/okto_nexus/adapters/inbound/http/routes.py": "c51b4f4f031c3b85fc49772c7bb032a8ebe2a854bfdff3682d72535c570683c5",
+    "tests/home_evolution/test_home_queries.py": "7f680e62e6576324cde2a0beebe36fd4863b35c424d170c2eb6fa53168f8657c",
+    "tests/home_evolution/test_home_http.py": "3d42e2d758cd3b39e265db23272dd8bd0b147018ccb3698c25ffbdc8e474cd96",
+    "tests/home_evolution/test_home_native.py": "a7687e0e56f40848264f2705b3917c330877da1a776d784e4b585e1d159ab9fd"
+  },
+  "runs": [
+    {
+      "artifact": "backend-tests.xml",
+      "sha256": "32e8b63149cf39b86898b777dc21b2df29059069d80c036f9381e7b660b0a106",
+      "tests": 27,
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/home_evolution/test_home_queries.py tests/home_evolution/test_home_http.py tests/home_evolution/test_home_native.py -q --tb=short --junitxml=plans/home_evolution/evidence/pr01/backend-tests.xml"
+    },
+    {
+      "artifact": "backend-final-delta.xml",
+      "sha256": "fab128bd0451fb8dcde44ecd56d7f804b45cb196069aa84d19a1559db0e0b9b3",
+      "tests": 5,
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/home_evolution/test_home_queries.py tests/home_evolution/test_home_native.py -q --tb=short -k \"expired_claim or pending_classification or shares_one or snooze\" --junitxml=plans/home_evolution/evidence/pr01/backend-final-delta.xml"
+    },
+    {
+      "artifact": "attention-regressions.xml",
+      "sha256": "e9c97aba3b72e5e1e3d4388f42817084ba1a7d61495c36dc42a4eb07591b4991",
+      "tests": 2,
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_attention_api.py -q --tb=short -k \"existing_operator_auth_paths or disabled or source_failure\" --junitxml=plans/home_evolution/evidence/pr01/attention-regressions.xml"
+    }
+  ],
+  "unique_passing_cases": 30,
+  "overlap_policy": "27 full Home cases plus five final-delta cases overlap four, yielding28 uniqueHome;2 existingAttention authregressions =>30unique",
+  "checks": {
+    "ruff": "PASS tool94c92c on ownedHome sources/tests",
+    "diff_check": "PASS tool52a4e7",
+    "d07": "Canonical artifact headers changed; independent HTML/SVG/XHTML qualification owned by v11_preparation"
+  },
+  "antecedents": [
+    {
+      "tool": "984d6b",
+      "result": "13PASS/3FAIL/1teardownERROR",
+      "reason": "New fixtures omitted terminal-event FK; expected400 insteadcanonical422; duplicate TestClient lifespan. Correctedfixtures, no failure hidden."
+    },
+    {
+      "tool": "9cca76",
+      "result": "1PASS/1FAIL",
+      "reason": "Synthetic runtime_handoff_bindings fixture omitted required grant."
+    },
+    {
+      "tool": "c6ea32",
+      "result": "1PASS/1FAIL",
+      "reason": "Fixture positional INSERT did not list added schema columns; correctedexplicitcolumnlist. Later2focalsPASS3ff75d."
+    },
+    {
+      "tool": "55c6b6",
+      "result": "17PASS/1FAIL",
+      "reason": "Alreadyrunning test process retained pre-correction fixture; no runtime failure. Source fixqualified by3ff75d andfinalfull27cases."
+    }
+  ],
+  "limits": [
+    "No live harness/provider/service acceptance is claimed.",
+    "Performance measured by Root separately in pr05-performance; measured large dataset p95 still exceeds500ms target. No SLO PASS claimed.",
+    "Work state filters apply to work only; workspace/agent filters apply to all blocks.",
+    "External reports never establish native execution; service presence/activity remain separate.",
+    "No Git operations, ledger status selections or frontend edits by this backend handoff."
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "driver": "driver.py",
+  "bind": "bind_plan.py",
+  "runtime_created": false,
+  "provider_calls": 0,
+  "serial_actions": [
+    "prepare",
+    "install",
+    "start",
+    "watch (retained concurrently)",
+    "review",
+    "setup --review-revision <actual>",
+    "useful (observes; real native permission/toggle by Root in parallel)",
+    "verify-report",
+    "close",
+    "Home exact CLOSED continuation rejection (browser)",
+    "cleanup"
+  ],
+  "safe_recovery_actions": {
+    "setup-observe": "GET only original test, never Finish/reapply",
+    "observe": "GET/RO original useful intent only; no deadline renewal"
+  },
+  "operator_browser_actions": [
+    "bootstrap/login own application",
+    "Use operational Home",
+    "inspect actual native permission and decide exact current target",
+    "Use classic Home during same admitted work, observe via Attention/CLI, restore",
+    "continue exact CLOSED result and record canonical refusal/noPOST"
+  ],
+  "awaiting_only": [
+    "Root/v11 final source/candidate review",
+    "new paid consent receipt; no technical namespace/package remains unbound"
+  ],
+  "no_inherited_r3_budget": true,
+  "force_cleanup_authority": "standing task authority; current own generation/instance checked, no personal or OS effects",
+  "candidate_sha256": "5a8c72d04e9e4adc426173dd14971ef28c6dec599af2bfea42b5deaf61012c40",
+  "candidate": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6\\candidate.json",
+  "candidate_scope_frozen_before_consent": true,
+  "last_authorization_delta": "actual-authorization.json bound to candidateSHA/campaignUUID/root; does not rewrite candidate"
+}

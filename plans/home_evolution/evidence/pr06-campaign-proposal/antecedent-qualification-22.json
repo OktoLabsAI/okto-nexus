@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "status": "OFFLINE_DRIVER_QUALIFIED_PENDING_ROOT_REVIEW_FINAL_PACKAGE_BIND_AND_NEW_CONSENT",
+  "final_tests": {
+    "passed": 22,
+    "tests": 22,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "elapsed_seconds": 0.9856887999922037,
+    "installed_product_boundary_mocked": true,
+    "provider_calls": 0,
+    "service_actions": 0,
+    "source_path_injection_for_product": false
+  },
+  "final_test_tool": "3eed17",
+  "ruff_F_tool": "d65470",
+  "ast_parse_tool": "c2da3a",
+  "initial_run": {
+    "path": "initial-run.json",
+    "sha256": "02d4ca31dcb6761f6c83f1a77161afaac90fbe7b88276a9010a569c743131653",
+    "bytes": 551
+  },
+  "test_counts": "22 unique final cases; initial19 and intermediate22 overlap and are not added",
+  "runtime": [
+    {
+      "path": "driver.py",
+      "sha256": "9b9c5da71dc6629d6519a97e352e12f1f951fa2f538d7a75d8e1f312cc1535d2",
+      "bytes": 38610
+    },
+    {
+      "path": "usage.py",
+      "sha256": "62f9e1261a2248ca78b66212f7fa38cb3af90d618c4f2db0021c20e252935b87",
+      "bytes": 5390
+    },
+    {
+      "path": "own_process.py",
+      "sha256": "90e1c3869c877b61553af4f86f20cc25282a91143f0a68b998911d3a92bff588",
+      "bytes": 2636
+    },
+    {
+      "path": "bind_plan.py",
+      "sha256": "f443de1a69855f2b0315c8d268577fd2b5875c477453f3f64c763840a38133d0",
+      "bytes": 5243
+    }
+  ],
+  "tests": [
+    {
+      "path": "test_driver.py",
+      "sha256": "852352515ead10907e6778ec5eedf407e659eb74f3a3c61252fe53c998317b8c",
+      "bytes": 18805
+    },
+    {
+      "path": "run_tests.py",
+      "sha256": "78923f3bf45f290ddcc344a6a8078b1e9aa5f53371e13d5c0bada8a87a9058b8",
+      "bytes": 1728
+    },
+    {
+      "path": "final.xml",
+      "sha256": "8bf3fa81551af219458866d38f9dc63cd9a9992ec6fad4b712b146fce3009a0b",
+      "bytes": 156
+    },
+    {
+      "path": "test-result.json",
+      "sha256": "5cf24a463ca45999046d37153f5097985576f1dcd4d5c99e7a8de4df430cf8f1",
+      "bytes": 273
+    },
+    {
+      "path": "parser-origins.json",
+      "sha256": "49d387ae9fa27f3f811997c65ea3ad24d9c7dbab478f42d5e3770e139847222d",
+      "bytes": 1228
+    }
+  ],
+  "process_observer_reference": {
+    "path": "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/cohort.py",
+    "component": "Process class only; no old controller/import/policy/authorization"
+  },
+  "product_parser_package": "antecedent isolated Nexus0.3.4 wheel5600514aa01f16046785fc00ee46141edae207244fa84b6a88b5283f8e87d981; final bind checks parser bytes identical or refuses until focal requalification",
+  "actual_effects": {
+    "service_actions": 0,
+    "provider_calls": 0,
+    "native_executables_launched": 0,
+    "credential_files_read": 0,
+    "real_campaign_databases_read": 0,
+    "os_session_actions": 0
+  },
+  "limits": [
+    "No atomic billing ceiling is asserted; late usage can overshoot observed threshold.",
+    "Initial setup consumes one of the two productive calls.",
+    "A real permission is not manufactured; if absent it is NOT_RUN.",
+    "Browser toggle/closed-session UI refusal require separate actual browser observations in this same useful task.",
+    "A failed or unknown side effect is never resubmitted automatically.",
+    "Current service generation is selected afresh for owned cleanup, not assumed from an old PID.",
+    "The actual user consent record and final package binding do not exist yet."
+  ]
+}

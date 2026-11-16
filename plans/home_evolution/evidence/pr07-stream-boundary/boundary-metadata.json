@@ -1,0 +1,77 @@
+{
+  "server_pid": 26772,
+  "server_exit_code": 0,
+  "client_pid": 49712,
+  "client_exit_code": 0,
+  "runtime_started": false,
+  "provider_calls": 0,
+  "real_authentication": false,
+  "phases": [
+    {
+      "stage": "commit-before-subscribe",
+      "frame": {
+        "event": "attention-reset",
+        "id": 1,
+        "data": {
+          "version": 1,
+          "event_cursor": 1,
+          "reason": "snapshot_required",
+          "clear": false
+        }
+      },
+      "cursor": 1,
+      "low": 1,
+      "titles": [
+        "Boundary item 1"
+      ],
+      "total": 1,
+      "calls": 2,
+      "peak": 1
+    },
+    {
+      "stage": "commit-while-disconnected",
+      "frame": {
+        "event": "attention-reset",
+        "id": 2,
+        "data": {
+          "version": 1,
+          "event_cursor": 2,
+          "reason": "snapshot_required",
+          "clear": false
+        }
+      },
+      "cursor": 2,
+      "low": 1,
+      "titles": [
+        "Boundary item 2",
+        "Boundary item 1"
+      ],
+      "total": 2,
+      "calls": 3,
+      "peak": 1
+    },
+    {
+      "stage": "retention-gap",
+      "frame": {
+        "event": "attention-reset",
+        "id": 3,
+        "data": {
+          "version": 1,
+          "event_cursor": 3,
+          "reason": "retention_gap",
+          "clear": false
+        }
+      },
+      "cursor": 3,
+      "low": 3,
+      "titles": [
+        "Boundary item 3",
+        "Boundary item 2",
+        "Boundary item 1"
+      ],
+      "total": 3,
+      "calls": 4,
+      "peak": 1
+    }
+  ]
+}

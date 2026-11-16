@@ -1,0 +1,20 @@
+{
+  "id": "HOME-T-C02",
+  "status": "PASS",
+  "displayState": "awaiting_agent",
+  "target": {
+    "executor_id": "exe_a1293f0cede01c09e88468566ada3b69",
+    "kind": "execution",
+    "operation_id": "op_d5544dcee3e116089d71c147589a2bfe",
+    "server_id": "srv_4de5894190ba534387424f988b50444e",
+    "session_id": "ses_f492bb31e8b33e73418d87dbac9f049c",
+    "workspace_id": "ws"
+  },
+  "inputRequestedVisible": true,
+  "readOnly": true,
+  "answerControls": 0,
+  "inspectionMutations": 0,
+  "operatorInputRequests": 0,
+  "operatorAttemptStatus": 403,
+  "approvalAfter": "pending"
+}

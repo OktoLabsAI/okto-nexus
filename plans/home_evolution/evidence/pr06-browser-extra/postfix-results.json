@@ -1,0 +1,99 @@
+{
+  "announcement": {
+    "status": "PASS_DOM_ONLY",
+    "bursts": {
+      "changes": [
+        {
+          "text": "Home updated. New work, attention or results are available.",
+          "at": 4696.300000011921
+        },
+        {
+          "text": "",
+          "at": 5358.600000023842
+        },
+        {
+          "text": "Home updated. New work, attention or results are available.",
+          "at": 7359.800000011921
+        }
+      ],
+      "secondWorkVisible": true
+    },
+    "afterScope": {
+      "liveText": "",
+      "changes": [
+        {
+          "text": "Home updated. New work, attention or results are available.",
+          "at": 4696.300000011921
+        },
+        {
+          "text": "",
+          "at": 5358.600000023842
+        },
+        {
+          "text": "Home updated. New work, attention or results are available.",
+          "at": 7359.800000011921
+        },
+        {
+          "text": "",
+          "at": 8815.199999988079
+        }
+      ]
+    },
+    "checks": {
+      "twoDistinctBurstsAnnounced": true,
+      "exactlyTwoNonemptyAnnouncements": true,
+      "pendingTimerCancelledOnWorkspaceChange": true
+    },
+    "speechOrHumanScreenReaderTested": false,
+    "scripts": [
+      "http://127.0.0.1:51697/assets/index-fgvI6LZl.js"
+    ]
+  },
+  "quiet": {
+    "checks": [
+      {
+        "id": "F01",
+        "status": "PASS_DOM_FIXTURE",
+        "setupCTA": true,
+        "noZeroGrid": true,
+        "noEmptyPrimaryPanels": true,
+        "disabledExternalExplicit": true
+      },
+      {
+        "id": "F02",
+        "status": "PASS_DOM_FIXTURE",
+        "requestCTA": true,
+        "workerCard": true,
+        "noZeroGrid": true,
+        "noEmptyPrimaryPanels": true,
+        "keyboardDrawerFocus": true,
+        "viewport": 360,
+        "document": 360
+      },
+      {
+        "id": "quiet-guard-partial",
+        "status": "PASS_DOM_FIXTURE",
+        "text": "Work\nTotal unknown\n\nOut of date · last authorized snapshot · Nov 15, 06:45 PM\n\nNo matching work. Start a tracked handoff or a conversation with New request."
+      },
+      {
+        "id": "quiet-guard-unavailable",
+        "status": "PASS_DOM_FIXTURE",
+        "text": "Work\nTotal unknown\n\nOut of date · last authorized snapshot · Nov 15, 06:45 PM\n\nUnavailable. FIXTURE UNAVAILABLE"
+      },
+      {
+        "id": "quiet-guard-disabled",
+        "status": "PASS_DOM_FIXTURE",
+        "text": "Work\nTotal unknown\n\nDisabled · Nov 15, 06:45 PM\n\nDisabled. FIXTURE DISABLED"
+      }
+    ],
+    "mutationAttempts": [],
+    "pageErrors": [],
+    "scripts": [
+      "http://127.0.0.1:51697/assets/index-fgvI6LZl.js"
+    ],
+    "limits": [
+      "GET response fixtures only; backend bootstrap/operator exclusion qualified separately by actual ASGI test.",
+      "No setup, native work or producer was executed."
+    ]
+  }
+}

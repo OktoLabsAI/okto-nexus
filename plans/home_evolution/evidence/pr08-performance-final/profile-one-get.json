@@ -1,0 +1,475 @@
+{
+  "dataset": {
+    "agents": 101,
+    "handoffs": 1000,
+    "events": 100000,
+    "sessions": 100,
+    "execution_operations": 0,
+    "worker_agents": 100
+  },
+  "profiled_service_ms": 1143.3905999874696,
+  "sql_statements": 46,
+  "transactions": 1,
+  "writes": 0,
+  "total_calls": 329267,
+  "primitive_calls": 329047,
+  "total_profiled_seconds": 1.1426942000000002,
+  "top_cumulative": [
+    {
+      "file": "src/okto_nexus/application/home.py",
+      "line": 72,
+      "name": "read",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "internal_seconds": 0.00022610000000000002,
+      "cumulative_seconds": 1.1427145
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "name": "<method 'execute' of 'sqlite3.Connection' objects>",
+      "primitive_calls": 49,
+      "total_calls": 49,
+      "internal_seconds": 0.5407946,
+      "cumulative_seconds": 1.0445456
+    },
+    {
+      "file": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "line": 260,
+      "name": "overview",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "internal_seconds": 0.0003643,
+      "cumulative_seconds": 1.0367052
+    },
+    {
+      "file": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "line": 198,
+      "name": "activity_item",
+      "primitive_calls": 1000,
+      "total_calls": 1000,
+      "internal_seconds": 0.011601,
+      "cumulative_seconds": 0.2058934
+    },
+    {
+      "file": "src/okto_nexus/application/attention_operations.py",
+      "line": 40,
+      "name": "handoff_eligible",
+      "primitive_calls": 1000,
+      "total_calls": 1000,
+      "internal_seconds": 0.011226400000000001,
+      "cumulative_seconds": 0.1715595
+    },
+    {
+      "file": "src/okto_nexus/domain/attention.py",
+      "line": 38,
+      "name": "canonical",
+      "primitive_calls": 4003,
+      "total_calls": 4003,
+      "internal_seconds": 0.0058992,
+      "cumulative_seconds": 0.1116323
+    },
+    {
+      "file": "__init__.py",
+      "line": 183,
+      "name": "dumps",
+      "primitive_calls": 4104,
+      "total_calls": 4104,
+      "internal_seconds": 0.017244000000000002,
+      "cumulative_seconds": 0.10732720000000001
+    },
+    {
+      "file": "src/okto_nexus/domain/home.py",
+      "line": 251,
+      "name": "activity",
+      "primitive_calls": 1000,
+      "total_calls": 1000,
+      "internal_seconds": 0.0246367,
+      "cumulative_seconds": 0.10432010000000001
+    },
+    {
+      "file": "src/okto_nexus/adapters/outbound/sqlite/attention.py",
+      "line": 62,
+      "name": "project",
+      "primitive_calls": 1000,
+      "total_calls": 1000,
+      "internal_seconds": 0.005261,
+      "cumulative_seconds": 0.10010720000000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "name": "<built-in method builtins.next>",
+      "primitive_calls": 9,
+      "total_calls": 10,
+      "internal_seconds": 0.0004351,
+      "cumulative_seconds": 0.08955990000000001
+    },
+    {
+      "file": "contextlib.py",
+      "line": 136,
+      "name": "__enter__",
+      "primitive_calls": 4,
+      "total_calls": 4,
+      "internal_seconds": 1.58e-05,
+      "cumulative_seconds": 0.08894490000000001
+    },
+    {
+      "file": "contextlib.py",
+      "line": 515,
+      "name": "enter_context",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "internal_seconds": 1.36e-05,
+      "cumulative_seconds": 0.08834
+    },
+    {
+      "file": "src/okto_nexus/adapters/outbound/sqlite/attention.py",
+      "line": 44,
+      "name": "_relation",
+      "primitive_calls": 2,
+      "total_calls": 2,
+      "internal_seconds": 0.0012481,
+      "cumulative_seconds": 0.0883182
+    },
+    {
+      "file": "encoder.py",
+      "line": 183,
+      "name": "encode",
+      "primitive_calls": 4104,
+      "total_calls": 4104,
+      "internal_seconds": 0.0142146,
+      "cumulative_seconds": 0.0862135
+    },
+    {
+      "file": "__init__.py",
+      "line": 299,
+      "name": "loads",
+      "primitive_calls": 4013,
+      "total_calls": 4013,
+      "internal_seconds": 0.011018700000000001,
+      "cumulative_seconds": 0.0850688
+    },
+    {
+      "file": "src/okto_nexus/domain/attention.py",
+      "line": 42,
+      "name": "digest",
+      "primitive_calls": 2001,
+      "total_calls": 2001,
+      "internal_seconds": 0.0070016,
+      "cumulative_seconds": 0.0721779
+    },
+    {
+      "file": "decoder.py",
+      "line": 340,
+      "name": "decode",
+      "primitive_calls": 4013,
+      "total_calls": 4013,
+      "internal_seconds": 0.0178865,
+      "cumulative_seconds": 0.0704772
+    },
+    {
+      "file": "src/okto_nexus/domain/routing.py",
+      "line": 339,
+      "name": "can_agent_see_event",
+      "primitive_calls": 1000,
+      "total_calls": 1000,
+      "internal_seconds": 0.0087214,
+      "cumulative_seconds": 0.0690712
+    },
+    {
+      "file": "encoder.py",
+      "line": 205,
+      "name": "iterencode",
+      "primitive_calls": 4104,
+      "total_calls": 4104,
+      "internal_seconds": 0.0656331,
+      "cumulative_seconds": 0.0656331
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "line": 1349,
+      "name": "_find_and_load",
+      "primitive_calls": 13,
+      "total_calls": 16,
+      "internal_seconds": 0.0002749,
+      "cumulative_seconds": 0.053865500000000004
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "line": 1304,
+      "name": "_find_and_load_unlocked",
+      "primitive_calls": 11,
+      "total_calls": 14,
+      "internal_seconds": 0.00021140000000000002,
+      "cumulative_seconds": 0.052484600000000006
+    },
+    {
+      "file": "__init__.py",
+      "line": 71,
+      "name": "import_module",
+      "primitive_calls": 12,
+      "total_calls": 12,
+      "internal_seconds": 7.66e-05,
+      "cumulative_seconds": 0.049598800000000005
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "line": 1375,
+      "name": "_gcd_import",
+      "primitive_calls": 12,
+      "total_calls": 12,
+      "internal_seconds": 6.81e-05,
+      "cumulative_seconds": 0.049509000000000004
+    },
+    {
+      "file": "src/okto_nexus/application/attention_operations.py",
+      "line": 82,
+      "name": "project",
+      "primitive_calls": 1000,
+      "total_calls": 1000,
+      "internal_seconds": 0.012820100000000001,
+      "cumulative_seconds": 0.049005200000000006
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "name": "<built-in method builtins.isinstance>",
+      "primitive_calls": 38374,
+      "total_calls": 38374,
+      "internal_seconds": 0.0263291,
+      "cumulative_seconds": 0.048310200000000005
+    },
+    {
+      "file": "src/okto_nexus/domain/routing.py",
+      "line": 219,
+      "name": "is_agent_eligible",
+      "primitive_calls": 2000,
+      "total_calls": 2000,
+      "internal_seconds": 0.0051498,
+      "cumulative_seconds": 0.046439400000000006
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "line": 911,
+      "name": "_load_unlocked",
+      "primitive_calls": 11,
+      "total_calls": 14,
+      "internal_seconds": 0.0001387,
+      "cumulative_seconds": 0.043661200000000004
+    },
+    {
+      "file": "<frozen importlib._bootstrap_external>",
+      "line": 1020,
+      "name": "exec_module",
+      "primitive_calls": 11,
+      "total_calls": 14,
+      "internal_seconds": 0.00012020000000000001,
+      "cumulative_seconds": 0.042333
+    },
+    {
+      "file": "src/okto_nexus/domain/targets.py",
+      "line": 320,
+      "name": "validate_target",
+      "primitive_calls": 2000,
+      "total_calls": 2000,
+      "internal_seconds": 0.0065488000000000005,
+      "cumulative_seconds": 0.040163700000000004
+    },
+    {
+      "file": "src/okto_nexus/domain/tag_selector.py",
+      "line": 368,
+      "name": "reachable",
+      "primitive_calls": 1000,
+      "total_calls": 1000,
+      "internal_seconds": 0.0089625,
+      "cumulative_seconds": 0.0400113
+    },
+    {
+      "file": "decoder.py",
+      "line": 351,
+      "name": "raw_decode",
+      "primitive_calls": 4013,
+      "total_calls": 4013,
+      "internal_seconds": 0.037399800000000004,
+      "cumulative_seconds": 0.037399800000000004
+    },
+    {
+      "file": "<frozen importlib._bootstrap_external>",
+      "line": 1093,
+      "name": "get_code",
+      "primitive_calls": 14,
+      "total_calls": 14,
+      "internal_seconds": 0.0004336,
+      "cumulative_seconds": 0.036364400000000005
+    },
+    {
+      "file": "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py",
+      "line": 129,
+      "name": "build_policy",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "internal_seconds": 0.0002598,
+      "cumulative_seconds": 0.0343323
+    },
+    {
+      "file": "src/okto_nexus/domain/routing.py",
+      "line": 111,
+      "name": "_get",
+      "primitive_calls": 7000,
+      "total_calls": 7000,
+      "internal_seconds": 0.0090136,
+      "cumulative_seconds": 0.029399
+    },
+    {
+      "file": "<frozen importlib._bootstrap_external>",
+      "line": 1214,
+      "name": "get_data",
+      "primitive_calls": 14,
+      "total_calls": 14,
+      "internal_seconds": 0.0001741,
+      "cumulative_seconds": 0.0288587
+    },
+    {
+      "file": "src/okto_nexus/domain/tag_selector.py",
+      "line": 362,
+      "name": "_participant_field",
+      "primitive_calls": 6000,
+      "total_calls": 6000,
+      "internal_seconds": 0.007481600000000001,
+      "cumulative_seconds": 0.0237862
+    },
+    {
+      "file": "src/okto_nexus/domain/targets.py",
+      "line": 177,
+      "name": "_strategy_of",
+      "primitive_calls": 2000,
+      "total_calls": 2000,
+      "internal_seconds": 0.0045227,
+      "cumulative_seconds": 0.0234069
+    },
+    {
+      "file": "<frozen abc>",
+      "line": 117,
+      "name": "__instancecheck__",
+      "primitive_calls": 17000,
+      "total_calls": 17000,
+      "internal_seconds": 0.011251,
+      "cumulative_seconds": 0.0219811
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "name": "<built-in method _io.open_code>",
+      "primitive_calls": 14,
+      "total_calls": 14,
+      "internal_seconds": 0.0217176,
+      "cumulative_seconds": 0.0217176
+    },
+    {
+      "file": "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py",
+      "line": 131,
+      "name": "read",
+      "primitive_calls": 36,
+      "total_calls": 36,
+      "internal_seconds": 0.0173227,
+      "cumulative_seconds": 0.0214284
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "name": "<method 'get' of 'dict' objects>",
+      "primitive_calls": 35774,
+      "total_calls": 35774,
+      "internal_seconds": 0.019060200000000003,
+      "cumulative_seconds": 0.019060200000000003
+    },
+    {
+      "file": "src/okto_nexus/domain/base.py",
+      "line": 50,
+      "name": "iso_to_epoch",
+      "primitive_calls": 2006,
+      "total_calls": 2006,
+      "internal_seconds": 0.008745000000000001,
+      "cumulative_seconds": 0.0172
+    },
+    {
+      "file": "scripts/measure_home_evolution.py",
+      "line": 61,
+      "name": "<lambda>",
+      "primitive_calls": 47112,
+      "total_calls": 47112,
+      "internal_seconds": 0.0169962,
+      "cumulative_seconds": 0.0169962
+    },
+    {
+      "file": "src/okto_nexus/domain/targets.py",
+      "line": 156,
+      "name": "normalize_strategy",
+      "primitive_calls": 2000,
+      "total_calls": 2000,
+      "internal_seconds": 0.0081372,
+      "cumulative_seconds": 0.016908700000000002
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "line": 480,
+      "name": "_call_with_frames_removed",
+      "primitive_calls": 22,
+      "total_calls": 28,
+      "internal_seconds": 0.0001487,
+      "cumulative_seconds": 0.0138318
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "name": "<built-in method builtins.exec>",
+      "primitive_calls": 11,
+      "total_calls": 14,
+      "internal_seconds": 0.00016010000000000002,
+      "cumulative_seconds": 0.013666500000000002
+    },
+    {
+      "file": "src/okto_nexus/application/attention_authority.py",
+      "line": 52,
+      "name": "prepare_graph",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "internal_seconds": 0.0068977000000000005,
+      "cumulative_seconds": 0.012191500000000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "name": "<built-in method _hashlib.openssl_sha256>",
+      "primitive_calls": 3207,
+      "total_calls": 3207,
+      "internal_seconds": 0.011602600000000001,
+      "cumulative_seconds": 0.011602600000000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "name": "<built-in method _abc._abc_instancecheck>",
+      "primitive_calls": 17000,
+      "total_calls": 17000,
+      "internal_seconds": 0.010730100000000001,
+      "cumulative_seconds": 0.010730100000000001
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "line": 1240,
+      "name": "_find_spec",
+      "primitive_calls": 14,
+      "total_calls": 14,
+      "internal_seconds": 0.00028900000000000003,
+      "cumulative_seconds": 0.010673400000000001
+    }
+  ],
+  "raw_profile_sha256": "e5302618d76dc6cb055c19bb86a63f3114d7c4db67be5e5d5877a4c650eea528",
+  "limitations": [
+    "Exactly one process-first service read under cProfile, without a warmup; profiler overhead and first-use initialization differ from the20 warm latency samples.",
+    "No provider/native/runtime service, production account, credential, HTTP or browser interaction.",
+    "The50 top function summaries contain code locations/counts only; raw profile remains in own Temp."
+  ]
+}

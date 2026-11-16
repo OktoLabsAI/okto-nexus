@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="a GET begun in background cannot clear the wake revalidation fence" time="0.005624" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs" failure="Expected values to be strictly equal:&#10;&#10;'ready' !== 'stale'&#10;">
+		<failure type="testCodeFailure" message="Expected values to be strictly equal:&#10;&#10;'ready' !== 'stale'">
+[Error [ERR_TEST_FAILURE]: Expected values to be strictly equal:
+
+'ready' !== 'stale'
+] {
+  code: 'ERR_TEST_FAILURE',
+  failureType: 'testCodeFailure',
+  cause: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'ready' !== 'stale'
+  
+      at TestContext.&lt;anonymous> (file:///D:/Projetos/Techridy/okto_labs_okto_nexus/frontend/tests/homeR1Controller.test.mjs:114:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'ready',
+    expected: 'stale',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+}
+		</failure>
+	</testcase>
+	<!-- tests 1 -->
+	<!-- suites 0 -->
+	<!-- pass 0 -->
+	<!-- fail 1 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 598.3348 -->
+</testsuites>

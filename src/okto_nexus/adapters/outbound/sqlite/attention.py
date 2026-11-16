@@ -3,6 +3,7 @@ from contextlib import contextmanager
 import hashlib
 import importlib
 import json
+import re
 import sqlite3
 import time
 
@@ -41,9 +42,10 @@ class SqliteAttentionQueries:
         self.decision_registry = decision_registry
 
     @contextmanager
-    def _relation(self, uow, *, filters, now, config, access, context):
+    def _relation(self, uow, *, filters, now, config, access, context, source_scope=None, server_only=False):
         conn = uow.connection
         sources, policies, projectors, decoders, functions = [], {}, {}, {}, []
+        source_params = {}
         deadline = time.monotonic() + self.QUERY_SECONDS
         expired = False
 
@@ -76,6 +78,9 @@ class SqliteAttentionQueries:
                 if filters.get('kind') is not None and filters['kind'] not in kinds:
                     continue
                 adapter = importlib.import_module('.attention_' + family, __package__)
+                workspace_bound = getattr(adapter, 'WORKSPACE_BOUND', False) is True
+                if server_only and workspace_bound:
+                    continue
                 application = importlib.import_module('okto_nexus.application.attention_' + family)
                 # Policy preloads may reuse their source's SQL predicates. Track
                 # successful registrations immediately so policy failures cannot
@@ -83,13 +88,29 @@ class SqliteAttentionQueries:
                 for name, arity, function in getattr(adapter, 'SQL_FUNCTIONS', ()):
                     conn.create_function(name, arity, function, deterministic=True)
                     functions.append((name, arity, function))
-                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                source_sql = adapter.SOURCE_SQL
+                policy_filters = filters
+                if workspace_bound and source_scope is not None:
+                    # Internal Home hint only. Source declarations prove these
+                    # families cannot emit Server-wide occurrences. Preserve
+                    # raw SQL pushdown without filtering unbound/future sources.
+                    def source_parameter(match):
+                        key = 'home_source_' + family + '_' + match.group(1)
+                        source_params[key] = source_scope.get(match.group(1))
+                        return ':' + key
+                    # Agent selection on logical work includes sender and
+                    # receiver. Do not prune the receiver's question needed
+                    # to classify that work when its sender is selected.
+                    source_sql = re.sub(r':(workspace_id)\b', source_parameter, source_sql)
+                    policy_filters = dict(filters, **{key:value for key,value in source_scope.items()
+                        if key == 'workspace_id' and value is not None})
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + source_sql + ')')
                 extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
                          if family == 'approvals' else {})
                 if family in ('authority', 'external'):
                     extra['check_budget'] = check_budget
                 if family == 'external':
-                    extra['filters'] = filters
+                    extra['filters'] = policy_filters
                 policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
                 projectors[family] = application.project
                 if hasattr(adapter, 'decode_facts'):
@@ -100,6 +121,7 @@ class SqliteAttentionQueries:
             conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
             params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'),
                           external_kind=filters.get('kind'), external_now=stamp(now).replace('+00:00', 'Z'))
+            params.update(source_params)
             clauses = []
             for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
                 if name in filters:
@@ -116,7 +138,8 @@ class SqliteAttentionQueries:
                 clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
             elif seen == 'snoozed':
                 clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
-            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+            relation = '''WITH source_facts AS (''' + (' UNION ALL '.join(sources) or
+                'SELECT NULL AS family,NULL AS facts WHERE 0') + '''),
                 projected AS MATERIALIZED (
                     SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
                 occurrences AS MATERIALIZED (

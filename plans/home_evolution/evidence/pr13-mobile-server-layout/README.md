@@ -1,0 +1,7 @@
+# Current A08 mobile Server layout focal
+
+HOME011 literal layout acceptance is qualified: same Home route and useful desktop/mobile reading. The extended pagination/quiet-project rerun remains partial and is not claimed. The current Dcu4 bundle shows the separate Server lane at desktop and at 360 CSS px on the same Home route. At 360px, document width=360, Home width/scroll=328, Server edges=16..344, and keyboard-focused Snooze passes an actual center hit-test without horizontal scrolling. See results.json and mobile-server.png.
+
+Initial four geometry checks passed, but visual review found navigation covering the first mobile capture. Artifacts are preserved under antecedent/ and do not qualify accessibility. The refined probe reloads at 360px, waits for collapsed navigation, and checks actual hit-testing. It passed the first two checks. Pagination subsequently produced no observed server-attention GET within 10s, so final paging and quiet-project checks are not claimed. Cause is not established; no product changed. failure.png records the incomplete step.
+
+Both own processes closed normally: browser close=0 with PID28024 absent, then fixture terminal exit=0. Antecedent processes also exited normally. READY pins and product/bundle/script hashes are recorded. This is a domain query-port projection contract fixture, not a new live global producer. No mutation/provider/real account use. Test ledger stays71PASS/2NOT_RUN; no human assistive-technology or native zoom conclusion is added.

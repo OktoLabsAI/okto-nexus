@@ -1,0 +1,101 @@
+{
+  "status": "PASS_REAL_TCP_HOME_STREAM_BOUNDARY",
+  "scenario": "HOME-T-E02",
+  "command": [
+    "rtk",
+    "proxy",
+    ".venv/Scripts/python.exe",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "pytest",
+    "tests/home_evolution/test_home_stream_boundary.py",
+    "-q",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-stream-boundary-3_s3fsx_\\initial.xml"
+  ],
+  "tool_start": "43bfdc",
+  "tool_completion": "5d078f",
+  "exit_code": 0,
+  "tests": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "case": "test_commit_subscription_reconnect_and_retention_gap_refresh_real_home",
+    "three_boundary_phases": true,
+    "pytest_seconds": 10.0,
+    "junit_seconds": 9.81
+  },
+  "proof": [
+    "Real SQLite transaction commits handoff plus event after overview and before first SSE subscription; real attention-reset triggers production HomeController canonical GET showing item1.",
+    "After disconnect, a second committed handoff is recovered through Last-Event-ID reconnect reset and Home GET showing both items.",
+    "A third commit prunes earlier events while retaining AUTOINCREMENT high-water; real retention_gap reset from the original cursor triggers Home GET showing all three durable handoffs, low-water3.",
+    "Real HomeController uses real Node fetch against mounted Home/SSE HTTP routes, no API response mock or manual state patch. Peak GET concurrency1, baseline plus three refreshes.",
+    "HTTP mutation attempt returns405; only fixture IPC writes synthetic SQLite rows.",
+    "Node Popen.wait and multiprocessing Process.join retain exact owned process handles; both physically exit0 without termination/kill."
+  ],
+  "sources": [
+    {
+      "path": "tests/home_evolution/test_home_stream_boundary.py",
+      "sha256": "fb91d10784ba29387f47378e9262adb08d3b7411ae3f71656389d7c08a00a51e"
+    },
+    {
+      "path": "frontend/src/homeController.ts",
+      "sha256": "548a73ab4fe4b17396f540e974ed25475b02e35848222aafe76aae550c227ae1"
+    },
+    {
+      "path": "frontend/src/hooks/useHomeOverview.ts",
+      "sha256": "8605095c5e7030c7cde9ce0aeb72f0e3dbdc0bdf959e2e0cfa50b045a55c90af"
+    },
+    {
+      "path": "frontend/tests/homeR1Support.mjs",
+      "sha256": "cdc1b9bffa9311709af0401cf70f3bb97d2b8f011528c96d163f90b12567ecb5"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/http/stream.py",
+      "sha256": "3a4673d9de064e01d88006b9e82cf5bc0f8a85851294c849b5db6bec90e73279"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/http/attention_stream.py",
+      "sha256": "671e2d070568adcb5134442e4932c72b3fed992f8acbc5ef83959dee7921a8f2"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/http/home.py",
+      "sha256": "41d51cbb0d63091ddce429698fae5203404e4a280cbf89462d3184187bf7398e"
+    },
+    {
+      "path": "src/okto_nexus/application/home.py",
+      "sha256": "ad24ddfa5488708587c7bfe553f439919a29bb0c9d2023fff9544ec4d407e2d9"
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "sha256": "f7a20338a6638c1abd3038138c13dc794c5ea7c404bac3284cff4b300343aa6f"
+    }
+  ],
+  "effects": {
+    "provider_calls": 0,
+    "harness_discovery": false,
+    "product_lifespan": false,
+    "native_runtime": false,
+    "real_authentication": false,
+    "loopback_tcp_fixture": true,
+    "synthetic_sqlite_commits": 3,
+    "retention_prune_fixture_only": true,
+    "http_mutations_accepted": 0,
+    "processes_still_live": 0
+  },
+  "checks": {
+    "git_diff_check": "PASS 0bdc5b",
+    "ruff": "NOT_RUN: .venv has no ruff module (2b13c9); no dependency installation attempted"
+  },
+  "warnings": [
+    "pytest record_property warns about xunit2 compatibility; the boundary property is actually present and was parsed and verified before curation."
+  ],
+  "limits": [
+    "Actual TCP, SSE and controller are exercised, but no browser EventSource implementation or React effect lifecycle is mounted.",
+    "Source-backed disposable fixture, not installed-package or real-harness qualification.",
+    "Retention is a deliberate fixture transaction, not a production retention scheduler execution.",
+    "No change to product, frozen candidate/package, ledgers or authorization. One case is not all73 scenarios."
+  ]
+}

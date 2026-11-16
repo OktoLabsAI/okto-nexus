@@ -1,0 +1,60 @@
+{
+  "status": "PASS",
+  "qualificationLayer": "DOM and real HTTP only",
+  "spokenAssistiveTechnologyStatus": "NOT_RUN",
+  "narratorLaunched": false,
+  "announcements": [
+    {
+      "text": "Home updated. New work, attention or results are available.",
+      "at": 10774.600000023842
+    },
+    {
+      "text": "Home updated. New work, attention or results are available.",
+      "at": 30950.5
+    }
+  ],
+  "novelWorkIds": [
+    "home_ba7e943896518f0c15565cdf796df1fca882e19ce8bda24bf16e3d6be203eaa3",
+    "home_879bfdd5c9ae5edf939a6258ea3b96d84ddee0be025351708dc0c4ea2ebed046"
+  ],
+  "focus": {
+    "value": "A",
+    "focused": true,
+    "selection": [
+      0,
+      1
+    ]
+  },
+  "overviewRequests": [
+    {
+      "status": 200,
+      "query": "?workspace_id=home-alpha"
+    },
+    {
+      "status": 200,
+      "query": "?workspace_id=home-alpha"
+    },
+    {
+      "status": 200,
+      "query": "?workspace_id=home-alpha"
+    },
+    {
+      "status": 200,
+      "query": "?workspace_id=home-alpha"
+    },
+    {
+      "status": 200,
+      "query": "?workspace_id=home-alpha"
+    }
+  ],
+  "mutationRequests": [],
+  "pageErrors": [],
+  "counters": "Running\n0\n\nactivities\n\nWaiting to start\n16\n\nactivities\n\nNeeds you\n0\n\noccurrences\n\nNew results\n1\n\nresults",
+  "bundle": [
+    "/assets/index-Dcu4bArB.js"
+  ],
+  "limits": [
+    "Two real SQLite handoff/task/event pulses; no DOM payload injection or routed GET response.",
+    "No actual assistive-technology consumption or human speech observation was performed."
+  ]
+}

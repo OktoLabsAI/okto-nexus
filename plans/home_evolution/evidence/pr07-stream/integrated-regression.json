@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "source_head": "b9fd2a7a",
+  "command": "rtk npm test",
+  "cwd": "frontend",
+  "tool_ref": "8bf768",
+  "exit_code": 0,
+  "tests": 204,
+  "passed": 204,
+  "failed": 0,
+  "scope": "Complete frontend Node regression including the four new stream/TTL cases; no browser, native runtime or provider claim"
+}

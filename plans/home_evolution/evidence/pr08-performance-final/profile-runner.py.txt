@@ -1,0 +1,36 @@
+import cProfile,hashlib,importlib.util,json,pstats,tempfile
+from pathlib import Path
+from time import perf_counter
+r=Path('D:/Projetos/Techridy/okto_labs_okto_nexus')
+spec=importlib.util.spec_from_file_location('home_pr08_measuring',r/'scripts/measure_home_evolution.py')
+m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+out=Path('C:/Users/jpamb/AppData/Local/Temp/home-r1-pr08-one-get-profile.json')
+raw=out.with_suffix('.pstats')
+with tempfile.TemporaryDirectory(prefix='nexus-home-pr08-profile-') as own:
+ deps=m.bootstrap({'OKTO_NEXUS_EMBEDDING_MODE':'off','OKTO_NEXUS_TELEMETRY_ENABLED':'0'},['--home',own])
+ try:
+  counts,_=m.seed(deps,100,1000,100000)
+  service=m.build_app(deps).state.home
+  measured=m.MeasuredFactory(deps.connection_factory);service.factory=measured
+  prof=cProfile.Profile();began=perf_counter();prof.enable()
+  value=service.read(context=m.OPERATOR,filters={'workspace_id':m.WORKSPACE})
+  prof.disable();elapsed=(perf_counter()-began)*1000
+  assert measured.transactions==1 and measured.changes==0
+  assert value['work']['status']=='ready' and value['work']['total']==1000
+  prof.dump_stats(str(raw));stats=pstats.Stats(prof)
+  rows=[]
+  for (filename,line,name),(primitive,total,own_time,cumulative,_) in sorted(stats.stats.items(),key=lambda kv:kv[1][3],reverse=True)[:50]:
+   path=Path(filename)
+   if path.is_absolute():
+    try:filename=str(path.relative_to(r)).replace('\\','/')
+    except ValueError:filename=path.name
+   rows.append(dict(file=filename,line=line,name=name,primitive_calls=primitive,total_calls=total,internal_seconds=own_time,cumulative_seconds=cumulative))
+  data=dict(dataset=counts,profiled_service_ms=elapsed,sql_statements=len(measured.statements),transactions=measured.transactions,writes=measured.changes,
+   total_calls=stats.total_calls,primitive_calls=stats.prim_calls,total_profiled_seconds=stats.total_tt,top_cumulative=rows,
+   raw_profile_sha256=hashlib.sha256(raw.read_bytes()).hexdigest(),
+   limitations=['Exactly one process-first service read under cProfile, without a warmup; profiler overhead and first-use initialization differ from the20 warm latency samples.',
+    'No provider/native/runtime service, production account, credential, HTTP or browser interaction.',
+    'The50 top function summaries contain code locations/counts only; raw profile remains in own Temp.'])
+ finally:deps.connection_factory.close()
+out.write_text(json.dumps(data,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({key:data[key] for key in ('profiled_service_ms','sql_statements','transactions','writes','total_calls')}))

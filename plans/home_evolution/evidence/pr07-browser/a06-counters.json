@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "scenario": "HOME-T-A06",
+  "tool_ref": "45e0d4",
+  "cli_terminal_exit_code": 0,
+  "cli_terminal_tool_ref": "adeb78",
+  "a_counters": {
+    "running": 0,
+    "waiting_to_start": 14,
+    "needs_you": 0,
+    "new_results": 1
+  },
+  "b_counters_before_late_a": {
+    "running": 0,
+    "waiting_to_start": 1,
+    "needs_you": 0,
+    "new_results": 0
+  },
+  "b_counters_after_late_a": {
+    "running": 0,
+    "waiting_to_start": 1,
+    "needs_you": 0,
+    "new_results": 0
+  },
+  "late_outcome": "fulfilled after B form",
+  "form": {
+    "value": "B-only counter barrier draft.",
+    "same_dom_node": true,
+    "focused": true,
+    "selection": [
+      2,
+      8
+    ]
+  },
+  "old_work_absent": true,
+  "mutation_requests": [],
+  "bundle": "index-D4dmKnLh.js",
+  "source_pins": {
+    "tests/home_evolution/browser_fixture.py": "8a86251b05cb88a546a292ae93671b91d88359d2ef12a582aeb3a2611c97f97d",
+    "tests/home_evolution/browser_checks.js": "1c785273ee94e101a674a556c96438948b8c930499deba0997b2d136a2b4167b",
+    "src/okto_nexus/application/home.py": "ad24ddfa5488708587c7bfe553f439919a29bb0c9d2023fff9544ec4d407e2d9",
+    "src/okto_nexus/domain/home.py": "d5858ce9222644b7dbe2da13dab6e27c27f632410dc4df3a82166331388c132b",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "f7a20338a6638c1abd3038138c13dc794c5ea7c404bac3284cff4b300343aa6f",
+    "src/okto_nexus/adapters/inbound/http/home.py": "41d51cbb0d63091ddce429698fae5203404e4a280cbf89462d3184187bf7398e",
+    "src/okto_nexus/adapters/inbound/http/routes.py": "c51b4f4f031c3b85fc49772c7bb032a8ebe2a854bfdff3682d72535c570683c5",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "ee780df0f18b68738e0294e17944379878a42bace9393467355763d7feccfc53",
+    "tests/home_evolution/browser_final_identity_counters.js": "efef64ca3290899217ca3c675425839437489705dd5c9681422a1c9b43da32b4"
+  },
+  "cleanup": {
+    "fixture_session": 21286,
+    "fixture_exit_code": 0,
+    "fixture_exit_tool_ref": "4ed312",
+    "browser_close_command_exit_code": 0,
+    "browser_close_tool_ref": "b14dfc",
+    "browser_pid_39884_absent": true,
+    "browser_pid_tool_ref": "167ab2"
+  },
+  "antecedent": {
+    "tool_ref": "f46f19",
+    "assertions": "PASS",
+    "harness_console_error": "Init script attempted localStorage on final about:blank; no application assertion failed.",
+    "correction": "Protocol guard in the test init script only; repeated final run has no CLI console error notice."
+  },
+  "scope": "Actual built browser, synthetic migrated SQLite/read-only HTTP; a delayed real A GET fulfilled after B counters and form existed. No provider or real authentication."
+}

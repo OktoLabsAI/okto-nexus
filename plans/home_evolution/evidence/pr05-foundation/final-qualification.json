@@ -1,0 +1,37 @@
+{
+  "status": "PASS_FOCAL_FOUNDATION",
+  "scope": "26 unique frontend foundation cases; no backend/browser/provider claim",
+  "unique_tests": 26,
+  "failures": 0,
+  "original_qualification_sha256": "9a3c81b0cc47cf22830351f4e214d2e10fad84ff2072e0c6fcde377e1b0edc22",
+  "commands": [
+    "rtk proxy node --test --test-reporter=junit tests/homeR1Controller.test.mjs tests/homeR1Api.test.mjs tests/homeR1Navigation.test.mjs tests/homeR1Presentation.test.mjs"
+  ],
+  "source_pins": {
+    "frontend/src/api.ts": "3a655f80be7308efd99dab7e67c07db481ed179edbdc585334601dd430b432a7",
+    "frontend/src/homeTypes.ts": "ddda0c419625310acfc236e74ffe3b38f308a16a75c4d39eb88bf06fc13ba34a",
+    "frontend/src/homeApi.ts": "fe5b2b8cda788ec38f1359037009f0adb5167a6042487e89006145da31358eb7",
+    "frontend/src/homePresentation.ts": "3611a807a7892e47d1604d85fb2893208788063f30feec62f6267a9e25c9e2e1",
+    "frontend/src/homeNavigation.ts": "f8f49082d09eb83bc53f931d96811fe62eeec127e51d175014f95d1292c6ebe5",
+    "frontend/src/homeController.ts": "9149382ddd29565ae320e1e02910cfeaa88c81d49d4edf9573906fc2b6558233",
+    "frontend/src/hooks/useHomeOverview.ts": "8605095c5e7030c7cde9ce0aeb72f0e3dbdc0bdf959e2e0cfa50b045a55c90af",
+    "frontend/tests/homeR1Support.mjs": "cdc1b9bffa9311709af0401cf70f3bb97d2b8f011528c96d163f90b12567ecb5",
+    "frontend/tests/homeR1Api.test.mjs": "b7aba20c4024c7984911dc5cdf81d6862bd1bd69355c6e005b6a684fd781770f",
+    "frontend/tests/homeR1Controller.test.mjs": "993507c264ad29df1e4ac44c8038e74b4c2718d1ef9ea4b0fe41f9715386dcab",
+    "frontend/tests/homeR1Navigation.test.mjs": "2e1a0f59c8f05c22bd1c9fd59643c3cd6fd2a5d080884e7da9d0bc5dbd370a3f",
+    "frontend/tests/homeR1Presentation.test.mjs": "3c9d4585ecb6a937e9b1adc221e6ac99cb5ec34f54392d90b1652b849ba6bf10"
+  },
+  "node_result_tool": "537987",
+  "xml_parse_verified_tool": "3f3803",
+  "xml_sha256": "6079ac94d827c7ca4cca4139efc9e340571f862f2d6e5e46c23d96fdf620e747",
+  "notes": [
+    "Only feed retention and revision-identical pagination deltas after antecedent24.",
+    "PowerShell wrote UTF16 with UTF8 XML declaration; metadata parse 5698b8 failed, decoded UTF16 then normalized to UTF8 without re-running tests. 26 cases, zero failures verified."
+  ],
+  "typescript": {
+    "command": "rtk proxy npx tsc --noEmit",
+    "session_id": 31523,
+    "completion_tool": "2a189d",
+    "exit_code": 0
+  }
+}

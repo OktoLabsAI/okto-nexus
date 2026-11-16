@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="E02 event during initial snapshot survives its older cursor and queues a fresh canonical read" time="0.009911" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="E02 reconnect and retention gap during a read resnapshot without replaying an obsolete page cursor" time="0.001916" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="E03 duplicate and out-of-order hints cannot replay activity states over newer canonical snapshots" time="0.001812" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="E05 a continuously live stream does not renew external TTL or replace stale reported work with native activity" time="0.002796" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<!-- tests 4 -->
+	<!-- suites 0 -->
+	<!-- pass 4 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 662.7168 -->
+</testsuites>

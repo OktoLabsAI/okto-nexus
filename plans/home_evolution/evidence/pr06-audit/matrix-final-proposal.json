@@ -1,0 +1,968 @@
+{
+  "status": "PROPOSED_EVIDENCE_STATUS_NOT_LEDGER_OR_WHOLE_ACCEPTANCE",
+  "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
+  "reference_files": {
+    "Q": "tests/home_evolution/test_home_queries.py",
+    "HTTP": "tests/home_evolution/test_home_http.py",
+    "N": "tests/home_evolution/test_home_native.py",
+    "BASE": "tests/home_evolution/test_baseline_fixture.py",
+    "CTRL": "frontend/tests/homeR1Controller.test.mjs",
+    "API": "frontend/tests/homeR1Api.test.mjs",
+    "NAV": "frontend/tests/homeR1Navigation.test.mjs",
+    "PRES": "frontend/tests/homeR1Presentation.test.mjs",
+    "UI": "frontend/tests/homeUI.test.mjs",
+    "DEC": "tests/execution_r4/test_native_decisions.py",
+    "ATT": "tests/test_attention_api.py",
+    "EXT": "tests/test_attention_external.py",
+    "STREAM": "tests/test_attention_stream.py",
+    "BOUND": "tests/home_evolution/test_home_boundaries.py",
+    "PKG": "tests/home_evolution/test_home_package.py",
+    "BROWSER": "plans/home_evolution/evidence/pr06-browser/preliminary.json",
+    "PERF": "plans/home_evolution/evidence/pr05-performance/measurement.json"
+  },
+  "scenarios": [
+    {
+      "id": "A01",
+      "test_references": [
+        "Q:test_overview_real_fixture_is_read_only_and_scoped",
+        "BROWSER:Workspace filtering uses real GET projection and excludes global-only agents"
+      ],
+      "coverage": "partial",
+      "limitation": "Preliminary browser uses real reads; same-agent competing attention in both workspaces not directly asserted.",
+      "scenario_id": "HOME-T-A01",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "A02",
+      "test_references": [
+        "Q:test_agent_and_external_pages_have_reachable_continuations",
+        "Q:test_retries_share_handoff_controls_do_not_become_work"
+      ],
+      "coverage": "partial",
+      "limitation": "Full authorized union and logical handoff dedup covered separately; no one case combines all duplicate relationships across two workspaces.",
+      "scenario_id": "HOME-T-A02",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "A03",
+      "test_references": [
+        "Q:test_overview_real_fixture_is_read_only_and_scoped"
+      ],
+      "coverage": "direct",
+      "limitation": "Global agent excluded from workspace fixture.",
+      "scenario_id": "HOME-T-A03",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "A04",
+      "test_references": [
+        "HTTP:test_real_agent_and_monitor_keys_cannot_read_home_as_operator"
+      ],
+      "coverage": "direct",
+      "limitation": "Real issued agent and monitor keys refused by actual ASGI Home endpoint; no fake operator context.",
+      "scenario_id": "HOME-T-A04",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "A05",
+      "test_references": [
+        "CTRL:scope generation clears protected state and ignores late old reads without overlap",
+        "UI:logout clears only Home continuation content and leaves unrelated recovery records intact",
+        "UI:late artifact content is never downloaded after access or mount invalidation",
+        "BROWSER:A real 403 clears protected Home list and an open drawer"
+      ],
+      "coverage": "partial",
+      "limitation": "Preliminary browser routed 403 is explicit revocation fixture, not actual account revocation. Browser history must not resurrect protected views; final evidence pending.",
+      "scenario_id": "HOME-T-A05",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "A06",
+      "test_references": [
+        "CTRL:scope generation clears protected state and ignores late old reads without overlap"
+      ],
+      "coverage": "partial",
+      "limitation": "Late data covered; browser form identity remains integration.",
+      "scenario_id": "HOME-T-A06",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "A07",
+      "test_references": [
+        "Q:test_exact_target_server_workspace_and_session",
+        "NAV"
+      ],
+      "coverage": "direct",
+      "limitation": "Wrong server/workspace/session refused by resolver tests.",
+      "scenario_id": "HOME-T-A07",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "A08",
+      "test_references": [
+        "none"
+      ],
+      "coverage": "gap",
+      "limitation": "No explicit Home server-wide incident presentation fixture; inspect current global-incident placement.",
+      "scenario_id": "HOME-T-A08",
+      "proposed_status": "NOT_YET_EVIDENCED"
+    },
+    {
+      "id": "B01",
+      "test_references": [
+        "Q:test_overview_real_fixture_is_read_only_and_scoped"
+      ],
+      "coverage": "direct",
+      "limitation": "Open sessions in fixture do not count running.",
+      "scenario_id": "HOME-T-B01",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "B02",
+      "test_references": [
+        "Q:test_started_event_requires_current_owner_stream_and_nonterminal"
+      ],
+      "coverage": "partial",
+      "limitation": "Cleanup distinction covered; warm one-shot and starting process cases not individually exercised.",
+      "scenario_id": "HOME-T-B02",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "B03",
+      "test_references": [
+        "UI:work keeps accepted distinct from running and stable activities for one agent",
+        "PRES"
+      ],
+      "coverage": "partial",
+      "limitation": "Pure presentation; no complete CLAIMED SQL transition case.",
+      "scenario_id": "HOME-T-B03",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "B04",
+      "test_references": [
+        "Q:test_started_event_requires_current_owner_stream_and_nonterminal"
+      ],
+      "coverage": "direct",
+      "limitation": "Receipt accepted without started/progress not running.",
+      "scenario_id": "HOME-T-B04",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "B05",
+      "test_references": [
+        "Q:test_retries_share_handoff_controls_do_not_become_work",
+        "Q:test_native_delivery_and_handoff_are_one_activity_then_claim_change_separates_history"
+      ],
+      "coverage": "direct",
+      "limitation": "Real SQLite deduplicates delivery/history links, groups two submits and excludes steer/close controls. Synthetic canonical facts, no real native attempt claim.",
+      "scenario_id": "HOME-T-B05",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "B06",
+      "test_references": [
+        "Q:test_native_delivery_and_handoff_are_one_activity_then_claim_change_separates_history",
+        "Q:test_expired_claim_is_unknown_not_a_current_native_activity"
+      ],
+      "coverage": "direct",
+      "limitation": "Prior claim remains historical; new claim receives no prior runtime refs, expired current claim does not invent current activity.",
+      "scenario_id": "HOME-T-B06",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "B07",
+      "test_references": [
+        "Q:test_direct_delegation_keeps_each_handoff_and_canonical_task_title"
+      ],
+      "coverage": "direct",
+      "limitation": "A-to-B and B-to-C source/recipient and distinct IDs explicitly asserted without operator message.",
+      "scenario_id": "HOME-T-B07",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "B08",
+      "test_references": [
+        "UI:work keeps accepted distinct from running and stable activities for one agent"
+      ],
+      "coverage": "partial",
+      "limitation": "Two rendered rows; SQL independent blocked/running same-agent sessions not exercised.",
+      "scenario_id": "HOME-T-B08",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "B09",
+      "test_references": [
+        "Q:test_business_feed_uses_real_events_not_unread_or_private_payload"
+      ],
+      "coverage": "partial",
+      "limitation": "Feed source correct; broadcast/info inbox not-work fixture missing.",
+      "scenario_id": "HOME-T-B09",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "B10",
+      "test_references": [
+        "Q:test_workspace_pages_are_complete_and_cursor_bound",
+        "N:test_pending_classification_is_counted_before_page_and_preserves_recipient"
+      ],
+      "coverage": "direct",
+      "limitation": "Totals and pending classification computed before page.",
+      "scenario_id": "HOME-T-B10",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "C01",
+      "test_references": [
+        "N:test_pending_classification_is_counted_before_page_and_preserves_recipient",
+        "DEC:test_question_listing_and_decision_belong_to_originating_interlocutor"
+      ],
+      "coverage": "partial",
+      "limitation": "Existing canonical service covered; Home modal exact input/options needs browser integration.",
+      "scenario_id": "HOME-T-C01",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "C02",
+      "test_references": [
+        "N:test_pending_classification_is_counted_before_page_and_preserves_recipient",
+        "DEC:test_question_listing_and_decision_belong_to_originating_interlocutor"
+      ],
+      "coverage": "partial",
+      "limitation": "Recipient distinction; UI impersonation refusal needs integrated check.",
+      "scenario_id": "HOME-T-C02",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "C03",
+      "test_references": [
+        "DEC:test_invalid_or_stale_decision_cannot_create_an_operation",
+        "DEC:test_dispatch_revalidates_operator_decision_and_uses_control_lane"
+      ],
+      "coverage": "reused",
+      "limitation": "Canonical contract reused, not re-executed by this audit.",
+      "scenario_id": "HOME-T-C03",
+      "proposed_status": "REUSED_CONTRACT_NOT_HOME_END_TO_END"
+    },
+    {
+      "id": "C04",
+      "test_references": [
+        "DEC:test_public_cas_records_exactly_one_application_and_replay",
+        "DEC:test_two_interfaces_race_for_one_canonical_decision"
+      ],
+      "coverage": "reused",
+      "limitation": "Does not itself prove Home double-click/lost-response handling.",
+      "scenario_id": "HOME-T-C04",
+      "proposed_status": "REUSED_CONTRACT_NOT_HOME_END_TO_END"
+    },
+    {
+      "id": "C05",
+      "test_references": [
+        "DEC:test_lost_input_is_reported_without_inventing_a_native_receipt",
+        "PRES"
+      ],
+      "coverage": "reused",
+      "limitation": "Canonical receipt separation; actual Home decision status still integration.",
+      "scenario_id": "HOME-T-C05",
+      "proposed_status": "REUSED_CONTRACT_NOT_HOME_END_TO_END"
+    },
+    {
+      "id": "C06",
+      "test_references": [
+        "DEC:test_sensitive_input_is_retained_in_memory_and_explicitly_resupplied_after_loss"
+      ],
+      "coverage": "reused",
+      "limitation": "Existing recovery contract; Home unknown-result navigation not directly exercised.",
+      "scenario_id": "HOME-T-C06",
+      "proposed_status": "REUSED_CONTRACT_NOT_HOME_END_TO_END"
+    },
+    {
+      "id": "C07",
+      "test_references": [
+        "N:test_snooze_changes_needs_you_not_the_pending_work_state"
+      ],
+      "coverage": "direct",
+      "limitation": "Actual canonical snooze removes Needs-you priority while same pending native work remains awaiting_operator.",
+      "scenario_id": "HOME-T-C07",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "C08",
+      "test_references": [
+        "ATT:test_preferences_are_shared_between_devices_cas_and_independent_from_resolution",
+        "UI:result opening never marks seen or silently continues"
+      ],
+      "coverage": "partial",
+      "limitation": "Home new episode and page/workspace isolation incomplete.",
+      "scenario_id": "HOME-T-C08",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "C09",
+      "test_references": [
+        "ATT:test_feature_off_is_explicit_and_leaves_original_paths_and_domain_intact"
+      ],
+      "coverage": "reused",
+      "limitation": "Attention OFF service contract; Home canonical controls usability needs integration.",
+      "scenario_id": "HOME-T-C09",
+      "proposed_status": "REUSED_CONTRACT_NOT_HOME_END_TO_END"
+    },
+    {
+      "id": "C10",
+      "test_references": [
+        "none"
+      ],
+      "coverage": "gap",
+      "limitation": "Exact Home interrupt scope not directly exercised; canonical component reuse alone insufficient.",
+      "scenario_id": "HOME-T-C10",
+      "proposed_status": "NOT_YET_EVIDENCED"
+    },
+    {
+      "id": "D01",
+      "test_references": [
+        "UI:result preview is escaped and outcome, cleanup and unseen tracking remain separate",
+        "PRES"
+      ],
+      "coverage": "partial",
+      "limitation": "Real SQL handoff SUCCEEDED without complete missing dedicated test.",
+      "scenario_id": "HOME-T-D01",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "D02",
+      "test_references": [
+        "PRES"
+      ],
+      "coverage": "partial",
+      "limitation": "State labels covered; real VERIFYING result and inspector integration missing.",
+      "scenario_id": "HOME-T-D02",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "D03",
+      "test_references": [
+        "Q:test_overview_real_fixture_is_read_only_and_scoped",
+        "UI:result preview is escaped and outcome, cleanup and unseen tracking remain separate"
+      ],
+      "coverage": "direct",
+      "limitation": "Success and pending cleanup represented separately.",
+      "scenario_id": "HOME-T-D03",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "D04",
+      "test_references": [
+        "Q:test_result_artifact_reference_uses_exact_durable_operation_without_paths"
+      ],
+      "coverage": "direct",
+      "limitation": "Real artifact/runtime_result joined to exact canonical operation; preview and allowlisted artifact metadata, private path excluded. Synthetic result facts.",
+      "scenario_id": "HOME-T-D04",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "D05",
+      "test_references": [
+        "BOUND:test_home_reads_and_exact_seen_preserve_unread_other_page_other_workspace_and_canonical_facts",
+        "UI:result opening never marks seen or silently continues"
+      ],
+      "coverage": "direct",
+      "limitation": "Actual SQLite read/resolve preserve canonical messages, message_deliveries, handoffs, operations/receipts/results/grants and seen values. Browser local unread timestamp remains separate module.",
+      "scenario_id": "HOME-T-D05",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "D06",
+      "test_references": [
+        "BOUND:test_home_reads_and_exact_seen_preserve_unread_other_page_other_workspace_and_canonical_facts"
+      ],
+      "coverage": "direct",
+      "limitation": "Exact occurrence becomes seen; other-page occurrence and separate-workspace result/attention unchanged. No inbox ACK or canonical mutation.",
+      "scenario_id": "HOME-T-D06",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "D07",
+      "test_references": [
+        "BOUND:test_artifact_reference_never_grants_agent_read_or_cross_workspace_access",
+        "BOUND:test_html_artifact_cannot_execute_with_operator_origin_privileges[html/svg/xhtml]",
+        "UI:result preview is escaped and outcome, cleanup and unseen tracking remain separate",
+        "UI:late artifact content is never downloaded after access or mount invalidation"
+      ],
+      "coverage": "direct",
+      "limitation": "Initial real inline-HTML security FAIL was corrected. Final ASGI active-document headers, managed payload, 403/404 scope and no-sniff checked. Does not claim actual browser JavaScript execution experiment.",
+      "scenario_id": "HOME-T-D07",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "D08",
+      "test_references": [
+        "UI:canonical continuation reads only the selected session and binding",
+        "UI:closed or draining continuation never looks up another session",
+        "UI:recipient and binding mismatch refuse rather than falling back",
+        "UI:revalidation compares every scope dimension before a continuation command"
+      ],
+      "coverage": "direct",
+      "limitation": "Real canonical API calls mocked at transport, no native invocation.",
+      "scenario_id": "HOME-T-D08",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "E01",
+      "test_references": [
+        "CTRL",
+        "HTTP:test_overview_and_every_page_http_contract"
+      ],
+      "coverage": "partial",
+      "limitation": "Initial read present, no actual commit-before-SSE integration.",
+      "scenario_id": "HOME-T-E01",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "E02",
+      "test_references": [
+        "CTRL:reconnect/gap invalidate, unrelated events do not, and disposal removes timers",
+        "STREAM:test_atomic_insert_and_retention_between_polls_resets_even_from_zero"
+      ],
+      "coverage": "reused",
+      "limitation": "Combined browser stream/snapshot race not directly exercised.",
+      "scenario_id": "HOME-T-E02",
+      "proposed_status": "REUSED_CONTRACT_NOT_HOME_END_TO_END"
+    },
+    {
+      "id": "E03",
+      "test_references": [
+        "CTRL:pagination deduplicates immutable IDs",
+        " conflict resets via coherent overview instead of replaying cursor"
+      ],
+      "coverage": "partial",
+      "limitation": "Page dedupe covered; out-of-order real SSE state regression not directly exercised.",
+      "scenario_id": "HOME-T-E03",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "E04",
+      "test_references": [
+        "CTRL:bursts coalesce while pending and never exceed one read/second"
+      ],
+      "coverage": "direct",
+      "limitation": "Deterministic fake-clock queue; not a production performance claim.",
+      "scenario_id": "HOME-T-E04",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "E05",
+      "test_references": [
+        "CTRL:fallback and source TTL refresh independently of live stream",
+        " hidden events reduce work then wake",
+        "EXT:test_expiration_is_passive_and_stale_recurs_after_recovery"
+      ],
+      "coverage": "partial",
+      "limitation": "Combined live browser external TTL still integration.",
+      "scenario_id": "HOME-T-E05",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "E06",
+      "test_references": [
+        "CTRL:time spent reading does not extend source TTL by another full interval",
+        "API",
+        "ATT:test_operator_key_rotation_is_checked_after_warm_http_auth"
+      ],
+      "coverage": "partial",
+      "limitation": "Home actual key revocation/deadline integration not executed.",
+      "scenario_id": "HOME-T-E06",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "E07",
+      "test_references": [
+        "Q:test_disabled_external_and_failed_work_are_not_empty_success",
+        "CTRL:partial failure retains only same-scope stale block, never successful empty or stale forbidden data"
+      ],
+      "coverage": "direct",
+      "limitation": "Controller 401/403 parameter cases also clear state.",
+      "scenario_id": "HOME-T-E07",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "E08",
+      "test_references": [
+        "DEC:test_two_interfaces_race_for_one_canonical_decision"
+      ],
+      "coverage": "partial",
+      "limitation": "Canonical race yes; two actual Home tabs conflict presentation pending.",
+      "scenario_id": "HOME-T-E08",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "E09",
+      "test_references": [
+        "CTRL:fallback and source TTL refresh independently of live stream",
+        " hidden events reduce work then wake"
+      ],
+      "coverage": "partial",
+      "limitation": "Fake visibility event; sensitive action after real visibility change needs browser check.",
+      "scenario_id": "HOME-T-E09",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "E10",
+      "test_references": [
+        "CTRL:visual pause keeps published identity and accepts newest snapshot only when applied",
+        "UI:stale results disable preference and continuation controls"
+      ],
+      "coverage": "partial",
+      "limitation": "SSR/pure state; canonical authority remains separate.",
+      "scenario_id": "HOME-T-E10",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "F01",
+      "test_references": [
+        "none"
+      ],
+      "coverage": "gap",
+      "limitation": "Actual empty Home onboarding browser scenario not covered by listed UI tests.",
+      "scenario_id": "HOME-T-F01",
+      "proposed_status": "NOT_YET_EVIDENCED"
+    },
+    {
+      "id": "F02",
+      "test_references": [
+        "none"
+      ],
+      "coverage": "gap",
+      "limitation": "One connected idle agent layout needs browser scenario.",
+      "scenario_id": "HOME-T-F02",
+      "proposed_status": "NOT_YET_EVIDENCED"
+    },
+    {
+      "id": "F03",
+      "test_references": [
+        "UI:work opens the exact target only on explicit click",
+        "NAV",
+        "BROWSER:Exact handoff drawer and keyboard close restore the trigger"
+      ],
+      "coverage": "partial",
+      "limitation": "Real preliminary browser confirms exact handoff. Other target kinds covered by typed resolver/unit paths, not each browser drawer.",
+      "scenario_id": "HOME-T-F03",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "F04",
+      "test_references": [
+        "CTRL:modal pause retains expanded pages only for same revision, resets changed revisions, and never crosses scope",
+        "BROWSER:Exact handoff drawer and keyboard close restore the trigger"
+      ],
+      "coverage": "partial",
+      "limitation": "Both controller bugs corrected (feed refresh/page preservation). Root final real pagination/scroll test in progress; do not substitute keyboard-focus proof for pagination.",
+      "scenario_id": "HOME-T-F04",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "F05",
+      "test_references": [
+        "BROWSER:Draft, focus and selection survive actual overview response",
+        " discard is explicit"
+      ],
+      "coverage": "browser_preliminary",
+      "limitation": "Actual same DOM node, focus and selection checked while real response completes; final pinned-server repeat pending.",
+      "scenario_id": "HOME-T-F05",
+      "proposed_status": "PRELIMINARY_BROWSER_ONLY"
+    },
+    {
+      "id": "F06",
+      "test_references": [
+        "UI:logout clears only Home continuation content and leaves unrelated recovery records intact",
+        "BROWSER:Draft, focus and selection survive actual overview response",
+        " discard is explicit",
+        "BROWSER:A real 403 clears protected Home list and an open drawer"
+      ],
+      "coverage": "partial",
+      "limitation": "Real discard guard and routed forbidden clearing; project/target draft switching and actual logout remain broader than this subset.",
+      "scenario_id": "HOME-T-F06",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "F07",
+      "test_references": [
+        "NAV"
+      ],
+      "coverage": "partial",
+      "limitation": "Opaque parsing/scope guarded; real back/forward/deep-link route lifecycle pending.",
+      "scenario_id": "HOME-T-F07",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "F08",
+      "test_references": [
+        "PRES",
+        "UI"
+      ],
+      "coverage": "partial",
+      "limitation": "Static labels present; visual design/theme review is Root browser task.",
+      "scenario_id": "HOME-T-F08",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "G01",
+      "test_references": [
+        "PRES",
+        "CTRL:external generations remain distinct during paginated append and never change native results"
+      ],
+      "coverage": "direct",
+      "limitation": "External/native state not merged in controller or labels.",
+      "scenario_id": "HOME-T-G01",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "G02",
+      "test_references": [
+        "EXT:test_completion_stays_historical_unseen_after_ttl_without_becoming_task_success",
+        "PRES"
+      ],
+      "coverage": "reused",
+      "limitation": "Canonical external contract, not new end-to-end Home run.",
+      "scenario_id": "HOME-T-G02",
+      "proposed_status": "REUSED_CONTRACT_NOT_HOME_END_TO_END"
+    },
+    {
+      "id": "G03",
+      "test_references": [
+        "EXT:test_expiration_is_passive_and_stale_recurs_after_recovery",
+        "PRES"
+      ],
+      "coverage": "direct",
+      "limitation": "Pure labels and canonical TTL fixture.",
+      "scenario_id": "HOME-T-G03",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "G04",
+      "test_references": [
+        "CTRL:external generations remain distinct during paginated append and never change native results"
+      ],
+      "coverage": "partial",
+      "limitation": "Native/external association proof is not exercised as linked pair.",
+      "scenario_id": "HOME-T-G04",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "G05",
+      "test_references": [
+        "Q:test_overview_real_fixture_is_read_only_and_scoped"
+      ],
+      "coverage": "partial",
+      "limitation": "External untrusted workspace fixture absent; repository filtering exists by inspection.",
+      "scenario_id": "HOME-T-G05",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "G06",
+      "test_references": [
+        "Q:test_disabled_external_and_failed_work_are_not_empty_success"
+      ],
+      "coverage": "direct",
+      "limitation": "OBS disabled does not remove work/results.",
+      "scenario_id": "HOME-T-G06",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "H01",
+      "test_references": [
+        "BROWSER:Exact handoff drawer and keyboard close restore the trigger"
+      ],
+      "coverage": "partial",
+      "limitation": "Keyboard close and trigger focus observed; complete keyboard path through every action not yet certified.",
+      "scenario_id": "HOME-T-H01",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "H02",
+      "test_references": [
+        "none"
+      ],
+      "coverage": "gap",
+      "limitation": "aria live batching source exists; assistive output/DOM timing not tested.",
+      "scenario_id": "HOME-T-H02",
+      "proposed_status": "NOT_YET_EVIDENCED"
+    },
+    {
+      "id": "H03",
+      "test_references": [
+        "BROWSER:360px document and exact-record drawer remain within viewport"
+      ],
+      "coverage": "partial",
+      "limitation": "360px document/drawer checked; true browser 200% zoom and remaining controls not established by preliminary result.",
+      "scenario_id": "HOME-T-H03",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "H04",
+      "test_references": [
+        "BOUND:test_home_reads_and_exact_seen_preserve_unread_other_page_other_workspace_and_canonical_facts",
+        "Q:test_each_page_uses_one_read_uow",
+        "Q:test_overview_shares_one_attention_projection_statement",
+        "HTTP:test_overview_and_every_page_http_contract",
+        "BROWSER:mutationRequests=[]"
+      ],
+      "coverage": "direct",
+      "limitation": "Actual canonical rows unchanged and write=False UOW; read browser subset sent no mutations. Authentication metadata outside domain-read assertion.",
+      "scenario_id": "HOME-T-H04",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    },
+    {
+      "id": "H05",
+      "test_references": [
+        "Q:test_business_feed_uses_real_events_not_unread_or_private_payload",
+        "N:test_pending_classification_is_counted_before_page_and_preserves_recipient",
+        "NAV",
+        "UI:result preview is escaped and outcome, cleanup and unseen tracking remain separate"
+      ],
+      "coverage": "partial",
+      "limitation": "No comprehensive secret/path/tool-output marker matrix across all summary blocks.",
+      "scenario_id": "HOME-T-H05",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "H06",
+      "test_references": [
+        "PERF:cases agents=1/10/100",
+        "Q:test_overview_shares_one_attention_projection_statement"
+      ],
+      "coverage": "measured_partial",
+      "limitation": "Retained run has 46 statements at every size, not N+1; source-final retest Root-owned. Large-dataset timing target not met.",
+      "scenario_id": "HOME-T-H06",
+      "proposed_status": "MEASURED_PARTIAL"
+    },
+    {
+      "id": "H07",
+      "test_references": [
+        "PERF:dataset agents=100 handoffs=1000 events=100000"
+      ],
+      "coverage": "measured_partial",
+      "limitation": "Retained run traversed 11 pages/1000 distinct activities with bounded payload. No sessions/native operations in this benchmark; not an active-native stress claim.",
+      "scenario_id": "HOME-T-H07",
+      "proposed_status": "MEASURED_PARTIAL"
+    },
+    {
+      "id": "H08",
+      "test_references": [
+        "PERF:environment/cases/service_read/json_encoding/payload_bytes/pagination"
+      ],
+      "coverage": "measured_target_not_met",
+      "limitation": "Retained large p95 946.1015ms exceeds 500ms target; 1/100-agent runs also exceeded target. Root final retest may supersede metrics. HTTP/render/rate are not this service-only benchmark.",
+      "scenario_id": "HOME-T-H08",
+      "proposed_status": "TARGET_NOT_MET"
+    },
+    {
+      "id": "I01",
+      "test_references": [
+        "BROWSER:Classic fallback is independent of work and still renders"
+      ],
+      "coverage": "partial",
+      "limitation": "Real frontend fallback/restoration with zero mutations; fixture has no live native work, so agent continuity remains real-campaign evidence.",
+      "scenario_id": "HOME-T-I01",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "I02",
+      "test_references": [
+        "PKG",
+        "plans/home_evolution/evidence/pr01/qualification.json:sql_migrations=0"
+      ],
+      "coverage": "partial",
+      "limitation": "Read model additive with no Home SQL migration; actual isolated upgrade/rollback compatibility still separate. Do not claim old binary supports all current schemas.",
+      "scenario_id": "HOME-T-I02",
+      "proposed_status": "PARTIAL"
+    },
+    {
+      "id": "I03",
+      "test_references": [
+        "plans/home_evolution/evidence/pr06-package/selection.json:installed_selection"
+      ],
+      "coverage": "pending_installed_and_real",
+      "limitation": "Concrete canonical terminal tests selected (connect/reconnect, question/answer/result, exact continuation, persistence); not yet executed in recorded selection. Real local harness campaign still required by HOME-033.",
+      "scenario_id": "HOME-T-I03",
+      "proposed_status": "NOT_RUN_SELECTED"
+    },
+    {
+      "id": "I04",
+      "test_references": [
+        "PKG:test_packaged_operational_home_serves_assets_and_compatible_contract"
+      ],
+      "coverage": "pending_installed",
+      "limitation": "Test source and committed build exist; isolated wheel/origin/resource qualification selected, not yet complete in inspected evidence.",
+      "scenario_id": "HOME-T-I04",
+      "proposed_status": "NOT_RUN_SELECTED"
+    },
+    {
+      "id": "I05",
+      "test_references": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "BROWSER",
+        "plans/home_evolution/evidence/pr06-package/selection.json"
+      ],
+      "coverage": "direct",
+      "limitation": "Evidence explicitly distinguishes SQLite/ASGI, SSR, real preliminary DOM and selected-but-unexecuted installed campaign. Audit does not turn fixture facts into native outcomes.",
+      "scenario_id": "HOME-T-I05",
+      "proposed_status": "VERIFIED_AT_STATED_LAYER"
+    }
+  ],
+  "invariants": [
+    {
+      "id": "01",
+      "scenarios": "I01/I03",
+      "assessment": "Optional frontend fallback has preliminary DOM proof; actual local terminal full cycle and native continuity still required independently."
+    },
+    {
+      "id": "02",
+      "scenarios": "C03/C04/D08",
+      "assessment": "Canonical APIs and authority reused, no Home Core/Connector protocol or scheduler introduced; installed integration pending."
+    },
+    {
+      "id": "03",
+      "scenarios": "E04/H04",
+      "assessment": "GET-only serialized reader; real read UOW and protected-table snapshots, no Home execution machine."
+    },
+    {
+      "id": "04",
+      "scenarios": "D05/H04",
+      "assessment": "Boundary fixture proves canonical messages/inbox/handoffs/runtime/grants unchanged by reads and seen; browser subset sends zero mutations."
+    },
+    {
+      "id": "05",
+      "scenarios": "B01-B06/D01-D03/G01-G03",
+      "assessment": "Current-owner/stream and expired/prior-claim fixtures now complement truthful labels; native campaign not inferred."
+    },
+    {
+      "id": "06",
+      "scenarios": "A04-A07/D07/H05",
+      "assessment": "Real worker/monitor Home refusal and artifact worker/wrong-workspace refusal; active-content vulnerability fixed. Comprehensive summary marker and real browser auth revocation remain narrower gaps."
+    },
+    {
+      "id": "07",
+      "scenarios": "C03-C06/D08",
+      "assessment": "Existing canonical CAS/revalidation preserved; unknown-response and two-tab Home integrated decision flow still requires dedicated proof."
+    },
+    {
+      "id": "08",
+      "scenarios": "B05/B06/B08",
+      "assessment": "Logical handoff/retry grouping and old-claim separation now tested in SQLite. Independent same-agent blocked/running sessions remains specific fixture gap."
+    },
+    {
+      "id": "09",
+      "scenarios": "G01-G06",
+      "assessment": "External lifetime/provenance kept separate; optional Herdr absence does not disable native Home."
+    },
+    {
+      "id": "10",
+      "scenarios": "I01-I03",
+      "assessment": "Fallback toggles presentation only; zero browser mutations observed. Active executor continuity on toggle still real-campaign proof."
+    }
+  ],
+  "scope": "Read-only update from retained final qualifications and inspected tests. No tests, provider, browser, service or ledger changes in this audit. Browser final and performance final rerun remain Root-owned.",
+  "source_pins": {
+    "tests/home_evolution/test_home_queries.py": "7f680e62e6576324cde2a0beebe36fd4863b35c424d170c2eb6fa53168f8657c",
+    "tests/home_evolution/test_home_http.py": "3d42e2d758cd3b39e265db23272dd8bd0b147018ccb3698c25ffbdc8e474cd96",
+    "tests/home_evolution/test_home_native.py": "a7687e0e56f40848264f2705b3917c330877da1a776d784e4b585e1d159ab9fd",
+    "tests/home_evolution/test_baseline_fixture.py": "112799ccf8beeddb2aa740ce2c96906a7a04efa409ec13b5ab41b47632a7206e",
+    "frontend/tests/homeR1Controller.test.mjs": "993507c264ad29df1e4ac44c8038e74b4c2718d1ef9ea4b0fe41f9715386dcab",
+    "frontend/tests/homeR1Api.test.mjs": "b7aba20c4024c7984911dc5cdf81d6862bd1bd69355c6e005b6a684fd781770f",
+    "frontend/tests/homeR1Navigation.test.mjs": "2e1a0f59c8f05c22bd1c9fd59643c3cd6fd2a5d080884e7da9d0bc5dbd370a3f",
+    "frontend/tests/homeR1Presentation.test.mjs": "3c9d4585ecb6a937e9b1adc221e6ac99cb5ec34f54392d90b1652b849ba6bf10",
+    "frontend/tests/homeUI.test.mjs": "a60350156deccc0df81f818f387371fd5a1cb57f5a2105524a855833ea5e01a0",
+    "tests/execution_r4/test_native_decisions.py": "3c790a408f966403969897a4c647949720e059ddf02013e13ae87eb9f3da3228",
+    "tests/test_attention_api.py": "3b21f99d943bc2d6519ef6e2cf2b29270b79221fdc9ec6bf56a68bbf09493cae",
+    "tests/test_attention_external.py": "b644255f7464dde7245452fa93a50732700f07c826b5e0455807e8e56f9114e3",
+    "tests/test_attention_stream.py": "334629c86109c5bdfc920e2ec5dc7913d1c66d14ce9c6000d661d3b67b04cb21",
+    "tests/home_evolution/test_home_boundaries.py": "9b375d71902a83ed05476efee88d3540339309b49563cde2d85ce5282e6f3e0f",
+    "tests/home_evolution/test_home_package.py": "b91f6a61366e7831c799794c5eb7dbbb01b98f8df0f6d72162d97c7bed79b612",
+    "plans/home_evolution/evidence/pr06-browser/preliminary.json": "b9749d6d7301c7c67dadaae0bcbbd79839d0b8b6a8e1050934c40bfd191dde5a",
+    "plans/home_evolution/evidence/pr05-performance/measurement.json": "4af9a34db176272f93a0c372bf0c04b3ed3cb31681f855b48f6e5f7dcd13f5f2"
+  },
+  "antecedent_matrix_sha256": "c0e7cf47754a4f0b773bc9ed3c2dcec5ccc9e6aa58e115be340b8fabeda8343b",
+  "status_meaning": "Proposals only, not ledger statuses: VERIFIED_AT_STATED_LAYER means the precise automated assertion is evidenced, never a claim of all scenario variants, live provider behavior or 73/73 acceptance.",
+  "qualification_pins": {
+    "pr01/qualification.json": "b89884914efeb2061c98a03ffaaebd7b2eb8d610b33b8fc5fe80348c67d72b75",
+    "pr02-04-ui/qualification.json": "941aea43be11736482c57add2db66a6a1fabae5807e146f837a71018a093e3ac",
+    "pr05-foundation/final-qualification.json": "8223cc5237857d6d0889cd1451671c007e19cb5798b01591181208367ab314e6",
+    "pr06-boundaries/qualification.json": "a450a87588466dec4cc5b0eb9418493e9e837914f016d0ac25d41dd1dbd76f91",
+    "pr06-browser/preliminary.json": "b9749d6d7301c7c67dadaae0bcbbd79839d0b8b6a8e1050934c40bfd191dde5a",
+    "pr05-performance/measurement.json": "4af9a34db176272f93a0c372bf0c04b3ed3cb31681f855b48f6e5f7dcd13f5f2",
+    "pr06-package/selection.json": "87dd7712d62bd75b938c95e5b8eee786b818d0d53978d3af12886ca5117dc2f9"
+  },
+  "suite_counts": {
+    "backend_home_unique": 28,
+    "backend_existing_attention_regressions": 2,
+    "foundation_unique": 26,
+    "ui_home": 16,
+    "ui_legacy_and_modal_regressions": 12,
+    "ui_total": 28,
+    "boundaries_unique": 5,
+    "note": "No sum converted to 73 acceptance scenarios; Node integrated196 overlaps focused suites. Browser6 checks are preliminary, not six extra scenario passes."
+  },
+  "m3_priorities": [
+    {
+      "priority": 1,
+      "task": "Close final pinned browser and installed-package evidence already in progress",
+      "ids": [
+        "F04",
+        "F07",
+        "H01",
+        "H03",
+        "I04"
+      ],
+      "limit": "No new provider needed for these. Do not call SSR focus or CSS viewport a true screen-reader/200% browser-zoom proof."
+    },
+    {
+      "priority": 2,
+      "task": "Retain final performance measurements and explicit missed target before default rollout",
+      "ids": [
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "limit": "Large fixture exceeds500ms in retained service measurement. Do not rename it PASS; final source rerun and rollout limitation/optimization decision belong to Root."
+    },
+    {
+      "priority": 3,
+      "task": "One genuinely authorized disposable local harness campaign through canonical terminal and Home",
+      "ids": [
+        "C01",
+        "C03",
+        "C05",
+        "C10",
+        "D08",
+        "I01",
+        "I03"
+      ],
+      "limit": "Use a qualified harness and finite work. Actual operator must decide the real question; do not synthesize a human decision/native receipt. Record request/result, exact continuation or explicit closed refusal, interruption scope if selected, close/reopen and presentation-off continuity without extra jobs just for screenshots. HOME-033 requires consent and disposable data; R3 grants/waivers do not authorize this automatically."
+    },
+    {
+      "priority": 4,
+      "task": "Use multiagent/remote and external variants only where actually available and authorized",
+      "ids": [
+        "B08",
+        "G04",
+        "G05"
+      ],
+      "limit": "Remote qualification is conditional in the plan. Herdr optional, not a new universal gate. Do not invent active sessions to simulate campaign completion."
+    },
+    {
+      "priority": 5,
+      "task": "Keep specific uncovered synthetic/browser cases visible",
+      "ids": [
+        "A08",
+        "B08",
+        "B09",
+        "C06",
+        "E08",
+        "H02"
+      ],
+      "limit": "Server-wide incident placement, two independent sessions, informational broadcasts, unknown response/two-tab UI and screen-reader announcements are not settled by suite count. Test only the relevant contract when closing each gap."
+    }
+  ]
+}

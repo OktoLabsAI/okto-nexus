@@ -1,0 +1,84 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "Workspace filtering uses real GET projection and excludes global-only agents",
+      "status": "PASS",
+      "detail": {
+        "alphaHasReview": true,
+        "betaHasIndependentRequest": true,
+        "globalExcluded": true
+      }
+    },
+    {
+      "name": "Closing drawer after refresh preserves unchanged-revision pages and actual scroll container",
+      "status": "PASS",
+      "detail": {
+        "loadedActivities": 15,
+        "scrollBefore": 1665,
+        "scrollAfter": 1665,
+        "focusRestored": true
+      }
+    },
+    {
+      "name": "Exact handoff drawer and keyboard close restore the trigger",
+      "status": "PASS",
+      "detail": {
+        "kind": "handoff",
+        "handoff_id": "browser-handoff-0",
+        "focusRestored": true
+      }
+    },
+    {
+      "name": "Draft, focus and selection survive actual overview response; discard is explicit",
+      "status": "PASS",
+      "detail": {
+        "sameNode": true,
+        "focusRetained": true,
+        "selectionRetained": true,
+        "discardGuard": true
+      }
+    },
+    {
+      "name": "360px document and exact-record drawer remain within viewport",
+      "status": "PASS",
+      "detail": {
+        "page": {
+          "viewport": 360,
+          "document": 360
+        },
+        "drawer": {
+          "width": 360,
+          "viewport": 360
+        }
+      }
+    },
+    {
+      "name": "Classic fallback is independent of work and still renders",
+      "status": "PASS",
+      "detail": {
+        "classicRendered": true,
+        "operationalRestored": true,
+        "mutationRequests": 0
+      }
+    },
+    {
+      "name": "A real 403 clears protected Home list and an open drawer",
+      "status": "PASS",
+      "detail": {
+        "listCleared": true,
+        "drawerCleared": true,
+        "syntheticRevocation": true
+      }
+    }
+  ],
+  "mutationRequests": [],
+  "pageErrors": [],
+  "limitations": [
+    "Synthetic fixture, built frontend and actual read APIs; 403 is an explicit routed fixture.",
+    "No provider inference, native decisions, real screen-reader speech or true browser 200% zoom measured.",
+    "This selected browser subset does not certify all 73 acceptance scenarios."
+  ],
+  "source_head": "fa2e4215",
+  "bundle": "index-D4dmKnLh.js"
+}

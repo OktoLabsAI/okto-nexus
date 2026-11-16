@@ -1,0 +1,60 @@
+{
+  "scope": "Existing SQLite/application Graph and bounded event-page reads; JSON encoding only.",
+  "method": "One excluded warmup, 20 measured reads in one read transaction, perf_counter, nearest-rank p95. Query trace counts statements; total_changes remains unchanged.",
+  "not_measured": [
+    "HTTP",
+    "browser rendering",
+    "network",
+    "cold start",
+    "future HOME-R1 projection",
+    "100-agent Graph"
+  ],
+  "measurements": {
+    "baseline_graph": {
+      "browser_render_measured": false,
+      "database_changes": 0,
+      "json_encode": {
+        "p50_ms": 0.13580004451796412,
+        "p95_ms": 0.15700003132224083
+      },
+      "read": {
+        "p50_ms": 1.0528999846428633,
+        "p95_ms": 1.1415999615564942
+      },
+      "response_bytes_max": 3357,
+      "response_bytes_min": 3357,
+      "samples": 20,
+      "sql_statements_max": 10,
+      "sql_statements_min": 10,
+      "warmup": 1
+    },
+    "baseline_existing_events_page": {
+      "browser_render_measured": false,
+      "database_changes": 0,
+      "fixture_counts": {
+        "agents": 100,
+        "events": 100001,
+        "handoff_runtime_attempts": 3,
+        "handoffs": 1000,
+        "sessions": 4,
+        "workspaces": 2
+      },
+      "json_encode": {
+        "p50_ms": 0.04830001853406429,
+        "p95_ms": 0.06260001100599766
+      },
+      "read": {
+        "p50_ms": 0.10499998461455107,
+        "p95_ms": 0.12179999612271786
+      },
+      "response_bytes_max": 2428,
+      "response_bytes_min": 2428,
+      "rows_per_read": 10,
+      "samples": 20,
+      "sql_statements_max": 1,
+      "sql_statements_min": 1,
+      "warmup": 1
+    }
+  },
+  "acceptance_claim": "No HOME-R1 latency, payload or end-to-end acceptance claim."
+}

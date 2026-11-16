@@ -1,0 +1,46 @@
+{
+  "selected_at": "2026-11-16T16:41:53.955701+00:00",
+  "pid": 18768,
+  "source_head": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+  "input_sha256": {
+    "scripts/measure_home_evolution.py": "afade961208cabfdd7412b5e302252ebd38abcbdfccb34cf30ae240d484ec764",
+    "pyproject.toml": "5362ed3940c936490e8ade4ca196d83a8f89bb7c11ad0b081ea995665b02d8fe",
+    "uv.lock": "9ec7868aa2f5976c100a37d72179420b54077a7294b3cce64e81001234abaeca",
+    "src/okto_nexus/domain/home.py": "3d07b528a9e1b7afb12cb52b83d9862d01385fecf7d4322aeefb192a3fb6b2b0",
+    "src/okto_nexus/application/home.py": "2fa6a1f64d00b8e19e6f7a9fe87af7c18e7ab18302d7ea0e7cc807ba37cddcf0",
+    "src/okto_nexus/application/home_ports.py": "f78377e4ff66488184382898fbf3bf6076b2afde0e470f7f5f2a587f26abe3d6",
+    "src/okto_nexus/adapters/inbound/http/home.py": "235bc87a160650f73f3e46ec576c2421a068ce7ce7de5a2faa9a54a31b529de8",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "1f589cb5f592c6bdeca73b202f9f31918685aca92dc0dae07be66f68ef0c886e",
+    "src/okto_nexus/adapters/outbound/sqlite/attention.py": "f04de2cd2db9e7e830d8738133157e08e9c8c67bae19a9708d2e39e41e394e88",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_native.py": "6af1bd541bee55bf2f01e550b415e474c3c10d6081814fb8a4d77fc409e5b19e",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py": "9cf5d2e3bd5f326a6b045aaf8679fbb8e3cf0c5dcb8a056f48c7bdc5cbaa3d70",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py": "495b701847e2e0546267b03cdfd503d0d1290fe2449502fc3adcfaaf2086dab5",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_results.py": "63b1644169950f7f32b0c808fe16daa941df000d2fc589c2c8dbf68942b6c6f2",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py": "36b0961d1178bf3c4a0b1c667beda475f8229039ed23c68fc2a24010db208358",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_external.py": "7a87c16c7f82a5d934528ff382234f3d8c4cd1515cb3e2e46e7487959f445962"
+  },
+  "runner_sha256": "a583ea3ade3c86217253f4f85ed6896edf1d5911b36a5801d9bac3facecffa84",
+  "cases": [
+    [
+      1,
+      10,
+      100
+    ],
+    [
+      10,
+      10,
+      100
+    ],
+    [
+      100,
+      10,
+      100
+    ],
+    [
+      100,
+      1000,
+      100000
+    ]
+  ],
+  "samples": 20
+}

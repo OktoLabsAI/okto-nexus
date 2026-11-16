@@ -48,3 +48,7 @@
   .agent-modal-body > div.grid-cols-2 > .col-span-2 { grid-column: span 1; }
   .agent-modal-header > button[aria-label="Expand modal"], .agent-modal-header > button[aria-label="Restore modal"] { display: none; }
 }
+
+/* Home reuses the modal's native focus trap and discard guard in a side panel. */
+.agent-action-modal.agent-action-drawer { margin: 0 0 0 auto; height: 100dvh; max-height: 100dvh; width: min(56rem, 95vw); max-width: 95vw; border-radius: 1rem 0 0 1rem; }
+@media (max-width: 640px) { .agent-action-modal.agent-action-drawer { width: 100vw; max-width: 100vw; border-radius: 0; } }

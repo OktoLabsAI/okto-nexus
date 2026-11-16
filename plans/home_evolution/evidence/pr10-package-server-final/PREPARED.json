@@ -1,0 +1,23 @@
+{
+  "status": "PREPARED_NOT_EXECUTED_AWAIT_ROOT_RELEASE",
+  "source_head_prepared": "3d95aad8",
+  "runner_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-server-package-runner.py",
+  "runner_sha256": "e375550cd05082af223b3d48955eee4d59a7fb61045e32c328a3dd5dde3523e5",
+  "release_command": "rtk proxy .venv/Scripts/python.exe -X utf8 C:/Users/jpamb/AppData/Local/Temp/home-r1-server-package-runner.py --root-released",
+  "phases": [
+    "isolated copy fresh TypeScript/Vite and wheel/sdist",
+    "Twine both",
+    "Nexus only reinstall --no-index --no-deps into existing own isolated prefix",
+    "ci_installed -I from independent cwd:11Server+1Package cases,3wheel origins/bytes",
+    "compare699Nexus payloads/7assets and full before-build/after-test inputs"
+  ],
+  "effects_before_release": {
+    "build": false,
+    "pip": false,
+    "tests": false,
+    "provider": false,
+    "authentication": false,
+    "service": false
+  },
+  "scheduling": "Root backend performance20x4 currently owns CPU; do not run until Root explicitly releases."
+}

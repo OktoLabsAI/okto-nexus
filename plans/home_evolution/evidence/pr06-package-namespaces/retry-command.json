@@ -1,0 +1,23 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+    "test",
+    "--wheel",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-namespaces-l8urr8ev\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+    "--output",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-namespaces-l8urr8ev\\installed-final",
+    "--tests",
+    "tests/home_evolution/test_home_package.py",
+    "tests/home_evolution/test_home_namespaces.py"
+  ],
+  "started_at": "2026-11-15T22:13:45.551113+00:00",
+  "ended_at": "2026-11-15T22:14:00.683023+00:00",
+  "exit_code": 0
+}

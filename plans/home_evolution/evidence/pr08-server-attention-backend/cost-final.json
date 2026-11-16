@@ -1,0 +1,115 @@
+{
+  "status": "PASS",
+  "tool_ref": "6db7c3",
+  "recorded_at": "2026-11-16T15:29:22.017129+00:00",
+  "method": "Same comparison runner as unscoped antecedent: one discarded warmup, five warm reads per implementation/dataset; same projected A payload; current canonical default/no-hint Attention for baseline Home classes from b82a36f2.",
+  "runner_sha256": "50f03364106a5d7848b5d6a68a810a0bd4dddca0e18f2ec4005ac6c390305010",
+  "raw_xml_sha256": "71c59827bbf955730a473304d67c4780a34ff4a18f77fc52d60eb013a5046a30",
+  "input_sha256": {
+    "src/okto_nexus/domain/home.py": "3d07b528a9e1b7afb12cb52b83d9862d01385fecf7d4322aeefb192a3fb6b2b0",
+    "src/okto_nexus/application/home.py": "2fa6a1f64d00b8e19e6f7a9fe87af7c18e7ab18302d7ea0e7cc807ba37cddcf0",
+    "src/okto_nexus/application/home_ports.py": "f78377e4ff66488184382898fbf3bf6076b2afde0e470f7f5f2a587f26abe3d6",
+    "src/okto_nexus/adapters/inbound/http/home.py": "235bc87a160650f73f3e46ec576c2421a068ce7ce7de5a2faa9a54a31b529de8",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "1f589cb5f592c6bdeca73b202f9f31918685aca92dc0dae07be66f68ef0c886e",
+    "src/okto_nexus/adapters/outbound/sqlite/attention.py": "f04de2cd2db9e7e830d8738133157e08e9c8c67bae19a9708d2e39e41e394e88",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_native.py": "6af1bd541bee55bf2f01e550b415e474c3c10d6081814fb8a4d77fc409e5b19e",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py": "9cf5d2e3bd5f326a6b045aaf8679fbb8e3cf0c5dcb8a056f48c7bdc5cbaa3d70",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py": "495b701847e2e0546267b03cdfd503d0d1290fe2449502fc3adcfaaf2086dab5",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_results.py": "63b1644169950f7f32b0c808fe16daa941df000d2fc589c2c8dbf68942b6c6f2",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py": "36b0961d1178bf3c4a0b1c667beda475f8229039ed23c68fc2a24010db208358",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_external.py": "7a87c16c7f82a5d934528ff382234f3d8c4cd1515cb3e2e46e7487959f445962",
+    "tests/home_evolution/test_home_server_attention.py": "4e81946e6b07601ccf8e88ef99ccfbc9fc93a7002f8aaa71452da01277e9cd2d",
+    "tests/home_evolution/test_home_native.py": "78ff1b729f98d4394ce6c9ae2e918d98a3177cff2f6a28221396cb662ffaa25d",
+    "tests/test_attention_authority.py": "b81847ed6c3df14850f6511668860a2844f6196f123f34b1be840b198a74be8c"
+  },
+  "measurements": [
+    {
+      "dataset": "small",
+      "implementation": "baseline_b82",
+      "samples_ms": [
+        289.87909998977557,
+        269.0419999998994,
+        265.4649000032805,
+        245.85449998266995,
+        266.5030999924056
+      ],
+      "p50_ms": 266.5030999924056,
+      "p95_nearest_rank_ms": 289.87909998977557,
+      "sql_statements": [
+        50
+      ],
+      "transactions_per_read": [
+        1
+      ],
+      "writes": 0
+    },
+    {
+      "dataset": "small",
+      "implementation": "server_attention",
+      "samples_ms": [
+        356.7752999952063,
+        403.035799972713,
+        347.62830002000555,
+        338.01589999347925,
+        349.8692000284791
+      ],
+      "p50_ms": 349.8692000284791,
+      "p95_nearest_rank_ms": 403.035799972713,
+      "sql_statements": [
+        50
+      ],
+      "transactions_per_read": [
+        1
+      ],
+      "writes": 0
+    },
+    {
+      "dataset": "500-other-project-aged-handoffs",
+      "implementation": "baseline_b82",
+      "samples_ms": [
+        248.69340000441298,
+        243.94529999699444,
+        237.77850001351908,
+        260.3264999925159,
+        259.8818999831565
+      ],
+      "p50_ms": 248.69340000441298,
+      "p95_nearest_rank_ms": 260.3264999925159,
+      "sql_statements": [
+        50
+      ],
+      "transactions_per_read": [
+        1
+      ],
+      "writes": 0
+    },
+    {
+      "dataset": "500-other-project-aged-handoffs",
+      "implementation": "server_attention",
+      "samples_ms": [
+        387.2323000105098,
+        378.60200001159683,
+        340.43590002693236,
+        355.60770001029596,
+        355.1747999736108
+      ],
+      "p50_ms": 355.60770001029596,
+      "p95_nearest_rank_ms": 387.2323000105098,
+      "sql_statements": [
+        50
+      ],
+      "transactions_per_read": [
+        1
+      ],
+      "writes": 0
+    }
+  ],
+  "baseline_home_commit": "b82a36f2",
+  "limitations": [
+    "Small five-sample local service/SQLite comparison, not production SLO or controlled cold-cache experiment.",
+    "HTTP/browser/native/provider were not measured; no actual global incident producer was created.",
+    "Root confirmed Vite build/browser/test processes finished before final measurement; general machine load was not otherwise controlled.",
+    "One read UoW and zero writes were asserted with SQLite authorizer/trace through MeasuredFactory.",
+    "Constant overhead remains; workload growth from500 unrelated B handoffs is pruned by the explicit source hint."
+  ]
+}

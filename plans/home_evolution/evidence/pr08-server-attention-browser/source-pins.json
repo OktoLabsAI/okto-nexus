@@ -1,0 +1,51 @@
+{
+  "captured_at_utc": "2026-11-16T15:18:31.827100+00:00",
+  "source_pins": {
+    "frontend/src/components/home/HomeCards.tsx": "62a71dfb655dc3b230c717d9247efe962368b25470a545037b3ca5c1676d1455",
+    "frontend/src/components/home/OperationalHome.tsx": "aeecaba0298525e81cc085b09ba407cd7cf134f13c510025582f5d542e3fddd8",
+    "frontend/src/homeApi.ts": "e753a2408b358f0d49dd86c11fa2dff75786f332cafed5fd0330ef6b92c3d9af",
+    "frontend/src/homeController.ts": "880d15c3b4315d8155cb53fb67169ed1db264d17e8977b1b3aa05bbe1b8b66a6",
+    "frontend/src/homeTypes.ts": "6791b1b967e9f53eba05677ba2c7f7f7278fe85ad1a99fe924033ffddfafb5ff",
+    "src/okto_nexus/adapters/inbound/http/attention.py": "012a8a711b759cf209cdd83119f6b9bd5d1a9b28bff03e60496f0dec74a6bd6f",
+    "src/okto_nexus/adapters/inbound/http/home.py": "235bc87a160650f73f3e46ec576c2421a068ce7ce7de5a2faa9a54a31b529de8",
+    "src/okto_nexus/adapters/inbound/http/routes.py": "c51b4f4f031c3b85fc49772c7bb032a8ebe2a854bfdff3682d72535c570683c5",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-Dcu4bArB.js": "7f8e447605e14b15ee3c064602198c9ca9a02d84247c2ab3d941eea0735e8797",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "d3aee0d01394fe674d4fe6cf78a5513e5f8000f7a7c1fd14dfe9e0bad4dbd16b",
+    "src/okto_nexus/adapters/outbound/sqlite/attention.py": "f04de2cd2db9e7e830d8738133157e08e9c8c67bae19a9708d2e39e41e394e88",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py": "495b701847e2e0546267b03cdfd503d0d1290fe2449502fc3adcfaaf2086dab5",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py": "36b0961d1178bf3c4a0b1c667beda475f8229039ed23c68fc2a24010db208358",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_external.py": "7a87c16c7f82a5d934528ff382234f3d8c4cd1515cb3e2e46e7487959f445962",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_native.py": "6af1bd541bee55bf2f01e550b415e474c3c10d6081814fb8a4d77fc409e5b19e",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py": "9cf5d2e3bd5f326a6b045aaf8679fbb8e3cf0c5dcb8a056f48c7bdc5cbaa3d70",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_results.py": "63b1644169950f7f32b0c808fe16daa941df000d2fc589c2c8dbf68942b6c6f2",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "1f589cb5f592c6bdeca73b202f9f31918685aca92dc0dae07be66f68ef0c886e",
+    "src/okto_nexus/application/attention.py": "cf0b96fe7d568fcc04f50d99ce30c3eae3f42e826b40b905eb384c2cf3500553",
+    "src/okto_nexus/application/home.py": "2fa6a1f64d00b8e19e6f7a9fe87af7c18e7ab18302d7ea0e7cc807ba37cddcf0",
+    "src/okto_nexus/domain/home.py": "3d07b528a9e1b7afb12cb52b83d9862d01385fecf7d4322aeefb192a3fb6b2b0",
+    "tests/home_evolution/browser_checks.js": "1c785273ee94e101a674a556c96438948b8c930499deba0997b2d136a2b4167b",
+    "tests/home_evolution/browser_fixture.py": "8a86251b05cb88a546a292ae93671b91d88359d2ef12a582aeb3a2611c97f97d",
+    "tests/home_evolution/browser_server_attention_checks.js": "d576d9a492db2bb73181cb32315effacf240c6311feb5a4beeeb082f14e928a1",
+    "tests/home_evolution/browser_server_attention_fixture.py": "8b4bfdd3b2c7d59080a21b07b37aa558882b9dfa47d9454e84f3261dc8f47236",
+    "tests/home_evolution/test_home_server_attention.py": "64ff31867fad0dc645f6ad76946dea5c9d93c822ca7d72e044834fb49d669917"
+  },
+  "ready_import_pins": {
+    "tests/home_evolution/browser_fixture.py": "8a86251b05cb88a546a292ae93671b91d88359d2ef12a582aeb3a2611c97f97d",
+    "tests/home_evolution/browser_checks.js": "1c785273ee94e101a674a556c96438948b8c930499deba0997b2d136a2b4167b",
+    "src/okto_nexus/application/home.py": "2fa6a1f64d00b8e19e6f7a9fe87af7c18e7ab18302d7ea0e7cc807ba37cddcf0",
+    "src/okto_nexus/domain/home.py": "3d07b528a9e1b7afb12cb52b83d9862d01385fecf7d4322aeefb192a3fb6b2b0",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "1f589cb5f592c6bdeca73b202f9f31918685aca92dc0dae07be66f68ef0c886e",
+    "src/okto_nexus/adapters/inbound/http/home.py": "235bc87a160650f73f3e46ec576c2421a068ce7ce7de5a2faa9a54a31b529de8",
+    "src/okto_nexus/adapters/inbound/http/routes.py": "c51b4f4f031c3b85fc49772c7bb032a8ebe2a854bfdff3682d72535c570683c5",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "d3aee0d01394fe674d4fe6cf78a5513e5f8000f7a7c1fd14dfe9e0bad4dbd16b"
+  },
+  "all_server_runtime_source_mtimes_precede_ready": true,
+  "files_changed_after_ready": [
+    "tests/home_evolution/browser_server_attention_checks.js"
+  ],
+  "client_source_exactly_matches_executed_cli_code": true,
+  "client_script_note": "Only the browser script changed after the Python server READY, before CLI execution. Its complete current source was compared to the retained executed CLI code and matches exactly.",
+  "fixture_synthetic": true,
+  "native_runtime_started": false,
+  "global_producer_created": false,
+  "sql_null_workspace_rows_created": false
+}

@@ -1,0 +1,50 @@
+{
+  "artifact_kind": "INERT_TECHNICAL_CANDIDATE",
+  "campaign_id": "home-r1-local-codex-bc1d3f18e856",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-codex-bc1d3f18e856",
+  "port": 62817,
+  "policy": {
+    "max_calls": 2,
+    "observed_limit": 200000,
+    "preventive": 150000,
+    "reserve": 50000
+  },
+  "scope_paths": {
+    "deliverables": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-codex-bc1d3f18e856\\deliverables",
+    "nexus-home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-codex-bc1d3f18e856\\nexus-home",
+    "private": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-codex-bc1d3f18e856\\private",
+    "public": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-codex-bc1d3f18e856\\public",
+    "workspace": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-codex-bc1d3f18e856\\workspace"
+  },
+  "request_ids": {
+    "close": "home-r1-close-01",
+    "interrupt": "home-r1-interrupt-01",
+    "useful": "home-r1-local-useful-02"
+  },
+  "setup_intent": "generated once by canonical connect --plan and pinned before any apply; not an invented Server ID",
+  "effects": [
+    "Create only these campaign directories and synthetic CSV",
+    "Install own user Task Scheduler service with login trigger",
+    "Start own Nexus and local application operator bootstrap",
+    "One paid local setup test and one paid useful task",
+    "Real native decision only if emitted; presentation toggle only on own browser",
+    "Normal cleanup then necessary canonical force only for current own instance; uninstall own task, preserve data"
+  ],
+  "ambient_native_configuration": "Existing CLI account, model, MCP and instruction configuration may be inherited. No isolation or enforcement claim. Capability/effective metadata inspection occurs after consent before paid apply; no reading auth.json or dumping personal configuration.",
+  "candidate_sha256": "5a8c72d04e9e4adc426173dd14971ef28c6dec599af2bfea42b5deaf61012c40",
+  "package_wheel": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-namespaces-l8urr8ev\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+    "sha256": "c41f00cb3d1702df351c2e15ebee8c14c3eb238b67b7631a1604a8d7ec8df190"
+  },
+  "python": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+    "sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79"
+  },
+  "payload_pins": 883,
+  "campaign_root_exists": false,
+  "authorization_present": false,
+  "create_tool": "898e7f",
+  "execute_without_consent_tool": "1d7453",
+  "refused_without_consent": "NEW_PAID_CONSENT_REQUIRED",
+  "product_or_provider_effects": 0
+}
