@@ -40,7 +40,7 @@ export function useHomeOverview(options: HomeOverviewOptions) {
   useEffect(() => {
     controller.current?.configure({ ...options, origin: window.location.origin,
       visible: options.visible !== false && !document.hidden });
-  }, [options.workspace, options.identityKey, options.enabled, options.visible, options.agent_id, options.state]);
+  }, [options.workspace, options.identityKey, options.enabled, options.visible, options.agent_id, options.state,options.family,options.quick,options.harness,options.host,options.holdOrder]);
   useEffect(() => { if (options.latestEvent) controller.current?.invalidate(options.latestEvent); }, [options.latestEvent]);
   useEffect(() => { controller.current?.onStreamStatus(options.streamStatus ?? 'off'); }, [options.streamStatus]);
   const refresh = useCallback(() => controller.current?.refresh(), []);
@@ -48,10 +48,16 @@ export function useHomeOverview(options: HomeOverviewOptions) {
   const pause = useCallback((paused?: boolean) => controller.current?.pause(paused), []);
   const apply = useCallback(() => controller.current?.apply(), []);
   const clear = useCallback(() => controller.current?.clear(), []);
+  const holdOrder=useCallback((holding:boolean)=>controller.current?.holdOrder(holding),[]);
+  const loadEntries=useCallback(()=>controller.current?.loadEntries(),[]);
+  const loadGroupChildren=useCallback((groupId:string)=>controller.current?.loadGroupChildren(groupId),[]);
+  const loadEntrySessions=useCallback((groupId:string,entryId:string)=>controller.current?.loadEntrySessions(groupId,entryId),[]);
+  const loadEntryAttention=useCallback((groupId:string,entryId:string)=>controller.current?.loadEntryAttention(groupId,entryId),[]);
+  const loadEntryResults=useCallback((groupId:string,entryId:string)=>controller.current?.loadEntryResults(groupId,entryId),[]);
   // Effects run after paint: never render a previous identity/workspace during
   // the intervening render before configure has cleared its controller cache.
   const expected = homeContextKey({ ...options, origin: typeof window === 'undefined' ? '' : window.location.origin });
   const visibleState = state.scopeKey === expected && options.enabled !== false && options.identityKey
     ? state : { ...initialHomeState(), status: options.enabled === false || !options.identityKey ? 'disabled' as const : 'loading' as const };
-  return { state: visibleState, refresh, loadMore, pause, apply, clear };
+  return { state: visibleState, refresh, loadMore, pause, apply, clear,holdOrder,loadEntries,loadGroupChildren,loadEntrySessions,loadEntryAttention,loadEntryResults };
 }

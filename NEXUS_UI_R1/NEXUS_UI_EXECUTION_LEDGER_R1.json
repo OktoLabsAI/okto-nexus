@@ -2025,7 +2025,7 @@
       "id": "UI-023",
       "pr": "PR-04",
       "title": "Substituir listas paralelas pela região única",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-010",
         "UI-021"
@@ -2050,14 +2050,18 @@
         "T-HOME-02",
         "T-HOME-03"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json"
+      ],
+      "limitations": [
+        "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
+      ]
     },
     {
       "id": "UI-024",
       "pr": "PR-04",
       "title": "Implementar expansão de sessões e conexões ociosas",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-023"
       ],
@@ -2083,14 +2087,18 @@
         "T-DATA-12",
         "T-PANEL-04"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json"
+      ],
+      "limitations": [
+        "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
+      ]
     },
     {
       "id": "UI-025",
       "pr": "PR-04",
       "title": "Aplicar filtros, ordem e vazio proporcionais",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-023",
         "UI-024"
@@ -2117,8 +2125,12 @@
         "T-HOME-09",
         "T-RESULT-05"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json"
+      ],
+      "limitations": [
+        "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
+      ]
     },
     {
       "id": "UI-026",
@@ -2158,7 +2170,7 @@
       "id": "UI-027",
       "pr": "PR-04",
       "title": "Adaptar atualização compartilhada à lista única",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-021",
         "UI-025"
@@ -2185,8 +2197,12 @@
         "T-LIVE-04",
         "T-LIVE-05"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json"
+      ],
+      "limitations": [
+        "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
+      ]
     },
     {
       "id": "UI-028",

@@ -1,4 +1,4 @@
-import type { AttentionOccurrence } from './attentionTypes';
+import type { AttentionOccurrence, AttentionAction } from './attentionTypes';
 import type { ExternalObservation } from './observationTypes';
 
 export interface HomeScope { workspace_id: string | null; agent_id?: string; state?: string }
@@ -80,4 +80,44 @@ export interface HomeConnectionContext {
 }
 export interface HomeSessionContext extends HomeConnectionContext {
   session_id: string; lifecycle_state: string;
+}
+
+export type HomeQuickFilter = 'active' | 'needs_you' | 'results' | 'all';
+export interface HomeEntryFilters extends HomeFilters { quick?: HomeQuickFilter; harness?: string; host?: string }
+export interface HomeEntryScope extends HomeScope { quick: HomeQuickFilter; include_recent_results: boolean; harness?: string; host?: string }
+export interface HomeEntryQuery extends HomeEntryFilters { cursor?: string; limit?: number; preview?: number }
+export interface HomeSessionRef { server_id: string; executor_id: string; workspace_id: string; session_id: string }
+export interface HomeConnectionRef { server_id: string; executor_id: string; workspace_id: string; binding_id: string; agent_id: string }
+export type HomeEntryKind = 'work' | 'session' | 'connection' | 'external' | 'attention';
+export type HomeEntryDisplayState = HomeDisplayState | 'configured' | 'connected' | 'idle' | 'offline' | 'stale';
+export type HomeEntryAction = {kind:'inspect'; target:HomeTarget} | {kind:'attention'; attention_id:string; action:AttentionAction};
+export interface HomeEntry {
+  id:string; kind:HomeEntryKind; source_ref:HomeSourceRef; workspace_id:string; agent_id:string|null;
+  title:string; agent_label:string|null; harness_label:string|null; host_label:string|null;
+  display_state:HomeEntryDisplayState; evidence:'confirmed'|'reported'|'inferred'|'unknown'; state_since:string|null;
+  sessions:HomeSessionRef[]; sessions_total:number|null; has_more_sessions:boolean; sessions_cursor:string|null;
+  attention_refs:string[]; result_refs:string[]; target:HomeTarget|null;
+  result_tracking:'unseen'|'unknown'|'seen'|'not_applicable'; actions:HomeEntryAction[];
+  attention_preview:AttentionOccurrence[]; attention_total:number|null; has_more_attention:boolean; attention_cursor:string|null;
+  results_preview:HomeResult[]; results_total:number|null; has_more_results:boolean; results_cursor:string|null;
+  related_coverage:{attention:'ready'|'unknown';results:'ready'|'unknown'};
+  external:ExternalObservation[]; as_of:string|null; next_refresh_at:string|null;
+}
+export interface HomeEntryGroup {
+  id:string; server_id:string; executor_id:string|null; workspace_id:string; agent_id:string|null;
+  connection:HomeConnectionRef|null; label:string; agent_label:string|null; workspace_label:string|null; host_label:string|null;
+  children:HomeEntry[]; children_total:number|null; has_more_children:boolean; children_cursor:string|null;
+}
+export interface HomeEntryCount { value:number|null; total_is_exact:boolean; unit:'activities'|'external_instances'|'occurrences'|'sessions'|'results' }
+export interface HomeEntrySummary {
+  activities:HomeEntryCount; external_instances:HomeEntryCount; occurrences:HomeEntryCount;
+  sessions:HomeEntryCount; results:HomeEntryCount; unseen_results:HomeEntryCount;
+}
+export type HomeEntryPartition = 'groups'|'children'|'sessions'|'attention'|'results';
+export interface HomeEntryPage<T> extends Omit<HomeSection<T>, 'revision'> {
+  version:1; scope:HomeEntryScope; server_id:string; generated_at:string; snapshot_id:string|null;
+  revision:string|null; partition:HomeEntryPartition; group_id:string|null; entry_id:string|null;
+  event_cursor:number; event_low_watermark:number|null; source_status:Record<string,HomeSectionStatus>;
+  coverage:{result_tracking:'unknown'|'partial'|'ready'}; summary:HomeEntrySummary;
+  server_attention:Pick<HomeSection<AttentionOccurrence>,'status'|'items'|'total'|'total_is_exact'|'has_more'>;
 }

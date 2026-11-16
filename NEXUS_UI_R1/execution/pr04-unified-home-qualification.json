@@ -1,0 +1,62 @@
+{
+  "tasks": [
+    "UI-023",
+    "UI-024",
+    "UI-025",
+    "UI-027"
+  ],
+  "status": "IMPLEMENTED",
+  "frontend": {
+    "full_suite": {
+      "passed": 255,
+      "tool_ref": "24c180",
+      "cut": "Before final copy/as_of adjustment"
+    },
+    "final_focal": {
+      "passed": 33,
+      "tool_ref": "c000cc",
+      "scope": "Entry API/controller/cards and legacy composition compatibility after final adjustment"
+    },
+    "typescript": {
+      "exit_code": 0,
+      "tool_ref": "1d42cf"
+    },
+    "build": {
+      "exit_code": 0,
+      "session": 89006,
+      "tool_ref": "332bc6",
+      "bundle": "index-BWNovhxJ.js",
+      "css": "index-Dy9r_el7.css"
+    }
+  },
+  "behavior": [
+    "Existing OperationalHome now has one Follow-up region for work, passive sessions/connections, attention and deliveries.",
+    "Groups and all related partitions use backend cursors and totals. No legacy overview/activity requests in entries family.",
+    "Existing HomeController owns one serialized generation-bound queue, shared stream invalidation, hidden-tab TTL, pause and auth cleanup.",
+    "Focused or expanded contexts hold material ordering updates until Apply updates; stable text can refresh.",
+    "Four quick filters and optional details preserve initial recent/unseen window, explicit source partiality and unknown totals.",
+    "Composer, canonical inspection/actions, occurrence revision checks, artifacts and old controller consumers remain reused."
+  ],
+  "limitations": [
+    "Node/SSR is not mounted-browser, screen-reader or real-harness evidence; UI-028 and panel/onboarding gates remain pending.",
+    "Current inspector still needs the composed entry/session/related context gate UI-026/UI-030; this milestone alone does not complete opening a row.",
+    "Existing Vite large-chunk warning remains; no performance percentile claim."
+  ],
+  "migrations": 0,
+  "provider_calls": 0,
+  "effects": "Presentation and passive reads; productive actions retain their existing canonical surfaces and authority.",
+  "rollback": "Revert this presentation/controller extension and rebuild assets. Classic Home and legacy API family remain available; persisted work and connection profiles are untouched.",
+  "next": "Compose exact entry/session panel; mandatory UI/Connector onboarding; mounted-browser qualification.",
+  "working_tree_raw_sha256": {
+    "frontend/src/components/home/HomeCards.tsx": "97538322e7f7473f4874b19d695f57f898ccd82e9260fd3314135c706b82f948",
+    "frontend/src/components/home/OperationalHome.tsx": "b67a17846f7324e7e2adbe999536113c16330910d7c3df6b17cd1572944852c1",
+    "frontend/src/homeApi.ts": "a262a5ed4e13caedb1f0b25c44f8b6e911aebc6a0f5fe1aad32b10e1c260635c",
+    "frontend/src/homeController.ts": "5427a9c1246993244a99745a4c37507023e2b840143bcae9c18850d5ab62ba2a",
+    "frontend/src/homeTypes.ts": "2861bc3cee2f1edcd63ee59e54424502de9a7a8810b004227bfcbf478db4d4bb",
+    "frontend/src/hooks/useHomeOverview.ts": "ec781890f103053b651b162b7f6c953b977b944944e7176710f2d4d74bc9cd22",
+    "frontend/tests/homeR1Api.test.mjs": "58ee903ea5b6d5c72295d48f782cafe5f5f626cb3381cc576cc6c7d8169ef825",
+    "frontend/tests/homeUI.test.mjs": "f2fc847d4d490b23a9e4b36d5184e626531e999a311dc26926cb9eea141db165",
+    "frontend/tests/uiEntriesController.test.mjs": "d17ae88d16ee3b7ac0dbce7914a75bf49a7dbcd9a52345c4323c1de2ee34ff5d",
+    "frontend/tests/uiEntryCards.test.mjs": "2015b50ab04454ba1777d3b2b5ba73aac6faa0d1f7b7065fc91687b241093384"
+  }
+}

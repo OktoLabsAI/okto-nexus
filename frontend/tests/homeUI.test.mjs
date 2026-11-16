@@ -166,37 +166,45 @@ const serverOccurrence = () => ({attention_id:'canonical-server-attention',kind:
   seen_state:{seen:false,seen_at:null,snoozed:false,snoozed_until:null,revision:7}});
 const quietSnapshot = item => ({version:1,server_id:'server',scope:{workspace_id:'ws'},generated_at:'2030-01-01T00:00:00Z',
   work:section({}),attention:section({}),results:section({}),agents:section({}),external_activity:section({status:'disabled'}),server_attention:section({items:[item],total:1}),summary:{}});
-let renderedHomeState,serverRows=[];
-modules.set(fileURLToPath(new URL('../src/hooks/useHomeOverview.ts',import.meta.url)),{exports:{useHomeOverview:()=>({state:renderedHomeState,refresh(){},pause(){},apply(){},loadMore(){}})}});
-cards.AttentionRow=props=>{serverRows.push(props);return React.createElement(AttentionRow,props);};
+let renderedHomeState,entryRows=[];
+modules.set(fileURLToPath(new URL('../src/hooks/useHomeOverview.ts',import.meta.url)),{exports:{useHomeOverview:()=>({state:renderedHomeState,refresh(){},pause(){},apply(){},loadMore(){},holdOrder(){},loadEntries(){},loadGroupChildren(){},loadEntrySessions(){},loadEntryAttention(){},loadEntryResults(){}})}});
+const EntryRow=cards.HomeEntryRow;
+cards.HomeEntryRow=props=>{entryRows.push(props);return React.createElement(EntryRow,props);};
 const {OperationalHome}=load(new URL('../src/components/home/OperationalHome.tsx',import.meta.url));
 const homeProps={workspace:'ws',workspaces:[],identityKey:'operator',refreshTick:0,latestEvent:null,streamStatus:'live',onNavigate(){},onAttentionChanged(){},onSetupAgent(){},registerLeaveGuard(){}};
 const renderHome = snapshot => {
-  serverRows=[];renderedHomeState={snapshot,status:'ready',staleSections:[],paused:false,generation:1,loading:false,loadingMore:null,error:null,activity:null,hasPendingUpdate:false};
+  entryRows=[];renderedHomeState={entries:snapshot,entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{},status:'ready',staleSections:[],paused:false,generation:1,loading:false,entryLoading:null,error:null,hasPendingUpdate:false};
   return html(OperationalHome,homeProps);
 };
+const entriesSnapshot=(item,children=[])=>({version:1,server_id:'server',revision:'entry-revision',status:'ready',items:children.length?[{id:'group',label:'Agent context',children,children_total:children.length,has_more_children:false}]:[],
+  total:children.length?1:0,total_is_exact:true,has_more:false,source_status:{work:'ready',connections:'ready',sessions:'ready',attention:'ready'},coverage:{result_tracking:'ready'},
+  server_attention:{status:'ready',items:item?[item]:[],total:item?1:0,total_is_exact:true,has_more:false},summary:{}});
 
-test('Server lane remains explicitly separate from a quiet project and enters announcement identity tracking', () => {
-  const item=serverOccurrence(),snapshot=quietSnapshot(item),markup=renderHome(snapshot);
-  assert.match(markup,/aria-label="Server"/);assert.match(markup,/data-home-item="canonical-server-attention"/);
-  assert.match(markup,/Server-wide attention is independent/);assert.match(markup,/Set up your first agent/);
-  assert.doesNotMatch(markup,/Operational summary|aria-label="Needs you"/);
-  assert.equal(isQuietHome(snapshot),true);assert.deepEqual([...homeAnnouncementIds(snapshot)],[item.attention_id]);
-  const forbidden={...snapshot,server_attention:section({status:'forbidden',items:[item],total:null})};
-  const hidden=renderHome(forbidden);assert.doesNotMatch(hidden,/data-home-item="canonical-server-attention"/);assert.match(hidden,/Access unavailable/);
+test('single follow-up keeps Server notice independent and removes the permanent Server panel', () => {
+  const item=serverOccurrence(),snapshot=entriesSnapshot(item),markup=renderHome(snapshot);
+  assert.match(markup,/1 Server attention item/);assert.match(markup,/separate from project work/);assert.match(markup,/data-testid="home-follow-up"/);
+  assert.match(markup,/No matching activity/);assert.doesNotMatch(markup,/aria-label="Server"|Set up your first agent|Operational summary|Recent activity/);
+  assert.doesNotMatch(renderHome(entriesSnapshot(null)),/Server attention item|Server attention unavailable/);
+  const forbidden={...snapshot,server_attention:{...snapshot.server_attention,status:'forbidden',total:null}};
+  const hidden=renderHome(forbidden);assert.doesNotMatch(hidden,/canonical-server-attention/);assert.match(hidden,/Server attention unavailable/);
+  // The retained legacy helper remains valid for other existing consumers.
+  assert.equal(isQuietHome(quietSnapshot(item)),true);assert.deepEqual([...homeAnnouncementIds(quietSnapshot(item))],[item.attention_id]);
 });
 
-test('Server viewing preferences use the captured canonical ID and both revisions, with stale or changed occurrences fenced', async () => {
-  const item=serverOccurrence(),snapshot=quietSnapshot(item),api=load(new URL('../src/api.ts',import.meta.url)).api;
+test('entry viewing preferences use captured canonical ID and revisions, with stale or changed occurrences fenced', async () => {
+  const item={...serverOccurrence(),attention_id:'canonical-project-attention',workspace_id:'ws',agent_id:'A'};
+  const e={id:'entry',kind:'work',workspace_id:'ws',agent_id:'A',title:'One task',display_state:'awaiting_operator',evidence:'confirmed',
+    target:null,sessions:[],sessions_total:0,has_more_sessions:false,attention_preview:[item],attention_refs:[item.attention_id],attention_total:1,has_more_attention:false,
+    results_preview:[],result_refs:[],results_total:0,has_more_results:false,result_tracking:'not_applicable',external:[]};
+  const snapshot=entriesSnapshot(null,[e]),api=load(new URL('../src/api.ts',import.meta.url)).api;
   const previous=api.attentionSeen,calls=[];api.attentionSeen=async(...args)=>{calls.push(args);return {};};
   try{
-    renderHome(snapshot);serverRows[0].onSeen(item,true);await new Promise(setImmediate);
+    renderHome(snapshot);entryRows[0].onSeen(item,true);await new Promise(setImmediate);
     assert.deepEqual(calls,[[item.attention_id,{seen:true,source_revision:item.source_revision,preference_revision:7}]]);
-    assert.equal(freshHomeOccurrence(snapshot,['server_attention'],item),undefined);
-    assert.equal(freshHomeOccurrence(snapshot,[],{...item,source_revision:'old-source'}),undefined);
-    assert.equal(freshHomeOccurrence(snapshot,[],{...item,seen_state:{...item.seen_state,revision:6}}),undefined);
+    assert.equal(cards.freshHomeEntryOccurrence(renderedHomeState,{...item,source_revision:'old-source'}),undefined);
+    assert.equal(cards.freshHomeEntryOccurrence(renderedHomeState,{...item,seen_state:{...item.seen_state,revision:6}}),undefined);
     renderHome(snapshot);renderedHomeState.staleSections.push('server_attention');
-    serverRows[0].onSeen(item,true);await new Promise(setImmediate);assert.equal(calls.length,1);
-    renderHome(snapshot);renderedHomeState.paused=true;serverRows[0].onSeen(item,true);await new Promise(setImmediate);assert.equal(calls.length,1);
+    entryRows[0].onSeen(item,true);await new Promise(setImmediate);assert.equal(calls.length,1);
+    renderHome(snapshot);renderedHomeState.paused=true;entryRows[0].onSeen(item,true);await new Promise(setImmediate);assert.equal(calls.length,1);
   }finally{api.attentionSeen=previous;}
 });
