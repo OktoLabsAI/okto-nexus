@@ -1,0 +1,178 @@
+{
+  "status": "QUALIFIED_FOCAL_WITH_EXPLICIT_ANTECEDENTS",
+  "at": "2026-11-16T20:49:28.281702+00:00",
+  "nexus_wheel_sha256": "74c9ecafacbe1e77e90de3e0a3bae05b87e59c3f8862f70df68e415273e68711",
+  "installed_environment": {
+    "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+    "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+    "os": "Windows-11-10.0.26300-SP0",
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9",
+    "isolated": 1,
+    "sys_path": [
+      "C:\\Python313\\python313.zip",
+      "C:\\Python313\\DLLs",
+      "C:\\Python313\\Lib",
+      "C:\\Python313",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\win32",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\win32\\lib",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\pythonwin"
+    ],
+    "packages": {
+      "okto-nexus": {
+        "version": "0.3.5",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py"
+      },
+      "okto-nexus-connector": {
+        "version": "0.0.13",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+      },
+      "okto-nexus-connector-core": {
+        "version": "0.0.14",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py"
+      },
+      "pytest": {
+        "version": "9.2.0",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\pytest\\__init__.py"
+      }
+    },
+    "assets": {
+      "okto_nexus/adapters/inbound/http/static/index.html": "05d0113a3218fb47a6206884437834bfce9215a7fd2f6c8b270345ecab1f0bde",
+      "okto_nexus/adapters/inbound/http/static/assets/index-CXFy-VnM.css": "36054c625504c406bff2dcd5a38d66952b72ded0d7c88d44e53658eae1b6316b",
+      "okto_nexus/adapters/inbound/http/static/assets/index-dfy1_5aT.js": "d4361240c4405978aefb39034e3c07e549766d338d290b313f719e282de62409",
+      "okto_nexus/adapters/inbound/http/static/logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+      "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-dark.svg": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+      "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-light.svg": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+      "okto_nexus/adapters/inbound/http/static/logos/oktolabs-icon.svg": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+    },
+    "provider_qualified": false
+  },
+  "nexus_campaign": {
+    "tests": "189",
+    "failures": "2",
+    "errors": "0",
+    "skipped": "0",
+    "time": "584.822"
+  },
+  "nexus_campaign_status": "INPUTS_CHANGED",
+  "nexus_campaign_changed_inputs": [
+    "tests/ui_simplification/browser_project_connect_fixture.py"
+  ],
+  "nexus_campaign_findings": "187 passed, 2 failed. Both old test oracles mixed HTTP_LOOPBACK initial cursors with AGENT_KEY HTTP continuation. The canonical human/credential fence correctly refused them.",
+  "corrected_oracle_focal": {
+    "tests": "2",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "17.556"
+  },
+  "corrected_oracle_campaign_status": "PASS",
+  "corrected_oracle_changed_inputs": [],
+  "connector_campaign": {
+    "tests": "52",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "30.792"
+  },
+  "connector_campaign_status": "PASS",
+  "live_http": {
+    "status": "PASS",
+    "tools": 54,
+    "distinct_authenticated_agents": 2,
+    "provider_calls": 0,
+    "message_event_observed": true,
+    "handoff_completed": true,
+    "artifact_round_trip": true,
+    "shared_md_written": true,
+    "canonical_stop_exit_code": 0,
+    "physical_child_exit_code": 0,
+    "temporary_root_removed": true
+  },
+  "antecedents": [
+    "Original stdio live script failed initialize because current Nexus is HTTP-only.",
+    "First HTTP driver completed MCP flow but cleanup failed on provisioning parent pooled SQLite handle; explicit factory.close plus DB rename/unlink unit regression fixed it. Both failed runs are retained."
+  ],
+  "driver_tests": {
+    "passed": 6,
+    "toolref": "01718e",
+    "ruff": "3e0d75",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r1-packages-wry3ter9/venv/Scripts/python.exe",
+      "-I",
+      "-m",
+      "pytest",
+      "-c",
+      "nul",
+      "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+      "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_live_http_driver.py",
+      "-q"
+    ]
+  },
+  "driver_source_sha256": {
+    "scripts/live_client.py": "c45643a809319861f21d73a3ddb2fc536b39f2e19e408563fd6cf907d26f2aa8",
+    "tests/test_live_http_driver.py": "a55b111d987bc697868d95893ed7849c0c4a437378433dd818498951e00cfdb8",
+    "CONTRIBUTING.md": "ea980300f34e3b85d207770a7153775f9f9fda775a3212f8e4e3f95b53b9c8ae"
+  },
+  "python_payload_entries": 708,
+  "python_payload_file": "pr08-installed-evidence/python-payload.json",
+  "cleanup": {
+    "checked_at": "2026-11-16T20:49:25.6328844Z",
+    "count": 0,
+    "remaining_owned_runtime_processes": []
+  },
+  "limits": [
+    "Not a single 189/189 final run: retain 187-pass/2-fail antecedent and separate corrected-oracle 2-pass focal.",
+    "Historical PR00 sample excluded; focal suite only.",
+    "Windows Python3.13.1 only; Linux/Python3.11/Python3.12 remain independent CI evidence.",
+    "Synthetic fixtures and coordination-only live flow do not qualify real harnesses or model providers.",
+    "No personal environment/authentication, user-service install, Windows session termination, publishing or provider inference."
+  ],
+  "evidence_files_sha256": {
+    "python-nexus-final-manifest.json": "73dd2ad0debe8786d404f76968e4f9dfd1f9303edc376d7d4bb8f751614cb8b4",
+    "python-nexus-final-build.log": "f0d8523de26f402fecbd698d0c5634e91b4c028d5ebf36c5c0ca1830e75d306d",
+    "python-reinstall-final.json": "2466ca7ba60966df6056d7c72e8f26acdd41ead43260e93c18bc652f4b1b8aa9",
+    "python-reinstall-final.log": "8edb177fbd670dcf86d4699072ce93824936afb604e16f229238955f2093582a",
+    "python-smoke-final.json": "c6ac3174553470ac499bcce0326ed13143c3ad395cd8a0e11e06574e4e29430b",
+    "python-smoke-final.log": "3077f218331c19faf36a45a20d29459b675100e7b4e157f94a67484fb398b5e1",
+    "python-twine-final.json": "5f83300f5afd01f08e2a5f8a1f3f1ff604fad5b87cd2d6f0bd98ddadc03800ba",
+    "python-twine-final.log": "c595b683bf6d81762496a10fa767b1fbe706658a93027a49ed24390f28780c48",
+    "python-installed-environment-final.json": "c8ff3754cb4b9661a9815ba347e57de3f65d5f55da5e4fe69294854abee30f99",
+    "python-ci-final-installed.json": "be3bfd8e2598b0eecc9e7306eeb596e57c12afa0dbcbca02435f9b2a29daff64",
+    "python-ci-final-campaign.json": "4fa77d1882980fc41410acf72c62c48cff289c2fb4ece15226b7270f0347b983",
+    "python-ci-final-tests.xml": "8472f89f91f046f4257b02ce4ea527ada9a9d64525d122c071ecd280a299573a",
+    "python-test-final.json": "efeb1f235a4198ae18a482c4aaf80be62f64d9aad9fadf6d3eda68deabbf2e19",
+    "python-test-final.log": "b420a82f527a5c0814395983d82dab81697644e6693a4a4ce19e6fad3d899ea0",
+    "python-ci-connector-final-installed.json": "be3bfd8e2598b0eecc9e7306eeb596e57c12afa0dbcbca02435f9b2a29daff64",
+    "python-ci-connector-final-campaign.json": "dc674a9cf0c3e04b9d293cd501c270db9548f8ac967c76794954bf3629d661a0",
+    "python-ci-connector-final-tests.xml": "083173f188c4b8169934fc3999ddb8da9e343429109c8960c73706600e9d6f32",
+    "python-connector-test-final.json": "e94f926a40a9291fd28e89eaa9129bf0903d18766d6c0c18a740eac17331ff81",
+    "python-connector-test-final.log": "8a43a60701170344322f9710d41176c223b5bee3f7e8bda61bbad9df36ba6f63",
+    "python-ci-related-focal-campaign.json": "528e7e639bcf1b49516b8ee2100db2a5d019e0dd5fe35b0e11b17174f7624a4a",
+    "python-ci-related-focal-tests.xml": "742dd8485e67f1a87a9274519730f6a19fa475131206c3b4fa5533084ff0158d",
+    "python-related-focal-final.json": "2c8c0a704b7583a1264b534de1f18b23d14030f3255eb79c5098ecc27d63097d",
+    "python-related-focal-final.log": "4d0858792d88d96de533830cc3fab1d38d8ac8c3a35c9d31b92043f28f267d14",
+    "python-live-mcp-final.json": "2fa22128351c0a35802514a93236a6ae035d9fa230f1d1f13cc1bdc89d1be2a3",
+    "python-live-mcp-final.log": "d6847c94e4912a0039ef379d41e6cb310ea8b5311cdd959b8125d09de14f788a",
+    "python-live-http-cleanup-antecedent.json": "ac873429ed631ba249eadb5b8dc8f138d351e11e83d99fad370d74cfd3ce5090",
+    "python-live-http-cleanup-antecedent.log": "4ff13bc24fea6e2130a0aad2298b831ede309992b46efaad5adb83862e481283",
+    "python-live-http-final.json": "988b0ac32e850a66f04f809e751bdbf40beb7953a65a558a9a55a9856d5d2745",
+    "python-live-http-final.log": "551c932a0e46c9dc0468b4621db925e6d047ad5959ab7d9c7ca47fd8266bd2c9",
+    "python-before.json": "312f6dc917171c5722349f485114103c64558331a0426ffa70471e1ee7b047e4",
+    "python-after.json": "d5b60e5f2b4e32f74208107b9683d28e031477ee5caaef37dd1603435f3eeea1",
+    "python-cleanup.json": "20c00c3ca9d2b40d9b207e9a1cceeeffd6b9bb6a5586004819f393c0910b4419",
+    "python-qualify.py": "674f39cea2f093b36e3d0d8bae905e83c93ace3135113221e020466abdc73902",
+    "python-installed_probe.py": "b41a27b39acbbba86612ee57ca61a65509ea74e67a3a4452e7748369842202d0",
+    "python-cleanup_probe.ps1": "c705c35e1f7937e72c5263df41c3eaa610af5462c25bbf87f0dc3b3c76dca34c"
+  },
+  "live_executed_driver_source_sha256": {
+    "scripts/live_client.py": "a277057de946a7729047cbbbb4d7b018417b4f421d4c399b583bb2c3f8ab425b",
+    "tests/test_live_http_driver.py": "15ae9b57fe9dc5a4721722041e3946fc7f6e87a1c1933512b4582718158fd711",
+    "CONTRIBUTING.md": "ea980300f34e3b85d207770a7153775f9f9fda775a3212f8e4e3f95b53b9c8ae"
+  },
+  "post_live_guard_delta": "Only recursive cleanup refusal guard added after real HTTP PASS. It requires resolved root == immutable allocation snapshot, exact temporary parent, expected own prefix, and no symlink. Six focal tests passed including unrelated sentinel byte identity; real HTTP was not repeated for this guard-only delta."
+}

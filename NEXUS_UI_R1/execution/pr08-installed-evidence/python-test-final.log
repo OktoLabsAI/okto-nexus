@@ -1,0 +1,254 @@
+okto-nexus - local agent coordination bus
+
+Usage:
+  okto-nexus connect [options] Review and connect a local project
+  okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
+  okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
+  okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
+  okto-nexus participant smoke exchange|handoff|status|observe [options]  Review optional cooperation with a peer
+  okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
+  okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus message send [options]  Send conversation using a participant profile
+  okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
+  okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
+  okto-nexus observe herdr bind|run|status [options]  Publish optional external activity observations
+  okto-nexus operator login|status|logout --profile NAME [options]
+  okto-nexus operator approval APPROVAL_ID --profile NAME [options]
+  okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
+  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
+  okto-nexus tail [options]    Stream the event log as NDJSON
+  okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
+
+Use `okto-nexus serve --help` for server options. Agents connect to /mcp
+over HTTP with their existing API key.
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Projetos\Techridy\okto_labs_okto_nexus
+configfile: C:\Users\jpamb\AppData\Local\Temp\nexus-ci-installed-5ii22cwh\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 189 items
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_app_integration.py::test_production_app_exposes_entries_without_manual_route_install PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_app_integration.py::test_entries_cursor_is_bound_to_authenticated_human_without_exposing_identity PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_app_integration.py::test_agent_is_denied_before_any_entry_source_query PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_layer_boundary.py::test_entries_inner_layers_have_no_persistence_or_transport_imports PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_all_125_groups_children_and_25_sessions_are_reachable PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_cursor_scope_parent_principal_and_material_revision_are_bound PASSED [  3%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_external_source_is_complete_reported_and_not_matched_by_agent PASSED [  3%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_quick_sender_receiver_harness_and_host_filters PASSED [  4%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_partial_external_and_budget_keep_unknown_totals PASSED [  4%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_optional_http_router_exact_pages_and_no_store PASSED [  5%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_http_global_budget_preserves_unknown_envelope_shape PASSED [  5%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_malformed_cursor_and_wrong_parent_are_explicit PASSED [  6%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_default_recent_window_and_retained_unseen_are_distinct_from_active PASSED [  6%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_untracked_old_result_is_unknown_coverage_never_assumed_seen PASSED [  7%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_context_labels_use_only_canonical_project_host_scalars PASSED [  7%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_external_generation_restart_gets_new_identity_without_inheriting_preferences PASSED [  8%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_boolean_version_and_deep_cursor_are_validation_errors_not_server_errors PASSED [  8%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_single_read_uow_no_journal_or_transcript_and_one_size_sample PASSED [  9%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_related.py::test_attention_preview_and_pages_preserve_five_canonical_questions FAILED [ 10%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_related.py::test_results_preview_and_pages_preserve_five_canonical_deliveries FAILED [ 10%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_related.py::test_default_keeps_idle_configured_connection_while_active_does_not PASSED [ 11%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_logical_work_identity_sessions_results_and_receiver_are_preserved PASSED [ 11%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_uncovered_session_and_idle_connection_have_exact_context PASSED [ 12%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_more_than_hundred_rows_and_twenty_runtime_refs_are_not_truncated PASSED [ 12%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_partial_source_remains_unknown_and_other_sources_survive PASSED [ 13%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_existing_operator_authorization_runs_before_relation PASSED [ 13%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_global_and_orphan_occurrences_keep_scope_and_recipient PASSED [ 14%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_missing_attention_is_unknown_not_zero PASSED [ 14%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_sender_filter_keeps_receiver_question_and_results PASSED [ 15%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_resource_budget_never_returns_exact_prefix PASSED [ 15%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_projection_is_read_only_and_secret_free PASSED [ 16%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_historical_session_never_uses_new_binding_context PASSED [ 16%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_old_claim_result_stays_orphan_instead_of_enriching_new_claim PASSED [ 17%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_relations.py::test_permission_error_is_never_downgraded_to_partial PASSED [ 17%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_two_sessions_same_agent_resolve_exact_current_and_closed_scope PASSED [ 18%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_session_without_productive_turn_and_retention_never_select_latest PASSED [ 19%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_retained_session_keeps_admitted_scope_after_current_binding_rotates PASSED [ 19%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_closed_session_replays_same_committed_history_without_control_or_new_session PASSED [ 20%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_session_foreign_scope_and_operator_authority_are_checked_by_real_http PASSED [ 20%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_exact_connection_context_is_additive_and_legacy_execution_target_still_resolves PASSED [ 21%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_new_session_target_schema_is_closed[patch0] PASSED [ 21%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_new_session_target_schema_is_closed[patch1] PASSED [ 22%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_new_session_target_schema_is_closed[patch2] PASSED [ 22%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_new_session_target_schema_is_closed[patch3] PASSED [ 23%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_new_session_target_schema_is_closed[patch4] PASSED [ 23%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_new_session_target_schema_is_closed[patch5] PASSED [ 24%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_home_session_targets.py::test_new_session_target_schema_is_closed[patch6] PASSED [ 24%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_project_connect_read_contract.py::test_short_flow_read_contract_exposes_safe_directory_and_uncreated_identity_draft PASSED [ 25%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_project_connect_read_contract.py::test_agent_credentials_cannot_turn_a_draft_reference_into_operator_creation_authority PASSED [ 25%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_empty_store_does_not_create_anything PASSED [ 26%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_legacy_and_multiple_connections_preserved_without_rewrite PASSED [ 26%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_destinations_homes_projects_and_operator_topologies_do_not_mix PASSED [ 27%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_remote_human_metadata_exact_without_vault_or_client PASSED [ 28%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_all_uncertainty_slots_are_retained_and_no_payload_exposed PASSED [ 28%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_invalid_or_oversized_checkpoint_is_not_empty_success[broken] PASSED [ 29%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_invalid_or_oversized_checkpoint_is_not_empty_success[array] PASSED [ 29%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_invalid_or_oversized_checkpoint_is_not_empty_success[oversized] PASSED [ 30%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_invalid_work_checkpoint_preserved_not_adopted PASSED [ 30%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_startup_and_unknown_work_stage_remain_pending PASSED [ 31%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_foreign_work_scope_cannot_be_adopted PASSED [ 31%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_bounded_directory_and_document_reads PASSED [ 32%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_symlink_profile_refused_without_reading_target PASSED [ 32%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_deep_operator_metadata_fails_closed PASSED [ 33%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_choices.py::test_local_instance_and_remote_human_must_be_selected PASSED [ 33%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_json_ambiguous_returns_selection_without_setup PASSED [ 34%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_plan_selection_and_cancel_never_start_service PASSED [ 34%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_resume_exact_connection_no_defaults_or_grants PASSED [ 35%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_selected_connection_race_never_becomes_new_setup[deleted] PASSED [ 35%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_selected_connection_race_never_becomes_new_setup[replaced] PASSED [ 36%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_second_harness_generated_profile_keeps_original PASSED [ 37%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_script_multiple_projects_requires_workspace_id_and_preserves_explicit_choice PASSED [ 37%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_interactive_multiple_projects_are_chosen_explicitly PASSED [ 38%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_new_script_requires_stable_profile_before_service PASSED [ 38%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_new_intent_retry_before_review_retains_agent_and_setup_id PASSED [ 39%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_pre_review_reservation_visible_and_recoverable_without_new_flag PASSED [ 39%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_after_review_response_loss_keeps_checkpoint_and_explicit_profile_compatibility PASSED [ 40%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_review_enrichment_is_retained_without_rewriting_original_intent PASSED [ 40%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_server_changed_during_review_refuses_before_apply_and_preserves_reservation PASSED [ 41%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_explicit_client_conflict_and_legacy_new_flag_do_not_overwrite PASSED [ 41%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_changed_addition_choices_refused_and_profile_busy_preserves_intent PASSED [ 42%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_remote_new_flag_rejected_before_operator_client_or_local_fallback PASSED [ 42%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_empty_catalog_picker_does_not_ask_for_profile PASSED [ 43%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_harness_picker_only_uses_observed_options PASSED [ 43%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_concurrent_additions_same_profile_cannot_overwrite PASSED [ 44%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_pending_other_harness_is_visible_before_independent_addition PASSED [ 44%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_direct_reservation_api_rejects_profile_paths_before_creation[../outside] PASSED [ 45%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_direct_reservation_api_rejects_profile_paths_before_creation[a/b] PASSED [ 46%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_direct_reservation_api_rejects_profile_paths_before_creation[a\\b] PASSED [ 46%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_direct_reservation_api_rejects_profile_paths_before_creation[] PASSED [ 47%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_direct_reservation_api_rejects_profile_paths_before_creation[.] PASSED [ 47%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_direct_reservation_api_rejects_profile_paths_before_creation[..] PASSED [ 48%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_reservation_idempotence_accepts_original_selection_without_setup_id PASSED [ 48%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_redirected_parent_cannot_create_outside_store[terminal] PASSED [ 49%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_redirected_parent_cannot_create_outside_store[connection-intents] PASSED [ 49%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_redirected_parent_cannot_create_outside_store[profiles] PASSED [ 50%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_picker.py::test_cli_explicit_addition_checks_redirect_before_profile_lock PASSED [ 50%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_all_pages_then_proven_tuple_candidates_and_legacy_dedup PASSED [ 51%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[version] PASSED [ 51%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[revision] PASSED [ 52%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[scope] PASSED [ 52%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[total] PASSED [ 53%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[duplicate] PASSED [ 53%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[cursor] PASSED [ 54%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[server] PASSED [ 55%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[missing] PASSED [ 55%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_transport_failure_is_not_permission_for_a_new_identity PASSED [ 56%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_local_shortcut_full_tuple_drift_is_not_merged_by_agent_or_binding_name PASSED [ 56%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_discovery.py::test_discovered_canonical_connect_call_opens_once PASSED [ 57%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_discovery.py::test_operator_restricts_execution_without_issuing_connection_keys PASSED [ 57%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_discovery.py::test_canonical_discovery_does_not_advertise_unready_binding[grant] PASSED [ 58%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_discovery.py::test_canonical_discovery_does_not_advertise_unready_binding[stale] PASSED [ 58%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_discovery.py::test_canonical_discovery_does_not_advertise_unready_binding[offline] PASSED [ 59%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_discovery.py::test_canonical_discovery_does_not_advertise_unready_binding[readiness] PASSED [ 59%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_discovery.py::test_binding_discovery_reads_canonical_history_without_native_registry PASSED [ 60%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_discovery.py::test_self_connect_refuses_foreign_identity_and_revoked_grant PASSED [ 60%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_discovery.py::test_self_connect_keeps_authenticated_identity_despite_operator_environment PASSED [ 61%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_discovery.py::test_self_connect_revalidates_grant_after_admission_before_native_open[grant] PASSED [ 61%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_discovery.py::test_self_connect_revalidates_grant_after_admission_before_native_open[permission] PASSED [ 62%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_catalog.py::test_http_catalog_authorization_projection_filters_and_no_sensitive_fields PASSED [ 62%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_catalog.py::test_catalog_public_labels_never_serialize_arbitrary_metadata PASSED [ 63%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_catalog.py::test_cursor_scope_limit_revision_and_unknown_parameters PASSED [ 64%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_catalog.py::test_catalog_one_read_uow_write_barrier_and_human_cursor_fence PASSED [ 64%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut PASSED [ 65%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_catalog_remote.py::test_remote_canonical_alias_requires_workspace_and_preserves_remote_scope PASSED [ 65%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_zero_sessions_opens_only_after_explicit_request PASSED [ 66%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_one_session_requires_continue_or_new_choice[1-single] PASSED [ 66%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_one_session_requires_continue_or_new_choice[n-None] PASSED [ 67%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_multiple_sessions_choose_exact_id_not_timestamp_or_checkpoint PASSED [ 67%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_cancel_session_selection_never_submits PASSED [ 68%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_pending_observe_or_exit_precedes_session_selection PASSED [ 68%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_pending_recovery_uses_original_slot_before_explicit_selection PASSED [ 69%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_control_pending_recovery_does_not_become_productive_work PASSED [ 69%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_new_context_cannot_control_or_answer_remembered_sibling PASSED [ 70%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_control_targets_selected_session PASSED [ 70%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_closed_or_partial_session_inventory_is_not_latest_fallback PASSED [ 71%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_closed_session_requires_explicit_new_context PASSED [ 71%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_selected_session_closed_before_submit_refuses_without_replacement PASSED [ 72%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_explicit_chat_session_bypasses_picker_but_revalidates PASSED [ 73%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_json_send_without_durable_session_requires_explicit_selection PASSED [ 73%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_json_explicit_session_intents_never_prompt[options0] PASSED [ 74%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_json_explicit_session_intents_never_prompt[options1] PASSED [ 74%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_session_picker.py::test_json_resume_preserves_original_intent_without_session_picker PASSED [ 75%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_multi_harness.py::test_two_distinct_harnesses_share_project_keep_custom_a_and_recover_b_finish PASSED [ 75%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_atomic_idempotent PASSED [ 76%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_workspace_paths_aggregate_across_agents_on_the_same_host PASSED [ 76%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_rolls_back_every_configuration_change[no_test] PASSED [ 77%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_rolls_back_every_configuration_change[invalid_settings] PASSED [ 77%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_rolls_back_every_configuration_change[stale_baseline] PASSED [ 78%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_setup_auto_claim_preserves_omission_and_resets_explicit_null PASSED [ 78%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_setup_auto_claim_rejects_non_boolean_and_stale_revision PASSED [ 79%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_setup_transport_requires_operator PASSED [ 79%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_authorizes_work_only_with_effective_handoff_opt_in[False-None-False] PASSED [ 80%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_authorizes_work_only_with_effective_handoff_opt_in[True-None-True] PASSED [ 80%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_authorizes_work_only_with_effective_handoff_opt_in[True-False-False] PASSED [ 81%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_authorizes_work_only_with_effective_handoff_opt_in[False-True-True] PASSED [ 82%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_offers_scoped_session_choice_and_retries_after_release[NONE-False] PASSED [ 82%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_offers_scoped_session_choice_and_retries_after_release[NONE-True] PASSED [ 83%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_offers_scoped_session_choice_and_retries_after_release[CLOSED-False] PASSED [ 83%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_offers_scoped_session_choice_and_retries_after_release[CLOSED-True] PASSED [ 84%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_remote_policy_can_finish_before_connector_registration[False] PASSED [ 84%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_remote_policy_can_finish_before_connector_registration[True] PASSED [ 85%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_preserves_inherited_runtime_policy[True] PASSED [ 85%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_preserves_inherited_runtime_policy[False] PASSED [ 86%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_remote_finish_updates_approved_binding_atomically PASSED [ 86%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_setup_refuses_concurrent_preset_change_before_any_commit PASSED [ 87%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_remote_finish_rejects_embedded_binding_without_partial_writes PASSED [ 87%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup.py::test_finish_refuses_unchecked_or_stale_installation_revision PASSED [ 88%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup_recovery.py::test_recovery_matches_durable_receipt_without_reapplying[operator-/v1] PASSED [ 88%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup_recovery.py::test_recovery_matches_durable_receipt_without_reapplying[operator-/api/v1/runtime-management] PASSED [ 89%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup_recovery.py::test_recovery_matches_durable_receipt_without_reapplying[None-/v1] PASSED [ 89%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup_recovery.py::test_recovery_matches_durable_receipt_without_reapplying[None-/api/v1/runtime-management] PASSED [ 90%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup_recovery.py::test_missing_or_unauthorized_receipt_is_not_success PASSED [ 91%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup_recovery.py::test_receipts_are_scoped_to_authorized_audit_actor PASSED [ 91%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup_recovery.py::test_connector_recovers_through_real_http_handlers[finish-True] PASSED [ 92%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup_recovery.py::test_connector_recovers_through_real_http_handlers[test-False] PASSED [ 92%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_setup_recovery.py::test_connector_recovers_through_real_http_handlers[test-True] PASSED [ 93%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_continuity.py::test_live_connection_renews_proofs_without_changing_owner[None] PASSED [ 93%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_continuity.py::test_live_connection_renews_proofs_without_changing_owner[revoked] PASSED [ 94%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_continuity.py::test_live_connection_renews_proofs_without_changing_owner[expired] PASSED [ 94%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_continuity.py::test_short_disconnect_resumes_same_lane_and_generation[False] PASSED [ 95%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_continuity.py::test_short_disconnect_resumes_same_lane_and_generation[True] PASSED [ 95%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_setup_integration.py::test_operator_and_connector_cli_complete_same_root_once[none] PASSED [ 96%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_setup_integration.py::test_operator_and_connector_cli_complete_same_root_once[decision] PASSED [ 96%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_setup_integration.py::test_operator_and_connector_cli_complete_same_root_once[apply] PASSED [ 97%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_setup_integration.py::test_operator_and_connector_cli_complete_same_root_once[rereview] PASSED [ 97%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_setup_integration.py::test_operator_and_connector_cli_complete_same_root_once[local-rereview] PASSED [ 98%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_setup_integration.py::test_operator_and_connector_cli_complete_same_root_once[finish-race] PASSED [ 98%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_daemon_startup.py::test_daemon_starts_registered_r4_control_without_legacy_fallback[False] PASSED [ 99%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_daemon_startup.py::test_daemon_starts_registered_r4_control_without_legacy_fallback[True] PASSED [100%]
+
+================================== FAILURES ===================================
+_____ test_attention_preview_and_pages_preserve_five_canonical_questions ______
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_related.py:97: in test_attention_preview_and_pages_preserve_five_canonical_questions
+    assert_continuation(s, 'attention', entry, group, expected, 'attention_id')
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_related.py:66: in assert_continuation
+    assert response.status_code == 200, response.text
+E   AssertionError: {"ok":false,"error":{"code":"CONFLICT","message":"Home entries cursor belongs to a different scope or parent.","details":{"reason":"HOME_ENTRIES_SNAPSHOT_CHANGED"}}}
+E   assert 409 == 200
+E    +  where 409 = <Response [409 Conflict]>.status_code
+______ test_results_preview_and_pages_preserve_five_canonical_deliveries ______
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_related.py:117: in test_results_preview_and_pages_preserve_five_canonical_deliveries
+    values = assert_continuation(s, 'results', entry, group, expected, 'id')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_related.py:66: in assert_continuation
+    assert response.status_code == 200, response.text
+E   AssertionError: {"ok":false,"error":{"code":"CONFLICT","message":"Home entries cursor belongs to a different scope or parent.","details":{"reason":"HOME_ENTRIES_SNAPSHOT_CHANGED"}}}
+E   assert 409 == 200
+E    +  where 409 = <Response [409 Conflict]>.status_code
+============================== warnings summary ===============================
+..\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\ci-final\tests.xml -
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_related.py::test_attention_preview_and_pages_preserve_five_canonical_questions
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_related.py::test_results_preview_and_pages_preserve_five_canonical_deliveries
+============ 2 failed, 187 passed, 1 warning in 584.91s (0:09:44) =============

@@ -8,7 +8,7 @@ from nexus_connector_core import R4_PREVIEW_REVISION
 
 from okto_nexus.application.execution_events import commit_execution_events
 from okto_nexus.application.execution_leases import ExecutionChannel
-from .test_entry_pages import scenario as scenario, all_groups, service_for, copy_session
+from .test_entry_pages import scenario as scenario, service_for, copy_session
 from .test_fixtures import fixtures
 
 
@@ -56,6 +56,31 @@ def related(s, partition, entry, group_id, cursor=None, limit=2):
         client.close()
 
 
+def http_groups(s):
+    """A cursor must continue the same authenticated principal, including source.
+
+    Direct loopback service calls and bearer HTTP requests are intentionally
+    different principals. Obtain these HTTP continuations through HTTP too.
+    """
+    headers = {'Authorization': 'Bearer ' + s.app.state.test_agent_keys['operator']}
+    client = TestClient(s.app)
+    groups, cursor = [], None
+    try:
+        while True:
+            params = dict(quick='all', limit=100, preview=3)
+            if cursor:
+                params['cursor'] = cursor
+            response = client.get('/api/v1/home/entries', params=params, headers=headers)
+            assert response.status_code == 200, response.text
+            page = response.json()['data']
+            groups.extend(page['items'])
+            cursor = page['next_cursor']
+            if not cursor:
+                return groups
+    finally:
+        client.close()
+
+
 def assert_continuation(s, partition, entry, group, expected, id_key):
     preview = entry[partition + '_preview']
     assert len(preview) == 3 and entry[partition + '_total'] == 5
@@ -86,7 +111,7 @@ def assert_continuation(s, partition, entry, group, expected, id_key):
 def test_attention_preview_and_pages_preserve_five_canonical_questions(scenario):
     s = scenario
     peer_questions(s)
-    groups, _ = all_groups(service_for(s), s)
+    groups = http_groups(s)
     group, entry = next((g, e) for g in groups for e in g['children'] if e['display_state'] == 'awaiting_operator')
     expected = [o for o in s.app.state.attention.read(context=s.operator, filters={'state': 'all'}, limit=100)['items']
                 if o['operation_id'] == entry['target']['operation_id'] and o['kind'] == 'native_question_pending']
@@ -108,7 +133,7 @@ def test_results_preview_and_pages_preserve_five_canonical_deliveries(scenario):
     occurrence = initial['attention']
     s.app.state.attention.mark_seen(context=s.operator, attention_id=occurrence['attention_id'],
         source_revision=occurrence['source_revision'], preference_revision=occurrence['seen_state']['revision'])
-    groups, _ = all_groups(service_for(s), s)
+    groups = http_groups(s)
     group, entry = next((g, e) for g in groups for e in g['children'] if e['source_ref']['id'] == 'related-conversation')
     expected = [r for r in s.read(section='results', limit=100)['items'] if r['source_ref']['id'].startswith('related-result-')]
     assert len(entry['result_refs']) == 3

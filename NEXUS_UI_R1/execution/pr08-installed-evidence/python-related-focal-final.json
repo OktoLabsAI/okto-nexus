@@ -1,0 +1,21 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+    "-I",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+    "test",
+    "--wheel",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-final\\okto_nexus-0.3.5-py3-none-any.whl",
+    "--output",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\ci-related-focal",
+    "--tests",
+    "tests/UI_simplification/test_entry_related.py::test_attention_preview_and_pages_preserve_five_canonical_questions",
+    "tests/UI_simplification/test_entry_related.py::test_results_preview_and_pages_preserve_five_canonical_deliveries"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9",
+  "started_at": "2026-11-16T20:47:27.623770+00:00",
+  "exit_code": 0,
+  "ended_at": "2026-11-16T20:47:58.834591+00:00"
+}
