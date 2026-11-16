@@ -1,5 +1,10 @@
 # Candidato final, ainda não autorizado
 
+Atualização A08: o corte D4 abaixo passou a antecedente durante a correção da
+faixa Servidor. A execução aguarda o novo artefato qualificado e rebind técnico,
+preservando os mesmos IDs, diretório, limites e contabilidade. Nenhum provedor
+ou serviço da campanha foi iniciado.
+
 Entrada de revisão: [PROPOSTA.md](PROPOSTA.md).
 Comandos finais: [workflow-final-ui.json](workflow-final-ui.json).
 Candidato final: `candidate-final-ui.json`, SHA256

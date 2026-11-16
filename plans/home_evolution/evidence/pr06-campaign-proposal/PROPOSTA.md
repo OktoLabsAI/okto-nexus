@@ -1,5 +1,11 @@
 # HOME-033 — proposta de validação local
 
+> **Atualização técnica A08:** a revisão encontrou falta da faixa Servidor na
+> Home. Esse delta está sendo implementado e será empacotado/qualificado antes
+> de qualquer execução. O candidato e wheel D4 descritos abaixo são antecedentes,
+> sem autorização nem efeitos. Pasta, IDs, duas chamadas e orçamento proposto
+> permanecem iguais; não haverá reinício de contabilidade ou nova campanha.
+
 **Preparação inerte concluída; execução ainda não autorizada.** Candidato final `cbb2a45ba9cc99833b5af881abc8415c4c7d355c436d6e05e8cfab4288fdd6af`, wheel `7e1563622f4becb21cc62b6182cb4683c7546861256c355c16bb9aa78efa87ff`, interface `D4dmKnLh`. O candidato anterior permanece preservado, com a mesma pasta, IDs e limites. A tentativa de preparar sem consentimento foi recusada antes de efeitos; nenhum serviço ou chamada de modelo foi iniciado.
 
 Proponho validar a Home com o Codex CLI na conta já usada pelo próprio CLI, em uma campanha temporária própria. Serão **no máximo duas chamadas produtivas**: o teste obrigatório de conexão e um pedido pequeno para ler um CSV sintético, calcular quantidade/soma decimal e escrever um relatório com hash verificável. Não haverá terceira chamada de continuação: após encerrar a sessão, verificaremos a recusa de continuar aquele contexto exato.
