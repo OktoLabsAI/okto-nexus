@@ -1586,7 +1586,8 @@
         "T-SCOPE-06"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json"
       ],
       "limitations": [
         "Scoped local filesystem/CLI/HTTP/SQLite tests with synthetic lifecycle/setup-test peer; real provider and two different native harnesses not certified. UI016 qualification remains separate."
@@ -1628,7 +1629,8 @@
         "T-CLI-07"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json"
       ],
       "limitations": [
         "Scoped local filesystem/CLI/HTTP/SQLite tests with synthetic lifecycle/setup-test peer; real provider and two different native harnesses not certified. UI016 qualification remains separate."
@@ -1664,7 +1666,8 @@
         "T-CLI-15"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json"
       ],
       "limitations": [
         "Scoped local filesystem/CLI/HTTP/SQLite tests with synthetic lifecycle/setup-test peer; real provider and two different native harnesses not certified. UI016 qualification remains separate."
@@ -1742,7 +1745,8 @@
         "T-SVC-04"
       ],
       "evidence": [
-        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json"
+        "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json"
       ],
       "limitations": [
         "Lifecycle/discovery/version/provider setup-test are synthetic; no real harness binary, provider login, paid inference, personal credentials or installation.",
@@ -2490,7 +2494,7 @@
       "id": "UI-036",
       "pr": "PR-06",
       "title": "Implementar retomar/adicionar no Connector",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-004",
         "UI-016"
@@ -2517,8 +2521,12 @@
         "T-CONN-03",
         "T-CONN-04"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr06-connector-qualification.json"
+      ],
+      "limitations": [
+        "Synthetic CLI/HTTP pipeline; complete UI journey and native host qualification remain pending."
+      ]
     },
     {
       "id": "UI-037",

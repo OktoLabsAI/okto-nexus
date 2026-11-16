@@ -2,11 +2,13 @@
 from dataclasses import asdict
 
 
-def selection_required(catalog, *, reason='connection_selection_required', lifecycle_requested=False):
+def selection_required(catalog, *, reason='connection_selection_required', lifecycle_requested=False,
+        metadata_revalidation_requested=False):
     return dict(state='selection_required', reason=reason,
         # connect may already have ensured the service; never claim no effects.
-        effects_started=None if lifecycle_requested else False,
+        effects_started=None if lifecycle_requested or metadata_revalidation_requested else False,
         lifecycle_requested=lifecycle_requested,
+        canonical_metadata_revalidation_requested=metadata_revalidation_requested,
         choices=[asdict(row) for row in catalog.choices],
         catalog_complete=catalog.complete,
         issues=[asdict(issue) for issue in catalog.issues])
@@ -29,8 +31,11 @@ def pick_connection(catalog, *, client=None, read=input, write=print):
     for index, row in enumerate(candidates, 1):
         pending = any((row.setup_pending, row.work_pending, row.control_pending,
             row.authorization_pending, row.decision_pending, row.startup_pending))
+        host = 'Server host'
+        if row.canonical_ref and row.canonical_ref.get('execution_location') == 'remote':
+            host = 'Remote host ' + ''.join(c for c in row.canonical_ref['host_label'] if c.isprintable())
         write(f'{index}. Resume {row.client or "harness unconfirmed"} / {row.agent_id} / {row.profile}'
-              + f' [Server host; {row.setup_state}]'
+              + f' [{host}; {row.setup_state}]'
               + (' (recover pending checkpoint first)' if pending else ''))
     write('a. Add another connection\nc. Cancel')
     while True:

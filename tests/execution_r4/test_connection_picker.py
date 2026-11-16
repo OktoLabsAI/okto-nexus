@@ -26,6 +26,33 @@ def boundary(tmp_path, monkeypatch):
     def http(*args, **kwargs):
         def call(method, path, body=None):
             assert method == 'GET'
+            def catalog_rows():
+                rows = []
+                for source in (home / 'terminal/profiles').glob('*.json'):
+                    document = read_json(source)
+                    selected = document['selection']
+                    binding = document.get('result', {}).get('binding', {})
+                    if not binding.get('binding_id'):
+                        continue
+                    rows.append(dict(server_id='server-a', binding_id=binding['binding_id'],
+                        endpoint_id='endpoint-' + selected['agent'], executor_id='executor-a',
+                        agent_id=selected['agent'], workspace_id=selected.get('workspace_id') or 'workspace-existing',
+                        workspace_binding_id='workspace-binding-' + selected['agent'],
+                        adapter_id={'codex': 'codex_app_server', 'claude': 'claude_stream'}[selected['client']],
+                        execution_location='local'))
+                return rows
+            if '/connections/catalog?' in path:
+                from urllib.parse import parse_qs, urlsplit
+                query = parse_qs(urlsplit(path).query)
+                scope = {'execution_location': 'local'}
+                if 'workspace_id' in query:
+                    scope['workspace_id'] = query['workspace_id'][0]
+                rows = [row for row in catalog_rows() if scope.get('workspace_id') in (None, row['workspace_id'])]
+                return dict(version=1, server_id='server-a', scope=scope, revision='a' * 64,
+                    items=rows, total=len(rows), total_is_exact=True, has_more=False, next_cursor=None)
+            if '/connections/bindings/' in path:
+                binding_id = path.rsplit('/', 1)[-1]
+                return next(row for row in catalog_rows() if row['binding_id'] == binding_id) | {'state': 'APPROVED'}
             if '/connections/setup/' in path:
                 from urllib.parse import unquote, urlsplit
                 agent = unquote(urlsplit(path).path.rsplit('/', 1)[-1])

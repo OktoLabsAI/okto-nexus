@@ -62,6 +62,8 @@ def _display(value, as_json):
         return
     if value.get('profile'):
         print('Connection shortcut: ' + value['profile'])
+    if value.get('canonical_metadata_revalidation_requested'):
+        print('Canonical metadata revalidation was requested; existing revision metadata may change.')
     if value.get('state') == 'review' and value.get('kind') == 'remote_project_setup':
         from .remote_setup_io import display_review
         display_review(value)
@@ -172,6 +174,7 @@ def run_connect(argv):
             effects_started=False, lifecycle_requested=False, choices=[]), args.json)
         return 3
     guard = checkpoint = reservation = selected_choice = None
+    canonical_metadata = False
     try:
         from .terminal_target import resolve_terminal_target, terminal_target_selection
         project, profile = project_profile(args.project, args.profile)
@@ -231,14 +234,21 @@ def run_connect(argv):
                 pending = pending_reservations(service.adapter.home, project, me['server_id'])
                 catalog = ConnectionChoiceCatalog(catalog.choices + pending.choices,
                     catalog.issues + pending.issues, catalog.complete and pending.complete)
+                if catalog.complete:
+                    from .canonical_connections import merge_canonical_connections
+                    canonical_metadata = True
+                    catalog = merge_canonical_connections(call, local=catalog, server_id=me['server_id'],
+                        project=project, workspace_id=args.workspace_id)
             if not catalog.complete or (catalog.choices and (args.json or not sys.stdin.isatty()) and not args.new_connection):
-                _display(selection_required(catalog, lifecycle_requested=not args.plan), args.json)
+                _display(selection_required(catalog, lifecycle_requested=not args.plan,
+                    metadata_revalidation_requested=canonical_metadata), args.json)
                 return 3
             action, selected_profile = ('add', None) if args.new_connection else (
                 pick_connection(catalog, client=args.client, read=input) if sys.stdin.isatty() and not args.json else ('add', None))
             if action in ('cancel', 'unconfirmed'):
                 _display(dict(state='canceled' if action == 'cancel' else 'selection_required',
-                    effects_started=None if not args.plan else False, lifecycle_requested=not args.plan), args.json)
+                    effects_started=None if not args.plan or canonical_metadata else False,
+                    lifecycle_requested=not args.plan, canonical_metadata_revalidation_requested=canonical_metadata), args.json)
                 return 0 if action == 'cancel' else 3
             if action == 'resume':
                 profile = selected_profile
@@ -250,6 +260,9 @@ def run_connect(argv):
             target = directory / (profile + '.json')
             prior = read_json(target) if target.exists() else None
             checkpoint = prior
+        if not hasattr(service, 'operator_profile'):
+            from .connection_reservation import _safe_paths
+            _safe_paths(service.adapter.home, profile)
         directory.mkdir(parents=True, exist_ok=True)
         if guard is None:
             guard = ExclusiveFileLock(directory / (profile + '.guard'))
@@ -258,6 +271,20 @@ def run_connect(argv):
         checkpoint = saved
         from .connection_reservation import read_reservation, reserve_connection
         reservation = read_reservation(service.adapter.home, profile) if not hasattr(service, 'operator_profile') else None
+        if selected_choice is not None and selected_choice.canonical_ref is not None and not saved:
+            if reservation is not None:
+                raise ConnectionError('PROFILE_CONFLICT', 'The canonical shortcut name is reserved by another local intent.')
+            from .canonical_connections import associate_canonical
+            call = LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port)
+            facade = RemoteTerminalConnection if selected_choice.canonical_ref['execution_location'] == 'remote' else TerminalConnection
+            flow = facade(call, lambda value: atomic_json(target, value))
+            result = associate_canonical(flow, call, reference=selected_choice.canonical_ref, project=project)
+            _display(dict(result, profile=profile, canonical_metadata_revalidation_requested=True,
+                effects_started=None, lifecycle_requested=not args.plan), args.json)
+            if not args.plan and not args.json and not args.no_chat and sys.stdin.isatty():
+                from .work import interactive_work
+                return interactive_work(service, profile, timeout=args.timeout)
+            return 0
         if selected_choice is not None:
             retained = saved or reservation
             current_selection = retained.get('selection', {}) if retained else {}
@@ -358,8 +385,10 @@ def run_connect(argv):
                 material_sink=material_sink(args.json), handoff_sink=export)
         elif args.review_current or args.setup_receipt_output:
             raise ConnectionError('REMOTE_DRAFT_REQUIRED', 'This profile does not contain a remote host setup draft.')
-        elif hasattr(service, 'operator_profile'):
-            flow = RemoteTerminalConnection(service.operator_http, lambda value: atomic_json(target, value))
+        elif hasattr(service, 'operator_profile') or saved and saved.get('remote_scope'):
+            call = service.operator_http if hasattr(service, 'operator_profile') else LocalOperatorHTTP(
+                host=service.adapter.host, port=service.adapter.port)
+            flow = RemoteTerminalConnection(call, lambda value: atomic_json(target, value))
         else:
             def save_local_setup(value):
                 if reservation is not None and value.get('server_id') != reservation['server_id']:
@@ -452,6 +481,7 @@ def run_connect(argv):
                   'code': getattr(error, 'code', 'PROFILE_BUSY' if isinstance(error, LockBusy) else 'CONFIG_ERROR'),
                   'message': getattr(error, 'message', getattr(error, 'action', 'Inspect the selected service and saved profile before continuing.')),
                   'possible_effect': possible_effect,
+                  **({'effects_started': None, 'canonical_metadata_revalidation_requested': True} if canonical_metadata else {}),
                   **({'profile': profile} if reservation is not None else {})}, args.json)
         return 3
     finally:

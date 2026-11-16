@@ -44,6 +44,8 @@ class ConnectionChoice:
     decision_pending: bool
     # No readiness/grant claim can be established by local JSON.
     requires_canonical_revalidation: bool = True
+    canonical_ref: dict | None = None
+    binding_ref: dict | None = None
 
 
 @dataclass(frozen=True)
@@ -171,6 +173,10 @@ def list_connection_choices(scope: ConnectionChoiceScope) -> ConnectionChoiceCat
                         raise ValueError('Invalid binding')
                     binding_id = _text(binding.get('binding_id') or selection.get('binding_id'), optional=True)
                     workspace = _text(binding.get('workspace_id') or selection.get('workspace_id'), optional=True)
+                    identity_fields = ('server_id', 'executor_id', 'binding_id', 'endpoint_id',
+                        'agent_id', 'workspace_id', 'workspace_binding_id')
+                    binding_ref = {key: binding[key] for key in identity_fields} if all(
+                        isinstance(binding.get(key), str) and binding[key] for key in identity_fields) else None
                     checkpoint_path = work / (name + '.json')
                     checkpoint = _read(checkpoint_path) if checkpoint_path.exists() or checkpoint_path.is_symlink() else {}
                     if checkpoint and checkpoint.get('format') != 1:
@@ -184,7 +190,7 @@ def list_connection_choices(scope: ConnectionChoiceScope) -> ConnectionChoiceCat
                     choices.append(ConnectionChoice(name, agent, client, binding_id, workspace,
                         state, state != 'done', _pending(saved, 'login_start_operation'),
                         _pending(checkpoint, 'work'), _pending(checkpoint, 'control'),
-                        _pending(checkpoint, 'authorization'), _pending(checkpoint, 'decision')))
+                        _pending(checkpoint, 'authorization'), _pending(checkpoint, 'decision'), binding_ref=binding_ref))
                 except (OSError, ValueError, KeyError, TypeError, RecursionError):
                     issues.append(ChoiceIssue(name, 'checkpoint_unconfirmed'))
     except FileNotFoundError:
