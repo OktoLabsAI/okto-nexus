@@ -5,7 +5,7 @@ import {attentionTarget, readAttentionReference, type AttentionTarget} from '../
 import {ApprovalInspection} from '../views/ApprovalsView';
 import {HandoffInspection} from '../views/HandoffsView';
 import {AgentActionModal} from './AgentActionModal';
-import {AgentRuntimeAdministration} from './AgentRuntimeAdministration';
+import {HomeExecutionInspection,HomeSessionControls} from './home/HomeExecutionInspection';
 import {MessageDetail} from './MessageDetailModal';
 import {RuntimePolicy} from './RuntimePolicy';
 import {RuntimeRecovery} from './RuntimeRecovery';
@@ -22,9 +22,11 @@ export function AttentionInspection({item, action, onClose, onChanged, refreshKe
 }
 
 /** Shared canonical controls; containers never manufacture an Attention occurrence. */
-export function CanonicalInspection({target, item, action, onClose, onChanged, refreshKey}: {
+export function CanonicalInspection({target, item, action, onClose, onChanged, refreshKey, contextual=true, suppressOutput=false}: {
   target: AttentionTarget; item?: AttentionOccurrence; action?: AttentionAction;
   onClose: () => void; onChanged: () => void; refreshKey?: string;
+  contextual?: boolean;
+  suppressOutput?: boolean;
 }) {
   const targetKey = JSON.stringify(target);
   const [message, setMessage] = useState<MessageRow | null>(null);
@@ -52,12 +54,13 @@ export function CanonicalInspection({target, item, action, onClose, onChanged, r
   }, [targetKey, refreshKey]);
   const authority = action === 'review_authority';
   const recovery = action === 'inspect_recovery' && item?.kind === 'runtime_recovery_attention';
-  return <div className="space-y-4 min-w-0">
+  return <div className="space-y-4 min-w-0" data-contextual-inspection={contextual||undefined}>
       {item && target.kind !== 'external_observation' && <p className="text-xs text-surface-500 break-all">{item.source_type} · {item.source_id}</p>}
       {target.kind === 'unavailable' && <p role="status">{target.reason}</p>}
       {loading && <p role="status">Loading canonical record…</p>}
       {error && <p role="alert">{error}</p>}
-      {target.kind === 'session' && <HomeSessionInspection key={targetKey} context={target.context}/>}
+      {target.kind === 'session' && <>{!suppressOutput&&<HomeSessionInspection key={targetKey} context={target.context}/>}
+        <HomeSessionControls key={`controls:${targetKey}`} context={target.context}/></>}
       {target.kind === 'connection' && <section aria-label="Connection context" className="space-y-2 text-sm">
         <h3 className="font-semibold">Connection · Read only</h3>
         <p>Saved context only. Configuration does not establish session readiness or permission to execute.</p>
@@ -71,8 +74,7 @@ export function CanonicalInspection({target, item, action, onClose, onChanged, r
         allowDecision={target.decide && item?.freshness === 'current' && item.resolution === 'open'} onChanged={onChanged} refreshKey={refreshKey} />}
       {target.kind === 'handoff' && <HandoffInspection key={targetKey} handoffId={target.id} workspace={target.workspace}
         allowVerify={target.verify && item?.freshness === 'current' && item.resolution === 'open'} onChanged={onChanged} refreshKey={refreshKey} />}
-      {target.kind === 'execution' && <AgentRuntimeAdministration key={targetKey} agentId={target.agent} onClose={onClose} embedded refreshKey={refreshKey}
-        initialInspection={{executorId: target.executor, operationId: target.operation, sessionId: target.session, workspaceId: target.workspace}} />}
+      {target.kind === 'execution' && <HomeExecutionInspection key={targetKey} target={target} refreshKey={refreshKey} suppressOutput={suppressOutput}/>}
       {target.kind === 'message' && message?.message_id === target.id && <MessageDetail message={message} />}
       {target.kind === 'delivery' && delivery?.operation_id === target.operation && <section aria-label="Canonical delivery operation" className="space-y-2 text-sm">
         <h3 className="font-semibold">Delivery operation · {delivery.state}</h3>

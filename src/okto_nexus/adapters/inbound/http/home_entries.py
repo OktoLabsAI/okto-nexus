@@ -5,7 +5,7 @@ import anyio.to_thread
 from fastapi import APIRouter, Request
 
 from ....errors import ErrorCode, OktoNexusError
-from .identity_ctx import runtime_request_context
+from .identity_ctx import runtime_request_context, current_operator
 from .routes import _map_error, _ok
 
 
@@ -23,7 +23,8 @@ async def call(request, *, partition, group_id=None, entry_id=None):
         except ValueError:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid Home entries page size.', {}) from None
         value = await anyio.to_thread.run_sync(partial(request.app.state.home_entries.read,
-            context=runtime_request_context(), filters={k: request.query_params[k] for k in FILTERS if k in request.query_params},
+            context=runtime_request_context(), principal=current_operator.get(),
+            filters={k: request.query_params[k] for k in FILTERS if k in request.query_params},
             partition=partition, group_id=group_id, entry_id=entry_id,
             cursor=request.query_params.get('cursor'), limit=limit, preview=preview))
         response = _ok(value)

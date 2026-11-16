@@ -29,6 +29,11 @@ import {
   isMetricsPromptDismissed,
 } from "./components/metricsConsentStorage";
 import { OnboardingModal } from "./components/onboarding/OnboardingModal";
+import {ProjectConnectFlow} from './components/onboarding/ProjectConnectFlow';
+import {AgentActionModal} from './components/AgentActionModal';
+import {HomeInspection} from './components/home/HomeInspection';
+import {clearExactRuntimeRequests} from './components/home/exactRuntimeOperations';
+import type {HomeTarget} from './homeTypes';
 import { shouldOfferIntroduction } from './components/onboarding/onboardingStorage';
 import {
   isCompleted as onboardingDone,
@@ -98,7 +103,7 @@ export default function App() {
   useEffect(() => {
     sessionStorage.removeItem("okto_nexus_operator_key");
     void refreshAuth();
-    const expired = () => {clearHomeContinuationRequests(sessionStorage);void refreshAuth();};
+    const expired = () => {clearHomeContinuationRequests(sessionStorage);clearExactRuntimeRequests(sessionStorage);void refreshAuth();};
     window.addEventListener("nexus-auth-expired", expired);
     return () => window.removeEventListener("nexus-auth-expired", expired);
   }, [refreshAuth]);
@@ -107,6 +112,7 @@ export default function App() {
   if (!status.authenticated) return <OperatorGate configured={status.configured} onUnlock={() => void refreshAuth()} />;
   return <Dashboard key={status.username || "local-operator"} identityKey={JSON.stringify([status.local, status.username])} localOpen={status.local} onLock={() => {
     clearHomeContinuationRequests(sessionStorage);
+    clearExactRuntimeRequests(sessionStorage);
     window.dispatchEvent(new Event('nexus-operator-logout'));
     void api.operatorLogout().then(refreshAuth).catch(exc => setError((exc as Error).message));
   }} />;
@@ -182,7 +188,7 @@ function Dashboard({
   const registerHomeLeaveGuard = useCallback((guard: (() => boolean) | null) => {homeLeaveGuard.current = guard;}, []);
   const mayLeavePanel = useCallback(() => {
     if (homeLeaveGuard.current && !homeLeaveGuard.current()) return false;
-    const attentionDialog = document.querySelector<HTMLDialogElement>('[data-testid="attention-inspection"]');
+    const attentionDialog = document.querySelector<HTMLDialogElement>('[data-testid="attention-inspection"], [data-testid="project-connect-detail"], [data-testid="connection-context-detail"]');
     if (attentionDialog) {attentionDialog.dispatchEvent(new Event('cancel', {cancelable:true}));return false;}
     return true;
   }, []);
@@ -304,6 +310,14 @@ function Dashboard({
   const [helpOpen, setHelpOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [onboardingOpen, setOnboardingOpen] = useState(false);
+  const [connectFlowOpen,setConnectFlowOpen]=useState(false);
+  const [connectionTarget,setConnectionTarget]=useState<HomeTarget|null>(null);
+  const openConnectFlow=()=>{if(mayLeavePanel()){setConnectionTarget(null);setConnectFlowOpen(true);}};
+  useEffect(()=>{
+    const clear=()=>{setConnectFlowOpen(false);setConnectionTarget(null);};
+    window.addEventListener('nexus-auth-expired',clear);window.addEventListener('nexus-operator-logout',clear);
+    return()=>{window.removeEventListener('nexus-auth-expired',clear);window.removeEventListener('nexus-operator-logout',clear);};
+  },[]);
   const [introductionChecked, setIntroductionChecked] = useState(false);
   const [metricsPanel, setMetricsPanel] = useState<"menu" | "prompt" | null>(
     null,
@@ -740,8 +754,19 @@ function Dashboard({
       {helpOpen && <HelpModal onClose={() => setHelpOpen(false)} />}
       {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
       {onboardingOpen && (
-        <OnboardingModal onClose={() => setOnboardingOpen(false)} onOpenAgents={() => setView('Agents')} />
+        <OnboardingModal onClose={() => setOnboardingOpen(false)} onOpenAgents={() => {setOnboardingOpen(false);openConnectFlow();}} />
       )}
+      {connectFlowOpen&&<AgentActionModal title="Connect a project agent" presentation="drawer" wide testId="project-connect-detail" onClose={()=>setConnectFlowOpen(false)}>
+        <ProjectConnectFlow identityKey={identityKey} workspace={workspaces.find(item=>item.workspace_id===workspace)??null} serverOrigin={window.location.origin}
+          onClose={()=>setConnectFlowOpen(false)} onResume={item=>{setConnectFlowOpen(false);setConnectionTarget({kind:'connection',server_id:item.server_id,executor_id:item.executor_id,
+            workspace_id:item.workspace_id,binding_id:item.binding_id,agent_id:item.agent_id});}}
+          onComplete={result=>{setConnectFlowOpen(false);setRefreshTick(value=>value+1);attention.refresh();
+            if(result.binding){const b=result.binding;if(b.server_id)setConnectionTarget({kind:'connection',server_id:b.server_id,executor_id:b.executor_id,workspace_id:b.workspace_id,binding_id:b.binding_id,agent_id:b.agent_id});}}}/>
+      </AgentActionModal>}
+      {connectionTarget&&<AgentActionModal title="Connection context" presentation="drawer" wide testId="connection-context-detail" onClose={()=>setConnectionTarget(null)}>
+        <HomeInspection target={connectionTarget} serverId={connectionTarget.server_id} workspace={connectionTarget.workspace_id} onClose={()=>setConnectionTarget(null)}
+          onChanged={()=>{setRefreshTick(value=>value+1);attention.refresh();}}/>
+      </AgentActionModal>}
       {metricsPanel && !onboardingOpen && (
         <MetricsSettingsPanel
           initialPrompt={metricsPanel === "prompt"}
@@ -793,6 +818,7 @@ function Dashboard({
       <main className="flex-1 min-w-0 overflow-hidden">
           {view === 'Home' && <div className="h-full flex flex-col min-h-0">
             <div className="shrink-0 px-4 pt-2 flex justify-end">
+              {(!homeOperational||info?.features?.feature_home===false)&&<button type="button" className="btn btn-secondary mr-3" onClick={openConnectFlow}>Connect agent</button>}
               <button type="button" className="text-xs text-surface-500 underline" aria-pressed={homeOperational}
                 onClick={() => {if (!mayLeavePanel()) return;const next = !homeOperational;localStorage.setItem('okto-nexus-home-operational', next ? 'enabled' : 'disabled');setHomeOperational(next);}}>
                 {homeOperational ? 'Use classic Home' : 'Use operational Home'}
@@ -802,7 +828,7 @@ function Dashboard({
               {homeOperational && info?.features?.feature_home !== false
                 ? <OperationalHome key={workspace} workspace={workspace} workspaces={workspaces} identityKey={identityKey}
                     refreshTick={refreshTick} latestEvent={latestHomeEvent} streamStatus={sseStatus} onNavigate={setView}
-                    onAttentionChanged={attention.refresh} onSetupAgent={() => setOnboardingOpen(true)} registerLeaveGuard={registerHomeLeaveGuard}/>
+                    onAttentionChanged={attention.refresh} onSetupAgent={openConnectFlow} registerLeaveGuard={registerHomeLeaveGuard}/>
                 : <HomeView key={workspace} workspace={workspace} refreshTick={refreshTick} attention={attention.state}
                     onRefreshAttention={attention.refresh} onNavigate={setView}/>}
             </div>
@@ -846,12 +872,13 @@ function Dashboard({
             />
           )}
           {view === "Meta-harness" && (
-            <MetaHarnessView
+            <div className="h-full flex flex-col min-h-0"><div className="shrink-0 px-4 pt-3 flex justify-end"><button type="button" className="btn btn-secondary" onClick={openConnectFlow}>Connect agent</button></div>
+            <div className="min-h-0 flex-1"><MetaHarnessView
               workspace={workspace}
               workspaces={workspaces}
               liveTick={liveTick}
               newSince={visitBaseline}
-            />
+            /></div></div>
           )}
           {view === "Events" && (
             <EventsView

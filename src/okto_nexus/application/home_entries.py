@@ -9,7 +9,8 @@ import time
 from ..domain.attention import normalize_filters
 from ..domain.home_entries import EntryRelations
 from ..domain import home_entry_pages as pages
-from ..errors import OktoNexusError
+from ..errors import ErrorCode, OktoNexusError
+from ..domain.home import digest
 from .home_ports import HomeEntryQueries
 
 
@@ -20,7 +21,7 @@ class HomeEntriesService:
         self.home = home_service
         self.queries = queries
 
-    def read(self, *, context, filters=None, partition='groups', group_id=None, entry_id=None,
+    def read(self, *, context, principal=None, filters=None, partition='groups', group_id=None, entry_id=None,
              cursor=None, limit=10, preview=3):
         scope = pages.filters(filters)
         started = time.monotonic()
@@ -34,7 +35,11 @@ class HomeEntriesService:
             # before all source queries, joins, counts and cursor validation.
             server, now, config = self.home._basis(uow, context, scope)
             bounds = uow.connection.execute("SELECT COALESCE((SELECT seq FROM sqlite_sequence WHERE name='events'),0),(SELECT MIN(event_id) FROM events)").fetchone()
-            principal = context.actor_agent_id or 'local_operator'
+            if context.authentication_source == 'operator_session' and (
+                    type(principal) is not str or not principal or len(principal) > 160 or not principal.isprintable()):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The authenticated human identity is unavailable.', {})
+            principal = digest([context.authentication_source, context.actor_agent_id, context.credential_binding,
+                principal if context.authentication_source == 'operator_session' else None])
             value = self.home._safe(now, lambda: self._read(uow, scope=scope, server=server,
                 now=now, config=config, context=context, principal=principal,
                 partition=partition, group_id=group_id, entry_id=entry_id, cursor=cursor,

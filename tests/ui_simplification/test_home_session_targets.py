@@ -6,7 +6,13 @@ import pytest
 
 from okto_nexus.domain.home import target as validate_target
 from okto_nexus.errors import OktoNexusError
-from .test_fixtures import fixtures, scenario
+from .test_fixtures import fixtures
+
+
+@pytest.fixture
+def scenario(tmp_path):
+    with fixtures.scenario(tmp_path / 'scenario') as value:
+        yield value
 
 
 def session_target(s, index=0, session_id=None):

@@ -5,7 +5,13 @@ import './AgentActionModal.css';
 import {CapturedModalChanges, type ModalChangeReceipt} from '../modalChanges';
 
 const ModalContext = createContext<{footer: HTMLDivElement | null; dismiss: () => void; guard: (dirty: boolean, busy: boolean) => void;
-  changes: ModalChangeReceipt} | null>(null);
+  changes: ModalChangeReceipt; transition: (action: () => void) => void} | null>(null);
+
+/** Use the same draft/busy guard when changing context inside the active panel. */
+export function useAgentModalTransition() {
+  const modal = useContext(ModalContext);
+  return modal?.transition ?? ((action: () => void) => action());
+}
 
 /** Confirm captured edits only after canonical success or a confirmed new revision. */
 export function useAgentModalChanges(): ModalChangeReceipt | null {
@@ -34,6 +40,7 @@ export function AgentActionModal({title, children, onClose, wide = false, compac
   const [expanded, setExpanded] = useState(false);
   const [discard, setDiscard] = useState(false);
   const [footer, setFooter] = useState<HTMLDivElement | null>(null);
+  const pendingTransition = useRef<(() => void) | null>(null);
   const changed = useRef(new CapturedModalChanges());
   const changes = useRef<ModalChangeReceipt>({
     checkpoint: () => changed.current.checkpoint(),
@@ -43,9 +50,22 @@ export function AgentActionModal({title, children, onClose, wide = false, compac
   const guard = useRef((dirty: boolean, busy: boolean) => {explicit.current = {dirty, busy};}).current;
   const close = useRef(onClose); close.current = onClose;
   const dismiss = () => {
+    pendingTransition.current = null;
     if (busy || explicit.current.busy) return;
     if (guardChanges && (dirty || changed.current.dirty || explicit.current.dirty)) setDiscard(true);
     else close.current();
+  };
+  const transition = (action: () => void) => {
+    if (busy || explicit.current.busy) return;
+    if (guardChanges && (dirty || changed.current.dirty || explicit.current.dirty)) {
+      pendingTransition.current = action;setDiscard(true);
+    } else action();
+  };
+  const discardChanges = () => {
+    const action = pendingTransition.current;pendingTransition.current = null;
+    if (!action) {close.current();return;}
+    changed.current.reset(changed.current.checkpoint());explicit.current = {dirty:false,busy:false};
+    setDiscard(false);action();
   };
   useEffect(() => {
     const trigger = document.activeElement as HTMLElement | null;
@@ -56,7 +76,7 @@ export function AgentActionModal({title, children, onClose, wide = false, compac
   return createPortal(<dialog ref={dialog} aria-labelledby={titleId} aria-modal="true" data-testid={testId}
     className={`agent-action-modal ${presentation === 'drawer' ? 'agent-action-drawer' : ''} ${wide ? 'agent-action-modal-wide' : ''} ${compact === 'tall' ? 'agent-action-modal-compact-tall' : compact ? 'agent-action-modal-compact' : ''} ${expanded ? 'agent-action-modal-expanded' : ''}`}
     onCancel={event => {event.preventDefault(); event.stopPropagation(); dismiss();}}>
-    <ModalContext.Provider value={{footer, dismiss, guard, changes}}>
+    <ModalContext.Provider value={{footer, dismiss, guard, changes, transition}}>
       <header className="agent-modal-header">
         <h2 id={titleId}>{title}</h2>
         <button type="button" aria-label={expanded ? 'Restore modal' : 'Expand modal'} title={expanded ? 'Restore' : 'Expand'} onClick={() => setExpanded(v => !v)}>
@@ -66,10 +86,12 @@ export function AgentActionModal({title, children, onClose, wide = false, compac
       </header>
       {discard && <div className="agent-modal-discard" role="alert">
         <p>Discard unsaved changes?</p>
-        <button className="btn btn-secondary" autoFocus onClick={() => setDiscard(false)}>Keep editing</button>
-        <button className="btn btn-danger" onClick={() => close.current()}>Discard changes</button>
+        <button className="btn btn-secondary" autoFocus onClick={() => {pendingTransition.current=null;setDiscard(false);}}>Keep editing</button>
+        <button className="btn btn-danger" onClick={discardChanges}>Discard changes</button>
       </div>}
-      <div className="agent-modal-body" onChangeCapture={() => changed.current.capture()}>{children}</div>
+      <div className="agent-modal-body" onChangeCapture={event => {
+        if (!(event.target instanceof Element) || !event.target.closest('[data-modal-passive]')) changed.current.capture();
+      }}>{children}</div>
       <div className="agent-modal-footer" ref={setFooter} />
     </ModalContext.Provider>
   </dialog>, document.body);

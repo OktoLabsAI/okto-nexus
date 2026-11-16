@@ -6,7 +6,8 @@ import {SessionExecutionPanel} from '../SessionExecutionPanel';
 
 /** Revalidate admission identity before exposing only the existing passive event viewer. */
 export function HomeSessionInspection({context}: {context: HomeSessionContext}) {
-  const key=JSON.stringify(context);
+  const key=JSON.stringify([context.server_id,context.executor_id,context.workspace_id,context.session_id,
+    context.binding_id,context.workspace_binding_id,context.agent_id]);
   const [read,setRead]=useState<{key:string;session:RuntimeSession|null;error:string}>({key,session:null,error:''});
   useEffect(()=>{
     const controller=new AbortController();setRead({key,session:null,error:''});

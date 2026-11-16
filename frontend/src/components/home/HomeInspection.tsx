@@ -10,6 +10,8 @@ import {CanonicalInspection} from '../AttentionInspection';
 import {MetaHarnessComposer} from '../MetaHarnessComposer';
 import {RuntimeOperations} from '../RuntimeOperations';
 import {readContinuationContext} from './continuation';
+import type {HomeEntrySelection} from '../../homeEntryInspection';
+import {HomeEntryInspection} from './HomeEntryInspection';
 
 export function HomeNewRequest({workspace, workspaces, onChanged}: {workspace: string; workspaces: WorkspaceListItem[]; onChanged: () => void}) {
   const [agents, setAgents] = useState<AgentRow[]>([]), [error, setError] = useState('');
@@ -25,8 +27,10 @@ export function HomeAttentionInspection({item, action, onClose, onChanged, refre
 }
 
 /** Opening is read-only. The original canonical inspector retains ownership of commands. */
-export function HomeInspection({target, serverId, workspace, continuation, onClose, onChanged}: {
+export function HomeInspection({target, serverId, workspace, continuation, onClose, onChanged,entrySelection,suppressOutput=false}: {
   target: HomeTarget; serverId: string; workspace: string | null; continuation?: boolean;
+  entrySelection?:HomeEntrySelection;
+  suppressOutput?:boolean;
   onClose: () => void; onChanged: () => void;
 }) {
   const [resolved, setResolved] = useState<Awaited<ReturnType<typeof resolveHomeTarget>> | null>(null);
@@ -51,7 +55,9 @@ export function HomeInspection({target, serverId, workspace, continuation, onClo
   }, [key, serverId, workspace, continuation]);
   return <div className="space-y-4">
     {error ? <p role="alert">{error}</p> : !resolved && <p role="status">Revalidating the exact canonical record…</p>}
-    {resolved && !continuation && <CanonicalInspection target={homeInspectionTarget(resolved)} onClose={onClose} onChanged={onChanged}/>}
+    {resolved && !continuation && (entrySelection?<HomeEntryInspection selection={entrySelection} target={target} serverId={serverId} workspace={workspace} onClose={onClose} onChanged={onChanged}
+      renderRecord={(related,continuing)=><HomeInspection key={JSON.stringify([related,continuing])} target={related} continuation={continuing} suppressOutput serverId={serverId} workspace={workspace} onClose={onClose} onChanged={onChanged}/>}/>
+      :<CanonicalInspection target={homeInspectionTarget(resolved)} contextual suppressOutput={suppressOutput} onClose={onClose} onChanged={onChanged}/>)}
     {resolved && continuation && context && <RuntimeOperations agentId={context.session.scope.agent_id} binding={context.binding} canStart={false} continuationScope={context.session.scope}/>}
   </div>;
 }

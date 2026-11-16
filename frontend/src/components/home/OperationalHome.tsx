@@ -12,8 +12,9 @@ import {PageContainer} from '../PageContainer';
 import {useWorkspaceName} from '../WorkspaceNames';
 import {HomeNewRequest, HomeInspection, HomeAttentionInspection} from './HomeInspection';
 import {HomeEntryGroupCard,HomeEntryRow,homeFocus,homeEntriesAnnouncementIds,freshHomeEntryOccurrence,isQuietEntries} from './HomeCards';
+import type {HomeEntrySelection} from '../../homeEntryInspection';
 
-type Panel = {kind: 'request'} | {kind: 'target'; target: HomeTarget; continuation?: boolean}
+type Panel = {kind: 'request'} | {kind: 'target'; target: HomeTarget; continuation?: boolean;entrySelection?:HomeEntrySelection}
   | {kind: 'attention'; item: AttentionOccurrence; action: AttentionAction};
 const states: HomeEntryDisplayState[] = ['running', 'awaiting_owner', 'claimed', 'queued', 'native_accepted', 'awaiting_operator', 'awaiting_agent', 'awaiting_dependency', 'awaiting_verification', 'outcome_unknown','configured','connected','idle','offline','stale'];
 export function OperationalHome({workspace, workspaces, identityKey, refreshTick, latestEvent, streamStatus, onNavigate,
@@ -184,10 +185,16 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
           expanded={!!expanded[group.id]} onExpand={()=>{const next={...expanded,[group.id]:!expanded[group.id]};holdOrder(listFocused||Object.values(next).some(Boolean));setExpanded(next);}}
           stale={blocked} loading={state.entryLoading?.partition==='children'&&state.entryLoading.groupId===group.id} onMore={()=>loadGroupChildren(group.id)}>
           {entry=>{const key=homeEntryPageKey(group.id,entry.id),loading=state.entryLoading?.groupId===group.id&&state.entryLoading.entryId===entry.id?state.entryLoading.partition:null;
+            const selection:HomeEntrySelection={groupId:group.id,revision:snapshot.revision,
+              filters:{workspace_id:workspace==='all'?undefined:workspace,agent_id:agentFilter||undefined,state:stateFilter||undefined,quick,harness:harnessFilter||undefined,host:hostFilter||undefined},
+              entry:{...entry,sessions:state.entrySessions[key]?.items??entry.sessions,sessions_cursor:state.entrySessions[key]?state.entrySessions[key].next_cursor:entry.sessions_cursor,
+                attention_preview:state.entryAttention[key]?.items??entry.attention_preview,attention_cursor:state.entryAttention[key]?state.entryAttention[key].next_cursor:entry.attention_cursor,
+                results_preview:state.entryResults[key]?.items??entry.results_preview,results_cursor:state.entryResults[key]?state.entryResults[key].next_cursor:entry.results_cursor}};
             return <HomeEntryRow key={entry.id} entry={entry} serverId={snapshot.server_id} sessionsPage={state.entrySessions[key]} attentionPage={state.entryAttention[key]} resultsPage={state.entryResults[key]}
               stale={blocked} preferencesStale={snapshot.source_status.attention!=='ready'} pendingIds={pending} loading={loading}
-              onOpen={target=>open({kind:'target',target})} onContinue={target=>open({kind:'target',target,continuation:true})}
-              onAttentionOpen={(item,action)=>open({kind:'attention',item,action})} onSeen={(item,seen)=>void preference(item,seen)} onSnooze={item=>void preference(item)}
+              onOpen={target=>open({kind:'target',target,entrySelection:selection})} onContinue={target=>open({kind:'target',target,continuation:true})}
+              onAttentionOpen={(item,action)=>entry.target?open({kind:'target',target:entry.target,entrySelection:{...selection,attention:{item,action}}}):open({kind:'attention',item,action})}
+              onSeen={(item,seen)=>void preference(item,seen)} onSnooze={item=>void preference(item)}
               onMore={partition=>partition==='sessions'?loadEntrySessions(group.id,entry.id):partition==='attention'?loadEntryAttention(group.id,entry.id):loadEntryResults(group.id,entry.id)}/>;
           }}
         </HomeEntryGroupCard>)}</ul>
@@ -197,7 +204,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     {panel&&snapshot&&<AgentActionModal title={panel.kind==='request'?'New request':panel.kind==='attention'?'Canonical attention record':panel.continuation?'Continue this exact session':'Activity detail'} onClose={close} presentation="drawer" wide testId="home-detail">
       {panel.kind==='request'?<HomeNewRequest workspace={workspace} workspaces={workspaces} onChanged={changed}/>
         :panel.kind==='attention'?<HomeAttentionInspection item={panel.item} action={panel.action} onClose={close} onChanged={changed}/>
-          :<HomeInspection target={panel.target} serverId={snapshot.server_id} workspace={workspace==='all'?null:workspace} continuation={panel.continuation} onClose={close} onChanged={changed}/>}
+          :<HomeInspection target={panel.target} serverId={snapshot.server_id} workspace={workspace==='all'?null:workspace} continuation={panel.continuation} entrySelection={panel.entrySelection} onClose={close} onChanged={changed}/>}
     </AgentActionModal>}
   </PageContainer>;
 }

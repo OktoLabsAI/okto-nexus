@@ -2144,7 +2144,7 @@
       "id": "UI-026",
       "pr": "PR-04",
       "title": "Ligar ações básicas e incidentes globais",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-008",
         "UI-025"
@@ -2171,8 +2171,12 @@
         "T-ATTN-06",
         "T-HOME-10"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+      ],
+      "limitations": [
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+      ]
     },
     {
       "id": "UI-027",
@@ -2216,7 +2220,7 @@
       "id": "UI-028",
       "pr": "PR-04",
       "title": "Qualificar comportamento da Home no navegador",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-026",
         "UI-027"
@@ -2291,7 +2295,7 @@
       "id": "UI-030",
       "pr": "PR-05",
       "title": "Compor painel com contexto, sessão e entrega",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-029",
         "UI-026"
@@ -2318,14 +2322,18 @@
         "T-PANEL-07",
         "T-EXT-03"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+      ],
+      "limitations": [
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+      ]
     },
     {
       "id": "UI-031",
       "pr": "PR-05",
       "title": "Reutilizar decisões e controles exatos",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-030"
       ],
@@ -2351,14 +2359,18 @@
         "T-PANEL-08",
         "T-PANEL-09"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+      ],
+      "limitations": [
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+      ]
     },
     {
       "id": "UI-032",
       "pr": "PR-05",
       "title": "Proteger foco, rascunho, histórico e scroll",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-030",
         "UI-031"
@@ -2387,14 +2399,18 @@
         "T-A11Y-02",
         "T-A11Y-03"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+      ],
+      "limitations": [
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+      ]
     },
     {
       "id": "UI-033",
       "pr": "PR-05",
       "title": "Integrar vistos, artefatos e continuidade",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-031",
         "UI-032"
@@ -2423,14 +2439,18 @@
         "T-RESULT-04",
         "T-RESULT-06"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+      ],
+      "limitations": [
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+      ]
     },
     {
       "id": "UI-034",
       "pr": "PR-05",
       "title": "Qualificar inspeção e concorrência no navegador",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-033"
       ],
@@ -2464,7 +2484,7 @@
       "id": "UI-035",
       "pr": "PR-06",
       "title": "Expor retomar/adicionar no onboarding da UI",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-016",
         "UI-030"
@@ -2491,8 +2511,12 @@
         "T-ONB-03",
         "T-ONB-04"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+      ],
+      "limitations": [
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+      ]
     },
     {
       "id": "UI-036",
@@ -2536,7 +2560,7 @@
       "id": "UI-037",
       "pr": "PR-06",
       "title": "Conectar revisão remota e continuidade sem dashboard obrigatório",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-036",
         "UI-035"
@@ -2564,14 +2588,18 @@
         "T-CONN-07",
         "T-SVC-03"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+      ],
+      "limitations": [
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+      ]
     },
     {
       "id": "UI-038",
       "pr": "PR-06",
       "title": "Preservar daemon e opção de login no novo fluxo",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-015",
         "UI-036"
@@ -2599,14 +2627,18 @@
         "T-SVC-05",
         "T-SVC-06"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+      ],
+      "limitations": [
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+      ]
     },
     {
       "id": "UI-039",
       "pr": "PR-06",
       "title": "Qualificar a jornada multi-harness entre superfícies",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-035",
         "UI-037",
@@ -2644,7 +2676,7 @@
       "id": "UI-040",
       "pr": "PR-07",
       "title": "Executar regressão de segurança e semântica",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-022",
         "UI-028",
@@ -2684,7 +2716,7 @@
       "id": "UI-041",
       "pr": "PR-07",
       "title": "Qualificar acessibilidade, responsividade e desempenho",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-028",
         "UI-034"
@@ -2791,7 +2823,7 @@
       "id": "UI-044",
       "pr": "PR-08",
       "title": "Atualizar documentação e compatibilidade pública",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-039",
         "UI-040"
@@ -2828,7 +2860,7 @@
       "id": "UI-045",
       "pr": "PR-08",
       "title": "Empacotar e validar o conjunto compatível",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-040",
         "UI-041",
@@ -2863,7 +2895,7 @@
       "id": "UI-046",
       "pr": "PR-08",
       "title": "Qualificar migração, fallback e rollback",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-045"
       ],
@@ -2898,7 +2930,7 @@
       "id": "UI-047",
       "pr": "PR-08",
       "title": "Fechar rastreabilidade e decidir ativação padrão",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-043",
         "UI-045",
@@ -3344,12 +3376,15 @@
     },
     {
       "id": "T-DATA-13",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "unitário/SQLite",
       "given": "Claim ou SUBMITTED sem RUNNING.",
       "when": "Apresentar estado.",
       "expected": "Mostrar assumido/recebido, não executando ou concluído.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr03-performance/qualification.json",
+        "NEXUS_UI_R1/execution/pr03-performance/semantics.json"
+      ],
       "tasks": [
         "UI-022"
       ]
@@ -3584,12 +3619,14 @@
     },
     {
       "id": "T-PANEL-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "contrato/HTTP",
       "given": "Sessão sem operação.",
       "when": "Codificar/resolver alvo session.",
       "expected": "Abertura sem operation_id e escopo canônico conferido.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+      ],
       "tasks": [
         "UI-003",
         "UI-019",
@@ -4339,12 +4376,14 @@
     },
     {
       "id": "T-CONN-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "Connector/integração",
       "given": "Connector tem alias/conexão compatível.",
       "when": "connect no projeto.",
       "expected": "Retomar/adicionar vem antes de tratar criação como Replace/Abort obrigatório.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr06-connector-qualification.json"
+      ],
       "tasks": [
         "UI-004",
         "UI-036"
@@ -4352,12 +4391,14 @@
     },
     {
       "id": "T-CONN-02",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "Connector/integração",
       "given": "Outro harness no mesmo host/projeto.",
       "when": "Adicionar nova conexão.",
       "expected": "Alias/checkpoint próprio e configuração anterior preservada.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr06-connector-qualification.json"
+      ],
       "tasks": [
         "UI-036"
       ]
@@ -4376,12 +4417,14 @@
     },
     {
       "id": "T-CONN-04",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "Connector/integração",
       "given": "Wizard Connector atual rejeita --json.",
       "when": "Invocar com JSON/noninteractive.",
       "expected": "Contrato antigo preservado; sem pergunta de credencial ou prompt escondido.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr06-connector-qualification.json"
+      ],
       "tasks": [
         "UI-036"
       ]
@@ -4638,12 +4681,14 @@
     },
     {
       "id": "T-PERF-02",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "carga/instrumentação",
       "given": "1.000 atividades e 100.000 eventos.",
       "when": "Paginar e medir p50/p95.",
       "expected": "Limites/cursors funcionam; registrar hardware/volume/meta atingida ou não.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr03-performance/qualification.json"
+      ],
       "tasks": [
         "UI-022",
         "UI-041"

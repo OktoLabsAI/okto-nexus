@@ -1,0 +1,103 @@
+{
+  "status": "IMPLEMENTED_PENDING_MOUNTED_BROWSER_AND_INSTALLED_QUALIFICATION",
+  "tasks": [
+    "UI-026",
+    "UI-030",
+    "UI-031",
+    "UI-032",
+    "UI-033",
+    "UI-035",
+    "UI-037",
+    "UI-038"
+  ],
+  "qualification": {
+    "frontend_complete": {
+      "passed": 291,
+      "exit_code": 0,
+      "duration_ms": 19147.8227,
+      "tool_ref": "049ec6"
+    },
+    "build": {
+      "exit_code": 0,
+      "session": 23417,
+      "tool_ref": "a03900",
+      "bundle": "index-CIRJLndB.js",
+      "css": "index-CXFy-VnM.css"
+    },
+    "joint_cli_http_sqlite": {
+      "passed": 175,
+      "exit_code": 0,
+      "session": 17857,
+      "tool_ref": "1fbc62",
+      "scope": "Terminal connect/identity/work/multi-harness, local and canonical catalogs/pickers/project, remote association and remote operator regression. Inert peers and temporary Homes; no provider."
+    },
+    "human_cursor_and_entries": {
+      "passed": 17,
+      "exit_code": 0,
+      "duration_seconds": 190.4,
+      "session": 12839,
+      "tool_ref": "1a7fd5"
+    },
+    "historical_targets_fixture_import_cleanup": {
+      "passed": 13,
+      "exit_code": 0,
+      "tool_ref": "748ac4"
+    },
+    "onboarding_read_only_http": {
+      "passed": 2,
+      "tool_ref": "cb8aa3",
+      "scope": "Existing dashboard handlers and new identity draft: no agent/grant/session/operation/model test created; agent credential denied."
+    },
+    "global_ruff": {
+      "exit_code": 1,
+      "errors": 23912,
+      "tool_ref": "e6a34b",
+      "scope": "Repository-wide ruff check includes legacy sources, generated/build copies and standalone evidence drivers. Not a clean global lint result. New product Python/target tests passed focused Ruff checks."
+    }
+  },
+  "behavior": [
+    "One contextual panel retains work, exact session selection, questions, delivered results and authorized artifacts. No parallel runtime inventory.",
+    "Session-only targets have no invented operation. Multiple sessions require explicit selection; question/result selection binds its own exact session and controls.",
+    "Shared passive output viewer has one body, no nested terminal dialog/maximizer; contextual canonical controls fix all seven runtime dimensions and cannot start a replacement session.",
+    "Continue, interrupt-current-run and close are distinct reviewed intents. Unknown review/admission is recover-only, with same-ID receipts and no automatic replay.",
+    "Logout clears protected output/text; attempted controls retain a minimal quarantined recovery fence, including sibling intents, rather than becoming permission for a new action.",
+    "One existing modal guard protects context switches and drafts. Explicitly passive session selection does not fabricate a dirty form.",
+    "Connect agent opens the short flow from operational/classic Home and Conversations, preserving the existing introduction guide and internal view IDs.",
+    "Onboarding lists all bounded authorized catalog pages, revalidates Resume, proposes a distinct identity only at canonical Finish, uses dynamic presets/defaults and explicit model-test/Finish consent.",
+    "Remote onboarding explains browser/Server/Connector authority and uses the existing host-draft and operator review pipeline; no operator credential is copied to the host.",
+    "Home entries cursors now bind authenticated human identity separately from the operator actor; missing human context is denied. Existing authorization remains canonical."
+  ],
+  "limitations": [
+    "Mounted-browser Home and full UI onboarding journeys are separate running qualifications, not inferred from Node or SSR.",
+    "Existing terminal useLayoutEffect SSR warning and Vite large-chunk warning remain.",
+    "Global Ruff is not clean; no broad formatting or unrelated lint rewrite was performed.",
+    "Performance measurements in pr03-performance retain their antecedent source cut; the later principal-only cursor fence does not relabel those timings.",
+    "No native harness, real remote machine, screen-reader, human usability or paid campaign has been qualified by this source milestone."
+  ],
+  "migrations": 0,
+  "provider_calls": 0,
+  "rollback": "Revert presentation/onboarding/control integration and rebuild static assets; keep classic Home, legacy URLs/explicit profiles and all canonical setup/receipt/session data. No data reset or service replacement is required.",
+  "next": "Complete mounted-browser and installed-artifact checks; retain real-harness, accessibility, performance and rollout gates without treating IMPLEMENTED as VERIFIED.",
+  "working_tree_raw_sha256": {
+    "frontend/src/App.tsx": "7858f2fa995548691548bdc071d2fda964d4b7b906eea517c2f592bfc614b3c3",
+    "frontend/src/components/AgentActionModal.tsx": "7a7bdfa6079608dc0beb2a18120155d2ffb6041104c9bdbcde0a27571ded158b",
+    "frontend/src/components/AttentionInspection.tsx": "5c0314c4c581f9015e3df3bfd715d275786d7f6f89f5aaf7a8925519c12c622d",
+    "frontend/src/components/RuntimeOperations.tsx": "4eb63fd34f8dc277f86d0d6144e1b50a59217b26c1ce80c8807cd039501a1c8f",
+    "frontend/src/components/home/HomeEntryInspection.tsx": "db3049fb2fd70bc7a4b925f0ae2fa51b4c7517d1bd957fd16687a483dfdfd108",
+    "frontend/src/components/home/HomeExecutionInspection.tsx": "2da84374c6521dde86ab7a6ca7927f7efce666f9436cb506f53922f98fa368f7",
+    "frontend/src/components/home/exactRuntimeOperations.ts": "9fd067672d874c52c9c95fd89ca158a9758afbcb34a4746783051617cb1c526f",
+    "frontend/src/components/home/HomeInspection.tsx": "fbe6c27987a46b0d26031929acaf0ac79dfc24e9532c7f3301d1448f6715bb3e",
+    "frontend/src/components/home/HomeSessionInspection.tsx": "c57af1af1c54731008391f43ab833207d7f6c8823642ee643b622736d67ffb31",
+    "frontend/src/components/home/OperationalHome.tsx": "af48b0183d618c509449115d239ac7f0557ddd0854c436c3b2d0d4da9a6a29b1",
+    "frontend/src/components/home/continuation.ts": "de44cf650541e43508aa0abf626ba8fe968226a97677c66dc3e7f40e9871e952",
+    "frontend/src/components/onboarding/ProjectConnectFlow.tsx": "88d82739d93d3b9276f20e6110cab9198c8d339505e28e5c52ba0886a9f5eec7",
+    "frontend/src/homeEntryInspection.ts": "0990f4ad7fc7f62c48995f17d9efb217fd3030070fd79cfd51b67db6c769bb3e",
+    "frontend/src/projectConnectFlowModel.ts": "39b0deae5728e18e06e9033e244fbcce809b3bebcf08b900020386cc08116675",
+    "frontend/src/runtimeApi.ts": "4cff4a3830ce721bba548794bd454b1a2f23d5864bf901c2f9026ce87c960e65",
+    "frontend/src/connectionConfiguration.ts": "a9471635d91b9d769ca60c98c3b2e3fbdf3b40d83aeba824d9d6da5781e77eda",
+    "src/okto_nexus/application/home_entries.py": "1675551db67015f0fecbc8f03691f5044a6a4880d58f65c36fee342b322839e5",
+    "src/okto_nexus/adapters/inbound/http/home_entries.py": "ff762ff4bbc5f9dc704e9236b5e36f95a0e1b6f956c63f8589f4f4f7942e9742",
+    "tests/ui_simplification/test_project_connect_read_contract.py": "39f12f58d1b56f4166f0aaefa9bf2810e8d62407bfa3288f1a84fdcf0f9c268f",
+    "tests/ui_simplification/test_entry_app_integration.py": "2c829ea4ceb0ffbe01661384e7958f77e5840571fd0291cb923126066836e308"
+  }
+}

@@ -1,5 +1,9 @@
 """Production assembly, operator authorization and additive read compatibility."""
 from fastapi.testclient import TestClient
+import pytest
+
+from okto_nexus.domain.runtime_context import RuntimeRequestContext
+from okto_nexus.errors import OktoNexusError
 
 from .test_fixtures import fixtures
 
@@ -23,6 +27,21 @@ def test_production_app_exposes_entries_without_manual_route_install(tmp_path):
             assert client.get('/api/v1/home/entries?limit=1&limit=2', headers=headers).status_code == 422
         finally:
             client.close()
+
+
+def test_entries_cursor_is_bound_to_authenticated_human_without_exposing_identity(tmp_path):
+    with fixtures.scenario(tmp_path/'human-cursor') as s:
+        service=s.app.state.home_entries
+        context=RuntimeRequestContext(None, 'operator_session', trusted_local_operator=True)
+        first=service.read(context=context,principal='human-a',limit=1,filters={'quick':'all'})
+        assert first['has_more'] and first['next_cursor']
+        assert 'human-a' not in first['next_cursor']
+        with pytest.raises(OktoNexusError) as error:
+            service.read(context=context,principal='human-b',limit=1,filters={'quick':'all'},cursor=first['next_cursor'])
+        assert error.value.code == 'CONFLICT'
+        with pytest.raises(OktoNexusError) as error:
+            service.read(context=context,limit=1,filters={'quick':'all'})
+        assert error.value.code == 'PERMISSION_DENIED'
 
 
 def test_agent_is_denied_before_any_entry_source_query(tmp_path):

@@ -1,19 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 import {revalidateContinuation, clearHomeContinuationRequests} from "./home/continuation";
 import { RuntimeHistory } from "./RuntimeHistory";
-import {useAgentModalGuard} from "./AgentActionModal";
+import {useAgentModalGuard,useAgentModalTransition} from "./AgentActionModal";
+import {assertExactRequest,assertExactResolution,clearExactRuntimeRequests,exactRuntimeIntents,exactRuntimeLabels,exactScopeKey,exactStorageIdentity,
+  mayDiscardExactRequest,pendingExactRequests,quarantineExactRequest,revalidateExactContext,type ExactRuntimeContext} from './home/exactRuntimeOperations';
 import { ApiError } from "../api";
 import { runtimeApi, type BindingView, type RuntimeIntent, type RuntimeOperation,
   type RuntimeRequest, type RuntimeResolution, type RuntimeScope, type RuntimeSession } from "../runtimeApi";
 
-type Saved = {request: RuntimeRequest; resolution: RuntimeResolution | null; submissionAttempted: boolean; reviewError?: string; connectionVerified?: boolean; startedAt?: number};
+type Saved = {request: RuntimeRequest; resolution: RuntimeResolution | null; submissionAttempted: boolean; reviewAttempted?: boolean; reviewError?: string; connectionVerified?: boolean; startedAt?: number;quarantined?:boolean;recoveryConfirmed?:boolean};
 const labels: Record<RuntimeIntent, string> = {"runtime.start": "Start or reuse a runtime",
   "turn.submit": "Send a turn", "turn.steer": "Steer a turn", "turn.interrupt": "Interrupt a turn", "runtime.close": "Close the runtime"};
 const fieldClass = "block w-full rounded border p-2 dark:bg-surface-800";
 
-export function RuntimeOperations({agentId, binding, canStart, connectionTest = false, testConfigurationKey = '', onTestStateChange, continuationScope}: {
+export function RuntimeOperations({agentId, binding, canStart, connectionTest = false, testConfigurationKey = '', onTestStateChange, continuationScope,
+  exactContext,allowedIntents,suppressOutput=false,onAccessLost}: {
   agentId: string; binding: BindingView; canStart: boolean; connectionTest?: boolean; testConfigurationKey?: string; onTestStateChange?: (state: string) => void; continuationScope?: RuntimeScope;
+  exactContext?:ExactRuntimeContext;allowedIntents?:readonly RuntimeIntent[];suppressOutput?:boolean;onAccessLost?:()=>void;
 }) {
+  const fixedScope=exactContext?.scope||continuationScope;
+  const fixedKey=exactContext?exactScopeKey(exactContext.scope):'';
+  const permitted=(Object.keys(labels) as RuntimeIntent[]).filter(value=>(!allowedIntents||allowedIntents.includes(value))&&
+    (!exactContext||exactRuntimeIntents.includes(value)));
+  const transition=useAgentModalTransition();
   const mounted = useRef(true);
   const lock = useRef(false);
   const currentRecord = useRef<Saved | null>(null);
@@ -23,8 +32,8 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
   const [operation, setOperation] = useState<RuntimeOperation | null>(null);
   const [followUps, setFollowUps] = useState<RuntimeOperation[]>([]);
   const [session, setSession] = useState<RuntimeSession | null>(null);
-  const [intent, setIntent] = useState<RuntimeIntent>(continuationScope ? "turn.submit" : "runtime.start");
-  const [sessionId, setSessionId] = useState(continuationScope?.session_id || "");
+  const [intent, setIntent] = useState<RuntimeIntent>(fixedScope ? "turn.submit" : "runtime.start");
+  const [sessionId, setSessionId] = useState(fixedScope?.session_id || "");
   const [selection, setSelection] = useState(connectionTest ? "new" : "automatic");
   const testPrompt = "Reply with exactly NEXUS_CONNECTION_OK to confirm this connection.";
   const [text, setText] = useState(connectionTest ? testPrompt : "");
@@ -33,32 +42,48 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [now, setNow] = useState(Date.now());
+  const [pendingExact,setPendingExact]=useState<Saved[]>([]);
+  const [cacheEpoch,setCacheEpoch]=useState(0);
+
+  const invalidateFixed=()=>{
+    continuationActive.current=false;clearHomeContinuationRequests(sessionStorage);clearExactRuntimeRequests(sessionStorage);
+    currentRecord.current=null;setSaved(null);setOperation(null);setFollowUps([]);setSession(null);setText('');
+    setPendingExact([]);
+    setError('Operator authorization changed. Reopen this exact context.');setStorageKey('');onAccessLost?.();
+  };
+  const reportFailure=(failure:unknown)=>{
+    if(exactContext&&[401,403].includes((failure as {status?:number}).status??0)){invalidateFixed();return;}
+    if(mounted.current)setError(String(failure));
+  };
 
   useEffect(() => {
-    if (!continuationScope) return;
+    if (!fixedScope) return;
     continuationActive.current = true;
     const clear = () => {
       continuationActive.current = false;
-      clearHomeContinuationRequests(sessionStorage);currentRecord.current = null;
-      setSaved(null);setOperation(null);setFollowUps([]);setSession(null);setText('');setError('Operator authorization changed. This context must be reopened.');setStorageKey('');
+      clearHomeContinuationRequests(sessionStorage);clearExactRuntimeRequests(sessionStorage);currentRecord.current = null;
+      setSaved(null);setOperation(null);setFollowUps([]);setSession(null);setText('');setPendingExact([]);setError('Operator authorization changed. This context must be reopened.');setStorageKey('');
     };
     window.addEventListener('nexus-auth-expired', clear);window.addEventListener('nexus-operator-logout', clear);
     return () => {continuationActive.current = false;window.removeEventListener('nexus-auth-expired', clear);window.removeEventListener('nexus-operator-logout', clear);};
-  }, [!!continuationScope]);
+  }, [!!fixedScope]);
   const matches = (scope: RuntimeScope) => scope.agent_id === agentId && scope.binding_id === binding.binding_id &&
     scope.executor_id === binding.executor_id && scope.workspace_id === binding.workspace_id &&
-    scope.workspace_binding_id === binding.workspace_binding_id && (!continuationScope ||
-      scope.server_id === continuationScope.server_id && scope.session_id === continuationScope.session_id);
-  useAgentModalGuard(!!continuationScope && (!!text.trim() || !!saved), busy);
+    scope.workspace_binding_id === binding.workspace_binding_id && (!fixedScope ||
+      scope.server_id === fixedScope.server_id && scope.session_id === fixedScope.session_id);
+  useAgentModalGuard(!!fixedScope && (!!text.trim() || !!saved), busy);
   const validateContinuation = async () => {
-    if (!continuationScope) return;
+    if (!fixedScope) return;
     if (!mounted.current || !continuationActive.current) throw new Error("Reopen this session after operator authorization changed.");
-    await revalidateContinuation(runtimeApi, continuationScope);
+    if(exactContext)await revalidateExactContext(runtimeApi,exactContext,intent);
+    else await revalidateContinuation(runtimeApi, fixedScope);
     if (!mounted.current || !continuationActive.current) throw new Error("Reopen this session after operator authorization changed.");
   };
   const persist = (value: Saved) => {
-    if (continuationScope && (!mounted.current || !continuationActive.current)) throw new Error("The Home continuation context is no longer authorized.");
-    sessionStorage.setItem(storageKey, JSON.stringify(value));
+    if (fixedScope && (!mounted.current || !continuationActive.current)) throw new Error("The Home continuation context is no longer authorized.");
+    if(exactContext)assertExactRequest(value.request,exactContext);
+    if(exactContext&&value.resolution)assertExactResolution(value.resolution,value.request,exactContext);
+    sessionStorage.setItem(storageKey, JSON.stringify(value.quarantined?quarantineExactRequest(value):value));
     currentRecord.current = value;
     if (mounted.current) setSaved(value);
   };
@@ -66,24 +91,26 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
     if (lock.current) return;
     lock.current = true; setBusy(true); setError("");
     try { await task(); }
-    catch (failure) { if (mounted.current) setError(String(failure)); }
+    catch (failure) { if (mounted.current) reportFailure(failure); }
     finally { lock.current = false; if (mounted.current) setBusy(false); }
   };
   const check = async (record: Saved, signal?: AbortSignal) => {
     const view = await runtimeApi.intent(record.request.client_intent_id, signal);
+    if(exactContext){assertExactResolution(view.resolution,record.request,exactContext);
+      if(view.operation&&view.operation.action!==record.request.intent)throw new Error('The returned receipt belongs to another intent.');}
     if (!matches(view.resolution.scope) || view.resolution.client_intent_id !== record.request.client_intent_id ||
         (view.operation && (!matches(view.operation.scope) || view.operation.operation_id !== view.resolution.operation_id))) {
       throw new Error("The returned operation does not match this selection.");
     }
     if (signal?.aborted || !mounted.current || currentRecord.current?.request.client_intent_id !== record.request.client_intent_id) return;
-    persist({...currentRecord.current, resolution: view.resolution});
+    persist({...currentRecord.current, resolution: view.resolution,recoveryConfirmed:true});
     // A reuse resolution points at the original opening receipt. Reading that
     // receipt does not replace admission of this newly reviewed reuse request.
     if (view.resolution.reuse && !currentRecord.current.submissionAttempted) return;
     setOperation(view.operation);
     if (view.operation) {
       setSessionId(view.resolution.session_id);
-      const current = await runtimeApi.session(view.resolution.session_id, signal);
+      const current = await runtimeApi.session(view.resolution.session_id, signal,fixedScope?.executor_id);
       if (!matches(current.scope)) throw new Error("The returned session does not match this selection.");
       const children = await Promise.all(view.operation.follow_up_operation_ids.map(id => runtimeApi.operation(id, signal)));
       if (children.some(child => !matches(child.scope) || child.scope.session_id !== view.resolution.session_id)) {
@@ -97,13 +124,25 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
 
   useEffect(() => {
     mounted.current = true;
+    if(exactContext){currentRecord.current=null;setSaved(null);setOperation(null);setFollowUps([]);setSession(null);setStorageKey('');setSessionId(exactContext.scope.session_id);setText('');}
     const controller = new AbortController();
     void (async () => {
       try {
         const me = await runtimeApi.me(controller.signal);
         if (controller.signal.aborted) return;
-        const identity = [me.server_id, me.agent_id, agentId, binding.binding_id, ...(continuationScope ? ['home-continuation', continuationScope.session_id] : []), ...(connectionTest ? ["connection-test", binding.binding_revision, testConfigurationKey] : [])];
+        if(exactContext&&me.server_id!==exactContext.scope.server_id)throw new Error('The exact context belongs to another Server.');
+        const identity = [me.server_id, me.agent_id, agentId, binding.binding_id,
+          ...(exactContext?exactStorageIdentity(exactContext.scope,intent):continuationScope ? ['home-continuation', continuationScope.session_id] : []),
+          ...(connectionTest ? ["connection-test", binding.binding_revision, testConfigurationKey] : [])];
         const key = `okto-nexus:r4-runtime:${JSON.stringify([...identity, binding.workspace_binding_id])}`;
+        if(exactContext){
+          const pending=pendingExactRequests<Saved>(sessionStorage,value=>`okto-nexus:r4-runtime:${JSON.stringify([
+            me.server_id,me.agent_id,agentId,binding.binding_id,...exactStorageIdentity(exactContext.scope,value),binding.workspace_binding_id])}`,exactContext);
+          setPendingExact(pending);
+          if(pending.length&&!pending.some(record=>record.request.intent===intent)){
+            setError('Another recorded action in this exact session requires recovery. Choose its original request; no new action was created.');return;
+          }
+        }
         let raw = sessionStorage.getItem(key);
         if (!raw) {
           const previous = sessionStorage.getItem(`okto-nexus:r4-runtime:${JSON.stringify(identity)}`);
@@ -113,18 +152,20 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
           const record = JSON.parse(raw) as Saved;
           if (!record.request || record.request.agent_id !== agentId || record.request.binding_id !== binding.binding_id ||
               record.request.workspace_binding_id !== binding.workspace_binding_id || !record.request.client_intent_id ||
-              typeof record.submissionAttempted !== "boolean" || continuationScope && (record.request.intent !== "turn.submit" || record.request.session_id !== continuationScope.session_id)) throw new Error("The saved runtime request is invalid. Keep it for recovery; no request was sent.");
+              typeof record.submissionAttempted !== "boolean" || continuationScope && !exactContext && (record.request.intent !== "turn.submit" || record.request.session_id !== continuationScope.session_id)) throw new Error("The saved runtime request is invalid. Keep it for recovery; no request was sent.");
+          if(exactContext){assertExactRequest(record.request,exactContext);if(record.resolution)assertExactResolution(record.resolution,record.request,exactContext);
+            if(record.request.intent!==intent)throw new Error('The retained request belongs to another exact intent.');}
           currentRecord.current = record; setSaved(record);
           if (record.reviewError) setError(record.reviewError);
           setIntent(record.request.intent);
           setSessionId(record.resolution?.session_id || record.request.session_id || "");
         }
         setStorageKey(key);
-      } catch (failure) { if (!controller.signal.aborted) setError(String(failure)); }
+      } catch (failure) { if (!controller.signal.aborted) reportFailure(failure); }
     })();
     const timer = window.setInterval(() => setNow(Date.now()), 1000);
     return () => { mounted.current = false; controller.abort(); window.clearInterval(timer); };
-  }, [agentId, binding.binding_id, binding.workspace_binding_id]);
+  }, [agentId, binding.binding_id, binding.workspace_binding_id,fixedKey,exactContext?intent:'',exactContext?cacheEpoch:0]);
 
   // Recovery only reads. Neither reload nor polling repeats a mutation.
   useEffect(() => {
@@ -135,7 +176,7 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
       if (active || lock.current) return;
       active = true;
       try { if (currentRecord.current) await check(currentRecord.current, controller.signal); }
-      catch (failure) { if (!controller.signal.aborted && mounted.current) setError(String(failure)); }
+      catch (failure) { if (!controller.signal.aborted && mounted.current) reportFailure(failure); }
       finally { active = false; }
     };
     void refresh();
@@ -146,6 +187,10 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
   }, [storageKey, saved?.request.client_intent_id, saved?.reviewError]);
 
   const review = async () => {
+    if(exactContext&&saved?.quarantined)throw new Error('Only check the original quarantined request. Do not repeat its review or submission.');
+    if(exactContext&&!permitted.includes(intent))throw new Error('This exact intent is unavailable.');
+    if(exactContext&&pendingExact.some(record=>record.request.intent!==intent))throw new Error('Recover the other original action in this exact session before a new action.');
+    if(exactContext&&saved?.reviewAttempted&&!saved.resolution&&!saved.reviewError)throw new Error('Check the original request; its review outcome is unconfirmed.');
     await validateContinuation();
     let record = saved;
     if (!record) {
@@ -156,13 +201,15 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
         if (selection === "new") request.new_session = true;
         if (selection === "existing") request.session_id = sessionId.trim();
       } else request.session_id = sessionId.trim();
+      if(exactContext)request.session_id=exactContext.scope.session_id;
       if ((intent === "runtime.start" || intent === "turn.submit" || intent === "turn.steer") && text) request.text = text;
       if (intent === "turn.steer" || intent === "turn.interrupt") request.target = {
         kind: targetKind, expected_turn_id: targetKind === "native_turn_id" ? turnId.trim() : null};
-      record = {request, resolution: null, submissionAttempted: false, startedAt: Date.now()};
+      if(exactContext&&intent==='turn.interrupt')request.target=exactContext.interruptTarget||{kind:'current_run',expected_turn_id:null};
+      record = {request, resolution: null, submissionAttempted: false, startedAt: Date.now(),...(exactContext?{reviewAttempted:false}:{})};
       persist(record); // Storage failure must prevent the first POST.
     }
-    record = {...record, reviewError: undefined};
+    record = {...record, reviewError: undefined,...(exactContext?{reviewAttempted:true}:{})};
     persist(record);
     let resolution: RuntimeResolution;
     try {
@@ -170,7 +217,8 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
     } catch (failure) {
       // A known refusal is not a lost response. Preserve its explanation across
       // refreshes instead of polling an intent that was never admitted.
-      if (failure instanceof ApiError && failure.status >= 400 && failure.status < 500) {
+      if (failure instanceof ApiError && failure.status >= 400 && failure.status < 500&&
+          (!exactContext||['VALIDATION_ERROR','PERMISSION_DENIED','NOT_FOUND'].includes(failure.code))) {
         persist({...record, reviewError: String(failure)});
       }
       throw failure;
@@ -178,6 +226,7 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
     if (!matches(resolution.scope) || resolution.client_intent_id !== record.request.client_intent_id) {
       throw new Error("The resolved request does not match this selection.");
     }
+    if(exactContext)assertExactResolution(resolution,record.request,exactContext);
     if (mounted.current) persist({...record, resolution});
   };
   const resolution = saved?.resolution;
@@ -185,15 +234,15 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
   const needsText = intent === "turn.submit" || intent === "turn.steer";
   const targeted = intent === "turn.steer" || intent === "turn.interrupt";
   const needsSession = intent !== "runtime.start" || selection === "existing";
-  const canReview = storageKey && (intent !== "runtime.start" || canStart) &&
+  const canReview = storageKey && permitted.includes(intent) && (!exactContext||!pendingExact.some(record=>record.request.intent!==intent)) && (intent !== "runtime.start" || canStart) &&
     (!needsSession || sessionId.trim()) && (!needsText || text.trim()) &&
-    (!targeted || targetKind !== "native_turn_id" || turnId.trim());
+    (!targeted || !!exactContext || targetKind !== "native_turn_id" || turnId.trim());
   const uncertain = !!saved?.submissionAttempted && !operation;
   const isObserved = (value: RuntimeOperation) => !!value.executor_stage &&
     !["RECEIVED_DURABLE", "PREPARED", "SUBMISSION_STARTED", "OUTCOME_UNKNOWN"].includes(value.executor_stage) &&
     value.admission_state !== "RECONCILING";
   const observed = !!operation && isObserved(operation) && followUps.length === operation.follow_up_operation_ids.length && followUps.every(isObserved);
-  const canClear = !!saved && (!saved.submissionAttempted || observed);
+  const canClear = !!saved && (exactContext?mayDiscardExactRequest(saved,observed):!saved.submissionAttempted || observed);
 
   const testPassed = connectionTest && saved?.request.intent === 'runtime.start' && !!operation &&
     !operation.error && followUps.length > 0 && followUps.length === operation.follow_up_operation_ids.length &&
@@ -227,7 +276,7 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
     await submitReviewed();
   };
   return <section aria-label="Runtime operations" className="space-y-3 border-t pt-3">
-    <h4 className="font-semibold">{connectionTest ? 'Test connection' : 'Runtime operations'}</h4>
+    <h4 className="font-semibold">{connectionTest ? 'Test connection' : exactContext?'Actions for this exact session':'Runtime operations'}</h4>
     {connectionTest && <p>A short message opens a separate test session using the saved settings and account. Provider usage may apply.</p>}
     {(testPassed || saved?.connectionVerified) && <div role="status" className="rounded-lg border border-green-500 p-3 text-green-700 dark:text-green-300"><strong>Connection verified</strong><p>The harness started and returned the expected response.</p></div>}
     {connectionTest && saved?.submissionAttempted && !observed && !saved.connectionVerified && <p role="status">Testing connection…</p>}
@@ -237,23 +286,32 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
     {connectionTest && !saved && <button className="btn btn-primary" disabled={busy || !storageKey || (intent === "runtime.start" && !canStart)} onClick={() => void run(async () => {await review(); await submitReviewed();})}>{busy ? 'Submitting…' : intent === "runtime.close" ? "Close test session" : "Test connection"}</button>}
     {connectionTest && !canStart && !saved && <p role="alert">Execution is not authorized or the installation is unavailable. Return to Authorization and refresh readiness.</p>}
     {!connectionTest && <p>Review an action, then submit it for this agent and connection. Execution requires the agent's current grant.</p>}
-    {!connectionTest && !saved && <fieldset disabled={busy || !storageKey} className="space-y-2">
-      {!continuationScope && <label className="block">Action <select aria-label="Runtime action" className={fieldClass} value={intent}
-        onChange={event => setIntent(event.target.value as RuntimeIntent)}>
-        {Object.entries(labels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+    {exactContext&&pendingExact.length>0&&!saved&&<label className="block text-sm">Recover a recorded action in this exact session
+      <select aria-label="Recorded exact action" data-modal-passive className={fieldClass} value="" disabled={busy}
+        onChange={event=>{const next=event.target.value as RuntimeIntent;if(pendingExact.some(record=>record.request.intent===next))transition(()=>setIntent(next));}}>
+        <option value="">Choose the original request</option>{pendingExact.map(record=><option key={record.request.client_intent_id} value={record.request.intent}>
+          {exactRuntimeLabels[record.request.intent]} · {record.request.client_intent_id}</option>)}
       </select></label>}
-      {continuationScope && <p className="text-sm break-all">Continue as operator in session {continuationScope.session_id}. Workspace and recipient are fixed.</p>}
+    {!connectionTest && !saved && <fieldset disabled={busy || !storageKey} className="space-y-2">
+      {(!continuationScope||exactContext) && <label className="block">Action <select aria-label="Runtime action" data-modal-passive={exactContext||undefined} className={fieldClass} value={intent}
+        onChange={event => {const next=event.target.value as RuntimeIntent;if(exactContext)transition(()=>setIntent(next));else setIntent(next);}}>
+        {permitted.map(value => <option key={value} value={value}>{exactContext?exactRuntimeLabels[value]:labels[value]}</option>)}
+      </select></label>}
+      {fixedScope && <p className="text-sm break-all">{exactContext?'Act':'Continue'} as operator in session {fixedScope.session_id}. Workspace and recipient are fixed.</p>}
       {intent === "runtime.start" && <label className="block">Session selection <select aria-label="Session selection" className={fieldClass}
         value={selection} onChange={event => setSelection(event.target.value)}>
         <option value="automatic">Reuse if unambiguous; otherwise start</option><option value="new">Create a new session</option>
         <option value="existing">Reuse a specific session</option>
       </select></label>}
-      {needsSession && !continuationScope && <label className="block">Session ID <input aria-label="Runtime session ID" className={fieldClass} value={sessionId}
+      {needsSession && !fixedScope && <label className="block">Session ID <input aria-label="Runtime session ID" className={fieldClass} value={sessionId}
         maxLength={160} onChange={event => setSessionId(event.target.value)} /></label>}
       {(intent === "runtime.start" || needsText) && <label className="block">{intent === "runtime.start" ? "Initial message (optional)" : "Message"}
         <textarea aria-label="Runtime message" className={fieldClass} rows={3} value={text} maxLength={65536}
           onChange={event => setText(event.target.value)} /></label>}
-      {targeted && <>
+      {exactContext&&intent==='turn.interrupt'&&<p className="text-sm">{exactContext.interruptTarget?
+        `Interrupt only native turn ${exactContext.interruptTarget.expected_turn_id} in this session.`:
+        'Interrupt the current run in this exact session at execution time. This does not target the historical turn of the inspected operation.'}</p>}
+      {targeted && !exactContext && <>
         <label className="block">Turn target <select aria-label="Turn target" className={fieldClass} value={targetKind}
           onChange={event => setTargetKind(event.target.value as typeof targetKind)}>
           <option value="native_turn_id">Specific native turn</option><option value="current_run">Current run at execution time</option>
@@ -268,19 +326,23 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
       <summary hidden={!connectionTest} className="cursor-pointer text-sm">Test details and recovery</summary>
       <p>{labels[saved.request.intent]}{saved.request.target && ` · ${saved.request.target.kind === "current_run" ? "Current run at execution time" : `Native turn ${saved.request.target.expected_turn_id}`}`}</p>
       {saved.request.text && <details><summary>Reviewed message</summary><pre className="whitespace-pre-wrap break-words">{saved.request.text}</pre></details>}
-      {!resolution && <button className="btn btn-secondary" disabled={busy} onClick={() => void run(review)}>Retry the same review</button>}
+      {!resolution && !exactContext&&<button className="btn btn-secondary" disabled={busy} onClick={() => void run(review)}>Retry the same review</button>}
+      {saved.quarantined&&<p role="status">Authorization changed after this request was recorded. Protected text was cleared. Only check the original request; review and submission cannot be repeated.</p>}
+      {exactContext&&saved.reviewAttempted&&!resolution&&!saved.reviewError&&<p role="status">The review outcome is unconfirmed. Check this same request before considering another action.</p>}
       {resolution && <>
         <p>{resolution.reuse ? "Reuse existing session" : "Session"}: <span data-testid="runtime-operation-session">{resolution.session_id}</span></p>
         {!resolution.can_submit && <p role="alert">Cannot submit: {resolution.blockers.join(", ")}</p>}
         {expired && !saved.submissionAttempted && <p role="status">This review expired. Review a new request before submitting.</p>}
-        {!operation && <button className="btn btn-primary" disabled={busy || !resolution.can_submit || (expired && !saved.submissionAttempted) || !!continuationScope && saved.submissionAttempted}
+        {!operation && !saved.quarantined&&(!exactContext||!saved.submissionAttempted)&&<button className="btn btn-primary" disabled={busy || !permitted.includes(saved.request.intent) || !!exactContext&&pendingExact.some(record=>record.request.intent!==intent) || !resolution.can_submit || (expired && !saved.submissionAttempted) || !!fixedScope && saved.submissionAttempted}
           onClick={() => void run(async () => {
+            if(saved.quarantined)throw new Error('Only check this original request.');
             await validateContinuation();
+            if(exactContext)assertExactResolution(resolution,saved.request,exactContext);
             const record = {...saved, submissionAttempted: true};
             persist(record);
             const result = await runtimeApi.submit(resolution);
             if (!matches(result.scope) || result.operation_id !== resolution.operation_id) throw new Error("The admitted operation does not match this selection.");
-            if (mounted.current && (!continuationScope || continuationActive.current)) { setOperation(result); setSessionId(resolution.session_id); }
+            if (mounted.current && (!fixedScope || continuationActive.current)) { setOperation(result); setSessionId(resolution.session_id); }
           })}>{uncertain ? "Retry the same submission" : "Submit reviewed action"}</button>}
       </>}
       {uncertain && <p role="status">Submission is not confirmed. Check its result. Do not create a replacement action.</p>}
@@ -293,14 +355,15 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
         {operation.follow_up_operation_ids.length > 0 && <p>Initial turn operations: {operation.follow_up_operation_ids.join(", ")}</p>}
         {followUps.map(child => <div key={child.operation_id}><p>Initial turn: {child.executor_stage || child.admission_state}.</p>
           {child.error && <p>{child.error.code}: {child.error.message}</p>}
-          {child.result && <pre className="whitespace-pre-wrap break-words">{child.result.output_text}{child.result.output_truncated ? "\n[Output truncated]" : ""}</pre>}
+          {!suppressOutput&&child.result && <pre className="whitespace-pre-wrap break-words">{child.result.output_text}{child.result.output_truncated ? "\n[Output truncated]" : ""}</pre>}
         </div>)}
-        {operation.result && <pre className="whitespace-pre-wrap break-words">{operation.result.output_text}{operation.result.output_truncated ? "\n[Output truncated]" : ""}</pre>}
+        {!suppressOutput&&operation.result && <pre className="whitespace-pre-wrap break-words">{operation.result.output_text}{operation.result.output_truncated ? "\n[Output truncated]" : ""}</pre>}
       </div>}
       {session && <p>Session: {session.lifecycle_state}. Lease: {session.lease_state}.{session.durable_release_pending ? " Release confirmation pending." : ""}</p>}
-      {!connectionTest && session && <RuntimeHistory key={JSON.stringify([session.scope.server_id, session.scope.executor_id, session.scope.session_id])} scope={session.scope} harness={binding.adapter_id} />}
+      {!connectionTest && !suppressOutput&&session && <RuntimeHistory key={JSON.stringify([session.scope.server_id, session.scope.executor_id, session.scope.session_id])} scope={session.scope} harness={binding.adapter_id} />}
       {canClear && (!connectionTest || !session || session.lifecycle_state === "CLOSED") && <button className="btn btn-secondary" disabled={busy} onClick={() => {
         sessionStorage.removeItem(storageKey); currentRecord.current = null; setSaved(null); setOperation(null); setFollowUps([]); setSession(null); setText(""); setError("");
+        if(exactContext){setStorageKey('');setCacheEpoch(value=>value+1);}
         if (connectionTest) {setIntent(session && session.lifecycle_state !== "CLOSED" ? "runtime.close" : "runtime.start"); setText(testPrompt);} else if (sessionId) setIntent("turn.submit");
       }}>{connectionTest ? (session && session.lifecycle_state !== "CLOSED" ? "Prepare to close test session" : "Reset test") : saved.submissionAttempted ? "Prepare another action" : "Discard review"}</button>}
       <p className="text-xs">This tab retains the request and message for recovery. Refreshing only checks the recorded result.</p>

@@ -61,8 +61,11 @@ export interface SetupRequest {
   baseline: SetupBaseline; configuration: ConnectionConfiguration;
   broadcast_handoff_auto_claim?: boolean | null;
   mcp_preset?: {expected_revision: number; servers: import('./api').MCPPreset['servers']};
+  project_preset?: {id: string; revision: number};
+  agent_creation?: {display_name: string; defaults_hash: string};
+  native_decision_policy?: {expected_revision: string; initialize: boolean};
 }
-export interface SetupTest {test_id: string; status: 'running' | 'succeeded' | 'failed'; stage: string; details: string[]}
+export interface SetupTest {test_id: string; status: 'running' | 'succeeded' | 'failed'; stage: string; details: string[]; retryable_failure?: boolean}
 
 // Remote onboarding and MCP-only changes save policy, not a local installation.
 export function policyOnlySetup(request: SetupRequest): SetupRequest {

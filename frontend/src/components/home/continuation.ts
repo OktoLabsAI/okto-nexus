@@ -15,7 +15,7 @@ export async function revalidateContinuation(client: Pick<Reads, 'session'>, sco
   assertContinuableSession(current, scope);
 }
 export async function readContinuationContext(client: Reads, target: HomeTarget, agentId: string | undefined, signal?: AbortSignal) {
-  if ((target.kind !== 'execution' && target.kind !== 'result') || !agentId || !target.workspace_id)
+  if ((target.kind !== 'execution' && target.kind !== 'result' && target.kind !== 'session') || !agentId || !target.workspace_id)
     throw new Error('The exact session and recipient are required.');
   const session = await client.session(target.session_id, signal, target.executor_id);
   if (session.scope.server_id !== target.server_id || session.scope.executor_id !== target.executor_id ||
