@@ -1,0 +1,114 @@
+{
+  "surface": "nexus-passive",
+  "private_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-service-nexus-passive-bzh6dg_z",
+  "exit_code": 0,
+  "seconds": 1.89487449999433,
+  "installed_before": {
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+    "isolated": 1,
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv",
+    "packages": {
+      "okto-nexus": {
+        "version": "0.3.5",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+        "payload_files": 715,
+        "payload_sha256": "50892e69d50fb80eb1794dd3663fa8382b0a76c2b978750709060ede8cc19019"
+      },
+      "okto-nexus-connector": {
+        "version": "0.0.13",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+        "payload_files": 127,
+        "payload_sha256": "41a22c5200a6c06faf81c842a462d45db2fbb7a4acafc0779f0197279c07378f"
+      },
+      "okto-nexus-connector-core": {
+        "version": "0.0.14",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+        "payload_files": 168,
+        "payload_sha256": "8f1cdc596a664325a9ce72bff492154f50b4fd9e7cdba9a22a56a8012d668b5d"
+      }
+    }
+  },
+  "installed_after": {
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+    "isolated": 1,
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv",
+    "packages": {
+      "okto-nexus": {
+        "version": "0.3.5",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+        "payload_files": 715,
+        "payload_sha256": "50892e69d50fb80eb1794dd3663fa8382b0a76c2b978750709060ede8cc19019"
+      },
+      "okto-nexus-connector": {
+        "version": "0.0.13",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+        "payload_files": 127,
+        "payload_sha256": "41a22c5200a6c06faf81c842a462d45db2fbb7a4acafc0779f0197279c07378f"
+      },
+      "okto-nexus-connector-core": {
+        "version": "0.0.14",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+        "payload_files": 168,
+        "payload_sha256": "8f1cdc596a664325a9ce72bff492154f50b4fd9e7cdba9a22a56a8012d668b5d"
+      }
+    }
+  },
+  "changed_installed_payloads": [],
+  "test_sources_sha256": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_terminal_connect_process.py": "f6e2f5e7a65912c570d53fd67e9da979a9e8ea8fb2ed77618c80b91fa5659a98",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_service_restart_contracts.py": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\remote_renewal_helpers.py": "f9365aa8ae61c16a3ce0bdaa1108cbdba159472bc2e6a25544fd7edc7ca86ad2",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_configure_login_start.py": "3699386bbcd294eb45e08f19517b6fcc2dd9a2da077c6553e14fc6879c5e4b23",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_user_service_lifecycle.py": "f0153b3f5b4df614381fc014b98cc5e53d20900a5d32dea27f2c7a9ab9b0421c",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_service_inspection.py": "7d9f1587c2aa14dca878e4b2678372d887680b41be4742c7f43caf5171e5e140",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_service_status_missing_discovery.py": "610682ab78e4e68c0d1a27c1a98492f89a8f021f15e53ec87bd0e4c3b1ba2ef2",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_service_upgrade.py": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\integration\\test_passive_cli.py": "5e8143b471c23833b4618a514fbbe04dded5d25e8c159538cfaa8f2b12d70453"
+  },
+  "changed_test_sources": [],
+  "pytest_arguments": [
+    "-c",
+    "nul",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+    "-p",
+    "no:cacheprovider",
+    "-o",
+    "asyncio_mode=auto",
+    "-o",
+    "asyncio_default_fixture_loop_scope=function",
+    "--basetemp=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-service-nexus-passive-bzh6dg_z\\pytest",
+    "-q",
+    "--tb=short",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\evidence\\pr07-service\\nexus-passive-tests.xml",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_service_inspection.py::test_status_of_absent_instance_does_not_create_home_or_start_process",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_service_inspection.py::test_remote_target_is_not_silently_treated_as_local",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_service_status_missing_discovery.py::test_status_inspects_absence_with_missing_saved_or_explicit_root"
+  ],
+  "cases": [
+    {
+      "name": "test_status_of_absent_instance_does_not_create_home_or_start_process",
+      "classname": "tests.test_service_inspection",
+      "outcome": "PASS"
+    },
+    {
+      "name": "test_remote_target_is_not_silently_treated_as_local",
+      "classname": "tests.test_service_inspection",
+      "outcome": "PASS"
+    },
+    {
+      "name": "test_status_inspects_absence_with_missing_saved_or_explicit_root[False]",
+      "classname": "tests.test_service_status_missing_discovery",
+      "outcome": "PASS"
+    },
+    {
+      "name": "test_status_inspects_absence_with_missing_saved_or_explicit_root[True]",
+      "classname": "tests.test_service_status_missing_discovery",
+      "outcome": "PASS"
+    }
+  ],
+  "provider_calls": 0,
+  "personal_installation_changed": false,
+  "native_scheduler_calls": false,
+  "scope": "Real persisted service-plan/checkpoint logic with FakeTasks, fake IPC and fake process status"
+}

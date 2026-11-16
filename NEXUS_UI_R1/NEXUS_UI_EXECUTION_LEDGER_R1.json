@@ -80,7 +80,7 @@
       "id": "PR-03",
       "title": "Projeção unificada e alvos de sessão",
       "milestone": "M2",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "tasks": [
         "UI-017",
         "UI-018",
@@ -94,7 +94,7 @@
       "id": "PR-04",
       "title": "Home com acompanhamento único",
       "milestone": "M2",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "tasks": [
         "UI-023",
         "UI-024",
@@ -108,7 +108,7 @@
       "id": "PR-05",
       "title": "Painel contextual e interações",
       "milestone": "M2",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "tasks": [
         "UI-029",
         "UI-030",
@@ -122,7 +122,7 @@
       "id": "PR-06",
       "title": "Onboarding UI e Connector integrado",
       "milestone": "M3",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "tasks": [
         "UI-035",
         "UI-036",
@@ -135,7 +135,7 @@
       "id": "PR-07",
       "title": "Regressão e qualificação",
       "milestone": "M3",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "tasks": [
         "UI-040",
         "UI-041",
@@ -147,7 +147,7 @@
       "id": "PR-08",
       "title": "Documentação, pacote e rollout",
       "milestone": "M3",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "tasks": [
         "UI-044",
         "UI-045",
@@ -1559,7 +1559,7 @@
       "id": "UI-011",
       "pr": "PR-02",
       "title": "Catalogar conexões do projeto sem mudar sua autoridade",
-      "status": "VERIFIED",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-004",
         "UI-005"
@@ -1590,7 +1590,8 @@
         "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json"
       ],
       "limitations": [
-        "Scoped local filesystem/CLI/HTTP/SQLite tests with synthetic lifecycle/setup-test peer; real provider and two different native harnesses not certified. UI016 qualification remains separate."
+        "Scoped local filesystem/CLI/HTTP/SQLite tests with synthetic lifecycle/setup-test peer; real provider and two different native harnesses not certified. UI016 qualification remains separate.",
+        "Retirada qualificacao ampla VERIFIED: T-CLI-14/T-SCOPE-06 exigem evidencias completas de destinos/operadores, alem do catalogo local ja verificado."
       ],
       "validation": {
         "acceptance": "Passive scoped catalog, preserved legacy metadata and unknown checkpoints; no readiness/grant claim",
@@ -1950,7 +1951,8 @@
         "T-SCOPE-03"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr03-entries-qualification.json"
+        "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
+        "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates."
@@ -1989,7 +1991,8 @@
         "T-PERF-01"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr03-entries-qualification.json"
+        "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
+        "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates."
@@ -2610,7 +2613,9 @@
         "T-SVC-03"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
@@ -2649,7 +2654,9 @@
         "T-SVC-06"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
@@ -2693,7 +2700,9 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json",
         "NEXUS_UI_R1/execution/pr06-final-client-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md"
+        "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "limitations": [
         "Conexoes e recuperacao qualificadas com peers sinteticos; sessoes runtime/Home e provedores reais exigem evidencias separadas."
@@ -2736,7 +2745,11 @@
         "T-EXT-01",
         "T-EXT-02"
       ],
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "limitations": []
     },
     {
@@ -2786,7 +2799,7 @@
       "id": "UI-042",
       "pr": "PR-07",
       "title": "Executar campanha produtiva real isolada",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-039",
         "UI-040"
@@ -2821,7 +2834,7 @@
       "id": "UI-043",
       "pr": "PR-07",
       "title": "Validar compreensão e objetivo do produto",
-      "status": "TODO",
+      "status": "BLOCKED",
       "depends_on": [
         "UI-041",
         "UI-042"
@@ -2848,8 +2861,12 @@
         "T-QUAL-05",
         "T-QUAL-06"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/usability-script.md"
+      ],
+      "limitations": [
+        "Requer participante sem conhecimento da arquitetura. Nao executado por agente como substituto humano."
+      ]
     },
     {
       "id": "UI-044",
@@ -2886,7 +2903,8 @@
         "T-REL-01"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json"
+        "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json",
+        "NEXUS_UI_R1/execution/release-report.md"
       ],
       "limitations": []
     },
@@ -2922,7 +2940,9 @@
         "T-REL-02",
         "T-REL-03"
       ],
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/release-report.md"
+      ],
       "limitations": []
     },
     {
@@ -2957,7 +2977,11 @@
         "T-REL-06",
         "T-SVC-02"
       ],
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/release-report.md",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "limitations": []
     },
     {
@@ -2990,7 +3014,9 @@
         "T-REL-07",
         "T-REL-08"
       ],
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/release-report.md"
+      ],
       "limitations": []
     }
   ],
@@ -3033,14 +3059,20 @@
     },
     {
       "id": "T-BASE-03",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "contrato",
       "given": "Há páginas com comparadores de nome e flags.",
       "when": "Mapear navegação.",
       "expected": "Todos os destinos, controles e dependências de nomes possuem destino preservado.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/navigation-tracking-contract.md",
+        "NEXUS_UI_R1/execution/pr01-shell-qualification.json"
+      ],
       "tasks": [
         "UI-002"
+      ],
+      "limitations": [
+        "Aceite restrito ao nivel declarado e aos asserts documentados; peers sinteticos/relatorio de processo nao sao qualificacao native, remota ou assistiva."
       ]
     },
     {
@@ -3113,6 +3145,9 @@
       "evidence": [],
       "tasks": [
         "UI-007"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3125,6 +3160,9 @@
       "evidence": [],
       "tasks": [
         "UI-006"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3137,6 +3175,9 @@
       "evidence": [],
       "tasks": [
         "UI-007"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3150,6 +3191,9 @@
       "tasks": [
         "UI-007",
         "UI-010"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3181,6 +3225,9 @@
       "evidence": [],
       "tasks": [
         "UI-008"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3212,6 +3259,9 @@
       "tasks": [
         "UI-009",
         "UI-019"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3243,6 +3293,9 @@
       "evidence": [],
       "tasks": [
         "UI-010"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3256,6 +3309,9 @@
       "tasks": [
         "UI-003",
         "UI-017"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3297,6 +3353,9 @@
       "evidence": [],
       "tasks": [
         "UI-017"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3324,6 +3383,9 @@
       "tasks": [
         "UI-003",
         "UI-018"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3370,15 +3432,21 @@
     },
     {
       "id": "T-DATA-10",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "SQLite/HTTP",
       "given": "Join de mensagens/recibos gera multiplicidade.",
       "when": "Contar e paginar.",
       "expected": "IDs lógicos únicos e desempate determinístico; nenhum salto silencioso.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
+        "tests/ui_simplification/test_entry_pages.py"
+      ],
       "tasks": [
         "UI-005",
         "UI-020"
+      ],
+      "limitations": [
+        "Aceite restrito ao nivel declarado e aos asserts documentados; peers sinteticos/relatorio de processo nao sao qualificacao native, remota ou assistiva."
       ]
     },
     {
@@ -3406,6 +3474,9 @@
       "tasks": [
         "UI-022",
         "UI-024"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3433,33 +3504,47 @@
       "evidence": [],
       "tasks": [
         "UI-022"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
       "id": "T-SCOPE-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/SQLite",
       "given": "Agente global atua em A e B.",
       "when": "Filtrar A antes de total/paginação.",
       "expected": "Nenhum dado/contador de B; agentes globais não viram participantes de A sem vínculo.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json"
+      ],
       "tasks": [
         "UI-002",
         "UI-020",
         "UI-040"
+      ],
+      "limitations": [
+        "HTTP/SQLite fixture e browser passivo comprovados; nao e campanha native/provedor."
       ]
     },
     {
       "id": "T-SCOPE-02",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/SQLite",
       "given": "Alvo session pertence a outro executor/projeto.",
       "when": "Forjar URL e resolver.",
       "expected": "Recusar sob contrato atual; não vazar existência/conteúdo nem selecionar latest.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr03-session-viewer-qualification.json",
+        "tests/ui_simplification/test_home_session_targets.py"
+      ],
       "tasks": [
         "UI-019",
         "UI-040"
+      ],
+      "limitations": [
+        "Aceite restrito ao nivel declarado e aos asserts documentados; peers sinteticos/relatorio de processo nao sao qualificacao native, remota ou assistiva."
       ]
     },
     {
@@ -3472,6 +3557,9 @@
       "evidence": [],
       "tasks": [
         "UI-020"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3513,6 +3601,9 @@
       "evidence": [],
       "tasks": [
         "UI-011"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3525,6 +3616,9 @@
       "evidence": [],
       "tasks": [
         "UI-021"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3555,6 +3649,9 @@
       "evidence": [],
       "tasks": [
         "UI-023"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3603,6 +3700,9 @@
       "evidence": [],
       "tasks": [
         "UI-024"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3615,6 +3715,9 @@
       "evidence": [],
       "tasks": [
         "UI-025"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3627,6 +3730,9 @@
       "evidence": [],
       "tasks": [
         "UI-025"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3640,6 +3746,9 @@
       "tasks": [
         "UI-025",
         "UI-028"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3652,6 +3761,9 @@
       "evidence": [],
       "tasks": [
         "UI-025"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3665,6 +3777,9 @@
       "tasks": [
         "UI-026",
         "UI-028"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3694,6 +3809,9 @@
       "tasks": [
         "UI-019",
         "UI-030"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3708,6 +3826,9 @@
         "UI-014",
         "UI-019",
         "UI-030"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3738,6 +3859,9 @@
       "evidence": [],
       "tasks": [
         "UI-029"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3751,6 +3875,9 @@
       "tasks": [
         "UI-029",
         "UI-034"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3763,6 +3890,9 @@
       "evidence": [],
       "tasks": [
         "UI-030"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3775,6 +3905,9 @@
       "evidence": [],
       "tasks": [
         "UI-031"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3788,6 +3921,9 @@
       "tasks": [
         "UI-031",
         "UI-034"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3800,6 +3936,9 @@
       "evidence": [],
       "tasks": [
         "UI-032"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3813,6 +3952,9 @@
       "tasks": [
         "UI-032",
         "UI-034"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3825,6 +3967,9 @@
       "evidence": [],
       "tasks": [
         "UI-032"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3856,6 +4001,9 @@
       "tasks": [
         "UI-018",
         "UI-031"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3868,6 +4016,9 @@
       "evidence": [],
       "tasks": [
         "UI-026"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3898,6 +4049,9 @@
       "evidence": [],
       "tasks": [
         "UI-031"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3911,6 +4065,9 @@
       "tasks": [
         "UI-008",
         "UI-026"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3924,6 +4081,9 @@
       "tasks": [
         "UI-018",
         "UI-033"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3936,6 +4096,9 @@
       "evidence": [],
       "tasks": [
         "UI-033"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3948,6 +4111,9 @@
       "evidence": [],
       "tasks": [
         "UI-033"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3961,6 +4127,9 @@
       "tasks": [
         "UI-009",
         "UI-033"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3973,6 +4142,9 @@
       "evidence": [],
       "tasks": [
         "UI-025"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3985,6 +4157,9 @@
       "evidence": [],
       "tasks": [
         "UI-033"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -3997,6 +4172,9 @@
       "evidence": [],
       "tasks": [
         "UI-027"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4009,6 +4187,9 @@
       "evidence": [],
       "tasks": [
         "UI-027"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4021,6 +4202,9 @@
       "evidence": [],
       "tasks": [
         "UI-027"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4033,6 +4217,9 @@
       "evidence": [],
       "tasks": [
         "UI-027"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4045,6 +4232,9 @@
       "evidence": [],
       "tasks": [
         "UI-027"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4057,6 +4247,9 @@
       "evidence": [],
       "tasks": [
         "UI-028"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4067,7 +4260,8 @@
       "when": "connect interativo.",
       "expected": "Sugerir seleção/revisão curta; nenhum nome de profile obrigatório.",
       "evidence": [
-        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-004",
@@ -4079,26 +4273,40 @@
     },
     {
       "id": "T-CLI-02",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "unitário/CLI",
       "given": "Perfil legado project-hash e novo perfil.",
       "when": "Descobrir conexões.",
       "expected": "Ambos encontrados sem renomear nem alterar seus checkpoints.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-011"
+      ],
+      "limitations": [
+        "Aceite restrito ao nivel declarado e aos asserts documentados; peers sinteticos/relatorio de processo nao sao qualificacao native, remota ou assistiva."
       ]
     },
     {
       "id": "T-CLI-03",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "unitário/CLI",
       "given": "Nomes/path iguais em contextos diferentes.",
       "when": "Resolver candidatos.",
       "expected": "Não deduplicar identidades ou destinos por string amigável.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-011"
+      ],
+      "limitations": [
+        "Aceite restrito ao nivel declarado e aos asserts documentados; peers sinteticos/relatorio de processo nao sao qualificacao native, remota ou assistiva."
       ]
     },
     {
@@ -4110,7 +4318,8 @@
       "expected": "Novo profile/identidade sugeridos e persistidos; Codex inalterado.",
       "evidence": [
         "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
-        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-012",
@@ -4128,7 +4337,8 @@
       "when": "connect.",
       "expected": "Oferecer Retomar/Adicionar/Cancelar em vez de adoção ou criação silenciosa.",
       "evidence": [
-        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-004",
@@ -4140,14 +4350,21 @@
     },
     {
       "id": "T-CLI-06",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI",
       "given": "Há várias conexões, duas de Codex.",
       "when": "Escolher retomar.",
       "expected": "Exigir identificação da conexão correta; nunca a primeira/latest.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-012"
+      ],
+      "limitations": [
+        "Aceite restrito ao nivel declarado e aos asserts documentados; peers sinteticos/relatorio de processo nao sao qualificacao native, remota ou assistiva."
       ]
     },
     {
@@ -4158,7 +4375,8 @@
       "when": "Invocar connect.",
       "expected": "Recusar substituição explícita com orientação; sem criar outra conexão inesperada.",
       "evidence": [
-        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-012"
@@ -4176,7 +4394,8 @@
       "expected": "Mesmo receipt, agent_id e binding; sem novo teste ou grant.",
       "evidence": [
         "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
-        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-013",
@@ -4193,35 +4412,54 @@
       "given": "Dois terminais adicionam conexões simultaneamente.",
       "when": "Reservar perfis/commitar setup.",
       "expected": "Sem overwrite; intents independentes ou conflito honesto; locks curtos.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-013"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
       "id": "T-CLI-10",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI/HTTP",
       "given": "Checkpoint com efeito incerto anterior.",
       "when": "connect sem nova intenção.",
       "expected": "Recuperar o mesmo pedido; não criar substituto para escapar do estado.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr02-session-intent-qualification.json",
+        "tests/execution_r4/test_terminal_multi_harness.py",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-013",
         "UI-016"
+      ],
+      "limitations": [
+        "Aceite restrito ao nivel declarado e aos asserts documentados; peers sinteticos/relatorio de processo nao sao qualificacao native, remota ou assistiva."
       ]
     },
     {
       "id": "T-CLI-11",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI",
       "given": "JSON/noninteractive com várias conexões e sem seletor.",
       "when": "connect --json.",
       "expected": "Retornar seleção necessária estruturada, sem perguntar nem criar modelo/identidade.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-004",
         "UI-015"
+      ],
+      "limitations": [
+        "Aceite restrito ao nivel declarado e aos asserts documentados; peers sinteticos/relatorio de processo nao sao qualificacao native, remota ou assistiva."
       ]
     },
     {
@@ -4231,9 +4469,14 @@
       "given": "Nova conexão scriptada com --new-connection e --profile explícito e estável.",
       "when": "Repetir comando após falha de resposta.",
       "expected": "Recuperar a mesma criação; conteúdo diferente conflita.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-015"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4243,10 +4486,15 @@
       "given": "Server ausente.",
       "when": "connect --plan, status ou doctor.",
       "expected": "Não autostart nem probe/inferência; limite relatado corretamente.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-015",
         "UI-044"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4256,9 +4504,14 @@
       "given": "Mesmo diretório usado com operator profiles remotos diferentes.",
       "when": "Escolher/retomar.",
       "expected": "Contextos isolados; metadado local não vira autoridade sobre outro Server.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-011"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4269,7 +4522,8 @@
       "when": "Tentar retomar em outro terminal.",
       "expected": "PROFILE_BUSY/caminho canônico; não remover lock ou clonar como workaround.",
       "evidence": [
-        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-013"
@@ -4287,7 +4541,8 @@
       "expected": "Recuperar intenção exata antes de pedir sessão nova.",
       "evidence": [
         "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
-        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-014"
@@ -4305,7 +4560,8 @@
       "expected": "Apresentar contexto correto; nada produtivo enviado antes do pedido.",
       "evidence": [
         "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
-        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-014"
@@ -4323,7 +4579,8 @@
       "expected": "Escolha explícita; --session-id é respeitado e verificado.",
       "evidence": [
         "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
-        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-014"
@@ -4341,7 +4598,8 @@
       "expected": "Histórico ou recusa; nova sessão/autoridade requer intenção e revisão próprias.",
       "evidence": [
         "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
-        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-014"
@@ -4359,7 +4617,8 @@
       "expected": "Nenhum agente/binding/grant/trabalho novo; declarar se serviço já permaneceu ativo.",
       "evidence": [
         "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
-        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-016"
@@ -4377,7 +4636,8 @@
       "expected": "O primeiro mantém suas escolhas; o novo usa apenas o preset consentido.",
       "evidence": [
         "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
-        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-016",
@@ -4500,7 +4760,8 @@
       "when": "connect no projeto.",
       "expected": "Retomar/adicionar vem antes de tratar criação como Replace/Abort obrigatório.",
       "evidence": [
-        "NEXUS_UI_R1/execution/pr06-connector-qualification.json"
+        "NEXUS_UI_R1/execution/pr06-connector-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-004",
@@ -4515,7 +4776,8 @@
       "when": "Adicionar nova conexão.",
       "expected": "Alias/checkpoint próprio e configuração anterior preservada.",
       "evidence": [
-        "NEXUS_UI_R1/execution/pr06-connector-qualification.json"
+        "NEXUS_UI_R1/execution/pr06-connector-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-036"
@@ -4528,9 +4790,14 @@
       "given": "Mesmo agente já vinculado a outra máquina.",
       "when": "Solicitar nova conexão.",
       "expected": "Política de máquina respeitada; nenhum revoke/replacement oculto.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-036"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4541,7 +4808,8 @@
       "when": "Invocar com JSON/noninteractive.",
       "expected": "Contrato antigo preservado; sem pergunta de credencial ou prompt escondido.",
       "evidence": [
-        "NEXUS_UI_R1/execution/pr06-connector-qualification.json"
+        "NEXUS_UI_R1/execution/pr06-connector-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
       ],
       "tasks": [
         "UI-036"
@@ -4554,9 +4822,14 @@
       "given": "Host aguarda aprovação remota.",
       "when": "Fechar CLI e aprovar como operador pelo terminal.",
       "expected": "Daemon/mesmo root continuam; sem credencial de operador no host.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-037"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4566,22 +4839,34 @@
       "given": "Workspace compartilhado e pastas distintas nos hosts.",
       "when": "Retomar/bootstrap.",
       "expected": "Workspace lógico preservado e cada pasta local mantida; sem copiar path do Server.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-037"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
       "id": "T-CONN-07",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "Connector/integração",
       "given": "Perda de resposta durante aprovação/Finish/reconnect.",
       "when": "Retomar mesmo root.",
       "expected": "Receipts/child IDs recuperados; não renovar grant ou duplicar identidade/proposta.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
+        "tests/execution_r4/test_remote_setup_integration.py",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-037",
         "UI-039"
+      ],
+      "limitations": [
+        "Aceite restrito ao nivel declarado e aos asserts documentados; peers sinteticos/relatorio de processo nao sao qualificacao native, remota ou assistiva."
       ]
     },
     {
@@ -4591,9 +4876,15 @@
       "given": "Server já ativo e nova conexão no mesmo projeto.",
       "when": "connect adicionar.",
       "expected": "Reutilizar a instância/supervisor; não daemon por profile.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json"
+      ],
       "tasks": [
         "UI-038"
+      ],
+      "limitations": [
+        "Cenario completo permanece NOT_RUN. Faixa13PASS/3FAIL de fixture cobre apenas os subconjuntos explicitados em scenario-audit.md; sem nativeWindows-login/work-active/rollbackqualif."
       ]
     },
     {
@@ -4603,10 +4894,16 @@
       "given": "Trabalho admitido e painel/CLI fechados.",
       "when": "Fechar UI, /quit, Ctrl+C do observador.",
       "expected": "Não interromper trabalho nem encerrar serviço.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json"
+      ],
       "tasks": [
         "UI-038",
         "UI-046"
+      ],
+      "limitations": [
+        "Cenario completo permanece NOT_RUN. Faixa13PASS/3FAIL de fixture cobre apenas os subconjuntos explicitados em scenario-audit.md; sem nativeWindows-login/work-active/rollbackqualif."
       ]
     },
     {
@@ -4616,10 +4913,16 @@
       "given": "Destino é Server remoto indisponível.",
       "when": "Conectar/reconectar.",
       "expected": "Erro/espera remota; nenhum Server local substituto.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json"
+      ],
       "tasks": [
         "UI-037",
         "UI-038"
+      ],
+      "limitations": [
+        "Cenario completo permanece NOT_RUN. Faixa13PASS/3FAIL de fixture cobre apenas os subconjuntos explicitados em scenario-audit.md; sem nativeWindows-login/work-active/rollbackqualif."
       ]
     },
     {
@@ -4629,10 +4932,16 @@
       "given": "Comando de leitura/plano e serviço ausente.",
       "when": "status/doctor/plan.",
       "expected": "Sem autostart/inferência; checkpoints declarados somente nos comandos que os admitem.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json"
+      ],
       "tasks": [
         "UI-015",
         "UI-044"
+      ],
+      "limitations": [
+        "Cenario completo permanece NOT_RUN. Faixa13PASS/3FAIL de fixture cobre apenas os subconjuntos explicitados em scenario-audit.md; sem nativeWindows-login/work-active/rollbackqualif."
       ]
     },
     {
@@ -4642,9 +4951,15 @@
       "given": "Tarefa de login instalada/desabilitada ou startup pendente.",
       "when": "Retomar/adicionar.",
       "expected": "Não reinstalar/habilitar silenciosamente; usar operação já revisada.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json"
+      ],
       "tasks": [
         "UI-038"
+      ],
+      "limitations": [
+        "Cenario completo permanece NOT_RUN. Faixa13PASS/3FAIL de fixture cobre apenas os subconjuntos explicitados em scenario-audit.md; sem nativeWindows-login/work-active/rollbackqualif."
       ]
     },
     {
@@ -4654,9 +4969,15 @@
       "given": "Grant expirado/resultado incerto e serviço reinicia.",
       "when": "Reconnect.",
       "expected": "Não renovar orçamento nem reexecutar; reconciliar pela identidade original.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
+        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json"
+      ],
       "tasks": [
         "UI-038"
+      ],
+      "limitations": [
+        "Cenario completo permanece NOT_RUN. Faixa13PASS/3FAIL de fixture cobre apenas os subconjuntos explicitados em scenario-audit.md; sem nativeWindows-login/work-active/rollbackqualif."
       ]
     },
     {
@@ -4669,6 +4990,9 @@
       "evidence": [],
       "tasks": [
         "UI-040"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4681,6 +5005,9 @@
       "evidence": [],
       "tasks": [
         "UI-040"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4693,19 +5020,27 @@
       "evidence": [],
       "tasks": [
         "UI-030"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
       "id": "T-SEC-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/browser",
       "given": "Snapshot/expansão/detail GET repetidos.",
       "when": "Ler Home e abrir painel.",
       "expected": "Não criar session, grant, mensagem, claim, ACK, teste ou decisão; auth metadata existente separada.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json"
+      ],
       "tasks": [
         "UI-021",
         "UI-040"
+      ],
+      "limitations": [
+        "HTTP/SQLite fixture e browser passivo comprovados; nao e campanha native/provedor."
       ]
     },
     {
@@ -4718,6 +5053,9 @@
       "evidence": [],
       "tasks": [
         "UI-040"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4730,6 +5068,9 @@
       "evidence": [],
       "tasks": [
         "UI-034"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4743,6 +5084,9 @@
       "tasks": [
         "UI-010",
         "UI-041"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4756,6 +5100,9 @@
       "tasks": [
         "UI-032",
         "UI-041"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4769,6 +5116,9 @@
       "tasks": [
         "UI-032",
         "UI-041"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4781,6 +5131,9 @@
       "evidence": [],
       "tasks": [
         "UI-041"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4795,6 +5148,9 @@
         "UI-021",
         "UI-022",
         "UI-041"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4822,6 +5178,9 @@
       "evidence": [],
       "tasks": [
         "UI-022"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4834,6 +5193,9 @@
       "evidence": [],
       "tasks": [
         "UI-041"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4846,6 +5208,9 @@
       "evidence": [],
       "tasks": [
         "UI-005"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4859,6 +5224,9 @@
       "tasks": [
         "UI-039",
         "UI-042"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4871,18 +5239,26 @@
       "evidence": [],
       "tasks": [
         "UI-042"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
       "id": "T-QUAL-04",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "campanha/usuário",
       "given": "Sistema operacional/plataforma não exercitado.",
       "when": "Preparar relatório.",
       "expected": "Não anunciar qualificação universal de login/reboot ou harness.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/release-report.md"
+      ],
       "tasks": [
         "UI-042"
+      ],
+      "limitations": [
+        "Aceite restrito ao nivel declarado e aos asserts documentados; peers sinteticos/relatorio de processo nao sao qualificacao native, remota ou assistiva."
       ]
     },
     {
@@ -4895,6 +5271,9 @@
       "evidence": [],
       "tasks": [
         "UI-043"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4907,6 +5286,9 @@
       "evidence": [],
       "tasks": [
         "UI-043"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4920,6 +5302,9 @@
       "tasks": [
         "UI-044",
         "UI-045"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4932,6 +5317,9 @@
       "evidence": [],
       "tasks": [
         "UI-045"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4944,6 +5332,9 @@
       "evidence": [],
       "tasks": [
         "UI-045"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4953,9 +5344,14 @@
       "given": "Browser e perfis anteriores.",
       "when": "Atualizar e reabrir.",
       "expected": "Aliases, seleção e checkpoints preservados; IDs de setup não mudam.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-046"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4965,9 +5361,14 @@
       "given": "Home simples ativada e trabalho em andamento.",
       "when": "Voltar à apresentação anterior.",
       "expected": "Daemon/sessões/grants intactos; sino e ações básicas acessíveis.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-046"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
@@ -4977,33 +5378,48 @@
       "given": "Novos perfis gerados pelo picker.",
       "when": "Usar comando explícito --profile ou fallback qualificado.",
       "expected": "Conexões continuam utilizáveis; reversão não apaga atalhos/identidades.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+      ],
       "tasks": [
         "UI-046"
+      ],
+      "limitations": [
+        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
       ]
     },
     {
       "id": "T-REL-07",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "integração/processo",
       "given": "UI visual concluída, onboarding de segundo harness não.",
       "when": "Avaliar entrega.",
       "expected": "Plano permanece incompleto; R09/R17/R18 são gates obrigatórios.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/release-report.md"
+      ],
       "tasks": [
         "UI-047"
+      ],
+      "limitations": [
+        "Aceite restrito ao nivel declarado e aos asserts documentados; peers sinteticos/relatorio de processo nao sao qualificacao native, remota ou assistiva."
       ]
     },
     {
       "id": "T-REL-08",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "integração/processo",
       "given": "Testes/campanhas pendentes e flag atual OFF.",
       "when": "Decidir release/default.",
       "expected": "Registrar limites e aprovação; não marcar pronto/ativar em produção automaticamente.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/release-report.md"
+      ],
       "tasks": [
         "UI-047"
+      ],
+      "limitations": [
+        "Aceite restrito ao nivel declarado e aos asserts documentados; peers sinteticos/relatorio de processo nao sao qualificacao native, remota ou assistiva."
       ]
     }
   ],
@@ -5043,6 +5459,10 @@
     {
       "at": "2026-11-16T21:27:53.691930+00:00",
       "event": "Home empty guard uses additive backend prefilter canonical connection inventory, same authorized UoW/noextraSQL.297Node/build,2inventoryPython and5realbrowserchecksPASS;17pages/relatedPASS with separately corrected own test-oracle failure. Firstconnection/filteredempty distinguished.3CLI focals PASS realHTTP with inertpeer; no personal service/provider. Browser 19+8 earlier cuts preserved."
+    },
+    {
+      "at": "2026-11-16T21:31:40.012598+00:00",
+      "event": "Conservative acceptance audit: full-scenario passes separated from subsets. UI011 broad VERIFIED withdrawn pending multi-destination topology cases; no work discarded. UI043 human usability remains blocked with prepared script. Release/default not approved; process gates report limits without certifying native/AT. Task counts/IDs/specification preserved."
     }
   ],
   "risk_acceptances": [],

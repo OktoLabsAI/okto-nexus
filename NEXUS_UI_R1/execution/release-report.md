@@ -1,0 +1,126 @@
+# UI-R1: implementação e qualificação
+
+O plano permanece **IN_PROGRESS**, sem aprovação de release ou ativação padrão.
+Navegação, acompanhamento único, painel exato e onboarding múltiplo foram
+implementados. A qualificação completa de PR-00..PR-08 exige os cenários do
+ledger, inclusive campanha real e avaliação humana; não se encerra com a UI.
+
+## Entrega implementada
+
+| Etapa | Resultado | Evidência principal |
+|---|---|---|
+| PR-00 | Baseline atual, drift, contratos e fixture determinística; arquivos de entrada preservados | `baseline.json`, contratos e `pr00-fixture-qualification.json` |
+| PR-01 | Home, Conversations, Graph, Artifacts; Advanced secundário agrupado; IDs/URLs e sino global preservados | `pr01-shell-qualification.json` |
+| PR-02 | Retomar/adicionar/cancelar no CLI, alias gerado, reserva durável, workspace canônico compartilhado e intenções de sessão separadas | `pr02-local-connection-qualification.json`, `pr02-session-intent-qualification.json` |
+| PR-03 | Correlação completa e paginação escopada no backend, sessões sem operação, alvos exatos e fontes parciais explícitas | `pr03-entries-qualification.json`, `pr03-session-viewer-qualification.json` |
+| PR-04 | Uma região Follow-up, expansão de contexto, filtros, atualização compartilhada e onboarding apenas com inventário vazio comprovado | `pr04-unified-home-qualification.json`, `evidence/pr04-browser/` |
+| PR-05 | Um painel contextual com terminal somente leitura, perguntas, resultados, artefatos e controles canônicos vinculados à sessão | `pr05-panel-onboarding-source-qualification.json`, browser humano/CAS |
+| PR-06 | Retomar/adicionar na UI e Connector, revisão e Finish canônicos, defaults/permissões existentes preservados, recuperação sem replay | `pr06-catalog-convergence-qualification.json`, `pr06-connector-qualification.json`, `pr06-final-client-qualification.json` |
+| PR-07 | Regressões focalizadas, navegador real, medições e proposta isolada de campanha; gates externos continuam abertos | Ledger, `pr03-performance/`, `pr07-native-proposal/` |
+| PR-08 | Guias, artefatos identificados por hash, instalação isolada, smoke MCP HTTP e rastreabilidade | `pr08-installed-*.json`, este relatório e ledger |
+
+Nexus usa `feature/v0.3.5`/0.3.5; Connector usa
+`feature/v0.0.13`/0.0.13. Core permanece em 0.0.14, sem alteração de código ou
+protocolo. Os SHAs fornecidos para análise não foram usados para retroceder os
+checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
+
+## Evidências e fronteiras
+
+- O ledger é a fonte de status por cenário. Testes parcialmente cobertos mantêm
+  NOT_RUN ou BLOCKED; ter arquivos de implementação não os transforma em PASS.
+- O frontend completo tem 297 testes Node aprovados no corte CIXUIG91 e
+  TypeScript/Vite aprovados. Node/SSR não são navegador nem leitor de tela.
+- A Home teve 19 checks de navegador no corte dfy1, mais oito checks humanos de
+  formulário/guard/CAS no corte vmh. Duas abas enviaram decisões reais à API,
+  retornaram 202/409 e produziram uma decisão, uma operação `input.provide` e um
+  outbox. A aplicação nativa dessa decisão não foi executada.
+- O onboarding usou HTTP/SQLite reais com Test peer sintético. Codex e Claude
+  compartilharam o workspace, com duas identidades distintas e configuração da
+  primeira intacta. Respostas perdidas foram recuperadas pelos mesmos IDs.
+  Os cortes finais corrigem recusa definitiva, inputs controlados e restauração
+  de projeto/host. Esses peers não criam sessões runtime: não são harnesses reais.
+- A campanha Python instalada antecedente teve 187 PASS e duas falhas de oráculo
+  que misturavam principais de autenticação no cursor. Os dois focais corrigidos
+  passaram separadamente. Isso **não** é uma execução única 189/189. Connector
+  teve 52 focais instalados aprovados. O relatório de pacote conserva hashes,
+  versões, origens de importação e os deltas posteriores.
+- O smoke MCP HTTP real usou duas identidades, SDK oficial e 54 ferramentas em
+  Server foreground temporário. Mensagens/eventos, handoff, artefato e shared.md
+  passaram; parada canônica e saída física foram comprovadas. Não houve modelo.
+- Uma faixa posterior de serviço teve 13 PASS e três falhas de fixtures antigas
+  de login, em quatro execuções separadas. Processos reais comprovaram
+  inicialização/reuso/saída do launcher e restart do Server com grants
+  válido/expirado/revogado e peer inerte. As fixtures de login não fornecem o
+  receipt atual de supervisor; as falhas UNKNOWN permanecem registradas. Não é
+  qualificação de tarefa nativa do Windows, trabalho ativo sobrevivendo ou
+  rollback de UI. Ver `evidence/pr07-service/scenario-audit.md`.
+- Ruff focal passou. Ruff global falhou com 23.912 erros, incluindo código
+  legado, cópias geradas e drivers de evidência. Não há alegação de lint global
+  limpo nem classificação automática de todos esses erros como preexistentes.
+- A CI remota é independente da validação local. Consultas anteriores retornaram
+  runs em fila; ausência de conclusão não significa aprovação.
+
+Cada relatório preserva seu corte e seus antecedentes. Assets posteriores não
+mudam retroativamente a qualificação de browser ou os tempos medidos antes deles.
+
+## Limites que impedem qualificação completa
+
+Além dos gates abaixo, há cenários completos de navegador, escopo, serviço e
+rollback ainda NOT_RUN, mesmo quando partes passaram. Incluem scrollback ao
+receber output, maximizar/restaurar, revogação com rascunho/Voltar, recuperação de
+decisão com resposta perdida, corrida de escopos e reversão de apresentação com
+trabalho admitido. Esses são trabalhos de qualificação executáveis; não são
+classificados automaticamente como bloqueios externos. O ledger distingue cada
+cenário e mantém a entrega em andamento.
+
+1. UI-042 requer nova autorização específica para a campanha UI-R1 com provedores
+   e contas autenticadas. Consentimentos de campanhas anteriores não foram
+   reaproveitados. A proposta executável isolada está em `pr07-native-proposal/`;
+   seu preflight deve recusar suporte/contabilidade não comprovados, sem replay.
+2. Uma máquina remota real com Connector e pastas diferentes não foi qualificada
+   por peers locais. Não há declaração de suporte universal de plataforma/harness.
+3. UI-043 requer uma pessoa sem conhecimento da arquitetura executando o roteiro;
+   navegação automática não mede compreensão humana.
+4. Leitor de tela real e zoom nativo de 200% não foram comprovados. Viewport de
+   360 px foi exercitado, mas não substitui essas qualificações.
+5. A medição de 100 agentes/1.000 atividades/100.002 eventos registrou p95 de
+   1.225,94 ms para a leitura inicial, acima da meta proposta de 500 ms; expansão
+   teve p95 de 1.031,41 ms. Foram 55 SQLs/uma UoW/zero writes na leitura inicial.
+   A projeção é O(N + relações), limitada por orçamento, não O(página).
+6. Cenários de scrollback, maximizar/restaurar, revogação com rascunho/Voltar,
+   interrupção exata, resposta perdida de decisão, rollback com trabalho vivo e
+   lifecycle específico só podem fechar com suas evidências literais. As coberturas
+   parciais estão separadas no ledger.
+
+Suspensão, logout/login e reinicialização do Windows foram descartados do escopo
+de execução desta sessão pelo usuário. Não foram executados nem declarados PASS.
+Os bloqueios anteriores HOME-R1/R3 aplicáveis permanecem; esta implementação não
+é uma dispensa desses gates.
+
+## Efeitos, migrações e rollback
+
+Não há migração SQLite nova. Foram adicionados endpoints/metadados de leitura,
+projeção de apresentação e sidecar local de intenção de conexão formato 1;
+perfis legados continuam formato 1. Novas identidades só nascem no Finish
+canônico, com revisão e permissões explícitas. Retomar não testa modelo nem
+renova grant. Leitura/abertura não autoriza executar.
+
+Os testes criaram apenas dados, pacotes e processos temporários próprios.
+Nenhuma instalação pessoal ou tarefa de login pessoal foi alterada. Credenciais
+reais não foram acessadas e não houve release, deploy ou campanha paga.
+
+Rollback de apresentação: voltar à Home clássica preservando sino e controles
+básicos. Rollback de código: reverter os commits da feature por commits novos e
+reconstruir assets; não resetar dados. Manter aliases, checkpoints, receipts,
+sessões e intenções incertas. Usar `--profile` explícito para os atalhos já
+confirmados. A reversão não é justificativa para apagar uma intenção desconhecida
+ou repetir trabalho. A qualificação de rollback com trabalho vivo permanece gate
+próprio, sem confundir este procedimento com teste executado.
+
+## Próximo gate
+
+Concluir as verificações isoladas pendentes e registrar a conclusão da CI no SHA
+correspondente. Só iniciar a campanha real após autorização sobre a proposta
+concreta, sem alterar o ambiente pessoal. Depois executar avaliação humana e
+qualificações assistivas/topológicas disponíveis. A aprovação de release/default
+continua `false` até os gates serem atendidos e existir autorização específica.

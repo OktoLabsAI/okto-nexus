@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="2.756" timestamp="2026-11-16T18:22:31.937681-03:00" hostname="Alienware_m15"><testcase classname="tests.unit.test_configure_login_start" name="test_disabled_task_requires_enable_review_and_later_disable_is_preserved" time="0.749"><failure message="okto_nexus_connector.errors.ConnectorError: DAEMON_UNAVAILABLE (login_start): The selected instance is unknown: SUPERVISOR_OUTCOME_UNCONFIRMED. -- Inspect daemon status/logs. The existing launch was not stopped or repeated.">..\okto-nexus-connector\tests\unit\test_configure_login_start.py:66: in &lt;lambda&gt;
+    monkeypatch.setattr(manager, 'start', lambda root: lifecycle.start(root, timeout=.3))
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\okto_nexus_connector\daemon\lifecycle.py:208: in start
+    raise ConnectorError('DAEMON_UNAVAILABLE', 'start', f'The selected instance is {current.state}: {current.reason}.',
+E   okto_nexus_connector.errors.ConnectorError: DAEMON_UNAVAILABLE (start): The selected instance is unknown: SUPERVISOR_OUTCOME_UNCONFIRMED. -- Inspect daemon status/logs. The existing launch was not stopped or repeated.
+
+The above exception was the direct cause of the following exception:
+..\okto-nexus-connector\tests\unit\test_configure_login_start.py:204: in test_disabled_task_requires_enable_review_and_later_disable_is_preserved
+    assert (await r.run())['saved']
+            ^^^^^^^^^^^^^
+..\okto-nexus-connector\tests\unit\test_configure_login_start.py:80: in run
+    return await local.configure_local(args, output, root, store, identity, 'http://127.0.0.1:8202', portable)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\okto_nexus_connector\cli\commands\configure_local.py:180: in configure_local
+    await configure_startup.resume(args, root, saved, persist_saved)
+C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\okto_nexus_connector\cli\commands\configure_startup.py:74: in resume
+    raise ConnectorError(error.code, 'login_start', error.message, possible_effect=True,
+E   okto_nexus_connector.errors.ConnectorError: DAEMON_UNAVAILABLE (login_start): The selected instance is unknown: SUPERVISOR_OUTCOME_UNCONFIRMED. -- Inspect daemon status/logs. The existing launch was not stopped or repeated.</failure></testcase><testcase classname="tests.unit.test_configure_login_start" name="test_existing_task_reuse_or_lost_enablement_receipt_does_not_recreate[False]" time="0.544"><failure message="okto_nexus_connector.errors.ConnectorError: DAEMON_UNAVAILABLE (login_start): The selected instance is unknown: SUPERVISOR_OUTCOME_UNCONFIRMED. -- Inspect daemon status/logs. The existing launch was not stopped or repeated.">..\okto-nexus-connector\tests\unit\test_configure_login_start.py:66: in &lt;lambda&gt;
+    monkeypatch.setattr(manager, 'start', lambda root: lifecycle.start(root, timeout=.3))
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\okto_nexus_connector\daemon\lifecycle.py:208: in start
+    raise ConnectorError('DAEMON_UNAVAILABLE', 'start', f'The selected instance is {current.state}: {current.reason}.',
+E   okto_nexus_connector.errors.ConnectorError: DAEMON_UNAVAILABLE (start): The selected instance is unknown: SUPERVISOR_OUTCOME_UNCONFIRMED. -- Inspect daemon status/logs. The existing launch was not stopped or repeated.
+
+The above exception was the direct cause of the following exception:
+..\okto-nexus-connector\tests\unit\test_configure_login_start.py:241: in test_existing_task_reuse_or_lost_enablement_receipt_does_not_recreate
+    assert (await r.run())['status'] == 'awaiting_operator_approval'
+            ^^^^^^^^^^^^^
+..\okto-nexus-connector\tests\unit\test_configure_login_start.py:80: in run
+    return await local.configure_local(args, output, root, store, identity, 'http://127.0.0.1:8202', portable)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\okto_nexus_connector\cli\commands\configure_local.py:180: in configure_local
+    await configure_startup.resume(args, root, saved, persist_saved)
+C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\okto_nexus_connector\cli\commands\configure_startup.py:74: in resume
+    raise ConnectorError(error.code, 'login_start', error.message, possible_effect=True,
+E   okto_nexus_connector.errors.ConnectorError: DAEMON_UNAVAILABLE (login_start): The selected instance is unknown: SUPERVISOR_OUTCOME_UNCONFIRMED. -- Inspect daemon status/logs. The existing launch was not stopped or repeated.</failure></testcase><testcase classname="tests.unit.test_configure_login_start" name="test_existing_task_reuse_or_lost_enablement_receipt_does_not_recreate[True]" time="0.467"><failure message="okto_nexus_connector.errors.ConnectorError: DAEMON_UNAVAILABLE (login_start): The selected instance is unknown: SUPERVISOR_OUTCOME_UNCONFIRMED. -- Inspect daemon status/logs. The existing launch was not stopped or repeated.">..\okto-nexus-connector\tests\unit\test_configure_login_start.py:66: in &lt;lambda&gt;
+    monkeypatch.setattr(manager, 'start', lambda root: lifecycle.start(root, timeout=.3))
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\okto_nexus_connector\daemon\lifecycle.py:208: in start
+    raise ConnectorError('DAEMON_UNAVAILABLE', 'start', f'The selected instance is {current.state}: {current.reason}.',
+E   okto_nexus_connector.errors.ConnectorError: DAEMON_UNAVAILABLE (start): The selected instance is unknown: SUPERVISOR_OUTCOME_UNCONFIRMED. -- Inspect daemon status/logs. The existing launch was not stopped or repeated.
+
+The above exception was the direct cause of the following exception:
+..\okto-nexus-connector\tests\unit\test_configure_login_start.py:241: in test_existing_task_reuse_or_lost_enablement_receipt_does_not_recreate
+    assert (await r.run())['status'] == 'awaiting_operator_approval'
+            ^^^^^^^^^^^^^
+..\okto-nexus-connector\tests\unit\test_configure_login_start.py:80: in run
+    return await local.configure_local(args, output, root, store, identity, 'http://127.0.0.1:8202', portable)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\okto_nexus_connector\cli\commands\configure_local.py:180: in configure_local
+    await configure_startup.resume(args, root, saved, persist_saved)
+C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\okto_nexus_connector\cli\commands\configure_startup.py:74: in resume
+    raise ConnectorError(error.code, 'login_start', error.message, possible_effect=True,
+E   okto_nexus_connector.errors.ConnectorError: DAEMON_UNAVAILABLE (login_start): The selected instance is unknown: SUPERVISOR_OUTCOME_UNCONFIRMED. -- Inspect daemon status/logs. The existing launch was not stopped or repeated.</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,150 @@
+{
+  "status": "SCOPED_13_PASS_3_RETAINED_FIXTURE_FAIL",
+  "at": "2026-11-16T21:35:28.226348+00:00",
+  "totals": {
+    "PASS": 13,
+    "FAIL": 3,
+    "SKIP": 0
+  },
+  "runs": {
+    "nexus": {
+      "report": "nexus-qualification.json",
+      "seconds": 345.68566840002313,
+      "cases": [
+        {
+          "name": "test_connect_starts_reuses_and_leaves_service_owned_until_explicit_stop[False]",
+          "classname": "tests.test_terminal_connect_process",
+          "outcome": "PASS"
+        },
+        {
+          "name": "test_connect_starts_reuses_and_leaves_service_owned_until_explicit_stop[True]",
+          "classname": "tests.test_terminal_connect_process",
+          "outcome": "PASS"
+        },
+        {
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "outcome": "PASS"
+        },
+        {
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "outcome": "PASS"
+        },
+        {
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[valid]",
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "outcome": "PASS"
+        }
+      ]
+    },
+    "nexus-passive": {
+      "report": "nexus-passive-qualification.json",
+      "seconds": 1.89487449999433,
+      "cases": [
+        {
+          "name": "test_status_of_absent_instance_does_not_create_home_or_start_process",
+          "classname": "tests.test_service_inspection",
+          "outcome": "PASS"
+        },
+        {
+          "name": "test_remote_target_is_not_silently_treated_as_local",
+          "classname": "tests.test_service_inspection",
+          "outcome": "PASS"
+        },
+        {
+          "name": "test_status_inspects_absence_with_missing_saved_or_explicit_root[False]",
+          "classname": "tests.test_service_status_missing_discovery",
+          "outcome": "PASS"
+        },
+        {
+          "name": "test_status_inspects_absence_with_missing_saved_or_explicit_root[True]",
+          "classname": "tests.test_service_status_missing_discovery",
+          "outcome": "PASS"
+        }
+      ]
+    },
+    "connector-controls": {
+      "report": "connector-controls-qualification.json",
+      "seconds": 5.372854900022503,
+      "cases": [
+        {
+          "name": "test_active_disable_does_not_stop_or_change_generation_control",
+          "classname": "tests.unit.test_user_service_lifecycle",
+          "outcome": "PASS"
+        },
+        {
+          "name": "test_enablement_response_loss_recovers_without_another_native_effect",
+          "classname": "tests.unit.test_user_service_lifecycle",
+          "outcome": "PASS"
+        },
+        {
+          "name": "test_disabled_task_remains_disabled",
+          "classname": "tests.unit.test_service_upgrade",
+          "outcome": "PASS"
+        },
+        {
+          "name": "test_cli_observation_never_initializes_an_absent_instance",
+          "classname": "tests.integration.test_passive_cli",
+          "outcome": "PASS"
+        }
+      ]
+    },
+    "connector": {
+      "report": "connector-qualification.json",
+      "seconds": 3.6951878999825567,
+      "cases": [
+        {
+          "name": "test_disabled_task_requires_enable_review_and_later_disable_is_preserved",
+          "classname": "tests.unit.test_configure_login_start",
+          "outcome": "FAIL"
+        },
+        {
+          "name": "test_existing_task_reuse_or_lost_enablement_receipt_does_not_recreate[False]",
+          "classname": "tests.unit.test_configure_login_start",
+          "outcome": "FAIL"
+        },
+        {
+          "name": "test_existing_task_reuse_or_lost_enablement_receipt_does_not_recreate[True]",
+          "classname": "tests.unit.test_configure_login_start",
+          "outcome": "FAIL"
+        }
+      ]
+    }
+  },
+  "installed_cut": "Nexus0.3.5 CdDUCMon / Connector0.0.13 / Core0.0.14",
+  "packager_reported_nexus_wheel_sha256": "d596027d5a75620c502cf1337c1b96196da51e82ddd6bb3780d324024cdc2972",
+  "provider_calls": 0,
+  "native_scheduler_calls": false,
+  "personal_environment_changed": false,
+  "all_selected_package_and_test_comparisons_unchanged": true,
+  "runner_revision_note": "Passive/control surfaces were added while the Nexus invocation ran; that invocation selected the original Nexus nodes. Per-run recorded pytest arguments and test hashes define the scope, not a claim of an immutable entire checkout.",
+  "runner_sha256": "cc9e8a4d1142a1bfbdd967111230ce0dfe02b07112f2460ac53842bd55f3cea6",
+  "cleanup": {
+    "remaining_owned_processes": [],
+    "targets": [
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-service-nexus-y93fv5kn",
+        "absent": true
+      },
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-service-connector-7z43wd43",
+        "absent": true
+      },
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-service-connector-controls-cl9kihg_",
+        "absent": true
+      },
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-service-nexus-passive-bzh6dg_z",
+        "absent": true
+      }
+    ]
+  },
+  "limits": [
+    "Synthetic native peers and FakeTasks do not qualify real providers or native login tasks.",
+    "Three stale configure-login fixtures fail the current missing-parent-proof guard and are retained.",
+    "No active native session/OUTCOME_UNKNOWN work survived the crash in these cases.",
+    "No complete UI/release rollback or remote-unavailable fallback journey was executed."
+  ]
+}
