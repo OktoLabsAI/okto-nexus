@@ -1,0 +1,75 @@
+{
+  "status": "PASS_INERT_SERVER_FINAL_REBIND_AND_REFUSAL",
+  "at": "2026-11-16T16:16:19.425353+00:00",
+  "candidate_sha256": "6181fd0029f1eb023d226f168f6d00b60baad2cfe92e12b3850592a36fecc189",
+  "ancestor_chain_sha256": [
+    "5a8c72d04e9e4adc426173dd14971ef28c6dec599af2bfea42b5deaf61012c40",
+    "cbb2a45ba9cc99833b5af881abc8415c4c7d355c436d6e05e8cfab4288fdd6af"
+  ],
+  "changed_top_level_keys": [
+    "package",
+    "technical_rebind"
+  ],
+  "immutable_scope_equal": true,
+  "driver_unchanged_sha256": "485de9675df7226b65e95679dd64b574295061623990cd8f2355ccbb0cff9ccd",
+  "python_and_images_unchanged": true,
+  "runtime_pins_equal": true,
+  "runtime_pin_count": 7,
+  "installed_payloads_verified": 883,
+  "wheel_sha256": "c1c45e2a3dc8b9f0bed348ddc2d09ab4d0afccbaae2b8c19253fdcaf4980b759",
+  "package_qualification_sha256": "629985a6e8d40149f6d89e47f0633afdbc6e133f9886a0d8195a9a7ab6c18b42",
+  "source_commit": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+  "static_bundle": "index-Dcu4bArB.js",
+  "policy": {
+    "max_calls": 2,
+    "observed_limit": 200000,
+    "preventive": 150000,
+    "reserve": 50000
+  },
+  "campaign_id": "home-r1-local-codex-bc1d3f18e856",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-codex-bc1d3f18e856",
+  "port": 62817,
+  "reserved_calls": 0,
+  "authorization_exists": false,
+  "campaign_root_exists": false,
+  "native_executable_bytes_verified_without_execution": true,
+  "new_native_or_auth_configuration_inspected": false,
+  "refusal": {
+    "status": "PASS_REFUSED_BEFORE_PRODUCT_IMPORT_OR_EFFECTS",
+    "candidate_sha256": "6181fd0029f1eb023d226f168f6d00b60baad2cfe92e12b3850592a36fecc189",
+    "driver_exit_code": 1,
+    "driver_result": {
+      "completed": false,
+      "error_type": "ValueError",
+      "code": "NEW_PAID_CONSENT_REQUIRED"
+    },
+    "product_import_attempts": [],
+    "effect_attempts": [],
+    "product_modules_loaded": false,
+    "campaign_root_exists": false,
+    "authorization_exists": false,
+    "reservations": 0,
+    "provider_calls": 0,
+    "method": "Actual driver.py __main__ via runpy with original CLI argv and an audit hook that would fail any product import, process/directory effect or provider-home read before consent. No product/driver function replaced."
+  },
+  "tools": {
+    "rebind": "42c716",
+    "guarded_actual_driver_refusal": "7b0a9c"
+  },
+  "effects": {
+    "provider_calls": 0,
+    "service_actions": 0,
+    "native_executable_executions": 0,
+    "personal_authentication_actions": 0,
+    "receipt_created": false
+  },
+  "source_helpers": {
+    "rebind": "9b1c4fbdf3e2d3bfb00cc5727a43130aadb45175962c0d1fe36e6ec4585d64da",
+    "refusal_proof": "23ac5649e9dc86dc9648e555453841532a77a307c5b96dd4874c7093e2eeddba"
+  },
+  "limitations": [
+    "A technical candidate is not a user authorization or campaign outcome.",
+    "Original27 offline driver tests and earlier peer review are retained, not rerun or added to this rebind.",
+    "The package snapshot imports existing parser modules read-only to verify their qualified origin bytes; no CLI product handler is called. The separate actual driver refusal proof loads no product module."
+  ]
+}

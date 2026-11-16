@@ -1,0 +1,176 @@
+"""Finite local ARIA/screen-reader probe over disposable standard Nexus data.
+
+No Narrator, native GUI, provider, host service or browser is launched here.
+The observer chooses a private browser tab and any assistive technology manually.
+Only this runner's two scheduled SQLite fixture pulses write data; HTTP is read-only.
+"""
+from __future__ import annotations
+
+import argparse
+import asyncio
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import sys
+import tempfile
+import time
+from types import SimpleNamespace
+import uuid
+
+ROOT = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(ROOT))
+
+from fastapi.responses import JSONResponse  # noqa: E402
+import uvicorn  # noqa: E402
+
+from okto_nexus.adapters.inbound.http.app import build_app  # noqa: E402
+from okto_nexus.bootstrap import embedded_inventory  # noqa: E402
+from okto_nexus.bootstrap.dependencies import bootstrap  # noqa: E402
+from okto_nexus.domain.handoff import EVENT_CREATED, HANDOFF_STREAM  # noqa: E402
+from tests.home_evolution.browser_fixture import seed  # noqa: E402
+
+
+def emit(value):
+    print(json.dumps(value, ensure_ascii=False), flush=True)
+
+
+def copy_row(connection, table, row, changes):
+    # Only two constant table names below call this helper. All values stay bound.
+    assert table in {'tasks', 'handoffs'}
+    value = dict(row, **changes)
+    connection.execute('INSERT INTO '+table+'('+','.join(value)+') VALUES('
+                       +','.join('?' for _ in value)+')', tuple(value.values()))
+
+
+def pulse(deps, namespace, number):
+    now = deps.clock.now_iso()
+    task_id, handoff_id = f'at-probe-task-{namespace}-{number}', f'at-probe-handoff-{namespace}-{number}'
+    with deps.connection_factory.unit_of_work() as uow:
+        c = uow.connection
+        task = c.execute("SELECT * FROM tasks WHERE task_id='browser-task-0'").fetchone()
+        handoff = c.execute("SELECT * FROM handoffs WHERE handoff_id='browser-handoff-0'").fetchone()
+        assert task and handoff and handoff['status'] == 'OPEN'
+        task_changes = dict(task_id=task_id, title=f'Screen reader probe {number}', created_at=now)
+        if 'updated_at' in task.keys():
+            task_changes['updated_at'] = now
+        copy_row(c, 'tasks', task, task_changes)
+        copy_row(c, 'handoffs', handoff, dict(handoff_id=handoff_id, task_id=task_id,
+                 created_at=now, updated_at=now, status='OPEN', claimed_by=None))
+        payload = dict(handoff_id=handoff_id, workspace_id=handoff['workspace_id'], status='OPEN',
+                       from_agent_id=handoff['from_agent_id'], target=json.loads(handoff['target']),
+                       visibility=handoff['visibility'], created_at=now)
+        cursor = c.execute('INSERT INTO events(workspace_id,stream,type,actor_agent_id,payload,visibility,target,created_at) '
+                  'VALUES(?,?,?,?,?,?,?,?)', (handoff['workspace_id'], HANDOFF_STREAM, EVENT_CREATED,
+                  handoff['from_agent_id'], json.dumps(payload), handoff['visibility'], handoff['target'], now))
+        event_id = cursor.lastrowid
+    return dict(number=number, title=f'Screen reader probe {number}', handoff_id=handoff_id,
+                task_id=task_id, workspace_id='home-alpha', event_type=EVENT_CREATED,
+                event_id=event_id, created_at=now)
+
+
+async def run(app, deps, *, home, args):
+    config = uvicorn.Config(app, host='127.0.0.1', port=args.port, lifespan='off',
+                            timeout_graceful_shutdown=5, log_level='warning')
+    server = uvicorn.Server(config)
+    app.state.server = server  # Existing SSE generators observe should_exit and drain.
+    sock = config.bind_socket()
+    port = sock.getsockname()[1]
+    namespace = uuid.uuid4().hex[:12]
+    stop_file = args.stop_file or home/'STOP'
+    ready_file = args.ready_file or home/'ready.json'
+    for path in (stop_file, ready_file):
+        path.parent.mkdir(parents=True, exist_ok=True)
+    if stop_file.exists() or ready_file.exists():
+        sock.close()
+        raise ValueError('Use fresh own stop/ready paths; existing control files are not overwritten.')
+    started = time.monotonic()
+    pulses, stop_reason = [], None
+    plan = dict(url=f'http://127.0.0.1:{port}', fixture_home=str(home), stop_file=str(stop_file),
+        ready_file=str(ready_file), synthetic=True, http_mutations=False, runtime_started=False,
+        narrator_started=False, gui_controlled=False, provider_calls=0, namespace=namespace,
+        pulse_schedule_seconds=[args.first_delay, args.first_delay+args.pulse_gap],
+        duration_seconds=args.duration, shutdown_grace_seconds=5,
+        request_stop_at_seconds=args.duration-5,
+        pulse_titles=['Screen reader probe 1','Screen reader probe 2'],
+        source_pins={str(path.relative_to(ROOT)).replace('\\','/'):hashlib.sha256(path.read_bytes()).hexdigest()
+                     for path in (Path(__file__), ROOT/'tests/home_evolution/browser_fixture.py',
+                       ROOT/'src/okto_nexus/adapters/inbound/http/static/index.html')})
+    ready_file.write_text(json.dumps(plan, indent=2)+'\n', encoding='utf-8')
+    emit(dict(kind='READY', **plan))
+
+    async def scheduled_pulses():
+        for number, deadline in enumerate(plan['pulse_schedule_seconds'], 1):
+            await asyncio.sleep(max(0, started+deadline-time.monotonic()))
+            if server.should_exit:
+                return
+            value = await asyncio.to_thread(pulse, deps, namespace, number)
+            value['elapsed_seconds'] = round(time.monotonic()-started, 3)
+            pulses.append(value)
+            emit(dict(kind='PULSE', **value))
+
+    async def stop_when_due():
+        nonlocal stop_reason
+        while not server.should_exit:
+            if stop_file.exists():
+                stop_reason = 'own_stop_file'
+                server.should_exit = True
+                return
+            if time.monotonic()-started >= args.duration-5:
+                stop_reason = 'duration_elapsed'
+                server.should_exit = True
+                return
+            await asyncio.sleep(.1)
+
+    tasks = [asyncio.create_task(scheduled_pulses()), asyncio.create_task(stop_when_due())]
+    try:
+        await server.serve(sockets=[sock])
+    finally:
+        for task in tasks:
+            task.cancel()
+        outcomes = await asyncio.gather(*tasks, return_exceptions=True)
+        sock.close()
+        failures = [str(x) for x in outcomes if isinstance(x, Exception) and not isinstance(x, asyncio.CancelledError)]
+        report = dict(kind='FINAL', stopped=True, stop_reason=stop_reason or 'server_exit',
+            elapsed_seconds=round(time.monotonic()-started, 3), pulses=pulses,
+            pulse_errors=failures, runtime_started=False, narrator_started=False,
+            provider_calls=0, fixture_home_preserved=True)
+        (home/'report.json').write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
+        emit(report)
+        if failures:
+            raise RuntimeError('Fixture pulse failed; inspect own report.json')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--first-delay', type=float, default=15)
+    parser.add_argument('--pulse-gap', type=float, default=15)
+    parser.add_argument('--duration', type=float, default=90)
+    parser.add_argument('--port', type=int, default=0)
+    parser.add_argument('--stop-file', type=Path)
+    parser.add_argument('--ready-file', type=Path)
+    args = parser.parse_args()
+    if not (1 <= args.first_delay and 3 <= args.pulse_gap and
+            args.first_delay+args.pulse_gap+9 <= args.duration <= 90):
+        parser.error('Require first-delay>=1, pulse-gap>=3 and second pulse+9 <= duration <=90 seconds (includes5s drain).')
+    home = Path(tempfile.mkdtemp(prefix='nexus-home-r1-at-'))
+    embedded_inventory.discover_local_candidates = lambda **_: SimpleNamespace(candidates=())
+    deps = bootstrap({}, ['--home', str(home), '--embedding-mode', 'off', '--feature-harness-integrations', 'false'])
+    try:
+        seed(deps)
+        app = build_app(deps)
+
+        @app.middleware('http')
+        async def read_only_http(request, call_next):
+            if request.method not in {'GET', 'HEAD', 'OPTIONS'}:
+                return JSONResponse({'fixture': 'Manual AT probe HTTP is read-only.'}, status_code=405)
+            return await call_next(request)
+
+        asyncio.run(run(app, deps, home=home, args=args))
+    finally:
+        deps.connection_factory.close()
+    emit(dict(kind='EXIT', normal=True, at=datetime.now(timezone.utc).isoformat()))
+
+
+if __name__ == '__main__':
+    main()

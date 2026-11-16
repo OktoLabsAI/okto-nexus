@@ -1,0 +1,2095 @@
+{
+  "status": "PASS_MEASURED_NOT_SLO_APPROVAL",
+  "source_head": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+  "input_sha256": {
+    "scripts/measure_home_evolution.py": "afade961208cabfdd7412b5e302252ebd38abcbdfccb34cf30ae240d484ec764",
+    "pyproject.toml": "5362ed3940c936490e8ade4ca196d83a8f89bb7c11ad0b081ea995665b02d8fe",
+    "uv.lock": "9ec7868aa2f5976c100a37d72179420b54077a7294b3cce64e81001234abaeca",
+    "src/okto_nexus/domain/home.py": "3d07b528a9e1b7afb12cb52b83d9862d01385fecf7d4322aeefb192a3fb6b2b0",
+    "src/okto_nexus/application/home.py": "2fa6a1f64d00b8e19e6f7a9fe87af7c18e7ab18302d7ea0e7cc807ba37cddcf0",
+    "src/okto_nexus/application/home_ports.py": "f78377e4ff66488184382898fbf3bf6076b2afde0e470f7f5f2a587f26abe3d6",
+    "src/okto_nexus/adapters/inbound/http/home.py": "235bc87a160650f73f3e46ec576c2421a068ce7ce7de5a2faa9a54a31b529de8",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "1f589cb5f592c6bdeca73b202f9f31918685aca92dc0dae07be66f68ef0c886e",
+    "src/okto_nexus/adapters/outbound/sqlite/attention.py": "f04de2cd2db9e7e830d8738133157e08e9c8c67bae19a9708d2e39e41e394e88",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_native.py": "6af1bd541bee55bf2f01e550b415e474c3c10d6081814fb8a4d77fc409e5b19e",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py": "9cf5d2e3bd5f326a6b045aaf8679fbb8e3cf0c5dcb8a056f48c7bdc5cbaa3d70",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py": "495b701847e2e0546267b03cdfd503d0d1290fe2449502fc3adcfaaf2086dab5",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_results.py": "63b1644169950f7f32b0c808fe16daa941df000d2fc589c2c8dbf68942b6c6f2",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py": "36b0961d1178bf3c4a0b1c667beda475f8229039ed23c68fc2a24010db208358",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_external.py": "7a87c16c7f82a5d934528ff382234f3d8c4cd1515cb3e2e46e7487959f445962"
+  },
+  "environment": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.13.1",
+    "sqlite": "3.45.3",
+    "cpu_logical": 16,
+    "ram_bytes": 34073251840
+  },
+  "cases": [
+    {
+      "dataset": {
+        "agents": 2,
+        "handoffs": 10,
+        "events": 100,
+        "sessions": 1,
+        "execution_operations": 0,
+        "worker_agents": 1
+      },
+      "server": {
+        "ready": true,
+        "port": 55472,
+        "dataset": {
+          "agents": 2,
+          "handoffs": 10,
+          "events": 100,
+          "sessions": 1,
+          "execution_operations": 0,
+          "worker_agents": 1
+        },
+        "runtime_started": false,
+        "discovery_enabled": false,
+        "clock_patched": false,
+        "authentication_path": "Unmodified canonical local-loopback operator; no API key or personal account used",
+        "nexus_origin": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\__init__.py",
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "python_executable": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\pythonw.exe",
+        "http_protocol": "uvicorn.protocols.http.h11_impl.H11Protocol"
+      },
+      "samples": 20,
+      "discarded_warmups": 1,
+      "warmup": {
+        "http_ms": 741.0129000199959,
+        "http_status": 200,
+        "decoded_body_bytes": 10006,
+        "downloaded_body_bytes": 10006,
+        "content_encoding": null,
+        "generated_at": "2026-11-16T16:42:09.910658Z",
+        "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+        "event_cursor": 100,
+        "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+        "total_uows": 1,
+        "sql_statements": 46,
+        "uows": [
+          {
+            "declared_write": false,
+            "sql_statements": 46,
+            "row_changes": 0,
+            "denied_mutations": 0
+          }
+        ],
+        "peak_uows": 1
+      },
+      "http_round_trip": {
+        "p50_ms": 244.4788499851711,
+        "p95_ms": 281.2836999655701
+      },
+      "sample_requests": [
+        {
+          "http_ms": 252.00599996605888,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:10.315048Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 256.5866999793798,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:10.585294Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 281.2836999655701,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:10.854341Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 222.55569999106228,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:11.155085Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 247.52060003811494,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:11.390535Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 216.82550001423806,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:11.645174Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 269.04869999270886,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:11.885591Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 215.63649998279288,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:12.168260Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 244.8852999950759,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:12.406218Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 254.79070004075766,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:12.658979Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 230.02230003476143,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:12.929427Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 239.9586999672465,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:13.164202Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 244.0723999752663,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:13.416825Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 267.0265999622643,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:13.669862Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 253.59629996819422,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:13.956758Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 226.3537000399083,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:14.227174Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 230.3276999737136,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:14.461453Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 197.20200001029298,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:14.712875Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 289.550399989821,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:14.917531Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 196.96979998843744,
+          "http_status": 200,
+          "decoded_body_bytes": 10006,
+          "downloaded_body_bytes": 10006,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:15.215942Z",
+          "snapshot_id": "9d9b3f9c97f6a170fb04826176426921c1587e332951f90d0d5a30b7da7dc885",
+          "event_cursor": 100,
+          "server_id": "srv_38019a903b56c594e26e3edf682add3e",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        }
+      ],
+      "one_read_uow_per_request": true,
+      "sql_statements_per_request": [
+        46
+      ],
+      "database_changes": 0,
+      "cleanup": {
+        "normal_stop_ack": true,
+        "pid": 45664,
+        "forced": false,
+        "exit_code": 0,
+        "physically_exited": true
+      }
+    },
+    {
+      "dataset": {
+        "agents": 11,
+        "handoffs": 10,
+        "events": 100,
+        "sessions": 10,
+        "execution_operations": 0,
+        "worker_agents": 10
+      },
+      "server": {
+        "ready": true,
+        "port": 55479,
+        "dataset": {
+          "agents": 11,
+          "handoffs": 10,
+          "events": 100,
+          "sessions": 10,
+          "execution_operations": 0,
+          "worker_agents": 10
+        },
+        "runtime_started": false,
+        "discovery_enabled": false,
+        "clock_patched": false,
+        "authentication_path": "Unmodified canonical local-loopback operator; no API key or personal account used",
+        "nexus_origin": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\__init__.py",
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "python_executable": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\pythonw.exe",
+        "http_protocol": "uvicorn.protocols.http.h11_impl.H11Protocol"
+      },
+      "samples": 20,
+      "discarded_warmups": 1,
+      "warmup": {
+        "http_ms": 503.07079998310655,
+        "http_status": 200,
+        "decoded_body_bytes": 11117,
+        "downloaded_body_bytes": 11117,
+        "content_encoding": null,
+        "generated_at": "2026-11-16T16:42:19.539371Z",
+        "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+        "event_cursor": 100,
+        "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+        "total_uows": 1,
+        "sql_statements": 46,
+        "uows": [
+          {
+            "declared_write": false,
+            "sql_statements": 46,
+            "row_changes": 0,
+            "denied_mutations": 0
+          }
+        ],
+        "peak_uows": 1
+      },
+      "http_round_trip": {
+        "p50_ms": 217.50129997963086,
+        "p95_ms": 227.63889998896047
+      },
+      "sample_requests": [
+        {
+          "http_ms": 211.43570001004264,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:19.783135Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 223.79140002885833,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:20.001922Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 220.87690001353621,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:20.240021Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 223.18450000602752,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:20.477063Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 203.42500001424924,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:20.714437Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 227.34859999036416,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:20.935498Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 222.96769998501986,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:21.175678Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 216.09359997091815,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:21.412079Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 196.04060001438484,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:21.633799Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 217.24969998467714,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:21.840670Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 208.39949999935925,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:22.071478Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 217.1070000040345,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:22.292761Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 227.63889998896047,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:22.530659Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 217.9059999762103,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:22.769096Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 267.81049999408424,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:23.006543Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 217.75289997458458,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:23.290640Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 223.0930000077933,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:23.528217Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 151.2057000072673,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:23.765121Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 156.32040001219139,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:23.922244Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 156.7718000151217,
+          "http_status": 200,
+          "decoded_body_bytes": 11117,
+          "downloaded_body_bytes": 11117,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:24.095349Z",
+          "snapshot_id": "04615485aedfa1b38ded90219b85b4c7623793709f95a98a2b07b408c742e8f2",
+          "event_cursor": 100,
+          "server_id": "srv_ff7a080745678c8dd58072cde50a7913",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        }
+      ],
+      "one_read_uow_per_request": true,
+      "sql_statements_per_request": [
+        46
+      ],
+      "database_changes": 0,
+      "cleanup": {
+        "normal_stop_ack": true,
+        "pid": 50012,
+        "forced": false,
+        "exit_code": 0,
+        "physically_exited": true
+      }
+    },
+    {
+      "dataset": {
+        "agents": 101,
+        "handoffs": 10,
+        "events": 100,
+        "sessions": 100,
+        "execution_operations": 0,
+        "worker_agents": 100
+      },
+      "server": {
+        "ready": true,
+        "port": 55483,
+        "dataset": {
+          "agents": 101,
+          "handoffs": 10,
+          "events": 100,
+          "sessions": 100,
+          "execution_operations": 0,
+          "worker_agents": 100
+        },
+        "runtime_started": false,
+        "discovery_enabled": false,
+        "clock_patched": false,
+        "authentication_path": "Unmodified canonical local-loopback operator; no API key or personal account used",
+        "nexus_origin": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\__init__.py",
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "python_executable": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\pythonw.exe",
+        "http_protocol": "uvicorn.protocols.http.h11_impl.H11Protocol"
+      },
+      "samples": 20,
+      "discarded_warmups": 1,
+      "warmup": {
+        "http_ms": 452.76299997931346,
+        "http_status": 200,
+        "decoded_body_bytes": 11118,
+        "downloaded_body_bytes": 11118,
+        "content_encoding": null,
+        "generated_at": "2026-11-16T16:42:27.829791Z",
+        "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+        "event_cursor": 100,
+        "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+        "total_uows": 1,
+        "sql_statements": 46,
+        "uows": [
+          {
+            "declared_write": false,
+            "sql_statements": 46,
+            "row_changes": 0,
+            "denied_mutations": 0
+          }
+        ],
+        "peak_uows": 1
+      },
+      "http_round_trip": {
+        "p50_ms": 180.60115003027022,
+        "p95_ms": 289.2768000019714
+      },
+      "sample_requests": [
+        {
+          "http_ms": 153.44299998832867,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:28.061531Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 158.90119998948649,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:28.232746Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 180.1427000318654,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:28.409380Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 245.81739999121055,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:28.600848Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 312.26360000437126,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:28.853163Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 166.14190000109375,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:29.185344Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 161.60819999640808,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:29.359860Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 163.81370002636686,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:29.535176Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 154.8181000398472,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:29.709436Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 181.05960002867505,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:29.881493Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 153.2823999878019,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:30.068700Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 141.3524000090547,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:30.241476Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 182.75189999258146,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:30.398518Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 200.6431000190787,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:30.588224Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 156.99069999391213,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:30.810247Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 207.7415000530891,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:30.983721Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 184.22749999444932,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:31.204654Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 182.09290003869683,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:31.408620Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 182.8271999838762,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:31.598694Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 289.2768000019714,
+          "http_status": 200,
+          "decoded_body_bytes": 11118,
+          "downloaded_body_bytes": 11118,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:31.802615Z",
+          "snapshot_id": "0437189eceb7325272f0d659722cfc9ac199ebd119a546a4733e13e6bb862b01",
+          "event_cursor": 100,
+          "server_id": "srv_c2a642959680e28b02f1e84c734294d7",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        }
+      ],
+      "one_read_uow_per_request": true,
+      "sql_statements_per_request": [
+        46
+      ],
+      "database_changes": 0,
+      "cleanup": {
+        "normal_stop_ack": true,
+        "pid": 50524,
+        "forced": false,
+        "exit_code": 0,
+        "physically_exited": true
+      }
+    },
+    {
+      "dataset": {
+        "agents": 101,
+        "handoffs": 1000,
+        "events": 100000,
+        "sessions": 100,
+        "execution_operations": 0,
+        "worker_agents": 100
+      },
+      "server": {
+        "ready": true,
+        "port": 62004,
+        "dataset": {
+          "agents": 101,
+          "handoffs": 1000,
+          "events": 100000,
+          "sessions": 100,
+          "execution_operations": 0,
+          "worker_agents": 100
+        },
+        "runtime_started": false,
+        "discovery_enabled": false,
+        "clock_patched": false,
+        "authentication_path": "Unmodified canonical local-loopback operator; no API key or personal account used",
+        "nexus_origin": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\__init__.py",
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "python_executable": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\pythonw.exe",
+        "http_protocol": "uvicorn.protocols.http.h11_impl.H11Protocol"
+      },
+      "samples": 20,
+      "discarded_warmups": 1,
+      "warmup": {
+        "http_ms": 525.8249000180513,
+        "http_status": 200,
+        "decoded_body_bytes": 11477,
+        "downloaded_body_bytes": 11477,
+        "content_encoding": null,
+        "generated_at": "2026-11-16T16:42:37.084236Z",
+        "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+        "event_cursor": 100000,
+        "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+        "total_uows": 1,
+        "sql_statements": 46,
+        "uows": [
+          {
+            "declared_write": false,
+            "sql_statements": 46,
+            "row_changes": 0,
+            "denied_mutations": 0
+          }
+        ],
+        "peak_uows": 1
+      },
+      "http_round_trip": {
+        "p50_ms": 401.47265000268817,
+        "p95_ms": 450.31759998528287
+      },
+      "sample_requests": [
+        {
+          "http_ms": 299.0575999720022,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:37.378735Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 324.9257999705151,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:37.692376Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 332.94669998576865,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:38.025640Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 400.23930004099384,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:38.375223Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 477.41839999798685,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:38.786497Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 433.8602999923751,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:39.275341Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 450.31759998528287,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:39.719118Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 401.96069999365136,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:40.190380Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 417.02300001634285,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:40.602299Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 418.80489996401593,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:41.027573Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 449.41870000911877,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:41.454623Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 424.0898999851197,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:41.912466Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 424.36750000342727,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:42.353345Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 413.6760999681428,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:42.795261Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 372.0366000197828,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:43.222312Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 366.78000004030764,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:43.602255Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 400.984600011725,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:43.978411Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 398.53090001270175,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:44.387981Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 369.139600021299,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:44.800576Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        },
+        {
+          "http_ms": 378.0735000036657,
+          "http_status": 200,
+          "decoded_body_bytes": 11477,
+          "downloaded_body_bytes": 11477,
+          "content_encoding": null,
+          "generated_at": "2026-11-16T16:42:45.178605Z",
+          "snapshot_id": "d7715e79fca9441954dc567439359b143c3ad6d90b21d19065d3a3d5c1dc04e0",
+          "event_cursor": 100000,
+          "server_id": "srv_b391898d3315c42f99f198b035e9a953",
+          "total_uows": 1,
+          "sql_statements": 46,
+          "uows": [
+            {
+              "declared_write": false,
+              "sql_statements": 46,
+              "row_changes": 0,
+              "denied_mutations": 0
+            }
+          ],
+          "peak_uows": 1
+        }
+      ],
+      "one_read_uow_per_request": true,
+      "sql_statements_per_request": [
+        46
+      ],
+      "database_changes": 0,
+      "cleanup": {
+        "normal_stop_ack": true,
+        "pid": 53256,
+        "forced": false,
+        "exit_code": 0,
+        "physically_exited": true
+      }
+    }
+  ],
+  "limitations": [
+    "Real local HTTP full-body round trip, excluding subsequent client JSON parsing and own control-pipe stats collection.",
+    "One discarded real HTTP warmup plus20 warm keep-alive requests per dataset; no browser/SSE or app lifespan/startup during timing.",
+    "Unmodified canonical loopback authorization and real clock. No personal auth, provider or native executable.",
+    "Shared factory observation covers auth/projection UoWs; SQLite write barrier and total_changes check reject mutations.",
+    "Owned read-only fixture middleware adds slight overhead and blocks every non-read request. No route/response/data is mocked.",
+    "General Windows load is not otherwise controlled;500ms remains a local acceptance target, not a production SLO guarantee."
+  ],
+  "latency_target_ms": 500,
+  "latency_target_met": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "all_source_pins_unchanged": true,
+  "finished_at": "2026-11-16T16:42:46.144475+00:00"
+}

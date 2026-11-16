@@ -15,6 +15,44 @@ anterior é promovido automaticamente para HOME-R1.
 - [Contrato](plans/home_evolution/contracts.md).
 - [ADR de visualização](plans/home_evolution/adr-result-view-state.md).
 
+## Retrato atual — 2026-11-16
+
+Produto `3d95aad8` enviado em `feature/v0.3.4`, com a faixa Servidor separada.
+Matriz: **71 PASS / 2 NOT_RUN (H02/I01)**. O gate **M3 não foi aprovado**;
+a Home clássica continua padrão e o objetivo completo ainda não é declarado
+concluído.
+
+O [pacote final](plans/home_evolution/evidence/pr10-package-server-final/qualification.json)
+passou12/12 focais instalados e Twine, com699 payloads/7 assets, três origens
+conferidas e2.116 inputs imutáveis. Wheel0.3.4: `c1c45e2a…`, bundleDcu4bArB.
+Não houve novo build para contornar a ausência de Twine na venv; foi usada a
+ferramenta já instalada nos mesmos artefatos.
+
+O [HTTP real](plans/home_evolution/evidence/pr12-http-performance/qualification.json)
+mediu20 amostras quentes por conjunto, após aquecimento: p95 de281,28/227,64/
+289,28/450,32ms para1/10/100 workers e100 workers com1.000 atividades/100.000
+eventos. Os quatro atingiram a meta local de500ms, com46 SQL/GET e0 writes.
+O [experimento de serviço PR08](plans/home_evolution/evidence/pr08-performance-final/qualification.json)
+permanece separado, incluindo seu p95 grande de
+673,91ms; condições distintas não permitem subtrair overhead ou prometer SLO
+de produção. As medições antigas permanecem no histórico com seu próprio corte.
+
+As [capturas para avaliação humana](plans/home_evolution/evidence/pr11-human-preview/qualification.json)
+e o [focal manual DOM/HTTP](plans/home_evolution/evidence/pr09-screen-reader-attempt/manual-qualification.json)
+estão preparados e qualificados nos limites indicados. Não houve participante
+avaliando compreensão em10s nem fala de leitor de tela. H02 continua NOT_RUN;
+I01 ainda requer observar a continuidade dos processos vivos ao alternar Home.
+
+A [proposta de campanha](plans/home_evolution/evidence/pr06-campaign-proposal/PROPOSTA.md)
+está vinculada ao candidato `6181fd00…` e ao pacote final. Mantém o mesmo UUID,
+diretório, IDs e orçamento observado de200 mil tokens/no máximo2 chamadas.
+Não há consentimento, reserva, diretório ou execução dessa campanha; a recusa
+antes de efeitos foi comprovada. A preparação não será apresentada como
+inferência real. Restam HOME-033 consentida, H02/I01, compreensão humana e gate M3.
+
+Os registros seguintes preservam o estado histórico de cada marco, inclusive
+pendências posteriormente resolvidas. Este retrato é o estado vigente.
+
 ## 2026-11-15 — PR-00 em andamento
 
 Working tree inicial limpa em `feature/v0.3.3`, HEAD `7e0cec1e`. Main recuperada

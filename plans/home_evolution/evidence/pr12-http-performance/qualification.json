@@ -1,0 +1,224 @@
+{
+  "status": "PASS_LOCAL_REAL_HTTP_ENDPOINT_P95_ALL_FOUR_DATASETS",
+  "at": "2026-11-16T16:53:06.099835+00:00",
+  "source_head": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+  "input_sha256": {
+    "scripts/measure_home_evolution.py": "afade961208cabfdd7412b5e302252ebd38abcbdfccb34cf30ae240d484ec764",
+    "pyproject.toml": "5362ed3940c936490e8ade4ca196d83a8f89bb7c11ad0b081ea995665b02d8fe",
+    "uv.lock": "9ec7868aa2f5976c100a37d72179420b54077a7294b3cce64e81001234abaeca",
+    "src/okto_nexus/domain/home.py": "3d07b528a9e1b7afb12cb52b83d9862d01385fecf7d4322aeefb192a3fb6b2b0",
+    "src/okto_nexus/application/home.py": "2fa6a1f64d00b8e19e6f7a9fe87af7c18e7ab18302d7ea0e7cc807ba37cddcf0",
+    "src/okto_nexus/application/home_ports.py": "f78377e4ff66488184382898fbf3bf6076b2afde0e470f7f5f2a587f26abe3d6",
+    "src/okto_nexus/adapters/inbound/http/home.py": "235bc87a160650f73f3e46ec576c2421a068ce7ce7de5a2faa9a54a31b529de8",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "1f589cb5f592c6bdeca73b202f9f31918685aca92dc0dae07be66f68ef0c886e",
+    "src/okto_nexus/adapters/outbound/sqlite/attention.py": "f04de2cd2db9e7e830d8738133157e08e9c8c67bae19a9708d2e39e41e394e88",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_native.py": "6af1bd541bee55bf2f01e550b415e474c3c10d6081814fb8a4d77fc409e5b19e",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py": "9cf5d2e3bd5f326a6b045aaf8679fbb8e3cf0c5dcb8a056f48c7bdc5cbaa3d70",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py": "495b701847e2e0546267b03cdfd503d0d1290fe2449502fc3adcfaaf2086dab5",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_results.py": "63b1644169950f7f32b0c808fe16daa941df000d2fc589c2c8dbf68942b6c6f2",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py": "36b0961d1178bf3c4a0b1c667beda475f8229039ed23c68fc2a24010db208358",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_external.py": "7a87c16c7f82a5d934528ff382234f3d8c4cd1515cb3e2e46e7487959f445962"
+  },
+  "runner_sha256": "a583ea3ade3c86217253f4f85ed6896edf1d5911b36a5801d9bac3facecffa84",
+  "execution": {
+    "tool_ref": "ed5e82",
+    "session": 64545,
+    "exit_code": 0,
+    "benchmark_runs": 1,
+    "requests_per_dataset": 21,
+    "warm_samples_per_dataset": 20,
+    "discarded_http_warmups_per_dataset": 1
+  },
+  "metric_definition": "perf_counter around httpx.Client.get actual loopback TCP until full response body is received; client JSON parsing/validation and separate process-control statistics are outside the timer. Keep-alive reused after one real warmup.",
+  "preparation": {
+    "uvicorn_lifespan": "off",
+    "discovery": "off",
+    "read_only_fixture_guard": true,
+    "auth_patched": false,
+    "clock_patched": false,
+    "browser": false,
+    "sse": false,
+    "personal_account_or_credentials": false,
+    "provider_calls": 0,
+    "native_harness_executions": 0
+  },
+  "runtime_blob_snapshot": {
+    "qualified_package_sha256": "629985a6e8d40149f6d89e47f0633afdbc6e133f9886a0d8195a9a7ab6c18b42",
+    "wheel_sha256": "c1c45e2a3dc8b9f0bed348ddc2d09ab4d0afccbaae2b8c19253fdcaf4980b759",
+    "nexus_source_payloads_equal_frozen_wheel": 699,
+    "sorted_payload_sha256": "17ded9df3b8c0fd521dc82e018ed9d85fcc84a7a4c5fd0367dcd57951a5c6487",
+    "measurement_source_hashes_unchanged": true,
+    "code_origin": "source checkout src/okto_nexus, verified for all four child servers"
+  },
+  "environment": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "python": "3.13.1",
+    "sqlite": "3.45.3",
+    "cpu_logical": 16,
+    "ram_bytes": 34073251840,
+    "dependencies": {
+      "uvicorn": "0.49.0",
+      "httpx": "0.28.1",
+      "fastapi": "0.137.2",
+      "starlette": "1.3.1",
+      "anyio": "4.14.0"
+    }
+  },
+  "p95_target_ms": 500,
+  "p95_method": "Nearest rank, ceil(0.95*20):19th ordered warm sample; median averages10th/11th.",
+  "results": [
+    {
+      "dataset": {
+        "agents": 2,
+        "handoffs": 10,
+        "events": 100,
+        "sessions": 1,
+        "execution_operations": 0,
+        "worker_agents": 1
+      },
+      "http_p50_ms": 244.4788499851711,
+      "http_p95_ms": 281.2836999655701,
+      "local_endpoint_target_met": true,
+      "service_p95_from_separate_experiment_ms": 421.1246999911964,
+      "downloaded_body_max_bytes": 10006,
+      "decoded_body_max_bytes": 10006,
+      "generated_at_range": [
+        "2026-11-16T16:42:10.315048Z",
+        "2026-11-16T16:42:15.215942Z"
+      ],
+      "observer": {
+        "requests": 21,
+        "declared_read_uow_each": 1,
+        "sql_each": 46,
+        "writes": 0,
+        "denied_mutations": 0
+      },
+      "cleanup": {
+        "normal_stop_ack": true,
+        "pid": 45664,
+        "forced": false,
+        "exit_code": 0,
+        "physically_exited": true
+      }
+    },
+    {
+      "dataset": {
+        "agents": 11,
+        "handoffs": 10,
+        "events": 100,
+        "sessions": 10,
+        "execution_operations": 0,
+        "worker_agents": 10
+      },
+      "http_p50_ms": 217.50129997963086,
+      "http_p95_ms": 227.63889998896047,
+      "local_endpoint_target_met": true,
+      "service_p95_from_separate_experiment_ms": 325.23420004872605,
+      "downloaded_body_max_bytes": 11117,
+      "decoded_body_max_bytes": 11117,
+      "generated_at_range": [
+        "2026-11-16T16:42:19.783135Z",
+        "2026-11-16T16:42:24.095349Z"
+      ],
+      "observer": {
+        "requests": 21,
+        "declared_read_uow_each": 1,
+        "sql_each": 46,
+        "writes": 0,
+        "denied_mutations": 0
+      },
+      "cleanup": {
+        "normal_stop_ack": true,
+        "pid": 50012,
+        "forced": false,
+        "exit_code": 0,
+        "physically_exited": true
+      }
+    },
+    {
+      "dataset": {
+        "agents": 101,
+        "handoffs": 10,
+        "events": 100,
+        "sessions": 100,
+        "execution_operations": 0,
+        "worker_agents": 100
+      },
+      "http_p50_ms": 180.60115003027022,
+      "http_p95_ms": 289.2768000019714,
+      "local_endpoint_target_met": true,
+      "service_p95_from_separate_experiment_ms": 327.13890000013635,
+      "downloaded_body_max_bytes": 11118,
+      "decoded_body_max_bytes": 11118,
+      "generated_at_range": [
+        "2026-11-16T16:42:28.061531Z",
+        "2026-11-16T16:42:31.802615Z"
+      ],
+      "observer": {
+        "requests": 21,
+        "declared_read_uow_each": 1,
+        "sql_each": 46,
+        "writes": 0,
+        "denied_mutations": 0
+      },
+      "cleanup": {
+        "normal_stop_ack": true,
+        "pid": 50524,
+        "forced": false,
+        "exit_code": 0,
+        "physically_exited": true
+      }
+    },
+    {
+      "dataset": {
+        "agents": 101,
+        "handoffs": 1000,
+        "events": 100000,
+        "sessions": 100,
+        "execution_operations": 0,
+        "worker_agents": 100
+      },
+      "http_p50_ms": 401.47265000268817,
+      "http_p95_ms": 450.31759998528287,
+      "local_endpoint_target_met": true,
+      "service_p95_from_separate_experiment_ms": 673.9100000122562,
+      "downloaded_body_max_bytes": 11477,
+      "decoded_body_max_bytes": 11477,
+      "generated_at_range": [
+        "2026-11-16T16:42:37.378735Z",
+        "2026-11-16T16:42:45.178605Z"
+      ],
+      "observer": {
+        "requests": 21,
+        "declared_read_uow_each": 1,
+        "sql_each": 46,
+        "writes": 0,
+        "denied_mutations": 0
+      },
+      "cleanup": {
+        "normal_stop_ack": true,
+        "pid": 53256,
+        "forced": false,
+        "exit_code": 0,
+        "physically_exited": true
+      }
+    }
+  ],
+  "all_shared_factory_uses_observed": true,
+  "all84requests_one_read_uow_46sql_zero_changes": true,
+  "owned_servers": 4,
+  "all_owned_servers_normal_physical_exit0": true,
+  "forced_stops": 0,
+  "own_temp_data_removed_after_child_joins": true,
+  "ruff": {
+    "tool_ref": "589588",
+    "exit_code": 0
+  },
+  "limitations": [
+    "These are observed local endpoint results on this isolated fixture; they do not constitute a production SLO, cold-cache benchmark, browser/render/useful-view measurement or live-native-workload test.",
+    "The service-only20-sample experiment is preserved separately, including its large-case p95673.91ms miss. This HTTP experiment used fresh dedicated child processes, explicit discovery/lifespan OFF, different timing/observation paths and a later environment/cache state. They are not paired overhead samples; no claim that HTTP is intrinsically faster than service.read is made.",
+    "The script records actual generated_at/event_cursor/counts; clocks, auth rules, data fields and endpoint responses were not patched. All request traces use the app shared connection factory; no model/provider or personal account was used.",
+    "A tiny read-only fixture middleware blocks non-read methods and adds some overhead. Background machine load outside Root coordination was not controlled.",
+    "All datasets have synthetic fresh open handoffs and zero native execution operations; no implication for large transcript/permission/active-runtime datasets."
+  ]
+}

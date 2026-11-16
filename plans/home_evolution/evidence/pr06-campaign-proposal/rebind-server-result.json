@@ -1,0 +1,28 @@
+{
+  "ancestor_candidate_sha256": "cbb2a45ba9cc99833b5af881abc8415c4c7d355c436d6e05e8cfab4288fdd6af",
+  "ancestor_chain_sha256": [
+    "5a8c72d04e9e4adc426173dd14971ef28c6dec599af2bfea42b5deaf61012c40",
+    "cbb2a45ba9cc99833b5af881abc8415c4c7d355c436d6e05e8cfab4288fdd6af"
+  ],
+  "authorization_exists": false,
+  "binding_function": "Existing qualified package_snapshot; fixed wheel constant changed only in helper process memory, original source files unchanged.",
+  "campaign_root_exists": false,
+  "candidate_sha256": "6181fd0029f1eb023d226f168f6d00b60baad2cfe92e12b3850592a36fecc189",
+  "changed_top_level_keys": [
+    "package",
+    "technical_rebind"
+  ],
+  "driver_sha256": "485de9675df7226b65e95679dd64b574295061623990cd8f2355ccbb0cff9ccd",
+  "immutable_scope_equal": true,
+  "installed_payload_count": 883,
+  "native_executable_bytes_verified": true,
+  "native_executable_executions": 0,
+  "original_runtime_pins_equal": true,
+  "provider_calls": 0,
+  "python_images_equal": true,
+  "qualification_sha256": "629985a6e8d40149f6d89e47f0633afdbc6e133f9886a0d8195a9a7ab6c18b42",
+  "reservations": 0,
+  "service_actions": 0,
+  "status": "INERT_SERVER_FINAL_REBIND_COMPLETE",
+  "wheel_sha256": "c1c45e2a3dc8b9f0bed348ddc2d09ab4d0afccbaae2b8c19253fdcaf4980b759"
+}

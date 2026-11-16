@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "status": "PASS_INSTALLED_FINAL_SERVER_ATTENTION_CUT",
+  "at": "2026-11-16T16:08:29.842166+00:00",
+  "source_head": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+  "build_manifest_head": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+  "artifacts": {
+    "okto_nexus-0.3.4-py3-none-any.whl": "c1c45e2a3dc8b9f0bed348ddc2d09ab4d0afccbaae2b8c19253fdcaf4980b759",
+    "okto_nexus-0.3.4.tar.gz": "ea50bc0656717ee1826df0762f748af58ec53eab389fcb3198d50ff8b20e40c4"
+  },
+  "wheel_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-server-final-el33h4ik\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+  "sdist_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-server-final-el33h4ik\\dist\\okto_nexus-0.3.4.tar.gz",
+  "candidate_python": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+    "sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+    "version": "3.13.1",
+    "isolated_test_flag": "-I",
+    "independent_cwd": true
+  },
+  "tests": {
+    "passed": 12,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "case_ids": [
+      "tests.home_evolution.test_home_server_attention::test_server_lane_separate_from_all_project_counters_and_filters",
+      "tests.home_evolution.test_home_server_attention::test_both_attention_lanes_page_without_crossing_scope_server_or_revision",
+      "tests.home_evolution.test_home_server_attention::test_http_server_lane_scope_echo_and_closed_read_only_routes",
+      "tests.home_evolution.test_home_server_attention::test_disabled_or_failed_canonical_source_is_not_false_empty_server_lane",
+      "tests.home_evolution.test_home_server_attention::test_existing_migrated_sources_have_no_fabricated_server_incident",
+      "tests.home_evolution.test_home_server_attention::test_global_preference_reuses_canonical_cas_and_keeps_project_sources_unchanged",
+      "tests.home_evolution.test_home_server_attention::test_server_projection_failure_keeps_other_sections_honest_and_authorization_denial_fatal",
+      "tests.home_evolution.test_home_server_attention::test_home_hint_never_prunes_undeclared_or_unbound_canonical_global_source[None]",
+      "tests.home_evolution.test_home_server_attention::test_home_hint_never_prunes_undeclared_or_unbound_canonical_global_source[False]",
+      "tests.home_evolution.test_home_server_attention::test_workspace_bound_sources_keep_pushdown_and_classic_attention_is_unchanged",
+      "tests.home_evolution.test_home_server_attention::test_logical_handoff_sender_filter_preserves_receivers_native_question[input]",
+      "tests.home_evolution.test_home_package::test_packaged_operational_home_serves_assets_and_compatible_contract"
+    ],
+    "junit_case_seconds": 47.715,
+    "raw_xml_sha256": "08f46a784a73b436a79430af03b863baeab94af7cb3e36909e35c13c3edd019f",
+    "public_xml_allowlist": "testcase class/name/time and aggregate counts only"
+  },
+  "build": {
+    "fresh_typescript_vite": true,
+    "static_bundle": "index-Dcu4bArB.js",
+    "twine_wheel": "PASSED",
+    "twine_sdist": "PASSED",
+    "system_twine_existing": true,
+    "system_twine_sha256": "0ef0c286c910cfb67ac6b3f716563117ba1c38a3ac841079a1179970c9cab0a0",
+    "build_executions": 1,
+    "generic_helper_manifest_scope_overridden": "Generic development-build wording is retained in original manifest; complete prebuild/posttest input freeze independently establishes this qualified source cut."
+  },
+  "verification": {
+    "three_site_packages_origins_and_wheel_payloads_compared": true,
+    "nexus_payloads_equal_checkout": 699,
+    "static_resources_equal": 7,
+    "full_pipeline_input_files": 2116,
+    "installed_test_input_files": 2116,
+    "changed_inputs": [],
+    "install": "Only Nexus --no-index --force-reinstall --no-deps; existing own disposable prefix"
+  },
+  "runner_pins": {
+    "home-r1-server-package-runner.py": "e375550cd05082af223b3d48955eee4d59a7fb61045e32c328a3dd5dde3523e5",
+    "home-r1-server-package-resume.py": "d3cf710d44aa92956a4a099213f0f98ba1032a8ef546e3e985d0416302b9fd16"
+  },
+  "tool_recovery": {
+    "antecedent_terminal_tool": "f49384",
+    "antecedent_step": 1,
+    "antecedent_exit_code": 1,
+    "cause": "No module named twine in development venv",
+    "twine_evidence_tool": "cdefae",
+    "final_terminal_tool": "6e4453",
+    "final_exit_code": 0,
+    "same_artifacts_and_original_prebuild_input_snapshot": true
+  },
+  "boundary": {
+    "provider_calls": 0,
+    "personal_authentication_actions": 0,
+    "native_harness_launches": 0,
+    "production_service_actions": 0,
+    "os_session_events": 0,
+    "test_fixtures": "Disposable migrated SQLite and in-process ASGI, canonical synthetic native input ingress, no global producer invented"
+  },
+  "limitations": [
+    "These12 installed SQLite/ASGI/package cases do not replace built-browser acceptance, real provider HOME033 or a production performance SLO.",
+    "Previous17/33/4/1 installed cuts are retained separately and were not rerun or added to the12 total.",
+    "Core and remote Connector remain their already qualified dependencies; Connector is a test-only package, not a Nexus runtime dependency.",
+    "The initial Twine phase failure is retained and was resolved using an existing system tool, without rebuilding or installing a tool."
+  ]
+}

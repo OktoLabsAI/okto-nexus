@@ -1,0 +1,18 @@
+{
+  "status": "PASS_REFUSED_BEFORE_PRODUCT_IMPORT_OR_EFFECTS",
+  "candidate_sha256": "6181fd0029f1eb023d226f168f6d00b60baad2cfe92e12b3850592a36fecc189",
+  "driver_exit_code": 1,
+  "driver_result": {
+    "completed": false,
+    "error_type": "ValueError",
+    "code": "NEW_PAID_CONSENT_REQUIRED"
+  },
+  "product_import_attempts": [],
+  "effect_attempts": [],
+  "product_modules_loaded": false,
+  "campaign_root_exists": false,
+  "authorization_exists": false,
+  "reservations": 0,
+  "provider_calls": 0,
+  "method": "Actual driver.py __main__ via runpy with original CLI argv and an audit hook that would fail any product import, process/directory effect or provider-home read before consent. No product/driver function replaced."
+}

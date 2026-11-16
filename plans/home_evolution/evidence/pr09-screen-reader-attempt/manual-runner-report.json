@@ -1,0 +1,35 @@
+{
+  "kind": "FINAL",
+  "stopped": true,
+  "stop_reason": "duration_elapsed",
+  "elapsed_seconds": 75.274,
+  "pulses": [
+    {
+      "number": 1,
+      "title": "Screen reader probe 1",
+      "handoff_id": "at-probe-handoff-a4735fcc80e7-1",
+      "task_id": "at-probe-task-a4735fcc80e7-1",
+      "workspace_id": "home-alpha",
+      "event_type": "handoff.created",
+      "event_id": 1,
+      "created_at": "2026-11-16T16:48:39.430362Z",
+      "elapsed_seconds": 30.021
+    },
+    {
+      "number": 2,
+      "title": "Screen reader probe 2",
+      "handoff_id": "at-probe-handoff-a4735fcc80e7-2",
+      "task_id": "at-probe-task-a4735fcc80e7-2",
+      "workspace_id": "home-alpha",
+      "event_type": "handoff.created",
+      "event_id": 2,
+      "created_at": "2026-11-16T16:48:59.421566Z",
+      "elapsed_seconds": 50.008
+    }
+  ],
+  "pulse_errors": [],
+  "runtime_started": false,
+  "narrator_started": false,
+  "provider_calls": 0,
+  "fixture_home_preserved": true
+}

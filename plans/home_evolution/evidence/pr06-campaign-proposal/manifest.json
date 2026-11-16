@@ -1,6 +1,43 @@
 {
-  "scope": "Explicit inert proposal, original qualification and final UI rebind; no authorization/private/raw database/binary",
+  "scope": "Inert Server-final A08 candidate, same namespace/policy/accounting; antecedents preserved; no authorization or runtime data",
+  "current_candidate": {
+    "path": "candidate-server-final.json",
+    "sha256": "6181fd0029f1eb023d226f168f6d00b60baad2cfe92e12b3850592a36fecc189"
+  },
+  "antecedent_manifest_files": [
+    "manifest-before-a08.json",
+    "manifest-before-server-final.json"
+  ],
+  "antecedent_document_aliases": {
+    "PROPOSTA.md": "PROPOSTA-before-server-final.md",
+    "INDEX.md": "INDEX-before-server-final.md"
+  },
   "files": [
+    {
+      "path": "INDEX-before-server-final.md",
+      "sha256": "4a0a87afb321ac12822c6f97f11f931f28d99fb9249eaff1b48815a1d29b1fae",
+      "bytes": 1654
+    },
+    {
+      "path": "INDEX.md",
+      "sha256": "761251f7513609026708a98e2198a2f9dc25d0f8c8f26c8fc11bd686bca5cdfd",
+      "bytes": 1561
+    },
+    {
+      "path": "PROPOSTA-before-server-final.md",
+      "sha256": "0545c993128e0a1ced7fb16a3d5324e4098db039ac12d995c55b45ca775488d7",
+      "bytes": 3242
+    },
+    {
+      "path": "PROPOSTA.md",
+      "sha256": "4f2af4fc072eab5839693a13ba0404d8b8c0101ffccdb270de29d20339dd5ffe",
+      "bytes": 3804
+    },
+    {
+      "path": "README.md",
+      "sha256": "a5c3291e04f21fdd4ab0ca6fbb3c8335922935ee02a8897b04728c2b58ab592a",
+      "bytes": 11478
+    },
     {
       "path": "antecedent-freeze-22.json",
       "sha256": "f407aa63d7af8a750306db448d68d1c297a44f8bad686c709ec61c874da10045",
@@ -25,6 +62,11 @@
       "path": "candidate-projection.json",
       "sha256": "9b5beb0b7c72a7c67fc1e39a062a1d3fd1f6a463ae5f351f6a61b967b6ba96ac",
       "bytes": 2748
+    },
+    {
+      "path": "candidate-server-final.json",
+      "sha256": "6181fd0029f1eb023d226f168f6d00b60baad2cfe92e12b3850592a36fecc189",
+      "bytes": 250640
     },
     {
       "path": "candidate.json",
@@ -57,6 +99,16 @@
       "bytes": 551
     },
     {
+      "path": "manifest-before-a08.json",
+      "sha256": "c622dded58034902edecc245174fc577f7116cbfbedfb0c32de3acd667331fcd",
+      "bytes": 4572
+    },
+    {
+      "path": "manifest-before-server-final.json",
+      "sha256": "aad6e445229403a98f88bb38e96d25275db2819b1264db6409c69a2cded0aefd",
+      "bytes": 4789
+    },
+    {
       "path": "own_process.py",
       "sha256": "90e1c3869c877b61553af4f86f20cc25282a91143f0a68b998911d3a92bff588",
       "bytes": 2636
@@ -72,19 +124,14 @@
       "bytes": 2814
     },
     {
-      "path": "PROPOSTA.md",
-      "sha256": "0545c993128e0a1ced7fb16a3d5324e4098db039ac12d995c55b45ca775488d7",
-      "bytes": 3242
+      "path": "peer-server-final.json",
+      "sha256": "a1c23c21a71ce74ed52aa96dc16fb3c461fff9fa585cb475ed80bad93cad950d",
+      "bytes": 2257
     },
     {
       "path": "qualification.json",
       "sha256": "5cbf6ccc20107a58f559e7e9ab8b6852000564a34e059ef58e01ac4a04169a65",
       "bytes": 4469
-    },
-    {
-      "path": "README.md",
-      "sha256": "a5c3291e04f21fdd4ab0ca6fbb3c8335922935ee02a8897b04728c2b58ab592a",
-      "bytes": 11478
     },
     {
       "path": "rebind-qualification.json",
@@ -97,9 +144,34 @@
       "bytes": 694
     },
     {
+      "path": "rebind-server-qualification.json",
+      "sha256": "e11f5c03b664da4c4b04671761f4d7b86008fdbc45aadfddfec86ac94a10d673",
+      "bytes": 3230
+    },
+    {
+      "path": "rebind-server-result.json",
+      "sha256": "6c99343a7f5d287d94c3d63d201d85d36279d9e656bbb30b64aa96420d89bcf8",
+      "bytes": 1266
+    },
+    {
       "path": "rebind_final_ui.py",
       "sha256": "cfea7853f203d10e909c2925b10b38d5e0c40500f7f71adfd239c5304199a09a",
       "bytes": 5704
+    },
+    {
+      "path": "rebind_server_final.py",
+      "sha256": "9b1c4fbdf3e2d3bfb00cc5727a43130aadb45175962c0d1fe36e6ec4585d64da",
+      "bytes": 4426
+    },
+    {
+      "path": "refusal-server-result.json",
+      "sha256": "4724f211dc71364cacfe571139eb9ef1ec45024c11d0d073235b59ee38dbc53b",
+      "bytes": 750
+    },
+    {
+      "path": "refusal_server_proof.py",
+      "sha256": "23ac5649e9dc86dc9648e555453841532a77a307c5b96dd4874c7093e2eeddba",
+      "bytes": 2637
     },
     {
       "path": "review.json",
@@ -142,10 +214,14 @@
       "bytes": 1901
     },
     {
+      "path": "workflow-server-final.json",
+      "sha256": "8c6c98161e4669a37aec813aeb8f62429c19a33a69dade731380161df0b2f8a3",
+      "bytes": 2725
+    },
+    {
       "path": "workflow.json",
       "sha256": "3fd9d0a608a89cc25d04bb5966be8875bec288a10f8c2081376676d788b8d405",
       "bytes": 1700
     }
-  ],
-  "technical_status": "A08_REQUALIFICATION_PENDING_NO_EXECUTION"
+  ]
 }

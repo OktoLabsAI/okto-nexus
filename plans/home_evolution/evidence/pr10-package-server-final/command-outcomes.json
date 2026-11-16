@@ -1,0 +1,85 @@
+{
+  "initial": [
+    {
+      "command": [
+        "rtk",
+        "proxy",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\build_validation_artifacts.py",
+        "--output",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-server-final-el33h4ik\\dist"
+      ],
+      "exit_code": 0,
+      "log_sha256": "4a8630d11d79c0c0bf5baa333b47a25777b15920f63fcd4d2283e6a0b9ad31e0"
+    },
+    {
+      "command": [
+        "rtk",
+        "proxy",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+        "-m",
+        "twine",
+        "check",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-server-final-el33h4ik\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-server-final-el33h4ik\\dist\\okto_nexus-0.3.4.tar.gz"
+      ],
+      "exit_code": 1,
+      "log_sha256": "fde4c1212f760715f2f6e6cec79018738ae6f516cd6b36dcb9ac1ca333cc45f6"
+    }
+  ],
+  "same_artifact_resume": [
+    {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\Scripts\\twine.exe",
+        "check",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-server-final-el33h4ik\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-server-final-el33h4ik\\dist\\okto_nexus-0.3.4.tar.gz"
+      ],
+      "exit_code": 0,
+      "log_sha256": "6f67b22a5083cb8a4cdfcdfe381585bc27ace22c1170ccc02ff8b04512fdd15d"
+    },
+    {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pip",
+        "install",
+        "--no-index",
+        "--force-reinstall",
+        "--no-deps",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-server-final-el33h4ik\\dist\\okto_nexus-0.3.4-py3-none-any.whl"
+      ],
+      "exit_code": 0,
+      "log_sha256": "741f0e90e3e71e7bbfd94af3a1af4f99ef52ea43e3b331131243f700cc6055e7"
+    },
+    {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+        "test",
+        "--wheel",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-server-final-el33h4ik\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+        "--tests",
+        "tests/home_evolution/test_home_server_attention.py",
+        "tests/home_evolution/test_home_package.py",
+        "--output",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-server-final-el33h4ik\\installed"
+      ],
+      "exit_code": 0,
+      "log_sha256": "349bf0bf0c6fedbb687f3f7f9399f5014eb0a0e29c4a826ed999abf87ae6ea56"
+    }
+  ],
+  "build_repeated": false,
+  "new_tool_installed": false,
+  "reason": "Development venv had no Twine module; resumed same wheel/sdist with the existing system Twine executable."
+}

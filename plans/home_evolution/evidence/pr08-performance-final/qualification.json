@@ -1,0 +1,577 @@
+{
+  "execution_status": "PASS",
+  "latency_target_status": "NOT_MET_FOR_LARGE_CASE",
+  "recorded_at": "2026-11-16T15:49:29.218519+00:00",
+  "source_head": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+  "initial_clean_worktree_tool_ref": "8ad01c",
+  "initial_head_tool_ref": "c9e32e",
+  "verified_source_blobs": [
+    {
+      "path": "scripts/measure_home_evolution.py",
+      "git_blob": "8c8ddb6e2bbdc7424bfaa4da96e50b1152fed288",
+      "checkout_sha256": "afade961208cabfdd7412b5e302252ebd38abcbdfccb34cf30ae240d484ec764",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "pyproject.toml",
+      "git_blob": "92fe61833a9b62f3c34692c627c8e6956287afe9",
+      "checkout_sha256": "5362ed3940c936490e8ade4ca196d83a8f89bb7c11ad0b081ea995665b02d8fe",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "uv.lock",
+      "git_blob": "ed0cbac6ba0f01e51bce1c1beb7bbfba9b6df463",
+      "checkout_sha256": "9ec7868aa2f5976c100a37d72179420b54077a7294b3cce64e81001234abaeca",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "src/okto_nexus/application/home.py",
+      "git_blob": "8f332588c1b0c1cb47c7b0772349c27cb1176722",
+      "checkout_sha256": "2fa6a1f64d00b8e19e6f7a9fe87af7c18e7ab18302d7ea0e7cc807ba37cddcf0",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "src/okto_nexus/domain/home.py",
+      "git_blob": "1a9fe5d2db161e5e31ba0176f47e9ed4b97c3989",
+      "checkout_sha256": "3d07b528a9e1b7afb12cb52b83d9862d01385fecf7d4322aeefb192a3fb6b2b0",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "git_blob": "c3027b83144a1690d53b526ab3c7f083c8529137",
+      "checkout_sha256": "1f589cb5f592c6bdeca73b202f9f31918685aca92dc0dae07be66f68ef0c886e",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/http/home.py",
+      "git_blob": "e6e39739925663d49868e34b4ea485a7f01cfd87",
+      "checkout_sha256": "235bc87a160650f73f3e46ec576c2421a068ce7ce7de5a2faa9a54a31b529de8",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "src/okto_nexus/application/home_ports.py",
+      "git_blob": "4507e18da802a6b9844ccab49f3449d36eb1f342",
+      "checkout_sha256": "f78377e4ff66488184382898fbf3bf6076b2afde0e470f7f5f2a587f26abe3d6",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/attention.py",
+      "git_blob": "19583f53272d47746c2f0eb4e8318cdd383a5640",
+      "checkout_sha256": "f04de2cd2db9e7e830d8738133157e08e9c8c67bae19a9708d2e39e41e394e88",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/attention_native.py",
+      "git_blob": "ac1732f402752619f8652ae31e5c41941f7338aa",
+      "checkout_sha256": "6af1bd541bee55bf2f01e550b415e474c3c10d6081814fb8a4d77fc409e5b19e",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py",
+      "git_blob": "f9c0c66137fb1a34f812b67b1e85869103fc4b96",
+      "checkout_sha256": "9cf5d2e3bd5f326a6b045aaf8679fbb8e3cf0c5dcb8a056f48c7bdc5cbaa3d70",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py",
+      "git_blob": "ba7d5b96a882aaf2c369f006fe888de2387d8c8b",
+      "checkout_sha256": "495b701847e2e0546267b03cdfd503d0d1290fe2449502fc3adcfaaf2086dab5",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/attention_results.py",
+      "git_blob": "646b6be9a829d5eddbb639e283f151cd37eac185",
+      "checkout_sha256": "63b1644169950f7f32b0c808fe16daa941df000d2fc589c2c8dbf68942b6c6f2",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py",
+      "git_blob": "43e4cf83ae2eb14c88b55ca1c51bf9a1fe71dd7e",
+      "checkout_sha256": "36b0961d1178bf3c4a0b1c667beda475f8229039ed23c68fc2a24010db208358",
+      "matches_frozen_head": true
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/attention_external.py",
+      "git_blob": "ed13e45e8e923769aa3123f8910a7c0d5d0af49c",
+      "checkout_sha256": "7a87c16c7f82a5d934528ff382234f3d8c4cd1515cb3e2e46e7487959f445962",
+      "matches_frozen_head": true
+    }
+  ],
+  "measurement_command": "rtk proxy .venv/Scripts/python.exe -X utf8 scripts/measure_home_evolution.py --output <own Temp JSON> --samples 20 --ram-bytes 34073251840 --environment-note <recorded coordination/cache limits>",
+  "measurement_terminal": {
+    "tool_ref": "2d54bc",
+    "exit_code": 0,
+    "session": 99084,
+    "run_once": true
+  },
+  "profile_terminal": {
+    "tool_ref": "84da0d",
+    "exit_code": 0,
+    "session": 5309,
+    "service_reads": 1
+  },
+  "p95_target_ms": 500,
+  "results": [
+    {
+      "worker_agents": 1,
+      "activities": 10,
+      "events": 100,
+      "p50_ms": 338.8184499926865,
+      "p95_ms": 421.1246999911964,
+      "meets_local_p95_target": true,
+      "sql_statements_max": 46,
+      "payload_bytes_max": 9987,
+      "pagination": {
+        "pages": 1,
+        "distinct_activities": 10
+      }
+    },
+    {
+      "worker_agents": 10,
+      "activities": 10,
+      "events": 100,
+      "p50_ms": 312.3972999746911,
+      "p95_ms": 325.23420004872605,
+      "meets_local_p95_target": true,
+      "sql_statements_max": 46,
+      "payload_bytes_max": 11098,
+      "pagination": {
+        "pages": 1,
+        "distinct_activities": 10
+      }
+    },
+    {
+      "worker_agents": 100,
+      "activities": 10,
+      "events": 100,
+      "p50_ms": 306.5321499889251,
+      "p95_ms": 327.13890000013635,
+      "meets_local_p95_target": true,
+      "sql_statements_max": 46,
+      "payload_bytes_max": 11099,
+      "pagination": {
+        "pages": 1,
+        "distinct_activities": 10
+      }
+    },
+    {
+      "worker_agents": 100,
+      "activities": 1000,
+      "events": 100000,
+      "p50_ms": 593.6788500112016,
+      "p95_ms": 673.9100000122562,
+      "meets_local_p95_target": false,
+      "sql_statements_max": 46,
+      "payload_bytes_max": 11458,
+      "pagination": {
+        "pages": 11,
+        "distinct_activities": 1000
+      }
+    }
+  ],
+  "explain_summary": [
+    {
+      "dataset": {
+        "agents": 2,
+        "handoffs": 10,
+        "events": 100,
+        "sessions": 1,
+        "execution_operations": 0,
+        "worker_agents": 1
+      },
+      "plans": 45,
+      "available": 45,
+      "unavailable": 0,
+      "static_correlated_nodes": 51
+    },
+    {
+      "dataset": {
+        "agents": 11,
+        "handoffs": 10,
+        "events": 100,
+        "sessions": 10,
+        "execution_operations": 0,
+        "worker_agents": 10
+      },
+      "plans": 45,
+      "available": 45,
+      "unavailable": 0,
+      "static_correlated_nodes": 51
+    },
+    {
+      "dataset": {
+        "agents": 101,
+        "handoffs": 10,
+        "events": 100,
+        "sessions": 100,
+        "execution_operations": 0,
+        "worker_agents": 100
+      },
+      "plans": 45,
+      "available": 45,
+      "unavailable": 0,
+      "static_correlated_nodes": 51
+    },
+    {
+      "dataset": {
+        "agents": 101,
+        "handoffs": 1000,
+        "events": 100000,
+        "sessions": 100,
+        "execution_operations": 0,
+        "worker_agents": 100
+      },
+      "plans": 45,
+      "available": 45,
+      "unavailable": 0,
+      "static_correlated_nodes": 51
+    }
+  ],
+  "largest_plan": {
+    "sql_sha256": "f42ed4f53d8c2be2cf3e154e04bfc24f657e6d8c7e4777dcb494b44166e5fbea",
+    "nodes": 576,
+    "selected_rows": [
+      [
+        79,
+        20,
+        0,
+        "CORRELATED SCALAR SUBQUERY 127"
+      ],
+      [
+        127,
+        118,
+        0,
+        "CORRELATED SCALAR SUBQUERY 129"
+      ],
+      [
+        243,
+        177,
+        0,
+        "CORRELATED SCALAR SUBQUERY 123"
+      ],
+      [
+        381,
+        177,
+        0,
+        "CORRELATED SCALAR SUBQUERY 121"
+      ],
+      [
+        437,
+        177,
+        0,
+        "CORRELATED SCALAR SUBQUERY 122"
+      ],
+      [
+        777,
+        14,
+        0,
+        "CORRELATED SCALAR SUBQUERY 132"
+      ],
+      [
+        917,
+        11,
+        0,
+        "CORRELATED SCALAR SUBQUERY 135"
+      ],
+      [
+        921,
+        917,
+        0,
+        "MATERIALIZE home_attention"
+      ],
+      [
+        924,
+        921,
+        0,
+        "MATERIALIZE home_attention_all"
+      ],
+      [
+        1626,
+        1495,
+        0,
+        "CORRELATED SCALAR SUBQUERY 9"
+      ],
+      [
+        1664,
+        1495,
+        0,
+        "CORRELATED SCALAR SUBQUERY 11"
+      ],
+      [
+        1724,
+        1495,
+        0,
+        "CORRELATED SCALAR SUBQUERY 13"
+      ],
+      [
+        1789,
+        1495,
+        0,
+        "CORRELATED SCALAR SUBQUERY 15"
+      ],
+      [
+        2007,
+        1492,
+        0,
+        "CORRELATED SCALAR SUBQUERY 20"
+      ],
+      [
+        3287,
+        3259,
+        0,
+        "CORRELATED SCALAR SUBQUERY 29"
+      ],
+      [
+        3469,
+        3438,
+        0,
+        "CORRELATED SCALAR SUBQUERY 39"
+      ],
+      [
+        3568,
+        3520,
+        0,
+        "CORRELATED SCALAR SUBQUERY 41"
+      ],
+      [
+        3641,
+        3520,
+        0,
+        "CORRELATED SCALAR SUBQUERY 29"
+      ],
+      [
+        3761,
+        3737,
+        0,
+        "CORRELATED SCALAR SUBQUERY 32"
+      ],
+      [
+        3799,
+        3737,
+        0,
+        "CORRELATED SCALAR SUBQUERY 33"
+      ],
+      [
+        3857,
+        3737,
+        0,
+        "CORRELATED SCALAR SUBQUERY 31"
+      ],
+      [
+        3905,
+        3737,
+        0,
+        "CORRELATED SCALAR SUBQUERY 31"
+      ],
+      [
+        3954,
+        3737,
+        0,
+        "CORRELATED SCALAR SUBQUERY 31"
+      ],
+      [
+        4002,
+        3737,
+        0,
+        "CORRELATED SCALAR SUBQUERY 31"
+      ],
+      [
+        4049,
+        3737,
+        0,
+        "CORRELATED SCALAR SUBQUERY 31"
+      ],
+      [
+        4097,
+        3737,
+        0,
+        "CORRELATED SCALAR SUBQUERY 31"
+      ],
+      [
+        4226,
+        4215,
+        0,
+        "CORRELATED SCALAR SUBQUERY 46"
+      ],
+      [
+        5078,
+        5051,
+        0,
+        "CORRELATED SCALAR SUBQUERY 58"
+      ],
+      [
+        5174,
+        5135,
+        0,
+        "CORRELATED SCALAR SUBQUERY 61"
+      ],
+      [
+        5188,
+        5135,
+        0,
+        "CORRELATED SCALAR SUBQUERY 62"
+      ],
+      [
+        5210,
+        5135,
+        0,
+        "CORRELATED SCALAR SUBQUERY 63"
+      ],
+      [
+        5224,
+        5135,
+        0,
+        "CORRELATED SCALAR SUBQUERY 64"
+      ],
+      [
+        5293,
+        5278,
+        0,
+        "CORRELATED SCALAR SUBQUERY 66"
+      ],
+      [
+        5309,
+        5278,
+        0,
+        "CORRELATED SCALAR SUBQUERY 67"
+      ],
+      [
+        6054,
+        5923,
+        0,
+        "CORRELATED SCALAR SUBQUERY 77"
+      ],
+      [
+        6092,
+        5923,
+        0,
+        "CORRELATED SCALAR SUBQUERY 79"
+      ],
+      [
+        6152,
+        5923,
+        0,
+        "CORRELATED SCALAR SUBQUERY 81"
+      ],
+      [
+        6217,
+        5923,
+        0,
+        "CORRELATED SCALAR SUBQUERY 83"
+      ],
+      [
+        6435,
+        5920,
+        0,
+        "CORRELATED SCALAR SUBQUERY 88"
+      ],
+      [
+        8236,
+        5367,
+        0,
+        "CORRELATED SCALAR SUBQUERY 96"
+      ],
+      [
+        9110,
+        8882,
+        0,
+        "CORRELATED SCALAR SUBQUERY 101"
+      ],
+      [
+        9608,
+        938,
+        0,
+        "SCAN home_attention_all"
+      ],
+      [
+        9626,
+        936,
+        0,
+        "SCAN home_attention"
+      ],
+      [
+        9687,
+        936,
+        0,
+        "CORRELATED SCALAR SUBQUERY 134"
+      ],
+      [
+        10028,
+        9953,
+        0,
+        "CORRELATED SCALAR SUBQUERY 144"
+      ],
+      [
+        10175,
+        9953,
+        0,
+        "CORRELATED SCALAR SUBQUERY 143"
+      ],
+      [
+        10474,
+        10457,
+        0,
+        "CORRELATED SCALAR SUBQUERY 148"
+      ],
+      [
+        10560,
+        9935,
+        0,
+        "CORRELATED SCALAR SUBQUERY 151"
+      ],
+      [
+        10565,
+        10560,
+        0,
+        "SCAN home_attention"
+      ],
+      [
+        10739,
+        10733,
+        0,
+        "SCAN home_attention"
+      ],
+      [
+        10767,
+        10761,
+        0,
+        "SEARCH home_attention"
+      ],
+      [
+        10792,
+        10787,
+        0,
+        "SCAN home_attention"
+      ],
+      [
+        10854,
+        10850,
+        0,
+        "SCAN home_attention_all"
+      ]
+    ]
+  },
+  "profile_interpretation": {
+    "profiled_ms": 1143.3905999874696,
+    "overview_cumulative_seconds": 1.0367052,
+    "sqlite_execute_cumulative_seconds": 1.0445456,
+    "sqlite_execute_internal_seconds": 0.5407946,
+    "activity_projection_calls": 1000,
+    "activity_projection_cumulative_seconds": 0.2058934,
+    "handoff_eligibility_calls": 1000,
+    "handoff_eligibility_cumulative_seconds": 0.1715595,
+    "canonical_projection_calls": 1000,
+    "canonical_projection_cumulative_seconds": 0.1001072,
+    "inference": "SQLite/overview dominates this process-first instrumented read; Python activity and eligibility functions each run1000 times. Plans retain correlated Home Attention sites, but these measurements do not establish quadratic dominance. No SQL optimization was performed."
+  },
+  "scope_limits": [
+    "Actual service/SQLite and JSON encoding over disposable migrated datasets; no HTTP/browser/native/provider inference or production account.",
+    "This is a fresh cut, not an attribution of old measurements to new bytes. Three local p95 cases meet500ms; the1000-activity/100000-event case does not.",
+    "20 warm samples per dataset and one discarded process-first read with EXPLAIN; not an OS-cold-cache or production SLO guarantee.",
+    "One additional process-first cProfile GET on a separately seeded equivalent large dataset; profiler/initialization overhead means1143ms is not a warm latency sample.",
+    "Cumulative profile timings overlap;51 static correlated plan nodes per case are not runtime invocation counts or proof of quadratic growth.",
+    "Root coordinated no build/pip/browser CPU work during measurement; general Windows background load was not controlled.",
+    "Existing runtime graph/catalog and fixture row shapes remain the tested ones; no claim for a large live native-operation/transcript dataset.",
+    "No product/test/docs edit, index/cache/migration or provider/service action was made by this measurement task."
+  ]
+}

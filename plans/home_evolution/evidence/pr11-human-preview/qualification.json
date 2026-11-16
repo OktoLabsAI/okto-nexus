@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "preview_capture_status": "PASS",
+  "human_assessment_status": "NOT_RUN",
+  "qualified_at_utc": "2026-11-16T16:31:50.715179+00:00",
+  "human_participant_simulated": false,
+  "scenario": "Standard synthetic first-value preview for plan section9; no test-ledger scenario automatically promoted",
+  "source_head": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+  "browser": {
+    "version": "157.0.8103.51",
+    "viewport": {
+      "width": 1440,
+      "height": 1100
+    },
+    "own_isolated_cli_session": "home-r1-human-preview-retained"
+  },
+  "performance": {
+    "complete_samples_retained": 1,
+    "capture_attempts": 2,
+    "http_cache_disabled": true,
+    "first_overview_resource_duration_ms": 1198.300000011921,
+    "first_work_dom_ms": 1533.300000011921,
+    "two_subsequent_frame_opportunity_ms": 1539,
+    "second_normal_overview_response_end_ms": 285.448,
+    "p95_measured": false,
+    "home_service_latency_measured": false,
+    "http20_sequential_samples_run": false,
+    "note": "One navigation with first snapshot and normal revalidation; no controlled OS/SQLite cache or browser-process startup measurement."
+  },
+  "effects": {
+    "provider_calls": 0,
+    "native_runtime_started": false,
+    "real_credentials_used": false,
+    "post_requests": 0,
+    "console_errors": 0,
+    "page_errors": 0,
+    "fixture_seed_modified": false,
+    "server_contract_injection": false,
+    "installed_final_prefix_touched": false
+  },
+  "cleanup": {
+    "browser_close_exit_code": 0,
+    "browser_close_tool_ref": "4613e2",
+    "browser_pid_33232_absent": true,
+    "browser_absence_tool_ref": "66d0e6",
+    "fixture_exec_session": 39265,
+    "fixture_physical_exit_code": 0,
+    "fixture_exit_tool_ref": "9445f4",
+    "force_kill_used": false,
+    "antecedent_fixture_physical_exit_code": 0,
+    "antecedent_fixture_exit_tool_ref": "1a28e5",
+    "antecedent_browser_close_exit_code": 0,
+    "antecedent_browser_close_tool_ref": "4b2278"
+  },
+  "commands": {
+    "capture_tool_ref": "148bc6",
+    "retained_metadata_inspection_tool_ref": "8d3b76",
+    "browser_version_tool_ref": "25c66e",
+    "html_source_pins_tool_ref": "ba823c"
+  },
+  "limitations": [
+    "One complete cache-disabled navigation sample retained after an earlier truncated-output capture; not p95 or a controlled cold OS/SQLite-cache benchmark.",
+    "The DOM mark and two subsequent animation frames indicate render/frame opportunities, not human comprehension or a physical-paint measurement.",
+    "No human participant was simulated. Running0 and Claimed remain distinct.",
+    "The participant has not viewed or interpreted these captures; this artifact cannot itself qualify the ten-second human criterion.",
+    "Scroller metadata did not include the real inner overflow wrapper; no exact-scroll measurement is claimed."
+  ]
+}

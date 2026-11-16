@@ -1,5 +1,75 @@
 # HOME-R1 — entregas incrementais
 
+## Retrato atual — 2026-11-16
+
+O corte de produto `3d95aad8` inclui a faixa Servidor separada e foi enviado na
+branch `feature/v0.3.4`. A matriz registra **71 PASS e 2 NOT_RUN: H02/I01**.
+Essa contagem descreve os níveis de prova de cada cenário; não significa que
+a campanha real ou o gate M3 foram concluídos. **M3 não foi aprovado e a Home
+clássica continua padrão.**
+
+O wheel0.3.4 SHA256
+`c1c45e2a3dc8b9f0bed348ddc2d09ab4d0afccbaae2b8c19253fdcaf4980b759`
+e o sdist passaram Twine. A qualificação instalada executou12/12 focais
+(11 Servidor e1 pacote), conferiu as três origens instaladas,699 payloads e7
+assets iguais ao checkout, incluindo `index-Dcu4bArB.js`, e comprovou2.116 inputs
+imutáveis entre antes do build e depois dos testes. A ausência de Twine na venv
+foi contornada com a ferramenta já instalada, nos mesmos artefatos, sem rebuild.
+Esses12 casos não são somados às rodadas anteriores. Evidência:
+[pacote final](evidence/pr10-package-server-final/qualification.json).
+
+O benchmark do endpoint usou TCP/HTTP real em quatro fixtures descartáveis,
+com uma chamada de aquecimento descartada e20 amostras quentes por conjunto:
+
+| Workers | Handoffs | Eventos | HTTP p50 | HTTP p95 |
+| --- | --- | --- | --- | --- |
+| 1 | 10 | 100 | 244,48 ms | 281,28 ms |
+| 10 | 10 | 100 | 217,50 ms | 227,64 ms |
+| 100 | 10 | 100 | 180,60 ms | 289,28 ms |
+| 100 | 1.000 | 100.000 | 401,47 ms | 450,32 ms |
+
+Os quatro p95 HTTP ficaram abaixo da meta local de500ms. Nas requisições
+observadas houve46 SQL/GET,1 UoW,0 writes e corpo máximo de11.477 bytes. O
+cronômetro inclui a resposta completa; parsing/validação JSON do cliente e
+estatísticas de controle ficam fora dele. Isso não é SLO de produção, cache
+frio, render, compreensão humana ou carga com operações nativas/transcrições.
+A medição de serviço PR08 permanece preservada, inclusive o p95 grande de
+**673,91ms**, acima da meta. Os experimentos têm caminhos de observação,
+processos e condições de cache distintos; não são pares para subtrair overhead
+nem demonstram que HTTP seja intrinsecamente mais rápido. Evidências:
+[HTTP final](evidence/pr12-http-performance/qualification.json) e
+[serviço PR08](evidence/pr08-performance-final/qualification.json).
+
+O [preview para avaliação humana](evidence/pr11-human-preview/qualification.json)
+retém capturas sintéticas do corte3d95 e uma navegação sem cache HTTP: primeiro
+Work no DOM em1.533,30ms. É uma amostra, não p95, pintura física ou teste com
+participante. A avaliação de compreensão em aproximadamente10s **não ocorreu**.
+O [focal manual DOM/HTTP](evidence/pr09-screen-reader-attempt/manual-qualification.json)
+observou dois avisos úteis agrupados e preservou foco/seleção, com0 POSTs.
+Não iniciou Narrator nem capturou fala; H02 continua NOT_RUN. A tentativa da
+ponte Windows retornou native pipe unavailable. I01 também continua NOT_RUN
+para continuidade de daemon/Core/Connector vivos durante a troca de apresentação;
+os toggles de browser já executados não substituem essa prova.
+
+A campanha HOME-033 está preparada no candidato inerte
+`6181fd0029f1eb023d226f168f6d00b60baad2cfe92e12b3850592a36fecc189`,
+vinculado ao pacote final. A cadeia5a8→cbb→6181 preserva UUID, home, porta, IDs,
+driver e limites; mudaram somente package/technical_rebind. O driver recusou
+prepare sem consentimento antes de importar produto ou iniciar efeitos. A pasta
+da campanha, a autorização e as reservas continuam ausentes; não houve inferência
+nem serviço dessa campanha iniciado. A proposta mantém no máximo2 chamadas e
+200 mil tokens observados, com a possível ultrapassagem por atraso de medição
+explicitada. Ver [proposta atual](evidence/pr06-campaign-proposal/PROPOSTA.md) e
+[rebind qualificado](evidence/pr06-campaign-proposal/rebind-server-qualification.json).
+
+Pacote, benchmark e capturas já não são pendências de preparação. Permanecem a
+execução consentida de HOME-033, H02, I01, a avaliação humana e a decisão M3 com
+essas evidências. Core/Connector não receberam mudanças de protocolo nesta
+frente. Não houve deploy automático ou alteração de sessão do Windows.
+
+Os marcos abaixo são histórico: suas contagens e pendências descrevem os cortes
+da época e não substituem este retrato atual.
+
 ## PR-00 — baseline, fontes e contrato
 
 Resultado: checkout reconciliado, versão0.3.4 e branchfeature/v0.3.4; contrato
