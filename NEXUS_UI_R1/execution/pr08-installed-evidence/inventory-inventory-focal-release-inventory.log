@@ -1,0 +1,66 @@
+okto-nexus - local agent coordination bus
+
+Usage:
+  okto-nexus connect [options] Review and connect a local project
+  okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
+  okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
+  okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
+  okto-nexus participant smoke exchange|handoff|status|observe [options]  Review optional cooperation with a peer
+  okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
+  okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus message send [options]  Send conversation using a participant profile
+  okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
+  okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
+  okto-nexus observe herdr bind|run|status [options]  Publish optional external activity observations
+  okto-nexus operator login|status|logout --profile NAME [options]
+  okto-nexus operator approval APPROVAL_ID --profile NAME [options]
+  okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
+  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
+  okto-nexus tail [options]    Stream the event log as NDJSON
+  okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
+
+Use `okto-nexus serve --help` for server options. Agents connect to /mcp
+over HTTP with their existing API key.
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Projetos\Techridy\okto_labs_okto_nexus
+configfile: C:\Users\jpamb\AppData\Local\Temp\nexus-ci-installed-q1uf978t\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 22 items
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_empty_inventory.py::test_inventory_is_authorized_pre_filter_and_unknown_after_source_failure PASSED [  4%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_empty_inventory.py::test_empty_adapters_default_unknown_and_proven_zero_changes_revision PASSED [  9%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_all_125_groups_children_and_25_sessions_are_reachable PASSED [ 13%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_cursor_scope_parent_principal_and_material_revision_are_bound PASSED [ 18%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_external_source_is_complete_reported_and_not_matched_by_agent PASSED [ 22%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_quick_sender_receiver_harness_and_host_filters PASSED [ 27%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_partial_external_and_budget_keep_unknown_totals PASSED [ 31%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_optional_http_router_exact_pages_and_no_store PASSED [ 36%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_http_global_budget_preserves_unknown_envelope_shape PASSED [ 40%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_malformed_cursor_and_wrong_parent_are_explicit PASSED [ 45%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_default_recent_window_and_retained_unseen_are_distinct_from_active PASSED [ 50%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_untracked_old_result_is_unknown_coverage_never_assumed_seen PASSED [ 54%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_context_labels_use_only_canonical_project_host_scalars PASSED [ 59%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_external_generation_restart_gets_new_identity_without_inheriting_preferences PASSED [ 63%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_boolean_version_and_deep_cursor_are_validation_errors_not_server_errors PASSED [ 68%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_pages.py::test_single_read_uow_no_journal_or_transcript_and_one_size_sample PASSED [ 72%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_related.py::test_attention_preview_and_pages_preserve_five_canonical_questions PASSED [ 77%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_related.py::test_results_preview_and_pages_preserve_five_canonical_deliveries PASSED [ 81%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_related.py::test_default_keeps_idle_configured_connection_while_active_does_not PASSED [ 86%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_app_integration.py::test_production_app_exposes_entries_without_manual_route_install PASSED [ 90%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_app_integration.py::test_entries_cursor_is_bound_to_authenticated_human_without_exposing_identity PASSED [ 95%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\ui_simplification\test_entry_app_integration.py::test_agent_is_denied_before_any_entry_source_query PASSED [100%]
+
+============================== warnings summary ===============================
+..\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\ci-inventory-focal\tests.xml -
+================== 22 passed, 1 warning in 69.48s (0:01:09) ===================

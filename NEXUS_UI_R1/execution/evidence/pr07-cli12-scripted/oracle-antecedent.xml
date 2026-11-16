@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="9.751" timestamp="2026-11-16T19:33:36.048661-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_terminal_scripted_recovery" name="test_scripted_new_connection_exact_review_recovers_lost_finish_without_replay" time="7.626"><failure message="KeyError: 'error'">tests\execution_r4\test_terminal_scripted_recovery.py:47: in test_scripted_new_connection_exact_review_recovers_lost_finish_without_replay
+    assert conflict['error']['code'] == 'PROFILE_CONFLICT'
+           ^^^^^^^^^^^^^^^^^
+E   KeyError: 'error'</failure></testcase></testsuite></testsuites>

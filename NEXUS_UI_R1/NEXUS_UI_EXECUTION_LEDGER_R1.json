@@ -1676,7 +1676,8 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json",
         "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json",
-        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-cli12-scripted/qualification.json"
       ],
       "limitations": [
         "Scoped local filesystem/CLI/HTTP/SQLite tests with synthetic lifecycle/setup-test peer; real provider and two different native harnesses not certified. UI016 qualification remains separate."
@@ -1757,7 +1758,8 @@
         "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
         "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json",
         "NEXUS_UI_R1/execution/pr02-final-contract-focals.json",
-        "NEXUS_UI_R1/execution/pr07-doctor-qualification.json"
+        "NEXUS_UI_R1/execution/pr07-doctor-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-cli12-scripted/qualification.json"
       ],
       "limitations": [
         "Lifecycle/discovery/version/provider setup-test are synthetic; no real harness binary, provider login, paid inference, personal credentials or installation.",
@@ -1800,7 +1802,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
-        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-cli12-scripted/qualification.json"
       ],
       "limitations": [
         "Lifecycle/discovery/version/provider setup-test are synthetic; no real harness binary, provider login, paid inference, personal credentials or installation.",
@@ -2150,7 +2153,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json",
-        "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json"
+        "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
@@ -2268,7 +2272,8 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos."
@@ -2765,7 +2770,8 @@
         "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
-        "NEXUS_UI_R1/execution/pr07-login-fixture-qualification.json"
+        "NEXUS_UI_R1/execution/pr07-login-fixture-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json"
       ],
       "limitations": []
     },
@@ -2847,8 +2853,13 @@
         "T-QUAL-03",
         "T-QUAL-04"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr07-native-proposal/qualification-final.json",
+        "NEXUS_UI_R1/execution/final-review.json"
+      ],
+      "limitations": [
+        "Proposta executavel final vinculada,21offline e zero-admission real lifecyclePASS. Nova aprovacao do usuario pendente; campanha/provider e topologiareal NOT_RUN."
+      ]
     },
     {
       "id": "UI-043",
@@ -2925,7 +2936,9 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json",
         "NEXUS_UI_R1/execution/release-report.md",
-        "NEXUS_UI_R1/execution/pr07-doctor-qualification.json"
+        "NEXUS_UI_R1/execution/pr07-doctor-qualification.json",
+        "NEXUS_UI_R1/execution/final-review.json",
+        "NEXUS_UI_R1/execution/pr08-installed-qualification.json"
       ],
       "limitations": []
     },
@@ -2962,7 +2975,9 @@
         "T-REL-03"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/release-report.md"
+        "NEXUS_UI_R1/execution/release-report.md",
+        "NEXUS_UI_R1/execution/final-review.json",
+        "NEXUS_UI_R1/execution/pr08-installed-qualification.json"
       ],
       "limitations": []
     },
@@ -3001,7 +3016,9 @@
       "evidence": [
         "NEXUS_UI_R1/execution/release-report.md",
         "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
+        "NEXUS_UI_R1/execution/final-review.json",
+        "NEXUS_UI_R1/execution/pr08-installed-qualification.json"
       ],
       "limitations": []
     },
@@ -3036,7 +3053,9 @@
         "T-REL-08"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/release-report.md"
+        "NEXUS_UI_R1/execution/release-report.md",
+        "NEXUS_UI_R1/execution/final-review.json",
+        "NEXUS_UI_R1/execution/pr08-installed-qualification.json"
       ],
       "limitations": []
     }
@@ -3757,28 +3776,32 @@
       "given": "Fonte falha mas outras respondem.",
       "when": "Atualizar.",
       "expected": "Mostrar parcialidade e dados válidos; não fingir ausência de agentes.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json"
+      ],
       "tasks": [
         "UI-025"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Subsetdebrowser comprovado: parcialapos trocaescopo (naoRefreshliteral); Server/project0 mas sinoglobal3deoutroprojeto. Cenariointeiro mantidoNOT_RUN."
       ]
     },
     {
       "id": "T-HOME-08",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Troca A→B com resposta lenta de A.",
       "when": "Resolver requests fora de ordem.",
       "expected": "Descartar A e preservar somente escopo B.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json"
+      ],
       "tasks": [
         "UI-025",
         "UI-028"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "RespostaAHTTP200bufferizada inalterada, aposBready Aabortada;0POST. Fixturecanonicasintetica."
       ]
     },
     {
@@ -3803,13 +3826,15 @@
       "given": "Nenhuma ocorrência global ou de atenção.",
       "when": "Renderizar.",
       "expected": "Sem painel vazio Server/Needs you; recursos continuam no sino/filtro.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json"
+      ],
       "tasks": [
         "UI-026",
         "UI-028"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Subsetdebrowser comprovado: parcialapos trocaescopo (naoRefreshliteral); Server/project0 mas sinoglobal3deoutroprojeto. Cenariointeiro mantidoNOT_RUN."
       ]
     },
     {
@@ -4497,19 +4522,20 @@
     },
     {
       "id": "T-CLI-12",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI",
       "given": "Nova conexão scriptada com --new-connection e --profile explícito e estável.",
       "when": "Repetir comando após falha de resposta.",
       "expected": "Recuperar a mesma criação; conteúdo diferente conflita.",
       "evidence": [
-        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
+        "NEXUS_UI_R1/execution/evidence/pr07-cli12-scripted/qualification.json"
       ],
       "tasks": [
         "UI-015"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "CLI parser/JSON e HTTP/SQLite reais; lifecycle/version/peers sinteticos, nao provider."
       ]
     },
     {
@@ -5263,13 +5289,15 @@
       "given": "Dois harnesses reais qualificados e consentimento.",
       "when": "Conectar A, adicionar B, pedir e retomar.",
       "expected": "IDs/permissões preservados; resultados e sessão na Home; nenhuma exigência de nome de profile.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr07-native-proposal/qualification-final.json"
+      ],
       "tasks": [
         "UI-039",
         "UI-042"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Campanha real ainda NOT_RUN: candidato final e21offlinePASS nao substituem provedores. Nova autorizacao especifica solicitada; sem inferencia de consentimentos anteriores."
       ]
     },
     {
@@ -5279,12 +5307,14 @@
       "given": "Host remoto real e consentimento.",
       "when": "Usar Connector, aprovar e observar.",
       "expected": "Publicação, sessão, perguntas e resultado comprovados na topologia; sem inferir de peers sintéticos.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr07-native-proposal/qualification-final.json"
+      ],
       "tasks": [
         "UI-042"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Campanha real ainda NOT_RUN: candidato final e21offlinePASS nao substituem provedores. Nova autorizacao especifica solicitada; sem inferencia de consentimentos anteriores."
       ]
     },
     {
@@ -5336,48 +5366,57 @@
     },
     {
       "id": "T-REL-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "integração/processo",
       "given": "Checkout atualizado.",
       "when": "Executar scripts/documentação/build.",
       "expected": "Comandos existentes conferidos; front empacotado corresponde aos contratos novos.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr08-installed-qualification.json",
+        "NEXUS_UI_R1/execution/final-review.json"
+      ],
       "tasks": [
         "UI-044",
         "UI-045"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Pacote exato instalado em Windows/Python3.13; CI Linux/3.11/3.12 e campanhas native/remotas permanecem gates separados.187+2focal e22Home+52Connector sao cortes distintos, nao uma unica suitegreen."
       ]
     },
     {
       "id": "T-REL-02",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "integração/processo",
       "given": "Wheel/sdist construídos.",
       "when": "Instalar em ambiente isolado sem checkout irmão.",
       "expected": "Assets, APIs e CLI funcionam no pacote real; hashes e comando registrados.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr08-installed-qualification.json",
+        "NEXUS_UI_R1/execution/final-review.json"
+      ],
       "tasks": [
         "UI-045"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Pacote exato instalado em Windows/Python3.13; CI Linux/3.11/3.12 e campanhas native/remotas permanecem gates separados.187+2focal e22Home+52Connector sao cortes distintos, nao uma unica suitegreen."
       ]
     },
     {
       "id": "T-REL-03",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "integração/processo",
       "given": "Server/Connector/Core com pins/manifestos.",
       "when": "Rodar integração.",
       "expected": "Tuple compatível; não downgrade incidental nem alteração de Core desnecessária.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr08-installed-qualification.json",
+        "NEXUS_UI_R1/execution/final-review.json"
+      ],
       "tasks": [
         "UI-045"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Pacote exato instalado em Windows/Python3.13; CI Linux/3.11/3.12 e campanhas native/remotas permanecem gates separados.187+2focal e22Home+52Connector sao cortes distintos, nao uma unica suitegreen."
       ]
     },
     {

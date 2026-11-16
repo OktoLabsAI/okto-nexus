@@ -1,0 +1,66 @@
+{
+  "scenario": "T-CLI-12",
+  "status": "PASS_DECLARED_SYNTHETIC_BOUNDARIES",
+  "final_run": {
+    "handle": "70f45f",
+    "tests": 1,
+    "passed": 1,
+    "seconds": 10.39,
+    "junit": "tests-final.xml"
+  },
+  "prior_runs": [
+    {
+      "handle": "630f1b",
+      "status": "FAIL_TEST_ORACLE",
+      "reason": "CLI returns top-level code, not nested error.code; corrected test only",
+      "junit": "oracle-antecedent.xml"
+    },
+    {
+      "handle": "b77b39",
+      "status": "PASS",
+      "seconds": 10.65,
+      "junit": "tests.xml",
+      "later_strengthening": "explicit canonical agent ID set/count invariant added; final rerun passed"
+    }
+  ],
+  "surface": "actual run_connect parsing/profile/review/apply/recovery + real FastAPI ASGI handlers and SQLite, not TCP Server lifecycle",
+  "assertions": [
+    "stdin is non-TTY; input raises immediately",
+    "stable --new-connection --profile --client codex --json --plan",
+    "plan preserves canonical state and agent IDs, no Test/version probe",
+    "changed display-name content conflicts before effect and preserves profile bytes",
+    "exact displayed review_revision approved",
+    "response lost after canonical setup:finish commit",
+    "same command/approval recovers same selection/request/review and intent",
+    "one Test, one Finish, one synthetic version probe throughout",
+    "one new canonical agent created at Finish; identity set/count unchanged by recovery",
+    "binding/grant/policy/endpoint/override/commit full snapshots unchanged by recovery",
+    "same command again returns same result without profile byte or canonical mutation"
+  ],
+  "source_pins_at_final_qualification": {
+    "tests/execution_r4/test_terminal_scripted_recovery.py": "99b3c1f02d156b03c2cfc049188e0744aadebc471fbab37e6cd86803a889e786",
+    "tests/execution_r4/test_terminal_multi_harness.py": "701c95a04867289fdc4570f4e4e047c6bdfc9f234f8236e061415c36ec2a236d",
+    "tests/execution_r4/test_terminal_connect.py": "a26a7463446f3dd45d601e778107a6f99ec2b53ab0947882a9b1ad406248a232",
+    "tests/execution_r4/test_connection_setup_recovery.py": "13d2b0f3fe0ee1fe60a7107137e25980d376d2d4f0cb22601388c428098d5b23",
+    "src/okto_nexus/adapters/inbound/cli/connect.py": "d494b37e3668a3ba1825c2cecf2c9e527ad427e6f4403c8641957865b54e66dc"
+  },
+  "origins": "origins.json",
+  "cleanup": "cleanup.json",
+  "limits": [
+    "Lifecycle/service state and candidate availability/version/peer setup execution are explicitly synthetic",
+    "No real provider/native protocol, personal account, Windows session or Server process",
+    "Canonical HTTP routes are exercised through ASGI TestClient, not a real TCP listener",
+    "No actual campaign/candidate/observer marker executed or written"
+  ],
+  "product_changed": false,
+  "post_lint_fixture_alias_focal": {
+    "passed": 1,
+    "seconds": 9.47,
+    "tool_ref": "72fa86",
+    "ruff_tool_ref": "794503",
+    "junit": "tests-fixture-alias-final.xml",
+    "change": "Only explicit fixture reexports and request.getfixturevalue remove F401/F811; assertions/product unchanged. Earlier source pins retain their own70f45f cut.",
+    "source_sha256": "0662f8f363264af6d2db15b7b23ad2f7c836205b9d625a7cb68cb9afca98f7d2",
+    "cleanup_limit": "Latest standard pytest allocation is managed by pytest; earlier cleanup.json covers the agent-owned two allocations only. No real Server/native process was started."
+  }
+}

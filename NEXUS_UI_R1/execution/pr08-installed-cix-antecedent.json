@@ -1,0 +1,215 @@
+{
+  "status": "LOCAL_INSTALLED_PACKAGE_QUALIFIED_WITH_FOCAL_AND_ANTECEDENT_EVIDENCE",
+  "at": "2026-11-16T21:41:31.553959+00:00",
+  "source_head_at_build": "06097a29e1f17f3ac9aa7d50b25511134ec37481",
+  "candidate": {
+    "nexus_version": "0.3.5",
+    "connector_version": "0.0.13",
+    "core_version": "0.0.14",
+    "wheel_sha256": "3e7f259e36f7dbb0dc1bc4f4633a32b527dda1df64a1db12cc904d3f5e1b36dc",
+    "artifacts": {
+      "connector\\okto_nexus_connector-0.0.13-py3-none-any.whl": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+      "connector\\okto_nexus_connector-0.0.13.tar.gz": "63b1e8350d42fa0288a329937a63776a5793c17551936116a6e9840db1eadc14",
+      "nexus\\okto_nexus-0.3.5-py3-none-any.whl": "280027cc36a8d9e92ef03f9c5a54f2d40d7f2081ae45e1440bfaa006918a96ad",
+      "nexus\\okto_nexus-0.3.5.tar.gz": "a3bffd9c5386f1298308564897b22fb759c7baad083ad9a53edb89af6d70b8ef",
+      "nexus-final\\okto_nexus-0.3.5-py3-none-any.whl": "74c9ecafacbe1e77e90de3e0a3bae05b87e59c3f8862f70df68e415273e68711",
+      "nexus-final\\okto_nexus-0.3.5.tar.gz": "df3a93960bdf87d25b17c65bef597f2dd3e3091331c0923be0430a7613bec9f3",
+      "nexus-release\\okto_nexus-0.3.5-py3-none-any.whl": "a78b8b3ecf4a050314c55759b2ebc0ec474621819dba019f5b9648438f11990e",
+      "nexus-release\\okto_nexus-0.3.5.tar.gz": "0be435a560f3542b38d7d57bf8fb22026952cd3517b1ec426765d6f2c2ae8a36",
+      "nexus-release-next\\okto_nexus-0.3.5-py3-none-any.whl": "39897b89334416497012d47f6db02282ffa310c3c7889ef352ee3e1311d33dc3",
+      "nexus-release-next\\okto_nexus-0.3.5.tar.gz": "6380a9b7f37e97df1d0280b2b87b24ee4f87ea7ca6f16e3e5942abd567ef1cf8",
+      "nexus-release-labels\\okto_nexus-0.3.5-py3-none-any.whl": "d596027d5a75620c502cf1337c1b96196da51e82ddd6bb3780d324024cdc2972",
+      "nexus-release-labels\\okto_nexus-0.3.5.tar.gz": "ea13342699c9288bdf7d59cb9c6c4715c99cbc9a5150eaf4fbee5e67a841e25a",
+      "nexus-release-inventory\\okto_nexus-0.3.5-py3-none-any.whl": "3e7f259e36f7dbb0dc1bc4f4633a32b527dda1df64a1db12cc904d3f5e1b36dc",
+      "nexus-release-inventory\\okto_nexus-0.3.5.tar.gz": "c7793cf7188a2352dc40613e7e54c0e54105e4084ad7ef8a2361bdf317ba6b63"
+    },
+    "javascript": "index-CIXUIG91.js",
+    "javascript_sha256": "0de41929962e2b23b65a30920d607ea2fc853db62bba859b40c78add287cafc1",
+    "css": "index-CXFy-VnM.css",
+    "css_sha256": "36054c625504c406bff2dcd5a38d66952b72ded0d7c88d44e53658eae1b6316b"
+  },
+  "installed_environment": {
+    "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+    "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+    "os": "Windows-11-10.0.26300-SP0",
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9",
+    "isolated": 1,
+    "sys_path": [
+      "C:\\Python313\\python313.zip",
+      "C:\\Python313\\DLLs",
+      "C:\\Python313\\Lib",
+      "C:\\Python313",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\win32",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\win32\\lib",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\pythonwin"
+    ],
+    "packages": {
+      "okto-nexus": {
+        "version": "0.3.5",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py"
+      },
+      "okto-nexus-connector": {
+        "version": "0.0.13",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+      },
+      "okto-nexus-connector-core": {
+        "version": "0.0.14",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py"
+      },
+      "pytest": {
+        "version": "9.2.0",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\pytest\\__init__.py"
+      }
+    },
+    "assets": {
+      "okto_nexus/adapters/inbound/http/static/index.html": "744464438063011cc4063e3a5ce15941c47cd0a37790d0daf214b30b882a2133",
+      "okto_nexus/adapters/inbound/http/static/assets/index-CIXUIG91.js": "0de41929962e2b23b65a30920d607ea2fc853db62bba859b40c78add287cafc1",
+      "okto_nexus/adapters/inbound/http/static/assets/index-CXFy-VnM.css": "36054c625504c406bff2dcd5a38d66952b72ded0d7c88d44e53658eae1b6316b",
+      "okto_nexus/adapters/inbound/http/static/logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+      "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-dark.svg": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+      "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-light.svg": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+      "okto_nexus/adapters/inbound/http/static/logos/oktolabs-icon.svg": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+    },
+    "provider_qualified": false
+  },
+  "outside_checkout_isolated_smoke": true,
+  "all_three_installed_packages_byte_equal_to_exact_wheels": true,
+  "nexus_and_connector_console_entrypoint_help": true,
+  "twine_four_artifacts_pass": true,
+  "module_payload_continuity": {
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus\\okto_nexus-0.3.5-py3-none-any.whl",
+      "wheel_sha256": "280027cc36a8d9e92ef03f9c5a54f2d40d7f2081ae45e1440bfaa006918a96ad",
+      "module_payload_files": 708,
+      "changed_module_payload": []
+    },
+    "nexus-final": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-final\\okto_nexus-0.3.5-py3-none-any.whl",
+      "wheel_sha256": "74c9ecafacbe1e77e90de3e0a3bae05b87e59c3f8862f70df68e415273e68711",
+      "module_payload_files": 708,
+      "changed_module_payload": []
+    },
+    "nexus-release": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-release\\okto_nexus-0.3.5-py3-none-any.whl",
+      "wheel_sha256": "a78b8b3ecf4a050314c55759b2ebc0ec474621819dba019f5b9648438f11990e",
+      "module_payload_files": 708,
+      "changed_module_payload": []
+    },
+    "nexus-release-next": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-release-next\\okto_nexus-0.3.5-py3-none-any.whl",
+      "wheel_sha256": "39897b89334416497012d47f6db02282ffa310c3c7889ef352ee3e1311d33dc3",
+      "module_payload_files": 708,
+      "changed_module_payload": []
+    },
+    "nexus-release-labels": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-release-labels\\okto_nexus-0.3.5-py3-none-any.whl",
+      "wheel_sha256": "d596027d5a75620c502cf1337c1b96196da51e82ddd6bb3780d324024cdc2972",
+      "module_payload_files": 708,
+      "changed_module_payload": []
+    },
+    "nexus-release-inventory": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-release-inventory\\okto_nexus-0.3.5-py3-none-any.whl",
+      "wheel_sha256": "3e7f259e36f7dbb0dc1bc4f4633a32b527dda1df64a1db12cc904d3f5e1b36dc",
+      "module_payload_files": 708,
+      "changed_module_payload": [
+        "okto_nexus/adapters/outbound/sqlite/home_entries.py",
+        "okto_nexus/application/home_entries.py",
+        "okto_nexus/domain/home_entries.py",
+        "okto_nexus/domain/home_entry_pages.py"
+      ],
+      "changed_file_hashes": {
+        "okto_nexus/adapters/outbound/sqlite/home_entries.py": {
+          "antecedent": "710284fdfc2d8728905dabeb9b9aaa2af6eb8592227ec2baaa1a7e1e84b35342",
+          "current": "d34154693d527fa96df452c0b2ff4e7ee918ccef5c1dd7205742ac159e434e5e"
+        },
+        "okto_nexus/application/home_entries.py": {
+          "antecedent": "1675551db67015f0fecbc8f03691f5044a6a4880d58f65c36fee342b322839e5",
+          "current": "2ad5704dbf61526dc6a1be8d099da017997e38c93c9ad80cea359c7597e9e005"
+        },
+        "okto_nexus/domain/home_entries.py": {
+          "antecedent": "df16b1f6c755983ec99fc380ce88661454c076289905d1a8855d47adb7161d22",
+          "current": "c28203f88d69bd22b4e1dd7544ff58716fd2e96862c67433d75dd5f462c0ef1d"
+        },
+        "okto_nexus/domain/home_entry_pages.py": {
+          "antecedent": "6e34e7d198fe9821d61591c2334753f35bb3f8a610a238afd1e01a27d24cf40e",
+          "current": "abca8cf04b8ef225a70dbaf23dcfaa4fff6fea25af53d95c9676af8f566dc617"
+        }
+      }
+    }
+  },
+  "python_qualification": "pr08-installed-python-qualification.json",
+  "python_evidence_summary": "187-pass/2-old-oracle-fail antecedent, corrected-oracle 2-pass focal, and 52-pass Connector antecedent retained. Final four Home read-model file changes have a separate 22/22 installed-I Home regression. No 189-case repeat or single all-green 189 run is claimed.",
+  "fresh_boot_qualification": "pr08-installed-antecedent.json",
+  "fresh_boot_reuse_basis": "Bootstrap modules and dependencies unchanged. Four Home read-model modules changed, explicitly listed with hashes and covered by final 22 installed HTTP/domain tests; the other704 module payload files match antecedents. Fresh Core-only/noConnector/noTorch boot remains an antecedent, not a falsely rerun final fresh environment.",
+  "http_mcp_live": "Real installed HTTP MCP flow with two distinct authenticated agents, 54 tools, message/event/handoff/artifact/shared.md, canonical stop0 and physical child exit0; no inference. See Python qualification for the failed stdio and pooled-handle-cleanup antecedents.",
+  "driver_guard_delta": "Six focused tests passed after adding the exact resolved temporary-root deletion fence; the successful full HTTP flow predates only that guard delta, and was not repeated.",
+  "source_inputs_changed_during_final_package": [
+    "tests/ui_simplification/browser_navigation_fixture.py",
+    "tests/ui_simplification/test_workspace_scope.py"
+  ],
+  "connector_inputs_changed_during_final_package": [],
+  "cleanup": {
+    "checked_at": "2026-11-16T21:40:53.3919535Z",
+    "count": 0,
+    "remaining_owned_runtime_processes": []
+  },
+  "limits": [
+    "Windows Python3.13.1 local qualification only; Linux and Python3.11/Python3.12 remain separate CI evidence.",
+    "Historical PR00 sample excluded. This is focal installed qualification, not a complete repository suite or a single 189/189 run.",
+    "Synthetic fixture boundaries and a coordination-only live flow do not qualify native harnesses, real providers or personal authentication.",
+    "No publication/deployment, personal package installation, user-service installation or Windows session termination."
+  ],
+  "evidence_files_sha256": {
+    "inventory-nexus-release-inventory-manifest.json": "89f647c099adbf08032706f59d9cde9df79481566c520c31df802e3b4b539707",
+    "inventory-nexus-release-inventory-build.log": "191d8e6349189eeda7d91e49b1d59753beb5c9b9077968380154b077fe58f7fd",
+    "inventory-reinstall-release-inventory.json": "961faf4f4ea9b0158a4079e0801e99fbcffd0a7da7286dc82a0fad0b896d95ed",
+    "inventory-reinstall-release-inventory.log": "873b09ed38c13010d192907705df4cbe5360b1fe098c3e19a738703adfdd4607",
+    "inventory-smoke-release-inventory.json": "00152ff907c9786b343339521a8424204086b21360d0bbf947b0b2bb4caef09f",
+    "inventory-smoke-release-inventory.log": "3077f218331c19faf36a45a20d29459b675100e7b4e157f94a67484fb398b5e1",
+    "inventory-ci-release-inventory-installed.json": "53fe9cfba787fbb75ff072c215d6d5706d553ba3fb0d9a6e519c6b05454f9fd7",
+    "inventory-twine-release-inventory.json": "7bcb4fc7f57d650e28ca300edc6a8d6c4ace569eef91c7cf98df341e0978fef7",
+    "inventory-twine-release-inventory.log": "0b14822e2d4b23dc57049d70189312083059742d258910cd842d5126e95977a1",
+    "inventory-installed-environment-release-inventory.json": "d2cd6e84e3400b7d515ebb3a72a017634539387e7d8f9f8a047abb1385f2d97f",
+    "inventory-payload-comparison-inventory.json": "f592fed413e8b107a1cfd1cf30dd03aa9df3329b46094fed9baa96a698f7d92a",
+    "inventory-inventory-focal-release-inventory.json": "6a36dd18895de6e5f56d33b939f66669e22921dd90eca4ee19083c5a7b0016d7",
+    "inventory-inventory-focal-release-inventory.log": "181a18194942ef4f09037947da25ecb6ab0cb9d7e64db462825ae7ed3faa0862",
+    "inventory-ci-inventory-focal-campaign.json": "4057c6044a44e0c694eb99b12bd7c444c5018f5524380542f717f561d11a7bfe",
+    "inventory-ci-inventory-focal-tests.xml": "67b51cf3e822e420c0d29b5edfed3b63e7594f01f89dfe38a33c3da11af94ec5",
+    "inventory-before-release-inventory.json": "f477f7f32693881349abff86aed1554578a81c9e57b5d0632a152e947e3803d9",
+    "inventory-after-release-inventory.json": "3bc1f5874116c2eb477b2ff0f8cc3cb35d8f4693955b222faef4578f2526aad8",
+    "inventory-okto-nexus-release-inventory.json": "32173290312bdcfddb2d2183b07267da0775119dbfa7182b4fd80c63100f1458",
+    "inventory-okto-nexus-release-inventory.log": "3077f218331c19faf36a45a20d29459b675100e7b4e157f94a67484fb398b5e1",
+    "inventory-okto-nexus-connector-release-inventory.json": "55512398b38818f339b9cd60d702d68e09508eeb306177137e6cd02fd84d38ea",
+    "inventory-okto-nexus-connector-release-inventory.log": "d35b5e8ac3a2316dcc6c5c899fe6006469c69de9c0ed976ed3b1f45bd1b4ed14",
+    "inventory-cleanup.json": "5159330297035d84febfba0edacac66cff16c50b96afa82bfa87fa4529937afe"
+  },
+  "final_python_delta": {
+    "module_payload_files": 708,
+    "unchanged_payload_files": 704,
+    "changed_payload_files": [
+      "okto_nexus/adapters/outbound/sqlite/home_entries.py",
+      "okto_nexus/application/home_entries.py",
+      "okto_nexus/domain/home_entries.py",
+      "okto_nexus/domain/home_entry_pages.py"
+    ],
+    "intent": "Prefilter connection inventory proof for truthful empty Home; no new SQL/migration/Core change."
+  },
+  "final_installed_home_focal": {
+    "tests": "22",
+    "failures": "0",
+    "errors": "0",
+    "time": "69.273",
+    "status": "PASS",
+    "changed_inputs": [],
+    "files": [
+      "test_empty_inventory.py",
+      "test_entry_pages.py",
+      "test_entry_related.py",
+      "test_entry_app_integration.py"
+    ]
+  },
+  "previous_candidate_qualification": "pr08-installed-vmh-antecedent.json",
+  "source_input_drift_classification": "Only two test/browser fixture source files changed outside the final installed22 campaign; no packaged Python/frontend/metadata input drift. Raw before/after pins are retained."
+}

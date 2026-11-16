@@ -69,6 +69,19 @@ checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
 Cada relatório preserva seu corte e seus antecedentes. Assets posteriores não
 mudam retroativamente a qualificação de browser ou os tempos medidos antes deles.
 
+O pacote final BXP tem wheel SHA256
+`544c48099db0793c66af54a48c70585e620fb0e56e02b145ab1bb38e5e743a64`.
+Os 708 módulos Python são byte a byte iguais ao corte que passou pelos 22 focais
+instalados da Home. A comparação com o antecedente de 189 casos isola quatro
+arquivos de metadados do inventário e mantém 704 idênticos. Smoke, entrypoints,
+Twine e pins do pacote final passaram; nenhuma instalação pessoal foi alterada.
+
+A proposta real foi vinculada a esse pacote, teve 21 testes offline e um smoke
+de lifecycle real com zero admissões. A revisão independente e a conferência de
+1.047 pins passaram. O candidato `3ea51229…fafb88e` foi apresentado ao usuário
+para uma nova autorização específica; o template permanece falso. Nenhuma
+aprovação de release/default é inferida dessa eventual autorização da campanha.
+
 ## Limites que impedem qualificação completa
 
 Além dos gates abaixo, há cenários completos de navegador, escopo, serviço e

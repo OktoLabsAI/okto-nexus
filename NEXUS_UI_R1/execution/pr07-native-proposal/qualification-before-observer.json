@@ -1,0 +1,61 @@
+{
+  "at": "2026-11-16T21:58:59.900170+00:00",
+  "status": "OFFLINE_GUARDS_PASS_DRAFT_PACKAGE_BIND_PENDING",
+  "candidate": "candidate-draft-v2.json",
+  "candidate_sha256": "5b676433646ec78d5a9ca2dc530aec3bef3372ba8cdc0d97b2800157e643e433",
+  "offline_tests": {
+    "passed": 18,
+    "elapsed_seconds": 1.31,
+    "toolref": "68ea1e",
+    "junit": "offline.xml",
+    "previous_17_pass_antecedent": "8aaa85; one mixed-case environment guard case added after Root review"
+  },
+  "ruff": {
+    "status": "PASS",
+    "toolref": "3e4c28"
+  },
+  "commands": {
+    "dry-run": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\driver.py",
+        "dry-run",
+        "--plan",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\candidate-draft-v2.json",
+        "--expected-plan-sha256",
+        "5b676433646ec78d5a9ca2dc530aec3bef3372ba8cdc0d97b2800157e643e433"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"campaign_id\": \"062496549c9340ccb78271b640c8849a\",\n  \"policy\": {\n    \"accounting\": \"observed_plus_permanent_per_admission_v1\",\n    \"claude_scope\": \"full_result_per_admission_conservative_sum\",\n    \"codex_final_usage_claim\": false,\n    \"max_admissions\": 6,\n    \"observed_limit\": 500000,\n    \"preventive\": 450000,\n    \"provision_per_admission\": 75000,\n    \"provision_refund\": false,\n    \"reserve\": 50000\n  },\n  \"order\": [\n    \"codex.setup\",\n    \"claude.setup\",\n    \"codex.work\",\n    \"codex.continue\",\n    \"claude.work\",\n    \"claude.continue\"\n  ],\n  \"effects_started\": false,\n  \"provider_called\": false,\n  \"package_bound\": false,\n  \"native_bindings_bound\": true\n}\n",
+      "stderr": ""
+    },
+    "execute": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\driver.py",
+        "execute",
+        "--plan",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\candidate-draft-v2.json",
+        "--expected-plan-sha256",
+        "5b676433646ec78d5a9ca2dc530aec3bef3372ba8cdc0d97b2800157e643e433"
+      ],
+      "exit_code": 2,
+      "stdout": "{\"status\": \"REFUSED\", \"reason\": \"NEW_CAMPAIGN_CONSENT_REQUIRED\", \"no_automatic_replay\": true}\n",
+      "stderr": ""
+    }
+  },
+  "campaign_root_created": false,
+  "native_invoked": false,
+  "provider_called": false,
+  "provider_auth_or_configuration_content_read": false,
+  "provider_home_scanned": false,
+  "passive_discovery": "passive-discovery.json (Root explicitly authorized PATH/layout/executable SHA reads only)",
+  "old_draft": "candidate-draft.json is superseded, never authorized, no user consent exists.",
+  "remaining": "Bind final package after final UI browser/build; reconcile final template hash before ONE new real user authorization. Version/model/account entitlement is checked only after that consent, with strict refusal/no fallback."
+}

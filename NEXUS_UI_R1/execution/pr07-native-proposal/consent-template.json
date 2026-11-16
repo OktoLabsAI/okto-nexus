@@ -1,0 +1,26 @@
+{
+  "schema": "ui042-new-consent-v1",
+  "campaign_id": "062496549c9340ccb78271b640c8849a",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-062496549c9340ccb78271b640c8849a",
+  "candidate_sha256": "3ea51229df9bcc4d93d7f42dbe5e4d62a97741d97c99907a49a21cde6fafb88e",
+  "policy": {
+    "accounting": "observed_plus_permanent_per_admission_v1",
+    "claude_scope": "full_result_per_admission_conservative_sum",
+    "codex_final_usage_claim": false,
+    "max_admissions": 6,
+    "observed_limit": 500000,
+    "preventive": 450000,
+    "provision_per_admission": 75000,
+    "provision_refund": false,
+    "reserve": 50000
+  },
+  "issued_at": null,
+  "user_response_reference": null,
+  "user_authorized_new_campaign": false,
+  "allow_current_authenticated_codex_cli": false,
+  "allow_current_authenticated_claude_sonnet_cli": false,
+  "acknowledges_observed_not_atomic_billing_cap": false,
+  "acknowledges_admissions_not_upstream_http_count": false,
+  "allow_owned_canonical_force_after_normal_deadline": false,
+  "acknowledges_native_cli_may_write_its_own_login_home": false
+}

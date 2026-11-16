@@ -1,0 +1,19 @@
+{
+  "agent_ids": {
+    "claude": "ui042-claude-062496549c9340cc",
+    "codex": "ui042-codex-062496549c9340cc"
+  },
+  "campaign_id": "062496549c9340ccb78271b640c8849a",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-062496549c9340ccb78271b640c8849a",
+  "created_at": "2026-11-16T21:49:59.272507+00:00",
+  "intent_ids": {
+    "claude.continue": "ui042_062496549c9340ccb78271b640c8849a_claude_continue",
+    "claude.setup": "ui042_062496549c9340ccb78271b640c8849a_claude_setup",
+    "claude.work": "ui042_062496549c9340ccb78271b640c8849a_claude_work",
+    "codex.continue": "ui042_062496549c9340ccb78271b640c8849a_codex_continue",
+    "codex.setup": "ui042_062496549c9340ccb78271b640c8849a_codex_setup",
+    "codex.work": "ui042_062496549c9340ccb78271b640c8849a_codex_work"
+  },
+  "port": 51076,
+  "temporary_parent": "C:\\Users\\jpamb\\AppData\\Local\\Temp"
+}
