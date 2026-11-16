@@ -232,3 +232,88 @@ SQLite/HTTP da projeção nova; T-PANEL-01 exige parser/resolver de session sem
 operation_id. Todos continuam NOT_RUN nesta etapa. Mapas antigos não promovem
 esses cenários novos. HOME-R1 H02/I01/campanha/avaliação humana/performance e
 rollout continuam com seus limites; nem UI-003 nem um menu novo aprovam M3.
+
+## Decisão técnica UI-020 — composição inicial e filtro explícito
+
+Em 16/11/2026, o root aprovou distinguir a ausência do parâmetro `quick` da
+seleção explícita `quick=active`. Sem `quick`, a composição inicial mantém
+trabalho não terminal, sessões vivas e resultados recentes de24h, além dos
+resultados ainda `unseen` pela Attention canônica e retidos após essa janela.
+Com `quick=active`, resultados terminais são excluídos; `results` e `all`
+continuam caminhos explícitos para os resultados retidos. `not_tracked` não é
+tratado como `unseen`: fonte de tracking parcial mantém cobertura/total
+desconhecidos e nunca inventa `seen=false`.
+
+A normalização interna expõe `include_recent_results` no escopo de leitura e
+vincula esse valor ao cursor. Esse campo não é aceito como parâmetro externo;
+não foi criado um quinto filtro público. Os cursores usam base64/digest com
+validação de principal já autorizado, Server, filtros, partição, parent IDs,
+revisão e âncora de ordenação. Não há MAC nem assinatura criptográfica e nenhum
+token/chave de autenticação entra no cursor.
+
+Esta decisão esclarece o contrato; os testes de serviço/router opcionais de
+UI-020/021 não promovem integração de app, browser, performance ou rollout.
+
+Resultados antigos `not_tracked` continuam visíveis no default com
+`result_tracking=unknown`, cobertura parcial e totais desconhecidos; não são
+classificados como vistos nem não vistos. Metadados de atualidade propagam
+`as_of` e o menor prazo conhecido de15s/Attention/validade externa. Um budget
+global mantém envelope e unidades, com valores desconhecidos e sem cursor.
+
+Na implementação opcional UI-020/021, labels vêm somente de
+`agents.metadata.display_name` (string≤120, conforme identityMetadata/setup),
+`workspaces.display_name` e `execution_executors.label`, validados/redigidos no
+join em lote. Metadados extras não são selecionados. Ausente/inválido permanece
+null; grupo técnico usa fallback explícito `Agent name unavailable`, não IDs
+como nome principal. A chave/âncora nunca usa label. Identidade de item externo
+inclui geração; rotação não retargeta o item anterior nem transfere preferências.
+
+Recorte funcional final:14 focais de `test_entry_pages.py` PASS (56.83s,
+tool `23864b`), router montado somente no app de teste pelo helper opcional.
+Quantificação de uma leitura desse recorte:130 grupos canônicos,10 retornados,
+139 atividades/27 sessões/36 vínculos de operação nas fontes nativas,1
+observação externa;56 statements,1 UoW read-only,0 writes e23.290 bytes JSON
+compacto. É materialização O(N+relações), não O(página); limites100.000 rows por
+fonte nativa,65.536 observações pelo repositório canônico e deadlines de query
+com checagens globais de processamento. Não foi medido p95 nem latência HTTP.
+Build frontend simultâneo não é evidência de performance. Falhas/budget não
+transformam prefixos em inventário completo. Integração de app, cliente,
+browser e qualificação de performance continuam em seus próprios incrementos.
+
+## Extensão relacionada UI-030/031 — leitura contida por entrada
+
+O DTO de entrada acrescenta `attention_preview: AttentionOccurrence[]` e
+`results_preview: HomeResult[]`, sempre com no máximo3 objetos canônicos.
+Cada família possui `attention_total`/`results_total` (inteiro ou null),
+`has_more_attention`/`has_more_results` e
+`attention_cursor`/`results_cursor`. `related_coverage.attention` e `.results`
+são `ready` ou `unknown`, incluindo falhas de correlação/fontes. Os refs e
+ações de Attention no overview correspondem somente a esses previews, sem
+emitir milhares de refs/ações ou truncar sem caminho para o restante.
+
+Os caminhos são `GET /api/v1/home/entries/{group_id}/children/{entry_id}/attention`
+e `GET /api/v1/home/entries/{group_id}/children/{entry_id}/results`. Retornam o envelope
+existente com `partition=attention|results`, os parent IDs exatos e `items`
+canônicos completos. Aceitam os mesmos filtros/cursor e `limit` entre1 e100.
+Cursor vincula Server, principal já autorizado, filtros, partição, parent IDs,
+revisão material e âncora; mudança de parent/partição/revisão é CONFLICT.
+Não há endpoint de escrita novo. Ocorrências preservam source_revision,
+allowed_actions e os detalhes canônicos; resultados preservam estado de
+visualização, previews/artefatos e alvo. Nenhum desses detalhes depende de
+procurar uma primeira página da fila global no cliente.
+
+Attention ordena ação humana aberta/atual primeiro, depois tempo e ID; resultados
+ordenam unseen primeiro, depois tempo e ID. Totais desconhecidos não viram zero.
+A composição default sem `quick` inclui conexões configuradas e sessões offline
+ainda ligadas a uma conexão comprovada; `active` explícito continua filtrando
+esses passivos. Zero nessa seleção não prova ausência de agentes/instalação.
+
+Qualificação focal: `test_entry_related.py` e `test_entry_layer_boundary.py`,
+4 PASS em21.96s (tool `6c6dfd`), Ruff PASS (`8fded1`). Cinco perguntas do mesmo
+turn foram recebidas pelo ingress/canal/lease/grant canônicos sintéticos reais;
+cinco resultados históricos próprios compartilham uma entrega lógica, sem nova
+inferência. Ambos percorrem preview3 e todas as continuações, com igualdade ao
+objeto canônico, foreign group/entry/partition e limite inválido. Resultado seen
+por CAS real fica após unseen. GET não cria decisões/operações. A integração
+produtiva do router já pertence ao root; estes focais exercitam suas rotas reais
+no app temporário. Não são prova de browser, desempenho ou campanha real.

@@ -967,6 +967,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     app.include_router(attention_router(), prefix="/api/v1")
     from .home import build_router as home_router
     app.include_router(home_router(), prefix="/api/v1")
+    from ....bootstrap.home_entries import install_home_entries
+    install_home_entries(app, app.state.home)
     from .observations import management_router as observation_management_router, publish_router as observation_publish_router
     app.include_router(observation_management_router(), prefix="/api/v1")
     app.include_router(observation_publish_router(), prefix="/v1")

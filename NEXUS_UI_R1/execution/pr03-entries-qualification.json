@@ -1,0 +1,56 @@
+{
+  "stage": "PR-03 entries backend integration",
+  "status": "IMPLEMENTED",
+  "tasks": [
+    "UI-017",
+    "UI-018",
+    "UI-020",
+    "UI-021"
+  ],
+  "qualification": {
+    "command": "rtk proxy .venv\\Scripts\\python.exe -X utf8 -m pytest tests/ui_simplification -q -k \"not single_current_baseline_sample and not measured_metadata\"",
+    "passed": 52,
+    "deselected": 1,
+    "duration_seconds": 193.71,
+    "exit_code": 0,
+    "session": 44303,
+    "tool_ref": "096276",
+    "scope": "Current deterministic fixture, exact targets, entries relations/pages/related pages, production HTTP wiring and architecture boundary. Excludes original PR-00 measurement. Includes current one-size sample; no latency percentile claim."
+  },
+  "behavior": [
+    "Complete scoped canonical work/session/connection relations are correlated before grouping/counting/pagination; no React first-page inventory.",
+    "Sessions without operations, agent-originated handoffs, unassigned work, historical binding and claim identities retain exact provenance.",
+    "Attention and results enrich their parent; unrelated retained occurrences remain explicit. Server incidents remain separate from project counts.",
+    "Groups, children, sessions, attention and results expose bounded independent GET pagination with server/scope/principal/parent/revision checks.",
+    "One read-only UoW, no transcript/event-journal query, no productive effects. Existing operator policy precedes source reads.",
+    "Partial or budget-exhausted sources never become exact empty inventories. Unknown result tracking remains unknown.",
+    "Production app installs additive entries routes; overview V1 remains available and tested. No-store and strict query validation apply."
+  ],
+  "limitations": [
+    "Materialization costs O(N+relationships) within per-source row and global time budgets, not O(page).",
+    "One-size SQL/payload assertions do not prove 1/10/100 scaling or p50/p95; UI-022 remains pending.",
+    "HTTP/SQLite fixtures do not qualify a native harness, mounted browser, screen reader or comprehension.",
+    "Cases spanning browser and HTTP remain NOT_RUN until both levels are exercised.",
+    "Starlette emits its existing httpx TestClient deprecation warning."
+  ],
+  "migrations": 0,
+  "provider_calls": 0,
+  "effects": "Additive read projection and routes only; no grants, sessions, ACKs or execution created by reads.",
+  "rollback": "Revert additive entries integration and restore legacy presentation; existing overview, sessions, setup/receipts and persisted execution state remain compatible.",
+  "next": "UI-022 scaling/semantics qualification; finish UI-023..028 composition and UI-035..039 mandatory onboarding.",
+  "working_tree_raw_sha256": {
+    "src/okto_nexus/adapters/inbound/http/app.py": "f66ddf1ee9535d74a5a9ad512f211a642f79bff4ffa4b8b662fba0b0ba6d9c3e",
+    "src/okto_nexus/adapters/inbound/http/home_entries.py": "405d53f9ad8ac7e27fb46e7d57e0bcaac7452f3f668f25c18dbbbe79c4818b28",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "710284fdfc2d8728905dabeb9b9aaa2af6eb8592227ec2baaa1a7e1e84b35342",
+    "src/okto_nexus/application/home_entries.py": "3ea1153b7a7412a1e714681e4f7f81b27b6ce0e36d76ab5977f004d0b573a348",
+    "src/okto_nexus/application/home_ports.py": "08b0ad58709c56cd7bd4e6def05ce6cecb0d1fec5eb1d8b6115b39ce7d2f7f0c",
+    "src/okto_nexus/bootstrap/home_entries.py": "45c09a3b2a32fb4a88d5b266d087a5709c71d40a92f6ba3a3d0eeef7dec4c6d9",
+    "src/okto_nexus/domain/home_entries.py": "df16b1f6c755983ec99fc380ce88661454c076289905d1a8855d47adb7161d22",
+    "src/okto_nexus/domain/home_entry_pages.py": "6e34e7d198fe9821d61591c2334753f35bb3f8a610a238afd1e01a27d24cf40e",
+    "tests/ui_simplification/test_entry_app_integration.py": "243bb440063298a794837130f0ef87f4a9983b1f9ae37ee170da5ff0b887b3e4",
+    "tests/ui_simplification/test_entry_layer_boundary.py": "d33d8e2087baec5dd89b5c7bd3ecc35215f59047828b6aeedae141549471dbdc",
+    "tests/ui_simplification/test_entry_pages.py": "9ecaf62906116bdd1e5d56ca7430afa1f056b03cbc4ae89a7c190b6841b22365",
+    "tests/ui_simplification/test_entry_related.py": "56e2f7cdbdc0684799cd68d08e0544648791ad5490bdd9ddc89b9f916fb5885a",
+    "tests/ui_simplification/test_entry_relations.py": "b3f4ced0c15ac5fc4060aa954713602fb889752eaa16f97861625f25bbb010fc"
+  }
+}

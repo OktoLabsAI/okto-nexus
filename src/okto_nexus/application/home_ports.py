@@ -1,5 +1,7 @@
 """Read-only database boundary for HOME projections."""
-from typing import Protocol
+from typing import Callable, Protocol
+
+from ..domain.home_entries import EntryRelations
 
 
 class HomeOverviewQueries(Protocol):
@@ -9,3 +11,13 @@ class HomeOverviewQueries(Protocol):
     def target(self, uow, target): ...
     def overview(self, uow, *, scope, server_id, now, limits, attention_relation): ...
     def attention_page(self, uow, *, relation, limit, scope, now, serverwide=False, after=None): ...
+
+
+class HomeEntryQueries(Protocol):
+    """Complete passive relations in the caller's authorized read snapshot."""
+
+    def read(self, uow, *, scope, server_id: str, now: str, attention_relation,
+             check_budget: Callable[[], None]) -> EntryRelations: ...
+
+    def external(self, uow, *, scope, server_id: str, now: str, config, observations,
+                 relations: EntryRelations, check_budget: Callable[[], None]) -> None: ...
