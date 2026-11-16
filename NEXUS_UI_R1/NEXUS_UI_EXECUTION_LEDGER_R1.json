@@ -1378,7 +1378,9 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr01-shell-qualification.json",
-        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json"
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
+        "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
       ],
       "limitations": [
         "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
@@ -1417,7 +1419,9 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr01-shell-qualification.json",
-        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json"
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
+        "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
       ],
       "limitations": [
         "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
@@ -1546,7 +1550,9 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr01-shell-qualification.json",
-        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json"
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
+        "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
       ],
       "limitations": [
         "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
@@ -2298,7 +2304,9 @@
         "T-PANEL-06"
       ],
       "evidence": [
-        "NEXUS_UI_R1\\execution\\pr03-session-viewer-qualification.json"
+        "NEXUS_UI_R1\\execution\\pr03-session-viewer-qualification.json",
+        "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
       ],
       "limitations": [
         "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
@@ -2415,7 +2423,9 @@
         "T-A11Y-03"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
+        "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
@@ -2494,7 +2504,9 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json",
+        "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos."
@@ -2574,7 +2586,8 @@
         "T-CONN-04"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr06-connector-qualification.json"
+        "NEXUS_UI_R1/execution/pr06-connector-qualification.json",
+        "NEXUS_UI_R1/execution/pr07-login-fixture-qualification.json"
       ],
       "limitations": [
         "Synthetic CLI/HTTP pipeline; complete UI journey and native host qualification remain pending."
@@ -2656,7 +2669,8 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
+        "NEXUS_UI_R1/execution/pr07-login-fixture-qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
@@ -2748,7 +2762,8 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
+        "NEXUS_UI_R1/execution/pr07-login-fixture-qualification.json"
       ],
       "limitations": []
     },
@@ -2789,7 +2804,9 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json",
+        "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos."
@@ -3142,12 +3159,14 @@
       "given": "Índice Advanced aberto.",
       "when": "Acessar cada grupo.",
       "expected": "Todos os destinos da matriz estão acessíveis, sem sidebar expandir para dezenas de itens.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+      ],
       "tasks": [
         "UI-007"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Subset real browser comprovado; Memory direct view/fresh question arrival e funções completas não inferidas. Ver qualification.json."
       ]
     },
     {
@@ -3172,12 +3191,14 @@
       "given": "Memory desabilitada.",
       "when": "Abrir Advanced e tentar link direto.",
       "expected": "Visibilidade/recusa seguem contratos atuais; navegação não habilita a feature.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+      ],
       "tasks": [
         "UI-007"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Subset real browser comprovado; Memory direct view/fresh question arrival e funções completas não inferidas. Ver qualification.json."
       ]
     },
     {
@@ -3222,12 +3243,14 @@
       "given": "Em Graph ou Artifacts surge pergunta.",
       "when": "Abrir sino.",
       "expected": "Fila abre no contexto global, sem exigir rota Advanced ou outra Home.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+      ],
       "tasks": [
         "UI-008"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Subset real browser comprovado; Memory direct view/fresh question arrival e funções completas não inferidas. Ver qualification.json."
       ]
     },
     {
@@ -3285,17 +3308,20 @@
     },
     {
       "id": "T-NAV-12",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "360px e menu móvel.",
       "when": "Navegar pelos destinos básicos e Advanced.",
       "expected": "Menu fecha corretamente, foco e rótulos acessíveis; sem overflow obrigatório.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+      ],
       "tasks": [
         "UI-010"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Navegador real com fixture canônica e peers sintéticos; não certifica leitor de tela ou harness real."
       ]
     },
     {
@@ -3851,17 +3877,20 @@
     },
     {
       "id": "T-PANEL-05",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Drawer contém terminal.",
       "when": "Maximizar/restaurar.",
       "expected": "Uma camada gerenciada, sem dois dialogs modais/foco concorrente.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+      ],
       "tasks": [
         "UI-029"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Navegador real com fixture canônica e peers sintéticos; não certifica leitor de tela ou harness real."
       ]
     },
     {

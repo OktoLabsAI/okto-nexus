@@ -1,0 +1,21 @@
+{
+  "scope": "final source snapshot only; antecedent compiled assets retain their own READY pins",
+  "source_sha256": {
+    "frontend/src/App.tsx": "6fe23fbfa03fe4ca646871ea31829e1d6be09c5991aa99acc2448dc3c16b3f2d",
+    "frontend/src/components/AgentActionModal.css": "ceb610f6ebc547e6fc97c07e60f71f7a1ff1e257931a1eee9b16650e17d81dd5",
+    "frontend/tests/navigationFocus.test.mjs": "7fada334f6c469b2964e1d23b99fb63b5aac5098a9a7e6c0deb09a654e6a454c",
+    "tests/ui_simplification/browser_navigation_fixture.py": "187ba1bd43bc6295fd5f26a4de410d0cbeaa70f12d537ded20020b4c246fdd52",
+    "tests/ui_simplification/browser_navigation_checks.js": "250f02e776fd4af5429ede86f052977de68ad8e1bf3ae5125611e2c5693405cb",
+    "tests/ui_simplification/browser_navigation_focus_checks.js": "702aea1a1ca84341b2b1e02e063d3af018671331657a4f5d06f348374e296437",
+    "tests/ui_simplification/browser_panel_expand_checks.js": "3b72595209789ef5a53207c44d8e5c9e8b0d16c0db0efbf116571f142929b1b9"
+  },
+  "final_static_sha256": {
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "57106acf826e0f8098dffb435fe9e371e4b7ed9e860253603ab68ebe22ce4cd3",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-BXpHvePH.js": "6872da3cff0444e43226a5aafdcb061f320f217e2eb6ceb83f80266e29a4d6c7",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-C-ZFb395.css": "cf9d0698234d975279e0da1a1cfb10dd2e8f0f88d15c074515049a556bf43683",
+    "src/okto_nexus/adapters/inbound/http/static/logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+    "src/okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-dark.svg": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+    "src/okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-light.svg": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+    "src/okto_nexus/adapters/inbound/http/static/logos/oktolabs-icon.svg": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+  }
+}

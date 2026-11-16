@@ -4,7 +4,7 @@
 // class strategy. Every surface beyond the gate talks exclusively to
 // /api/v1 (br_4eeb72b0).
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   ChartColumn,
   ChevronDown,
@@ -163,6 +163,12 @@ function OperatorGate({configured, onUnlock}: {configured: boolean; onUnlock: ()
   </div>;
 }
 
+export function restoreClosedNavigationFocus(navigation:HTMLElement|null, trigger:HTMLButtonElement|null, active:Element|null):boolean {
+  if(!navigation||!trigger||!active||!navigation.contains(active)||active.closest('dialog[open], [role="dialog"]'))return false;
+  trigger.focus({preventScroll:true});
+  return true;
+}
+
 function Dashboard({
   onLock,
   localOpen,
@@ -176,6 +182,8 @@ function Dashboard({
   const [view, setViewState] = useState<View>("Home");
   const [narrow, setNarrow] = useState(() => window.matchMedia('(max-width: 767px)').matches);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigationToggleRef=useRef<HTMLButtonElement>(null);
+  const navigationPanelRef=useRef<HTMLElement>(null);
   useEffect(() => {
     const media = window.matchMedia('(max-width: 767px)');
     const resize = () => { setNarrow(media.matches); setMobileMenuOpen(false); };
@@ -219,6 +227,9 @@ function Dashboard({
     () => localStorage.getItem("okto-nexus-sidebar") !== "closed",
   );
   const navigationOpen = narrow ? mobileMenuOpen : sidebarOpen;
+  useLayoutEffect(()=>{
+    if(!navigationOpen)restoreClosedNavigationFocus(navigationPanelRef.current,navigationToggleRef.current,document.activeElement);
+  },[navigationOpen]);
   const [workspaces, setWorkspaces] = useState<WorkspaceListItem[]>([]);
   // True once GET /workspaces answered, so an empty list is not mistaken for
   // "not loaded yet" when the saved scope is checked.
@@ -603,6 +614,7 @@ function Dashboard({
           aria-expanded={navigationOpen}
           aria-controls="dashboard-navigation"
           data-testid="sidebar-toggle"
+          ref={navigationToggleRef}
         >
           <PanelLeft size={18} />
         </button>
@@ -802,6 +814,7 @@ function Dashboard({
         aria-label="Close navigation" onClick={() => setMobileMenuOpen(false)} />}
       {/* Navigation sidebar (the Pulse Sidebar grammar) */}
       <aside
+        ref={navigationPanelRef}
         id="dashboard-navigation"
         aria-hidden={!navigationOpen}
         className={`absolute inset-y-0 left-0 z-30 md:static backdrop-blur-md bg-surface-50 dark:bg-surface-900

@@ -51,6 +51,16 @@ supervisor/control receipt with a correctly matched injected parent/child
 identity, then exercises Resume/Add; no real login task is required to test that
 composition, but its ownership proof cannot simply be omitted.
 
+After this run, Root corrected that test-only native observation boundary and
+added a missing-parent negative. The separate Connector report
+`docs/evidence/ui-r1/login-fixture-qualification.json` (commit `4d51008`) records
+36 PASS / 1 new-test oracle FAIL plus a corrected 1-case PASS; not a single
+37/37 run. Native parent/task/process observations remain injected and runtime
+source did not change. The `login-fixture-*.xml` files in this directory retain
+that later qualification. It supersedes the stale fixture expectation for the
+mocked composition, without rewriting the three original failures above or
+claiming a native Windows login task was installed.
+
 There were no native provider/harness executions, personal credentials, native
 scheduled-task mutations, Windows session events or global service changes.
 Native peers and task-driver boundaries are explicitly synthetic. The new Home

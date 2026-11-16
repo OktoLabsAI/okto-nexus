@@ -1,0 +1,809 @@
+{
+  "status": "PARTIAL",
+  "checks": [
+    {
+      "name": "NAV03 four Advanced groups",
+      "status": "PASS",
+      "groups": [
+        "Agents and execution",
+        "Policies and control",
+        "History and diagnostics",
+        "System and data"
+      ]
+    },
+    {
+      "name": "Memory OFF not advertised",
+      "status": "PASS",
+      "destinations": [
+        "Agent administration",
+        "Runtime administration",
+        "Tags and capabilities",
+        "Communication styles",
+        "Policies",
+        "Guardrails",
+        "Approval history",
+        "Message history",
+        "Work delegations",
+        "Events",
+        "Execution records",
+        "Project health",
+        "System settings"
+      ]
+    },
+    {
+      "name": "NAV03 destination Agent administration",
+      "status": "PASS",
+      "headings": []
+    },
+    {
+      "name": "NAV03 destination Runtime administration",
+      "status": "PASS",
+      "headings": [
+        "Runtimes",
+        "Agent connections",
+        "Transport operations"
+      ]
+    },
+    {
+      "name": "NAV03 destination Tags and capabilities",
+      "status": "PASS",
+      "headings": [
+        "Registry",
+        "Register a new key"
+      ]
+    },
+    {
+      "name": "NAV03 destination Communication styles",
+      "status": "PASS",
+      "headings": [
+        "Communication"
+      ]
+    },
+    {
+      "name": "NAV03 destination Policies",
+      "status": "PASS",
+      "headings": [
+        "Policies"
+      ]
+    },
+    {
+      "name": "NAV03 destination Guardrails",
+      "status": "PASS",
+      "headings": [
+        "Guardrails",
+        "1. Agent groups",
+        "2. Guardrail rules",
+        "3. Apply a guardrail to agents",
+        "Denials"
+      ]
+    },
+    {
+      "name": "NAV03 destination Approval history",
+      "status": "PASS",
+      "headings": [
+        "Approvals",
+        "Pending"
+      ]
+    },
+    {
+      "name": "NAV03 destination Message history",
+      "status": "PASS",
+      "headings": []
+    },
+    {
+      "name": "NAV03 destination Work delegations",
+      "status": "PASS",
+      "headings": [
+        "Open",
+        "Claimed",
+        "Verifying",
+        "Completed",
+        "Rejected",
+        "Cancelled"
+      ]
+    },
+    {
+      "name": "NAV03 destination Events",
+      "status": "PASS",
+      "headings": []
+    },
+    {
+      "name": "NAV03 destination Execution records",
+      "status": "PASS",
+      "headings": [
+        "Execution log"
+      ]
+    },
+    {
+      "name": "NAV03 destination Project health",
+      "status": "PASS",
+      "headings": [
+        "Unnamed workspace",
+        "Coordination health",
+        "Message distribution"
+      ]
+    },
+    {
+      "name": "NAV03 destination System settings",
+      "status": "PASS",
+      "headings": [
+        "Settings",
+        "Appearance",
+        "Operator notifications"
+      ]
+    },
+    {
+      "name": "NAV03 sidebar stays compact",
+      "status": "PASS"
+    },
+    {
+      "name": "Memory OFF canonical direct endpoint refuses",
+      "status": 422,
+      "body": {
+        "detail": [
+          {
+            "type": "missing",
+            "loc": [
+              "query",
+              "workspace"
+            ],
+            "msg": "Field required",
+            "input": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "NAV08 bell global from Graph",
+      "status": "PASS",
+      "queue_url": "http://127.0.0.1:63381/api/v1/attention?state=active&seen=all&limit=50",
+      "items": [
+        {
+          "workspace_id": "ws",
+          "kind": "executor_disconnected_with_work"
+        },
+        {
+          "workspace_id": "ws",
+          "kind": "executor_disconnected_with_work"
+        },
+        {
+          "workspace_id": "ws",
+          "kind": "question_waiting_for_agent"
+        }
+      ]
+    },
+    {
+      "name": "NAV08 bell global from Artifacts",
+      "status": "PASS",
+      "queue_url": "http://127.0.0.1:63381/api/v1/attention?state=active&seen=all&limit=50",
+      "items": [
+        {
+          "workspace_id": "ws",
+          "kind": "executor_disconnected_with_work"
+        },
+        {
+          "workspace_id": "ws",
+          "kind": "executor_disconnected_with_work"
+        },
+        {
+          "workspace_id": "ws",
+          "kind": "question_waiting_for_agent"
+        }
+      ]
+    },
+    {
+      "name": "NAV12 mobile navigate Home",
+      "status": "FAIL",
+      "focus": {
+        "tag": "BUTTON",
+        "label": "Home",
+        "hidden": true,
+        "visible": true,
+        "width": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "NAV12 mobile navigate Conversations",
+      "status": "FAIL",
+      "focus": {
+        "tag": "BUTTON",
+        "label": "Conversations",
+        "hidden": true,
+        "visible": true,
+        "width": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "NAV12 mobile navigate Graph",
+      "status": "FAIL",
+      "focus": {
+        "tag": "BUTTON",
+        "label": "Graph",
+        "hidden": true,
+        "visible": true,
+        "width": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "NAV12 mobile navigate Artifacts",
+      "status": "FAIL",
+      "focus": {
+        "tag": "BUTTON",
+        "label": "Artifacts",
+        "hidden": true,
+        "visible": true,
+        "width": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "NAV12 mobile navigate Advanced",
+      "status": "FAIL",
+      "focus": {
+        "tag": "BUTTON",
+        "label": "Advanced",
+        "hidden": true,
+        "visible": true,
+        "width": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "NAV12 Escape closes with accessible focus",
+      "status": "FAIL",
+      "focus": {
+        "tag": "BUTTON",
+        "label": "Home",
+        "hidden": true,
+        "visible": true,
+        "width": 360,
+        "viewport": 360
+      }
+    },
+    {
+      "name": "No canonical mutation requested",
+      "status": "PASS",
+      "mutations": []
+    },
+    {
+      "name": "No page runtime errors",
+      "status": "PASS",
+      "errors": []
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/assets/index-CIXUIG91.js"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/assets/index-CXFy-VnM.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/stream?view=attention&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/stream?"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/presets"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/tags"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/capabilities"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/observations/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents/B/runtime-policy"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents/C/runtime-policy"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents/operator/runtime-policy"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents/other/runtime-policy"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents/registrar/runtime-policy"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents/subject/runtime-policy"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/harness/bindings?limit=50"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/harness/outbox?limit=50"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/tags"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/comm-presets"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/events?type=governance.denied&after=0&limit=200&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/policies"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/tags"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/guardrails/groups"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/guardrails"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/guardrails/assignments?"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/capabilities"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/guardrails/denials?workspace=ws&limit=50"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/approvals?workspace=ws&status=all&limit=100&offset=0"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/settings"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/messages?page=1&page_size=25&include_body=true&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/handoffs?workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/events/types?workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/events?after=0&limit=25&workspace=ws&since=2026-11-15T21%3A42%3A00.000Z&until=2026-11-16T21%3A42%3A00.000Z"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/harness/execution-log?offset=0&limit=100&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces/ws/analytics?window=24h"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/sessions?workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces/ws/health?window=24h"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/one-shot-policy"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/runtime-policy"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/settings"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/stream?view=attention"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention?state=active&seen=all&limit=50"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention?state=active&seen=all&limit=50"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/artifacts?workspace=ws&page=1&page_size=20"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/stream?view=attention&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/stream?view=attention"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention?state=active&seen=all&limit=50"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention?state=active&seen=all&limit=50"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/stream?view=attention&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/runtime-management/runtime/input-requests?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/settings"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/messages?agent=operator&page=1&page_size=20&include_body=true&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/handoffs?from_agent=operator&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/artifacts?workspace=ws&page=1&page_size=20"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:63381/api/v1/workspaces"
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Question was preseeded; no fresh question/SSE arrival was generated.",
+    "No generic Memory view URL contract exists in App; direct canonical HTTP feature refusal was tested.",
+    "No assistive-technology speech or physical mobile device qualification."
+  ]
+}

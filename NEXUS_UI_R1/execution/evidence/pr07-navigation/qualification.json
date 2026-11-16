@@ -1,0 +1,72 @@
+{
+  "status": "SCOPED_BROWSER_PASS_WITH_RETAINED_ANTECEDENTS",
+  "provider_calls": 0,
+  "productive_http_mutations": 0,
+  "fixture": "canonical SQLite and HTTP; synthetic native peers; read-only wrapper",
+  "cases": {
+    "T_NAV03": {
+      "status": "PASS_SUBSCOPE",
+      "cut": "CIXUIG91",
+      "evidence": "antecedent-CIXUIG91/navigation-result.json",
+      "qualified": "four Advanced groups and 13 destination navigation/breadcrumbs; Memory hidden",
+      "not_qualified": [
+        "full destination functions",
+        "direct Memory view URL"
+      ]
+    },
+    "T_NAV08": {
+      "status": "PASS_SUBSCOPE",
+      "cut": "CIXUIG91",
+      "evidence": "antecedent-CIXUIG91/navigation-result.json",
+      "qualified": "Graph and Artifacts bell open unfiltered global Attention with preseeded question",
+      "not_qualified": [
+        "fresh question arrival"
+      ]
+    },
+    "T_NAV12": {
+      "status": "PASS",
+      "cut": "BXpHvePH",
+      "evidence": "focus-final-result.json",
+      "checks": 13,
+      "retained_failure": "antecedent-CIXUIG91/navigation-result.json"
+    },
+    "T_PANEL05": {
+      "status": "PASS",
+      "cut": "BXpHvePH",
+      "evidence": "panel-final-result.json",
+      "widths": [
+        896,
+        1368,
+        896
+      ],
+      "dialogs": 1,
+      "viewers": 1,
+      "same_target_and_stable_viewer": true,
+      "retained_failures": [
+        "antecedent-CIXUIG91/panel-expand-result.json",
+        "panel-BXp-initial-loading-oracle.json"
+      ]
+    }
+  },
+  "final_js_sha256": "6872da3cff0444e43226a5aafdcb061f320f217e2eb6ceb83f80266e29a4d6c7",
+  "final_css_sha256": "cf9d0698234d975279e0da1a1cfb10dd2e8f0f88d15c074515049a556bf43683",
+  "memory_direct_http": {
+    "correct_workspace_query_status": 200,
+    "is_feature_refusal_proof": false,
+    "direct_view_url": "NOT_RUN; no generic view URL contract"
+  },
+  "cleanup": "cleanup.json",
+  "limits": [
+    "No assistive technology or speech testing",
+    "No native provider/hardware test",
+    "No growing-output test",
+    "CIX NAV03/NAV08 not relabeled as BXP executions"
+  ],
+  "execution_handles": {
+    "focus": "7e8834",
+    "panel": "d2c643",
+    "browser_close": "cd8169",
+    "fixture_exit": "42bd29",
+    "physical_cleanup": "863d7f"
+  }
+}

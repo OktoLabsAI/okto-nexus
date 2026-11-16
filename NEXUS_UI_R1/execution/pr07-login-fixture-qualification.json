@@ -1,0 +1,12 @@
+{
+  "status": "CORRECTED_UNIT_FIXTURE_BOUNDARY_WITH_NEGATIVE_GUARD",
+  "connector_report": "OktoLabsAI/okto-nexus-connector feature/v0.0.13 docs/evidence/ui-r1/login-fixture-qualification.json",
+  "runtime_source_cut": "daa7f2b3abe6aea9ab72338c1475ebbb014a2340",
+  "runtime_changes": 0,
+  "result": {"antecedent_passed": 36, "antecedent_failed": 1, "antecedent_seconds": 11.31, "antecedent_tool_ref": "31e5c6", "corrected_focal_passed": 1, "corrected_focal_seconds": 1.40, "corrected_focal_tool_ref": "5fc3aa"},
+  "scope": "Installed Connector wizard/lifecycle and bounded-parent unit contracts; task/process/parent native observations injected. New missing-parent negative refuses without new task, drain, registration or onboarding effect.",
+  "prior_three_failures": "Preserved in evidence/pr07-service/connector-tests.xml. Wizard fixture had not modeled the new bounded-parent observation at its existing native boundary. No runtime guard was weakened.",
+  "xml": ["NEXUS_UI_R1/execution/evidence/pr07-service/login-fixture-async-mode-antecedent.xml", "NEXUS_UI_R1/execution/evidence/pr07-service/login-fixture-refusal-oracle-antecedent.xml", "NEXUS_UI_R1/execution/evidence/pr07-service/login-fixture-refusal-current-tests.xml"],
+  "limits": ["36-pass/1-oracle-fail plus corrected1-pass is not a single37/37 run.", "No real Windows login task, provider, credentials, active native session survival or presentation rollback qualified."],
+  "effects": {"paid_calls": 0, "personal_installation_changed": false, "runtime_wheel_changed": false}
+}

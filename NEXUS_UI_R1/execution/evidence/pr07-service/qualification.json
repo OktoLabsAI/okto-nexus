@@ -146,5 +146,17 @@
     "Three stale configure-login fixtures fail the current missing-parent-proof guard and are retained.",
     "No active native session/OUTCOME_UNKNOWN work survived the crash in these cases.",
     "No complete UI/release rollback or remote-unavailable fallback journey was executed."
-  ]
+  ],
+  "subsequent_fixture_contract_qualification": {
+    "connector_commit": "4d51008",
+    "runtime_changed": false,
+    "native_observation": "injected unit port, not real login registration",
+    "separate_runs": {
+      "broad_pass": 36,
+      "broad_new_oracle_fail": 1,
+      "corrected_focal_pass": 1
+    },
+    "original_three_failures_preserved": true,
+    "manifest": "login-fixture-manifest.json"
+  }
 }
