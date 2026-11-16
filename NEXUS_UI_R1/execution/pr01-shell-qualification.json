@@ -1,0 +1,39 @@
+{
+  "status": "PASS_SCOPED_SHELL_IMPLEMENTATION_NOT_M1_GATE",
+  "at": "2026-11-16T18:29:58.234235+00:00",
+  "npm_test": {
+    "tests": 228,
+    "passed": 228,
+    "failed": 0,
+    "exit_code": 0,
+    "duration_ms": 5481.37,
+    "tool_ref": "eabe99"
+  },
+  "build": {
+    "command": "rtk proxy npm run build",
+    "session": 75423,
+    "exit_code": 0,
+    "bundle": "index-6o2k3pzt.js",
+    "css": "index-CqPDZl5S.css",
+    "tool_refs": [
+      "09e558",
+      "68b7a8"
+    ],
+    "warning": "Existing large monolithic JS chunk; no promise of initial render performance"
+  },
+  "browser": {
+    "qualification": "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
+    "sha256": "7d6cdb14866be9ad90fe2c6b61fe23a78f8ba007e5cea31ac7295aa95c84204d",
+    "checks_pass": 17,
+    "mutations": 0,
+    "all_own_processes_exit0": true
+  },
+  "scope": "Four primary destinations plus Advanced, preserved legacy IDs and operator seen semantics; global active summary independent from project and queue filters; canonical approval inspection/fallback; Node and browser are distinct evidence.",
+  "limitations": [
+    "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
+    "All advanced pages, delegated ACL403, native question arriving in Graph/Artifacts, dirty-form guard and native AT not certified by the browser run.",
+    "Mobile keyboard/menu/hit-tests and no horizontal overflow recorded; automatic post-animation focus transfer not claimed.",
+    "No SQLite migration, policy/grant change or service lifecycle effect."
+  ],
+  "rollback": "Revert shell commits; old APIs/components/IDs and operational presentation flag remain; no data deletion."
+}

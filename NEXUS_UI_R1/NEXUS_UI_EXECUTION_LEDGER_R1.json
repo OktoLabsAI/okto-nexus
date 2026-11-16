@@ -53,7 +53,7 @@
       "id": "PR-01",
       "title": "Navegação simples e pendências globais",
       "milestone": "M1",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "tasks": [
         "UI-006",
         "UI-007",
@@ -1352,7 +1352,7 @@
       "id": "UI-006",
       "pr": "PR-01",
       "title": "Implementar registro de navegação com IDs estáveis",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-003"
       ],
@@ -1376,14 +1376,22 @@
         "T-NAV-02",
         "T-NAV-04"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr01-shell-qualification.json",
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json"
+      ],
+      "limitations": [
+        "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
+        "All advanced pages, delegated ACL403, native question arriving in Graph/Artifacts, dirty-form guard and native AT not certified by the browser run.",
+        "Mobile keyboard/menu/hit-tests and no horizontal overflow recorded; automatic post-animation focus transfer not claimed.",
+        "No SQLite migration, policy/grant change or service lifecycle effect."
+      ]
     },
     {
       "id": "UI-007",
       "pr": "PR-01",
       "title": "Criar índice Avançado e breadcrumb",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-006"
       ],
@@ -1407,14 +1415,22 @@
         "T-NAV-05",
         "T-NAV-06"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr01-shell-qualification.json",
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json"
+      ],
+      "limitations": [
+        "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
+        "All advanced pages, delegated ACL403, native question arriving in Graph/Artifacts, dirty-form guard and native AT not certified by the browser run.",
+        "Mobile keyboard/menu/hit-tests and no horizontal overflow recorded; automatic post-animation focus transfer not claimed.",
+        "No SQLite migration, policy/grant change or service lifecycle effect."
+      ]
     },
     {
       "id": "UI-008",
       "pr": "PR-01",
       "title": "Garantir sino e fila de pendências em qualquer Home",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-006"
       ],
@@ -1440,14 +1456,22 @@
         "T-ATTN-01",
         "T-ATTN-06"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr01-shell-qualification.json",
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json"
+      ],
+      "limitations": [
+        "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
+        "All advanced pages, delegated ACL403, native question arriving in Graph/Artifacts, dirty-form guard and native AT not certified by the browser run.",
+        "Mobile keyboard/menu/hit-tests and no horizontal overflow recorded; automatic post-animation focus transfer not claimed.",
+        "No SQLite migration, policy/grant change or service lifecycle effect."
+      ]
     },
     {
       "id": "UI-009",
       "pr": "PR-01",
       "title": "Migrar rótulos, links e preferências sem quebrar fluxos",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-006",
         "UI-007",
@@ -1476,14 +1500,22 @@
         "T-NAV-11",
         "T-RESULT-04"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr01-shell-qualification.json",
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json"
+      ],
+      "limitations": [
+        "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
+        "All advanced pages, delegated ACL403, native question arriving in Graph/Artifacts, dirty-form guard and native AT not certified by the browser run.",
+        "Mobile keyboard/menu/hit-tests and no horizontal overflow recorded; automatic post-animation focus transfer not claimed.",
+        "No SQLite migration, policy/grant change or service lifecycle effect."
+      ]
     },
     {
       "id": "UI-010",
       "pr": "PR-01",
       "title": "Validar shell simples e acesso operacional",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-009",
         "UI-005"
@@ -1512,8 +1544,16 @@
         "T-NAV-12",
         "T-A11Y-01"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr01-shell-qualification.json",
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json"
+      ],
+      "limitations": [
+        "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
+        "All advanced pages, delegated ACL403, native question arriving in Graph/Artifacts, dirty-form guard and native AT not certified by the browser run.",
+        "Mobile keyboard/menu/hit-tests and no horizontal overflow recorded; automatic post-animation focus transfer not claimed.",
+        "No SQLite migration, policy/grant change or service lifecycle effect."
+      ]
     },
     {
       "id": "UI-011",
@@ -2887,28 +2927,40 @@
     },
     {
       "id": "T-NAV-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Dashboard autenticado padrão.",
       "when": "Abrir sidebar.",
       "expected": "Exibir somente Home/Conversations/Graph/Artifacts como destinos principais e Advanced secundário.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
+        "NEXUS_UI_R1/execution/pr01-shell-qualification.json"
+      ],
       "tasks": [
         "UI-003",
         "UI-006",
         "UI-010"
+      ],
+      "limitations": [
+        "Scoped shell checks on synthetic canonical fixture; no real harness/AT/native200percent qualification."
       ]
     },
     {
       "id": "T-NAV-02",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Lista antiga contém Runtimes/Agents/Handoffs.",
       "when": "Abrir novo shell.",
       "expected": "Não criar novos destinos Harnesses/Execuções/Sessões ou duplicar atalhos como menus.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
+        "NEXUS_UI_R1/execution/pr01-shell-qualification.json"
+      ],
       "tasks": [
         "UI-006"
+      ],
+      "limitations": [
+        "Scoped shell checks on synthetic canonical fixture; no real harness/AT/native200percent qualification."
       ]
     },
     {
@@ -2962,15 +3014,21 @@
     },
     {
       "id": "T-NAV-07",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Home operacional OFF e aprovação pendente.",
       "when": "Usar shell simples.",
       "expected": "Sino/fila básica e controle canônico permanecem disponíveis.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
+        "NEXUS_UI_R1/execution/pr01-shell-qualification.json"
+      ],
       "tasks": [
         "UI-008",
         "UI-010"
+      ],
+      "limitations": [
+        "Scoped shell checks on synthetic canonical fixture; no real harness/AT/native200percent qualification."
       ]
     },
     {
@@ -2987,14 +3045,20 @@
     },
     {
       "id": "T-NAV-09",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Conversations renomeada e mensagens novas.",
       "when": "Entrar/sair e abrir Home.",
       "expected": "Comportamento de OPERATOR_VIEWS/vistos preservado; Home não marca tudo visto.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
+        "NEXUS_UI_R1/execution/pr01-shell-qualification.json"
+      ],
       "tasks": [
         "UI-009"
+      ],
+      "limitations": [
+        "Scoped shell checks on synthetic canonical fixture; no real harness/AT/native200percent qualification."
       ]
     },
     {
@@ -3012,15 +3076,21 @@
     },
     {
       "id": "T-NAV-11",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "documentação",
       "given": "Guias e introdução antigos.",
       "when": "Pesquisar nomes/caminhos visíveis.",
       "expected": "Orientações apontam para acessos reais e diferenciam Conversations de Messages.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
+        "NEXUS_UI_R1/execution/pr01-shell-qualification.json"
+      ],
       "tasks": [
         "UI-009",
         "UI-044"
+      ],
+      "limitations": [
+        "Scoped shell checks on synthetic canonical fixture; no real harness/AT/native200percent qualification."
       ]
     },
     {
@@ -4650,6 +4720,10 @@
     {
       "at": "2026-11-16T18:28:25.603965+00:00",
       "event": "UI011 read-only catalog acceptance verified; UI012/013 implementation current53unit+2canonicalHTTP/SQLite cases. Same logical workspace and original connection preservation proved with synthetic setup-test peer. Earlier90case regression remains separate cut. Session-intent/UI016 and Connector/UI onboarding gates remain open; no paid test or installation change."
+    },
+    {
+      "at": "2026-11-16T18:29:58.234235+00:00",
+      "event": "Shell implementation qualified at scoped levels:228Node/build and17browser checks, not all stage acceptances. Five fully covered navigation scenarios PASS; other partial/untested cases retain NOT_RUN. Prior Home/real-harness/AT gates not waived. No paid inference or installation change."
     }
   ],
   "risk_acceptances": [],

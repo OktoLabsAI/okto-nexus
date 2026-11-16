@@ -4,36 +4,20 @@
 // class strategy. Every surface beyond the gate talks exclusively to
 // /api/v1 (br_4eeb72b0).
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  Activity,
-  Bell,
-  Bot,
-  Brain,
   ChartColumn,
-  CheckSquare,
   ChevronDown,
   Compass,
-  Files,
-  FolderOpen,
   HelpCircle,
-  House,
   Info,
-  KanbanSquare,
   Lock,
   Menu,
-  MessageSquare,
-  MessagesSquare,
   Moon,
   PanelLeft,
   RotateCw,
   Settings,
-  Shield,
-  ShieldAlert,
   Sun,
-  Tags,
-  Users,
-  Waypoints,
   X,
 } from "lucide-react";
 import { AboutModal } from "./components/AboutModal";
@@ -96,39 +80,13 @@ import {
   workspaceDisplayName,
 } from "./components/WorkspaceNames";
 import type { WorkspaceListItem } from "./api";
+import {getNavigationBreadcrumb, getNavigationEntry, type ViewId} from './navigationRegistry';
+import {AdvancedView} from './views/AdvancedView';
+import {useScopedAttentionSummary} from './hooks/useScopedAttentionSummary';
+import {NavigationSidebar} from './components/NavigationSidebar';
+import {GlobalAttentionButton} from './components/GlobalAttentionButton';
 
-const VIEWS = [
-  { name: "Home", icon: House },
-  { name: "Attention", icon: Bell },
-  { name: "Graph", icon: Waypoints },
-  { name: "Messages", icon: MessagesSquare },
-  { name: "Handoffs", icon: KanbanSquare },
-  { name: "Meta-harness", icon: Bot },
-  { name: "Events", icon: Activity },
-  { name: "Artifacts", icon: Files },
-  // Experimental: listed only when feature_memory is enabled in the effective
-  // server config. MCP memory_* tool exposure is gated at server bootstrap too.
-  { name: "Memory", icon: Brain },
-  { name: "Workspaces", icon: FolderOpen },
-  { name: "Agents", icon: Users },
-  { name: "Registry", icon: Tags },
-  // The named, versioned policy catalog (spec 80624c1a): a policy is STAGED
-  // until an agent binds it; enforcement is always-on and binding-driven (the
-  // feature_governance flag is gone).
-  { name: "Policies", icon: Shield },
-  { name: "Guardrails", icon: ShieldAlert },
-  // The named, versioned communication-style catalog (spec 6f961722): the
-  // reusable half of the 4th per-agent axis — a style tells an agent HOW to
-  // communicate and surfaces SELF-ONLY on its whoami once bound.
-  { name: "Communication", icon: MessageSquare },
-  // Always listed too (spec 2948b2a2 BR6: pending items stay decidable with
-  // feature_hitl OFF); only the BADGE is gated — by the data, never the flag.
-  { name: "Approvals", icon: CheckSquare },
-  { name: "Runtimes", icon: Bot },
-  { name: "Execution log", icon: Activity },
-  { name: "Settings", icon: Settings },
-] as const;
-type View = (typeof VIEWS)[number]["name"];
+type View = ViewId;
 
 export default function App() {
   const [status, setStatus] = useState<import("./api").OperatorStatus | null>(null);
@@ -267,7 +225,9 @@ function Dashboard({
   const [workspace, setWorkspace] = useState<string>(
     () => localStorage.getItem("okto-nexus-workspace") ?? "all",
   );
-  const attention = useAttention({workspace, visible: view === 'Attention',
+  const attention = useAttention({workspace: view === 'Attention' ? 'all' : workspace, visible: view === 'Attention',
+    enabled: info?.features?.feature_attention !== false});
+  const globalAttention = useScopedAttentionSummary({workspace: 'all',
     enabled: info?.features?.feature_attention !== false});
   const [attentionInspection, setAttentionInspection] = useState<{
     item: AttentionOccurrence; action: AttentionAction;
@@ -305,7 +265,6 @@ function Dashboard({
     setAttentionInspection(null);
     setAttentionNavigationNotice(null);
   }, [workspace, view]);
-  const attentionSummary = ['forbidden', 'disabled'].includes(attention.state.status) ? null : attention.state.summary;
   const pickWorkspace = (id: string) => {
     if (!mayLeavePanel()) return;
     localStorage.setItem("okto-nexus-workspace", id);
@@ -324,13 +283,14 @@ function Dashboard({
   useEffect(() => {
     if (refreshTick) attention.refresh();
   }, [refreshTick, attention.refresh]);
+  useEffect(() => {if (refreshTick || attention.state.summary) globalAttention.refresh();},
+    [refreshTick, attention.state.summary?.observed_at, globalAttention.refresh]);
   // Monotonic counter bumped on every SSE event — drives the side panel's
   // live update while it is open (eventLog itself saturates at 500).
   const [liveTick, setLiveTick] = useState(0);
   // HITL (spec 2948b2a2): pending-approvals count behind the sidebar badge
   // (data-gated, never flag-gated — D7) + a tick bumped only on approval.*
   // SSE events so the Approvals screen refetches exactly when it matters.
-  const [pendingApprovals, setPendingApprovals] = useState(0);
   const [approvalTick, setApprovalTick] = useState(0);
   // Unread operator messages: server count behind the sidebar badge, a tick
   // bumped on message.created events, and the toasts shown in every view.
@@ -350,10 +310,6 @@ function Dashboard({
   );
   const menuRef = useRef<HTMLDivElement>(null);
   const memoryEnabled = Boolean(info?.features?.feature_memory);
-  const visibleViews = useMemo(
-    () => VIEWS.filter((v) => v.name !== "Memory" || memoryEnabled),
-    [memoryEnabled],
-  );
 
   const loadInfo = useCallback(async () => {
     const next = await api.info();
@@ -480,27 +436,8 @@ function Dashboard({
     return () => window.clearInterval(timer);
   }, [loadGraph, view]);
 
-  // Badge count (initial fetch + every approval.* event + header refresh).
-  // GET /approvals is workspace-scoped, so the "all" scope sums over every
-  // known workspace. A locked gate / non-operator key just means no badge.
-  const loadApprovalCount = useCallback(async () => {
-    try {
-      const ids =
-        workspace === "all"
-          ? (await api.workspaces()).workspaces.map((w) => w.workspace_id)
-          : [workspace];
-      const pages = await Promise.all(ids.map((id) => api.approvals(id)));
-      setPendingApprovals(
-        pages.reduce((total, page) => total + page.items.length, 0),
-      );
-    } catch {
-      setPendingApprovals(0);
-    }
-  }, [workspace]);
-
-  useEffect(() => {
-    loadApprovalCount();
-  }, [loadApprovalCount, approvalTick, refreshTick]);
+  const loadApprovalCount = useCallback(() => {attention.refresh();globalAttention.refresh();},
+    [attention.refresh, globalAttention.refresh]);
 
   // Unread messages for the operator. The first answer only seeds the list of
   // reported messages, so opening the dashboard does not toast old messages.
@@ -656,9 +593,13 @@ function Dashboard({
           <PanelLeft size={18} />
         </button>
         <BrandMark />
-        <span className="text-sm text-surface-500 dark:text-surface-400 truncate min-w-0">
-          / {view}
-        </span>
+        <nav aria-label="Breadcrumb" className="text-sm text-surface-500 dark:text-surface-400 flex flex-wrap items-center gap-1 min-w-0">
+          {getNavigationBreadcrumb(view).map((crumb, index, crumbs) => <span key={`${crumb.id}-${index}`} className="min-w-0">
+            <span aria-hidden="true"> / </span>
+            {index === crumbs.length - 1 ? <span aria-current="page">{crumb.label}</span>
+              : <button type="button" className="underline focus-visible:ring-2" onClick={() => setView(crumb.id)}>{crumb.label}</button>}
+          </span>)}
+        </nav>
         <div className="ml-auto w-full sm:w-auto min-w-0 flex items-center gap-2 text-xs">
           <select
             value={workspace}
@@ -683,12 +624,13 @@ function Dashboard({
               </option>
             ))}
           </select>
+          <GlobalAttentionButton state={globalAttention.state} onOpen={() => {globalAttention.refresh();setView('Attention');}}/>
           <LiveChip status={sseStatus} />
           <button
             className="btn btn-secondary !px-2"
             onClick={() => setRefreshTick((t) => t + 1)}
-            title={`Refresh ${view}`}
-            aria-label={`Refresh ${view}`}
+            title={`Refresh ${getNavigationEntry(view).label}`}
+            aria-label={`Refresh ${getNavigationEntry(view).label}`}
             data-testid="header-refresh"
           >
             <RotateCw size={14} />
@@ -844,60 +786,7 @@ function Dashboard({
         data-testid="nav-sidebar"
       >
         <div className="w-56 flex flex-col h-full">
-          <nav className="flex-1 overflow-y-auto p-2 pt-3">
-            <h3 className="px-3 py-1 text-xs font-medium uppercase tracking-wider text-surface-400 dark:text-surface-500">
-              Observability
-            </h3>
-            <ul className="space-y-1 mb-4">
-              {visibleViews.filter((v) => v.name !== "Settings").map(({ name, icon: Icon }) => (
-                <li key={name}>
-                  <button
-                    data-view={name}
-                    onClick={() => setView(name)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors ${
-                      view === name
-                        ? "bg-accent-100 text-accent-700 dark:bg-accent-900/60 dark:text-accent-200"
-                        : "text-surface-700 hover:bg-surface-100 dark:text-surface-300 dark:hover:bg-surface-800"
-                    }`}
-                  >
-                    <Icon size={16} />
-                    <span className="truncate">{name}</span>
-                    {(name === "Messages" || name === "Meta-harness") &&
-                      operatorUnread > 0 && (
-                      <span
-                        className="ml-auto min-w-[18px] px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-semibold text-center leading-none"
-                        data-testid={`unread-badge-${name}`}
-                        title="Unread messages addressed to the operator"
-                      >
-                        {operatorUnread}
-                      </span>
-                    )}
-                    {name === "Approvals" && pendingApprovals > 0 && (
-                      <span
-                        className="ml-auto min-w-[18px] px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-semibold text-center leading-none"
-                        data-testid="approvals-badge"
-                      >
-                        {pendingApprovals}
-                      </span>
-                    )}
-                    {name === 'Attention' && (Boolean(attentionSummary?.total) ||
-                        attention.state.status === 'stale' || attention.state.status === 'error') && (
-                      <span data-testid="attention-badge"
-                        aria-label={attentionSummary
-                          ? `${attentionSummary.counts.action_required} need action, ${attentionSummary.counts.watch} to watch${attention.state.status === 'stale' ? ', out of date' : ''}`
-                          : 'Attention could not be read'}
-                        title={attentionSummary
-                          ? `${attentionSummary.counts.action_required} need action; ${attentionSummary.counts.watch} to watch. ${workspace === 'all' ? 'All workspaces.' : 'Selected workspace.'}${attention.state.status === 'stale' ? ' Last known counts; refresh is pending.' : ''}`
-                          : 'Attention could not be read'}
-                        className="ml-auto min-w-[18px] px-1.5 py-0.5 rounded-full bg-accent-600 text-white text-[10px] font-semibold text-center leading-none">
-                        {attentionSummary ? `${attentionSummary.total}${attention.state.status === 'stale' ? '*' : ''}` : '!'}
-                      </span>
-                    )}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <NavigationSidebar view={view} onNavigate={setView} unread={operatorUnread}/>
         </div>
       </aside>
 
@@ -918,12 +807,19 @@ function Dashboard({
                     onRefreshAttention={attention.refresh} onNavigate={setView}/>}
             </div>
           </div>}
-          {view === 'Attention' && <AttentionView
+          {view === 'Advanced' && <AdvancedView memoryEnabled={memoryEnabled} onNavigate={setView}/>}
+          {view === 'Attention' && <div className="h-full flex flex-col min-h-0">
+            <p className="px-4 pt-3 text-xs text-surface-500">All projects and Server incidents. The project selector does not filter this queue.</p>
+            {attention.state.status === 'disabled' && <div className="px-4 pt-3 flex flex-wrap gap-2">
+              <button className="btn btn-secondary" onClick={() => setView('Approvals')}>Review approvals</button>
+              <button className="btn btn-secondary" onClick={() => setView('Meta-harness')}>Open Conversations</button>
+            </div>}
+            <div className="min-h-0 flex-1"><AttentionView
             state={{...attention.state, notice: attention.state.notice ?? attentionNavigationNotice}}
             filters={attention.filters} onFiltersChange={attention.setFilters}
             onRefresh={attention.refresh} onLoadMore={attention.loadMore}
             onSeen={attention.markSeen} onSnooze={attention.snooze} onOpen={openAttention}
-          />}
+          /></div></div>}
           {view === "Graph" && (
             <GraphView
               graph={graph}
@@ -1022,7 +918,7 @@ function Dashboard({
                   setToasts((current) => current.filter((t) => t.id !== toast.id));
                   setView("Meta-harness");
                 }}
-                title="Open Meta-harness"
+                title="Open Conversations"
               >
                 <div className="font-semibold text-surface-800 dark:text-surface-100">
                   {toast.title}

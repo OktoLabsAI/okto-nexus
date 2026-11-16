@@ -68,12 +68,17 @@ const SECTIONS: Section[] = [
         </P>
         <H>Connect your first agent</H>
         <P>
-          Go to <b>Agents → New agent</b>, name it and save its API key when
-          shown. Open the agent&apos;s <b>Connections</b> to configure a managed
-          runtime, or copy its MCP snippet into an independently running client.
-          For execution on another computer, use the <b>Connector</b> guide in
-          this help. The key is shown only once.
+          Open the connection guide from the header menu, or run
+          <code>okto-nexus connect</code> in your project terminal. The dashboard
+          is optional. For an independently running MCP client, use the MCP
+          credentials guide; for another computer, use the Connector guide.
+          Administration remains available under <b>Advanced → Agents and execution
+          → Agent administration</b>.
         </P>
+        <P>Home, Conversations, Graph and Artifacts are the main destinations.
+          Conversations is the chat surface; Message history under Advanced →
+          History and diagnostics is the technical message record. Needs attention
+          remains available from every page.</P>
         <H>Watch it live</H>
         <P>
           The graph shows presence and traffic in real time (the ● Live chip
@@ -81,7 +86,7 @@ const SECTIONS: Section[] = [
         </P>
         <H>Send a smoke-test message</H>
         <P>
-          Open <b>Meta-harness</b>, choose Message, select an audience and send
+          Open <b>Conversations</b>, choose Message, select an audience and send
           a turn. Replies appear in the same conversation, so it is the fastest
           way to confirm that an agent is connected and responding.
         </P>
@@ -115,7 +120,7 @@ const SECTIONS: Section[] = [
             <b>Delete</b>: removes a regular agent from active use and revokes
             its key. Runtime history remains available when it references the
             agent. The reserved <code>operator</code> identity powers dashboard
-            messaging and Meta-harness, so it cannot be deleted.
+            messaging and Conversations, so it cannot be deleted.
           </Li>
         </ul>
         <H>Permissions & presets</H>
@@ -147,7 +152,7 @@ const SECTIONS: Section[] = [
         <H>Choose where the harness runs</H>
         <P>
           Nexus uses Connector Core to discover and control supported Codex,
-          Claude Code and Pi installations. In <b>Agents → Connections</b>,
+          Claude Code and Pi installations. In <b>Advanced → Agents and execution → Agent administration → Connections</b>,
           Local means the Nexus Server machine; Remote means a machine running
           Connector. All permits either location; it does not authorize two
           simultaneous execution owners for the same agent identity.
@@ -190,11 +195,11 @@ const SECTIONS: Section[] = [
           The connection test checks installation, provider login and a real
           model response in a temporary session, then closes it. It does not
           test Nexus message routing. After Finish, send a private message in
-          Meta-harness and check the reply, receipts and Execution log.
+          Conversations and check the reply, receipts and Execution log.
         </P>
         <H>Session context and automatic delivery</H>
         <P>
-          Set defaults in <b>Settings → Global runtime defaults</b> or override
+          Set defaults in <b>Advanced → System and data → System settings → Global runtime defaults</b> or override
           them for an agent. Shared keeps senders in one conversation. One
           session per sender separates agents but shares that sender&apos;s history
           across its sessions. One session per sender + source session isolates
@@ -262,7 +267,7 @@ okto-nexus-connector identity list`}</Code>
         <P>
           After the setup reports completion, follow its runtime start command.
           Keep the daemon running to receive work; closing the setup terminal
-          does not stop it. Confirm a private message and reply in Meta-harness.
+          does not stop it. Confirm a private message and reply in Conversations.
         </P>
         <Code>{`okto-nexus-connector daemon status
 okto-nexus-connector runtime start CONNECTION_NAME
@@ -318,7 +323,7 @@ okto-nexus-connector proxy show`}</Code>
         <H>Delivery session requires reconciliation</H>
         <P>
           Nexus cannot yet confirm the retained session&apos;s state or ownership.
-          Automatic runtime recovery is enabled by default in Settings. New
+          Automatic runtime recovery is enabled by default in Advanced → System and data → System settings. New
           messages wait during recovery; already submitted work is not blindly
           replayed. If bounded recovery reports that attention is required,
           inspect the Execution log and resolve the reported condition before
@@ -455,13 +460,13 @@ okto-nexus-connector proxy show`}</Code>
   },
   {
     id: "meta-harness",
-    title: "Meta-harness",
+    title: "Conversations",
     icon: <Bot size={14} />,
     content: (
       <>
         <H>One conversation surface</H>
         <P>
-          Meta-harness combines messages, agent replies, handoff requests and
+          Conversations combines messages, agent replies, handoff requests and
           terminal handoff results in one chronological chat. Filter by one
           agent or keep the complete team conversation visible.
         </P>
@@ -496,7 +501,7 @@ okto-nexus-connector proxy show`}</Code>
           stays gray until every target acknowledges the message and turns
           green when all targets are done. Click the indicator to see each
           recipient&apos;s queued, received and acknowledged timestamps and who is
-          still pending. Under <b>Settings → Interface behavior</b>, switch the
+          still pending. Under <b>Advanced → System and data → System settings → Interface behavior</b>, switch the
           receipt display to <b>Timeline receipt messages</b> to restore the
           separate receipt turns.
         </P>
@@ -660,7 +665,7 @@ okto-nexus-connector proxy show`}</Code>
   },
   {
     id: "registry",
-    title: "Registry",
+    title: "Tags and capabilities",
     icon: <Tags size={14} />,
     content: (
       <>
@@ -703,7 +708,7 @@ okto-nexus-connector proxy show`}</Code>
         <P>
           Publishing appends a new immutable version; previous versions remain
           available for audit. A policy is only staged until you bind it to an
-          agent from <b>Agents</b>. Enforcement is driven by that binding and
+          agent from <b>Advanced → Agents and execution → Agent administration</b>. Enforcement is driven by that binding and
           applies immediately.
         </P>
         <H>Operate safely</H>
@@ -769,7 +774,7 @@ okto-nexus-connector proxy show`}</Code>
         <H>Version and bind</H>
         <P>
           Publishing appends an immutable version. Bind a preset to an agent
-          from <b>Agents</b>; only that agent receives the style through its{" "}
+          from <b>Advanced → Agents and execution → Agent administration</b>; only that agent receives the style through its{" "}
           <code>whoami</code> response. An agent may use a shared preset or an
           inline style of its own.
         </P>
@@ -819,14 +824,14 @@ okto-nexus-connector proxy show`}</Code>
   },
   {
     id: "settings",
-    title: "Settings & maintenance",
+    title: "System settings & maintenance",
     icon: <Settings size={14} />,
     content: (
       <>
         <H>Runtime parameters</H>
         <P>
           Every CLI knob (presence and lease TTLs, retention windows, limits,
-          trust mode) is editable on the Settings screen and persists across
+          trust mode) is editable on Advanced → System and data → System settings and persists across
           restarts. Precedence: CLI &gt; environment variable &gt; value
           saved here &gt; default — a value pinned by a flag shows as
           read-only (cli/env).
@@ -864,7 +869,7 @@ okto-nexus --help           # command reference; MCP uses HTTP /mcp`}</Code>
         <P>
           With --host 0.0.0.0, direct localhost access remains open. For the
           remote dashboard, configure a username and password locally in
-          Settings → Operator access. Sessions last eight hours; Sign out
+          Advanced → System and data → System settings → Operator access. Sessions last eight hours; Sign out
           ends the session, and changing the password signs out all sessions.
           MCP and Connector continue to use agent API keys. Use HTTPS to
           encrypt remote sign-in and session traffic.

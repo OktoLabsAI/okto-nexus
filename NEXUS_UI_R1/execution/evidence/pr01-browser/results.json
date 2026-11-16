@@ -1,0 +1,1072 @@
+{
+  "main": {
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "T-NAV-01/02 desktop classic Home has four primary IDs and Advanced only",
+        "status": "PASS",
+        "ids": [
+          "Home",
+          "Meta-harness",
+          "Graph",
+          "Artifacts",
+          "Advanced"
+        ]
+      },
+      {
+        "name": "Classic Home preserves unread marker and shows scoped vs global summary",
+        "status": "PASS",
+        "initialBadge": "4",
+        "markerHome": null,
+        "scoped": "WORKSPACE OVERVIEW\n\nHome\n\nYour agents, harnesses and conversations in one place.\n\nWorkspace: home-alpha \u00b7 Updates every 15 seconds\n\nRefresh overview\nGraph\nConnections and handoffs\nConversations\nConversations and sessions\nMessage history\nCommunication history\nNeeds attention\nReview pending items\nAgents & activity\n\nConnected agents and recent activity\n\n13 agents \u00b7 3 connected\n\nLast 24 hours \u00b7 Updated Nov 16, 03:08 PM\n\noperator\nOffline\n\n0 connections \u00b7 1 messages pending \u00b7 0 open handoffs\n\nNo recent activity\n\nA\nConnected\n\n2 connections \u00b7 0 messages pending \u00b7 14 open handoffs\n\nRequested approval \u00b7 Nov 16, 03:08 PM\n\nB\nConnected\n\n1 connections \u00b7 0 messages pending \u00b7 1 open handoffs\n\nNo recent activity\n\nC\nConnected\n\n1 connections \u00b7 1 messages pending \u00b7 2 open handoffs\n\nNo recent activity\n\nglobal\nOffline\n\n0 connections \u00b7 0 messages pending \u00b7 0 open handoffs\n\nNo recent activity\n\nworker-0\nOffline\n\n0 connections \u00b7 0 messages pending \u00b7 0 open handoffs\n\nNo recent activity\n\nworker-1\nOffline\n\n0 connections \u00b7 0 messages pending \u00b7 0 open handoffs\n\nNo recent activity\n\nworker-2\nOffline\n\n0 connections \u00b7 0 messages pending \u00b7 0 open handoffs\n\nNo recent activity\n\nShowing 8 of 13. Open Advanced \u2192 Agents and execution \u2192 Agent administration for the full list.\n\nHarness sessions\n\nYour managed conversations\n\n0 open \u00b7 0 total\n\nNo managed conversations yet. Open Conversations to find your agents.\n\nRecent communications\n\nLatest messages between agents and people\n\nA \u2192 operator\n\nUI-R1 unread operator message\n\nNov 16, 03:08 PM \u00b7 home-alpha\n\nB \u2192 C\n\nCoordination update\n\nNov 16, 03:08 PM \u00b7 home-alpha\n\nNeeds attention\n\nDecisions, questions and results to review\n\n1 need action \u00b7 2 to watch\n\n3 unseen \u00b7 0 snoozed \u00b7 Updated Nov 16, 03:08 PM\n\nExternal activity reports\n\nNo external instances in this scope\n\nObserved Nov 16, 03:08 PM \u00b7 Publishing disabled\n\nReported by Herdr or other integrations; separate from managed sessions.\n\nInspect external activity"
+      },
+      {
+        "name": "T-NAV-03/05 Advanced has four groups and Memory OFF hidden",
+        "status": "PASS",
+        "groups": [
+          "Agents and execution",
+          "Policies and control",
+          "History and diagnostics",
+          "System and data"
+        ]
+      },
+      {
+        "name": "Advanced destination keeps section selection and three-level breadcrumb",
+        "status": "PASS",
+        "crumb": "/ Advanced\n/ Policies and control\n/ Policies"
+      },
+      {
+        "name": "T-NAV-07/08 Graph opens global queue with two canonical approvals",
+        "status": "PASS",
+        "badge": "4",
+        "approvalButtons": 2
+      },
+      {
+        "name": "Global active badge is independent of resolved queue filter",
+        "status": "PASS",
+        "badge": "4"
+      },
+      {
+        "name": "Canonical approval inspector opens passively as one dialog",
+        "status": "PASS",
+        "dialogs": 1
+      },
+      {
+        "name": "Global badge remains global after project switch",
+        "status": "PASS",
+        "badge": "4"
+      },
+      {
+        "name": "T-NAV-09 Conversations keeps operator view marker; Home does not advance it",
+        "status": "PASS",
+        "markerHome": null,
+        "markerConversation": "2026-11-16T18:08:11.834241Z",
+        "markerAfterHome": "2026-11-16T18:08:11.834241Z"
+      },
+      {
+        "name": "T-NAV-12 360px keyboard destinations close menu and retain reachable controls",
+        "status": "PASS",
+        "mobile": [
+          {
+            "id": "Home",
+            "width": 360,
+            "scroll": 360,
+            "activeTag": "BUTTON",
+            "activeLabel": null,
+            "activeVisible": true,
+            "menuHitTest": true
+          },
+          {
+            "id": "Meta-harness",
+            "width": 360,
+            "scroll": 360,
+            "activeTag": "BUTTON",
+            "activeLabel": null,
+            "activeVisible": true,
+            "menuHitTest": true
+          },
+          {
+            "id": "Graph",
+            "width": 360,
+            "scroll": 360,
+            "activeTag": "BUTTON",
+            "activeLabel": null,
+            "activeVisible": true,
+            "menuHitTest": true
+          },
+          {
+            "id": "Artifacts",
+            "width": 360,
+            "scroll": 360,
+            "activeTag": "BUTTON",
+            "activeLabel": null,
+            "activeVisible": true,
+            "menuHitTest": true
+          },
+          {
+            "id": "Advanced",
+            "width": 360,
+            "scroll": 360,
+            "activeTag": "BUTTON",
+            "activeLabel": null,
+            "activeVisible": true,
+            "menuHitTest": true
+          }
+        ]
+      },
+      {
+        "name": "GET-only browser has no mutations or frontend failures",
+        "status": "PASS",
+        "mutations": [],
+        "errors": [],
+        "consoleErrors": []
+      }
+    ],
+    "requests": [
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/assets/index-6o2k3pzt.js"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/assets/index-CqPDZl5S.css"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/operator-auth/status"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/logos/nexus-icon.svg"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/logos/nexus-wordmark-light.svg"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/logos/nexus-wordmark-dark.svg"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/info"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/meta-harness/runtime-sessions?page=1&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/messages?page=1&page_size=6&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/observations/summary?workspace_id=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?workspace_id=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/stream?view=attention&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/stream?"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/operator/unread-count"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?workspace_id=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/events?type=governance.denied&after=0&limit=200&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/policies"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/tags"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/stream?view=attention"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention?state=active&seen=all&limit=50"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/operator/unread-count"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention?state=active&seen=all&limit=50"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention?state=resolved&seen=all&limit=50"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention?state=active&seen=all&limit=50"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/approvals/apr_3961626ddc88452f94d3582e78022c41"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/meta-harness/runtime-sessions?page=1&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/messages?page=1&page_size=6&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/observations/summary?workspace_id=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?workspace_id=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/stream?view=attention&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-beta&window_hours=24"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-beta&window_hours=24"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/meta-harness/runtime-sessions?page=1&workspace=home-beta"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/messages?page=1&page_size=6&workspace=home-beta"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/observations/summary?workspace_id=home-beta"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?workspace_id=home-beta"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/stream?view=attention&workspace=home-beta"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/runtime-management/runtime/input-requests?workspace_id=home-beta"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/agents"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/settings"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/messages?agent=operator&page=1&page_size=20&include_body=true&workspace=home-beta"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/handoffs?from_agent=operator&workspace=home-beta"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/operator/unread-count"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?workspace_id=home-beta"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-beta&window_hours=24"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/meta-harness/runtime-sessions?page=1&workspace=home-beta"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/messages?page=1&page_size=6&workspace=home-beta"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/observations/summary?workspace_id=home-beta"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/assets/index-6o2k3pzt.js"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/assets/index-CqPDZl5S.css"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/operator-auth/status"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/logos/nexus-icon.svg"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/logos/nexus-wordmark-light.svg"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/logos/nexus-wordmark-dark.svg"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/info"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/meta-harness/runtime-sessions?page=1&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/messages?page=1&page_size=6&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/observations/summary?workspace_id=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?workspace_id=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/stream?view=attention&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/stream?"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/runtime-management/runtime/input-requests?workspace_id=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/agents"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/settings"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/messages?agent=operator&page=1&page_size=20&include_body=true&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/handoffs?from_agent=operator&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?workspace_id=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/agents"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/artifacts?workspace=home-alpha&page=1&page_size=20"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:50224/api/v1/workspaces"
+      }
+    ],
+    "responses": [
+      {
+        "url": "http://127.0.0.1:50224/api/v1/operator-auth/status",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/info",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/stream?view=attention&workspace=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/observations/summary?workspace_id=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/stream?",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/messages?page=1&page_size=6&workspace=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/meta-harness/runtime-sessions?page=1&workspace=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/operator/unread-count",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?workspace_id=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?workspace_id=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/events?type=governance.denied&after=0&limit=200&workspace=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/policies",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/tags",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/stream?view=attention",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/operator/unread-count",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention?state=active&seen=all&limit=50",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention?state=active&seen=all&limit=50",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention?state=resolved&seen=all&limit=50",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention?state=active&seen=all&limit=50",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/approvals/apr_3961626ddc88452f94d3582e78022c41",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/observations/summary?workspace_id=home-beta",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/messages?page=1&page_size=6&workspace=home-beta",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/meta-harness/runtime-sessions?page=1&workspace=home-beta",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/stream?view=attention&workspace=home-beta",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-beta&window_hours=24",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/settings",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/runtime-management/runtime/input-requests?workspace_id=home-beta",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/agents",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/handoffs?from_agent=operator&workspace=home-beta",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/messages?agent=operator&page=1&page_size=20&include_body=true&workspace=home-beta",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?workspace_id=home-beta",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/operator/unread-count",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/observations/summary?workspace_id=home-beta",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-beta&window_hours=24",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/meta-harness/runtime-sessions?page=1&workspace=home-beta",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/messages?page=1&page_size=6&workspace=home-beta",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/operator-auth/status",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/info",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/observations/summary?workspace_id=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/messages?page=1&page_size=6&workspace=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/meta-harness/runtime-sessions?page=1&workspace=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/stream?",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/stream?view=attention&workspace=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/runtime-management/runtime/input-requests?workspace_id=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/settings",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/agents",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/handoffs?from_agent=operator&workspace=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/messages?agent=operator&page=1&page_size=20&include_body=true&workspace=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?workspace_id=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/graph?workspace=home-alpha&window_hours=24",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?workspace_id=home-alpha",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/attention/summary?state=active&seen=all",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/artifacts?workspace=home-alpha&page=1&page_size=20",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/agents",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:50224/api/v1/workspaces",
+        "status": 200
+      }
+    ],
+    "errors": [],
+    "consoleErrors": [],
+    "bundle": [
+      "/assets/index-6o2k3pzt.js"
+    ]
+  },
+  "flags": {
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "Memory ON remains feature-driven in Advanced index",
+        "status": "PASS",
+        "visible": 1
+      },
+      {
+        "name": "Attention OFF retains globally reachable bell with explicit unavailable count",
+        "status": "PASS",
+        "label": "Needs attention. All projects and Server. Attention is disabled. Open available questions and approval controls.",
+        "badge": "!"
+      },
+      {
+        "name": "Classic fallback provides canonical approval and conversation shortcuts",
+        "status": "PASS",
+        "approve": 1,
+        "converse": 1
+      },
+      {
+        "name": "Attention OFF shortcut reaches existing canonical approvals page",
+        "status": "PASS",
+        "text": "Approvals\n\nRuntime requests and actions intercepted by require_approval policies wait here until you decide. Review native questions to provide an explicit answer. A recorded decision does not prove delivery to the runtime.\n\nInterception disabled \u2014 the feature_hitl flag is off, so no new actions are being intercepted. Pending items below remain decidable. Enable it under Settings \u203a Features.\n\nAll 1\nPending 1\nApproved 0\nRejected 0\nArchived 0\nCreated from\nCreated through\nAction\nAll actions\nmessage_create\nAgent\nAll agents\nA\nClear filters\n\n1 approval(s) \u00b7 Dates use local time.\n\nPending\n1 WAITING\noldest first\n\tWAITING\tAGENT\tACTION\tSUMMARY\tPOLICY\tDECISION\n\n\t1m\tA\tMESSAGE_CREATE\tdirect \u2192 B \u00b7 56 bytes\tui-r1-qual-p\u2026\tApproveRejectArchive"
+      },
+      {
+        "name": "Real canonical HTTP middleware rejects invalid credential on advanced API",
+        "status": 401,
+        "body": {
+          "ok": false,
+          "error": {
+            "code": "AUTH_FAILED",
+            "message": "Authentication failed: unknown or inactive api_key"
+          }
+        }
+      },
+      {
+        "name": "Real cross-origin operator read response (not delegated-agent ACL test)",
+        "status": "OBSERVED",
+        "httpStatus": 403,
+        "body": {
+          "ok": false,
+          "error": {
+            "code": "CROSS_ORIGIN_BLOCKED",
+            "message": "Refused a cross-origin or rebound-host request on the loopback trust path; authenticate with an api_key."
+          }
+        }
+      },
+      {
+        "name": "Flag variant browser performs no mutations and has no frontend errors",
+        "status": "PASS",
+        "errors": [],
+        "consoleErrors": [],
+        "mutations": []
+      }
+    ],
+    "requests": [
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/assets/index-6o2k3pzt.js"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/assets/index-CqPDZl5S.css"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/operator-auth/status"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/logos/nexus-icon.svg"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/logos/nexus-wordmark-light.svg"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/logos/nexus-wordmark-dark.svg"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/info"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/graph?workspace=home-alpha&window_hours=24"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/graph?workspace=home-alpha&window_hours=24"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/meta-harness/runtime-sessions?page=1&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/messages?page=1&page_size=6&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/observations/summary?workspace_id=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/attention/summary?workspace_id=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/attention/summary?state=active&seen=all"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/stream?view=attention&workspace=home-alpha"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/stream?"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/approvals?workspace=home-alpha&status=all&limit=100&offset=0"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:64945/api/v1/settings"
+      }
+    ],
+    "errors": [],
+    "consoleErrors": []
+  }
+}

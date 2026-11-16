@@ -1,0 +1,78 @@
+{
+  "status": "SCOPED_BROWSER_CHECKS_PASS_WITH_EXPLICIT_UNTESTED_BOUNDARIES",
+  "product_version": "0.3.5",
+  "baseline_bump_head": "9de55d95",
+  "head_at_curation": "736f36b2d3e493b274c729811ef54401c444c99c",
+  "runtime_source": "Frozen frontend working tree; source-pins.json is authoritative for tested bytes, not an assumption that frontend was already committed.",
+  "bundle": "index-6o2k3pzt.js",
+  "css": "index-CqPDZl5S.css",
+  "main_checks_pass": 11,
+  "flag_checks_pass": 6,
+  "actual_http_denials": [
+    {
+      "status": 401,
+      "code": "AUTH_FAILED",
+      "scope": "Invalid fixture credential on canonical /api/v1/approvals"
+    },
+    {
+      "status": 403,
+      "code": "CROSS_ORIGIN_BLOCKED",
+      "scope": "Cross-origin loopback trust boundary; not delegated-agent ACL"
+    }
+  ],
+  "browser_page_errors": [],
+  "browser_console_errors": [],
+  "mutation_requests": [],
+  "covered": [
+    "Five navigation destinations, legacy data-view IDs and four purpose groups",
+    "Policies advanced selection and Advanced/group/page breadcrumb; no all-pages browser claim",
+    "Memory OFF visibility and ON visibility from real info response",
+    "Classic Home scoped3 versus global4 summary; two canonical pending approvals in global queue",
+    "Graph entry, independent resolved queue filter and project switch, passive exact approval inspector",
+    "Conversations operator seen marker; Home does not advance it; no HTTP seen mutation exists in this path",
+    "360 CSSpx keyboard navigation across five destinations, collapsed menu, visible focus observations and actual menu-control hit-tests; document width360",
+    "Attention OFF globally reachable fallback and real canonical approvals page",
+    "Actual401 and cross-origin403 on canonical advanced read API"
+  ],
+  "not_claimed": [
+    "New unified Home projection, standalone session target or two-harness onboarding",
+    "Full T-NAV-03 every destination exercised in browser",
+    "Delegated-agent403 or authorization to mutate; no mutation attempted",
+    "Native question generated while Graph/Artifacts open; seeded pending approvals were used",
+    "Native200percent zoom, actual screen-reader speech or human comprehension",
+    "Dirty-form navigation guard or synthetic401/403 UI interception",
+    "Unsupported bookmark-by-view route, automatic focus transfer after menu animation, all native hosts or personal authentication"
+  ],
+  "cleanup": [
+    {
+      "variant": "antecedent",
+      "browser_pid": 10208,
+      "browser_close_exit_code": 0,
+      "pid_absent": true,
+      "fixture_exec_session": 97425,
+      "fixture_exit_code": 0,
+      "port": 64078
+    },
+    {
+      "variant": "main",
+      "browser_pid": 42252,
+      "browser_close_exit_code": 0,
+      "pid_absent": true,
+      "fixture_exec_session": 75632,
+      "fixture_exit_code": 0,
+      "port": 50224
+    },
+    {
+      "variant": "flags",
+      "browser_pid": 51756,
+      "browser_close_exit_code": 0,
+      "pid_absent": true,
+      "fixture_exec_session": 40011,
+      "fixture_exit_code": 0,
+      "port": 64945
+    }
+  ],
+  "all_three_ports_listening_after_cleanup": 0,
+  "antecedents": "Retained selector timeout, valid transient stale badge and initial info timing/case-sensitive test assertion mistakes. Final checks wait for actual controls/data and respect explicit stale counts; no product modifications made.",
+  "raw_flags_status_note": "The HTTP401 check data uses status:401, which overrides its PASS string in the raw helper spread. Actual denied.status()===401 was asserted and the overall runner passed; qualification records the HTTP result explicitly."
+}

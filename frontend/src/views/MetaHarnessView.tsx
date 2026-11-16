@@ -988,7 +988,7 @@ export function MetaHarnessView({
               <Bot size={20} />
             </div>
             <div className="min-w-0">
-              <h2 className="font-display text-base font-semibold text-surface-900 dark:text-white">Meta-harness</h2>
+              <h2 className="font-display text-base font-semibold text-surface-900 dark:text-white">Conversations</h2>
               <p className="truncate text-xs text-surface-500 dark:text-surface-400">Talk to agents and follow message or handoff outcomes in one timeline.</p>
             </div>
             <div className="ml-auto flex items-center gap-2">

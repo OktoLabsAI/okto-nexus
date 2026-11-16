@@ -1,0 +1,17 @@
+{
+  "url": "http://127.0.0.1:50224",
+  "fixture_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-shell-browser-f1bdnh4c",
+  "synthetic": true,
+  "mutations": false,
+  "runtime_started": false,
+  "source_pins": {
+    "tests/home_evolution/browser_fixture.py": "8a86251b05cb88a546a292ae93671b91d88359d2ef12a582aeb3a2611c97f97d",
+    "tests/home_evolution/browser_checks.js": "1c785273ee94e101a674a556c96438948b8c930499deba0997b2d136a2b4167b",
+    "src/okto_nexus/application/home.py": "2fa6a1f64d00b8e19e6f7a9fe87af7c18e7ab18302d7ea0e7cc807ba37cddcf0",
+    "src/okto_nexus/domain/home.py": "3d07b528a9e1b7afb12cb52b83d9862d01385fecf7d4322aeefb192a3fb6b2b0",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "1f589cb5f592c6bdeca73b202f9f31918685aca92dc0dae07be66f68ef0c886e",
+    "src/okto_nexus/adapters/inbound/http/home.py": "235bc87a160650f73f3e46ec576c2421a068ce7ce7de5a2faa9a54a31b529de8",
+    "src/okto_nexus/adapters/inbound/http/routes.py": "c51b4f4f031c3b85fc49772c7bb032a8ebe2a854bfdff3682d72535c570683c5",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "55cfd17684820cfbfe12a059bec994bf2dc2063afee5322053ff6c491f7a0430"
+  }
+}

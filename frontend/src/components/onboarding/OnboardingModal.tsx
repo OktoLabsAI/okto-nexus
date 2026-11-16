@@ -91,12 +91,12 @@ export function OnboardingModal({onClose, onOpenAgents}: {onClose: () => void; o
         </section>}
         <aside className="border-t border-surface-200 dark:border-surface-700 pt-4 text-sm text-surface-600 dark:text-surface-300">
           <h2 className="font-semibold text-surface-900 dark:text-white mb-1">Already connected from the terminal?</h2>
-          <p>Open Agents to inspect the same identity and saved Connections. Changing a display name or role keeps the agent ID and history. A running service, an authenticated client, a ready session and a completed result are different states.</p>
+          <p>Open Advanced → Agents and execution → Agent administration to inspect the same identity and saved Connections. Changing a display name or role keeps the agent ID and history. A running service, an authenticated client, a ready session and a completed result are different states.</p>
         </aside>
       </main>
       <footer className="flex shrink-0 flex-wrap justify-end gap-2 border-t border-surface-200 dark:border-surface-700 p-4">
         <button type="button" className={button} onClick={close}>Continue in terminal</button>
-        <button type="button" className={button + ' bg-accent-600 text-white'} onClick={openAgents} data-testid="onboarding-cta">Open Agents</button>
+        <button type="button" className={button + ' bg-accent-600 text-white'} onClick={openAgents} data-testid="onboarding-cta">Open agent administration</button>
       </footer>
     </div>
   </div>;
