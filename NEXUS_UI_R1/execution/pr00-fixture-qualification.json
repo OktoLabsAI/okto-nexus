@@ -1,0 +1,45 @@
+{
+  "task": "UI-005",
+  "status": "PASS_FIXTURE_FACTS_ONLY",
+  "at": "2026-11-16T18:13:11.629804+00:00",
+  "source_pins": {
+    "NEXUS_UI_R1/execution/fixtures.py": "843bfcdcf89849ddb2dc1354dc6a977f9c422d6816cdbf0afe629b8c6d302eb7",
+    "tests/ui_simplification/test_fixtures.py": "64d07ce070b7ee62ba180cac816005c7f736151a3b9d4c408b368706c2657814",
+    "NEXUS_UI_R1/execution/navigation-tracking-contract.md": "c25b7fabf8de6a354b27d71e3913a6b0ac43994e75b2cc6c8d9e9de129a638ed",
+    "NEXUS_UI_R1/execution/connection-session-contract.md": "7ef403658d2b53d6106bdaba2c1e24bee2fe82039511f25012652a35aa717349"
+  },
+  "runs": [
+    {
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/ui_simplification/test_fixtures.py -q -k 'not single_current_baseline_sample'",
+      "actual_selection": "not single_current_baseline_sample",
+      "passed": 6,
+      "deselected": 1,
+      "exit_code": 0,
+      "tool_ref": "3b353e",
+      "seconds": 21.1
+    },
+    {
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/ui_simplification/test_fixtures.py::test_single_current_baseline_sample -q -s",
+      "passed": 1,
+      "exit_code": 0,
+      "tool_ref": "6efe1f",
+      "seconds": 5.67
+    }
+  ],
+  "baseline": {
+    "samples": 1,
+    "read_uows": 1,
+    "sql_statements_including_nested": 54,
+    "writes": 0,
+    "payload_bytes": 10510,
+    "sections_ready": 5,
+    "latency_measured": false
+  },
+  "limitations": [
+    "One admitted READY session with canonical input and a separate CLOSED synthetic-read-fact session, not two real harnesses.",
+    "Recipient variants are separate fixtures; no provider/native binary or personal credentials.",
+    "Group/children paging, connection selectors, real campaign, browser and screen-reader remain separately qualified.",
+    "Discarded preliminary baseline included background maintenance; final sample isolates the calling thread."
+  ],
+  "processes_active": false
+}

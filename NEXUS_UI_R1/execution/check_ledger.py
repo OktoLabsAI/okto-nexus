@@ -34,11 +34,15 @@ def main():
         assert set(task['test_ids']) <= tests.keys()
         if task['status'] == 'VERIFIED':
             assert task['evidence'], key
+        for path in task['evidence']:
+            assert isinstance(path, str) and (ROOT/path).is_file(), (key, path)
     for test in tests.values():
         assert test['status'] in {'NOT_RUN', 'PASS', 'FAIL', 'BLOCKED'}
         assert set(test['tasks']) <= tasks.keys()
         if test['status'] == 'PASS':
             assert test['evidence'], test['id']
+        for path in test['evidence']:
+            assert isinstance(path, str) and (ROOT/path).is_file(), (test['id'], path)
     visited, active = set(), set()
 
     def visit(key):

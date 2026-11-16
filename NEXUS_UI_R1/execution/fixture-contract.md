@@ -1,6 +1,83 @@
 # UI-005 — contrato de fixtures de PR-00
 
-Estado: **preparação; implementação aguarda o fechamento de UI-003/UI-004**.
+Estado: **UI-005 implementada como fixture de PR-00; sete focais executados**.
+UI-003/UI-004 tiveram freeze técnico aceito. Os cenários de produto continuam
+dependendo da implementação e da execução de suas próprias jornadas.
+
+## Implementação e execução atual — 2026-11-16
+
+`fixtures.py::scenario(directory, recipient="operator"|"subject", clock=...)`
+é um context manager reutilizável por pytest e por um futuro servidor de browser.
+Exige diretório explícito vazio, usa `bootstrap({})`, descoberta local vazia,
+relógio ISO/epoch consistente injetado antes do bootstrap, TestClient/WSS reais
+e teardown de canal/lifespan/factory. Não executa o arquivo nativo sintético.
+`ReadBarrier` fornece rendezvous por Event com timeout finito, sem sleeps.
+
+Os IDs canônicos opacos são capturados do retorno da admissão; não são fixados
+por UUID artificial. Há uma única `execution_installation` e todos os registros
+de execução compartilham seu Server/executor reais. O alias A é `subject`; B/C
+são identidades próprias da mesma instalação. Não há produtor global novo nem
+cópia/mescla de bancos.
+
+| Fato de fixture executado | Verificação focal |
+| --- | --- |
+| Duas conexões | Dois endpoints/bindings persistidos distintos, criados antes da admissão; `ConnectionFact` é modelo de teste, não DTO futuro nem alegação de prontidão. |
+| Duas sessões do mesmo agente | Exatamente duas rows, contexto Server/executor/binding/workspace/workspace_binding/agent conferido por join. Uma READY admitida, outra CLOSED histórica sintética; IDs exatos diferentes. |
+| A→B→C | Messages/deliveries e handoffs diretos persistidos; nenhum envio do operador; não se infere parentesco novo. |
+| Trabalho sem executor | Handoff OPEN broadcast sem runtime_handoff_binding; a Home atual mantém runtime_refs vazio. |
+| Pergunta ao operador | Variante input com admissão, grant, ticket/revisions atualizados, lease aplicado e event ingress canônicos; Home mostra awaiting_operator no session_id exato. |
+| Pergunta ao agente | Variante independente agent_input mostra awaiting_agent; listagem HTTP visível apenas ao destinatário real e POST dos demais recebe403 em ambas as variantes. Não se responde à pergunta durante o teste. |
+| Resultado incerto | Receipt OUTCOME_UNKNOWN, possible_effect=1, retry_safe=0, operação presente na Home; nenhum retry executado. |
+| Sucesso e cleanup | Receipt SUCCEEDED e containment REQUESTED na sessão histórica; Home atual mantém cleanup_state=pending. |
+| Externo | create_source/create_instance/issue_token/publish reais, fonte/instância retornadas encontradas na Home; token efêmero não publicado. |
+| Fonte parcial | Falha sqlite3.OperationalError somente nos ports overview/work; work unavailable/total desconhecido, resultados e externo ready; leitura normal restaurada após o contexto. |
+| Multiplicidade/páginas | Work atual state=all percorrido em páginas de1 até fim, conjunto igual à página completa e sem IDs repetidos. Isso não certifica o agrupamento/paging futuro de UI-003. |
+
+Dados históricos adicionais são explicitamente `synthetic-read-fact`; não têm
+admissão/lease próprios e não provam capacidade de retomar/autorizar conexão ou
+executar essas operações. Perguntas operador/agente usam dois cenários próprios,
+não uma fusão de authorities nem perguntas simultâneas artificialmente copiadas.
+Seletores, grupos/children/session refs e navegação UI-003/UI-004 ainda não são
+testados aqui. `ConnectionFact` fica separado desses DTOs ainda inexistentes.
+
+Execuções:
+
+- `rtk proxy .venv\Scripts\python.exe -m pytest tests/ui_simplification/test_fixtures.py -q -k "not single_current_baseline_sample"`: **6 PASS**,1 deselected,21.10s (tool `3b353e`, processo terminal0).
+- `rtk proxy .venv\Scripts\python.exe -m pytest tests/ui_simplification/test_fixtures.py::test_single_current_baseline_sample -q -s`: **1 PASS**,5.67s (tool `6efe1f`, terminal0).
+- `rtk proxy ruff check NEXUS_UI_R1/execution/fixtures.py tests/ui_simplification/test_fixtures.py`: PASS (`e5c524`).
+
+Baseline controlado atual, **uma amostra final**, sem medição de latência:
+`current_home_overview`,1 UoW read-only no thread chamador,54 statements SQLite
+por trace (inclui nested reads),0 alterações nesse UoW,10.510 bytes JSON compacto
+UTF-8 e5 seções ready. Não mede cliques/navegação, performance HTTP ou paginação
+futura. Instrumentação preliminar capturou manutenção concorrente do lifespan e
+falhou com6 UoWs; foi descartada, e a coleta final isola o thread da leitura.
+As demais falhas de desenvolvimento (unicidade de endpoint, ticket antigo,
+grant duplicado, assert de DTO e segundo lifespan indevido) foram corrigidas no
+fixture/teste, sem alteração de produto. Nenhuma prova preliminar foi promovida.
+
+Origens: Python `.venv/Scripts/python.exe`, Nexus `src/okto_nexus/__init__.py`,
+Core `.venv/Lib/site-packages/nexus_connector_core/__init__.py`. O recorte não
+importa CLI/service_manager e não qualifica instalação/distribuição do Core.
+HEAD de partida `9de55d950739ed5d7348e946506e4c05464ccb13`.
+SHA256: fixture `843bfcdcf89849ddb2dc1354dc6a977f9c422d6816cdbf0afe629b8c6d302eb7`;
+teste `64d07ce070b7ee62ba180cac816005c7f736151a3b9d4c408b368706c2657814`;
+UI-003 `c25b7fabf8de6a354b27d71e3913a6b0ac43994e75b2cc6c8d9e9de129a638ed`;
+UI-004 `7ef403658d2b53d6106bdaba2c1e24bee2fe82039511f25012652a35aa717349`.
+
+Todos os contextos/processos de teste terminaram; os diretórios pytest são
+artefatos temporários do runner. Não ficou serviço/listener/provider iniciado
+por esta tarefa. Nenhum ledger, produto ou instalação pessoal foi alterado;
+nenhum commit/push foi feito por este agente.
+T-BASE-04 tem fixture executável; T-DATA-10/T-QUAL-01 de produto não são PASS
+por estes sete focais. Não há baseline de browser fabricado.
+
+## Histórico da preparação e protocolo para as etapas seguintes
+
+O texto a seguir registra a preparação anterior ao freeze e o protocolo que
+orientou a implementação; suas dependências futuras não substituem o retrato
+executado acima.
+
 Este arquivo não qualifica cenários UI-R1 e não altera os ledgers anteriores.
 O aceite exige fixtures compartilháveis e determinísticas, não um inventário
 de cartões montado em React. O checkout observado está em `feature/v0.3.5`,
