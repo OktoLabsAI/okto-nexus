@@ -1,0 +1,32 @@
+{
+  "repository": "OktoLabsAI/okto-nexus-connector",
+  "source_commit": "daa7f2b3abe6aea9ab72338c1475ebbb014a2340",
+  "branch": "feature/v0.0.13",
+  "command": "rtk proxy uv build --out-dir OWN_TEMP/connector",
+  "build_exit_code": 0,
+  "build_tool_ref": "f18e40",
+  "artifacts": {
+    "okto_nexus_connector-0.0.13-py3-none-any.whl": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+    "okto_nexus_connector-0.0.13.tar.gz": "63b1e8350d42fa0288a329937a63776a5793c17551936116a6e9840db1eadc14"
+  },
+  "nexus_ci_dependency": "vendor/ci/okto_nexus_connector-0.0.13-py3-none-any.whl",
+  "core_pin": "0.0.14 unchanged",
+  "core_wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+  "installed_connector_focals": {
+    "passed": 52,
+    "duration_seconds": 32.13,
+    "tool_ref": "518e93",
+    "scope": "New own Tempvenv isolated site-packages, new picker and legacy connect reuse; not native host/provider"
+  },
+  "lock_check": {
+    "command": "rtk proxy uv lock --check --offline",
+    "exit_code": 0,
+    "packages": 106,
+    "tool_ref": "1eb17a"
+  },
+  "personal_installation_changed": false,
+  "published": false,
+  "limitations": [
+    "Final Nexus installed and full CI matrix are separate evidence; this artifact alone does not qualify a provider or real remote host."
+  ]
+}

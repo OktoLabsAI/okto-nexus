@@ -8,15 +8,29 @@ During qualification, select **Use operational Home** above the classic Home.
 Select **Use classic Home** to return. The preference belongs to this browser;
 switching presentation does not stop the daemon, change grants, acknowledge
 messages or alter Core/Connector execution. The default remains classic until
-the HOME-R1 rollout gate is qualified.
+the HOME-R1 and UI-R1 rollout gates are qualified.
 
-## Read the overview
+## Find work in one place
+
+The primary destinations are **Home**, **Conversations**, **Graph** and
+**Artifacts**. **Advanced** groups the existing pages by purpose; authorization
+continues to apply on every surface. The existing Meta-harness identity is now
+labelled Conversations; saved view identities and detail URLs remain compatible.
 
 Choose a workspace in the dashboard header. **All workspaces** is the authorized
-union, rather than an inferred project. Agent and work-state filters narrow the
-overview. Work performed between agents appears without an operator message.
+union, rather than an inferred project. Home has one **Follow-up** region:
+work, related sessions, questions and deliveries appear together in their proven
+context. Work between agents and sessions without a productive operation are
+included. An idle/open session is not a running task. There is no separate
+Harnesses, Executions or Sessions destination.
 
-| Area | Meaning |
+Use **Active**, **Needs you**, **Results** or **All** to narrow the view. The
+initial view also includes recent and tracked unseen deliveries. Optional
+details filter agent, harness, host and state. Large groups and their sessions,
+questions and results have their own **Load more** controls; totals come from
+the authorized backend relation, not from the visible page size.
+
+| Information in the context | Meaning |
 | --- | --- |
 | Running | Distinct logical activities with current evidence of execution. |
 | Waiting to start | Work waiting for an owner, dispatch or native start. |
@@ -24,24 +38,24 @@ overview. Work performed between agents appears without an operator message.
 | Server | Authorized incidents that apply to the Server as a whole, when reported by a canonical source. Separate from project counters. |
 | New results / Recent results | Unseen results where the canonical occurrence tracks viewing; recent results where it does not. An unknown count is not zero. |
 | Work | Logical handoffs, productive deliveries and direct turns. Attempts and controls remain attached to their work. |
-| Agents | Identity and reported presence/connectivity. An open session does not prove work is running. |
+| Session / connection | Exact host, project and connection context; a session without a turn stays passive. |
 | External reports | Source-qualified external telemetry, separate from native work and completion. |
 
 The counters use different units and should not be added into a task total.
-The **Server** section stays independent of project and agent filters. A global
+The compact **Server** notice stays independent of project and agent filters. A global
 incident does not mean every project has that incident. Project counters exclude
 it, including in All workspaces. Global agent connectivity alone does not create
 a Server incident.
 
-A [synthetic example of the Server section](../plans/home_evolution/evidence/pr08-server-attention-browser/quiet-server.png)
-shows how global incidents remain visible while the selected project is empty.
+The global bell opens the complete authorized queue across projects and Server
+incidents. An empty Server does not occupy a permanent list beside the work.
 **Claimed** means an agent assumed responsibility. **Accepted by runtime** means
 the native request was accepted; neither alone proves execution. A successful
 turn can produce a result while its handoff still awaits completion or
 verification. Pending cleanup is a separate technical obligation and does not
 erase a successful result.
 
-Each section reports its snapshot time and whether it is current, partial,
+Each context reports its snapshot time and whether it is current, partial,
 unavailable or disabled. A connected stream does not make an expired external
 report current. Stale telemetry becomes unknown; it does not imply an idle
 agent. A Herdr `done` report does not complete a Nexus handoff.
@@ -59,7 +73,7 @@ recorded and its application by a harness are separate facts. When a response
 is lost or an outcome is unknown, inspect and reconcile the existing operation;
 do not assume it is safe to repeat it.
 
-**New request** reuses the Meta-harness composer. Choose **Handoff** for tracked
+**New request** reuses the Conversations composer. Choose **Handoff** for tracked
 work or **Message** for a conversation, and review the recipient, namespace and
 audience. **Continue this session** is different: it resolves the exact existing
 session and its current authority. A closed, draining or revoked session is not
@@ -71,6 +85,30 @@ rather than executed as dashboard HTML. **Mark seen** applies only to that
 tracked occurrence and revision. Opening Home, inspecting a preview or marking
 it seen does not ACK an inbox, approve a request or complete work. Results
 without canonical viewing state remain labelled recent.
+
+## Connect or resume a collaborator
+
+**Connect agent** opens the short project connection flow from Home or
+Conversations. **Open connection** revalidates that exact recorded connection;
+it does not start a session or renew authorization. **Add another harness on
+this Server** proposes a separate collaborator using the current project preset.
+Choose an observed installation, review the project and Server folder, consent
+to its temporary model test, then explicitly Finish. The proposed identity is
+created only at canonical Finish. Customize expands additional settings without
+requiring the administration grid.
+
+The browser, Nexus Server and Connector host have different authority. Local
+installation checks and provider login folders refer to the Server host.
+**Use a Connector on another host** supplies a credential-free host-draft
+command; run it on that host and have an authenticated operator review the same
+draft through the [remote setup flow](remote-project-setup.md). A project name
+or local folder alone cannot authorize a remote connection.
+
+An unconfirmed check, test or Finish keeps its original request. Reopen the
+same project and identity to recover it; recovery does not silently issue a
+second test or grant. Closing the dashboard does not stop the existing service.
+Startup at login remains a separately supported, explicitly consented service
+option in the [service lifecycle guide](service-lifecycle.md).
 
 ## Updates and drafts
 
@@ -86,7 +124,7 @@ you apply the latest snapshot. Drafts, focus and the selected recipient should
 survive read refreshes. Closing or leaving an edited form offers a discard
 choice; logout clears protected state.
 
-**Load more** stays inside its section. A new snapshot or paging conflict can
+**Load more** stays inside its context or related partition. A new snapshot or paging conflict can
 restart the page set so records from incompatible revisions are not combined.
 
 ## Diagnose a problem
@@ -105,5 +143,6 @@ restart the page set so records from incompatible revisions are not combined.
   controls remain available; reverting the presentation requires no data reset.
 
 The implementation contract, reproducible measurements and acceptance ledger
-are in [the HOME-R1 evidence directory](../plans/home_evolution/release-report.md).
+are in [UI-R1](../NEXUS_UI_R1/NEXUS_UI_EXECUTION_LEDGER_R1.json), alongside
+the retained [HOME-R1 evidence](../plans/home_evolution/release-report.md).
 Synthetic SQLite, browser and real-harness evidence are recorded separately.

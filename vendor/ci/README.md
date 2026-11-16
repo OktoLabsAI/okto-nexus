@@ -1,5 +1,21 @@
 # Current Connector integration artifact
 
+Connector **0.0.13**, commit `daa7f2b3abe6aea9ab72338c1475ebbb014a2340`, is
+the UI-R1 integration-test dependency selected by `manifest.json`. Its wheel
+SHA-256 is `4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90`.
+The matching Core **0.0.14** wheel is unchanged (`ea179780...`). Connector is
+not a Nexus runtime dependency. No package was published or installed into the
+user's personal environment.
+
+This artifact adds the project Resume/Add/Cancel picker and retains canonical
+setup, receipt and daemon ownership. Source qualification is in Connector
+`docs/evidence/ui-r1/qualification.json`; Nexus installed/browser evidence is
+tracked in `NEXUS_UI_R1/execution/`. Source, fixture, installed and native
+provider qualification are distinct gates. The existing older wheels remain
+historical artifacts and are not selected implicitly.
+
+## Previous integration artifact
+
 Connector 0.0.12 is built from `a8bd48bdc6d6e835c55eb601a7e7fa316453aa7b`,
 SHA-256 `2b8ce688541a5ae6e9806467569be0743fef6ff607c763f2b93accf0f93e017d`. Core remains the identical `ea179780...` wheel
 pinned by `manifest.json`; no package version or runtime dependency changed.
