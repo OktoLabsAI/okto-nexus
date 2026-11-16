@@ -55,6 +55,16 @@ test('actual embedded output body is read-only history without a nested dialog o
   assert.match(markup,/aria-pressed="true"[^>]*>History/);
 });
 
+test('only the read-only session body excludes observation controls from captured draft edits',()=>{
+  const markup=render({session:session(),embedded:true});
+  assert.match(markup,/^<section aria-label="Session execution output" data-modal-passive="true"/);
+  assert.match(markup,/<input type="checkbox"[^>]*\/> Auto-scroll/);
+  const {RuntimeOperations}=load(new URL('../src/components/RuntimeOperations.tsx',import.meta.url));
+  const form=renderToStaticMarkup(React.createElement(RuntimeOperations,{agentId:'agent',binding:{binding_id:'binding',agent_id:'agent'},canStart:false}));
+  assert.match(form,/<textarea aria-label="Runtime message"/);
+  assert.doesNotMatch(form,/data-modal-passive/,'canonical runtime form remains outside the passive viewer boundary');
+});
+
 test('standalone wrapper body retains terminal maximizer while exact-session target selects passive inspector',()=>{
   assert.match(render({session:session(),harness:'codex_app_server',host:'Recorded host'}),/Maximize terminal/);
   const target={kind:'session',server_id:context.server_id,executor_id:context.executor_id,workspace_id:context.workspace_id,session_id:context.session_id};

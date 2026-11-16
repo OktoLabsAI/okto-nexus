@@ -1,0 +1,194 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "read-only Auto-scroll followed by Close creates no dirty guard",
+      "status": "PASS",
+      "protectedByAncestor": true
+    },
+    {
+      "name": "edited canonical composer still requires discard",
+      "status": "PASS",
+      "formPassive": false
+    },
+    {
+      "name": "Keep editing preserves exact unsent draft",
+      "status": "PASS"
+    },
+    {
+      "name": "new frozen bundle and no protected action executed",
+      "status": "PASS",
+      "assets": [
+        "/assets/index-BGONNtiX.js"
+      ],
+      "errors": []
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/assets/index-BGONNtiX.js"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/assets/index-C-ZFb395.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/stream?view=attention&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/stream?"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/home/target?target=%7B%22handoff_id%22%3A%22ui-handoff-0%22%2C%22kind%22%3A%22handoff%22%2C%22server_id%22%3A%22srv_bffdca3f135270e6558172967cd79b1e%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/home/target?target=%7B%22handoff_id%22%3A%22ui-handoff-0%22%2C%22kind%22%3A%22handoff%22%2C%22server_id%22%3A%22srv_bffdca3f135270e6558172967cd79b1e%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/handoffs?handoff_id=ui-handoff-0&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_81a03b6c72bc4cb16342da88b2d28223%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_bffdca3f135270e6558172967cd79b1e%22%2C%22session_id%22%3A%22ses_492d0f369c08fcd1c94cccda755b568c%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_81a03b6c72bc4cb16342da88b2d28223%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_bffdca3f135270e6558172967cd79b1e%22%2C%22session_id%22%3A%22ses_492d0f369c08fcd1c94cccda755b568c%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/runtime-management/runtime/sessions/ses_492d0f369c08fcd1c94cccda755b568c?executor_id=exe_81a03b6c72bc4cb16342da88b2d28223"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/runtime-management/runtime/sessions/ses_492d0f369c08fcd1c94cccda755b568c/events?executor_id=exe_81a03b6c72bc4cb16342da88b2d28223&after_sequence=0&limit=100"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/runtime-management/runtime/sessions/ses_492d0f369c08fcd1c94cccda755b568c?executor_id=exe_81a03b6c72bc4cb16342da88b2d28223"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/runtime-management/runtime/sessions/ses_492d0f369c08fcd1c94cccda755b568c?executor_id=exe_81a03b6c72bc4cb16342da88b2d28223"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/runtime-management/connections/bindings/binding"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:50898/api/v1/agents"
+    }
+  ],
+  "errors": [],
+  "scope": "Only Auto-scroll read-only Close guard regression and unsent canonical composer guard; not provider, campaign, AT or full Home requalification.",
+  "cleanup": {
+    "browser_pid": 53208,
+    "close_exit": 0,
+    "fixture_session": 6152,
+    "fixture_exit": 0,
+    "pid_absent": true,
+    "listener50898_absent": true,
+    "shared_wss_lifespan_factory": "CLOSED"
+  },
+  "current_source_sha256": {
+    "frontend/src/components/SessionExecutionPanel.tsx": "9e40b97121f2800c8df3641b4be4c86a3b9e93e29f437028e0f949a6f9d5ce81",
+    "frontend/src/components/RuntimeEventStream.tsx": "7c30cf8ac64f0035ee9875207cdc2425a33e3ce31d430e0837d10eccb5be6b7d",
+    "frontend/src/components/AgentActionModal.tsx": "7a7bdfa6079608dc0beb2a18120155d2ffb6041104c9bdbcde0a27571ded158b",
+    "frontend/tests/uiSessionInspection.test.mjs": "f6566e9d80d07c27a445c075da28aad366894f2d58cee0eb633f73e306db683a"
+  }
+}

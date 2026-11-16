@@ -2312,7 +2312,8 @@
       "evidence": [
         "NEXUS_UI_R1\\execution\\pr03-session-viewer-qualification.json",
         "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr11-readonly-viewer-guard/qualification.json"
       ],
       "limitations": [
         "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
@@ -2389,7 +2390,8 @@
         "T-PANEL-09"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-panel09-lost-response/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
@@ -2431,7 +2433,8 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
         "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr11-readonly-viewer-guard/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
@@ -2512,7 +2515,9 @@
         "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json",
         "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-panel09-lost-response/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr11-readonly-viewer-guard/qualification.json"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos."
@@ -3970,18 +3975,21 @@
     },
     {
       "id": "T-PANEL-09",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/browser",
       "given": "Decisão commitada com resposta perdida.",
       "when": "Reabrir/repetir recuperação.",
       "expected": "Mesma decisão/operação; não duplicar nem assumir aplicação nativa.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-panel09-lost-response/qualification.json"
+      ],
       "tasks": [
         "UI-031",
         "UI-034"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Browser/HTTP/SQLite real em loopback com peer inerte; resposta HTTP202 perdida apos commit, recuperacao por GET e reabertura da mesma decisao. Uma decisao/input.provide/execution_dispatch_outbox; DISPATCH_PENDING nao comprova aplicacao nativa.",
+        "Falha de seletor na reabertura e consulta inicial a outbox legado preservadas. Clock controlado, sem qualificacao de lease180s; shutdown cancelou dois leitores SSE."
       ]
     },
     {
@@ -5545,6 +5553,10 @@
     {
       "at": "2026-11-16T21:31:40.012598+00:00",
       "event": "Conservative acceptance audit: full-scenario passes separated from subsets. UI011 broad VERIFIED withdrawn pending multi-destination topology cases; no work discarded. UI043 human usability remains blocked with prepared script. Release/default not approved; process gates report limits without certifying native/AT. Task counts/IDs/specification preserved."
+    },
+    {
+      "at": "2026-11-16T23:08:02.829702+00:00",
+      "event": "T-PANEL-09 PASS no escopo browser/HTTP/SQLite declarado. BGONN corrige apenas o guard de Auto-scroll readonly: quatro checks browser PASS, formulario canonico ainda protegido,300Node PASS e build. Pacote/proposta BXP congelados e nao alterados; sem migracao/provedor/instalacao pessoal. Nenhum gate amplo foi promovido por esses focais."
     }
   ],
   "risk_acceptances": [],

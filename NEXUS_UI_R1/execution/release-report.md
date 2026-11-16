@@ -28,12 +28,19 @@ checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
 
 - O ledger é a fonte de status por cenário. Testes parcialmente cobertos mantêm
   NOT_RUN ou BLOCKED; ter arquivos de implementação não os transforma em PASS.
-- O frontend completo tem 299 testes Node aprovados no corte BXpHvePH e
+- O frontend completo tem 300 testes Node aprovados no corte BGONNtiX e
   TypeScript/Vite aprovados. Node/SSR não são navegador nem leitor de tela.
 - A Home teve 19 checks de navegador no corte dfy1, mais oito checks humanos de
   formulário/guard/CAS no corte vmh. Duas abas enviaram decisões reais à API,
   retornaram 202/409 e produziram uma decisão, uma operação `input.provide` e um
   outbox. A aplicação nativa dessa decisão não foi executada.
+- O focal posterior de resposta perdida enviou uma decisão real, recebeu202 no
+  interceptor e perdeu somente a resposta ao browser. Recuperação por GET e
+  reabertura mantiveram a decisão original DISPATCH_PENDING e um único outbox;
+  não houve segunda operação ou aplicação nativa. Ver T-PANEL-09.
+- O corte BGONN corrige o falso aviso de rascunho ao alternar Auto-scroll no
+  terminal somente leitura. Quatro checks no navegador comprovam fechamento
+  direto e preservação do guard para um formulário canônico realmente editado.
 - O onboarding usou HTTP/SQLite reais com Test peer sintético. Codex e Claude
   compartilharam o workspace, com duas identidades distintas e configuração da
   primeira intacta. Respostas perdidas foram recuperadas pelos mesmos IDs.
@@ -69,12 +76,14 @@ checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
 Cada relatório preserva seu corte e seus antecedentes. Assets posteriores não
 mudam retroativamente a qualificação de browser ou os tempos medidos antes deles.
 
-O pacote final BXP tem wheel SHA256
+O pacote BXP congelado para a proposta de campanha tem wheel SHA256
 `544c48099db0793c66af54a48c70585e620fb0e56e02b145ab1bb38e5e743a64`.
 Os 708 módulos Python são byte a byte iguais ao corte que passou pelos 22 focais
 instalados da Home. A comparação com o antecedente de 189 casos isola quatro
 arquivos de metadados do inventário e mantém 704 idênticos. Smoke, entrypoints,
 Twine e pins do pacote final passaram; nenhuma instalação pessoal foi alterada.
+O delta de apresentação BGONN é posterior e foi qualificado separadamente; não
+substitui retroativamente esse wheel nem altera a proposta aguardando aprovação.
 
 A proposta real foi vinculada a esse pacote, teve 21 testes offline e um smoke
 de lifecycle real com zero admissões. A revisão independente e a conferência de
@@ -87,7 +96,7 @@ aprovação de release/default é inferida dessa eventual autorização da campa
 Além dos gates abaixo, há cenários completos de navegador, escopo, serviço e
 rollback ainda NOT_RUN, mesmo quando partes passaram. Incluem scrollback ao
 receber output, maximizar/restaurar, revogação com rascunho/Voltar, recuperação de
-decisão com resposta perdida, corrida de escopos e reversão de apresentação com
+decisões em outros contextos e reversão de apresentação com
 trabalho admitido. Esses são trabalhos de qualificação executáveis; não são
 classificados automaticamente como bloqueios externos. O ledger distingue cada
 cenário e mantém a entrega em andamento.
@@ -111,7 +120,7 @@ cenário e mantém a entrega em andamento.
    teve p95 de 1.031,41 ms. Foram 55 SQLs/uma UoW/zero writes na leitura inicial.
    A projeção é O(N + relações), limitada por orçamento, não O(página).
 6. Cenários de scrollback, maximizar/restaurar, revogação com rascunho/Voltar,
-   interrupção exata, resposta perdida de decisão, rollback com trabalho vivo e
+   interrupção exata, rollback com trabalho vivo e
    lifecycle específico só podem fechar com suas evidências literais. As coberturas
    parciais estão separadas no ledger.
 

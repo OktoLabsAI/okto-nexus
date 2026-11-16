@@ -46,7 +46,7 @@ function ExecutionBody({session,harness,host,embedded=false}: SessionExecutionPa
     return()=>{controller.abort();window.clearTimeout(timer);window.removeEventListener('nexus-auth-expired',revoke);window.removeEventListener('nexus-operator-logout',revoke);};
   },[]);
   if(blocked||!current)return <p role="alert">{error}</p>;
-  return <section aria-label="Session execution output" className="space-y-3 min-w-0">
+  return <section aria-label="Session execution output" data-modal-passive className="space-y-3 min-w-0">
     <p className="text-xs text-surface-500 break-words">{[harness,host,current.lifecycle_state].filter(Boolean).join(' · ')} · Read only</p>
     <p className="text-xs text-surface-500 break-all">{session.scope.session_id}</p>
     {error&&<p role="alert" className="text-xs text-red-600">{error}</p>}
