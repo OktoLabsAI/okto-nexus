@@ -1,0 +1,80 @@
+{
+    "format_version":  1,
+    "origin":  {
+                   "id":  "project-generalist",
+                   "revision":  1
+               },
+    "identity":  {
+                     "role":  "Project assistant",
+                     "permissions":  {
+                                         "messages":  {
+                                                          "send_direct":  true,
+                                                          "send_broadcast":  false,
+                                                          "send_channel":  true
+                                                      },
+                                         "handoffs":  {
+                                                          "create":  true,
+                                                          "work":  true,
+                                                          "cancel":  true
+                                                      },
+                                         "channels":  {
+                                                          "create":  false
+                                                      },
+                                         "artifacts":  {
+                                                           "put":  true
+                                                       },
+                                         "events":  {
+                                                        "read":  true
+                                                    },
+                                         "observations":  {
+                                                              "manage_self":  false,
+                                                              "publish":  false
+                                                          },
+                                         "identity":  {
+                                                          "update_profile":  true,
+                                                          "update_capabilities":  false
+                                                      },
+                                         "workspaces":  {
+                                                            "list":  true,
+                                                            "include_paths":  false
+                                                        },
+                                         "shared_md":  {
+                                                           "render":  true
+                                                       },
+                                         "health":  {
+                                                        "read":  true
+                                                    },
+                                         "experimental":  {
+                                                              "memory_write":  false,
+                                                              "memory_read":  false,
+                                                              "memory_search":  false
+                                                          },
+                                         "limits":  {
+                                                        "messages_per_minute":  60,
+                                                        "max_recipients":  10
+                                                    }
+                                     },
+                     "defaults_hash":  "sha256:6324ab87d77e9be205e191bec96469118655aff30133a27f6948d3d513c77663"
+                 },
+    "configuration":  {
+                          "runtime_enabled":  true,
+                          "session_policy":  "per_sender",
+                          "harness_settings":  {
+
+                                               },
+                          "tool_access":  "ask",
+                          "authorization":  {
+                                                "minutes":  60,
+                                                "no_expiry":  false,
+                                                "actions":  20,
+                                                "unlimited_actions":  false
+                                            }
+                      },
+    "effects":  [
+                    "Use the selected agent and project workspace through the existing managed connection.",
+                    "Allow authorized sessions and eligible Nexus messages for 60 minutes and at most 20 runtime actions.",
+                    "Keep native tool decisions and existing model/project instructions; no sandbox settings are replaced.",
+                    "The connection test opens the harness and requests a model response; provider usage may be charged.",
+                    "Finish saves the connection and execution grant. It does not submit a project task."
+                ]
+}

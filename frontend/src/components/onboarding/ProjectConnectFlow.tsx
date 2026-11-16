@@ -84,7 +84,7 @@ export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,o
       {!state.busy&&<button className="btn btn-secondary" onClick={()=>act(()=>model.initialize())}>Retry loading</button>}</div>}
     {(phase==='choose'||phase==='configure')&&<label className="block">Project
       <select aria-label="Project" data-modal-passive className={input} disabled={state.busy} value={state.workspace?.workspace_id||''}
-        onChange={event=>{const id=event.target.value;transition(()=>act(()=>model.selectWorkspace(state.workspaces.find(item=>item.workspace_id===id)||null)));}}>
+        onChange={event=>{const id=event.target.value;const selected=state.workspaces.find(item=>item.workspace_id===id)||null;transition(()=>act(()=>model.selectWorkspace(selected)));}}>
         <option value="">New project on the Server</option>{state.workspaces.map(item=><option key={item.workspace_id} value={item.workspace_id}>{item.display_name||'Unnamed project'}</option>)}
       </select></label>}
     {phase==='choose'&&<>
@@ -126,20 +126,20 @@ export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,o
       {choice&&choice.technical_state!=='READY_FOR_RUNTIME'&&<div><p>A version check runs the selected program on this Server without authorizing a model session.</p>
         <button className="btn btn-secondary" disabled={state.busy} onClick={()=>act(()=>model.verifyInstallation())}>Verify selected installation</button></div>}
       <label className="block">Collaborator name<input className={input} aria-label="Collaborator name" maxLength={120} value={state.displayName} disabled={state.busy}
-        onChange={e=>act(()=>model.customize({},e.target.value))} /></label>
+        onChange={e=>{const value=e.target.value;act(()=>model.customize({},value));}} /></label>
       <label className="block">Project name<input className={input} aria-label="Project name" value={state.configuration.workspace_label} disabled={state.busy}
-        onChange={e=>act(()=>model.customize({workspace_label:e.target.value}))} /></label>
+        onChange={e=>{const value=e.target.value;act(()=>model.customize({workspace_label:value}));}} /></label>
       {state.workspacePaths.length>1&&<label className="block">Previously used Server folder<select className={input} aria-label="Previously used Server folder" value={state.configuration.workspace_root}
-        onChange={e=>act(()=>model.customize({workspace_root:e.target.value}))}><option value="">Choose a folder</option>{state.workspacePaths.map(path=><option key={path} value={path}>{path}</option>)}</select></label>}
+        onChange={e=>{const value=e.target.value;act(()=>model.customize({workspace_root:value}));}}><option value="">Choose a folder</option>{state.workspacePaths.map(path=><option key={path} value={path}>{path}</option>)}</select></label>}
       <label className="block">Project folder on the Nexus Server<input className={input} aria-label="Project folder on the Nexus Server" value={state.configuration.workspace_root} disabled={state.busy}
-        onChange={e=>act(()=>model.customize({workspace_root:e.target.value}))} /></label>
+        onChange={e=>{const value=e.target.value;act(()=>model.customize({workspace_root:value}));}} /></label>
       <p>Recommended project preset: {state.preset?.origin.id}, revision {state.preset?.origin.revision}. The proposed identity is created only at Finish.</p>
       <button className="btn btn-secondary" aria-expanded={customize} onClick={()=>setCustomize(value=>!value)}>Customize</button>
       {customize&&<div className="space-y-3"><label className="block">Provider login directory on the Server<input className={input} aria-label="Provider login directory on the Server"
-        value={state.configuration.provider_home||''} onChange={e=>act(()=>model.customize({provider_home:e.target.value||null}))} /></label>
+        value={state.configuration.provider_home||''} onChange={e=>{const value=e.target.value;act(()=>model.customize({provider_home:value||null}));}} /></label>
         {choice?.harness_configuration&&<HarnessPreferenceFields schema={choice.harness_configuration} values={state.configuration.harness_settings}
           onChange={harness_settings=>act(()=>model.customize({harness_settings}))} />}
-        <label className="block">Nexus tool access<select className={input} aria-label="Nexus tool access" value={state.configuration.tool_access} onChange={e=>act(()=>model.customize({tool_access:e.target.value as 'ask'|'always_allow'}))}><option value="ask">Ask for approval</option><option value="always_allow">Always allow</option></select></label>
+        <label className="block">Nexus tool access<select className={input} aria-label="Nexus tool access" value={state.configuration.tool_access} onChange={e=>{const value=e.target.value as 'ask'|'always_allow';act(()=>model.customize({tool_access:value}));}}><option value="ask">Ask for approval</option><option value="always_allow">Always allow</option></select></label>
       </div>}
       <button className="btn btn-primary" disabled={state.busy||!state.candidateRef} onClick={()=>act(()=>model.review())}>Review this connection</button>
     </section>}
@@ -161,6 +161,8 @@ export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,o
     {phase==='uncertain'&&<section aria-label="Recover retained connection attempt" className="space-y-3"><h3 className="font-semibold">Check the retained attempt</h3>
       <p>Its result is not yet confirmed. Selection is locked. Recovery checks the same request; it does not start a new model test, create another identity or renew a grant.</p>
       <button className="btn btn-primary" disabled={state.busy} onClick={()=>act(()=>model.recover())}>Recover existing attempt</button>
+      {state.testRejected&&<><p>The Server definitively rejected this test before execution. You can preserve this attempt and explicitly edit a new review; no test is repeated automatically.</p>
+        <button className="btn btn-secondary" disabled={state.busy} onClick={()=>act(()=>model.editRejectedReview())}>Edit rejected review</button></>}
       {state.test?.status==='failed'&&state.test.retryable_failure&&<button className="btn btn-secondary" disabled={state.busy} onClick={()=>act(()=>model.retryReview())}>Review a new test after confirmed cleanup</button>}
       {request&&<details><summary>Retained setup reference</summary><p className="break-all">{request.client_intent_id}</p></details>}</section>}
   </section>;

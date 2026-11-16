@@ -22,6 +22,7 @@ function load(url) {
 }
 const {ProjectConnectModel,connectCheckpointKey,connectorDraftCommand}=load(new URL('../src/projectConnectFlowModel.ts',import.meta.url));
 const {ProjectConnectFlow}=load(new URL('../src/components/onboarding/ProjectConnectFlow.tsx',import.meta.url));
+const {RuntimeManagementError}=load(new URL('../src/runtimeApi.ts',import.meta.url));
 const workspace={workspace_id:'logical-project',display_name:'Fixture project'};
 const preset={format_version:1,origin:{id:'project-generalist',revision:7},identity:{role:'Project assistant',permissions:{messages:{send_direct:true},limits:{messages_per_minute:43,max_recipients:6}},defaults_hash:'sha256:'+'f'.repeat(64)},
   configuration:{runtime_enabled:true,session_policy:'per_sender',harness_settings:{},tool_access:'ask',authorization:{minutes:17,actions:9,no_expiry:false,unlimited_actions:false}},effects:['A temporary model test may incur provider usage.','Finish saves the reviewed connection.']};
@@ -63,6 +64,61 @@ function fixture(patch={}) {
 async function reviewed(f,adapter='codex_app_server') {
   const model=f.model();await model.initialize();await model.add();model.selectInstallation('candidate-'+adapter);model.review();return model;
 }
+
+test('definitive real 422 rejection survives reload and explicit edit archives rather than replaying',async()=>{
+  let posts=0;
+  const metadata={stage:'connection.test',possible_effect:false,retry_safe:false,operation_id:null,action:''};
+  const f=fixture({async testSetup(){posts++;throw new RuntimeManagementError(422,'VALIDATION_ERROR','provider_home is required',undefined,metadata);}});
+  let model=await reviewed(f,'claude_stream');await model.test(true);
+  const request=clone(model.getSnapshot().request);
+  assert.equal(model.getSnapshot().phase,'uncertain');assert.equal(model.getSnapshot().testRejected,true);
+  model.dispose();model=f.model();await model.initialize();assert.equal(model.getSnapshot().testRejected,true);
+  await model.editRejectedReview();
+  assert.equal(model.getSnapshot().phase,'configure');assert.equal(posts,1);
+  assert.deepEqual(model.getSnapshot().workspaces,[workspace]);
+  assert.deepEqual(model.getSnapshot().workspace,workspace);
+  assert.equal(model.getSnapshot().executorLabel,'Fixture Server');
+  assert.equal(model.getSnapshot().request,null);assert.equal(model.getSnapshot().retained,false);
+  const archive=JSON.parse([...f.storage.values.values()][0]);assert.deepEqual(archive.request,request);
+  assert.ok(f.calls.some(c=>c.name==='workspacePaths'));
+  assert.equal(f.calls.filter(c=>c.name==='finishSetup').length,0);
+  model.review();assert.notEqual(model.getSnapshot().request.client_intent_id,request.client_intent_id);
+  assert.equal(posts,1);model.dispose();
+});
+
+test('unknown or contradictory errors cannot authorize editing or a replacement test',async()=>{
+  const proof={stage:'connection.test',possible_effect:false,retry_safe:false,operation_id:null,action:''};
+  const errors=[new Error('response lost'),
+    ...[{possible_effect:undefined},{possible_effect:true},{operation_id:'operation-1'},{operation_id:undefined},
+      {retry_safe:true},{stage:'connection.finish'},{action:'runtime.open'}].map(change=>new RuntimeManagementError(422,'VALIDATION_ERROR','refused',undefined,{...proof,...change})),
+    new RuntimeManagementError(500,'VALIDATION_ERROR','refused',undefined,proof),
+    new RuntimeManagementError(422,'NOT_FOUND','refused',undefined,proof)];
+  for(const error of errors){
+    const f=fixture({async testSetup(){throw error;}}),model=await reviewed(f);await model.test(true);
+    assert.equal(model.getSnapshot().testRejected,false);
+    await assert.rejects(()=>model.editRejectedReview(),/definitive/);
+    assert.ok(f.storage.values.size);assert.equal(f.calls.filter(c=>c.name==='finishSetup').length,0);
+    model.dispose();
+  }
+});
+
+test('definitive rejection still requires same Server, authorized project and absent Finish',async()=>{
+  const metadata={stage:'connection.test',possible_effect:false,retry_safe:false,operation_id:null,action:''};
+  for(const fence of ['server','workspace','committed','deleted-project','deleted-executor','mismatched-executor','options']){
+    const f=fixture({async testSetup(){throw new RuntimeManagementError(422,'VALIDATION_ERROR','refused',undefined,metadata);}});
+    const model=await reviewed(f);await model.test(true);
+    if(fence==='server')f.api.me=async()=>({server_id:'other',agent_id:'operator-agent'});
+    if(fence==='workspace')f.api.workspacePaths=async()=>{throw new Error('Project permission revoked');};
+    if(fence==='committed')f.setReceipt({state:'committed'});
+    if(fence==='deleted-project')f.api.connectionWorkspaces=async()=>({items:[],has_more:false,next_workspace_id:null});
+    if(fence==='deleted-executor')f.api.executors=async()=>[];
+    if(fence==='mismatched-executor')f.api.executors=async()=>[{executor_id:'other-host',kind:'embedded',label:'Other host'}];
+    if(fence==='options')f.api.options=async()=>{throw new Error('Permission revoked');};
+    await model.editRejectedReview();
+    assert.equal(model.getSnapshot().phase,'uncertain');assert.equal(model.getSnapshot().retained,true);
+    assert.equal(f.storage.values.size,1);model.dispose();
+  }
+});
 
 test('real canonical preset flags normalize without relaxing portable configuration validation',async()=>{
   for(const authorization of [

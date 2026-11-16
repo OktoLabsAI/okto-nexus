@@ -2513,10 +2513,13 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
-        "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json"
+        "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json",
+        "NEXUS_UI_R1/execution/pr06-final-client-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md"
       ],
       "limitations": [
-        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
+        "Conexoes e recuperacao qualificadas com peers sinteticos; sessoes runtime/Home e provedores reais exigem evidencias separadas."
       ]
     },
     {
@@ -2671,9 +2674,13 @@
         "T-QUAL-02"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json"
+        "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json",
+        "NEXUS_UI_R1/execution/pr06-final-client-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md"
       ],
-      "limitations": []
+      "limitations": [
+        "Conexoes e recuperacao qualificadas com peers sinteticos; sessoes runtime/Home e provedores reais exigem evidencias separadas."
+      ]
     },
     {
       "id": "UI-040",
@@ -4309,26 +4316,38 @@
     },
     {
       "id": "T-ONB-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser/HTTP",
       "given": "Home com uma conexão.",
       "when": "Conectar agente.",
       "expected": "Oferecer abrir existente/adicionar sem abrir administração avançada.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr06-final-client-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md"
+      ],
       "tasks": [
         "UI-035"
+      ],
+      "limitations": [
+        "Browser/HTTP/SQLite reais com setup-test sintetico; cortes e falhas antecedentes preservados. Nao qualifica harness/provedor real."
       ]
     },
     {
       "id": "T-ONB-02",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser/HTTP",
       "given": "Novo harness local selecionado.",
       "when": "Revisar/confirmar.",
       "expected": "Mesmos serviços de setup/Finish do CLI, sem segunda implementação de autoridade.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr06-final-client-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md"
+      ],
       "tasks": [
         "UI-035"
+      ],
+      "limitations": [
+        "Browser/HTTP/SQLite reais com setup-test sintetico; cortes e falhas antecedentes preservados. Nao qualifica harness/provedor real."
       ]
     },
     {
@@ -4338,21 +4357,32 @@
       "given": "Dashboard aberto em device diferente do Server.",
       "when": "Escolher execução local/remota.",
       "expected": "Explicar host real; navegador não detecta executáveis da máquina do usuário por suposição.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md"
+      ],
       "tasks": [
         "UI-035"
+      ],
+      "limitations": [
+        "Evidencia parcial; o given completo do cenario nao foi executado. Mantido NOT_RUN."
       ]
     },
     {
       "id": "T-ONB-04",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser/HTTP",
       "given": "Usuário escolhe Personalizar.",
       "when": "Editar configuração.",
       "expected": "Expandir controles existentes sem trocar identidade/preset já salvo ou tornar personalização obrigatória.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr06-final-client-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md"
+      ],
       "tasks": [
         "UI-035"
+      ],
+      "limitations": [
+        "Browser/HTTP/SQLite reais com setup-test sintetico; cortes e falhas antecedentes preservados. Nao qualifica harness/provedor real."
       ]
     },
     {
@@ -4362,9 +4392,14 @@
       "given": "Conexão criada no CLI e UI aberta depois.",
       "when": "Listar/retomar.",
       "expected": "Mesmo agente/binding/sessão; sem novo cadastro manual na UI.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md"
+      ],
       "tasks": [
         "UI-039"
+      ],
+      "limitations": [
+        "Evidencia parcial; o given completo do cenario nao foi executado. Mantido NOT_RUN."
       ]
     },
     {
@@ -4374,9 +4409,14 @@
       "given": "Pasta/nome iguais mas workspace sem permissão.",
       "when": "Adicionar conexão no projeto.",
       "expected": "Não conceder acesso por semelhança; seleção/autorização canônicas.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md"
+      ],
       "tasks": [
         "UI-039"
+      ],
+      "limitations": [
+        "Evidencia parcial; o given completo do cenario nao foi executado. Mantido NOT_RUN."
       ]
     },
     {
@@ -4922,6 +4962,10 @@
     {
       "at": "2026-11-16T19:06:05.006257+00:00",
       "event": "Exact session/connection target and shared passive terminal viewer implemented.13HTTP/SQLite and34focalNode, full236frontend/build passed. Historical binding-rotation discrepancy fixed against canonical session API. Mounted browser and joint onboarding still separate; fixture historical-context delta preserves original PR00 source/measurement in commit2cc70419."
+    },
+    {
+      "at": "2026-11-16T21:13:42.973584+00:00",
+      "event": "UI035 finalclient CdDUCMon:295Node/build,22focals,1HTTP refusal and real-browser reload/edit PASS. Full synthetic two-harness connections retain dfy cut; no native session/provider promotion. Definitive refusal, controlled input and restored context display fixed; no DB migration/personal install/paid call."
     }
   ],
   "risk_acceptances": [],

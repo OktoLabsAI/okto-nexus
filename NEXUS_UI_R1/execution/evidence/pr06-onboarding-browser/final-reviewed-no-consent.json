@@ -1,0 +1,59 @@
+{
+  "state": {
+    "counts": {
+      "agents": 3,
+      "execution_bindings": 1,
+      "runtime_execution_grants": 1,
+      "execution_sessions": 0,
+      "execution_operations": 0,
+      "connection_setup_commits": 1
+    },
+    "agents": [
+      "operator",
+      "subject",
+      "collaborator-a"
+    ],
+    "bindings": [
+      {
+        "binding_id": "bind_996a8a807a4acc5aee796ce382cefef1",
+        "agent_id": null,
+        "executor_id": "exe_f8436c2e187fc94c306b8eaa3156d6fb",
+        "workspace_id": null,
+        "workspace_binding_id": "wxb_62370c865c7442a548805850f941eac3",
+        "adapter_id": null
+      }
+    ],
+    "row_digests": {
+      "agents": "47ca1852fc5fbd36049da3b7980cc5e5b8f49ac2a6664866cb0694930dcd0747",
+      "execution_bindings": "868b43f76cb2cbb86fe9513121b8066673822f44daa9721db54cc312dc7ba605",
+      "runtime_execution_grants": "87f7cae7bed023254e2d64f010629d44f406e27b0ce9974b639bce505b9ce273",
+      "execution_sessions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "execution_operations": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "connection_setup_commits": "548686784ebb2f201302e4bd2094cd93b981627737021e7aca032dd3ad4c8072"
+    },
+    "a_agent_digest": "90cca04db795331ceb40fc5eaac067bc3a7e962805349ebe3147966619e62532",
+    "a_configuration_digests": {
+      "binding": "868b43f76cb2cbb86fe9513121b8066673822f44daa9721db54cc312dc7ba605",
+      "grant": "87f7cae7bed023254e2d64f010629d44f406e27b0ce9974b639bce505b9ce273",
+      "endpoint": "ec42915569c959f32f720b48da4cf7def47bf1f0929809f65ec04d090b62c1d8",
+      "profile": "ed98b5a2d81bdd0fc43514175aa854d0adda0002a14ca9d98704df3e67dee8e8"
+    },
+    "turns": [
+      "connect_b3a4bd5817054431ae5985546ff44160"
+    ],
+    "probes": 1,
+    "calls": [
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:test",
+        "intent": "setup_59ea591a9673908d2b541dc60db51c09",
+        "agent": "project_7d2d530bf2ef4d457cb40068cb59151a",
+        "workspace": "wsr_5c7a48340dd02e4e5de50685745f34be"
+      }
+    ]
+  },
+  "scripts": [
+    "http://127.0.0.1:59597/assets/index-CdDUCMon.js"
+  ],
+  "test_disabled": true
+}

@@ -1,6 +1,7 @@
 import type {ConnectionConfiguration, SetupRequest, SetupTest} from './connectionConfiguration';
 import {parseConnectionConfiguration} from './connectionConfiguration';
 import type {runtimeApi, ConnectionCatalogItem, ProjectPresetOverview, RuntimeOptions, SetupDraftView, SetupFinishResult} from './runtimeApi';
+import {RuntimeManagementError, type DefinitiveSetupTestRejection} from './runtimeApi';
 
 export type ProjectConnectApi = Pick<typeof runtimeApi, 'me' | 'projectPreset' | 'setupDraft' | 'executors' |
   'options' | 'workspacePaths' | 'connectionCatalog' | 'binding' | 'checkLocalInstallation' |
@@ -16,10 +17,12 @@ export interface ConnectSnapshot {
   test: SetupTest | null; result: SetupFinishResult | null;
   workspacePaths: string[];
   retained: boolean;
+  testRejected: boolean;
   catalogStatus: 'loading' | 'ready' | 'unavailable';
   reviewIdentity: ProjectPresetOverview['identity'] | null; reviewEffects: string[]; nativePolicySource: string | null;
 }
 interface Checkpoint {
+  testRejection?:DefinitiveSetupTestRejection;
   version: 1; identity: string; server: string; workspace: string | null;
   kind: 'version' | 'test' | 'finish'; agentId: string; displayName: string;
   executorId: string; candidateRef: string; configuration: ConnectionConfiguration;
@@ -87,7 +90,7 @@ export class ProjectConnectModel {
     if (!identity) throw new Error('The authenticated dashboard identity is required.');
     this.state = {phase:'loading',busy:false,error:'',catalog:[],workspaces:[],workspace,serverId:'',
       agentId:'',displayName:'',executorId:'',executorLabel:'',options:null,candidateRef:'',configuration:null,
-      preset:null,draft:null,request:null,test:null,result:null,workspacePaths:[],retained:false,catalogStatus:'loading',reviewIdentity:null,reviewEffects:[],nativePolicySource:null};
+      preset:null,draft:null,request:null,test:null,result:null,workspacePaths:[],retained:false,testRejected:false,catalogStatus:'loading',reviewIdentity:null,reviewEffects:[],nativePolicySource:null};
   }
   getSnapshot = () => this.state;
   subscribe = (fn: () => void) => {this.listeners.add(fn);return () => this.listeners.delete(fn);};
@@ -126,14 +129,21 @@ export class ProjectConnectModel {
       if(item.request)freeze(item.request);
       if(item.request&&(!item.reviewIdentity||item.reviewIdentity.defaults_hash!==item.request.agent_creation?.defaults_hash))
         throw new Error('The retained identity review does not match its request.');
+      if(item.testRejection&&(item.kind!=='test'||JSON.stringify(item.testRejection)!==JSON.stringify({status:422,code:'VALIDATION_ERROR',stage:'connection.test',possible_effect:false,operation_id:null,retry_safe:false})))
+        throw new Error('The retained rejection does not confirm a definitive precondition refusal.');
       this.checkpoint=item;
       this.set({phase:'uncertain',agentId:item.agentId,displayName:item.displayName,executorId:item.executorId,
         candidateRef:item.candidateRef,configuration:item.configuration,request:item.request,retained:true,
         reviewIdentity:item.reviewIdentity,reviewEffects:item.reviewEffects||[],nativePolicySource:item.nativePolicySource,
-        error:'A previous attempt is retained. Check its receipt and test status before continuing.'});
+        testRejected:!!item.testRejection,error:'A previous attempt is retained. Check its receipt and test status before continuing.'});
       return;
     }
     const preset = await this.api.projectPreset(this.controller.signal);
+    const workspaces=await this.workspaceDirectory();
+    this.set({preset,workspaces});
+    await this.catalog();this.set({phase:'choose'});
+  });}
+  private async workspaceDirectory():Promise<ConnectWorkspace[]> {
     const workspaces: ConnectWorkspace[]=[];let after: string|null=null;
     const seen=new Set<string>(),ids=new Set<string>();let complete=false;
     for(let pageNumber=0;pageNumber<MAX_PAGES;pageNumber++) {
@@ -154,9 +164,8 @@ export class ProjectConnectModel {
     }
     if(!complete)throw new Error('The project directory exceeds the complete interactive page budget. No partial directory is used.');
     if(this.state.workspace&&!ids.has(this.state.workspace.workspace_id))throw new Error('The selected project is no longer available.');
-    this.set({preset,workspaces});
-    await this.catalog();this.set({phase:'choose'});
-  });}
+    return workspaces;
+  }
   private async catalog() {
     this.set({catalog:[],catalogStatus:'loading'});
     const items: ConnectionCatalogItem[]=[];const seen=new Set<string>(),ids=new Set<string>();let cursor:string|null=null,revision:string|null=null,total:number|null=null,complete=false;
@@ -308,7 +317,15 @@ export class ProjectConnectModel {
   async test(approved:boolean) {
     if(!approved||this.state.phase!=='review'||!this.state.request)throw new Error('Review and explicitly consent to the model test first.');
     await this.run(async()=>{this.retain('test',this.state.request);this.set({phase:'testing'});
-      const test=await this.api.testSetup(this.state.request!);this.validateTest(test,this.state.request!);this.set({test,phase:test.status==='succeeded'?'finish':test.status==='failed'?'uncertain':'testing'});
+      try {
+        const test=await this.api.testSetup(this.state.request!);this.validateTest(test,this.state.request!);this.set({test,phase:test.status==='succeeded'?'finish':test.status==='failed'?'uncertain':'testing'});
+      }catch(error){
+        if(error instanceof RuntimeManagementError&&error.definitiveTestRejection&&this.checkpoint?.kind==='test') {
+          this.checkpoint={...this.checkpoint,testRejection:error.definitiveTestRejection};
+          this.storage.setItem(this.key(),JSON.stringify(this.checkpoint));this.set({testRejected:true});
+        }
+        throw error;
+      }
     },true);
   }
   async recover() {await this.run(async()=>{
@@ -351,6 +368,33 @@ export class ProjectConnectModel {
       this.storage.removeItem(this.key());this.checkpoint=null;
       this.set({phase:'configure',draft,preset,request:null,test:null,retained:false});
       await this.loadOptions();
+    });
+  }
+  async editRejectedReview() {
+    if(this.state.busy||this.state.phase!=='uncertain'||this.checkpoint?.kind!=='test'||!this.checkpoint.testRejection||!this.state.testRejected)
+      throw new Error('Only a definitive Server precondition refusal can reopen this review.');
+    await this.run(async()=>{
+      const checkpoint=this.checkpoint!, request=checkpoint.request!;
+      const me=await this.api.me(this.controller.signal);
+      if(me.server_id!==this.state.serverId||me.agent_id!==this.me?.agent_id)
+        throw new Error('The authenticated Server identity changed. Preserve this attempt.');
+      const workspaces=await this.workspaceDirectory();
+      const executors=await this.api.executors(me.agent_id,this.controller.signal);
+      const exact=executors.filter(item=>item.kind==='embedded'&&item.executor_id===checkpoint.executorId);
+      if(exact.length!==1)throw new Error('The retained execution host is no longer available. Preserve this attempt.');
+      // Reauthorize the exact project on this host; a retained ID or an absent
+      // receipt alone never establishes project access or proves no effect.
+      if(this.state.workspace)await this.api.workspacePaths(this.state.workspace.workspace_id,this.state.executorId,this.controller.signal);
+      await this.catalog();
+      try {await this.api.setupReceipt(request.client_intent_id,this.controller.signal);throw new Error('This setup is committed. Recover its receipt.');}
+      catch(error){if(code(error)!=='NOT_FOUND')throw error;}
+      const [draft,preset]=await Promise.all([this.api.setupDraft(this.state.agentId,this.controller.signal),this.api.projectPreset(this.controller.signal)]);
+      await this.loadOptions();
+      this.storage.setItem(this.key()+':previous:'+encodeURIComponent(request.client_intent_id),JSON.stringify(checkpoint));
+      this.storage.removeItem(this.key());this.checkpoint=null;
+      this.set({phase:'configure',draft,preset,workspaces,executorLabel:exact[0].label||'Nexus Server',
+        workspace:this.state.workspace?workspaces.find(item=>item.workspace_id===this.state.workspace!.workspace_id)!:null,
+        request:null,test:null,retained:false,testRejected:false});
     });
   }
   private complete(result:SetupFinishResult) {

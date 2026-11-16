@@ -189,6 +189,20 @@ export interface NativeDecisionView {
 }
 
 // R4 uses Bearer authentication and direct JSON, unlike the legacy /api envelope.
+export interface DefinitiveSetupTestRejection {
+  status:422; code:'VALIDATION_ERROR'; stage:'connection.test'; possible_effect:false;
+  operation_id:null; retry_safe:false;
+}
+export class RuntimeManagementError extends ApiError {
+  readonly definitiveTestRejection:DefinitiveSetupTestRejection|null;
+  constructor(status:number, code:string, message:string, details:unknown, metadata:unknown) {
+    super(status,code,message,details);
+    const value=metadata as Record<string,unknown>|null;
+    this.definitiveTestRejection=status===422&&code==='VALIDATION_ERROR'&&value?.stage==='connection.test'&&
+      value.possible_effect===false&&value.operation_id===null&&value.retry_safe===false&&value.action===''?
+      {status:422,code:'VALIDATION_ERROR',stage:'connection.test',possible_effect:false,operation_id:null,retry_safe:false}:null;
+  }
+}
 async function read<T>(path: string, signal: AbortSignal | undefined, body?: unknown): Promise<T> {
   const headers = new Headers();
   headers.set("x-nexus-ui", "1");
@@ -202,7 +216,7 @@ async function read<T>(path: string, signal: AbortSignal | undefined, body?: unk
   catch { throw new ApiError(response.status, `HTTP_${response.status}`, response.statusText || "Invalid server response"); }
   if (!response.ok) {
     const error = value.error ?? value;
-    throw new ApiError(response.status, error.code ?? `HTTP_${response.status}`, error.message ?? response.statusText, error.details);
+    throw new RuntimeManagementError(response.status, error.code ?? `HTTP_${response.status}`, error.message ?? response.statusText, error.details,error);
   }
   return value as T;
 }
