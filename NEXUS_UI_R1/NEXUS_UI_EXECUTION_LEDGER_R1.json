@@ -66,7 +66,7 @@
       "id": "PR-02",
       "title": "Seletor local obrigatório retomar/adicionar",
       "milestone": "M1",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "tasks": [
         "UI-011",
         "UI-012",
@@ -80,7 +80,7 @@
       "id": "PR-03",
       "title": "Projeção unificada e alvos de sessão",
       "milestone": "M2",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "tasks": [
         "UI-017",
         "UI-018",
@@ -1519,7 +1519,7 @@
       "id": "UI-011",
       "pr": "PR-02",
       "title": "Catalogar conexões do projeto sem mudar sua autoridade",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "depends_on": [
         "UI-004",
         "UI-005"
@@ -1545,14 +1545,23 @@
         "T-CLI-14",
         "T-SCOPE-06"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+      ],
+      "limitations": [
+        "Scoped local filesystem/CLI/HTTP/SQLite tests with synthetic lifecycle/setup-test peer; real provider and two different native harnesses not certified. UI016 qualification remains separate."
+      ],
+      "validation": {
+        "acceptance": "Passive scoped catalog, preserved legacy metadata and unknown checkpoints; no readiness/grant claim",
+        "current_focals": 53,
+        "proof": "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+      }
     },
     {
       "id": "UI-012",
       "pr": "PR-02",
       "title": "Implementar picker retomar/adicionar no connect",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-011"
       ],
@@ -1578,14 +1587,18 @@
         "T-CLI-06",
         "T-CLI-07"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+      ],
+      "limitations": [
+        "Scoped local filesystem/CLI/HTTP/SQLite tests with synthetic lifecycle/setup-test peer; real provider and two different native harnesses not certified. UI016 qualification remains separate."
+      ]
     },
     {
       "id": "UI-013",
       "pr": "PR-02",
       "title": "Persistir nova intenção e proteger concorrência",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-012"
       ],
@@ -1610,14 +1623,18 @@
         "T-CLI-10",
         "T-CLI-15"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr02-local-connection-qualification.json"
+      ],
+      "limitations": [
+        "Scoped local filesystem/CLI/HTTP/SQLite tests with synthetic lifecycle/setup-test peer; real provider and two different native harnesses not certified. UI016 qualification remains separate."
+      ]
     },
     {
       "id": "UI-014",
       "pr": "PR-02",
       "title": "Separar seleção de sessão de recuperação de envio",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-012",
         "UI-013"
@@ -1651,7 +1668,7 @@
       "id": "UI-015",
       "pr": "PR-02",
       "title": "Implementar seleção explícita para scripts sem prompts",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-013",
         "UI-014"
@@ -1685,7 +1702,7 @@
       "id": "UI-016",
       "pr": "PR-02",
       "title": "Testar o segundo harness e retomada ponta a ponta sintética",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-015",
         "UI-005"
@@ -1721,7 +1738,7 @@
       "id": "UI-017",
       "pr": "PR-03",
       "title": "Projetar relações unificadas de trabalho e sessões",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-003",
         "UI-005"
@@ -1755,7 +1772,7 @@
       "id": "UI-018",
       "pr": "PR-03",
       "title": "Unir atenção e resultados por correlação",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-017"
       ],
@@ -1789,7 +1806,7 @@
       "id": "UI-019",
       "pr": "PR-03",
       "title": "Adicionar sessões sem operação aos alvos tipados",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-003",
         "UI-017"
@@ -1824,7 +1841,7 @@
       "id": "UI-020",
       "pr": "PR-03",
       "title": "Aplicar escopo, contagem e paginação por grupo",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-017",
         "UI-018"
@@ -1859,7 +1876,7 @@
       "id": "UI-021",
       "pr": "PR-03",
       "title": "Expor contrato de entries compatível e limitado",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-019",
         "UI-020"
@@ -4629,6 +4646,10 @@
     {
       "at": "2026-11-16T18:13:11.629804+00:00",
       "event": "PR00 fixture qualified with7 scoped cases; contracts remain IMPLEMENTED until functional traceability exercised. TBASE04 PASS only. Baseline excludes latency/browser. No prior Home/R3 qualification blocker waived."
+    },
+    {
+      "at": "2026-11-16T18:28:25.603965+00:00",
+      "event": "UI011 read-only catalog acceptance verified; UI012/013 implementation current53unit+2canonicalHTTP/SQLite cases. Same logical workspace and original connection preservation proved with synthetic setup-test peer. Earlier90case regression remains separate cut. Session-intent/UI016 and Connector/UI onboarding gates remain open; no paid test or installation change."
     }
   ],
   "risk_acceptances": [],

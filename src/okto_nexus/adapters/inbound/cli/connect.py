@@ -60,6 +60,8 @@ def _display(value, as_json):
     if as_json:
         print(json.dumps(value, ensure_ascii=False))
         return
+    if value.get('profile'):
+        print('Connection shortcut: ' + value['profile'])
     if value.get('state') == 'review' and value.get('kind') == 'remote_project_setup':
         from .remote_setup_io import display_review
         display_review(value)
@@ -127,6 +129,8 @@ def run_connect(argv):
     parser = argparse.ArgumentParser(prog='okto-nexus connect',
         description='Review and connect this local project using the canonical managed setup.')
     parser.add_argument('--profile', help='saved local project profile name')
+    parser.add_argument('--new-connection', action='store_true',
+        help='explicitly add another connection without replacing an existing profile')
     parser.add_argument('--operator-profile', help='use this saved human operator profile on a remote Server')
     parser.add_argument('--remote-draft', type=Path,
         help='review a remote host draft exported by Connector connect --setup-draft')
@@ -163,16 +167,29 @@ def run_connect(argv):
         parser.error('--name is for a new identity; existing names are preserved')
     if not 0 < args.timeout <= 300:
         parser.error('--timeout must be greater than 0 and at most 300 seconds')
-    guard = checkpoint = None
+    if args.new_connection and not args.profile and (args.json or not sys.stdin.isatty()):
+        _display(dict(state='selection_required', reason='new_connection_requires_profile',
+            effects_started=False, lifecycle_requested=False, choices=[]), args.json)
+        return 3
+    guard = checkpoint = reservation = selected_choice = None
     try:
-        from .terminal_target import resolve_terminal_target
+        from .terminal_target import resolve_terminal_target, terminal_target_selection
         project, profile = project_profile(args.project, args.profile)
+        if args.new_connection:
+            _, remote_operator = terminal_target_selection(service_args, profile, args.operator_profile)
+            if remote_operator:
+                raise ConnectionError('REMOTE_ADDITION_REQUIRES_HOST', 'Add a remote connection through its Connector host.')
         service = resolve_terminal_target(service_args, profile, args.operator_profile, resolve_local_service)
+        if args.new_connection and hasattr(service, 'operator_profile'):
+            raise ConnectionError('REMOTE_ADDITION_REQUIRES_HOST', 'Add a remote connection through its Connector host; this flag selects local managed setup only.')
         if (args.remote_draft or args.setup_receipt_output or args.review_current) and not hasattr(service, 'operator_profile'):
             raise ConnectionError('REMOTE_OPERATOR_REQUIRED', 'Remote host setup requires a saved human operator profile.')
         if hasattr(service, 'operator_profile') and args.start_at_login is not None:
             raise ConnectionError('REMOTE_STARTUP_NOT_LOCAL', 'Choose startup on the execution host using its Connector; this operator client cannot install a remote Server service.')
         directory = service.adapter.home / 'terminal/profiles'
+        if not hasattr(service, 'operator_profile'):
+            from .connection_reservation import _safe_paths
+            _safe_paths(service.adapter.home, profile)
         target = directory / (profile + '.json')
         def save(value):
             nonlocal checkpoint
@@ -181,7 +198,7 @@ def run_connect(argv):
         prior = read_json(target) if target.exists() else None
         checkpoint = prior
         status = None
-        if (not args.plan and prior and prior.get('login_start_operation', {}).get('state') in ('pending', 'installed')):
+        if (args.profile and not args.plan and prior and prior.get('login_start_operation', {}).get('state') in ('pending', 'installed')):
             guard = ExclusiveFileLock(directory / (profile + '.guard'))
             guard.acquire()
             prior = read_json(target)
@@ -196,13 +213,74 @@ def run_connect(argv):
         if status['state'] != 'ready':
             _display({'state': 'service_not_ready', 'service': status}, args.json)
             return 3
+        if not hasattr(service, 'operator_profile') and not args.profile:
+            from .connection_choices import ConnectionChoiceScope, list_connection_choices, ConnectionChoiceCatalog, ChoiceIssue
+            from .connection_picker import pick_connection, selection_required
+            if args.new_connection and (args.json or not sys.stdin.isatty()):
+                _display(selection_required(ConnectionChoiceCatalog((), (), True),
+                    reason='new_connection_requires_profile', lifecycle_requested=not args.plan), args.json)
+                return 3
+            call = LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port)
+            me = call('GET', '/api/v1/runtime-management/connections/me')
+            if not status.get('instance_id'):
+                catalog = ConnectionChoiceCatalog((), (ChoiceIssue(None, 'instance_unconfirmed'),), False)
+            else:
+                catalog = list_connection_choices(ConnectionChoiceScope(service.adapter.home,
+                    Path(project), me['server_id'], instance_id=status['instance_id']))
+                from .connection_reservation import pending_reservations
+                pending = pending_reservations(service.adapter.home, project, me['server_id'])
+                catalog = ConnectionChoiceCatalog(catalog.choices + pending.choices,
+                    catalog.issues + pending.issues, catalog.complete and pending.complete)
+            if not catalog.complete or (catalog.choices and (args.json or not sys.stdin.isatty()) and not args.new_connection):
+                _display(selection_required(catalog, lifecycle_requested=not args.plan), args.json)
+                return 3
+            action, selected_profile = ('add', None) if args.new_connection else (
+                pick_connection(catalog, client=args.client, read=input) if sys.stdin.isatty() and not args.json else ('add', None))
+            if action in ('cancel', 'unconfirmed'):
+                _display(dict(state='canceled' if action == 'cancel' else 'selection_required',
+                    effects_started=None if not args.plan else False, lifecycle_requested=not args.plan), args.json)
+                return 0 if action == 'cancel' else 3
+            if action == 'resume':
+                profile = selected_profile
+                selected_choice = next(row for row in catalog.choices if row.profile == profile)
+            elif catalog.choices or args.new_connection:
+                profile = 'connection-' + uuid.uuid4().hex[:24]
+                args.new_connection = True
+            args.profile = profile
+            target = directory / (profile + '.json')
+            prior = read_json(target) if target.exists() else None
+            checkpoint = prior
         directory.mkdir(parents=True, exist_ok=True)
         if guard is None:
             guard = ExclusiveFileLock(directory / (profile + '.guard'))
             guard.acquire()
         saved = read_json(target) if target.exists() else None
         checkpoint = saved
-        if saved:
+        from .connection_reservation import read_reservation, reserve_connection
+        reservation = read_reservation(service.adapter.home, profile) if not hasattr(service, 'operator_profile') else None
+        if selected_choice is not None:
+            retained = saved or reservation
+            current_selection = retained.get('selection', {}) if retained else {}
+            current_binding = (saved or {}).get('result', {}).get('binding', {}).get('binding_id') or current_selection.get('binding_id')
+            if (not retained or current_selection.get('agent') != selected_choice.agent_id
+                    or selected_choice.binding_id is not None and current_binding != selected_choice.binding_id
+                    or selected_choice.client is not None and current_selection.get('client') != selected_choice.client):
+                raise ConnectionError('PROFILE_DRIFT', 'The selected connection changed during the choice. Inspect it before continuing.')
+        if args.new_connection and saved and not reservation:
+            raise ConnectionError('PROFILE_CONFLICT', 'This profile belongs to another connection, not this addition intent.')
+        if reservation:
+            selection = saved_selection(saved or dict(selection=reservation['selection'], state='reserved'), args, project)
+            current = LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port)(
+                'GET', '/api/v1/runtime-management/connections/me')
+            if current['server_id'] != reservation['server_id']:
+                raise ConnectionError('SERVER_ID_MISMATCH', 'The addition intent belongs to another Server.')
+            # Canonical review may enrich unspecified client/login/display
+            # metadata. Its retained review is authoritative for those choices;
+            # the original identity/project/setup intent must never change.
+            if any(selection.get(key) != reservation['selection'].get(key)
+                    for key in ('agent', 'project', 'create_agent', 'setup_intent_id')):
+                raise ConnectionError('PROFILE_CONFLICT', 'The profile no longer matches its original addition intent.')
+        elif saved:
             selection = saved_selection(saved, args, project)
         else:
             if (hasattr(service, 'operator_profile') and not args.remote_draft
@@ -219,7 +297,32 @@ def run_connect(argv):
                 if args.remote_draft:
                     from .remote_setup_io import read_draft
                     selection['remote_draft'] = read_draft(args.remote_draft)
+        if args.new_connection and reservation is None and not saved and not selection.get('workspace_id'):
+            from .connection_choices import ConnectionChoiceScope, list_connection_choices
+            from .connection_project import project_workspace_choices, pick_project_workspace
+            call = LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port)
+            current = call('GET', '/api/v1/runtime-management/connections/me')
+            if not status.get('instance_id'):
+                raise ConnectionError('PROJECT_SELECTION_UNCONFIRMED', 'The local service instance is not confirmed.')
+            project_catalog = list_connection_choices(ConnectionChoiceScope(service.adapter.home,
+                Path(project), current['server_id'], instance_id=status['instance_id']))
+            workspaces = project_workspace_choices(call, project_catalog, project)
+            if len(workspaces) > 1 and (args.json or not sys.stdin.isatty()):
+                _display(dict(state='selection_required', reason='workspace_selection_required',
+                    choices=[dict(workspace_id=row.workspace_id, label=row.label) for row in workspaces],
+                    effects_started=None if not args.plan else False, lifecycle_requested=not args.plan), args.json)
+                return 3
+            if workspaces:
+                workspace_id = pick_project_workspace(workspaces, read=input)
+                if workspace_id is None:
+                    _display(dict(state='canceled', effects_started=None if not args.plan else False,
+                        lifecycle_requested=not args.plan), args.json)
+                    return 0
+                selection['workspace_id'] = workspace_id
         existing_login = connect_login.selected(saved) if saved else selection.get('login_start')
+        if (reservation and (not saved or saved['state'] != 'done')
+                and args.start_at_login is not None and args.start_at_login != bool(existing_login)):
+            raise ConnectionError('PROFILE_CONFLICT', 'Recover the retained addition before changing its startup choice.')
         if args.start_at_login is False and existing_login:
             if saved['state'] == 'done' and saved.get('login_start_plan') and not saved.get('login_start_operation'):
                 saved.pop('login_start_plan')
@@ -239,6 +342,11 @@ def run_connect(argv):
             else:
                 selection['login_start'] = plan
                 saved = None
+        if args.new_connection and reservation is None:
+            current = LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port)(
+                'GET', '/api/v1/runtime-management/connections/me')
+            reservation = reserve_connection(service.adapter.home, profile, selection, current['server_id'])
+            selection = reservation['selection']
         remote_setup = bool(selection.get('remote_draft'))
         handoff_path = None
         if remote_setup:
@@ -253,8 +361,12 @@ def run_connect(argv):
         elif hasattr(service, 'operator_profile'):
             flow = RemoteTerminalConnection(service.operator_http, lambda value: atomic_json(target, value))
         else:
+            def save_local_setup(value):
+                if reservation is not None and value.get('server_id') != reservation['server_id']:
+                    raise ConnectionError('SERVER_ID_MISMATCH', 'The Server changed after the addition was reserved.')
+                atomic_json(target, value)
             flow = TerminalConnection(LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port),
-                                      lambda value: atomic_json(target, value))
+                                      save_local_setup)
         recovered_review = bool(remote_setup and saved and saved['state'] == 'review_submitted')
         if recovered_review:
             saved = flow.recover_review(saved)
@@ -263,7 +375,21 @@ def run_connect(argv):
                 raise ConnectionError('REMOTE_REVIEW_UNAVAILABLE', 'Select a pending remote setup profile to refresh its review.')
             saved = flow.review(selection, previous=saved)
         elif not saved:
-            saved = flow.review(selection)
+            try:
+                saved = flow.review(selection)
+            except ConnectionError as error:
+                if (error.code != 'CLIENT_SELECTION_REQUIRED' or not error.choices
+                        or args.json or not sys.stdin.isatty() or remote_setup
+                        or hasattr(service, 'operator_profile')):
+                    raise
+                from .connection_picker import pick_harness
+                client = pick_harness(error.choices, read=input)
+                if client is None:
+                    _display(dict(state='canceled', effects_started=None if not args.plan else False,
+                        lifecycle_requested=not args.plan), args.json)
+                    return 0
+                selection['client'] = client
+                saved = flow.review(selection)
             if saved['state'] == 'configured':
                 saved = read_json(target)  # Reused bindings can still review local startup.
         if saved['state'] == 'done':
@@ -309,6 +435,8 @@ def run_connect(argv):
                             current_user_service=(transition or status).get('user_service'))
         if handoff_path and result.get('handoff'):
             result['handoff_path'] = handoff_path
+        if reservation is not None:
+            result = dict(result, profile=profile)
         _display(result, args.json)
         if result['state'] == 'configured' and not args.plan and not args.json and not args.no_chat and sys.stdin.isatty():
             from .work import interactive_work
@@ -323,7 +451,8 @@ def run_connect(argv):
         _display({'state': 'unconfirmed' if possible_effect else 'refused',
                   'code': getattr(error, 'code', 'PROFILE_BUSY' if isinstance(error, LockBusy) else 'CONFIG_ERROR'),
                   'message': getattr(error, 'message', getattr(error, 'action', 'Inspect the selected service and saved profile before continuing.')),
-                  'possible_effect': possible_effect}, args.json)
+                  'possible_effect': possible_effect,
+                  **({'profile': profile} if reservation is not None else {})}, args.json)
         return 3
     finally:
         if guard is not None:

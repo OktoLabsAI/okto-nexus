@@ -83,6 +83,17 @@ def test_review_requires_exact_consent_then_finish_and_reconnect_preserve_config
     assert [item['state'] for item in t.saved] == ['review', 'approved', 'check_submitted', 'approved', 'test_submitted', 'finish', 'done']
 
 
+def test_reserved_addition_setup_id_is_used_by_canonical_review(terminal):
+    t = terminal
+    intent_id = 'connect_' + 'a' * 32
+    selection = t.selection | {'setup_intent_id': intent_id}
+    first = t.flow.review(selection)
+    second = t.flow.review(deepcopy(selection))
+    assert first['request']['client_intent_id'] == second['request']['client_intent_id'] == intent_id
+    assert first['review_revision'] == second['review_revision']
+    assert t.probes == t.turns == []
+
+
 @pytest.mark.parametrize('home_kind', [None, 'approved-provider-home', '.codex'])
 def test_provider_login_guidance_preserves_failed_request_without_replay(terminal, monkeypatch, tmp_path, capsys, home_kind):
     t = terminal

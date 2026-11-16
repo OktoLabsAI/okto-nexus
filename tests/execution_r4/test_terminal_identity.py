@@ -1,6 +1,7 @@
 """A reviewed project identity is created exactly once by canonical Finish."""
 from copy import deepcopy
 import json
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -29,6 +30,60 @@ def agents(deps):
 
 def review(t):
     return t.flow.review(dict(t.selection, agent='project-assistant', create_agent=True, display_name=None))
+
+
+def test_addition_finish_reuses_canonical_project_without_changing_first_connection(terminal, tmp_path, monkeypatch):
+    from okto_nexus.adapters.inbound.cli.connection_choices import ConnectionChoiceScope, list_connection_choices
+    from okto_nexus.adapters.inbound.cli.connection_project import project_workspace_choices
+    from okto_nexus.adapters.outbound.service_manager.context import atomic_json
+    t = terminal
+    first = t.flow.review(t.selection)
+    configured = t.flow.apply(first, approval=first['review_revision'])
+    original_profile = deepcopy(t.saved[-1])
+    home = tmp_path / 'catalog-home'
+    directory = home / 'terminal/profiles'
+    directory.mkdir(parents=True)
+    path = directory / 'legacy.json'
+    atomic_json(path, original_profile)
+    before_profile = path.read_bytes()
+    before = snapshot(t.deps)
+    choices = list_connection_choices(ConnectionChoiceScope(home,
+        Path(t.selection['project']), configured['server_id'], instance_id='fixture-instance'))
+    projects = project_workspace_choices(t.call, choices, t.selection['project'])
+    assert len(projects) == 1 and projects[0].workspace_id == configured['workspace_id']
+    # The real parser calls the real HTTP app/database through the established
+    # fixture transport; only lifecycle and the setup-test provider are fake.
+    service = SimpleNamespace(adapter=SimpleNamespace(home=home, host='127.0.0.1', port=1),
+        inspect=lambda: {'state': 'ready', 'instance_id': 'fixture-instance'},
+        ensure_running=lambda **kwargs: pytest.fail('plan cannot start a service'))
+    monkeypatch.setattr(connect, 'resolve_local_service', lambda args: service)
+    monkeypatch.setattr(connect, 'LocalOperatorHTTP', lambda **kwargs: t.call)
+    assert connect.run_connect(['--home', str(home), '--new-connection', '--profile', 'second',
+        '--project', t.selection['project'], '--client', 'codex', '--plan', '--json']) == 0
+    addition = json.loads((directory / 'second.json').read_text(encoding='utf-8'))
+    assert addition['review_request']['workspace_id'] == configured['workspace_id']
+    second = t.flow.apply(addition, approval=addition['review_revision'])
+    assert second['workspace_id'] == configured['workspace_id']
+    assert second['agent_id'] != configured['agent_id'] and second['binding_id'] != configured['binding_id']
+    after = snapshot(t.deps)
+    for table in ('execution_bindings', 'runtime_execution_grants'):
+        assert all(row in after[table] for row in before[table])
+        assert len(after[table]) == len(before[table]) + 1
+    assert path.read_bytes() == before_profile
+    assert len(t.turns) == 2  # Explicit synthetic setup-test peer, no provider.
+
+
+def test_addition_existing_agent_does_not_silently_reuse_binding(terminal):
+    t = terminal
+    first = t.flow.review(t.selection)
+    configured = t.flow.apply(first, approval=first['review_revision'])
+    before = snapshot(t.deps)
+    for explicit_binding in (None, configured['binding_id']):
+        with pytest.raises(ConnectionError) as caught:
+            t.flow.review(dict(t.selection, binding_id=explicit_binding,
+                setup_intent_id='connect_' + 'c' * 32))
+        assert caught.value.code == 'ADDITION_CONFLICT'
+    assert snapshot(t.deps) == before and len(t.turns) == 1
 
 
 @pytest.mark.parametrize('lost_finish', [False, True])
