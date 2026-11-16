@@ -224,40 +224,68 @@ def result_attention(raw, occurrence):
 class SqliteHomeQueries:
     QUERY_SECONDS = 5.0
 
+    @staticmethod
+    def _attention_relations(relation):
+        import re
+        sql, params = relation
+        sql = re.sub(r':([a-zA-Z_][a-zA-Z_0-9]*)', r':att_\1', sql)
+        # Canonical policies project authorized source facts. Only partition
+        # those occurrences: NULL is never inferred from a missing workspace.
+        ctes = '''WITH home_attention_all AS MATERIALIZED (''' + sql + ''' SELECT item FROM filtered),
+          home_attention AS MATERIALIZED (SELECT item FROM home_attention_all
+            WHERE json_extract(item,'$.workspace_id') IS NOT NULL
+              AND (:workspace_id IS NULL OR json_extract(item,'$.workspace_id')=:workspace_id)),
+          home_server_attention AS MATERIALIZED (SELECT item FROM home_attention_all
+            WHERE json_extract(item,'$.workspace_id') IS NULL)'''
+        return ctes, {'att_' + key: value for key, value in params.items()}
+
+    @staticmethod
+    def _attention_aggregate(partition, *, page_limit, after=False):
+        actionable = (" AND json_extract(item,'$.category')='action_required'"
+            " AND (:agent_id IS NULL OR json_extract(item,'$.agent_id')=:agent_id)") if partition == 'home_attention' else ''
+        source = f"SELECT item FROM {partition} WHERE json_extract(item,'$.active')=1" + actionable
+        cursor = ''' WHERE json_extract(item,'$.priority')<:after_priority OR
+          (json_extract(item,'$.priority')=:after_priority AND
+           (json_extract(item,'$.first_detected_at')>:after_first OR
+            (json_extract(item,'$.first_detected_at')=:after_first AND
+             json_extract(item,'$.attention_id')>:after_id)))''' if after else ''
+        page = 'SELECT item FROM (' + source + ')' + cursor + '''
+          ORDER BY json_extract(item,'$.priority') DESC,json_extract(item,'$.first_detected_at'),
+            json_extract(item,'$.attention_id') LIMIT :''' + page_limit
+        return '''SELECT json_object('total',COUNT(*),'snapshot_revision',nexus_attention_set_digest_v1(item),
+          'next_change_at',(SELECT MIN(json_extract(item,'$.next_change_at')) FROM ''' + partition + '''
+            WHERE json_extract(item,'$.next_change_at')>:now),
+          'items',json((SELECT json_group_array(json(item)) FROM (''' + page + ''')))) FROM (''' + source + ')'
+
     def overview(self, uow, *, scope, server_id, now, limits, attention_relation):
         """Share the canonical occurrence projection across three Home blocks.
 
         This is a statement-local materialization, never a stored snapshot or
         temporary table. The service falls back to isolated reads on failure.
         """
-        import re
-        attention_sql, attention_params = attention_relation
-        attention_sql = re.sub(r':([a-zA-Z_][a-zA-Z_0-9]*)', r':att_\1', attention_sql)
-        params = {'att_' + key: value for key, value in attention_params.items()}
+        attention_ctes, params = self._attention_relations(attention_relation)
         params.update(server_id=server_id, home_now=now, workspace_id=scope.get('workspace_id'),
             agent_id=scope.get('agent_id'), state=scope.get('state'),
-            after_time=None, after_id=None, home_attention_limit=limits['attention']+1, now=now)
+            after_time=None, after_id=None, home_attention_limit=limits['attention']+1,
+            home_server_attention_limit=limits['server_attention']+1, now=now)
         fragments = []
         for section in ('work','results'):
             relation = FACTS if section=='work' else RESULTS
             field = 'last_activity_at' if section=='work' else 'created_at'
             params[section+'_limit'] = limits[section]+1
             fragments.append('(' + relation + self._aggregate_sql(field, section+'_limit', as_json=True) + ') AS '+section)
-        fragments.append('''(SELECT json_object('total',COUNT(*),'snapshot_revision',nexus_attention_set_digest_v1(item),
-            'next_change_at',(SELECT MIN(json_extract(item,'$.next_change_at')) FROM home_attention WHERE json_extract(item,'$.next_change_at')>:now),
-            'items',json((SELECT json_group_array(json(item)) FROM (SELECT item FROM home_actionable
-              ORDER BY json_extract(item,'$.priority') DESC,json_extract(item,'$.first_detected_at'),json_extract(item,'$.attention_id')
-              LIMIT :home_attention_limit)))) FROM home_actionable) AS attention''')
-        sql = 'WITH home_attention AS MATERIALIZED ('+attention_sql+' SELECT item FROM filtered), home_actionable AS MATERIALIZED ('
-        sql += "SELECT item FROM home_attention WHERE json_extract(item,'$.active')=1 AND json_extract(item,'$.category')='action_required') SELECT "
+        for name, partition in (('attention','home_attention'),('server_attention','home_server_attention')):
+            fragments.append('(' + self._attention_aggregate(partition, page_limit='home_'+name+'_limit') + ') AS '+name)
+        sql = attention_ctes + ' SELECT '
         with self.bounded(uow.connection):
             row = uow.connection.execute(sql + ','.join(fragments), params).fetchone()
         result = {}
         for section in ('work','results'):
             result[section] = self._page_result(json.loads(row[section]), section=section, scope=scope,
                 now=now, limit=limits[section], after=None)
-        result['attention'] = json.loads(row['attention'])
-        result['attention']['snapshot_revision'] = result['attention']['snapshot_revision'] or _SetDigest().finalize()
+        for name in ('attention','server_attention'):
+            result[name] = json.loads(row[name])
+            result[name]['snapshot_revision'] = result[name]['snapshot_revision'] or _SetDigest().finalize()
         return result
 
     @staticmethod
@@ -276,20 +304,29 @@ class SqliteHomeQueries:
             return 'SELECT json_object('+','.join("'"+key+"',"+expr for key,expr in fields)+') FROM filtered'
         return 'SELECT '+','.join(expr+' AS '+key for key,expr in fields)+' FROM filtered'
 
-    def attention_page(self, uow, *, relation, limit):
-        sql, params = relation
-        params = dict(params, home_attention_limit=limit+1)
-        sql += ", home_actionable AS MATERIALIZED (SELECT item FROM filtered WHERE json_extract(item,'$.active')=1 AND json_extract(item,'$.category')='action_required') "
-        row = uow.connection.execute(sql + '''SELECT COUNT(*) AS total,
-            nexus_attention_set_digest_v1(item) AS revision,
-            (SELECT MIN(json_extract(item,'$.next_change_at')) FROM viewing
-             WHERE json_extract(item,'$.next_change_at')>:now) AS next_change_at,
-            (SELECT json_group_array(json(item)) FROM (SELECT item FROM home_actionable
-             ORDER BY json_extract(item,'$.priority') DESC,json_extract(item,'$.first_detected_at'),
-               json_extract(item,'$.attention_id') LIMIT :home_attention_limit)) AS items
-            FROM home_actionable''', params).fetchone()
-        return dict(total=row['total'], snapshot_revision=row['revision'] or _SetDigest().finalize(),
-            next_change_at=row['next_change_at'], items=json.loads(row['items']))
+    def attention_page(self, uow, *, relation, limit, scope, now, serverwide=False, after=None):
+        from ....domain.home import invalid
+        sql, params = self._attention_relations(relation)
+        params.update(workspace_id=scope.get('workspace_id'), agent_id=scope.get('agent_id'),
+            now=now, home_attention_limit=limit+1)
+        if after:
+            try:
+                priority, first = json.loads(after['key'][0])
+                if type(priority) is not int or type(first) is not str:
+                    raise ValueError
+            except (ValueError, TypeError):
+                invalid('Invalid Home attention cursor ordering key.')
+            params.update(after_priority=priority, after_first=first, after_id=after['key'][1])
+        partition = 'home_server_attention' if serverwide else 'home_attention'
+        with self.bounded(uow.connection):
+            row = uow.connection.execute(sql + ' ' + self._attention_aggregate(partition,
+                page_limit='home_attention_limit', after=after is not None), params).fetchone()
+        value = json.loads(row[0])
+        value['snapshot_revision'] = value['snapshot_revision'] or _SetDigest().finalize()
+        if after and after['revision'] != value['snapshot_revision']:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'Home attention changed while paging.',
+                dict(reason='HOME_SNAPSHOT_CHANGED'))
+        return value
 
     @contextmanager
     def bounded(self, conn):
@@ -317,14 +354,11 @@ class SqliteHomeQueries:
         if section in ('work', 'results'):
             attention_sql = 'SELECT NULL AS item WHERE 0'
             if attention_relation:
-                attention_sql, attention_params = attention_relation
-                # Attention's parameters are namespaced to avoid its state and
-                # category filters colliding with the Home work-state filter.
-                import re
-                attention_sql = re.sub(r':([a-zA-Z_][a-zA-Z_0-9]*)', r':att_\1', attention_sql)
-                params.update({'att_' + key: value for key, value in attention_params.items()})
-                attention_sql += ' SELECT item FROM filtered'
-            relation = 'WITH home_attention AS MATERIALIZED (' + attention_sql + '),' + relation.lstrip()[4:]
+                attention_ctes, attention_params = self._attention_relations(attention_relation)
+                params.update(attention_params)
+            else:
+                attention_ctes = 'WITH home_attention AS MATERIALIZED (' + attention_sql + ')'
+            relation = attention_ctes + ',' + relation.lstrip()[4:]
         with self.bounded(uow.connection):
             row = uow.connection.execute(relation + self._aggregate_sql(time_field), params).fetchone()
         return self._page_result(row, section=section, scope=scope, now=now, limit=limit, after=after)

@@ -21,12 +21,20 @@ overview. Work performed between agents appears without an operator message.
 | Running | Distinct logical activities with current evidence of execution. |
 | Waiting to start | Work waiting for an owner, dispatch or native start. |
 | Needs you | Current actionable Attention occurrences, with their own priority and snooze state. |
+| Server | Authorized incidents that apply to the Server as a whole, when reported by a canonical source. Separate from project counters. |
 | New results / Recent results | Unseen results where the canonical occurrence tracks viewing; recent results where it does not. An unknown count is not zero. |
 | Work | Logical handoffs, productive deliveries and direct turns. Attempts and controls remain attached to their work. |
 | Agents | Identity and reported presence/connectivity. An open session does not prove work is running. |
 | External reports | Source-qualified external telemetry, separate from native work and completion. |
 
 The counters use different units and should not be added into a task total.
+The **Server** section stays independent of project and agent filters. A global
+incident does not mean every project has that incident. Project counters exclude
+it, including in All workspaces. Global agent connectivity alone does not create
+a Server incident.
+
+A [synthetic example of the Server section](../plans/home_evolution/evidence/pr08-server-attention-browser/quiet-server.png)
+shows how global incidents remain visible while the selected project is empty.
 **Claimed** means an agent assumed responsibility. **Accepted by runtime** means
 the native request was accepted; neither alone proves execution. A successful
 turn can produce a result while its handoff still awaits completion or

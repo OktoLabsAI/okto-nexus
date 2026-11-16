@@ -1,0 +1,57 @@
+"""Disposable comparison runner, removed after own measurement."""
+import importlib.util
+import json
+from pathlib import Path
+import statistics
+import subprocess
+import types
+from time import perf_counter
+from .fixtures import home_scenario, OPERATOR, WORKSPACES
+from .test_home_queries import service
+
+ROOT = Path(__file__).resolve().parents[2]
+
+def old_class(path, package, name):
+    source = subprocess.run(['rtk','proxy','git','show','b82a36f2:'+path],
+        cwd=ROOT, check=True, text=True, capture_output=True, encoding='utf-8').stdout
+    module = types.ModuleType(package+'._home_pr08_baseline')
+    module.__package__ = package
+    exec(compile(source, path, 'exec'), module.__dict__)
+    return getattr(module,name)
+
+def test_measure_cross_project(service, home_scenario, record_property):
+    spec = importlib.util.spec_from_file_location('home_pr08_measuring', ROOT/'scripts/measure_home_evolution.py')
+    measuring = importlib.util.module_from_spec(spec);spec.loader.exec_module(measuring)
+    App = old_class('src/okto_nexus/application/home.py','okto_nexus.application','HomeOverviewService')
+    Queries = old_class('src/okto_nexus/adapters/outbound/sqlite/home.py',
+        'okto_nexus.adapters.outbound.sqlite','SqliteHomeQueries')
+    old = App(factory=service.factory, access=service.access, queries=Queries(),
+        attention=service.attention, observations=service.observations, clock=service.clock, config=service.config)
+    results = []
+    for phase in ('small','500-other-project-aged-handoffs'):
+        if phase != 'small':
+            with home_scenario.factory.unit_of_work() as uow:
+                row = dict(uow.connection.execute('SELECT * FROM handoffs WHERE workspace_id=? LIMIT 1',(WORKSPACES[1],)).fetchone())
+                for n in range(500):
+                    data = dict(row,handoff_id=f'cost-beta-{n}',status='OPEN',claimed_by=None,
+                        created_at='2001-01-01T00:00:00Z',updated_at='2001-01-01T00:00:00Z')
+                    uow.connection.execute('INSERT INTO handoffs('+','.join(data)+') VALUES('+','.join('?' for _ in data)+')',tuple(data.values()))
+        expected = None
+        for label, app in (('baseline_b82',old),('server_attention',service)):
+            measured = measuring.MeasuredFactory(home_scenario.factory);app.factory=measured
+            app.read(context=OPERATOR,filters={'workspace_id':WORKSPACES[0]})
+            samples,counts,transactions=[],[],[]
+            for _ in range(5):
+                measured.statements.clear();before=measured.transactions
+                started=perf_counter();value=app.read(context=OPERATOR,filters={'workspace_id':WORKSPACES[0]})
+                samples.append((perf_counter()-started)*1000)
+                counts.append(len(measured.statements));transactions.append(measured.transactions-before)
+                assert transactions[-1]==1 and measured.changes==0
+                assert value['work']['status']==value['attention']['status']=='ready'
+            projection = {key:{field:value[key][field] for field in ('status','total','items')} for key in ('work','results','attention','agents')}
+            if expected is None:expected=projection
+            else:assert projection==expected
+            results.append(dict(dataset=phase,implementation=label,samples_ms=samples,
+                p50_ms=statistics.median(samples),p95_nearest_rank_ms=max(samples),
+                sql_statements=sorted(set(counts)),transactions_per_read=sorted(set(transactions)),writes=measured.changes))
+    record_property('measurement',json.dumps(results))

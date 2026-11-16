@@ -28,7 +28,8 @@ function load(url) {
   return module.exports;
 }
 
-const {HomeCounters, HomeBlock, WorkRow, ResultRow, AttentionRow, downloadCurrentArtifact, isQuietHome, HomeWelcome} = load(new URL('../src/components/home/HomeCards.tsx', import.meta.url));
+const cards = load(new URL('../src/components/home/HomeCards.tsx', import.meta.url));
+const {HomeCounters, HomeBlock, WorkRow, ResultRow, AttentionRow, downloadCurrentArtifact, isQuietHome, HomeWelcome, freshHomeOccurrence, homeAnnouncementIds} = cards;
 const {readContinuationContext, revalidateContinuation, clearHomeContinuationRequests} = load(new URL('../src/components/home/continuation.ts', import.meta.url));
 const {RuntimeOperations} = load(new URL('../src/components/RuntimeOperations.tsx', import.meta.url));
 const {MetaHarnessComposer} = load(new URL('../src/components/MetaHarnessComposer.tsx', import.meta.url));
@@ -156,4 +157,46 @@ test('quiet welcome reuses explicit onboarding or request callback, with disable
   assert.doesNotMatch(markup,/Operational summary/);
   buttons(HomeWelcome(props))[0].props.onClick();assert.deepEqual([setup,request],[1,0]);
   buttons(HomeWelcome({...props,needsSetup:false}))[0].props.onClick();assert.deepEqual([setup,request],[1,1]);
+});
+
+const serverOccurrence = () => ({attention_id:'canonical-server-attention',kind:'executor_disconnected_with_work',category:'watch',severity:'warning',priority:20,
+  workspace_id:null,agent_id:null,session_id:null,operation_id:null,message_id:null,result_id:null,executor_id:'executor',
+  source_type:'execution_executor',source_id:'executor',source_revision:'canonical-source-revision',first_detected_at:'2030-01-01T00:00:00Z',last_changed_at:'2030-01-01T00:00:00Z',
+  freshness:'current',summary_code:'executor_disconnected_with_work',allowed_actions:['inspect_executor'],resolution:'open',active:true,next_change_at:null,
+  seen_state:{seen:false,seen_at:null,snoozed:false,snoozed_until:null,revision:7}});
+const quietSnapshot = item => ({version:1,server_id:'server',scope:{workspace_id:'ws'},generated_at:'2030-01-01T00:00:00Z',
+  work:section({}),attention:section({}),results:section({}),agents:section({}),external_activity:section({status:'disabled'}),server_attention:section({items:[item],total:1}),summary:{}});
+let renderedHomeState,serverRows=[];
+modules.set(fileURLToPath(new URL('../src/hooks/useHomeOverview.ts',import.meta.url)),{exports:{useHomeOverview:()=>({state:renderedHomeState,refresh(){},pause(){},apply(){},loadMore(){}})}});
+cards.AttentionRow=props=>{serverRows.push(props);return React.createElement(AttentionRow,props);};
+const {OperationalHome}=load(new URL('../src/components/home/OperationalHome.tsx',import.meta.url));
+const homeProps={workspace:'ws',workspaces:[],identityKey:'operator',refreshTick:0,latestEvent:null,streamStatus:'live',onNavigate(){},onAttentionChanged(){},onSetupAgent(){},registerLeaveGuard(){}};
+const renderHome = snapshot => {
+  serverRows=[];renderedHomeState={snapshot,status:'ready',staleSections:[],paused:false,generation:1,loading:false,loadingMore:null,error:null,activity:null,hasPendingUpdate:false};
+  return html(OperationalHome,homeProps);
+};
+
+test('Server lane remains explicitly separate from a quiet project and enters announcement identity tracking', () => {
+  const item=serverOccurrence(),snapshot=quietSnapshot(item),markup=renderHome(snapshot);
+  assert.match(markup,/aria-label="Server"/);assert.match(markup,/data-home-item="canonical-server-attention"/);
+  assert.match(markup,/Server-wide attention is independent/);assert.match(markup,/Set up your first agent/);
+  assert.doesNotMatch(markup,/Operational summary|aria-label="Needs you"/);
+  assert.equal(isQuietHome(snapshot),true);assert.deepEqual([...homeAnnouncementIds(snapshot)],[item.attention_id]);
+  const forbidden={...snapshot,server_attention:section({status:'forbidden',items:[item],total:null})};
+  const hidden=renderHome(forbidden);assert.doesNotMatch(hidden,/data-home-item="canonical-server-attention"/);assert.match(hidden,/Access unavailable/);
+});
+
+test('Server viewing preferences use the captured canonical ID and both revisions, with stale or changed occurrences fenced', async () => {
+  const item=serverOccurrence(),snapshot=quietSnapshot(item),api=load(new URL('../src/api.ts',import.meta.url)).api;
+  const previous=api.attentionSeen,calls=[];api.attentionSeen=async(...args)=>{calls.push(args);return {};};
+  try{
+    renderHome(snapshot);serverRows[0].onSeen(item,true);await new Promise(setImmediate);
+    assert.deepEqual(calls,[[item.attention_id,{seen:true,source_revision:item.source_revision,preference_revision:7}]]);
+    assert.equal(freshHomeOccurrence(snapshot,['server_attention'],item),undefined);
+    assert.equal(freshHomeOccurrence(snapshot,[],{...item,source_revision:'old-source'}),undefined);
+    assert.equal(freshHomeOccurrence(snapshot,[],{...item,seen_state:{...item.seen_state,revision:6}}),undefined);
+    renderHome(snapshot);renderedHomeState.staleSections.push('server_attention');
+    serverRows[0].onSeen(item,true);await new Promise(setImmediate);assert.equal(calls.length,1);
+    renderHome(snapshot);renderedHomeState.paused=true;serverRows[0].onSeen(item,true);await new Promise(setImmediate);assert.equal(calls.length,1);
+  }finally{api.attentionSeen=previous;}
 });

@@ -163,6 +163,7 @@ class HomeOverview(TypedDict):
     results: HomeSection[HomeResult]
     agents: HomeSection[HomeAgent]
     attention: HomeSection[dict]
+    server_attention: HomeSection[dict]
     external_activity: HomeSection[dict]
 
 

@@ -28,14 +28,27 @@ def test_pending_classification_is_counted_before_page_and_preserves_recipient(d
     assert service.read(context=OPERATOR, section='work', filters={'state':opposite})['total'] == 0
 
 
-def test_home_attention_cursor_is_the_existing_attention_cursor(decision_state):
+def test_home_attention_reuses_canonical_identity_revisions_and_preferences(decision_state):
     _, app, _ = decision_state
     service = app.state.home
     value = service.read(context=OPERATOR)
     canonical = app.state.attention.read(context=OPERATOR, filters={'category':'action_required'}, limit=3)
     assert value['attention']['revision'] == canonical['snapshot_revision']
     assert value['attention']['items'] == canonical['items']
-    assert value['attention']['next_cursor'] == canonical['next_cursor']
+    assert value['attention']['items']
+    for item, original in zip(value['attention']['items'], canonical['items'], strict=True):
+        assert item['attention_id'] == original['attention_id']
+        assert item['source_revision'] == original['source_revision']
+        assert item['seen_state'] == original['seen_state']
+    item = canonical['items'][0]
+    app.state.attention.mark_seen(context=OPERATOR, attention_id=item['attention_id'],
+        source_revision=item['source_revision'], preference_revision=item['seen_state']['revision'])
+    updated = service.read(context=OPERATOR)
+    canonical = app.state.attention.read(context=OPERATOR, filters={'category':'action_required'}, limit=3)
+    assert updated['attention']['items'] == canonical['items']
+    seen = next(row for row in updated['attention']['items'] if row['attention_id'] == item['attention_id'])
+    assert seen['seen_state']['seen'] is True
+    assert seen['seen_state']['revision'] == item['seen_state']['revision'] + 1
 
 
 @pytest.mark.parametrize('decision_state', ['input'], indirect=True)

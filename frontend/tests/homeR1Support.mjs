@@ -32,6 +32,6 @@ export const section = (items = [], patch = {}) => ({ status: 'ready', as_of: '2
   next_refresh_at: null, items, total: items.length, total_is_exact: true, has_more: false, next_cursor: null, revision: 'r1', ...patch });
 export const overview = (patch = {}) => ({ version: 1, scope: { workspace_id: 'ws' }, server_id: 'server',
   generated_at: '2030-01-01T00:00:00Z', snapshot_id: 'snapshot1', event_cursor: 5, event_low_watermark: 1,
-  summary: {}, work: section([{ id: 'work1' }]), attention: section(), results: section(), agents: section(), external_activity: section(), ...patch });
+  summary: {}, work: section([{ id: 'work1' }]), attention: section(), server_attention: section(), results: section(), agents: section(), external_activity: section(), ...patch });
 export const page = (items, patch = {}) => ({ ...section(items), version: 1, scope: { workspace_id: 'ws' },
   server_id: 'server', generated_at: '2030-01-01T00:00:00Z', snapshot_id: 'snapshot1', ...patch });

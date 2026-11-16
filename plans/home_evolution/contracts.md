@@ -4,6 +4,9 @@ Estado: congelado para PR-01/02; alterações incompatíveis exigem registro nes
 documento e no ledger. DTOs Python/TypeScript devem refletir o mesmo contrato;
 não usar `any` para preencher referências ou estados não definidos.
 
+Emenda A08 em qualificação: faixa Servidor e paginação Home das duas partições
+de Attention, preservando identidade, preferências e comandos canônicos.
+
 ## Leitura e autorização
 
 `HomeOverviewService` recebe o RequestContext canônico e abre um UoW
@@ -16,6 +19,10 @@ Rotas sob o envelope atual `/api/v1`, `Cache-Control: no-store`:
 - `GET /home/overview?workspace_id=&agent_id=&state=&limit_work=10&limit_attention=3&limit_results=6&limit_agents=6`.
 - `GET /home/work?...&cursor=&limit=` e `GET /home/results?...&cursor=&limit=`.
 - `GET /home/activity?...&cursor=&limit=` para o feed de eventos de negócio.
+- `GET /home/attention?...&cursor=&limit=` pagina a partição de projetos;
+  `GET /home/server-attention?...&cursor=&limit=` pagina a faixa Servidor.
+  Ambos retornam `HomePage<AttentionOccurrence>`, com cursores Home próprios.
+  A API clássica de Attention e seus comandos/preferências não são alterados.
 - `GET /home/agents?...&cursor=&limit=` e `GET /home/external?...&cursor=&limit=`
   completam a paginação interna desses blocos. Extensão de leitura registrada
   na PR-01: os limites propostos não podem virar truncamento irrecuperável.
@@ -31,6 +38,14 @@ própria freshness. Não aceitar
 parâmetros duplicados, cursores de outro escopo ou referências incompatíveis.
 O mesmo operador autorizado pode ler Todos, sem duplicação por join.
 
+Exceção explícita: `server_attention` contém somente ocorrências canônicas
+autorizadas sem workspace. Essa faixa é independente de workspace/agente/Work
+state selecionados; o `scope` da resposta ecoa o contexto para impedir adoção de
+respostas/cursors de outra geração. A partição de projetos exclui ocorrências
+globais antes de total/paginação e `summary.needs_you` nunca soma essa faixa,
+nem em Todos. A faixa Servidor reúne ocorrências globais ativas, tanto watch
+quanto action_required, com status/freshness e paginação próprios.
+
 401/403 removem dados protegidos do cliente. Falha transitória pode manter só o
 último snapshot da mesma origem/identidade/workspace, rotulado stale. Um bloco
 indisponível usa status/reason_code e total null; não vira sucesso vazio.
@@ -39,7 +54,7 @@ indisponível usa status/reason_code e total null; não vira sucesso vazio.
 
 `HomeOverview`: `version:1`, `scope:{workspace_id:string|null,agent_id?:string,
 state?:string}`, `server_id`, `generated_at`, `snapshot_id`, `event_cursor`,
-`event_low_watermark`, `summary`, `work`, `attention`, `results`, `agents`,
+`event_low_watermark`, `summary`, `work`, `attention`, `server_attention`, `results`, `agents`,
 `external_activity`. Feed pode ser paginado separadamente.
 
 `HomeSection<T>`: `status:ready|partial|unavailable|disabled|forbidden`,
@@ -101,6 +116,11 @@ argumentos e paths não são selecionados para o overview.
 `attention.items` reutiliza `AttentionOccurrence` sem perder IDs, revisões,
 destinatário, allowed_actions, freshness ou seen_state. Incidentes globais do
 Server ficam identificados separadamente dos números do projeto.
+
+`server_attention.items` preserva o mesmo `AttentionOccurrence`, revisões,
+preferências, ações e autorização. Nenhum produtor global novo é criado:
+fontes atuais ligadas a workspace não são promovidas a incidentes de Servidor.
+O estado vazio do projeto não oculta ocorrências globais ou fonte indisponível.
 
 `external_activity.items` reutiliza `ExternalObservation` ou projeção limitada
 equivalente, com fonte/instância/geração/validade. Nenhum sinal externo conta como

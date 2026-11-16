@@ -5,7 +5,7 @@ from datetime import timedelta
 import sqlite3
 
 from ..domain import home
-from ..domain.attention import digest, instant, normalize_filters, encode_cursor
+from ..domain.attention import canonical, digest, instant, normalize_filters
 from ..errors import ErrorCode, OktoNexusError
 from .home_ports import HomeOverviewQueries
 
@@ -48,18 +48,19 @@ class HomeOverviewService:
                 return self._unavailable(now, 'FEATURE_DISABLED', 'disabled')
             raise
 
-    def _attention(self, uow, scope, now, limit, relation, value=None):
-        filters = normalize_filters({k: v for k, v in scope.items() if k != 'state' and v is not None} |
-                                    dict(category='action_required'))
+    def _attention(self, uow, scope, server, now, limit, relation, value=None, *, serverwide=False, after=None):
         if value is None:
-            value = self.queries.attention_page(uow, relation=relation, limit=limit)
+            value = self.queries.attention_page(uow, relation=relation, limit=limit, scope=scope,
+                now=now, serverwide=serverwide, after=after)
         items = value['items'][:limit]
         more = len(value['items']) > limit
         deadline = (instant(now) + timedelta(seconds=15)).isoformat()
         deadline = min(deadline, value['next_change_at']) if value['next_change_at'] else deadline
         return dict(status='ready', as_of=now, next_refresh_at=deadline, items=items,
             total=value['total'], total_is_exact=True, has_more=more,
-            next_cursor=encode_cursor(filters=filters, snapshot_revision=value['snapshot_revision'], item=items[-1]) if more else None,
+            next_cursor=home.encode_cursor('server_attention' if serverwide else 'attention',
+                dict(scope, _server_id=server), value['snapshot_revision'],
+                [canonical([items[-1]['priority'], items[-1]['first_detected_at']]), items[-1]['attention_id']]) if more else None,
             revision=value['snapshot_revision'])
 
     def _external(self, uow, scope, now, config, limit, after=None):
@@ -71,24 +72,31 @@ class HomeOverviewService:
     def read(self, *, context, filters=None, section=None, cursor=None, limit=20,
              limit_work=10, limit_attention=3, limit_results=6, limit_agents=6):
         scope = home.filters(filters)
-        if section not in (None, 'work', 'results', 'activity', 'agents', 'external'):
+        if section not in (None, 'work', 'results', 'activity', 'agents', 'external', 'attention', 'server_attention'):
             home.invalid()
         if section is None and cursor is not None:
             home.invalid()
         for bound in (limit, limit_work, limit_attention, limit_results, limit_agents):
             home.limit(bound)
-        after = home.decode_cursor(cursor, section, scope)
+        attention_section = section in ('attention', 'server_attention')
+        after = None if attention_section else home.decode_cursor(cursor, section, scope)
         with self.factory.unit_of_work(write=False) as uow, ExitStack() as sources:
             server, now, config = self._basis(uow, context, scope)
+            if attention_section:
+                after = home.decode_cursor(cursor, section, dict(scope, _server_id=server))
             statistics = {}
             combined = None
             attention_relation, attention_error = None, None
             if config.feature_attention:
-                attention_filters = normalize_filters({k: v for k, v in scope.items()
-                    if k != 'state' and v is not None} | dict(state='all'))
+                # Preserve canonical Server-wide occurrences independently of
+                # project/agent filters, then partition before totals/pages.
+                # One authorized relation is shared by Work/Results/both lanes.
+                attention_filters = normalize_filters(dict(state='all'))
                 try:
                     attention_relation = sources.enter_context(self.attention.queries._relation(uow,
-                        filters=attention_filters, now=now, config=config, access=self.access, context=context))
+                        filters=attention_filters, now=now, config=config, access=self.access, context=context,
+                        source_scope={'workspace_id':scope.get('workspace_id')},
+                        server_only=section == 'server_attention'))
                 except (sqlite3.Error, OktoNexusError) as exc:
                     if isinstance(exc, OktoNexusError) and exc.code == ErrorCode.PERMISSION_DENIED:
                         raise
@@ -96,7 +104,7 @@ class HomeOverviewService:
             if section is None and attention_relation is not None:
                 try:
                     combined = self.queries.overview(uow, scope=scope, server_id=server, now=now,
-                        limits=dict(work=limit_work, results=limit_results, attention=limit_attention),
+                        limits=dict(work=limit_work, results=limit_results, attention=limit_attention, server_attention=3),
                         attention_relation=attention_relation)
                 except sqlite3.Error:
                     # Retry only independent read projections, so one failed
@@ -126,8 +134,9 @@ class HomeOverviewService:
                         return self._unavailable(now, 'FEATURE_DISABLED', 'disabled')
                     if attention_error:
                         return self._unavailable(now, attention_error)
-                    return self._attention(uow, scope, now, size, attention_relation,
-                        combined['attention'] if combined is not None else None)
+                    return self._attention(uow, scope, server, now, size, attention_relation,
+                        combined[name] if combined is not None and page_after is None else None,
+                        serverwide=name == 'server_attention', after=page_after)
                 return self._safe(now, read)
 
             if section:
@@ -136,7 +145,7 @@ class HomeOverviewService:
                     snapshot_id=digest([server, scope, section, value.get('revision')]))
             blocks = {name: read_block(name, size) for name, size in (
                 ('work', limit_work), ('results', limit_results), ('agents', limit_agents),
-                ('attention', limit_attention), ('external', 6))}
+                ('attention', limit_attention), ('server_attention', 3), ('external', 6))}
             bounds = uow.connection.execute("SELECT COALESCE((SELECT seq FROM sqlite_sequence WHERE name='events'),0),(SELECT MIN(event_id) FROM events)").fetchone()
 
         def counter(value, label, unit, reason=None):
@@ -156,7 +165,7 @@ class HomeOverviewService:
             snapshot_id=digest([server, scope, {k: v.get('revision') for k, v in blocks.items()}]),
             event_cursor=int(bounds[0]), event_low_watermark=bounds[1], summary=summary,
             work=blocks['work'], attention=blocks['attention'], results=blocks['results'],
-            agents=blocks['agents'], external_activity=blocks['external'])
+            agents=blocks['agents'], external_activity=blocks['external'], server_attention=blocks['server_attention'])
 
     def resolve(self, *, context, target, workspace_id=None):
         selected = home.target(target)

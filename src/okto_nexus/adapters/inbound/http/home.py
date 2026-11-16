@@ -47,8 +47,8 @@ def build_router():
                 section=section, filters=scope, cursor=cursor, limit=limit)
         return page
 
-    for section in ('work', 'results', 'activity', 'agents', 'external'):
-        router.add_api_route('/home/' + section, page_endpoint(section), methods=['GET'], name='home_' + section)
+    for section in ('work', 'results', 'activity', 'agents', 'external', 'attention', 'server_attention'):
+        router.add_api_route('/home/' + section.replace('_', '-'), page_endpoint(section), methods=['GET'], name='home_' + section)
 
     @router.get('/home/target')
     async def target(request: Request, target: str = Query(max_length=4096), workspace_id: str | None = None):

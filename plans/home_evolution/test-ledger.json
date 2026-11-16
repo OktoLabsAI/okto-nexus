@@ -2,7 +2,7 @@
   "schema_version": 1,
   "plan": "plans/home_evolution/source-plan.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
-  "updated_at": "2026-11-16T14:51:47.453094+00:00",
+  "updated_at": "2026-11-16T15:38:33.978340+00:00",
   "scenarios": {
     "HOME-T-A01": {
       "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
@@ -131,11 +131,23 @@
     },
     "HOME-T-A08": {
       "requirement": "Ocorrências Server-wide são identificadas separadamente e não atribuídas a todos os projetos por conveniência.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr08-server-attention-backend/qualification.json",
+        "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json",
+        "plans/home_evolution/evidence/pr08-server-attention-browser/qualification.json"
+      ],
+      "commit": "e60e7bbb + Server-lane implementation milestone",
+      "environment": "Real SQLite/HTTP and built Dcu4 Chromium, valid nullable-workspace domain occurrences at authorized projection port; no global producer invented",
+      "limitations": [
+        "Current canonical families remain workspace-bound; global test facts exercise the read contract, not a new live Server incident producer.",
+        "New installed package and full-size latency measurement remain separate qualification steps."
+      ],
+      "tests": [
+        "11 backend cases plus source-scoped native receiver proof",
+        "210 complete frontend tests including Server lane",
+        "6 browser checks with 22 canonical GETs, separate counts/pages, real CAS200/409, quiet/pause/partial403"
+      ]
     },
     "HOME-T-B01": {
       "requirement": "Sessão aberta sem turno não conta como execução em andamento.",

@@ -38,3 +38,24 @@ porta snapshot e projeções, sem HTTP interno ou snapshots concorrentes. Nenhum
 filesystem de artefato, journal integral ou provedor dentro da transação.
 Contagens e páginas usam a mesma relação autorizada; não concatenar páginas para
 fingir inventário completo. Medir queries por família, não por agente.
+
+## Emenda A08 — partições de Attention
+
+Home materializa a relação canônica autorizada e separa projetos e Servidor
+antes de total/paginação. `/home/attention` e `/home/server-attention` são
+fachadas de leitura com cursores Home por seção/escopo/Servidor/revisão; IDs,
+source_revision, preferências/CAS e controles continuam canônicos. A API
+clássica de Attention preserva seu contrato e não recebe esses cursores.
+
+Famílias comprovadamente ligadas a workspace declaram `WORKSPACE_BOUND=True`.
+Só elas recebem hint interno de workspace, mantendo pushdown; família sem essa
+declaração fica unscoped e pode preservar uma ocorrência global válida. Não há
+hint de agente no conjunto que contextualiza trabalho: ao filtrar o remetente A,
+a evidência do destinatário B continua necessária para representar A→B.
+O filtro de agente vale para a lista de pendências de projeto. A faixa Servidor
+é independente dos filtros de projeto/agente/Work state e excluída de Needs you.
+
+As seis famílias atuais têm fontes com workspace obrigatório; nenhuma foi
+convertida em produtor global. As provas globais usam ocorrências válidas do
+domínio na porta de projeção, sem inserir NULL em tabelas incompatíveis. O custo
+do scan unscoped inicial e a correção por pushdown são registrados separadamente.

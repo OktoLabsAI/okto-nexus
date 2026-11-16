@@ -1,0 +1,88 @@
+{
+  "scope": "First hint cut, before final sender-filter fidelity change; no final-source claim. Same measurement workload; selector has workspace only.",
+  "measurements": [
+    {
+      "dataset": "small",
+      "implementation": "baseline_b82",
+      "samples_ms": [
+        274.34349997201934,
+        297.4652000120841,
+        316.40680000418797,
+        268.38590000988916,
+        254.95580001734197
+      ],
+      "p50_ms": 274.34349997201934,
+      "p95_nearest_rank_ms": 316.40680000418797,
+      "sql_statements": [
+        50
+      ],
+      "transactions_per_read": [
+        1
+      ],
+      "writes": 0
+    },
+    {
+      "dataset": "small",
+      "implementation": "server_attention",
+      "samples_ms": [
+        429.2446000035852,
+        371.62019999232143,
+        381.26130000455305,
+        387.7506999997422,
+        370.4775999649428
+      ],
+      "p50_ms": 381.26130000455305,
+      "p95_nearest_rank_ms": 429.2446000035852,
+      "sql_statements": [
+        50
+      ],
+      "transactions_per_read": [
+        1
+      ],
+      "writes": 0
+    },
+    {
+      "dataset": "500-other-project-aged-handoffs",
+      "implementation": "baseline_b82",
+      "samples_ms": [
+        263.76210001762956,
+        265.5660000164062,
+        257.797300000675,
+        274.25219997530803,
+        278.63189997151494
+      ],
+      "p50_ms": 265.5660000164062,
+      "p95_nearest_rank_ms": 278.63189997151494,
+      "sql_statements": [
+        50
+      ],
+      "transactions_per_read": [
+        1
+      ],
+      "writes": 0
+    },
+    {
+      "dataset": "500-other-project-aged-handoffs",
+      "implementation": "server_attention",
+      "samples_ms": [
+        370.47600001096725,
+        368.2185999932699,
+        380.121499998495,
+        399.40169994952157,
+        376.538599957712
+      ],
+      "p50_ms": 376.538599957712,
+      "p95_nearest_rank_ms": 399.40169994952157,
+      "sql_statements": [
+        50
+      ],
+      "transactions_per_read": [
+        1
+      ],
+      "writes": 0
+    }
+  ],
+  "raw_xml_sha256": "865b1918c26eaf7bde4e8162e737667e1e59123e8d1267564cb77b2d4fb27769",
+  "tool_ref": "1114b3",
+  "exit_code": 0
+}

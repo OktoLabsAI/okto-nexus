@@ -5,6 +5,10 @@ no output, authority or decision and disappears with the source handoff.
 """
 
 
+# Native and handoff result sources preserve their non-null workspace.
+WORKSPACE_BOUND = True
+
+
 _LINKS = """
 SELECT r.server_id,r.executor_id,r.operation_id,r.session_id,r.stream_epoch,
        r.terminal_sequence,r.delivery_outcome,r.captured_at,

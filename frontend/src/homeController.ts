@@ -2,6 +2,7 @@ import type { HomeApi } from './homeApi';
 import type { HomeActivity, HomeAgent, HomeFeedEvent, HomeFilters, HomeOverview, HomePage, HomePageSection,
   HomeResult, HomeSection, HomeSectionName } from './homeTypes';
 import type { ExternalObservation } from './observationTypes';
+import type { AttentionOccurrence } from './attentionTypes';
 
 export interface HomeContext {
   workspace: string | null; identityKey: string; origin?: string; enabled?: boolean; visible?: boolean;
@@ -22,14 +23,14 @@ export interface HomeDependencies {
 }
 export const initialHomeState = (): HomeState => ({ snapshot: null, activity: null, status: 'loading',
   loading: false, loadingMore: null, paused: false, hasPendingUpdate: false, error: null, staleSections: [], generation: 0, scopeKey: null });
-const sections = ['work', 'attention', 'results', 'agents', 'external_activity'] as const;
+const sections = ['work', 'attention', 'results', 'agents', 'external_activity', 'server_attention'] as const;
 /** Hints only. The fallback/TTL still covers sources without a workspace event. */
 export function homeInvalidatedSections(type: string): HomeSectionName[] {
-  if (/^observation[.:-]/.test(type)) return ['external_activity', 'agents', 'attention', 'activity'];
-  if (/^attention[.:-]/.test(type)) return ['attention', 'results', 'work'];
+  if (/^observation[.:-]/.test(type)) return ['external_activity', 'agents', 'attention', 'server_attention', 'activity'];
+  if (/^attention[.:-]/.test(type)) return ['attention', 'server_attention', 'results', 'work'];
   if (/^message[.:-]/.test(type)) return ['work', 'agents', 'activity'];
-  if (/^handoff[.:-]/.test(type)) return ['work', 'results', 'attention', 'agents', 'activity'];
-  if (/^(execution|runtime|native|approval)[.:-]/.test(type)) return ['work', 'results', 'attention', 'agents', 'activity'];
+  if (/^handoff[.:-]/.test(type)) return ['work', 'results', 'attention', 'server_attention', 'agents', 'activity'];
+  if (/^(execution|runtime|native|approval)[.:-]/.test(type)) return ['work', 'results', 'attention', 'server_attention', 'agents', 'activity'];
   if (/^(agent|session|authorization|operator|stream)[.:-]/.test(type) || ['reset', 'gap', 'reconnect'].includes(type))
     return [...sections, 'activity'];
   return [];
@@ -219,7 +220,7 @@ export class HomeController {
           notice = 'Updated results changed pagination. Showing the first page.';
         const prior = this.resetPages ? null : this.latest;
         this.latest = { ...value, work: retained(value.work, prior?.work),
-          attention: retained(value.attention, prior?.attention), results: retained(value.results, prior?.results),
+          attention: retained(value.attention, prior?.attention), server_attention: retained(value.server_attention, prior?.server_attention), results: retained(value.results, prior?.results),
           agents: retained(value.agents, prior?.agents), external_activity: retained(value.external_activity, prior?.external_activity) };
         this.resetPages = false;
         // A loaded feed stays visible, explicitly stale, while its first page
@@ -227,34 +228,17 @@ export class HomeController {
         if (this.latestActivity || this.activityDirty) {
           this.activityDirty = true; this.morePending = 'activity';
         }
-      } else if (section === 'attention') {
-        const previous = this.latest?.attention;
-        if (!previous?.next_cursor || !this.latest) return;
-        const filters = this.filters();
-        const query = { ...(filters.workspace_id ? { workspace_id: filters.workspace_id } : {}),
-          ...(filters.agent_id ? { agent_id: filters.agent_id } : {}),
-          category: 'action_required' as const, state: 'active' as const, seen: 'all' as const,
-          cursor: previous.next_cursor, limit: 10 };
-        const value = await this.deps.api.attention(query, job.abort.signal);
-        if (!current()) return;
-        if (value.version !== 1 || (value.filters.workspace_id ?? null) !== (query.workspace_id ?? null) ||
-            (value.filters.agent_id ?? '') !== (query.agent_id ?? '') || value.filters.category !== query.category ||
-            value.filters.state !== query.state || value.filters.seen !== query.seen)
-          throw new Error('HOME_SCOPE_CHANGED');
-        if (previous.revision && value.snapshot_revision !== previous.revision)
-          throw Object.assign(new Error('Attention page changed.'), { status: 409 });
-        this.latest = { ...this.latest, attention: append(previous, { status: 'ready', items: value.items,
-          total: value.total, total_is_exact: true, has_more: value.next_cursor !== null, next_cursor: value.next_cursor,
-          revision: value.snapshot_revision, as_of: value.observed_at, next_refresh_at: value.next_refresh_at }, item => item.attention_id) };
       } else {
         const previous = section === 'activity' ? (this.activityDirty ? null : this.latestActivity) : this.latest?.[section === 'external' ? 'external_activity' : section];
-        const query = { ...this.filters(), limit: 10, ...(previous?.next_cursor ? { cursor: previous.next_cursor } : {}) };
+        const query = { ...this.filters(), limit: section === 'server_attention' ? 20 : 10, ...(previous?.next_cursor ? { cursor: previous.next_cursor } : {}) };
         const value = await this.deps.api[section](query, job.abort.signal);
         if (!current()) return;
         if (value.version !== 1 || !this.validScope(value)) throw new Error('HOME_SCOPE_CHANGED');
         if (previous?.revision && value.revision && previous.revision !== value.revision)
           throw Object.assign(new Error('Home page changed.'), { status: 409 });
         if (!usable(value)) throw Object.assign(new Error('Home section unavailable.'), { code: value.reason_code ?? 'HOME_SECTION_UNAVAILABLE' });
+        if ((section === 'attention' || section === 'server_attention') && this.latest) this.latest = { ...this.latest,
+          [section]: append(this.latest[section], value as HomePage<AttentionOccurrence>, item => item.attention_id) };
         if (section === 'work' && this.latest) this.latest = { ...this.latest, work: append(this.latest.work, value as HomePage<HomeActivity>, item => item.id) };
         if (section === 'results' && this.latest) this.latest = { ...this.latest, results: append(this.latest.results, value as HomePage<HomeResult>, item => item.id) };
         if (section === 'agents' && this.latest) this.latest = { ...this.latest, agents: append(this.latest.agents, value as HomePage<HomeAgent>, item => item.agent_id) };

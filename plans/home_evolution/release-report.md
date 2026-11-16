@@ -260,3 +260,30 @@ peer/ingress sintéticos e identidade efêmera, sem executável nativo, inferên
 ou conta pessoal. Servidores e browsers próprios encerraram; os três servidores
 finais tiveram saída0. Prova antecede A08 e não é atribuída ao futuro pacote.
 Ver `evidence/pr07-native-browser/`. Ledger:70PASS/3NOT_RUN (A08/H02/I01).
+
+## Faixa Servidor implementada e qualificada na fonte
+
+A08 passou: `server_attention` independente de filtros de projeto/agente/Work
+state, sem contaminar Needs you, com paginação e cursores por seção/escopo/Servidor/
+revisão. `/home/attention` protege a partição de projetos; a API clássica continua
+com o contrato original. Hint interno somente de workspace preserva pushdown de
+fontes explicitamente workspace-bound; fontes ausentes/False ficam unscoped.
+A evidência do destinatário B permanece ao filtrar o remetente A de um handoff.
+Não há migration, novo produtor global, inferência ou I/O de host no GET.
+
+Qualificação:11 novos backend PASS e regressão ampla233PASS/1FAIL de expectativa
+antiga de migration167 já existente. Essa expectativa foi corrigida sem remover
+os checks históricos; o focal e a reutilização canônica renomeada passaram2/2.
+Os11 novos casos e o conflito de revisão com digest válido também passaram após
+ajustes de teste. Não se apresenta isso como uma única rodada234/234.
+Frontend210/210, TypeScript e Vite PASS, bundleDcu4;6 checks de browser incluindo
+22 GETs canônicos e CAS real200/409 passaram. Fixtures/browsers encerrados.
+As provas globais usam domínio/porta canônica válida, não NULL inválido em DB.
+
+O scan unscoped inicial duplicou custo ao acrescentar500 handoffs em B. Depois
+do pushdown, cinco amostras quentes por variante mediram p50/p95 de349,87/403,04ms
+no conjunto pequeno e355,61/387,23ms com500 itens adicionais no outro projeto:
+50SQL/GET,1UoW,0writes. Permanece overhead constante frente ao baseline; amostra
+pequena, sem SLO de HTTP/produção ou cache frio. Evidências em
+`pr08-server-attention-{backend,ui,browser}`; custo completo/novo pacote ainda
+serão qualificados separadamente. Ledger:71PASS/2NOT_RUN (H02/I01).

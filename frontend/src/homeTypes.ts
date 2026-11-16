@@ -54,6 +54,7 @@ export interface HomeOverview {
   work: HomeSection<HomeActivity>; attention: HomeSection<AttentionOccurrence>;
   results: HomeSection<HomeResult>; agents: HomeSection<HomeAgent>;
   external_activity: HomeSection<ExternalObservation>;
+  server_attention: HomeSection<AttentionOccurrence>;
 }
 export interface HomeFeedEvent {
   id: string; kind: string; label: string; created_at: string; workspace_id: string;
@@ -63,8 +64,8 @@ export interface HomePage<T> extends HomeSection<T> {
   version: 1; scope: HomeScope; server_id: string; generated_at: string; snapshot_id: string;
 }
 export interface HomePageQuery extends HomeFilters { cursor?: string; limit?: number }
-export type HomePageSection = 'work' | 'results' | 'activity' | 'agents' | 'external' | 'attention';
-export type HomeSectionName = 'work' | 'attention' | 'results' | 'agents' | 'external_activity' | 'activity';
+export type HomePageSection = 'work' | 'results' | 'activity' | 'agents' | 'external' | 'attention' | 'server_attention';
+export type HomeSectionName = 'work' | 'attention' | 'results' | 'agents' | 'external_activity' | 'activity' | 'server_attention';
 export interface HomeResolvedTarget {
   version: 1; target: HomeTarget; available: boolean; source_revision: string;
   agent_id?: string | null; reason_code?: string; observed_at?: string;

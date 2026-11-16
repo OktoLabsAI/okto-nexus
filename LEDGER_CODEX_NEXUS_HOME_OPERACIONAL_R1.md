@@ -122,3 +122,16 @@ com cliente e servidor próprios encerrados. O interrupt exato passou com duas
 sessões e peers sintéticos: irmã intacta, cleanup canônico e saída física de
 ambos comprovados, com códigos reais1/1. A regressão frontend inteira passou
 204/204. Ledger atual:63PASS/10NOT_RUN. Produto e candidato pago não mudaram.
+
+## Faixa Servidor e fechamento dos testes de contrato
+
+Histórico/rascunhos/teclado e perguntas nativas/concorrência elevaram a matriz
+a70PASS. A revisão A08 encontrou uma lacuna real e a corrigiu: faixa Servidor
+separada, cursores Home por partição e hint somente de workspace, sem perder
+a evidência de B ao filtrar o remetente A. São11 novos casos backend,210
+frontend, build e6 checks de browser PASS. A regressão ampla foi233PASS/1falha
+de expectativa antiga de migration, corrigida e qualificada por focal.
+Contagem atual:71PASS/2NOT_RUN (H02/I01). O novo pacote e a medida de volume
+completo ainda estão pendentes. O candidato pago D4 permanece antecedente,
+sem execução. H02 depende da ponte Windows, que retornou native pipe unavailable;
+não houve leitor de tela iniciado nem captura de fala real.

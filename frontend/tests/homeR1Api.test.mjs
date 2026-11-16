@@ -32,3 +32,18 @@ test('canonical 401 expiry is preserved and an aborted old response cannot expir
     assert.equal(events.length, 1);
   } finally { globalThis.fetch = fetch; globalThis.window = window; }
 });
+
+test('project and Server attention have separate read-only Home cursor endpoints', async () => {
+  const original=globalThis.fetch,calls=[];
+  globalThis.fetch=async(path,init)=>{calls.push({path,init});return Response.json({ok:true,data:{}});};
+  try{
+    const query={workspace_id:'ws/?',agent_id:'agent',state:'running',cursor:'opaque=&?',limit:20};
+    await homeApi.attention(query);await homeApi.server_attention(query);
+    assert.deepEqual(calls.map(c=>new URL(c.path,'https://fixture').pathname),['/api/v1/home/attention','/api/v1/home/server-attention']);
+    for(const c of calls){
+      const url=new URL(c.path,'https://fixture');
+      for(const [key,value]of Object.entries(query))assert.equal(url.searchParams.get(key),String(value));
+      assert.equal(c.init.cache,'no-store');assert.equal(c.init.method,undefined);assert.equal(c.init.body,undefined);
+    }
+  }finally{globalThis.fetch=original;}
+});

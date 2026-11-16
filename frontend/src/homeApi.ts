@@ -1,9 +1,9 @@
-import { api, call } from './api';
+import { call } from './api';
 import { encodeHomeTarget } from './homeNavigation';
 import type { HomeActivity, HomeAgent, HomeFeedEvent, HomeFilters, HomeOverview, HomePage,
   HomePageQuery, HomeResolvedTarget, HomeResult, HomeTarget } from './homeTypes';
 import type { ExternalObservation } from './observationTypes';
-import type { AttentionPage, AttentionPageQuery } from './attentionTypes';
+import type { AttentionOccurrence } from './attentionTypes';
 
 export interface HomeApi {
   overview(filters: HomeFilters, signal?: AbortSignal): Promise<HomeOverview>;
@@ -12,7 +12,8 @@ export interface HomeApi {
   activity(query: HomePageQuery, signal?: AbortSignal): Promise<HomePage<HomeFeedEvent>>;
   agents(query: HomePageQuery, signal?: AbortSignal): Promise<HomePage<HomeAgent>>;
   external(query: HomePageQuery, signal?: AbortSignal): Promise<HomePage<ExternalObservation>>;
-  attention(query: AttentionPageQuery, signal?: AbortSignal): Promise<AttentionPage>;
+  attention(query: HomePageQuery, signal?: AbortSignal): Promise<HomePage<AttentionOccurrence>>;
+  server_attention(query: HomePageQuery, signal?: AbortSignal): Promise<HomePage<AttentionOccurrence>>;
   target(target: HomeTarget, workspace: string | null, signal?: AbortSignal): Promise<HomeResolvedTarget>;
   resolveTarget(target: HomeTarget, workspace: string | null, signal?: AbortSignal): Promise<HomeResolvedTarget>;
 }
@@ -36,6 +37,7 @@ export const homeApi: HomeApi = {
   activity: (query, signal) => get<HomePage<HomeFeedEvent>>(`activity?${queryString(query)}`, signal),
   agents: (query, signal) => get<HomePage<HomeAgent>>(`agents?${queryString(query)}`, signal),
   external: (query, signal) => get<HomePage<ExternalObservation>>(`external?${queryString(query)}`, signal),
-  attention: (query, signal) => api.attention(query, signal),
+  attention: (query, signal) => get<HomePage<AttentionOccurrence>>(`attention?${queryString(query)}`, signal),
+  server_attention: (query, signal) => get<HomePage<AttentionOccurrence>>(`server-attention?${queryString(query)}`, signal),
   target, resolveTarget: target,
 };

@@ -11,7 +11,7 @@ import {AgentActionModal} from '../AgentActionModal';
 import {PageContainer} from '../PageContainer';
 import {useWorkspaceName} from '../WorkspaceNames';
 import {HomeNewRequest, HomeInspection, HomeAttentionInspection} from './HomeInspection';
-import {AgentRow, AttentionRow, HomeBlock, HomeCounters, HomeWelcome, isQuietHome, ResultRow, WorkRow, homeFocus} from './HomeCards';
+import {AgentRow, AttentionRow, HomeBlock, HomeCounters, HomeWelcome, isQuietHome, ResultRow, WorkRow, homeFocus, homeAnnouncementIds, freshHomeOccurrence} from './HomeCards';
 
 type Panel = {kind: 'request'} | {kind: 'target'; target: HomeTarget; continuation?: boolean}
   | {kind: 'attention'; item: AttentionOccurrence; action: AttentionAction};
@@ -46,7 +46,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
       setAnnouncement('');
     }
     if (!snapshot) return;
-    const ids = new Set([...snapshot.work.items.map(item => item.id), ...snapshot.results.items.map(item => item.id), ...snapshot.attention.items.map(item => item.attention_id)]);
+    const ids = homeAnnouncementIds(snapshot);
     const previous = announced.current;
     announced.current = {generation:state.generation,ids};
     if (previous.generation !== state.generation) {setAnnouncement('');return;}
@@ -112,9 +112,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   const changed = () => {refresh();onAttentionChanged();};
   const preference = async (item: AttentionOccurrence, seen?: boolean) => {
     const before = current.current, snap = before.snapshot;
-    const fresh = (section: 'attention'|'results') => snap?.[section].status === 'ready' && !before.staleSections.includes(section);
-    const rows = [...(fresh('attention') ? snap!.attention.items : []), ...(fresh('results') ? snap!.results.items.flatMap(result => result.attention ? [result.attention] : []) : [])];
-    const canonical = rows.find(row => row.attention_id === item.attention_id);
+    const canonical = freshHomeOccurrence(snap, before.staleSections, item);
     if (!snap || !['ready', 'stale'].includes(before.status) || before.paused || !canonical || canonical.source_revision !== item.source_revision ||
         canonical.seen_state.revision !== item.seen_state.revision || locks.current.has(item.attention_id)) {setNotice('Refresh this occurrence before changing its viewing preference.');return;}
     locks.current.add(item.attention_id);setPending([...locks.current]);setNotice('');
@@ -124,8 +122,8 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     } catch {if (mounted.current && current.current.generation === before.generation) setNotice('The viewing preference could not be confirmed. Refreshing the canonical occurrence; it will not be replayed.');}
     finally {locks.current.delete(item.attention_id);if (mounted.current && current.current.generation === before.generation) {setPending([...locks.current]);changed();}}
   };
-  const isStale = (section: 'work'|'attention'|'results'|'agents'|'external_activity') => !['ready', 'stale'].includes(state.status) || state.staleSections.includes(section) || state.paused;
-  const quiet = !agentFilter && !stateFilter && isQuietHome(snapshot, state.status !== 'ready' || state.staleSections.some(section => ['work','results','attention','agents','external_activity'].includes(section)));
+  const isStale = (section: 'work'|'attention'|'results'|'agents'|'external_activity'|'server_attention') => !['ready', 'stale'].includes(state.status) || state.staleSections.includes(section) || state.paused;
+  const quiet = !agentFilter && !stateFilter && isQuietHome(snapshot, !['ready', 'stale'].includes(state.status) || state.staleSections.some(section => ['work','results','attention','agents','external_activity'].includes(section)));
   const agentsBlock = snapshot && <HomeBlock title="Agents" section={snapshot.agents} stale={isStale('agents')} onMore={() => loadMore('agents')} loadingMore={state.loadingMore === 'agents'} empty="No visible agents in this scope."><ul className="divide-y divide-surface-200 dark:divide-surface-700">{snapshot.agents.items.map(item => <AgentRow key={item.agent_id} item={item}/>)}</ul></HomeBlock>;
   return <PageContainer testId="operational-home" className="space-y-5">
     <header className="flex flex-wrap justify-between items-start gap-3">
@@ -152,6 +150,10 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
       </div>
     {!snapshot && <p role="status" className="panel p-5">{state.status === 'forbidden' ? 'Operator access is required. Protected Home data has been cleared.' : state.status === 'disabled' ? 'Operational Home is disabled.' : state.status === 'error' ? 'Home information is unavailable. Refresh to try again.' : 'Loading operational overview…'}</p>}
     {snapshot && <>
+      <HomeBlock title="Server" section={snapshot.server_attention} stale={isStale('server_attention')} onMore={() => loadMore('server_attention')} loadingMore={state.loadingMore === 'server_attention'} empty="No active server-wide attention.">
+        <p className="text-xs text-surface-500 mt-3">Server-wide attention is independent of the selected workspace, agent and work-state filters.</p>
+        <ul className="divide-y divide-surface-200 dark:divide-surface-700">{snapshot.server_attention.items.map(item => <AttentionRow key={item.attention_id} item={item} pending={pending.includes(item.attention_id)} stale={isStale('server_attention')} onOpen={(item,action) => open({kind:'attention',item,action})} onSeen={(item,seen) => void preference(item,seen)} onSnooze={item => void preference(item)}/>)}</ul>
+      </HomeBlock>
       {quiet ? <>
         <HomeWelcome needsSetup={snapshot.agents.total === 0} externalDisabled={snapshot.external_activity.status === 'disabled'} onSetup={onSetupAgent} onRequest={() => open({kind:'request'})}/>
         {snapshot.agents.total !== 0 && agentsBlock}

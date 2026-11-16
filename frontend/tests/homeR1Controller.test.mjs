@@ -8,7 +8,7 @@ function harness() {
   const clock = new Clock(), calls = [], changes = [];
   let active = 0, peak = 0;
   const behavior = { overview: () => overview(), work: () => page([{ id: 'work2' }]), results: () => page([]), activity: () => page([]),
-    agents: () => page([]), external: () => page([]), attention: () => ({}) };
+    agents: () => page([]), external: () => page([]), attention: () => page([]), server_attention: () => page([]) };
   const api = Object.fromEntries(Object.keys(behavior).map(kind => [kind, async (query, signal) => {
     calls.push({ kind, query, signal, at: clock.now }); active++; peak = Math.max(peak, active);
     try { return await behavior[kind](query, signal); } finally { active--; }
@@ -134,16 +134,14 @@ test('wrong-server response is not admitted into the current cache', async () =>
   h.controller.refresh(); await h.clock.advance(1000); assert.equal(h.controller.getState().snapshot.server_id, 'server');
   assert.equal(h.controller.getState().status, 'stale'); h.controller.dispose();
 });
-test('Attention pagination reuses canonical category/state/seen cursor contract, not Home display-state', async () => {
+test('project Attention pagination uses Home scope and opaque partition cursor with canonical occurrence identities', async () => {
   const h = harness(); h.behavior.overview = () => overview({ scope: { workspace_id: 'ws', state: 'running' },
     attention: section([{ attention_id: 'one' }], { next_cursor: 'att:opaque', has_more: true }) });
   h.configure({ state: 'running' }); await h.clock.advance();
-  h.behavior.attention = query => ({ version: 1, filters: { workspace_id: query.workspace_id, category: query.category,
-    state: query.state, seen: query.seen }, snapshot_revision: 'r1', items: [{ attention_id: 'one' }, { attention_id: 'two' }],
-    total: 2, next_cursor: null, observed_at: '2030-01-01T00:00:00Z', next_refresh_at: null });
+  h.behavior.attention = query => page([{ attention_id: 'one' }, { attention_id: 'two' }], { scope: {workspace_id: query.workspace_id, state:query.state} });
   h.controller.loadMore('attention'); await h.clock.advance(1000);
-  assert.equal(h.calls[1].query.state, 'active'); assert.equal(h.calls[1].query.category, 'action_required');
-  assert.equal(h.calls[1].query.seen, 'all'); assert.equal(h.calls[1].query.cursor, 'att:opaque');
+  assert.equal(h.calls[1].query.state, 'running'); assert.equal(h.calls[1].query.category, undefined);
+  assert.equal(h.calls[1].query.seen, undefined); assert.equal(h.calls[1].query.cursor, 'att:opaque');
   assert.deepEqual(h.controller.getState().snapshot.attention.items.map(x => x.attention_id), ['one', 'two']); h.controller.dispose();
 });
 test('external generations remain distinct during paginated append and never change native results', async () => {
@@ -156,8 +154,8 @@ test('external generations remain distinct during paginated append and never cha
   assert.deepEqual(h.controller.getState().snapshot.results.items, []); h.controller.dispose();
 });
 test('invalidation matrix and scope keys distinguish external, attention, origin and identity', () => {
-  assert.deepEqual(homeInvalidatedSections('observation.activity'), ['external_activity', 'agents', 'attention', 'activity']);
-  assert.deepEqual(homeInvalidatedSections('attention-invalidated'), ['attention', 'results', 'work']);
+  assert.deepEqual(homeInvalidatedSections('observation.activity'), ['external_activity', 'agents', 'attention', 'server_attention', 'activity']);
+  assert.deepEqual(homeInvalidatedSections('attention-invalidated'), ['attention', 'server_attention', 'results', 'work']);
   assert.deepEqual(homeInvalidatedSections('token.delta'), []);
   const context = { workspace: 'all', identityKey: 'A', origin: 'https://one' };
   assert.equal(homeContextKey(context), homeContextKey({ ...context, workspace: null }));
@@ -311,4 +309,63 @@ test('E05 a continuously live stream does not renew external TTL or replace stal
   h.controller.onStreamStatus('live'); await h.clock.advance(1000);
   assert.equal(h.calls.length, 2); assert.equal(h.peak(), 1);
   h.controller.dispose();
+});
+
+test('Server and project attention paginate independently by canonical attention_id without changing project counters', async () => {
+  const h=harness(),scope={workspace_id:'ws',agent_id:'worker',state:'running'},summary={needs_you:{value:2}};
+  h.behavior.overview=()=>overview({scope,summary,
+    attention:section([{attention_id:'project1'}],{next_cursor:'project:1',has_more:true}),
+    server_attention:section([{attention_id:'server1',workspace_id:null}],{next_cursor:'server:1',has_more:true})});
+  h.configure({agent_id:'worker',state:'running'});await h.clock.advance();
+  for(const [kind,prefix]of [['attention','project'],['server_attention','server']]){
+    let n=1;
+    h.behavior[kind]=query=>{n++;assert.equal(query.cursor,`${prefix}:${n-1}`);return page([
+      {attention_id:`${prefix}1`,workspace_id:kind==='server_attention'?null:'ws'},
+      {attention_id:`${prefix}${n}`,workspace_id:kind==='server_attention'?null:'ws'}
+    ],{scope,next_cursor:n===2?`${prefix}:2`:null,has_more:n===2});};
+    h.controller.loadMore(kind);await h.clock.advance(1000);
+    h.controller.loadMore(kind);await h.clock.advance(1000);
+    assert.deepEqual(h.controller.getState().snapshot[kind].items.map(x=>x.attention_id),[`${prefix}1`,`${prefix}2`,`${prefix}3`]);
+  }
+  assert.deepEqual(h.controller.getState().snapshot.summary,summary);
+  assert.equal(h.calls.find(c=>c.kind==='server_attention').query.limit,20);
+  assert.ok(h.calls.every(c=>c.query.workspace_id==='ws'&&c.query.agent_id==='worker'&&c.query.state==='running'));
+  assert.equal(h.peak(),1);h.controller.dispose();
+});
+
+test('Server failure and TTL remain section-scoped, while Server paging authorization loss clears every protected section', async () => {
+  const h=harness();h.behavior.overview=()=>overview({server_attention:section([],{
+    status:'unavailable',total:null,next_refresh_at:'2030-01-01T00:00:02Z'})});
+  h.configure();await h.clock.advance();
+  assert.deepEqual(h.controller.getState().staleSections,['server_attention']);
+  assert.equal(h.controller.getState().snapshot.work.status,'ready');
+  h.behavior.overview=()=>overview({server_attention:section([{attention_id:'server1'}],{next_cursor:'server:1',has_more:true})});
+  await h.clock.advance(2000);assert.equal(h.calls.length,2);
+  h.behavior.server_attention=()=>{throw error(403);};
+  h.controller.loadMore('server_attention');await h.clock.advance(1000);
+  assert.equal(h.controller.getState().snapshot,null);assert.equal(h.controller.getState().status,'forbidden');
+  h.controller.dispose();
+});
+
+test('Server pages are generation-bound, paused reads do not publish, and page conflicts refresh both partitions', async () => {
+  const h=harness(),pending=deferred();
+  h.behavior.overview=()=>overview({server_attention:section([{attention_id:'server1'}],{next_cursor:'server:1',has_more:true})});
+  h.configure();await h.clock.advance();h.behavior.server_attention=()=>pending.promise;
+  h.controller.loadMore('server_attention');await h.clock.advance(1000);
+  h.behavior.overview=()=>overview({scope:{workspace_id:'other'},server_attention:section([{attention_id:'new-context-server'}])});
+  h.configure({workspace:'other'});pending.resolve(page([{attention_id:'obsolete-page'}]));await flush();await h.clock.advance(1000);
+  assert.deepEqual(h.controller.getState().snapshot.server_attention.items.map(x=>x.attention_id),['new-context-server']);
+  h.controller.pause(true);h.behavior.overview=()=>overview({scope:{workspace_id:'other'},server_attention:section([{attention_id:'pending-server'}])});
+  h.controller.refresh();await h.clock.advance(1000);
+  assert.deepEqual(h.controller.getState().snapshot.server_attention.items.map(x=>x.attention_id),['new-context-server']);
+  h.controller.pause(false);
+  assert.deepEqual(h.controller.getState().snapshot.server_attention.items.map(x=>x.attention_id),['pending-server']);
+  h.behavior.overview=()=>overview({scope:{workspace_id:'other'},server_attention:section([{attention_id:'before-conflict'}],{next_cursor:'server:old',has_more:true})});
+  h.controller.refresh();await h.clock.advance(1000);
+  h.behavior.server_attention=()=>page([{attention_id:'wrong-revision'}],{scope:{workspace_id:'other'},revision:'different'});
+  h.behavior.overview=()=>overview({scope:{workspace_id:'other'},attention:section([{attention_id:'fresh-project'}]),server_attention:section([{attention_id:'fresh-server'}])});
+  h.controller.loadMore('server_attention');await h.clock.advance(2000);
+  assert.deepEqual(h.controller.getState().snapshot.server_attention.items.map(x=>x.attention_id),['fresh-server']);
+  assert.deepEqual(h.controller.getState().snapshot.attention.items.map(x=>x.attention_id),['fresh-project']);
+  assert.equal(h.peak(),1);h.controller.dispose();
 });

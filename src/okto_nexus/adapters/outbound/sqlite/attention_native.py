@@ -1,6 +1,9 @@
 """One relational facts query for canonical native attention; no per-item I/O."""
 import json
 
+# Native operational frames are validated against workspace-bound operations.
+WORKSPACE_BOUND = True
+
 
 def _object(alias, fields):
     return 'json_object(' + ','.join("'" + field + "'," + alias + '.' + field for field in fields.split()) + ')'

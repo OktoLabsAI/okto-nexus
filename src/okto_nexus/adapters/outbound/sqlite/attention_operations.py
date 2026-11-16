@@ -8,6 +8,9 @@ import json
 
 from ....application.attention_operations import handoff_eligible, operator_policy
 
+# Every emitted operation/message/handoff retains its non-null workspace.
+WORKSPACE_BOUND = True
+
 
 SQL_FUNCTIONS = (("nexus_attention_handoff_eligible_v1", 2, handoff_eligible),)
 

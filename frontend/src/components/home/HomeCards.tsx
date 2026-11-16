@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState, type ReactNode} from 'react';
 import {api, ApiError} from '../../api';
 import {ArrowUpRight, Eye} from 'lucide-react';
-import type {HomeActivity, HomeResult, HomeSection, HomeTarget, HomeSummary, HomeAgent, HomeOverview} from '../../homeTypes';
+import type {HomeActivity, HomeResult, HomeSection, HomeSectionName, HomeTarget, HomeSummary, HomeAgent, HomeOverview} from '../../homeTypes';
 import type {AttentionAction, AttentionOccurrence} from '../../attentionTypes';
 import {homeCounterLabel, homeSectionLabel, homeStateLabel, homeResultLabel} from '../../homePresentation';
 import {attentionActionLabels, attentionDescription, primaryAttentionAction} from '../../attentionPresentation';
@@ -9,6 +9,16 @@ import {useWorkspaceName} from '../WorkspaceNames';
 import {formatTime} from '../../timeFormat';
 
 export const homeFocus = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500';
+export function homeAnnouncementIds(snapshot: HomeOverview): Set<string> {
+  return new Set([...snapshot.work.items.map(item => item.id), ...snapshot.results.items.map(item => item.id),
+    ...snapshot.attention.items.map(item => item.attention_id), ...snapshot.server_attention.items.map(item => item.attention_id)]);
+}
+export function freshHomeOccurrence(snapshot: HomeOverview | null, staleSections: HomeSectionName[], item: AttentionOccurrence): AttentionOccurrence | undefined {
+  const fresh = (section: 'attention'|'results'|'server_attention') => snapshot?.[section].status === 'ready' && !staleSections.includes(section);
+  const rows = [...(fresh('attention') ? snapshot!.attention.items : []), ...(fresh('server_attention') ? snapshot!.server_attention.items : []),
+    ...(fresh('results') ? snapshot!.results.items.flatMap(result => result.attention ? [result.attention] : []) : [])];
+  return rows.find(row => row.attention_id === item.attention_id && row.source_revision === item.source_revision && row.seen_state.revision === item.seen_state.revision);
+}
 export function isQuietHome(snapshot: HomeOverview | null, stale = false): boolean {
   if (!snapshot || stale) return false;
   const empty = (section: HomeSection<unknown>) => section.status === 'ready' && section.total_is_exact === true && section.total === 0 && section.items.length === 0;

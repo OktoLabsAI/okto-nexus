@@ -6,6 +6,9 @@ the authenticated read transaction. Projectors never query this connection.
 """
 from . import attention_native as native
 
+# Blocking authority is tied to a workspace-bound delivery/operation/request.
+WORKSPACE_BOUND = True
+
 
 _DELIVERY = ('operation_id delivery_id message_id workspace_id actor_agent_id credential_binding recipient_agent_id '
     'endpoint_id endpoint_revision profile_revision runtime_session_id status created_at reconciliation_id admission_binding '

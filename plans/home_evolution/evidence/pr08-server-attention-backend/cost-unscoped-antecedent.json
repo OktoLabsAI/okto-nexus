@@ -1,0 +1,96 @@
+{
+  "scope": "Service/SQLite only, five warm samples per variant, same fixture and same projected A payload, 500 unrelated aged B handoffs. Not a production SLO or controlled cold-cache experiment.",
+  "baseline": "b82a36f2 Home app/SQL classes loaded from Git; unchanged canonical Attention",
+  "runner_sha256": "50f03364106a5d7848b5d6a68a810a0bd4dddca0e18f2ec4005ac6c390305010",
+  "measurements": [
+    {
+      "dataset": "small",
+      "implementation": "baseline_b82",
+      "samples_ms": [
+        268.2811000267975,
+        273.39650003705174,
+        280.3016999969259,
+        306.47419998422265,
+        260.62570000067353
+      ],
+      "p50_ms": 273.39650003705174,
+      "p95_nearest_rank_ms": 306.47419998422265,
+      "sql_statements": [
+        50
+      ],
+      "transactions_per_read": [
+        1
+      ],
+      "writes": 0
+    },
+    {
+      "dataset": "small",
+      "implementation": "server_attention",
+      "samples_ms": [
+        408.5613999632187,
+        378.31389997154474,
+        360.23210000712425,
+        338.3920000051148,
+        357.29169996920973
+      ],
+      "p50_ms": 360.23210000712425,
+      "p95_nearest_rank_ms": 408.5613999632187,
+      "sql_statements": [
+        50
+      ],
+      "transactions_per_read": [
+        1
+      ],
+      "writes": 0
+    },
+    {
+      "dataset": "500-other-project-aged-handoffs",
+      "implementation": "baseline_b82",
+      "samples_ms": [
+        258.562000002712,
+        271.5675000217743,
+        257.57110002450645,
+        254.5564000029117,
+        248.16340004326776
+      ],
+      "p50_ms": 257.57110002450645,
+      "p95_nearest_rank_ms": 271.5675000217743,
+      "sql_statements": [
+        50
+      ],
+      "transactions_per_read": [
+        1
+      ],
+      "writes": 0
+    },
+    {
+      "dataset": "500-other-project-aged-handoffs",
+      "implementation": "server_attention",
+      "samples_ms": [
+        496.4521999936551,
+        538.8908999739215,
+        484.3768999562599,
+        504.5562000013888,
+        446.72589999390766
+      ],
+      "p50_ms": 496.4521999936551,
+      "p95_nearest_rank_ms": 538.8908999739215,
+      "sql_statements": [
+        50
+      ],
+      "transactions_per_read": [
+        1
+      ],
+      "writes": 0
+    }
+  ],
+  "tool_ref": "6b9fb0",
+  "exit_code": 0,
+  "writes": 0,
+  "uow_per_read": 1,
+  "limitations": [
+    "Concurrent machine load was not controlled.",
+    "No HTTP/browser/provider/native execution measured.",
+    "No global producer was invented."
+  ]
+}
