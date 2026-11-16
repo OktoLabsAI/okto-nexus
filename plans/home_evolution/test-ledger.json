@@ -2,7 +2,7 @@
   "schema_version": 1,
   "plan": "plans/home_evolution/source-plan.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
-  "updated_at": "2026-11-16T14:28:42.597295+00:00",
+  "updated_at": "2026-11-16T14:38:08.667977+00:00",
   "scenarios": {
     "HOME-T-A01": {
       "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
@@ -74,19 +74,40 @@
     },
     "HOME-T-A05": {
       "requirement": "Revogação/logout remove payloads protegidos da lista, drawer e caches; o histórico do browser não os restaura.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-browser/results.json"
+      ],
+      "commit": "7c34b4d8 + recovered browser qualification; production cut fa2e4215/D4",
+      "environment": "Actual built Chromium App and own synthetic SQLite/HTTP fixture, controlled late GET, routed403/logout boundary, real history/keyboard",
+      "limitations": [
+        "Historical product cut before A08 Server lane changes.",
+        "Logout response is browser-routed; form explicitly discarded before Sign out.",
+        "H01 covers the recorded keyboard route, not all native sensitive controls; no AT speech."
+      ],
+      "tests": [
+        "403/logout history cannot restore protected Home"
+      ]
     },
     "HOME-T-A06": {
       "requirement": "Troca A→B com resposta lenta de A não mistura dados, contadores ou formulários.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-browser/results.json",
+        "plans/home_evolution/evidence/pr07-browser/a06-counters.json"
+      ],
+      "commit": "7c34b4d8 + recovered browser qualification; production cut fa2e4215/D4",
+      "environment": "Actual built Chromium App and own synthetic SQLite/HTTP fixture, controlled late GET, routed403/logout boundary, real history/keyboard",
+      "limitations": [
+        "Historical product cut before A08 Server lane changes.",
+        "Logout response is browser-routed; form explicitly discarded before Sign out.",
+        "H01 covers the recorded keyboard route, not all native sensitive controls; no AT speech."
+      ],
+      "tests": [
+        "Late A response cannot change B counters/work/form/scope/focus/selection"
+      ]
     },
     "HOME-T-A07": {
       "requirement": "Referência de alvo incompatível com workspace é recusada, mesmo quando o ID existe.",
@@ -812,11 +833,21 @@
     },
     "HOME-T-F06": {
       "requirement": "Troca de projeto/alvo com rascunho solicita descarte quando necessário; logout limpa dados protegidos.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-browser/results.json"
+      ],
+      "commit": "7c34b4d8 + recovered browser qualification; production cut fa2e4215/D4",
+      "environment": "Actual built Chromium App and own synthetic SQLite/HTTP fixture, controlled late GET, routed403/logout boundary, real history/keyboard",
+      "limitations": [
+        "Historical product cut before A08 Server lane changes.",
+        "Logout response is browser-routed; form explicitly discarded before Sign out.",
+        "H01 covers the recorded keyboard route, not all native sensitive controls; no AT speech."
+      ],
+      "tests": [
+        "Actual modal Keep/Discard protects project/target replacement"
+      ]
     },
     "HOME-T-F07": {
       "requirement": "Voltar/avançar/deep link revalidam alvo e autorização; referência inexistente tem saída clara.",
@@ -945,11 +976,21 @@
     },
     "HOME-T-H01": {
       "requirement": "Teclado percorre filtros, cards, drawer e ações; foco retorna ao item ou a um destino estável.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-browser/qualification.json",
+        "plans/home_evolution/evidence/pr07-browser/results.json"
+      ],
+      "commit": "7c34b4d8 + recovered browser qualification; production cut fa2e4215/D4",
+      "environment": "Actual built Chromium App and own synthetic SQLite/HTTP fixture, controlled late GET, routed403/logout boundary, real history/keyboard",
+      "limitations": [
+        "Historical product cut before A08 Server lane changes.",
+        "Logout response is browser-routed; form explicitly discarded before Sign out.",
+        "H01 covers the recorded keyboard route, not all native sensitive controls; no AT speech."
+      ],
+      "tests": [
+        "Keyboard filters/cards/drawer/composer mode and restored focus"
+      ]
     },
     "HOME-T-H02": {
       "requirement": "Leitor de tela recebe avisos úteis agrupados, não todo stream; estado não depende só de cor.",

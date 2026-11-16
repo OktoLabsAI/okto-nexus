@@ -1,0 +1,120 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "F06: modal draft prevents implicit workspace/target change; explicit discard allows exact replacement",
+      "status": "PASS",
+      "detail": {
+        "keepEditingPreserved": true,
+        "explicitDiscard": true,
+        "scope": "home-beta",
+        "exactTarget": "browser-handoff-4",
+        "newComposerEmpty": true,
+        "backgroundModalNotBypassed": true,
+        "targetBefore": null
+      }
+    },
+    {
+      "id": "A06: retained old-workspace GET cannot overwrite the new workspace or its live form",
+      "status": "PASS",
+      "detail": {
+        "barrierOrdered": true,
+        "lateOutcome": "fulfilled after B form",
+        "scope": "home-beta",
+        "form": {
+          "value": "B-only draft with a stable selection.",
+          "same": true,
+          "focused": true,
+          "selection": [
+            2,
+            8
+          ]
+        },
+        "oldWorkAbsent": true
+      }
+    },
+    {
+      "id": "A05: protected list and target stay cleared across back/forward after canonical-shaped 403",
+      "status": "PASS",
+      "detail": {
+        "revocation": "routed 403, actual Home GET consumer",
+        "listCleared": true,
+        "drawerCleared": true,
+        "backForwardNoProtectedPayload": true,
+        "noRealAccountMutation": true
+      }
+    },
+    {
+      "id": "A05/F06: synthetic sign-out clears dirty form and browser history cannot revive it",
+      "status": "PASS",
+      "detail": {
+        "syntheticLogoutRequests": 1,
+        "backendLogoutRequests": 0,
+        "historyNoHomeOrDraft": true,
+        "realCredentialsUsed": false
+      }
+    },
+    {
+      "id": "H01: keyboard reaches filters/cards/drawer/actions and returns focus without pointer assistance",
+      "status": "PASS",
+      "detail": {
+        "keyboardTrace": [
+          {
+            "target": "Workspace scope",
+            "tabs": 2
+          },
+          {
+            "target": "Filter Home by agent",
+            "tabs": 23
+          },
+          {
+            "target": "Work state",
+            "tabs": 2
+          },
+          {
+            "target": "Inspect Review the integration",
+            "tabs": 2
+          },
+          {
+            "target": "Close modal",
+            "tabs": 1
+          },
+          {
+            "target": "New request",
+            "tabs": 38
+          },
+          {
+            "target": "Message",
+            "tabs": 3
+          },
+          {
+            "target": "Handoff",
+            "tabs": 3
+          },
+          {
+            "target": "Discard changes",
+            "tabs": 1
+          }
+        ],
+        "drawerFocus": true,
+        "cardFocusRestored": true,
+        "composerFocusRestored": true,
+        "submitted": false,
+        "limits": "No native approval fixture or real screen-reader speech in this selected keyboard route."
+      }
+    }
+  ],
+  "mutationRequests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/operator-auth/logout"
+    }
+  ],
+  "pageErrors": [],
+  "browserDialogs": [
+    {
+      "type": "beforeunload",
+      "message": ""
+    }
+  ]
+}

@@ -228,3 +228,23 @@ e a sessão irmã conserva turno, receipt e processo vivos. Cleanup usa interrup
 e close canônicos, com saída física dos dois peers comprovada por wait; códigos
 reais1/1 preservados, sem alegar0. Ruff/diff-check PASS. Não é prova de clique
 no browser nem inferência real. Ver `evidence/pr07-interrupt/`. Ledger:63PASS/10NOT_RUN.
+
+## Identidade, histórico, rascunhos e teclado
+
+Cinco checks reais de browser recuperados e um focal adicional de contadores
+qualificam A05/A06/F06/H01 no corte D4 anterior à faixa Servidor. Contadores B
+(waiting1/results0) diferem de A(waiting14/results1) e não mudam após a resposta
+atrasada de A; formulário, foco, seleção, lista e projeto também se mantêm.
+Histórico não restaura payloads após403/logout; o logout foi roteado no browser
+e o rascunho foi descartado antes da saída. O percurso de teclado cobre filtros,
+cards, drawer e ações do composer, sem alegar todos os controles sensíveis.
+Cleanup do focal confirmou fixture exit0/browser fechado; da execução anterior
+foi comprovada ausência física atual, sem inventar código de saída original.
+Ver `evidence/pr07-browser/`. Ledger:67PASS/6NOT_RUN.
+
+A revisão de A08 identificou lacuna de contrato: o domínio admite ocorrências
+globais válidas, mas a Home não tinha uma faixa Servidor separada. Não há produtor
+global atual nas famílias canônicas; isso não elimina o requisito de partição.
+Backend e interface estão sendo corrigidos, sem criar produtor fictício nem
+inserir NULL em tabelas que o proíbem. O pacote/candidato D4 passa a antecedente
+até qualificar esse delta; a campanha paga não foi iniciada.
