@@ -2,7 +2,7 @@
   "schema_version": 1,
   "plan": "plans/home_evolution/source-plan.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
-  "updated_at": "2026-11-16T15:38:33.978340+00:00",
+  "updated_at": "2026-11-16T17:14:44.402380+00:00",
   "scenarios": {
     "HOME-T-A01": {
       "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
@@ -135,13 +135,13 @@
       "evidence": [
         "plans/home_evolution/evidence/pr08-server-attention-backend/qualification.json",
         "plans/home_evolution/evidence/pr08-server-attention-ui/qualification.json",
-        "plans/home_evolution/evidence/pr08-server-attention-browser/qualification.json"
+        "plans/home_evolution/evidence/pr08-server-attention-browser/qualification.json",
+        "plans/home_evolution/evidence/pr10-package-server-final/qualification.json"
       ],
-      "commit": "e60e7bbb + Server-lane implementation milestone",
+      "commit": "3d95aad8",
       "environment": "Real SQLite/HTTP and built Dcu4 Chromium, valid nullable-workspace domain occurrences at authorized projection port; no global producer invented",
       "limitations": [
-        "Current canonical families remain workspace-bound; global test facts exercise the read contract, not a new live Server incident producer.",
-        "New installed package and full-size latency measurement remain separate qualification steps."
+        "Current canonical families remain workspace-bound; global test facts exercise the read contract, not a new live Server incident producer."
       ],
       "tests": [
         "11 backend cases plus source-scoped native receiver proof",
@@ -1031,10 +1031,18 @@
     "HOME-T-H02": {
       "requirement": "Leitor de tela recebe avisos úteis agrupados, não todo stream; estado não depende só de cor.",
       "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "evidence": [
+        "plans/home_evolution/evidence/pr09-screen-reader-attempt/result.json",
+        "plans/home_evolution/evidence/pr09-screen-reader-attempt/manual-qualification.json"
+      ],
+      "commit": "3d95aad8 + evidence-only preparation",
+      "environment": "Windows11; synthetic canonical SQLite/HTTP and own Chromium where referenced; unexecuted real-world boundary remains explicit",
+      "limitations": [
+        "Supported native bridge failed before Narrator launch. No real screen-reader speech or Speech Recap observation exists; manual probe is prepared, not a human result."
+      ],
+      "tests": [
+        "Two real SQLite pulse IDs yield two grouped DOM announcements with focus preserved; this is DOM/HTTP only."
+      ]
     },
     "HOME-T-H03": {
       "requirement": "Layout a 360 px, zoom 200% e desktop mantém ações acessíveis e sem overflow horizontal obrigatório.",
@@ -1093,13 +1101,22 @@
       "evidence": [
         "plans/home_evolution/evidence/pr05-performance/measurement-final-workers.json",
         "plans/home_evolution/performance.md",
-        "plans/home_evolution/evidence/pr06-browser/request-rate.json"
+        "plans/home_evolution/evidence/pr06-browser/request-rate.json",
+        "plans/home_evolution/evidence/pr08-performance-final/qualification.json",
+        "plans/home_evolution/evidence/pr12-http-performance/qualification.json",
+        "plans/home_evolution/evidence/pr11-human-preview/qualification.json"
       ],
-      "commit": "f948c5d7",
-      "environment": "Windows11; Python3.13.1/SQLite3.45.3;1/10/100 scoped workers with disposable presence sessions;20 warm samples; concurrent build/browser load allowed",
+      "commit": "3d95aad8",
+      "environment": "Windows11.26300; Python3.13.1/SQLite3.45.3,16logicalCPU/34073251840B RAM.1/10/100 workers plus reserved human; separate20-warm-sample service and real HTTP experiments.",
       "limitations": [
-        "500ms p95 target NOT MET in all four datasets; see recorded metrics.",
-        "Service/JSON/SQL/pagination measured; browser idle request rate separate, no provider/native load promise."
+        "Earlier four service misses remain historical. Current service p95 large case673.91ms still misses500ms; current HTTP p95 four datasets281.28/227.64/289.28/450.32ms meet only the local endpoint target.",
+        "Separate source/HTTP processes, cache/observation paths and timings are not paired overhead measurements. No production SLO or native-operation/transcript workload claim.",
+        "One cache-disabled initial-view sample is not p95 or actual unfamiliar-human comprehension; independent UI request-rate evidence remains separately scoped."
+      ],
+      "tests": [
+        "46SQL and one read UoW per request independent of worker/card count;0writes.",
+        "Service large dataset paginates1000 distinct activities over11 pages with100000 events; overview bounded.",
+        "HTTP84 total requests,20 measured warm samples/dataset after a warmup; response<=11477B; actual source/hardware/method and raw samples recorded."
       ]
     },
     "HOME-T-H07": {
@@ -1108,13 +1125,22 @@
       "evidence": [
         "plans/home_evolution/evidence/pr05-performance/measurement-final-workers.json",
         "plans/home_evolution/performance.md",
-        "plans/home_evolution/evidence/pr06-browser/request-rate.json"
+        "plans/home_evolution/evidence/pr06-browser/request-rate.json",
+        "plans/home_evolution/evidence/pr08-performance-final/qualification.json",
+        "plans/home_evolution/evidence/pr12-http-performance/qualification.json",
+        "plans/home_evolution/evidence/pr11-human-preview/qualification.json"
       ],
-      "commit": "f948c5d7",
-      "environment": "Windows11; Python3.13.1/SQLite3.45.3;1/10/100 scoped workers with disposable presence sessions;20 warm samples; concurrent build/browser load allowed",
+      "commit": "3d95aad8",
+      "environment": "Windows11.26300; Python3.13.1/SQLite3.45.3,16logicalCPU/34073251840B RAM.1/10/100 workers plus reserved human; separate20-warm-sample service and real HTTP experiments.",
       "limitations": [
-        "500ms p95 target NOT MET in all four datasets; see recorded metrics.",
-        "Service/JSON/SQL/pagination measured; browser idle request rate separate, no provider/native load promise."
+        "Earlier four service misses remain historical. Current service p95 large case673.91ms still misses500ms; current HTTP p95 four datasets281.28/227.64/289.28/450.32ms meet only the local endpoint target.",
+        "Separate source/HTTP processes, cache/observation paths and timings are not paired overhead measurements. No production SLO or native-operation/transcript workload claim.",
+        "One cache-disabled initial-view sample is not p95 or actual unfamiliar-human comprehension; independent UI request-rate evidence remains separately scoped."
+      ],
+      "tests": [
+        "46SQL and one read UoW per request independent of worker/card count;0writes.",
+        "Service large dataset paginates1000 distinct activities over11 pages with100000 events; overview bounded.",
+        "HTTP84 total requests,20 measured warm samples/dataset after a warmup; response<=11477B; actual source/hardware/method and raw samples recorded."
       ]
     },
     "HOME-T-H08": {
@@ -1123,22 +1149,40 @@
       "evidence": [
         "plans/home_evolution/evidence/pr05-performance/measurement-final-workers.json",
         "plans/home_evolution/performance.md",
-        "plans/home_evolution/evidence/pr06-browser/request-rate.json"
+        "plans/home_evolution/evidence/pr06-browser/request-rate.json",
+        "plans/home_evolution/evidence/pr08-performance-final/qualification.json",
+        "plans/home_evolution/evidence/pr12-http-performance/qualification.json",
+        "plans/home_evolution/evidence/pr11-human-preview/qualification.json"
       ],
-      "commit": "f948c5d7",
-      "environment": "Windows11; Python3.13.1/SQLite3.45.3;1/10/100 scoped workers with disposable presence sessions;20 warm samples; concurrent build/browser load allowed",
+      "commit": "3d95aad8",
+      "environment": "Windows11.26300; Python3.13.1/SQLite3.45.3,16logicalCPU/34073251840B RAM.1/10/100 workers plus reserved human; separate20-warm-sample service and real HTTP experiments.",
       "limitations": [
-        "500ms p95 target NOT MET in all four datasets; see recorded metrics.",
-        "Service/JSON/SQL/pagination measured; browser idle request rate separate, no provider/native load promise."
+        "Earlier four service misses remain historical. Current service p95 large case673.91ms still misses500ms; current HTTP p95 four datasets281.28/227.64/289.28/450.32ms meet only the local endpoint target.",
+        "Separate source/HTTP processes, cache/observation paths and timings are not paired overhead measurements. No production SLO or native-operation/transcript workload claim.",
+        "One cache-disabled initial-view sample is not p95 or actual unfamiliar-human comprehension; independent UI request-rate evidence remains separately scoped."
+      ],
+      "tests": [
+        "46SQL and one read UoW per request independent of worker/card count;0writes.",
+        "Service large dataset paginates1000 distinct activities over11 pages with100000 events; overview bounded.",
+        "HTTP84 total requests,20 measured warm samples/dataset after a warmup; response<=11477B; actual source/hardware/method and raw samples recorded."
       ]
     },
     "HOME-T-I01": {
       "requirement": "Feature da Home nova OFF restaura a experiência anterior sem parar daemon, Core ou Connector.",
       "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json",
+        "plans/home_evolution/evidence/pr07-native-browser/qualification.json",
+        "plans/home_evolution/evidence/pr06-campaign-proposal/peer-server-final.json"
+      ],
+      "commit": "3d95aad8 + evidence-only preparation",
+      "environment": "Windows11; synthetic canonical SQLite/HTTP and own Chromium where referenced; unexecuted real-world boundary remains explicit",
+      "limitations": [
+        "No useful running real daemon/Core/Connector cohort was observed across the feature toggle. HOME033 remains unexecuted; presentation separation alone does not qualify live continuity."
+      ],
+      "tests": [
+        "Actual presentation toggles send0mutations and preserve original controls in the scoped synthetic UI cuts."
+      ]
     },
     "HOME-T-I02": {
       "requirement": "Migrations aditivas preservam histórico e não exigem remoção de tabelas para reverter apresentação.",
@@ -1178,13 +1222,16 @@
       "evidence": [
         "plans/home_evolution/evidence/pr06-package/qualification.json",
         "plans/home_evolution/evidence/pr06-package-final/qualification.json",
-        "plans/home_evolution/evidence/pr06-package-namespaces/qualification.json"
+        "plans/home_evolution/evidence/pr06-package-namespaces/qualification.json",
+        "plans/home_evolution/evidence/pr10-package-server-final/qualification.json"
       ],
-      "commit": "d730cf96",
-      "environment": "Python3.13 -I independent cwd; actual installed wheel, real CLI/HTTP and synthetic native peers; no provider",
+      "commit": "3d95aad8",
+      "environment": "Python3.13 -I, independent cwd, actual final c1c45e2a wheel and Dcu4 static resources; three installed package origins/payloads verified",
       "limitations": [
-        "17 full CLI antecedents,33 corrected-package antecedents,4 namespace delta cases are separate cuts; counts overlap, do not add.",
-        "Real local harness remains separately consented HOME-033."
+        "Previous17/33/4/1 cuts remain antecedents;12 final cases do not rerun the full terminal lifecycle or constitute a provider campaign."
+      ],
+      "tests": [
+        "12 final installed cases:11 Server/project/native-context contract cases plus packaged asset/API contract. Twine wheel/sdist passed;2116 inputs unchanged."
       ]
     },
     "HOME-T-I05": {
