@@ -41,6 +41,16 @@ checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
 - O corte BGONN corrige o falso aviso de rascunho ao alternar Auto-scroll no
   terminal somente leitura. Quatro checks no navegador comprovam fechamento
   direto e preservação do guard para um formulário canônico realmente editado.
+- O inventário HTTP/SQLite paginado de Todos manteve dois bindings do mesmo
+  agente separados, incluindo pergunta bloqueada e resultado do outro contexto.
+  Um segundo projeto autorizado acrescentou um trabalho sem multiplicá-lo pelos
+  bindings; a filtragem de projeto preservou os totais anteriores.
+- A instrumentação instalada adicional de 1/10/100 agentes manteve55SQL em
+  entries/children/sessions, uma UoW somente leitura e zero writes/transcripts.
+  Esse corte tem três amostras quentes e apenas dois eventos; não substitui o
+  benchmark anterior de100.002 eventos nem aprova SLO. Fixtures persistidas
+  também comprovaram sessões técnicas sem atividade produtiva e resultado
+  SUCCEEDED separado do handoff aberto/cleanup pendente.
 - O onboarding usou HTTP/SQLite reais com Test peer sintético. Codex e Claude
   compartilharam o workspace, com duas identidades distintas e configuração da
   primeira intacta. Respostas perdidas foram recuperadas pelos mesmos IDs.

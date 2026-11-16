@@ -1,0 +1,8 @@
+{
+  "toolref": "525686",
+  "exit_code": 1,
+  "cause": "Test oracle accessed summary.running; entries summary has no such field. No product error asserted.",
+  "correction": "Compare explicit count of work entries whose display_state is running before/after passive session fixtures.",
+  "cleanup": "Fixture context exited normally (StreamableHTTP manager shutdown); no external process or provider invoked.",
+  "results_published": false
+}

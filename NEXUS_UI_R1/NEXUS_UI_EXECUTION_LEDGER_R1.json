@@ -1843,7 +1843,8 @@
         "T-DATA-05"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr03-entries-qualification.json"
+        "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
+        "NEXUS_UI_R1/execution/pr12-multi-connection-inventory-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates."
@@ -1962,7 +1963,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
-        "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json"
+        "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json",
+        "NEXUS_UI_R1/execution/pr12-multi-connection-inventory-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates."
@@ -2002,7 +2004,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
-        "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json"
+        "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json",
+        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates."
@@ -2040,7 +2043,8 @@
         "T-PERF-03"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr03-performance/qualification.json"
+        "NEXUS_UI_R1/execution/pr03-performance/qualification.json",
+        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json"
       ],
       "limitations": [
         "Measured bound O(N+relations), 55 SQL at1/10/100 agents. Large scenario misses500ms latency target; no native harness/browser performance claim."
@@ -2114,7 +2118,8 @@
         "T-PANEL-04"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json"
+        "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json",
+        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
@@ -2820,7 +2825,8 @@
         "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json",
         "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr09-native-zoom/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr09-native-zoom/qualification.json",
+        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json"
       ],
       "limitations": [
         "Native200% zoom focal PASS, com limitacao de captura CLI. Sem AT/speech ou scrollbackcrescente completo; p95maioracimade500ms; cobertura parcialnaoconcluietapa."
@@ -3399,17 +3405,21 @@
     },
     {
       "id": "T-DATA-04",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "SQLite/HTTP",
       "given": "Mesmo agente tem duas conexões/hosts no projeto.",
       "when": "Agrupar.",
       "expected": "Contextos distintos; nenhum estado único esconde a sessão bloqueada.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr12-multi-connection-inventory-qualification.json"
+      ],
       "tasks": [
         "UI-017"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Read facts seeded through existing fixture schema are not two real harnesses or two physical hosts.",
+        "One executor with two bindings; no proof of Windows task, remote connector, provider output, browser presentation or assistive technology.",
+        "Existing Starlette/httpx deprecation warning retained. No product, package, campaign pins, personal configuration or schema migration changed."
       ]
     },
     {
@@ -3519,18 +3529,22 @@
     },
     {
       "id": "T-DATA-12",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "unitário/SQLite",
       "given": "Sessões READY, OPENING, warm e cleanup sem turno.",
       "when": "Classificar atividade.",
       "expected": "Não contar como RUNNING produtivo; tipos técnicos disponíveis só como contexto.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json"
+      ],
       "tasks": [
         "UI-022",
         "UI-024"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Synthetic SQLite durable read facts; no native lifecycle/billing claim.",
+        "Warm/cleanup technical facts are not projected as activity; this does not qualify browser labels.",
+        "Three samples only diagnose query-growth, not production latency percentiles. Existing PR03 larger benchmark retained."
       ]
     },
     {
@@ -3550,17 +3564,21 @@
     },
     {
       "id": "T-DATA-14",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "unitário/SQLite",
       "given": "Turno SUCCEEDED mas handoff aberto ou cleanup pendente.",
       "when": "Projetar resultado.",
       "expected": "Sucesso do turno separado de handoff/limpeza; nenhum convite automático a repetir.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json"
+      ],
       "tasks": [
         "UI-022"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Synthetic SQLite durable read facts; no native lifecycle/billing claim.",
+        "Warm/cleanup technical facts are not projected as activity; this does not qualify browser labels.",
+        "Three samples only diagnose query-growth, not production latency percentiles. Existing PR03 larger benchmark retained."
       ]
     },
     {
@@ -3603,17 +3621,21 @@
     },
     {
       "id": "T-SCOPE-03",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/SQLite",
       "given": "Visão Todos e vários vínculos por agente.",
       "when": "Ler/paginar.",
       "expected": "União autorizada sem duplicar trabalho por vínculo.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr12-multi-connection-inventory-qualification.json"
+      ],
       "tasks": [
         "UI-020"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Read facts seeded through existing fixture schema are not two real harnesses or two physical hosts.",
+        "One executor with two bindings; no proof of Windows task, remote connector, provider output, browser presentation or assistive technology.",
+        "Existing Starlette/httpx deprecation warning retained. No product, package, campaign pins, personal configuration or schema migration changed."
       ]
     },
     {
@@ -5211,19 +5233,23 @@
     },
     {
       "id": "T-PERF-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "carga/instrumentação",
       "given": "Fixtures de 1/10/100 agentes.",
       "when": "Medir entries e expansão.",
       "expected": "Queries não crescem por agente; overview não traz transcripts ou consulta provedores.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json"
+      ],
       "tasks": [
         "UI-021",
         "UI-022",
         "UI-041"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Synthetic SQLite durable read facts; no native lifecycle/billing claim.",
+        "Warm/cleanup technical facts are not projected as activity; this does not qualify browser labels.",
+        "Three samples only diagnose query-growth, not production latency percentiles. Existing PR03 larger benchmark retained."
       ]
     },
     {
@@ -5557,6 +5583,14 @@
     {
       "at": "2026-11-16T23:08:02.829702+00:00",
       "event": "T-PANEL-09 PASS no escopo browser/HTTP/SQLite declarado. BGONN corrige apenas o guard de Auto-scroll readonly: quatro checks browser PASS, formulario canonico ainda protegido,300Node PASS e build. Pacote/proposta BXP congelados e nao alterados; sem migracao/provedor/instalacao pessoal. Nenhum gate amplo foi promovido por esses focais."
+    },
+    {
+      "at": "2026-11-16T23:10:16.772920+00:00",
+      "event": "T-DATA-04/T-SCOPE-03 PASS no nivel HTTP/SQLite: inventario paginado All com dois bindings do mesmo agente, estados irmaos separados e segundo projeto autorizado sem duplicar trabalho. Oraculo inicial e lint antecedentes preservados; sem produto/native/browser/AT ou migracao."
+    },
+    {
+      "at": "2026-11-16T23:12:15.170480+00:00",
+      "event": "T-PERF-01/T-DATA-12/T-DATA-14 PASS offline instalado BXP:55SQL em entries/children/sessions para1/10/100agentes;1readUoW/0writes/0transcripts. READY/OPENING/WARM/CLOSING semturno nao contam trabalho; resultadoSUCCEEDED correlacionado a handoffOPEN mantem cleanup separado. Tres amostras quentes sem100k eventos nao substituem benchmark anterior/SLO/browser. Oraculos/fixtures antecedentes preservados; produto e pins congelados intactos."
     }
   ],
   "risk_acceptances": [],

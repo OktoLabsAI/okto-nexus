@@ -1,0 +1,8 @@
+{
+  "toolref": "6f234a",
+  "exit_code": 1,
+  "cause": "Synthetic fixture invented message/delivery IDs without creating those parent records; SQLite correctly rejected delivery_outbox foreign keys.",
+  "correction": "Reuse existing ui-message-0/ui-delivery-0 parents as in canonical existing link_handoff test helper. No FK disabled or product change.",
+  "cleanup": "Fixture context exited normally; no external process or provider invoked.",
+  "results_published": false
+}
