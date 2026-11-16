@@ -1,0 +1,23 @@
+{
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "sqlite": "3.45.3",
+  "system": "Windows",
+  "release": "11",
+  "machine": "AMD64",
+  "processor": "Intel64 Family 6 Model 141 Stepping 1, GenuineIntel",
+  "cpus": 16,
+  "clock": "perf_counter; service.read only",
+  "warmup_per_series": 1,
+  "samples": 20,
+  "source_sha256": {
+    "src/okto_nexus/application/home_entries.py": "3ea1153b7a7412a1e714681e4f7f81b27b6ce0e36d76ab5977f004d0b573a348",
+    "src/okto_nexus/domain/home_entry_pages.py": "6e34e7d198fe9821d61591c2334753f35bb3f8a610a238afd1e01a27d24cf40e",
+    "src/okto_nexus/domain/home_entries.py": "df16b1f6c755983ec99fc380ce88661454c076289905d1a8855d47adb7161d22",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "710284fdfc2d8728905dabeb9b9aaa2af6eb8592227ec2baaa1a7e1e84b35342",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "67079e23ab7e357595a30eb880c3182d277adb68e7283bf2969553e2970467a2",
+    "src/okto_nexus/application/home.py": "33d6e8a65ef0feb18e9128b37728d7e82aed930517cd6b74225bbaf25de4cb43",
+    "src/okto_nexus/adapters/outbound/sqlite/attention.py": "f04de2cd2db9e7e830d8738133157e08e9c8c67bae19a9708d2e39e41e394e88",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "NEXUS_UI_R1/execution/pr03-performance/measure.py": "0a502e5c900ac50c4e5e200a1e03495072acfb9a8e9ace109a20eb5d81c16053"
+  }
+}

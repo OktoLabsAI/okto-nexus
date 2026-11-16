@@ -1995,7 +1995,7 @@
       "id": "UI-022",
       "pr": "PR-03",
       "title": "Qualificar consultas e semântica de estados",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-021"
       ],
@@ -2022,8 +2022,12 @@
         "T-PERF-02",
         "T-PERF-03"
       ],
-      "evidence": [],
-      "limitations": []
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr03-performance/qualification.json"
+      ],
+      "limitations": [
+        "Measured bound O(N+relations), 55 SQL at1/10/100 agents. Large scenario misses500ms latency target; no native harness/browser performance claim."
+      ]
     },
     {
       "id": "UI-023",
