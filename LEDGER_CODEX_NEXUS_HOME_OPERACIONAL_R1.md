@@ -116,3 +116,9 @@ e estados técnicos READY/OPENING/cleanup sem turno produtivo. Produto e wheel
 permanecem iguais; são deltas de testes. Ledger atual:61PASS/12NOT_RUN.
 A08 permanece sem produtor global canônico exercitado; não foi criada uma
 linha inválida para simular esse aceite. Evidências `pr07-stream` e `pr07-scope`.
+
+A fronteira snapshot/SSE real passou nas três fases de commit/reconnect/gap,
+com cliente e servidor próprios encerrados. O interrupt exato passou com duas
+sessões e peers sintéticos: irmã intacta, cleanup canônico e saída física de
+ambos comprovados, com códigos reais1/1. A regressão frontend inteira passou
+204/204. Ledger atual:63PASS/10NOT_RUN. Produto e candidato pago não mudaram.

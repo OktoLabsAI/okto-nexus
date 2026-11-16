@@ -2,7 +2,7 @@
   "schema_version": 1,
   "plan": "plans/home_evolution/source-plan.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
-  "updated_at": "2026-11-15T23:30:26.520436+00:00",
+  "updated_at": "2026-11-16T14:28:42.597295+00:00",
   "scenarios": {
     "HOME-T-A01": {
       "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
@@ -413,11 +413,19 @@
     },
     "HOME-T-C10": {
       "requirement": "Interromper usa a sessão/turno selecionados e contrato atual; não encerra todos os processos do agente.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-interrupt/qualification.json"
+      ],
+      "commit": "b82a36f2 + test-only interrupt scope qualification",
+      "environment": "Real migrated SQLite/ASGI/Core admission with two own Python JSON-RPC fake peers; no provider or real account",
+      "limitations": [
+        "Home target resolution and canonical command boundary, not browser click.",
+        "Both fake peers physically exited with actual codes1/1; no exit0 claim."
+      ],
+      "tests": [
+        "test_home_exact_target_interrupt_leaves_sibling_turn_and_process_alive"
+      ]
     },
     "HOME-T-D01": {
       "requirement": "Turno SUCCEEDED sem handoff_complete não aparece como handoff concluído.",

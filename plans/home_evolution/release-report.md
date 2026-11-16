@@ -218,3 +218,13 @@ O HomeController de produção fez fetch HTTP real e observou1→2→3 atividade
 com pico de1GET concorrente. Cliente Node e fixture Uvicorn encerraram fisicamente
 com código0. Ruff do sistema PASS; sem React/browser EventSource ou provedor
 declarados. Ver `evidence/pr07-stream-boundary/`. Ledger:62PASS/11NOT_RUN.
+
+## Interrupção com isolamento de sessão
+
+O novo teste C10 passou na fronteira HTTP/SQLite/Core real, com dois peers
+Python JSON-RPC sintéticos: HomeTarget resolve o alvo exato, sessão forjada é
+recusada, turno obsoleto não tem efeito, interrupt cancela somente o selecionado
+e a sessão irmã conserva turno, receipt e processo vivos. Cleanup usa interrupt
+e close canônicos, com saída física dos dois peers comprovada por wait; códigos
+reais1/1 preservados, sem alegar0. Ruff/diff-check PASS. Não é prova de clique
+no browser nem inferência real. Ver `evidence/pr07-interrupt/`. Ledger:63PASS/10NOT_RUN.

@@ -1,0 +1,70 @@
+{
+  "status": "PASS",
+  "scenario": "HOME-T-C10",
+  "command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest -q tests/home_evolution/test_home_interrupt_scope.py -o junit_family=legacy --junitxml=<own Temp XML>",
+  "tool_ref": "b0df80",
+  "exit_code": 0,
+  "tests": 1,
+  "failures": 0,
+  "seconds": "14.572",
+  "source_pins": {
+    "tests/home_evolution/test_home_interrupt_scope.py": "d47d0712af23c776820171b8d1116001a4fb432632b59ee646c291fa2b739a3b",
+    "tests/execution_r4/test_embedded_dispatch.py": "3a4c8b265729482a86b7c77d0a3f3ff3e794fe3934ecb440de1fc082bf199324",
+    "tests/execution_r4/test_canonical_native_protocol_regressions.py": "db3aed23a3acc3fd3e954566706f6c73f7fd65149fe4774814c8e4beee05d323",
+    "tests/test_harness_codex_connector.py": "ed6cb4bafaed47899f10534934c1458fcc2d07b1467803cf0c42354b51551bf3",
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "f7a20338a6638c1abd3038138c13dc794c5ea7c404bac3284cff4b300343aa6f",
+    "src/okto_nexus/adapters/inbound/http/home.py": "41d51cbb0d63091ddce429698fae5203404e4a280cbf89462d3184187bf7398e"
+  },
+  "raw_xml_sha256": "8579e813a65fbd65e11d700bc2a7ba9693ee982784f01368ee122b996be4eb65",
+  "owned_fake_peer_physical_exits": [
+    {
+      "pid": 40692,
+      "exit_code": 1
+    },
+    {
+      "pid": 35120,
+      "exit_code": 1
+    }
+  ],
+  "assertions": [
+    "Two distinct admitted native sessions and two Python pipe-peer PIDs; native IDs need not be globally unique.",
+    "Real Home work projection emits selected operation target; canonical target resolver returns exact identity and rejects forged sibling session with404.",
+    "Stale expected_turn_id produces FAILED/possible_effect false.",
+    "Real public interrupt route with selected session/current native turn produces one wire interrupt at selected PID and CANCELLED selected turn.",
+    "Sibling native turn remains unchanged, executor stage SUBMITTED, lease ACTIVE/lifecycle READY, process still alive, zero sibling interrupt operations before cleanup.",
+    "Replay returns original operation identity.",
+    "After assertions, explicit canonical sibling interrupt/cancel and both session closes finish; retained Popen.wait proves physical exit of both peers."
+  ],
+  "cleanup_semantics": "Exit code1 is recorded, not relabeled0: canonical adapter close may terminate a pipe process. Physical exit is proved, not graceful fake-peer shutdown.",
+  "process_inventory": {
+    "tool_ref": "e094d9",
+    "python_command_contains_fixture_pid_after_run": []
+  },
+  "ruff": {
+    "tool_ref": "6e4a4b",
+    "exit_code": 0
+  },
+  "effects": {
+    "provider_calls": 0,
+    "personal_authentication": false,
+    "real_codex_executable": false,
+    "tcp_listener": false
+  },
+  "limitations": [
+    "Real SQLite/ASGI/admission/Core dispatch with scripted Python JSON-RPC native peers; not a real provider/harness campaign.",
+    "Home target routing and public canonical control API are exercised, not a browser click in Home.",
+    "Existing Starlette/httpx deprecation warning; no dependency modification."
+  ],
+  "antecedents": [
+    {
+      "tool_ref": "9603d7",
+      "status": "PASS",
+      "scope": "Original file with physical wait assertion; overlapping case, do not add count."
+    },
+    {
+      "tool_ref": "e336cf",
+      "status": "FAIL",
+      "scope": "Added test-only exit0 assertion failed after all isolation assertions passed; actual close code1. Corrected assertion to physical-exit requirement, preserving actual exit metadata. No product change."
+    }
+  ]
+}
