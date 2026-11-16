@@ -28,7 +28,7 @@ checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
 
 - O ledger é a fonte de status por cenário. Testes parcialmente cobertos mantêm
   NOT_RUN ou BLOCKED; ter arquivos de implementação não os transforma em PASS.
-- O frontend completo tem 297 testes Node aprovados no corte CIXUIG91 e
+- O frontend completo tem 299 testes Node aprovados no corte BXpHvePH e
   TypeScript/Vite aprovados. Node/SSR não são navegador nem leitor de tela.
 - A Home teve 19 checks de navegador no corte dfy1, mais oito checks humanos de
   formulário/guard/CAS no corte vmh. Duas abas enviaram decisões reais à API,
@@ -54,6 +54,12 @@ checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
   receipt atual de supervisor; as falhas UNKNOWN permanecem registradas. Não é
   qualificação de tarefa nativa do Windows, trabalho ativo sobrevivendo ou
   rollback de UI. Ver `evidence/pr07-service/scenario-audit.md`.
+- As fixtures do wizard foram depois atualizadas para modelar explicitamente a
+  observação do parent na mesma fronteira nativa já simulada. Wizard/supervisor
+  tiveram 36 PASS e uma falha do novo oráculo; o focal corrigido passou. O novo
+  negativo comprova recusa quando falta a prova do parent, sem enfraquecer o
+  guard de produção. O teste instalado de doctor ausente também passou, sem
+  criar home, executar provider ou autoiniciar o Server.
 - Ruff focal passou. Ruff global falhou com 23.912 erros, incluindo código
   legado, cópias geradas e drivers de evidência. Não há alegação de lint global
   limpo nem classificação automática de todos esses erros como preexistentes.
@@ -81,8 +87,12 @@ cenário e mantém a entrega em andamento.
    por peers locais. Não há declaração de suporte universal de plataforma/harness.
 3. UI-043 requer uma pessoa sem conhecimento da arquitetura executando o roteiro;
    navegação automática não mede compreensão humana.
-4. Leitor de tela real e zoom nativo de 200% não foram comprovados. Viewport de
-   360 px foi exercitado, mas não substitui essas qualificações.
+4. Leitor de tela real não foi comprovado. O zoom nativo de 200% foi exercitado
+   depois por `chrome.tabs.setZoom/getZoom=2`, em extensão/perfil temporários
+   próprios: mesma janela, innerWidth 1424→712 e DPR 1→2, sem overflow geométrico
+   da Home e com fechamento do painel alcançável. Capturas CLI recortam o
+   viewport físico nesse modo; inspeção visual completa e scrollback ao vivo não
+   foram certificados por essa captura. Viewport de 360 px também foi exercitado.
 5. A medição de 100 agentes/1.000 atividades/100.002 eventos registrou p95 de
    1.225,94 ms para a leitura inicial, acima da meta proposta de 500 ms; expansão
    teve p95 de 1.031,41 ms. Foram 55 SQLs/uma UoW/zero writes na leitura inicial.

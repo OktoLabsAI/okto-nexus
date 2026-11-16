@@ -1756,7 +1756,8 @@
       "evidence": [
         "NEXUS_UI_R1\\execution\\pr02-session-intent-qualification.json",
         "NEXUS_UI_R1/execution/pr06-catalog-convergence-qualification.json",
-        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json"
+        "NEXUS_UI_R1/execution/pr02-final-contract-focals.json",
+        "NEXUS_UI_R1/execution/pr07-doctor-qualification.json"
       ],
       "limitations": [
         "Lifecycle/discovery/version/provider setup-test are synthetic; no real harness binary, provider login, paid inference, personal credentials or installation.",
@@ -2670,7 +2671,8 @@
         "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
-        "NEXUS_UI_R1/execution/pr07-login-fixture-qualification.json"
+        "NEXUS_UI_R1/execution/pr07-login-fixture-qualification.json",
+        "NEXUS_UI_R1/execution/pr07-doctor-qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
@@ -2806,10 +2808,11 @@
         "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json",
         "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr09-native-zoom/qualification.json"
       ],
       "limitations": [
-        "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos."
+        "Native200% zoom focal PASS, com limitacao de captura CLI. Sem AT/speech ou scrollbackcrescente completo; p95maioracimade500ms; cobertura parcialnaoconcluietapa."
       ]
     },
     {
@@ -2921,7 +2924,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json",
-        "NEXUS_UI_R1/execution/release-report.md"
+        "NEXUS_UI_R1/execution/release-report.md",
+        "NEXUS_UI_R1/execution/pr07-doctor-qualification.json"
       ],
       "limitations": []
     },
@@ -4510,20 +4514,21 @@
     },
     {
       "id": "T-CLI-13",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "CLI",
       "given": "Server ausente.",
       "when": "connect --plan, status ou doctor.",
       "expected": "Não autostart nem probe/inferência; limite relatado corretamente.",
       "evidence": [
-        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md"
+        "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
+        "NEXUS_UI_R1/execution/pr07-doctor-qualification.json"
       ],
       "tasks": [
         "UI-015",
         "UI-044"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Instalado Windows3.13, Server/home ausente; variantes plan/status/doctor sem inferencia/autostart. Nao e restart/live-work/login."
       ]
     },
     {
@@ -4956,21 +4961,22 @@
     },
     {
       "id": "T-SVC-04",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "integração/lifecycle",
       "given": "Comando de leitura/plano e serviço ausente.",
       "when": "status/doctor/plan.",
       "expected": "Sem autostart/inferência; checkpoints declarados somente nos comandos que os admitem.",
       "evidence": [
         "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
-        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
+        "NEXUS_UI_R1/execution/pr07-doctor-qualification.json"
       ],
       "tasks": [
         "UI-015",
         "UI-044"
       ],
       "limitations": [
-        "Cenario completo permanece NOT_RUN. Faixa13PASS/3FAIL de fixture cobre apenas os subconjuntos explicitados em scenario-audit.md; sem nativeWindows-login/work-active/rollbackqualif."
+        "Instalado Windows3.13, Server/home ausente; variantes plan/status/doctor sem inferencia/autostart. Nao e restart/live-work/login."
       ]
     },
     {
@@ -5141,13 +5147,15 @@
       "given": "Output ao vivo, zoom 200% e 360px.",
       "when": "Ler/pausar/scrollback.",
       "expected": "Ações alcançáveis, avisos agrupados, estado com texto e sem perda de leitura.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr09-native-zoom/qualification.json"
+      ],
       "tasks": [
         "UI-032",
         "UI-041"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Zoom NATIVO200% comprovado viaAPIChrome e geometria/acoes,360px emoutrocut. CapturaCLIrecorta viewportfisico; AT/speech/scrollbackao vivo e cenariointeiro ainda NAOverificados."
       ]
     },
     {
@@ -5157,12 +5165,14 @@
       "given": "Leitor de tela real/ponte do SO indisponível.",
       "when": "Qualificar acessibilidade.",
       "expected": "Registrar bloqueio; resultado Node/DOM não é promovido a campanha assistiva real.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr09-native-zoom/qualification.json"
+      ],
       "tasks": [
         "UI-041"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Zoom NATIVO200% comprovado viaAPIChrome e geometria/acoes,360px emoutrocut. CapturaCLIrecorta viewportfisico; AT/speech/scrollbackao vivo e cenariointeiro ainda NAOverificados."
       ]
     },
     {
@@ -5229,17 +5239,21 @@
     },
     {
       "id": "T-QUAL-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "campanha/usuário",
       "given": "Fixture reproduzível de jornada.",
       "when": "Executar sem produção.",
       "expected": "Trabalhos, perguntas e resultados controlados com evidência por cenário.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr00-fixture-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json",
+        "NEXUS_UI_R1/execution/fixture-contract.md"
+      ],
       "tasks": [
         "UI-005"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Jornada de fixture controlada, explicitamente sem producao; nao qualifica UI042/harness/provedor real nem compreensao humana."
       ]
     },
     {
