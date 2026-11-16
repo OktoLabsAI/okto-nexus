@@ -1,0 +1,536 @@
+{
+  "status": "THREE_SCENARIOS_GIVEN_WHEN_EXPECTED_SUPPORTED_WITH_PRESERVED_RUNNER_ANTECEDENTS",
+  "scenarios": {
+    "T-HOME-05": {
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "T-HOME-05",
+          "name": "All includes canonical connection with no session and another connection with work",
+          "status": "PASS",
+          "idle": {
+            "id": "home_entry_5f9cb0a923644f7d4c0b709c7a169761a64c9c34a1be52954dcb45c8d6de6b5f",
+            "kind": "connection",
+            "source_ref": {
+              "type": "connection",
+              "id": "ui12-idle-binding",
+              "revision": "aee9bc855391a7c05516eafe9568a6c5b66c95ba379c295fa869d76ae85da636"
+            },
+            "workspace_id": "ws",
+            "agent_id": "subject",
+            "title": "Connection",
+            "agent_label": null,
+            "harness_label": "codex_app_server",
+            "host_label": null,
+            "display_state": "configured",
+            "evidence": "confirmed",
+            "state_since": null,
+            "sessions": [],
+            "sessions_total": 0,
+            "has_more_sessions": false,
+            "sessions_cursor": null,
+            "attention_preview": [],
+            "attention_total": 0,
+            "has_more_attention": false,
+            "attention_cursor": null,
+            "results_preview": [],
+            "results_total": 0,
+            "has_more_results": false,
+            "results_cursor": null,
+            "related_coverage": {
+              "attention": "ready",
+              "results": "ready"
+            },
+            "attention_refs": [],
+            "result_refs": [],
+            "target": {
+              "kind": "connection",
+              "server_id": "srv_7a363a3336d72c60d31f079d1ae56dbb",
+              "executor_id": "exe_2fc070c04a404bcb5de22f9297f1d997",
+              "workspace_id": "ws",
+              "binding_id": "ui12-idle-binding",
+              "agent_id": "subject"
+            },
+            "result_tracking": "not_applicable",
+            "actions": [
+              {
+                "kind": "inspect",
+                "target": {
+                  "kind": "connection",
+                  "server_id": "srv_7a363a3336d72c60d31f079d1ae56dbb",
+                  "executor_id": "exe_2fc070c04a404bcb5de22f9297f1d997",
+                  "workspace_id": "ws",
+                  "binding_id": "ui12-idle-binding",
+                  "agent_id": "subject"
+                }
+              }
+            ],
+            "external": [],
+            "as_of": "2026-11-16T23:12:33.440422Z",
+            "next_refresh_at": "2026-11-16T23:12:48.440422Z"
+          },
+          "work": {
+            "id": "home_32b18b529f10a26f9be5b921370bac85a7b0aa682aad7b1d9496ab884052052e",
+            "kind": "work",
+            "source_ref": {
+              "id": "ui-handoff-0",
+              "revision": "7fe658f70a625b8f1154b4cb9bf62e747500cc72cfc538d3d89cbe406b46144f",
+              "type": "handoff"
+            },
+            "workspace_id": "ws",
+            "agent_id": "subject",
+            "title": "Handoff",
+            "agent_label": null,
+            "harness_label": "codex_app_server",
+            "host_label": null,
+            "display_state": "awaiting_owner",
+            "evidence": "confirmed",
+            "state_since": "2026-11-16T23:12:33.440422Z",
+            "sessions": [
+              {
+                "server_id": "srv_7a363a3336d72c60d31f079d1ae56dbb",
+                "executor_id": "exe_2fc070c04a404bcb5de22f9297f1d997",
+                "workspace_id": "ws",
+                "session_id": "ses_9adef94a5a1f2e96389111fbee086458"
+              },
+              {
+                "server_id": "srv_7a363a3336d72c60d31f079d1ae56dbb",
+                "executor_id": "exe_2fc070c04a404bcb5de22f9297f1d997",
+                "workspace_id": "ws",
+                "session_id": "ui04-second-exact-session"
+              }
+            ],
+            "sessions_total": 2,
+            "has_more_sessions": false,
+            "sessions_cursor": null,
+            "attention_preview": [
+              {
+                "active": true,
+                "agent_id": "subject",
+                "allowed_actions": [
+                  "inspect_approval",
+                  "review_authority"
+                ],
+                "attention_id": "att_22a057898d4db5da98c93d83a81b892e346bfb1ae62665e291f290acb1e85d06",
+                "category": "action_required",
+                "executor_id": "exe_2fc070c04a404bcb5de22f9297f1d997",
+                "first_detected_at": "2026-11-16T23:12:37.526000+00:00",
+                "freshness": "current",
+                "kind": "execution_authority_blocking",
+                "last_changed_at": "2026-11-16T23:12:37.526000+00:00",
+                "message_id": null,
+                "next_change_at": null,
+                "operation_id": "op_62a337135d0a71872d5b171312fa0210",
+                "priority": 30,
+                "resolution": "open",
+                "result_id": null,
+                "seen_state": {
+                  "revision": 0,
+                  "seen": false,
+                  "seen_at": null,
+                  "snoozed": false,
+                  "snoozed_until": null
+                },
+                "session_id": "ses_9adef94a5a1f2e96389111fbee086458",
+                "severity": "warning",
+                "source_id": "r4request_669abf18089cd66d12876fbc3f05d7a26fde7089557441a5dd450104ab44079b",
+                "source_revision": "63c2dcea02c5dba2ffbe7181c6ef69552b5efca50969e512ea9fe0c5c329f56d",
+                "source_type": "execution_native_request",
+                "summary_code": "execution_authority_blocking",
+                "workspace_id": "ws"
+              },
+              {
+                "active": true,
+                "agent_id": "subject",
+                "allowed_actions": [
+                  "inspect_approval"
+                ],
+                "attention_id": "att_45282059ebed277dfccf36387b4261380d919e7e09e9345dc12569c6ac063889",
+                "category": "watch",
+                "executor_id": "exe_2fc070c04a404bcb5de22f9297f1d997",
+                "first_detected_at": "2026-11-16T23:12:37.479000+00:00",
+                "freshness": "stale",
+                "kind": "question_waiting_for_agent",
+                "last_changed_at": "2026-11-16T23:12:37.479000+00:00",
+                "message_id": null,
+                "next_change_at": "2026-11-16T23:14:33.440422+00:00",
+                "operation_id": "op_62a337135d0a71872d5b171312fa0210",
+                "priority": 10,
+                "resolution": "open",
+                "result_id": null,
+                "seen_state": {
+                  "revision": 0,
+                  "seen": false,
+                  "seen_at": null,
+                  "snoozed": false,
+                  "snoozed_until": null
+                },
+                "session_id": "ses_9adef94a5a1f2e96389111fbee086458",
+                "severity": "info",
+                "source_id": "r4request_669abf18089cd66d12876fbc3f05d7a26fde7089557441a5dd450104ab44079b",
+                "source_revision": "0665137ad7877bc986237b83b7afd96e5ba717b733b791ae4300718097b46da5",
+                "source_type": "execution_native_request",
+                "summary_code": "question_waiting_for_agent",
+                "workspace_id": "ws"
+              }
+            ],
+            "attention_total": 2,
+            "has_more_attention": false,
+            "attention_cursor": null,
+            "results_preview": [],
+            "results_total": 0,
+            "has_more_results": false,
+            "results_cursor": null,
+            "related_coverage": {
+              "attention": "ready",
+              "results": "ready"
+            },
+            "attention_refs": [
+              "att_22a057898d4db5da98c93d83a81b892e346bfb1ae62665e291f290acb1e85d06",
+              "att_45282059ebed277dfccf36387b4261380d919e7e09e9345dc12569c6ac063889"
+            ],
+            "result_refs": [],
+            "target": {
+              "handoff_id": "ui-handoff-0",
+              "kind": "handoff",
+              "server_id": "srv_7a363a3336d72c60d31f079d1ae56dbb",
+              "workspace_id": "ws"
+            },
+            "result_tracking": "not_applicable",
+            "actions": [
+              {
+                "kind": "inspect",
+                "target": {
+                  "handoff_id": "ui-handoff-0",
+                  "kind": "handoff",
+                  "server_id": "srv_7a363a3336d72c60d31f079d1ae56dbb",
+                  "workspace_id": "ws"
+                }
+              },
+              {
+                "kind": "attention",
+                "attention_id": "att_22a057898d4db5da98c93d83a81b892e346bfb1ae62665e291f290acb1e85d06",
+                "action": "inspect_approval"
+              },
+              {
+                "kind": "attention",
+                "attention_id": "att_22a057898d4db5da98c93d83a81b892e346bfb1ae62665e291f290acb1e85d06",
+                "action": "review_authority"
+              },
+              {
+                "kind": "attention",
+                "attention_id": "att_45282059ebed277dfccf36387b4261380d919e7e09e9345dc12569c6ac063889",
+                "action": "inspect_approval"
+              }
+            ],
+            "external": [],
+            "as_of": "2026-11-16T23:12:33.440422Z",
+            "next_refresh_at": "2026-11-16T23:12:48.440422Z"
+          },
+          "summary": {
+            "activities": {
+              "value": 5,
+              "total_is_exact": true,
+              "unit": "activities"
+            },
+            "external_instances": {
+              "value": 1,
+              "total_is_exact": true,
+              "unit": "external_instances"
+            },
+            "occurrences": {
+              "value": 1,
+              "total_is_exact": true,
+              "unit": "occurrences"
+            },
+            "sessions": {
+              "value": 4,
+              "total_is_exact": true,
+              "unit": "sessions"
+            },
+            "results": {
+              "value": 1,
+              "total_is_exact": true,
+              "unit": "results"
+            },
+            "unseen_results": {
+              "value": null,
+              "total_is_exact": false,
+              "unit": "results"
+            }
+          },
+          "inventory": {
+            "connections": {
+              "value": 3,
+              "total_is_exact": true,
+              "unit": "connections"
+            }
+          }
+        },
+        {
+          "id": "T-HOME-05",
+          "name": "both exact contexts are reachable and passive connection adds no execution",
+          "status": "PASS"
+        }
+      ]
+    },
+    "T-HOME-07": {
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "T-HOME-07",
+          "name": "literal same-scope Refresh shows partiality while valid sources remain",
+          "status": "PASS",
+          "source_status": {
+            "attention": "ready",
+            "work": "ready",
+            "results": "unavailable",
+            "connections": "ready",
+            "sessions": "ready",
+            "correlations": "ready",
+            "external": "ready"
+          },
+          "total": null,
+          "inventory": {
+            "connections": {
+              "value": 3,
+              "total_is_exact": true,
+              "unit": "connections"
+            }
+          }
+        }
+      ]
+    },
+    "T-HOME-10": {
+      "status": "PASS",
+      "checks": [
+        {
+          "name": "T-HOME-10 canonical all-project and project Attention are both exact zero",
+          "status": "PASS",
+          "canonical": {
+            "global": {
+              "status": 200,
+              "body": {
+                "ok": true,
+                "data": {
+                  "total": 0,
+                  "snapshot_revision": "63e9013a4eb996a4c197721e2c11973eafa2c368b385d6ca4331741e02cc5094",
+                  "counts": {
+                    "action_required": 0,
+                    "watch": 0,
+                    "priority": {
+                      "10": 0,
+                      "20": 0,
+                      "30": 0
+                    },
+                    "unseen": 0,
+                    "snoozed": 0
+                  },
+                  "event_cursor": 0,
+                  "event_low_watermark": null,
+                  "version": 1,
+                  "filters": {
+                    "state": "active",
+                    "seen": "all"
+                  },
+                  "observed_at": "2026-11-16T23:15:36.561331+00:00",
+                  "next_refresh_at": "2026-11-16T23:15:51.561331+00:00",
+                  "refresh_after_seconds": 15
+                }
+              }
+            },
+            "project": {
+              "status": 200,
+              "body": {
+                "ok": true,
+                "data": {
+                  "total": 0,
+                  "snapshot_revision": "63e9013a4eb996a4c197721e2c11973eafa2c368b385d6ca4331741e02cc5094",
+                  "counts": {
+                    "action_required": 0,
+                    "watch": 0,
+                    "priority": {
+                      "10": 0,
+                      "20": 0,
+                      "30": 0
+                    },
+                    "unseen": 0,
+                    "snoozed": 0
+                  },
+                  "event_cursor": 0,
+                  "event_low_watermark": null,
+                  "version": 1,
+                  "filters": {
+                    "workspace_id": "ws",
+                    "state": "active",
+                    "seen": "all"
+                  },
+                  "observed_at": "2026-11-16T23:15:36.619067+00:00",
+                  "next_refresh_at": "2026-11-16T23:15:51.619067+00:00",
+                  "refresh_after_seconds": 15
+                }
+              }
+            }
+          },
+          "server_attention": {
+            "status": "ready",
+            "items": [],
+            "total": 0,
+            "total_is_exact": true,
+            "has_more": false
+          },
+          "summary": {
+            "activities": {
+              "value": 0,
+              "total_is_exact": true,
+              "unit": "activities"
+            },
+            "external_instances": {
+              "value": 0,
+              "total_is_exact": true,
+              "unit": "external_instances"
+            },
+            "occurrences": {
+              "value": 0,
+              "total_is_exact": true,
+              "unit": "occurrences"
+            },
+            "sessions": {
+              "value": 0,
+              "total_is_exact": true,
+              "unit": "sessions"
+            },
+            "results": {
+              "value": 0,
+              "total_is_exact": true,
+              "unit": "results"
+            },
+            "unseen_results": {
+              "value": 0,
+              "total_is_exact": true,
+              "unit": "results"
+            }
+          }
+        },
+        {
+          "name": "zero Attention creates no empty Server or Needs you panel",
+          "status": "PASS"
+        },
+        {
+          "name": "Needs you filter remains accessible at zero",
+          "status": "PASS",
+          "needs": {
+            "version": 1,
+            "scope": {
+              "workspace_id": "ws",
+              "quick": "needs_you",
+              "include_recent_results": false
+            },
+            "server_id": "srv_537a2d0fe8c316e3fd756aa2ebd8840f",
+            "generated_at": "2026-11-16T23:15:37.274128Z",
+            "snapshot_id": "ccbf99c1e869deea52ad6438516a57115f7cad3b23bcaa6e78763e256259677c",
+            "revision": "ccbf99c1e869deea52ad6438516a57115f7cad3b23bcaa6e78763e256259677c",
+            "partition": "groups",
+            "group_id": null,
+            "entry_id": null,
+            "status": "ready",
+            "source_status": {
+              "attention": "ready",
+              "work": "ready",
+              "results": "ready",
+              "connections": "ready",
+              "sessions": "ready",
+              "correlations": "ready",
+              "external": "ready"
+            },
+            "items": [],
+            "total": 0,
+            "total_is_exact": true,
+            "has_more": false,
+            "inventory": {
+              "connections": {
+                "value": 0,
+                "total_is_exact": true,
+                "unit": "connections"
+              }
+            },
+            "coverage": {
+              "result_tracking": "ready"
+            },
+            "next_cursor": null,
+            "as_of": "2026-11-16T23:15:37.274128Z",
+            "next_refresh_at": "2026-11-16T23:15:52.274128Z",
+            "server_attention": {
+              "status": "ready",
+              "items": [],
+              "total": 0,
+              "total_is_exact": true,
+              "has_more": false
+            },
+            "summary": {
+              "activities": {
+                "value": 0,
+                "total_is_exact": true,
+                "unit": "activities"
+              },
+              "external_instances": {
+                "value": 0,
+                "total_is_exact": true,
+                "unit": "external_instances"
+              },
+              "occurrences": {
+                "value": 0,
+                "total_is_exact": true,
+                "unit": "occurrences"
+              },
+              "sessions": {
+                "value": 0,
+                "total_is_exact": true,
+                "unit": "sessions"
+              },
+              "results": {
+                "value": 0,
+                "total_is_exact": true,
+                "unit": "results"
+              },
+              "unseen_results": {
+                "value": 0,
+                "total_is_exact": true,
+                "unit": "results"
+              }
+            },
+            "event_cursor": 0,
+            "event_low_watermark": null
+          }
+        }
+      ],
+      "queue_continuation": {
+        "status": "PASS",
+        "name": "Canonical global bell opens actual Attention queue with no matching items",
+        "heading": "Attention",
+        "empty": true,
+        "globalBadge": "0",
+        "body": "All projects and Server incidents. The project selector does not filter this queue.\n\nAttention\n\nReview pending decisions, blocked work and results.\n\nRefresh\nFilter attention\nAgent ID\nCategory\nAll categories\nNeeds action\nWatch\nKind\nAll kinds\nApproval awaiting review\nRuntime permission requested\nRuntime question for the operator\nQuestion waiting for an agent\nHandoff awaiting verification\nExecution outcome unknown\nDelivery needs attention\nRuntime recovery needs attention\nExecution authorization changed\nExecution host disconnected\nHandoff still unclaimed\nResult ready to inspect\nCleanup needs inspection\nExternal instance awaiting input\nExternal completion observed\nExternal report expired\nState\nActive attention\nOpen at source\nResolved at source\nExpired\nAll states\nPriority\nAll priorities\nHigh\nMedium\nStandard\nViewing state\nSeen and unseen\nUnseen\nSeen\nSnoozed\n\nSeen only records that you reviewed an item. Snooze hides attention temporarily; it does not approve, pause or resolve work.\n\n0 matching items \u00b7 0 shown\n\nSnapshot just now \u00b7 Live updates\n\nNo attention items match this view\n\nTry another filter to inspect seen, snoozed or historical items."
+      },
+      "raw_runner_status": "FAIL",
+      "raw_runner_reason": "locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('heading', { name: 'Needs attention', exact: true }) to be visible\u001b[22m\n",
+      "limit": "Incorrect heading locator timed out after bell opened; actual queue validated separately in same browser/fixture. Earlier observations-disabled fixture was partial/unknown, preserved as antecedent."
+    }
+  },
+  "cleanup": {
+    "browser46844_close_exit": 0,
+    "browser46844_absent": true,
+    "native_session68522_exit": 0,
+    "empty_antecedent_session38926_exit": 0,
+    "empty_final_session34884_exit": 0,
+    "listeners54592_50072_56285_absent": true,
+    "shared_wss_lifespan_factories_closed": true,
+    "forced_kill": false
+  },
+  "dependency_sha256": {
+    "NEXUS_UI_R1/execution/evidence/pr04-browser/fixture.py": "f775aff38cc7fccbfcea3381bac12239769595b36035140f51c77b4c1493c083",
+    "NEXUS_UI_R1/execution/evidence/pr04-browser/empty-fixture.py": "4fb8f883db7e805f780d2fc221b8c0dc7c557897a7f358916350fe876787924b",
+    "NEXUS_UI_R1/execution/evidence/pr10-home-fences/fixture.py": "500d90d26663287717124a1aa3096b706d8925ea64b4d10415c587ee1155915f",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20"
+  }
+}

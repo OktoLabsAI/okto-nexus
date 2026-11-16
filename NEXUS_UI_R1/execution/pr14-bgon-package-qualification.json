@@ -1,0 +1,65 @@
+{
+  "status": "PASS_PRESENTATION_PACKAGE_DELTA_ONLY",
+  "own_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-bgon-package-5wwdklas",
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "isolated": 1,
+  "origins": {
+    "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-bgon-package-5wwdklas\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+    "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-bgon-package-5wwdklas\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+    "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-bgon-package-5wwdklas\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py"
+  },
+  "versions": {
+    "okto-nexus": "0.3.5",
+    "okto-nexus-connector": "0.0.13",
+    "okto-nexus-connector-core": "0.0.14"
+  },
+  "artifacts": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-bgon-package-5wwdklas\\artifacts\\okto_nexus-0.3.5-py3-none-any.whl": "070e10fcace001a8c267daeb03052e10a69af54b3ce3829e84527f7d0f8d0b31",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-bgon-package-5wwdklas\\artifacts\\okto_nexus-0.3.5.tar.gz": "6a2d6ad850f594b83c4bfa74a9edc348f9db22d5762151b3cfaace579d31ebac"
+  },
+  "antecedent_bxp_wheel_sha256": "544c48099db0793c66af54a48c70585e620fb0e56e02b145ab1bb38e5e743a64",
+  "unchanged_python_files": 538,
+  "python_mismatches": [],
+  "unchanged_nonstatic_module_payload_files": 708,
+  "installed_payloads_byte_equal_to_wheel": 715,
+  "static_files_byte_equal_to_checkout": 7,
+  "product_changes_vs_bxp": [
+    "okto_nexus/adapters/inbound/http/static/index.html"
+  ],
+  "zip_members_removed": [
+    "okto_nexus/adapters/inbound/http/static/assets/index-BXpHvePH.js"
+  ],
+  "zip_members_added": [
+    "okto_nexus/adapters/inbound/http/static/assets/index-BGONNtiX.js"
+  ],
+  "console_help": {
+    "returncode": 0,
+    "connect_present": true
+  },
+  "frozen_provider_candidate_unchanged": true,
+  "build": {
+    "tool": "2f5a7c",
+    "exit_code": 0,
+    "warnings": [
+      "Existing setuptools license table deprecation."
+    ]
+  },
+  "install": {
+    "tool": "8769bf",
+    "exit_code": 0,
+    "packages": 46
+  },
+  "twine": {
+    "tool": "ca1a58",
+    "exit_code": 0,
+    "wheel": "PASSED",
+    "sdist": "PASSED"
+  },
+  "limits": [
+    "Separate owned prefix; no personal installation/configuration changed.",
+    "Package delta verification and console help only; no replacement for all installed tests or browser/AT/native campaign.",
+    "BXP provider proposal and installed prefix remain frozen. A later backend change needs a new package delta.",
+    "Earlier prose calling708 module payloads Python modules was imprecise:538 are.py,167 are.sql migrations and3 are other module assets. All708 compare equal at this cut.",
+    "Initial verifier assertion incorrectly expected708.py files; toolca79e4 failed that oracle before smoke. Corrected count derives from exact wheel member sets, toolbbf4fa."
+  ]
+}

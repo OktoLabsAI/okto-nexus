@@ -1,0 +1,1249 @@
+{
+  "diagnostics": [
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:12.789195+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:14.808123+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:16.823999+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:18.843455+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:20.864267+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:22.870495+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:24.887175+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:26.905679+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:28.918547+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:30.928814+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:32.943002+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:34.963736+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:36.982288+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:38.997704+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:41.016976+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:43.042043+00:00"
+    },
+    {
+      "kind": "canonical_lease_renewed",
+      "serial": 2,
+      "valid_until_server": null
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:45.149312+00:00"
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:10:46.047233+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:10:46.067969+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:10:46.318636+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:10:46.327262+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:47.171376+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:49.193810+00:00"
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:10:50.022537+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742Z",
+      "wall": "2026-11-16T23:10:50.282833+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:10:50.444352+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:10:50.448168+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742Z",
+      "wall": "2026-11-16T23:10:50.488153+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742Z",
+      "wall": "2026-11-16T23:10:50.723940+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:10:50.811106+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:10:50.813044+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:51.210416+00:00"
+    },
+    {
+      "kind": "canonical_new_question",
+      "view": "Graph"
+    },
+    {
+      "kind": "canonical_new_question",
+      "view": "Artifacts"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:53.292978+00:00"
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:10:54.459483+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:10:54.460674+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:10:54.461655+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:55.313258+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:57.324047+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:10:59.335855+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:01.353587+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:03.375042+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:05.387758+00:00"
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:05.599250+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:05.601374+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:05.603167+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:07.410886+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:09.425647+00:00"
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:09.480305+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:09.481342+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:09.482494+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 2,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:11.445305+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:13.465706+00:00"
+    },
+    {
+      "kind": "canonical_lease_renewed",
+      "serial": 3,
+      "valid_until_server": null
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:15.544317+00:00"
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:16.979902+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:16.981915+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:16.983776+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.278540+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.280583+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.282306+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.312949+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.314913+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.316586+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.542201+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.544391+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.546374+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.550334+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.552046+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.558468+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:17.565906+00:00"
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.675923+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.678118+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.680055+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.790144+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.792590+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:17.794711+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:19.591416+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:21.609409+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:23.617138+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:25.634875+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:27.656779+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:29.672244+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:31.688017+00:00"
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:32.399062+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:32.400549+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:32.401848+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:32.657928+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:32.659414+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:32.660438+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:32.739219+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:32.741020+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:32.742640+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:33.707962+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:35.727089+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:37.737524+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:39.758796+00:00"
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:40.175496+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:40.177253+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:40.178974+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:40.276092+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:40.277323+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:40.278253+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:40.365099+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:40.367065+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "authority",
+      "now": "2026-11-16T23:10:09.660742+00:00",
+      "wall": "2026-11-16T23:11:40.368747+00:00",
+      "lease": {
+        "status": "ACTIVE",
+        "valid_until_server": "2026-11-16T23:12:09.660742+00:00",
+        "lease_serial": 3,
+        "connection_generation": 2
+      },
+      "lane": {
+        "expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "ticket_expires_at": "2026-11-16T23:20:12.195258+00:00",
+        "connection_generation": 2
+      },
+      "current": true
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:41.766825+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:43.789555+00:00"
+    },
+    {
+      "kind": "canonical_lease_renewed",
+      "serial": 4,
+      "valid_until_server": null
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:45.853221+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:47.897881+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:49.918616+00:00"
+    },
+    {
+      "kind": "canonical_wss_heartbeat",
+      "wall": "2026-11-16T23:11:51.938735+00:00"
+    }
+  ],
+  "thread_stopped": true,
+  "limit_seconds": 180
+}

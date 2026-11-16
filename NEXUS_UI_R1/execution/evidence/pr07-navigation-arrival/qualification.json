@@ -1,0 +1,54 @@
+{
+  "bundle": "index-BGONNtiX.js",
+  "js_sha256": "dfef7675dea3918117e0df676e3e6d1ef72dd03dec61086e0d24a1b91f6430c9",
+  "cases": {
+    "T-NAV-08": {
+      "status": "PASS_DECLARED_SYNTHETIC_BOUNDARIES",
+      "Graph": {
+        "before_handle": "ae9311",
+        "publication": "arrival-Graph.json",
+        "open_handle": "46b1b9",
+        "exact_row_handle": "67d8f6",
+        "screenshot": "graph-new-question.png"
+      },
+      "Artifacts": {
+        "before_handle": "2b3dad",
+        "publication": "artifacts-only/arrival-Artifacts.json",
+        "ack_handle": "c68c4c",
+        "exact_read_before_bell_and_row_handle": "5e78b7",
+        "screenshot": "artifacts-only/new-question.png"
+      },
+      "first_artifacts_attempt": "SUBSET temporal ack not fenced; retained6334dc"
+    },
+    "T-NAV-05": {
+      "status": "PARTIAL",
+      "handle": "a210c3",
+      "feature_memory": false,
+      "hidden_from_advanced": true,
+      "unknown_view_query_opens": "Home",
+      "scoped_memory_http_status": 200,
+      "direct_link_given": "NOT_RUN_NO_PRODUCT_VIEW_URL_CONTRACT"
+    },
+    "T-NAV-04": {
+      "status": "NOT_RUN_GIVEN_UNAVAILABLE",
+      "reason": "No product saved-view preference or generic view bookmark entry point; no artificial storage key injected",
+      "callback_probe": "INCOMPLETE bea31f; browser closed while Policies exact-name locator pending"
+    }
+  },
+  "native_provider_calls": 0,
+  "browser_productive_posts": 0,
+  "canonical_ingestion": "commit_execution_events with admitted channel/session/turn and new sequence/request IDs; actual approvals generated",
+  "limitations": [
+    "Inert native fixture, not provider transport or application",
+    "No automatic bell-count increment claim",
+    "First fixture later canonical renew refused stale inventory; retained diagnostics",
+    "No UI URL or saved-selection contract invented"
+  ],
+  "cleanup": "cleanup.json",
+  "product_changed": false,
+  "source_pins_at_qualification": {
+    "tests\\ui_simplification\\prepare_navigation_arrival_fixture.py": "c7a544ae977268f23de1292f60dea6c820b60310b4a01a0fe2b6494beff4443c",
+    "frontend\\src\\navigationRegistry.ts": "2b7ab80924a61a655fa0756fbc4661bc808fe37545bbdf1c094b65a761fd8495",
+    "frontend\\src\\App.tsx": "6fe23fbfa03fe4ca646871ea31829e1d6be09c5991aa99acc2448dc3c16b3f2d"
+  }
+}

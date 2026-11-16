@@ -88,18 +88,25 @@ mudam retroativamente a qualificação de browser ou os tempos medidos antes del
 
 O pacote BXP congelado para a proposta de campanha tem wheel SHA256
 `544c48099db0793c66af54a48c70585e620fb0e56e02b145ab1bb38e5e743a64`.
-Os 708 módulos Python são byte a byte iguais ao corte que passou pelos 22 focais
+Os 708 payloads não estáticos do módulo são byte a byte iguais ao corte dos22
+focais:538 arquivos Python,167 migrações SQL e três outros recursos. A prosa
+anterior chamou esse conjunto imprecisamente de708 módulos Python.
+Esses payloads são iguais ao corte que passou pelos22 focais
 instalados da Home. A comparação com o antecedente de 189 casos isola quatro
 arquivos de metadados do inventário e mantém 704 idênticos. Smoke, entrypoints,
 Twine e pins do pacote final passaram; nenhuma instalação pessoal foi alterada.
 O delta de apresentação BGONN é posterior e foi qualificado separadamente; não
-substitui retroativamente esse wheel nem altera a proposta aguardando aprovação.
+substitui retroativamente esse wheel nem altera a proposta original congelada.
+O wheel BGONN `070e10fc…f8d0b31` foi construído, instalado em outro prefix próprio,
+validado com Twine e smoke do console;538 Python/708 payloads não estáticos
+permaneceram iguais ao BXP. Correções backend posteriores requerem novo corte.
 
 A proposta real foi vinculada a esse pacote, teve 21 testes offline e um smoke
 de lifecycle real com zero admissões. A revisão independente e a conferência de
 1.047 pins passaram. O candidato `3ea51229…fafb88e` foi apresentado ao usuário
-para uma nova autorização específica; o template permanece falso. Nenhuma
-aprovação de release/default é inferida dessa eventual autorização da campanha.
+para uma autorização específica; o usuário autorizou depois somente Codex.
+O template original permanece falso, com derivado estreito em preparação.
+Nenhuma aprovação de release/default é inferida da autorização da campanha.
 
 ## Limites que impedem qualificação completa
 
@@ -111,14 +118,17 @@ trabalho admitido. Esses são trabalhos de qualificação executáveis; não sã
 classificados automaticamente como bloqueios externos. O ledger distingue cada
 cenário e mantém a entrega em andamento.
 
-1. UI-042 requer nova autorização específica para a campanha UI-R1 com provedores
-   e contas autenticadas. Consentimentos de campanhas anteriores não foram
-   reaproveitados. A proposta executável isolada está em `pr07-native-proposal/`;
-   seu preflight deve recusar suporte/contabilidade não comprovados, sem replay.
+1. O usuário autorizou a campanha UI-R1 somente com Codex e permitiu múltiplas
+   instâncias. O derivado em preparação usa duas conexões Codex, preserva o teto
+   de seis admissões/500mil tokens observados e exclui Claude. A proposta
+   original está preservada; nenhuma execução real ocorreu neste corte. Dois
+   Codex não qualificam um segundo tipo de harness. Claude foi adiado por falta
+   de limite disponível; não se reutiliza autorização histórica para executá-lo.
 2. Uma máquina remota real com Connector e pastas diferentes não foi qualificada
    por peers locais. Não há declaração de suporte universal de plataforma/harness.
-3. UI-043 requer uma pessoa sem conhecimento da arquitetura executando o roteiro;
-   navegação automática não mede compreensão humana.
+3. O usuário confirmou um participante disponível nesta máquina para UI-043.
+   O ambiente humano está em preparação; navegação automática não mede
+   compreensão humana nem fornece tempos ou taxas de sucesso do participante.
 4. Leitor de tela real não foi comprovado. O zoom nativo de 200% foi exercitado
    depois por `chrome.tabs.setZoom/getZoom=2`, em extensão/perfil temporários
    próprios: mesma janela, innerWidth 1424→712 e DPR 1→2, sem overflow geométrico
@@ -162,7 +172,7 @@ próprio, sem confundir este procedimento com teste executado.
 ## Próximo gate
 
 Concluir as verificações isoladas pendentes e registrar a conclusão da CI no SHA
-correspondente. Só iniciar a campanha real após autorização sobre a proposta
-concreta, sem alterar o ambiente pessoal. Depois executar avaliação humana e
+correspondente. Executar o derivado Codex autorizado após seu preflight técnico,
+sem alterar o ambiente pessoal. Executar a avaliação humana preparada e
 qualificações assistivas/topológicas disponíveis. A aprovação de release/default
 continua `false` até os gates serem atendidos e existir autorização específica.

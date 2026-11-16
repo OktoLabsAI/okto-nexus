@@ -1462,7 +1462,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr01-shell-qualification.json",
-        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json"
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation-arrival/qualification.json"
       ],
       "limitations": [
         "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
@@ -2119,7 +2120,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json",
-        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json"
+        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
@@ -2159,7 +2161,9 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json",
         "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr13-live-fences/qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
@@ -2197,7 +2201,8 @@
         "T-HOME-10"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
@@ -2278,7 +2283,8 @@
         "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos."
@@ -2869,14 +2875,14 @@
         "NEXUS_UI_R1/execution/final-review.json"
       ],
       "limitations": [
-        "Proposta executavel final vinculada,21offline e zero-admission real lifecyclePASS. Nova aprovacao do usuario pendente; campanha/provider e topologiareal NOT_RUN."
+        "Autorizacao especifica real recebida somente para Codex; derivado conserva teto6/500k e excluiClaude. Campanha ainda em preparacao tecnica, sem admissao real neste registro. Claude/topologiaremota continuam gates separados."
       ]
     },
     {
       "id": "UI-043",
       "pr": "PR-07",
       "title": "Validar compreensão e objetivo do produto",
-      "status": "BLOCKED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-041",
         "UI-042"
@@ -2907,7 +2913,7 @@
         "NEXUS_UI_R1/execution/usability-script.md"
       ],
       "limitations": [
-        "Requer participante sem conhecimento da arquitetura. Nao executado por agente como substituto humano."
+        "Participante disponivel nesta maquina confirmado. Ambiente/roteiro humano em preparacao; nenhuma interacao, tempo ou compreensao humana inferida."
       ]
     },
     {
@@ -2988,7 +2994,8 @@
       "evidence": [
         "NEXUS_UI_R1/execution/release-report.md",
         "NEXUS_UI_R1/execution/final-review.json",
-        "NEXUS_UI_R1/execution/pr08-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr08-installed-qualification.json",
+        "NEXUS_UI_R1/execution/pr14-bgon-package-qualification.json"
       ],
       "limitations": []
     },
@@ -3210,12 +3217,14 @@
       "given": "Bookmark/seleção salva de Meta-harness ou Policies.",
       "when": "Carregar aplicação nova.",
       "expected": "Resolver o componente correto e novo rótulo sem alterar identidade lógica ou permissões.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation-arrival/qualification.json"
+      ],
       "tasks": [
         "UI-006"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Sem contrato atual de URL generica de view ou preferencia de view salva. Alias callback e Memory oculta nao comprovam esses givens; API Memory200 com feature false preservada. Nao foi inventado novo contrato para obter PASS."
       ]
     },
     {
@@ -3226,13 +3235,14 @@
       "when": "Abrir Advanced e tentar link direto.",
       "expected": "Visibilidade/recusa seguem contratos atuais; navegação não habilita a feature.",
       "evidence": [
-        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation-arrival/qualification.json"
       ],
       "tasks": [
         "UI-007"
       ],
       "limitations": [
-        "Subset real browser comprovado; Memory direct view/fresh question arrival e funções completas não inferidas. Ver qualification.json."
+        "Sem contrato atual de URL generica de view ou preferencia de view salva. Alias callback e Memory oculta nao comprovam esses givens; API Memory200 com feature false preservada. Nao foi inventado novo contrato para obter PASS."
       ]
     },
     {
@@ -3272,19 +3282,19 @@
     },
     {
       "id": "T-NAV-08",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Em Graph ou Artifacts surge pergunta.",
       "when": "Abrir sino.",
       "expected": "Fila abre no contexto global, sem exigir rota Advanced ou outra Home.",
       "evidence": [
-        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation-arrival/qualification.json"
       ],
       "tasks": [
         "UI-008"
       ],
       "limitations": [
-        "Subset real browser comprovado; Memory direct view/fresh question arrival e funções completas não inferidas. Ver qualification.json."
+        "Perguntas novas ingeridas canonicamente depois de Graph/Artifacts aberto; sino abre fila global e item exato. Peer inerte, sem provider. Primeiro peer recusou renew posterior por inventario stale; nenhum claim de lease prolongada."
       ]
     },
     {
@@ -3768,49 +3778,53 @@
     },
     {
       "id": "T-HOME-05",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Uma conexão sem sessão e outra com tarefa.",
       "when": "Abrir Todos.",
       "expected": "Ambas alcançáveis; conexão sem tarefa não soma execução.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json"
+      ],
       "tasks": [
         "UI-024"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Browser/HTTP/SQLite: binding sem sessao/op e conexao com trabalho alcancaveis em Todos, targets distintos. Fatos historicos sinteticos; sem harness real."
       ]
     },
     {
       "id": "T-HOME-06",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Usuário lê grupo expandido enquanto há mudança de prioridade.",
       "when": "Receber atualização.",
       "expected": "Não deslocar foco/linha sob interação; atualização controlada.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr13-live-fences/qualification.json"
+      ],
       "tasks": [
         "UI-025"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Grupo expandido/foco da ultima de23linhas preservados enquanto publicacao canonica externa muda prioridade/ordem; Apply explicito aplica nova ordem. Fonte observacional, sem worker/provider real."
       ]
     },
     {
       "id": "T-HOME-07",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Fonte falha mas outras respondem.",
       "when": "Atualizar.",
       "expected": "Mostrar parcialidade e dados válidos; não fingir ausência de agentes.",
       "evidence": [
-        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json"
       ],
       "tasks": [
         "UI-025"
       ],
       "limitations": [
-        "Subsetdebrowser comprovado: parcialapos trocaescopo (naoRefreshliteral); Server/project0 mas sinoglobal3deoutroprojeto. Cenariointeiro mantidoNOT_RUN."
+        "Refresh literal com results OperationalError controlado na query; outras fontes ready/dados validos, partial/unknown/inventory3 sem CTA falsa. Fixture propria, sem provider."
       ]
     },
     {
@@ -3848,20 +3862,20 @@
     },
     {
       "id": "T-HOME-10",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Nenhuma ocorrência global ou de atenção.",
       "when": "Renderizar.",
       "expected": "Sem painel vazio Server/Needs you; recursos continuam no sino/filtro.",
       "evidence": [
-        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json"
       ],
       "tasks": [
         "UI-026",
         "UI-028"
       ],
       "limitations": [
-        "Subsetdebrowser comprovado: parcialapos trocaescopo (naoRefreshliteral); Server/project0 mas sinoglobal3deoutroprojeto. Cenariointeiro mantidoNOT_RUN."
+        "Global/projeto Attention0 e Home/Server0 comprovados em DB proprio com observations habilitada. Sino/filtro vazios alcancaveis. Config inicial disabled e erro de heading do runner preservados; continuacao no mesmo browser confirma heading real Attention."
       ]
     },
     {
@@ -3987,12 +4001,16 @@
       "given": "Dois turnos/sessões do mesmo agente.",
       "when": "Interromper um alvo específico.",
       "expected": "Outro turno/sessão intacto; efeito e resultado corretamente correlacionados.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/pr13-exact-interrupt-cleanup.json",
+        "NEXUS_UI_R1/execution/pr13-exact-interrupt-stack.txt",
+        "NEXUS_UI_R1/execution/pr13-antecedent-core-comparison.json"
+      ],
       "tasks": [
         "UI-031"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Tentativa focal falhou no primeiro runtime.open OUTCOME_UNKNOWN antes de criar nativepipe/turnos/sessaoirma. Teardown aguardou ownerincerto; cleanup forçado apenas pytest proprio, dados preservados, sem DRAINED. Core168arquivos byteigual ao wheel atual; causa original ainda nao demonstrada. Nao qualifica nem prova regressao da interrupcao."
       ]
     },
     {
@@ -4317,12 +4335,14 @@
       "given": "Muitas sessões aparecem na lista.",
       "when": "Deixar só um painel aberto.",
       "expected": "Uma observação de detalhe ativa; não abrir tail/SSE por linha.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr13-live-fences/qualification.json"
+      ],
       "tasks": [
         "UI-027"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Subset real browser somente: lista expandida semdetailGET, depois1painel/1sessao; preview voltou3antesabertura. Pause/Apply observacional semworkerreal/draftdecisao. Cenario inteiro nao inferido."
       ]
     },
     {
@@ -4332,12 +4352,14 @@
       "given": "Pausa visual e trabalho real prossegue.",
       "when": "Pausar e aplicar atualizações.",
       "expected": "Agentes não são pausados; rascunhos/decisões mantêm validação.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr13-live-fences/qualification.json"
+      ],
       "tasks": [
         "UI-028"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Subset real browser somente: lista expandida semdetailGET, depois1painel/1sessao; preview voltou3antesabertura. Pause/Apply observacional semworkerreal/draftdecisao. Cenario inteiro nao inferido."
       ]
     },
     {
@@ -5331,7 +5353,7 @@
         "UI-042"
       ],
       "limitations": [
-        "Campanha real ainda NOT_RUN: candidato final e21offlinePASS nao substituem provedores. Nova autorizacao especifica solicitada; sem inferencia de consentimentos anteriores."
+        "Usuario autorizou campanha apenas Codex, podendo duasinstancias, mesmos6admissoes/500ktokensobservados/450kpreventivo. Claude adiado por limiteindisponivel. Derivado estreito em preparacao; nenhum providerexecutado ainda. DoisCodex nao qualificam segundo tipo deharness nemtopologiaremota."
       ]
     },
     {
@@ -5348,7 +5370,7 @@
         "UI-042"
       ],
       "limitations": [
-        "Campanha real ainda NOT_RUN: candidato final e21offlinePASS nao substituem provedores. Nova autorizacao especifica solicitada; sem inferencia de consentimentos anteriores."
+        "Usuario autorizou campanha apenas Codex, podendo duasinstancias, mesmos6admissoes/500ktokensobservados/450kpreventivo. Claude adiado por limiteindisponivel. Derivado estreito em preparacao; nenhum providerexecutado ainda. DoisCodex nao qualificam segundo tipo deharness nemtopologiaremota."
       ]
     },
     {
@@ -5591,6 +5613,10 @@
     {
       "at": "2026-11-16T23:12:15.170480+00:00",
       "event": "T-PERF-01/T-DATA-12/T-DATA-14 PASS offline instalado BXP:55SQL em entries/children/sessions para1/10/100agentes;1readUoW/0writes/0transcripts. READY/OPENING/WARM/CLOSING semturno nao contam trabalho; resultadoSUCCEEDED correlacionado a handoffOPEN mantem cleanup separado. Tres amostras quentes sem100k eventos nao substituem benchmark anterior/SLO/browser. Oraculos/fixtures antecedentes preservados; produto e pins congelados intactos."
+    },
+    {
+      "at": "2026-11-16T23:31:40.016765+00:00",
+      "event": "Mais5cenarios completos browser PASS: NAV08/HOME05/06/07/10; LIVE05/06 apenas subsets. Interrupcao exata naoqualificada aposopenincerto+cleanupforcadoownpytest;Coreigual. Usuario autorizou derivado somenteCodex,Claudeadiado, e participante humano local disponivel. BGONN pacoteisolado/Twine/smokePASS;708payloadsnaoestaticos incluem538.py+167.sql+3outros, corrigindo prosa anterior. Semrelease/default."
     }
   ],
   "risk_acceptances": [],
