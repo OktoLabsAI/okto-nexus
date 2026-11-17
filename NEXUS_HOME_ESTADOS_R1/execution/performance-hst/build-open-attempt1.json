@@ -1,0 +1,23 @@
+{
+  "own_driver": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-driver-31nkb7_h",
+  "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9",
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\build-open-worker.py",
+    "--released",
+    "PACKAGE_READY",
+    "--ready",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc36-final-package\\READY.json",
+    "--root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9"
+  ],
+  "state": "EXITED",
+  "pid": 22704,
+  "exit_code": 0,
+  "seconds": 23.74592869996559,
+  "physical_exit": true
+}

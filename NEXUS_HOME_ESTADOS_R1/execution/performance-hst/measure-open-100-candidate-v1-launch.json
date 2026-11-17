@@ -1,0 +1,31 @@
+{
+  "name": "measure-open-100-candidate-v1",
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ezz4igiu\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\measure-worker.py",
+    "measure",
+    "--released",
+    "PACKAGE_READY",
+    "--ready",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst\\READY.json",
+    "--dataset",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9\\dataset.json",
+    "--connections",
+    "100",
+    "--variant",
+    "candidate-v1",
+    "--output",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9\\reports\\measure-open-100-candidate-v1.json"
+  ],
+  "own_driver": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-driver-31nkb7_h",
+  "output": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9\\reports\\measure-open-100-candidate-v1.json",
+  "state": "EXITED",
+  "pid": 58048,
+  "exit_code": 0,
+  "seconds": 46.32421799993608,
+  "physical_exit": true
+}

@@ -109,18 +109,52 @@ def origin_guard():
             raise RuntimeError('A loaded product submodule escaped the selected prefix: ' + name)
 
 
+def helper_pins():
+    values = {}
+    for module in tuple(sys.modules.values()):
+        source = getattr(module, '__file__', None)
+        if source and Path(source).suffix == '.py':
+            path = Path(source).resolve()
+            if path.is_relative_to(REPO):
+                values[path.relative_to(REPO).as_posix()] = sha(path)
+    return dict(sorted(values.items()))
+
+
 @contextmanager
 def no_external_effects():
     original_popen, original_connect = subprocess.Popen, socket.socket.connect
+    original_socketpair = socket.socketpair
+    self_pipe = threading.local()
 
     def forbidden(*args, **kwargs):
         raise RuntimeError('No subprocess or network connection is allowed in this benchmark worker.')
-    subprocess.Popen = forbidden
-    socket.socket.connect = forbidden
+
+    class ForbiddenProcess(original_popen):
+        def __init__(self, *args, **kwargs):
+            forbidden()
+
+    def local_socketpair(*args, **kwargs):
+        # Windows asyncio implements its private wakeup pipe with a local
+        # socketpair fallback. This is not an HTTP/provider connection.
+        self_pipe.active = True
+        try:
+            return original_socketpair(*args, **kwargs)
+        finally:
+            self_pipe.active = False
+
+    def scoped_connect(sock, address):
+        if getattr(self_pipe, 'active', False) and address[0] in ('127.0.0.1', '::1'):
+            return original_connect(sock, address)
+        forbidden()
+
+    subprocess.Popen = ForbiddenProcess
+    socket.socket.connect = scoped_connect
+    socket.socketpair = local_socketpair
     try:
         yield
     finally:
         subprocess.Popen, socket.socket.connect = original_popen, original_connect
+        socket.socketpair = original_socketpair
 
 
 def build(args, ready):
@@ -153,6 +187,7 @@ def build(args, ready):
             database_sha256=sha(initial_db), schema_sha256=schema(initial_db), clones=clones))
         print(json.dumps(dict(phase='built', connections=size)), flush=True)
     manifest['state'] = 'BUILT_NOT_MEASURED'
+    manifest['helper_source_pins'] = helper_pins()
     save(root / 'dataset.json', manifest)
 
 
@@ -211,6 +246,8 @@ def stats(samples):
 
 def measure(args, ready):
     manifest = json.loads(Path(args.dataset).read_text(encoding='utf-8'))
+    if any(sha(REPO / path) != value for path, value in manifest['helper_source_pins'].items()):
+        raise RuntimeError('Prepared fixture/helper source bytes changed between variants.')
     case = next(case for case in manifest['cases'] if case['size'] == args.connections)
     owned = Path(args.dataset).resolve().parent
     marker = json.loads((owned / '.hst-owned.json').read_text(encoding='utf-8'))
@@ -336,7 +373,7 @@ def main():
     if args.mode == 'measure':
         result.update(payload_files=sum(p['count'] for p in after.values()), payload_drift=False,
             package_modules={name: dict(origin=value['origin'], count=value['count']) for name, value in after.items()},
-            wheel_sha256=ready['wheel_sha256'], source_candidate=ready['source_candidate'], runner_sha256=sha(__file__),
+            wheel_sha256=ready['wheel_sha256'], source_candidate=ready.get('source_candidate', ready.get('source_commit')), runner_sha256=sha(__file__),
             own_environment_home=str(env_home))
         save(args.output, result)
         print(json.dumps(dict(variant=args.variant, connections=args.connections, status=result['status'])), flush=True)

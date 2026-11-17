@@ -226,10 +226,6 @@ def page(relations, *, scope, server_id, principal, now, partition='root', colum
     for values in columns.values():
         values.sort(key=lambda pair: pair[0])
     unlinked.sort(key=child_key)
-    revision = digest([entry_revision, columns,
-        None if relations.harness_blocking is None else sorted(relations.harness_blocking, key=canonical),
-        {identifier: [e.id for _, e in children] for identifier, (_, children, _) in sorted(cards.items())},
-        [e.id for _, e in unlinked]])
     if operational:
         # Runtime evidence timestamps/renewals are diagnostic. Only their
         # semantic classification and exact decision refs invalidate pages.
@@ -251,6 +247,11 @@ def page(relations, *, scope, server_id, principal, now, partition='root', colum
         for row in relations.harness_blocking or ():
             if row['family'] == 'request' and row['state'] == 'PENDING' and instant(row['expires_at']) > instant(now):
                 refresh = min(refresh, instant(row['expires_at']))
+    else:
+        revision = digest([entry_revision, columns,
+            None if relations.harness_blocking is None else sorted(relations.harness_blocking, key=canonical),
+            {identifier: [e.id for _, e in children] for identifier, (_, children, _) in sorted(cards.items())},
+            [e.id for _, e in unlinked]])
     exact = relations.total_is_exact and relations.connections is not None and not old_unknown
     base.update(partition={'root': 'harness_board', 'column': 'harness_board_column',
         'children': 'harness_children', 'unlinked': 'harness_unlinked',

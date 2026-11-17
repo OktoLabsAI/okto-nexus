@@ -4,7 +4,9 @@ from datetime import UTC, datetime
 import hashlib
 import json
 from pathlib import Path
+import re
 import subprocess
+import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent / 'static-checks'
@@ -24,6 +26,8 @@ def lint(path, contents):
 
 
 def main():
+    label = sys.argv[1] if len(sys.argv) > 1 else 'ruff'
+    assert re.fullmatch(r'[a-z0-9-]+', label), label
     names = set(call(['rtk', 'proxy', 'git', 'diff', '--name-only', BASE, '--', 'src', 'tests/home_states', 'tools']).stdout.splitlines())
     names.update(call(['rtk', 'proxy', 'git', 'ls-files', '--others', '--exclude-standard', '--',
                        'src', 'tests/home_states', 'tools']).stdout.splitlines())
@@ -45,7 +49,9 @@ def main():
               'scope': 'Changed/new Python product, home_states tests and tools; default repository configuration',
               'checks': checks,
               'limitations': ['Diagnostic count comparison is not the full repository lint gate or functional testing.']}
-    (HERE / 'ruff.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
+    output = HERE / (label + '.json')
+    assert not output.exists() or label == 'ruff', 'Preserve an antecedent cut; choose another label.'
+    output.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
     increased = {name: row['increased_rule_counts'] for name, row in checks.items() if row['increased_rule_counts']}
     print(json.dumps({'files': len(checks), 'increased': increased}))
     raise SystemExit(bool(increased))

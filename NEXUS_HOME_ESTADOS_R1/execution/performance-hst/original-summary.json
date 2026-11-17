@@ -1,0 +1,930 @@
+{
+  "status": "FAIL",
+  "read_p95_target_ms": 500,
+  "warmup": 3,
+  "samples_per_series": 20,
+  "cuts": [
+    {
+      "workload": "mixed",
+      "connections": 1,
+      "variant": "baseline-v1",
+      "report": "original-timings/measure-1-baseline-v1.json",
+      "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+      "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 203.19294999353588,
+          "nearest_rank_p95_ms": 218.542099930346,
+          "max_payload_bytes": 66994
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 201.26020000316203,
+          "nearest_rank_p95_ms": 228.25630009174347,
+          "max_payload_bytes": 28800
+        }
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "payload_drift": false,
+      "productive_drift": []
+    },
+    {
+      "workload": "mixed",
+      "connections": 1,
+      "variant": "candidate-v1",
+      "report": "original-timings/measure-1-candidate-v1.json",
+      "wheel_sha256": "15cc6dfc6b43fc815d5031a8378232b1bfa96f9048eefb4d85699337994a5af7",
+      "source_candidate": "687295b6cd6758aa36690152fdb4258e36d33c91",
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 200.94919996336102,
+          "nearest_rank_p95_ms": 213.7420999351889,
+          "max_payload_bytes": 77257
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 198.16349999746308,
+          "nearest_rank_p95_ms": 213.91960000619292,
+          "max_payload_bytes": 32375
+        }
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "payload_drift": false,
+      "productive_drift": []
+    },
+    {
+      "workload": "mixed",
+      "connections": 1,
+      "variant": "candidate-v2",
+      "report": "original-timings/measure-1-candidate-v2.json",
+      "wheel_sha256": "15cc6dfc6b43fc815d5031a8378232b1bfa96f9048eefb4d85699337994a5af7",
+      "source_candidate": "687295b6cd6758aa36690152fdb4258e36d33c91",
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 193.62729997374117,
+          "nearest_rank_p95_ms": 213.83109991438687,
+          "max_payload_bytes": 82523
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 172.23219998413697,
+          "nearest_rank_p95_ms": 191.9789999956265,
+          "max_payload_bytes": 32915
+        }
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 8
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 54,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 8
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 54,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "payload_drift": false,
+      "productive_drift": []
+    },
+    {
+      "workload": "mixed",
+      "connections": 10,
+      "variant": "baseline-v1",
+      "report": "original-timings/measure-10-baseline-v1.json",
+      "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+      "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 244.92435005959123,
+          "nearest_rank_p95_ms": 320.0988000025973,
+          "max_payload_bytes": 259632
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 239.52430009376258,
+          "nearest_rank_p95_ms": 269.27289995364845,
+          "max_payload_bytes": 27949
+        }
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "payload_drift": false,
+      "productive_drift": []
+    },
+    {
+      "workload": "mixed",
+      "connections": 10,
+      "variant": "candidate-v1",
+      "report": "original-timings/measure-10-candidate-v1.json",
+      "wheel_sha256": "15cc6dfc6b43fc815d5031a8378232b1bfa96f9048eefb4d85699337994a5af7",
+      "source_candidate": "687295b6cd6758aa36690152fdb4258e36d33c91",
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 254.37929993495345,
+          "nearest_rank_p95_ms": 323.8876999821514,
+          "max_payload_bytes": 291015
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 251.19010003982112,
+          "nearest_rank_p95_ms": 316.72170001547784,
+          "max_payload_bytes": 31172
+        }
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "payload_drift": false,
+      "productive_drift": []
+    },
+    {
+      "workload": "mixed",
+      "connections": 10,
+      "variant": "candidate-v2",
+      "report": "original-timings/measure-10-candidate-v2.json",
+      "wheel_sha256": "15cc6dfc6b43fc815d5031a8378232b1bfa96f9048eefb4d85699337994a5af7",
+      "source_candidate": "687295b6cd6758aa36690152fdb4258e36d33c91",
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 301.2312999344431,
+          "nearest_rank_p95_ms": 352.9370999895036,
+          "max_payload_bytes": 307214
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 244.1633500275202,
+          "nearest_rank_p95_ms": 299.20040001161397,
+          "max_payload_bytes": 31713
+        }
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 8
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 54,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 8
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 54,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "payload_drift": false,
+      "productive_drift": []
+    },
+    {
+      "workload": "mixed",
+      "connections": 100,
+      "variant": "baseline-v1",
+      "report": "original-timings/measure-100-baseline-v1.json",
+      "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+      "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 899.1911500343122,
+          "nearest_rank_p95_ms": 982.4056000215933,
+          "max_payload_bytes": 252835
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 853.6023000488058,
+          "nearest_rank_p95_ms": 928.3112999983132,
+          "max_payload_bytes": 27965
+        }
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "payload_drift": false,
+      "productive_drift": []
+    },
+    {
+      "workload": "mixed",
+      "connections": 100,
+      "variant": "candidate-v1",
+      "report": "original-timings/measure-100-candidate-v1.json",
+      "wheel_sha256": "15cc6dfc6b43fc815d5031a8378232b1bfa96f9048eefb4d85699337994a5af7",
+      "source_candidate": "687295b6cd6758aa36690152fdb4258e36d33c91",
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 875.231200014241,
+          "nearest_rank_p95_ms": 973.5923999687657,
+          "max_payload_bytes": 281050
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 891.9661000254564,
+          "nearest_rank_p95_ms": 1032.852299977094,
+          "max_payload_bytes": 31188
+        }
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "payload_drift": false,
+      "productive_drift": []
+    },
+    {
+      "workload": "mixed",
+      "connections": 100,
+      "variant": "candidate-v2",
+      "report": "original-timings/measure-100-candidate-v2.json",
+      "wheel_sha256": "15cc6dfc6b43fc815d5031a8378232b1bfa96f9048eefb4d85699337994a5af7",
+      "source_candidate": "687295b6cd6758aa36690152fdb4258e36d33c91",
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 999.7072999831289,
+          "nearest_rank_p95_ms": 1147.227199980989,
+          "max_payload_bytes": 297313
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 945.8012999966741,
+          "nearest_rank_p95_ms": 1125.2849999582395,
+          "max_payload_bytes": 31730
+        }
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 8
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 54,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 8
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 54,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "payload_drift": false,
+      "productive_drift": []
+    },
+    {
+      "workload": "open",
+      "connections": 100,
+      "variant": "baseline-v1",
+      "report": "original-timings/measure-open-100-baseline-v1.json",
+      "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+      "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 741.0827999701723,
+          "nearest_rank_p95_ms": 953.6701000761241,
+          "max_payload_bytes": 162252
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 772.5792500423267,
+          "nearest_rank_p95_ms": 898.4730000374839,
+          "max_payload_bytes": 20520
+        }
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "payload_drift": false,
+      "productive_drift": []
+    },
+    {
+      "workload": "open",
+      "connections": 100,
+      "variant": "candidate-v1",
+      "report": "original-timings/measure-open-100-candidate-v1.json",
+      "wheel_sha256": "15cc6dfc6b43fc815d5031a8378232b1bfa96f9048eefb4d85699337994a5af7",
+      "source_candidate": "687295b6cd6758aa36690152fdb4258e36d33c91",
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 686.0056500299834,
+          "nearest_rank_p95_ms": 854.2934999568388,
+          "max_payload_bytes": 162307
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 894.4678499829024,
+          "nearest_rank_p95_ms": 1076.8928000470623,
+          "max_payload_bytes": 20575
+        }
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "payload_drift": false,
+      "productive_drift": []
+    },
+    {
+      "workload": "open",
+      "connections": 100,
+      "variant": "candidate-v2",
+      "report": "original-timings/measure-open-100-candidate-v2.json",
+      "wheel_sha256": "15cc6dfc6b43fc815d5031a8378232b1bfa96f9048eefb4d85699337994a5af7",
+      "source_candidate": "687295b6cd6758aa36690152fdb4258e36d33c91",
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 745.8794500562362,
+          "nearest_rank_p95_ms": 946.1386000039056,
+          "max_payload_bytes": 174986
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 929.7678000293672,
+          "nearest_rank_p95_ms": 1170.8088000304997,
+          "max_payload_bytes": 21117
+        }
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 8
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 54,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 8
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 54,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "payload_drift": false,
+      "productive_drift": []
+    }
+  ],
+  "manifest": [
+    {
+      "path": "original-timings/measure-1-baseline-v1.json",
+      "sha256": "b79321568c3fd1689ddb82cbb12e40f2e45a4f75a521f214799054e47054efe7",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\reports\\measure-1-baseline-v1.json"
+    },
+    {
+      "path": "original-timings/measure-1-candidate-v1.json",
+      "sha256": "668a335e847df247bda216428d1f8d1c29c92826512119ab1d6016e196209f3e",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\reports\\measure-1-candidate-v1.json"
+    },
+    {
+      "path": "original-timings/measure-1-candidate-v2.json",
+      "sha256": "ee6dba6c6a0d76e8f1f33bf6228a7f7b533cc7aa0168743dafa9d5efa45428c0",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\reports\\measure-1-candidate-v2.json"
+    },
+    {
+      "path": "original-timings/measure-10-baseline-v1.json",
+      "sha256": "949236cca1164188c242855a671fcd87373b3ad4ea2fefe5e28788d6e76c6482",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\reports\\measure-10-baseline-v1.json"
+    },
+    {
+      "path": "original-timings/measure-10-candidate-v1.json",
+      "sha256": "40419c66e8f357d59717897ecf0ae439873ba0fa910037e8c79d7551818d56d6",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\reports\\measure-10-candidate-v1.json"
+    },
+    {
+      "path": "original-timings/measure-10-candidate-v2.json",
+      "sha256": "7a4605fb87bf39413c9e6b0f806f5938bfef340862a0741fb290ff05064eeca4",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\reports\\measure-10-candidate-v2.json"
+    },
+    {
+      "path": "original-timings/measure-100-baseline-v1.json",
+      "sha256": "f29e61aa52fcbf0a38ebc31f9faaa3de01bfdf49eafbf949ace6f554b525c8da",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\reports\\measure-100-baseline-v1.json"
+    },
+    {
+      "path": "original-timings/measure-100-candidate-v1.json",
+      "sha256": "8813b58efec5571b9412a4b758daf6b7418d9725152c3d8f1700850111707d7b",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\reports\\measure-100-candidate-v1.json"
+    },
+    {
+      "path": "original-timings/measure-100-candidate-v2.json",
+      "sha256": "f1b1e796b3a45f5d065d6ecd8673cfd50540a117edcde2acf66d929e7e88d9ca",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\reports\\measure-100-candidate-v2.json"
+    },
+    {
+      "path": "original-timings/measure-open-100-baseline-v1.json",
+      "sha256": "fa97cd74e6f6c1b44619a8011a772c98d7ab1eaaacc6bb9a25b918a92a9d7d74",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9\\reports\\measure-open-100-baseline-v1.json"
+    },
+    {
+      "path": "original-timings/measure-open-100-candidate-v1.json",
+      "sha256": "3ff823626b669ab7b380a6cd6d4a45a469f9f536e743df19bd14aaee4f10a4e9",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9\\reports\\measure-open-100-candidate-v1.json"
+    },
+    {
+      "path": "original-timings/measure-open-100-candidate-v2.json",
+      "sha256": "ea7c5483a3d463eb0cc552cd9fc43276bbbd0fff8275b300559a77f699604a87",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9\\reports\\measure-open-100-candidate-v2.json"
+    }
+  ],
+  "limitations": [
+    "HTTP/ASGI only: first useful DOM target 2s remains NOT_RUN.",
+    "TestClient creates a fresh AnyIO portal per GET; original timings remain failed, not corrected retroactively.",
+    "Mixed 100-case has 925 terminal and 75 open activities; separate OPEN dataset has 1000 open activities and 100000 history events.",
+    "Synthetic SQL performance facts do not qualify real runtime, authority, grants or native causal progress.",
+    "No latency claim applies to later source optimizations or a future candidate package.",
+    "Diagnostic cProfile costs overlap and are not additional p95 measurements."
+  ]
+}

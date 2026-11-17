@@ -4,6 +4,7 @@ No page API is called here. Work/result builders and the authorized Attention
 relation are shared with Home v1. No transcript, native control or host access.
 """
 import json
+import re
 import sqlite3
 
 from ....domain.attention import digest
@@ -225,6 +226,44 @@ class SqliteHomeEntryRelations:
     def _results(self, uow, **kwargs):
         return self._project(uow, relation=RESULTS, **kwargs)
 
+    def _work_results(self, uow, *, params, attention_relation, check_budget):
+        """Share statement-local authorized Attention, keeping both relations intact.
+
+        Nested WITH scopes preserve the independent Work/Results CTE names.
+        Results deliberately retain receiver facts outside the Work agent filter.
+        Any SQLite failure discards this batch; read() retries isolated sources.
+        """
+        if attention_relation is None:
+            ctes = 'WITH home_attention AS MATERIALIZED (SELECT NULL AS item WHERE 0)'
+            additions = {}
+        else:
+            ctes, additions = self.home._attention_relations(attention_relation)
+        results = re.sub(r':agent_id\b', ':result_agent_id', RESULTS)
+        sql = (ctes + " SELECT 'work' AS section,item FROM (" + FACTS
+            + " SELECT item FROM filtered LIMIT :batch_source_limit) UNION ALL SELECT 'results',item FROM ("
+            + results + ' SELECT item FROM filtered LIMIT :batch_source_limit)')
+        values = {'work': [], 'results': []}
+        with self.home.bounded(uow.connection):
+            cursor = uow.connection.execute(sql, dict(params, result_agent_id=None,
+                batch_source_limit=self.MAX_RELATION_ROWS + 1, **additions))
+            try:
+                for row in cursor:
+                    check_budget()
+                    section = values[row[0]]
+                    # The existing ceiling belongs to each complete source,
+                    # not to the sum of two otherwise valid source relations.
+                    if len(section) >= self.MAX_RELATION_ROWS:
+                        raise sqlite3.OperationalError('Home entry source resource budget exceeded')
+                    section.append(json.loads(row[1]))
+            finally:
+                cursor.close()
+        return values['work'], values['results']
+
+    def _can_batch_work_results(self):
+        # Custom query ports/fault injection retain their isolated semantics.
+        return all(getattr(getattr(self, name), '__func__', None) is getattr(SqliteHomeEntryRelations, name)
+            for name in ('_work', '_results', '_project'))
+
     def _rows(self, uow, sql, params, check_budget=None):
         with self.home.bounded(uow.connection):
             return self._collect(uow.connection.execute(sql, params), dict, check_budget)
@@ -277,8 +316,22 @@ class SqliteHomeEntryRelations:
         if attention_relation is None:
             status['attention'] = 'unavailable'
         effective_attention = attention_relation if status['attention'] == 'ready' else None
-        work = source('work', lambda: self._work(uow, params=params, attention_relation=effective_attention, check_budget=check_budget))
-        results = source('results', lambda: self._results(uow, params=dict(params, agent_id=None), attention_relation=effective_attention, check_budget=check_budget))
+        combined = None
+        if self._can_batch_work_results():
+            check_budget()
+            try:
+                combined = self._work_results(uow, params=params,
+                    attention_relation=effective_attention, check_budget=check_budget)
+            except sqlite3.Error:
+                # Preserve source isolation: e.g. a missing Results table must
+                # not erase independently readable Work (or the reverse).
+                pass
+        if combined is None:
+            work = source('work', lambda: self._work(uow, params=params, attention_relation=effective_attention, check_budget=check_budget))
+            results = source('results', lambda: self._results(uow, params=dict(params, agent_id=None), attention_relation=effective_attention, check_budget=check_budget))
+        else:
+            work, results = combined
+            status.update(work='ready', results='ready')
         raw_connections = source('connections', lambda: self._rows(uow, CONNECTIONS, params, check_budget))
         raw_sessions = source('sessions', lambda: self._rows(uow, SESSIONS, params, check_budget))
         owners = source('correlations', lambda: self._rows(uow, OPERATION_OWNERS, params, check_budget))

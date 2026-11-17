@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "state": "BUILT_NOT_MEASURED",
+  "clock": "2026-11-16T12:00:00.000000Z",
+  "ready": {
+    "ready": true,
+    "at": "2026-11-17T11:00:27.504835+00:00",
+    "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\artifacts\\okto_nexus-0.3.6-py3-none-any.whl",
+    "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+    "payload_files": 1028,
+    "prefix_frozen": true,
+    "orchestration": "Host Python has psutil; use host -B for installed_regression.py. Its pytest child uses this exact prefix -I -B. No psutil added to prefix."
+  },
+  "fixture_sha256": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+  "builder_sha256": "530816b1396b904c28061da7f98ab64222beba202f81636fbf78658d862e27e6",
+  "cases": [
+    {
+      "size": 1,
+      "volume": {
+        "connections": 1,
+        "activities": 10,
+        "added_native_events": 0,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification"
+      },
+      "db_relative": "nexus.db",
+      "database_sha256": "aef8aa833fa7786e5b1d175f6162ea24bbca81ca0f26fce1902d941ebcd0b291",
+      "schema_sha256": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "clones": {
+        "baseline-v1": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\case-1\\baseline-v1",
+        "candidate-v1": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\case-1\\candidate-v1",
+        "candidate-v2": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\case-1\\candidate-v2"
+      }
+    },
+    {
+      "size": 10,
+      "volume": {
+        "connections": 10,
+        "activities": 100,
+        "added_native_events": 0,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification"
+      },
+      "db_relative": "nexus.db",
+      "database_sha256": "8293885fcdd0ec08effe689bdc0328ae6e5e3e4ff7a5c09891383192f214c40b",
+      "schema_sha256": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "clones": {
+        "baseline-v1": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\case-10\\baseline-v1",
+        "candidate-v1": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\case-10\\candidate-v1",
+        "candidate-v2": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\case-10\\candidate-v2"
+      }
+    },
+    {
+      "size": 100,
+      "volume": {
+        "connections": 100,
+        "activities": 1000,
+        "added_native_events": 100000,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification"
+      },
+      "db_relative": "nexus.db",
+      "database_sha256": "4f2a64bf6652673aecb4f53af241137b8fb9e93e6481fa9072325101591c5857",
+      "schema_sha256": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "clones": {
+        "baseline-v1": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\case-100\\baseline-v1",
+        "candidate-v1": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\case-100\\candidate-v1",
+        "candidate-v2": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\case-100\\candidate-v2"
+      }
+    }
+  ],
+  "helper_source_pins": {
+    "NEXUS_HOME_ESTADOS_R1/execution/performance-hst/benchmark.py": "45a50d995c69a480ee15b3b7cb4942efbb218e9680580e54eec0b0edd432b9a9",
+    "NEXUS_HOME_ESTADOS_R1/execution/performance-hst/dataset.py": "530816b1396b904c28061da7f98ab64222beba202f81636fbf78658d862e27e6",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "tests/execution_r4/test_native_decisions.py": "3c790a408f966403969897a4c647949720e059ddf02013e13ae87eb9f3da3228",
+    "tests/execution_r4/test_ns09.py": "6c38dae214d5c33229720ad23e83e7d558e2d134500e14124680c7ffe80da462",
+    "tests/execution_r4/test_open_bootstrap.py": "9dd81f3b017105a0023e37d66ae1b457d05330c11597012bddf240cd617c7ae2",
+    "tests/execution_r4/test_session_capabilities.py": "49d3c933ccbc01d9ad3ab3d338cee9781ce77a3aa32b4884b3804c2d23e3b0e3"
+  }
+}

@@ -5,7 +5,7 @@ Every continuation reauthorizes and recomputes the material revision.
 """
 import base64
 import json
-from dataclasses import asdict
+from dataclasses import fields
 from datetime import timedelta
 
 from ..errors import ErrorCode, OktoNexusError
@@ -147,17 +147,40 @@ def selected(entry, scope, now):
 
 
 def revision(relations, check_budget):
+    # Relations are fixed for this read UoW. Their JSON rows need no recursive
+    # deepcopy; only the dataclass contexts need conversion. Keep references in
+    # these per-call caches so aliases are cheap without risking id reuse or
+    # retaining a snapshot across reads/principals.
+    contexts, row_keys = {}, {}
+
+    def context_value(context):
+        if context is None:
+            return None
+        identifier = id(context)
+        if identifier not in contexts:
+            contexts[identifier] = (context, {f.name: getattr(context, f.name) for f in fields(context)})
+        return contexts[identifier][1]
+
+    def row_key(row):
+        identifier = id(row)
+        if identifier not in row_keys:
+            row_keys[identifier] = (row, canonical(row))
+        return row_keys[identifier][1]
+
     entries = []
     for entry in sorted(relations.entries, key=lambda item: item.id):
         check_budget()
-        value = asdict(entry)
+        value = {f.name: getattr(entry, f.name) for f in fields(entry)}
+        value['connection'] = context_value(entry.connection)
+        value['sessions'] = tuple(context_value(s) for s in entry.sessions)
+        value['registered_connections'] = tuple(context_value(c) for c in entry.registered_connections)
         for name, key in (('operations', 'operation_id'), ('attention', 'attention_id'), ('results', 'id'), ('external', 'observed_instance_id')):
-            value[name].sort(key=lambda row: (row[key], canonical(row)))
+            value[name] = sorted(value[name], key=lambda row, key=key: (row[key], row_key(row)))
         entries.append(value)
     result = digest(dict(entries=entries, server_attention=sorted(relations.server_attention, key=lambda row: row['attention_id']),
                          source_status=relations.source_status, connection_count=relations.connection_count,
                          connections=None if relations.connections is None else sorted(
-                             (asdict(c) for c in relations.connections), key=canonical)))
+                             (context_value(c) for c in relations.connections), key=row_key)))
     check_budget()
     return result
 

@@ -57,8 +57,9 @@ For root overview and a selected card's first activity page:
   deadline without repeatedly changing the fixed evidence clock.
 - One separate instrumented read counts SQL statement opcodes and UoWs/writes;
   never stores expanded SQL, bound parameters or response content. Query-growth
-  comparison across 1/10/100 detects per-card fan-out. Optional EXPLAIN query plans
-  contain only table/index/plan descriptions, with no parameter values.
+  comparison across 1/10/100 detects per-card fan-out. EXPLAIN capture is a
+  follow-up diagnostic if the measurements miss the target; this prepared worker
+  does not currently export query plans or SQL.
 - Hash productive tables before/after reads. Existing auth bookkeeping is
   distinguished from grants, claims, queue, sessions, native operations/decisions,
   receipts, outbox and setup commits.
@@ -84,11 +85,19 @@ and preserve data rather than retrying automatically. Worker subprocess creation
 is forbidden, so no provider/native child tree is possible. Root controls the
 exclusive timing window and any later cleanup; no recursive delete is prepared.
 
-Pending product delta identified during preparation: Root has accepted extra
-batch fences against current authorization/configuration/credential revisions and
-the realization's exact workspace binding. Those corrections await
-`READERS_RELEASED`; this benchmark will use the final package after them. They
-are not implemented or measured by these scripts.
+Product delta identified during preparation: extra batch fences against current
+authorization/configuration/credential revisions and the realization's exact
+workspace binding were implemented after Root released source readers, with
+focused qualification recorded separately. The benchmark must use the fresh
+package containing those corrections; these scripts have not measured them.
+
+Expected costs, not measurements: dataset generation is O(connections +
+activities + added history), with history inserted in one transaction per case.
+The read model materializes authorized relations before paging, so its Python
+cost remains O(retained relations), not O(page size). Batches should keep SQL
+statement count independent of card count, but SQL scan/index cost still needs
+measurement. No assumption of constant latency, bounded total memory or passing
+p95 follows from constant query count. This preparation makes no execution claim.
 
 Prepared files: `dataset.py` (synthetic generator), `benchmark.py` (build/measure
 workers). Orchestration/release and candidate prefix are intentionally pending.

@@ -921,6 +921,15 @@
           "result": "PASS40 focused source tests after currentness fences; no provider executed",
           "artifact_path": "execution/operational-currentness/qualification.json",
           "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        },
+        {
+          "commit": "b04799c6 + exact source/test payload pins in artifact",
+          "command_or_procedure": "Isolated source Home suites, including batch/revision equivalence oracles",
+          "environment": "Windows; source-only Nexus with pinned installed dependencies; no provider",
+          "timestamp": "2026-11-17T15:06:29.139225+00:00",
+          "result": "PASS178; source/test drift zero; 35 batch/revision cases included",
+          "artifact_path": "execution/source-tests/perf-r2-home/qualification.json",
+          "limitations": "New package and performance repeat pending. Initial focal cut retained as 31PASS/2FAIL caused by unavailable fixture workspace; explicit unavailable-workspace authority negatives now pass."
         }
       ]
     },
@@ -1880,7 +1889,17 @@
         "HST-T-J06"
       ],
       "status": "IN_PROGRESS",
-      "evidence": []
+      "evidence": [
+        {
+          "commit": "b04799c6 + exact source/test payload pins in artifact",
+          "command_or_procedure": "Isolated source Home suites, including batch/revision equivalence oracles",
+          "environment": "Windows; source-only Nexus with pinned installed dependencies; no provider",
+          "timestamp": "2026-11-17T15:06:29.139225+00:00",
+          "result": "PASS178; source/test drift zero; 35 batch/revision cases included",
+          "artifact_path": "execution/source-tests/perf-r2-home/qualification.json",
+          "limitations": "New package and performance repeat pending. Initial focal cut retained as 31PASS/2FAIL caused by unavailable fixture workspace; explicit unavailable-workspace authority negatives now pass."
+        }
+      ]
     },
     {
       "id": "HST-025",
@@ -1935,7 +1954,17 @@
         "HST-T-K06"
       ],
       "status": "IN_PROGRESS",
-      "evidence": []
+      "evidence": [
+        {
+          "commit": "b04799c6 + exact source/test payload pins in artifact",
+          "command_or_procedure": "Isolated source Home suites, including batch/revision equivalence oracles",
+          "environment": "Windows; source-only Nexus with pinned installed dependencies; no provider",
+          "timestamp": "2026-11-17T15:06:29.139225+00:00",
+          "result": "PASS178; source/test drift zero; 35 batch/revision cases included",
+          "artifact_path": "execution/source-tests/perf-r2-home/qualification.json",
+          "limitations": "New package and performance repeat pending. Initial focal cut retained as 31PASS/2FAIL caused by unavailable fixture workspace; explicit unavailable-workspace authority negatives now pass."
+        }
+      ]
     },
     {
       "id": "HST-026",
@@ -2004,8 +2033,18 @@
         "HST-T-J05",
         "HST-T-J06"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        {
+          "commit": "b04799c6 + exact source/test payload pins in artifact",
+          "command_or_procedure": "Isolated source Home suites, including batch/revision equivalence oracles",
+          "environment": "Windows; source-only Nexus with pinned installed dependencies; no provider",
+          "timestamp": "2026-11-17T15:06:29.139225+00:00",
+          "result": "PASS178; source/test drift zero; 35 batch/revision cases included",
+          "artifact_path": "execution/source-tests/perf-r2-home/qualification.json",
+          "limitations": "New package and performance repeat pending. Initial focal cut retained as 31PASS/2FAIL caused by unavailable fixture workspace; explicit unavailable-workspace authority negatives now pass."
+        }
+      ]
     },
     {
       "id": "HST-028",
@@ -3463,8 +3502,18 @@
       "when": "Abrir overview e resultados",
       "then": "Prévia/metadados paginados; sem carregar transcripts/payloads completos.",
       "level": "SQLite instrumentado + benchmark",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "FAIL",
+      "evidence": [
+        {
+          "commit": "687295b6cd6758aa36690152fdb4258e36d33c91",
+          "command_or_procedure": "12 paired installed ASGI/TestClient cuts; 3 warmups and 20 samples per route",
+          "environment": "Windows; baseline 0.3.6 and first frozen 0.3.7, owned byte-identical datasets",
+          "timestamp": "2026-11-17T15:06:29.139225+00:00",
+          "result": "Valid complete replies, 500ms p95 miss at 100 connections; FAIL retained",
+          "artifact_path": "execution/performance-hst/original-qualification.json",
+          "limitations": "Mixed retained and explicit 1000OPEN workloads distinguished. Fresh TestClient portal per request; persistent transport refinement and optimized candidate not measured yet. DOM first-useful NOT_RUN."
+        }
+      ]
     },
     {
       "id": "HST-T-J05",
@@ -3474,8 +3523,18 @@
       "when": "Executar amostras e calcular p50/p95",
       "then": "Registrar números reais, query count, payload e comparação; amostra única não é p95.",
       "level": "SQLite instrumentado + benchmark",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "FAIL",
+      "evidence": [
+        {
+          "commit": "687295b6cd6758aa36690152fdb4258e36d33c91",
+          "command_or_procedure": "12 paired installed ASGI/TestClient cuts; 3 warmups and 20 samples per route",
+          "environment": "Windows; baseline 0.3.6 and first frozen 0.3.7, owned byte-identical datasets",
+          "timestamp": "2026-11-17T15:06:29.139225+00:00",
+          "result": "Valid complete replies, 500ms p95 miss at 100 connections; FAIL retained",
+          "artifact_path": "execution/performance-hst/original-qualification.json",
+          "limitations": "Mixed retained and explicit 1000OPEN workloads distinguished. Fresh TestClient portal per request; persistent transport refinement and optimized candidate not measured yet. DOM first-useful NOT_RUN."
+        }
+      ]
     },
     {
       "id": "HST-T-J06",
@@ -3680,6 +3739,15 @@
       "result": "PASS368",
       "artifact": "execution/source-tests/home-global/qualification.json",
       "limitations": "Pre-currentness delta; SOURCE_ONLY, not final package/browser/real harness."
+    },
+    "performance_r2": {
+      "source_tests": "PASS178",
+      "source_test_drift": [],
+      "artifact": "execution/source-tests/perf-r2-home/qualification.json",
+      "original_target_500ms": "FAIL",
+      "fresh_package_directory": "execution/package-hst-r2",
+      "new_performance_qualification": "NOT_RUN",
+      "browser": "NOT_RUN"
     }
   }
 }

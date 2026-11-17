@@ -1,0 +1,26 @@
+{
+  "own_driver": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-driver-4u1maboy",
+  "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3a9737ff22bb4acba3197ebccf56d55b",
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-driver-4u1maboy\\cwd",
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\benchmark.py",
+    "build",
+    "--released",
+    "PACKAGE_READY",
+    "--ready",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc36-final-package\\READY.json",
+    "--root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3a9737ff22bb4acba3197ebccf56d55b"
+  ],
+  "runner_sha256": "3769fe4a450b37242733532d2758e52959e4f5ba079d35b98b5b9e08ad71cf58",
+  "state": "EXITED",
+  "pid": 59684,
+  "exit_code": 1,
+  "seconds": 8.680541399982758,
+  "physical_exit": true
+}
