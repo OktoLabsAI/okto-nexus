@@ -1,0 +1,51 @@
+{
+  "label": "compatibility-50",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-c",
+    "import sys,runpy;sys.path[:0]=['D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\src', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc-compat-source-p7x9pmmf'];runpy.run_module('pytest',run_name='__main__')",
+    "-p",
+    "release_plugin",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-compat-source-p7x9pmmf\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_entry_compatibility.py",
+    "-v",
+    "-s",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-compat-source-p7x9pmmf\\compatibility-50\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-compat-source-p7x9pmmf",
+  "deadline_seconds": 60,
+  "started_at": "2026-11-17T07:40:55.543161+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 2756,
+      "parent_pid": null,
+      "birth_filetime": 134393748555451661,
+      "alive": false
+    },
+    {
+      "pid": 36960,
+      "parent_pid": 2756,
+      "birth_filetime": 134393748555669886,
+      "alive": false
+    },
+    {
+      "pid": 22016,
+      "parent_pid": 36960,
+      "birth_filetime": 134393748555861763,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T07:41:03.444174+00:00"
+}

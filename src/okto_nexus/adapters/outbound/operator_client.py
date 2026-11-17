@@ -138,7 +138,7 @@ class RemoteOperatorHTTP(LocalOperatorHTTP):
             return super().__call__(method, path, body)
         except ConnectionError as error:
             if error.code == 'AUTH_FAILED':
-                raise ConnectionError('OPERATOR_LOGIN_REQUIRED', 'The operator session expired or was revoked. Sign in again on this operator client.', stage=error.stage) from None
+                raise ConnectionError('OPERATOR_LOGIN_REQUIRED', 'The operator session expired or was revoked. Sign in again on this operator client.', stage=error.stage, http_status=error.http_status) from None
             raise
 
     def verify(self, *, call=None):

@@ -152,6 +152,18 @@ def run_connect(argv):
             argv, invocation_cwd, frozen_name = restart.argv, restart.invocation_cwd, restart.frozen_name
 
 
+def _quick_entry_requested(args):
+    # Public syntax opts in explicitly. Legacy selectors keep their old flow;
+    # a retained Quick checkpoint is handled after the exact profile is read.
+    if args.harness or args.project_name or args.connect_id:
+        return True
+    legacy = ('profile', 'project', 'client', 'agent', 'new_agent', 'name',
+        'workspace_id', 'binding_id', 'candidate_ref', 'provider_home',
+        'operator_profile', 'remote_draft', 'setup_receipt_output', 'approve')
+    return not (any(getattr(args, key, None) is not None for key in legacy)
+        or args.new_connection or args.review_current)
+
+
 def _run_connect_once(argv, *, invocation_cwd=None, frozen_name=None):
     from .connect_arguments import parse_connect_args, parse_mode
     try:
@@ -180,7 +192,7 @@ def _run_connect_once(argv, *, invocation_cwd=None, frozen_name=None):
         return 3
     guard = checkpoint = reservation = selected_choice = quick_prepared = quick_previous = None
     quick_operation = None
-    quick_enabled = enabled and bool(args.harness or args.project_name or args.connect_id or not args.profile)
+    quick_enabled = enabled and _quick_entry_requested(args)
     canonical_metadata = False
     try:
         from .terminal_target import resolve_terminal_target, terminal_target_selection

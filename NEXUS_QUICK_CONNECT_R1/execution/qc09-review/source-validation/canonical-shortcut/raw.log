@@ -1,0 +1,36 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r3-harness-pr27-gsg_twh1\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Projetos\Techridy\okto_labs_okto_nexus
+configfile: C:\Users\jpamb\AppData\Local\Temp\nexus-qc-compat-source-p7x9pmmf\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut", "when": "setup", "outcome": "passed", "duration": 8.752036900026724}
+Choose a project connection (selection does not submit work):
+1. Resume codex / subject / canonical-e59a541068e93c9d18162f4e [Server host; canonical_approved]
+2. Resume codex / catalog-second / canonical-45d4cb1c939b3cba78f38ed4 [Server host; canonical_approved]
+a. Add another connection
+c. Cancel
+Connection shortcut: canonical-e59a541068e93c9d18162f4e
+Canonical metadata revalidation was requested; existing revision metadata may change.
+Configuration saved: agent subject, workspace wsr_0b890990fa6e2b98dd1b54766de32135, binding bind_1a720ecb0b10e418eca7a582e92c6e06.
+Session readiness has not been checked. No project task was submitted.
+{"state": "configured", "server_id": "srv_9bba020807d8259193e834a5028ac204", "agent_id": "subject", "binding_id": "bind_1a720ecb0b10e418eca7a582e92c6e06", "workspace_id": "wsr_0b890990fa6e2b98dd1b54766de32135", "configuration": {"baseline": {"execution_revision": 1, "runtime_revision": 1, "defaults_revision": 1, "binding_revision": 1, "endpoint_revision": 1}, "runtime_policy": {"agent_id": "subject", "runtime_enabled": true, "revision": 1, "inherit_global_mcps": null, "session_policy": "per_sender", "broadcast_handoff_auto_claim": null, "defaults": {"runtime_enabled": true, "session_policy": "shared", "revision": 1, "automatic_recovery": true, "inherit_global_mcps": false, "broadcast_handoff_auto_claim": false}, "effective": {"runtime_enabled": true, "session_policy": "per_sender", "inherit_global_mcps": false, "broadcast_handoff_auto_claim": false}, "handoff_auto_claim_rollout_enabled": false}, "runtime_default": true, "native_decision_policy": {"value": true, "source": "stored", "editable": true, "revision": "62f874605f5f17fadaafb96e4c77255b8766c54fec7ce4e7a305fa5313bac03a", "can_initialize": false}, "connections": [{"binding_id": "bind_1a720ecb0b10e418eca7a582e92c6e06", "candidate_ref": "nexus-install-v1:e70970a8ecea5042b9e8b3b3c2daab6586283bd97a26feea01fafd277b6fb311", "executor_id": "exe_6ed0ab4e85628c32645cf22c99398035", "workspace_id": "wsr_0b890990fa6e2b98dd1b54766de32135", "adapter_id": "codex_app_server", "execution_location": "local"}], "project_preset": {"id": "project-generalist", "revision": 1}, "mcp_preset": {"revision": 0, "servers": [], "configuration_digest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"}, "folders": {"workspace_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-compat-source-p7x9pmmf\\canonical-shortcut\\tmp\\pytest-of-unknown\\pytest-0\\test_cli_existing_canonical_wi0\\workspace", "provider_home": null, "secret_bindings": {}}, "public_config": {"alias": "Project", "relay_results": true}, "automatic_reply": true, "authorization": {"minutes": 60, "actions": 20}}, "setup_run_id": null, "session_state": "not_checked", "work_state": "not_submitted"}
+IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut", "when": "call", "outcome": "passed", "duration": 0.13944879989139736}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut", "when": "teardown", "outcome": "passed", "duration": 0.5368168000131845}
+
+
+============================== warnings summary ===============================
+release_plugin.py:10
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-compat-source-p7x9pmmf\release_plugin.py:10: SyntaxWarning: invalid escape sequence '\P'
+    assert pathlib.Path(origins['okto_nexus']).resolve().is_relative_to(pathlib.Path('D:\Projetos\Techridy\okto_labs_okto_nexus\src')),origins
+
+..\nexus-ui-r3-harness-pr27-gsg_twh1\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r3-harness-pr27-gsg_twh1\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc-compat-source-p7x9pmmf\canonical-shortcut\junit.xml -
+======================= 1 passed, 2 warnings in 11.22s ========================

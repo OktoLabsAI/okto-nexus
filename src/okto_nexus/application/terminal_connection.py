@@ -27,9 +27,10 @@ def _same_local_path(actual, selected):
 
 
 class ConnectionError(Exception):
-    def __init__(self, code, message, *, possible_effect=False, stage='connect', choices=None):
+    def __init__(self, code, message, *, possible_effect=False, stage='connect', choices=None, http_status=None):
         self.code, self.message, self.possible_effect, self.stage = code, message, possible_effect, stage
         self.choices = choices
+        self.http_status = http_status
         super().__init__(message)
 
 

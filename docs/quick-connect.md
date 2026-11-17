@@ -74,6 +74,12 @@ Existing `--client`, `--project`, `--profile`, `--agent`, `--binding-id`, `--pla
 are managed-mode grammar; mixing them with participant mode is refused before
 setup. Root aliases do not override product commands.
 
+A bare `connect` enters Quick Connect. Commands using only legacy selectors,
+such as `connect --client codex --project /existing/project`, keep their original
+selection and recovery flow; they do not require public-ID adoption to resume.
+Add a positional harness or `--id` to explicitly choose Quick Connect alongside
+those flags. An exact saved Quick Connect profile retains its original flow.
+
 For a stable scripted addition, choose a technical checkpoint explicitly:
 
 ```sh

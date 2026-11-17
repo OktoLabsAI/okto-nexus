@@ -1,0 +1,44 @@
+{
+  "scope": "Read-only source review; proposed tests/fixtures changes are not applied or executed.",
+  "repository": {
+    "tests/execution_r4/test_canonical_admission_shutdown.py": "3de9310074474215aa782565beed61320a169452c295118b83fa6b341a33a451",
+    "tests/execution_r4/test_canonical_delivery.py": "c5a450910894dccea9fb62f1257458b74566084384baccfcda1c68366d4ebd80",
+    "tests/execution_r4/test_local_realization.py": "7e3aa0601eae2721afab4a9fbc3676c83a061aa431bfcba7d9cfdd7c1ae4a1f6",
+    "tests/execution_r4/test_embedded_inventory.py": "bcf26f49915be258a705ff969b0c49ca332446fafbd61dda400a2aabfd356ef4",
+    "src/okto_nexus/application/settings.py": "b199972569bcf88f2f5c9b692215019cb9c22b0df696a83e37090c17ed594eef",
+    "src/okto_nexus/config.py": "e498a660a830f208ad87f5e9c2e0915ec4a1b994cf257b6c6726fd7504231cf4",
+    "src/okto_nexus/adapters/inbound/http/app.py": "f845a56ac4abee2085ce1bb953eb84ac012ebf80cb7b9c92f0c50ed8e6655cda",
+    "src/okto_nexus/adapters/inbound/http/routes.py": "c51b4f4f031c3b85fc49772c7bb032a8ebe2a854bfdff3682d72535c570683c5",
+    "tools/ci_installed.py": "78b32c0ed8bb8c7592def69cd1c272a96c5d5f7c86bc07436d4ff64cf0e85c6d",
+    "tests/execution_r4/test_canonical_structured_work.py": "b2e0b0140d68e1b2805a53ec35c1ea5de32176b692f6fec207c6bbdb006bd26f",
+    "tests/execution_r4/test_canonical_native_protocol_regressions.py": "2a36c5b89e04cb121f7dc0e076965b09336de71b865964141fd2f102993f2da2",
+    "tests/execution_r4/test_canonical_handoff_recovery.py": "b8acbab38c92e018c547abdc65fb70b6d81f2765b30093276ff4765d6eeece93",
+    "tests/execution_r4/test_canonical_capture_admission.py": "9c68f21098768a4f6e2b24bff6a103fc3a65c02a3efc403e23be04880a32c787",
+    "src/okto_nexus/bootstrap/embedded_events.py": "4053fc0401e073f33821a2b33100f73637a0683a2b07e7af3636159b8c4280f6",
+    "tests/execution_r4/test_agent_recovery_isolation.py": "da7fb517e8e46ec9ba260ec153b3f79714d8db9d758bc9eee24d63ddf68c8549",
+    "tests/test_runtime_relay_process_restart.py": "4a5810008692014b332e18d1510341370d02630e4b9527d023c0368992cda173",
+    "tests/runtime_serve_shutdown_fixture.py": "6db2afec0f96c84de693a8ac97e0835234291899a0f64d150549cede17d59a22",
+    "tests/execution_r4/test_service_restart_contracts.py": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+    "tests/conftest.py": "76bd626b5de50b565e4f8f1fb81b112b47a41b40778e8e34a26b60da1928f8a0"
+  },
+  "installed_core": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Lib\\site-packages\\nexus_connector_core\\runtime.py": "58c4ddfcb99c4b420fcfbcfb7bfa2f81ff71530ed8656b1d68ae0aa3c0e545bf",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Lib\\site-packages\\nexus_connector_core\\journal.py": "424af579ca4aa8f2b0ca2da398c650c8547acc5c491f0a745d1802f6617a4bba"
+  },
+  "proposal_sha256": "e4b3fed2eb8ee6cd1b90768cfafefa2ef85f8739a992dd3479624c50ad992066",
+  "classification": {
+    "settings": "Confirmed fixture/oracle precondition mismatch; product pin refusal follows its declared contract.",
+    "late_structured": "Concrete duplicate-factory/handshake drift; exact first failure awaits bounded focal trace. No TypeError inference from optional kwargs alone.",
+    "quota": "Separate ACK-durability precondition gap; hypothesis until actual traceback/state.",
+    "recovery_unavailable": "Awaiting exact first failed assertion; no classification without it."
+  },
+  "mutations": {
+    "product": false,
+    "tests": false,
+    "ci_runner": false,
+    "ledger": false,
+    "prefix": false
+  },
+  "test_or_app_processes_started": 0,
+  "provider_calls": 0
+}

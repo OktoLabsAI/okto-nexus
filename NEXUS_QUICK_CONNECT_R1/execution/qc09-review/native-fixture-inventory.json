@@ -1,0 +1,505 @@
+{
+  "factories": [
+    {
+      "path": "tests/execution_r4/canonical_relay_crash_process.py",
+      "line": 35,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": true,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/capacity_connector_process.py",
+      "line": 196,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch",
+        "process_launch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": false,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": true
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/launch_recovery_process_fixture.py",
+      "line": 37,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch",
+        "process_launch",
+        "process_birth_recorder"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": false,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": true,
+        "process_launch": true
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_boot_regressions.py",
+      "line": 28,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": false,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_claude_approvals.py",
+      "line": 39,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": true,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_claude_replacement.py",
+      "line": 34,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": true,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_context_observation.py",
+      "line": 37,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": false,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_fragmented_pipes.py",
+      "line": 34,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": true,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_io_boundaries.py",
+      "line": 75,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": true,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": true
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_native_approvals.py",
+      "line": 38,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": true,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_native_protocol_regressions.py",
+      "line": 40,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch",
+        "opening_guard",
+        "process_birth_recorder",
+        "process_launch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": true,
+      "explicit_hooks": {
+        "opening_guard": true,
+        "process_birth_recorder": true,
+        "process_launch": true
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": true,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_native_protocol_regressions.py",
+      "line": 342,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": false,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": true,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_notify_targets.py",
+      "line": 31,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": false,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_opening_fallback.py",
+      "line": 41,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": false,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_profile_requirements.py",
+      "line": 139,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": true,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_registered_adapters.py",
+      "line": 136,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": false,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_relay.py",
+      "line": 34,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": false,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_structured_work.py",
+      "line": 36,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": true,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_local_launch.py",
+      "line": 86,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared"
+      ],
+      "accepts_kwargs": true,
+      "direct_native_peer": false,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_ns07.py",
+      "line": 152,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": false,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    },
+    {
+      "path": "tests/execution_r4/test_one_shot_runtime.py",
+      "line": 146,
+      "factory": "Factory",
+      "args": [
+        "self",
+        "prepared",
+        "session_id",
+        "context",
+        "stream_epoch"
+      ],
+      "accepts_kwargs": false,
+      "direct_native_peer": false,
+      "explicit_hooks": {
+        "opening_guard": false,
+        "process_birth_recorder": false,
+        "process_launch": false
+      },
+      "uses_shared_install_native": false,
+      "account_read_literal": false,
+      "source_is_legacy": false
+    }
+  ],
+  "native_work_importers": [
+    {
+      "path": "tests/execution_r4/test_canonical_handoff_recovery.py",
+      "line": 184
+    }
+  ],
+  "source_pins": {
+    "tests/execution_r4/canonical_relay_crash_process.py": "8010bffa9de04d0551b6df7c91d52c63b279e608f0def36cf1af9b51abd1bfd6",
+    "tests/execution_r4/capacity_connector_process.py": "032c6f7f2030f8987bda8718bedd72ae3b367a6822fdd8b50ec479acaa52e649",
+    "tests/execution_r4/launch_recovery_process_fixture.py": "43757c96f7dde8167709db7bf59be08e46a6248ee59c5c59bb3ca475dcac37b5",
+    "tests/execution_r4/test_canonical_boot_regressions.py": "b3b5d439d2f673e37862aee45fa920d027b60f446ffe7f5deacf7b8138d78fff",
+    "tests/execution_r4/test_canonical_claude_approvals.py": "9fca236cc23fb48b2f9a3b66d808b58ce2853d9899ddbbc8fd1668d67db80312",
+    "tests/execution_r4/test_canonical_claude_replacement.py": "032fdb8993e7e3cb0e382fb72c208c8584ed08f56c88f3e12904c25e6bc12626",
+    "tests/execution_r4/test_canonical_context_observation.py": "6385dbf93219b9d40850abb92f4743801dd28ad221b27c8ef151ee0bbe476b67",
+    "tests/execution_r4/test_canonical_fragmented_pipes.py": "deb374cf2dfc40771dfd009b486d01e9fe1d5bca6a7c2e2f3597ffa4db0bcb45",
+    "tests/execution_r4/test_canonical_handoff_recovery.py": "b8acbab38c92e018c547abdc65fb70b6d81f2765b30093276ff4765d6eeece93",
+    "tests/execution_r4/test_canonical_io_boundaries.py": "41ccd58d56d11c6445d3436efbc6990f5c89c572fa77a67acc2e7012e69354da",
+    "tests/execution_r4/test_canonical_native_approvals.py": "3d0177b76bf0ce14996060ed51330c1112067e0ca726b8b5752cf98c06608557",
+    "tests/execution_r4/test_canonical_native_protocol_regressions.py": "2a36c5b89e04cb121f7dc0e076965b09336de71b865964141fd2f102993f2da2",
+    "tests/execution_r4/test_canonical_notify_targets.py": "27e80f7990bec1b9c3763841e6703ead6252515c6dac7bca4e6dfa25026b66c5",
+    "tests/execution_r4/test_canonical_opening_fallback.py": "6eb4a661b94cbbfd3c8ad3793a7b6636205dbce3354f43d9cb9c343ad3e9eebd",
+    "tests/execution_r4/test_canonical_profile_requirements.py": "1880a65f45daba50c8144cf055d27a1f601a84ace41b3d41dc4f5757e1b87e7c",
+    "tests/execution_r4/test_canonical_registered_adapters.py": "5cb206f7ee0666f114e1794ba587d6f23e0873ebe2b80f22e3655fc601e08c18",
+    "tests/execution_r4/test_canonical_relay.py": "cd545938994809168bd72e07d681dc1d582195a47bbd60749066c29f3c029974",
+    "tests/execution_r4/test_canonical_structured_work.py": "b2e0b0140d68e1b2805a53ec35c1ea5de32176b692f6fec207c6bbdb006bd26f",
+    "tests/execution_r4/test_local_launch.py": "f35a9594fc5549ced7750efc45dfb0ff4951dd23785f9c517d3a9944bd3f9072",
+    "tests/execution_r4/test_ns07.py": "e213dd626ff50c1588562e423c49348a5510e6bf4ba7c05afb0663f014a92686",
+    "tests/execution_r4/test_one_shot_runtime.py": "712afe6e765189280035adeccbd330a4916c488fa7a2aef83f45c8146c24bdd4"
+  },
+  "limitations": [
+    "Static inventory is not a failure classification.",
+    "Core negotiates optional hooks by signature; missing hooks alone do not prove TypeError.",
+    "Factory-named classes include intentional negatives and non-native doubles; direct_native_peer is lexical only.",
+    "Do not mass-replace targeted failure/adaptor factories without their exact trace.",
+    "No product, fixture, prefix, Core or protocol changes made."
+  ]
+}

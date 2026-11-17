@@ -1,0 +1,26 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r3-harness-pr27-gsg_twh1\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Projetos\Techridy\okto_labs_okto_nexus
+configfile: C:\Users\jpamb\AppData\Local\Temp\nexus-qc-compat-source-p7x9pmmf\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_multi_harness.py::test_single_observed_harness_needs_no_profile_and_existing_connection_offers_all_intents IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_terminal_multi_harness.py::test_single_observed_harness_needs_no_profile_and_existing_connection_offers_all_intents", "when": "setup", "outcome": "passed", "duration": 6.194003300042823}
+IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_terminal_multi_harness.py::test_single_observed_harness_needs_no_profile_and_existing_connection_offers_all_intents", "when": "call", "outcome": "passed", "duration": 2.4930337000405416}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_terminal_multi_harness.py::test_single_observed_harness_needs_no_profile_and_existing_connection_offers_all_intents", "when": "teardown", "outcome": "passed", "duration": 0.6335048999171704}
+
+
+============================== warnings summary ===============================
+release_plugin.py:10
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-compat-source-p7x9pmmf\release_plugin.py:10: SyntaxWarning: invalid escape sequence '\P'
+    assert pathlib.Path(origins['okto_nexus']).resolve().is_relative_to(pathlib.Path('D:\Projetos\Techridy\okto_labs_okto_nexus\src')),origins
+
+..\nexus-ui-r3-harness-pr27-gsg_twh1\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r3-harness-pr27-gsg_twh1\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc-compat-source-p7x9pmmf\single-harness\junit.xml -
+======================= 1 passed, 2 warnings in 11.00s ========================

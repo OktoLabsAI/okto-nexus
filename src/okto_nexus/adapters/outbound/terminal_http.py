@@ -33,10 +33,12 @@ class LocalOperatorHTTP:
             data=json.dumps(body).encode('utf-8') if body is not None else None,
             headers=self.request_headers())
         failed = False
+        http_status = None
         try:
             response = self.opener.open(request, timeout=self.timeout)
         except HTTPError as error:
             response, failed = error, True
+            http_status = error.code
         except (URLError, TimeoutError, OSError):
             raise ConnectionError('OUTCOME_UNKNOWN' if method != 'GET' else 'SERVER_UNREACHABLE',
                 'The Server response is unavailable. Inspect or resume the same saved request.',
@@ -58,11 +60,11 @@ class LocalOperatorHTTP:
                 raise ValueError()
         except (ValueError, TypeError):
             raise ConnectionError('RESPONSE_UNCONFIRMED', 'The Server returned an invalid or oversized response.',
-                                  possible_effect=method != 'GET') from None
+                                  possible_effect=method != 'GET', http_status=http_status) from None
         if failed:
             error = value.get('error', {})
             if not isinstance(error, dict):
-                raise ConnectionError('RESPONSE_UNCONFIRMED', 'The Server error response is malformed.', possible_effect=method != 'GET')
+                raise ConnectionError('RESPONSE_UNCONFIRMED', 'The Server error response is malformed.', possible_effect=method != 'GET', http_status=http_status)
             raise ConnectionError(error.get('code', 'REQUEST_REFUSED'), error.get('message', 'The Server refused this request.'),
-                stage=error.get('stage', 'http'), possible_effect=error.get('possible_effect', False))
+                stage=error.get('stage', 'http'), possible_effect=error.get('possible_effect', False), http_status=http_status)
         return value

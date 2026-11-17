@@ -57,7 +57,8 @@ def require_public_ids(call, server_id):
     try:
         value = call('GET', PREFIX + '/connections/public-ids')
     except ConnectionError as error:
-        if error.code in ('NOT_FOUND', 'HTTP_ERROR', 'VALIDATION_ERROR'):
+        if (error.http_status in (404, 405) or error.http_status is None
+                and error.code in ('NOT_FOUND', 'HTTP_ERROR', 'VALIDATION_ERROR')):
             raise ConnectionError('CONNECT_ID_UNSUPPORTED_SERVER', 'This Server must be upgraded to support public Harness IDs.') from None
         raise
     if (type(value) is not dict or value.get('version') != 1 or value.get('server_id') != server_id

@@ -1,0 +1,49 @@
+{
+  "label": "canonical-shortcut",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-c",
+    "import sys,runpy;sys.path.insert(0,'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc-legacy-gate-_3qjupdh\\\\overlay');runpy.run_module('pytest',run_name='__main__')",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after\\tests\\execution_r4\\test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut",
+    "-v",
+    "-s",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\canonical-shortcut\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh",
+  "deadline_seconds": 60,
+  "started_at": "2026-11-17T07:24:22.266649+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 45012,
+      "parent_pid": null,
+      "birth_filetime": 134393738622688588,
+      "alive": false
+    },
+    {
+      "pid": 52280,
+      "parent_pid": 45012,
+      "birth_filetime": 134393738622949814,
+      "alive": false
+    },
+    {
+      "pid": 57892,
+      "parent_pid": 52280,
+      "birth_filetime": 134393738623081370,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T07:24:43.806772+00:00"
+}

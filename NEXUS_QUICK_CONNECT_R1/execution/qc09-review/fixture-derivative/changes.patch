@@ -1,0 +1,67 @@
+--- a/tests/execution_r4/test_canonical_admission_shutdown.py
++++ b/tests/execution_r4/test_canonical_admission_shutdown.py
+@@ -58,10 +58,10 @@
+     assert sum(row.get('method') == 'turn/start' for row in map(json.loads, log.read_text(encoding='utf-8').splitlines())) == 1
+ 
+ 
+-def test_feature_disable_preserves_unprojected_terminal_and_exclusive_claim(connected_local, monkeypatch):
++def test_feature_disable_preserves_unprojected_terminal_and_exclusive_claim(mutable_connected_local, monkeypatch):
+     from okto_nexus.bootstrap import embedded_events
+     from test_canonical_consumption import pull
+-    setup, binding, native = connected_local
++    setup, binding, native = mutable_connected_local
+     enable(setup, binding)
+     sent = send(setup, monkeypatch)
+     assert sent['ok'], sent
+@@ -98,3 +98,31 @@
+         assert uow.connection.execute('SELECT count(*) FROM delivery_outbox').fetchone()[0] == 1
+         assert uow.connection.execute('SELECT max(attempt_no) FROM execution_dispatch_outbox').fetchone()[0] == 1
+     assert native.opens == 1 and len(native.native.sent) == 1
++
++
++import pytest
++from contextlib import contextmanager
++from types import SimpleNamespace
++
++
++@pytest.fixture
++def mutable_connected_local(tmp_path, monkeypatch):
++    import test_local_realization as realization
++    from okto_nexus.bootstrap.dependencies import bootstrap
++    from okto_nexus.adapters.inbound.http.app import build_app
++
++    def mutable_app_for(home):
++        deps = bootstrap({}, ["--home", str(home),
++            "--runtime-handoff-auto-claim-enabled", "false"])
++        return deps, build_app(deps)
++
++    monkeypatch.setattr(realization, "app_for", mutable_app_for)
++    with contextmanager(realization.local_setup.__wrapped__)(tmp_path, monkeypatch,
++            SimpleNamespace(param="codex_app_server")) as setup:
++        response = setup[2].get("/api/v1/settings", headers=setup[3]["operator"])
++        assert response.status_code == 200, response.text
++        setting = next(item for item in response.json()["data"]["items"]
++                       if item["key"] == "feature_harness_integrations")
++        assert setting["value"] is True and setting["editable"] is True, setting
++        assert setting["source"] == "default", setting
++        yield connected_local.__wrapped__(setup)
+--- a/tests/execution_r4/test_canonical_structured_work.py
++++ b/tests/execution_r4/test_canonical_structured_work.py
+@@ -31,14 +31,9 @@
+         + change + '    text = json.dumps({"nexus_work_result": decision})\n')
+     source = _FAKE_SERVER_SOURCE.replace('    item_id = "item_" + turn_id', transform + '    item_id = "item_" + turn_id')
+     assert source != _FAKE_SERVER_SOURCE
+-    peers = []
+-    class Factory:
+-        async def open(self, prepared, session_id, context, *, stream_epoch):
+-            peer = CodexAppServerConnector(command=[sys._base_executable, "-u", "-c", source], cwd=str(setup[-1]), env={})
+-            peers.append(peer)
+-            native = await asyncio.to_thread(peer.start, owning_agent_id=context.agent_id)
+-            return CopiedAdapterSession(peer, native, session_id=session_id, stream_epoch=stream_epoch, context=context)
+-    setup[1].state.embedded_dispatch_owner.native_factory = Factory()
++    # Reuse the full canonical launch/guard/birth/handshake test boundary.
++    from test_canonical_native_protocol_regressions import install_native
++    peers, _ = install_native(connected, source)
+     hid, grant, claim, call = prepare(setup, binding, monkeypatch, workspace_id=workspace(setup))
+     if verify:
+         with setup[0].connection_factory.unit_of_work() as uow:

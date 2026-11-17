@@ -1,0 +1,35 @@
+{
+  "at": "2026-11-17T07:42:17.657645+00:00",
+  "status": "PASS_SOURCE_ONLY",
+  "tests": {
+    "tests": 53,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "scope": "Five approved compatibility source files plus one new regression file.",
+  "source_files": {
+    "src/okto_nexus/application/terminal_connection.py": "214d0085e6cfa5da131f9396e75a1b95ffc4ecd1f43169020d0d4884bde624f2",
+    "src/okto_nexus/adapters/outbound/terminal_http.py": "a210a02458ad42d396d766ba06dac22db20417874e3bfdb42c8b783a82b2a7dd",
+    "src/okto_nexus/adapters/outbound/operator_client.py": "e6b4a4a1bc9dbfa800fbe67709efab051b861272b99f6030d13f32a25bbcc339",
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_ids.py": "1214c7cf34fd2a4fcdbd0f617092fefca93bfce04f7bc2c1f30ff6aadd6023fc",
+    "src/okto_nexus/adapters/inbound/cli/connect.py": "710a68852ea12b34a56da9967ac6f0bb993226fbf209d7aa49f6f263e2f6d207",
+    "tests/quick_connect/test_entry_compatibility.py": "8bad0d91860855bad901eb33b00b5ccc70ea9b89edaaa95335278d38c879d5ad"
+  },
+  "current_source_pin_count": 741,
+  "source_drift": [],
+  "dependency_prefix": "C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv",
+  "prefix_payload_files": 1013,
+  "prefix_payload_drift": [],
+  "owned_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-compat-source-p7x9pmmf",
+  "all_owned_processes_exited": true,
+  "forced": false,
+  "provider_calls": 0,
+  "limitations": [
+    "Nexus imported from current checkout/src; this is not an installed new-wheel qualification.",
+    "Core and Connector imported from unchanged PR27 prefix; no personal environment or prior prefix reinstalled.",
+    "Existing three HTTP/SQLite fixtures use explicit synthetic candidate/provider/lifecycle boundaries.",
+    "Original legacy test files and unrelated fixtures were not edited.",
+    "The earlier real old-Server proof remains a separate derivative antecedent."
+  ]
+}

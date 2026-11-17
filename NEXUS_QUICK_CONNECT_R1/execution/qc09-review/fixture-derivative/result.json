@@ -1,0 +1,112 @@
+{
+  "cases": [
+    {
+      "label": "mutable-feature",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-fixture-derivative-m57vs0lf\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-fixture-derivative-m57vs0lf\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-fixture-derivative-m57vs0lf\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-fixture-derivative-m57vs0lf\\after\\tests\\execution_r4\\test_canonical_admission_shutdown.py::test_feature_disable_preserves_unprojected_terminal_and_exclusive_claim",
+        "-v",
+        "-s",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-fixture-derivative-m57vs0lf\\mutable-feature\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-fixture-derivative-m57vs0lf",
+      "deadline_seconds": 60,
+      "started_at": "2026-11-17T06:34:33.977700+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 38064,
+          "parent_pid": null,
+          "birth_filetime": 134393708739808802,
+          "alive": false
+        },
+        {
+          "pid": 55796,
+          "parent_pid": 38064,
+          "birth_filetime": 134393708740233339,
+          "alive": false
+        },
+        {
+          "pid": 44608,
+          "parent_pid": 55796,
+          "birth_filetime": 134393708740478704,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T06:34:49.931875+00:00"
+    },
+    {
+      "label": "structured-late",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-fixture-derivative-m57vs0lf\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-fixture-derivative-m57vs0lf\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-fixture-derivative-m57vs0lf\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-fixture-derivative-m57vs0lf\\after\\tests\\execution_r4\\test_canonical_handoff_recovery.py::test_late_structured_output_cannot_complete_reclaimed_work",
+        "-v",
+        "-s",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-fixture-derivative-m57vs0lf\\structured-late\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-fixture-derivative-m57vs0lf",
+      "deadline_seconds": 60,
+      "started_at": "2026-11-17T06:34:49.936220+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 27948,
+          "parent_pid": null,
+          "birth_filetime": 134393708899387769,
+          "alive": false
+        },
+        {
+          "pid": 36956,
+          "parent_pid": 27948,
+          "birth_filetime": 134393708899639442,
+          "alive": false
+        },
+        {
+          "pid": 53056,
+          "parent_pid": 36956,
+          "birth_filetime": 134393708899814773,
+          "alive": false
+        },
+        {
+          "pid": 33116,
+          "parent_pid": 53056,
+          "birth_filetime": 134393709011056402,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T06:35:06.715703+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

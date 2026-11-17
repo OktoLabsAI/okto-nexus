@@ -1,0 +1,49 @@
+{
+  "label": "two-harnesses",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-c",
+    "import sys,runpy;sys.path.insert(0,'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc-legacy-gate-_3qjupdh\\\\overlay');runpy.run_module('pytest',run_name='__main__')",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after\\tests\\execution_r4\\test_terminal_multi_harness.py::test_two_distinct_harnesses_share_project_keep_custom_a_and_recover_b_finish",
+    "-v",
+    "-s",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\two-harnesses\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh",
+  "deadline_seconds": 60,
+  "started_at": "2026-11-17T07:25:00.620146+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 54168,
+      "parent_pid": null,
+      "birth_filetime": 134393739006230786,
+      "alive": false
+    },
+    {
+      "pid": 19228,
+      "parent_pid": 54168,
+      "birth_filetime": 134393739006520785,
+      "alive": false
+    },
+    {
+      "pid": 54280,
+      "parent_pid": 19228,
+      "birth_filetime": 134393739006663778,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T07:25:18.415524+00:00"
+}
