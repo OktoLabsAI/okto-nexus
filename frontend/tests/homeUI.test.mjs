@@ -108,10 +108,13 @@ test('real RuntimeOperations continuation presentation cannot select a new or re
   assert.match(markup,/Continue as operator in session session/);assert.match(markup,/Review runtime action/);
   assert.doesNotMatch(markup,/aria-label="Runtime action"|aria-label="Runtime session ID"|Reuse if unambiguous|Create a new session/);
 });
-test('shared composer exposes explicit message versus handoff without a hidden chosen recipient', () => {
+test('shared composer uses intention labels and requires an explicit recipient', () => {
   const markup=html(MetaHarnessComposer,{workspace:'ws',workspaces:[],agents:[],onSent(){}});
   assert.match(markup,/meta-kind-message/);assert.match(markup,/meta-kind-handoff/);assert.match(markup,/choose agent/);
-  assert.match(markup,/<button[^>]*disabled=""[^>]*aria-label="Send turn"/);
+  assert.match(markup,/role="group" aria-label="Interaction"/);
+  assert.match(markup,/meta-kind-message[^>]*aria-pressed="true"[^]*?>Chat<\/button>/);
+  assert.match(markup,/meta-kind-handoff[^]*?>Ask for work<\/button>/);
+  assert.match(markup,/<button[^>]*disabled=""[^>]*aria-label="Send chat message"/);
 });
 
 test('logout clears only Home continuation content and leaves unrelated recovery records intact', () => {
