@@ -1,0 +1,54 @@
+{
+  "url": "http://127.0.0.1:59142",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-r3-harness-e00xq9af",
+  "identities": {
+    "artifact_id": "art_b3ae8a8096904b828ed17821ba9de057",
+    "workspace": "ws",
+    "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-r3-harness-e00xq9af\\participant-project",
+    "question_session": "ses_b91f34599de3e1069243bd5f8fda4a02",
+    "closed_session": "ui-session-2",
+    "r3_fixture": {
+      "registered_bindings": [
+        "binding",
+        "ui-binding-2"
+      ],
+      "initial_phase": "Canonical admitted pending blocking input plus closed synthetic history/result.",
+      "operator_handoff": "r3-operator-handoff; separate public retained handoff, another claimant, explicit operator verifier. Qualify only if actual HTTP exposes verify_handoff.",
+      "second_phase": "Explicit add_parallel marker adds a scoped RUNNING operation/session READ FACT on binding; not actual native execution.",
+      "unchanged_authority": "No operator permission, recipient, grant, ticket or native request TTL changed."
+    }
+  },
+  "observation_window_seconds": 900,
+  "extend_read_window_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-r3-harness-control-t455pd9d\\extend-read-window.json",
+  "extension_scope": "Observation only; no grant, ticket or native request expiry change",
+  "decision_authority_times": [
+    {
+      "binding_id": "binding",
+      "lane_ticket_expires_at": "2026-11-17T04:26:15.864641+00:00"
+    }
+  ],
+  "original_grants": [
+    {
+      "grant_id": "grant_4462a756d8c24a578bb62a00e700769b",
+      "expires_at": "2026-11-17T05:16:15.297488Z",
+      "max_executions": 10
+    }
+  ],
+  "authority_limit": "Each native request expires120s after ingress; original control-lane ticket normally10min. No hidden grant or lane-ticket renewal; UI observation starts60min and can be extended explicitly without changing authority.",
+  "facilitator_trigger": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-r3-harness-control-t455pd9d\\publish-fresh-question",
+  "trigger_policy": "Only after root starts task3, never under an existing human draft. New request8/source-sequence, same admitted operator turn/grant; old request expiry remains immutable.",
+  "provider_calls": 0,
+  "native_binary_calls": 0,
+  "test_is_simulated": true,
+  "loopback_operator": true,
+  "source_sha256": {
+    "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/fixture.py": "c5cda7c680845f46ef029336311a3f0fbfe43061898881bec21681cf4be8278f",
+    "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/observation_window.py": "fb32e8cdaceac860f1d95b588dcbdac2efcca6c7034d0ca83869d8f5be29c2df",
+    "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/seed.py": "1c8de6ee95d981418f76baebdd7217d425fa2aad58236c9ad8e804a55935f1e9",
+    "tests/ui_simplification/test_harness_board.py": "44bde6c7ef6fbeb598b36d7d2da4b9c8c73139c5592129e32550749d2a276c4b",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "bcc82c12852913beb86e9a237b93e364c8c484bef6d986bd6152c21c11aa5177",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-Bljabqt3.js": "8daee362886fa56f4d37bcfbbcd019c737ca14cd8b4908a31e4a5eb29962554b"
+  },
+  "fixture_pid": 52600
+}

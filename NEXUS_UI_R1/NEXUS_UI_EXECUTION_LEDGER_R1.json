@@ -1863,14 +1863,16 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -1922,14 +1924,16 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -1979,7 +1983,8 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
@@ -1988,7 +1993,8 @@
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2041,14 +2047,16 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2100,14 +2108,16 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2158,14 +2168,16 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Measured bound O(N+relations), 55 SQL at1/10/100 agents. Large scenario misses500ms latency target; no native harness/browser performance claim.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2216,14 +2228,16 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2275,14 +2289,16 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2338,14 +2354,16 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2398,14 +2416,16 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2456,14 +2476,16 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2520,14 +2542,16 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2574,7 +2598,8 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
@@ -2582,7 +2607,8 @@
         "Source targets/viewer do not close unified Home or UI/Connector onboarding gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2627,13 +2653,15 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2680,13 +2708,15 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2736,13 +2766,15 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2790,13 +2822,15 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2848,13 +2882,15 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -2906,7 +2942,8 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
@@ -2914,7 +2951,8 @@
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
         "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -3322,12 +3360,14 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -3377,12 +3417,14 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -3434,12 +3476,14 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     },
     {
@@ -3487,12 +3531,14 @@
         "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
         "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
         "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
-        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/qualification.json"
       ],
       "limitations": [
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification.",
+        "R3 automated current milestone complete:350Node/build,42isolatedinstalled,14functionalbrowserchecks; intermediate fixture/oracle/old-origin-console failure preserved. No human/native/AT/SLO/reconnect-individual qualification inferred. Original global gates remain."
       ]
     }
   ],
@@ -6138,6 +6184,10 @@
     {
       "at": "2026-11-17T04:17:27.312564+00:00",
       "event": "R3 source milestone: conditional Active/Needs you/Results and notifications implemented with registered harness identities and canonical per-request blocking proof.350/350Node plus TSC/Vite onBljabqt3 pass;350cut addsfirst-projectintent and legitimate empty-origin references with exact attention fallback. Backend source scopes/metadata/order/cost/legacy tests pinned separately;1batch adds1SQL(58vs57matchedfixture) independent1/10/100, oneUoW/0writes;100single715mssample isnotSLO. Oldendpoints/targets/pump/flags preserved. No Core/protocol/Attention/setup/receipt/migration/personalinstall/provider change. Individual reconnect absent is explicit and doesnotinvoke global service restart. User unavailable for hours: no new human trial; human/global qualification remains pending. QuickConnect package queued, not inspected; current browser+installed+cleanup+commit/push must finish before next implementation."
+    },
+    {
+      "at": "2026-11-17T04:25:32.831592+00:00",
+      "event": "Current conditional Home/notifications implementation completed with automated tests:350Node+TSC/Vite,42installed(all25R3+17regressions),14functionalbrowser checks in2phases, source/payload/pins verified. Real canonical public operator handoff reached its exact record; unlinked requests remain visible without fake harnesses. Browser42? No: browser14functional, installed42. Console-from-old-origin guard failure and expiry/oracle antecedents preserved, not flattened to an all-green history.0POST/provider/manualhuman in finalbrowser, owned processes/ports physically absent; package prefix has no remaining process. Codecommit ae1809f8 pushed. User postponed manual participation for hours; no humanPASS/release/default. Next request QuickConnect remains unread until final evidence commit/push/checks finish. Global UI-R1 qualification remains IN_PROGRESS separately."
     }
   ],
   "risk_acceptances": [],

@@ -5,6 +5,17 @@ Navegação, acompanhamento único, painel exato e onboarding múltiplo foram
 implementados. A qualificação completa de PR-00..PR-08 exige os cenários do
 ledger, inclusive campanha real e avaliação humana; não se encerra com a UI.
 
+O corte atual da composição é o **R3**, descrito em
+[`R3_IMPLEMENTATION_REPORT.md`](R3_IMPLEMENTATION_REPORT.md). Active contém
+harnesses registrados; Needs you distingue harness comprovadamente aguardando
+o usuário de pedidos não bloqueantes; Results contém entregas com término
+reportado. O mesmo harness pode continuar executando com pedido e entrega em
+suas colunas próprias. São 350 testes frontend, 42 instalados e 14 verificações
+funcionais de navegador no corte R3, com antecedentes e limites preservados.
+Os layouts e pacotes R1/R2 abaixo são cortes anteriores, sem qualificação
+retroativa do R3 ou aceite humano inferido. Reconexão individual indisponível
+é explícita; o card não reinicia globalmente o Connector.
+
 ## Entrega implementada
 
 | Etapa | Resultado | Evidência principal |

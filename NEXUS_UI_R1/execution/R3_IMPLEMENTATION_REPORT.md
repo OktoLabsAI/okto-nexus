@@ -63,7 +63,20 @@ relações e arquivos por workspace. Wheel `0ecc87a6…5c2b490`, sdist
 Nexus conferem com fonte/wheel, os 168 Core e 127 Connector com os wheels
 exatos. Prefixos anteriores e os 1.035 pins BXP permanecem intactos.
 
-O browser técnico final está em qualificação separada.
+O browser técnico PR25 comprovou **14 verificações funcionais** em duas fases:
+harness bloqueado em Needs you e, após outra execução RUNNING comprovada,
+harness em Active com pergunta independente em Needs you e entrega em Results.
+Inclui handoff público verificável pelo operador atual, alvo exato, origens
+sem vínculo, inspeção somente leitura, paginação contextual, 360 px, Add apenas
+com GETs e reconexão indisponível explícita. Zero POST ou provedor.
+
+Foram preservados os antecedentes de oráculo/expiração e uma falha de guarda
+de console da origem anterior. As verificações funcionais passaram; isso não
+é uma alegação de que todo comando intermediário foi verde. A fase final
+comprovou snapshot pareado HTTP/DOM ainda antes do prazo nativo original,
+sem nova publicação ou extensão de TTL. Navegador, Chrome, Node, fixture e
+porta próprios encerraram e sua ausência física foi comprovada. Root revisou
+visualmente as duas fases e as evidências têm 57 pins conferidos.
 Nenhuma aprovação humana, leitor de tela real, harness real ou campanha paga é
 inferida de Node, metadados sintéticos ou fixture local.
 
@@ -100,7 +113,9 @@ incertos. Nunca limpar dados ou repetir um envio como mecanismo de reversão.
 
 ## Sequência solicitada
 
-Concluir a qualificação automatizada, o cleanup e o commit/push desta implementação
-antes de iniciar o pacote Quick Connect indicado pelo usuário. O pacote novo
-ainda não foi inspecionado ou iniciado. A indisponibilidade humana não é tratada
-como aceite; a qualificação global UI-R1 continua explicitamente separada.
+A implementação e a qualificação automatizada desta composição estão concluídas,
+com cleanup comprovado. Código em `ae1809f8`; a evidência final e o ledger serão
+enviados no fechamento deste milestone, antes de iniciar o pacote Quick Connect
+indicado pelo usuário. Até este corte o pacote novo não foi inspecionado ou
+iniciado. A indisponibilidade humana não é tratada como aceite; a qualificação
+global UI-R1 continua explicitamente separada, sem release/default aprovados.

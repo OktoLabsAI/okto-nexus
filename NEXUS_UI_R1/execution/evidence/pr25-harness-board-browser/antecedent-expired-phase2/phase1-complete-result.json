@@ -1,0 +1,122 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "Canonical operator handoff Review opened its exact target and actual filtered handoff route",
+      "status": "PASS",
+      "target": {
+        "handoff_id": "r3-operator-handoff",
+        "kind": "handoff",
+        "server_id": "srv_8f3761b40f231ff604aa9fd9a49af82d",
+        "workspace_id": "ws"
+      },
+      "proof": [
+        {
+          "status": 200,
+          "url": "http://127.0.0.1:60106/api/v1/home/target?target=%7B%22handoff_id%22%3A%22r3-operator-handoff%22%2C%22kind%22%3A%22handoff%22%2C%22server_id%22%3A%22srv_8f3761b40f231ff604aa9fd9a49af82d%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+        },
+        {
+          "status": 200,
+          "url": "http://127.0.0.1:60106/api/v1/handoffs?handoff_id=r3-operator-handoff&workspace=ws"
+        }
+      ],
+      "limit": "Original script expected a different route shape; this checks preserved real target/filter responses without repeating the click or any decision."
+    },
+    {
+      "name": "Selected-project Add enters configuration directly through canonical GET reads without chooser or Test/Finish",
+      "status": "PASS",
+      "requests": [
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:60106/logos/nexus-icon.svg"
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:60106/api/v1/runtime-management/connections/me"
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:60106/api/v1/runtime-management/connections/project-preset"
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:60106/api/v1/runtime-management/connections/workspaces?limit=100"
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:60106/api/v1/runtime-management/connections/catalog?workspace_id=ws&limit=100"
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:60106/api/v1/runtime-management/connections/setup/project_c3a681fce700f539e9d233af4272ae62?new_agent_draft=true"
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:60106/api/v1/runtime-management/agents/operator/executors?limit=100"
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:60106/api/v1/runtime-management/connections/me"
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:60106/api/v1/runtime-management/agents/operator/runtime-options?executor_id=exe_ea6b3fe72fbe155eefbd8467253e0465&workspace_id=ws"
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:60106/api/v1/runtime-management/workspaces/ws/paths?executor_id=exe_ea6b3fe72fbe155eefbd8467253e0465"
+        }
+      ]
+    },
+    {
+      "name": "Completion uses frozen bundle and no mutations or frontend errors",
+      "status": "PASS",
+      "pageErrors": [],
+      "consoleErrors": []
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60106/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60106/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60106/api/v1/runtime-management/connections/project-preset"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60106/api/v1/runtime-management/connections/workspaces?limit=100"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60106/api/v1/runtime-management/connections/catalog?workspace_id=ws&limit=100"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60106/api/v1/runtime-management/connections/setup/project_c3a681fce700f539e9d233af4272ae62?new_agent_draft=true"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60106/api/v1/runtime-management/agents/operator/executors?limit=100"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60106/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60106/api/v1/runtime-management/agents/operator/runtime-options?executor_id=exe_ea6b3fe72fbe155eefbd8467253e0465&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60106/api/v1/runtime-management/workspaces/ws/paths?executor_id=exe_ea6b3fe72fbe155eefbd8467253e0465"
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": []
+}
