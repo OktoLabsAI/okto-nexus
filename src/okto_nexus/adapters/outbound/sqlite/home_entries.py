@@ -18,7 +18,7 @@ from ....domain.home_entries import (
 )
 from ..harness.event_journal import redact
 from . import home_operational_facts
-from .home import FACTS, RESULTS, SqliteHomeQueries
+from .home import FACTS, FACTS_NATIVE_PROGRESS, RESULTS, SqliteHomeQueries
 
 # This relation is independent of the old runtime_refs preview (20). The
 # persisted delivery/claim is resolved before sender filtering or pagination.
@@ -182,6 +182,35 @@ HARNESS_BLOCKING_V2 = HARNESS_BLOCKING.replace(
 )
 
 
+class _WorkRows(list):
+    """Request-local private metadata; list items remain legacy activity JSON."""
+
+    def __init__(self, values=(), native_progress_current=()):
+        super().__init__(values)
+        self.native_progress_current = list(native_progress_current)
+
+
+def _progress_collection(raw):
+    try:
+        values = json.loads(raw) if raw is not None else []
+    except (TypeError, ValueError):
+        return []
+    return values if isinstance(values, list) else []
+
+
+def _progress_key(value):
+    if not isinstance(value, dict):
+        return None
+    names = ('server_id', 'executor_id', 'operation_id', 'session_id', 'workspace_id',
+        'agent_id', 'binding_id', 'workspace_binding_id', 'stream_epoch')
+    if any(type(value.get(name)) is not str or not value[name] for name in names):
+        return None
+    owner = value.get('owner_generation')
+    if type(owner) is not int or owner < 1:
+        return None
+    return (*tuple(value[name] for name in names), owner)
+
+
 class SqliteHomeEntryRelations:
     """Internal, unpaged projection. Does not authenticate or grant authority.
 
@@ -211,14 +240,23 @@ class SqliteHomeEntryRelations:
             cursor.close()  # UDF cleanup must not retain an unfinished statement.
 
     def _project(self, uow, *, relation, params, attention_relation, check_budget=None):
+        include_progress = relation is FACTS and params.get('delivery_presentation_version') == 2
+        if include_progress:
+            relation = FACTS_NATIVE_PROGRESS
         if attention_relation is None:
             ctes = 'WITH home_attention AS MATERIALIZED (SELECT NULL AS item WHERE 0)'
             additions = {}
         else:
             ctes, additions = self.home._attention_relations(attention_relation)
-        sql = ctes + ',' + relation.lstrip()[4:] + ' SELECT item FROM filtered'
+        sql = ctes + ',' + relation.lstrip()[4:] + (' SELECT item,native_progress_current FROM filtered' if include_progress else ' SELECT item FROM filtered')
+        progress = []
+        def decode(row):
+            if include_progress:
+                progress.extend(_progress_collection(row[1]))
+            return json.loads(row[0])
         with self.home.bounded(uow.connection):
-            return self._collect(uow.connection.execute(sql, dict(params, **additions)), lambda row: json.loads(row[0]), check_budget)
+            values = self._collect(uow.connection.execute(sql, dict(params, **additions)), decode, check_budget)
+        return _WorkRows(values, progress) if include_progress else values
 
     def _work(self, uow, **kwargs):
         return self._project(uow, relation=FACTS, **kwargs)
@@ -238,11 +276,14 @@ class SqliteHomeEntryRelations:
             additions = {}
         else:
             ctes, additions = self.home._attention_relations(attention_relation)
+        include_progress = params.get('delivery_presentation_version') == 2
+        work_relation = FACTS_NATIVE_PROGRESS if include_progress else FACTS
+        progress_column = 'native_progress_current' if include_progress else 'NULL'
         results = re.sub(r':agent_id\b', ':result_agent_id', RESULTS)
-        sql = (ctes + " SELECT 'work' AS section,item FROM (" + FACTS
-            + " SELECT item FROM filtered LIMIT :batch_source_limit) UNION ALL SELECT 'results',item FROM ("
+        sql = (ctes + " SELECT 'work' AS section,item," + progress_column + ' FROM (' + work_relation
+            + " SELECT item,native_progress_current FROM filtered LIMIT :batch_source_limit) UNION ALL SELECT 'results',item,NULL FROM ("
             + results + ' SELECT item FROM filtered LIMIT :batch_source_limit)')
-        values = {'work': [], 'results': []}
+        values = {'work': _WorkRows() if include_progress else [], 'results': []}
         with self.home.bounded(uow.connection):
             cursor = uow.connection.execute(sql, dict(params, result_agent_id=None,
                 batch_source_limit=self.MAX_RELATION_ROWS + 1, **additions))
@@ -255,6 +296,8 @@ class SqliteHomeEntryRelations:
                     if len(section) >= self.MAX_RELATION_ROWS:
                         raise sqlite3.OperationalError('Home entry source resource budget exceeded')
                     section.append(json.loads(row[1]))
+                    if include_progress and row[0] == 'work':
+                        section.native_progress_current.extend(_progress_collection(row[2]))
             finally:
                 cursor.close()
         return values['work'], values['results']
@@ -476,6 +519,17 @@ class SqliteHomeEntryRelations:
             rows = source('operational_dependencies', lambda: self._rows(uow, HARNESS_BLOCKING_V2, params, check_budget))
             if status['operational_dependencies'] == 'ready':
                 relations.harness_blocking = [json.loads(row['item']) for row in rows]
+                if status['work'] == 'ready':
+                    positive_progress = set()
+                    for proof in getattr(work, 'native_progress_current', ()):
+                        check_budget()
+                        key = _progress_key(proof)
+                        if key is not None:
+                            positive_progress.add(key)
+                    for operation in relations.harness_blocking:
+                        check_budget()
+                        if operation.get('family') == 'operation' and _progress_key(operation) in positive_progress:
+                            operation['productive_progress_current'] = True
             relations.operational_source_status = {name: status.pop(name) for name in
                 ('operational_sessions', 'operational_leases', 'operational_dependencies')}
         return relations

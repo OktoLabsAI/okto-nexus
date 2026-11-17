@@ -136,3 +136,28 @@ These hashes fix the audited Home/native projection inputs; they are not a build
 | `frontend/src/homeController.ts` | `5d0de1e04e503f3eb4892d2876a6f02bbed40f2d228cd3b0aefa539db9f92c65` |
 
 Audit commands were read-only `rtk proxy rg`, `rtk proxy python -B -X utf8` for bounded text/hash reads, and repository pin reads. There is no test command/result, service PID, provider usage, cleanup action or new PASS to report.
+
+## R5 correction: productive events with a SUBMITTED receipt
+
+The real R3 browser fixture exposed a second reader assumption: Core retains a
+`SUBMITTED` receipt while the admitted turn emits committed `started` and
+`progress` events. It does not write a productive `RUNNING` receipt. The older
+Work relation already recognizes these events, but the new harness reducer
+required `RUNNING`, so it could not recognize actual independent work.
+
+The R5 correction transports a private, complete set of positive progress
+identities from the existing Work SQL relation, before preview truncation. It
+matches server, executor, operation, session, workspace, subject agent, binding,
+workspace binding, owner generation and stream epoch. This is separate from
+legacy item JSON and revisions. Only an exact positive match can supplement a
+`SUBMITTED` operation. Missing facts remain unknown; labels, running counts and
+the first twenty preview references are not evidence.
+
+The reducer retains current authority, runtime, lease/control and stream
+fences, excludes uncertain dispatches, and respects exact native blockers and
+unconfirmed decisions. Thus independent current work can keep the harness in
+Active while the request remains in Needs You. Terminal independent work does
+not release another session's block. This does not create causal proof that a
+decision was applied. Core, receipt stages, schema and native protocols are
+unchanged. R5 execution and final qualification are recorded separately; this
+source explanation is not itself a passing test.

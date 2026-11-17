@@ -4,6 +4,22 @@ All notable changes to Okto Nexus are documented in this file.
 
 ## Unreleased
 
+### 0.3.7 development
+
+- Evolve the opt-in operational Home with separate current connection,
+  productive work and human-blocking evidence. Keep independent work in Active
+  while its request appears in Needs You; fully blocked harnesses move there.
+- Distinguish turn output, task completion and delivery verification in Results,
+  using the exact canonical delivery/claim proof. Missing native application
+  confirmation remains explicit after an operator decision.
+- Keep contextual reads available while the board is paused. Identical polls
+  do not announce updates, exact sessions open directly when unambiguous, and
+  fresh partial coverage is distinct from an unsuccessful refresh.
+- Preserve version-1 consumers, classic Home, the global bell and terminal/CLI
+  workflows. This change does not migrate the database, change Core/Connector
+  pins, stop services or enable the presentation by default. Qualification and
+  remaining gates are tracked in `NEXUS_HOME_ESTADOS_R1`.
+
 ### 0.2.2
 
 - Add global MCP inheritance defaults, nullable agent overrides and explicit

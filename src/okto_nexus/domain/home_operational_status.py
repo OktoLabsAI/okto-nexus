@@ -107,7 +107,8 @@ def project(relations, registry, *, now, check_budget):
                 (refusals if refused else confirmations).append(ref)
                 response_uncertain = response_uncertain or row.get('native_write_stage') == 'OUTCOME_UNKNOWN' or row.get('native_write_dispatch') == 'RECONCILING'
                 uncertain.add(row['operation_id'])
-        running = {o['session_id'] for oid, o in pending.items() if o['stage'] == 'RUNNING'
+        running = {o['session_id'] for oid, o in pending.items() if (o['stage'] == 'RUNNING'
+                   or o['stage'] == 'SUBMITTED' and o.get('productive_progress_current') is True)
                    and o['session_id'] in live and oid not in blockers and oid not in uncertain
                    and o.get('owner_generation') == live[o['session_id']].owner_generation
                    and o.get('stream_epoch') == live[o['session_id']].stream_epoch}

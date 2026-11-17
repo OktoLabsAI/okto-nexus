@@ -43,6 +43,9 @@ WITH links AS MATERIALIZED (
   THEN json_extract(e.payload_json,'$.payload.delivery_phase') IN ('started','progress') ELSE 1 END
 ), scoped_ops AS MATERIALIZED (
  SELECT o.server_id,o.executor_id,o.operation_id,o.session_id,o.workspace_id,o.subject_agent_id,
+   o.binding_id,o.workspace_binding_id,
+   s.owner_generation AS progress_owner_generation,
+   s.stream_epoch AS progress_stream_epoch,
    o.actor_agent_id,o.admission_state,o.created_at,r.stage,r.received_at,r.receipt_revision,s.lifecycle_state,
    CASE WHEN s.lifecycle_state IN ('READY','ACTIVE') AND s.lease_state='ACTIVE'
      AND r.stage NOT IN ('SUCCEEDED','FAILED','CANCELLED','OUTCOME_UNKNOWN','REFUSED_BEFORE_EFFECT')
@@ -88,7 +91,8 @@ WITH links AS MATERIALIZED (
   NULL AS running_since,
   MAX(COALESCE(received_at,created_at)) AS latest,
   json_group_array(json_object('executor_id',executor_id,'session_id',session_id,'operation_id',operation_id))
-    FILTER(WHERE position<=20) AS runtime_refs
+    FILTER(WHERE position<=20) AS runtime_refs,
+  NULL AS native_progress_current
  FROM ranked GROUP BY group_key
 ), parents AS MATERIALIZED (
  SELECT 'handoff' AS kind,h.handoff_id AS source_id,h.workspace_id,h.status,h.created_at AS created,
@@ -120,7 +124,7 @@ WITH links AS MATERIALIZED (
   'session_id',p.session_id,'blocked',p.blocked,'claim_expired',p.claim_expired,'running',COALESCE(g.running,0),
   'running_since',g.running_since,'latest',g.latest,'attempt_count',COALESCE(g.attempts,0),
   'runtime_refs',json(COALESCE(g.runtime_refs,'[]')),'stage',last.stage,'receipt_at',last.received_at,
-  'cleanup',COALESCE(last.cleanup,0)) AS fact
+  'cleanup',COALESCE(last.cleanup,0)) AS fact,g.native_progress_current AS native_progress_current
  FROM parents p LEFT JOIN grouped g ON g.group_key=p.group_key
  LEFT JOIN ranked last ON last.group_key=p.group_key AND last.position=1
  WHERE (:agent_id IS NULL OR p.sender=:agent_id OR p.recipient=:agent_id
@@ -136,11 +140,20 @@ WITH links AS MATERIALIZED (
  OR (json_extract(item,'$.source_type') IN ('execution_native_request','execution_operation','execution_result','handoff_result') AND EXISTS(SELECT 1 FROM json_each(fact,'$.runtime_refs') ref
   WHERE json_extract(item,'$.operation_id')=json_extract(ref.value,'$.operation_id')
     AND json_extract(item,'$.executor_id')=json_extract(ref.value,'$.executor_id')
-    AND json_extract(item,'$.session_id')=json_extract(ref.value,'$.session_id')))))) AS item FROM facts),
-filtered AS MATERIALIZED (SELECT item FROM projected WHERE
+    AND json_extract(item,'$.session_id')=json_extract(ref.value,'$.session_id')))))) AS item,native_progress_current FROM facts),
+filtered AS MATERIALIZED (SELECT item,native_progress_current FROM projected WHERE
  (:state IS NOT NULL AND (:state='all' OR json_extract(item,'$.display_state')=:state)) OR
  (:state IS NULL AND json_extract(item,'$.display_state') NOT IN ('completed','turn_completed','failed','cancelled')))
 """
+
+# Only the internal v2 relation serializes complete positive operation proof.
+# Legacy/public queries keep NULL and do not allocate this JSON collection.
+FACTS_NATIVE_PROGRESS = FACTS.replace('NULL AS native_progress_current', """
+  json_group_array(json_object('server_id',server_id,'executor_id',executor_id,'operation_id',operation_id,
+    'session_id',session_id,'workspace_id',workspace_id,'agent_id',subject_agent_id,
+    'binding_id',binding_id,'workspace_binding_id',workspace_binding_id,
+    'owner_generation',progress_owner_generation,'stream_epoch',progress_stream_epoch))
+    FILTER(WHERE observed_running=1) AS native_progress_current""")
 
 
 RESULTS = """

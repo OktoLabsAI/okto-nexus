@@ -612,6 +612,15 @@
           "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
           "artifact_path": "execution/source-tests/r3-home/qualification.json",
           "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
+        },
+        {
+          "commit": "3ea245d87635a22da2647d234338f0b728942fab + exact R5 source/test artifact pins",
+          "command_or_procedure": "Bounded source-only focal run of six files: productive reducer, private full-key transport, actual Core ingress and legacy equivalence",
+          "environment": "Windows; isolated source-first Nexus with pinned dependencies; inert native peer, no provider",
+          "timestamp": "2026-11-17T17:24:21.000062+00:00",
+          "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
+          "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
+          "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
         }
       ]
     },
@@ -705,6 +714,15 @@
           "result": "PASS_SUBSET14, FAIL1: actual Working producer mismatch; decision registered remains awaiting confirmation",
           "artifact_path": "execution/browser-hst/cuts/r3-question-decision/qualification.json",
           "limitations": "Core keeps receipt SUBMITTED while current progress exists. R5 correction in progress; no fabricated RUNNING receipt. Post-answer terminal cut not qualified; causal APPLIED proof unavailable."
+        },
+        {
+          "commit": "3ea245d87635a22da2647d234338f0b728942fab + exact R5 source/test artifact pins",
+          "command_or_procedure": "Bounded source-only focal run of six files: productive reducer, private full-key transport, actual Core ingress and legacy equivalence",
+          "environment": "Windows; isolated source-first Nexus with pinned dependencies; inert native peer, no provider",
+          "timestamp": "2026-11-17T17:24:21.000062+00:00",
+          "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
+          "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
+          "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
         }
       ]
     },
@@ -802,6 +820,15 @@
           "result": "PASS_SUBSET14, FAIL1: actual Working producer mismatch; decision registered remains awaiting confirmation",
           "artifact_path": "execution/browser-hst/cuts/r3-question-decision/qualification.json",
           "limitations": "Core keeps receipt SUBMITTED while current progress exists. R5 correction in progress; no fabricated RUNNING receipt. Post-answer terminal cut not qualified; causal APPLIED proof unavailable."
+        },
+        {
+          "commit": "3ea245d87635a22da2647d234338f0b728942fab + exact R5 source/test artifact pins",
+          "command_or_procedure": "Bounded source-only focal run of six files: productive reducer, private full-key transport, actual Core ingress and legacy equivalence",
+          "environment": "Windows; isolated source-first Nexus with pinned dependencies; inert native peer, no provider",
+          "timestamp": "2026-11-17T17:24:21.000062+00:00",
+          "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
+          "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
+          "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
         }
       ]
     },
@@ -938,6 +965,15 @@
           "result": "PASS40 focused source tests after currentness fences; no provider executed",
           "artifact_path": "execution/operational-currentness/qualification.json",
           "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        },
+        {
+          "commit": "3ea245d87635a22da2647d234338f0b728942fab + exact R5 source/test artifact pins",
+          "command_or_procedure": "Bounded source-only focal run of six files: productive reducer, private full-key transport, actual Core ingress and legacy equivalence",
+          "environment": "Windows; isolated source-first Nexus with pinned dependencies; inert native peer, no provider",
+          "timestamp": "2026-11-17T17:24:21.000062+00:00",
+          "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
+          "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
+          "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
         }
       ]
     },
@@ -1029,6 +1065,15 @@
           "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
           "artifact_path": "execution/source-tests/r3-home/qualification.json",
           "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
+        },
+        {
+          "commit": "3ea245d87635a22da2647d234338f0b728942fab + exact R5 source/test artifact pins",
+          "command_or_procedure": "Bounded source-only focal run of six files: productive reducer, private full-key transport, actual Core ingress and legacy equivalence",
+          "environment": "Windows; isolated source-first Nexus with pinned dependencies; inert native peer, no provider",
+          "timestamp": "2026-11-17T17:24:21.000062+00:00",
+          "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
+          "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
+          "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
         }
       ]
     },
@@ -2096,6 +2141,15 @@
           "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
           "artifact_path": "execution/source-tests/r3-home/qualification.json",
           "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
+        },
+        {
+          "commit": "3ea245d87635a22da2647d234338f0b728942fab + exact R5 source/test artifact pins",
+          "command_or_procedure": "Bounded source-only focal run of six files: productive reducer, private full-key transport, actual Core ingress and legacy equivalence",
+          "environment": "Windows; isolated source-first Nexus with pinned dependencies; inert native peer, no provider",
+          "timestamp": "2026-11-17T17:24:21.000062+00:00",
+          "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
+          "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
+          "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
         }
       ]
     },
@@ -2179,6 +2233,15 @@
           "result": "PASS746, SKIP8; timeout/force/drift/remaining processes0",
           "artifact_path": "execution/package-hst-r3/installed-qualification.json",
           "limitations": "R3 only. Eight literal POSIX/non-TTY skips; collection and launcher antecedents retained. Not browser, accessibility, native console, real-provider or final R5 qualification."
+        },
+        {
+          "commit": "3ea245d87635a22da2647d234338f0b728942fab + exact R5 source/test artifact pins",
+          "command_or_procedure": "Bounded source-only focal run of six files: productive reducer, private full-key transport, actual Core ingress and legacy equivalence",
+          "environment": "Windows; isolated source-first Nexus with pinned dependencies; inert native peer, no provider",
+          "timestamp": "2026-11-17T17:24:21.000062+00:00",
+          "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
+          "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
+          "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
         }
       ]
     },
@@ -4118,11 +4181,16 @@
       "ui_browser": "PENDING"
     },
     "r5_working_correction": {
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED_SOURCE_FOCALS_PASS90",
       "cause": "Actual committed started/progress exists while Core receipt remains SUBMITTED.",
       "approach": "Private full-key positive proof; preserve authority/liveness/gap/uncertainty and terminal fences.",
       "receipt_core_schema_changes": false,
-      "final_qualification": "PENDING"
+      "final_qualification": "PENDING_FRESH_R5_INSTALLED_BROWSER_PERFORMANCE",
+      "source_focals": "execution/source-tests/r5-working-focal/qualification.json",
+      "frontend": "execution/frontend-r5/qualification.json",
+      "frontend_node": "PASS404; input drift0; no browser/AT claim",
+      "static": "execution/static-checks/r5-working.json; 31files, no increased Ruff rule counts",
+      "lock": "uv lock --check PASS106; no lock mutation"
     }
   }
 }
