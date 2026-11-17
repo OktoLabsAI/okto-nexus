@@ -5832,7 +5832,7 @@
       "when": "Publicar novo estado",
       "then": "Uma identidade, painel independente da coluna, retorno de foco correto.",
       "level": "unidade com relógio/promessas + browser",
-      "status": "NOT_RUN",
+      "status": "FAIL",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5842,9 +5842,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Controller preserves identity; real card column movement while panel open and return focus not run. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T23:03:50.981696+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/focus-r8-body-focus-failure/qualification.json",
+          "environment": "Actual installed R8 Chrome; fresh canonical A1 working and A2 question with original validity, inert protocol peer",
+          "command_or_procedure": "Observe full exact A tuple move to current/full Needs you plus original A2 request and exact successful A1 delivery; Escape and wait for same-A/stable-heading focus",
+          "result": "FAIL real product focus: exact move and same panel pass; after Escape focus stays BODY through2.5s while A exists only in Needs you",
+          "limitations": "No AT speech/provider claim. Received semantic snapshot has a different revision from host; equality is not required. Automatic CLI cleanup log-name collision required one own-session close under a distinct log; physical absence confirmed. Two of three canonical session closes confirmed, A2 remains unknown."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Controller preserves identity; real card column movement while panel open and return focus not run."
+      "execution_notes": "Real R8 focus regression. Preserve successful exact move/panel predicates; source fix/new installed browser proof required before qualifying the complete scenario."
     },
     {
       "id": "HST-T-F08",
@@ -6569,7 +6578,7 @@
       "when": "Fechar painel",
       "then": "Foco retorna ao mesmo ID canônico ou destino estável, não outro harness.",
       "level": "navegador + AT quando disponível",
-      "status": "NOT_RUN",
+      "status": "FAIL",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -6579,9 +6588,18 @@
           "result": "Audit: NOT_RUN",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "No actual movement-close return-focus same canonicalID browser test. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T23:03:50.981696+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/focus-r8-body-focus-failure/qualification.json",
+          "environment": "Actual installed R8 Chrome; fresh canonical A1 working and A2 question with original validity, inert protocol peer",
+          "command_or_procedure": "Observe full exact A tuple move to current/full Needs you plus original A2 request and exact successful A1 delivery; Escape and wait for same-A/stable-heading focus",
+          "result": "FAIL real product focus: exact move and same panel pass; after Escape focus stays BODY through2.5s while A exists only in Needs you",
+          "limitations": "No AT speech/provider claim. Received semantic snapshot has a different revision from host; equality is not required. Automatic CLI cleanup log-name collision required one own-session close under a distinct log; physical absence confirmed. Two of three canonical session closes confirmed, A2 remains unknown."
         }
       ],
-      "execution_notes": "No actual movement-close return-focus same canonicalID browser test."
+      "execution_notes": "Real R8 focus regression. Preserve successful exact move/panel predicates; source fix/new installed browser proof required before qualifying the complete scenario."
     },
     {
       "id": "HST-T-I03",
@@ -7471,7 +7489,7 @@
       "human": false
     },
     "local_usability_candidate": {
-      "state": "ADDITIONAL_FUNCTIONAL_QUALIFICATION_IN_PROGRESS; R8 menu correction verified in actual browser",
+      "state": "NOT_READY: reproduced focus-return defect awaiting R9 correction and installed browser verification",
       "runtime_source": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
       "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
       "supported_scope": [
@@ -7595,6 +7613,14 @@
       "real_provider": false,
       "whole_batch_green": false,
       "raw_retention_limit": "Repeated own pytest processes used default tmp retention; only two cleanup JSON files remain. All six passing owner contexts assert close() has no failures. No missing raw snapshots fabricated."
+    },
+    "r8_focus_regression": {
+      "evidence": "execution/remaining-qualification-r7-next/experience-batch/focus-r8-body-focus-failure/qualification.json",
+      "status": "FAIL_PRODUCT_BODY_FOCUS",
+      "correct_scope_and_panel": true,
+      "source_fix": "PENDING_R9",
+      "human": "NOT_INVITED",
+      "provider_invocations": 0
     }
   }
 }

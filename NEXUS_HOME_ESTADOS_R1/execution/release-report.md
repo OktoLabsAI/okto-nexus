@@ -5,7 +5,9 @@ has not started.** The selected local functional/context flows have now been
 reviewed against source, installed and browser evidence. Additional supported
 functional/security/compatibility checks remain before the human invitation;
 a reproduced unnamed menu control has been corrected and packaged in R8;
-its accessible name and expanded state are verified in the actual R8 browser. The whole
+its accessible name and expanded state are verified in the actual R8 browser.
+A later exact move/close test reproduced a focus-return defect and is being
+corrected before human evaluation. The whole
 plan's remaining qualification is explicit. Following the user's clarification about other
 processes on this shared machine, performance timings are diagnostic and
 non-blocking for this local delivery; no further tuning is required solely
@@ -135,7 +137,21 @@ assertions were not reached, so E16 remains unqualified pending a scoped
 correction. Prior attempts and this6PASS/1FAIL remain preserved. Pytest retention
 left only two raw cleanup JSONs; all six passing teardown close assertions ran,
 and missing raw snapshots were not reconstructed. Current ledger counts are
-58PASS/50NOT_RUN/8BLOCKED.
+58PASS/48NOT_RUN/8BLOCKED/2FAIL. The failures are F07/I02's real focus return,
+described below, not performance timing targets.
+
+The [focused R8 move test](remaining-qualification-r7-next/experience-batch/focus-r8-body-focus-failure/qualification.json)
+removed the host-revision equality assumption and captured received snapshots.
+It proved one exact harness moved from Active to current/full Needs you, with
+the original question and exact successful sibling delivery, while its panel
+remained the same. After Escape the card was in Needs you but focus remained
+BODY throughout the observation. This is a real F07/I02 product failure; a new
+source/package/browser verification is required. Source review suggests the
+focus RAF can run before the effect applies the cached board, allowing a later
+commit to remove the refocused old trigger. That ordering is a diagnosis to
+test, not an invented browser trace. Two of three canonical closes confirmed;
+A2 close remains unknown despite physical absence. No decision, renewal or
+provider call was added.
 R7 prefixes and the original failing AX capture remain immutable. No Python
 behavior changed.
 
