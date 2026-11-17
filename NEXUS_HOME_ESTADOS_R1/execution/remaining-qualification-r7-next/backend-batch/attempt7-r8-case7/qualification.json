@@ -1,0 +1,121 @@
+{
+  "status": "PASS_ONE_FOCAL_CASE",
+  "passed": 1,
+  "failed": 0,
+  "not_run_selected": 0,
+  "node": "tests/execution_r4/test_backend_batch_r8.py::test_same_delivery_verification_three_files_seen_and_no_ack",
+  "scenario_proposal": "E16",
+  "layer": "Installed HTTP/SQLite and canonical MCP complete/verification/seen + source-copy TypeScript presentation of same actual API before/after data",
+  "seconds": 5.252,
+  "runner_exit_code": 0,
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "payload_files": 1031,
+  "manifest_sha256": "41e7c96318faaa59703d881cb0dc5585cddb12ad741ccf61723e3ff4e446dbfc",
+  "runner_sha256": "d42edb74db860ab971dfa8e77b27e5d7b2f93cbce6eb1a9a595911462ddaf584",
+  "presentation_sha256": "0767b68e4434a9dfc87f26bcd65d51e4c72a3a8fb6973a723f0927bcfc28f903",
+  "checks": [
+    "Same delivery/result IDs and same three artifacts before/after canonical handoff verification",
+    "Canonical task verifying/pending to completed/approved with verification evidence and changed semantic revision",
+    "Actual before scope turn/historicalfalse displays Turn result available plus Awaiting verification",
+    "Actual after scope turn/historicalfalse displays Task completed plus Delivery verified",
+    "Finite cursor traversal reaches old unseen selected result beyond first page exactly once",
+    "Seen CAS removes only old selected result from retained delivery list, preserves other results view states",
+    "Canonical target remains available, protected existing inbox deliveries are not ACKed, compared protected rows unchanged after seen/GET"
+  ],
+  "actual_semantics": {
+    "before": {
+      "cleanup": "unknown",
+      "content_state": "available",
+      "evidence": "canonical",
+      "execution_outcome": "succeeded",
+      "historical": false,
+      "scope": "turn",
+      "semantic_revision": "dcb82ab75bd6b95586893abfc5f7dee3dc58d2d85daff8e9255ff2c62a680fa1",
+      "task_state": "verifying",
+      "verification": "pending",
+      "verification_evidence_ref": null,
+      "version": 1
+    },
+    "after": {
+      "cleanup": "unknown",
+      "content_state": "available",
+      "evidence": "canonical",
+      "execution_outcome": "succeeded",
+      "historical": false,
+      "scope": "turn",
+      "semantic_revision": "176083458dde87fedec07e5aa227e9a42d39387b9a58c7fc14ab0b44847bcc4f",
+      "task_state": "completed",
+      "verification": "approved",
+      "verification_evidence_ref": "handoff-verification:13:b6eb01690e8261409cc5af4e93674f5a5bad417d20c8e93c7cce211bf3251a7e",
+      "version": 1
+    }
+  },
+  "guards": {
+    "source_drift": [],
+    "payload_drift": [],
+    "copied_drift": [],
+    "presentation_drift": [],
+    "external_helper_tooling_drift": [],
+    "own_helper_closure_drift": [],
+    "r7_r8_nonstatic_drift": []
+  },
+  "physical": [
+    {
+      "pid": 37252,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 58836,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 8852,
+      "same_birth_alive": false,
+      "present": false
+    }
+  ],
+  "physical_same_birth_remaining": 0,
+  "active_matching_runner_pids": [],
+  "owned_command": {
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 37252,
+        "birth": 1794956903.2780464,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 58836,
+        "birth": 1794956903.2930872,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 8852,
+        "birth": 1794956908.9836872,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  "snapshot_scope": "Six explicitly listed tables per test; not a whole-database read-only claim. Auth telemetry/real control renewal are separate.",
+  "raw_private_home_retained": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-backend-batch-r8-s9lhmd71",
+  "precedent_six_cases": "attempt5-r8 remains6PASS1FAIL; these six PASS were not repeated. This separate focal fixes only an expectation of native turn scope.",
+  "limits": [
+    "Historical capture/receipt/artifact read-facts are synthetic and do not prove three real managed executions.",
+    "No real provider or native inference, browser, human acceptance or performance claim.",
+    "Presentation imports copied pinned TypeScript, not the installed JavaScript bundle.",
+    "Six protected tables do not establish whole-DB read-only behavior.",
+    "100ms ancestry polling cannot enumerate every short-lived child."
+  ],
+  "input_readers_released": true
+}

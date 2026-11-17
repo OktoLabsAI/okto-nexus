@@ -1,0 +1,33 @@
+[
+  {
+    "case": "test_same_delivery_verification_three_files_seen_and_no_ack",
+    "owned_command": {
+      "exit_code": 0,
+      "timed_out": false,
+      "force_used": false,
+      "stdin": "closed PIPE",
+      "known_processes": [
+        {
+          "pid": 37252,
+          "birth": 1794956903.2780464,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 58836,
+          "birth": 1794956903.2930872,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 8852,
+          "birth": 1794956908.9836872,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        }
+      ],
+      "actions": [],
+      "remaining_known_processes": [],
+      "remaining_listeners": [],
+      "success": true,
+      "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+    }
+  }
+]

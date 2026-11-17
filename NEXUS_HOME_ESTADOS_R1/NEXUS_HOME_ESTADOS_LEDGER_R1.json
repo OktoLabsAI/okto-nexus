@@ -5635,7 +5635,7 @@
       "when": "Atualizar e abrir Home",
       "then": "Mesma entrega atualizada; artefatos por vínculo; não marcar itens invisíveis nem ACK de inbox; retenção canônica preservada.",
       "level": "unidade + SQLite/HTTP + apresentação",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5654,9 +5654,18 @@
           "environment": "Windows; frozen R7 prefix;1828base+1test pins;1031payload files; isolated-I-B; no provider/browser/human",
           "result": "PASS7SOURCE/PASS7INSTALLED; first source6PASS/1invalid-seedFAIL retained; no runtime/pin/helper drift",
           "limitations": "A06 query-only private sibling proof. E08/E09/E16 are historical migrated read fixtures with real HTTP/SQLite; H02/H03 API only. H07 uses SQL negative grant revocation with canonical request/denied POST, not canonical revoke lifecycle. Full browser clauses remain unverified."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T23:14:12.298480+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/backend-batch/attempt7-r8-case7/qualification.json",
+          "environment": "Actual R8 installed ASGI/SQLite; historical capture/artifact read facts, in-process canonical handoff tool functions and HTTP Seen CAS, copied pinned TypeScript consuming the same API before/after",
+          "command_or_procedure": "tests/execution_r4/test_backend_batch_r8.py::test_same_delivery_verification_three_files_seen_and_no_ack (case7 only; six previous PASS cases were not repeated)",
+          "result": "PASS same delivery/three artifacts, finite off-page traversal, current canonical verification/revision, strict presentation enums and badges, Seen changes only selected old result, no ACK of existing deliveries, exact target remains readable; all guards0/physical0",
+          "limitations": "Canonical handoff tool functions are called in-process, not via MCP network transport. Historical capture/receipt/artifact fixture is not three real executions. Source-copy TypeScript is not browser evidence. Cleanup semantics remain unknown before/after; verified delivery does not imply cleanup success. Previous6PASS/1FAIL presentation-oracle result preserved."
         }
       ],
-      "execution_notes": "PARTIAL literal scenario: Off-page seen/retention and three same-claim artifact references; no inbox ACK. Missing browser/native clauses remain NOT_RUN; no suite-count promotion."
+      "execution_notes": "PASS same delivery/three artifacts, finite off-page traversal, current canonical verification/revision, strict presentation enums and badges, Seen changes only selected old result, no ACK of existing deliveries, exact target remains readable; all guards0/physical0. Canonical handoff tool functions are called in-process, not via MCP network transport. Historical capture/receipt/artifact fixture is not three real executions. Source-copy TypeScript is not browser evidence. Cleanup semantics remain unknown before/after; verified delivery does not imply cleanup success. Previous6PASS/1FAIL presentation-oracle result preserved."
     },
     {
       "id": "HST-T-F01",
@@ -7612,7 +7621,19 @@
       "physical_same_birth_remaining": 0,
       "real_provider": false,
       "whole_batch_green": false,
-      "raw_retention_limit": "Repeated own pytest processes used default tmp retention; only two cleanup JSON files remain. All six passing owner contexts assert close() has no failures. No missing raw snapshots fabricated."
+      "raw_retention_limit": "Repeated own pytest processes used default tmp retention; only two cleanup JSON files remain. All six passing owner contexts assert close() has no failures. No missing raw snapshots fabricated.",
+      "focal_completion": {
+        "evidence": "execution/remaining-qualification-r7-next/backend-batch/attempt7-r8-case7/qualification.json",
+        "counts": {
+          "PASS": 1,
+          "FAIL": 0
+        },
+        "selected": "E16 only",
+        "prior_six_cases_repeated": false,
+        "all_seven_cases_have_pass_evidence_in_separate_cuts": true,
+        "original_full_batch_failure_preserved": true,
+        "real_provider": false
+      }
     },
     "r8_focus_regression": {
       "evidence": "execution/remaining-qualification-r7-next/experience-batch/focus-r8-body-focus-failure/qualification.json",
