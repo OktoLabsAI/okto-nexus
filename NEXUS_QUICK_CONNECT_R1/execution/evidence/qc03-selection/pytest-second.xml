@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="54" time="1.057" timestamp="2026-11-17T02:00:22.428641-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_known_harness_selects_exact_passive_candidate_without_running_it[codex]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_known_harness_selects_exact_passive_candidate_without_running_it[claude]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_known_harness_selects_exact_passive_candidate_without_running_it[pi]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_absent_token_can_use_unique_detected_family_but_typo_requires_choice" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_unknown_noninteractive_is_selection_required_and_never_executes_token[codxe]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_unknown_noninteractive_is_selection_required_and_never_executes_token[claude; PRIVATE]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_unknown_noninteractive_is_selection_required_and_never_executes_token[$(PRIVATE)]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_unknown_noninteractive_is_selection_required_and_never_executes_token[../../PRIVATE]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_unknown_tty_selection_is_explicit_not_fuzzy_or_first_candidate" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_multiple_families_without_tty_never_choose_first" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_harness_picker_cancel_is_no_effect[c]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_harness_picker_cancel_is_no_effect[]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_supported_but_absent_is_not_installed_automatically" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_stale_never_means_absence_or_ready[False-STALE]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_stale_never_means_absence_or_ready[False-OFFLINE]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_stale_never_means_absence_or_ready[False-UNKNOWN]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_stale_never_means_absence_or_ready[True-STALE]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_stale_never_means_absence_or_ready[True-OFFLINE]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_stale_never_means_absence_or_ready[True-UNKNOWN]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_multiple_installations_require_exact_candidate_noninteractive" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_tty_installation_picker_never_defaults_to_first" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_configuration_policy_requires_boolean_true[False]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_configuration_policy_requires_boolean_true[None]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_configuration_policy_requires_boolean_true[1]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_configuration_policy_requires_boolean_true[true]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_malformed_inventory_is_structured_unconfirmed[None]" time="0.001"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">body = None
+
+    @pytest.mark.parametrize('body', [None, {'options': None, 'adapter_freshness': {}},
+                                     {'options': [None], 'adapter_freshness': {}},
+                                     {'options': [], 'adapter_freshness': None}])
+    def test_malformed_inventory_is_structured_unconfirmed(body):
+&gt;       assert_code('INVENTORY_UNCONFIRMED', lambda: choose(body, client='codex'))
+
+tests\quick_connect\test_quick_connect_selection.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\quick_connect\test_quick_connect_selection.py:19: in assert_code
+    action()
+tests\quick_connect\test_quick_connect_selection.py:120: in &lt;lambda&gt;
+    assert_code('INVENTORY_UNCONFIRMED', lambda: choose(body, client='codex'))
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\quick_connect\test_quick_connect_selection.py:41: in choose
+    result = selection.choose_harness(get, agent_id='operator', executor_id='host-a',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+call = &lt;function choose.&lt;locals&gt;.get at 0x0000021623B3C360&gt;
+agent_id = 'operator', executor_id = 'host-a', workspace_id = 'project-a'
+client = 'codex', candidate_ref = None, interactive = False
+read = &lt;function no_read at 0x000002162253B6A0&gt;
+write = &lt;built-in function print&gt;
+
+    def choose_harness(call, *, agent_id, executor_id, workspace_id, client=None,
+            candidate_ref=None, interactive=False, read=input, write=print):
+        inventory = call('GET', PREFIX + '/agents/' + quote(agent_id, safe='') + '/runtime-options?' +
+            urlencode(dict(executor_id=executor_id, **({'workspace_id': workspace_id} if workspace_id else {}))))
+&gt;       if type(inventory.get('options')) is not list or type(inventory.get('adapter_freshness')) is not dict:
+                ^^^^^^^^^^^^^
+E       AttributeError: 'NoneType' object has no attribute 'get'
+
+src\okto_nexus\adapters\inbound\cli\quick_connect_selection.py:19: AttributeError</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_malformed_inventory_is_structured_unconfirmed[body1]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_malformed_inventory_is_structured_unconfirmed[body2]" time="0.001"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">body = {'options': [None], 'adapter_freshness': {}}
+
+    @pytest.mark.parametrize('body', [None, {'options': None, 'adapter_freshness': {}},
+                                     {'options': [None], 'adapter_freshness': {}},
+                                     {'options': [], 'adapter_freshness': None}])
+    def test_malformed_inventory_is_structured_unconfirmed(body):
+&gt;       assert_code('INVENTORY_UNCONFIRMED', lambda: choose(body, client='codex'))
+
+tests\quick_connect\test_quick_connect_selection.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\quick_connect\test_quick_connect_selection.py:19: in assert_code
+    action()
+tests\quick_connect\test_quick_connect_selection.py:120: in &lt;lambda&gt;
+    assert_code('INVENTORY_UNCONFIRMED', lambda: choose(body, client='codex'))
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\quick_connect\test_quick_connect_selection.py:41: in choose
+    result = selection.choose_harness(get, agent_id='operator', executor_id='host-a',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+call = &lt;function choose.&lt;locals&gt;.get at 0x0000021623B9B100&gt;
+agent_id = 'operator', executor_id = 'host-a', workspace_id = 'project-a'
+client = 'codex', candidate_ref = None, interactive = False
+read = &lt;function no_read at 0x000002162253B6A0&gt;
+write = &lt;built-in function print&gt;
+
+    def choose_harness(call, *, agent_id, executor_id, workspace_id, client=None,
+            candidate_ref=None, interactive=False, read=input, write=print):
+        inventory = call('GET', PREFIX + '/agents/' + quote(agent_id, safe='') + '/runtime-options?' +
+            urlencode(dict(executor_id=executor_id, **({'workspace_id': workspace_id} if workspace_id else {}))))
+        if type(inventory.get('options')) is not list or type(inventory.get('adapter_freshness')) is not dict:
+            raise ConnectionError('INVENTORY_UNCONFIRMED', 'The passive harness inventory is unconfirmed.')
+&gt;       observed = {name: [row for row in inventory['options'] if row.get('adapter_id') == adapter
+                                                                  ^^^^^^^
+            and row.get('candidate_ref')] for name, adapter in CLIENTS.items()}
+E       AttributeError: 'NoneType' object has no attribute 'get'
+
+src\okto_nexus\adapters\inbound\cli\quick_connect_selection.py:21: AttributeError</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_malformed_inventory_is_structured_unconfirmed[body3]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_inventory_echo_cannot_cross_agent_or_host[agent_id-foreign-agent]" time="0.001"><failure message="Failed: DID NOT RAISE ConnectionError">field = 'agent_id', value = 'foreign-agent'
+
+    @pytest.mark.parametrize('field,value', [('agent_id', 'foreign-agent'), ('executor_id', 'foreign-host')])
+    def test_inventory_echo_cannot_cross_agent_or_host(field, value):
+        body = inventory([candidate()]) | {field: value}
+&gt;       assert_code('INVENTORY_UNCONFIRMED', lambda: choose(body, client='codex'))
+
+tests\quick_connect\test_quick_connect_selection.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+code = 'INVENTORY_UNCONFIRMED'
+action = &lt;function test_inventory_echo_cannot_cross_agent_or_host.&lt;locals&gt;.&lt;lambda&gt; at 0x0000021623B9BA60&gt;
+
+    def assert_code(code, action):
+&gt;       with pytest.raises(ConnectionError) as caught:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ConnectionError
+
+tests\quick_connect\test_quick_connect_selection.py:18: Failed</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_inventory_echo_cannot_cross_agent_or_host[executor_id-foreign-host]" time="0.001"><failure message="Failed: DID NOT RAISE ConnectionError">field = 'executor_id', value = 'foreign-host'
+
+    @pytest.mark.parametrize('field,value', [('agent_id', 'foreign-agent'), ('executor_id', 'foreign-host')])
+    def test_inventory_echo_cannot_cross_agent_or_host(field, value):
+        body = inventory([candidate()]) | {field: value}
+&gt;       assert_code('INVENTORY_UNCONFIRMED', lambda: choose(body, client='codex'))
+
+tests\quick_connect\test_quick_connect_selection.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+code = 'INVENTORY_UNCONFIRMED'
+action = &lt;function test_inventory_echo_cannot_cross_agent_or_host.&lt;locals&gt;.&lt;lambda&gt; at 0x0000021623B9BD80&gt;
+
+    def assert_code(code, action):
+&gt;       with pytest.raises(ConnectionError) as caught:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ConnectionError
+
+tests\quick_connect\test_quick_connect_selection.py:18: Failed</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_new_agent_cannot_resume_existing_public_id" time="0.009" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_add_cannot_turn_into_legacy_binding_association" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_existing_exact_id_returns_resume_without_installation_probe" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_prepare_bound_id_does_not_override_exact_selectors[change0]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_prepare_bound_id_does_not_override_exact_selectors[change1]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_prepare_bound_id_does_not_override_exact_selectors[change2]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_legacy_completed_profile_must_not_override_explicit_selector[change0]" time="0.002"><failure message="Failed: DID NOT RAISE ConnectionError">project_stub = {'project': 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-11182\\test_legacy_completed_profile_0', ...e_id': 'project-a', 'project_revision': 'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', ...}
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11182/test_legacy_completed_profile_0')
+change = {'agent': 'other-agent'}
+
+    @pytest.mark.parametrize('change', [{'agent': 'other-agent'}, {'binding_id': 'other-binding'}])
+    def test_legacy_completed_profile_must_not_override_explicit_selector(project_stub, tmp_path, change):
+        saved = dict(state='done', server_id='server-a',
+            selection=dict(agent='agent-a', client='codex', project=str(tmp_path), label='Project A',
+                workspace_id='project-a', binding_id='binding-a', candidate_ref=None,
+                provider_home=None, create_agent=False, display_name=None),
+            result={'binding': {'binding_id': 'binding-a'}})
+&gt;       assert_code('PROFILE_CONFLICT', lambda: prepare(GetOnly([bound_id()]), args(**change), tmp_path, saved=saved))
+
+tests\quick_connect\test_quick_connect_selection.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+code = 'PROFILE_CONFLICT'
+action = &lt;function test_legacy_completed_profile_must_not_override_explicit_selector.&lt;locals&gt;.&lt;lambda&gt; at 0x0000021623C867A0&gt;
+
+    def assert_code(code, action):
+&gt;       with pytest.raises(ConnectionError) as caught:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ConnectionError
+
+tests\quick_connect\test_quick_connect_selection.py:18: Failed</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_legacy_completed_profile_must_not_override_explicit_selector[change1]" time="0.003"><failure message="Failed: DID NOT RAISE ConnectionError">project_stub = {'project': 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-11182\\test_legacy_completed_profile_1', ...e_id': 'project-a', 'project_revision': 'sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', ...}
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11182/test_legacy_completed_profile_1')
+change = {'binding_id': 'other-binding'}
+
+    @pytest.mark.parametrize('change', [{'agent': 'other-agent'}, {'binding_id': 'other-binding'}])
+    def test_legacy_completed_profile_must_not_override_explicit_selector(project_stub, tmp_path, change):
+        saved = dict(state='done', server_id='server-a',
+            selection=dict(agent='agent-a', client='codex', project=str(tmp_path), label='Project A',
+                workspace_id='project-a', binding_id='binding-a', candidate_ref=None,
+                provider_home=None, create_agent=False, display_name=None),
+            result={'binding': {'binding_id': 'binding-a'}})
+&gt;       assert_code('PROFILE_CONFLICT', lambda: prepare(GetOnly([bound_id()]), args(**change), tmp_path, saved=saved))
+
+tests\quick_connect\test_quick_connect_selection.py:219: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+code = 'PROFILE_CONFLICT'
+action = &lt;function test_legacy_completed_profile_must_not_override_explicit_selector.&lt;locals&gt;.&lt;lambda&gt; at 0x0000021623C86840&gt;
+
+    def assert_code(code, action):
+&gt;       with pytest.raises(ConnectionError) as caught:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ConnectionError
+
+tests\quick_connect\test_quick_connect_selection.py:18: Failed</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_pending_own_intent_recovery_precedes_namespace_collision_and_does_not_discover" time="0.050" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes0]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes1]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes2]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes3]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes4]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes5]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes6]" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes7]" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes8]" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes9]" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes10]" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_retained_foreign_server_is_refused_not_relabelled_current" time="0.002"><failure message="Failed: DID NOT RAISE ConnectionError">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11182/test_retained_foreign_server_i0')
+
+    def test_retained_foreign_server_is_refused_not_relabelled_current(tmp_path):
+&gt;       assert_code('PROFILE_CONFLICT', lambda: prepare(GetOnly(), args(), tmp_path, saved=retained(tmp_path, server='server-b')))
+
+tests\quick_connect\test_quick_connect_selection.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+code = 'PROFILE_CONFLICT'
+action = &lt;function test_retained_foreign_server_is_refused_not_relabelled_current.&lt;locals&gt;.&lt;lambda&gt; at 0x0000021623C9D580&gt;
+
+    def assert_code(code, action):
+&gt;       with pytest.raises(ConnectionError) as caught:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ConnectionError
+
+tests\quick_connect\test_quick_connect_selection.py:18: Failed</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_pending_legacy_setup_is_not_adopted_or_reconfigured" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_selection" name="test_free_id_new_choice_only_proposes_metadata_no_test_or_reservation" time="0.003" /></testsuite></testsuites>

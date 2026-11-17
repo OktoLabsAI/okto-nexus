@@ -1,0 +1,31 @@
+{
+  "qualification": "REAL_INPUT_PTY_SUBSET_PASS_CTRL_C_TRANSPORT_INTERRUPTED",
+  "terminal_measurement": {"tool_handle": "8cc48f", "stdin_isatty": true, "stdout_isatty": false, "stderr_isatty": false, "platform": "win32", "transport": "exec_command tty:true through PowerShell/Windows pseudo-console and RTK proxy; RTK captures output", "resize_tested": false},
+  "confirmed_subset": {
+    "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe -B -Xutf8 -m pytest tests/quick_connect/test_quick_connect_pty.py -k \"not ctrl_c\" -s -q --junitxml=NEXUS_QUICK_CONNECT_R1/execution/evidence/qc06-pty/pytest-confirmed-subset.xml",
+    "tool_handles": ["2eb082", "9ec6c9", "66ea00", "4f70e7", "67fef9", "d41eea", "b8d020", "066542"],
+    "exit_code": 0, "passed": 4, "deselected": 1, "elapsed_seconds_including_external_prompt_waits": 97.47,
+    "tests": ["Real stdin terminal measurement", "--json completes with parseable ANSI-free product output and no input even when stdin is TTY", "Actual input cancel retains review with zero check/Test", "Actual input y confirms one synthetic Test and later y resumes exact binding with unchanged receipts/grants and no replay"],
+    "input_events": [{"tool_handle": "66ea00", "chars": "cancel\\r"}, {"tool_handle": "67fef9", "chars": "y\\r"}, {"tool_handle": "b8d020", "chars": "y\\r"}],
+    "no_monkeypatch": ["input", "stdin", "stdin.isatty"]
+  },
+  "ctrl_c_observation": {
+    "status": "PARTIAL_NOT_PASS",
+    "issued_marker_tool": "da61a1",
+    "control_input_tool": "d21ed3", "chars": "U+0003",
+    "observed_exit": 1,
+    "observed": "After synthetic Test issued marker, Ctrl-C terminated the RTK/PTY command without pytest summary or observable CLI return130. No final XML was produced for that interrupted run. This does not prove CLI graceful interrupt behavior.",
+    "checkpoint_read_tool": "0fd5f6", "checkpoint_state": "test_submitted", "original_setup_intent": "connect_a605e8fbb2ef405b852becc1be168101", "selected_connect_id": "codex",
+    "read_only_database_tool": "c65ed8", "execution_bindings": 0, "runtime_execution_grants": 0,
+    "physical_absence_tool": "7c5cd4", "matching_owned_python_processes": 0,
+    "no_replay_or_provider_execution": true
+  },
+  "antecedent": {
+    "xml": "pytest-cancelled-antecedent.xml", "tool_handles": ["9f481b", "165f30", "7a87a9", "d32597", "330031"], "exit_code": 1, "passed": 3, "failed": 2,
+    "reason": "Passive synthetic inventory initially suggested the environment's default provider-home path. Operator cancelled EVERY remaining review before any Test; confirm/interrupt expected assertions intentionally then failed. No native executable/provider/auth file was used. Fixture corrected to set HOME/USERPROFILE/CODEX_HOME/CLAUDE_CONFIG_DIR under Temp before app bootstrap and pass explicit own provider-home thereafter. No full PASS from this antecedent."
+  },
+  "isolation": {"nexus": "checkout source, not installed 0.3.6", "core": "preserved PR27 prefix read-only; Python -B -Xutf8; no pip", "authority": "canonical TestClient/SQLite per-test temporary home, loopback operator", "service": "inert inspect/ensure methods only, no service process", "provider": "version and ConnectionTests.run synthetic boundaries; no actual executable/model", "input_owner": "agent tool writes to its own terminal; no human task or personal terminal", "personal_home_after_fix": "all provider/home suggestions and explicit roots are temporary"},
+  "cleanup": {"normal_subset_exit_code": 0, "normal_subset_process_absence_tool": "620003", "matching_owned_python_processes": 0, "provider_or_service_or_browser_processes_started": 0, "notes": "Normal subset closes all TestClient lifespans. Interrupted run's process was independently absent; retained data preserved. No other processes were stopped."},
+  "ruff": {"tool_handle": "7e8253", "command": "rtk proxy ruff check tests/quick_connect/test_quick_connect_pty.py", "exit_code": 0},
+  "limits": ["stdin is a real terminal but stdout/stderr are pipes through RTK; no full output-TTY/ANSI-layout claim", "No terminal resize, other OS/shell, installed CLI, real provider or user-usability qualification", "Ctrl-C case is partial transport evidence, not full QC-G09/Python handler PASS", "Timing includes deliberate external waits for prompts and is not a performance measurement", "No product, Git, ledger, installed prefix or Windows session changes"]
+}

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="10" time="0.817" timestamp="2026-11-17T02:40:54.121328-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_harness_alternatives" name="test_known_missing_harness_tty_can_explicitly_choose_available_supported_family" time="0.001"><failure message="okto_nexus.application.terminal_connection.ConnectionError: This supported harness has no confirmed installation. No installation was attempted.">def test_known_missing_harness_tty_can_explicitly_choose_available_supported_family():
+        execute, state = run(inventory(candidate('codex')), interactive=True, answers=['1'])
+&gt;       assert execute() == ('codex', 'codex-candidate')
+               ^^^^^^^^^
+
+tests\quick_connect\test_harness_alternatives.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\quick_connect\test_harness_alternatives.py:46: in execute
+    return choose_harness(get, agent_id='operator', executor_id='host-a', workspace_id='project-a',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+call = &lt;function run.&lt;locals&gt;.get at 0x0000022DE899BF60&gt;, agent_id = 'operator'
+executor_id = 'host-a', workspace_id = 'project-a', client = 'claude'
+candidate_ref = None, interactive = True
+read = &lt;function run.&lt;locals&gt;.read at 0x0000022DE89BC040&gt;
+write = &lt;built-in method append of list object at 0x0000022DE89A8800&gt;
+
+    def choose_harness(call, *, agent_id, executor_id, workspace_id, client=None,
+            candidate_ref=None, interactive=False, read=input, write=print):
+        inventory = call('GET', PREFIX + '/agents/' + quote(agent_id, safe='') + '/runtime-options?' +
+            urlencode(dict(executor_id=executor_id, **({'workspace_id': workspace_id} if workspace_id else {}))))
+        if (type(inventory) is not dict or type(inventory.get('options')) is not list
+                or type(inventory.get('adapter_freshness')) is not dict
+                or inventory.get('agent_id') != agent_id or inventory.get('executor_id') != executor_id
+                or any(type(row) is not dict for row in inventory['options'])):
+            raise ConnectionError('INVENTORY_UNCONFIRMED', 'The passive harness inventory is unconfirmed.')
+        observed = {name: [row for row in inventory['options'] if row.get('adapter_id') == adapter
+            and row.get('candidate_ref')] for name, adapter in CLIENTS.items()}
+        alternatives = [dict(harness=name, observed=bool(rows),
+            freshness=inventory['adapter_freshness'].get(CLIENTS[name], 'UNKNOWN'),
+            candidates=[dict(candidate_ref=row['candidate_ref'], can_configure=row.get('can_configure') is True,
+                technical_state=row.get('technical_state')) for row in rows]) for name, rows in observed.items()]
+        while True:
+            if client not in CLIENTS:
+                detected = [name for name, rows in observed.items() if rows]
+                if client is None and len(detected) == 1:
+                    client = detected[0]
+                elif not interactive:
+                    raise ConnectionError('CLIENT_SELECTION_REQUIRED', 'Select a supported harness from the passive inventory.', choices=alternatives)
+                else:
+                    write('Choose a supported harness (listing does not test login or run a version command):')
+                    for index, choice in enumerate(alternatives, 1):
+                        state = 'observed' if choice['observed'] else 'not confirmed in inventory'
+                        write(f"{index}. {choice['harness']} — {state}; {choice['freshness']}")
+                    write('c. Cancel')
+                    while True:
+                        try:
+                            answer = read('Harness: ').strip().lower()
+                        except EOFError:
+                            answer = 'c'
+                        if answer in ('', 'c'):
+                            raise ConnectionError('CONNECT_CANCELLED', 'Harness selection cancelled.')
+                        if answer.isdecimal() and 1 &lt;= int(answer) &lt;= len(alternatives):
+                            client = alternatives[int(answer) - 1]['harness']
+                            break
+                        write('Choose a displayed harness or c.')
+            rows = observed[client]
+            if inventory['adapter_freshness'].get(CLIENTS[client]) != 'FRESH':
+                raise ConnectionError('INVENTORY_UNCONFIRMED', 'The selected harness inventory is not fresh; absence and readiness are unconfirmed.', choices=alternatives)
+            if candidate_ref:
+                rows = [row for row in rows if row['candidate_ref'] == candidate_ref]
+&gt;           if not rows:
+E           okto_nexus.application.terminal_connection.ConnectionError: This supported harness has no confirmed installation. No installation was attempted.
+
+src\okto_nexus\adapters\inbound\cli\quick_connect_selection.py:59: ConnectionError</failure></testcase><testcase classname="tests.quick_connect.test_harness_alternatives" name="test_known_missing_harness_tty_can_cancel_without_install_or_test[c]" time="0.001"><failure message="AssertionError: assert 'INSTALLATION_UNAVAILABLE' == 'CONNECT_CANCELLED'&#10;  &#10;  - CONNECT_CANCELLED&#10;  + INSTALLATION_UNAVAILABLE">answer = 'c'
+
+    @pytest.mark.parametrize('answer', ['c', ''])
+    def test_known_missing_harness_tty_can_cancel_without_install_or_test(answer):
+        execute, state = run(inventory(candidate('codex')), interactive=True, answers=[answer])
+        with pytest.raises(ConnectionError) as caught:
+            execute()
+&gt;       assert caught.value.code == 'CONNECT_CANCELLED'
+E       AssertionError: assert 'INSTALLATION_UNAVAILABLE' == 'CONNECT_CANCELLED'
+E         
+E         - CONNECT_CANCELLED
+E         + INSTALLATION_UNAVAILABLE
+
+tests\quick_connect\test_harness_alternatives.py:64: AssertionError</failure></testcase><testcase classname="tests.quick_connect.test_harness_alternatives" name="test_known_missing_harness_tty_can_cancel_without_install_or_test[]" time="0.001"><failure message="AssertionError: assert 'INSTALLATION_UNAVAILABLE' == 'CONNECT_CANCELLED'&#10;  &#10;  - CONNECT_CANCELLED&#10;  + INSTALLATION_UNAVAILABLE">answer = ''
+
+    @pytest.mark.parametrize('answer', ['c', ''])
+    def test_known_missing_harness_tty_can_cancel_without_install_or_test(answer):
+        execute, state = run(inventory(candidate('codex')), interactive=True, answers=[answer])
+        with pytest.raises(ConnectionError) as caught:
+            execute()
+&gt;       assert caught.value.code == 'CONNECT_CANCELLED'
+E       AssertionError: assert 'INSTALLATION_UNAVAILABLE' == 'CONNECT_CANCELLED'
+E         
+E         - CONNECT_CANCELLED
+E         + INSTALLATION_UNAVAILABLE
+
+tests\quick_connect\test_harness_alternatives.py:64: AssertionError</failure></testcase><testcase classname="tests.quick_connect.test_harness_alternatives" name="test_known_missing_noninteractive_exposes_three_safe_supported_alternatives" time="0.001"><failure message="AssertionError: assert False&#10; +  where False = isinstance(None, list)&#10; +    where None = ConnectionError('This supported harness has no confirmed installation. No installation was attempted.').choices">def test_known_missing_noninteractive_exposes_three_safe_supported_alternatives():
+        execute, state = run(inventory(candidate('codex')))
+        with pytest.raises(ConnectionError) as caught:
+            execute()
+        error = caught.value
+        assert error.code == 'INSTALLATION_UNAVAILABLE'
+&gt;       assert isinstance(error.choices, list)
+E       AssertionError: assert False
+E        +  where False = isinstance(None, list)
+E        +    where None = ConnectionError('This supported harness has no confirmed installation. No installation was attempted.').choices
+
+tests\quick_connect\test_harness_alternatives.py:74: AssertionError</failure></testcase><testcase classname="tests.quick_connect.test_harness_alternatives" name="test_stale_requested_harness_is_unconfirmed_not_missing_or_auto_switched" time="0.000" /><testcase classname="tests.quick_connect.test_harness_alternatives" name="test_stale_tty_request_never_switches_harness_without_explicit_answer" time="0.000" /><testcase classname="tests.quick_connect.test_harness_alternatives" name="test_denied_requested_candidate_cannot_bypass_policy_noninteractive" time="0.000" /><testcase classname="tests.quick_connect.test_harness_alternatives" name="test_denied_candidate_can_explicitly_choose_different_fresh_authorized_family" time="0.000"><failure message="okto_nexus.application.terminal_connection.ConnectionError: The canonical policy does not allow configuring this installation.">def test_denied_candidate_can_explicitly_choose_different_fresh_authorized_family():
+        execute, state = run(inventory(candidate('codex', allowed=False), candidate('claude')),
+            client='codex', interactive=True, answers=['2'])
+&gt;       assert execute() == ('claude', 'claude-candidate')
+               ^^^^^^^^^
+
+tests\quick_connect\test_harness_alternatives.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\quick_connect\test_harness_alternatives.py:46: in execute
+    return choose_harness(get, agent_id='operator', executor_id='host-a', workspace_id='project-a',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+call = &lt;function run.&lt;locals&gt;.get at 0x0000022DE89F5120&gt;, agent_id = 'operator'
+executor_id = 'host-a', workspace_id = 'project-a', client = 'codex'
+candidate_ref = None, interactive = True
+read = &lt;function run.&lt;locals&gt;.read at 0x0000022DE89F51C0&gt;
+write = &lt;built-in method append of list object at 0x0000022DE8A1A3C0&gt;
+
+    def choose_harness(call, *, agent_id, executor_id, workspace_id, client=None,
+            candidate_ref=None, interactive=False, read=input, write=print):
+        inventory = call('GET', PREFIX + '/agents/' + quote(agent_id, safe='') + '/runtime-options?' +
+            urlencode(dict(executor_id=executor_id, **({'workspace_id': workspace_id} if workspace_id else {}))))
+        if (type(inventory) is not dict or type(inventory.get('options')) is not list
+                or type(inventory.get('adapter_freshness')) is not dict
+                or inventory.get('agent_id') != agent_id or inventory.get('executor_id') != executor_id
+                or any(type(row) is not dict for row in inventory['options'])):
+            raise ConnectionError('INVENTORY_UNCONFIRMED', 'The passive harness inventory is unconfirmed.')
+        observed = {name: [row for row in inventory['options'] if row.get('adapter_id') == adapter
+            and row.get('candidate_ref')] for name, adapter in CLIENTS.items()}
+        alternatives = [dict(harness=name, observed=bool(rows),
+            freshness=inventory['adapter_freshness'].get(CLIENTS[name], 'UNKNOWN'),
+            candidates=[dict(candidate_ref=row['candidate_ref'], can_configure=row.get('can_configure') is True,
+                technical_state=row.get('technical_state')) for row in rows]) for name, rows in observed.items()]
+        while True:
+            if client not in CLIENTS:
+                detected = [name for name, rows in observed.items() if rows]
+                if client is None and len(detected) == 1:
+                    client = detected[0]
+                elif not interactive:
+                    raise ConnectionError('CLIENT_SELECTION_REQUIRED', 'Select a supported harness from the passive inventory.', choices=alternatives)
+                else:
+                    write('Choose a supported harness (listing does not test login or run a version command):')
+                    for index, choice in enumerate(alternatives, 1):
+                        state = 'observed' if choice['observed'] else 'not confirmed in inventory'
+                        write(f"{index}. {choice['harness']} — {state}; {choice['freshness']}")
+                    write('c. Cancel')
+                    while True:
+                        try:
+                            answer = read('Harness: ').strip().lower()
+                        except EOFError:
+                            answer = 'c'
+                        if answer in ('', 'c'):
+                            raise ConnectionError('CONNECT_CANCELLED', 'Harness selection cancelled.')
+                        if answer.isdecimal() and 1 &lt;= int(answer) &lt;= len(alternatives):
+                            client = alternatives[int(answer) - 1]['harness']
+                            break
+                        write('Choose a displayed harness or c.')
+            rows = observed[client]
+            if inventory['adapter_freshness'].get(CLIENTS[client]) != 'FRESH':
+                raise ConnectionError('INVENTORY_UNCONFIRMED', 'The selected harness inventory is not fresh; absence and readiness are unconfirmed.', choices=alternatives)
+            if candidate_ref:
+                rows = [row for row in rows if row['candidate_ref'] == candidate_ref]
+            if not rows:
+                if not interactive or candidate_ref is not None:
+                    raise ConnectionError('INSTALLATION_UNAVAILABLE', 'This supported harness has no confirmed installation. No installation was attempted.', choices=alternatives)
+                write('This supported harness has no confirmed installation. Choose another or cancel; nothing will be installed.')
+                client = ''  # Force an explicit choice, even when only one other family is observed.
+                continue
+            if len(rows) != 1:
+                choices = [dict(candidate_ref=row['candidate_ref'], adapter_id=row['adapter_id'],
+                    technical_state=row.get('technical_state'), can_configure=row.get('can_configure') is True) for row in rows]
+                if not interactive:
+                    raise ConnectionError('INSTALLATION_SELECTION_REQUIRED', 'Select an exact installation candidate.', choices=choices)
+                write('Choose the approved installation candidate:')
+                for index, row in enumerate(choices, 1):
+                    write(f"{index}. {row['candidate_ref']} — {row['technical_state']}")
+                write('c. Cancel')
+                try:
+                    answer = read('Installation: ').strip().lower()
+                except EOFError:
+&gt;                   answer = 'c'
+E                   okto_nexus.application.terminal_connection.ConnectionError: The canonical policy does not allow configuring this installation.
+
+src\okto_nexus\adapters\inbound\cli\quick_connect_selection.py:77: ConnectionError</failure></testcase><testcase classname="tests.quick_connect.test_harness_alternatives" name="test_explicitly_selected_denied_alternative_is_still_refused" time="0.001"><failure message="AssertionError: assert 'INSTALLATION_UNAVAILABLE' in {'CONFIGURATION_NOT_AUTHORIZED', 'CONNECT_CANCELLED'}&#10; +  where 'INSTALLATION_UNAVAILABLE' = ConnectionError('This supported harness has no confirmed installation. No installation was attempted.').code&#10;[+1 more line; full report in element text]">def test_explicitly_selected_denied_alternative_is_still_refused():
+        execute, state = run(inventory(candidate('codex', allowed=False)),
+            client='claude', interactive=True, answers=['1', 'c'])
+        with pytest.raises(ConnectionError) as caught:
+            execute()
+&gt;       assert caught.value.code in {'CONFIGURATION_NOT_AUTHORIZED', 'CONNECT_CANCELLED'}
+E       AssertionError: assert 'INSTALLATION_UNAVAILABLE' in {'CONFIGURATION_NOT_AUTHORIZED', 'CONNECT_CANCELLED'}
+E        +  where 'INSTALLATION_UNAVAILABLE' = ConnectionError('This supported harness has no confirmed installation. No installation was attempted.').code
+E        +    where ConnectionError('This supported harness has no confirmed installation. No installation was attempted.') = &lt;ExceptionInfo ConnectionError('This supported harness has no confirmed installation. No installation was attempted.') tblen=3&gt;.value
+
+tests\quick_connect\test_harness_alternatives.py:122: AssertionError</failure></testcase><testcase classname="tests.quick_connect.test_harness_alternatives" name="test_explicitly_selected_stale_alternative_is_not_usable" time="0.001"><failure message="AssertionError: assert 'INSTALLATION_UNAVAILABLE' in {'CONNECT_CANCELLED', 'INVENTORY_UNCONFIRMED'}&#10; +  where 'INSTALLATION_UNAVAILABLE' = ConnectionError('This supported harness has no confirmed installation. No installation was attempted.').code&#10; +    where ConnectionError('This supported harness has no confirmed installation. No installation was attempted.') = &lt;ExceptionInfo ConnectionError('This supported harness has no confirmed installation. No installation was attempted.') tblen=3&gt;.value">def test_explicitly_selected_stale_alternative_is_not_usable():
+        execute, state = run(inventory(candidate('codex'), stale='codex'), interactive=True, answers=['1', 'c'])
+        with pytest.raises(ConnectionError) as caught:
+            execute()
+&gt;       assert caught.value.code in {'INVENTORY_UNCONFIRMED', 'CONNECT_CANCELLED'}
+E       AssertionError: assert 'INSTALLATION_UNAVAILABLE' in {'CONNECT_CANCELLED', 'INVENTORY_UNCONFIRMED'}
+E        +  where 'INSTALLATION_UNAVAILABLE' = ConnectionError('This supported harness has no confirmed installation. No installation was attempted.').code
+E        +    where ConnectionError('This supported harness has no confirmed installation. No installation was attempted.') = &lt;ExceptionInfo ConnectionError('This supported harness has no confirmed installation. No installation was attempted.') tblen=3&gt;.value
+
+tests\quick_connect\test_harness_alternatives.py:130: AssertionError</failure></testcase></testsuite></testsuites>

@@ -122,12 +122,12 @@ class TerminalConnection:
             request['agent_creation'] = {'display_name': '',
                 'defaults_hash': current['agent_creation_defaults']['defaults_hash']}
         available = self.options(request)
-        if not selection['client']:
+        if selection['client'] not in CLIENTS:
             clients = {name for name, adapter in CLIENTS.items() for row in available['options']
                        if row['adapter_id'] == adapter and row.get('candidate_ref')}
-            if len(clients) != 1:
+            if selection['client'] is not None or len(clients) != 1:
                 raise ConnectionError('CLIENT_SELECTION_REQUIRED',
-                    'Choose --client from the observed harnesses: ' + ', '.join(sorted(clients)),
+                    'Choose a supported harness from the passive inventory.',
                     choices=sorted(clients))
             selection['client'] = clients.pop()
         rows = [row for row in available['options'] if row['adapter_id'] == CLIENTS[selection['client']]
@@ -152,6 +152,10 @@ class TerminalConnection:
         request.update(candidate_ref=selected['candidate_ref'], inventory_revision=available['inventory_revision'],
             baseline=current['baseline'], project_preset=dict(ORIGIN), configuration=configuration(
                 adapter_id=selected['adapter_id'], project=selection['project'], label=selection['label'], provider_home=home))
+        if selection.get('public_connection') is not None:
+            # Product metadata belongs in the setup envelope, outside the Core
+            # configuration schema. Its stable ref and root proof were reviewed.
+            request['public_connection'] = deepcopy(selection['public_connection'])
         native_policy = current.get('native_decision_policy')
         if native_policy is None:
             raise ConnectionError('NATIVE_POLICY_UNCONFIRMED', 'This Server cannot review native decision policy for project setup.')
@@ -181,6 +185,66 @@ class TerminalConnection:
         self.save(document)
         return observed
 
+    def review_public_association(self, selection, *, previous=None):
+        """Review legacy adoption as metadata, never as a new setup Test."""
+        from dataclasses import fields
+        from ..domain.quick_connect import CanonicalConnectionReference
+        me = self.api('GET', '/connections/me')
+        legacy = deepcopy(selection)
+        public = legacy.pop('public_connection')
+        binding = self.api('GET', '/connections/bindings/' + quote(selection['binding_id'], safe=''))
+        # Validate the existing connection/root/provider/exact selectors before
+        # preparing its public metadata review. No shortcut is saved yet.
+        temporary = dict(server_id=me['server_id'], selection=legacy,
+            result=dict(binding=dict(binding_id=selection['binding_id'])))
+        if isinstance(self, RemoteTerminalConnection):
+            temporary['remote_scope'] = {key: binding[key] for key in self.SCOPE}
+        self.observe(temporary)
+        reference = {field.name: binding.get(field.name) for field in fields(CanonicalConnectionReference)}
+        CanonicalConnectionReference(**reference)
+        request = dict(approved=True, client_intent_id='associate_' + uuid.uuid4().hex,
+            connect_id=public['connect_id'], expected_binding_ref=reference,
+            expected_binding_revision=binding['binding_revision'])
+        review = dict(server_id=me['server_id'], selection=selection, request=request,
+            version_check_required=False,
+            effects=['Associate this public Harness ID with the exact existing connection.',
+                'No installation check, model test, agent creation, grant renewal or new session.'])
+        if 'remote_scope' in temporary:
+            review['remote_scope'] = temporary['remote_scope']
+        document = deepcopy(previous) if previous else {}
+        if previous:
+            document['public_id_previous_setup'] = {key: deepcopy(previous[key])
+                for key in ('request', 'review_request', 'review_revision', 'result', 'selection') if key in previous}
+        document.update(review, format=1, kind='public_id_association', state='review',
+            review_request=deepcopy(request), review_revision=document_revision(review))
+        self.save(document)
+        return document
+
+    def _apply_public_association(self, document, approval):
+        review = {key: document[key] for key in ('server_id', 'selection', 'request', 'version_check_required', 'effects')}
+        if 'remote_scope' in document:
+            review['remote_scope'] = document['remote_scope']
+        if document_revision(review) != document['review_revision'] or document['request'] != document['review_request']:
+            raise ConnectionError('REVIEW_CHANGED', 'The public Harness ID association review changed.')
+        if document['state'] == 'review':
+            if approval != document['review_revision']:
+                raise ConnectionError('REVIEW_REQUIRED', 'Approve the exact public Harness ID association review.')
+            document['state'] = 'association_submitted'
+            self.save(document)
+        if document['state'] != 'association_submitted':
+            raise ConnectionError('CHECKPOINT_INVALID', 'The retained association checkpoint is unrecognized.')
+        public = self.api('POST', '/connections/public-ids/associate-existing', document['request'])
+        if (public.get('state') != 'bound' or public.get('connect_id') != document['request']['connect_id']
+                or public.get('canonical_ref') != document['request']['expected_binding_ref']):
+            raise ConnectionError('PUBLIC_ID_UNCONFIRMED', 'The public association result is inconsistent.', possible_effect=True)
+        document.update(state='done', result=dict(saved=True, agent_id=document['selection']['agent'],
+            binding=dict(binding_id=document['selection']['binding_id']), public_connection=public))
+        previous_selection = document.get('public_id_previous_setup', {}).get('selection')
+        if previous_selection:
+            document['selection'] = deepcopy(previous_selection) | document['selection']
+        self._save_committed(document)
+        return self.observe(document)
+
     def observe(self, document):
         me = self.api('GET', '/connections/me')
         if me['server_id'] != document['server_id']:
@@ -197,10 +261,36 @@ class TerminalConnection:
                     not _same_local_path(current.get('folders', {}).get('provider_home'), selection['provider_home']) or
                 current.get('folders', {}).get('workspace_root') != selection['project']):
             raise ConnectionError('PROFILE_DRIFT', 'The canonical binding no longer matches this local project profile. Review it explicitly.')
-        return {'state': 'configured', 'server_id': me['server_id'], 'agent_id': selection['agent'],
+        result = {'state': 'configured', 'server_id': me['server_id'], 'agent_id': selection['agent'],
                 'binding_id': binding, 'workspace_id': match['workspace_id'], 'configuration': current,
                 'setup_run_id': document.get('request', {}).get('client_intent_id'),
                 'session_state': 'not_checked', 'work_state': 'not_submitted'}
+        public = document.get('result', {}).get('public_connection') or selection.get('public_connection')
+        if public is not None:
+            result['public_connection'] = self._observe_public_id(public['connect_id'],
+                workspace_id=match['workspace_id'], binding_id=binding, server_id=me['server_id'])
+        return result
+
+    def _observe_public_id(self, connect_id, *, workspace_id, binding_id, server_id):
+        from dataclasses import fields
+        from ..domain.quick_connect import CanonicalConnectionReference, normalize_connect_id
+        # Full binding + public registry are independent canonical reads. Their
+        # complete immutable references must agree before saying "connected".
+        binding = self.api('GET', '/connections/bindings/' + quote(binding_id, safe=''))
+        page = self.api('GET', '/connections/public-ids?' + urlencode(dict(
+            workspace_id=workspace_id, connect_id=normalize_connect_id(connect_id), limit=100)))
+        rows = [r for r in page.get('items', ()) if r.get('connect_id') == connect_id]
+        reference = {field.name: binding.get(field.name) for field in fields(CanonicalConnectionReference)}
+        if (page.get('server_id') != server_id or page.get('has_more') is not False
+                or page.get('total_is_exact') is not True or len(rows) != 1
+                or rows[0].get('state') != 'bound' or binding.get('state') != 'APPROVED'
+                or reference['server_id'] != server_id or reference['workspace_id'] != workspace_id
+                or reference['binding_id'] != binding_id
+                or any(type(value) is not str or not value for value in reference.values())
+                or rows[0].get('canonical_ref') != reference):
+            raise ConnectionError('PUBLIC_ID_UNCONFIRMED',
+                'The public Harness ID is not bound to the exact approved connection.')
+        return dict(version=1, state='bound', connect_id=connect_id, canonical_ref=reference)
 
     def approve_review(self, document, approval):
         review = {key: document[key] for key in ('server_id', 'selection', 'version_check_required', 'effects')}
@@ -279,6 +369,8 @@ class TerminalConnection:
             raise ConnectionError('SERVER_ID_MISMATCH', 'The selected Server installation changed.', possible_effect=check_submitted)
         if document['state'] == 'done':
             return self.observe(document)
+        if document.get('kind') == 'public_id_association':
+            return self._apply_public_association(document, approval)
         request = self.approve_review(document, approval)
         checked_version = False
         if document['state'] in ('test_submitted', 'finish'):
@@ -292,7 +384,7 @@ class TerminalConnection:
                         or receipt.get('result', {}).get('agent_id') != request['agent_id']):
                     raise ConnectionError('RECEIPT_UNCONFIRMED', 'The Server returned an inconsistent setup receipt.', possible_effect=True)
                 document.update(state='done', result=receipt['result'])
-                self.save(document)
+                self._save_committed(document)
                 return self.observe(document)
         if (document['state'] in ('approved', 'check_submitted') and document['version_check_required']
                 and not document.get('version_check_confirmed')):
@@ -320,6 +412,29 @@ class TerminalConnection:
             # The confirmed checkpoint remains resumable, but no new test starts now.
             self._check_observation_deadline(check_deadline)
             checked_version = True
+        if request.get('public_connection') and document['state'] == 'approved':
+            # Reserving after version confirmation fixes the current request
+            # hash. It precedes the paid model Test and is idempotent by intent.
+            reservation = self.api('POST', '/connections/public-ids/reserve',
+                dict(approved=True, request=deepcopy(request)))
+            public = request['public_connection']
+            if (reservation.get('version') != 1 or reservation.get('state') not in ('reserved', 'bound')
+                    or reservation.get('connect_id') != public['connect_id']
+                    or reservation.get('reservation_ref') != public['reservation_ref']
+                    or reservation.get('setup_run_id') != request['client_intent_id']):
+                raise ConnectionError('PUBLIC_ID_RESERVATION_UNCONFIRMED',
+                    'The Harness ID reservation was not confirmed. Preserve this intent.', possible_effect=True)
+            document['public_id_reservation'] = reservation
+            self.save(document)
+            if reservation['state'] == 'bound':
+                receipt = self.api('POST', '/connections/setup:recover', request)
+                if (receipt.get('state') != 'committed' or receipt.get('setup_run_id') != request['client_intent_id']
+                        or receipt.get('result', {}).get('public_connection', {}).get('connect_id') != public['connect_id']
+                        or receipt.get('result', {}).get('agent_id') != request['agent_id']):
+                    raise ConnectionError('RECEIPT_UNCONFIRMED', 'The bound Harness ID has no matching setup receipt.', possible_effect=True)
+                document.update(state='done', result=receipt['result'])
+                self._save_committed(document)
+                return self.observe(document)
         if document['state'] == 'approved':
             document['state'] = 'test_submitted'
             self.save(document)
@@ -372,8 +487,21 @@ class TerminalConnection:
         self.save(document)
         result = self.api('POST', '/connections/setup:finish', request)
         document.update(state='done', result=result)
-        self.save(document)
+        self._save_committed(document)
         return self.observe(document)
+
+    def _save_committed(self, document):
+        try:
+            self.save(document)
+        except OSError:
+            # The previous durable checkpoint still owns this same setup intent;
+            # recovery reads its receipt and repairs only the local shortcut.
+            public = document.get('result', {}).get('public_connection')
+            error = ConnectionError('CONFIGURED_SHORTCUT_PENDING',
+                'The canonical connection is configured; its local shortcut needs repair. Resume the same profile.',
+                possible_effect=True)
+            error.committed_public_connection = public
+            raise error from None
 
 
 class RemoteTerminalConnection(TerminalConnection):
@@ -415,7 +543,12 @@ class RemoteTerminalConnection(TerminalConnection):
             raise ConnectionError('PROFILE_DRIFT', 'The approved remote binding changed scope. Review its current selection explicitly.')
         if binding['state'] != 'APPROVED':
             raise ConnectionError('CONNECTION_UNAVAILABLE', 'The canonical connection is ' + binding['state'] + '; inspect its current authorization.')
-        return dict(state='configured', server_id=me['server_id'], agent_id=binding['agent_id'],
+        result = dict(state='configured', server_id=me['server_id'], agent_id=binding['agent_id'],
             binding_id=binding['binding_id'], workspace_id=binding['workspace_id'],
             configuration=self.current(binding['agent_id'], binding['binding_id']),
-            topology='remote_operator', session_state='not_checked', work_state='not_submitted')
+            topology='remote_operator', execution_location='remote', session_state='not_checked', work_state='not_submitted')
+        public = document.get('result', {}).get('public_connection') or document['selection'].get('public_connection')
+        if public is not None:
+            result['public_connection'] = self._observe_public_id(public['connect_id'],
+                workspace_id=binding['workspace_id'], binding_id=binding['binding_id'], server_id=me['server_id'])
+        return result

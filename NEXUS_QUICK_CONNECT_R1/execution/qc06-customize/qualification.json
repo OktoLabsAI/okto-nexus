@@ -1,0 +1,34 @@
+{
+  "scope": "QC021 pure customization and unit port-boundary preservation; new source cut, not a full CLI journey",
+  "status": "FOCAL_PASS",
+  "final_run": "focal-run.json",
+  "result": {"tests_passed": 26, "pytest_seconds": 0.92, "tool": "ae79ca", "exit_code": 0, "source_drift": []},
+  "lint": {"tool": "681c00", "exit_code": 0, "command": "rtk proxy C:/Users/jpamb/AppData/Roaming/Python/Python313/Scripts/ruff.exe check tests/quick_connect/test_quick_connect_customize.py NEXUS_QUICK_CONNECT_R1/execution/qc06-customize/run_focal.py"},
+  "demonstrated": [
+    "All four customization fields produce a new automatic profile and remove old approval without mutating the old review",
+    "Service arguments and explicit login/no-chat flags are retained as argument vectors",
+    "ID normalization, frozen project-name provenance and canonical workspace survive ID/harness changes; harness change clears candidate and proposed ID",
+    "Project/root change refuses exact incompatible selectors; association retains exact agent/binding/workspace and cannot switch harness",
+    "Cancel/EOF and invalid field values do not mutate review or generate a new profile on cancellation",
+    "Actual run_connect trampoline carries frozen invocation/name into the next invocation only after a stub invocation finally has unwound",
+    "Association unit port stub preserves unknown previous selection/top-level checkpoint fields after commit; public wire allowlist excludes those private fields"
+  ],
+  "read_only_review": [
+    {"source": "src/okto_nexus/adapters/inbound/cli/connect.py", "observation": "run_connect catches ReviewRestart outside _run_connect_once; _run_connect_once finally releases its guard. Customization marks the old review superseded, saves it, then raises restart before flow.apply."},
+    {"source": "src/okto_nexus/adapters/inbound/cli/quick_connect_selection.py", "observation": "prepare uses frozen_name as discovery adapter; a new selection creates a fresh reservation reference. This is a source observation, not an end-to-end execution qualification."},
+    {"source": "src/okto_nexus/application/terminal_connection.py", "observation": "Association commit merges previous selection with current selection, current canonical members winning; tested with an inert association port only."}
+  ],
+  "antecedents": [
+    {"tool": "95e117", "result": "25 PASS in 1.07 seconds, before association preservation unit was added"},
+    {"tool": "16c6ef", "result": "Ruff unused pathlib import in the new test; removed test-only import"},
+    {"tool": "d96a27", "result": "26 PASS in 1.02 seconds; final run additionally pins TerminalConnection source"}
+  ],
+  "limits": [
+    "No actual HTTP/SQLite review or provider call is performed by this test file",
+    "A real new review revision/intent/reservation and old-profile guard release under HTTP/TTY require the separately owned CLI integration journey",
+    "The trampoline stub proves outer sequencing, not concrete lock acquisition behavior",
+    "Association port acceptance is synthetic; exact canonical association authorization is covered by separate qc04-terminal tests, not inherited as a PASS here",
+    "Source-first Nexus with qualified PR27 dependency prefix; no install, global suite, build, personal credentials or lifecycle process"
+  ],
+  "cleanup": {"test_process_exit_code": 0, "provider_calls": 0, "services_started": 0, "temporary_files": "Only pytest-owned directories with ordinary pytest retention; no physical purge claimed"}
+}

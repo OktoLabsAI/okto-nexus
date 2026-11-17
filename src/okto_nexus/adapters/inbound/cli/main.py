@@ -11,7 +11,8 @@ import sys
 _HELP = """okto-nexus - local agent coordination bus
 
 Usage:
-  okto-nexus connect [options] Review and connect a local project
+  okto-nexus connect [harness] [project-name] [--id HARNESS_ID] [options]
+  okto-nexus codex|claude|pi [project-name] [--id HARNESS_ID] [options]
   okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
   okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
   okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
@@ -93,12 +94,26 @@ def main(argv: list[str] | None = None) -> int:
     if command == "provider-credentials":
         from .provider_credentials import run_provider_credentials
         return run_provider_credentials(rest)
-    print(
-        "[okto-nexus] MCP stdio is no longer available. "
-        "Run `okto-nexus serve` and connect to its HTTP /mcp endpoint.\n\n"
-        + _HELP,
-        file=sys.stderr,
-    )
+    # Explicit product commands above always take precedence over aliases. An
+    # alias enters the same function, never a shell or a rewritten sys.argv.
+    from ....application.project_preset import CLIENTS
+    if command in CLIENTS:
+        from .quick_connect_policy import entry_enabled
+        if not entry_enabled():
+            print('Quick Connect entry is disabled. Resume existing connections with connect --profile NAME.', file=sys.stderr)
+            return 2
+        from .connect import run_connect
+        return run_connect([command, *rest])
+    if command in ('stdio', 'mcp') or command.startswith('-'):
+        print('MCP stdio is no longer available. Run `okto-nexus serve` and connect to its HTTP /mcp endpoint.', file=sys.stderr)
+        return 2
+    import difflib
+    choices = ('connect', 'init', 'doctor', 'participant', 'preset', 'work',
+        'operator', 'serve', 'service', 'tail', 'admin', 'observe',
+        'message', 'handoff', 'request', 'provider-credentials', *CLIENTS)
+    suggestions = difflib.get_close_matches(command, choices, n=3, cutoff=0.5)
+    hint = (' Did you mean: ' + ', '.join(suggestions) + '?') if suggestions else ''
+    print('Unknown command.' + hint + '\nUse okto-nexus --help for available commands.', file=sys.stderr)
     return 2
 
 

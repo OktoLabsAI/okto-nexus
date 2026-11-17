@@ -1,0 +1,23 @@
+﻿[
+    {
+        "ProcessId":  55592,
+        "ParentProcessId":  57744,
+        "CreationDate":  "\/Date(1794892618732)\/",
+        "ExecutablePath":  "C:\\Python313\\python.exe",
+        "CommandLine":  "\"C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts\\python.exe\" -I tests/quick_connect/browser_public_ids_fixture.py --ready NEXUS_QUICK_CONNECT_R1/execution/qc05-browser/ready.json --stop NEXUS_QUICK_CONNECT_R1/execution/qc05-browser/stop --final NEXUS_QUICK_CONNECT_R1/execution/qc05-browser/final.json --expected-bundle index-CfDr8rCI.js --duration 900"
+    },
+    {
+        "ProcessId":  25104,
+        "ParentProcessId":  54280,
+        "CreationDate":  "\/Date(1794892643026)\/",
+        "ExecutablePath":  "C:\\Program Files\\nodejs\\node.exe",
+        "CommandLine":  "\"C:\\Program Files\\nodejs\\node.exe\" C:\\Users\\jpamb\\AppData\\Local\\npm-cache\\_npx\\31e32ef8478fbf80\\node_modules\\playwright-core\\lib\\entry\\cliDaemon.js qc05-public-ids --headed"
+    },
+    {
+        "ProcessId":  43876,
+        "ParentProcessId":  25104,
+        "CreationDate":  "\/Date(1794892643624)\/",
+        "ExecutablePath":  "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "CommandLine":  "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,HttpsUpgrades,HttpsFirstBalancedModeAutoEnable,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,AvoidCorsURLLoaderRestartOnRedirect,TcpPortRandomizationWin,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,PreconnectToSearch,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface,SkipListAccountsWithoutGaiaCookies --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --enable-unsafe-swiftshader --edge-skip-compat-layer-relaunch --disable-stack-profiler --disable-infobars --disable-sync --do-not-de-elevate --disable-blink-features=AutomationControlled --user-data-dir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\playwright_chromiumdev_profile-Um0xs2 --remote-debugging-pipe --no-startup-window"
+    }
+]

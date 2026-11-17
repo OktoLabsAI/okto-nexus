@@ -1,0 +1,19 @@
+{
+  "qualification": "THREE_FOCAL_CLI_HTTP_DELTA_CASES_PASS",
+  "antecedent": {"cut": "qc04-cli-http", "passed": 17, "test_source_copy": "antecedent17-test.py.txt", "test_source_sha256": "a22bcd328e3565b5906ea79e93579d8acdfc10e9e26e94543e1f01051c8c1872", "note": "The 17-case source/evidence is preserved as a prior cut, not claimed reexecuted against every later change."},
+  "run": {
+    "tool_handles": ["59be67", "37790f"],
+    "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe -B -Xutf8 -m pytest tests/quick_connect/test_quick_connect_cli.py -k \"json_unknown_exposes or rollback_preserves or tty_customize_id\" -q --junitxml=NEXUS_QUICK_CONNECT_R1/execution/evidence/qc04b-cli-delta/pytest.xml",
+    "exit_code": 0, "passed": 3, "deselected": 16, "elapsed_seconds": 23.17
+  },
+  "ruff": {"tool_handle": "ded163", "command": "rtk proxy ruff check tests/quick_connect/test_quick_connect_cli.py tests/quick_connect/test_quick_connect_pty.py", "exit_code": 0},
+  "cases": [
+    {"name": "json_unknown_exposes_authorized_alternatives_without_input", "observed": "Real HTTP passive inventory with unknown codxe returns state=selection_required/code=CLIENT_SELECTION_REQUIRED and alternatives for every registered family, including observed Codex candidates; no stdin/Test/probe. Resolves the B02 alternatives gap of the earlier cut."},
+    {"name": "rollback_preserves_exact_existing_profile_without_replay_and_blocks_new_entry_before_context", "observed": "After canonical creation, OKTO_NEXUS_QUICK_CONNECT=off still resumes exact existing profile/ID/binding with unchanged setup receipts, grants and one synthetic Test/probe total. A new positional/ID entry refuses QUICK_CONNECT_DISABLED before another lifecycle or HTTP call."},
+    {"name": "tty_customize_id_creates_new_review_preserves_hint_and_invalidates_original_hash", "observed": "Mapped test-owned input customizes only ID, preserves frozen initial naming hint without rediscovery, produces a fresh review/intent, supersedes original and refuses its old hash, then basic connect resumes reviewer with unchanged binding/grants. One synthetic Test/probe. This case uses isatty/input mocks; native input PTY is separately qualified in qc06-pty."}
+  ],
+  "fixture_hardening": "Before app/bootstrap, HOME/USERPROFILE/CODEX_HOME/CLAUDE_CONFIG_DIR are set to this test's Temp paths; every CLI call also passes an explicit own provider-home. This prevents passive default provider-home suggestions pointing at a personal directory. Test-only changes; no personal path/config/credential read or installation change.",
+  "environment": {"nexus": "checkout source, not installed 0.3.6", "interpreter": "preserved PR27 Python 3.13.1 Windows x64, -B -Xutf8", "core": "preserved installed Core read-only; no pip", "http_sqlite": "real canonical TestClient/SQLite handlers in per-test Temp homes", "provider_boundary": "only synthetic version/Test peers from terminal fixture; zero actual native/provider calls"},
+  "cleanup": {"testclient_contexts_closed": true, "provider_service_or_browser_processes_started": 0, "ledger_git_or_prefix_changed": false},
+  "limits": ["Only these three tests rerun against this new cut; no full 19-test or 147-scenario matrix PASS", "No real model, real authenticated CLI/provider, installed package, human study or full OS PTY qualification", "Retained historical manifests describe their own source cuts; later source edits are not retroactive qualification"]
+}

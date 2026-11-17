@@ -1,0 +1,63 @@
+{
+  "db": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc05-browser-zj4nic_q\\home\\nexus.db",
+  "mode": "read-only; no query writes",
+  "before_evidence": "Only whole-table count/hash was captured, not rows or per-column hashes.",
+  "changed_columns": "UNKNOWN; exact changed columns and cause cannot be proved from whole-table digest.",
+  "after_metadata": [
+    {
+      "session_id": "ses_1b39d87c3b67e1ae4da4e8e9899731cd",
+      "binding_id": "binding",
+      "workspace_id": "ws",
+      "lifecycle_state": "READY",
+      "stream_epoch": "native-epoch",
+      "lease_state": "SUPERSEDED"
+    },
+    {
+      "session_id": "ui-session-2",
+      "binding_id": "ui-binding-2",
+      "workspace_id": "ws",
+      "lifecycle_state": "CLOSED",
+      "stream_epoch": "ui-historical-epoch",
+      "lease_state": "CLOSED"
+    }
+  ],
+  "after_column_hashes": {
+    "server_id": "21235f54ea22a9124e07e35ad1c97d26d0f1622faf26a93afd02691a372dc03c",
+    "executor_id": "5c43d024f1a79f7f7e7f8fdb394c25e3a4aaf721887b3a17c0b94413c3c42ebc",
+    "session_id": "d96a094cee8a4767de31deecb49ad3c23bb9c360297ab06f69e4a96579ef907f",
+    "binding_id": "0def3fab887cdd572c013e69ffc353df36f372d27ed2beadd13be8483e249d8b",
+    "workspace_id": "1ecaef22049ea2ce6afa8c5aa5cd74ba7b268edff3f27a698de9cdcdd53d3e4f",
+    "workspace_binding_id": "f7d5c49c460c69e5f0446abc444f09fc26c7de490d15606ca0572d2d88d2b5ee",
+    "open_operation_id": "8c88a756765a450e1387b1a85099af11cad19b89f1c653c5137cbd952cc7a745",
+    "core_owner_ref": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9",
+    "owner_generation": "e718fe8edf8a7c2917cd7444286b7048042a74abf5208f1d70933c08dbd6b7e9",
+    "lifecycle_state": "1b7cdb9728a340c46dc7c9e29f619d21b0db36bb932002c94de156098a222344",
+    "ownership_proof_json": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9",
+    "stream_epoch": "c4e266850fe6a932bc5c43d03f9b18fea800f2483281f272abaf91aa1c452e06",
+    "lease_state": "039e280a2be6c0a5254279a1c922d62e52991f9993f61fb77afb59f9c85e3d9b",
+    "legacy_session_id": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9",
+    "metadata_json": "f018a931332392907ca3c9ed1af6b079fb3ff16a816a5322cadc4a55e7779a11",
+    "local_retirement_json": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9",
+    "local_retirement_revision": "d72b99cb0537a539a6caaa05ce4f5bed34266fac178b275056629d67c5058486",
+    "local_journal_name": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9",
+    "containment_reason": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9",
+    "contained_at": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9"
+  },
+  "seed_known_historical_fields": {
+    "session_id": "ui-session-2",
+    "lifecycle_state": "CLOSED",
+    "lease_state": "CLOSED",
+    "stream_epoch": "ui-historical-epoch"
+  },
+  "limitation": "No claim that every Home GET was free of canonical maintenance effects. Eight protected tables remained byte equal; all nine row counts remained equal.",
+  "offline_after_lifespan_hash": "f69ad946bc80fea8ded0378a0ad4e56213563d18f8f902647c988972b1542078",
+  "same_as_pre_lifespan_final_snapshot": true,
+  "single_column_source_hypothesis": {
+    "column": "lease_state",
+    "before": "ACTIVE",
+    "after": "SUPERSEDED",
+    "reconstructed_sha256": "c75b2796665cdfc956af125a68ea2f48c80871eed307aa8bbe4ef5cdb9a6238c",
+    "original_sha256": "342fab0b11420f7a1dfb0a5de2c5e68561a59cb3d9f866d04f05463b8e4375bd",
+    "exact_whole_table_hash_match": false
+  }
+}

@@ -61,6 +61,21 @@ def _trusted_git(root: Path, *, deadline: float | None = None) -> Path | None:
         excluded.append(Path.cwd().resolve(strict=True))
     except OSError:
         pass
+    # The execution root may be a monorepo subdirectory. A sibling tools/git
+    # inside its repository is still project-controlled, even with absolute PATH.
+    # Only inspect ancestor metadata (including .git files in worktrees); never
+    # run a candidate to establish that trust boundary or scan directories.
+    for base in tuple(dict.fromkeys(excluded)):
+        for depth, ancestor in enumerate((base, *base.parents)):
+            if depth >= 64 or deadline is not None and time.monotonic() >= deadline:
+                return None
+            try:
+                (ancestor / '.git').lstat()
+            except (FileNotFoundError, NotADirectoryError):
+                continue
+            except OSError:
+                return None  # An unreadable trust boundary is not approval.
+            excluded.append(ancestor)
     for index, entry in enumerate(os.environ.get('PATH', '').split(os.pathsep, 64)):
         if index >= 64 or deadline is not None and time.monotonic() >= deadline:
             break
@@ -182,7 +197,8 @@ class _GitReader:
 
 def _origin_name(origin: str) -> str | None:
     if (origin != origin.strip() or any(unicodedata.category(c).startswith('C')
-            or unicodedata.category(c).startswith('Z') and c != ' ' for c in origin)):
+            or unicodedata.category(c).startswith('Z') and c != ' ' for c in origin)
+            or re.search(r'%2f|%5c', origin, re.IGNORECASE)):
         return None
     # Windows drives must be recognized before SCP's host:path spelling.
     if re.match(r'^[A-Za-z]:[\\/]', origin):

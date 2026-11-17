@@ -1,0 +1,115 @@
+{
+  "algorithm": "sha256",
+  "entries": [
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/connect.py",
+      "bytes": 39793,
+      "sha256": "ce55b0bede9ef32f7f2bde52e770c2a7fc8dc36a0cd7c7fa0a4d862c7515d923"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/main.py",
+      "bytes": 5825,
+      "sha256": "0591c4685a8dfe6e2e71d0de46ae30fddde0ad06275bb6ceba1acc7149e87307"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/connect_arguments.py",
+      "bytes": 9069,
+      "sha256": "9ba2169ef628c8eb9b16a378e15d194faf01b65e03fe1963b125d7d9e39b4cae"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_selection.py",
+      "bytes": 18509,
+      "sha256": "e37d4fe130130596d7eddf2210c3427cfd2b6bc282e361f45c7e97af8bd27c5a"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_project.py",
+      "bytes": 12154,
+      "sha256": "4bbb099d669004e5f691d7fce4a0bef76d80fd0a85208e83691c11d033f568fa"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_ids.py",
+      "bytes": 9022,
+      "sha256": "c33f718020b1e56a070d4235f8099ea6dd905f5eb6cd963a052eb040eb434c22"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_outcome.py",
+      "bytes": 5460,
+      "sha256": "5ebbe3dc2dc9dc0365bdd8bffbdc97be2b22fabc822076af0ab71b72db34a69a"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_customize.py",
+      "bytes": 4761,
+      "sha256": "63499c6324708b0ae5ad7c39f52ba40331163c2a36e9ede8676ea4de7cb50fca"
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/git_project_hint.py",
+      "bytes": 13120,
+      "sha256": "d882321ace6d98f28d2879709d3b5f588832a179e55e90e3fd31cd682787bf32"
+    },
+    {
+      "path": "src/okto_nexus/application/terminal_connection.py",
+      "bytes": 37758,
+      "sha256": "1f607e5a3e8faeb9d87981ee3231d0e66151a2efbe60ae539effa7fe052cde3c"
+    },
+    {
+      "path": "src/okto_nexus/application/connection_public_ids.py",
+      "bytes": 16602,
+      "sha256": "4a22dee1dd1fd3872d994bd8a39893e3c34980a02321b248448c34b6546c7b71"
+    },
+    {
+      "path": "src/okto_nexus/application/connection_project_context.py",
+      "bytes": 6618,
+      "sha256": "93f7dc7abcedfc2d392c322e24c6a2a5d33aad366d18ff01d580eab38b1e7d6a"
+    },
+    {
+      "path": "src/okto_nexus/application/connection_workspaces.py",
+      "bytes": 4158,
+      "sha256": "893177cd92f64725ad9fd5fe19b2f405abddeab1a13ad4aa7b0442fa7aca5c8f"
+    },
+    {
+      "path": "src/okto_nexus/domain/quick_connect.py",
+      "bytes": 9505,
+      "sha256": "b45cc4c86437fa0c720205fcad078248bb5a73bb3d666f280b05097ee61b9680"
+    },
+    {
+      "path": "src/okto_nexus/domain/connection_public_ids.py",
+      "bytes": 2033,
+      "sha256": "e4cf0e3db027e2eb264aee564cf5798ea596618c0dc1f2f78054dc40fdb9c157"
+    },
+    {
+      "path": "tests/quick_connect/test_quick_connect_cli.py",
+      "bytes": 16280,
+      "sha256": "a22bcd328e3565b5906ea79e93579d8acdfc10e9e26e94543e1f01051c8c1872"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc04-cli-http/qualification.json",
+      "bytes": 6133,
+      "sha256": "6ec834dc077adb56072c064447cd0b7ef4322f6fefe5e2124a6c361c6f0a0257"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc04-cli-http/pytest-initial.xml",
+      "bytes": 424,
+      "sha256": "429dc2f63c9ad01566d454cb966c6f077fbe6799060c627bd17a9297a65456df"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc04-cli-http/pytest-second.xml",
+      "bytes": 9572,
+      "sha256": "e3abab7167230f82b2e523460cbf0a96c7fc265a1662b08d1bd775fcd6390e2b"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc04-cli-http/pytest-third.xml",
+      "bytes": 5581,
+      "sha256": "bd36ac5221da0d459420f637410b0e0e90b3071192e89a145aa6a1b7988746a6"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc04-cli-http/pytest-legacy-fixed.xml",
+      "bytes": 427,
+      "sha256": "95dfc9ccd3396629a03b0c3246a1090ed62dc22593f225ff39cac9c6401c0162"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc04-cli-http/pytest-final.xml",
+      "bytes": 3085,
+      "sha256": "f41026310945df7d4f90ee514ece6331c4af975b1de2136b3cd911d7f420c636"
+    }
+  ]
+}

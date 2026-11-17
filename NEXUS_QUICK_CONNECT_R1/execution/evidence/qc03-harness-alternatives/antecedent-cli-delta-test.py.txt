@@ -1,0 +1,369 @@
+"""Quick Connect through the existing SQLite/HTTP setup fixture.
+
+The service boundary is inert and harness check/Test boundaries are synthetic.
+Nothing here starts the service CLI, a native harness or a paid provider. Tests
+are added/executed only after the source-owner integration freeze.
+"""
+from pathlib import Path
+import json
+import sys
+from types import SimpleNamespace
+
+import pytest
+
+
+# Reuse the canonical fixture graph, whose legacy helper imports are flat.
+# Scope the import search change to loading those helpers; no product path or
+# installed prefix is mutated. local_setup installs its own candidate before
+# constructing the app, so the helper directory's autouse fixture is not needed
+# to prevent discovery of personal installations.
+_before = list(sys.path)
+try:
+    sys.path.insert(0, str(Path(__file__).parents[1] / 'execution_r4'))
+    import test_terminal_connect as _terminal
+finally:
+    sys.path[:] = _before
+
+local_setup = _terminal.local_setup
+checking = _terminal.checking
+terminal = _terminal.terminal
+
+
+@pytest.fixture(autouse=True)
+def isolated_provider_environment(tmp_path, monkeypatch):
+    """Fence passive home suggestions before the imported app fixture starts."""
+    home = tmp_path / 'own-os-home'
+    home.mkdir()
+    for name in ('HOME', 'USERPROFILE'):
+        monkeypatch.setenv(name, str(home))
+    for name, path in [('CODEX_HOME', home / '.codex'), ('CLAUDE_CONFIG_DIR', home / '.claude')]:
+        path.mkdir()
+        monkeypatch.setenv(name, str(path))
+
+
+@pytest.fixture
+def quick_cli(terminal, tmp_path, monkeypatch):
+    from okto_nexus.adapters.inbound.cli import connect, main, work
+    from okto_nexus.adapters.outbound import git_project_hint
+
+    t = terminal
+    trusted_git = git_project_hint._trusted_git
+    home = tmp_path / 'quick-cli-home'
+    provider = tmp_path / 'own-provider-home'
+    provider.mkdir()
+    lifecycle = []
+    service = SimpleNamespace(
+        adapter=SimpleNamespace(home=home, host='127.0.0.1', port=8202),
+        inspect=lambda: lifecycle.append('inspect') or {'state': 'ready'},
+        ensure_running=lambda **_: lifecycle.append('ensure') or {'state': 'ready'})
+    monkeypatch.setattr(connect, 'resolve_local_service', lambda _args: service)
+    monkeypatch.setattr(connect, 'LocalOperatorHTTP', lambda **_kwargs: t.call)
+    monkeypatch.setattr(connect.sys, 'stdin', SimpleNamespace(isatty=lambda: False))
+    monkeypatch.chdir(t.selection['project'])
+
+    def forbidden_chat(*_args, **_kwargs):
+        pytest.fail('noninteractive CLI entered project work')
+
+    def forbidden_git(*_args, **_kwargs):
+        pytest.fail('plan/retained review attempted executable discovery')
+
+    monkeypatch.setattr(work, 'interactive_work', forbidden_chat)
+    monkeypatch.setattr(git_project_hint, '_trusted_git', forbidden_git)
+
+    def run(tokens):
+        # Explicit own home before terminal_target_selection: never inspect a
+        # personal saved operator profile/config context, even with inert service.
+        return main.main([*tokens, '--home', str(home), '--provider-home', str(provider)])
+
+    return SimpleNamespace(t=t, home=home, service=service, lifecycle=lifecycle,
+                           run=run, project=Path(t.selection['project']), trusted_git=trusted_git)
+
+
+def invoke(cli, capsys, tokens, expected=0):
+    code = cli.run(tokens)
+    captured = capsys.readouterr()
+    assert code == expected, captured.out + captured.err
+    value = json.loads(captured.out)
+    assert isinstance(value, dict)
+    return value
+
+
+def first_connection(cli, capsys, *, profile='first', name='Logical App', connect_id=None):
+    base = ['connect', 'codex', name, '--profile', profile, '--json']
+    if connect_id:
+        base += ['--id', connect_id]
+    review = invoke(cli, capsys, [*base, '--plan'])
+    assert review['state'] == 'review' and review['quick_connect']['status'] == 'planned'
+    assert cli.t.turns == cli.t.probes == []
+    result = invoke(cli, capsys, [*base, '--approve', review['review_revision']])
+    assert result['state'] == 'configured'
+    return base, review, result
+
+
+def test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay(quick_cli, capsys):
+    c = quick_cli
+    _, review, result = first_connection(c, capsys)
+    summary = result['quick_connect']
+    assert summary['connect_id'] == 'codex' and summary['connect_id_status'] == 'bound'
+    assert summary['operation'] == 'created' and summary['project_name'] == 'Logical App'
+    assert summary['project_name_source'] == 'explicit' and summary['project_root'] == str(c.project)
+    assert result['session_state'] == 'not_checked' and result['work_state'] == 'not_submitted'
+    assert len(c.t.turns) == len(c.t.probes) == 1
+    before = _terminal.snapshot(c.t.deps)
+    repeated = invoke(c, capsys, ['connect', '--profile', 'first', '--json'])
+    assert repeated['quick_connect']['connect_id'] == 'codex'
+    assert repeated['quick_connect']['operation'] == 'reused'
+    assert repeated['binding_id'] == result['binding_id']
+    assert _terminal.snapshot(c.t.deps) == before and len(c.t.turns) == len(c.t.probes) == 1
+    assert review['selection']['project'] == str(c.project)
+
+
+def test_second_codex_explicit_add_uses_reviewer_id_in_same_workspace(quick_cli, capsys):
+    c = quick_cli
+    _, _, first = first_connection(c, capsys)
+    base = ['connect', 'codex', 'Logical App', '--profile', 'second', '--id', 'reviewer',
+            '--new-connection', '--workspace-id', first['workspace_id'], '--json']
+    before = _terminal.snapshot(c.t.deps)
+    review = invoke(c, capsys, [*base, '--plan'])
+    assert review['quick_connect']['proposed_connect_id'] == 'reviewer'
+    assert len(c.t.turns) == len(c.t.probes) == 1 and _terminal.snapshot(c.t.deps) == before
+    second = invoke(c, capsys, [*base, '--approve', review['review_revision']])
+    assert second['workspace_id'] == first['workspace_id']
+    assert second['binding_id'] != first['binding_id'] and second['agent_id'] != first['agent_id']
+    assert second['quick_connect']['connect_id'] == 'reviewer'
+    assert len(c.t.turns) == 2  # two explicitly approved synthetic connection tests
+
+
+def test_exact_public_id_noninteractive_without_profile_reuses_canonical_reference(quick_cli, capsys):
+    c = quick_cli
+    _, _, first = first_connection(c, capsys)
+    before = _terminal.snapshot(c.t.deps)
+    result = invoke(c, capsys, ['connect', '--id', 'codex', '--json'])
+    assert result['binding_id'] == first['binding_id']
+    assert result['quick_connect']['operation'] == 'reused'
+    assert result['quick_connect']['canonical_reference'] == first['quick_connect']['canonical_reference']
+    assert _terminal.snapshot(c.t.deps) == before and len(c.t.turns) == len(c.t.probes) == 1
+
+
+def test_explicit_occupied_id_add_fails_before_another_model_test(quick_cli, capsys):
+    c = quick_cli
+    first_connection(c, capsys)
+    before = _terminal.snapshot(c.t.deps)
+    result = invoke(c, capsys, ['connect', 'codex', 'Logical App', '--new-connection',
+        '--profile', 'collision', '--id', 'codex', '--json'], expected=3)
+    assert result['code'] == 'HARNESS_ID_ALREADY_EXISTS'
+    assert len(c.t.turns) == len(c.t.probes) == 1 and _terminal.snapshot(c.t.deps) == before
+
+
+@pytest.mark.parametrize('tokens', [
+    ['connect', 'codex', '--client', 'claude', '--json'],
+    ['connect', 'codex', '--pro', 'PRIVATE', '--json'],
+    ['connect', 'codex', '--clinet', 'claude', '--json'],
+])
+def test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup(quick_cli, capsys, tokens):
+    c = quick_cli
+    before = _terminal.snapshot(c.t.deps)
+    result = invoke(c, capsys, tokens, expected=2)
+    assert result['code'] == 'INVALID_ARGUMENTS' and result['effects_started'] is False
+    assert c.lifecycle == [] and c.t.calls == [] and c.t.turns == c.t.probes == []
+    assert _terminal.snapshot(c.t.deps) == before
+
+
+def test_new_connection_json_id_without_profile_never_invents_idempotency(quick_cli, capsys):
+    c = quick_cli
+    result = invoke(c, capsys, ['connect', 'codex', 'App', '--new-connection', '--id', 'reviewer', '--json'], expected=3)
+    assert result['state'] == 'selection_required' and result['reason'] == 'new_connection_requires_profile'
+    assert c.lifecycle == [] and c.t.calls == [] and c.t.turns == c.t.probes == []
+
+
+def test_plan_with_service_off_never_starts_daemon_or_discovers_git(quick_cli, capsys):
+    c = quick_cli
+
+    def off():
+        c.lifecycle.append('inspect-off')
+        return {'state': 'stopped'}
+
+    c.service.inspect = off
+    result = invoke(c, capsys, ['connect', 'codex', '--plan', '--json'], expected=3)
+    assert result['state'] == 'service_not_ready'
+    assert c.lifecycle == ['inspect-off'] and c.t.calls == []
+    assert c.t.turns == c.t.probes == []
+
+
+@pytest.mark.parametrize('client,code', [('codxe', 'CLIENT_SELECTION_REQUIRED'), ('claude', 'INSTALLATION_UNAVAILABLE')])
+def test_unknown_or_unavailable_harness_json_does_not_read_or_test(quick_cli, capsys, client, code):
+    c = quick_cli
+    result = invoke(c, capsys, ['connect', client, 'App', '--profile', 'selection', '--plan', '--json'], expected=3)
+    assert result['code'] == code
+    assert c.t.turns == c.t.probes == [] and c.lifecycle == ['inspect']
+
+
+def test_root_alias_uses_same_managed_review_not_external_cli(quick_cli, capsys):
+    c = quick_cli
+    result = invoke(c, capsys, ['codex', 'Alias Project', '--profile', 'alias', '--plan', '--json'])
+    assert result['state'] == 'review' and result['selection']['client'] == 'codex'
+    assert result['selection']['label'] == 'Alias Project'
+    assert result['quick_connect']['project_name_source'] == 'explicit'
+    assert c.t.turns == c.t.probes == []
+
+
+def test_unknown_harness_tty_choice_is_explicit_and_plan_does_not_test(quick_cli, monkeypatch, capsys):
+    from okto_nexus.adapters.inbound.cli import connect
+    c = quick_cli
+    monkeypatch.setattr(connect.sys, 'stdin', SimpleNamespace(isatty=lambda: True))
+    prompts = []
+
+    def answer(prompt):
+        prompts.append(prompt)
+        assert prompt == 'Harness: '
+        return '1'  # explicit Codex choice, never fuzzy correction of codxe
+
+    monkeypatch.setattr('builtins.input', answer)
+    assert c.run(['connect', 'codxe', 'App', '--profile', 'tty', '--plan', '--no-chat']) == 0
+    output = capsys.readouterr().out
+    assert prompts == ['Harness: '] and 'Choose a supported harness' in output
+    assert 'ID do Harness (proposed): codex' in output
+    assert c.t.turns == c.t.probes == []
+
+
+@pytest.mark.parametrize('lost', ['setup:test', 'setup:finish'])
+def test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay(quick_cli, capsys, lost):
+    c = quick_cli
+    base = ['connect', 'codex', 'App', '--profile', 'pending', '--new-connection', '--id', 'reviewer', '--json']
+    review = invoke(c, capsys, [*base, '--plan'])
+    c.t.fault.after = lost
+    uncertain = invoke(c, capsys, [*base, '--approve', review['review_revision']], expected=3)
+    assert uncertain['possible_effect'] is True and uncertain['code'] == 'OUTCOME_UNKNOWN'
+    assert uncertain['quick_connect']['status'] == 'unknown'
+    before = _terminal.snapshot(c.t.deps)
+    assert len(c.t.turns) == len(c.t.probes) == 1
+    recovered = invoke(c, capsys, base)
+    assert recovered['quick_connect']['connect_id'] == 'reviewer'
+    assert recovered['quick_connect']['status'] == 'connected'
+    assert len(c.t.turns) == len(c.t.probes) == 1
+    after = _terminal.snapshot(c.t.deps)
+    if lost == 'setup:finish':
+        assert after == before
+    assert len(after['runtime_execution_grants']) == len(after['execution_bindings']) == 1
+
+
+def test_legacy_public_id_adoption_only_writes_metadata_preserves_unknown_fields_without_echo(quick_cli, capsys):
+    c = quick_cli
+    base = ['connect', '--client', 'codex', '--agent', 'subject', '--profile', 'legacy',
+            '--project', str(c.project), '--json']
+    review = invoke(c, capsys, [*base, '--plan'])
+    legacy = invoke(c, capsys, [*base, '--approve', review['review_revision']])
+    assert legacy['state'] == 'configured' and 'quick_connect' not in legacy
+    path = c.home / 'terminal' / 'profiles' / 'legacy.json'
+    saved = json.loads(path.read_text(encoding='utf-8'))
+    saved['legacy_private'] = 'PRIVATE_opaque_NOT_PUBLIC'
+    saved['selection']['legacy_extension'] = {'opaque': 'PRIVATE_opaque_NOT_PUBLIC'}
+    path.write_text(json.dumps(saved), encoding='utf-8')
+    before = _terminal.snapshot(c.t.deps)
+    posts_before = sum(method == 'POST' for method, _ in c.t.calls)
+    adopt = ['connect', 'codex', '--id', 'legacy-public', '--profile', 'legacy', '--json']
+    proposal = invoke(c, capsys, [*adopt, '--plan'])
+    assert proposal['kind'] == 'public_id_association'
+    assert 'PRIVATE_opaque_NOT_PUBLIC' not in json.dumps(proposal)
+    result = invoke(c, capsys, [*adopt, '--approve', proposal['review_revision']])
+    assert result['quick_connect']['operation'] == 'associated_existing'
+    assert result['quick_connect']['connect_id'] == 'legacy-public'
+    assert result['binding_id'] == legacy['binding_id']
+    assert 'PRIVATE_opaque_NOT_PUBLIC' not in json.dumps(result)
+    assert _terminal.snapshot(c.t.deps) == before
+    assert len(c.t.turns) == len(c.t.probes) == 1
+    assert sum(method == 'POST' for method, _ in c.t.calls) == posts_before + 1
+    on_disk = json.loads(path.read_text(encoding='utf-8'))
+    assert on_disk['legacy_private'] == 'PRIVATE_opaque_NOT_PUBLIC'
+    assert on_disk['selection']['legacy_extension'] == {'opaque': 'PRIVATE_opaque_NOT_PUBLIC'}
+
+
+def test_tty_customize_id_creates_new_review_preserves_hint_and_invalidates_original_hash(quick_cli, monkeypatch, capsys):
+    from okto_nexus.adapters.inbound.cli import connect
+    from okto_nexus.adapters.outbound import git_project_hint
+    c = quick_cli
+    monkeypatch.setattr(connect.sys, 'stdin', SimpleNamespace(isatty=lambda: True))
+    discovery_calls = []
+    real_discover = git_project_hint.discover_project_name
+
+    def discover(root, *, plan=False):
+        discovery_calls.append((root, plan))
+        return real_discover(root, plan=plan)
+
+    # The first invocation reads only this temporary nonrepository directory.
+    # A restart changing only the ID must retain that hint without another read.
+    monkeypatch.setattr(git_project_hint, '_trusted_git', c.trusted_git)
+    monkeypatch.setattr(git_project_hint, 'discover_project_name', discover)
+    responses = iter(['customize', '1', 'reviewer', 'y'])
+    originals = []
+
+    def answer(prompt):
+        value = next(responses)
+        if value == 'customize':
+            paths = list((c.home / 'terminal' / 'profiles').glob('*.json'))
+            assert len(paths) == 1
+            originals.append((paths[0], json.loads(paths[0].read_text(encoding='utf-8'))))
+            assert c.t.turns == c.t.probes == []
+        elif value == '1':
+            assert prompt == 'Customize: '
+        elif value == 'reviewer':
+            assert prompt == 'New ID do Harness: '
+        else:
+            assert 'Confirm this review' in prompt
+            assert c.t.turns == c.t.probes == []
+        return value
+
+    monkeypatch.setattr('builtins.input', answer)
+    assert c.run(['connect', 'codex', '--no-chat']) == 0
+    output = capsys.readouterr().out
+    assert 'ID do Harness: reviewer' in output
+    assert len(discovery_calls) == 1 and discovery_calls[0][0] == c.project
+    assert len(c.t.turns) == len(c.t.probes) == 1
+    old_path, old = originals[0]
+    replaced = json.loads(old_path.read_text(encoding='utf-8'))
+    assert replaced['state'] == 'superseded'
+    new_path = old_path.with_name(replaced['superseded_by_profile'] + '.json')
+    current = json.loads(new_path.read_text(encoding='utf-8'))
+    assert current['state'] == 'done'
+    assert current['review_revision'] != old['review_revision']
+    assert current['request']['client_intent_id'] != old['request']['client_intent_id']
+    assert current['selection']['label'] == old['selection']['label']
+    assert current['selection']['public_connection']['connect_id'] == 'reviewer'
+    assert current['selection']['quick_connect']['name_discovery'] == {'status': 'saved', 'reason': 'saved_selection'}
+    before = _terminal.snapshot(c.t.deps)
+    monkeypatch.setattr(connect.sys, 'stdin', SimpleNamespace(isatty=lambda: False))
+    refused = invoke(c, capsys, ['connect', '--profile', old_path.stem,
+        '--approve', old['review_revision'], '--json'], expected=3)
+    assert refused.get('quick_connect', {}).get('status') != 'connected'
+    resumed = invoke(c, capsys, ['connect', 'codex', '--json'])
+    assert resumed['quick_connect']['connect_id'] == 'reviewer'
+    assert resumed['quick_connect']['operation'] == 'reused'
+    assert len(c.t.turns) == len(c.t.probes) == 1 and _terminal.snapshot(c.t.deps) == before
+
+
+def test_json_unknown_exposes_authorized_alternatives_without_input(quick_cli, capsys):
+    from okto_nexus.application.project_preset import CLIENTS
+    c = quick_cli
+    result = invoke(c, capsys, ['connect', 'codxe', 'App', '--profile', 'choices', '--json', '--plan'], expected=3)
+    assert result['state'] == 'selection_required' and result['code'] == 'CLIENT_SELECTION_REQUIRED'
+    assert {choice['harness'] for choice in result['choices']} == set(CLIENTS)
+    codex = next(choice for choice in result['choices'] if choice['harness'] == 'codex')
+    assert codex['observed'] is True and codex['candidates']
+    assert all(set(choice) == {'harness', 'observed', 'freshness', 'candidates'} for choice in result['choices'])
+    assert c.t.turns == c.t.probes == []
+
+
+def test_rollback_preserves_exact_existing_profile_without_replay_and_blocks_new_entry_before_context(quick_cli, capsys, monkeypatch):
+    c = quick_cli
+    _, _, created = first_connection(c, capsys)
+    before = _terminal.snapshot(c.t.deps)
+    monkeypatch.setenv('OKTO_NEXUS_QUICK_CONNECT', 'off')
+    resumed = invoke(c, capsys, ['connect', '--profile', 'first', '--json'])
+    assert resumed['binding_id'] == created['binding_id']
+    assert resumed['quick_connect']['connect_id'] == created['quick_connect']['connect_id']
+    assert len(c.t.turns) == len(c.t.probes) == 1 and _terminal.snapshot(c.t.deps) == before
+    lifecycle_before, calls_before = list(c.lifecycle), list(c.t.calls)
+    disabled = invoke(c, capsys, ['connect', 'codex', '--id', 'another', '--json'], expected=3)
+    assert disabled['code'] == 'QUICK_CONNECT_DISABLED' and disabled['effects_started'] is False
+    assert c.lifecycle == lifecycle_before and c.t.calls == calls_before
+    assert _terminal.snapshot(c.t.deps) == before

@@ -1,0 +1,45 @@
+{
+  "algorithm": "sha256",
+  "entries": [
+    {
+      "path": "tests/quick_connect/test_quick_connect_pty.py",
+      "bytes": 6148,
+      "sha256": "de71181344a41eddbc58b08bd875de0dd561f0d1b7ecc72e62abe293e36f35c3"
+    },
+    {
+      "path": "tests/quick_connect/test_quick_connect_cli.py",
+      "bytes": 16280,
+      "sha256": "a22bcd328e3565b5906ea79e93579d8acdfc10e9e26e94543e1f01051c8c1872"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/connect.py",
+      "bytes": 40613,
+      "sha256": "835d044787e0af87a32dfe5e76b20d5389fdb064d777ce9bf046b545772ccd20"
+    },
+    {
+      "path": "src/okto_nexus/application/terminal_connection.py",
+      "bytes": 37758,
+      "sha256": "1f607e5a3e8faeb9d87981ee3231d0e66151a2efbe60ae539effa7fe052cde3c"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_selection.py",
+      "bytes": 18509,
+      "sha256": "e37d4fe130130596d7eddf2210c3427cfd2b6bc282e361f45c7e97af8bd27c5a"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc06-pty/qualification.json",
+      "bytes": 4451,
+      "sha256": "510424ba00381b75d7a2fb39953ddaaf86ba806c1f70505b45a93ad44c3121d5"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc06-pty/pytest-confirmed-subset.xml",
+      "bytes": 799,
+      "sha256": "6ea01fb3654e9146ff161fa7af64eb00e044d95e77e12e5b4a9d2117e45c17d5"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc06-pty/pytest-cancelled-antecedent.xml",
+      "bytes": 4585,
+      "sha256": "200dcb557e672e5b311ec6acd697aa785efcc48fb95a02ebcd490066238f8e38"
+    }
+  ]
+}

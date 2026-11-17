@@ -193,7 +193,7 @@ def list_public_ids(deps, context, *, workspace_id=None, requested_id=None, limi
                 if saved['revision'] != revision:
                     raise _conflict('The public ID namespace changed. Restart pagination.', 'PUBLIC_IDS_CHANGED')
                 after = saved['after']
-            except (ValueError, TypeError, KeyError, UnicodeError):
+            except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Invalid public ID cursor.', {}) from None
         selected = uow.connection.execute('SELECT * FROM connection_public_ids WHERE ' + where +
             ' AND connect_id>? ORDER BY connect_id LIMIT ?', [*args, after, limit + 1]).fetchall()

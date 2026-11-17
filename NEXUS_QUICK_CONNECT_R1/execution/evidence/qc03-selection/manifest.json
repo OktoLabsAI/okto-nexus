@@ -1,0 +1,35 @@
+{
+  "algorithm": "sha256",
+  "entries": [
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_selection.py",
+      "bytes": 17502,
+      "sha256": "4692406fc38f1f19696f8bca7582625da35312043dc270d77958540cec6d91aa"
+    },
+    {
+      "path": "tests/quick_connect/test_quick_connect_selection.py",
+      "bytes": 13461,
+      "sha256": "83b7878d436677f4c0ba6d11f83ae0a0b220b9e5224d4115b7c5b1ffb6c82b2a"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-selection/qualification.json",
+      "bytes": 3341,
+      "sha256": "6c45e9e3d703c071af0bec0b80f11457e38fc28fd0361d696d6e6c359c82f4b8"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-selection/pytest.xml",
+      "bytes": 8800,
+      "sha256": "dfedfbe3068ebe1da9bec54f0bc816bd9b6c99b90137bec6bc81a850e8ec9128"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-selection/pytest-initial.xml",
+      "bytes": 15764,
+      "sha256": "af0290482e16de9f01e71b59416e2b2cc6a0f89a75ad0aea38fa2aa48148da71"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-selection/pytest-second.xml",
+      "bytes": 20141,
+      "sha256": "35e98721a3a6858db61480258fb9482daaec368b88484f36ebb1078a058f8a0c"
+    }
+  ]
+}

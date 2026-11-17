@@ -1,0 +1,56 @@
+async page => {
+ const cfg={"out": "output/playwright/qc05", "ids": [{"version": 1, "state": "bound", "connect_id": "reviewer", "reservation_ref": "pcr_aab5790e5265423ca31a6ec4a054fdc3", "revision": 1, "setup_run_id": "qc05-associate-reviewer", "workspace_id": "ws", "project_draft_ref": null, "request_hash": "sha256:ad408f931aa1546c97c52cd4f6f69cfb629b0cc0d19bb22d1a61aa8eaa39d476", "canonical_ref": {"agent_id": "subject", "binding_id": "binding", "endpoint_id": "ep", "executor_id": "exe_656dcdfda4b4a3a8a750e956cebfe7bd", "server_id": "srv_dd5c93d11520f3a389bcb8b13e4b8a0f", "workspace_binding_id": "wxb", "workspace_id": "ws"}}, {"version": 1, "state": "bound", "connect_id": "builder", "reservation_ref": "pcr_4853a0c617f346378d7c162393dc938a", "revision": 1, "setup_run_id": "qc05-associate-builder", "workspace_id": "ws", "project_draft_ref": null, "request_hash": "sha256:84b34947dafe4c703e343fcb2e40498cef657dd97dac29c84985e5e7f10ca7d0", "canonical_ref": {"agent_id": "subject", "binding_id": "ui-binding-2", "endpoint_id": "ui-ep-2", "executor_id": "exe_656dcdfda4b4a3a8a750e956cebfe7bd", "server_id": "srv_dd5c93d11520f3a389bcb8b13e4b8a0f", "workspace_binding_id": "wxb", "workspace_id": "ws"}}], "legacy_binding": "qc05-legacy-binding"}, checks=[], requests=[], responses=[], pageErrors=[], consoleErrors=[];
+ page.setDefaultTimeout(15000);
+ page.on('request',r=>requests.push({method:r.method(),url:r.url()}));
+ page.on('response',r=>{if(r.url().includes('/api/'))responses.push({status:r.status(),url:r.url()});});
+ page.on('pageerror',e=>pageErrors.push(e.message));
+ page.on('console',m=>{if(m.type()==='error')consoleErrors.push(m.text());});
+ const check=(name,ok,data={})=>{checks.push({name,status:ok?'PASS':'FAIL',...data});if(!ok)throw Error(name);};
+ const get=async path=>{const r=await page.request.get(new URL(path,page.url()).href);check('Canonical GET '+path,r.status()===200,{status:r.status()});return await r.json();};
+ const close=async()=>{const d=page.getByRole('dialog');if(await d.count())await d.getByRole('button',{name:'Close modal',exact:true}).click();};
+ try {
+  const selector=page.getByRole('region',{name:'Existing project connections',exact:true});
+  await selector.waitFor();
+  const text=await selector.innerText();
+  check('Selector presents two public IDs and explicit legacy fallback',text.includes('Harness ID: reviewer')&&text.includes('Harness ID: builder')&&text.includes('Harness ID not assigned')&&await selector.getByRole('button',{name:'Open connection',exact:true}).count()===3,{text});
+  await page.screenshot({path:cfg.out+'/selector-desktop.png',fullPage:false});
+  const catalog=await get('/api/v1/runtime-management/connections/catalog?workspace_id=ws&limit=100');
+  check('Catalog IDs bind distinct exact canonical connections',catalog.total===3&&catalog.items.filter(i=>i.connect_id).length===2&&cfg.ids.every(expected=>catalog.items.some(row=>row.connect_id===expected.connect_id&&Object.entries(expected.canonical_ref).every(([k,v])=>row[k]===v))),{rows:catalog.items.map(r=>({connect_id:r.connect_id,binding_id:r.binding_id,workspace_id:r.workspace_id,endpoint_id:r.endpoint_id}))});
+  await selector.locator('div').filter({has:page.getByText('Harness ID: builder · Codex',{exact:true})}).filter({has:page.getByRole('button',{name:'Open connection',exact:true})}).last().getByRole('button',{name:'Open connection',exact:true}).click();
+  await page.getByTestId('project-connect-detail').waitFor({state:'detached'});
+  await page.getByTestId('home-detail').waitFor();
+  const target=JSON.parse(new URL(page.url()).searchParams.get('home_target'));
+  const expected=cfg.ids.find(i=>i.connect_id==='builder').canonical_ref;
+  check('Opening builder preserves the exact connection target',target.kind==='connection'&&['server_id','executor_id','binding_id','workspace_id','workspace_binding_id','agent_id'].every(k=>target[k]===expected[k]),{target});
+  const binding=await get('/api/v1/runtime-management/connections/bindings/'+encodeURIComponent(expected.binding_id));
+  check('Inspector binding resolves the same seven-field canonical identity',Object.entries(expected).every(([k,v])=>binding[k]===v),{binding:Object.fromEntries(Object.keys(expected).map(k=>[k,binding[k]]))});
+  await page.screenshot({path:cfg.out+'/builder-exact-context.png',fullPage:false});
+  await close();
+  await page.getByRole('list',{name:'Main destinations',exact:true}).getByRole('button',{name:'Home',exact:true}).click();
+  await page.getByRole('region',{name:'Needs you',exact:true}).getByRole('heading',{name:'Harness ID: reviewer',exact:true}).waitFor();
+  const labels=await page.getByRole('list',{name:'Main destinations',exact:true}).getByRole('button').allTextContents();
+  check('Basic navigation remains exactly four destinations',JSON.stringify(labels)===JSON.stringify(['Home','Conversations','Graph','Artifacts']),{labels});
+  const board=(await get('/api/v1/home/harness-board?workspace_id=ws')).data;
+  const active=board.columns.active.items, needs=board.columns.needs_you.items, results=board.columns.results.items;
+  check('Home uses the same public ID in Active, Needs you and delivery origin',active.some(i=>i.connection?.connect_id==='builder')&&active.some(i=>i.connection?.binding_id===cfg.legacy_binding&&i.connection.connect_id===null)&&needs.some(i=>i.connection?.connect_id==='reviewer')&&results.some(i=>i.harness_refs.some(ref=>ref.connection.connect_id==='builder'&&ref.connection.binding_id===expected.binding_id)),{active:active.map(i=>({kind:i.kind,id:i.id,connection:i.connection})),needs:needs.map(i=>({kind:i.kind,id:i.id,connection:i.connection})),results:results.map(i=>({kind:i.kind,id:i.id,harness_refs:i.harness_refs}))});
+  check('DOM keeps public ID headings and informative unassigned fallback',await page.getByRole('region',{name:'Active',exact:true}).getByRole('heading',{name:'Harness ID: builder',exact:true}).count()===1&&await page.getByRole('region',{name:'Needs you',exact:true}).getByRole('heading',{name:'Harness ID: reviewer',exact:true}).count()===1&&await page.getByText('Harness ID not assigned',{exact:true}).count()===1);
+  await page.screenshot({path:cfg.out+'/home-desktop.png',fullPage:false});
+  await page.getByRole('region',{name:'Results',exact:true}).getByRole('button',{name:'View delivery',exact:true}).click();
+  await page.getByTestId('home-detail').waitFor();
+  const deliveryTarget=JSON.parse(new URL(page.url()).searchParams.get('home_target'));
+  check('Delivery opens an explicit original target rather than a latest session',!!deliveryTarget&&deliveryTarget.kind!=='agent',{target:deliveryTarget});
+  await page.screenshot({path:cfg.out+'/delivery-context.png',fullPage:false});
+  await close();
+  await page.setViewportSize({width:360,height:800});
+  const menu=page.getByRole('button',{name:'Open navigation',exact:true});
+  if(await menu.count())await menu.click();
+  await page.screenshot({path:cfg.out+'/mobile-navigation.png',fullPage:false});
+  check('Mobile basic navigation remains four destinations',await page.getByRole('list',{name:'Main destinations',exact:true}).getByRole('button').count()===4);
+  const dismiss=page.getByRole('button',{name:'Close navigation',exact:true});
+  if(await dismiss.count())await dismiss.click();
+  await page.screenshot({path:cfg.out+'/home-mobile-360.png',fullPage:false});
+  check('360 viewport retains the same three column headings',await page.getByRole('region',{name:'Active',exact:true}).count()===1&&await page.getByRole('region',{name:'Needs you',exact:true}).count()===1&&await page.getByRole('region',{name:'Results',exact:true}).count()===1);
+  check('No mutations, frontend errors or failed API responses',requests.every(r=>r.method==='GET')&&pageErrors.length===0&&consoleErrors.length===0&&responses.every(r=>r.status<400),{pageErrors,consoleErrors,failedResponses:responses.filter(r=>r.status>=400)});
+  return {status:'PASS',checks,requests,responses,pageErrors,consoleErrors};
+ }catch(e){await page.screenshot({path:cfg.out+'/failure.png',fullPage:false});return {status:'FAIL',message:e.message,checks,requests,responses,pageErrors,consoleErrors};}
+}

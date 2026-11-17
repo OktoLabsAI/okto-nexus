@@ -1,0 +1,108 @@
+{
+  "url": "http://127.0.0.1:63926",
+  "pid": 55592,
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc05-browser-zj4nic_q",
+  "identities": {
+    "public_ids": [
+      {
+        "version": 1,
+        "state": "bound",
+        "connect_id": "reviewer",
+        "reservation_ref": "pcr_aab5790e5265423ca31a6ec4a054fdc3",
+        "revision": 1,
+        "setup_run_id": "qc05-associate-reviewer",
+        "workspace_id": "ws",
+        "project_draft_ref": null,
+        "request_hash": "sha256:ad408f931aa1546c97c52cd4f6f69cfb629b0cc0d19bb22d1a61aa8eaa39d476",
+        "canonical_ref": {
+          "agent_id": "subject",
+          "binding_id": "binding",
+          "endpoint_id": "ep",
+          "executor_id": "exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+          "server_id": "srv_dd5c93d11520f3a389bcb8b13e4b8a0f",
+          "workspace_binding_id": "wxb",
+          "workspace_id": "ws"
+        }
+      },
+      {
+        "version": 1,
+        "state": "bound",
+        "connect_id": "builder",
+        "reservation_ref": "pcr_4853a0c617f346378d7c162393dc938a",
+        "revision": 1,
+        "setup_run_id": "qc05-associate-builder",
+        "workspace_id": "ws",
+        "project_draft_ref": null,
+        "request_hash": "sha256:84b34947dafe4c703e343fcb2e40498cef657dd97dac29c84985e5e7f10ca7d0",
+        "canonical_ref": {
+          "agent_id": "subject",
+          "binding_id": "ui-binding-2",
+          "endpoint_id": "ui-ep-2",
+          "executor_id": "exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+          "server_id": "srv_dd5c93d11520f3a389bcb8b13e4b8a0f",
+          "workspace_binding_id": "wxb",
+          "workspace_id": "ws"
+        }
+      }
+    ],
+    "legacy_binding": "qc05-legacy-binding",
+    "workspace_id": "ws",
+    "question_session": "ses_1b39d87c3b67e1ae4da4e8e9899731cd",
+    "historical_session": "ui-session-2",
+    "synthetic_read_facts": true,
+    "real_provider_calls": 0,
+    "native_binary_calls": 0
+  },
+  "before": {
+    "agents": {
+      "count": 6,
+      "sha256": "551688fcf7443f5426115e3c485c0521e14852a2ac7f7948c679dd457142c208"
+    },
+    "execution_bindings": {
+      "count": 3,
+      "sha256": "dd02f94f19e48f108046d8803bcc70e00077176e7122812dd614956d8562f56e"
+    },
+    "runtime_execution_grants": {
+      "count": 1,
+      "sha256": "5562fd0064b062d1e9fc2700a619038695311430de445da9cde6e326174613de"
+    },
+    "execution_sessions": {
+      "count": 2,
+      "sha256": "342fab0b11420f7a1dfb0a5de2c5e68561a59cb3d9f866d04f05463b8e4375bd"
+    },
+    "execution_operations": {
+      "count": 5,
+      "sha256": "a695027c1e40718595ef9e0c018f93f494fa90a1b5c3d8a06ff46be535c7a49d"
+    },
+    "connection_setup_commits": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "execution_results": {
+      "count": 1,
+      "sha256": "55072d5be06f19ff22fc5a0eeb5e451b7c6801e7f1d74ad2221eb39196f7dee9"
+    },
+    "execution_native_requests": {
+      "count": 1,
+      "sha256": "467b14e39499a48b0c37c95686dfa940dd81032990ce262a863a4205b7d81fa9"
+    },
+    "connection_public_ids": {
+      "count": 2,
+      "sha256": "12441b617021c945b7ba19197783fd170c108bd02827759119a29758fe5d017a"
+    }
+  },
+  "source_pins": {
+    "tests/quick_connect/browser_public_ids_fixture.py": "3ef574d1003ddcb4a987039346687ddacbfa7559088a414cfef21eb79785483e",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "src/okto_nexus/application/connection_public_ids.py": "4a22dee1dd1fd3872d994bd8a39893e3c34980a02321b248448c34b6546c7b71",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "324ca1b40e22dc55e0f55f26b666a877923a90ca7fba9fc4f06c6730fc97128a",
+    "src/okto_nexus/adapters/outbound/sqlite/connection_catalog.py": "f05d2626f2644d8dcc748731f9ef85fb3b48e03aef82ef26eb6ba72435c011c5",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "cc0eb2e2efdf2be288ed5e3f1605f237d51fd1986fb5e1856c302f7ebb162775",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-CfDr8rCI.js": "03278c86e467207f48b1ef8ce88f3640fe04d27053c4041604e77b034914a7cc",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-Ds-MK2FR.css": "f761e905e0d9642c4c7d0f96d9e0f73404012f0d69d4fead8509e6fd9130b7b7"
+  },
+  "controlled_clock": "2026-11-17T05:17:00.396568Z",
+  "read_only": true,
+  "personal_auth": false,
+  "installed_qualification": false
+}

@@ -1,0 +1,30 @@
+{
+  "exit_code": 0,
+  "duration_seconds": 12.803881800035015,
+  "argv": [
+    "C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\src');import okto_nexus;print(\"SOURCE_PROVENANCE\",sys.executable,okto_nexus.__file__,flush=True);import pytest;raise SystemExit(pytest.main([\"-q\",\"tests/execution_r4/test_public_id_retirement.py\",\"--junitxml=NEXUS_QUICK_CONNECT_R1/execution/qc07-public-id-occupancy/pytest.xml\"]))"
+  ],
+  "source_before": {
+    "src/okto_nexus/application/connection_public_ids.py": "0985f81564b845fa987bce65df22f81d9faf804b4e8277f373155aa224c3c71e",
+    "src/okto_nexus/application/endpoints.py": "aa7f8e388b81f33a6fc248ab185dd857d07b195e6bee48bbbe06f0cdac9d7b8e",
+    "src/okto_nexus/application/connection_project_context.py": "93f7dc7abcedfc2d392c322e24c6a2a5d33aad366d18ff01d580eab38b1e7d6a",
+    "src/okto_nexus/application/connection_setup.py": "dbece9d566fc3703452767f4233fc1966be10495e0e47951b6c49c9fef68a3c1",
+    "tests/execution_r4/test_public_id_retirement.py": "d93b7d358764b5c31f041ccacd012a4e2a4ecdc2647c6a3431f557924bd3bd11",
+    "tests/execution_r4/test_public_connection_ids.py": "0c804b556c2a413b3162d0260a49f81c7ebb541ebb5139783c91247848a34023"
+  },
+  "source_after": {
+    "src/okto_nexus/application/connection_public_ids.py": "0985f81564b845fa987bce65df22f81d9faf804b4e8277f373155aa224c3c71e",
+    "src/okto_nexus/application/endpoints.py": "aa7f8e388b81f33a6fc248ab185dd857d07b195e6bee48bbbe06f0cdac9d7b8e",
+    "src/okto_nexus/application/connection_project_context.py": "93f7dc7abcedfc2d392c322e24c6a2a5d33aad366d18ff01d580eab38b1e7d6a",
+    "src/okto_nexus/application/connection_setup.py": "dbece9d566fc3703452767f4233fc1966be10495e0e47951b6c49c9fef68a3c1",
+    "tests/execution_r4/test_public_id_retirement.py": "d93b7d358764b5c31f041ccacd012a4e2a4ecdc2647c6a3431f557924bd3bd11",
+    "tests/execution_r4/test_public_connection_ids.py": "0c804b556c2a413b3162d0260a49f81c7ebb541ebb5139783c91247848a34023"
+  },
+  "source_drift": []
+}

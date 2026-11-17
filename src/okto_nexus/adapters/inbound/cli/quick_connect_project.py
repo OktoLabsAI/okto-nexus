@@ -108,8 +108,8 @@ def resolve_project(call, *, server_id, executor_id, invocation_cwd, root,
         interactive=False, read=input, write=print, discover=None):
     """Return frozen review inputs. This function never creates a project/folder."""
     if project_name is not None and (type(project_name) is not str or not project_name.strip()
-            or not project_name.isprintable() or len(project_name) > 120):
-        raise ConnectionError('PROJECT_NAME_INVALID', 'Use a printable project name of at most 120 characters.')
+            or not project_name.isprintable() or len(project_name) > 160):
+        raise ConnectionError('PROJECT_NAME_INVALID', 'Use a printable project name of at most 160 characters.')
     directory, directory_revision = project_directory(call, server_id)
     context = project_context(call, server_id=server_id, executor_id=executor_id, root=root)
     mapped = [row for row in directory if row['workspace_id'] in context['mapped_workspace_ids']]

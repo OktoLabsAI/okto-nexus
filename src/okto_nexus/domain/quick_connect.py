@@ -16,7 +16,7 @@ DiscoveryReason = Literal[
     'explicit_name', 'existing_nexus', 'saved_selection', 'git_origin', 'git_worktree',
     'directory_fallback', 'git_unavailable', 'not_a_repository', 'origin_missing',
     'origin_invalid', 'origin_ambiguous', 'git_timeout', 'git_output_limit',
-    'git_config_unavailable', 'dubious_ownership', 'unsafe_git_executable',
+    'git_config_unavailable', 'git_cleanup_unconfirmed', 'dubious_ownership', 'unsafe_git_executable',
     'unsupported_git_transport', 'invalid_project_name', 'not_run_plan', 'not_needed', 'unconfirmed',
 ]
 OutcomeStatus = Literal[
@@ -57,7 +57,7 @@ _REASONS = (
     'explicit_name', 'existing_nexus', 'saved_selection', 'git_origin', 'git_worktree',
     'directory_fallback', 'git_unavailable', 'not_a_repository', 'origin_missing',
     'origin_invalid', 'origin_ambiguous', 'git_timeout', 'git_output_limit',
-    'git_config_unavailable', 'dubious_ownership', 'unsafe_git_executable',
+    'git_config_unavailable', 'git_cleanup_unconfirmed', 'dubious_ownership', 'unsafe_git_executable',
     'unsupported_git_transport', 'invalid_project_name', 'not_run_plan', 'not_needed', 'unconfirmed',
 )
 

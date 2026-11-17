@@ -1,0 +1,45 @@
+{
+  "qualification": "CONTROLLED_GET_SELECTION_TESTS_PASS_CLI_HTTP_INTEGRATION_PENDING",
+  "green": {
+    "tool_handle": "625962",
+    "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe -B -Xutf8 -m pytest tests/quick_connect/test_quick_connect_selection.py -q --junitxml=NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-selection/pytest.xml",
+    "exit_code": 0,
+    "passed": 54,
+    "elapsed_seconds": 1.06
+  },
+  "ruff": {
+    "tool_handle": "3dfe77",
+    "command": "rtk proxy ruff check src/okto_nexus/adapters/inbound/cli/quick_connect_selection.py tests/quick_connect/test_quick_connect_selection.py",
+    "exit_code": 0,
+    "observed": "All checks passed!"
+  },
+  "antecedents": [
+    {"tool_handle": "303fae", "exit_code": 1, "passed": 44, "failed": 5, "elapsed_seconds": 1.26, "observed": "Null/malformed inventory, foreign agent/executor echo and foreign saved Server lacked structured refusal"},
+    {"tool_handle": "17f547", "exit_code": 1, "passed": 47, "failed": 7, "elapsed_seconds": 1.32, "observed": "Five preceding failures plus explicit agent/binding overwritten by legacy completed profile; three additional exact-ID selector positives passed"}
+  ],
+  "environment": {
+    "interpreter": "C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe",
+    "python": "3.13.1 Windows x64",
+    "origin_check_tool": "ac85a9",
+    "nexus_under_test": "current checkout src via pytest pythonpath, NOT Nexus installed in preserved PR27 prefix",
+    "core": "existing nexus_connector_core from preserved PR27 site-packages, read only",
+    "bytecode_writes": "disabled by -B",
+    "warning": "Existing pytest_asyncio unset default loop scope deprecation warning; no async test or configuration change in this suite"
+  },
+  "behaviors": [
+    "Known/absent/unknown harness, typo and shell-like token remain data; TTY selection explicit; noninteractive never reads",
+    "Stale/offline/unknown inventory is not absence or readiness; exact candidate and multiple-installation selection; can_configure must be true",
+    "Malformed inventory and foreign agent/executor echoes refuse before candidate use",
+    "New-agent cannot resume bound public ID; new connection cannot adopt explicit old binding",
+    "Bound public ID resume avoids new-installation inventory; exact selectors cannot be overwritten, including completed legacy profiles",
+    "Own pending intent is recovered before project/Git/catalog/namespace collision selection; all explicit flag mismatches and foreign Server refuse",
+    "All fake boundary calls asserted GET-only; a proposed reservation_ref is a local intent field, not a canonical reservation or approval"
+  ],
+  "limits": [
+    "No real HTTP, SQLite authorization, physical host, installation probe or provider was exercised",
+    "Project resolver and embedded executor lookup are stubbed in prepare-specific tests; tested independently elsewhere",
+    "Not CLI JSON serialization, PTY, installed 0.3.6 or end-to-end Test/Finish/recovery qualification",
+    "Source owner corrected implementation; this agent edited only tests and evidence"
+  ],
+  "side_effects": {"provider_calls": 0, "real_writes": 0, "services_or_browser_started": 0, "pip_or_prefix_mutation": false, "ledger_or_git_changed": false}
+}
