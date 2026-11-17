@@ -11,13 +11,38 @@ completa. Trabalho, sessão, pergunta, erro e entrega são eventos/contextos
 dentro desse card. Não se exige onboarding ou uma ação de conectar para
 acompanhar um harness já exibido. Adicionar outro harness é uma ação separada.
 
-As três colunas continuam visíveis na mesma região. Cada instância registrada
-ocupa exatamente uma coluna. Needs you tem prioridade para ação humana atual;
-na ausência dela, trabalho ativo/pendente prevalece; entregas retidas levam a
-Results quando não há atividade pendente. Contexto ocioso/configurado continua
-alcançável com esse estado explícito, sem alegação de execução RUNNING.
-Perguntas e entregas não somem quando o card está em outra coluna: prévia,
-contagens e acesso ao contexto completo permanecem dentro dele.
+Em seguida, o usuário esclareceu a estrutura das notificações:
+
+> Active devem ser apenas hanesses com opcao de inspecionar a execucao/reconectar. Needs you: deve aparecer com solicitacoes de acao para o usuário, como pedidos de aprovacao ou handoffs. Results: Resultados de harnesses que tenham reportado fim.
+
+E definiu o caso de execução simultânea a uma solicitação:
+
+> se o harness estiver parado esperando o usuário, deve ir para needs you, se nao, somente a acao vai para needs you e o harness continua Active.
+
+As três colunas continuam visíveis na mesma região, com unidades explícitas:
+
+- Active contém somente instâncias registradas de harness, com estado e acesso
+  à inspeção da execução ou ao fluxo canônico de reconexão quando aplicável.
+- Needs you contém o harness quando há prova de que ele está parado aguardando
+  o usuário. Seus pedidos ficam dentro do card. Se o harness segue executando,
+  permanece em Active e somente a solicitação aparece em Needs you, identificada
+  por sua origem e ação esperada. Uma sessão bloqueada não paralisa outras
+  sessões produtivas do mesmo harness. Pedido sem vínculo comprovado continua
+  alcançável, sem inventar um harness ou um bloqueio.
+- Results contém entregas com término reportado, mesmo quando o harness tem
+  outro trabalho em andamento. Reporte, sucesso de execução, limpeza, verificação
+  e aceite são estados distintos. Reporte externo não prova sucesso nativo.
+
+Ausência de prova de bloqueio é desconhecida, não prova de paralisação nem de
+execução em andamento. Contexto ocioso/configurado continua alcançável com seu
+estado explícito, sem alegação de RUNNING. Perguntas e entregas mantêm IDs
+estáveis e não são duplicadas em outro tipo de card apenas para notificar.
+
+Abrir, visualizar ou marcar visto não aprova um pedido. Aprovações e handoffs
+só oferecem as ações admitidas pela autoridade canônica para o destinatário
+atual. Resolução, expiração, revogação ou resposta perdida exigem revalidação;
+um resultado incerto não autoriza replay ou nova execução. O sino global usa
+as mesmas ocorrências/IDs e não é outra fila independente.
 
 Duas conexões do mesmo agente ou do mesmo Codex não são fundidas por nome,
 host, PID ou sessão mais recente. A correlação usa apenas identidades completas

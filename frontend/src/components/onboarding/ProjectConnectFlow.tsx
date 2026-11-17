@@ -1,6 +1,6 @@
 import {useEffect, useId, useMemo, useRef, useState, useSyncExternalStore} from 'react';
 import {runtimeApi, type ConnectionCatalogItem, type SetupFinishResult} from '../../runtimeApi';
-import {ProjectConnectModel, connectorDraftCommand, type ConnectWorkspace, type ProjectConnectApi} from '../../projectConnectFlowModel';
+import {ProjectConnectModel, connectorDraftCommand, type ConnectWorkspace, type ProjectConnectApi, type ProjectConnectEntryMode} from '../../projectConnectFlowModel';
 import {ConnectionOutcome, ConnectionWorkflow} from '../ConnectionWorkflow';
 import {HarnessPreferenceFields} from '../HarnessPreferenceFields';
 import {ModalCancelButton, useAgentModalGuard, useAgentModalChanges, useAgentModalTransition} from '../AgentActionModal';
@@ -11,11 +11,12 @@ export interface ProjectConnectFlowProps {
   identityKey:string; workspace:ConnectWorkspace|null; serverOrigin:string;
   onClose:()=>void; onResume:(connection:ConnectionCatalogItem)=>void; onComplete:(result:SetupFinishResult, options?:{openContext?:boolean})=>void;
   api?:ProjectConnectApi; storage?:Pick<Storage,'getItem'|'setItem'|'removeItem'>;
+  entryMode?:ProjectConnectEntryMode;
 }
 
 /** An inline body for the existing contextual panel; never another modal. */
-export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,onResume,onComplete,api=runtimeApi,storage=browserStorage}:ProjectConnectFlowProps) {
-  const model=useMemo(()=>new ProjectConnectModel(api,storage,identityKey,workspace),[api,storage,identityKey,workspace?.workspace_id]);
+export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,onResume,onComplete,api=runtimeApi,storage=browserStorage,entryMode='choose'}:ProjectConnectFlowProps) {
+  const model=useMemo(()=>new ProjectConnectModel(api,storage,identityKey,workspace),[api,storage,identityKey,workspace?.workspace_id,entryMode]);
   const lifetime=useMemo(()=>({active:false,started:false}),[model]);
   const state=useSyncExternalStore(model.subscribe,model.getSnapshot,model.getSnapshot);
   const changes=useAgentModalChanges(), transition=useAgentModalTransition();
@@ -32,11 +33,11 @@ export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,o
   useEffect(()=>{if(resumeTarget&&!state.busy){setResumeTarget(null);transition(()=>onResume(resumeTarget));}},[resumeTarget,state.busy,transition,onResume]);
   useEffect(()=>{
     lifetime.active=true;
-    if(!lifetime.started){lifetime.started=true;void model.initialize();}
+    if(!lifetime.started){lifetime.started=true;void model.initialize(entryMode);}
     // StrictMode's effect rehearsal must not dispose a still-mounted model or
     // load twice. A real identity/workspace change disposes the old lifetime.
     return()=>{lifetime.active=false;queueMicrotask(()=>{if(!lifetime.active)model.dispose();});};
-  },[model,lifetime]);
+  },[model,lifetime,entryMode]);
   useEffect(()=>{setConsent(false);setFinishConsent(false);},[state.request]);
   useEffect(()=>{if(error||state.error){const field=invalid==='name'?nameField.current:invalid==='project'?projectField.current:invalid==='folder'?folderField.current:null;
     const details=field?.closest('details');if(details)details.open=true;(field||alert.current)?.focus();}},[error,state.error,invalid]);
@@ -95,7 +96,7 @@ export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,o
     </div></details>
   </div>;
   return <section aria-label="Connect a project agent" data-testid="project-connect-flow" className="space-y-4">
-    <header className="flex items-start justify-between gap-3"><div><h2 className="text-xl font-semibold">Connect agent</h2>
+    <header className="flex items-start justify-between gap-3"><div><h2 className="text-xl font-semibold">{entryMode==='add'?'Add harness':'Connect agent'}</h2>
       <p className="text-sm text-surface-500">{state.workspace?.display_name||'Choose a project'} · Nexus Server</p></div>
       <ModalCancelButton onClose={onClose}>{state.retained?'Close and keep attempt':'Close'}</ModalCancelButton></header>
     <ConnectionWorkflow steps={['Connection','Setup','Confirm']} step={step}
@@ -107,16 +108,16 @@ export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,o
     </ConnectionOutcome>}
     {(error||state.error)&&<p id={errorId} ref={alert} tabIndex={-1} role="alert">{error||state.error}</p>}
     {phase==='loading'&&<div role="status"><p>{state.busy?'Loading authorized project connections…':'The connection flow could not be loaded.'}</p>
-      {!state.busy&&<button className="btn btn-secondary" onClick={()=>act(()=>model.initialize())}>Retry loading</button>}</div>}
+      {!state.busy&&<button className="btn btn-secondary" onClick={()=>act(()=>model.initialize(entryMode))}>Retry loading</button>}</div>}
     {phase==='choose'&&<label className="block">Project
       <select aria-label="Project" data-modal-passive className={input} disabled={state.busy} value={state.workspace?.workspace_id||''}
         onChange={event=>{const id=event.target.value;const selected=state.workspaces.find(item=>item.workspace_id===id)||null;transition(()=>act(()=>model.selectWorkspace(selected)));}}>
-        <option value="">New project on the Server</option>{state.workspaces.map(item=><option key={item.workspace_id} value={item.workspace_id}>{item.display_name||'Unnamed project'}</option>)}
+        <option value="">{entryMode==='add'?'Choose a project':'New project on the Server'}</option>{state.workspaces.map(item=><option key={item.workspace_id} value={item.workspace_id}>{item.display_name||'Unnamed project'}</option>)}
       </select></label>}
     {phase==='choose'&&<>
       {state.catalogStatus==='loading'&&<p role="status">Checking the complete authorized connection catalog…</p>}
       {state.catalogStatus==='unavailable'&&<p>Connection coverage is unavailable; this is not an empty project. <button className="btn btn-secondary" disabled={state.busy} onClick={()=>act(()=>model.refreshCatalog())}>Reload connections</button></p>}
-      {state.catalog.length>0&&<section aria-label="Existing project connections" className="space-y-2"><h3 className="font-semibold">Open an existing connection</h3>
+      {entryMode==='choose'&&state.catalog.length>0&&<section aria-label="Existing project connections" className="space-y-2"><h3 className="font-semibold">Open an existing connection</h3>
         <p>Selecting opens its context. It does not start a session, renew authorization or change its configuration.</p>
         {state.catalog.map(item=><div key={item.server_id+':'+item.executor_id+':'+item.binding_id} className="rounded border p-3">
           <p className="font-medium">{item.agent_label||'Agent name unavailable'} · {item.adapter_id==='codex_app_server'?'Codex':item.adapter_id==='claude_stream'?'Claude':item.adapter_id==='pi_rpc'?'Pi':item.adapter_id}</p>
@@ -124,8 +125,8 @@ export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,o
           <button className="btn btn-secondary" disabled={state.busy} onClick={()=>act(async()=>{const result=await model.resume(item);if(result)setResumeTarget(result);})}>Open connection</button>
           <details><summary>Technical details</summary><p className="break-all">{item.binding_id}</p><p>Harness reference: {item.adapter_id}</p><p>Canonical access and state are checked when opened.</p></details>
         </div>)}</section>}
-      {state.catalogStatus==='ready'&&!state.catalog.length&&<p>No recorded connections match this project. You can add a collaborator.</p>}
-      <div className="flex flex-wrap gap-2"><button className="btn btn-primary" disabled={state.busy||state.catalogStatus!=='ready'} onClick={()=>act(()=>model.add())}>Add another harness on this Server</button>
+      {entryMode==='choose'&&state.catalogStatus==='ready'&&!state.catalog.length&&<p>No recorded connections match this project. You can add a collaborator.</p>}
+      <div className="flex flex-wrap gap-2"><button className="btn btn-primary" disabled={state.busy||state.catalogStatus!=='ready'||entryMode==='add'&&!state.workspace} onClick={()=>act(()=>model.add())}>{entryMode==='add'?'Add harness on this Server':'Add another harness on this Server'}</button>
         <button className="btn btn-secondary" disabled={state.busy} onClick={()=>act(()=>model.remote())}>Use a Connector on another host</button></div>
     </>}
     {phase==='remote'&&<section aria-label="Connect on another host" data-modal-passive className="space-y-3">

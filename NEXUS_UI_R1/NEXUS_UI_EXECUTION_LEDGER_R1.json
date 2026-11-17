@@ -2173,7 +2173,9 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
@@ -2224,7 +2226,9 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
@@ -2279,7 +2283,9 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
@@ -2331,7 +2337,9 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
@@ -2381,7 +2389,9 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
@@ -2437,7 +2447,9 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos.",
@@ -2779,7 +2791,9 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
@@ -5978,6 +5992,10 @@
     {
       "at": "2026-11-17T03:27:14.260911+00:00",
       "event": "Fourth human journey incomplete: user did not understand opening a registered connection and explicitly expects ONLY registered harness cards with events inside, rather than varied work/session/attention cards.8 trusted clicks/0POST;0setupcommits, original2bindings/grants unchanged. Own browser/fixture exited0 and physical absence verified. Exact feedback preserved inPR23/fourth-run; no duration or humanPASS inferred. R3 amendment replaces visual card unit with a registered harness instance, preserves three columns and backend aggregation/pagination, full identities, unlinked basic fallback and canonical controls. Reuse services/controllers/targets; no Core/protocol/Attention/setup rewrite, paid call, personal install or release. Original input IDs/specs/SHAs and prior qualification blockers remain."
+    },
+    {
+      "at": "2026-11-17T03:45:46.100132+00:00",
+      "event": "User further defines action notifications: blocked harness waiting for user moves to Needs you; if harness keeps executing, only the action appears in Needs you and harness remains Active. Results are reported completions independent of other active work. R3 docs updated to conditional heterogeneous columns. Proof of blocking comes from safe persisted native metadata and complete scoped productive-operation coverage, not React inference or mere request existence. No individual reconnect capability exists: read-only context is not reconnect, global Connector restart is not wired per card. Add intent focal37PASS, retained checkpoint/All-project safeguards, legacy chooser preserved; global/browser/installed R3 qualification pending."
     }
   ],
   "risk_acceptances": [],

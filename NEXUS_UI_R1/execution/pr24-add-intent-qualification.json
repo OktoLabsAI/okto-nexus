@@ -1,0 +1,62 @@
+{
+  "status": "FOCUSED_NODE_MODEL_PASS_BROWSER_NOT_RUN",
+  "scope": "Add intent entry to the existing project connection flow; no new API or runtime intent.",
+  "validation": {
+    "command": "rtk proxy node --test tests/projectConnectFlow.test.mjs",
+    "working_directory": "frontend",
+    "tool_output_handle": "36ff97",
+    "exit_code": 0,
+    "tests": 37,
+    "pass": 37,
+    "fail": 0,
+    "skipped": 0,
+    "duration_ms": 1911.7567,
+    "global_suite_claim": false
+  },
+  "source_sha256": {
+    "frontend/src/App.tsx": "341e1716a1a2288390eaf9f98eb4ccd8588836c369192a2877124b0390ac7676",
+    "frontend/src/components/onboarding/ProjectConnectFlow.tsx": "3bdc78ae630b72adccbd3a6769e3279a6df5ed928934be07efc7ab3c522d0a17",
+    "frontend/src/projectConnectFlowModel.ts": "83249776fe2ccb970bf531c2ff5b3acbabfb9d24f31e9ff8d210c1dd1f47cb44",
+    "frontend/tests/projectConnectFlow.test.mjs": "022fa6bc8cc788d63545857a987cdf761548dad3ed16ccfed41cdd75ec4cd7cd"
+  },
+  "behavior": [
+    "App retains zero-argument openConnectFlow() for the default chooser and adds zero-argument openAddHarness(). Only OperationalHome receives openAddHarness; HomeView classic, Conversations and onboarding retain openConnectFlow.",
+    "ProjectConnectFlow.entryMode is optional and defaults to choose. Add mode does not present the existing-connection catalog as an observation/resume task.",
+    "For an already selected authorized project, initialize(add) completes the existing identity/checkpoint/preset/directory/catalog reads before invoking existing add() after the initialization request settles. It does not resume an existing binding or submit Test/Finish.",
+    "All projects does not invent a new project: Add mode remains at explicit project selection and disables Add until an authorized project is selected.",
+    "A retained unknown request takes precedence over Add intent. Concurrent initialization is blocked, and incomplete catalogs or a project absent from the authorized directory cannot allocate a new draft.",
+    "Selecting a project from All checks that exact identity/server/workspace checkpoint key and restores its retained request before exposing Add. Manual add() also revalidates project directory membership.",
+    "Existing review, cost disclosure, separate Test/Finish consents, canonical result validation, request IDs, recovery and default chooser/Connector paths remain in the existing implementation."
+  ],
+  "new_focused_checks": [
+    "Add intent enters configuration only after complete canonical reads and never resumes or submits work.",
+    "Add intent cannot replace a retained unknown request or start a second concurrent initialization.",
+    "All projects Add intent requires an explicit authorized project and leaves the classic chooser compatible.",
+    "Add intent refuses incomplete catalogs and projects absent from the authorized directory before allocating a draft.",
+    "Selecting a project from All restores its exact retained attempt before exposing Add."
+  ],
+  "negative_all_to_retained_workspace": {
+    "given": "An exact project has a retained Test request whose response was lost; a new flow starts from All projects.",
+    "when": "The authorized project is explicitly selected.",
+    "expected_and_observed_in_model_test": "The original request is restored in uncertain/retained state. No setupDraft, binding resume, Test or Finish is issued, and a subsequent Add is refused. The original checkpoint remains stored.",
+    "layer": "Node test using the actual ProjectConnectModel and explicit fixture API/storage ports; no HTTP server or browser."
+  },
+  "compatibility": {
+    "default_entry_mode": "choose",
+    "legacy_classic_home": "Existing chooser callback retained in App source.",
+    "conversations": "Existing chooser callback retained in App source.",
+    "onboarding": "Existing chooser callback retained in App source.",
+    "cli": "No CLI source or contract changed; CLI runtime behavior not re-executed in this focal.",
+    "default_model_chooser": "Initialize() still displays the canonical catalog; exact existing binding resume remains read-only and covered by the focused Node suite."
+  },
+  "limits": [
+    "This report covers the focused Node/model/render checks only. It is not a global test-suite, build, browser, real-host, accessibility or human-usability qualification.",
+    "No Vite build or browser was run for this milestone; root performs integration/global validation separately.",
+    "No provider/model inference, authenticated native CLI, personal profile, service action, installation, grant renewal or paid operation occurred.",
+    "Direct Add configures the existing Nexus Server wizard. The default chooser and existing Connector/bootstrap path remain available in their original entry points; no new remote reconnect or control capability was introduced.",
+    "Source hashes identify the frozen Add-intent cut recorded with tool152241. Later R3 composition work must be qualified on its own final bundle."
+  ],
+  "product_files_changed": 3,
+  "test_files_changed": 1,
+  "git_build_ledger_prefix_operations_by_agent": false
+}

@@ -323,9 +323,12 @@ function Dashboard({
   const [aboutOpen, setAboutOpen] = useState(false);
   const [onboardingOpen, setOnboardingOpen] = useState(false);
   const [connectFlowOpen,setConnectFlowOpen]=useState(false);
+  const [connectFlowEntryMode,setConnectFlowEntryMode]=useState<'choose'|'add'>('choose');
   const [connectionTarget,setConnectionTarget]=useState<HomeTarget|null>(null);
   const [pendingConnectionReturn,setPendingConnectionReturn]=useState<{identityKey:string;workspaceId:string;target:HomeTarget|null;openContext:boolean}|null>(null);
-  const openConnectFlow=()=>{if(mayLeavePanel()){setPendingConnectionReturn(null);setConnectionTarget(null);setConnectFlowOpen(true);}};
+  const openProjectConnectFlow=(mode:'choose'|'add')=>{if(mayLeavePanel()){setPendingConnectionReturn(null);setConnectionTarget(null);setConnectFlowEntryMode(mode);setConnectFlowOpen(true);}};
+  const openConnectFlow=()=>openProjectConnectFlow('choose');
+  const openAddHarness=()=>openProjectConnectFlow('add');
   const applyConnectionReturn=(next:NonNullable<typeof pendingConnectionReturn>)=>{
     if(next.identityKey!==identityKey)return;
     if(!pickWorkspace(next.workspaceId)){
@@ -788,8 +791,8 @@ function Dashboard({
       {onboardingOpen && (
         <OnboardingModal onClose={() => setOnboardingOpen(false)} onOpenAgents={() => {setOnboardingOpen(false);openConnectFlow();}} />
       )}
-      {connectFlowOpen&&<AgentActionModal title="Connect a project agent" presentation="drawer" wide testId="project-connect-detail" onClose={()=>setConnectFlowOpen(false)}>
-        <ProjectConnectFlow identityKey={identityKey} workspace={workspaces.find(item=>item.workspace_id===workspace)??null} serverOrigin={window.location.origin}
+      {connectFlowOpen&&<AgentActionModal title={connectFlowEntryMode==='add'?'Add harness':'Connect a project agent'} presentation="drawer" wide testId="project-connect-detail" onClose={()=>setConnectFlowOpen(false)}>
+        <ProjectConnectFlow entryMode={connectFlowEntryMode} identityKey={identityKey} workspace={workspaces.find(item=>item.workspace_id===workspace)??null} serverOrigin={window.location.origin}
           onClose={()=>setConnectFlowOpen(false)} onResume={item=>{setConnectFlowOpen(false);setPendingConnectionReturn({identityKey,workspaceId:item.workspace_id,openContext:true,
             target:{kind:'connection',server_id:item.server_id,executor_id:item.executor_id,workspace_id:item.workspace_id,binding_id:item.binding_id,agent_id:item.agent_id}});}}
           onComplete={(result,options?:{openContext?:boolean})=>{setConnectFlowOpen(false);setRefreshTick(value=>value+1);attention.refresh();
@@ -855,7 +858,7 @@ function Dashboard({
               {homeOperational && info?.features?.feature_home !== false
                 ? <OperationalHome key={workspace} workspace={workspace} workspaces={workspaces} identityKey={identityKey}
                     refreshTick={refreshTick} latestEvent={latestHomeEvent} streamStatus={sseStatus} onNavigate={setView}
-                    onAttentionChanged={attention.refresh} onSetupAgent={openConnectFlow} onWorkspaceChange={pickWorkspace} registerLeaveGuard={registerHomeLeaveGuard}/>
+                    onAttentionChanged={attention.refresh} onSetupAgent={openAddHarness} onWorkspaceChange={pickWorkspace} registerLeaveGuard={registerHomeLeaveGuard}/>
                 : <HomeView key={workspace} workspace={workspace} refreshTick={refreshTick} attention={attention.state}
                     onRefreshAttention={attention.refresh} onNavigate={setView} workspaces={workspaces} onWorkspaceChange={pickWorkspace} onSetupAgent={openConnectFlow}/>}
             </div>

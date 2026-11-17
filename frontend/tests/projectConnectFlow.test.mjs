@@ -65,6 +65,67 @@ async function reviewed(f,adapter='codex_app_server') {
   const model=f.model();await model.initialize();await model.add();model.selectInstallation('candidate-'+adapter);model.review();return model;
 }
 
+test('Add intent enters configuration only after complete canonical reads and never resumes or submits work',async()=>{
+  const f=fixture();f.setCatalog([row()]);const model=f.model();
+  await model.initialize('add');const state=model.getSnapshot();
+  assert.equal(state.phase,'configure');assert.equal(state.workspace.workspace_id,workspace.workspace_id);
+  assert.notEqual(state.agentId,'existing-agent');assert.equal(state.request,null);assert.equal(state.retained,false);
+  assert.equal(f.calls.filter(c=>c.name==='setupDraft').length,1);
+  assert.ok(f.calls.findIndex(c=>c.name==='connectionCatalog')<f.calls.findIndex(c=>c.name==='setupDraft'));
+  assert.equal(f.calls.some(c=>['binding','testSetup','finishSetup','recoverSetup','checkLocalInstallation'].includes(c.name)),false);
+  const html=renderExistingModel(model,f,{entryMode:'add'});
+  assert.match(html,/>Add harness<\/h2>/);assert.doesNotMatch(html,/Existing project connections|Open an existing connection/);
+  model.dispose();
+});
+
+test('Add intent cannot replace a retained unknown request or start a second concurrent initialization',async()=>{
+  const f=fixture({async testSetup(){throw new Error('response lost');}}),first=await reviewed(f);await first.test(true);
+  const retained=clone(first.getSnapshot().request);first.dispose();const before=f.calls.length;
+  const restored=f.model();await restored.initialize('add');
+  assert.equal(restored.getSnapshot().phase,'uncertain');assert.equal(restored.getSnapshot().retained,true);
+  assert.deepEqual(restored.getSnapshot().request,retained);
+  assert.deepEqual(f.calls.slice(before).map(c=>c.name),['me']);restored.dispose();
+  const parallel=fixture();let release,meCalls=0;const gate=new Promise(resolve=>release=resolve),originalMe=parallel.api.me;
+  parallel.api.me=async()=>{meCalls++;await gate;return originalMe();};const model=parallel.model();
+  const pending=model.initialize('add');await model.initialize('add');assert.equal(meCalls,1);
+  assert.equal(parallel.calls.some(c=>c.name==='setupDraft'),false);release();await pending;
+  assert.equal(model.getSnapshot().phase,'configure');assert.equal(parallel.calls.filter(c=>c.name==='setupDraft').length,1);model.dispose();
+});
+
+test('All projects Add intent requires an explicit authorized project and leaves the classic chooser compatible',async()=>{
+  const f=fixture();f.setCatalog([row()]);const all=f.model('human-1',null);await all.initialize('add');
+  assert.equal(all.getSnapshot().phase,'choose');assert.equal(f.calls.some(c=>c.name==='setupDraft'),false);
+  let html=renderExistingModel(all,f,{entryMode:'add',workspace:null});
+  assert.match(html,/<option value=""[^>]*>Choose a project<\/option>/);
+  assert.match(html,/<button[^>]*disabled=""[^>]*>Add harness on this Server<\/button>/);
+  assert.doesNotMatch(html,/Existing project connections|Open an existing connection|New project on the Server/);
+  await all.selectWorkspace(workspace);assert.equal(all.getSnapshot().phase,'choose');
+  assert.equal(f.calls.some(c=>c.name==='setupDraft'),false);await all.add();assert.equal(all.getSnapshot().phase,'configure');all.dispose();
+  const classic=f.model();await classic.initialize();assert.equal(classic.getSnapshot().phase,'choose');
+  html=renderExistingModel(classic,f);assert.match(html,/Existing project connections|Open an existing connection/);assert.match(html,/New project on the Server/);
+  const item=classic.getSnapshot().catalog[0];assert.deepEqual(await classic.resume(item),item);
+  assert.equal(f.calls.filter(c=>c.name==='binding').length,1);assert.equal(f.calls.some(c=>['testSetup','finishSetup'].includes(c.name)),false);classic.dispose();
+});
+
+test('Add intent refuses incomplete catalogs and projects absent from the authorized directory before allocating a draft',async()=>{
+  for(const kind of ['catalog','project']){
+    const f=fixture();if(kind==='catalog')f.api.connectionCatalog=async()=>{throw new Error('Catalog unavailable');};
+    else f.api.connectionWorkspaces=async()=>({items:[],has_more:false,next_workspace_id:null});
+    const model=f.model();await model.initialize('add');assert.notEqual(model.getSnapshot().phase,'configure');
+    await model.add();assert.notEqual(model.getSnapshot().phase,'configure');
+    assert.ok(model.getSnapshot().error);assert.equal(f.calls.some(c=>['setupDraft','testSetup','finishSetup','binding'].includes(c.name)),false);model.dispose();
+  }
+});
+
+test('selecting a project from All restores its exact retained attempt before exposing Add',async()=>{
+  const f=fixture({async testSetup(){throw new Error('response lost');}}),prior=await reviewed(f);await prior.test(true);
+  const request=clone(prior.getSnapshot().request);prior.dispose();const before=f.calls.length;
+  const all=f.model('human-1',null);await all.initialize('add');assert.equal(all.getSnapshot().phase,'choose');
+  await all.selectWorkspace(workspace);assert.equal(all.getSnapshot().phase,'uncertain');assert.equal(all.getSnapshot().retained,true);
+  assert.deepEqual(all.getSnapshot().request,request);assert.equal(f.calls.slice(before).some(c=>['setupDraft','binding','testSetup','finishSetup'].includes(c.name)),false);
+  await assert.rejects(()=>all.add(),/retained/);assert.equal(f.storage.values.size,1);all.dispose();
+});
+
 test('definitive real 422 rejection survives reload and explicit edit archives rather than replaying',async()=>{
   let posts=0;
   const metadata={stage:'connection.test',possible_effect:false,retry_safe:false,operation_id:null,action:''};

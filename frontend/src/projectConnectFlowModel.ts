@@ -7,6 +7,7 @@ export type ProjectConnectApi = Pick<typeof runtimeApi, 'me' | 'projectPreset' |
   'options' | 'workspacePaths' | 'connectionCatalog' | 'binding' | 'checkLocalInstallation' |
   'testSetup' | 'setupTest' | 'finishSetup' | 'recoverSetup' | 'setupReceipt' | 'connectionWorkspaces'>;
 export interface ConnectWorkspace {workspace_id: string; display_name: string | null}
+export type ProjectConnectEntryMode = 'choose' | 'add';
 export type ConnectPhase = 'loading' | 'choose' | 'configure' | 'review' | 'checking' | 'testing' | 'finish' | 'uncertain' | 'complete' | 'remote';
 export interface ConnectSnapshot {
   phase: ConnectPhase; busy: boolean; error: string; catalog: ConnectionCatalogItem[];
@@ -107,7 +108,9 @@ export class ProjectConnectModel {
   private assertEditable() {
     if (this.checkpoint || this.state.request || this.state.busy) throw new Error('Recover the retained attempt before changing its reviewed selection.');
   }
-  async initialize() {await this.run(async () => {
+  async initialize(mode:ProjectConnectEntryMode='choose') {
+    if(this.state.busy)return;
+    await this.run(async () => {
     const me = await this.api.me(this.controller.signal);this.me=me;
     if(!identifier(me.server_id)||!identifier(me.agent_id))throw new Error('The authenticated Server identity is unconfirmed.');
     if(this.controller.signal.aborted)return;
@@ -142,7 +145,16 @@ export class ProjectConnectModel {
     const workspaces=await this.workspaceDirectory();
     this.set({preset,workspaces});
     await this.catalog();this.set({phase:'choose'});
-  });}
+    });
+    // Retained requests take precedence over entry intent. Start only after
+    // initialize's own request has settled; add() keeps its existing guards.
+    if(mode!=='add'||this.controller.signal.aborted||this.state.busy||this.checkpoint||this.state.retained||
+        this.state.request||this.state.phase!=='choose'||this.state.catalogStatus!=='ready'||!this.state.workspace)return;
+    if(!this.state.workspaces.some(item=>item.workspace_id===this.state.workspace!.workspace_id)) {
+      this.set({error:'Choose a project from the complete authorized directory before adding a harness.'});return;
+    }
+    await this.add();
+  }
   private async workspaceDirectory():Promise<ConnectWorkspace[]> {
     const workspaces: ConnectWorkspace[]=[];let after: string|null=null;
     const seen=new Set<string>(),ids=new Set<string>();let complete=false;
@@ -209,6 +221,9 @@ export class ProjectConnectModel {
     if(workspace&&!this.state.workspaces.some(item=>item.workspace_id===workspace.workspace_id))throw new Error('Choose a project from the complete authorized directory.');
     this.assertEditable();this.set({workspace,options:null,candidateRef:'',workspacePaths:[],catalog:[],catalogStatus:'loading',
       ...(this.state.configuration?{configuration:{...this.state.configuration,workspace_root:'',workspace_label:workspace?.display_name||'Project'}}:{})});
+    // A project selected from All may already have its own retained attempt.
+    // Reuse the exact initialization fence before exposing Add for that key.
+    if(this.storage.getItem(this.key())){await this.initialize();return;}
     await this.run(async()=>{await this.catalog();if(this.state.executorId){await this.loadOptions();await this.loadPaths();}});
   }
   async resume(item: ConnectionCatalogItem): Promise<ConnectionCatalogItem|null> {
@@ -233,6 +248,8 @@ export class ProjectConnectModel {
   async add() {this.assertEditable();await this.run(async()=>{
     if(this.state.catalogStatus!=='ready')throw new Error('Confirm the complete project connection catalog before adding another harness.');
     if(!this.me||!this.state.preset)throw new Error('The project recommendation is not loaded.');
+    if(this.state.workspace&&!this.state.workspaces.some(item=>item.workspace_id===this.state.workspace!.workspace_id))
+      throw new Error('Choose a project from the complete authorized directory before adding a harness.');
     const agent=this.makeId('project_');
     const draft=await this.api.setupDraft(agent,this.controller.signal);
     const executors=await this.api.executors(this.me.agent_id,this.controller.signal);
