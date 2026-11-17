@@ -1,0 +1,59 @@
+{
+  "mode": "SOURCE_ONLY_NOT_INSTALLED_NEXUS",
+  "started_at": "2026-11-17T19:26:51.924639+00:00",
+  "ended_at": "2026-11-17T19:30:17.332744+00:00",
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus');sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\src');import pytest;raise SystemExit(pytest.main(['-p', 'pytest_asyncio.plugin', '-p', 'no:cacheprovider', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-2o4s6xle\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--basetemp=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-2o4s6xle\\\\cases', '-q', '--tb=short', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-2o4s6xle\\\\tests.xml', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_group_identity_cache.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_page_metadata_equivalence.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_result_attention_lookup_equivalence.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_revision_equivalence.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_projection_batch.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_productive_progress_propagation.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_atomic_working.py']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-source-2o4s6xle\\cwd",
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-source-2o4s6xle",
+  "exit_code": 1,
+  "original_pid": 52688,
+  "process_exited": true,
+  "owned_command": {
+    "exit_code": 1,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 52688,
+        "birth": 1794943611.928567,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 36904,
+        "birth": 1794943611.9706593,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": false,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  "deadline_seconds": 420.0,
+  "stdin": "closed PIPE",
+  "provider_auth_environment_copied": false,
+  "test_files": {
+    "tests\\home_states\\test_group_identity_cache.py": "12657c731539c72ae7dd6983158c4bdeeae086c4d4648d31833cfc2372a5a7f3",
+    "tests\\home_states\\test_page_metadata_equivalence.py": "47e4a1ec0676592af0e194a250fee2792ea711a892150c6d127862ce360f07f3",
+    "tests\\home_states\\test_result_attention_lookup_equivalence.py": "605b331c6197a3ac0d2a647da985121b7867262649e43173ac0056161e57fa5b",
+    "tests\\home_states\\test_revision_equivalence.py": "7b744743416d08d58283187147fd673642d3b3cd0fb6022cb910a2ad6d6a0049",
+    "tests\\home_states\\test_projection_batch.py": "4ef93d4d063bdf2819c86a03184a1a8cd98e4d388f4771fb0eb5ff1f8f19be4d",
+    "tests\\home_states\\test_productive_progress_propagation.py": "6e7ac107cc147863e3a7801917602376f79d8a849be60870c5a80ba80e1b935d",
+    "tests\\home_states\\test_atomic_working.py": "dec4aaa5fb7d2ef23f432b2aee239fbe6e38187ba528a3922262b43512015228"
+  },
+  "limitations": [
+    "No installed app/browser/real harness/human qualification.",
+    "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  ],
+  "source_and_test_drift": []
+}

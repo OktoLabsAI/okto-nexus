@@ -349,11 +349,16 @@ def activity_item(raw, server, occurrences):
 
 def result_attention(raw, occurrence):
     item = json.loads(raw)
-    item.pop('_attention_id', None)
     value = json.loads(occurrence) if occurrence else None
+    return canonical(result_attention_value(item, value))
+
+
+def result_attention_value(item, value):
+    """The same projection for an already decoded, request-local occurrence."""
+    item.pop('_attention_id', None)
     item['attention'] = value
     item['view_state'] = ('seen' if value['seen_state']['seen'] else 'unseen') if value else 'not_tracked'
-    return canonical(item)
+    return item
 
 
 class SqliteHomeQueries:

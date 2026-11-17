@@ -909,6 +909,15 @@
           "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
           "artifact_path": "execution/package-hst-r5/installed-qualification.json",
           "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
+        },
+        {
+          "commit": "9d380f75 + exact R7 source/test pins in the corrected artifact",
+          "command_or_procedure": "Bounded coordinated source equivalence run after preserving the failed first cut",
+          "environment": "Windows; source-only Nexus, isolated pinned dependencies; closed PIPE; no provider",
+          "timestamp": "2026-11-17T19:40:10.220641+00:00",
+          "result": "PASS87 corrected; prior cut104PASS/12FAIL retained; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-performance-corrected/qualification.json",
+          "limitations": "Initial domain failure was a shadowed envelope variable, repaired before packaging; six new SQL oracle failures were trace/scope assumptions. Root identity-cache twelve cases passed in the first cut. R7 installed/browser/performance not yet run."
         }
       ]
     },
@@ -1289,6 +1298,15 @@
           "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
           "artifact_path": "execution/package-hst-r5/installed-qualification.json",
           "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
+        },
+        {
+          "commit": "9d380f75 + exact R7 source/test pins in the corrected artifact",
+          "command_or_procedure": "Bounded coordinated source equivalence run after preserving the failed first cut",
+          "environment": "Windows; source-only Nexus, isolated pinned dependencies; closed PIPE; no provider",
+          "timestamp": "2026-11-17T19:40:10.220641+00:00",
+          "result": "PASS87 corrected; prior cut104PASS/12FAIL retained; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-performance-corrected/qualification.json",
+          "limitations": "Initial domain failure was a shadowed envelope variable, repaired before packaging; six new SQL oracle failures were trace/scope assumptions. Root identity-cache twelve cases passed in the first cut. R7 installed/browser/performance not yet run."
         }
       ]
     },
@@ -1398,6 +1416,15 @@
           "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
           "artifact_path": "execution/package-hst-r5/installed-qualification.json",
           "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
+        },
+        {
+          "commit": "9d380f75 + exact R7 source/test pins in the corrected artifact",
+          "command_or_procedure": "Bounded coordinated source equivalence run after preserving the failed first cut",
+          "environment": "Windows; source-only Nexus, isolated pinned dependencies; closed PIPE; no provider",
+          "timestamp": "2026-11-17T19:40:10.220641+00:00",
+          "result": "PASS87 corrected; prior cut104PASS/12FAIL retained; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-performance-corrected/qualification.json",
+          "limitations": "Initial domain failure was a shadowed envelope variable, repaired before packaging; six new SQL oracle failures were trace/scope assumptions. Root identity-cache twelve cases passed in the first cut. R7 installed/browser/performance not yet run."
         }
       ]
     },
@@ -2591,6 +2618,15 @@
           "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
           "artifact_path": "execution/package-hst-r5/installed-qualification.json",
           "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
+        },
+        {
+          "commit": "9d380f75 + exact R7 source/test pins in the corrected artifact",
+          "command_or_procedure": "Bounded coordinated source equivalence run after preserving the failed first cut",
+          "environment": "Windows; source-only Nexus, isolated pinned dependencies; closed PIPE; no provider",
+          "timestamp": "2026-11-17T19:40:10.220641+00:00",
+          "result": "PASS87 corrected; prior cut104PASS/12FAIL retained; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-performance-corrected/qualification.json",
+          "limitations": "Initial domain failure was a shadowed envelope variable, repaired before packaging; six new SQL oracle failures were trace/scope assumptions. Root identity-cache twelve cases passed in the first cut. R7 installed/browser/performance not yet run."
         }
       ]
     },
@@ -2692,6 +2728,15 @@
           "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
           "artifact_path": "execution/package-hst-r5/installed-qualification.json",
           "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
+        },
+        {
+          "commit": "9d380f75 + exact R7 source/test pins in the corrected artifact",
+          "command_or_procedure": "Bounded coordinated source equivalence run after preserving the failed first cut",
+          "environment": "Windows; source-only Nexus, isolated pinned dependencies; closed PIPE; no provider",
+          "timestamp": "2026-11-17T19:40:10.220641+00:00",
+          "result": "PASS87 corrected; prior cut104PASS/12FAIL retained; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-performance-corrected/qualification.json",
+          "limitations": "Initial domain failure was a shadowed envelope variable, repaired before packaging; six new SQL oracle failures were trace/scope assumptions. Root identity-cache twelve cases passed in the first cut. R7 installed/browser/performance not yet run."
         }
       ]
     },
@@ -2809,6 +2854,24 @@
           "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
           "artifact_path": "execution/source-tests/r3-home/qualification.json",
           "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
+        },
+        {
+          "commit": "90b94ca9673c087554b7dc4a226490ef5417bd32",
+          "command_or_procedure": "Ten exclusive paired persistent-ASGI cuts, three warmups/twenty samples per route",
+          "environment": "Windows; immutable baseline/R6 installed prefixes and identical original mixed/OPEN seeds; no provider",
+          "timestamp": "2026-11-17T19:40:10.220641+00:00",
+          "result": "FAIL500ms: six large cases; four small cases PASS. All ten measured/ready with no drift, retry or timeout.",
+          "artifact_path": "execution/performance-hst/persistent-r6-final/qualification.json",
+          "limitations": "First HTTP proxy is not DOM. Mixed V2 regressed in this series; no optimization win or target waiver. Profile R6 is diagnostic only."
+        },
+        {
+          "commit": "9d380f75 + exact R7 source/test pins in the corrected artifact",
+          "command_or_procedure": "Bounded coordinated source equivalence run after preserving the failed first cut",
+          "environment": "Windows; source-only Nexus, isolated pinned dependencies; closed PIPE; no provider",
+          "timestamp": "2026-11-17T19:40:10.220641+00:00",
+          "result": "PASS87 corrected; prior cut104PASS/12FAIL retained; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-performance-corrected/qualification.json",
+          "limitations": "Initial domain failure was a shadowed envelope variable, repaired before packaging; six new SQL oracle failures were trace/scope assumptions. Root identity-cache twelve cases passed in the first cut. R7 installed/browser/performance not yet run."
         }
       ]
     },
@@ -3215,6 +3278,15 @@
           "result": "PARTIAL qualification; implementation and observed layers recorded without default approval",
           "artifact_path": "execution/browser-hst/r5-r6-final-report.md",
           "limitations": "Performance final window pending; native contracts, real providers, AT, human and prior broad gates remain explicit. No blanket PASS from a suite count."
+        },
+        {
+          "commit": "90b94ca9673c087554b7dc4a226490ef5417bd32",
+          "command_or_procedure": "Ten exclusive paired persistent-ASGI cuts, three warmups/twenty samples per route",
+          "environment": "Windows; immutable baseline/R6 installed prefixes and identical original mixed/OPEN seeds; no provider",
+          "timestamp": "2026-11-17T19:40:10.220641+00:00",
+          "result": "FAIL500ms: six large cases; four small cases PASS. All ten measured/ready with no drift, retry or timeout.",
+          "artifact_path": "execution/performance-hst/persistent-r6-final/qualification.json",
+          "limitations": "First HTTP proxy is not DOM. Mixed V2 regressed in this series; no optimization win or target waiver. Profile R6 is diagnostic only."
         }
       ]
     }
@@ -5700,6 +5772,15 @@
           "result": "Audit: NOT_RUN",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "OPEN1000/history100k paired timing exists;500ms fails and direct Results-heavy/payload-no-transcript boundary needs targeted proof, not DTO count alone. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "90b94ca9673c087554b7dc4a226490ef5417bd32",
+          "command_or_procedure": "Ten exclusive paired persistent-ASGI cuts, three warmups/twenty samples per route",
+          "environment": "Windows; immutable baseline/R6 installed prefixes and identical original mixed/OPEN seeds; no provider",
+          "timestamp": "2026-11-17T19:40:10.220641+00:00",
+          "result": "FAIL500ms: six large cases; four small cases PASS. All ten measured/ready with no drift, retry or timeout.",
+          "artifact_path": "execution/performance-hst/persistent-r6-final/qualification.json",
+          "limitations": "First HTTP proxy is not DOM. Mixed V2 regressed in this series; no optimization win or target waiver. Profile R6 is diagnostic only."
         }
       ]
     },
@@ -5739,6 +5820,15 @@
           "result": "Audit: PASS",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Original and persistent paired cuts use identical fresh-cloned seeds/hardware,3warmup+20samples, p50/p95/query counts/bytes.500ms target FAIL remains separate. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "90b94ca9673c087554b7dc4a226490ef5417bd32",
+          "command_or_procedure": "Ten exclusive paired persistent-ASGI cuts, three warmups/twenty samples per route",
+          "environment": "Windows; immutable baseline/R6 installed prefixes and identical original mixed/OPEN seeds; no provider",
+          "timestamp": "2026-11-17T19:40:10.220641+00:00",
+          "result": "FAIL500ms: six large cases; four small cases PASS. All ten measured/ready with no drift, retry or timeout.",
+          "artifact_path": "execution/performance-hst/persistent-r6-final/qualification.json",
+          "limitations": "First HTTP proxy is not DOM. Mixed V2 regressed in this series; no optimization win or target waiver. Profile R6 is diagnostic only."
         }
       ]
     },
@@ -6156,6 +6246,32 @@
       "human": "DEFERRED; no participant action requested",
       "default_rollout": false,
       "performance": "PENDING_FINAL_EXCLUSIVE_WINDOW"
+    },
+    "performance_r6": {
+      "measured": 10,
+      "small_pass": 4,
+      "large_fail": 6,
+      "threshold_p95_ms": 500,
+      "artifact": "execution/performance-hst/persistent-r6-final/qualification.json",
+      "diagnostic": "execution/performance-hst/profile-r6-final/qualification.json",
+      "first_useful_dom": "NOT_RUN",
+      "threshold_waived": false
+    },
+    "r7_source": {
+      "status": "SCOPED_EQUIVALENCE_PASS87",
+      "changes": [
+        "Only equal-ID ties need extra canonical sort keys.",
+        "Board uses the shared metadata envelope without rendering a discarded entries page.",
+        "Pure group identity hash reused until its complete immutable tuple changes; no source facts cached.",
+        "V2 complete authorized result-attention lookup is request-local with legacy fallbacks."
+      ],
+      "schema_migration": false,
+      "core_connector_protocol_changes": false,
+      "previous_failure": "execution/source-tests/r7-performance-focal/qualification.json",
+      "corrected": "execution/source-tests/r7-performance-corrected/qualification.json",
+      "installed": "PENDING_FRESH_R7",
+      "browser": "PENDING",
+      "performance": "PENDING_ORIGINAL_THRESHOLDS"
     }
   }
 }

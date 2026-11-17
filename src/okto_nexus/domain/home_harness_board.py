@@ -80,8 +80,8 @@ def page(relations, *, scope, server_id, principal, now, partition='root', colum
     if partition == 'root' and cursor is not None:
         invalid('A harness board cursor requires an exact partition.')
     base_options = {'presentation_version': 2} if operational else {}
-    base = entries.page(relations, scope=scope, server_id=server_id, principal=principal,
-        now=now, limit=1, preview=1, check_budget=check_budget, **base_options)
+    base = entries.metadata(relations, scope=scope, server_id=server_id,
+        now=now, check_budget=check_budget, **base_options)
     entry_revision = base['revision']
     registry = {connection_key(c): c for c in relations.connections or ()}
     groups = {key: [] for key in registry}

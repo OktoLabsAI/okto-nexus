@@ -86,7 +86,17 @@ class EntryRecord:
 
     @property
     def group_id(self):
-        return 'home_group_' + digest(self.group_key())
+        key = self.group_key()
+        # Memoize only this deterministic identity hash, never source facts,
+        # authority or freshness. Mutable/unsupported legacy keys keep the old
+        # calculation; a changed connection tuple invalidates the saved value.
+        if type(key) is not tuple or any(type(value) not in (str, int, type(None)) for value in key):
+            return 'home_group_' + digest(key)
+        cached = getattr(self, '_group_identity_cache', None)
+        if cached is None or cached[0] != key:
+            cached = (key, 'home_group_' + digest(key))
+            self._group_identity_cache = cached
+        return cached[1]
 
 
 @dataclass

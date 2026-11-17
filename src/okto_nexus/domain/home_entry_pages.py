@@ -167,6 +167,20 @@ def revision(relations, check_budget):
             row_keys[identifier] = (row, canonical(row))
         return row_keys[identifier][1]
 
+    def ordered_rows(rows, key):
+        # IDs are the primary ordering key. Only equal IDs need the canonical
+        # JSON tie-breaker; the final digest still validates every complete row.
+        ordered = sorted(rows, key=lambda row: row[key])
+        start = 0
+        while start < len(ordered):
+            end = start + 1
+            while end < len(ordered) and ordered[end][key] == ordered[start][key]:
+                end += 1
+            if end - start > 1:
+                ordered[start:end] = sorted(ordered[start:end], key=row_key)
+            start = end
+        return ordered
+
     entries = []
     for entry in sorted(relations.entries, key=lambda item: item.id):
         check_budget()
@@ -175,7 +189,7 @@ def revision(relations, check_budget):
         value['sessions'] = tuple(context_value(s) for s in entry.sessions)
         value['registered_connections'] = tuple(context_value(c) for c in entry.registered_connections)
         for name, key in (('operations', 'operation_id'), ('attention', 'attention_id'), ('results', 'id'), ('external', 'observed_instance_id')):
-            value[name] = sorted(value[name], key=lambda row, key=key: (row[key], row_key(row)))
+            value[name] = ordered_rows(value[name], key)
         entries.append(value)
     result = digest(dict(entries=entries, server_attention=sorted(relations.server_attention, key=lambda row: row['attention_id']),
                          source_status=relations.source_status, connection_count=relations.connection_count,
@@ -230,19 +244,16 @@ def entry_dto(entry, *, binding, revision, group_id, now, refresh_at, preview=3,
         external=entry.external, as_of=now, next_refresh_at=refresh_at)
 
 
-def page(relations, *, scope, server_id, principal, now, partition='groups', group_id=None,
-         entry_id=None, cursor=None, limit=10, preview=3, check_budget=lambda: None, presentation_version=1):
+def metadata(relations, *, scope, server_id, now, partition='groups', group_id=None,
+             entry_id=None, check_budget=lambda: None, presentation_version=1):
+    """Common envelope over the complete relation, without grouping/rendering.
+
+    Boards replace entry grouping/counts with their own complete projection.
+    They still need exactly the same entry revision, coverage, inventory and
+    refresh fences as contextual entry pages, within this one authorized read.
+    """
     if type(presentation_version) is not int or presentation_version not in (1, 2):
         invalid('Invalid Home presentation version.')
-    page_limit(limit)
-    page_limit(preview)
-    if partition not in {'groups', 'children', 'sessions', 'attention', 'results'}:
-        invalid('Invalid Home entries partition.')
-    if partition == 'groups' and (group_id is not None or entry_id is not None) or partition != 'groups' and group_id is None or partition == 'children' and entry_id is not None or partition in {'sessions', 'attention', 'results'} and entry_id is None:
-        invalid('Invalid Home entries parent references.')
-    for value in (group_id, entry_id):
-        if value is not None:
-            identity(value)
     material_revision = revision(relations, check_budget)
     if presentation_version == 2:
         material_revision = digest([2, material_revision])
@@ -275,6 +286,46 @@ def page(relations, *, scope, server_id, principal, now, partition='groups', gro
         if change and instant(now) < instant(change):
             refresh = min(refresh, instant(change))
     refresh_at = refresh.isoformat(timespec='microseconds').replace('+00:00', 'Z')
+    value = {'version': 1, 'scope': scope, 'server_id': server_id, 'generated_at': now,
+        'snapshot_id': material_revision, 'revision': material_revision, 'partition': partition,
+        'group_id': group_id, 'entry_id': entry_id, 'status': 'ready' if exact else 'partial',
+        'source_status': relations.source_status, 'items': [], 'total': 0 if exact else None,
+        'total_is_exact': exact, 'has_more': False,
+        'inventory': dict(connections=dict(value=relations.connection_count,
+            total_is_exact=relations.connection_count is not None,
+            unit='connections')),
+        'coverage': dict(result_tracking='unknown' if relations.source_status.get('attention') != 'ready' else 'partial' if tracking_unknown else 'ready'),
+        'next_cursor': None,
+        'as_of': now, 'next_refresh_at': refresh_at,
+        'server_attention': dict(status='ready' if relations.source_status.get('attention') == 'ready' else 'unavailable',
+            items=[o for o in relations.server_attention if o['active']][:3] if partition == 'groups' else [],
+            total=sum(o['active'] for o in relations.server_attention) if relations.source_status.get('attention') == 'ready' else None,
+            total_is_exact=relations.source_status.get('attention') == 'ready', has_more=sum(o['active'] for o in relations.server_attention)>3),
+        'summary': {'unseen_results': dict(value=None if tracking_unknown or relations.source_status.get('attention') != 'ready' else len(unseen_results),
+            total_is_exact=not tracking_unknown and relations.source_status.get('attention') == 'ready', unit='results')}}
+    if presentation_version == 2:
+        value.update(presentation_version=2, presentation_versions=[1, 2])
+    return value
+
+
+def page(relations, *, scope, server_id, principal, now, partition='groups', group_id=None,
+         entry_id=None, cursor=None, limit=10, preview=3, check_budget=lambda: None, presentation_version=1):
+    if type(presentation_version) is not int or presentation_version not in (1, 2):
+        invalid('Invalid Home presentation version.')
+    page_limit(limit)
+    page_limit(preview)
+    if partition not in {'groups', 'children', 'sessions', 'attention', 'results'}:
+        invalid('Invalid Home entries partition.')
+    if partition == 'groups' and (group_id is not None or entry_id is not None) or partition != 'groups' and group_id is None or partition == 'children' and entry_id is not None or partition in {'sessions', 'attention', 'results'} and entry_id is None:
+        invalid('Invalid Home entries parent references.')
+    for parent in (group_id, entry_id):
+        if parent is not None:
+            identity(parent)
+    envelope = metadata(relations, scope=scope, server_id=server_id, now=now,
+        partition=partition, group_id=group_id, entry_id=entry_id,
+        check_budget=check_budget, presentation_version=presentation_version)
+    material_revision, refresh_at = envelope['revision'], envelope['next_refresh_at']
+    exact = envelope['status'] == 'ready'
     binding = dict(server_id=server_id, principal=principal, scope=scope,
                    partition=partition, group_id=group_id, entry_id=entry_id)
     if presentation_version == 2:
@@ -351,25 +402,8 @@ def page(relations, *, scope, server_id, principal, now, partition='groups', gro
             results.update(r['id'] for r in entry.results)
     counts.update(sessions=len(sessions), results=len(results))
     check_budget()
-    value = {'version': 1, 'scope': scope, 'server_id': server_id, 'generated_at': now,
-        'snapshot_id': material_revision, 'revision': material_revision, 'partition': partition,
-        'group_id': group_id, 'entry_id': entry_id, 'status': 'ready' if exact else 'partial',
-        'source_status': relations.source_status, 'items': items, 'total': len(keyed) if exact else None,
-        'total_is_exact': exact, 'has_more': more,
-        'inventory': dict(connections=dict(value=relations.connection_count,
-            total_is_exact=relations.connection_count is not None,
-            unit='connections')),
-        'coverage': dict(result_tracking='unknown' if relations.source_status.get('attention') != 'ready' else 'partial' if tracking_unknown else 'ready'),
-        'next_cursor': cursor_encode(binding, material_revision, list(chosen[-1][0])) if more else None,
-        'as_of': now, 'next_refresh_at': refresh_at,
-        'server_attention': dict(status='ready' if relations.source_status.get('attention') == 'ready' else 'unavailable',
-            items=[o for o in relations.server_attention if o['active']][:3] if partition == 'groups' else [],
-            total=sum(o['active'] for o in relations.server_attention) if relations.source_status.get('attention') == 'ready' else None,
-            total_is_exact=relations.source_status.get('attention') == 'ready', has_more=sum(o['active'] for o in relations.server_attention)>3),
-        'summary': dict({key: dict(value=count if exact else None,
-            total_is_exact=exact, unit=key) for key, count in counts.items()},
-            unseen_results=dict(value=None if tracking_unknown or relations.source_status.get('attention') != 'ready' else len(unseen_results),
-                total_is_exact=not tracking_unknown and relations.source_status.get('attention') == 'ready', unit='results'))}
-    if presentation_version == 2:
-        value.update(presentation_version=2, presentation_versions=[1, 2])
-    return value
+    envelope.update(items=items, total=len(keyed) if exact else None, total_is_exact=exact, has_more=more,
+        next_cursor=cursor_encode(binding, material_revision, list(chosen[-1][0])) if more else None)
+    envelope['summary'] = dict({key: dict(value=count if exact else None,
+        total_is_exact=exact, unit=key) for key, count in counts.items()}, **envelope['summary'])
+    return envelope

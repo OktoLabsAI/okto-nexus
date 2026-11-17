@@ -6,8 +6,9 @@ relation are shared with Home v1. No transcript, native control or host access.
 import json
 import re
 import sqlite3
+from copy import deepcopy
 
-from ....domain.attention import digest
+from ....domain.attention import canonical, digest
 from ....domain.home_entries import (
     ConnectionContext,
     EntryRecord,
@@ -18,7 +19,13 @@ from ....domain.home_entries import (
 )
 from ..harness.event_journal import redact
 from . import home_operational_facts
-from .home import FACTS, FACTS_NATIVE_PROGRESS, RESULTS, SqliteHomeQueries
+from .home import (
+    FACTS,
+    FACTS_NATIVE_PROGRESS,
+    RESULTS,
+    SqliteHomeQueries,
+    result_attention_value,
+)
 
 # This relation is independent of the old runtime_refs preview (20). The
 # persisted delivery/claim is resolved before sender filtering or pagination.
@@ -190,6 +197,33 @@ class _WorkRows(list):
         self.native_progress_current = list(native_progress_current)
 
 
+_RESULT_ATTENTION_FILTER = """filtered AS MATERIALIZED (SELECT home_result_attention_v1(item,
+ (SELECT item FROM home_attention WHERE json_extract(item,'$.attention_id')=json_extract(projected.item,'$._attention_id'))) AS item FROM projected)"""
+
+
+class _ResultAttentionIndex:
+    """Complete decoded relation, owned by exactly one read/UoW/scope."""
+
+    def __init__(self, connection, relation, workspace_id, occurrences):
+        self.connection = connection
+        self.relation = relation
+        self.workspace_id = workspace_id
+        self.occurrences = occurrences
+
+    def project(self, item):
+        try:
+            value = self.occurrences.get(item.get('_attention_id'))
+            if value is not None and value['workspace_id'] != item.get('workspace_id'):
+                # Preserve the scalar SQL behavior for ambiguous data.
+                raise sqlite3.OperationalError('Result Attention workspace requires legacy lookup')
+            # Legacy UDF JSON decoding produced independent nested objects.
+            return result_attention_value(item, deepcopy(value))
+        except Exception as error:
+            # Match SQLite's UDF failure boundary; budget/authority callbacks
+            # run outside this pure transformation and are never caught here.
+            raise sqlite3.OperationalError('user-defined function raised exception') from error
+
+
 def _progress_collection(raw):
     try:
         values = json.loads(raw) if raw is not None else []
@@ -264,7 +298,7 @@ class SqliteHomeEntryRelations:
     def _results(self, uow, **kwargs):
         return self._project(uow, relation=RESULTS, **kwargs)
 
-    def _work_results(self, uow, *, params, attention_relation, check_budget):
+    def _work_results(self, uow, *, params, attention_relation, check_budget, result_attention_index=None):
         """Share statement-local authorized Attention, keeping both relations intact.
 
         Nested WITH scopes preserve the independent Work/Results CTE names.
@@ -279,7 +313,14 @@ class SqliteHomeEntryRelations:
         include_progress = params.get('delivery_presentation_version') == 2
         work_relation = FACTS_NATIVE_PROGRESS if include_progress else FACTS
         progress_column = 'native_progress_current' if include_progress else 'NULL'
-        results = re.sub(r':agent_id\b', ':result_agent_id', RESULTS)
+        indexed = (result_attention_index is not None
+            and result_attention_index.connection is uow.connection
+            and result_attention_index.relation is attention_relation
+            and result_attention_index.workspace_id == params.get('workspace_id')
+            and include_progress and RESULTS.count(_RESULT_ATTENTION_FILTER) == 1)
+        result_relation = (RESULTS.replace(_RESULT_ATTENTION_FILTER,
+            'filtered AS MATERIALIZED (SELECT item FROM projected)') if indexed else RESULTS)
+        results = re.sub(r':agent_id\b', ':result_agent_id', result_relation)
         sql = (ctes + " SELECT 'work' AS section,item," + progress_column + ' FROM (' + work_relation
             + " SELECT item,native_progress_current FROM filtered LIMIT :batch_source_limit) UNION ALL SELECT 'results',item,NULL FROM ("
             + results + ' SELECT item FROM filtered LIMIT :batch_source_limit)')
@@ -295,7 +336,10 @@ class SqliteHomeEntryRelations:
                     # not to the sum of two otherwise valid source relations.
                     if len(section) >= self.MAX_RELATION_ROWS:
                         raise sqlite3.OperationalError('Home entry source resource budget exceeded')
-                    section.append(json.loads(row[1]))
+                    item = json.loads(row[1])
+                    if indexed and row[0] == 'results':
+                        item = result_attention_index.project(item)
+                    section.append(item)
                     if include_progress and row[0] == 'work':
                         section.native_progress_current.extend(_progress_collection(row[2]))
             finally:
@@ -306,6 +350,41 @@ class SqliteHomeEntryRelations:
         # Custom query ports/fault injection retain their isolated semantics.
         return all(getattr(getattr(self, name), '__func__', None) is getattr(SqliteHomeEntryRelations, name)
             for name in ('_work', '_results', '_project'))
+
+    def _result_attention_index(self, uow, relation, occurrences, params, check_budget):
+        # Only the builtin collector attests complete source materialization.
+        # Custom ports retain their SQL/error behavior without new arguments.
+        if (params.get('delivery_presentation_version') != 2 or relation is None
+                or type(self.home) is not SqliteHomeQueries
+                or self.home._attention_relations is not SqliteHomeQueries._attention_relations
+                or getattr(self.home.bounded, '__func__', None) is not SqliteHomeQueries.bounded
+                or any(getattr(getattr(self, name), '__func__', None)
+                    is not getattr(SqliteHomeEntryRelations, name)
+                    for name in ('_attention', '_work_results'))):
+            return None
+        values = {}
+        for value in occurrences:
+            check_budget()
+            if not isinstance(value, dict):
+                return None
+            workspace = value.get('workspace_id')
+            if workspace is None:
+                continue  # Matches home_attention, not home_server_attention.
+            if type(workspace) is not str:
+                return None
+            if params.get('workspace_id') is not None and workspace != params['workspace_id']:
+                continue
+            identity = value.get('attention_id')
+            seen = value.get('seen_state')
+            if (type(identity) is not str or not identity or identity in values
+                    or not isinstance(seen, dict) or type(seen.get('seen')) is not bool):
+                return None
+            try:
+                canonical(value)  # Preserve the legacy UDF's finite JSON contract.
+            except (TypeError, ValueError, RecursionError):
+                return None
+            values[identity] = value
+        return _ResultAttentionIndex(uow.connection, relation, params.get('workspace_id'), values)
 
     def _rows(self, uow, sql, params, check_budget=None):
         with self.home.bounded(uow.connection):
@@ -363,8 +442,10 @@ class SqliteHomeEntryRelations:
         if self._can_batch_work_results():
             check_budget()
             try:
+                index = self._result_attention_index(uow, effective_attention, occurrences, params, check_budget)
+                arguments = {'result_attention_index': index} if index is not None else {}
                 combined = self._work_results(uow, params=params,
-                    attention_relation=effective_attention, check_budget=check_budget)
+                    attention_relation=effective_attention, check_budget=check_budget, **arguments)
             except sqlite3.Error:
                 # Preserve source isolation: e.g. a missing Results table must
                 # not erase independently readable Work (or the reverse).
