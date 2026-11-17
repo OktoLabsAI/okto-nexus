@@ -5624,7 +5624,7 @@
       "when": "Atualizar board",
       "then": "Aviso discreto e revalidação apropriada; painel não fecha e sessão selecionada não muda.",
       "level": "unidade com relógio/promessas + browser",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5634,9 +5634,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Actual partial source update kept panel and target; distinct OTHER harness changes with pending banner full case missing. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:48:26.203625+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json",
+          "environment": "Actual isolated R8 Chrome and installed Nexus/Core with inert protocol fixture; existing component and clock/promise tests remain distinct",
+          "command_or_procedure": "Review actual phase assertions and exact captured DOM/API values against the literal scenario, preserving all earlier oracle failures",
+          "result": "PASS scoped literal criterion: Other harness B closed canonically; controller received its actual changed revision while the same A question panel/node and exact session stayed open, with normal notice",
+          "limitations": "No provider/AT/full keyboard/native200% zoom claim. G02 preview1 is an explicit real-query variant. Later moved-close hash wait remained incomplete. Canonical cleanup unknown: three of four closes confirmed; normal process exit/physical absence do not resolve the fourth."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Actual partial source update kept panel and target; distinct OTHER harness changes with pending banner full case missing."
+      "execution_notes": "Other harness B closed canonically; controller received its actual changed revision while the same A question panel/node and exact session stayed open, with normal notice. See retained per-layer and cleanup limitations."
     },
     {
       "id": "HST-T-F03",
@@ -5826,7 +5835,7 @@
       "when": "Abrir leitura da sessão",
       "then": "Leitura exata permitida com revalidação; não bloquear toda Home por uma fonte.",
       "level": "unidade com relógio/promessas + browser",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5836,9 +5845,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Browser failed Results source, not exact GIVEN external unavailable+native session read combination. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:48:26.203677+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json",
+          "environment": "Actual isolated R8 Chrome and installed Nexus/Core with inert protocol fixture; existing component and clock/promise tests remain distinct",
+          "command_or_procedure": "Review actual phase assertions and exact captured DOM/API values against the literal scenario, preserving all earlier oracle failures",
+          "result": "PASS scoped literal criterion: Only the external query source raised a real SQLite error; actual board reported unavailable and the exact native session/output remained readable",
+          "limitations": "No provider/AT/full keyboard/native200% zoom claim. G02 preview1 is an explicit real-query variant. Later moved-close hash wait remained incomplete. Canonical cleanup unknown: three of four closes confirmed; normal process exit/physical absence do not resolve the fourth."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Browser failed Results source, not exact GIVEN external unavailable+native session read combination."
+      "execution_notes": "Only the external query source raised a real SQLite error; actual board reported unavailable and the exact native session/output remained readable. See retained per-layer and cleanup limitations."
     },
     {
       "id": "HST-T-F11",
@@ -5891,7 +5909,7 @@
       "when": "Renderizar notice",
       "then": "Mensagem normal não entra em error/role alert persistente.",
       "level": "unidade com relógio/promessas + browser",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5901,9 +5919,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Normal notice controller tested; browser partial change notice not explicitly checked for persistent role=alert/error. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:48:26.203705+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json",
+          "environment": "Actual isolated R8 Chrome and installed Nexus/Core with inert protocol fixture; existing component and clock/promise tests remain distinct",
+          "command_or_procedure": "Review actual phase assertions and exact captured DOM/API values against the literal scenario, preserving all earlier oracle failures",
+          "result": "PASS scoped literal criterion: A real changed revision produced Home status notices, with no Home or panel role=alert; Node promise/clock tests separately keep normal revisions out of error",
+          "limitations": "No provider/AT/full keyboard/native200% zoom claim. G02 preview1 is an explicit real-query variant. Later moved-close hash wait remained incomplete. Canonical cleanup unknown: three of four closes confirmed; normal process exit/physical absence do not resolve the fourth."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Normal notice controller tested; browser partial change notice not explicitly checked for persistent role=alert/error."
+      "execution_notes": "A real changed revision produced Home status notices, with no Home or panel role=alert; Node promise/clock tests separately keep normal revisions out of error. See retained per-layer and cleanup limitations."
     },
     {
       "id": "HST-T-F14",
@@ -5975,7 +6002,7 @@
       "when": "Clicar",
       "then": "Não escolher automaticamente; seletor/revalidação com cobertura explícita.",
       "level": "componente + navegador",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5985,9 +6012,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Incomplete preview selector validation unit only; real browser must refuse automatic choice. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:48:26.203716+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json",
+          "environment": "Actual isolated R8 Chrome and installed Nexus/Core with inert protocol fixture; existing component and clock/promise tests remain distinct",
+          "command_or_procedure": "Review actual phase assertions and exact captured DOM/API values against the literal scenario, preserving all earlier oracle failures",
+          "result": "PASS scoped literal criterion: Real canonical preview query returned one session/total2/hasMore; exact card session relation returned200/total2/exact, chooser remained unselected and both exact session outputs were read",
+          "limitations": "No provider/AT/full keyboard/native200% zoom claim. G02 preview1 is an explicit real-query variant. Later moved-close hash wait remained incomplete. Canonical cleanup unknown: three of four closes confirmed; normal process exit/physical absence do not resolve the fourth."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Incomplete preview selector validation unit only; real browser must refuse automatic choice."
+      "execution_notes": "Real canonical preview query returned one session/total2/hasMore; exact card session relation returned200/total2/exact, chooser remained unselected and both exact session outputs were read. See retained per-layer and cleanup limitations."
     },
     {
       "id": "HST-T-G03",
@@ -6050,7 +6086,7 @@
       "when": "Renderizar harness/request/delivery",
       "then": "Projeto aparece em todos os três tipos; projeto único pode omitir redundância.",
       "level": "componente + navegador",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -6060,9 +6096,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Canonical labels scoped; no All projects duplicate-ID rendering all harness/request/delivery types. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:48:26.203724+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json",
+          "environment": "Actual isolated R8 Chrome and installed Nexus/Core with inert protocol fixture; existing component and clock/promise tests remain distinct",
+          "command_or_procedure": "Review actual phase assertions and exact captured DOM/API values against the literal scenario, preserving all earlier oracle failures",
+          "result": "PASS scoped literal criterion: Offline literal review of all six captured DOM rows confirms project labels on both same-public-ID harnesses, the Alpha request and all three Beta deliveries under All projects",
+          "limitations": "No provider/AT/full keyboard/native200% zoom claim. G02 preview1 is an explicit real-query variant. Later moved-close hash wait remained incomplete. Canonical cleanup unknown: three of four closes confirmed; normal process exit/physical absence do not resolve the fourth."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Canonical labels scoped; no All projects duplicate-ID rendering all harness/request/delivery types."
+      "execution_notes": "Offline literal review of all six captured DOM rows confirms project labels on both same-public-ID harnesses, the Alpha request and all three Beta deliveries under All projects. See retained per-layer and cleanup limitations."
     },
     {
       "id": "HST-T-G06",
@@ -7435,6 +7480,31 @@
       "later_cut": "G02 incomplete selector observation; no cause/product defect established",
       "provider_calls": 0,
       "browser_posts": 0,
+      "human": "NOT_INVITED"
+    },
+    "r8_experience": {
+      "evidence": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json",
+      "qualified": [
+        "HST-T-F02",
+        "HST-T-F10",
+        "HST-T-F13",
+        "HST-T-G02",
+        "HST-T-G05"
+      ],
+      "observed_positive_checks": 44,
+      "whole_cut_green": false,
+      "stopped": "moved-close: exact host revision was not observed; later poll buffer not persisted, cause unproven",
+      "partial": [
+        "G03 specific titles",
+        "G06 full timestamp scenario",
+        "I01 complete keyboard names/traversal",
+        "I04 all states across both themes",
+        "I05 native200% zoom",
+        "F07/I02 actual final move/focus"
+      ],
+      "canonical_cleanup": "UNKNOWN: three of four session closes confirmed",
+      "physical_resources_absent": true,
+      "provider_invocations": 0,
       "human": "NOT_INVITED"
     }
   }

@@ -98,6 +98,25 @@ preparing a second connection. The first security-browser attempt searched for
 Chrome inside the sanitized temporary LOCALAPPDATA and never navigated. These
 are unqualified fixture/runner preconditions, not passing product scenarios or
 evidence of a product regression. Fresh scoped variants are reviewed before use.
+
+The [R8 session-role cut](remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json)
+contains44 positive predicates. Literal G02, F02, F10, F13 and G05 now qualify:
+an incomplete one-session preview does not choose automatically; another
+harness's real update preserves the exact open panel; unavailable external
+observation does not block native reads; normal changes create status notices
+without alerts; and all six captured harness/request/delivery rows identify
+their projects despite repeated public IDs. Its earlier wrong selector/oracles
+remain preserved. Themes,360px and bounded keyboard traversal supply partial
+evidence, without full AT/native200% or all-state theme claims.
+
+The final move/focus phase stopped while waiting for a host revision that was
+not observed by the controller. Its later received-poll buffer was not saved,
+so the cause remains unproven and F07/I02 are not qualified. A separate
+[cleanup record](remaining-qualification-r7-next/experience-batch/experience-r8-session-role/canonical-cleanup-detail.json)
+keeps three confirmed session closes and one unconfirmed close/unknown state.
+Normal process exit and physical absence resolve resources, not that receipt.
+The whole cut and overall delivery remain unqualified. Current ledger counts
+are51PASS/57NOT_RUN/8BLOCKED; no human invitation has been sent.
 R7 prefixes and the original failing AX capture remain immutable. No Python
 behavior changed.
 

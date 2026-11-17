@@ -1,6 +1,6 @@
 """Record literal completed context scenarios from a partially stopped cut."""
-from datetime import UTC, datetime
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -26,11 +26,11 @@ for test in ledger['tests']:
     if test['id'] not in details:
         continue
     result, limits = details[test['id']]
-    entry = dict(commit=q['source_commit'], timestamp=datetime.now(UTC).isoformat(),
-        artifact_path='execution/' + relative,
-        environment='Fresh R8 installed package, own Chrome and canonical Core with inert protocol peer; source-copy/component evidence remains distinct',
-        command_or_procedure='G01 direct singleton browser gesture and exact canonical session read; G04 zero-session context, before/after operations and grant digest; Node uiEntryInspection direct-selection contract',
-        result=result, limitations=limits + ' Later G02 chooser wait stopped the cut; its original incomplete result is retained and not promoted.')
+    entry = {'commit': q['source_commit'], 'timestamp': datetime.now(UTC).isoformat(),
+        'artifact_path': 'execution/' + relative,
+        'environment': 'Fresh R8 installed package, own Chrome and canonical Core with inert protocol peer; source-copy/component evidence remains distinct',
+        'command_or_procedure': 'G01 direct singleton browser gesture and exact canonical session read; G04 zero-session context, before/after operations and grant digest; Node uiEntryInspection direct-selection contract',
+        'result': result, 'limitations': limits + ' Later G02 chooser wait stopped the cut; its original incomplete result is retained and not promoted.'}
     test['status'] = 'PASS'
     if not any(old.get('artifact_path') == entry['artifact_path'] for old in test['evidence']):
         test['evidence'].append(entry)
@@ -41,8 +41,8 @@ for task in ledger['tasks']:
         for entry in entries[:1]:
             if not any(old.get('artifact_path') == entry['artifact_path'] for old in task['evidence']):
                 task['evidence'].append(entry)
-ledger['execution']['r8_context_base'] = dict(evidence='execution/' + relative,
-    qualified=['HST-T-G01', 'HST-T-G04'], later_cut='G02 incomplete selector observation; no cause/product defect established',
-    provider_calls=0, browser_posts=0, human='NOT_INVITED')
+ledger['execution']['r8_context_base'] = {'evidence': 'execution/' + relative,
+    'qualified': ['HST-T-G01', 'HST-T-G04'], 'later_cut': 'G02 incomplete selector observation; no cause/product defect established',
+    'provider_calls': 0, 'browser_posts': 0, 'human': 'NOT_INVITED'}
 path.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 print(json.dumps({'qualified': list(details), 'other_scenarios_promoted': False}))

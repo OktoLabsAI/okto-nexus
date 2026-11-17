@@ -1,7 +1,7 @@
 """Record fresh R8 packaging separately from predecessor backend test reuse."""
-from datetime import UTC, datetime
 import hashlib
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -33,23 +33,24 @@ assert equivalence['pytest_executed_on_r8'] is False
 
 path = HERE.parent / 'NEXUS_HOME_ESTADOS_LEDGER_R1.json'
 ledger = read(path)
-entry = dict(commit=SOURCE, timestamp=datetime.now(UTC).isoformat(),
-    artifact_path='execution/package-hst-r8/qualification.json',
-    environment='New isolated R8 prefix; pinned Core0.0.14/Connector0.0.13; original installation untouched',
-    command_or_procedure='Build/install/base Core/local lite/Connector/pip check/Twine/audit/CLI plus actual HTTP-MCP smoke',
-    result='PASS fresh R8 package; 1829 source pins/1031 payload files unchanged; 54 MCP tools/two fixture identities; normal exit and physical absence',
-    limitations='No real harness/provider or new pytest run. R7 installed 326+7 tests are reusable only for 1024 byte-identical nonstatic backend files; frontend requires R8 browser evidence.')
+entry = {'commit': SOURCE, 'timestamp': datetime.now(UTC).isoformat(),
+    'artifact_path': 'execution/package-hst-r8/qualification.json',
+    'environment': 'New isolated R8 prefix; pinned Core0.0.14/Connector0.0.13; original installation untouched',
+    'command_or_procedure': 'Build/install/base Core/local lite/Connector/pip check/Twine/audit/CLI plus actual HTTP-MCP smoke',
+    'result': 'PASS fresh R8 package; 1829 source pins/1031 payload files unchanged; 54 MCP tools/two fixture identities; normal exit and physical absence',
+    'limitations': 'No real harness/provider or new pytest run. R7 installed 326+7 tests are reusable only for 1024 byte-identical nonstatic backend files; frontend requires R8 browser evidence.'}
 for task in ledger['tasks']:
-    if task['id'] in ('HST-028', 'HST-031', 'HST-032'):
-        if not any(old.get('artifact_path') == entry['artifact_path'] for old in task['evidence']):
-            task['evidence'].append(entry)
-ledger['execution']['r8_package'] = dict(source=SOURCE, wheel_sha256=WHEEL,
-    ready='execution/package-hst-r8/READY.json', qualification=entry['artifact_path'],
-    live='execution/package-hst-r8/live-qualification.json',
-    equivalence='execution/package-hst-r8/runtime-equivalence-vs-r7.json',
-    runtime_equal_files=1024, pytest_r8_executed=False,
-    predecessor_installed_backend_tests='326+7, actually executed on immutable R7 prefix',
-    frontend_reuse=False, default_approved=False, provider_calls=0)
+    if task['id'] in ('HST-028', 'HST-031', 'HST-032') and not any(
+        old.get('artifact_path') == entry['artifact_path'] for old in task['evidence']
+    ):
+        task['evidence'].append(entry)
+ledger['execution']['r8_package'] = {'source': SOURCE, 'wheel_sha256': WHEEL,
+    'ready': 'execution/package-hst-r8/READY.json', 'qualification': entry['artifact_path'],
+    'live': 'execution/package-hst-r8/live-qualification.json',
+    'equivalence': 'execution/package-hst-r8/runtime-equivalence-vs-r7.json',
+    'runtime_equal_files': 1024, 'pytest_r8_executed': False,
+    'predecessor_installed_backend_tests': '326+7, actually executed on immutable R7 prefix',
+    'frontend_reuse': False, 'default_approved': False, 'provider_calls': 0}
 ledger['execution']['r8_menu_accessibility']['installed'] = 'PASS_FRESH_R8_PACKAGE; browser still pending'
 ledger['execution']['local_usability_candidate'].update(runtime_source=SOURCE, wheel_sha256=WHEEL,
     state='ADDITIONAL_FUNCTIONAL_QUALIFICATION_IN_PROGRESS; fresh R8 package ready, browser pending')

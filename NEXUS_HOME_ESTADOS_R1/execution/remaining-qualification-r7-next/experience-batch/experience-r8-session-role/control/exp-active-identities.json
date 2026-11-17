@@ -1,0 +1,43 @@
+{
+  "a1": {
+    "session_id": "ses_9631313ab5d6f261f5e541ac18aa8cc3",
+    "operation_id": "op_a5cd04fcf5910d9b7e121823b516dbd9",
+    "reference": {
+      "server_id": "srv_83c36267c49e82aa6d3036abfb3ade49",
+      "executor_id": "exe_83291175d64de43ade48fafc240f56aa",
+      "binding_id": "bind_ea397d14883d7add638f977822746230",
+      "endpoint_id": "ep_c31f864e8e0ceb1bc6af036d6886211c",
+      "agent_id": "hst-a",
+      "workspace_id": "wsr_3a833a556453277b86852ca1d994ff80",
+      "workspace_binding_id": "wxb_f9319bd329ee56992cc56145461738e8"
+    }
+  },
+  "a2": {
+    "session_id": "ses_a31c90f2fffc7f60aa345707690d4d87",
+    "operation_id": "op_4cbb34bf2ad7b1427e8a26b5b662db8e",
+    "reference": {
+      "server_id": "srv_83c36267c49e82aa6d3036abfb3ade49",
+      "executor_id": "exe_83291175d64de43ade48fafc240f56aa",
+      "binding_id": "bind_ea397d14883d7add638f977822746230",
+      "endpoint_id": "ep_c31f864e8e0ceb1bc6af036d6886211c",
+      "agent_id": "hst-a",
+      "workspace_id": "wsr_3a833a556453277b86852ca1d994ff80",
+      "workspace_binding_id": "wxb_f9319bd329ee56992cc56145461738e8"
+    }
+  },
+  "question": {
+    "request_id": "r4request_99d03ef442d1f375644199494f949b2e643c81fb2c0500af36b7e88f41e488b2",
+    "approval_key": {
+      "server_id": "srv_83c36267c49e82aa6d3036abfb3ade49",
+      "executor_id": "exe_83291175d64de43ade48fafc240f56aa",
+      "binding_id": "bind_ea397d14883d7add638f977822746230",
+      "agent_id": "hst-a",
+      "workspace_id": "wsr_3a833a556453277b86852ca1d994ff80",
+      "session_id": "ses_a31c90f2fffc7f60aa345707690d4d87",
+      "session_owner_generation": 1,
+      "canonical_request_id": "r4request_99d03ef442d1f375644199494f949b2e643c81fb2c0500af36b7e88f41e488b2",
+      "kind": "native_input"
+    },
+    "expires_at": "2026-11-17T22:41:15.776000+00:00"
+  }
+}

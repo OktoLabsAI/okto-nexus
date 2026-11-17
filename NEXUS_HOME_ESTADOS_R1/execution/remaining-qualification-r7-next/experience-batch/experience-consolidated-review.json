@@ -1,0 +1,209 @@
+{
+  "mode": "OFFLINE_REVIEW_NO_RUNTIME",
+  "status_changes": false,
+  "active_resources": false,
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "executed_predicates_passed": 44,
+  "rows": {
+    "G01": {
+      "assessment": "COMPLETE_CAPTURED",
+      "evidence": "base: entire scope GET200, exact singleton target and marker in one gesture; base operation/grant digest unchanged"
+    },
+    "G02": {
+      "assessment": "COMPLETE_CONTROLLED_QUERY_VARIANT",
+      "evidence": "history: real preview=1/total2/hasMore; exact relation GET200, blank choice; two known session options and outputs. No fabricated DTO"
+    },
+    "G03": {
+      "assessment": "PARTIAL_TITLE_PRODUCER_GAP",
+      "evidence": "CLOSED/READY/project/Updated and distinct exact outputs captured. Meaningful specific titles remain fallback Session; no invented producer"
+    },
+    "G04": {
+      "assessment": "LAZY_REGISTERED_POLICY_SUBSET",
+      "evidence": "Real per_sender effective policy, zero-session context; no runtime operation/grant change. Literal on-demand terminology must be mapped by Root, not a fabricated enum"
+    },
+    "G05": {
+      "assessment": "OFFLINE_CAPTURED_LITERAL_CANDIDATE",
+      "evidence": "All captured harness/request/delivery card text contains Project and Alpha/Beta label; equal reviewer IDs in two canonical workspaces. Root decides promotion against existing component evidence"
+    },
+    "G06": {
+      "assessment": "PARTIAL_NEGATIVE_ONLY",
+      "evidence": "Null state_since and no invented State since line asserted. Received timestamps observed but no dedicated full received/elapsed-duration oracle"
+    },
+    "I01": {
+      "assessment": "PARTIAL_BOUNDED_KEYBOARD",
+      "evidence": "Three populated columns; Tab reaches exact A, Enter opens, keyboard chooses exact A2, Tab/Enter opens native question; modal containment and named menu captured. Full actionable-name inventory/AT not qualified"
+    },
+    "I02": {
+      "assessment": "NOT_COMPLETED",
+      "evidence": "moved-close stopped before Escape/close/focus assertions; no focus-return PASS"
+    },
+    "I04": {
+      "assessment": "PARTIAL_THEME_STATES",
+      "evidence": "Light/dark preserve labels for states present in that phase. All requested Working/pending/error/unconfirmed combinations were not reasserted in both themes"
+    },
+    "I05": {
+      "assessment": "PARTIAL_360_ONLY",
+      "evidence": "Long canonical labels; three stacked columns and no page overflow; captures before question. Native200% zoom and full detail-return clause absent"
+    },
+    "F02": {
+      "assessment": "COMPLETE_CAPTURED",
+      "evidence": "Unrelated B close, received authoritative board200, same modal node and exact native-question form retained; real normal Home statuses, zero alerts"
+    },
+    "F07": {
+      "assessment": "NOT_COMPLETED",
+      "evidence": "Host proves same A moved to Needs you after sibling terminal, but corresponding browser board read and close/focus were not captured"
+    },
+    "F10": {
+      "assessment": "COMPLETE_CAPTURED",
+      "evidence": "Actual external query-port OperationalError -> external unavailable; exact native B2 session/output remains readable; restored source in finally"
+    },
+    "F12": {
+      "assessment": "PRIOR_R5_REUSE_PARTIAL",
+      "evidence": "No new decision in this batch. Use prior R5 paused two-poll/canonical202/terminal evidence only; preserve its authority-invariant limitations"
+    },
+    "F13": {
+      "assessment": "COMPLETE_CAPTURED",
+      "evidence": "Actual revision changed; Home statuses include Updates are available, normal revalidation and Home updated. No Home/modal role alerts"
+    }
+  },
+  "captured_project_text_rows": 6,
+  "revision_diagnosis": {
+    "last_captured_received_board": {
+      "revision": "d0d18b6b1985805752d0bd42b5c00d1bbf847cc2b4c86b6c19f2f985763e18dc",
+      "status": 200,
+      "ids": {
+        "active": [
+          "home_group_dfc99006a1d92b08f8146208c33012e4122ba7a5b7a1a67c266a0c61f1aa20e9",
+          "home_group_ea186ec17856964bb28f7e2af4abbbdc07fa32c1f7730c065d57594c89a77c9b"
+        ],
+        "needs_you": [
+          "home_request_att_945b0e472d29e7cbff2fd33073aafdb7d4961091b68a33f58690578c6b548239"
+        ],
+        "results": [
+          "home_delivery_canonical:result_d9c8a01e147c2daf67ee8a9488609eb47df12fc535f1ca031a5bdd22dda97fc4",
+          "home_delivery_canonical:result_e24a629e8eb1646931e3cb4ac0eb41e541316c759e1a73fac6fd6c22798db121",
+          "home_delivery_canonical:result_6339e3cdb1480ca859986534f47747f72e9327bf6f28ace72373d58ee52e2e1b"
+        ]
+      }
+    },
+    "host_terminal_revision": "a92202d6e2723905494458a13c02af5e1205dd6adaa2f9ab22b79509ca832956",
+    "host_terminal_ids": {
+      "active": [
+        "home_group_ea186ec17856964bb28f7e2af4abbbdc07fa32c1f7730c065d57594c89a77c9b"
+      ],
+      "needs_you": [
+        "home_group_dfc99006a1d92b08f8146208c33012e4122ba7a5b7a1a67c266a0c61f1aa20e9"
+      ],
+      "results": [
+        "home_delivery_canonical:result_238ddc3a7a24de2d792acd486bb0bb04234fab6130ad115e32cb9d9e5a85249e",
+        "home_delivery_canonical:result_d9c8a01e147c2daf67ee8a9488609eb47df12fc535f1ca031a5bdd22dda97fc4",
+        "home_delivery_canonical:result_e24a629e8eb1646931e3cb4ac0eb41e541316c759e1a73fac6fd6c22798db121",
+        "home_delivery_canonical:result_6339e3cdb1480ca859986534f47747f72e9327bf6f28ace72373d58ee52e2e1b"
+      ]
+    },
+    "host_A_full_block": {
+      "id": "home_group_dfc99006a1d92b08f8146208c33012e4122ba7a5b7a1a67c266a0c61f1aa20e9",
+      "connection": {
+        "server_id": "srv_83c36267c49e82aa6d3036abfb3ade49",
+        "executor_id": "exe_83291175d64de43ade48fafc240f56aa",
+        "workspace_id": "wsr_3a833a556453277b86852ca1d994ff80",
+        "binding_id": "bind_ea397d14883d7add638f977822746230",
+        "workspace_binding_id": "wxb_f9319bd329ee56992cc56145461738e8",
+        "agent_id": "hst-a",
+        "harness_id": "codex_app_server",
+        "workspace_label": "Alpha project for readable authorized collaborator activity and questions",
+        "host_label": null,
+        "agent_label": "Hst A",
+        "connect_id": "reviewer"
+      },
+      "status": {
+        "version": 1,
+        "connection": "connected",
+        "activity": "waiting_user",
+        "blocking": "full",
+        "freshness": "current",
+        "as_of": "2026-11-17T22:39:36.087Z",
+        "state_since": null,
+        "reason_code": "ALL_PENDING_WORK_BLOCKED",
+        "pending_actions": {
+          "value": 1,
+          "total_is_exact": true
+        },
+        "pending_by_kind": {
+          "question": {
+            "value": 1,
+            "total_is_exact": true
+          },
+          "approval": {
+            "value": 0,
+            "total_is_exact": true
+          },
+          "decision": {
+            "value": 0,
+            "total_is_exact": true
+          },
+          "verification": {
+            "value": 0,
+            "total_is_exact": true
+          }
+        },
+        "pending_request_ids": [
+          "att_945b0e472d29e7cbff2fd33073aafdb7d4961091b68a33f58690578c6b548239"
+        ],
+        "has_more_pending_requests": false,
+        "pending_requests_cursor": null,
+        "running_sessions": {
+          "value": 0,
+          "total_is_exact": true
+        },
+        "blocked_sessions": {
+          "value": 1,
+          "total_is_exact": true
+        },
+        "awaiting_native_confirmation": false
+      }
+    },
+    "new_delivery": {
+      "id": "home_delivery_canonical:result_238ddc3a7a24de2d792acd486bb0bb04234fab6130ad115e32cb9d9e5a85249e",
+      "target": {
+        "executor_id": "exe_83291175d64de43ade48fafc240f56aa",
+        "kind": "execution",
+        "operation_id": "op_a5cd04fcf5910d9b7e121823b516dbd9",
+        "server_id": "srv_83c36267c49e82aa6d3036abfb3ade49",
+        "session_id": "ses_9631313ab5d6f261f5e541ac18aa8cc3",
+        "workspace_id": "wsr_3a833a556453277b86852ca1d994ff80"
+      },
+      "semantics": {
+        "cleanup": "unknown",
+        "content_state": "pending",
+        "evidence": "canonical",
+        "execution_outcome": "succeeded",
+        "historical": false,
+        "scope": "turn",
+        "semantic_revision": "3b806cd113e6255c27235ad409be886712c5d0f1f46e565b2d02ed977929d674",
+        "task_state": "not_applicable",
+        "verification": "not_applicable",
+        "verification_evidence_ref": null,
+        "version": 1
+      }
+    },
+    "later_received_buffer_available": false,
+    "reason": "The Page buffer was not serialized on moved-close failure. Its variable name in printed source is not a capture. Only panel-after returned one real revision/ID record.",
+    "conclusion": "No evidence distinguishes transient host revision, missed observation, later revision, or no matching response. Do not assert the transient-projection hypothesis or a product defect."
+  },
+  "next_predicate_proposal": {
+    "execution_authorized": false,
+    "match": [
+      "real GET200 with full canonical connection tuple",
+      "A canonical ID exactly once in Needs you and absent Active",
+      "current waiting_user/full with same pending request ID",
+      "new A1 succeeded delivery target matches exact operation and session",
+      "same A2 modal node and canonical request context remain unchanged",
+      "after public close, exact same A ID or stable Home heading receives focus, never B"
+    ],
+    "revision": "Record actual revision; do not require equality to a prior potentially intermediate host digest",
+    "instrumentation": "Persist only revision/status/full tuple/column IDs/semantic status/new target IDs in every phase result, including catch; no raw CAS/inputs",
+    "authority": "Fresh own fixture, original120s lease/question limits, no renewals; publish question after setup; no provider/browser POST"
+  }
+}
