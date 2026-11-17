@@ -81,6 +81,23 @@ zero browser POST and zero page errors. It used zero runtime sessions or
 operations and ended normally with physical absence and no payload drift.
 This resolves the earlier real defect; complete keyboard/AT qualification
 remains separate.
+
+The [R8 direct-context cut](remaining-qualification-r7-next/experience-batch/experience-r8-g01-variant/qualification.json)
+also qualifies G01/G04 with the component predicates: one complete eligible
+session opens directly in one gesture, matching all12 canonical session-scope
+fields, exact URL target and output marker. A fresh registered connection with
+zero sessions opens its honest context without a session/operation, grant change
+or provider consumption. Its actual policy is per_sender with deferred opening;
+no on_demand enum was invented. The later multi-session chooser wait stopped
+that cut and remains incomplete, without an established product defect.
+
+Qualification instrumentation failures are retained separately: the first
+backend preflight lacked an explicit owned_commands helper import; its next
+attempt correctly rejected reuse of an already-approved realization when
+preparing a second connection. The first security-browser attempt searched for
+Chrome inside the sanitized temporary LOCALAPPDATA and never navigated. These
+are unqualified fixture/runner preconditions, not passing product scenarios or
+evidence of a product regression. Fresh scoped variants are reviewed before use.
 R7 prefixes and the original failing AX capture remain immutable. No Python
 behavior changed.
 

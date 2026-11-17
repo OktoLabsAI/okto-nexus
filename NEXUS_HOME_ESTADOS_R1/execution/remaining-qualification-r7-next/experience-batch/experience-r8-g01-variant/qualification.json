@@ -1,0 +1,260 @@
+{
+  "status": "PARTIAL_G01_G04_POSITIVE_G02_ORACLE_INCOMPLETE",
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "naming": {
+    "status": "PASS_NAMING_PREFLIGHT",
+    "checks": [
+      {
+        "id": "I01-header-menu-accessible-name",
+        "pass": true,
+        "actual": {
+          "attributes": {
+            "ariaLabel": "Application menu",
+            "title": null,
+            "text": ""
+          },
+          "ariaSnapshot": "- button \"Application menu\"",
+          "computedNameFromAX": "Application menu"
+        }
+      },
+      {
+        "id": "I01-header-menu-canonical-name",
+        "pass": true,
+        "actual": "Application menu"
+      },
+      {
+        "id": "I01-header-menu-expanded-state",
+        "pass": true,
+        "actual": {
+          "expandedBefore": "false",
+          "expandedOpen": "true",
+          "expandedClosed": "false",
+          "openAX": "- button \"Application menu\" [expanded]"
+        }
+      },
+      {
+        "id": "zero-browser-POST",
+        "pass": true,
+        "actual": []
+      },
+      {
+        "id": "zero-page-errors",
+        "pass": true,
+        "actual": []
+      }
+    ],
+    "posts": [],
+    "errors": []
+  },
+  "base": {
+    "status": "PASS_EXECUTED_SUBSET",
+    "phase": "base",
+    "checks": [
+      {
+        "id": "G01-real-canonical-GET-entire-scope",
+        "pass": true,
+        "actual": {
+          "status": 200,
+          "expectedScope": {
+            "server_id": "srv_3a2bb8a16d008b85c1f3639349e8849c",
+            "executor_id": "exe_e330da88941cb891208eb8be3bae6b06",
+            "binding_id": "bind_95cd6b1736aef54a13df72d0f065b4ad",
+            "agent_id": "hst-b",
+            "workspace_id": "wsr_c4227f137bd1f8895e02832b11c4277f",
+            "workspace_binding_id": "wxb_a2738dffe99b3d88e41bfd62c42abcf1",
+            "session_id": "ses_3dbdf19be664e8bd326b24abaef9609f",
+            "session_owner_generation": 1,
+            "authorization_revision": 2,
+            "configuration_revision": 2,
+            "binding_revision": 1,
+            "credential_epoch": 1
+          },
+          "actualScope": {
+            "server_id": "srv_3a2bb8a16d008b85c1f3639349e8849c",
+            "executor_id": "exe_e330da88941cb891208eb8be3bae6b06",
+            "binding_id": "bind_95cd6b1736aef54a13df72d0f065b4ad",
+            "agent_id": "hst-b",
+            "workspace_id": "wsr_c4227f137bd1f8895e02832b11c4277f",
+            "workspace_binding_id": "wxb_a2738dffe99b3d88e41bfd62c42abcf1",
+            "session_id": "ses_3dbdf19be664e8bd326b24abaef9609f",
+            "session_owner_generation": 1,
+            "authorization_revision": 2,
+            "configuration_revision": 2,
+            "binding_revision": 1,
+            "credential_epoch": 1
+          },
+          "comparedKeys": [
+            "agent_id",
+            "authorization_revision",
+            "binding_id",
+            "binding_revision",
+            "configuration_revision",
+            "credential_epoch",
+            "executor_id",
+            "server_id",
+            "session_id",
+            "session_owner_generation",
+            "workspace_binding_id",
+            "workspace_id"
+          ]
+        }
+      },
+      {
+        "id": "G01-exact-target-not-latest",
+        "pass": true,
+        "actual": {
+          "executor_id": "exe_e330da88941cb891208eb8be3bae6b06",
+          "kind": "session",
+          "server_id": "srv_3a2bb8a16d008b85c1f3639349e8849c",
+          "session_id": "ses_3dbdf19be664e8bd326b24abaef9609f",
+          "workspace_id": "wsr_c4227f137bd1f8895e02832b11c4277f"
+        }
+      },
+      {
+        "id": "G01-one-modal-one-gesture-exact-output",
+        "pass": true,
+        "actual": {
+          "marker": "HST synthetic output ses_3dbdf19be664e8bd326b24abaef9609f",
+          "chooserNotRequired": true
+        }
+      },
+      {
+        "id": "G04-registered-no-session-no-implicit-open",
+        "pass": true,
+        "actual": {
+          "policy": {
+            "hst-a": {
+              "agent_id": "hst-a",
+              "runtime_enabled": true,
+              "revision": 1,
+              "inherit_global_mcps": null,
+              "session_policy": "per_sender",
+              "broadcast_handoff_auto_claim": null,
+              "defaults": {
+                "runtime_enabled": true,
+                "session_policy": "shared",
+                "revision": 1,
+                "automatic_recovery": true,
+                "inherit_global_mcps": false,
+                "broadcast_handoff_auto_claim": false
+              },
+              "effective": {
+                "runtime_enabled": true,
+                "session_policy": "per_sender",
+                "inherit_global_mcps": false,
+                "broadcast_handoff_auto_claim": false
+              },
+              "handoff_auto_claim_rollout_enabled": false
+            },
+            "hst-b": {
+              "agent_id": "hst-b",
+              "runtime_enabled": true,
+              "revision": 1,
+              "inherit_global_mcps": null,
+              "session_policy": "per_sender",
+              "broadcast_handoff_auto_claim": null,
+              "defaults": {
+                "runtime_enabled": true,
+                "session_policy": "shared",
+                "revision": 1,
+                "automatic_recovery": true,
+                "inherit_global_mcps": false,
+                "broadcast_handoff_auto_claim": false
+              },
+              "effective": {
+                "runtime_enabled": true,
+                "session_policy": "per_sender",
+                "inherit_global_mcps": false,
+                "broadcast_handoff_auto_claim": false
+              },
+              "handoff_auto_claim_rollout_enabled": false
+            }
+          }
+        }
+      },
+      {
+        "id": "zero-browser-POST",
+        "pass": true,
+        "actual": []
+      },
+      {
+        "id": "zero-page-errors",
+        "pass": true,
+        "actual": []
+      }
+    ],
+    "posts": [],
+    "errors": [],
+    "observations": {},
+    "unasserted": [
+      "specific meaningful session titles without a canonical producer",
+      "native 200 percent zoom",
+      "screen reader speech",
+      "full keyboard coverage beyond enumerated traversal",
+      "F12 new decision (prior evidence only)"
+    ]
+  },
+  "history": {
+    "status": "INCOMPLETE",
+    "phase": "history",
+    "checks": [
+      {
+        "id": "G02-canonical-preview-query-observed",
+        "pass": true,
+        "actual": "/api/v1/home/harness-board?limit=10&preview=1&presentation_version=2"
+      },
+      {
+        "id": "G02-one-preview-not-unique",
+        "pass": true,
+        "actual": {
+          "preview": 1,
+          "total": 2,
+          "hasMore": true
+        }
+      }
+    ],
+    "posts": [],
+    "errors": [],
+    "error": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('dialog[open]').getByLabel('Choose a session', { exact: true }) to be visible\u001b[22m\n"
+  },
+  "base_authority_invariants": {
+    "operations_unchanged": true,
+    "grant_digest_unchanged": true
+  },
+  "interpretation": "G01 exact direct target, entire RuntimeSession.scope and marker passed; G04 honest no-session context passed. G02 canonical preview1/total2/hasMore passed, but UI selector was not observed. Whether the displayed snapshot remained held is unproven without the missing DOM capture; no product defect is established.",
+  "observed_target": {
+    "executor_id": "exe_e330da88941cb891208eb8be3bae6b06",
+    "kind": "session",
+    "server_id": "srv_3a2bb8a16d008b85c1f3639349e8849c",
+    "session_id": "ses_3dbdf19be664e8bd326b24abaef9609f",
+    "workspace_id": "wsr_c4227f137bd1f8895e02832b11c4277f"
+  },
+  "preflight_exact_target_match": true,
+  "not_asserted": [
+    "G02 no-auto-selection and chooser",
+    "G03 meaningful titles and remaining later phases",
+    "Cause of missing selector after canonical preview response"
+  ],
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "physical": {
+    "port": 63398,
+    "browser_profile_processes": [],
+    "listeners": [],
+    "active_resources": false
+  },
+  "payload_after": {
+    "files": 1031,
+    "mismatches": []
+  },
+  "provider_invocations": 0,
+  "browser_post_count": 0,
+  "original_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-djtuqyq4"
+}

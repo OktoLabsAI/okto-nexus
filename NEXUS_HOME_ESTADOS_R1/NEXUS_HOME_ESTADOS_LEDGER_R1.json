@@ -3160,6 +3160,15 @@
           "command_or_procedure": "Read actual header menu AX name; toggle open/closed and compare aria-expanded; audit browser POST/errors and owned cleanup",
           "result": "PASS five focal assertions: Application menu, expanded false/true/false, no POST/page errors; normal0/physical0/payload1031drift0",
           "limitations": "Resolves the real R7 defect; original negative evidence retained. Complete keyboard journey and AT speech are not qualified by this focal cut."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:35:11.724761+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-g01-variant/qualification.json",
+          "environment": "Fresh R8 installed package, own Chrome and canonical Core with inert protocol peer; source-copy/component evidence remains distinct",
+          "command_or_procedure": "G01 direct singleton browser gesture and exact canonical session read; G04 zero-session context, before/after operations and grant digest; Node uiEntryInspection direct-selection contract",
+          "result": "PASS complete eligible singleton opens in one gesture; actual canonical GET200, all12 scope fields, exact URL target and native output marker match",
+          "limitations": "Canonical inert peer, not a provider. Component direct-selection predicates ran in the404 Node suite; actual browser supplies the separate navigation layer. Later G02 chooser wait stopped the cut; its original incomplete result is retained and not promoted."
         }
       ]
     },
@@ -3557,6 +3566,15 @@
           "command_or_procedure": "Read actual header menu AX name; toggle open/closed and compare aria-expanded; audit browser POST/errors and owned cleanup",
           "result": "PASS five focal assertions: Application menu, expanded false/true/false, no POST/page errors; normal0/physical0/payload1031drift0",
           "limitations": "Resolves the real R7 defect; original negative evidence retained. Complete keyboard journey and AT speech are not qualified by this focal cut."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:35:11.724761+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-g01-variant/qualification.json",
+          "environment": "Fresh R8 installed package, own Chrome and canonical Core with inert protocol peer; source-copy/component evidence remains distinct",
+          "command_or_procedure": "G01 direct singleton browser gesture and exact canonical session read; G04 zero-session context, before/after operations and grant digest; Node uiEntryInspection direct-selection contract",
+          "result": "PASS complete eligible singleton opens in one gesture; actual canonical GET200, all12 scope fields, exact URL target and native output marker match",
+          "limitations": "Canonical inert peer, not a provider. Component direct-selection predicates ran in the404 Node suite; actual browser supplies the separate navigation layer. Later G02 chooser wait stopped the cut; its original incomplete result is retained and not promoted."
         }
       ]
     },
@@ -3787,6 +3805,15 @@
           "command_or_procedure": "Read actual header menu AX name; toggle open/closed and compare aria-expanded; audit browser POST/errors and owned cleanup",
           "result": "PASS five focal assertions: Application menu, expanded false/true/false, no POST/page errors; normal0/physical0/payload1031drift0",
           "limitations": "Resolves the real R7 defect; original negative evidence retained. Complete keyboard journey and AT speech are not qualified by this focal cut."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:35:11.724761+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-g01-variant/qualification.json",
+          "environment": "Fresh R8 installed package, own Chrome and canonical Core with inert protocol peer; source-copy/component evidence remains distinct",
+          "command_or_procedure": "G01 direct singleton browser gesture and exact canonical session read; G04 zero-session context, before/after operations and grant digest; Node uiEntryInspection direct-selection contract",
+          "result": "PASS complete eligible singleton opens in one gesture; actual canonical GET200, all12 scope fields, exact URL target and native output marker match",
+          "limitations": "Canonical inert peer, not a provider. Component direct-selection predicates ran in the404 Node suite; actual browser supplies the separate navigation layer. Later G02 chooser wait stopped the cut; its original incomplete result is retained and not promoted."
         }
       ]
     },
@@ -3954,6 +3981,15 @@
           "command_or_procedure": "Read actual header menu AX name; toggle open/closed and compare aria-expanded; audit browser POST/errors and owned cleanup",
           "result": "PASS five focal assertions: Application menu, expanded false/true/false, no POST/page errors; normal0/physical0/payload1031drift0",
           "limitations": "Resolves the real R7 defect; original negative evidence retained. Complete keyboard journey and AT speech are not qualified by this focal cut."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:35:11.724761+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-g01-variant/qualification.json",
+          "environment": "Fresh R8 installed package, own Chrome and canonical Core with inert protocol peer; source-copy/component evidence remains distinct",
+          "command_or_procedure": "G01 direct singleton browser gesture and exact canonical session read; G04 zero-session context, before/after operations and grant digest; Node uiEntryInspection direct-selection contract",
+          "result": "PASS complete eligible singleton opens in one gesture; actual canonical GET200, all12 scope fields, exact URL target and native output marker match",
+          "limitations": "Canonical inert peer, not a provider. Component direct-selection predicates ran in the404 Node suite; actual browser supplies the separate navigation layer. Later G02 chooser wait stopped the cut; its original incomplete result is retained and not promoted."
         }
       ]
     }
@@ -5908,7 +5944,7 @@
       "when": "Clicar Acompanhar no harness",
       "then": "Abrir seu acompanhamento em um gesto, sem lista intermediária vazia.",
       "level": "componente + navegador",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5918,9 +5954,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Single-complete-session model path exists; real browser one-gesture opening was not run on final UI. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:35:11.724761+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-g01-variant/qualification.json",
+          "environment": "Fresh R8 installed package, own Chrome and canonical Core with inert protocol peer; source-copy/component evidence remains distinct",
+          "command_or_procedure": "G01 direct singleton browser gesture and exact canonical session read; G04 zero-session context, before/after operations and grant digest; Node uiEntryInspection direct-selection contract",
+          "result": "PASS complete eligible singleton opens in one gesture; actual canonical GET200, all12 scope fields, exact URL target and native output marker match",
+          "limitations": "Canonical inert peer, not a provider. Component direct-selection predicates ran in the404 Node suite; actual browser supplies the separate navigation layer. Later G02 chooser wait stopped the cut; its original incomplete result is retained and not promoted."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Single-complete-session model path exists; real browser one-gesture opening was not run on final UI."
+      "execution_notes": "PASS complete eligible singleton opens in one gesture; actual canonical GET200, all12 scope fields, exact URL target and native output marker match. Canonical inert peer, not a provider. Component direct-selection predicates ran in the404 Node suite; actual browser supplies the separate navigation layer."
     },
     {
       "id": "HST-T-G02",
@@ -5974,7 +6019,7 @@
       "when": "Abrir card",
       "then": "Contexto e histórico, sem criar runtime/sessão ou consumir provedor.",
       "level": "componente + navegador",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5984,9 +6029,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "No-session context pure/SQL exists; browser on-demand card opens history without start not run. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:35:11.724810+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-g01-variant/qualification.json",
+          "environment": "Fresh R8 installed package, own Chrome and canonical Core with inert protocol peer; source-copy/component evidence remains distinct",
+          "command_or_procedure": "G01 direct singleton browser gesture and exact canonical session read; G04 zero-session context, before/after operations and grant digest; Node uiEntryInspection direct-selection contract",
+          "result": "PASS fresh registered binding with zero sessions opens honest context without creating session/operation, changing grant digest or consuming provider",
+          "limitations": "Observed actual per_sender policy with deferred native opening; no invented on_demand enum. This begins with zero sessions, not a manually closed replacement fixture. Later G02 chooser wait stopped the cut; its original incomplete result is retained and not promoted."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. No-session context pure/SQL exists; browser on-demand card opens history without start not run."
+      "execution_notes": "PASS fresh registered binding with zero sessions opens honest context without creating session/operation, changing grant digest or consuming provider. Observed actual per_sender policy with deferred native opening; no invented on_demand enum. This begins with zero sessions, not a manually closed replacement fixture."
     },
     {
       "id": "HST-T-G05",
@@ -7371,6 +7425,17 @@
       "frontend_reuse": false,
       "default_approved": false,
       "provider_calls": 0
+    },
+    "r8_context_base": {
+      "evidence": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-g01-variant/qualification.json",
+      "qualified": [
+        "HST-T-G01",
+        "HST-T-G04"
+      ],
+      "later_cut": "G02 incomplete selector observation; no cause/product defect established",
+      "provider_calls": 0,
+      "browser_posts": 0,
+      "human": "NOT_INVITED"
     }
   }
 }

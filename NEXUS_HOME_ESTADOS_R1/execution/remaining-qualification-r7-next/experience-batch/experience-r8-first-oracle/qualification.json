@@ -1,0 +1,95 @@
+{
+  "status": "INCOMPLETE_ORACLE_SINGLETON_SELECTOR",
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "naming": {
+    "status": "PASS_NAMING_PREFLIGHT",
+    "checks": [
+      {
+        "id": "I01-header-menu-accessible-name",
+        "pass": true,
+        "actual": {
+          "attributes": {
+            "ariaLabel": "Application menu",
+            "title": null,
+            "text": ""
+          },
+          "ariaSnapshot": "- button \"Application menu\"",
+          "computedNameFromAX": "Application menu"
+        }
+      },
+      {
+        "id": "I01-header-menu-canonical-name",
+        "pass": true,
+        "actual": "Application menu"
+      },
+      {
+        "id": "I01-header-menu-expanded-state",
+        "pass": true,
+        "actual": {
+          "expandedBefore": "false",
+          "expandedOpen": "true",
+          "expandedClosed": "false",
+          "openAX": "- button \"Application menu\" [expanded]"
+        }
+      },
+      {
+        "id": "zero-browser-POST",
+        "pass": true,
+        "actual": []
+      },
+      {
+        "id": "zero-page-errors",
+        "pass": true,
+        "actual": []
+      }
+    ],
+    "posts": [],
+    "errors": []
+  },
+  "base": {
+    "status": "INCOMPLETE",
+    "phase": "base",
+    "checks": [],
+    "posts": [],
+    "errors": [],
+    "error": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('dialog[open]').getByLabel('Choose a session', { exact: true }) to be visible\u001b[22m\n"
+  },
+  "base_assertions_completed": 0,
+  "interpretation": "The singleton path deliberately opens an exact session target directly. The test incorrectly waited for the multi-session selector. No product regression established.",
+  "observed_target": {
+    "executor_id": "exe_bed492c54ec6ed8c4ffef6dda3eec808",
+    "kind": "session",
+    "server_id": "srv_8f8ad500c3da342ae68eb308b72f2d21",
+    "session_id": "ses_ccba9ca6e0886e506143d554d531c896",
+    "workspace_id": "wsr_eb2732841c0f79ff494745031274c473"
+  },
+  "preflight_exact_target_match": true,
+  "not_asserted": [
+    "Viewer output after timeout",
+    "G01 full Then",
+    "G04 and all subsequent phases",
+    "No-authority-change digest comparison (not reached)"
+  ],
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "physical": {
+    "port": 51135,
+    "browser_profile_processes": [],
+    "listeners": [],
+    "active_resources": false
+  },
+  "payload_after": {
+    "files": 1031,
+    "mismatches": []
+  },
+  "provider_invocations": 0,
+  "browser_post_count": 0,
+  "original_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-mj98jp2b"
+}
