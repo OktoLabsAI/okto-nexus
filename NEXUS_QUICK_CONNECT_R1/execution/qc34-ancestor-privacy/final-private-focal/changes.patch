@@ -1,0 +1,91 @@
+--- routed/test_ancestor_privacy.py
++++ final/test_ancestor_privacy.py
+@@ -2,6 +2,8 @@
+ import hashlib
+ import json
+ import logging
++import os
++import stat
+ from pathlib import Path
+ from types import SimpleNamespace
+ 
+@@ -163,6 +165,15 @@
+     assert http_events > 0
+     no_secret(logs)
+     assert all(not trace.exists() for trace in traces)
++    from okto_nexus.adapters.outbound.harness import event_journal
++    producer = Path(event_journal.__file__).resolve()
++    producer_sha = hashlib.sha256(producer.read_bytes()).hexdigest()
++    assert producer_sha == '9262ee2742029bf4826d022fc2bd7fec54c2ff5234f193ef3261f1a306cdf274'
++    journal = c.t.deps.harness_supervisor.event_ingress.journal
++    expected_lock = (Path(c.t.deps.config.home_dir) / 'runtime-journal-v1/writer.lock').resolve()
++    assert expected_lock.is_relative_to(tmp_path.resolve())
++    audit = Path(os.environ['QC_DERIVATIVE_OUTPUT']) / 'file-read-audit.jsonl'
++    length_proofs = []
+     files, total_bytes, exclusions = [], 0, []
+     for path in sorted(tmp_path.rglob('*')):
+         if not path.is_file():
+@@ -170,7 +181,39 @@
+         if path.resolve() == input_config:
+             exclusions.append(str(path.relative_to(tmp_path)))
+             continue
+-        data = path.read_bytes()
++        def facts(p):
++            s = p.lstat()
++            return {'size': s.st_size, 'device': s.st_dev, 'inode': s.st_ino,
++                'mode': s.st_mode, 'attributes': getattr(s, 'st_file_attributes', 0)}
++        prior = facts(path)
++        attempt = {'path': str(path.relative_to(tmp_path)), 'before': prior}
++        with audit.open('a', encoding='utf-8') as stream:
++            stream.write(json.dumps({'phase': 'before_read', **attempt}) + '\n')
++        try:
++            data = path.read_bytes()
++        except PermissionError:
++            later = facts(path)
++            assert path.resolve() == expected_lock
++            assert stat.S_ISREG(prior['mode']) and not prior['attributes'] & 0x400
++            assert prior == later and prior['size'] == 1
++            assert prior['size'] < min(map(len, encoded))
++            assert type(journal) is event_journal.FileRuntimeEventJournal
++            assert journal.root.resolve() / 'writer.lock' == expected_lock
++            owner = journal._owner_file
++            assert owner is not None and not owner.closed
++            owner_stat = os.fstat(owner.fileno())
++            assert (owner_stat.st_dev, owner_stat.st_ino, owner_stat.st_size) == (prior['device'], prior['inode'], 1)
++            assert hashlib.sha256(producer.read_bytes()).hexdigest() == producer_sha
++            proof = {**attempt, 'after': later, 'outcome': 'length_proof',
++                'minimum_marker_encoded_bytes': min(map(len, encoded)),
++                'producer': str(producer), 'producer_sha256': producer_sha,
++                'same_live_owner_identity': True}
++            length_proofs.append(proof)
++            with audit.open('a', encoding='utf-8') as stream:
++                stream.write(json.dumps({'phase': 'after_read', **proof}) + '\n')
++            continue
++        with audit.open('a', encoding='utf-8') as stream:
++            stream.write(json.dumps({'phase': 'after_read', **attempt, 'outcome': 'full_read', 'bytes_read': len(data)}) + '\n')
+         total_bytes += len(data)
+         assert not any(pattern in data for pattern in encoded), str(path.relative_to(tmp_path))
+         for encoding in ('utf-8', 'utf-16-le', 'utf-16-be'):
+@@ -189,14 +232,20 @@
+                 for value in row:
+                     if isinstance(value, (str, bytes)):
+                         cells += 1
+-                        no_secret(value if isinstance(value, str) else value.decode('utf-8', errors='ignore'))
++                        
++                        if isinstance(value, str):
++                            no_secret(value)
++                        else:
++                            assert not any(pattern in value for pattern in encoded)
++                            for encoding in ('utf-8', 'utf-16-le', 'utf-16-be'):
++                                no_secret(value.decode(encoding, errors='ignore'))
+             rows += count
+             tables.append({'table': name, 'rows': count})
+     proof = {'sink': 'logging.FileHandler UTF-8 DEBUG attached to root/okto_nexus/httpx; no redaction/filter added',
+         'before_marker': True, 'after_marker': True, 'httpx_request_events': http_events,
+         'logging_bytes': log_path.stat().st_size, 'logging_sha256': hashlib.sha256(log_path.read_bytes()).hexdigest(),
+         'json_outputs_checked': len(outputs), 'plain_stdout_checked': True,
+-        'files': files, 'file_bytes_checked': total_bytes, 'only_exclusion': exclusions,
++        'length_proofs': length_proofs, 'producer_sha256': producer_sha, 'files': files, 'file_bytes_checked': total_bytes, 'only_exclusion': exclusions,
+         'all_sqlite_tables': tables, 'sqlite_table_count': len(tables), 'sqlite_rows_checked': rows,
+         'sqlite_text_cells_checked': cells, 'git_trace_files_absent': True,
+         'local_cli_home_scanned': str(c.home), 'server_home_scanned': str(c.t.deps.config.home_dir),

@@ -1,4 +1,5 @@
 """Connection catalog exposes logical workspace identity, never machine paths."""
+# ruff: noqa: F401, F811
 import json
 from test_local_realization import local_setup, publish
 
@@ -15,10 +16,11 @@ def test_catalog_paginates_other_workspaces_and_enforces_discovery_permission(lo
     response = client.get('/v1/connections/workspaces?limit=1',headers=headers['subject'])
     assert response.status_code == 200, response.text
     first = response.json()
-    assert first == dict(items=[dict(workspace_id='ws_a',display_name='Same project')],
+    assert {key: first[key] for key in ('items','has_more','next_workspace_id')} == dict(items=[dict(workspace_id='ws_a',display_name='Same project')],
                          has_more=True,next_workspace_id='ws_a')
+    assert first['version'] == 1 and first['total'] == 2 and first['total_is_exact']
     response=client.get('/v1/connections/workspaces?limit=1&after_workspace_id=ws_a',headers=headers['subject'])
-    assert response.json() == dict(items=[dict(workspace_id='ws_b',display_name='Same project')],
+    assert {key: response.json()[key] for key in ('items','has_more','next_workspace_id')} == dict(items=[dict(workspace_id='ws_b',display_name='Same project')],
                                    has_more=False,next_workspace_id=None)
     assert client.get('/v1/connections/workspaces?limit=101',headers=headers['operator']).status_code==422
     with deps.connection_factory.unit_of_work() as uow:

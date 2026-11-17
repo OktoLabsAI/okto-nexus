@@ -1,0 +1,13 @@
+{
+  "status": "CALL_FAILURE_AND_TEARDOWN_HANG_ON_BOTH_INSTALLED_VERSIONS",
+  "node": "tests/execution_r4/test_canonical_handoff_recovery.py::test_late_structured_output_cannot_complete_reclaimed_work",
+  "observed": "Both versions fail wait_result(PENDING_AUTHORIZATION) with runtime_results=None after10s before reclaim actions; subsequent TestClient.wait_shutdown hangs",
+  "classification": "Preexisting under these canonical/synthetic fixtures and sanitized installed environments; not established as QC0.3.6 regression. Underlying missing-result cause not yet proven.",
+  "http500_observed": false,
+  "containment": "Dedicated own-group CTRL_BREAK at25s for each; all tracked PID/create_time identities physically exited; no hard30s kill required",
+  "call_failure_evidence": "makereport hook persisted exact longrepr before teardown; no fabricated completed pytest/XML report",
+  "origin_limit": "Startup origin guard passed each; sessionfinish did not run due containment. Inline synthetic peer children are not real provider calls.",
+  "baseline": "Installed0.3.5 PR27, same test node and sanitized own-home environment, no source app imports or installation",
+  "candidate": "Installed0.3.6 frozen candidate01eb1ce...; no product/test edits",
+  "cleanup": "Both own bounded process trees physically absent; Temp DB/logs retained"
+}

@@ -1,0 +1,14 @@
+{
+  "observed_at": "2026-11-17T09:25:49.728688+00:00",
+  "keeper_pid": 398,
+  "birth_ticks": "7101",
+  "command_sha256": "4f19c24cb7e0369080bd9e6af21857ad11b331fa60a57da952f07bfd22a0049a",
+  "stop": "own stop-keeper file",
+  "alive": false,
+  "final_state": "absent",
+  "signal_used": false,
+  "WSL_shutdown_or_terminate_used": false,
+  "pytest_groups_remaining": [],
+  "copied_evidence_verified_before_stop": true,
+  "exact_keeper_exit_code": "Not reaped by this process; normal stop and /proc state observed separately."
+}

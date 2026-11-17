@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="5" time="75.144" timestamp="2026-11-17T02:25:53.165595-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_quick_connect_pty" name="test_real_terminal_measurement" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_pty" name="test_json_with_real_tty_never_requests_input" time="6.440" /><testcase classname="tests.quick_connect.test_quick_connect_pty" name="test_cancel_from_actual_terminal_does_not_check_or_test" time="48.006" /><testcase classname="tests.quick_connect.test_quick_connect_pty" name="test_confirm_and_resume_use_actual_terminal_without_replaying_test" time="12.288"><failure message="assert 0 == 1&#10; +  where 0 = len([])&#10; +    where [] = namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x0000027ECB468B00&gt;, selection...stapi.applications.FastAPI object at 0x0000027ECB144190&gt;, call=&lt;function terminal.&lt;locals&gt;.call at 0x0000027ECB4647C0&gt;).probes&#10;[+1 more line; full report in element text]">pty_cli = namespace(t=namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x0000027ECB468B00...ion pty_cli.&lt;locals&gt;.run at 0x0000027ECB498E00&gt;, client=&lt;starlette.testclient.TestClient object at 0x0000027ECB412C10&gt;)
+
+    def test_confirm_and_resume_use_actual_terminal_without_replaying_test(pty_cli):
+        from test_connection_setup_recovery import snapshot
+        c = pty_cli
+        print('PTY_CONFIRM_BEGIN: send y at the review prompt', flush=True)
+        assert c.run(['connect', 'codex', 'PTY Demo', '--profile', 'confirmed', '--no-chat']) == 0
+&gt;       assert len(c.t.turns) == len(c.t.probes) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+E        +    where [] = namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x0000027ECB468B00&gt;, selection...stapi.applications.FastAPI object at 0x0000027ECB144190&gt;, call=&lt;function terminal.&lt;locals&gt;.call at 0x0000027ECB4647C0&gt;).probes
+E        +      where namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x0000027ECB468B00&gt;, selection...stapi.applications.FastAPI object at 0x0000027ECB144190&gt;, call=&lt;function terminal.&lt;locals&gt;.call at 0x0000027ECB4647C0&gt;) = namespace(t=namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x0000027ECB468B00...ion pty_cli.&lt;locals&gt;.run at 0x0000027ECB498E00&gt;, client=&lt;starlette.testclient.TestClient object at 0x0000027ECB412C10&gt;).t
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\quick_connect\test_quick_connect_pty.py:91: AssertionError</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_pty" name="test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation" time="6.379"><failure message="assert 0 == 130">pty_cli = namespace(t=namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x0000027EC818C950...ion pty_cli.&lt;locals&gt;.run at 0x0000027ECAA6DEE0&gt;, client=&lt;starlette.testclient.TestClient object at 0x0000027ECA811810&gt;)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027ECB42A140&gt;
+
+    def test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation(pty_cli, monkeypatch):
+        from test_connection_setup_recovery import snapshot
+        c = pty_cli
+        active = SimpleNamespace(gate=None)
+    
+        async def pending(entry, request, candidate):
+            c.t.turns.append(request['client_intent_id'])
+            entry.update(status='running', stage='Own synthetic test waiting')
+            active.gate = asyncio.Event()
+            print('PTY_TEST_ISSUED_SEND_CTRL_C_NOW', flush=True)
+            await active.gate.wait()
+            entry.update(status='succeeded', stage='Synthetic test stopped normally')
+    
+        monkeypatch.setattr(c.t.app.state.connection_tests, 'run', pending)
+        print('PTY_INTERRUPT_BEGIN: send y; wait for issued marker before Ctrl-C', flush=True)
+        code = c.run(['connect', 'codex', 'PTY Interrupt', '--profile', 'interrupted', '--no-chat'])
+&gt;       assert code == 130
+E       assert 0 == 130
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\quick_connect\test_quick_connect_pty.py:116: AssertionError</failure></testcase></testsuite></testsuites>

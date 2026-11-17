@@ -1,0 +1,42 @@
+{
+  "label": "shared",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc33-shared-service-h7cygl8x\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc33-shared-service-h7cygl8x\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc33-shared-service-h7cygl8x\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc33-shared-service-h7cygl8x\\after\\tests\\execution_r4\\test_qc33_shared_service.py",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc33-shared-service-h7cygl8x\\shared\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc33-shared-service-h7cygl8x\\shared\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T09:35:10.421950+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 45768,
+      "parent_pid": null,
+      "birth_filetime": 134393817104245710,
+      "alive": false
+    },
+    {
+      "pid": 56916,
+      "parent_pid": 45768,
+      "birth_filetime": 134393817104503042,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T09:35:36.825333+00:00"
+}

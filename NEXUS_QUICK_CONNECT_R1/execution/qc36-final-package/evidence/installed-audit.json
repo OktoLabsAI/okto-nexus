@@ -1,0 +1,141 @@
+{
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+  "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv",
+  "isolated": true,
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+  "OS": "Windows-11-10.0.26300-SP0",
+  "sys_path": [
+    "C:\\Python313\\python313.zip",
+    "C:\\Python313\\DLLs",
+    "C:\\Python313\\Lib",
+    "C:\\Python313",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\win32",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\win32\\lib",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\pythonwin"
+  ],
+  "modules": {
+    "okto_nexus": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+      "payload_files": 733,
+      "equal_installed_wheel": true,
+      "equal_checkout_source": true
+    },
+    "nexus_connector_core": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+      "payload_files": 168,
+      "equal_installed_wheel": true,
+      "equal_checkout_source": false
+    },
+    "okto_nexus_connector": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+      "wheel_sha256": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+      "payload_files": 127,
+      "equal_installed_wheel": true,
+      "equal_checkout_source": false
+    }
+  },
+  "commands": [
+    {
+      "label": "nexus-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\okto-nexus.exe",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "connector-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\okto-nexus-connector.exe",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "codex-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\okto-nexus.exe",
+        "codex",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "claude-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\okto-nexus.exe",
+        "claude",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "pi-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\okto-nexus.exe",
+        "pi",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "badflag-json",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\okto-nexus.exe",
+        "connect",
+        "codex",
+        "--qc08-unknown-flag",
+        "--json"
+      ],
+      "exit_code": 2,
+      "expected": 2
+    }
+  ],
+  "sdist": {
+    "sha256": "b3b87f1a2e9bf1c308ad1343c8d6de62f7f698b9777e06a1ff1bf94a6d24b427",
+    "module_files_equal_wheel": 733
+  },
+  "assets": {
+    "okto_nexus/adapters/inbound/http/static/index.html": "cc0eb2e2efdf2be288ed5e3f1605f237d51fd1986fb5e1856c302f7ebb162775",
+    "okto_nexus/adapters/inbound/http/static/assets/index-CfDr8rCI.js": "03278c86e467207f48b1ef8ce88f3640fe04d27053c4041604e77b034914a7cc",
+    "okto_nexus/adapters/inbound/http/static/assets/index-Ds-MK2FR.css": "f761e905e0d9642c4c7d0f96d9e0f73404012f0d69d4fead8509e6fd9130b7b7",
+    "okto_nexus/adapters/inbound/http/static/logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+    "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-dark.svg": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+    "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-light.svg": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+    "okto_nexus/adapters/inbound/http/static/logos/oktolabs-icon.svg": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+  },
+  "badflag_json": {
+    "state": "refused",
+    "code": "INVALID_ARGUMENTS",
+    "message": "Invalid connect arguments. Use connect --help.",
+    "effects_started": false,
+    "lifecycle_requested": false
+  },
+  "versions": {
+    "okto-nexus": "0.3.6",
+    "okto-nexus-connector-core": "0.0.14",
+    "okto-nexus-connector": "0.0.13"
+  }
+}

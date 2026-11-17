@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="11.094" timestamp="2026-11-17T03:00:11.013282-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_canonical_admission_shutdown" name="test_feature_disable_preserves_unprojected_terminal_and_exclusive_claim" time="8.072"><failure message="AssertionError: {&quot;ok&quot;:false,&quot;error&quot;:{&quot;code&quot;:&quot;INVALID_SETTING&quot;,&quot;message&quot;:&quot;Setting 'feature_harness_integrations' is pinned by a CLI flag or environment variable for this run; remove the flag to manage it here.&quot;}}&#10;assert 422 == 200&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">connected_local = ((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/nexus-qc09-focal-candidate-38vfn1a9/...agent_id': 'subject', ...}, &lt;test_embedded_dispatch.connect_local.&lt;locals&gt;.NativeFactory object at 0x000001F3CA365FD0&gt;)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001F3C845A2C0&gt;
+
+    def test_feature_disable_preserves_unprojected_terminal_and_exclusive_claim(connected_local, monkeypatch):
+        from okto_nexus.bootstrap import embedded_events
+        from test_canonical_consumption import pull
+        setup, binding, native = connected_local
+        enable(setup, binding)
+        sent = send(setup, monkeypatch)
+        assert sent['ok'], sent
+        turn = current_turn(setup)
+        wait_receipt(setup, turn)
+        captured = threading.Event()
+        release = threading.Event()
+        original = embedded_events.commit_execution_events
+        def deferred(*args, **kwargs):
+            if not release.is_set():
+                captured.set()
+                raise OSError('Server projection unavailable after Core durable capture')
+            return original(*args, **kwargs)
+        monkeypatch.setattr(embedded_events, 'commit_execution_events', deferred)
+        try:
+            emit(setup, native, turn, 'Captured before disabling admission', wait_for_terminal=False)
+            assert captured.wait(10)
+            changed = setup[2].patch('/api/v1/settings', headers=setup[3]['operator'],
+                                    json={'feature_harness_integrations': False})
+&gt;           assert changed.status_code == 200, changed.text
+E           AssertionError: {"ok":false,"error":{"code":"INVALID_SETTING","message":"Setting 'feature_harness_integrations' is pinned by a CLI flag or environment variable for this run; remove the flag to manage it here."}}
+E           assert 422 == 200
+E            +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_admission_shutdown.py:84: AssertionError</failure></testcase></testsuite></testsuites>

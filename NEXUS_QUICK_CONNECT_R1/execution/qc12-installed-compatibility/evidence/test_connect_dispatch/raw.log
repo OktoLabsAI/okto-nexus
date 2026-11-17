@@ -1,0 +1,64 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 13 items
+
+after\tests\quick_connect\test_connect_dispatch.py::test_alias_calls_same_function_without_process_or_global_argv[codex] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_alias_calls_same_function_without_process_or_global_argv[codex]", "when": "setup", "outcome": "passed", "duration": 0.0005038999952375889}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_alias_calls_same_function_without_process_or_global_argv[codex]", "when": "call", "outcome": "passed", "duration": 0.0013501000357791781}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_alias_calls_same_function_without_process_or_global_argv[codex]", "when": "teardown", "outcome": "passed", "duration": 0.0002044000430032611}
+
+after\tests\quick_connect\test_connect_dispatch.py::test_alias_calls_same_function_without_process_or_global_argv[claude] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_alias_calls_same_function_without_process_or_global_argv[claude]", "when": "setup", "outcome": "passed", "duration": 0.0003491999814286828}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_alias_calls_same_function_without_process_or_global_argv[claude]", "when": "call", "outcome": "passed", "duration": 0.00018560001626610756}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_alias_calls_same_function_without_process_or_global_argv[claude]", "when": "teardown", "outcome": "passed", "duration": 0.000125700025819242}
+
+after\tests\quick_connect\test_connect_dispatch.py::test_alias_calls_same_function_without_process_or_global_argv[pi] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_alias_calls_same_function_without_process_or_global_argv[pi]", "when": "setup", "outcome": "passed", "duration": 0.00031239993404597044}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_alias_calls_same_function_without_process_or_global_argv[pi]", "when": "call", "outcome": "passed", "duration": 0.00013219995889812708}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_alias_calls_same_function_without_process_or_global_argv[pi]", "when": "teardown", "outcome": "passed", "duration": 0.00011859997175633907}
+
+after\tests\quick_connect\test_connect_dispatch.py::test_product_command_wins_and_unknown_root_never_enters_connect IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_product_command_wins_and_unknown_root_never_enters_connect", "when": "setup", "outcome": "passed", "duration": 0.00042339996434748173}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_product_command_wins_and_unknown_root_never_enters_connect", "when": "call", "outcome": "passed", "duration": 0.00033389998134225607}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_product_command_wins_and_unknown_root_never_enters_connect", "when": "teardown", "outcome": "passed", "duration": 0.00016020005568861961}
+
+after\tests\quick_connect\test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args0] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args0]", "when": "setup", "outcome": "passed", "duration": 0.0004288000054657459}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args0]", "when": "call", "outcome": "passed", "duration": 0.014624299947172403}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args0]", "when": "teardown", "outcome": "passed", "duration": 0.00022559997159987688}
+
+after\tests\quick_connect\test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args1] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args1]", "when": "setup", "outcome": "passed", "duration": 0.00048509996850043535}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args1]", "when": "call", "outcome": "passed", "duration": 0.0014717999147251248}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args1]", "when": "teardown", "outcome": "passed", "duration": 0.00017200002912431955}
+
+after\tests\quick_connect\test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args2] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args2]", "when": "setup", "outcome": "passed", "duration": 0.00047809991519898176}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args2]", "when": "call", "outcome": "passed", "duration": 0.0017709999810904264}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args2]", "when": "teardown", "outcome": "passed", "duration": 0.00019509997218847275}
+
+after\tests\quick_connect\test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args3] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args3]", "when": "setup", "outcome": "passed", "duration": 0.0005080000264570117}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args3]", "when": "call", "outcome": "passed", "duration": 0.0015702999662607908}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args3]", "when": "teardown", "outcome": "passed", "duration": 0.00017100002150982618}
+
+after\tests\quick_connect\test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args4] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args4]", "when": "setup", "outcome": "passed", "duration": 0.0004689999623224139}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args4]", "when": "call", "outcome": "passed", "duration": 0.0005356000037863851}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args4]", "when": "teardown", "outcome": "passed", "duration": 0.0001580000389367342}
+
+after\tests\quick_connect\test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args5] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args5]", "when": "setup", "outcome": "passed", "duration": 0.00043210003059357405}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args5]", "when": "call", "outcome": "passed", "duration": 0.005291900015436113}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args5]", "when": "teardown", "outcome": "passed", "duration": 0.00020140002015978098}
+
+after\tests\quick_connect\test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args6] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args6]", "when": "setup", "outcome": "passed", "duration": 0.00045469996985048056}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args6]", "when": "call", "outcome": "passed", "duration": 0.0015150000108405948}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args6]", "when": "teardown", "outcome": "passed", "duration": 0.0001759999431669712}
+
+after\tests\quick_connect\test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args7] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args7]", "when": "setup", "outcome": "passed", "duration": 0.000431500026024878}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args7]", "when": "call", "outcome": "passed", "duration": 0.0012885999167338014}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_json_grammar_errors_are_one_document_before_any_context[args7]", "when": "teardown", "outcome": "passed", "duration": 0.00016029994003474712}
+
+after\tests\quick_connect\test_connect_dispatch.py::test_help_stays_pure_when_reached_through_alias IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_help_stays_pure_when_reached_through_alias", "when": "setup", "outcome": "passed", "duration": 0.0003936999710276723}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_help_stays_pure_when_reached_through_alias", "when": "call", "outcome": "passed", "duration": 0.0018311000894755125}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_connect_dispatch.py::test_help_stays_pure_when_reached_through_alias", "when": "teardown", "outcome": "passed", "duration": 0.00016339996363967657}
+
+
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_connect_dispatch\junit.xml -
+============================= 13 passed in 0.74s ==============================

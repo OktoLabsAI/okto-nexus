@@ -1,0 +1,10 @@
+--- persistence-applied-final/tests/quick_connect/test_qc15_cli_choices.py
++++ tests/quick_connect/test_qc15_cli_choices.py
+@@ -1,7 +1,6 @@
+ """Installed CLI + canonical ASGI/SQLite; discovery/version/Test/lifecycle inert."""
+ from dataclasses import replace
+ import json
+-from pathlib import Path
+ from types import SimpleNamespace
+ import subprocess
+ 

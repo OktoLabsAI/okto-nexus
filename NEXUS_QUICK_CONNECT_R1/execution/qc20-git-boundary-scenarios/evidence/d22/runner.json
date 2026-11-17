@@ -1,0 +1,50 @@
+{
+  "label": "d22",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\after\\tests\\quick_connect\\test_quick_connect_git_boundaries.py::test_d22_cwd_and_ancestor_project_git_are_never_launched",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\d22\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T08:33:36.734638+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 19808,
+      "parent_pid": null,
+      "birth_filetime": 134393780167374634,
+      "alive": false
+    },
+    {
+      "pid": 44084,
+      "parent_pid": 19808,
+      "birth_filetime": 134393780167716016,
+      "alive": false
+    },
+    {
+      "pid": 49920,
+      "parent_pid": 44084,
+      "birth_filetime": 134393780167874446,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T08:33:50.696166+00:00"
+}

@@ -1,0 +1,13 @@
+# QC-I02: precise unsupported-Server diagnosis
+
+The installed 0.3.6 candidate has a diagnostic bug against the installed PR27 0.3.5 Server. Its `/connections/me` read succeeds, while the missing `/connections/public-ids` route returns HTTP 404 with a generic JSON `detail`. The transport converts that response to `REQUEST_REFUSED` and discards the HTTP status, so the capability helper cannot recognize the old Server. No setup, reservation, grant or provider call is required to reproduce this failure.
+
+The derivative patch adds optional `ConnectionError.http_status`, supplied from `urllib.error.HTTPError.code`. Both local and remote operator transports share that implementation; the remote `AUTH_FAILED` translation preserves the metadata. The public-ID capability helper recognizes exact 404/405. Existing legacy error-code compatibility applies only when HTTP status is absent. An explicit 401, 403 or 500 therefore cannot be disguised as an unsupported Server, even if its error code is `HTTP_ERROR`. Network failure remains `SERVER_UNREACHABLE`.
+
+`i02-derivative/changes.patch` is reviewable and has **not** been applied to repository product files or the installed candidate. It changes four product modules in a disposable full-package overlay copied from the frozen installed candidate. All dependencies still come from the qualified prefix; this derivative is not a claim that the shipped wheel contains the correction.
+
+`prepare_i02.py` prepared 732 copied module payloads. `run_i02.py` ran with the frozen candidate Python, `-I -B`, and explicitly inserted only that disposable overlay. The real old Server used its unchanged PR27 installed Python with isolated home/project/environment and an empty PATH. The run passed 22 checks: local/remote 404 and 405, malformed-body 404, authorization refusals, explicit 403/500 with legacy-looking error codes, closed-port network refusal, three status-less legacy codes, and the actual old Server. The report contains the literal argv and each sanitized result.
+
+The actual old Server produced `REQUEST_REFUSED` with `http_status=404`; the capability helper produced `CONNECT_ID_UNSUPPORTED_SERVER`. Its canonical stop and process exit both returned zero, no force was used, and the listener was absent. All 732 frozen candidate module payloads matched their pre-run hashes. No native harness, model, provider account, credential store, personal installation or existing prefix was modified.
+
+The original QC10 failure remains an antecedent. This focused derivative does not qualify a full upgrade journey or replace the active installed-suite evidence. Root can apply the patch and add repository regression tests after the CI input freeze is released.

@@ -1,0 +1,19 @@
+{
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-junction-diagnostic-_kfyvypz",
+  "command": [
+    "C:/Windows/System32/cmd.exe",
+    "/d",
+    "/c",
+    "mklink",
+    "/J",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-junction-diagnostic-_kfyvypz\\link",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-junction-diagnostic-_kfyvypz\\target"
+  ],
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "A sintaxe do comando est\u00e1 incorreta.\r\n",
+  "link_exists": false,
+  "is_junction": false,
+  "target_exists": true,
+  "data_removed": false
+}

@@ -1,0 +1,22 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc18-customize-f15275ix\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+after\tests\quick_connect\test_quick_connect_customization_output.py::test_f21_customize_real_review_creates_fresh_exact_intent[harness] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customization_output.py::test_f21_customize_real_review_creates_fresh_exact_intent[harness]", "when": "setup", "outcome": "passed", "duration": 5.450211400049739}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customization_output.py::test_f21_customize_real_review_creates_fresh_exact_intent[harness]", "when": "call", "outcome": "passed", "duration": 3.0818935999413952}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customization_output.py::test_f21_customize_real_review_creates_fresh_exact_intent[harness]", "when": "teardown", "outcome": "passed", "duration": 0.983401000034064}
+
+
+============================== warnings summary ===============================
+..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc18-customize-f15275ix\f21-harness\junit.xml -
+======================== 1 passed, 1 warning in 11.62s ========================

@@ -1,0 +1,32 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-0s9w2_3_\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Projetos\Techridy\okto_labs_okto_nexus
+configfile: C:\Users\jpamb\AppData\Local\Temp\nexus-qc09-filtered-remainder1-b9zmc7zh\wave1\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 2140 items / 2 deselected / 2138 selected
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_fragmented_pipes.py::test_core_fragmented_utf8_and_full_pipes_preserve_two_turns[claude_stream] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_concurrent_turns_charge_the_last_grant_slot_once PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_spent_grant_can_recover_its_recorded_operation_without_another_effect[rest] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_spent_grant_can_recover_its_recorded_operation_without_another_effect[mcp] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_concurrent_command_replay_keeps_one_effect_and_immutable_payload[transports0] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_concurrent_command_replay_keeps_one_effect_and_immutable_payload[transports1] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_concurrent_command_replay_keeps_one_effect_and_immutable_payload[transports2] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_revoked_grant_cannot_recover_previously_authorized_send PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_authority_change_denies_rest_and_mcp_before_native_send[revoke] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_authority_change_denies_rest_and_mcp_before_native_send[expire] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_authority_change_denies_rest_and_mcp_before_native_send[credential] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_authority_change_denies_rest_and_mcp_before_native_send[permissions] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_authority_change_denies_rest_and_mcp_before_native_send[profile] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_authority_change_denies_rest_and_mcp_before_native_send[configuration] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_changed_request_cannot_replace_canonical_command[content-rest] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_changed_request_cannot_replace_canonical_command[content-mcp] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_changed_request_cannot_replace_canonical_command[target-rest] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_changed_request_cannot_replace_canonical_command[target-mcp] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_changed_request_cannot_replace_canonical_command[owner_context-rest] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_grant_regressions.py::test_changed_request_cannot_replace_canonical_command[owner_context-mcp] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_http_producer.py::test_isolated_http_producer_keeps_native_execution_in_existing_owner[open] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_http_producer.py::test_isolated_http_producer_keeps_native_execution_in_existing_owner[message] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_io_boundaries.py::test_provider_spawn_native_and_embedding_io_are_outside_write_transactions FAILED [  1%]

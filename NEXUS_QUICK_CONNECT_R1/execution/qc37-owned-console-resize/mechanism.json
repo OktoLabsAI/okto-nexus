@@ -1,0 +1,14 @@
+{
+  "status": "PREPARED",
+  "original_test_sha256": "de71181344a41eddbc58b08bd875de0dd561f0d1b7ecc72e62abe293e36f35c3",
+  "mechanics": [
+    "Child CREATE_NEW_CONSOLE SW_HIDE, real CONIN$ plus real stdout/stderr CONOUT$, no fake isatty/input.",
+    "Controller attaches only after retained ownership/birth/image/path permit and verifies hidden same console and membership before every resize/input.",
+    "ReadConsoleOutputCharacterW reads only owned console buffer. Exact two distinct prompts gate y+Enter; no signal is sent.",
+    "At review prompt set owned window/buffer narrow50 columns; at resume prompt set wide100 columns, recording actual before/after dimensions.",
+    "Only original confirm/resume test executes; it asserts one Test/probe and unchanged canonical snapshot on resume.",
+    "PASS additionally requires real readable public ID and one-test completion marker in observed buffer.",
+    "180s supervisor deadline, fail closed to NOT_QUALIFIED, containment only exact retained own Python handles."
+  ],
+  "provider_calls": 0
+}

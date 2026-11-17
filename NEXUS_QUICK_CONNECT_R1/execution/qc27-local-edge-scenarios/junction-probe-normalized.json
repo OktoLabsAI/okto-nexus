@@ -1,0 +1,20 @@
+{
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-junction-normalized-0cebc94h",
+  "command": [
+    "C:\\Windows\\System32\\cmd.exe",
+    "/d",
+    "/c",
+    "mklink",
+    "/J",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-junction-normalized-0cebc94h\\link",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-junction-normalized-0cebc94h\\target"
+  ],
+  "exit_code": 0,
+  "stdout": "Jun\u00e7\u00e3o criada para C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-junction-normalized-0cebc94h\\link <<===>> C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-junction-normalized-0cebc94h\\target\r\n",
+  "stderr": "",
+  "link_exists": true,
+  "is_junction": true,
+  "resolved_link": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-junction-normalized-0cebc94h\\target",
+  "target_exists": true,
+  "data_removed": false
+}

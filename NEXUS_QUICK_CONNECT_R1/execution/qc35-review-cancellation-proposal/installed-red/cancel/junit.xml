@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="13.861" timestamp="2026-11-17T06:54:16.823802-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_qc35_review_cancel" name="test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state" time="9.264"><failure message="AssertionError: {'last_display_state': 'review'}&#10;assert 'review' == 'canceled'&#10;  &#10;  - canceled&#10;  + review">C:\Users\jpamb\AppData\Local\Temp\nexus-qc35-red-oiqzl4wy\after\tests\quick_connect\test_qc35_review_cancel.py:72: in test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state
+    assert final['state']=='canceled',{'last_display_state':final['state']}
+E   AssertionError: {'last_display_state': 'review'}
+E   assert 'review' == 'canceled'
+E     
+E     - canceled
+E     + review</failure></testcase></testsuite></testsuites>

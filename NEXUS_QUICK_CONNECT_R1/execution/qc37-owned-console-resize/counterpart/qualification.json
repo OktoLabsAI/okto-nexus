@@ -1,0 +1,109 @@
+{
+  "at": "2026-11-17T10:31:29.217139+00:00",
+  "status": "PASS",
+  "requirement": "QC030",
+  "tests": 1,
+  "node": "test_confirm_and_resume_use_actual_terminal_without_replaying_test",
+  "node_seconds": "8.183",
+  "original_test_sha256": "de71181344a41eddbc58b08bd875de0dd561f0d1b7ecc72e62abe293e36f35c3",
+  "original_test_modified": false,
+  "installed_wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "real_console": {
+    "stdin_tty": true,
+    "stdout_tty": true,
+    "stderr_tty": true,
+    "GetConsoleMode": true,
+    "hidden": true
+  },
+  "resizes": [
+    {
+      "before_buffer": [
+        120,
+        9001
+      ],
+      "after_buffer": [
+        50,
+        9001
+      ],
+      "after_window": [
+        0,
+        0,
+        49,
+        19
+      ]
+    },
+    {
+      "before_buffer": [
+        50,
+        9001
+      ],
+      "after_buffer": [
+        100,
+        9001
+      ],
+      "after_window": [
+        0,
+        0,
+        99,
+        19
+      ]
+    }
+  ],
+  "input_events": "Exactly two y+Enter confirmations through WriteConsoleInputW after exact prompts and fresh ownership fences.",
+  "signals_sent": 0,
+  "containment": [],
+  "console_read_bound": {
+    "used_lines_max": 400,
+    "chars_max": 200000,
+    "maximum_observed_chars": 6900
+  },
+  "observed_buffer_excerpts": [
+    "ID do Harness: codex                                                          Project: PTY",
+    "PTY_RESUME_CONFIRMED_ONE_TEST_TOTAL"
+  ],
+  "buffer_metadata": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc37-used-console-petxdyzv\\buffer-review.txt",
+      "sha256": "505433695eb4c373411689620d553c3a3638b928ea159500f34cd79c9a93fa41",
+      "bytes": 5414,
+      "raw_exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc37-used-console-petxdyzv\\buffer-resume.txt",
+      "sha256": "a11e2d027b401c7fa19157589931e8c81afc69ebd7022f1127a702edc11c6e36",
+      "bytes": 5019,
+      "raw_exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc37-used-console-petxdyzv\\buffer-final.txt",
+      "sha256": "07963c58b2c75d0b600386a3715432aa25756628273536d9f777dc664328dab0",
+      "bytes": 6930,
+      "raw_exported": false
+    }
+  ],
+  "canonical_assertions": "Original test asserts one synthetic Test and probe, successful Finish, exact profile resume, unchanged complete canonical snapshot, no replay.",
+  "all_owned_python_and_conhosts_absent": true,
+  "console_window_destroyed": true,
+  "process_absence_probe": {
+    "pids": [
+      15184,
+      17660,
+      33192,
+      38044,
+      52328,
+      56076
+    ],
+    "command": "Get-CimInstance Win32_Process -Filter \"ProcessId=15184 OR ProcessId=17660 OR ProcessId=33192 OR ProcessId=38044 OR ProcessId=52328 OR ProcessId=56076\" | Select-Object ProcessId,ParentProcessId,ExecutablePath | ConvertTo-Json",
+    "exit_code": 0,
+    "stdout_empty": true
+  },
+  "payload_files": 1027,
+  "payload_drift": [],
+  "source_drift": [],
+  "provider_calls": 0,
+  "limits": [
+    "Earlier refused full-buffer attempt remains NOT_QUALIFIED and preserved.",
+    "This qualifies one owned hidden Windows console at 50 and 100 columns, not every terminal implementation or language.",
+    "No real provider/native harness qualification, user console input, Windows settings or product/prefix changes."
+  ]
+}

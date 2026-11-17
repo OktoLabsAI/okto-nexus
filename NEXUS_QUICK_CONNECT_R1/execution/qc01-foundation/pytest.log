@@ -1,0 +1,31 @@
+........................................................................ [ 28%]
+.............F.......................................................... [ 56%]
+........................................................................ [ 84%]
+.........................................                                [100%]
+================================== FAILURES ===================================
+_________ test_help_is_immediate_and_uses_the_single_harness_registry _________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000022E6D02E350>
+capsys = <_pytest.capture.CaptureFixture object at 0x0000022E6D0C7390>
+
+    def test_help_is_immediate_and_uses_the_single_harness_registry(monkeypatch, capsys):
+        def forbidden(*args, **kwargs):
+            pytest.fail('Help cannot parse mode/service, read files or execute')
+        monkeypatch.setattr(grammar, 'parse_mode', forbidden)
+        monkeypatch.setattr(grammar, '_validate_discovery', forbidden)
+        monkeypatch.setattr(grammar, '_split_serve_args', forbidden)
+        with pytest.raises(SystemExit) as result:
+            grammar.parse_connect_args(['--harness-root', 'invalid', '--help'])
+        assert result.value.code == 0
+        output = capsys.readouterr().out
+>       assert 'Harness ID' in output
+E       AssertionError: assert 'Harness ID' in 'usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]\n                          [--new-connection]\n ...turns\n  --approve APPROVE     apply the exact displayed review revision\n  --json\n  --no-chat\n  --timeout TIMEOUT\n'
+
+tests\quick_connect\test_connect_arguments.py:145: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/quick_connect/test_connect_arguments.py::test_help_is_immediate_and_uses_the_single_harness_registry
+1 failed, 256 passed in 16.46s
+C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r3-harness-pr27-gsg_twh1\venv\Lib\site-packages\pytest_asyncio\plugin.py:306: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to "function" scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session". Set it to "fixture-scope" to keep the current behavior.
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))

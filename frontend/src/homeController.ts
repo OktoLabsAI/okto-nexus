@@ -466,7 +466,8 @@ export class HomeController {
   }
   private validHarnessConnection(c:HomeHarnessConnection,meta:HomeBoardMetadata):boolean{
     return !!c&&c.server_id===meta.server_id&&[c.executor_id,c.binding_id,c.workspace_binding_id,c.agent_id,c.workspace_id,c.harness_id]
-      .every(v=>typeof v==='string'&&!!v)&&(meta.scope.workspace_id===null||c.workspace_id===meta.scope.workspace_id);
+      .every(v=>typeof v==='string'&&!!v)&&(meta.scope.workspace_id===null||c.workspace_id===meta.scope.workspace_id)&&
+      (c.connect_id===undefined||c.connect_id===null||typeof c.connect_id==='string'&&/^[a-z][a-z0-9_-]{0,63}$/.test(c.connect_id));
   }
   private validHarnessSlice(page:HomeHarnessSlice,meta:HomeBoardMetadata,seen:Set<string>,column:HomeBoardColumn):boolean{
     if(!page||!Array.isArray(page.items)||!this.validHarnessPageShape(page))return false;

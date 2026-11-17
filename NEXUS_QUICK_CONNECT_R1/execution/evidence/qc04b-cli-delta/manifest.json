@@ -1,0 +1,55 @@
+{
+  "algorithm": "sha256",
+  "entries": [
+    {
+      "path": "tests/quick_connect/test_quick_connect_cli.py",
+      "bytes": 18635,
+      "sha256": "d3c418f9333f353223facaf971fdef2447ac852cfb02196868f45f8844e8641a"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/connect.py",
+      "bytes": 40613,
+      "sha256": "835d044787e0af87a32dfe5e76b20d5389fdb064d777ce9bf046b545772ccd20"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_customize.py",
+      "bytes": 4657,
+      "sha256": "6812aee851686fa6f860f79549e02f26708b4255546b84d5566b2d37a9db055e"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_selection.py",
+      "bytes": 18509,
+      "sha256": "e37d4fe130130596d7eddf2210c3427cfd2b6bc282e361f45c7e97af8bd27c5a"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_policy.py",
+      "bytes": 321,
+      "sha256": "60bfd526dc19a1f1ad15ce5be9fc242c9c1c05dc480b4ab1e8c3abf3401b6813"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_project.py",
+      "bytes": 12154,
+      "sha256": "b5249b8a6e29679b18776c877354ef6645a005c17a5ed8d0e815188bccb6f7de"
+    },
+    {
+      "path": "src/okto_nexus/application/terminal_connection.py",
+      "bytes": 37758,
+      "sha256": "1f607e5a3e8faeb9d87981ee3231d0e66151a2efbe60ae539effa7fe052cde3c"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc04b-cli-delta/qualification.json",
+      "bytes": 3512,
+      "sha256": "1a589c83c2b8dc037451a9be019208ccc55b8e829126cdbdf3a82c3798972edc"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc04b-cli-delta/pytest.xml",
+      "bytes": 759,
+      "sha256": "cb7862c2e8b2928a4dfc06d22e5a9fffb93d3a2ea6c77a2993e6944ca2500919"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc04b-cli-delta/antecedent17-test.py.txt",
+      "bytes": 16280,
+      "sha256": "a22bcd328e3565b5906ea79e93579d8acdfc10e9e26e94543e1f01051c8c1872"
+    }
+  ]
+}

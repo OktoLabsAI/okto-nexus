@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/tmp/nexus-qc28-xmlie7rv/uv",
+    "python",
+    "install",
+    "3.13.1",
+    "--install-dir",
+    "/tmp/nexus-qc28-xmlie7rv/python",
+    "--no-bin",
+    "--no-registry",
+    "--no-config",
+    "--cache-dir",
+    "/tmp/nexus-qc28-xmlie7rv/cache"
+  ],
+  "exit_code": 0,
+  "timeout": 180
+}

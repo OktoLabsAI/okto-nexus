@@ -1,0 +1,34 @@
+{
+  "status": "FAIL_OLD_SERVER_CAPABILITY_DIAGNOSTIC",
+  "candidate": "a0fa79129d8760eef945fc1445c2355430d5b54c",
+  "wheel_sha256": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+  "command": ["rtk", "proxy", "C:/Users/jpamb/AppData/Local/Temp/nexus-qc-r1-package-0s9w2_3_/venv/Scripts/python.exe", "-I", "-B", "-X", "utf8", "D:/Projetos/Techridy/okto_labs_okto_nexus/NEXUS_QUICK_CONNECT_R1/execution/qc10-entry-smoke/run.py"],
+  "cwd": "C:/Users/jpamb/AppData/Local/Temp/nexus-qc-r1-package-0s9w2_3_",
+  "exit_code": 1,
+  "tool_outputs": ["ccd47c", "99c6cb", "ea2ab8"],
+  "passed_checks": [
+    "Actual installed console cold --plan: service_not_ready, no database and no daemon start",
+    "Actual installed --new-connection --id --json without profile: selection_required with effects_started=false and lifecycle_requested=false",
+    "Actual installed 0.3.5 Server starts in a separate temporary home with empty PATH and no provider credentials",
+    "New installed client reads old Server /connections/me successfully"
+  ],
+  "failure": {
+    "requested": "GET /api/v1/runtime-management/connections/public-ids against installed Server 0.3.5",
+    "expected_code": "CONNECT_ID_UNSUPPORTED_SERVER",
+    "actual_code": "REQUEST_REFUSED",
+    "boundary": "LocalOperatorHTTP loses bare HTTP status while decoding the legacy unknown route; capability helper cannot recognize 404",
+    "namespace_fabricated": false,
+    "qualification": "Real local HTTP interoperability failure; not a unit-stub assumption or a provider failure"
+  },
+  "cleanup": {
+    "normal_canonical_stop": true,
+    "stop_result_file": "stop.stdout.json",
+    "reported_reason": "SHUTDOWN_COMPLETE",
+    "reported_shutdown_outcome": "drained",
+    "process_wait_and_stop_exit_assertions": "Both asserted zero in finally and passed; the only emitted exception is the original capability diagnostic assertion",
+    "forced": false,
+    "temporary_state_retained": "C:/Users/jpamb/AppData/Local/Temp/nexus-qc10-entry-smoke-enktfaee"
+  },
+  "effects": {"provider_calls": 0, "harness_processes": 0, "personal_install_changes": false},
+  "next_step": "Preserve this cut. Add precise HTTP-status capability detection in a separately reviewed derivative candidate; do not rewrite frozen inputs underneath current regression campaigns."
+}

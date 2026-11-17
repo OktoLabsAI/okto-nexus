@@ -1,0 +1,7 @@
+{
+  "nodeid": "tests/quick_connect/test_qc35_review_cancel.py::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state",
+  "when": "call",
+  "outcome": "failed",
+  "duration": 0.5640937000280246,
+  "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-red-oiqzl4wy\\after\\tests\\quick_connect\\test_qc35_review_cancel.py:72: in test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state\n    assert final['state']=='canceled',{'last_display_state':final['state']}\nE   AssertionError: {'last_display_state': 'review'}\nE   assert 'review' == 'canceled'\nE     \nE     - canceled\nE     + review"
+}

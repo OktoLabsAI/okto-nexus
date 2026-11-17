@@ -1,0 +1,55 @@
+{
+  "exit_code": 0,
+  "duration_seconds": 66.30215269996552,
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys,json;sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\src');import okto_nexus,nexus_connector_core;print(\"SOURCE_PROVENANCE \"+json.dumps({\"python\":sys.executable,\"nexus\":okto_nexus.__file__,\"core\":nexus_connector_core.__file__}),flush=True);import pytest;raise SystemExit(pytest.main([\"-q\",\"tests/quick_connect/test_quick_connect_outcome.py\",\"tests/quick_connect/test_terminal_public_connection.py\"]))"
+  ],
+  "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+  "source_before": {
+    "src/okto_nexus/application/terminal_connection.py": "2567ea3a606f79298a20a8deb360297ef361ceb4e6650c5baca9b9a094377886",
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_outcome.py": "5ebbe3dc2dc9dc0365bdd8bffbdc97be2b22fabc822076af0ab71b72db34a69a",
+    "src/okto_nexus/domain/quick_connect.py": "b45cc4c86437fa0c720205fcad078248bb5a73bb3d666f280b05097ee61b9680",
+    "src/okto_nexus/application/connection_public_ids.py": "4a22dee1dd1fd3872d994bd8a39893e3c34980a02321b248448c34b6546c7b71",
+    "src/okto_nexus/application/connection_project_context.py": "93f7dc7abcedfc2d392c322e24c6a2a5d33aad366d18ff01d580eab38b1e7d6a",
+    "src/okto_nexus/application/connection_setup.py": "dbece9d566fc3703452767f4233fc1966be10495e0e47951b6c49c9fef68a3c1",
+    "src/okto_nexus/adapters/inbound/http/runtime_v1.py": "c347dd454e84b0c1631186d140a8bd9d6821f4b9e326ac10ce248d176d8b2284",
+    "src/okto_nexus/domain/connection_public_ids.py": "e4cf0e3db027e2eb264aee564cf5798ea596618c0dc1f2f78054dc40fdb9c157",
+    "tests/execution_r4/test_terminal_connect.py": "a26a7463446f3dd45d601e778107a6f99ec2b53ab0947882a9b1ad406248a232",
+    "tests/execution_r4/test_public_connection_ids.py": "0c804b556c2a413b3162d0260a49f81c7ebb541ebb5139783c91247848a34023",
+    "tests/execution_r4/test_local_realization.py": "7e3aa0601eae2721afab4a9fbc3676c83a061aa431bfcba7d9cfdd7c1ae4a1f6",
+    "tests/execution_r4/test_local_installation_check.py": "6d05aea31ae63b19b7402df00e54f99032076614e0c4d26d3bb3f1e0c7bf40b9",
+    "tests/execution_r4/test_binding_operator.py": "d44090ef7f0b6dfaedf8f14a3a3b1cd0f11319e578ee70aa7e4e7fdb3ab933a0",
+    "tests/quick_connect/test_quick_connect_outcome.py": "c7c211912318adc0bc796b0e77a37ae44ee3f298a2e829a0f31ae1155082280f",
+    "tests/quick_connect/test_terminal_public_connection.py": "b93f5536f756fe87046876bd489e3e92bd8727a0327572cca7d635c0218403b2"
+  },
+  "source_after": {
+    "src/okto_nexus/application/terminal_connection.py": "2567ea3a606f79298a20a8deb360297ef361ceb4e6650c5baca9b9a094377886",
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_outcome.py": "5ebbe3dc2dc9dc0365bdd8bffbdc97be2b22fabc822076af0ab71b72db34a69a",
+    "src/okto_nexus/domain/quick_connect.py": "b45cc4c86437fa0c720205fcad078248bb5a73bb3d666f280b05097ee61b9680",
+    "src/okto_nexus/application/connection_public_ids.py": "4a22dee1dd1fd3872d994bd8a39893e3c34980a02321b248448c34b6546c7b71",
+    "src/okto_nexus/application/connection_project_context.py": "93f7dc7abcedfc2d392c322e24c6a2a5d33aad366d18ff01d580eab38b1e7d6a",
+    "src/okto_nexus/application/connection_setup.py": "dbece9d566fc3703452767f4233fc1966be10495e0e47951b6c49c9fef68a3c1",
+    "src/okto_nexus/adapters/inbound/http/runtime_v1.py": "c347dd454e84b0c1631186d140a8bd9d6821f4b9e326ac10ce248d176d8b2284",
+    "src/okto_nexus/domain/connection_public_ids.py": "e4cf0e3db027e2eb264aee564cf5798ea596618c0dc1f2f78054dc40fdb9c157",
+    "tests/execution_r4/test_terminal_connect.py": "a26a7463446f3dd45d601e778107a6f99ec2b53ab0947882a9b1ad406248a232",
+    "tests/execution_r4/test_public_connection_ids.py": "0c804b556c2a413b3162d0260a49f81c7ebb541ebb5139783c91247848a34023",
+    "tests/execution_r4/test_local_realization.py": "7e3aa0601eae2721afab4a9fbc3676c83a061aa431bfcba7d9cfdd7c1ae4a1f6",
+    "tests/execution_r4/test_local_installation_check.py": "6d05aea31ae63b19b7402df00e54f99032076614e0c4d26d3bb3f1e0c7bf40b9",
+    "tests/execution_r4/test_binding_operator.py": "d44090ef7f0b6dfaedf8f14a3a3b1cd0f11319e578ee70aa7e4e7fdb3ab933a0",
+    "tests/quick_connect/test_quick_connect_outcome.py": "c7c211912318adc0bc796b0e77a37ae44ee3f298a2e829a0f31ae1155082280f",
+    "tests/quick_connect/test_terminal_public_connection.py": "b93f5536f756fe87046876bd489e3e92bd8727a0327572cca7d635c0218403b2"
+  },
+  "source_drift": [],
+  "stdout_sha256": "6b14f4a3417ea72ce91ad025824da19be03f718b29d66d9db1c017dca890d6fc",
+  "stderr_sha256": "542f6c150bb142df717d1de8f6bcce724475c25317d1f5c846d0a5f04e35a0ef",
+  "limits": [
+    "Source-first Nexus with qualified PR27 Core; no prefix installation",
+    "Owned TestClient ASGI/SQLite and synthetic installation/model peers, not actual provider/native lifecycle"
+  ]
+}

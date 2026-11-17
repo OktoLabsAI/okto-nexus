@@ -1,0 +1,421 @@
+{
+  "status": "THREE_SCOPED_FOCALS_PASS_WITH_PRECONDITION_ANTECEDENTS",
+  "passed": 3,
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "cases": [
+    {
+      "node": "tests.quick_connect.test_qc25_concurrency_locks::test_g12_profile_guard_busy_fails_fast_then_same_review_recovers",
+      "evidence": "locks-final-race-antecedent/busy/junit.xml",
+      "status": "PASS"
+    },
+    {
+      "node": "tests.quick_connect.test_qc25_concurrency_locks::test_g12_catalog_lock_free_during_input_and_old_profile_released_after_customize",
+      "evidence": "locks-final-race-antecedent/input/junit.xml",
+      "status": "PASS"
+    },
+    {
+      "node": "tests.quick_connect.test_qc25_concurrency_locks::test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes",
+      "evidence": "race-final/race/junit.xml",
+      "status": "PASS"
+    }
+  ],
+  "cuts": [
+    {
+      "evidence": "initial-observer-antecedent",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5",
+      "cases": [
+        {
+          "label": "concurrency",
+          "exit_code": 1,
+          "command": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "-m",
+            "pytest",
+            "-c",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5\\pytest.ini",
+            "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5\\after",
+            "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5\\after",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5\\after\\tests\\quick_connect\\test_qc25_concurrency_locks.py",
+            "-v",
+            "-s",
+            "-x",
+            "--tb=short",
+            "-o",
+            "faulthandler_timeout=10",
+            "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5\\concurrency\\junit.xml"
+          ],
+          "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5\\concurrency\\cwd",
+          "signals": [],
+          "owned_processes_absent": true
+        }
+      ],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "repository_input_drift": []
+    },
+    {
+      "evidence": "locks-final-race-antecedent",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw",
+      "cases": [
+        {
+          "label": "race",
+          "exit_code": 1,
+          "command": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "-m",
+            "pytest",
+            "-c",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\pytest.ini",
+            "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\after",
+            "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\after",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\after\\tests\\quick_connect\\test_qc25_concurrency_locks.py::test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes",
+            "-v",
+            "-s",
+            "-x",
+            "--tb=short",
+            "-o",
+            "faulthandler_timeout=10",
+            "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\race\\junit.xml"
+          ],
+          "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\race\\cwd",
+          "signals": [],
+          "owned_processes_absent": true
+        },
+        {
+          "label": "busy",
+          "exit_code": 0,
+          "command": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "-m",
+            "pytest",
+            "-c",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\pytest.ini",
+            "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\after",
+            "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\after",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\after\\tests\\quick_connect\\test_qc25_concurrency_locks.py::test_g12_profile_guard_busy_fails_fast_then_same_review_recovers",
+            "-v",
+            "-s",
+            "-x",
+            "--tb=short",
+            "-o",
+            "faulthandler_timeout=10",
+            "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\busy\\junit.xml"
+          ],
+          "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\busy\\cwd",
+          "signals": [],
+          "owned_processes_absent": true
+        },
+        {
+          "label": "input",
+          "exit_code": 0,
+          "command": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "-m",
+            "pytest",
+            "-c",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\pytest.ini",
+            "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\after",
+            "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\after",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\after\\tests\\quick_connect\\test_qc25_concurrency_locks.py::test_g12_catalog_lock_free_during_input_and_old_profile_released_after_customize",
+            "-v",
+            "-s",
+            "-x",
+            "--tb=short",
+            "-o",
+            "faulthandler_timeout=10",
+            "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\junit.xml"
+          ],
+          "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\cwd",
+          "signals": [],
+          "owned_processes_absent": true
+        }
+      ],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "repository_input_drift": []
+    },
+    {
+      "evidence": "inventory-revision-antecedent",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk",
+      "cases": [
+        {
+          "label": "race",
+          "exit_code": 1,
+          "command": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "-m",
+            "pytest",
+            "-c",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\pytest.ini",
+            "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\after",
+            "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\after",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\after\\tests\\quick_connect\\test_qc25_concurrency_locks.py::test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes",
+            "-v",
+            "-s",
+            "-x",
+            "--tb=short",
+            "-o",
+            "faulthandler_timeout=10",
+            "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\race\\junit.xml"
+          ],
+          "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\race\\cwd",
+          "signals": [],
+          "owned_processes_absent": true
+        }
+      ],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "repository_input_drift": []
+    },
+    {
+      "evidence": "raw-inventory-route-antecedent",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-2xaguvpm",
+      "cases": [
+        {
+          "label": "race",
+          "exit_code": 1,
+          "command": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "-m",
+            "pytest",
+            "-c",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-2xaguvpm\\pytest.ini",
+            "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-2xaguvpm\\after",
+            "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-2xaguvpm\\after",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-2xaguvpm\\after\\tests\\quick_connect\\test_qc25_concurrency_locks.py::test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes",
+            "-v",
+            "-s",
+            "-x",
+            "--tb=short",
+            "-o",
+            "faulthandler_timeout=10",
+            "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-2xaguvpm\\race\\junit.xml"
+          ],
+          "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-2xaguvpm\\race\\cwd",
+          "signals": [],
+          "owned_processes_absent": true
+        }
+      ],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "repository_input_drift": []
+    },
+    {
+      "evidence": "race-final",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im",
+      "cases": [
+        {
+          "label": "race",
+          "exit_code": 0,
+          "command": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "-m",
+            "pytest",
+            "-c",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\pytest.ini",
+            "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\after",
+            "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\after",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\after\\tests\\quick_connect\\test_qc25_concurrency_locks.py::test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes",
+            "-v",
+            "-s",
+            "-x",
+            "--tb=short",
+            "-o",
+            "faulthandler_timeout=10",
+            "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\race\\junit.xml"
+          ],
+          "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\race\\cwd",
+          "signals": [],
+          "owned_processes_absent": true
+        }
+      ],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "repository_input_drift": []
+    }
+  ],
+  "scenarios": [
+    {
+      "ids": [
+        "QC-T-C18",
+        "QC-T-G15"
+      ],
+      "proposed_status": "PASS",
+      "evidence": "race-final/race/race-proof.json",
+      "scope": "Two first JSON reviews, exact approvals in threads, Barrier at actual canonical reserve, one winner Finish and one refused before second Test"
+    },
+    {
+      "ids": [
+        "QC-T-G12"
+      ],
+      "proposed_status": "PASS",
+      "evidence": [
+        "locks-final-race-antecedent/busy/busy-proof.json",
+        "locks-final-race-antecedent/input/input-lock-proof.json"
+      ],
+      "scope": "Real profile lock busy/release/recovery, real subprocess acquisition of global catalog guard during input and old profile guard after customization restart"
+    }
+  ],
+  "race": {
+    "counts": {
+      "workspaces": 1,
+      "connection_project_drafts": 1,
+      "connection_public_ids": 1,
+      "execution_bindings": 1,
+      "runtime_execution_grants": 1,
+      "connection_setup_commits": 1
+    },
+    "tests": 1,
+    "probes": 1,
+    "winner": "race-a",
+    "loser": "race-b",
+    "loser_code": "CONNECT_ID_PENDING",
+    "canonical_ref": {
+      "server_id": "srv_bc931c07d260249e0ce527fcf5030806",
+      "executor_id": "exe_a8462553bc2c6a8276fe618b94ddd518",
+      "binding_id": "bind_c000bb277e8f520b7eff5d6b75c9030d",
+      "endpoint_id": "ep_d6702d07cd51ca532e7bdb8d740d44cf",
+      "agent_id": "app-91c517d80b67",
+      "workspace_id": "wsr_310673980a172953b708565aebab6f6f",
+      "workspace_binding_id": "wxb_f246b45a787d504f3fe3b8e2dac6255a"
+    },
+    "directory_recognizes_winner": true,
+    "barrier": "Before actual canonical POST public-ids/reserve",
+    "thread_cwd_env_input_mutations": false
+  },
+  "busy": {
+    "code": "PROFILE_BUSY",
+    "elapsed_seconds": 0.03590530005749315,
+    "within_five_seconds": true,
+    "same_review_after_release": true,
+    "profile_bytes_unchanged": true,
+    "authority_tables_unchanged": true,
+    "tests": 0,
+    "probes": 0
+  },
+  "input_locks": {
+    "confirmations": 2,
+    "customized_new_review": true,
+    "tests": 0,
+    "probes": 0,
+    "subprocesses": [
+      {
+        "pid": 37516,
+        "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv",
+        "origins": {
+          "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+        },
+        "locks": [
+          {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\connection-intents\\catalog.guard",
+            "acquired": true
+          }
+        ],
+        "launcher_pid": 17524,
+        "exit_code": 0,
+        "timeout_seconds": 5
+      },
+      {
+        "pid": 26208,
+        "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv",
+        "origins": {
+          "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+        },
+        "locks": [
+          {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\connection-intents\\catalog.guard",
+            "acquired": true
+          }
+        ],
+        "launcher_pid": 49976,
+        "exit_code": 0,
+        "timeout_seconds": 5
+      },
+      {
+        "pid": 18696,
+        "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv",
+        "origins": {
+          "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+        },
+        "locks": [
+          {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\connection-intents\\catalog.guard",
+            "acquired": true
+          },
+          {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\profiles\\old.guard",
+            "acquired": true
+          }
+        ],
+        "launcher_pid": 59064,
+        "exit_code": 0,
+        "timeout_seconds": 5
+      },
+      {
+        "pid": 59384,
+        "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv",
+        "origins": {
+          "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+        },
+        "locks": [
+          {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\connection-intents\\catalog.guard",
+            "acquired": true
+          },
+          {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\profiles\\old.guard",
+            "acquired": true
+          },
+          {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\profiles\\connection-e6850701389340ac98261959.guard",
+            "acquired": true
+          }
+        ],
+        "launcher_pid": 44180,
+        "exit_code": 0,
+        "timeout_seconds": 5
+      }
+    ],
+    "old_profile_released_before_new_input": true,
+    "catalog_free_during_input": true
+  },
+  "probe_cleanup": "probe-cleanup.json",
+  "antecedents": [
+    "Initial attempt overlapped two unqualified version checks: real canonical single-flight denied one before reserve, so Barrier did not have two arrivals. stdout routing restoration also caused teardown observation error; not a completed namespace race.",
+    "Corrected observation still showed legitimate version-check single-flight. Busy and input lock tests passed in that same three-cut campaign and were not repeated.",
+    "Staggering launch until A reached reserve removed overlap but B correctly rejected stale inventory revision from its earlier review; still not the desired namespace-race given.",
+    "First precheck setup requested raw inventory through dashboard management surface, which does not expose that route; fixture failed before concurrency.",
+    "Final given performs one real authorized installation:check with inert version peer before both first reviews. Both canonical reviews explicitly require no additional version check; root remains unmapped and authority tables empty. Both real approvals can then rendezvous at reserve without bypassing version/inventory fences."
+  ],
+  "limitations": [
+    "Installed CLI function entry + canonical real ASGI HTTP/SQLite + real OS file locks/subprocesses. Service lifecycle, discovery/version/model Test peers are explicitly synthetic; no real provider/native harness/personal auth/daemon.",
+    "Version precheck1 is a legitimate separately authorized setup effect with runtime_authorized false, not a Test/admission/grant. It precedes the two reviews; the final race produces exactly one synthetic Test and one canonical Finish.",
+    "No input, cwd, env mutation in race threads. A parent-installed stdout router preserves each actual JSON document and is restored before pytest teardown.",
+    "Lock probes are installed -I-B child interpreters, stdin closed, five-second bounds, explicit three-module origins/PIDs/zero exit codes. Subsequent own-namespace process query is empty; no stop was issued.",
+    "Each cut has1027 exact package payload files and unchanged src/tests/docs pins, installed origins at session start/finish, own retained PID handles physically exited and zero termination signals.",
+    "G12 evidence remains on its exact earlier executed module bytes; only race was subsequently rerun. No claim of one combined3PASS run.",
+    "No product/normative tests/docs/ledger/Git/build/prefix mutation; raw DB/vault/keys stay outside repository."
+  ]
+}

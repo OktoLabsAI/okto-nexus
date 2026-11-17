@@ -46,6 +46,7 @@ class ConnectionContext:
     workspace_label: str | None = None
     host_label: str | None = None
     agent_label: str | None = None
+    connect_id: str | None = None
 
 
 @dataclass

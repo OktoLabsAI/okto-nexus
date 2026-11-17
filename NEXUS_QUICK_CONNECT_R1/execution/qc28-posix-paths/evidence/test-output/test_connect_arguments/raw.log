@@ -1,0 +1,303 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- /tmp/nexus-qc28-xmlie7rv/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /tmp/nexus-qc28-xmlie7rv/tests
+configfile: ../pytest.ini
+plugins: asyncio-1.5.0, anyio-4.16.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 41 items
+
+../tests/test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv0-codex-app] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv0-codex-app]", "when": "setup", "outcome": "passed", "duration": 0.0007625050000115152}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv0-codex-app]", "when": "call", "outcome": "passed", "duration": 0.0016596069999650354}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv0-codex-app]", "when": "teardown", "outcome": "passed", "duration": 0.00027902600004381384}
+
+../tests/test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv1-codex-None] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv1-codex-None]", "when": "setup", "outcome": "passed", "duration": 0.0006582639999805906}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv1-codex-None]", "when": "call", "outcome": "passed", "duration": 0.0014168569999810643}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv1-codex-None]", "when": "teardown", "outcome": "passed", "duration": 0.000133906000087336}
+
+../tests/test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv2-None-None] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv2-None-None]", "when": "setup", "outcome": "passed", "duration": 0.00048729399998137524}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv2-None-None]", "when": "call", "outcome": "passed", "duration": 0.0016285699999798453}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv2-None-None]", "when": "teardown", "outcome": "passed", "duration": 0.00019433899990417558}
+
+../tests/test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv3-codex-None] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv3-codex-None]", "when": "setup", "outcome": "passed", "duration": 0.0008196300000236079}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv3-codex-None]", "when": "call", "outcome": "passed", "duration": 0.0016015030000744446}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv3-codex-None]", "when": "teardown", "outcome": "passed", "duration": 0.00012434600000688079}
+
+../tests/test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv4-codex-Minha aplica\xe7\xe3o] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv4-codex-Minha aplica\\xe7\\xe3o]", "when": "setup", "outcome": "passed", "duration": 0.0005641590000777796}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv4-codex-Minha aplica\\xe7\\xe3o]", "when": "call", "outcome": "passed", "duration": 0.001227462999963791}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv4-codex-Minha aplica\\xe7\\xe3o]", "when": "teardown", "outcome": "passed", "duration": 0.00011272999995526334}
+
+../tests/test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv5-codex-My App] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv5-codex-My App]", "when": "setup", "outcome": "passed", "duration": 0.0005360430000109773}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv5-codex-My App]", "when": "call", "outcome": "passed", "duration": 0.0012643210000078398}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv5-codex-My App]", "when": "teardown", "outcome": "passed", "duration": 0.00018027400005848904}
+
+../tests/test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv6-claude-None] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv6-claude-None]", "when": "setup", "outcome": "passed", "duration": 0.0006624380000630481}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv6-claude-None]", "when": "call", "outcome": "passed", "duration": 0.0014762540000674562}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv6-claude-None]", "when": "teardown", "outcome": "passed", "duration": 0.0006630299999415001}
+
+../tests/test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv7-codxe-None] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv7-codxe-None]", "when": "setup", "outcome": "passed", "duration": 0.0005981929999734348}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv7-codxe-None]", "when": "call", "outcome": "passed", "duration": 0.0012472109999634995}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv7-codxe-None]", "when": "teardown", "outcome": "passed", "duration": 0.0001268070000151056}
+
+../tests/test_connect_arguments.py::test_legacy_path_flags_and_defaults_keep_their_original_types IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_legacy_path_flags_and_defaults_keep_their_original_types", "when": "setup", "outcome": "passed", "duration": 0.00013057500007107592}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_legacy_path_flags_and_defaults_keep_their_original_types", "when": "call", "outcome": "passed", "duration": 0.005486550999989959}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_legacy_path_flags_and_defaults_keep_their_original_types", "when": "teardown", "outcome": "passed", "duration": 9.493600009591319e-05}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv0] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv0]", "when": "setup", "outcome": "passed", "duration": 0.0005925330000309259}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv0]", "when": "call", "outcome": "passed", "duration": 0.001758349999931852}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv0]", "when": "teardown", "outcome": "passed", "duration": 0.00017027599994889897}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv1] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv1]", "when": "setup", "outcome": "passed", "duration": 0.0005620160000034957}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv1]", "when": "call", "outcome": "passed", "duration": 0.0016487829999505266}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv1]", "when": "teardown", "outcome": "passed", "duration": 0.00017134799998075323}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv2] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv2]", "when": "setup", "outcome": "passed", "duration": 0.0004997810000304526}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv2]", "when": "call", "outcome": "passed", "duration": 0.001560404000088056}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv2]", "when": "teardown", "outcome": "passed", "duration": 0.00019062200010466768}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv3] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv3]", "when": "setup", "outcome": "passed", "duration": 0.00045779599997786136}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv3]", "when": "call", "outcome": "passed", "duration": 0.001552721999928508}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv3]", "when": "teardown", "outcome": "passed", "duration": 0.00015754700007164502}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv4] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv4]", "when": "setup", "outcome": "passed", "duration": 0.000507123000033971}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv4]", "when": "call", "outcome": "passed", "duration": 0.0015540609999789012}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv4]", "when": "teardown", "outcome": "passed", "duration": 0.00015296399999442656}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv5] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv5]", "when": "setup", "outcome": "passed", "duration": 0.0004944139999452091}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv5]", "when": "call", "outcome": "passed", "duration": 0.0018147150000231704}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv5]", "when": "teardown", "outcome": "passed", "duration": 0.00016963199993824674}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv6] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv6]", "when": "setup", "outcome": "passed", "duration": 0.0006106450000515906}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv6]", "when": "call", "outcome": "passed", "duration": 0.00496353400001226}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv6]", "when": "teardown", "outcome": "passed", "duration": 0.00040513999999802763}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv7] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv7]", "when": "setup", "outcome": "passed", "duration": 0.0007692599999700178}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv7]", "when": "call", "outcome": "passed", "duration": 0.0025703820000444466}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv7]", "when": "teardown", "outcome": "passed", "duration": 0.00028218200009177963}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv8] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv8]", "when": "setup", "outcome": "passed", "duration": 0.0006589500000018234}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv8]", "when": "call", "outcome": "passed", "duration": 0.002289575999952831}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv8]", "when": "teardown", "outcome": "passed", "duration": 0.00018364700008532964}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv9] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv9]", "when": "setup", "outcome": "passed", "duration": 0.0005491250000204673}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv9]", "when": "call", "outcome": "passed", "duration": 0.0018566830000281698}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv9]", "when": "teardown", "outcome": "passed", "duration": 0.0001648989999694095}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv10] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv10]", "when": "setup", "outcome": "passed", "duration": 0.0005599730000085401}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv10]", "when": "call", "outcome": "passed", "duration": 0.0015951780000023064}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv10]", "when": "teardown", "outcome": "passed", "duration": 0.00016654499995638616}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv11] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv11]", "when": "setup", "outcome": "passed", "duration": 0.0004430499999443782}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv11]", "when": "call", "outcome": "passed", "duration": 0.0019809300000588337}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv11]", "when": "teardown", "outcome": "passed", "duration": 0.0002351560000306563}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv12] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv12]", "when": "setup", "outcome": "passed", "duration": 0.0007707070000151361}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv12]", "when": "call", "outcome": "passed", "duration": 0.0017753719999973328}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv12]", "when": "teardown", "outcome": "passed", "duration": 0.00017023399993831845}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv13] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv13]", "when": "setup", "outcome": "passed", "duration": 0.00047963099996195524}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv13]", "when": "call", "outcome": "passed", "duration": 0.001819362999981422}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv13]", "when": "teardown", "outcome": "passed", "duration": 0.00017318000004706846}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv14] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv14]", "when": "setup", "outcome": "passed", "duration": 0.00045863999991979654}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv14]", "when": "call", "outcome": "passed", "duration": 0.002628903000072569}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv14]", "when": "teardown", "outcome": "passed", "duration": 0.00020668500008014234}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv15] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv15]", "when": "setup", "outcome": "passed", "duration": 0.000460562999933245}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv15]", "when": "call", "outcome": "passed", "duration": 0.0018761259999564572}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv15]", "when": "teardown", "outcome": "passed", "duration": 0.00018468799999027397}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv16] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv16]", "when": "setup", "outcome": "passed", "duration": 0.00048342900004172407}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv16]", "when": "call", "outcome": "passed", "duration": 0.001696941999966839}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv16]", "when": "teardown", "outcome": "passed", "duration": 0.0001835030000165716}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv17] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv17]", "when": "setup", "outcome": "passed", "duration": 0.0005646550000619754}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv17]", "when": "call", "outcome": "passed", "duration": 0.0017323429999578366}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv17]", "when": "teardown", "outcome": "passed", "duration": 0.00018832900002507813}
+
+../tests/test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv18] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv18]", "when": "setup", "outcome": "passed", "duration": 0.0005111539999234083}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv18]", "when": "call", "outcome": "passed", "duration": 0.001710319999915555}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv18]", "when": "teardown", "outcome": "passed", "duration": 0.00020021500006350834}
+
+../tests/test_connect_arguments.py::test_service_value_arity_is_removed_before_positional_parsing IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_service_value_arity_is_removed_before_positional_parsing", "when": "setup", "outcome": "passed", "duration": 0.002043102000016006}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_service_value_arity_is_removed_before_positional_parsing", "when": "call", "outcome": "passed", "duration": 0.0016349810000519938}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_service_value_arity_is_removed_before_positional_parsing", "when": "teardown", "outcome": "passed", "duration": 0.00018487499994535028}
+
+../tests/test_connect_arguments.py::test_config_flag_set_is_derived_from_the_real_configuration_tables IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_config_flag_set_is_derived_from_the_real_configuration_tables", "when": "setup", "outcome": "passed", "duration": 0.00013385900001594564}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_config_flag_set_is_derived_from_the_real_configuration_tables", "when": "call", "outcome": "passed", "duration": 0.0901308259999496}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_config_flag_set_is_derived_from_the_real_configuration_tables", "when": "teardown", "outcome": "passed", "duration": 0.0001844100000880644}
+
+../tests/test_connect_arguments.py::test_service_validation_uses_real_parsers_without_loading_configuration IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_service_validation_uses_real_parsers_without_loading_configuration", "when": "setup", "outcome": "passed", "duration": 0.0003938270000389821}
+usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]
+                          [--new-connection]
+                          [--operator-profile OPERATOR_PROFILE]
+                          [--remote-draft REMOTE_DRAFT]
+                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]
+                          [--review-current] [--start-at-login |
+                          --no-start-at-login] [--agent AGENT |
+                          --new-agent NEW_AGENT] [--name NAME]
+                          [--client CLIENT] [--project PROJECT]
+                          [--workspace-id WORKSPACE_ID]
+                          [--binding-id BINDING_ID]
+                          [--candidate-ref CANDIDATE_REF]
+                          [--provider-home PROVIDER_HOME] [--plan]
+                          [--approve APPROVE] [--json] [--no-chat]
+                          [--timeout TIMEOUT]
+                          [harness] [project_name]
+okto-nexus connect: error: invalid service configuration arguments
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_service_validation_uses_real_parsers_without_loading_configuration", "when": "call", "outcome": "passed", "duration": 0.004380539999942812}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_service_validation_uses_real_parsers_without_loading_configuration", "when": "teardown", "outcome": "passed", "duration": 0.0001895909999802825}
+
+../tests/test_connect_arguments.py::test_discovery_paths_are_structural_and_never_resolved_or_probed IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_paths_are_structural_and_never_resolved_or_probed", "when": "setup", "outcome": "passed", "duration": 0.0017164659999480136}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_paths_are_structural_and_never_resolved_or_probed", "when": "call", "outcome": "passed", "duration": 0.002558927999984917}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_paths_are_structural_and_never_resolved_or_probed", "when": "teardown", "outcome": "passed", "duration": 0.00020539399997687724}
+
+../tests/test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail0] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail0]", "when": "setup", "outcome": "passed", "duration": 0.0003051050000522082}
+usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]
+                          [--new-connection]
+                          [--operator-profile OPERATOR_PROFILE]
+                          [--remote-draft REMOTE_DRAFT]
+                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]
+                          [--review-current] [--start-at-login |
+                          --no-start-at-login] [--agent AGENT |
+                          --new-agent NEW_AGENT] [--name NAME]
+                          [--client CLIENT] [--project PROJECT]
+                          [--workspace-id WORKSPACE_ID]
+                          [--binding-id BINDING_ID]
+                          [--candidate-ref CANDIDATE_REF]
+                          [--provider-home PROVIDER_HOME] [--plan]
+                          [--approve APPROVE] [--json] [--no-chat]
+                          [--timeout TIMEOUT]
+                          [harness] [project_name]
+okto-nexus connect: error: discovery paths must be absolute local paths
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail0]", "when": "call", "outcome": "passed", "duration": 0.0017774359999975786}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail0]", "when": "teardown", "outcome": "passed", "duration": 0.00011176300006354722}
+
+../tests/test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail1] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail1]", "when": "setup", "outcome": "passed", "duration": 0.000289300999952502}
+usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]
+                          [--new-connection]
+                          [--operator-profile OPERATOR_PROFILE]
+                          [--remote-draft REMOTE_DRAFT]
+                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]
+                          [--review-current] [--start-at-login |
+                          --no-start-at-login] [--agent AGENT |
+                          --new-agent NEW_AGENT] [--name NAME]
+                          [--client CLIENT] [--project PROJECT]
+                          [--workspace-id WORKSPACE_ID]
+                          [--binding-id BINDING_ID]
+                          [--candidate-ref CANDIDATE_REF]
+                          [--provider-home PROVIDER_HOME] [--plan]
+                          [--approve APPROVE] [--json] [--no-chat]
+                          [--timeout TIMEOUT]
+                          [harness] [project_name]
+okto-nexus connect: error: Pi discovery requires both --pi-install-root and --pi-node
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail1]", "when": "call", "outcome": "passed", "duration": 0.001790692999975363}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail1]", "when": "teardown", "outcome": "passed", "duration": 0.00011305099997116486}
+
+../tests/test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail2] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail2]", "when": "setup", "outcome": "passed", "duration": 0.00031677799995577516}
+usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]
+                          [--new-connection]
+                          [--operator-profile OPERATOR_PROFILE]
+                          [--remote-draft REMOTE_DRAFT]
+                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]
+                          [--review-current] [--start-at-login |
+                          --no-start-at-login] [--agent AGENT |
+                          --new-agent NEW_AGENT] [--name NAME]
+                          [--client CLIENT] [--project PROJECT]
+                          [--workspace-id WORKSPACE_ID]
+                          [--binding-id BINDING_ID]
+                          [--candidate-ref CANDIDATE_REF]
+                          [--provider-home PROVIDER_HOME] [--plan]
+                          [--approve APPROVE] [--json] [--no-chat]
+                          [--timeout TIMEOUT]
+                          [harness] [project_name]
+okto-nexus connect: error: Pi discovery requires both --pi-install-root and --pi-node
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail2]", "when": "call", "outcome": "passed", "duration": 0.0015805229999159565}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail2]", "when": "teardown", "outcome": "passed", "duration": 0.00010815300004196615}
+
+../tests/test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail3] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail3]", "when": "setup", "outcome": "passed", "duration": 0.00026967999997395964}
+usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]
+                          [--new-connection]
+                          [--operator-profile OPERATOR_PROFILE]
+                          [--remote-draft REMOTE_DRAFT]
+                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]
+                          [--review-current] [--start-at-login |
+                          --no-start-at-login] [--agent AGENT |
+                          --new-agent NEW_AGENT] [--name NAME]
+                          [--client CLIENT] [--project PROJECT]
+                          [--workspace-id WORKSPACE_ID]
+                          [--binding-id BINDING_ID]
+                          [--candidate-ref CANDIDATE_REF]
+                          [--provider-home PROVIDER_HOME] [--plan]
+                          [--approve APPROVE] [--json] [--no-chat]
+                          [--timeout TIMEOUT]
+                          [harness] [project_name]
+okto-nexus connect: error: a discovery option was repeated: --pi-node
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail3]", "when": "call", "outcome": "passed", "duration": 0.0027385289999983797}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail3]", "when": "teardown", "outcome": "passed", "duration": 0.00011040699996556214}
+
+../tests/test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail4] IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail4]", "when": "setup", "outcome": "passed", "duration": 0.00030524499993589416}
+usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]
+                          [--new-connection]
+                          [--operator-profile OPERATOR_PROFILE]
+                          [--remote-draft REMOTE_DRAFT]
+                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]
+                          [--review-current] [--start-at-login |
+                          --no-start-at-login] [--agent AGENT |
+                          --new-agent NEW_AGENT] [--name NAME]
+                          [--client CLIENT] [--project PROJECT]
+                          [--workspace-id WORKSPACE_ID]
+                          [--binding-id BINDING_ID]
+                          [--candidate-ref CANDIDATE_REF]
+                          [--provider-home PROVIDER_HOME] [--plan]
+                          [--approve APPROVE] [--json] [--no-chat]
+                          [--timeout TIMEOUT]
+                          [harness] [project_name]
+okto-nexus connect: error: discovery paths must be absolute local paths
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail4]", "when": "call", "outcome": "passed", "duration": 0.0017440469999883135}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail4]", "when": "teardown", "outcome": "passed", "duration": 0.00010745999998107436}
+
+../tests/test_connect_arguments.py::test_discovery_roots_deduplicate_lexically_with_the_existing_32_root_budget IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_roots_deduplicate_lexically_with_the_existing_32_root_budget", "when": "setup", "outcome": "passed", "duration": 0.0010143009999410424}
+usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]
+                          [--new-connection]
+                          [--operator-profile OPERATOR_PROFILE]
+                          [--remote-draft REMOTE_DRAFT]
+                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]
+                          [--review-current] [--start-at-login |
+                          --no-start-at-login] [--agent AGENT |
+                          --new-agent NEW_AGENT] [--name NAME]
+                          [--client CLIENT] [--project PROJECT]
+                          [--workspace-id WORKSPACE_ID]
+                          [--binding-id BINDING_ID]
+                          [--candidate-ref CANDIDATE_REF]
+                          [--provider-home PROVIDER_HOME] [--plan]
+                          [--approve APPROVE] [--json] [--no-chat]
+                          [--timeout TIMEOUT]
+                          [harness] [project_name]
+okto-nexus connect: error: at most 32 discovery roots are allowed
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_roots_deduplicate_lexically_with_the_existing_32_root_budget", "when": "call", "outcome": "passed", "duration": 0.004857902000026115}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_discovery_roots_deduplicate_lexically_with_the_existing_32_root_budget", "when": "teardown", "outcome": "passed", "duration": 0.0001688149999381494}
+
+../tests/test_connect_arguments.py::test_managed_mode_is_consumed_but_participant_options_are_left_for_its_real_parser IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_managed_mode_is_consumed_but_participant_options_are_left_for_its_real_parser", "when": "setup", "outcome": "passed", "duration": 0.0001262170000018159}
+usage: okto-nexus connect [--mode {managed,participant}]
+okto-nexus connect: error: QUICK_CONNECT_MODE_UNSUPPORTED: use the legacy participant options without Quick Connect positionals or --id
+usage: okto-nexus connect [--mode {managed,participant}]
+okto-nexus connect: error: QUICK_CONNECT_MODE_UNSUPPORTED: use the legacy participant options without Quick Connect positionals or --id
+usage: okto-nexus connect [--mode {managed,participant}]
+okto-nexus connect: error: QUICK_CONNECT_MODE_UNSUPPORTED: use the legacy participant options without Quick Connect positionals or --id
+usage: okto-nexus connect [--mode {managed,participant}]
+okto-nexus connect: error: QUICK_CONNECT_MODE_UNSUPPORTED: use the legacy participant options without Quick Connect positionals or --id
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_managed_mode_is_consumed_but_participant_options_are_left_for_its_real_parser", "when": "call", "outcome": "passed", "duration": 0.0017707970000628848}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_managed_mode_is_consumed_but_participant_options_are_left_for_its_real_parser", "when": "teardown", "outcome": "passed", "duration": 8.572199999434815e-05}
+
+../tests/test_connect_arguments.py::test_help_is_immediate_and_uses_the_single_harness_registry IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_help_is_immediate_and_uses_the_single_harness_registry", "when": "setup", "outcome": "passed", "duration": 0.0009283589999995456}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_help_is_immediate_and_uses_the_single_harness_registry", "when": "call", "outcome": "passed", "duration": 0.0025849120000884795}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_help_is_immediate_and_uses_the_single_harness_registry", "when": "teardown", "outcome": "passed", "duration": 0.00017906899995523418}
+
+../tests/test_connect_arguments.py::test_parsing_never_reads_stdin_environment_files_or_runs_processes IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_parsing_never_reads_stdin_environment_files_or_runs_processes", "when": "setup", "outcome": "passed", "duration": 0.0002200430000129927}
+IMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_parsing_never_reads_stdin_environment_files_or_runs_processes", "when": "call", "outcome": "passed", "duration": 0.0013776710000001913}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_connect_arguments.py::test_parsing_never_reads_stdin_environment_files_or_runs_processes", "when": "teardown", "outcome": "passed", "duration": 0.00014731099997788988}
+
+
+- generated xml file: /tmp/nexus-qc28-xmlie7rv/test-output/test_connect_arguments/junit.xml -
+============================== 41 passed in 0.40s ==============================

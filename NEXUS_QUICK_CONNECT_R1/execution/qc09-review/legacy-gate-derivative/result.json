@@ -1,0 +1,198 @@
+{
+  "cases": [
+    {
+      "label": "gate-matrix",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-c",
+        "import sys,runpy;sys.path.insert(0,'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc-legacy-gate-_3qjupdh\\\\overlay');runpy.run_module('pytest',run_name='__main__')",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after\\tests\\test_gate_derivative.py",
+        "-v",
+        "-s",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\gate-matrix\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh",
+      "deadline_seconds": 60,
+      "started_at": "2026-11-17T07:24:17.738125+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 58140,
+          "parent_pid": null,
+          "birth_filetime": 134393738577404804,
+          "alive": false
+        },
+        {
+          "pid": 58256,
+          "parent_pid": 58140,
+          "birth_filetime": 134393738577677770,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T07:24:22.262870+00:00"
+    },
+    {
+      "label": "canonical-shortcut",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-c",
+        "import sys,runpy;sys.path.insert(0,'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc-legacy-gate-_3qjupdh\\\\overlay');runpy.run_module('pytest',run_name='__main__')",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after\\tests\\execution_r4\\test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut",
+        "-v",
+        "-s",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\canonical-shortcut\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh",
+      "deadline_seconds": 60,
+      "started_at": "2026-11-17T07:24:22.266649+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 45012,
+          "parent_pid": null,
+          "birth_filetime": 134393738622688588,
+          "alive": false
+        },
+        {
+          "pid": 52280,
+          "parent_pid": 45012,
+          "birth_filetime": 134393738622949814,
+          "alive": false
+        },
+        {
+          "pid": 57892,
+          "parent_pid": 52280,
+          "birth_filetime": 134393738623081370,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T07:24:43.806772+00:00"
+    },
+    {
+      "label": "single-harness",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-c",
+        "import sys,runpy;sys.path.insert(0,'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc-legacy-gate-_3qjupdh\\\\overlay');runpy.run_module('pytest',run_name='__main__')",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after\\tests\\execution_r4\\test_terminal_multi_harness.py::test_single_observed_harness_needs_no_profile_and_existing_connection_offers_all_intents",
+        "-v",
+        "-s",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\single-harness\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh",
+      "deadline_seconds": 60,
+      "started_at": "2026-11-17T07:24:43.811204+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 34040,
+          "parent_pid": null,
+          "birth_filetime": 134393738838133375,
+          "alive": false
+        },
+        {
+          "pid": 40540,
+          "parent_pid": 34040,
+          "birth_filetime": 134393738838401124,
+          "alive": false
+        },
+        {
+          "pid": 59360,
+          "parent_pid": 40540,
+          "birth_filetime": 134393738838576883,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T07:25:00.614714+00:00"
+    },
+    {
+      "label": "two-harnesses",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-c",
+        "import sys,runpy;sys.path.insert(0,'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc-legacy-gate-_3qjupdh\\\\overlay');runpy.run_module('pytest',run_name='__main__')",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\after\\tests\\execution_r4\\test_terminal_multi_harness.py::test_two_distinct_harnesses_share_project_keep_custom_a_and_recover_b_finish",
+        "-v",
+        "-s",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh\\two-harnesses\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-legacy-gate-_3qjupdh",
+      "deadline_seconds": 60,
+      "started_at": "2026-11-17T07:25:00.620146+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 54168,
+          "parent_pid": null,
+          "birth_filetime": 134393739006230786,
+          "alive": false
+        },
+        {
+          "pid": 19228,
+          "parent_pid": 54168,
+          "birth_filetime": 134393739006520785,
+          "alive": false
+        },
+        {
+          "pid": 54280,
+          "parent_pid": 19228,
+          "birth_filetime": 134393739006663778,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T07:25:18.415524+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

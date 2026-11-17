@@ -1,0 +1,38 @@
+{
+  "classification": "INTERRUPTED_HUNG_TEARDOWN_NOT_FULL_PASS",
+  "original_output": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-installed-shard2-q6llt5bl\\qc09-installed-shard2",
+  "original_raw_campaign_status": "FAIL",
+  "raw_exit_code": 4294967295,
+  "input_drift": [],
+  "observed_pass_lines": 145,
+  "observed_failure_lines": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_agent_recovery_isolation.py::test_restart_isolates_fault_and_accepts_new_local_and_remote_agents[unavailable] FAILED [  0%]",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_canonical_capture_admission.py::test_core_quota_compacts_acked_events_and_preserves_server_history FAILED [  2%]",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_canonical_native_approvals.py::test_real_native_approval_is_durable_operator_only_and_idempotent[approve-item/commandExecution/requestApproval] FAILED [  6%]"
+  ],
+  "failure_cause_status": "UNKNOWN_FAIL: original plugin did not capture longrepr before stuck teardown",
+  "stack": "hung-pytest-stack.txt",
+  "stack_observation": "MainThread result\u2192anyio.from_thread.call\u2192starlette.testclient.wait_shutdown\u2192local_setup fixture teardown",
+  "stall_seconds_observed_minimum": 242.4,
+  "ownership_snapshot": "tree-before-stop.json",
+  "actual_pytest_pid": 50912,
+  "actual_executable": "C:/Python313/python.exe",
+  "parent_pid": 26692,
+  "owned_ci_tree_pids": [
+    46568,
+    59776,
+    26692,
+    50912
+  ],
+  "dedicated_process_group": false,
+  "action": "Stop only exact PID50912 after matching parent/executable/creationtime/commandhash; no group broadcast",
+  "stop_tool": "154ee4",
+  "stop_immediate_check": "reported exit unconfirmed; did not repeat stop",
+  "eventual_physical_absence_tool": "e4c925",
+  "eventual_owned_tree_present": 0,
+  "launcher_finished_tool": "eb550c",
+  "finish_origin_report_present": false,
+  "junit_present": false,
+  "paid_or_real_harness_children_observed": 0,
+  "notes": "Original files/DB/logs preserved; raw helper FAIL retained, never relabelled PASS. Separate derivative accounts exact already reported nodes; frozen app/test/CI inputs unchanged."
+}

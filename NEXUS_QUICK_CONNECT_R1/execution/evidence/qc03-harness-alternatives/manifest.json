@@ -1,0 +1,55 @@
+{
+  "algorithm": "sha256",
+  "entries": [
+    {
+      "path": "tests/quick_connect/test_harness_alternatives.py",
+      "bytes": 5810,
+      "sha256": "83f4144136cc8212d3e61fa604e46f7883bb61b69e5da79ee5bd522d8c106e42"
+    },
+    {
+      "path": "tests/quick_connect/test_quick_connect_cli.py",
+      "bytes": 20492,
+      "sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_selection.py",
+      "bytes": 20157,
+      "sha256": "2f9cea0231027b27a8ac4a1bda7b57c0c628bbc40692041da564359446db05ed"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/quick_connect_project.py",
+      "bytes": 12154,
+      "sha256": "b5249b8a6e29679b18776c877354ef6645a005c17a5ed8d0e815188bccb6f7de"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/connect.py",
+      "bytes": 40613,
+      "sha256": "835d044787e0af87a32dfe5e76b20d5389fdb064d777ce9bf046b545772ccd20"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-harness-alternatives/qualification.json",
+      "bytes": 4147,
+      "sha256": "427e668fa60aeabd8cf59f2fe56a69377549ad8d3bb5b9b10820a5ca4e763636"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-harness-alternatives/pytest-red.xml",
+      "bytes": 18171,
+      "sha256": "846cadedb562b20cd69e71ca049ee2ee09645832bfe7a5de17e8857f3b02969b"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-harness-alternatives/pytest-green.xml",
+      "bytes": 1850,
+      "sha256": "04d3d198e8b7ec2dd285dc2e99dc8c748c201d30acd8bea455e7a15f3c36e472"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-harness-alternatives/pytest-cli.xml",
+      "bytes": 625,
+      "sha256": "4ff51cb47f6f45395148f89872a679c46865eb48769e6ae989988fe3163453c3"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-harness-alternatives/antecedent-cli-delta-test.py.txt",
+      "bytes": 18635,
+      "sha256": "d3c418f9333f353223facaf971fdef2447ac852cfb02196868f45f8844e8641a"
+    }
+  ]
+}

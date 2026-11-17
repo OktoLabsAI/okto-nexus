@@ -1,0 +1,269 @@
+{
+  "version": 1,
+  "at": "2026-11-17T08:25:08.804797+00:00",
+  "status": "PASS_SCOPED",
+  "final_counts": {
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0
+  },
+  "cuts": [
+    {
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-wr5oy5i4",
+      "evidence": "antecedent-1",
+      "cases": [
+        {
+          "name": "test_bare_two_families_explicit_choice_or_cancel[2-claude]",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "FAIL"
+        }
+      ],
+      "exit_code": 1,
+      "signals": [],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "repository_input_drift": [],
+      "owned_processes_absent": true
+    },
+    {
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-4emspy8s",
+      "evidence": "antecedent-2",
+      "cases": [
+        {
+          "name": "test_bare_two_families_explicit_choice_or_cancel[2-claude]",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "PASS"
+        },
+        {
+          "name": "test_bare_two_families_explicit_choice_or_cancel[c-None]",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "FAIL"
+        }
+      ],
+      "exit_code": 1,
+      "signals": [],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "repository_input_drift": [],
+      "owned_processes_absent": true
+    },
+    {
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-p_i2pnii",
+      "evidence": "antecedent-3",
+      "cases": [
+        {
+          "name": "test_bare_two_families_explicit_choice_or_cancel[2-claude]",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "PASS"
+        },
+        {
+          "name": "test_bare_two_families_explicit_choice_or_cancel[c-None]",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "PASS"
+        },
+        {
+          "name": "test_bare_two_families_noninteractive_requires_choice",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "PASS"
+        },
+        {
+          "name": "test_two_candidates_explicitly_choose_second_exact_ref",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "FAIL"
+        }
+      ],
+      "exit_code": 1,
+      "signals": [],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "repository_input_drift": [],
+      "owned_processes_absent": true
+    },
+    {
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-b1fr23qm",
+      "evidence": "final",
+      "cases": [
+        {
+          "name": "test_bare_two_families_explicit_choice_or_cancel[2-claude]",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "PASS"
+        },
+        {
+          "name": "test_bare_two_families_explicit_choice_or_cancel[c-None]",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "PASS"
+        },
+        {
+          "name": "test_bare_two_families_noninteractive_requires_choice",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "PASS"
+        },
+        {
+          "name": "test_two_candidates_explicitly_choose_second_exact_ref",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "PASS"
+        },
+        {
+          "name": "test_two_candidates_noninteractive_refuses_first_default",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "PASS"
+        },
+        {
+          "name": "test_unknown_shell_like_token_never_spawns",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "PASS"
+        },
+        {
+          "name": "test_mixed_case_harness_is_normalized",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "PASS"
+        },
+        {
+          "name": "test_stale_canonical_publication_is_unconfirmed_not_missing",
+          "classname": "tests.execution_r4.test_qc15_cli_choices",
+          "status": "PASS"
+        }
+      ],
+      "exit_code": 0,
+      "signals": [],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "repository_input_drift": [],
+      "owned_processes_absent": true
+    }
+  ],
+  "installed_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "command_evidence": "final/runner.json",
+  "exact_nodes": "final/junit.xml",
+  "source_pins": "final/source-pins.json",
+  "payload_files": 1027,
+  "payload_after": "payload-after.json",
+  "origins": [
+    "final/origins.json",
+    "final/origins-finish.json"
+  ],
+  "scenarios": [
+    {
+      "id": "QC-T-A03",
+      "proposed_status": "PASS",
+      "nodes": [
+        "test_bare_two_families_explicit_choice_or_cancel[2-claude]",
+        "test_bare_two_families_explicit_choice_or_cancel[c-None]"
+      ],
+      "proof": "Bare main.main connect without positional/provider-home reaches authorized two-family wizard, explicit choose/cancel, no argument error.",
+      "literal": {
+        "title": "Sem posicionais",
+        "given": "argv connect",
+        "when": "normalizar",
+        "then": "wizard autorizado, sem erro de argumentos",
+        "layers": null
+      }
+    },
+    {
+      "id": "QC-T-B03",
+      "proposed_status": "PASS",
+      "nodes": [
+        "test_bare_two_families_explicit_choice_or_cancel[2-claude]",
+        "test_bare_two_families_explicit_choice_or_cancel[c-None]",
+        "test_bare_two_families_noninteractive_requires_choice"
+      ],
+      "proof": "Both observed families listed with cancellation; explicit second choice reaches Claude-only home requirement; cancel and noninteractive refusal have no effects.",
+      "literal": {
+        "title": "Enum ausente",
+        "given": "vários harnesses detectados",
+        "when": "connect em TTY",
+        "then": "lista útil com cancelar",
+        "layers": null
+      }
+    },
+    {
+      "id": "QC-T-B05",
+      "proposed_status": "PASS",
+      "nodes": [
+        "test_stale_canonical_publication_is_unconfirmed_not_missing"
+      ],
+      "proof": "Production publisher accepts actual stale-age publication; runtime-options remains populated but STALE; CLI refuses INVENTORY_UNCONFIRMED, no fallback/missing interpretation.",
+      "literal": {
+        "title": "Inventário stale",
+        "given": "fonte não atual",
+        "when": "listar",
+        "then": "não classificar como ausência ou selecionar outro",
+        "layers": null
+      }
+    },
+    {
+      "id": "QC-T-B06",
+      "proposed_status": "PASS",
+      "nodes": [
+        "test_two_candidates_explicitly_choose_second_exact_ref",
+        "test_two_candidates_noninteractive_refuses_first_default"
+      ],
+      "proof": "Two actual candidate refs from runtime-options; answer2 survives selection and canonical review_request.candidate_ref; JSON refuses default-first.",
+      "literal": {
+        "title": "Dois candidatos",
+        "given": "duas instalações Codex",
+        "when": "resolver harness",
+        "then": "escolha de candidate_ref; não usar primeira por ordem",
+        "layers": null
+      }
+    },
+    {
+      "id": "QC-T-B07",
+      "proposed_status": "NOT_RUN",
+      "nodes": [],
+      "proof": "No new canonical method-denial mutation/API established for this fixture. Existing helper/unit policy proof is antecedent; no ACL or DTO denial invented.",
+      "literal": {
+        "title": "Permissão negada",
+        "given": "candidato detectado mas can_configure false",
+        "when": "selecionar",
+        "then": "bloqueio de política mantido",
+        "layers": null
+      }
+    },
+    {
+      "id": "QC-T-B08",
+      "proposed_status": "PASS",
+      "nodes": [
+        "test_unknown_shell_like_token_never_spawns"
+      ],
+      "proof": "Shell-like unsupported token enters installed CLI with Popen forbidden, returns authorized alternatives/CLIENT_SELECTION_REQUIRED; no Test/version or canonical table effects.",
+      "literal": {
+        "title": "Texto malicioso",
+        "given": "token com separadores shell",
+        "when": "resolver",
+        "then": "nunca executar o texto como comando",
+        "layers": null
+      }
+    },
+    {
+      "id": "QC-T-B09",
+      "proposed_status": "PASS",
+      "nodes": [
+        "test_mixed_case_harness_is_normalized"
+      ],
+      "proof": "CoDeX normalizes through installed main to codex selection and codex_app_server canonical review.",
+      "literal": {
+        "title": "Case normalizado",
+        "given": "connect CoDeX",
+        "when": "resolver",
+        "then": "codex pela regra pública, sem fuzzy silencioso",
+        "layers": null
+      }
+    }
+  ],
+  "antecedent_oracles": [
+    "Cut1 wrongly expected bare Claude review without required provider-home; actual explicit second choice safely refused PROVIDER_HOME_REQUIRED.",
+    "Cut2 wrongly expected cancellation exit3/code; current installed contract returns exit0/state canceled.",
+    "Cut3 looked for candidate_ref inside configuration; actual canonical SetupRequest keeps candidate_ref at its top level."
+  ],
+  "limitations": [
+    "Actual installed Python CLI function entry + real ASGI HTTP/SQLite; interactive stdin/isatty are fixture-controlled, not native Windows PTY.",
+    "Service lifecycle, discovery candidates, build/version checks and provider Test peers are explicitly inert/synthetic; no provider or credential access.",
+    "Bare explicit Claude choice proves picker and safe required-home refusal, not full Claude onboarding/Test/Finish.",
+    "B07 remains NOT_RUN in this increment; no novel authorization rule was added.",
+    "No repository product/tests/docs/ledger/Git/build/install changes. Old source/R3 qualifications are not requalified.",
+    "Raw owned homes/SQLite/vault/keys remain only in Temp; reviewable logs/scripts/XML/pins copied. All retained child PID creation handles report physical exit.",
+    "Transient installed Python caches are not wheel payloads; all1027 covered package files matched their three wheels before/after each cut and at curation."
+  ]
+}

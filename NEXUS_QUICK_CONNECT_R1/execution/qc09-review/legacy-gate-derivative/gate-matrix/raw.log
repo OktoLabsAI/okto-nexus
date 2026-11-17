@@ -1,0 +1,140 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-0s9w2_3_\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc-legacy-gate-_3qjupdh\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 32 items
+
+after\tests\test_gate_derivative.py::test_public_entry[flags0] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags0]", "when": "setup", "outcome": "passed", "duration": 0.0007369999075308442}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags0]", "when": "call", "outcome": "passed", "duration": 0.002115999930538237}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags0]", "when": "teardown", "outcome": "passed", "duration": 0.0002340000355616212}
+
+after\tests\test_gate_derivative.py::test_public_entry[flags1] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags1]", "when": "setup", "outcome": "passed", "duration": 0.0003701000241562724}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags1]", "when": "call", "outcome": "passed", "duration": 0.002068700036033988}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags1]", "when": "teardown", "outcome": "passed", "duration": 0.00015259999781847}
+
+after\tests\test_gate_derivative.py::test_public_entry[flags2] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags2]", "when": "setup", "outcome": "passed", "duration": 0.0003226000117138028}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags2]", "when": "call", "outcome": "passed", "duration": 0.0012666999828070402}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags2]", "when": "teardown", "outcome": "passed", "duration": 0.00012620002962648869}
+
+after\tests\test_gate_derivative.py::test_public_entry[flags3] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags3]", "when": "setup", "outcome": "passed", "duration": 0.00029960006941109896}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags3]", "when": "call", "outcome": "passed", "duration": 0.001222899998538196}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags3]", "when": "teardown", "outcome": "passed", "duration": 0.0001362999901175499}
+
+after\tests\test_gate_derivative.py::test_public_entry[flags4] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags4]", "when": "setup", "outcome": "passed", "duration": 0.0002949000336229801}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags4]", "when": "call", "outcome": "passed", "duration": 0.0013832999393343925}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags4]", "when": "teardown", "outcome": "passed", "duration": 0.00020159990526735783}
+
+after\tests\test_gate_derivative.py::test_public_entry[flags5] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags5]", "when": "setup", "outcome": "passed", "duration": 0.00045419996604323387}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags5]", "when": "call", "outcome": "passed", "duration": 0.0013918000040575862}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags5]", "when": "teardown", "outcome": "passed", "duration": 0.00014279992319643497}
+
+after\tests\test_gate_derivative.py::test_public_entry[flags6] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags6]", "when": "setup", "outcome": "passed", "duration": 0.0004512000596150756}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags6]", "when": "call", "outcome": "passed", "duration": 0.001727700000628829}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags6]", "when": "teardown", "outcome": "passed", "duration": 0.00017030001617968082}
+
+after\tests\test_gate_derivative.py::test_public_entry[flags7] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags7]", "when": "setup", "outcome": "passed", "duration": 0.00031240005046129227}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags7]", "when": "call", "outcome": "passed", "duration": 0.0014967999886721373}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags7]", "when": "teardown", "outcome": "passed", "duration": 0.00016769999638199806}
+
+after\tests\test_gate_derivative.py::test_public_entry[flags8] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags8]", "when": "setup", "outcome": "passed", "duration": 0.00030590000096708536}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags8]", "when": "call", "outcome": "passed", "duration": 0.0013049000408500433}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags8]", "when": "teardown", "outcome": "passed", "duration": 0.00016600009985268116}
+
+after\tests\test_gate_derivative.py::test_public_entry[flags9] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags9]", "when": "setup", "outcome": "passed", "duration": 0.0004141000099480152}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags9]", "when": "call", "outcome": "passed", "duration": 0.0017086999723687768}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags9]", "when": "teardown", "outcome": "passed", "duration": 0.00014489993918687105}
+
+after\tests\test_gate_derivative.py::test_public_entry[flags10] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags10]", "when": "setup", "outcome": "passed", "duration": 0.00035660003777593374}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags10]", "when": "call", "outcome": "passed", "duration": 0.0017809000564739108}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags10]", "when": "teardown", "outcome": "passed", "duration": 0.00017450004816055298}
+
+after\tests\test_gate_derivative.py::test_public_entry[flags11] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags11]", "when": "setup", "outcome": "passed", "duration": 0.00041009997949004173}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags11]", "when": "call", "outcome": "passed", "duration": 0.0017494999337941408}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_public_entry[flags11]", "when": "teardown", "outcome": "passed", "duration": 0.00017819995991885662}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags0] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags0]", "when": "setup", "outcome": "passed", "duration": 0.0003928000805899501}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags0]", "when": "call", "outcome": "passed", "duration": 0.0018314000917598605}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags0]", "when": "teardown", "outcome": "passed", "duration": 0.00011450005695223808}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags1] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags1]", "when": "setup", "outcome": "passed", "duration": 0.00042129994835704565}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags1]", "when": "call", "outcome": "passed", "duration": 0.0017324000364169478}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags1]", "when": "teardown", "outcome": "passed", "duration": 0.00016529997810721397}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags2] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags2]", "when": "setup", "outcome": "passed", "duration": 0.0003762999549508095}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags2]", "when": "call", "outcome": "passed", "duration": 0.00168009998742491}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags2]", "when": "teardown", "outcome": "passed", "duration": 0.00020340003538876772}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags3] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags3]", "when": "setup", "outcome": "passed", "duration": 0.00043720006942749023}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags3]", "when": "call", "outcome": "passed", "duration": 0.0018148000817745924}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags3]", "when": "teardown", "outcome": "passed", "duration": 0.00010810000821948051}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags4] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags4]", "when": "setup", "outcome": "passed", "duration": 0.00033409998286515474}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags4]", "when": "call", "outcome": "passed", "duration": 0.0013157000066712499}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags4]", "when": "teardown", "outcome": "passed", "duration": 0.00012830004561692476}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags5] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags5]", "when": "setup", "outcome": "passed", "duration": 0.000399199896492064}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags5]", "when": "call", "outcome": "passed", "duration": 0.0017154000233858824}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags5]", "when": "teardown", "outcome": "passed", "duration": 0.00015839992556720972}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags6] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags6]", "when": "setup", "outcome": "passed", "duration": 0.0003893000539392233}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags6]", "when": "call", "outcome": "passed", "duration": 0.0017529999604448676}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags6]", "when": "teardown", "outcome": "passed", "duration": 0.00016589998267591}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags7] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags7]", "when": "setup", "outcome": "passed", "duration": 0.0004181999247521162}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags7]", "when": "call", "outcome": "passed", "duration": 0.0017047999426722527}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags7]", "when": "teardown", "outcome": "passed", "duration": 0.00014969997573643923}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags8] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags8]", "when": "setup", "outcome": "passed", "duration": 0.000422299955971539}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags8]", "when": "call", "outcome": "passed", "duration": 0.0015717999776825309}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags8]", "when": "teardown", "outcome": "passed", "duration": 0.00015189999248832464}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags9] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags9]", "when": "setup", "outcome": "passed", "duration": 0.00029419991187751293}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags9]", "when": "call", "outcome": "passed", "duration": 0.0017256999853998423}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags9]", "when": "teardown", "outcome": "passed", "duration": 0.0001849000109359622}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags10] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags10]", "when": "setup", "outcome": "passed", "duration": 0.0004243999719619751}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags10]", "when": "call", "outcome": "passed", "duration": 0.001786000095307827}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags10]", "when": "teardown", "outcome": "passed", "duration": 0.00016980001237243414}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags11] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags11]", "when": "setup", "outcome": "passed", "duration": 0.000394499977119267}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags11]", "when": "call", "outcome": "passed", "duration": 0.002239900059066713}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags11]", "when": "teardown", "outcome": "passed", "duration": 0.00015820004045963287}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags12] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags12]", "when": "setup", "outcome": "passed", "duration": 0.00041750003583729267}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags12]", "when": "call", "outcome": "passed", "duration": 0.0018369000172242522}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags12]", "when": "teardown", "outcome": "passed", "duration": 0.00017500005196779966}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags13] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags13]", "when": "setup", "outcome": "passed", "duration": 0.0004160000244155526}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags13]", "when": "call", "outcome": "passed", "duration": 0.0015811000484973192}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags13]", "when": "teardown", "outcome": "passed", "duration": 0.00018039997667074203}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags14] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags14]", "when": "setup", "outcome": "passed", "duration": 0.00043320003896951675}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags14]", "when": "call", "outcome": "passed", "duration": 0.001921399962157011}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags14]", "when": "teardown", "outcome": "passed", "duration": 0.00018390000332146883}
+
+after\tests\test_gate_derivative.py::test_legacy_selectors[flags15] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags15]", "when": "setup", "outcome": "passed", "duration": 0.0004645000444725156}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags15]", "when": "call", "outcome": "passed", "duration": 0.001627999939955771}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_legacy_selectors[flags15]", "when": "teardown", "outcome": "passed", "duration": 0.00012949993833899498}
+
+after\tests\test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags0-False] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags0-False]", "when": "setup", "outcome": "passed", "duration": 0.016474399948492646}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags0-False]", "when": "call", "outcome": "passed", "duration": 0.20443949999753386}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags0-False]", "when": "teardown", "outcome": "passed", "duration": 0.00040749995969235897}
+
+after\tests\test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags1-False] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags1-False]", "when": "setup", "outcome": "passed", "duration": 0.0038926999550312757}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags1-False]", "when": "call", "outcome": "passed", "duration": 0.11706590000540018}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags1-False]", "when": "teardown", "outcome": "passed", "duration": 0.0002527999458834529}
+
+after\tests\test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags2-False] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags2-False]", "when": "setup", "outcome": "passed", "duration": 0.0034051999682560563}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags2-False]", "when": "call", "outcome": "passed", "duration": 0.08748650003690273}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags2-False]", "when": "teardown", "outcome": "passed", "duration": 0.0003706000279635191}
+
+after\tests\test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags3-True] IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags3-True]", "when": "setup", "outcome": "passed", "duration": 0.003036299953237176}
+IMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags3-True]", "when": "call", "outcome": "passed", "duration": 0.1213520000455901}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/test_gate_derivative.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags3-True]", "when": "teardown", "outcome": "passed", "duration": 0.00038159999530762434}
+
+
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc-legacy-gate-_3qjupdh\gate-matrix\junit.xml -
+============================= 32 passed in 2.23s ==============================

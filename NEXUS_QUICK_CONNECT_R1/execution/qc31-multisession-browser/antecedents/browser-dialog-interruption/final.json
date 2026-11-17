@@ -1,0 +1,497 @@
+{
+  "status": "CLEANUP_OBSERVED",
+  "sessions": [
+    {
+      "label": "A",
+      "session_id": "ses_5718867a2ac2a93c72127e49eec8707a",
+      "text": "QC31 Alpha retained exact output",
+      "closed": true
+    },
+    {
+      "label": "B",
+      "session_id": "ses_91b1366e5a7abfd4622fe89616ceb7f7",
+      "text": "QC31 Beta current exact output",
+      "closed": true
+    }
+  ],
+  "peers": [
+    {
+      "pid": 40656,
+      "exit_code": 1
+    },
+    {
+      "pid": 22144,
+      "exit_code": 1
+    }
+  ],
+  "unknown": false,
+  "elapsed": 32.52780150005128,
+  "provider_invocations": 0,
+  "browser_requests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-CfDr8rCI.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Ds-MK2FR.css",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-icon.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/local/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/local/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/publish-health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/bindings/bind_8005863328f6834371bc90e8350ece38",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-CfDr8rCI.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Ds-MK2FR.css",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_5718867a2ac2a93c72127e49eec8707a",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_5718867a2ac2a93c72127e49eec8707a/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_5718867a2ac2a93c72127e49eec8707a",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/bindings/bind_8005863328f6834371bc90e8350ece38",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_5718867a2ac2a93c72127e49eec8707a/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Ds-MK2FR.css",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-CfDr8rCI.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/bindings/bind_8005863328f6834371bc90e8350ece38",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7",
+      "status": 200
+    }
+  ]
+}

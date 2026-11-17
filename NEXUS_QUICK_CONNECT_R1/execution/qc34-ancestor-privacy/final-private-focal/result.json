@@ -1,0 +1,58 @@
+{
+  "cases": [
+    {
+      "label": "final-private-focal",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-private-final-ttxkkkri\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-private-final-ttxkkkri\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-private-final-ttxkkkri\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-private-final-ttxkkkri\\after\\tests\\quick_connect\\test_ancestor_privacy.py::test_d25_private_origin_does_not_enter_observed_logs_json_homes_or_sqlite",
+        "-v",
+        "-s",
+        "-x",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=0",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-private-final-ttxkkkri\\final-private-focal\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-private-final-ttxkkkri\\separate-cwd",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T10:23:56.406240+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 22956,
+          "parent_pid": null,
+          "birth_filetime": 134393846364085843,
+          "alive": false
+        },
+        {
+          "pid": 43500,
+          "parent_pid": 22956,
+          "birth_filetime": 134393846364366546,
+          "alive": false
+        },
+        {
+          "pid": 38452,
+          "parent_pid": 43500,
+          "birth_filetime": 134393846364546926,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T10:24:11.688502+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

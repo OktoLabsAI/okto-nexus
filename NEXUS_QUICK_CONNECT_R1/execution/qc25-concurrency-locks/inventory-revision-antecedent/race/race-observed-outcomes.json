@@ -1,0 +1,55 @@
+{
+  "results": [
+    {
+      "code": -1,
+      "exception_type": "BrokenBarrierError"
+    },
+    {
+      "profile": "race-b",
+      "code": 3,
+      "value": {
+        "state": "refused",
+        "code": "CONFLICT",
+        "message": "Refresh the local inventory and select the installation again.",
+        "possible_effect": false,
+        "effects_started": null,
+        "canonical_metadata_revalidation_requested": true,
+        "profile": "race-b",
+        "quick_connect": {
+          "status": "failed",
+          "version": 1,
+          "proposed_connect_id": "codex",
+          "connect_id_status": "proposed",
+          "harness": "codex",
+          "project_name": "App",
+          "project_name_source": "explicit",
+          "name_discovery": {
+            "status": "not_needed",
+            "reason": "explicit_name"
+          },
+          "execution_location": "local",
+          "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+          "cwd_resolution": {
+            "invocation_cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "root_explicit": false,
+            "source": "cwd"
+          },
+          "resume_argv": [
+            "okto-nexus",
+            "connect",
+            "codex",
+            "App",
+            "--id",
+            "codex",
+            "--home",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\quick-cli-home",
+            "--profile",
+            "race-b"
+          ]
+        }
+      }
+    }
+  ],
+  "canonical_barrier_arrivals": 1
+}

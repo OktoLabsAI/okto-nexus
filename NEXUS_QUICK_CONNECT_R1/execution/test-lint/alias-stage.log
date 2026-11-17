@@ -1,0 +1,652 @@
+Traceback (most recent call last):
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\test-lint\apply.py", line 93, in <module>
+    assert after_lint.returncode == 0, after_lint.stdout
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: [
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 80,
+      "row": 18
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_qc15_policy_denial.py",
+    "fix": null,
+    "location": {
+      "column": 77,
+      "row": 18
+    },
+    "message": "Redefinition of unused `cli` from line 7: `cli` redefined here",
+    "noqa_row": 18,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 96,
+      "row": 12
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_qc24_namespace_executor_http.py",
+    "fix": null,
+    "location": {
+      "column": 85,
+      "row": 12
+    },
+    "message": "Redefinition of unused `local_setup` from line 6: `local_setup` redefined here",
+    "noqa_row": 12,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 85,
+      "row": 38
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_qc24_namespace_http.py",
+    "fix": null,
+    "location": {
+      "column": 74,
+      "row": 38
+    },
+    "message": "Redefinition of unused `local_setup` from line 9: `local_setup` redefined here",
+    "noqa_row": 38,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 99,
+      "row": 71
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_qc24_namespace_http.py",
+    "fix": null,
+    "location": {
+      "column": 88,
+      "row": 71
+    },
+    "message": "Redefinition of unused `local_setup` from line 9: `local_setup` redefined here",
+    "noqa_row": 71,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 94,
+      "row": 46
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_qc25_concurrency_locks.py",
+    "fix": null,
+    "location": {
+      "column": 85,
+      "row": 46
+    },
+    "message": "Redefinition of unused `quick_cli` from line 14: `quick_cli` redefined here",
+    "noqa_row": 46,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 79,
+      "row": 129
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_qc25_concurrency_locks.py",
+    "fix": null,
+    "location": {
+      "column": 70,
+      "row": 129
+    },
+    "message": "Redefinition of unused `quick_cli` from line 14: `quick_cli` redefined here",
+    "noqa_row": 129,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 95,
+      "row": 170
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_qc25_concurrency_locks.py",
+    "fix": null,
+    "location": {
+      "column": 86,
+      "row": 170
+    },
+    "message": "Redefinition of unused `quick_cli` from line 14: `quick_cli` redefined here",
+    "noqa_row": 170,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 97,
+      "row": 26
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_qc30_remote_public_id.py",
+    "fix": null,
+    "location": {
+      "column": 91,
+      "row": 26
+    },
+    "message": "Redefinition of unused `remote` from line 8: `remote` redefined here",
+    "noqa_row": 26,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 92,
+      "row": 22
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_qc35_review_cancel.py",
+    "fix": null,
+    "location": {
+      "column": 83,
+      "row": 22
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 22,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 87,
+      "row": 9
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_autoid_race.py",
+    "fix": null,
+    "location": {
+      "column": 78,
+      "row": 9
+    },
+    "message": "Redefinition of unused `quick_cli` from line 4: `quick_cli` redefined here",
+    "noqa_row": 9,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 72,
+      "row": 15
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_customization_output.py",
+    "fix": null,
+    "location": {
+      "column": 63,
+      "row": 15
+    },
+    "message": "Redefinition of unused `quick_cli` from line 8: `quick_cli` redefined here",
+    "noqa_row": 15,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 87,
+      "row": 15
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_customization_output.py",
+    "fix": null,
+    "location": {
+      "column": 74,
+      "row": 15
+    },
+    "message": "Redefinition of unused `two_harnesses` from line 10: `two_harnesses` redefined here",
+    "noqa_row": 15,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 97,
+      "row": 15
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_customization_output.py",
+    "fix": null,
+    "location": {
+      "column": 89,
+      "row": 15
+    },
+    "message": "Redefinition of unused `checking` from line 8: `checking` redefined here",
+    "noqa_row": 15,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 84,
+      "row": 90
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_customization_output.py",
+    "fix": null,
+    "location": {
+      "column": 75,
+      "row": 90
+    },
+    "message": "Redefinition of unused `quick_cli` from line 8: `quick_cli` redefined here",
+    "noqa_row": 90,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 75,
+      "row": 38
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_extra_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 66,
+      "row": 38
+    },
+    "message": "Redefinition of unused `quick_cli` from line 14: `quick_cli` redefined here",
+    "noqa_row": 38,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 87,
+      "row": 63
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_extra_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 78,
+      "row": 63
+    },
+    "message": "Redefinition of unused `quick_cli` from line 14: `quick_cli` redefined here",
+    "noqa_row": 63,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 74,
+      "row": 83
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_extra_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 65,
+      "row": 83
+    },
+    "message": "Redefinition of unused `quick_cli` from line 14: `quick_cli` redefined here",
+    "noqa_row": 83,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 83,
+      "row": 108
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_extra_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 74,
+      "row": 108
+    },
+    "message": "Redefinition of unused `quick_cli` from line 14: `quick_cli` redefined here",
+    "noqa_row": 108,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 67,
+      "row": 72
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+    "fix": null,
+    "location": {
+      "column": 58,
+      "row": 72
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 72,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 64,
+      "row": 81
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+    "fix": null,
+    "location": {
+      "column": 55,
+      "row": 81
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 81,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 61,
+      "row": 90
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+    "fix": null,
+    "location": {
+      "column": 52,
+      "row": 90
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 90,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 65,
+      "row": 116
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+    "fix": null,
+    "location": {
+      "column": 56,
+      "row": 116
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 116,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 73,
+      "row": 125
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+    "fix": null,
+    "location": {
+      "column": 64,
+      "row": 125
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 125,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 53,
+      "row": 134
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+    "fix": null,
+    "location": {
+      "column": 44,
+      "row": 134
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 134,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 83,
+      "row": 148
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+    "fix": null,
+    "location": {
+      "column": 74,
+      "row": 148
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 148,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 71,
+      "row": 161
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+    "fix": null,
+    "location": {
+      "column": 62,
+      "row": 161
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 161,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 79,
+      "row": 14
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_git_recovery.py",
+    "fix": null,
+    "location": {
+      "column": 70,
+      "row": 14
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 14,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 76,
+      "row": 30
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_project_directory_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 67,
+      "row": 30
+    },
+    "message": "Redefinition of unused `quick_cli` from line 8: `quick_cli` redefined here",
+    "noqa_row": 30,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 69,
+      "row": 58
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_project_directory_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 60,
+      "row": 58
+    },
+    "message": "Redefinition of unused `quick_cli` from line 8: `quick_cli` redefined here",
+    "noqa_row": 58,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 85,
+      "row": 71
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_project_directory_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 76,
+      "row": 71
+    },
+    "message": "Redefinition of unused `quick_cli` from line 8: `quick_cli` redefined here",
+    "noqa_row": 71,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 80,
+      "row": 83
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_project_directory_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 71,
+      "row": 83
+    },
+    "message": "Redefinition of unused `quick_cli` from line 8: `quick_cli` redefined here",
+    "noqa_row": 83,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 88,
+      "row": 113
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_project_directory_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 79,
+      "row": 113
+    },
+    "message": "Redefinition of unused `quick_cli` from line 8: `quick_cli` redefined here",
+    "noqa_row": 113,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 74,
+      "row": 38
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_project_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 65,
+      "row": 38
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 38,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 80,
+      "row": 61
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_project_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 71,
+      "row": 61
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 61,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 78,
+      "row": 83
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_project_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 69,
+      "row": 83
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 83,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 76,
+      "row": 134
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_project_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 67,
+      "row": 134
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 134,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 80,
+      "row": 146
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_project_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 71,
+      "row": 146
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 146,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  },
+  {
+    "cell": null,
+    "code": "F811",
+    "end_location": {
+      "column": 73,
+      "row": 158
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_project_scenarios.py",
+    "fix": null,
+    "location": {
+      "column": 64,
+      "row": 158
+    },
+    "message": "Redefinition of unused `quick_cli` from line 9: `quick_cli` redefined here",
+    "noqa_row": 158,
+    "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+  }
+]

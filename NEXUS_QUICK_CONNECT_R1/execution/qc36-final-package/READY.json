@@ -1,0 +1,12 @@
+{
+  "ready": true,
+  "at": "2026-11-17T11:00:27.504835+00:00",
+  "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+  "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\artifacts\\okto_nexus-0.3.6-py3-none-any.whl",
+  "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+  "payload_files": 1028,
+  "prefix_frozen": true,
+  "orchestration": "Host Python has psutil; use host -B for installed_regression.py. Its pytest child uses this exact prefix -I -B. No psutil added to prefix."
+}

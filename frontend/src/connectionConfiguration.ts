@@ -46,6 +46,19 @@ export function exportConnectionConfiguration(value: ConnectionConfiguration): s
   return JSON.stringify({...portable,automatic_reply:true,version:2},null,2)+'\n';
 }
 export type SetupBaseline = Record<string,number | null>;
+/** Public metadata belongs to the product envelope, never Core configuration. */
+export interface SetupPublicConnection {
+  version:1;connect_id:string;reservation_ref:string;project_revision:string;
+}
+export function assertSetupPublicConnection(value:unknown):asserts value is SetupPublicConnection {
+  if(!value||typeof value!=='object'||Array.isArray(value))throw new Error('The retained Harness ID review is invalid.');
+  const item=value as Record<string,unknown>;
+  if(Object.keys(item).sort().join()!=='connect_id,project_revision,reservation_ref,version'||item.version!==1||
+      typeof item.connect_id!=='string'||!/^[a-z][a-z0-9_-]{0,63}$/.test(item.connect_id)||
+      typeof item.reservation_ref!=='string'||!/^pcr_[0-9a-f]{32}$/.test(item.reservation_ref)||
+      typeof item.project_revision!=='string'||!/^sha256:[0-9a-f]{64}$/.test(item.project_revision))
+    throw new Error('The retained Harness ID review is invalid.');
+}
 export function sameConnectionConfiguration(left: ConnectionConfiguration, right: ConnectionConfiguration): boolean {
   const canonical = (value: unknown): string => {
     if (value && typeof value === 'object' && !Array.isArray(value)) {
@@ -56,6 +69,7 @@ export function sameConnectionConfiguration(left: ConnectionConfiguration, right
   return canonical(left) === canonical(right);
 }
 export interface SetupRequest {
+  public_connection?:SetupPublicConnection;
   client_intent_id: string; agent_id: string; executor_id: string; candidate_ref: string;
   inventory_revision: string; workspace_id: string | null; binding_id: string | null;
   baseline: SetupBaseline; configuration: ConnectionConfiguration;

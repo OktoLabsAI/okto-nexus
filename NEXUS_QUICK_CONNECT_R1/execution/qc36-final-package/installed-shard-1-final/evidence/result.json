@@ -1,0 +1,438 @@
+{
+  "started_at": "2026-11-17T11:13:45.792538+00:00",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y",
+  "selected": [
+    "tests\\quick_connect\\test_connect_arguments.py",
+    "tests\\quick_connect\\test_entry_compatibility.py",
+    "tests\\quick_connect\\test_git_project_hint.py",
+    "tests\\quick_connect\\test_git_remaining.py",
+    "tests\\quick_connect\\test_id_choice_scenarios.py",
+    "tests\\quick_connect\\test_pending_selector_fences.py",
+    "tests\\quick_connect\\test_qc15_cli_choices.py",
+    "tests\\quick_connect\\test_qc24_namespace_executor_http.py",
+    "tests\\quick_connect\\test_qc25_concurrency_locks.py",
+    "tests\\quick_connect\\test_qc33_shared_service.py",
+    "tests\\quick_connect\\test_quick_connect_autoid_race.py",
+    "tests\\quick_connect\\test_quick_connect_contracts.py",
+    "tests\\quick_connect\\test_quick_connect_customize.py",
+    "tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+    "tests\\quick_connect\\test_quick_connect_id_choices.py",
+    "tests\\quick_connect\\test_quick_connect_project.py",
+    "tests\\quick_connect\\test_quick_connect_project_scenarios.py",
+    "tests\\quick_connect\\test_quick_connect_render.py",
+    "tests\\quick_connect\\test_terminal_public_connection.py"
+  ],
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path[:0]=['C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\guard', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\execution_r4', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\home_evolution', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\legacy_native_fixture', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\ui_simplification'];import pytest;raise SystemExit(pytest.main(['-p', 'qc36_origin_guard', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\pytest.ini', '--rootdir=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree', '--confcutdir=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_connect_arguments.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_entry_compatibility.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_git_project_hint.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_git_remaining.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_id_choice_scenarios.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_pending_selector_fences.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_qc15_cli_choices.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_qc24_namespace_executor_http.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_qc25_concurrency_locks.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_qc33_shared_service.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_autoid_race.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_contracts.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_customize.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_git_boundaries.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_id_choices.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_project.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_project_scenarios.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_render.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\tree\\\\tests\\\\quick_connect\\\\test_terminal_public_connection.py', '-v', '--tb=short', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rilplc1y\\\\reports\\\\tests.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\cwd",
+  "helper_paths": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tree\\tests",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tree\\tests\\execution_r4",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tree\\tests\\home_evolution",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tree\\tests\\legacy_native_fixture",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tree\\tests\\quick_connect",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tree\\tests\\ui_simplification"
+  ],
+  "stdin": "closed PIPE; no NUL console reopening",
+  "timeout": 1800,
+  "signals": [],
+  "exit_code": 0,
+  "ended_at": "2026-11-17T11:20:51.010779+00:00",
+  "payload_files": 1028,
+  "payload_drift": [],
+  "source_drift": [],
+  "known_processes": [
+    {
+      "pid": 53496,
+      "birth": 1794914025.7972806,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 32672,
+      "birth": 1794914025.81504,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 55088,
+      "birth": 1794914036.2062016,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 58652,
+      "birth": 1794914036.479746,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 38968,
+      "birth": 1794914036.7613828,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 52416,
+      "birth": 1794914037.3113067,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 36820,
+      "birth": 1794914037.325425,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 45828,
+      "birth": 1794914037.6124318,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 42208,
+      "birth": 1794914038.1404295,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 48160,
+      "birth": 1794914038.1499186,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 59384,
+      "birth": 1794914038.4318087,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 42772,
+      "birth": 1794914038.668143,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 49040,
+      "birth": 1794914038.6765149,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 30208,
+      "birth": 1794914038.9839497,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 57132,
+      "birth": 1794914038.989463,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 15192,
+      "birth": 1794914039.5020626,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 5532,
+      "birth": 1794914039.5099676,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 57768,
+      "birth": 1794914039.5321536,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 51612,
+      "birth": 1794914040.078271,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 42588,
+      "birth": 1794914040.3365796,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 57816,
+      "birth": 1794914040.3546815,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 40148,
+      "birth": 1794914040.638049,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 1768,
+      "birth": 1794914040.8855572,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 52812,
+      "birth": 1794914040.8926346,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 12084,
+      "birth": 1794914040.9162354,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 24716,
+      "birth": 1794914041.1866217,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 57192,
+      "birth": 1794914041.1961756,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 29980,
+      "birth": 1794914041.4697008,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 56340,
+      "birth": 1794914042.01239,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 60056,
+      "birth": 1794914042.0202892,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 54300,
+      "birth": 1794914042.277118,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 45528,
+      "birth": 1794914042.2842667,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 55312,
+      "birth": 1794914042.557954,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 56540,
+      "birth": 1794914042.5660262,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 59272,
+      "birth": 1794914043.3830757,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 43144,
+      "birth": 1794914043.396346,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 38156,
+      "birth": 1794914043.9380305,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 60372,
+      "birth": 1794914043.9523337,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 59172,
+      "birth": 1794914044.204458,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 43236,
+      "birth": 1794914044.2186344,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 45240,
+      "birth": 1794914044.4926305,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 23620,
+      "birth": 1794914044.4994175,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 57120,
+      "birth": 1794914044.7805133,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 55700,
+      "birth": 1794914045.2618732,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 42236,
+      "birth": 1794914045.271712,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 23384,
+      "birth": 1794914045.2894044,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 56584,
+      "birth": 1794914047.206858,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 4744,
+      "birth": 1794914047.2173517,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 22828,
+      "birth": 1794914049.0924523,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 51940,
+      "birth": 1794914049.1000068,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 46356,
+      "birth": 1794914049.1150787,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 6580,
+      "birth": 1794914049.6418827,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 31556,
+      "birth": 1794914049.6467357,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 37516,
+      "birth": 1794914049.6675034,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 57720,
+      "birth": 1794914062.1253605,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 33480,
+      "birth": 1794914073.965744,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 8268,
+      "birth": 1794914073.978514,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 57060,
+      "birth": 1794914074.0060084,
+      "exe": "C:\\Program Files\\Git\\usr\\bin\\sh.exe"
+    },
+    {
+      "pid": 58884,
+      "birth": 1794914074.1653993,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 12064,
+      "birth": 1794914074.1775815,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 30288,
+      "birth": 1794914076.1979406,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 36000,
+      "birth": 1794914076.204742,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 50060,
+      "birth": 1794914095.9580476,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 53128,
+      "birth": 1794914095.9761372,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 56512,
+      "birth": 1794914101.947446,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 46312,
+      "birth": 1794914101.9606924,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 59744,
+      "birth": 1794914269.8733475,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 49492,
+      "birth": 1794914270.1425667,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 57292,
+      "birth": 1794914313.5643275,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 22016,
+      "birth": 1794914321.5030303,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 56204,
+      "birth": 1794914321.7709923,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 58744,
+      "birth": 1794914329.1569576,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 45808,
+      "birth": 1794914336.5606024,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 29200,
+      "birth": 1794914336.8178344,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 29776,
+      "birth": 1794914336.8268368,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 50128,
+      "birth": 1794914343.9689872,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 61288,
+      "birth": 1794914343.9934852,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    }
+  ]
+}

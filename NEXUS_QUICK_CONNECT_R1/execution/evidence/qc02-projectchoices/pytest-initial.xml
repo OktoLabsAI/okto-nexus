@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="47" time="0.987" timestamp="2026-11-17T01:54:17.592762-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_unique_exact_mapping_reuses_project_without_git_or_picker" time="0.010" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_explicit_label_selects_project_without_binding" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_new_explicit_label_is_proposal_not_path_or_workspace_creation" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_exact_workspace_and_conflicting_label_never_override_each_other[False]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_exact_workspace_and_conflicting_label_never_override_each_other[True]" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_exact_workspace_and_agreeing_name_preserve_selector" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_duplicate_names_require_choice_noninteractive" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_duplicate_names_tty_choice_is_exact" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_different_approved_root_requires_explicit_resolution[True-True]" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_different_approved_root_requires_explicit_resolution[True-False]" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_different_approved_root_requires_explicit_resolution[False-False]" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_tty_switch_root_records_provenance_without_chdir" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_explicit_root_preserves_original_invocation_cwd" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_hint_does_not_inherit_parent_mapping_or_merge_equal_names" time="0.004" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_catalog_choice_after_hint_keeps_existing_nexus_source" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_plan_passes_no_process_flag_and_only_proposes_directory_name" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_explicit_or_existing_name_precedes_changed_git_hint" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_unknown_mapping_is_not_an_empty_catalog" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_catalog_rename_between_selection_and_return_requires_new_review" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_directory_envelope_cannot_authorize_new_project[patch0]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_directory_envelope_cannot_authorize_new_project[patch1]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_directory_envelope_cannot_authorize_new_project[patch2]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_directory_envelope_cannot_authorize_new_project[patch3]" time="0.001"><failure message="Failed: DID NOT RAISE ConnectionError">patch = {'revision': 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz'}
+
+    @pytest.mark.parametrize('patch', [
+        {'version': 2}, {'server_id': 'server-b'}, {'revision': 'short'}, {'revision': 'z' * 64},
+        {'items': None}, {'items': [{}] * 101}, {'has_more': 1}, {'total_is_exact': False},
+        {'total': True}, {'total': 1}, {'next_cursor': 'unexpected'},
+    ])
+    def test_invalid_directory_envelope_cannot_authorize_new_project(patch):
+&gt;       assert_code('PROJECT_CATALOG_UNCONFIRMED', lambda: projects.project_directory(
+            lambda *_: directory() | patch, 'server-a'))
+
+tests\quick_connect\test_quick_connect_project.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+code = 'PROJECT_CATALOG_UNCONFIRMED'
+action = &lt;function test_invalid_directory_envelope_cannot_authorize_new_project.&lt;locals&gt;.&lt;lambda&gt; at 0x00000209D88EF240&gt;
+
+    def assert_code(code, action):
+&gt;       with pytest.raises(ConnectionError) as captured:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ConnectionError
+
+tests\quick_connect\test_quick_connect_project.py:27: Failed</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_directory_envelope_cannot_authorize_new_project[patch4]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_directory_envelope_cannot_authorize_new_project[patch5]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_directory_envelope_cannot_authorize_new_project[patch6]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_directory_envelope_cannot_authorize_new_project[patch7]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_directory_envelope_cannot_authorize_new_project[patch8]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_directory_envelope_cannot_authorize_new_project[patch9]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_directory_envelope_cannot_authorize_new_project[patch10]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_or_duplicate_directory_metadata_fails_closed[items0]" time="0.001"><failure message="Failed: DID NOT RAISE ConnectionError">items = [{'workspace_id': '', 'display_name': 'app'}]
+
+    @pytest.mark.parametrize('items', [[workspace('', 'app')], [workspace('w-a', 'app'), workspace('w-a', 'other')],
+                                      [workspace('w-a', '\x1bprivate')], [workspace('w-a', '')]])
+    def test_invalid_or_duplicate_directory_metadata_fails_closed(items):
+&gt;       assert_code('PROJECT_CATALOG_UNCONFIRMED', lambda: projects.project_directory(
+            lambda *_: directory(items), 'server-a'))
+
+tests\quick_connect\test_quick_connect_project.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+code = 'PROJECT_CATALOG_UNCONFIRMED'
+action = &lt;function test_invalid_or_duplicate_directory_metadata_fails_closed.&lt;locals&gt;.&lt;lambda&gt; at 0x00000209D8985120&gt;
+
+    def assert_code(code, action):
+&gt;       with pytest.raises(ConnectionError) as captured:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ConnectionError
+
+tests\quick_connect\test_quick_connect_project.py:27: Failed</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_or_duplicate_directory_metadata_fails_closed[items1]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_or_duplicate_directory_metadata_fails_closed[items2]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_invalid_or_duplicate_directory_metadata_fails_closed[items3]" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_pagination_complete_and_revision_drift" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_nonadjacent_cursor_cycle_is_bounded" time="0.001" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_project_context_checks_full_echo_and_revision[patch0]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_project_context_checks_full_echo_and_revision[patch1]" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_project_context_checks_full_echo_and_revision[patch2]" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_project_context_checks_full_echo_and_revision[patch3]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_project_context_checks_full_echo_and_revision[patch4]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_project_context_checks_full_echo_and_revision[patch5]" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_project_context_checks_full_echo_and_revision[patch6]" time="0.002" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_null_wire_envelope_is_structured_unconfirmed[directory]" time="0.002"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">reader = 'directory'
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11177/test_null_wire_envelope_is_str0')
+
+    @pytest.mark.parametrize('reader', ['directory', 'context'])
+    def test_null_wire_envelope_is_structured_unconfirmed(reader, tmp_path):
+        if reader == 'directory':
+&gt;           assert_code('PROJECT_CATALOG_UNCONFIRMED', lambda: projects.project_directory(lambda *_: None, 'server-a'))
+
+tests\quick_connect\test_quick_connect_project.py:283: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\quick_connect\test_quick_connect_project.py:28: in assert_code
+    action()
+tests\quick_connect\test_quick_connect_project.py:283: in &lt;lambda&gt;
+    assert_code('PROJECT_CATALOG_UNCONFIRMED', lambda: projects.project_directory(lambda *_: None, 'server-a'))
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+call = &lt;function test_null_wire_envelope_is_structured_unconfirmed.&lt;locals&gt;.&lt;lambda&gt;.&lt;locals&gt;.&lt;lambda&gt; at 0x00000209D89A40E0&gt;
+server_id = 'server-a'
+
+    def project_directory(call, server_id):
+        """Consume the complete logical project directory, including empty projects."""
+        rows, cursor, revision, total, seen, cursors = [], None, None, None, set(), set()
+        for _ in range(MAX_PAGES):
+            page = _get(call, '/connections/workspaces', limit=100, cursor=cursor)
+&gt;           if (page.get('version') != 1 or page.get('server_id') != server_id
+                ^^^^^^^^
+                    or type(page.get('revision')) is not str or len(page['revision']) != 64
+                    or type(page.get('items')) is not list or len(page['items']) &gt; 100
+                    or type(page.get('has_more')) is not bool or page.get('total_is_exact') is not True
+                    or type(page.get('total')) is not int or page['total'] &lt; 0):
+E                   AttributeError: 'NoneType' object has no attribute 'get'
+
+src\okto_nexus\adapters\inbound\cli\quick_connect_project.py:42: AttributeError</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_null_wire_envelope_is_structured_unconfirmed[context]" time="0.003"><failure message="AttributeError: 'NoneType' object has no attribute 'get'">reader = 'context'
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11177/test_null_wire_envelope_is_str1')
+
+    @pytest.mark.parametrize('reader', ['directory', 'context'])
+    def test_null_wire_envelope_is_structured_unconfirmed(reader, tmp_path):
+        if reader == 'directory':
+            assert_code('PROJECT_CATALOG_UNCONFIRMED', lambda: projects.project_directory(lambda *_: None, 'server-a'))
+        else:
+&gt;           assert_code('PROJECT_CATALOG_UNCONFIRMED', lambda: projects.project_context(lambda *_: None,
+                server_id='server-a', executor_id='host-a', root=str(tmp_path)))
+
+tests\quick_connect\test_quick_connect_project.py:285: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\quick_connect\test_quick_connect_project.py:28: in assert_code
+    action()
+tests\quick_connect\test_quick_connect_project.py:285: in &lt;lambda&gt;
+    assert_code('PROJECT_CATALOG_UNCONFIRMED', lambda: projects.project_context(lambda *_: None,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+call = &lt;function test_null_wire_envelope_is_structured_unconfirmed.&lt;locals&gt;.&lt;lambda&gt;.&lt;locals&gt;.&lt;lambda&gt; at 0x00000209D8984540&gt;
+server_id = 'server-a', executor_id = 'host-a'
+root = 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-11177\\test_null_wire_envelope_is_str1'
+workspace_id = None
+
+    def project_context(call, *, server_id, executor_id, root, workspace_id=None):
+        value = _get(call, '/connections/project-context', executor_id=executor_id,
+            project_root=root, workspace_id=workspace_id)
+&gt;       if (value.get('version') != 1 or value.get('server_id') != server_id
+            ^^^^^^^^^
+                or value.get('executor_id') != executor_id or value.get('workspace_id') != workspace_id
+                or type(value.get('project_revision')) is not str
+                or re.fullmatch(r'sha256:[a-f0-9]{64}', value['project_revision']) is None
+                or root is not None and not _same_local_path(value.get('project_root'), root)
+                or type(value.get('mapped_workspace_ids')) is not list
+                or any(type(v) is not str for v in value['mapped_workspace_ids'])):
+E               AttributeError: 'NoneType' object has no attribute 'get'
+
+src\okto_nexus\adapters\inbound\cli\quick_connect_project.py:73: AttributeError</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_paging_transport_failure_propagates_without_discovery_or_new_project" time="0.003" /><testcase classname="tests.quick_connect.test_quick_connect_project" name="test_local_executor_pages_exactly_and_rejects_multiple_or_stale_hosts" time="0.001" /></testsuite></testsuites>

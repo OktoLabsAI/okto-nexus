@@ -1,0 +1,27 @@
+{
+  "scope": "QC F/H pure output contracts; Root owns production corrections",
+  "status": "FAIL",
+  "execution": {
+    "tool": "1328f0",
+    "exit_code": 1,
+    "tests_passed": 13,
+    "tests_failed": 7,
+    "duration_seconds": 0.44,
+    "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe -I -B -X utf8 -c <insert checkout/src; pytest.main -q tests/quick_connect/test_quick_connect_outcome.py>",
+    "source_first": true,
+    "no_prefix_install": true
+  },
+  "test_sha256": "daabdd10cf64f595a09c59bac0898b9cccdce97459857c04237593be974209ca",
+  "failed_contracts": [
+    "Cancelled/conflict/failed/unknown become pending (four cases)",
+    "Foreign bound reference was not refused by annotate; proposed-ID mismatch is in the same test loop but was not independently reached after its first failure",
+    "Resume argv lacks public --id/harness/project selection",
+    "Positive basic summary omits approved root and project-name provenance"
+  ],
+  "source_pin_limit": "Production bytes were not hashed before the initial test; do not attribute a later source pin to this red cut. Tool1328f0 preserves observed failure names and outputs.",
+  "limits": [
+    "Synthetic output data only; no native/provider/setup/lifecycle execution",
+    "No production fix or test weakening by this agent",
+    "Existing upstream canonical revalidation may mitigate the annotate foreign-reference case; Root is reviewing its intended boundary"
+  ]
+}

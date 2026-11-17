@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="12" time="86.489" timestamp="2026-11-17T02:10:23.585511-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay" time="9.984" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_second_codex_explicit_add_uses_reviewer_id_in_same_workspace" time="9.245" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_exact_public_id_noninteractive_without_profile_reuses_canonical_reference" time="7.997" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_explicit_occupied_id_add_fails_before_another_model_test" time="6.978"><failure message="AssertionError: {&quot;state&quot;: &quot;refused&quot;, &quot;code&quot;: &quot;HARNESS_ID_ALREADY_EXISTS&quot;, &quot;message&quot;: &quot;This Harness ID is already occupied; select another ID explicitly.&quot;, &quot;possible_effect&quot;: false, &quot;effects_started&quot;: null, &quot;canonical_metadata_revalidation_requested&quot;: true}&#10;  &#10;assert 3 == 2">quick_cli = namespace(t=namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x00000203AC3104B0...indowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11194/test_explicit_occupied_id_add_0/workspace'))
+capsys = &lt;_pytest.capture.CaptureFixture object at 0x00000203A9AA8180&gt;
+
+    def test_explicit_occupied_id_add_fails_before_another_model_test(quick_cli, capsys):
+        c = quick_cli
+        first_connection(c, capsys)
+        before = _terminal.snapshot(c.t.deps)
+&gt;       result = invoke(c, capsys, ['connect', 'codex', 'Logical App', '--new-connection',
+            '--profile', 'collision', '--id', 'codex', '--json'], expected=2)
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\quick_connect\test_quick_connect_cli.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cli = namespace(t=namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x00000203AC3104B0...indowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11194/test_explicit_occupied_id_add_0/workspace'))
+capsys = &lt;_pytest.capture.CaptureFixture object at 0x00000203A9AA8180&gt;
+tokens = ['connect', 'codex', 'Logical App', '--new-connection', '--profile', 'collision', ...]
+expected = 2
+
+    def invoke(cli, capsys, tokens, expected=0):
+        code = cli.run(tokens)
+        captured = capsys.readouterr()
+&gt;       assert code == expected, captured.out + captured.err
+E       AssertionError: {"state": "refused", "code": "HARNESS_ID_ALREADY_EXISTS", "message": "This Harness ID is already occupied; select another ID explicitly.", "possible_effect": false, "effects_started": null, "canonical_metadata_revalidation_requested": true}
+E         
+E       assert 3 == 2
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\quick_connect\test_quick_connect_cli.py:70: AssertionError</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens0]" time="5.996" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens1]" time="6.455" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens2]" time="6.070" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_new_connection_json_id_without_profile_never_invents_idempotency" time="6.361" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_plan_with_service_off_never_starts_daemon_or_discovers_git" time="6.152" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_unknown_or_unavailable_harness_json_does_not_read_or_test[codxe-CLIENT_SELECTION_REQUIRED]" time="6.119"><failure message="AssertionError: {&quot;state&quot;: &quot;refused&quot;, &quot;code&quot;: &quot;CLIENT_SELECTION_REQUIRED&quot;, &quot;message&quot;: &quot;Select a supported harness from the passive inventory.&quot;, &quot;possible_effect&quot;: false, &quot;effects_started&quot;: null, &quot;canonical_metadata_revalidation_requested&quot;: true}&#10;  &#10;assert 3 == 2">quick_cli = namespace(t=namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x00000203AC4DBE30...indowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11194/test_unknown_or_unavailable_ha0/workspace'))
+capsys = &lt;_pytest.capture.CaptureFixture object at 0x00000203AC638750&gt;
+client = 'codxe', code = 'CLIENT_SELECTION_REQUIRED'
+
+    @pytest.mark.parametrize('client,code', [('codxe', 'CLIENT_SELECTION_REQUIRED'), ('claude', 'INSTALLATION_UNAVAILABLE')])
+    def test_unknown_or_unavailable_harness_json_does_not_read_or_test(quick_cli, capsys, client, code):
+        c = quick_cli
+&gt;       result = invoke(c, capsys, ['connect', client, 'App', '--profile', 'selection', '--plan', '--json'], expected=2)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\quick_connect\test_quick_connect_cli.py:181: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cli = namespace(t=namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x00000203AC4DBE30...indowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11194/test_unknown_or_unavailable_ha0/workspace'))
+capsys = &lt;_pytest.capture.CaptureFixture object at 0x00000203AC638750&gt;
+tokens = ['connect', 'codxe', 'App', '--profile', 'selection', '--plan', ...]
+expected = 2
+
+    def invoke(cli, capsys, tokens, expected=0):
+        code = cli.run(tokens)
+        captured = capsys.readouterr()
+&gt;       assert code == expected, captured.out + captured.err
+E       AssertionError: {"state": "refused", "code": "CLIENT_SELECTION_REQUIRED", "message": "Select a supported harness from the passive inventory.", "possible_effect": false, "effects_started": null, "canonical_metadata_revalidation_requested": true}
+E         
+E       assert 3 == 2
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\quick_connect\test_quick_connect_cli.py:70: AssertionError</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_unknown_or_unavailable_harness_json_does_not_read_or_test[claude-INSTALLATION_UNAVAILABLE]" time="6.117"><failure message="AssertionError: {&quot;state&quot;: &quot;refused&quot;, &quot;code&quot;: &quot;INSTALLATION_UNAVAILABLE&quot;, &quot;message&quot;: &quot;This supported harness has no confirmed installation. No installation was attempted.&quot;, &quot;possible_effect&quot;: false, &quot;effects_started&quot;: null, &quot;canonical_metadata_revalidation_requested&quot;: true}&#10;  &#10;assert 3 == 2">quick_cli = namespace(t=namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x00000203ACC18B50...indowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11194/test_unknown_or_unavailable_ha1/workspace'))
+capsys = &lt;_pytest.capture.CaptureFixture object at 0x00000203AC9527B0&gt;
+client = 'claude', code = 'INSTALLATION_UNAVAILABLE'
+
+    @pytest.mark.parametrize('client,code', [('codxe', 'CLIENT_SELECTION_REQUIRED'), ('claude', 'INSTALLATION_UNAVAILABLE')])
+    def test_unknown_or_unavailable_harness_json_does_not_read_or_test(quick_cli, capsys, client, code):
+        c = quick_cli
+&gt;       result = invoke(c, capsys, ['connect', client, 'App', '--profile', 'selection', '--plan', '--json'], expected=2)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\quick_connect\test_quick_connect_cli.py:181: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cli = namespace(t=namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x00000203ACC18B50...indowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11194/test_unknown_or_unavailable_ha1/workspace'))
+capsys = &lt;_pytest.capture.CaptureFixture object at 0x00000203AC9527B0&gt;
+tokens = ['connect', 'claude', 'App', '--profile', 'selection', '--plan', ...]
+expected = 2
+
+    def invoke(cli, capsys, tokens, expected=0):
+        code = cli.run(tokens)
+        captured = capsys.readouterr()
+&gt;       assert code == expected, captured.out + captured.err
+E       AssertionError: {"state": "refused", "code": "INSTALLATION_UNAVAILABLE", "message": "This supported harness has no confirmed installation. No installation was attempted.", "possible_effect": false, "effects_started": null, "canonical_metadata_revalidation_requested": true}
+E         
+E       assert 3 == 2
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\quick_connect\test_quick_connect_cli.py:70: AssertionError</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_root_alias_uses_same_managed_review_not_external_cli" time="5.859" /></testsuite></testsuites>

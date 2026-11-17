@@ -1,0 +1,82 @@
+[
+  {
+    "path": "allocation.json",
+    "sha256": "d0366fac05ef68ab946c21970cbd45260b4ed014c523592e3b6f5a7f070969fc",
+    "bytes": 110
+  },
+  {
+    "path": "curate.py",
+    "sha256": "5849896b29969bc95c2c109c9dc83cea0c750dac0f8e54b3f00d85081c641aa7",
+    "bytes": 5794
+  },
+  {
+    "path": "qualification.json",
+    "sha256": "3fc62ce6da0699303e216c96cd413be20aaaf4e8cc2c1b1ac192f88f3e592280",
+    "bytes": 14291
+  },
+  {
+    "path": "red-allocation.json",
+    "sha256": "fb4cf635467cdee65e4a4c998eb57357d2b85fd8aeb95b893970987725acabfe",
+    "bytes": 110
+  },
+  {
+    "path": "red2-allocation.json",
+    "sha256": "37f965cfefec5262a2bb5f0e4499a626199b6929e3118dd7d1c702bd38d8d1c3",
+    "bytes": 110
+  },
+  {
+    "path": "run.py",
+    "sha256": "4403985497120b36012fc0956d563af8dc62c6e498afdc678d5a7e701c2ce604",
+    "bytes": 11865
+  },
+  {
+    "path": "shell-proof.json",
+    "sha256": "162b4c68a5ae8ad7f5c7bece5e3a4f0621259d7584ab7c8151e02d8fb90105f5",
+    "bytes": 2403
+  },
+  {
+    "path": "shell_proof.py",
+    "sha256": "de67127b1450652dcb4b3e8877ec845ced83fd387b3597cd6c372a010b86fe71",
+    "bytes": 5671
+  },
+  {
+    "path": "final/payload-end.json",
+    "sha256": "cd60767c1bd520bda712d95a2ea65399bf7242e54e96f2be846c64539281015d",
+    "bytes": 123753
+  },
+  {
+    "path": "final/payload-start.json",
+    "sha256": "cd60767c1bd520bda712d95a2ea65399bf7242e54e96f2be846c64539281015d",
+    "bytes": 123753
+  },
+  {
+    "path": "final/source-pins-end.json",
+    "sha256": "4709e5f04956fa283689afabf63f04f32729354aca8fbc42f559c932d82cd493",
+    "bytes": 197159
+  },
+  {
+    "path": "final/source-pins-start.json",
+    "sha256": "4709e5f04956fa283689afabf63f04f32729354aca8fbc42f559c932d82cd493",
+    "bytes": 197159
+  },
+  {
+    "path": "final/render-and-outcome/junit-sanitized.xml",
+    "sha256": "941a4cce248f91245db2b15445019517f2ec07d018871c12e8fb502d77fc3149",
+    "bytes": 6380
+  },
+  {
+    "path": "final/render-and-outcome/origins-finish.json",
+    "sha256": "b8240146adc1711b78a660e74aea2b149777ecd9584dbe1d989e17c72f61bde6",
+    "bytes": 1602
+  },
+  {
+    "path": "final/render-and-outcome/origins-start.json",
+    "sha256": "651a26378b9d6bb3256e351976651f1fd35881133c18228012fca485714484a8",
+    "bytes": 1527
+  },
+  {
+    "path": "final/render-and-outcome/runner.json",
+    "sha256": "b82b8432dcb1b99d869fcad8b7050231d3c91e35f97b64cddf85e4c4d530c8ca",
+    "bytes": 1440
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "status": "STOPPED_AT_ROOT_AUTHORIZED_FREEZE_RELEASE",
+  "at": 1794901070.6321352,
+  "normal_interrupt_attempt": "External CTRL_BREAK reported WinError87/SystemError; children subsequently absent, exact delivery not inferred",
+  "verified_living_owned_tree_before_final_stop": [
+    {
+      "pid": 45140,
+      "ppid": 41220,
+      "create_time": 1794896780.6569908,
+      "exe": "C:\\Python313\\python.exe"
+    }
+  ],
+  "physically_exited": {
+    "45140": true
+  },
+  "primary_pids_absent": {
+    "48144": true,
+    "40944": true,
+    "45140": true
+  },
+  "scope": "No source/test/package writes, no other agents; remaining currentcase is inconclusive and tail NOT_RUN"
+}

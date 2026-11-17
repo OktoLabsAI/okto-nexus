@@ -1,0 +1,7 @@
+{
+  "nodeid": "tests/quick_connect/test_quick_connect_project_scenarios.py::test_c09_other_mapped_project_root_requires_explicit_tty_choice",
+  "when": "call",
+  "outcome": "failed",
+  "duration": 3.058879900025204,
+  "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc17-projects-adfkhdps\\after\\tests\\quick_connect\\test_quick_connect_project_scenarios.py:102: in test_c09_other_mapped_project_root_requires_explicit_tty_choice\n    assert result['quick_connect']['canonical_reference'] == second['quick_connect']['canonical_reference']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'canonical_reference'"
+}

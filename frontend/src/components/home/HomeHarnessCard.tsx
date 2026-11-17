@@ -18,7 +18,9 @@ export function HomeHarnessCard({card,column,blocked,onActivity,onEvent}: {
   const connection=card.connection;
   const labels={registered:'Registered harness',waiting_for_user:'Waiting for your response',awaiting_confirmation:'Waiting for confirmation',working:'Working',unknown:'Activity unknown'};
   return <li className="panel p-4 min-w-0 space-y-3" data-home-harness={card.id}>
-    <header><h4 className="font-semibold break-words">{connection.agent_label||'Unnamed collaborator'}</h4>
+    <header><h4 className="font-semibold break-words">{connection.connect_id?<><span className="text-xs font-normal text-surface-500">Harness ID: </span>{connection.connect_id}</>:connection.agent_label||'Unnamed collaborator'}</h4>
+      {connection.connect_id?<p className="text-xs text-surface-500 break-words">Collaborator: {connection.agent_label||'Name unavailable'}</p>:
+        <p className="text-xs text-surface-500">Harness ID not assigned</p>}
       <p className="text-sm text-surface-500 break-words">{[harnessName(connection.harness_id),connection.host_label||'Host not reported'].join(' · ')}</p>
       <p className="text-sm mt-1">{labels[card.activity_state]??'Activity unknown'}</p>
       {card.blocks_harness===null&&<p className="text-xs text-surface-500">Blocking status unknown</p>}</header>
@@ -42,7 +44,7 @@ export function HomeHarnessCard({card,column,blocked,onActivity,onEvent}: {
 export function HomeHarnessSignalCard({item,blocked,onOpen}: {
   item:HomeHarnessRequest|HomeHarnessDelivery;blocked:boolean;onOpen:()=>void;
 }) {
-  const names=item.harness_refs.map(({connection:c})=>[c.agent_label||'Unnamed collaborator',harnessName(c.harness_id),c.host_label||'Host not reported'].join(' · '));
+  const names=item.harness_refs.map(({connection:c})=>[c.connect_id?`Harness ID: ${c.connect_id}`:c.agent_label||'Unnamed collaborator',harnessName(c.harness_id),c.host_label||'Host not reported'].join(' · '));
   const action=item.kind==='request'?primaryAttentionAction(item.request):null;
   const label=item.kind==='delivery'?'View delivery':action==='respond_native'?'Review question':
     action==='decide_native'||action==='decide_approval'?'Review approval':'Review request';

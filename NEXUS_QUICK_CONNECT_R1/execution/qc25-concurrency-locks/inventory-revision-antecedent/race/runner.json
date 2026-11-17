@@ -1,0 +1,42 @@
+{
+  "label": "race",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\after\\tests\\quick_connect\\test_qc25_concurrency_locks.py::test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\race\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-ymdhelgk\\race\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T09:02:25.982702+00:00",
+  "signals": [],
+  "exit_code": 1,
+  "processes_after": [
+    {
+      "pid": 47312,
+      "parent_pid": null,
+      "birth_filetime": 134393797460158788,
+      "alive": false
+    },
+    {
+      "pid": 43108,
+      "parent_pid": 47312,
+      "birth_filetime": 134393797460429635,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T09:03:04.362976+00:00"
+}

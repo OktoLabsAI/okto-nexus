@@ -1,0 +1,22 @@
+{
+  "OS": "Linux-5.15.146.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "bootstrap_python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+  "env": {
+    "PATH": "/usr/bin:/bin",
+    "HOME": "/tmp/nexus-qc28-xmlie7rv/home",
+    "USERPROFILE": "/tmp/nexus-qc28-xmlie7rv/home",
+    "XDG_CONFIG_HOME": "/tmp/nexus-qc28-xmlie7rv/xdg-config",
+    "XDG_DATA_HOME": "/tmp/nexus-qc28-xmlie7rv/xdg-data",
+    "XDG_CACHE_HOME": "/tmp/nexus-qc28-xmlie7rv/xdg-cache",
+    "TMPDIR": "/tmp/nexus-qc28-xmlie7rv/tmp",
+    "LANG": "C.UTF-8",
+    "UV_CACHE_DIR": "/tmp/nexus-qc28-xmlie7rv/cache",
+    "UV_NO_CONFIG": "1",
+    "UV_PYTHON_INSTALL_DIR": "/tmp/nexus-qc28-xmlie7rv/python",
+    "UV_PYTHON_BIN_DIR": "/tmp/nexus-qc28-xmlie7rv/bin",
+    "UV_PYTHON_PREFERENCE": "only-managed"
+  },
+  "os_release": "PRETTY_NAME=\"Ubuntu 22.04.3 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"22.04\"\nVERSION=\"22.04.3 LTS (Jammy Jellyfish)\"\nVERSION_CODENAME=jammy\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=jammy\n",
+  "at": "2026-11-17T09:11:15.691251+00:00",
+  "scope": "Own /tmp only; env -i; no apt/sudo/dotfiles/system or user installs."
+}

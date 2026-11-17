@@ -1,0 +1,126 @@
+{
+  "status": "PASS_FIVE_SCENARIOS_ACROSS_DECLARED_CUTS",
+  "source_candidate": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "final_external_test": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-f17-proof-_nfe3zme\\after\\tests\\quick_connect\\test_quick_connect_extra_scenarios.py",
+  "final_external_test_sha256": "9f64bc7f227f84b237e6a1ed8c376a0ab4463a01934dccfdf65032f39a7fc7f3",
+  "coverage": {
+    "E03": "PASS initial",
+    "H06_new": "PASS initial",
+    "H06_existing": "PASS initial",
+    "G13": "PASS initial",
+    "F17": "PASS final-proof; exact project-CAS conflict, NOT isolated namespace uniqueness"
+  },
+  "antecedent": "Initial F17 expected HARNESS_ID_ALREADY_EXISTS but observed CONFLICT. Preserved FAIL; exact project-CAS counterpart and additional GET proof assertions run separately.",
+  "cuts": [
+    {
+      "label": "initial",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-installed-ewrhfzrv",
+      "cases": [
+        {
+          "label": "1-e03",
+          "exit_code": 0,
+          "passed": 1,
+          "failed": 0,
+          "process_handles_exited": true,
+          "signals": []
+        },
+        {
+          "label": "2-h06",
+          "exit_code": 0,
+          "passed": 1,
+          "failed": 0,
+          "process_handles_exited": true,
+          "signals": []
+        },
+        {
+          "label": "3-h06",
+          "exit_code": 0,
+          "passed": 1,
+          "failed": 0,
+          "process_handles_exited": true,
+          "signals": []
+        },
+        {
+          "label": "4-g13",
+          "exit_code": 0,
+          "passed": 1,
+          "failed": 0,
+          "process_handles_exited": true,
+          "signals": []
+        },
+        {
+          "label": "5-f17",
+          "exit_code": 1,
+          "passed": 0,
+          "failed": 1,
+          "process_handles_exited": true,
+          "signals": []
+        }
+      ],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "source_drift": [],
+      "app_source_present": false
+    },
+    {
+      "label": "cas-counterpart",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-f17-y9nxcja4",
+      "cases": [
+        {
+          "label": "f17-project-cas",
+          "exit_code": 0,
+          "passed": 1,
+          "failed": 0,
+          "process_handles_exited": true,
+          "signals": []
+        }
+      ],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "source_drift": [],
+      "app_source_present": false
+    },
+    {
+      "label": "final-proof",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-f17-proof-_nfe3zme",
+      "cases": [
+        {
+          "label": "f17-project-cas",
+          "exit_code": 0,
+          "passed": 1,
+          "failed": 0,
+          "process_handles_exited": true,
+          "signals": []
+        }
+      ],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "source_drift": [],
+      "app_source_present": false
+    }
+  ],
+  "safety": {
+    "provider_invocations": 0,
+    "native_harness_invocations": 0,
+    "prefix_modified": false,
+    "own_temporary_fixture_only": true,
+    "stdin_pipe_closed": true,
+    "child_python_flags": [
+      "-I",
+      "-B"
+    ],
+    "timeout_per_cut_seconds": 180,
+    "all_recorded_process_handles_exited": true,
+    "product_origins": "All three families installed at session start and finish; no product src copied."
+  },
+  "limits": [
+    "Not a full installed regression suite.",
+    "Five scenario coverage combines four initial passing cases and final F17 focal; not one five-pass final-file run.",
+    "Only agents.last_seen_at is excluded from snapshots because authentication updates telemetry; all other agent columns and all other listed table columns remain compared.",
+    "G13 historical own-fixture grant timestamps model expiry and do not prove expired execution is authorized.",
+    "F17 winner changes canonical project proof; stale review fails before namespace INSERT. Database uniqueness in isolation is not exercised here.",
+    "Fake version/Test peers are not real provider/harness qualification.",
+    "No real user, Windows session events, build, installation or Git actions."
+  ]
+}

@@ -1,0 +1,67 @@
+--- a/src/okto_nexus/application/terminal_connection.py
++++ b/src/okto_nexus/application/terminal_connection.py
+@@ -27,9 +27,10 @@
+ 
+ 
+ class ConnectionError(Exception):
+-    def __init__(self, code, message, *, possible_effect=False, stage='connect', choices=None):
++    def __init__(self, code, message, *, possible_effect=False, stage='connect', choices=None, http_status=None):
+         self.code, self.message, self.possible_effect, self.stage = code, message, possible_effect, stage
+         self.choices = choices
++        self.http_status = http_status
+         super().__init__(message)
+ 
+ 
+--- a/src/okto_nexus/adapters/outbound/terminal_http.py
++++ b/src/okto_nexus/adapters/outbound/terminal_http.py
+@@ -33,10 +33,12 @@
+             data=json.dumps(body).encode('utf-8') if body is not None else None,
+             headers=self.request_headers())
+         failed = False
++        http_status = None
+         try:
+             response = self.opener.open(request, timeout=self.timeout)
+         except HTTPError as error:
+             response, failed = error, True
++            http_status = error.code
+         except (URLError, TimeoutError, OSError):
+             raise ConnectionError('OUTCOME_UNKNOWN' if method != 'GET' else 'SERVER_UNREACHABLE',
+                 'The Server response is unavailable. Inspect or resume the same saved request.',
+@@ -58,11 +60,11 @@
+                 raise ValueError()
+         except (ValueError, TypeError):
+             raise ConnectionError('RESPONSE_UNCONFIRMED', 'The Server returned an invalid or oversized response.',
+-                                  possible_effect=method != 'GET') from None
++                                  possible_effect=method != 'GET', http_status=http_status) from None
+         if failed:
+             error = value.get('error', {})
+             if not isinstance(error, dict):
+-                raise ConnectionError('RESPONSE_UNCONFIRMED', 'The Server error response is malformed.', possible_effect=method != 'GET')
++                raise ConnectionError('RESPONSE_UNCONFIRMED', 'The Server error response is malformed.', possible_effect=method != 'GET', http_status=http_status)
+             raise ConnectionError(error.get('code', 'REQUEST_REFUSED'), error.get('message', 'The Server refused this request.'),
+-                stage=error.get('stage', 'http'), possible_effect=error.get('possible_effect', False))
++                stage=error.get('stage', 'http'), possible_effect=error.get('possible_effect', False), http_status=http_status)
+         return value
+--- a/src/okto_nexus/adapters/outbound/operator_client.py
++++ b/src/okto_nexus/adapters/outbound/operator_client.py
+@@ -138,7 +138,7 @@
+             return super().__call__(method, path, body)
+         except ConnectionError as error:
+             if error.code == 'AUTH_FAILED':
+-                raise ConnectionError('OPERATOR_LOGIN_REQUIRED', 'The operator session expired or was revoked. Sign in again on this operator client.', stage=error.stage) from None
++                raise ConnectionError('OPERATOR_LOGIN_REQUIRED', 'The operator session expired or was revoked. Sign in again on this operator client.', stage=error.stage, http_status=error.http_status) from None
+             raise
+ 
+     def verify(self, *, call=None):
+--- a/src/okto_nexus/adapters/inbound/cli/quick_connect_ids.py
++++ b/src/okto_nexus/adapters/inbound/cli/quick_connect_ids.py
+@@ -57,7 +57,8 @@
+     try:
+         value = call('GET', PREFIX + '/connections/public-ids')
+     except ConnectionError as error:
+-        if error.code in ('NOT_FOUND', 'HTTP_ERROR', 'VALIDATION_ERROR'):
++        if (error.http_status in (404, 405) or error.http_status is None
++                and error.code in ('NOT_FOUND', 'HTTP_ERROR', 'VALIDATION_ERROR')):
+             raise ConnectionError('CONNECT_ID_UNSUPPORTED_SERVER', 'This Server must be upgraded to support public Harness IDs.') from None
+         raise
+     if (type(value) is not dict or value.get('version') != 1 or value.get('server_id') != server_id

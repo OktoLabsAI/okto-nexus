@@ -1,0 +1,7 @@
+{
+  "nodeid": "tests/execution_r4/test_qc15_cli_choices.py::test_two_candidates_explicitly_choose_second_exact_ref",
+  "when": "call",
+  "outcome": "failed",
+  "duration": 1.3506769000086933,
+  "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-p_i2pnii\\after\\tests\\execution_r4\\test_qc15_cli_choices.py:127: in test_two_candidates_explicitly_choose_second_exact_ref\n    assert saved['review_request']['configuration']['candidate_ref'] == refs[1]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'candidate_ref'"
+}

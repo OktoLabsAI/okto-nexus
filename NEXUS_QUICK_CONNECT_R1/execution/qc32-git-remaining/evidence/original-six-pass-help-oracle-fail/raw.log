@@ -1,0 +1,359 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc32-git-remaining-hi6rd6jr\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 8 items
+
+..\after\tests\quick_connect\test_git_remaining.py::test_origin_wins_over_other_remote_names IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_origin_wins_over_other_remote_names", "when": "setup", "outcome": "passed", "duration": 7.303503800067119}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_origin_wins_over_other_remote_names", "when": "call", "outcome": "passed", "duration": 1.053502400056459}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_origin_wins_over_other_remote_names", "when": "teardown", "outcome": "passed", "duration": 0.7509559999452904}
+
+..\after\tests\quick_connect\test_git_remaining.py::test_reader_fault_reaches_cli_fallback_without_implicit_test[timeout-git_timeout] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_reader_fault_reaches_cli_fallback_without_implicit_test[timeout-git_timeout]", "when": "setup", "outcome": "passed", "duration": 6.538397599942982}
+READER_FALLBACK {"fault": "timeout", "reason": "git_timeout", "elapsed_seconds": 0.33667590003460646}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_reader_fault_reaches_cli_fallback_without_implicit_test[timeout-git_timeout]", "when": "call", "outcome": "passed", "duration": 0.4971197999548167}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_reader_fault_reaches_cli_fallback_without_implicit_test[timeout-git_timeout]", "when": "teardown", "outcome": "passed", "duration": 0.9731647999724373}
+
+..\after\tests\quick_connect\test_git_remaining.py::test_reader_fault_reaches_cli_fallback_without_implicit_test[invalid-output-git_config_unavailable] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_reader_fault_reaches_cli_fallback_without_implicit_test[invalid-output-git_config_unavailable]", "when": "setup", "outcome": "passed", "duration": 6.6602876000106335}
+READER_FALLBACK {"fault": "invalid-output", "reason": "git_config_unavailable", "elapsed_seconds": 0.2947388000320643}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_reader_fault_reaches_cli_fallback_without_implicit_test[invalid-output-git_config_unavailable]", "when": "call", "outcome": "passed", "duration": 0.47942840005271137}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_reader_fault_reaches_cli_fallback_without_implicit_test[invalid-output-git_config_unavailable]", "when": "teardown", "outcome": "passed", "duration": 0.9650828000158072}
+
+..\after\tests\quick_connect\test_git_remaining.py::test_two_local_clones_same_origin_have_distinct_workspace_namespaces IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_two_local_clones_same_origin_have_distinct_workspace_namespaces", "when": "setup", "outcome": "passed", "duration": 5.4818213999969885}
+Timeout (0:00:10)!
+Thread 0x00004354 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00004498 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 359 in wait
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\nexus_connector_core\offloop.py", line 161 in _next_item
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\nexus_connector_core\offloop.py", line 123 in _run
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00008dfc (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00009008 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000c4bc (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000e68c (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\threading.py", line 394 in wait_for
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 170 in _wait_for_wake
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 187 in _run
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000c058 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 296 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000e070 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 296 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000e0f4 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 148 in _publish_worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00007920 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_command_dispatcher.py", line 79 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000e318 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_command_dispatcher.py", line 79 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00002804 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_command_dispatcher.py", line 79 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000e654 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_command_dispatcher.py", line 79 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x000012a0 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_command_dispatcher.py", line 79 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000b630 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_command_dispatcher.py", line 79 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000d6c4 (most recent call first):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\outbound\runtime_wake.py", line 36 in receive
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000e604 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00001ba8 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 359 in wait
+  File "C:\Python313\Lib\queue.py", line 202 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1113 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000e520 (most recent call first):
+  File "C:\Python313\Lib\asyncio\windows_events.py", line 775 in _poll
+  File "C:\Python313\Lib\asyncio\windows_events.py", line 446 in select
+  File "C:\Python313\Lib\asyncio\base_events.py", line 1995 in _run_once
+  File "C:\Python313\Lib\asyncio\base_events.py", line 678 in run_forever
+  File "C:\Python313\Lib\asyncio\base_events.py", line 707 in run_until_complete
+  File "C:\Python313\Lib\asyncio\runners.py", line 118 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2621 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\from_thread.py", line 639 in run_blocking_portal
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000d028 (most recent call first):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\terminal_connection.py", line 458 in apply
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py", line 539 in _run_connect_once
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py", line 150 in run_connect
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\main.py", line 54 in main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc32-git-remaining-hi6rd6jr\after\tests\quick_connect\test_quick_connect_cli.py", line 76 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc32-git-remaining-hi6rd6jr\after\tests\quick_connect\test_git_remaining.py", line 118 in test_two_local_clones_same_origin_have_distinct_workspace_namespaces
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\python.py", line 187 in pytest_pyfunc_call
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\python.py", line 1798 in runtest
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 184 in pytest_runtest_call
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 250 in <lambda>
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 361 in from_call
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 249 in call_and_report
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 139 in runtestprotocol
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 118 in pytest_runtest_protocol
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\main.py", line 411 in pytest_runtestloop
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\main.py", line 387 in _main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\main.py", line 333 in wrap_session
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\main.py", line 380 in pytest_cmdline_main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\config\__init__.py", line 262 in _main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\config\__init__.py", line 286 in _console_main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pytest\__main__.py", line 9 in <module>
+  File "<frozen runpy>", line 88 in _run_code
+  File "<frozen runpy>", line 198 in _run_module_as_main
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_two_local_clones_same_origin_have_distinct_workspace_namespaces", "when": "call", "outcome": "passed", "duration": 5.011519400053658}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_two_local_clones_same_origin_have_distinct_workspace_namespaces", "when": "teardown", "outcome": "passed", "duration": 0.737055099918507}
+
+..\after\tests\quick_connect\test_git_remaining.py::test_explicit_project_reads_its_origin_while_cwd_stays_elsewhere IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_explicit_project_reads_its_origin_while_cwd_stays_elsewhere", "when": "setup", "outcome": "passed", "duration": 6.758642600034364}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_explicit_project_reads_its_origin_while_cwd_stays_elsewhere", "when": "call", "outcome": "passed", "duration": 2.4849759999196976}
+PASSEDTimeout (0:00:10)!
+Thread 0x0000e8a0 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\threading.py", line 659 in wait
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 392 in finish_shutdown_when
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_shutdown.py", line 26 in shutdown_runtime
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\bootstrap\server_shutdown.py", line 292 in attempt
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 59 in run
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 93 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00009d3c (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000dcc8 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000ae08 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000e0c8 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 1092 in join
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 411 in close
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 217 in _run
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000da3c (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 148 in _publish_worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000ee14 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00003fec (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 359 in wait
+  File "C:\Python313\Lib\queue.py", line 202 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1113 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000ab64 (most recent call first):
+  File "C:\Python313\Lib\asyncio\windows_events.py", line 775 in _poll
+  File "C:\Python313\Lib\asyncio\windows_events.py", line 446 in select
+  File "C:\Python313\Lib\asyncio\base_events.py", line 1995 in _run_once
+  File "C:\Python313\Lib\asyncio\base_events.py", line 678 in run_forever
+  File "C:\Python313\Lib\asyncio\base_events.py", line 707 in run_until_complete
+  File "C:\Python313\Lib\asyncio\runners.py", line 118 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2621 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\from_thread.py", line 639 in run_blocking_portal
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000d028 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 359 in wait
+  File "C:\Python313\Lib\concurrent\futures\_base.py", line 451 in result
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\from_thread.py", line 347 in call
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\starlette\testclient.py", line 576 in wait_shutdown
+  File "C:\Python313\Lib\contextlib.py", line 482 in _exit_wrapper
+  File "C:\Python313\Lib\contextlib.py", line 604 in __exit__
+  File "C:\Python313\Lib\contextlib.py", line 627 in close
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\starlette\testclient.py", line 584 in __exit__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc32-git-remaining-hi6rd6jr\after\tests\execution_r4\test_local_realization.py", line 37 in local_setup
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\fixtures.py", line 1083 in _teardown_yield_fixture
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\fixtures.py", line 1225 in finish
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 568 in teardown_exact
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 199 in pytest_runtest_teardown
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 250 in <lambda>
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 361 in from_call
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 249 in call_and_report
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 144 in runtestprotocol
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 118 in pytest_runtest_protocol
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\main.py", line 411 in pytest_runtestloop
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\main.py", line 387 in _main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\main.py", line 333 in wrap_session
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\main.py", line 380 in pytest_cmdline_main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\config\__init__.py", line 262 in _main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\config\__init__.py", line 286 in _console_main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pytest\__main__.py", line 9 in <module>
+  File "<frozen runpy>", line 88 in _run_code
+  File "<frozen runpy>", line 198 in _run_module_as_main
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_explicit_project_reads_its_origin_while_cwd_stays_elsewhere", "when": "teardown", "outcome": "passed", "duration": 1.0227795999962837}
+
+..\after\tests\quick_connect\test_git_remaining.py::test_dubious_ownership_diagnostic_never_changes_safe_directory IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_dubious_ownership_diagnostic_never_changes_safe_directory", "when": "setup", "outcome": "passed", "duration": 6.818367899977602}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_dubious_ownership_diagnostic_never_changes_safe_directory", "when": "call", "outcome": "passed", "duration": 0.5524824999738485}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_dubious_ownership_diagnostic_never_changes_safe_directory", "when": "teardown", "outcome": "passed", "duration": 1.0467350999824703}
+
+..\after\tests\quick_connect\test_git_remaining.py::test_real_repository_help_and_plan_never_execute_git IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_real_repository_help_and_plan_never_execute_git", "when": "setup", "outcome": "passed", "duration": 5.78068130009342}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_real_repository_help_and_plan_never_execute_git", "when": "call", "outcome": "failed", "duration": 0.1622581999981776, "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-git-remaining-hi6rd6jr\\after\\tests\\quick_connect\\test_git_remaining.py:208: in test_real_repository_help_and_plan_never_execute_git\n    assert 'project-name' in capsys.readouterr().out\nE   AssertionError: assert 'project-name' in 'usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]\\n                          [--new-connection]\\n                          [--operator-profile OPERATOR_PROFILE]\\n                          [--remote-draft REMOTE_DRAFT]\\n                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]\\n                          [--review-current] [--start-at-login |\\n                          --no-start-at-login] [--agent AGENT |\\n                          --new-agent NEW_AGENT] [--name NAME]\\n                          [--client CLIENT] [--project PROJECT]\\n                          [--workspace-id WORKSPACE_ID]\\n                          [--binding-id BINDING_ID]\\n                          [--candidate-ref CANDIDATE_REF]\\n                          [--provider-home PROVIDER_HOME] [--plan]\\n                          [--approve APPROVE] [--json] [--no-chat]\\n                          [--timeout TIMEOUT]\\n                          [harness] [project_name]\\n\\nReview and connect this project using the canonical managed setup.\\n\\npositional arguments:\\n  harness               public harness token (codex, claude, pi)\\n  project_name          logical project name; never a directo...ILE     technical saved local profile; retained for scripts\\n                        and recovery\\n  --new-connection      explicitly add another connection\\n  --operator-profile OPERATOR_PROFILE\\n                        saved human operator profile on a remote Server\\n  --remote-draft REMOTE_DRAFT\\n                        remote host draft exported by Connector\\n  --setup-receipt-output SETUP_RECEIPT_OUTPUT\\n                        export the public remote handoff\\n  --review-current\\n  --start-at-login\\n  --no-start-at-login\\n  --agent AGENT         existing canonical agent ID\\n  --new-agent NEW_AGENT\\n                        proposed unused canonical identity ID\\n  --name NAME           display name of the new identity\\n  --client CLIENT       legacy harness selector; tokens resolve after parsing\\n  --project PROJECT     physical directory, independently of project name\\n  --workspace-id WORKSPACE_ID\\n  --binding-id BINDING_ID\\n  --candidate-ref CANDIDATE_REF\\n  --provider-home PROVIDER_HOME\\n  --plan                review without service, Git, probes or model turns\\n  --approve APPROVE     apply the exact displayed review revision\\n  --json\\n  --no-chat\\n  --timeout TIMEOUT\\n'\nE    +  where 'usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]\\n                          [--new-connection]\\n                          [--operator-profile OPERATOR_PROFILE]\\n                          [--remote-draft REMOTE_DRAFT]\\n                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]\\n                          [--review-current] [--start-at-login |\\n                          --no-start-at-login] [--agent AGENT |\\n                          --new-agent NEW_AGENT] [--name NAME]\\n                          [--client CLIENT] [--project PROJECT]\\n                          [--workspace-id WORKSPACE_ID]\\n                          [--binding-id BINDING_ID]\\n                          [--candidate-ref CANDIDATE_REF]\\n                          [--provider-home PROVIDER_HOME] [--plan]\\n                          [--approve APPROVE] [--json] [--no-chat]\\n                          [--timeout TIMEOUT]\\n                          [harness] [project_name]\\n\\nReview and connect this project using the canonical managed setup.\\n\\npositional arguments:\\n  harness               public harness token (codex, claude, pi)\\n  project_name          logical project name; never a directo...ILE     technical saved local profile; retained for scripts\\n                        and recovery\\n  --new-connection      explicitly add another connection\\n  --operator-profile OPERATOR_PROFILE\\n                        saved human operator profile on a remote Server\\n  --remote-draft REMOTE_DRAFT\\n                        remote host draft exported by Connector\\n  --setup-receipt-output SETUP_RECEIPT_OUTPUT\\n                        export the public remote handoff\\n  --review-current\\n  --start-at-login\\n  --no-start-at-login\\n  --agent AGENT         existing canonical agent ID\\n  --new-agent NEW_AGENT\\n                        proposed unused canonical identity ID\\n  --name NAME           display name of the new identity\\n  --client CLIENT       legacy harness selector; tokens resolve after parsing\\n  --project PROJECT     physical directory, independently of project name\\n  --workspace-id WORKSPACE_ID\\n  --binding-id BINDING_ID\\n  --candidate-ref CANDIDATE_REF\\n  --provider-home PROVIDER_HOME\\n  --plan                review without service, Git, probes or model turns\\n  --approve APPROVE     apply the exact displayed review revision\\n  --json\\n  --no-chat\\n  --timeout TIMEOUT\\n' = CaptureResult(out='usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]\\n                          [--new-connection]\\n                          [--operator-profile OPERATOR_PROFILE]\\n                          [--remote-draft REMOTE_DRAFT]\\n                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]\\n                          [--review-current] [--start-at-login |\\n                          --no-start-at-login] [--agent AGENT |\\n                          --new-agent NEW_AGENT] [--name NAME]\\n                          [--client CLIENT] [--project PROJECT]\\n                          [--workspace-id WORKSPACE_ID]\\n                          [--binding-id BINDING_ID]\\n                          [--candidate-ref CANDIDATE_REF]\\n                          [--provider-home PROVIDER_HOME] [--plan]\\n                          [--approve APPROVE] [--json] [--no-chat]\\n                          [--timeout TIMEOUT]\\n                          [harness] [project_name]\\n\\nReview and connect this project using the canonical managed setup.\\n\\npositional arguments:\\n  harness               public harness token (codex, claude, pi)\\n  project_name          logical project nam...echnical saved local profile; retained for scripts\\n                        and recovery\\n  --new-connection      explicitly add another connection\\n  --operator-profile OPERATOR_PROFILE\\n                        saved human operator profile on a remote Server\\n  --remote-draft REMOTE_DRAFT\\n                        remote host draft exported by Connector\\n  --setup-receipt-output SETUP_RECEIPT_OUTPUT\\n                        export the public remote handoff\\n  --review-current\\n  --start-at-login\\n  --no-start-at-login\\n  --agent AGENT         existing canonical agent ID\\n  --new-agent NEW_AGENT\\n                        proposed unused canonical identity ID\\n  --name NAME           display name of the new identity\\n  --client CLIENT       legacy harness selector; tokens resolve after parsing\\n  --project PROJECT     physical directory, independently of project name\\n  --workspace-id WORKSPACE_ID\\n  --binding-id BINDING_ID\\n  --candidate-ref CANDIDATE_REF\\n  --provider-home PROVIDER_HOME\\n  --plan                review without service, Git, probes or model turns\\n  --approve APPROVE     apply the exact displayed review revision\\n  --json\\n  --no-chat\\n  --timeout TIMEOUT\\n', err='').out\nE    +    where CaptureResult(out='usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]\\n                          [--new-connection]\\n                          [--operator-profile OPERATOR_PROFILE]\\n                          [--remote-draft REMOTE_DRAFT]\\n                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]\\n                          [--review-current] [--start-at-login |\\n                          --no-start-at-login] [--agent AGENT |\\n                          --new-agent NEW_AGENT] [--name NAME]\\n                          [--client CLIENT] [--project PROJECT]\\n                          [--workspace-id WORKSPACE_ID]\\n                          [--binding-id BINDING_ID]\\n                          [--candidate-ref CANDIDATE_REF]\\n                          [--provider-home PROVIDER_HOME] [--plan]\\n                          [--approve APPROVE] [--json] [--no-chat]\\n                          [--timeout TIMEOUT]\\n                          [harness] [project_name]\\n\\nReview and connect this project using the canonical managed setup.\\n\\npositional arguments:\\n  harness               public harness token (codex, claude, pi)\\n  project_name          logical project nam...echnical saved local profile; retained for scripts\\n                        and recovery\\n  --new-connection      explicitly add another connection\\n  --operator-profile OPERATOR_PROFILE\\n                        saved human operator profile on a remote Server\\n  --remote-draft REMOTE_DRAFT\\n                        remote host draft exported by Connector\\n  --setup-receipt-output SETUP_RECEIPT_OUTPUT\\n                        export the public remote handoff\\n  --review-current\\n  --start-at-login\\n  --no-start-at-login\\n  --agent AGENT         existing canonical agent ID\\n  --new-agent NEW_AGENT\\n                        proposed unused canonical identity ID\\n  --name NAME           display name of the new identity\\n  --client CLIENT       legacy harness selector; tokens resolve after parsing\\n  --project PROJECT     physical directory, independently of project name\\n  --workspace-id WORKSPACE_ID\\n  --binding-id BINDING_ID\\n  --candidate-ref CANDIDATE_REF\\n  --provider-home PROVIDER_HOME\\n  --plan                review without service, Git, probes or model turns\\n  --approve APPROVE     apply the exact displayed review revision\\n  --json\\n  --no-chat\\n  --timeout TIMEOUT\\n', err='') = readouterr()\nE    +      where readouterr = <_pytest.capture.CaptureFixture object at 0x000001B13F0B1260>.readouterr"}
+FAILEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_remaining.py::test_real_repository_help_and_plan_never_execute_git", "when": "teardown", "outcome": "passed", "duration": 0.8169925999827683}
+
+
+================================== FAILURES ===================================
+____________ test_real_repository_help_and_plan_never_execute_git _____________
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc32-git-remaining-hi6rd6jr\after\tests\quick_connect\test_git_remaining.py:208: in test_real_repository_help_and_plan_never_execute_git
+    assert 'project-name' in capsys.readouterr().out
+E   AssertionError: assert 'project-name' in 'usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]\n                          [--new-connection]\n                          [--operator-profile OPERATOR_PROFILE]\n                          [--remote-draft REMOTE_DRAFT]\n                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]\n                          [--review-current] [--start-at-login |\n                          --no-start-at-login] [--agent AGENT |\n                          --new-agent NEW_AGENT] [--name NAME]\n                          [--client CLIENT] [--project PROJECT]\n                          [--workspace-id WORKSPACE_ID]\n                          [--binding-id BINDING_ID]\n                          [--candidate-ref CANDIDATE_REF]\n                          [--provider-home PROVIDER_HOME] [--plan]\n                          [--approve APPROVE] [--json] [--no-chat]\n                          [--timeout TIMEOUT]\n                          [harness] [project_name]\n\nReview and connect this project using the canonical managed setup.\n\npositional arguments:\n  harness               public harness token (codex, claude, pi)\n  project_name          logical project name; never a directo...ILE     technical saved local profile; retained for scripts\n                        and recovery\n  --new-connection      explicitly add another connection\n  --operator-profile OPERATOR_PROFILE\n                        saved human operator profile on a remote Server\n  --remote-draft REMOTE_DRAFT\n                        remote host draft exported by Connector\n  --setup-receipt-output SETUP_RECEIPT_OUTPUT\n                        export the public remote handoff\n  --review-current\n  --start-at-login\n  --no-start-at-login\n  --agent AGENT         existing canonical agent ID\n  --new-agent NEW_AGENT\n                        proposed unused canonical identity ID\n  --name NAME           display name of the new identity\n  --client CLIENT       legacy harness selector; tokens resolve after parsing\n  --project PROJECT     physical directory, independently of project name\n  --workspace-id WORKSPACE_ID\n  --binding-id BINDING_ID\n  --candidate-ref CANDIDATE_REF\n  --provider-home PROVIDER_HOME\n  --plan                review without service, Git, probes or model turns\n  --approve APPROVE     apply the exact displayed review revision\n  --json\n  --no-chat\n  --timeout TIMEOUT\n'
+E    +  where 'usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]\n                          [--new-connection]\n                          [--operator-profile OPERATOR_PROFILE]\n                          [--remote-draft REMOTE_DRAFT]\n                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]\n                          [--review-current] [--start-at-login |\n                          --no-start-at-login] [--agent AGENT |\n                          --new-agent NEW_AGENT] [--name NAME]\n                          [--client CLIENT] [--project PROJECT]\n                          [--workspace-id WORKSPACE_ID]\n                          [--binding-id BINDING_ID]\n                          [--candidate-ref CANDIDATE_REF]\n                          [--provider-home PROVIDER_HOME] [--plan]\n                          [--approve APPROVE] [--json] [--no-chat]\n                          [--timeout TIMEOUT]\n                          [harness] [project_name]\n\nReview and connect this project using the canonical managed setup.\n\npositional arguments:\n  harness               public harness token (codex, claude, pi)\n  project_name          logical project name; never a directo...ILE     technical saved local profile; retained for scripts\n                        and recovery\n  --new-connection      explicitly add another connection\n  --operator-profile OPERATOR_PROFILE\n                        saved human operator profile on a remote Server\n  --remote-draft REMOTE_DRAFT\n                        remote host draft exported by Connector\n  --setup-receipt-output SETUP_RECEIPT_OUTPUT\n                        export the public remote handoff\n  --review-current\n  --start-at-login\n  --no-start-at-login\n  --agent AGENT         existing canonical agent ID\n  --new-agent NEW_AGENT\n                        proposed unused canonical identity ID\n  --name NAME           display name of the new identity\n  --client CLIENT       legacy harness selector; tokens resolve after parsing\n  --project PROJECT     physical directory, independently of project name\n  --workspace-id WORKSPACE_ID\n  --binding-id BINDING_ID\n  --candidate-ref CANDIDATE_REF\n  --provider-home PROVIDER_HOME\n  --plan                review without service, Git, probes or model turns\n  --approve APPROVE     apply the exact displayed review revision\n  --json\n  --no-chat\n  --timeout TIMEOUT\n' = CaptureResult(out='usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]\n                          [--new-connection]\n                          [--operator-profile OPERATOR_PROFILE]\n                          [--remote-draft REMOTE_DRAFT]\n                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]\n                          [--review-current] [--start-at-login |\n                          --no-start-at-login] [--agent AGENT |\n                          --new-agent NEW_AGENT] [--name NAME]\n                          [--client CLIENT] [--project PROJECT]\n                          [--workspace-id WORKSPACE_ID]\n                          [--binding-id BINDING_ID]\n                          [--candidate-ref CANDIDATE_REF]\n                          [--provider-home PROVIDER_HOME] [--plan]\n                          [--approve APPROVE] [--json] [--no-chat]\n                          [--timeout TIMEOUT]\n                          [harness] [project_name]\n\nReview and connect this project using the canonical managed setup.\n\npositional arguments:\n  harness               public harness token (codex, claude, pi)\n  project_name          logical project nam...echnical saved local profile; retained for scripts\n                        and recovery\n  --new-connection      explicitly add another connection\n  --operator-profile OPERATOR_PROFILE\n                        saved human operator profile on a remote Server\n  --remote-draft REMOTE_DRAFT\n                        remote host draft exported by Connector\n  --setup-receipt-output SETUP_RECEIPT_OUTPUT\n                        export the public remote handoff\n  --review-current\n  --start-at-login\n  --no-start-at-login\n  --agent AGENT         existing canonical agent ID\n  --new-agent NEW_AGENT\n                        proposed unused canonical identity ID\n  --name NAME           display name of the new identity\n  --client CLIENT       legacy harness selector; tokens resolve after parsing\n  --project PROJECT     physical directory, independently of project name\n  --workspace-id WORKSPACE_ID\n  --binding-id BINDING_ID\n  --candidate-ref CANDIDATE_REF\n  --provider-home PROVIDER_HOME\n  --plan                review without service, Git, probes or model turns\n  --approve APPROVE     apply the exact displayed review revision\n  --json\n  --no-chat\n  --timeout TIMEOUT\n', err='').out
+E    +    where CaptureResult(out='usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]\n                          [--new-connection]\n                          [--operator-profile OPERATOR_PROFILE]\n                          [--remote-draft REMOTE_DRAFT]\n                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]\n                          [--review-current] [--start-at-login |\n                          --no-start-at-login] [--agent AGENT |\n                          --new-agent NEW_AGENT] [--name NAME]\n                          [--client CLIENT] [--project PROJECT]\n                          [--workspace-id WORKSPACE_ID]\n                          [--binding-id BINDING_ID]\n                          [--candidate-ref CANDIDATE_REF]\n                          [--provider-home PROVIDER_HOME] [--plan]\n                          [--approve APPROVE] [--json] [--no-chat]\n                          [--timeout TIMEOUT]\n                          [harness] [project_name]\n\nReview and connect this project using the canonical managed setup.\n\npositional arguments:\n  harness               public harness token (codex, claude, pi)\n  project_name          logical project nam...echnical saved local profile; retained for scripts\n                        and recovery\n  --new-connection      explicitly add another connection\n  --operator-profile OPERATOR_PROFILE\n                        saved human operator profile on a remote Server\n  --remote-draft REMOTE_DRAFT\n                        remote host draft exported by Connector\n  --setup-receipt-output SETUP_RECEIPT_OUTPUT\n                        export the public remote handoff\n  --review-current\n  --start-at-login\n  --no-start-at-login\n  --agent AGENT         existing canonical agent ID\n  --new-agent NEW_AGENT\n                        proposed unused canonical identity ID\n  --name NAME           display name of the new identity\n  --client CLIENT       legacy harness selector; tokens resolve after parsing\n  --project PROJECT     physical directory, independently of project name\n  --workspace-id WORKSPACE_ID\n  --binding-id BINDING_ID\n  --candidate-ref CANDIDATE_REF\n  --provider-home PROVIDER_HOME\n  --plan                review without service, Git, probes or model turns\n  --approve APPROVE     apply the exact displayed review revision\n  --json\n  --no-chat\n  --timeout TIMEOUT\n', err='') = readouterr()
+E    +      where readouterr = <_pytest.capture.CaptureFixture object at 0x000001B13F0B1260>.readouterr
+============================== warnings summary ===============================
+..\..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc32-git-remaining-hi6rd6jr\git-remaining\junit.xml -
+=========================== short test summary info ===========================
+FAILED ..\after\tests\quick_connect\test_git_remaining.py::test_real_repository_help_and_plan_never_execute_git
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+============== 1 failed, 6 passed, 1 warning in 66.51s (0:01:06) ==============

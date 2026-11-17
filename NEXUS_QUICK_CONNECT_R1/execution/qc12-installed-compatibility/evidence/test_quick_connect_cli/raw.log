@@ -1,0 +1,102 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 21 items
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay", "when": "setup", "outcome": "passed", "duration": 6.810107000055723}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay", "when": "call", "outcome": "passed", "duration": 1.7667714999988675}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay", "when": "teardown", "outcome": "passed", "duration": 1.0543304999591783}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_second_codex_explicit_add_uses_reviewer_id_in_same_workspace IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_second_codex_explicit_add_uses_reviewer_id_in_same_workspace", "when": "setup", "outcome": "passed", "duration": 5.248570499941707}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_second_codex_explicit_add_uses_reviewer_id_in_same_workspace", "when": "call", "outcome": "passed", "duration": 3.3293665000237525}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_second_codex_explicit_add_uses_reviewer_id_in_same_workspace", "when": "teardown", "outcome": "passed", "duration": 0.5712565000867471}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_exact_public_id_noninteractive_without_profile_reuses_canonical_reference IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_exact_public_id_noninteractive_without_profile_reuses_canonical_reference", "when": "setup", "outcome": "passed", "duration": 5.710351500078104}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_exact_public_id_noninteractive_without_profile_reuses_canonical_reference", "when": "call", "outcome": "passed", "duration": 1.738595200004056}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_exact_public_id_noninteractive_without_profile_reuses_canonical_reference", "when": "teardown", "outcome": "passed", "duration": 0.9176367999752983}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_explicit_occupied_id_add_fails_before_another_model_test IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_explicit_occupied_id_add_fails_before_another_model_test", "when": "setup", "outcome": "passed", "duration": 5.174409999977797}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_explicit_occupied_id_add_fails_before_another_model_test", "when": "call", "outcome": "passed", "duration": 1.5634519000304863}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_explicit_occupied_id_add_fails_before_another_model_test", "when": "teardown", "outcome": "passed", "duration": 0.3105955000501126}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens0] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens0]", "when": "setup", "outcome": "passed", "duration": 5.087773000006564}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens0]", "when": "call", "outcome": "passed", "duration": 0.003984900075010955}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens0]", "when": "teardown", "outcome": "passed", "duration": 0.8117020999779925}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens1] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens1]", "when": "setup", "outcome": "passed", "duration": 5.269690599991009}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens1]", "when": "call", "outcome": "passed", "duration": 0.0031007000943645835}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens1]", "when": "teardown", "outcome": "passed", "duration": 0.8390095999930054}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens2] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens2]", "when": "setup", "outcome": "passed", "duration": 5.2232593999942765}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens2]", "when": "call", "outcome": "passed", "duration": 0.0019189000595360994}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens2]", "when": "teardown", "outcome": "passed", "duration": 0.8298466999549419}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_new_connection_json_id_without_profile_never_invents_idempotency IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_new_connection_json_id_without_profile_never_invents_idempotency", "when": "setup", "outcome": "passed", "duration": 4.317414000048302}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_new_connection_json_id_without_profile_never_invents_idempotency", "when": "call", "outcome": "passed", "duration": 0.0017272999975830317}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_new_connection_json_id_without_profile_never_invents_idempotency", "when": "teardown", "outcome": "passed", "duration": 0.749033399973996}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_plan_with_service_off_never_starts_daemon_or_discovers_git IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_plan_with_service_off_never_starts_daemon_or_discovers_git", "when": "setup", "outcome": "passed", "duration": 5.167031700024381}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_plan_with_service_off_never_starts_daemon_or_discovers_git", "when": "call", "outcome": "passed", "duration": 0.002455199952237308}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_plan_with_service_off_never_starts_daemon_or_discovers_git", "when": "teardown", "outcome": "passed", "duration": 0.8332022000104189}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_unknown_or_unavailable_harness_json_does_not_read_or_test[codxe-CLIENT_SELECTION_REQUIRED] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_unknown_or_unavailable_harness_json_does_not_read_or_test[codxe-CLIENT_SELECTION_REQUIRED]", "when": "setup", "outcome": "passed", "duration": 5.280111499945633}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_unknown_or_unavailable_harness_json_does_not_read_or_test[codxe-CLIENT_SELECTION_REQUIRED]", "when": "call", "outcome": "passed", "duration": 0.0955060999840498}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_unknown_or_unavailable_harness_json_does_not_read_or_test[codxe-CLIENT_SELECTION_REQUIRED]", "when": "teardown", "outcome": "passed", "duration": 0.7144382999977097}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_unknown_or_unavailable_harness_json_does_not_read_or_test[claude-INSTALLATION_UNAVAILABLE] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_unknown_or_unavailable_harness_json_does_not_read_or_test[claude-INSTALLATION_UNAVAILABLE]", "when": "setup", "outcome": "passed", "duration": 5.345768400002271}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_unknown_or_unavailable_harness_json_does_not_read_or_test[claude-INSTALLATION_UNAVAILABLE]", "when": "call", "outcome": "passed", "duration": 0.12915369996335357}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_unknown_or_unavailable_harness_json_does_not_read_or_test[claude-INSTALLATION_UNAVAILABLE]", "when": "teardown", "outcome": "passed", "duration": 0.6807488000486046}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_root_alias_uses_same_managed_review_not_external_cli IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_root_alias_uses_same_managed_review_not_external_cli", "when": "setup", "outcome": "passed", "duration": 5.314071399974637}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_root_alias_uses_same_managed_review_not_external_cli", "when": "call", "outcome": "passed", "duration": 0.17193750001024455}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_root_alias_uses_same_managed_review_not_external_cli", "when": "teardown", "outcome": "passed", "duration": 0.6513638000469655}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_unknown_harness_tty_choice_is_explicit_and_plan_does_not_test IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_unknown_harness_tty_choice_is_explicit_and_plan_does_not_test", "when": "setup", "outcome": "passed", "duration": 5.39024460001383}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_unknown_harness_tty_choice_is_explicit_and_plan_does_not_test", "when": "call", "outcome": "passed", "duration": 0.2275201000738889}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_unknown_harness_tty_choice_is_explicit_and_plan_does_not_test", "when": "teardown", "outcome": "passed", "duration": 0.5337988999672234}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:test] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:test]", "when": "setup", "outcome": "passed", "duration": 5.315659899963066}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:test]", "when": "call", "outcome": "passed", "duration": 0.8399144998984411}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:test]", "when": "teardown", "outcome": "passed", "duration": 0.769149599946104}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:finish] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:finish]", "when": "setup", "outcome": "passed", "duration": 5.226337400032207}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:finish]", "when": "call", "outcome": "passed", "duration": 1.6987849000142887}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:finish]", "when": "teardown", "outcome": "passed", "duration": 1.0004817000590265}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_legacy_public_id_adoption_only_writes_metadata_preserves_unknown_fields_without_echo IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_legacy_public_id_adoption_only_writes_metadata_preserves_unknown_fields_without_echo", "when": "setup", "outcome": "passed", "duration": 5.402874200022779}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_legacy_public_id_adoption_only_writes_metadata_preserves_unknown_fields_without_echo", "when": "call", "outcome": "passed", "duration": 1.5903611000394449}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_legacy_public_id_adoption_only_writes_metadata_preserves_unknown_fields_without_echo", "when": "teardown", "outcome": "passed", "duration": 1.0258614999474958}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_tty_customize_id_creates_new_review_preserves_hint_and_invalidates_original_hash IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_tty_customize_id_creates_new_review_preserves_hint_and_invalidates_original_hash", "when": "setup", "outcome": "passed", "duration": 5.192439800011925}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_tty_customize_id_creates_new_review_preserves_hint_and_invalidates_original_hash", "when": "call", "outcome": "passed", "duration": 1.9192361000459641}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_tty_customize_id_creates_new_review_preserves_hint_and_invalidates_original_hash", "when": "teardown", "outcome": "passed", "duration": 0.9126174999400973}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_json_unknown_exposes_authorized_alternatives_without_input IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_json_unknown_exposes_authorized_alternatives_without_input", "when": "setup", "outcome": "passed", "duration": 5.437413700041361}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_json_unknown_exposes_authorized_alternatives_without_input", "when": "call", "outcome": "passed", "duration": 0.116778300027363}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_json_unknown_exposes_authorized_alternatives_without_input", "when": "teardown", "outcome": "passed", "duration": 0.687331399996765}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_rollback_preserves_exact_existing_profile_without_replay_and_blocks_new_entry_before_context IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_rollback_preserves_exact_existing_profile_without_replay_and_blocks_new_entry_before_context", "when": "setup", "outcome": "passed", "duration": 5.1831502000568435}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_rollback_preserves_exact_existing_profile_without_replay_and_blocks_new_entry_before_context", "when": "call", "outcome": "passed", "duration": 1.8374276000540704}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_rollback_preserves_exact_existing_profile_without_replay_and_blocks_new_entry_before_context", "when": "teardown", "outcome": "passed", "duration": 1.033737299963832}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[None-codex] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[None-codex]", "when": "setup", "outcome": "passed", "duration": 5.099572099978104}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[None-codex]", "when": "call", "outcome": "passed", "duration": 0.30602010001894087}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[None-codex]", "when": "teardown", "outcome": "passed", "duration": 0.5254995999857783}
+
+after\tests\quick_connect\test_quick_connect_cli.py::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[reviewer-reviewer] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[reviewer-reviewer]", "when": "setup", "outcome": "passed", "duration": 5.025731600006111}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[reviewer-reviewer]", "when": "call", "outcome": "passed", "duration": 0.26398400007747114}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_cli.py::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[reviewer-reviewer]", "when": "teardown", "outcome": "passed", "duration": 0.5665711000328884}
+
+
+============================== warnings summary ===============================
+..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_cli\junit.xml -
+================== 21 passed, 1 warning in 146.99s (0:02:26) ==================

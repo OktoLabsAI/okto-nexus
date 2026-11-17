@@ -1,0 +1,34 @@
+connected_local = ((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/nexus-qc09-bounded-baseline-8isjqqy0...agent_id': 'subject', ...}, <test_embedded_dispatch.connect_local.<locals>.NativeFactory object at 0x000002039936EF90>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000203985CD810>
+
+    def test_late_structured_output_cannot_complete_reclaimed_work(connected_local, monkeypatch):
+        from okto_nexus.application.handoff import HandoffService
+        from test_canonical_structured_work import native_work, state
+        setup, binding, hid, _, claim_work, call_work, peers = native_work(connected_local, monkeypatch)
+        with monkeypatch.context() as patch:
+            patch.setattr(HandoffService, 'process_runtime_results', lambda service: 0)
+            admitted = claim_work(completion_mode='structured_result_v1')
+            assert admitted['ok'], admitted
+>           result = wait_result(setup, 'PENDING_AUTHORIZATION')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+setup = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/nexus-qc09-bounded-baseline-8isjqqy0/...d', version=None, architecture=None, launch_script=None, build_identity=None, installation_ref=None, reason=None), ...)
+state = 'PENDING_AUTHORIZATION'
+
+    def wait_result(setup, state):
+        deadline = time.monotonic() + 10
+        row = None
+        while time.monotonic() < deadline:
+            with setup[0].connection_factory.unit_of_work(write=False) as uow:
+                found = uow.connection.execute('SELECT * FROM runtime_results WHERE canonical_operation_id IS NOT NULL').fetchone()
+                row = dict(found) if found else None
+            if row and row['publication_state'] == state:
+                return row
+            time.sleep(.02)
+>       pytest.fail(str(row))
+E       Failed: None
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_result_publication.py:35: Failed

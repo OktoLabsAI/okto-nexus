@@ -1,0 +1,18 @@
+{
+  "scope": "QC F/H pure outcome follow-up",
+  "status": "FOCAL_PASS",
+  "tests_passed": 20,
+  "evidence": "../qc04-terminal/focal-run.json",
+  "qualification": "../qc04-terminal/qualification.json",
+  "tool": "1099b5",
+  "source_sha256": {
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_outcome.py": "5ebbe3dc2dc9dc0365bdd8bffbdc97be2b22fabc822076af0ab71b72db34a69a",
+    "src/okto_nexus/domain/quick_connect.py": "b45cc4c86437fa0c720205fcad078248bb5a73bb3d666f280b05097ee61b9680",
+    "tests/quick_connect/test_quick_connect_outcome.py": "c7c211912318adc0bc796b0e77a37ae44ee3f298a2e829a0f31ae1155082280f"
+  },
+  "antecedents": [
+    "red-qualification.json",
+    "../qc04-terminal/qualification.json"
+  ],
+  "limits": "Pure synthetic data/output tests only; no chat, real CLI process, provider or native execution"
+}

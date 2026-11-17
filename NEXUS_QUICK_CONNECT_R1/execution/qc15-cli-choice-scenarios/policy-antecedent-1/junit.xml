@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="10.600" timestamp="2026-11-17T05:27:12.935039-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_qc15_policy_denial" name="test_existing_method_denial_is_projected_and_cli_refuses_before_effects" time="7.867"><failure message="AssertionError: assert ['agent_conne...ation_epochs'] == ['agent_connection_methods']&#10;  &#10;  Left contains one more item: 'attention_operation_epochs'&#10;  &#10;  Full diff: (-: missing in left side, +: extra in left side)&#10;    [&#10;        'agent_connection_methods',&#10;  +     'attention_operation_epochs',&#10;    ]">C:\Users\jpamb\AppData\Local\Temp\nexus-qc15-policy-ov6r5o_o\after\tests\execution_r4\test_qc15_policy_denial.py:38: in test_existing_method_denial_is_projected_and_cli_refuses_before_effects
+    assert changes == ['agent_connection_methods']
+E   AssertionError: assert ['agent_conne...ation_epochs'] == ['agent_connection_methods']
+E     
+E     Left contains one more item: 'attention_operation_epochs'
+E     
+E     Full diff: (-: missing in left side, +: extra in left side)
+E       [
+E           'agent_connection_methods',
+E     +     'attention_operation_epochs',
+E       ]</failure></testcase></testsuite></testsuites>

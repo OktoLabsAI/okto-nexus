@@ -1,0 +1,50 @@
+{
+  "cases": [
+    {
+      "label": "policy",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-policy-1h57xg1t\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-policy-1h57xg1t\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-policy-1h57xg1t\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-policy-1h57xg1t\\after\\tests\\execution_r4\\test_qc15_policy_denial.py",
+        "-v",
+        "-s",
+        "-x",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-policy-1h57xg1t\\policy\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-policy-1h57xg1t\\policy\\cwd",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T08:28:31.011640+00:00",
+      "signals": [],
+      "exit_code": 1,
+      "processes_after": [
+        {
+          "pid": 52636,
+          "parent_pid": null,
+          "birth_filetime": 134393777110135557,
+          "alive": false
+        },
+        {
+          "pid": 50432,
+          "parent_pid": 52636,
+          "birth_filetime": 134393777110300510,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T08:28:43.312391+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

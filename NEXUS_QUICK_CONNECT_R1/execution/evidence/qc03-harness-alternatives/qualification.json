@@ -1,0 +1,28 @@
+{
+  "qualification": "B04_PASSIVE_ALTERNATIVES_UNIT_AND_TWO_CLI_PLAN_CASES_PASS",
+  "unit_green": {
+    "tool_handle": "233d64",
+    "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe -B -Xutf8 -m pytest tests/quick_connect/test_harness_alternatives.py -q --junitxml=NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-harness-alternatives/pytest-green.xml",
+    "exit_code": 0, "passed": 10, "elapsed_seconds": 0.80
+  },
+  "cli_green": {
+    "tool_handles": ["98ef65", "0366de"],
+    "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe -B -Xutf8 -m pytest tests/quick_connect/test_quick_connect_cli.py -k b04_known_missing -q --junitxml=NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-harness-alternatives/pytest-cli.xml",
+    "exit_code": 0, "passed": 2, "deselected": 19, "elapsed_seconds": 15.39
+  },
+  "ruff": {"tool_handle": "6ec141", "command": "rtk proxy ruff check tests/quick_connect/test_harness_alternatives.py tests/quick_connect/test_quick_connect_cli.py", "exit_code": 0},
+  "antecedent_red": {"tool_handle": "88ee7b", "exit_code": 1, "passed": 3, "failed": 7, "elapsed_seconds": 1.04, "xml": "pytest-red.xml", "note": "Known missing family had no usable TTY alternatives/cancellation or noninteractive choices, and policy alternatives could not be selected. Source owner was editing concurrently around this run: traceback source text includes newer lines, so no exact frozen red-source hash is claimed. Green runs followed explicit source freeze."},
+  "covered": [
+    "Known requested Claude absent, Codex observed: explicit TTY selection of Codex or cancellation, one passive GET only and no version/install/provider operation",
+    "Noninteractive known-missing returns INSTALLATION_UNAVAILABLE plus all three supported families, per-family observed/freshness/candidates without claiming authentication or provider/model readiness",
+    "Stale requested inventory is unconfirmed rather than absence; never implicitly picks a different observed family",
+    "can_configure=false remains a policy refusal for the same candidate; an explicit choice of another fresh authorized family is allowed",
+    "Selecting stale or policy-denied alternatives still cannot make them usable",
+    "Two canonical CLI/HTTP --plan cases: requested Claude absent→explicit Codex; actual client/config adapter becomes Codex, default ID is codex (not claude), explicit reviewer preserved",
+    "Logical project name/source and physical root remain frozen; both CLI plans have zero synthetic version checks/Tests and zero canonical public-ID reservations, bindings or grants"
+  ],
+  "environment": {"python": "preserved PR27 Python 3.13.1 Windows x64, -B -Xutf8, current Nexus checkout source", "core": "existing installed Core read only; not installed Nexus0.3.6 qualification", "unit": "controlled authorized inventory DTOs; every boundary call asserted GET and each helper invocation uses one GET", "cli": "canonical TestClient/SQLite per-test temporary homes, inert lifecycle service, synthetic check/Test boundaries not invoked by plans", "home_isolation": "HOME/USERPROFILE/CODEX_HOME/CLAUDE_CONFIG_DIR under Temp before bootstrap; explicit own provider-home", "input": "unit and CLI input/TTY flags mapped by tests; native PTY subset is a separate evidence cut"},
+  "preserved_previous_test_source": {"path": "antecedent-cli-delta-test.py.txt", "sha256": "d3c418f9333f353223facaf971fdef2447ac852cfb02196868f45f8844e8641a"},
+  "cleanup": {"testclient_contexts_closed": true, "provider_service_or_browser_processes_started": 0, "native_provider_calls": 0, "ledger_git_prefix_mutation": false},
+  "limits": ["No real provider/harness installation/authentication, installed package, human study, full PTY or full 147-scenario matrix qualification", "CLI plans stop before approval; their effect-free proof is not successful native setup", "No rerun of every earlier test after this production delta; historical source cuts preserved", "Agent changed tests/evidence only; helper and orchestration fixes made by source owner"]
+}

@@ -1,0 +1,11 @@
+--- D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc15-cli-choice-scenarios\policy-final\executed-test.py
++++ tests/quick_connect/test_qc15_policy_denial.py
+@@ -79,5 +79,6 @@
+         refusal=value['code'], tests=0, probes=0,
+         table_hashes={name:hashlib.sha256(repr(rows).encode()).hexdigest()
+                       for name,rows in before_cli.items()})
+-    (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'policy-proof.json').write_text(
+-        json.dumps(proof,indent=2)+'\n',encoding='utf-8')
++    if os.environ.get('QC_DERIVATIVE_OUTPUT'):
++        (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'policy-proof.json').write_text(
++            json.dumps(proof,indent=2)+'\n',encoding='utf-8')

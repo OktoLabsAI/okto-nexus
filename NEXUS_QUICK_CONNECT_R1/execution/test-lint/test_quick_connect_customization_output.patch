@@ -1,0 +1,22 @@
+--- persistence-applied-final/tests/quick_connect/test_quick_connect_customization_output.py
++++ tests/quick_connect/test_quick_connect_customization_output.py
+@@ -5,9 +5,9 @@
+ 
+ import pytest
+ from test_quick_connect_cli import (  # noqa: F401
+-    checking, invoke, isolated_provider_environment, local_setup, quick_cli, terminal,
++    checking as checking, invoke, isolated_provider_environment as isolated_provider_environment, local_setup as local_setup, quick_cli as quick_cli, terminal as terminal,
+ )
+-from test_terminal_multi_harness import two_harnesses  # noqa: F401
++from test_terminal_multi_harness import two_harnesses as two_harnesses  # noqa: F401
+ from test_quick_connect_extra_scenarios import canonical_snapshot
+ 
+ 
+@@ -107,3 +107,7 @@
+     monkeypatch.setattr(work, 'interactive_work', chat)
+     assert c.run(['connect', 'codex', 'Chat Logical Project']) == 37
+     assert len(observed) == 1 and observed[0]['bound']
++
++
++# Explicit public exports include pytest fixtures used through injection.
++__all__ = ['Path', 'SimpleNamespace', 'canonical_snapshot', 'checking', 'invoke', 'isolated_provider_environment', 'json', 'local_setup', 'pytest', 'quick_cli', 'terminal', 'test_f21_customize_real_review_creates_fresh_exact_intent', 'test_h01_bound_public_id_and_project_are_printed_before_chat_callback', 'two_harnesses']

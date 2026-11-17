@@ -1,0 +1,35 @@
+MCP workspace_resolve: OK
+MCP agent_register: OK
+MCP agent_register: OK
+MCP agent_whoami: OK
+MCP agent_whoami: OK
+MCP session_open: OK
+MCP session_open: OK
+MCP channel_list: OK
+MCP message_create: OK
+MCP event_wait: OK
+MCP handoff_create: OK
+MCP handoff_claim: OK
+MCP handoff_complete: OK
+MCP artifact_put: OK
+MCP artifact_get: OK
+MCP shared_md_render: OK
+{
+  "transport": "HTTP /mcp/",
+  "authenticated_agents": 2,
+  "provider_calls": 0,
+  "real_harnesses_tested": false,
+  "tools_count": 54,
+  "message_observed_via_event_wait": true,
+  "handoff_completed": true,
+  "artifact_round_trip": true,
+  "shared_md_written": true,
+  "workspace_id": "b7e0a219725cede19ef17b975c241f20c45666ed7882622bb8d133c514032867",
+  "all_envelopes_ok": true,
+  "cleanup": {
+    "physical_exit": true,
+    "exit_code": 0,
+    "canonical_stop_exit_code": 0
+  }
+}
+LIVE E2E RESULT: PASS

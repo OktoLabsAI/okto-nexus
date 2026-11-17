@@ -1,0 +1,74 @@
+{
+  "allocation.json": {
+    "bytes": 345,
+    "sha256": "32f0a166777806df06cd3a02b189d3bf8f1a2424ec9bb8eb6c2952c719ba3555"
+  },
+  "curate.py": {
+    "bytes": 3666,
+    "sha256": "63629f1b33194e8d67de894069e3b1dac82821699fba2d998ae5a42a9d76c384"
+  },
+  "package-ready.json": {
+    "bytes": 410,
+    "sha256": "f6e92d9c88823d5d2ad6086cc1edb195b2a6efb203d475ea293e105249051657"
+  },
+  "prepare.py": {
+    "bytes": 5187,
+    "sha256": "38ed7927455d99bcace2cd4ed9f8c208efb87665ceb3c879db2758929b961c6e"
+  },
+  "qualification.json": {
+    "bytes": 1745,
+    "sha256": "15a1c519a414a8b5a2badae09ccb58df1cfc9f38ab976fbafbab7a376fa32fcd"
+  },
+  "run.py": {
+    "bytes": 10558,
+    "sha256": "8aa168affa911369ef2f1ea6778a1dee8585dc2eebe27070e81487dd97f4b211"
+  },
+  "evidence/junit.xml": {
+    "bytes": 419,
+    "sha256": "4dce45d5fe928526bace5e41f7cb7775e464332f6cf26ede9b9fadaa931669f6"
+  },
+  "evidence/origins-finish.json": {
+    "bytes": 128,
+    "sha256": "be91fafefa6b9ef0d8249709d3ad888472776b29a1e2acccbe080d108617adf7"
+  },
+  "evidence/origins.json": {
+    "bytes": 1714,
+    "sha256": "927f11bcafc3aec45a7ba13e915168e335b5a987dae2cb848b462f7449cf1030"
+  },
+  "evidence/payload-end.json": {
+    "bytes": 125523,
+    "sha256": "93223586af41bbb8471f6c69412b242a200bb36d7727cbb2fa1e8954ca9c003b"
+  },
+  "evidence/payload-start.json": {
+    "bytes": 125523,
+    "sha256": "93223586af41bbb8471f6c69412b242a200bb36d7727cbb2fa1e8954ca9c003b"
+  },
+  "evidence/raw.log": {
+    "bytes": 16917,
+    "sha256": "173ea2d849521cb420b0c12b4a0d9a31f68a6bb9defa83eba13b0a07f2b0ef98"
+  },
+  "evidence/reports.jsonl": {
+    "bytes": 640,
+    "sha256": "d5a9c7d79c8f2cd8615d75510ba08c416f4611b438a047d5df3e1fde30737047"
+  },
+  "evidence/result.json": {
+    "bytes": 1980,
+    "sha256": "de49e27c377b10767d6ed2e9dba4ee6a2356c738eae8bb510adf072c2a3449bb"
+  },
+  "evidence/runner.json": {
+    "bytes": 1644,
+    "sha256": "a55b66b53add9d9a9f49afa686678cb035e2f01b3bc6c7b6a41307cce021579b"
+  },
+  "evidence/source-pins.json": {
+    "bytes": 101051,
+    "sha256": "704cf4adbb8ffdd0b2777ce6011de4863bd270c5f65be8bb0b6a86a37c1a435a"
+  },
+  "evidence/test_quick_connect_autoid_race.py.txt": {
+    "bytes": 3848,
+    "sha256": "30645881505147693829592cd7d9520a2900af0bf23febffa537462bb63a97a3"
+  },
+  "evidence/test_quick_connect_extra_scenarios.py.txt": {
+    "bytes": 8064,
+    "sha256": "9f64bc7f227f84b237e6a1ed8c376a0ab4463a01934dccfdf65032f39a7fc7f3"
+  }
+}

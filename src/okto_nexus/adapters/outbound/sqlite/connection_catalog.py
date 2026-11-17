@@ -9,17 +9,30 @@ SELECT b.server_id,b.binding_id,b.executor_id,b.endpoint_id,b.workspace_binding_
  CASE WHEN x.kind='remote' THEN 'remote' ELSE 'local' END AS execution_location,
  substr(COALESCE(CASE WHEN json_valid(a.metadata) THEN CASE WHEN json_type(a.metadata,'$.display_name')='text' THEN json_extract(a.metadata,'$.display_name') END END,a.agent_id),1,120) AS agent_label,
  substr(COALESCE(w.display_name,e.workspace_id),1,120) AS workspace_label,
- substr(COALESCE(x.label,x.executor_id),1,120) AS host_label
+ substr(COALESCE(x.label,x.executor_id),1,120) AS host_label,
+ public.connect_id,public.revision AS public_connection_revision
 FROM execution_bindings b JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id
 JOIN agents a ON a.agent_id=e.agent_id
 JOIN execution_executors x ON x.server_id=b.server_id AND x.executor_id=b.executor_id
 LEFT JOIN workspaces w ON w.workspace_id=e.workspace_id
+LEFT JOIN connection_public_ids public INDEXED BY connection_public_id_binding
+ ON public.server_id=b.server_id AND public.state='bound'
+ AND public.canonical_ref_json IS NOT NULL
+ AND public.adapter_id=e.adapter_id
+ AND public.workspace_id=e.workspace_id
+ AND json_extract(public.canonical_ref_json,'$.server_id')=b.server_id
+ AND json_extract(public.canonical_ref_json,'$.executor_id')=b.executor_id
+ AND json_extract(public.canonical_ref_json,'$.binding_id')=b.binding_id
+ AND json_extract(public.canonical_ref_json,'$.endpoint_id')=b.endpoint_id
+ AND json_extract(public.canonical_ref_json,'$.workspace_binding_id')=b.workspace_binding_id
+ AND json_extract(public.canonical_ref_json,'$.agent_id')=e.agent_id
+ AND json_extract(public.canonical_ref_json,'$.workspace_id')=e.workspace_id
 WHERE b.server_id=?
 """
 _FIELDS = ('server_id', 'binding_id', 'executor_id', 'endpoint_id', 'workspace_binding_id',
     'agent_id', 'workspace_id', 'adapter_id', 'binding_revision', 'realization_revision',
     'endpoint_revision', 'activation_state', 'endpoint_enabled', 'agent_active', 'executor_revoked',
-    'execution_location', 'agent_label', 'workspace_label', 'host_label')
+    'execution_location', 'agent_label', 'workspace_label', 'host_label', 'connect_id', 'public_connection_revision')
 
 
 class SqliteConnectionCatalogQueries:

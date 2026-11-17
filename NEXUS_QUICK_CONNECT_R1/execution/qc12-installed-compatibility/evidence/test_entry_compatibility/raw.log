@@ -1,0 +1,212 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 50 items
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags0] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags0]", "when": "setup", "outcome": "passed", "duration": 0.0006328000454232097}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags0]", "when": "call", "outcome": "passed", "duration": 0.0017035999335348606}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags0]", "when": "teardown", "outcome": "passed", "duration": 0.00021609989926218987}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags1] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags1]", "when": "setup", "outcome": "passed", "duration": 0.0002753000007942319}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags1]", "when": "call", "outcome": "passed", "duration": 0.0010134000331163406}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags1]", "when": "teardown", "outcome": "passed", "duration": 9.770004544407129e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags2] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags2]", "when": "setup", "outcome": "passed", "duration": 0.00022409996017813683}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags2]", "when": "call", "outcome": "passed", "duration": 0.0008712999988347292}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags2]", "when": "teardown", "outcome": "passed", "duration": 8.680007886141539e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags3] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags3]", "when": "setup", "outcome": "passed", "duration": 0.00023550004698336124}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags3]", "when": "call", "outcome": "passed", "duration": 0.0012048999778926373}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags3]", "when": "teardown", "outcome": "passed", "duration": 8.659996092319489e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags4] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags4]", "when": "setup", "outcome": "passed", "duration": 0.00020250002853572369}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags4]", "when": "call", "outcome": "passed", "duration": 0.0009891000809147954}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags4]", "when": "teardown", "outcome": "passed", "duration": 8.139992132782936e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags5] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags5]", "when": "setup", "outcome": "passed", "duration": 0.0002172000240534544}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags5]", "when": "call", "outcome": "passed", "duration": 0.0008281000191345811}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags5]", "when": "teardown", "outcome": "passed", "duration": 8.329993579536676e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags6] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags6]", "when": "setup", "outcome": "passed", "duration": 0.00020020001102238894}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags6]", "when": "call", "outcome": "passed", "duration": 0.000824499991722405}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags6]", "when": "teardown", "outcome": "passed", "duration": 8.400005754083395e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags7] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags7]", "when": "setup", "outcome": "passed", "duration": 0.0001993000041693449}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags7]", "when": "call", "outcome": "passed", "duration": 0.0008014000486582518}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags7]", "when": "teardown", "outcome": "passed", "duration": 8.140003774315119e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags8] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags8]", "when": "setup", "outcome": "passed", "duration": 0.000202000024728477}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags8]", "when": "call", "outcome": "passed", "duration": 0.0008938000537455082}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags8]", "when": "teardown", "outcome": "passed", "duration": 8.199992589652538e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags9] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags9]", "when": "setup", "outcome": "passed", "duration": 0.00020240002777427435}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags9]", "when": "call", "outcome": "passed", "duration": 0.0008979999693110585}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags9]", "when": "teardown", "outcome": "passed", "duration": 8.33999365568161e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags10] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags10]", "when": "setup", "outcome": "passed", "duration": 0.00021970004308968782}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags10]", "when": "call", "outcome": "passed", "duration": 0.0008825999684631824}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags10]", "when": "teardown", "outcome": "passed", "duration": 8.349993731826544e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags11] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags11]", "when": "setup", "outcome": "passed", "duration": 0.00021389999892562628}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags11]", "when": "call", "outcome": "passed", "duration": 0.0009028000058606267}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_entry[flags11]", "when": "teardown", "outcome": "passed", "duration": 9.019998833537102e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags0] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags0]", "when": "setup", "outcome": "passed", "duration": 0.00022709998302161694}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags0]", "when": "call", "outcome": "passed", "duration": 0.0009031000081449747}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags0]", "when": "teardown", "outcome": "passed", "duration": 8.639995940029621e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags1] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags1]", "when": "setup", "outcome": "passed", "duration": 0.00022980000358074903}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags1]", "when": "call", "outcome": "passed", "duration": 0.0009205000242218375}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags1]", "when": "teardown", "outcome": "passed", "duration": 0.000125400023534894}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags2] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags2]", "when": "setup", "outcome": "passed", "duration": 0.00035009998828172684}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags2]", "when": "call", "outcome": "passed", "duration": 0.0020886999554932117}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags2]", "when": "teardown", "outcome": "passed", "duration": 0.00014709995593875647}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags3] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags3]", "when": "setup", "outcome": "passed", "duration": 0.0002658000448718667}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags3]", "when": "call", "outcome": "passed", "duration": 0.0009781001135706902}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags3]", "when": "teardown", "outcome": "passed", "duration": 0.00010120007209479809}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags4] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags4]", "when": "setup", "outcome": "passed", "duration": 0.0002447000006213784}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags4]", "when": "call", "outcome": "passed", "duration": 0.000999900046736002}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags4]", "when": "teardown", "outcome": "passed", "duration": 9.77999297901988e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags5] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags5]", "when": "setup", "outcome": "passed", "duration": 0.0002615000121295452}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags5]", "when": "call", "outcome": "passed", "duration": 0.0015327000292018056}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags5]", "when": "teardown", "outcome": "passed", "duration": 0.00013639999087899923}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags6] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags6]", "when": "setup", "outcome": "passed", "duration": 0.00035610003396868706}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags6]", "when": "call", "outcome": "passed", "duration": 0.0014786000829190016}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags6]", "when": "teardown", "outcome": "passed", "duration": 0.00010880001354962587}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags7] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags7]", "when": "setup", "outcome": "passed", "duration": 0.0002579001011326909}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags7]", "when": "call", "outcome": "passed", "duration": 0.0010333999525755644}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags7]", "when": "teardown", "outcome": "passed", "duration": 0.00010190007742494345}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags8] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags8]", "when": "setup", "outcome": "passed", "duration": 0.0002584999892860651}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags8]", "when": "call", "outcome": "passed", "duration": 0.0010714000090956688}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags8]", "when": "teardown", "outcome": "passed", "duration": 0.00011750007979571819}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags9] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags9]", "when": "setup", "outcome": "passed", "duration": 0.00024359999224543571}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags9]", "when": "call", "outcome": "passed", "duration": 0.0010162999387830496}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags9]", "when": "teardown", "outcome": "passed", "duration": 9.959994349628687e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags10] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags10]", "when": "setup", "outcome": "passed", "duration": 0.00023809995036572218}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags10]", "when": "call", "outcome": "passed", "duration": 0.0009926999919116497}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags10]", "when": "teardown", "outcome": "passed", "duration": 9.660003706812859e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags11] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags11]", "when": "setup", "outcome": "passed", "duration": 0.00024039996787905693}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags11]", "when": "call", "outcome": "passed", "duration": 0.0009785000002011657}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags11]", "when": "teardown", "outcome": "passed", "duration": 9.69000393524766e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags12] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags12]", "when": "setup", "outcome": "passed", "duration": 0.0002466000150889158}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags12]", "when": "call", "outcome": "passed", "duration": 0.0009957000147551298}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags12]", "when": "teardown", "outcome": "passed", "duration": 9.770004544407129e-05}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags13] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags13]", "when": "setup", "outcome": "passed", "duration": 0.0003408000338822603}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags13]", "when": "call", "outcome": "passed", "duration": 0.0021111000096425414}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags13]", "when": "teardown", "outcome": "passed", "duration": 0.00015330000314861536}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags14] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags14]", "when": "setup", "outcome": "passed", "duration": 0.0003530000103637576}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags14]", "when": "call", "outcome": "passed", "duration": 0.0015341999242082238}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags14]", "when": "teardown", "outcome": "passed", "duration": 0.00020229991059750319}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags15] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags15]", "when": "setup", "outcome": "passed", "duration": 0.0004909000126644969}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags15]", "when": "call", "outcome": "passed", "duration": 0.013644600054249167}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_legacy_selectors[flags15]", "when": "teardown", "outcome": "passed", "duration": 0.0002041999250650406}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags0-False] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags0-False]", "when": "setup", "outcome": "passed", "duration": 0.020116599975153804}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags0-False]", "when": "call", "outcome": "passed", "duration": 0.1250061000464484}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags0-False]", "when": "teardown", "outcome": "passed", "duration": 0.0002709999680519104}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags1-False] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags1-False]", "when": "setup", "outcome": "passed", "duration": 0.0028803000459447503}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags1-False]", "when": "call", "outcome": "passed", "duration": 0.07706559996586293}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags1-False]", "when": "teardown", "outcome": "passed", "duration": 0.0002172999083995819}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags2-False] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags2-False]", "when": "setup", "outcome": "passed", "duration": 0.0026067999424412847}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags2-False]", "when": "call", "outcome": "passed", "duration": 0.07203869998920709}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags2-False]", "when": "teardown", "outcome": "passed", "duration": 0.00022400007583200932}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags3-True] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags3-True]", "when": "setup", "outcome": "passed", "duration": 0.0025007999502122402}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags3-True]", "when": "call", "outcome": "passed", "duration": 0.08828699996229261}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags3-True]", "when": "teardown", "outcome": "passed", "duration": 0.0002445999998599291}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-False-CONNECT_ID_UNSUPPORTED_SERVER-local] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-False-CONNECT_ID_UNSUPPORTED_SERVER-local]", "when": "setup", "outcome": "passed", "duration": 0.0006051999516785145}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-False-CONNECT_ID_UNSUPPORTED_SERVER-local]", "when": "call", "outcome": "passed", "duration": 0.09897709998767823}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-False-CONNECT_ID_UNSUPPORTED_SERVER-local]", "when": "teardown", "outcome": "passed", "duration": 0.00015570002142339945}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-False-CONNECT_ID_UNSUPPORTED_SERVER-remote] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-False-CONNECT_ID_UNSUPPORTED_SERVER-remote]", "when": "setup", "outcome": "passed", "duration": 0.00054390006698668}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-False-CONNECT_ID_UNSUPPORTED_SERVER-remote]", "when": "call", "outcome": "passed", "duration": 0.10630029998719692}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-False-CONNECT_ID_UNSUPPORTED_SERVER-remote]", "when": "teardown", "outcome": "passed", "duration": 0.00016529997810721397}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[405-None-False-CONNECT_ID_UNSUPPORTED_SERVER-local] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[405-None-False-CONNECT_ID_UNSUPPORTED_SERVER-local]", "when": "setup", "outcome": "passed", "duration": 0.0004588000010699034}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[405-None-False-CONNECT_ID_UNSUPPORTED_SERVER-local]", "when": "call", "outcome": "passed", "duration": 0.0919002000009641}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[405-None-False-CONNECT_ID_UNSUPPORTED_SERVER-local]", "when": "teardown", "outcome": "passed", "duration": 0.00017040001694113016}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[405-None-False-CONNECT_ID_UNSUPPORTED_SERVER-remote] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[405-None-False-CONNECT_ID_UNSUPPORTED_SERVER-remote]", "when": "setup", "outcome": "passed", "duration": 0.000624899985268712}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[405-None-False-CONNECT_ID_UNSUPPORTED_SERVER-remote]", "when": "call", "outcome": "passed", "duration": 0.12169199995696545}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[405-None-False-CONNECT_ID_UNSUPPORTED_SERVER-remote]", "when": "teardown", "outcome": "passed", "duration": 0.00014730007387697697}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-True-CONNECT_ID_UNSUPPORTED_SERVER-local] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-True-CONNECT_ID_UNSUPPORTED_SERVER-local]", "when": "setup", "outcome": "passed", "duration": 0.0005025999853387475}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-True-CONNECT_ID_UNSUPPORTED_SERVER-local]", "when": "call", "outcome": "passed", "duration": 0.07672580005601048}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-True-CONNECT_ID_UNSUPPORTED_SERVER-local]", "when": "teardown", "outcome": "passed", "duration": 0.00013860000763088465}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-True-CONNECT_ID_UNSUPPORTED_SERVER-remote] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-True-CONNECT_ID_UNSUPPORTED_SERVER-remote]", "when": "setup", "outcome": "passed", "duration": 0.00043020001612603664}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-True-CONNECT_ID_UNSUPPORTED_SERVER-remote]", "when": "call", "outcome": "passed", "duration": 0.12478950002696365}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-True-CONNECT_ID_UNSUPPORTED_SERVER-remote]", "when": "teardown", "outcome": "passed", "duration": 0.000242199981585145}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[401-AUTH_FAILED-False-AUTH_FAILED-local] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[401-AUTH_FAILED-False-AUTH_FAILED-local]", "when": "setup", "outcome": "passed", "duration": 0.0004883999936282635}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[401-AUTH_FAILED-False-AUTH_FAILED-local]", "when": "call", "outcome": "passed", "duration": 0.15341030003037304}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[401-AUTH_FAILED-False-AUTH_FAILED-local]", "when": "teardown", "outcome": "passed", "duration": 0.00025859999004751444}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[401-AUTH_FAILED-False-AUTH_FAILED-remote] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[401-AUTH_FAILED-False-AUTH_FAILED-remote]", "when": "setup", "outcome": "passed", "duration": 0.0005939999828115106}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[401-AUTH_FAILED-False-AUTH_FAILED-remote]", "when": "call", "outcome": "passed", "duration": 0.10504840000066906}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[401-AUTH_FAILED-False-AUTH_FAILED-remote]", "when": "teardown", "outcome": "passed", "duration": 0.00014080002438277006}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[403-PERMISSION_DENIED-False-PERMISSION_DENIED-local] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-PERMISSION_DENIED-False-PERMISSION_DENIED-local]", "when": "setup", "outcome": "passed", "duration": 0.0004898000042885542}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-PERMISSION_DENIED-False-PERMISSION_DENIED-local]", "when": "call", "outcome": "passed", "duration": 0.10701879998669028}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-PERMISSION_DENIED-False-PERMISSION_DENIED-local]", "when": "teardown", "outcome": "passed", "duration": 0.0001379000023007393}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[403-PERMISSION_DENIED-False-PERMISSION_DENIED-remote] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-PERMISSION_DENIED-False-PERMISSION_DENIED-remote]", "when": "setup", "outcome": "passed", "duration": 0.0006312999175861478}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-PERMISSION_DENIED-False-PERMISSION_DENIED-remote]", "when": "call", "outcome": "passed", "duration": 0.10506410000380129}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-PERMISSION_DENIED-False-PERMISSION_DENIED-remote]", "when": "teardown", "outcome": "passed", "duration": 0.00021139997988939285}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[403-HTTP_ERROR-False-HTTP_ERROR-local] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-HTTP_ERROR-False-HTTP_ERROR-local]", "when": "setup", "outcome": "passed", "duration": 0.0006059000734239817}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-HTTP_ERROR-False-HTTP_ERROR-local]", "when": "call", "outcome": "passed", "duration": 0.10480999993160367}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-HTTP_ERROR-False-HTTP_ERROR-local]", "when": "teardown", "outcome": "passed", "duration": 0.00017030001617968082}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[403-HTTP_ERROR-False-HTTP_ERROR-remote] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-HTTP_ERROR-False-HTTP_ERROR-remote]", "when": "setup", "outcome": "passed", "duration": 0.0006262999959290028}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-HTTP_ERROR-False-HTTP_ERROR-remote]", "when": "call", "outcome": "passed", "duration": 0.0893517000367865}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-HTTP_ERROR-False-HTTP_ERROR-remote]", "when": "teardown", "outcome": "passed", "duration": 0.00017340003978461027}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[403-None-False-REQUEST_REFUSED-local] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-None-False-REQUEST_REFUSED-local]", "when": "setup", "outcome": "passed", "duration": 0.0005330001004040241}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-None-False-REQUEST_REFUSED-local]", "when": "call", "outcome": "passed", "duration": 0.1387636000290513}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-None-False-REQUEST_REFUSED-local]", "when": "teardown", "outcome": "passed", "duration": 0.00020000000949949026}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[403-None-False-REQUEST_REFUSED-remote] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-None-False-REQUEST_REFUSED-remote]", "when": "setup", "outcome": "passed", "duration": 0.0007057000184431672}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-None-False-REQUEST_REFUSED-remote]", "when": "call", "outcome": "passed", "duration": 0.12297410005703568}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[403-None-False-REQUEST_REFUSED-remote]", "when": "teardown", "outcome": "passed", "duration": 0.00016820000018924475}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[500-HTTP_ERROR-False-HTTP_ERROR-local] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[500-HTTP_ERROR-False-HTTP_ERROR-local]", "when": "setup", "outcome": "passed", "duration": 0.0007708000484853983}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[500-HTTP_ERROR-False-HTTP_ERROR-local]", "when": "call", "outcome": "passed", "duration": 0.10552039998583496}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[500-HTTP_ERROR-False-HTTP_ERROR-local]", "when": "teardown", "outcome": "passed", "duration": 0.00013160007074475288}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[500-HTTP_ERROR-False-HTTP_ERROR-remote] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[500-HTTP_ERROR-False-HTTP_ERROR-remote]", "when": "setup", "outcome": "passed", "duration": 0.00045709998812526464}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[500-HTTP_ERROR-False-HTTP_ERROR-remote]", "when": "call", "outcome": "passed", "duration": 0.12274660007096827}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_http_status_is_precise[500-HTTP_ERROR-False-HTTP_ERROR-remote]", "when": "teardown", "outcome": "passed", "duration": 0.00030429998878389597}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_network_refusal_is_not_unsupported[local] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_network_refusal_is_not_unsupported[local]", "when": "setup", "outcome": "passed", "duration": 0.00046229991130530834}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_network_refusal_is_not_unsupported[local]", "when": "call", "outcome": "passed", "duration": 1.1158241999801248}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_network_refusal_is_not_unsupported[local]", "when": "teardown", "outcome": "passed", "duration": 0.00021199998445808887}
+
+after\tests\quick_connect\test_entry_compatibility.py::test_public_id_network_refusal_is_not_unsupported[remote] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_network_refusal_is_not_unsupported[remote]", "when": "setup", "outcome": "passed", "duration": 0.0004270999925211072}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_network_refusal_is_not_unsupported[remote]", "when": "call", "outcome": "passed", "duration": 1.0988806000677869}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_entry_compatibility.py::test_public_id_network_refusal_is_not_unsupported[remote]", "when": "teardown", "outcome": "passed", "duration": 0.0003127999370917678}
+
+
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_entry_compatibility\junit.xml -
+============================= 50 passed in 5.34s ==============================

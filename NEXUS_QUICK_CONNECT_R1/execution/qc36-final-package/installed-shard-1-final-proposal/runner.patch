@@ -1,0 +1,20 @@
+--- installed_regression_shard1_counterpart.py
++++ installed_regression_shard1_final.py
+@@ -57,6 +57,8 @@
+     with (OUT/'phases.jsonl').open('a',encoding='utf-8') as f: f.write(json.dumps(value)+'\\n')
+ '''
+ 
++GUARD += "\n@pytest.hookimpl(hookwrapper=True)\ndef pytest_runtest_call(item):\n    if item.nodeid.split('::')[-1] != 'test_metadata_hint_is_not_an_identity_or_root_selector':\n        yield\n        return\n    from okto_nexus.adapters.outbound import git_project_hint\n    original = git_project_hint.discover_project_name\n    def observe(*args, **kwargs):\n        started = time.perf_counter()\n        result = original(*args, **kwargs)\n        record = dict(nodeid=item.nodeid, name=result.name, source=result.source,\n            status=result.status, reason=result.reason,\n            duration_seconds=time.perf_counter()-started,\n            behavior='identical result object returned; no arguments or settings modified')\n        with (OUT/'git-hint-observation.jsonl').open('a',encoding='utf-8') as stream:\n            stream.write(json.dumps(record)+'\\n')\n        return result\n    git_project_hint.discover_project_name = observe\n    try:\n        yield\n    finally:\n        git_project_hint.discover_project_name = original\n"
++
+ def main():
+     parser=argparse.ArgumentParser()
+     parser.add_argument('--tests',nargs='+',required=True)
+@@ -112,7 +114,7 @@
+     markers=tomllib.loads((REPO/'pyproject.toml').read_text(encoding='utf-8'))['tool']['pytest']['ini_options'].get('markers',[])
+     ini.write_text('[pytest]\nasyncio_mode=auto\nasyncio_default_fixture_loop_scope=function\nmarkers=\n'+''.join('    '+m+'\n' for m in markers))
+     selected_arguments=[str(p)+suffix for p in selected for suffix in sorted(selectors[p])]
+-    pytest_args=['-p','qc36_origin_guard','-c',str(ini),'--rootdir='+str(tree),'--confcutdir='+str(tree),*selected_arguments,'-v','--tb=short','-x','--junitxml='+str(root/'reports/tests.xml')]
++    pytest_args=['-p','qc36_origin_guard','-c',str(ini),'--rootdir='+str(tree),'--confcutdir='+str(tree),*selected_arguments,'-v','--tb=short','--junitxml='+str(root/'reports/tests.xml')]
+     helper_paths=[str(root/'tree/tests'),*[str(p) for p in sorted((root/'tree/tests').rglob('*')) if p.is_dir() and any(p.glob('*.py'))]]
+     code='import sys;sys.path[:0]='+repr([str(root/'guard'),*helper_paths])+';import pytest;raise SystemExit(pytest.main('+repr(pytest_args)+'))'
+     argv=[str(prefix/'Scripts/python.exe'),'-I','-B','-X','utf8','-c',code]

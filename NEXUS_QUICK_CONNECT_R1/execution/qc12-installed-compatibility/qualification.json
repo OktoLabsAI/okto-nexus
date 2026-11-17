@@ -1,0 +1,85 @@
+{
+  "at": "2026-11-17T07:54:24.571894+00:00",
+  "status": "COMPLETED_ORIGINAL_RUNNER_FAILURES_AND_SEPARATE_COUNTERPARTS",
+  "source_commit": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv",
+  "owned_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki",
+  "qualification": "STRICT_INSTALLED_APPLICATION_IMPORTS",
+  "original": {
+    "name": "Original complete quick_connect plus three legacy nodes",
+    "counts": {
+      "tests": 457,
+      "failures": 4,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 453
+    },
+    "cases": 18,
+    "results_file": "result.json",
+    "all_owned_processes_exited": true,
+    "signals": [],
+    "installed_payload_files": 1027,
+    "installed_payload_drift": [],
+    "source_drift": []
+  },
+  "git_counterpart": {
+    "name": "Git entire file with CWD and TMP non-overlapping",
+    "counts": {
+      "tests": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 43
+    },
+    "cases": 1,
+    "results_file": "counterpart-git-result.json",
+    "all_owned_processes_exited": true,
+    "signals": [],
+    "installed_payload_files": 1027,
+    "installed_payload_drift": [],
+    "source_drift": []
+  },
+  "non_tty_counterpart": {
+    "name": "Non-TTY exclusion counterpart; not PTY qualification",
+    "counts": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 5,
+      "passed": 0
+    },
+    "cases": 1,
+    "results_file": "counterpart-pty-result.json",
+    "all_owned_processes_exited": true,
+    "signals": [],
+    "installed_payload_files": 1027,
+    "installed_payload_drift": [],
+    "source_drift": []
+  },
+  "all_owned_processes_exited": true,
+  "forced": false,
+  "provider_calls": 0,
+  "interpretation": [
+    "The original total remains unchanged; counterpart results are not unioned into an all-green original.",
+    "Original Git budget test correctly rejected the fake binary located beneath the runner CWD. The runner violated the requested CWD/TMP sibling isolation.",
+    "Original Windows DEVNULL/NUL reported stdin.isatty=True but had no usable input, causing three EOF prompt failures. This is not evidence of working PTY or a product regression.",
+    "The entire Git file passed with CWD outside TMP and unchanged product/tests/wheel.",
+    "Closed PIPE confirmed non-TTY and yielded five honest PTY exclusions, not five passes.",
+    "Positive historical real-PTY evidence is separate and was not repeated."
+  ],
+  "isolation": {
+    "application_src_copied": false,
+    "checkout_src_on_child_path": false,
+    "all_three_module_origins_under_prefix": true,
+    "installed_payload_count": 1027,
+    "installed_payload_matches_wheels_start_finish": true,
+    "original_prefix_0s9_untouched": true
+  },
+  "prevention": "Future scripted non-TTY runners must use a PIPE with closed writer, assert stdin.isatty=False, and keep CWD outside TMP; Windows NUL is insufficient.",
+  "limitations": [
+    "Synthetic setup/model/lifecycle fixtures are not real harness or account qualification.",
+    "No installation, service, provider, Windows login/reboot/suspend or native campaign performed.",
+    "Only sanitized reports/logs and metadata are curated; own temporary DBs stay outside the repository."
+  ]
+}

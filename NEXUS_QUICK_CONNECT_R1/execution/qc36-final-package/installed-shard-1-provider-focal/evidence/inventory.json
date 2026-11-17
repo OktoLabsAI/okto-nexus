@@ -1,0 +1,24 @@
+{
+  "exitstatus": 0,
+  "collected": [
+    "tests/quick_connect/test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[2-claude]",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[c-None]",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_bare_two_families_noninteractive_requires_choice",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_two_candidates_explicitly_choose_second_exact_ref",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_two_candidates_noninteractive_refuses_first_default",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_unknown_shell_like_token_never_spawns",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_mixed_case_harness_is_normalized",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_stale_canonical_publication_is_unconfirmed_not_missing"
+  ],
+  "finished": [
+    "tests/quick_connect/test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[2-claude]",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[c-None]",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_bare_two_families_noninteractive_requires_choice",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_two_candidates_explicitly_choose_second_exact_ref",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_two_candidates_noninteractive_refuses_first_default",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_unknown_shell_like_token_never_spawns",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_mixed_case_harness_is_normalized",
+    "tests/quick_connect/test_qc15_cli_choices.py::test_stale_canonical_publication_is_unconfirmed_not_missing"
+  ],
+  "not_run": []
+}

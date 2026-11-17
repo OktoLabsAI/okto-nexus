@@ -1,0 +1,38 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc-git-cli-derivative-kq_sepcf\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 10 items
+
+..\after\tests\quick_connect\test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://example.invalid/team/logical-origin.git] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://example.invalid/team/logical-origin.git]", "when": "setup", "outcome": "passed", "duration": 6.407662899931893}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://example.invalid/team/logical-origin.git]", "when": "call", "outcome": "failed", "duration": 2.0239265999989584, "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-derivative-kq_sepcf\\after\\tests\\quick_connect\\test_git_cli_integration.py:123: in test_origin_first_connect_and_changed_metadata_exact_resume\n    assert set(changes) <= {'selection.quick_connect.operation'}, changes\nE   AssertionError: ['selection.public_connection.project_revision', 'selection.public_connection.reservation_ref', 'selection.quick_connect.name_discovery.reason', 'selection.quick_connect.name_discovery.status', 'selection.quick_connect.operation', 'selection.quick_connect.project_name_source']\nE   assert {'selection.p..._name_source'} <= {'selection.q...ct.operation'}\nE     \nE     Extra items in the left set:\nE     'selection.quick_connect.project_name_source'\nE     'selection.public_connection.project_revision'\nE     'selection.quick_connect.name_discovery.status'\nE     'selection.public_connection.reservation_ref'\nE     'selection.quick_connect.name_discovery.reason'"}
+FAILEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://example.invalid/team/logical-origin.git]", "when": "teardown", "outcome": "passed", "duration": 0.7619880000129342}
+
+
+================================== FAILURES ===================================
+_ test_origin_first_connect_and_changed_metadata_exact_resume[https://example.invalid/team/logical-origin.git] _
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-git-cli-derivative-kq_sepcf\after\tests\quick_connect\test_git_cli_integration.py:123: in test_origin_first_connect_and_changed_metadata_exact_resume
+    assert set(changes) <= {'selection.quick_connect.operation'}, changes
+E   AssertionError: ['selection.public_connection.project_revision', 'selection.public_connection.reservation_ref', 'selection.quick_connect.name_discovery.reason', 'selection.quick_connect.name_discovery.status', 'selection.quick_connect.operation', 'selection.quick_connect.project_name_source']
+E   assert {'selection.p..._name_source'} <= {'selection.q...ct.operation'}
+E     
+E     Extra items in the left set:
+E     'selection.quick_connect.project_name_source'
+E     'selection.public_connection.project_revision'
+E     'selection.quick_connect.name_discovery.status'
+E     'selection.public_connection.reservation_ref'
+E     'selection.quick_connect.name_discovery.reason'
+============================== warnings summary ===============================
+..\..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc-git-cli-derivative-kq_sepcf\git-cli-composed\junit.xml -
+=========================== short test summary info ===========================
+FAILED ..\after\tests\quick_connect\test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://example.invalid/team/logical-origin.git]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+======================== 1 failed, 1 warning in 11.72s ========================

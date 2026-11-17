@@ -1,0 +1,75 @@
+### Result
+4. [GET] http://127.0.0.1:54191/api/v1/operator-auth/status => [200] OK
+8. [GET] http://127.0.0.1:54191/api/v1/agents => [200] OK
+9. [GET] http://127.0.0.1:54191/api/v1/info => [200] OK
+10. [GET] http://127.0.0.1:54191/api/v1/graph?workspace=all&window_hours=24 => [200] OK
+11. [GET] http://127.0.0.1:54191/api/v1/workspaces => [200] OK
+12. [GET] http://127.0.0.1:54191/api/v1/info => [200] OK
+13. [GET] http://127.0.0.1:54191/api/v1/sessions => [200] OK
+14. [GET] http://127.0.0.1:54191/api/v1/attention/summary => [200] OK
+15. [GET] http://127.0.0.1:54191/api/v1/attention/summary?state=active&seen=all => [200] OK
+16. [GET] http://127.0.0.1:54191/api/v1/home/harness-board?limit=10&preview=3 => [200] OK
+17. [GET] http://127.0.0.1:54191/api/v1/stream?view=attention => [200] OK
+18. [GET] http://127.0.0.1:54191/api/v1/stream? => [200] OK
+19. [GET] http://127.0.0.1:54191/api/v1/operator/unread-count => [200] OK
+20. [GET] http://127.0.0.1:54191/api/v1/metrics/local/summary => [200] OK
+21. [GET] http://127.0.0.1:54191/api/v1/settings => [200] OK
+22. [GET] http://127.0.0.1:54191/api/v1/metrics/local/summary => [200] OK
+23. [GET] http://127.0.0.1:54191/api/v1/metrics/publish-health => [200] OK
+24. [GET] http://127.0.0.1:54191/api/v1/attention/summary => [200] OK
+25. [GET] http://127.0.0.1:54191/api/v1/attention/summary?state=active&seen=all => [200] OK
+26. [GET] http://127.0.0.1:54191/api/v1/home/harness-board?limit=10&preview=3 => [200] OK
+27. [GET] http://127.0.0.1:54191/api/v1/attention/summary?state=active&seen=all => [200] OK
+31. [GET] http://127.0.0.1:54191/api/v1/operator-auth/status => [200] OK
+34. [GET] http://127.0.0.1:54191/api/v1/agents => [200] OK
+35. [GET] http://127.0.0.1:54191/api/v1/info => [200] OK
+36. [GET] http://127.0.0.1:54191/api/v1/graph?workspace=all&window_hours=24 => [200] OK
+37. [GET] http://127.0.0.1:54191/api/v1/workspaces => [200] OK
+38. [GET] http://127.0.0.1:54191/api/v1/info => [200] OK
+39. [GET] http://127.0.0.1:54191/api/v1/sessions => [200] OK
+40. [GET] http://127.0.0.1:54191/api/v1/attention/summary => [200] OK
+41. [GET] http://127.0.0.1:54191/api/v1/attention/summary?state=active&seen=all => [200] OK
+42. [GET] http://127.0.0.1:54191/api/v1/home/harness-board?limit=10&preview=3 => [200] OK
+43. [GET] http://127.0.0.1:54191/api/v1/stream?view=attention => [200] OK
+44. [GET] http://127.0.0.1:54191/api/v1/stream? => [200] OK
+45. [GET] http://127.0.0.1:54191/api/v1/operator/unread-count => [200] OK
+46. [GET] http://127.0.0.1:54191/api/v1/attention/summary => [200] OK
+47. [GET] http://127.0.0.1:54191/api/v1/attention/summary?state=active&seen=all => [200] OK
+48. [GET] http://127.0.0.1:54191/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_3487af5a637db76c6f23b75af32193d3%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_69ba3c3cc6798426d816afddfeadba31%22%2C%22session_id%22%3A%22ses_5718867a2ac2a93c72127e49eec8707a%22%2C%22workspace_id%22%3A%22wsr_25f2dc2d74ada92b5d1457da79dd848d%22%7D => [200] OK
+49. [GET] http://127.0.0.1:54191/api/v1/runtime-management/runtime/sessions/ses_5718867a2ac2a93c72127e49eec8707a?executor_id=exe_3487af5a637db76c6f23b75af32193d3 => [200] OK
+50. [GET] http://127.0.0.1:54191/api/v1/runtime-management/connections/me => [200] OK
+51. [GET] http://127.0.0.1:54191/api/v1/runtime-management/runtime/sessions/ses_5718867a2ac2a93c72127e49eec8707a/events?executor_id=exe_3487af5a637db76c6f23b75af32193d3&after_sequence=0&limit=100 => [200] OK
+52. [GET] http://127.0.0.1:54191/api/v1/runtime-management/runtime/sessions/ses_5718867a2ac2a93c72127e49eec8707a?executor_id=exe_3487af5a637db76c6f23b75af32193d3 => [200] OK
+53. [GET] http://127.0.0.1:54191/api/v1/attention/summary?state=active&seen=all => [200] OK
+54. [GET] http://127.0.0.1:54191/api/v1/runtime-management/connections/bindings/bind_8005863328f6834371bc90e8350ece38 => [200] OK
+55. [GET] http://127.0.0.1:54191/api/v1/home/harness-board?limit=10&preview=3 => [200] OK
+59. [GET] http://127.0.0.1:54191/api/v1/operator-auth/status => [200] OK
+62. [GET] http://127.0.0.1:54191/api/v1/agents => [200] OK
+63. [GET] http://127.0.0.1:54191/api/v1/info => [200] OK
+64. [GET] http://127.0.0.1:54191/api/v1/graph?workspace=all&window_hours=24 => [200] OK
+65. [GET] http://127.0.0.1:54191/api/v1/workspaces => [200] OK
+66. [GET] http://127.0.0.1:54191/api/v1/info => [200] OK
+67. [GET] http://127.0.0.1:54191/api/v1/sessions => [200] OK
+68. [GET] http://127.0.0.1:54191/api/v1/attention/summary => [200] OK
+69. [GET] http://127.0.0.1:54191/api/v1/attention/summary?state=active&seen=all => [200] OK
+70. [GET] http://127.0.0.1:54191/api/v1/home/harness-board?limit=10&preview=3 => [200] OK
+73. [GET] http://127.0.0.1:54191/api/v1/operator/unread-count => [200] OK
+74. [GET] http://127.0.0.1:54191/api/v1/attention/summary => [200] OK
+75. [GET] http://127.0.0.1:54191/api/v1/attention/summary?state=active&seen=all => [200] OK
+76. [GET] http://127.0.0.1:54191/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_3487af5a637db76c6f23b75af32193d3%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_69ba3c3cc6798426d816afddfeadba31%22%2C%22session_id%22%3A%22ses_91b1366e5a7abfd4622fe89616ceb7f7%22%2C%22workspace_id%22%3A%22wsr_25f2dc2d74ada92b5d1457da79dd848d%22%7D => [200] OK
+77. [GET] http://127.0.0.1:54191/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7?executor_id=exe_3487af5a637db76c6f23b75af32193d3 => [200] OK
+78. [GET] http://127.0.0.1:54191/api/v1/runtime-management/connections/me => [200] OK
+79. [GET] http://127.0.0.1:54191/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7?executor_id=exe_3487af5a637db76c6f23b75af32193d3 => [200] OK
+80. [GET] http://127.0.0.1:54191/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7/events?executor_id=exe_3487af5a637db76c6f23b75af32193d3&after_sequence=0&limit=100 => [200] OK
+81. [GET] http://127.0.0.1:54191/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7?executor_id=exe_3487af5a637db76c6f23b75af32193d3 => [200] OK
+82. [GET] http://127.0.0.1:54191/api/v1/runtime-management/connections/bindings/bind_8005863328f6834371bc90e8350ece38 => [200] OK
+83. [GET] http://127.0.0.1:54191/api/v1/attention/summary?state=active&seen=all => [200] OK
+84. [GET] http://127.0.0.1:54191/api/v1/runtime-management/connections/me => [200] OK
+85. [GET] http://127.0.0.1:54191/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7/events?executor_id=exe_3487af5a637db76c6f23b75af32193d3&after_sequence=7&limit=100&stream_epoch=stream_c75378a3690d0adde101d8b478086e30 => [200] OK
+86. [GET] http://127.0.0.1:54191/api/v1/home/harness-board?limit=10&preview=3 => [200] OK
+87. [GET] http://127.0.0.1:54191/api/v1/runtime-management/runtime/sessions/ses_91b1366e5a7abfd4622fe89616ceb7f7?executor_id=exe_3487af5a637db76c6f23b75af32193d3 => [200] OK
+
+Note: 18 static requests not shown, run with --static option to see them.
+### Page
+- Page URL: http://127.0.0.1:54191/?home_target=%7B%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_69ba3c3cc6798426d816afddfeadba31%22%2C%22executor_id%22%3A%22exe_3487af5a637db76c6f23b75af32193d3%22%2C%22workspace_id%22%3A%22wsr_25f2dc2d74ada92b5d1457da79dd848d%22%2C%22session_id%22%3A%22ses_91b1366e5a7abfd4622fe89616ceb7f7%22%7D
+- Page Title: Okto Nexus

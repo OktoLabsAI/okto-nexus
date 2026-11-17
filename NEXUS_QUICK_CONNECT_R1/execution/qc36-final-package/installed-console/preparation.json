@@ -1,0 +1,39 @@
+{
+  "status": "PREPARED_NO_CONSOLE_STARTED",
+  "cases": [
+    {
+      "label": "ctrl-c",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-ctrl-c-9xij8ut2",
+      "runner": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc36-final-package\\installed-console\\ctrl-c\\run.py",
+      "original_test_sha256": "de71181344a41eddbc58b08bd875de0dd561f0d1b7ecc72e62abe293e36f35c3",
+      "fixture_tests_unchanged": true,
+      "copied_application_source": false,
+      "script_hashes": {
+        "child.py": "c057e39ffa57288d9b7cb82487271b092603edb586576681fe9db63893b8f338",
+        "controller.py": "47a8eccc919e29652b9cc02b46512ae4382b4d3ddb9c8fa0c2f13675d4a0f4e1",
+        "win.py": "ee04cf96317d90293818156a5c71c43a354bbc0a46dfd296f7a7496e69f2a45c"
+      },
+      "changes": [
+        "Rebind supervisor package/path/payload to i4 and1028.",
+        "Reject older descendant births before permit; no change to controller/input sequence or pytest assertions."
+      ]
+    },
+    {
+      "label": "resize",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-resize-a603b3rd",
+      "runner": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc36-final-package\\installed-console\\resize\\run.py",
+      "original_test_sha256": "de71181344a41eddbc58b08bd875de0dd561f0d1b7ecc72e62abe293e36f35c3",
+      "fixture_tests_unchanged": true,
+      "copied_application_source": false,
+      "script_hashes": {
+        "child.py": "51eab4938171a8b43d6a7cd73a368fe503066249d41fae8cd67fe1160d116778",
+        "controller.py": "d919311570cee88583eabb78b423aeb4a319963bc40e8334155fc9c11eebf852",
+        "win.py": "ee04cf96317d90293818156a5c71c43a354bbc0a46dfd296f7a7496e69f2a45c"
+      },
+      "changes": [
+        "Rebind supervisor package/path/payload to i4 and1028.",
+        "Reject older descendant births before permit; no change to controller/input sequence or pytest assertions."
+      ]
+    }
+  ]
+}

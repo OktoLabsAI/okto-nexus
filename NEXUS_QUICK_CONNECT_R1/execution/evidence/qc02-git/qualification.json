@@ -1,0 +1,148 @@
+{
+  "task": "QC-010",
+  "qualification": "ISOLATED_ADAPTER_TESTS_PASS_INTEGRATION_PENDING",
+  "implementation": "src/okto_nexus/adapters/outbound/git_project_hint.py",
+  "interface": "discover_project_name(root: Path, *, plan: bool = False) -> GitProjectHint",
+  "dto_fields": [
+    "name",
+    "source",
+    "status",
+    "reason"
+  ],
+  "pins": {
+    "src/okto_nexus/adapters/outbound/git_project_hint.py": "d882321ace6d98f28d2879709d3b5f588832a179e55e90e3fd31cd682787bf32",
+    "tests/quick_connect/test_git_project_hint.py": "a72d49700ff5ee985f882abdfbef45f36df98a1d7080bdd4d5594cb9f02e009d",
+    "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc02-git/pytest.xml": "b5ed0f7e19e81cb077c2ca7aef267b0c5aa386e19a75764116577c3c75f8a947"
+  },
+  "checks": {
+    "red": {
+      "tool_handle": "c2e7f2",
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/quick_connect/test_git_project_hint.py -q",
+      "exit_code": 1,
+      "observed": "ImportError: git_project_hint absent; collection failed before implementation"
+    },
+    "green": {
+      "tool_handles": [
+        "af913b",
+        "924343"
+      ],
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/quick_connect/test_git_project_hint.py -q --junitxml=NEXUS_QUICK_CONNECT_R1/execution/evidence/qc02-git/pytest.xml",
+      "exit_code": 0,
+      "passed": 43,
+      "skipped": 0,
+      "elapsed_seconds": 12.84,
+      "platform_exercised": "Windows; CPython 3.13 checkout environment"
+    },
+    "ruff": {
+      "tool_handle": "c5ac39",
+      "command": "rtk proxy ruff check src/okto_nexus/adapters/outbound/git_project_hint.py tests/quick_connect/test_git_project_hint.py",
+      "exit_code": 0,
+      "observed": "All checks passed!"
+    },
+    "antecedents": [
+      {
+        "tool_handle": "6bf538",
+        "passed": 32
+      },
+      {
+        "tool_handle": "87aff1",
+        "passed": 36
+      },
+      {
+        "tool_handle": "efc151",
+        "passed": 36,
+        "note": "shared reason/status alignment"
+      },
+      {
+        "tool_handle": "b0d244",
+        "exit_code": 1,
+        "note": "venv lacked Ruff; existing host Ruff was then located without installation"
+      },
+      {
+        "tool_handle": "c24c68",
+        "exit_code": 1,
+        "note": "quoting error in attempted source replacement; no file changes from that command; corrected with apply_patch"
+      },
+      {
+        "tool_handles": [
+          "33f8ed",
+          "1bcf61"
+        ],
+        "passed": 41,
+        "elapsed_seconds": 11.2,
+        "note": "Antecedent before inherited-pipe and PATH enumeration review; superseded by bounded nonblocking reader"
+      }
+    ]
+  },
+  "limits": {
+    "aggregate_deadline_seconds": 2.0,
+    "max_calls": 6,
+    "combined_stdout_stderr_bytes_per_call": 65536,
+    "max_retained_bytes_per_discovery": 393216,
+    "production_subcommands": [
+      "rev-parse --show-toplevel",
+      "config --local --no-includes --null --get-all remote.origin.url",
+      "config --local --no-includes --bool --get extensions.worktreeConfig",
+      "config --worktree --no-includes --null --get-all remote.origin.url"
+    ],
+    "worktree_config_query_condition": "only when local extensions.worktreeConfig is true",
+    "deadline_note": "One monotonic deadline covers root/executable resolution and reads. PATH enumeration is capped at64 entries with deadline checks; OS filesystem/spawn calls cannot be preempted. Nonblocking pipe reads prevent inherited-writer hangs; observation stops150ms before deadline to kill/wait/close the owned process. Wait is bounded; unconfirmed OS cleanup returns an explicit non-success discovery.",
+    "path_entry_limit": 64,
+    "cleanup_reserve_within_deadline_seconds": 0.15
+  },
+  "scenario_mapping": {
+    "local_adapter_cases": [
+      "QC-T-D01",
+      "QC-T-D02",
+      "QC-T-D03",
+      "QC-T-D04",
+      "QC-T-D05",
+      "QC-T-D06",
+      "QC-T-D07",
+      "QC-T-D08",
+      "QC-T-D09",
+      "QC-T-D10",
+      "QC-T-D11",
+      "QC-T-D12",
+      "QC-T-D13",
+      "QC-T-D14",
+      "QC-T-D15",
+      "QC-T-D19",
+      "QC-T-D21",
+      "QC-T-D22",
+      "QC-T-D24",
+      "QC-T-D25"
+    ],
+    "subsets": {
+      "QC-T-D20": "ownership refusal response classified by controlled reader; no real foreign-owner repository or permission bypass attempted",
+      "QC-T-D23": "plan=True directly proves zero executable resolution/subprocess; CLI help/parse entry gates await integration",
+      "QC-T-D10": "real temporary owned Python child exercises timeout/output limits and wait/reap; valid Git queries exercise argv/environment contract separately",
+      "QC-T-D19": "root argument is used as cwd/-C and parent cwd unchanged; explicit CLI --project selection is outside this adapter",
+      "QC-T-D25": "DTO privacy and no raw diagnostic exposure; CLI/checkpoint/telemetry integration remains pending"
+    },
+    "integration_pending": [
+      "QC-T-D16",
+      "QC-T-D17",
+      "QC-T-D18",
+      "QC-T-D26"
+    ]
+  },
+  "isolation_and_cleanup": {
+    "repositories": "pytest-owned temporary repositories only; init/config/empty commit/worktree for fixtures, with system/global config disabled and empty template/hooks directories",
+    "environment": "all inherited GIT_* keys removed case-insensitively in a copied environment; parent unchanged",
+    "git_resolution": "only absolute host PATH entries outside project/invocation directory, no relative/empty entries, no project-target symlinks, no shell/PATHEXT/UNC executable",
+    "production_writes": 0,
+    "network_or_provider_calls": 0,
+    "auth_or_personal_configuration_reads": 0,
+    "services_or_browser_started": 0,
+    "child_cleanup": "No reader threads: Windows PeekNamedPipe/POSIX nonblocking read. Every owned parent waited; timeout/overflow kill and bounded wait. Regression confirms exited parent with inherited-pipe descendant returns on deadline, does not kill descendant; test then requests normal stop of its own descendant and confirms physical absence.",
+    "git_commit_or_push": false,
+    "core_or_installed_prefix_changed": false,
+    "ledger_changed": false
+  },
+  "official_references": [
+    "https://git-scm.com/docs/git-config",
+    "https://git-scm.com/docs/git",
+    "https://git-scm.com/docs/git-worktree"
+  ]
+}

@@ -1,0 +1,565 @@
+{
+  "version": 1,
+  "created_at": "2026-11-17T05:34:41.168288+00:00",
+  "status": "PASS_SCOPED_PUBLIC_ID_UI_WITH_PRESERVED_VIEWER_NEGATIVE",
+  "human_acceptance": "NOT_RUN",
+  "ready": {
+    "url": "http://127.0.0.1:63926",
+    "pid": 55592,
+    "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc05-browser-zj4nic_q",
+    "identities": {
+      "public_ids": [
+        {
+          "version": 1,
+          "state": "bound",
+          "connect_id": "reviewer",
+          "reservation_ref": "pcr_aab5790e5265423ca31a6ec4a054fdc3",
+          "revision": 1,
+          "setup_run_id": "qc05-associate-reviewer",
+          "workspace_id": "ws",
+          "project_draft_ref": null,
+          "request_hash": "sha256:ad408f931aa1546c97c52cd4f6f69cfb629b0cc0d19bb22d1a61aa8eaa39d476",
+          "canonical_ref": {
+            "agent_id": "subject",
+            "binding_id": "binding",
+            "endpoint_id": "ep",
+            "executor_id": "exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+            "server_id": "srv_dd5c93d11520f3a389bcb8b13e4b8a0f",
+            "workspace_binding_id": "wxb",
+            "workspace_id": "ws"
+          }
+        },
+        {
+          "version": 1,
+          "state": "bound",
+          "connect_id": "builder",
+          "reservation_ref": "pcr_4853a0c617f346378d7c162393dc938a",
+          "revision": 1,
+          "setup_run_id": "qc05-associate-builder",
+          "workspace_id": "ws",
+          "project_draft_ref": null,
+          "request_hash": "sha256:84b34947dafe4c703e343fcb2e40498cef657dd97dac29c84985e5e7f10ca7d0",
+          "canonical_ref": {
+            "agent_id": "subject",
+            "binding_id": "ui-binding-2",
+            "endpoint_id": "ui-ep-2",
+            "executor_id": "exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+            "server_id": "srv_dd5c93d11520f3a389bcb8b13e4b8a0f",
+            "workspace_binding_id": "wxb",
+            "workspace_id": "ws"
+          }
+        }
+      ],
+      "legacy_binding": "qc05-legacy-binding",
+      "workspace_id": "ws",
+      "question_session": "ses_1b39d87c3b67e1ae4da4e8e9899731cd",
+      "historical_session": "ui-session-2",
+      "synthetic_read_facts": true,
+      "real_provider_calls": 0,
+      "native_binary_calls": 0
+    },
+    "controlled_clock": "2026-11-17T05:17:00.396568Z"
+  },
+  "browser": {
+    "engine": "real installed Chrome controlled by Playwright CLI",
+    "headed": true,
+    "session": "qc05-public-ids",
+    "isolated_profile": "playwright_chromiumdev_profile-Um0xs2",
+    "personal_profile": false,
+    "account_auth": false,
+    "viewports": [
+      "1440x1000",
+      "360x800"
+    ]
+  },
+  "commands": {
+    "fixture": [
+      "rtk",
+      "proxy",
+      "C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe",
+      "-I",
+      "tests/quick_connect/browser_public_ids_fixture.py",
+      "--ready",
+      "NEXUS_QUICK_CONNECT_R1/execution/qc05-browser/ready.json",
+      "--stop",
+      "NEXUS_QUICK_CONNECT_R1/execution/qc05-browser/stop",
+      "--final",
+      "NEXUS_QUICK_CONNECT_R1/execution/qc05-browser/final.json",
+      "--expected-bundle",
+      "index-CfDr8rCI.js",
+      "--duration",
+      "900"
+    ],
+    "browser": [
+      "rtk",
+      "proxy",
+      "npx",
+      "--yes",
+      "--package",
+      "@playwright/cli",
+      "playwright-cli",
+      "--session=qc05-public-ids",
+      "open",
+      "http://127.0.0.1:63926",
+      "--headed"
+    ],
+    "check_command_prefix": [
+      "rtk",
+      "proxy",
+      "npx",
+      "--yes",
+      "--package",
+      "@playwright/cli",
+      "playwright-cli",
+      "--session=qc05-public-ids",
+      "run-code",
+      "--filename"
+    ],
+    "scripts": [
+      "NEXUS_QUICK_CONNECT_R1/execution/qc05-browser/checks-run.js",
+      "NEXUS_QUICK_CONNECT_R1/execution/qc05-browser/continuation-run.js",
+      "tests/quick_connect/browser_public_ids_mobile.js",
+      "tests/quick_connect/browser_public_ids_mobile_final.js",
+      "tests/quick_connect/browser_public_ids_mobile_observe.js"
+    ],
+    "cleanup": "playwright-cli --session=qc05-public-ids close; then own fixture stop-file; observed process exit0"
+  },
+  "functional_checks": [
+    {
+      "name": "Selector presents two public IDs and explicit legacy fallback",
+      "status": "PASS",
+      "text": "Open an existing connection\n\nSelecting opens its context. It does not start a session, renew authorization or change its configuration.\n\nHarness ID: reviewer · Codex\n\nQC05 project · Connector host\n\nOpen connection\nTechnical details\n\nQC05 collaborator · Codex\n\nHarness ID not assigned\n\nQC05 project · Connector host\n\nOpen connection\nTechnical details\n\nHarness ID: builder · Codex\n\nQC05 project · Connector host\n\nOpen connection\nTechnical details"
+    },
+    {
+      "name": "Catalog IDs bind distinct exact canonical connections",
+      "status": "PASS",
+      "rows": [
+        {
+          "connect_id": "reviewer",
+          "binding_id": "binding",
+          "workspace_id": "ws",
+          "endpoint_id": "ep"
+        },
+        {
+          "connect_id": null,
+          "binding_id": "qc05-legacy-binding",
+          "workspace_id": "ws",
+          "endpoint_id": "qc05-legacy-endpoint"
+        },
+        {
+          "connect_id": "builder",
+          "binding_id": "ui-binding-2",
+          "workspace_id": "ws",
+          "endpoint_id": "ui-ep-2"
+        }
+      ]
+    },
+    {
+      "name": "Already opened builder context displays its exact saved binding scope",
+      "status": "PASS",
+      "text": "Connection context\nConnection · Read only\n\nSaved context only. Configuration does not establish session readiness or permission to execute.\n\nagent id\nsubject\nworkspace id\nws\nexecutor id\nexe_656dcdfda4b4a3a8a750e956cebfe7bd\nbinding id\nui-binding-2\nworkspace binding id\nwxb",
+      "limit": "Read-only Connection context is a distinct dialog, not the Home entry testid. No repeated Open click."
+    },
+    {
+      "name": "Saved inspector resolves the complete seven-field identity",
+      "status": "PASS",
+      "canonical_ref": {
+        "agent_id": "subject",
+        "binding_id": "ui-binding-2",
+        "endpoint_id": "ui-ep-2",
+        "executor_id": "exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+        "server_id": "srv_dd5c93d11520f3a389bcb8b13e4b8a0f",
+        "workspace_binding_id": "wxb",
+        "workspace_id": "ws"
+      }
+    },
+    {
+      "name": "Basic navigation stays exactly Home Conversations Graph Artifacts",
+      "status": "PASS",
+      "labels": [
+        "Home",
+        "Conversations",
+        "Graph",
+        "Artifacts"
+      ]
+    },
+    {
+      "name": "Same IDs and canonical context survive across Active Needs you and Results",
+      "status": "PASS",
+      "active": [
+        {
+          "id": "home_group_6b1c3f56c45c66c2ed1198cb150a7ab1595986e6e686bc0b71978d6797d5b1e0",
+          "kind": "harness",
+          "connection": {
+            "server_id": "srv_dd5c93d11520f3a389bcb8b13e4b8a0f",
+            "executor_id": "exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+            "workspace_id": "ws",
+            "binding_id": "ui-binding-2",
+            "workspace_binding_id": "wxb",
+            "agent_id": "subject",
+            "harness_id": "codex_app_server",
+            "workspace_label": "QC05 project",
+            "host_label": null,
+            "agent_label": "QC05 collaborator",
+            "connect_id": "builder"
+          }
+        },
+        {
+          "id": "home_group_f4005c47f5d1b76e662fda0fde4d75f2c16f82aae6e911b12b17d76cd905c277",
+          "kind": "harness",
+          "connection": {
+            "server_id": "srv_dd5c93d11520f3a389bcb8b13e4b8a0f",
+            "executor_id": "exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+            "workspace_id": "ws",
+            "binding_id": "qc05-legacy-binding",
+            "workspace_binding_id": "wxb",
+            "agent_id": "subject",
+            "harness_id": "codex_app_server",
+            "workspace_label": "QC05 project",
+            "host_label": null,
+            "agent_label": "QC05 collaborator",
+            "connect_id": null
+          }
+        }
+      ],
+      "needs": [
+        {
+          "id": "home_group_0dd72d6802aaf33e0bf3f5ac3798b64b3b2cc569a0b6c9e1d3729c9cd2cff94c",
+          "kind": "harness",
+          "connection": {
+            "server_id": "srv_dd5c93d11520f3a389bcb8b13e4b8a0f",
+            "executor_id": "exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+            "workspace_id": "ws",
+            "binding_id": "binding",
+            "workspace_binding_id": "wxb",
+            "agent_id": "subject",
+            "harness_id": "codex_app_server",
+            "workspace_label": "QC05 project",
+            "host_label": null,
+            "agent_label": "QC05 collaborator",
+            "connect_id": "reviewer"
+          }
+        }
+      ],
+      "results": [
+        {
+          "id": "home_delivery_canonical:result_6ccca1c898f93385c550cd54674712a3be4cb0c7887c886f8a37e0f40793296b",
+          "kind": "delivery",
+          "harness_refs": [
+            {
+              "card_id": "home_group_6b1c3f56c45c66c2ed1198cb150a7ab1595986e6e686bc0b71978d6797d5b1e0",
+              "connection": {
+                "server_id": "srv_dd5c93d11520f3a389bcb8b13e4b8a0f",
+                "executor_id": "exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+                "workspace_id": "ws",
+                "binding_id": "ui-binding-2",
+                "workspace_binding_id": "wxb",
+                "agent_id": "subject",
+                "harness_id": "codex_app_server",
+                "workspace_label": "QC05 project",
+                "host_label": null,
+                "agent_label": "QC05 collaborator",
+                "connect_id": "builder"
+              }
+            }
+          ],
+          "result": {
+            "id": "result_6ccca1c898f93385c550cd54674712a3be4cb0c7887c886f8a37e0f40793296b"
+          }
+        }
+      ]
+    },
+    {
+      "name": "DOM headings retain public IDs plus explicit legacy fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "Delivery click opens one explicit contextual dialog",
+      "status": "PASS",
+      "dialog": "Activity detail\nHandoff\n\nQC05 collaborator · codex_app_server\n\nRelated information as of 2026-11-17T05:17:00.396568Z. Controls revalidate their canonical records.\n\nSession\n\nCLOSED · Read only\n\nui-session-2\n\nLive tail\nHistory\nLoading events…\n Auto-scroll\nRefresh history\n\nEvents could not be refreshed. Loaded events are preserved. Error: The event stream was not found in this session.\n\nSession · terminal\nRead only\n12px\nWaiting for session events…\nContinue this exact session\nQuestions and decisions\nResult ready to inspect\n\nA canonical result is available for inspection.\n\nsubject · QC05 project\n\nInspect result\nMark seen\nSnooze 1 hour\nDeliveries and artifacts\nHandoff result\n\nSUCCEEDED · verification OPEN · Recent · seen state not tracked\n\nQC05 synthetic retained delivery\n\nsubject · QC05 project · Nov 17, 02:17 AM\n\nView delivery\nContinue this session\nOriginal record and controls\n\nThe exact execution could not be refreshed. Displayed facts may be out of date; actions revalidate their own scope.\n\nRefresh this exact execution",
+      "url": "http://127.0.0.1:63926/?home_target=%7B%22executor_id%22%3A%22exe_656dcdfda4b4a3a8a750e956cebfe7bd%22%2C%22kind%22%3A%22result%22%2C%22operation_id%22%3A%22ui-success%22%2C%22server_id%22%3A%22srv_dd5c93d11520f3a389bcb8b13e4b8a0f%22%2C%22session_id%22%3A%22ui-session-2%22%2C%22workspace_id%22%3A%22ws%22%7D"
+    },
+    {
+      "name": "Needs-you update retains an explicit canonical target",
+      "status": "PASS",
+      "target": {
+        "executor_id": "exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+        "kind": "execution",
+        "operation_id": "op_9676471341278d16a29634398569f8ce",
+        "server_id": "srv_dd5c93d11520f3a389bcb8b13e4b8a0f",
+        "session_id": "ses_1b39d87c3b67e1ae4da4e8e9899731cd",
+        "workspace_id": "ws"
+      }
+    },
+    {
+      "name": "Expanded 360 navigation has exactly four basic destinations",
+      "status": "PASS",
+      "names": [
+        "Home",
+        "Conversations",
+        "Graph",
+        "Artifacts"
+      ]
+    },
+    {
+      "name": "Escape closes mobile navigation and returns focus to visible toggle",
+      "status": "PASS",
+      "bounds": {
+        "width": 360,
+        "scroll": 360,
+        "focusHidden": false,
+        "focusId": "sidebar-toggle"
+      }
+    },
+    {
+      "name": "No horizontal document overflow at360",
+      "status": "PASS"
+    },
+    {
+      "name": "Three regions and both public IDs remain at360",
+      "status": "PASS"
+    }
+  ],
+  "raw_cuts": [
+    {
+      "file": "checks-cli.txt",
+      "status": "FAIL",
+      "message": "locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('home-detail') to be visible\u001b[22m\n"
+    },
+    {
+      "file": "continuation-cli.txt",
+      "status": "FAIL",
+      "message": "No writes or frontend errors while opening exact contexts"
+    },
+    {
+      "file": "mobile-cli.txt",
+      "status": "FAIL",
+      "message": "360 navigation preserves four basic destinations"
+    },
+    {
+      "file": "mobile-final-cli.txt",
+      "status": "FAIL",
+      "message": "locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Close navigation', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button aria-label=\"Close navigation\" class=\"absolute inset-0 z-20 bg-black/30\"></button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <nav aria-label=\"Main navigation\" data-testid=\"navigation-sidebar\" class=\"flex-1 overflow-y-auto p-2 pt-3 space-y-4\">…</nav> from <aside aria-hidden=\"false\" id=\"dashboard-navigation\" data-testid=\"nav-sidebar\" class=\"absolute inset-y-0 left-0 z-30 md:static backdrop-blur-md bg-surface-50 dark:bg-surface-900↵          border-r border-surface-200/50 dark:border-surface-700/30↵          flex flex-col overflow-hidden transition-all duration-300 ease-in-out↵          w-56\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <nav aria-label=\"Main navigation\" data-testid=\"navigation-sidebar\" class=\"flex-1 overflow-y-auto p-2 pt-3 space-y-4\">…</nav> from <aside aria-hidden=\"false\" id=\"dashboard-navigation\" data-testid=\"nav-sidebar\" class=\"absolute inset-y-0 left-0 z-30 md:static backdrop-blur-md bg-surface-50 dark:bg-surface-900↵          border-r border-surface-200/50 dark:border-surface-700/30↵          flex flex-col overflow-hidden transition-all duration-300 ease-in-out↵          w-56\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <nav aria-label=\"Main navigation\" data-testid=\"navigation-sidebar\" class=\"flex-1 overflow-y-auto p-2 pt-3 space-y-4\">…</nav> from <aside aria-hidden=\"false\" id=\"dashboard-navigation\" data-testid=\"nav-sidebar\" class=\"absolute inset-y-0 left-0 z-30 md:static backdrop-blur-md bg-surface-50 dark:bg-surface-900↵          border-r border-surface-200/50 dark:border-surface-700/30↵          flex flex-col overflow-hidden transition-all duration-300 ease-in-out↵          w-56\">…</aside> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+    },
+    {
+      "file": "mobile-observe-cli.txt",
+      "status": "PASS",
+      "message": null
+    }
+  ],
+  "session_drift_diagnostic": {
+    "db": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc05-browser-zj4nic_q\\home\\nexus.db",
+    "mode": "read-only; no query writes",
+    "before_evidence": "Only whole-table count/hash was captured, not rows or per-column hashes.",
+    "changed_columns": "UNKNOWN; exact changed columns and cause cannot be proved from whole-table digest.",
+    "after_metadata": [
+      {
+        "session_id": "ses_1b39d87c3b67e1ae4da4e8e9899731cd",
+        "binding_id": "binding",
+        "workspace_id": "ws",
+        "lifecycle_state": "READY",
+        "stream_epoch": "native-epoch",
+        "lease_state": "SUPERSEDED"
+      },
+      {
+        "session_id": "ui-session-2",
+        "binding_id": "ui-binding-2",
+        "workspace_id": "ws",
+        "lifecycle_state": "CLOSED",
+        "stream_epoch": "ui-historical-epoch",
+        "lease_state": "CLOSED"
+      }
+    ],
+    "after_column_hashes": {
+      "server_id": "21235f54ea22a9124e07e35ad1c97d26d0f1622faf26a93afd02691a372dc03c",
+      "executor_id": "5c43d024f1a79f7f7e7f8fdb394c25e3a4aaf721887b3a17c0b94413c3c42ebc",
+      "session_id": "d96a094cee8a4767de31deecb49ad3c23bb9c360297ab06f69e4a96579ef907f",
+      "binding_id": "0def3fab887cdd572c013e69ffc353df36f372d27ed2beadd13be8483e249d8b",
+      "workspace_id": "1ecaef22049ea2ce6afa8c5aa5cd74ba7b268edff3f27a698de9cdcdd53d3e4f",
+      "workspace_binding_id": "f7d5c49c460c69e5f0446abc444f09fc26c7de490d15606ca0572d2d88d2b5ee",
+      "open_operation_id": "8c88a756765a450e1387b1a85099af11cad19b89f1c653c5137cbd952cc7a745",
+      "core_owner_ref": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9",
+      "owner_generation": "e718fe8edf8a7c2917cd7444286b7048042a74abf5208f1d70933c08dbd6b7e9",
+      "lifecycle_state": "1b7cdb9728a340c46dc7c9e29f619d21b0db36bb932002c94de156098a222344",
+      "ownership_proof_json": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9",
+      "stream_epoch": "c4e266850fe6a932bc5c43d03f9b18fea800f2483281f272abaf91aa1c452e06",
+      "lease_state": "039e280a2be6c0a5254279a1c922d62e52991f9993f61fb77afb59f9c85e3d9b",
+      "legacy_session_id": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9",
+      "metadata_json": "f018a931332392907ca3c9ed1af6b079fb3ff16a816a5322cadc4a55e7779a11",
+      "local_retirement_json": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9",
+      "local_retirement_revision": "d72b99cb0537a539a6caaa05ce4f5bed34266fac178b275056629d67c5058486",
+      "local_journal_name": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9",
+      "containment_reason": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9",
+      "contained_at": "6d9695b0f6f0de8c737c15a199b1658001af6e4ef0d756109efffbd0c69ad4c9"
+    },
+    "seed_known_historical_fields": {
+      "session_id": "ui-session-2",
+      "lifecycle_state": "CLOSED",
+      "lease_state": "CLOSED",
+      "stream_epoch": "ui-historical-epoch"
+    },
+    "limitation": "No claim that every Home GET was free of canonical maintenance effects. Eight protected tables remained byte equal; all nine row counts remained equal.",
+    "offline_after_lifespan_hash": "f69ad946bc80fea8ded0378a0ad4e56213563d18f8f902647c988972b1542078",
+    "same_as_pre_lifespan_final_snapshot": true,
+    "single_column_source_hypothesis": {
+      "column": "lease_state",
+      "before": "ACTIVE",
+      "after": "SUPERSEDED",
+      "reconstructed_sha256": "c75b2796665cdfc956af125a68ea2f48c80871eed307aa8bbe4ef5cdb9a6238c",
+      "original_sha256": "342fab0b11420f7a1dfb0a5de2c5e68561a59cb3d9f866d04f05463b8e4375bd",
+      "exact_whole_table_hash_match": false
+    }
+  },
+  "http_path_counts": {
+    "/": 2,
+    "/api/v1/agents": 3,
+    "/api/v1/agents/subject/runtime-executions/ui-success": 2,
+    "/api/v1/agents/subject/runtime-policy": 1,
+    "/api/v1/approvals/r4request_dbe210da169f1f3f3bb0dc0e70ae6f5c3aabc9637dfa0ffe8a5ed087977d1ee8": 1,
+    "/api/v1/attention/summary": 96,
+    "/api/v1/graph": 9,
+    "/api/v1/handoffs": 4,
+    "/api/v1/home/harness-board": 25,
+    "/api/v1/home/target": 6,
+    "/api/v1/info": 4,
+    "/api/v1/messages": 8,
+    "/api/v1/meta-harness/runtime-sessions": 6,
+    "/api/v1/metrics/local/summary": 2,
+    "/api/v1/metrics/publish-health": 1,
+    "/api/v1/observations/summary": 4,
+    "/api/v1/operator-auth/status": 2,
+    "/api/v1/operator/unread-count": 70,
+    "/api/v1/runtime-management/connections/bindings/ui-binding-2": 2,
+    "/api/v1/runtime-management/connections/catalog": 4,
+    "/api/v1/runtime-management/connections/me": 2,
+    "/api/v1/runtime-management/connections/project-preset": 2,
+    "/api/v1/runtime-management/connections/workspaces": 2,
+    "/api/v1/runtime-management/runtime/input-requests": 108,
+    "/api/v1/runtime-management/runtime/sessions/ses_1b39d87c3b67e1ae4da4e8e9899731cd": 2,
+    "/api/v1/runtime-management/runtime/sessions/ses_1b39d87c3b67e1ae4da4e8e9899731cd/events": 1,
+    "/api/v1/runtime-management/runtime/sessions/ui-session-2": 1,
+    "/api/v1/runtime-management/runtime/sessions/ui-session-2/events": 1,
+    "/api/v1/sessions": 2,
+    "/api/v1/settings": 2,
+    "/api/v1/stream": 5,
+    "/api/v1/workspaces": 31,
+    "/assets/index-CfDr8rCI.js": 2,
+    "/assets/index-Ds-MK2FR.css": 2,
+    "/logos/nexus-icon.svg": 1,
+    "/logos/nexus-wordmark-dark.svg": 1,
+    "/logos/nexus-wordmark-light.svg": 1
+  },
+  "interpretation": [
+    "Initial selector/catalog checks passed. First driver expected home-detail/URL after Open connection; real UI correctly opens the distinct Connection context dialog. The timeout is preserved as an oracle error; no Open click was repeated.",
+    "Continuation proves exact saved context plus canonical seven-field binding, four basic destinations, same IDs/context across Active/Needs you/Results, legacy fallback and explicit delivery target.",
+    "Historical ui-success has synthetic projection receipts with canonical_frame NULL and ui-session-2 has no retained watermark. Viewer correctly returns DB_ERROR503 and stream404; this is preserved as a negative fixture and not accepted as a successful viewer.",
+    "First mobile driver looked for Open navigation rather than the existing Expand navigation label. Explicit fresh-snapshot toggle showed four destinations. Backdrop center is occluded by the sidebar at360; Escape closed navigation and returned visible focus. Both driver failures remain raw; no product change was made."
+  ],
+  "negative_viewer": {
+    "status": "NOT_VERIFIED_POSITIVE_VIEWER",
+    "target": {
+      "kind": "result",
+      "operation_id": "ui-success",
+      "session_id": "ui-session-2",
+      "workspace_id": "ws"
+    },
+    "receipt_error": {
+      "status": 503,
+      "code": "DB_ERROR",
+      "message": "Stored operation receipt history is invalid."
+    },
+    "stream_error": {
+      "status": 404,
+      "reason": "synthetic historical session has no retained stream watermark"
+    },
+    "no_forged_frame": true,
+    "no_product_relaxation": true
+  },
+  "passive_effects": {
+    "requests": 418,
+    "mutations": 0,
+    "stable_protected_tables": [
+      "agents",
+      "execution_bindings",
+      "runtime_execution_grants",
+      "execution_operations",
+      "connection_setup_commits",
+      "execution_results",
+      "execution_native_requests",
+      "connection_public_ids"
+    ],
+    "changed_tables": [
+      "execution_sessions"
+    ],
+    "counts_unchanged": true,
+    "grants_operations_bindings_agents_receipts_public_ids_byte_equal": true,
+    "session_digest_change": "Observed but not attributed: baseline stores a digest, not old session rows. No claim of zero total Server writes or no canonical background maintenance.",
+    "requests_file": "requests.json"
+  },
+  "runtime_source_pins": {
+    "tests/quick_connect/browser_public_ids_fixture.py": "3ef574d1003ddcb4a987039346687ddacbfa7559088a414cfef21eb79785483e",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "src/okto_nexus/application/connection_public_ids.py": "4a22dee1dd1fd3872d994bd8a39893e3c34980a02321b248448c34b6546c7b71",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "324ca1b40e22dc55e0f55f26b666a877923a90ca7fba9fc4f06c6730fc97128a",
+    "src/okto_nexus/adapters/outbound/sqlite/connection_catalog.py": "f05d2626f2644d8dcc748731f9ef85fb3b48e03aef82ef26eb6ba72435c011c5",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "cc0eb2e2efdf2be288ed5e3f1605f237d51fd1986fb5e1856c302f7ebb162775",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-CfDr8rCI.js": "03278c86e467207f48b1ef8ce88f3640fe04d27053c4041604e77b034914a7cc",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-Ds-MK2FR.css": "f761e905e0d9642c4c7d0f96d9e0f73404012f0d69d4fead8509e6fd9130b7b7"
+  },
+  "current_source_pins": {
+    "tests/quick_connect/browser_public_ids_fixture.py": "3ef574d1003ddcb4a987039346687ddacbfa7559088a414cfef21eb79785483e",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "src/okto_nexus/application/connection_public_ids.py": "0985f81564b845fa987bce65df22f81d9faf804b4e8277f373155aa224c3c71e",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "324ca1b40e22dc55e0f55f26b666a877923a90ca7fba9fc4f06c6730fc97128a",
+    "src/okto_nexus/adapters/outbound/sqlite/connection_catalog.py": "f05d2626f2644d8dcc748731f9ef85fb3b48e03aef82ef26eb6ba72435c011c5",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "cc0eb2e2efdf2be288ed5e3f1605f237d51fd1986fb5e1856c302f7ebb162775",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-CfDr8rCI.js": "03278c86e467207f48b1ef8ce88f3640fe04d27053c4041604e77b034914a7cc",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-Ds-MK2FR.css": "f761e905e0d9642c4c7d0f96d9e0f73404012f0d69d4fead8509e6fd9130b7b7"
+  },
+  "source_drift": [
+    "src/okto_nexus/application/connection_public_ids.py"
+  ],
+  "drift_explanation": "Root explicitly added bounded cursor RecursionError handling while this fixture was live. Loaded source cut is preserved separately; static assets did not drift. Browser does not exercise adversarial cursor parser.",
+  "cleanup": {
+    "mode": "normal Playwright close plus own fixture stop-file",
+    "force_used": false,
+    "fixture_exit_code": 0,
+    "owned_wss_lifespan_factory_closed": true,
+    "own_port": 63926,
+    "own_listener_absent": true,
+    "own_processes_absent": true,
+    "before_file": "own-processes-before.json",
+    "after_file": "cleanup-physical.json",
+    "listener_after": "cleanup-physical.json"
+  },
+  "boundaries": {
+    "real_provider_calls": 0,
+    "provider_auth_reads": 0,
+    "native_harness_cli_calls": 0,
+    "setup_tests_during_browsing": 0,
+    "finish_during_browsing": 0,
+    "grant_changes_during_browsing": 0,
+    "public_associations_before_baseline": 2,
+    "synthetic_registered_bindings": 3,
+    "underlying_fixture": "Existing admitted inert WSS question; explicit extra registered/historical SQL read facts.",
+    "current_installed_package": false,
+    "personal_install": false,
+    "git_mutations": false,
+    "ledger_edits": false
+  },
+  "screenshots": {
+    "screens/builder-exact-context.png": "b5e65283f3c24d96f8cfe9a6806eaa2bd49b7e4b1c00af314e6731f30d6b2d59",
+    "screens/continuation-failure.png": "2d5ed585f99fd45359558a745ad26ffabb7ba3985c00d4c9fe8469d3eb3e1b23",
+    "screens/delivery-context.png": "6d3534730ae6c9ede0f239331ac11622ba5107a7e81875eece2c4feeda7d9e75",
+    "screens/failure.png": "b5e65283f3c24d96f8cfe9a6806eaa2bd49b7e4b1c00af314e6731f30d6b2d59",
+    "screens/home-desktop.png": "548ea0130a1c30cf6efe8acd469f896232716b9bf8dac9e3b4ec521493f83b8e",
+    "screens/home-mobile-360-final.png": "be1b236863bdaa39ee56b84a39a6ad100e3db4e6c3a3692aad2dadf7eeec4e63",
+    "screens/mobile-failure.png": "8ddc86cf665c8b09499835009cdf0b6aae571ced6a9b863ff5b731496c47ccfa",
+    "screens/mobile-navigation-final.png": "76a6feac43bc4b5a9bb0d18e4dd6ffc3ffe0bacc027b2e05c880cff663fbcec7",
+    "screens/mobile-navigation.png": "455c5a7d6b7fd881d9446cc1da5f8827f6e42a70dc3821c56d7f01e5cbc71038",
+    "screens/needs-mobile-360-final.png": "6049d3eb65c969f50372c382943f5cad1453cbd0e497e24ea618e66fdb3bf45b",
+    "screens/needs-update-context.png": "c8fc78a32d8799e0cc587f01a065e36a840d6e1960d4f768979d2e7915d7885c",
+    "screens/results-mobile-360-final.png": "9b383247e60b8907d0ccdecdc2ce3deeb8c7817ed2fbb5a11fa4f984cd4a35d5",
+    "screens/selector-desktop.png": "74792a49e4a439415ed5e18f42a30a4911517e5e3a9437b93e18de0f17dc4734"
+  }
+}

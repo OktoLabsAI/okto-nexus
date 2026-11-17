@@ -1,0 +1,50 @@
+{
+  "label": "d21",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\after\\tests\\quick_connect\\test_quick_connect_git_boundaries.py::test_d21_hostile_git_directory_environment_cannot_redirect_discovery",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\d21\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T08:33:18.715217+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 59936,
+      "parent_pid": null,
+      "birth_filetime": 134393779987174455,
+      "alive": false
+    },
+    {
+      "pid": 29560,
+      "parent_pid": 59936,
+      "birth_filetime": 134393779987669079,
+      "alive": false
+    },
+    {
+      "pid": 22844,
+      "parent_pid": 29560,
+      "birth_filetime": 134393779987874816,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T08:33:36.729733+00:00"
+}

@@ -1,0 +1,57 @@
+{
+  "cases": [
+    {
+      "label": "d26",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-d26-u52jkdyq\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-d26-u52jkdyq\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-d26-u52jkdyq\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-d26-u52jkdyq\\after\\tests\\quick_connect\\test_quick_connect_git_recovery.py::test_d26_explicit_name_finish_recovery_ignores_changed_local_git",
+        "-v",
+        "-s",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-d26-u52jkdyq\\d26\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-d26-u52jkdyq",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T08:11:08.444776+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 30896,
+          "parent_pid": null,
+          "birth_filetime": 134393766684465964,
+          "alive": false
+        },
+        {
+          "pid": 34884,
+          "parent_pid": 30896,
+          "birth_filetime": 134393766684719260,
+          "alive": false
+        },
+        {
+          "pid": 36936,
+          "parent_pid": 34884,
+          "birth_filetime": 134393766684843908,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T08:11:22.748592+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

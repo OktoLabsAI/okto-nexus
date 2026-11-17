@@ -1,0 +1,46 @@
+{
+  "started_at": "2026-11-17T11:09:44.794718+00:00",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rdss0vap",
+  "selected": [
+    "tests\\execution_r4\\test_connection_catalog.py",
+    "tests\\execution_r4\\test_terminal_multi_harness.py"
+  ],
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path[:0]=['C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\guard', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\tree\\\\tests', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\tree\\\\tests\\\\execution_r4', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\tree\\\\tests\\\\home_evolution', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\tree\\\\tests\\\\legacy_native_fixture', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\tree\\\\tests\\\\quick_connect', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\tree\\\\tests\\\\ui_simplification'];import pytest;raise SystemExit(pytest.main(['-p', 'qc36_origin_guard', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\pytest.ini', '--rootdir=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\tree', '--confcutdir=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\tree', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\tree\\\\tests\\\\execution_r4\\\\test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\tree\\\\tests\\\\execution_r4\\\\test_terminal_multi_harness.py::test_single_observed_harness_needs_no_profile_and_existing_connection_offers_all_intents', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\tree\\\\tests\\\\execution_r4\\\\test_terminal_multi_harness.py::test_two_distinct_harnesses_share_project_keep_custom_a_and_recover_b_finish', '-v', '--tb=short', '-x', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-rdss0vap\\\\reports\\\\tests.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rdss0vap\\cwd",
+  "helper_paths": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rdss0vap\\tree\\tests",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rdss0vap\\tree\\tests\\execution_r4",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rdss0vap\\tree\\tests\\home_evolution",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rdss0vap\\tree\\tests\\legacy_native_fixture",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rdss0vap\\tree\\tests\\quick_connect",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rdss0vap\\tree\\tests\\ui_simplification"
+  ],
+  "stdin": "closed PIPE; no NUL console reopening",
+  "timeout": 600,
+  "signals": [],
+  "exit_code": 0,
+  "ended_at": "2026-11-17T11:10:16.440171+00:00",
+  "payload_files": 1028,
+  "payload_drift": [],
+  "source_drift": [],
+  "known_processes": [
+    {
+      "pid": 34572,
+      "birth": 1794913784.7965653,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 23184,
+      "birth": 1794913784.833092,
+      "exe": "C:\\Python313\\python.exe"
+    }
+  ]
+}

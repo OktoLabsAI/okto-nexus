@@ -87,3 +87,13 @@ test('actual overview signal handler opens the exact canonical attention when it
   const [external]=invoke({kind:'delivery',entry:{target:null},result:null,report,harness_refs:[]});
   assert.equal(external.kind,'attention');assert.equal(external.item,report);assert.equal(external.action,'inspect_external_observation');
 });
+test('QC public Harness ID is distinct from adapter family and collaborator, without changing event targets',()=>{
+  const value={...card,connection:{...card.connection,connect_id:'reviewer'}};
+  const html=render(value);assert.match(html,/Harness ID:[\s\S]*reviewer/);assert.match(html,/Collaborator: Research collaborator/);assert.match(html,/Codex/);
+  assert.equal(value.connection.harness_id,'codex_app_server');assert.equal(value.events_preview[0].target,target);
+  const signal={kind:'request',id:'request',request:{kind:'native_question_pending',allowed_actions:['respond_native'],freshness:'current',resolution:'open'},
+    harness_refs:[{card_id:'card',connection:value.connection}],blocks_harness:false};
+  const request=renderToStaticMarkup(React.createElement(HomeHarnessSignalCard,{item:signal,blocked:false,onOpen(){}}));
+  assert.match(request,/Harness ID: reviewer/);assert.match(request,/Codex/);assert.match(request,/Review question/);
+  assert.match(render(),/Harness ID not assigned/);
+});

@@ -1,0 +1,51 @@
+{
+  "execution_bindings": {
+    "count": 1,
+    "sha256": "2eae0cc83d80d31282d318adc9f630a47348005e27bd5ecaa9c8f7dd4478ee58"
+  },
+  "agent_endpoints": {
+    "count": 1,
+    "sha256": "3a286331301938798791a89e9098d12cb29b9ac583e3a16b782696c5a022f5be"
+  },
+  "runtime_execution_grants": {
+    "count": 1,
+    "sha256": "1bfd0ccdb3f002f69f82536b6690fd49d44f4f293aaea6be73f075f607effc03"
+  },
+  "connection_setup_commits": {
+    "count": 1,
+    "sha256": "2194e4904c68bac52c9eb2eb6a4e5b917471807a4774dff31aa99c9ba375ec28"
+  },
+  "connection_public_ids": {
+    "count": 1,
+    "sha256": "8f25a0ba24661c3f38c9a663c19da0dba65b83aa11698aae1d8ec032ab02b8c6"
+  },
+  "connection_project_drafts": {
+    "count": 1,
+    "sha256": "b17ebf884e7f5cc823377769d7a308c7f725a92134f732424c0a5134f777989b"
+  },
+  "execution_sessions": {
+    "count": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "execution_operations": {
+    "count": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "reference": {
+    "agent_id": "logical-origin-8fa97a7587f4",
+    "binding_id": "bind_8120aeebd683f8185deac2e8a37915dc",
+    "endpoint_id": "ep_3a88cec4171e3351622e533e727389f8",
+    "executor_id": "exe_e5d3beb45d6f3313bd795992e421098b",
+    "server_id": "srv_8fd39ed3535a1679f5fd61207e3ff189",
+    "workspace_binding_id": "wxb_1ce60854c5daa44a44dbb7f355db2069",
+    "workspace_id": "wsr_20e617a81d8c3c6f8b39ad77f747dd67"
+  },
+  "connect_id": "codex",
+  "workspaces": [
+    {
+      "workspace_id": "wsr_20e617a81d8c3c6f8b39ad77f747dd67",
+      "display_name": "logical-origin",
+      "root_realpath": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\tmp\\pytest-of-unknown\\pytest-0\\test_origin_first_connect_and_0\\workspace"
+    }
+  ]
+}

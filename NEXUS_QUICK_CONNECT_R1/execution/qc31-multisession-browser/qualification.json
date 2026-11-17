@@ -1,0 +1,99 @@
+{
+  "status": "PASS_SCOPED_CANONICAL_MULTISESSIONS",
+  "scenario": "I06",
+  "source_candidate": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "checks_passed": 15,
+  "checks_failed": 0,
+  "page_errors": [],
+  "provider_invocations": 0,
+  "fake_protocol": true,
+  "browser_requests": 86,
+  "browser_posts": 0,
+  "reference": {
+    "server_id": "srv_269d2c9d741d98a06c07785dbac027f6",
+    "executor_id": "exe_296d2a3065262178625196a0f342e3cb",
+    "binding_id": "bind_2031131ed8e50a9b2d9d0eedf0d10f56",
+    "endpoint_id": "ep_ed874b18db791030ae811efdb070e6cc",
+    "agent_id": "qc31-collaborator",
+    "workspace_id": "wsr_ae4eded1d27ae3a1d28a36df18d38e38",
+    "workspace_binding_id": "wxb_331c26efb8c44f0479b107c424299f72"
+  },
+  "connect_id": "session-reviewer",
+  "sessions": [
+    {
+      "label": "A",
+      "session_id": "ses_93ddc63ff779ec4b449f1680425a99c4",
+      "text": "QC31 Alpha retained exact output",
+      "closed": true
+    },
+    {
+      "label": "B",
+      "session_id": "ses_b2cee5c26f2666b0d9064363b290dcb1",
+      "text": "QC31 Beta current exact output",
+      "closed": false
+    }
+  ],
+  "canonical_histories": [
+    {
+      "label": "A",
+      "session_id": "ses_93ddc63ff779ec4b449f1680425a99c4",
+      "watermarks": [
+        {
+          "server_id": "srv_269d2c9d741d98a06c07785dbac027f6",
+          "executor_id": "exe_296d2a3065262178625196a0f342e3cb",
+          "session_id": "ses_93ddc63ff779ec4b449f1680425a99c4",
+          "stream_epoch": "stream_89a1f0d2bd0862cc1f87969b546897b2",
+          "committed_contiguous": 7,
+          "projected_through": 0,
+          "gap_state": "none"
+        }
+      ],
+      "nonnull_canonical_receipt_frames": 4
+    },
+    {
+      "label": "B",
+      "session_id": "ses_b2cee5c26f2666b0d9064363b290dcb1",
+      "watermarks": [
+        {
+          "server_id": "srv_269d2c9d741d98a06c07785dbac027f6",
+          "executor_id": "exe_296d2a3065262178625196a0f342e3cb",
+          "session_id": "ses_b2cee5c26f2666b0d9064363b290dcb1",
+          "stream_epoch": "stream_1905b00573694a1b8a2ccc1a9198ee91",
+          "committed_contiguous": 6,
+          "projected_through": 0,
+          "gap_state": "none"
+        }
+      ],
+      "nonnull_canonical_receipt_frames": 3
+    }
+  ],
+  "installed_payload_files": 1027,
+  "payload_drift": [],
+  "source_drift": [],
+  "assets": {
+    "index.html": {
+      "bytes": 472,
+      "sha256": "cc0eb2e2efdf2be288ed5e3f1605f237d51fd1986fb5e1856c302f7ebb162775"
+    },
+    "assets\\index-CfDr8rCI.js": {
+      "bytes": 1528602,
+      "sha256": "03278c86e467207f48b1ef8ce88f3640fe04d27053c4041604e77b034914a7cc"
+    },
+    "assets\\index-Ds-MK2FR.css": {
+      "bytes": 110497,
+      "sha256": "f761e905e0d9642c4c7d0f96d9e0f73404012f0d69d4fead8509e6fd9130b7b7"
+    }
+  },
+  "cleanup": "evidence/cleanup.json",
+  "limitations": [
+    "Synthetic local Codex protocol peer, no provider or personal account; not paid harness qualification.",
+    "A is closed/retained and B is current/READY at browser baseline. Not simultaneous running.",
+    "Exact canonical deep links open in fresh own tabs, one mounted viewer at a time. Not a session-picker UX or dirty-navigation test.",
+    "Core output and receipts are real canonical ingress from the inert protocol peer; no SQL identities, grants, frames, or journal insertion.",
+    "Synthetic source reports missing configuration fields/NATIVE_DISCOVERY_FAILED warning; no native account or model discovery claimed.",
+    "History watermark is a pre-browser sample, not a terminal billing fence; projected_through=0 is preserved, not claimed fully projected.",
+    "Preserved antecedents include fixture/oracle/control failures and are not promoted to PASS.",
+    "No human usability, screen reader, mobile, reconnect or real-provider execution is qualified."
+  ]
+}

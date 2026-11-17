@@ -1,0 +1,196 @@
+{
+  "results": [
+    {
+      "profile": "race-a",
+      "code": 0,
+      "value": {
+        "state": "configured",
+        "server_id": "srv_bc931c07d260249e0ce527fcf5030806",
+        "agent_id": "app-91c517d80b67",
+        "binding_id": "bind_c000bb277e8f520b7eff5d6b75c9030d",
+        "workspace_id": "wsr_310673980a172953b708565aebab6f6f",
+        "configuration": {
+          "baseline": {
+            "execution_revision": 1,
+            "runtime_revision": 1,
+            "defaults_revision": 1,
+            "binding_revision": 1,
+            "endpoint_revision": 1
+          },
+          "runtime_policy": {
+            "agent_id": "app-91c517d80b67",
+            "runtime_enabled": true,
+            "revision": 1,
+            "inherit_global_mcps": null,
+            "session_policy": "per_sender",
+            "broadcast_handoff_auto_claim": false,
+            "defaults": {
+              "runtime_enabled": true,
+              "session_policy": "shared",
+              "revision": 1,
+              "automatic_recovery": true,
+              "inherit_global_mcps": false,
+              "broadcast_handoff_auto_claim": false
+            },
+            "effective": {
+              "runtime_enabled": true,
+              "session_policy": "per_sender",
+              "inherit_global_mcps": false,
+              "broadcast_handoff_auto_claim": false
+            },
+            "handoff_auto_claim_rollout_enabled": false
+          },
+          "runtime_default": true,
+          "native_decision_policy": {
+            "value": true,
+            "source": "stored",
+            "editable": true,
+            "revision": "0b17173d71542e7a886c86609f7eebf56e33ee0a281a8fe05616f1277a161639",
+            "can_initialize": false
+          },
+          "connections": [
+            {
+              "binding_id": "bind_c000bb277e8f520b7eff5d6b75c9030d",
+              "candidate_ref": "nexus-install-v1:04a3aaaffee863a497cd6967b863c5394f650c814dcace61cc21ac368d971019",
+              "executor_id": "exe_a8462553bc2c6a8276fe618b94ddd518",
+              "workspace_id": "wsr_310673980a172953b708565aebab6f6f",
+              "adapter_id": "codex_app_server",
+              "execution_location": "local"
+            }
+          ],
+          "project_preset": {
+            "id": "project-generalist",
+            "revision": 1
+          },
+          "mcp_preset": {
+            "revision": 0,
+            "servers": [],
+            "configuration_digest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "folders": {
+            "workspace_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "provider_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\own-provider-home",
+            "secret_bindings": {}
+          },
+          "public_config": {
+            "alias": "App",
+            "relay_results": true
+          },
+          "automatic_reply": true,
+          "authorization": {
+            "minutes": 60,
+            "actions": 20
+          }
+        },
+        "setup_run_id": "connect_eef86641795b4997bdf1f452f29b49e8",
+        "session_state": "not_checked",
+        "work_state": "not_submitted",
+        "public_connection": {
+          "version": 1,
+          "state": "bound",
+          "connect_id": "codex",
+          "canonical_ref": {
+            "server_id": "srv_bc931c07d260249e0ce527fcf5030806",
+            "executor_id": "exe_a8462553bc2c6a8276fe618b94ddd518",
+            "workspace_id": "wsr_310673980a172953b708565aebab6f6f",
+            "binding_id": "bind_c000bb277e8f520b7eff5d6b75c9030d",
+            "workspace_binding_id": "wxb_f246b45a787d504f3fe3b8e2dac6255a",
+            "agent_id": "app-91c517d80b67",
+            "endpoint_id": "ep_d6702d07cd51ca532e7bdb8d740d44cf"
+          }
+        },
+        "profile": "race-a",
+        "quick_connect": {
+          "status": "connected",
+          "version": 1,
+          "connect_id": "codex",
+          "connect_id_status": "bound",
+          "operation": "created",
+          "harness": "codex",
+          "project_name": "App",
+          "project_name_source": "explicit",
+          "name_discovery": {
+            "status": "not_needed",
+            "reason": "explicit_name"
+          },
+          "execution_location": "local",
+          "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+          "cwd_resolution": {
+            "invocation_cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "root_explicit": false,
+            "source": "cwd"
+          },
+          "resume_argv": [
+            "okto-nexus",
+            "connect",
+            "codex",
+            "App",
+            "--id",
+            "codex",
+            "--home",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\quick-cli-home",
+            "--profile",
+            "race-a"
+          ],
+          "canonical_reference": {
+            "server_id": "srv_bc931c07d260249e0ce527fcf5030806",
+            "executor_id": "exe_a8462553bc2c6a8276fe618b94ddd518",
+            "workspace_id": "wsr_310673980a172953b708565aebab6f6f",
+            "binding_id": "bind_c000bb277e8f520b7eff5d6b75c9030d",
+            "workspace_binding_id": "wxb_f246b45a787d504f3fe3b8e2dac6255a",
+            "agent_id": "app-91c517d80b67",
+            "endpoint_id": "ep_d6702d07cd51ca532e7bdb8d740d44cf"
+          }
+        }
+      }
+    },
+    {
+      "profile": "race-b",
+      "code": 3,
+      "value": {
+        "state": "refused",
+        "code": "CONNECT_ID_PENDING",
+        "message": "This Harness ID or project directory is already reserved. Recover its original intent.",
+        "possible_effect": false,
+        "effects_started": null,
+        "canonical_metadata_revalidation_requested": true,
+        "profile": "race-b",
+        "quick_connect": {
+          "status": "failed",
+          "version": 1,
+          "proposed_connect_id": "codex",
+          "connect_id_status": "proposed",
+          "harness": "codex",
+          "project_name": "App",
+          "project_name_source": "explicit",
+          "name_discovery": {
+            "status": "not_needed",
+            "reason": "explicit_name"
+          },
+          "execution_location": "local",
+          "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+          "cwd_resolution": {
+            "invocation_cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "root_explicit": false,
+            "source": "cwd"
+          },
+          "resume_argv": [
+            "okto-nexus",
+            "connect",
+            "codex",
+            "App",
+            "--id",
+            "codex",
+            "--home",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-iq_ho7im\\race\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\quick-cli-home",
+            "--profile",
+            "race-b"
+          ]
+        }
+      }
+    }
+  ],
+  "canonical_barrier_arrivals": 2
+}

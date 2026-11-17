@@ -1,0 +1,42 @@
+{
+  "label": "concurrency",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5\\after\\tests\\quick_connect\\test_qc25_concurrency_locks.py",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5\\concurrency\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-gzdtkvj5\\concurrency\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T08:57:38.205123+00:00",
+  "signals": [],
+  "exit_code": 1,
+  "processes_after": [
+    {
+      "pid": 38156,
+      "parent_pid": null,
+      "birth_filetime": 134393794582075230,
+      "alive": false
+    },
+    {
+      "pid": 58804,
+      "parent_pid": 38156,
+      "birth_filetime": 134393794582236960,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T08:58:19.340431+00:00"
+}

@@ -1,0 +1,31 @@
+{
+  "status": "CLEANUP_OBSERVED",
+  "sessions": [
+    {
+      "label": "A",
+      "session_id": "ses_1ee21888d9b2b0e17b7b81f9f920099b",
+      "text": "QC31 Alpha retained exact output",
+      "closed": true
+    },
+    {
+      "label": "B",
+      "session_id": "ses_625a768d420d3914e270ab50530c28d2",
+      "text": "QC31 Beta current exact output",
+      "closed": true
+    }
+  ],
+  "peers": [
+    {
+      "pid": 21476,
+      "exit_code": 1
+    },
+    {
+      "pid": 58700,
+      "exit_code": 1
+    }
+  ],
+  "unknown": false,
+  "elapsed": 190.95590569998603,
+  "provider_invocations": 0,
+  "browser_requests": []
+}

@@ -1,0 +1,142 @@
+[
+  {
+    "path": "allocation.json",
+    "bytes": 94,
+    "sha256": "fb74566fe29447a8229d3412241ef3e5caa2991a8c355fd80f40c9fca21751c8"
+  },
+  {
+    "path": "curate.py",
+    "bytes": 5914,
+    "sha256": "6c0abcead51352770b611d563cac237828e8ffef3f6b9a12024cf3d7ebca2951"
+  },
+  {
+    "path": "original\\result.json",
+    "bytes": 2006,
+    "sha256": "5ba83f50d664229e6c26e439c91e8bf65156c6673aefe82001e1c492133ea4fb"
+  },
+  {
+    "path": "original\\source-pins.json",
+    "bytes": 101051,
+    "sha256": "704cf4adbb8ffdd0b2777ce6011de4863bd270c5f65be8bb0b6a86a37c1a435a"
+  },
+  {
+    "path": "original\\test-pin.json",
+    "bytes": 254,
+    "sha256": "7ee16b10a3f872b185b7cbb4be13491e9212b061baad7bcd79add4d9ddd7a0be"
+  },
+  {
+    "path": "package-ready.json",
+    "bytes": 410,
+    "sha256": "f6e92d9c88823d5d2ad6086cc1edb195b2a6efb203d475ea293e105249051657"
+  },
+  {
+    "path": "post-exit-privacy-scan.json",
+    "bytes": 18644,
+    "sha256": "67c976b24dad51dcdfa5efb792f83d7bdc0f4cd9e5ac8b99ec76360d1130f78f"
+  },
+  {
+    "path": "prepare.py",
+    "bytes": 13273,
+    "sha256": "cf8ad4a44a1dcac2d7ee76afd144a465c381cdbd87d564bc6fe7aa0656ab9e92"
+  },
+  {
+    "path": "prepare_routed.py",
+    "bytes": 3160,
+    "sha256": "666b255ca4ef2f0c62305e7b8d6f4bd94a9d4bff26f57923b4313425cf95c97d"
+  },
+  {
+    "path": "prepare_separate.py",
+    "bytes": 996,
+    "sha256": "9a71a1fd011a7d6ff306776233394b383a60fb628a5681156ca2aa0d8de6f385"
+  },
+  {
+    "path": "qualification.json",
+    "bytes": 3566,
+    "sha256": "48aa0aea476a999a5cafe32bc3c207c9a93f26029d0e974316a71443ecc58149"
+  },
+  {
+    "path": "routed\\changes.patch",
+    "bytes": 2539,
+    "sha256": "ac97db0e5c0d497f35a5a66422a4a04ef0c41cbffde25a02d0ed34eaedc781b6"
+  },
+  {
+    "path": "routed\\privacy-observed-focal\\origins.json",
+    "bytes": 1802,
+    "sha256": "6e5f4297e4c9e166d664b14bd10f3c5a7d7fe2a48ccd991bdfb508a3b1c9fb26"
+  },
+  {
+    "path": "routed\\privacy-observed-focal\\reports.jsonl",
+    "bytes": 738,
+    "sha256": "968aa8c2f12c2df06e1cc6e2734cf8459d9849dba559986a3295684478765bb6"
+  },
+  {
+    "path": "routed\\privacy-observed-focal\\runner.json",
+    "bytes": 1734,
+    "sha256": "08006b80c4e8a1cb7e337aa6a8e6bb598d4d7842069b07a27431063aea00bbd7"
+  },
+  {
+    "path": "routed\\pytest.ini",
+    "bytes": 149,
+    "sha256": "fa37694a7bbe4d978165f480873861a4ff4befe660e2f02682015b0d0de8b5c5"
+  },
+  {
+    "path": "routed\\registered-ancestor-focal\\origins.json",
+    "bytes": 1802,
+    "sha256": "6e5f4297e4c9e166d664b14bd10f3c5a7d7fe2a48ccd991bdfb508a3b1c9fb26"
+  },
+  {
+    "path": "routed\\registered-ancestor-focal\\reports.jsonl",
+    "bytes": 562,
+    "sha256": "781bd8183dd4424383b38e3fe40b2a9092fcc6f08a27128304bca2a724ee8629"
+  },
+  {
+    "path": "routed\\registered-ancestor-focal\\runner.json",
+    "bytes": 1722,
+    "sha256": "6f3580c2e79531b3f68567cae08109c20af7a58aab5124ba48a535c8b0720632"
+  },
+  {
+    "path": "routed\\result.json",
+    "bytes": 3997,
+    "sha256": "04e7dda086c4eba52eec5677ac9dc0283921d400c014bdc6d4e55b83c95ad5db"
+  },
+  {
+    "path": "routed\\source-pins.json",
+    "bytes": 101051,
+    "sha256": "704cf4adbb8ffdd0b2777ce6011de4863bd270c5f65be8bb0b6a86a37c1a435a"
+  },
+  {
+    "path": "routed\\test-pin.json",
+    "bytes": 344,
+    "sha256": "1aeba6e2cca506911a87aa7ce2a5134d678717b28ad15fa6a6bd173ced322122"
+  },
+  {
+    "path": "routed\\test_ancestor_privacy.py",
+    "bytes": 11891,
+    "sha256": "70fdc33bc22d46cad98fe3a732c5bf4918ba9e58c7da5d08758f8aece297f720"
+  },
+  {
+    "path": "routed-allocation.json",
+    "bytes": 91,
+    "sha256": "442637d4ca97dd33a47dcaf59007a91aab1aa83562c11fa18bbb22b5d2407e92"
+  },
+  {
+    "path": "run.py",
+    "bytes": 10156,
+    "sha256": "6ca9ce1baeb992f7be4830eb807fcf899d227caf1d5608c20e7996aba1eef407"
+  },
+  {
+    "path": "run_routed.py",
+    "bytes": 10395,
+    "sha256": "d5b8c5910a803bd7df9c1b173d1d8b09cb85b9233518315ffc345d4e9f63ec3b"
+  },
+  {
+    "path": "run_separate.py",
+    "bytes": 10388,
+    "sha256": "e2a12d3cab4fe499b6030ae5b453f5a735d4be9141b9fcbb9a9f5bb85f5f44b1"
+  },
+  {
+    "path": "scan_preserved_privacy.py",
+    "bytes": 6082,
+    "sha256": "bc2c5a282aa134ac5931361a715be46a55f82ee5601da821c12b47866693273a"
+  }
+]

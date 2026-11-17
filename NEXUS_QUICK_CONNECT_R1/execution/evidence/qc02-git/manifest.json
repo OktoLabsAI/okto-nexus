@@ -1,0 +1,30 @@
+{
+  "algorithm": "sha256",
+  "entries": [
+    {
+      "path": "src/okto_nexus/adapters/outbound/git_project_hint.py",
+      "bytes": 13120,
+      "sha256": "d882321ace6d98f28d2879709d3b5f588832a179e55e90e3fd31cd682787bf32"
+    },
+    {
+      "path": "tests/quick_connect/test_git_project_hint.py",
+      "bytes": 16610,
+      "sha256": "a72d49700ff5ee985f882abdfbef45f36df98a1d7080bdd4d5594cb9f02e009d"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc02-git/pytest.xml",
+      "bytes": 7041,
+      "sha256": "b5ed0f7e19e81cb077c2ca7aef267b0c5aa386e19a75764116577c3c75f8a947"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc02-git/README.md",
+      "bytes": 2556,
+      "sha256": "e3a75ab75ea52575cc86f420240245c69371662fec2730b205a50bd0967f4773"
+    },
+    {
+      "path": "NEXUS_QUICK_CONNECT_R1/execution/evidence/qc02-git/qualification.json",
+      "bytes": 6406,
+      "sha256": "764c641ef6b8f34ddf4c7e3fa807172dab52091f189dda1e288fc8b7ec27661b"
+    }
+  ]
+}

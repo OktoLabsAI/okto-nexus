@@ -1,0 +1,22 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-0s9w2_3_\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc09-fixture-derivative-m57vs0lf\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+after\tests\execution_r4\test_canonical_handoff_recovery.py::test_late_structured_output_cannot_complete_reclaimed_work IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_canonical_handoff_recovery.py::test_late_structured_output_cannot_complete_reclaimed_work", "when": "setup", "outcome": "passed", "duration": 5.8877662000013515}
+IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_canonical_handoff_recovery.py::test_late_structured_output_cannot_complete_reclaimed_work", "when": "call", "outcome": "passed", "duration": 2.4503694999730214}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_canonical_handoff_recovery.py::test_late_structured_output_cannot_complete_reclaimed_work", "when": "teardown", "outcome": "passed", "duration": 1.1022181001026183}
+
+
+============================== warnings summary ===============================
+..\nexus-qc-r1-package-0s9w2_3_\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-0s9w2_3_\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc09-fixture-derivative-m57vs0lf\structured-late\junit.xml -
+======================== 1 passed, 1 warning in 12.88s ========================

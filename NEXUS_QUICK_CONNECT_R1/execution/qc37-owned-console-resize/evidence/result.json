@@ -1,0 +1,133 @@
+{
+  "at": "2026-11-17T10:27:06.729701+00:00",
+  "status": "NOT_QUALIFIED",
+  "failure": {
+    "error": "RuntimeError",
+    "reason": "Controller refused; no extra input or signal may be attempted"
+  },
+  "commands": [
+    {
+      "kind": "single_pytest_child",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc37-console-resize-baydtkzi\\child.py"
+      ],
+      "creationflags": "CREATE_NEW_CONSOLE",
+      "show_window": "SW_HIDE"
+    },
+    {
+      "kind": "isolated_controller",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc37-console-resize-baydtkzi\\controller.py"
+      ],
+      "creationflags": "CREATE_NO_WINDOW"
+    }
+  ],
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc37-console-resize-baydtkzi",
+  "process_proofs": [
+    {
+      "pid": 57808,
+      "parent_pid": null,
+      "birth_filetime": 134393848160920558,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 59552,
+      "parent_pid": 57808,
+      "birth_filetime": 134393848161487279,
+      "image": "C:\\Python313\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 24920,
+      "parent_pid": null,
+      "birth_filetime": 134393848196116068,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 47472,
+      "parent_pid": 24920,
+      "birth_filetime": 134393848196451315,
+      "image": "C:\\Python313\\python.exe",
+      "alive": false
+    }
+  ],
+  "observed_non_clients": [
+    {
+      "pid": 42648,
+      "parent_pid": 57808,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 42648,
+      "parent_pid": 57808,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 42648,
+      "parent_pid": 57808,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 55932,
+      "parent_pid": 24920,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 42648,
+      "parent_pid": 57808,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 55932,
+      "parent_pid": 24920,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 42648,
+      "parent_pid": 57808,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 42648,
+      "parent_pid": 57808,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    }
+  ],
+  "containment": [
+    {
+      "pid": 59552,
+      "parent_pid": 57808,
+      "birth_filetime": 134393848161487279,
+      "image": "C:\\Python313\\python.exe",
+      "alive": true
+    },
+    {
+      "pid": 57808,
+      "parent_pid": null,
+      "birth_filetime": 134393848160920558,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+      "alive": true
+    }
+  ],
+  "elapsed_seconds": 10.639604899915867,
+  "payload_files": 1027,
+  "payload_drift": [],
+  "source_drift": [],
+  "provider_calls": 0
+}

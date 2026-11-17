@@ -1,0 +1,57 @@
+{
+  "cases": [
+    {
+      "label": "f17-project-cas",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-f17-y9nxcja4\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-f17-y9nxcja4\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-f17-y9nxcja4\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-f17-y9nxcja4\\after\\tests\\quick_connect\\test_quick_connect_extra_scenarios.py::test_f17_free_id_review_loses_race_before_new_test_identity_or_grant",
+        "-v",
+        "-s",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-f17-y9nxcja4\\f17-project-cas\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-f17-y9nxcja4",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T08:04:49.153881+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 48344,
+          "parent_pid": null,
+          "birth_filetime": 134393762891568297,
+          "alive": false
+        },
+        {
+          "pid": 44048,
+          "parent_pid": 48344,
+          "birth_filetime": 134393762891877515,
+          "alive": false
+        },
+        {
+          "pid": 53576,
+          "parent_pid": 44048,
+          "birth_filetime": 134393762892017737,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T08:05:05.623063+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

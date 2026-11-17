@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="13.945" timestamp="2026-11-17T05:18:46.903262-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_quick_connect_project_scenarios" name="test_c09_other_mapped_project_root_requires_explicit_tty_choice" time="11.207"><failure message="Failed: Unexpected prompt: Confirm resume? [y/N]">C:\Users\jpamb\AppData\Local\Temp\nexus-qc17-corrected-egw934lf\after\tests\quick_connect\test_quick_connect_project_scenarios.py:123: in test_c09_other_mapped_project_root_requires_explicit_tty_choice
+    assert c.run(['connect', 'codex', 'Project B', '--no-chat']) == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc17-corrected-egw934lf\after\tests\quick_connect\test_quick_connect_cli.py:76: in run
+    return main.main([*tokens, '--home', str(home), '--provider-home', str(provider)])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\main.py:54: in main
+    return run_connect(rest)
+           ^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:150: in run_connect
+    return _run_connect_once(argv, invocation_cwd=invocation_cwd, frozen_name=frozen_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:504: in _run_connect_once
+    if input('Confirm resume? [y/N] ').strip().lower() != 'y':
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc17-corrected-egw934lf\after\tests\quick_connect\test_quick_connect_project_scenarios.py:100: in answer
+    pytest.fail('Unexpected prompt: ' + prompt)
+E   Failed: Unexpected prompt: Confirm resume? [y/N]</failure></testcase></testsuite></testsuites>

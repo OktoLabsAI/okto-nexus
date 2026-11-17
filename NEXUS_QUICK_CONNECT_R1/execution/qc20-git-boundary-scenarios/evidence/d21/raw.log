@@ -1,0 +1,210 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc20-git-vp6ute53\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+after\tests\quick_connect\test_quick_connect_git_boundaries.py::test_d21_hostile_git_directory_environment_cannot_redirect_discovery IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_git_boundaries.py::test_d21_hostile_git_directory_environment_cannot_redirect_discovery", "when": "setup", "outcome": "passed", "duration": 8.170711999991909}
+Timeout (0:00:10)!
+Thread 0x0000873c (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 359 in wait
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\nexus_connector_core\offloop.py", line 161 in _next_item
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\nexus_connector_core\offloop.py", line 123 in _run
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00001724 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000ae08 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000de90 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000e728 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000da14 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\threading.py", line 394 in wait_for
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 170 in _wait_for_wake
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 187 in _run
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000e734 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 296 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000ce18 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 296 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000949c (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_dispatcher.py", line 148 in _publish_worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00009b88 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_command_dispatcher.py", line 79 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000b2c8 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_command_dispatcher.py", line 79 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000c9a0 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_command_dispatcher.py", line 79 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000d454 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_command_dispatcher.py", line 79 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000c28c (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_command_dispatcher.py", line 79 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000dac4 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 363 in wait
+  File "C:\Python313\Lib\queue.py", line 213 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\runtime_command_dispatcher.py", line 79 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x000064f0 (most recent call first):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\outbound\runtime_wake.py", line 36 in receive
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000c824 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000d830 (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 359 in wait
+  File "C:\Python313\Lib\queue.py", line 202 in get
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1113 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00009774 (most recent call first):
+  File "C:\Python313\Lib\asyncio\windows_events.py", line 775 in _poll
+  File "C:\Python313\Lib\asyncio\windows_events.py", line 446 in select
+  File "C:\Python313\Lib\asyncio\base_events.py", line 1995 in _run_once
+  File "C:\Python313\Lib\asyncio\base_events.py", line 678 in run_forever
+  File "C:\Python313\Lib\asyncio\base_events.py", line 707 in run_until_complete
+  File "C:\Python313\Lib\asyncio\runners.py", line 118 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2621 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\anyio\from_thread.py", line 639 in run_blocking_portal
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00004688 (most recent call first):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\application\terminal_connection.py", line 458 in apply
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py", line 539 in _run_connect_once
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py", line 150 in run_connect
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\main.py", line 54 in main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc20-git-vp6ute53\after\tests\quick_connect\test_quick_connect_cli.py", line 76 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc20-git-vp6ute53\after\tests\quick_connect\test_quick_connect_cli.py", line 83 in invoke
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc20-git-vp6ute53\after\tests\quick_connect\test_quick_connect_git_boundaries.py", line 60 in configure
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc20-git-vp6ute53\after\tests\quick_connect\test_quick_connect_git_boundaries.py", line 158 in test_d21_hostile_git_directory_environment_cannot_redirect_discovery
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\python.py", line 187 in pytest_pyfunc_call
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\python.py", line 1798 in runtest
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 184 in pytest_runtest_call
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 250 in <lambda>
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 361 in from_call
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 249 in call_and_report
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 139 in runtestprotocol
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\runner.py", line 118 in pytest_runtest_protocol
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\main.py", line 411 in pytest_runtestloop
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\main.py", line 387 in _main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\main.py", line 333 in wrap_session
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\main.py", line 380 in pytest_cmdline_main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\config\__init__.py", line 262 in _main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\_pytest\config\__init__.py", line 286 in _console_main
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\pytest\__main__.py", line 9 in <module>
+  File "<frozen runpy>", line 88 in _run_code
+  File "<frozen runpy>", line 198 in _run_module_as_main
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_git_boundaries.py::test_d21_hostile_git_directory_environment_cannot_redirect_discovery", "when": "call", "outcome": "passed", "duration": 2.458186800009571}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_git_boundaries.py::test_d21_hostile_git_directory_environment_cannot_redirect_discovery", "when": "teardown", "outcome": "passed", "duration": 0.3404510000254959}
+
+
+============================== warnings summary ===============================
+..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc20-git-vp6ute53\d21\junit.xml -
+======================== 1 passed, 1 warning in 14.98s ========================

@@ -1,0 +1,82 @@
+{
+  "pid": 56916,
+  "instance_id": "svc_003221ec83b2fb2af6eaecfb986440733bb7464da3b0a9cc373201368ad26700",
+  "generation": "b4579161df2da1dfc782290a1ccc4c4e",
+  "server_kind": "genuine foreground app/portal, not detached daemon",
+  "http_port": 62667,
+  "readiness": "Unmodified inspect_local_server + real held ServeLock + real HTTP /api/v1/service",
+  "local_operator_http": "real loopback socket, no transport stub",
+  "resolver": "unmodified production resolver",
+  "statuses": [
+    {
+      "pid": 56916,
+      "instance_id": "svc_003221ec83b2fb2af6eaecfb986440733bb7464da3b0a9cc373201368ad26700",
+      "generation": "b4579161df2da1dfc782290a1ccc4c4e",
+      "state": "ready",
+      "ready_for_queries": true
+    },
+    {
+      "pid": 56916,
+      "instance_id": "svc_003221ec83b2fb2af6eaecfb986440733bb7464da3b0a9cc373201368ad26700",
+      "generation": "b4579161df2da1dfc782290a1ccc4c4e",
+      "state": "ready",
+      "ready_for_queries": true
+    },
+    {
+      "pid": 56916,
+      "instance_id": "svc_003221ec83b2fb2af6eaecfb986440733bb7464da3b0a9cc373201368ad26700",
+      "generation": "b4579161df2da1dfc782290a1ccc4c4e",
+      "state": "ready",
+      "ready_for_queries": true
+    },
+    {
+      "pid": 56916,
+      "instance_id": "svc_003221ec83b2fb2af6eaecfb986440733bb7464da3b0a9cc373201368ad26700",
+      "generation": "b4579161df2da1dfc782290a1ccc4c4e",
+      "state": "ready",
+      "ready_for_queries": true
+    },
+    {
+      "pid": 56916,
+      "instance_id": "svc_003221ec83b2fb2af6eaecfb986440733bb7464da3b0a9cc373201368ad26700",
+      "generation": "b4579161df2da1dfc782290a1ccc4c4e",
+      "state": "ready",
+      "ready_for_queries": true
+    }
+  ],
+  "canonical_refs": [
+    {
+      "server_id": "srv_3e2e07cfb25c06eea833695c447c30e4",
+      "executor_id": "exe_41a8fda4a908d808835dacbe69ec15f1",
+      "binding_id": "bind_df36cf5ec4ff09925061e8ae08c0f10c",
+      "endpoint_id": "ep_0abee11920f38dbeec922dfc8a38d287",
+      "agent_id": "app-d06bbb67ba4f",
+      "workspace_id": "wsr_2cc0409a0dd4a74c95265ee4e1258378",
+      "workspace_binding_id": "wxb_2cd7290780cb6430ea8c94f27367b034"
+    },
+    {
+      "server_id": "srv_3e2e07cfb25c06eea833695c447c30e4",
+      "executor_id": "exe_41a8fda4a908d808835dacbe69ec15f1",
+      "binding_id": "bind_cda60a120ba1fb50ea2cc77d776901d9",
+      "endpoint_id": "ep_e4027fb9e825a0d67a9e10e4ad961a98",
+      "agent_id": "app-9961bc6598b1",
+      "workspace_id": "wsr_2cc0409a0dd4a74c95265ee4e1258378",
+      "workspace_binding_id": "wxb_aaf0c7c5c10fafb215786983c7741241"
+    }
+  ],
+  "counts": {
+    "workspaces": 1,
+    "connection_public_ids": 2,
+    "execution_bindings": 2,
+    "runtime_execution_grants": 2,
+    "connection_setup_commits": 2,
+    "execution_operations": 0,
+    "execution_sessions": 0
+  },
+  "synthetic_tests": 2,
+  "version_probes": 1,
+  "process_launch_attempts": 0,
+  "first_connection_rows_unchanged": true,
+  "first_profile_bytes_unchanged": true,
+  "user_service_installed": false
+}

@@ -1,0 +1,40 @@
+{
+  "scope": "QC021 selected-root/provenance customization delta; pure/unit boundary only",
+  "status": "FOCAL_PASS",
+  "result": {
+    "passed": 28,
+    "pytest_seconds": 0.87,
+    "tool": "70b191",
+    "source_drift": []
+  },
+  "lint": {
+    "tool": "3aa0d3",
+    "exit_code": 0
+  },
+  "antecedents": [
+    {
+      "tool": "21a067",
+      "result": "Root 100-test run:95PASS/5FAIL",
+      "reason": "Five reviewed fixture rows lacked required canonical-shaped cwd_resolution after Root seed expansion; not a new product failure"
+    },
+    {
+      "path": "../qc06-customize/qualification.json",
+      "note": "Earlier26PASS source cut preserved unchanged, not attributed to new Root code"
+    }
+  ],
+  "fixes": [
+    "Fixture supplies invocation_cwd/project_root/root_explicit/source",
+    "Two added ID/harness cases use args.project=None, invocation A and previously chosen root B; restart argv remains B",
+    "Prepare unit boundary retains exact workspace/name and frozen original cwd provenance instead of rediscovering Git or reclassifying B as new explicit-root consent"
+  ],
+  "limits": [
+    "No HTTP/SQLite/real lock/TTY/native provider proof in this delta",
+    "resolve_project/local_executor/inventory are inert unit ports; actual CLI root-switch focal remains separately owned"
+  ],
+  "cleanup": {
+    "exit_code": 0,
+    "services_started": 0,
+    "provider_calls": 0,
+    "pytest_temp": "Ordinary pytest-owned retention, no purge claim"
+  }
+}

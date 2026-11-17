@@ -1,0 +1,105 @@
+okto-nexus - local agent coordination bus
+
+Usage:
+  okto-nexus connect [harness] [project-name] [--id HARNESS_ID] [options]
+  okto-nexus codex|claude|pi [project-name] [--id HARNESS_ID] [options]
+  okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
+  okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
+  okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
+  okto-nexus participant smoke exchange|handoff|status|observe [options]  Review optional cooperation with a peer
+  okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
+  okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus message send [options]  Send conversation using a participant profile
+  okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
+  okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
+  okto-nexus observe herdr bind|run|status [options]  Publish optional external activity observations
+  okto-nexus operator login|status|logout --profile NAME [options]
+  okto-nexus operator approval APPROVAL_ID --profile NAME [options]
+  okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
+  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
+  okto-nexus tail [options]    Stream the event log as NDJSON
+  okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
+
+Use `okto-nexus serve --help` for server options. Agents connect to /mcp
+over HTTP with their existing API key.
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-0s9w2_3_\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Projetos\Techridy\okto_labs_okto_nexus
+configfile: C:\Users\jpamb\AppData\Local\Temp\nexus-qc09-installed-shard0-6pz4iz43\tmp\nexus-ci-installed-e2fw59i8\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 2132 items
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_approved_mcp_host.py::test_approved_mcp_environment_claims_and_completes_with_session_authority[strict] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_attach_removed.py::test_installed_core_cannot_load_external_attach[win32] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_attach_removed.py::test_installed_core_cannot_load_external_attach[linux] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_attach_removed.py::test_installed_core_cannot_load_external_attach[darwin] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_attach_removed.py::test_attach_removed_from_dashboard_and_catalog PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes[rest] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_attach_removed.py::test_removed_attach_cannot_open_through_legacy_public_routes[mcp] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_attach_removed.py::test_attach_retirement_disables_only_old_endpoints_and_preserves_records PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_binding_consent_dashboard.py::test_consent_applies_once_and_second_visit_reuses_binding[False] SKIPPED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_binding_consent_dashboard.py::test_consent_applies_once_and_second_visit_reuses_binding[True] SKIPPED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_binding_consent_dashboard.py::test_stale_inventory_after_review_refuses_approval SKIPPED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_binding_consent_dashboard.py::test_storage_failure_prevents_sending_unrecorded_intent SKIPPED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_admission_shutdown.py::test_grant_revoked_during_native_work_retains_terminal_without_completion PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_admission_shutdown.py::test_feature_disable_preserves_unprojected_terminal_and_exclusive_claim FAILED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_backup_artifacts.py::test_snapshot_manifest_survives_database_reopen PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_backup_artifacts.py::test_combined_snapshot_restores_identity_history_journal_and_artifact_without_native_replay PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_backup_artifacts.py::test_restore_refuses_incomplete_or_corrupted_combined_snapshot[artifact] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_backup_artifacts.py::test_restore_refuses_incomplete_or_corrupted_combined_snapshot[journal] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_backup_artifacts.py::test_restore_refuses_incomplete_or_corrupted_combined_snapshot[database] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_backup_artifacts.py::test_semantic_validation_checks_references_and_watermarks_even_with_matching_file_hashes[missing_reference] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_backup_artifacts.py::test_semantic_validation_checks_references_and_watermarks_even_with_matching_file_hashes[partial_tail] PASSED [  0%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_backup_artifacts.py::test_semantic_validation_checks_references_and_watermarks_even_with_matching_file_hashes[checkpoint_ahead] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_backup_artifacts.py::test_explicit_database_override_and_no_overwrite PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_backup_artifacts.py::test_uncertain_snapshot_restores_push_exclusion_with_admission_off PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_boot.py::test_serve_boot_uses_core_after_inventory_start_and_replays_once PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_boot.py::test_boot_approval_is_revalidated_after_admission[disable] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_boot.py::test_boot_approval_is_revalidated_after_admission[revision] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_boot.py::test_boot_approval_is_revalidated_after_admission[issuer] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_boot.py::test_boot_does_not_duplicate_an_existing_canonical_session PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_boot.py::test_boot_rejects_wrong_owner_before_admission PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_competitive_work.py::test_competitive_claim_losers_cannot_read_winning_payload_or_runtime PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_all_pages_then_proven_tuple_candidates_and_legacy_dedup PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[version] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[revision] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[scope] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[total] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[duplicate] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[cursor] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[server] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_incomplete_changed_or_foreign_pages_never_become_empty_success[missing] PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_transport_failure_is_not_permission_for_a_new_identity PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_connection_choices.py::test_local_shortcut_full_tuple_drift_is_not_merged_by_agent_or_binding_name PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_delegated_command.py::test_granted_sender_has_real_result_and_independent_budget[rest] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_delegated_command.py::test_granted_sender_has_real_result_and_independent_budget[mcp] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_delegated_command.py::test_send_only_grant_cannot_read_results_even_through_replay PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_delegated_command.py::test_revoked_delegation_is_rechecked_before_native_write PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_delegated_grants.py::test_endpoint_grant_allows_only_its_explicit_command_without_operator_identity[actions0] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_delegated_grants.py::test_endpoint_grant_allows_only_its_explicit_command_without_operator_identity[actions1] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_delegated_grants.py::test_endpoint_grant_allows_only_its_explicit_command_without_operator_identity[actions2] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_delegated_grants.py::test_delegated_authority_changes_are_rechecked_on_both_transports[permissions] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_delegated_grants.py::test_delegated_authority_changes_are_rechecked_on_both_transports[scope] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_delegated_grants.py::test_delegated_authority_changes_are_rechecked_on_both_transports[credential] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_delegated_grants.py::test_delegated_authority_changes_are_rechecked_on_both_transports[profile] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_delegated_grants.py::test_operator_cannot_control_session_after_approved_profile_changes PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_recovery_preserves_history_and_new_claim_epoch PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_stale_or_unreviewed_handoff_recovery_is_refused[change0] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_stale_or_unreviewed_handoff_recovery_is_refused[change1] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_stale_or_unreviewed_handoff_recovery_is_refused[change2] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_stale_or_unreviewed_handoff_recovery_is_refused[change3] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_operator_recovers_work_with_admission_disabled PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_recovery_never_reopens_completed_work[COMPLETED] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_recovery_never_reopens_completed_work[VERIFYING] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_recovery_never_reopens_completed_work[REJECTED] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_handoff_recovery_rolls_back_transition_event_and_audit PASSED [  3%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_concurrent_handoff_recovery_is_one_transition PASSED [  3%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_completed_native_turn_can_be_recovered_without_completing_work PASSED [  3%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_handoff_claim_cannot_be_released_as_conversation PASSED [  3%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_retired_stdio_cannot_create_another_work_recovery_owner PASSED [  3%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_handoff_recovery.py::test_late_structured_output_cannot_complete_reclaimed_work FAILED [  3%]

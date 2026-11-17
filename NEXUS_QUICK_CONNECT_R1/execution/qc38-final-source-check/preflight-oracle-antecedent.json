@@ -1,0 +1,17 @@
+{
+  "status": "RUNNER_ORACLE_ERROR_BEFORE_PYTEST",
+  "initial_command": "rtk proxy python -B NEXUS_QUICK_CONNECT_R1/execution/qc38-final-source-check/run.py",
+  "initial_exit_code": 1,
+  "assertion": "okto_nexus/adapters/inbound/http/static/index.html",
+  "wrong_wheel": "PR27/artifacts/okto_nexus-0.3.5-py3-none-any.whl",
+  "wrong_wheel_sha256": "6effebac2e23db5aa3ef700202d6951c79c8a5fd346c439f43e2f326b80f0105",
+  "correct_wheel": "PR27/final/artifacts/okto_nexus-0.3.5-py3-none-any.whl",
+  "correct_wheel_sha256": "0ecc87a6eb34a5515d430c923dc1ac462b52fde8e6b30e31482223e035c2b490",
+  "correct_comparison": {
+    "missing": [],
+    "drift": []
+  },
+  "pytest_started": false,
+  "prefix_changed": false,
+  "logs": "No saved raw log from preflight; tool exit/trace was observed. No reconstructed log claimed."
+}

@@ -1,0 +1,7 @@
+{
+  "nodeid": "tests/execution_r4/test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[c-None]",
+  "when": "call",
+  "outcome": "failed",
+  "duration": 1.1865063000004739,
+  "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-4emspy8s\\after\\tests\\execution_r4\\test_qc15_cli_choices.py:84: in test_bare_two_families_explicit_choice_or_cancel\n    assert code == 3 and 'CONNECT_CANCELLED' in out\nE   assert (0 == 3)"
+}

@@ -1,0 +1,11 @@
+--- a/src/okto_nexus/adapters/inbound/cli/connect.py
++++ b/src/okto_nexus/adapters/inbound/cli/connect.py
+@@ -534,6 +534,8 @@
+                     save(saved)
+                     raise restart  # finally releases the old profile lock before another is acquired.
+                 if answer != 'y':
++                    _display(dict(state='canceled', lifecycle_requested=not args.plan,
++                        canonical_metadata_revalidation_requested=canonical_metadata, effects_started=None), args.json)
+                     return 0
+                 approval = saved['review_revision']
+             result = flow.apply(saved, approval=approval, timeout=args.timeout)

@@ -1,0 +1,136 @@
+{
+  "cases": [
+    {
+      "label": "cancel",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\after\\tests\\quick_connect\\test_qc35_review_cancel.py",
+        "-v",
+        "-s",
+        "-x",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\cancel\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\cancel\\cwd",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T09:55:49.192450+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 60724,
+          "parent_pid": null,
+          "birth_filetime": 134393829492223639,
+          "alive": false
+        },
+        {
+          "pid": 55288,
+          "parent_pid": 60724,
+          "birth_filetime": 134393829492457657,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T09:56:07.081826+00:00"
+    },
+    {
+      "label": "choices",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\after\\tests\\quick_connect\\test_qc35_id_choice_antecedents.py",
+        "-v",
+        "-s",
+        "-x",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\choices\\junit.xml",
+        "-k",
+        "test_cancel_reports_lifecycle_and_metadata_without_false_no_effect_claim or test_explicit_resume_uses_actual_binding_family or test_json_cross_family_conflict_never_reads_stdin"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\choices\\cwd",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T09:56:07.088437+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 60388,
+          "parent_pid": null,
+          "birth_filetime": 134393829670913332,
+          "alive": false
+        },
+        {
+          "pid": 61316,
+          "parent_pid": 60388,
+          "birth_filetime": 134393829671097202,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T09:56:54.074389+00:00"
+    },
+    {
+      "label": "json-plan",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\after\\tests\\quick_connect\\test_quick_connect_cli.py::test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay",
+        "-v",
+        "-s",
+        "-x",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\json-plan\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\json-plan\\cwd",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T09:56:54.080078+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 57196,
+          "parent_pid": null,
+          "birth_filetime": 134393830140829041,
+          "alive": false
+        },
+        {
+          "pid": 2652,
+          "parent_pid": 57196,
+          "birth_filetime": 134393830141294167,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T09:57:14.491086+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

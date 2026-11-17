@@ -1,0 +1,68 @@
+{
+  "scope": "QC Terminal public connection facade over canonical ASGI/SQLite, plus pure F/H outcome functions",
+  "status": "FOCAL_PASS",
+  "final_run": "focal-run.json",
+  "result": {
+    "tests_passed": 28,
+    "outcome_tests": 20,
+    "terminal_tests": 8,
+    "pytest_seconds": 57.6,
+    "process_seconds": 66.30215269996552,
+    "exit_code": 0,
+    "source_drift": [],
+    "tool": "1099b5"
+  },
+  "antecedents": [
+    {
+      "tool": "1328f0",
+      "result": "7 failed,13 passed outcome",
+      "record": "../qc04-outcome/red-qualification.json",
+      "production_owner": "Root corrected output contracts; this agent did not edit production"
+    },
+    {
+      "tool": "a36225",
+      "result": "1 failed,19 passed outcome",
+      "cause": "Test expected plan helper stdout although it returns False to delegate full review; retained proposed/not-bound assertions and removed that printing assumption"
+    },
+    {
+      "tool": "e69198",
+      "result": "2 failed,26 passed combined",
+      "cause": "Two test counters treated canonical POST setup:recover as productive replay; now require exactly one recovery read POST and no other additional POST",
+      "test_cut": "antecedent-counting-oracle.py"
+    },
+    {
+      "tool": "d24e82",
+      "result": "Ruff F811 fixture name re-exports",
+      "cause": "Applied existing fixture-module convention for pytest injected arguments; no runtime/authority change"
+    }
+  ],
+  "lint": {
+    "command": "rtk proxy C:/Users/jpamb/AppData/Roaming/Python/Python313/Scripts/ruff.exe check tests/quick_connect/test_quick_connect_outcome.py tests/quick_connect/test_terminal_public_connection.py NEXUS_QUICK_CONNECT_R1/execution/qc04-terminal/run_focal.py",
+    "exit_code": 0,
+    "tool": "d22103"
+  },
+  "demonstrated": [
+    "Exact review required; reserve occurs before one simulated model Test and one Finish",
+    "Second identity colliding with bound ID is refused before another Test or canonical identity/grant mutation",
+    "Lost reserve response retries same intent/reservation; no new public ID",
+    "Already-bound reservation recovers committed receipt before repeating model Test, including lost test cache",
+    "Lost Finish and local shortcut write failure recover same bound ID/tuple, with exactly one canonical recovery read and no productive replay",
+    "Legacy public ID adoption changes only namespace metadata after exact review; wrong hash/content rejected",
+    "Remote human-loopback adoption/observation preserves exact remote tuple; operator CWD never sent as host root or used for directory proof",
+    "Pure outcome created/reused/partial/planned/conflict/cancelled/failed/unknown, complete-reference fences, safe public resume argv and provenance"
+  ],
+  "cleanup": {
+    "child_process_exit_code": 0,
+    "asgi_contexts": "Shared fixtures close TestClient and own embedded owners during teardown",
+    "actual_provider_or_harness_processes_started": 0,
+    "personal_credentials_used": false,
+    "temporary_files": "Owned pytest temporary homes use ordinary pytest retention outside repository; no claim of physical purge"
+  },
+  "limits": [
+    "ASGI in-process HTTP and actual SQLite, not a real TCP/remote host or installed Nexus CLI journey",
+    "Version/protocol/model peer results are explicit synthetic fixture hooks; no real provider, login, model cost or native success",
+    "PR27 installed Core is used; Nexus imports source checkout, not a newly installed0.3.6 package",
+    "No full147-scenario, platform3.11/3.12, user trial, service lifecycle or release qualification is claimed",
+    "Fixture/reference coverage and production source pins are limited to the15 files recorded before/after this run"
+  ]
+}

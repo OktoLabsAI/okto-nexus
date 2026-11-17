@@ -1,0 +1,48 @@
+{
+  "qualification": "CLIENT_PROJECT_RESOLVER_TESTS_PASS_BACKEND_INTEGRATION_PENDING",
+  "scope": "Fake authorized canonical GET envelopes and real temporary directories. No provider, Git discovery process, service, Test, Finish, reservation, workspace or grant write.",
+  "green": {
+    "tool_handle": "8e4f80",
+    "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/quick_connect/test_quick_connect_project.py -q --junitxml=NEXUS_QUICK_CONNECT_R1/execution/evidence/qc02-projectchoices/pytest.xml",
+    "exit_code": 0,
+    "passed": 47,
+    "elapsed_seconds": 0.96
+  },
+  "ruff": {
+    "tool_handle": "2f6fb7",
+    "command": "rtk proxy ruff check src/okto_nexus/adapters/inbound/cli/quick_connect_project.py tests/quick_connect/test_quick_connect_project.py",
+    "exit_code": 0,
+    "observed": "All checks passed!"
+  },
+  "antecedent": {
+    "tool_handle": "90e1c3",
+    "exit_code": 1,
+    "passed": 43,
+    "failed": 4,
+    "observed": "Nonhex revision and empty workspace ID accepted; null directory/context envelopes escaped as AttributeError. Source owner corrected validation; regression cases retained in final 47-case run."
+  },
+  "client_behaviors": [
+    "Unique exact authorized root mapping precedes hint discovery and needs no picker",
+    "Logical projects without connections can be selected; duplicate labels require exact selection",
+    "Explicit workspace/name selectors must agree; a label never becomes a directory",
+    "Original invocation CWD and explicit root remain separate; no process-global chdir",
+    "TTY root change is explicit and records existing_nexus provenance; explicit root/noninteractive mismatch refuses",
+    "Git hint cannot inherit parent directory mapping or merge equal labels; catalog choice after hint records existing_nexus provenance",
+    "Plan passes the no-process flag to discovery; explicit/existing names bypass discovery",
+    "Complete pagination, cursor cycles, changed revision/label during selection, malformed envelopes and foreign context echo fail closed",
+    "Backend forbidden errors propagate without a new-project substitute"
+  ],
+  "scenario_limits": {
+    "QC-T-C12": "Missing physical directory validation is the canonical backend/caller boundary, not exercised by a fake GET success",
+    "QC-T-C14": "Real symlink/junction replacement and Test/Finish revalidation remain backend/integration tests",
+    "QC-T-C15": "No global case normalization introduced; cross-platform actual filesystem matrix remains pending",
+    "QC-T-C18": "No transaction/concurrent workspace creation proof",
+    "QC-T-D16": "Equal hint label does not merge logical workspace in this client test; real namespace identity proof remains backend",
+    "QC-T-D17": "Explicit name bypasses Git hint; actual CLI argument normalization tested separately",
+    "QC-T-D18": "Existing canonical name bypasses discovery; saved connection/ID and session recovery remain caller/integration responsibilities",
+    "QC-T-D19": "Effective root and invocation CWD kept separate over client DTOs",
+    "QC-T-D26": "Saved-approved-intent recovery is outside resolve_project; not claimed as tested here"
+  },
+  "source_ownership": "Agent added only tests and this evidence; production quick_connect_project.py fixes made by root owner.",
+  "side_effects": {"paid_or_native_provider_calls": 0, "real_http_writes": 0, "services_or_browser_started": 0, "ledger_git_prefix_changed": false}
+}

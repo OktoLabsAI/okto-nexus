@@ -1,0 +1,283 @@
+{
+  "status": "PASS_READ_ONLY_CONSISTENCY_WITH_ONE_NONBLOCKING_NOTE",
+  "reviewed_at": "2026-11-17T11:27:35.175154+00:00",
+  "scope": "Ledger/tool/final-delivery against recorded XML, package, console/shell, prior broad/platform/browser reports; no test execution and no protected input edits.",
+  "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+  "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+  "input_sha256": {
+    "NEXUS_QUICK_CONNECT_R1/NEXUS_QUICK_CONNECT_LEDGER_R1.json": "8f1376f1af076c22bb3ba58af14fa74fbac0df33b66590554cb3e6950cf032ac",
+    "tools/reconcile_quick_connect_qualification.py": "cf68e9d6f313ee23a0a89439b8f6c065ddda59715bb69d811441e600390aabc6",
+    "NEXUS_QUICK_CONNECT_R1/execution/final-delivery.md": "dee4052cd3328b3eacb29b0c2e146d3504c4b1fd1a716bcedc57792c17c6b170",
+    "NEXUS_QUICK_CONNECT_R1/execution/final-installed-reconciliation.json": "f65bcbc78ed3f19011ba37150c6f60a69ee81c4a317aeccb8d382064dd265bfd",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/qualification.json": "643964662e4fa872c4bd92feda92d2debe43eb5276058c7c6c3838a3aa71e7ee",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-shells/qualification.json": "497a40de8507455fc46528411fe1b2c65f07407a61351b4d2d19bfdfcabcab52",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-console/qualification.json": "e6a64df999dbb7891ca0ee8ef9141ca6345fa0909b3b0cdade3651faebe10e25",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc09-installed-01/qualification.json": "fd02ad1dc992ddd3184f42584a3e3e8b8c6a7ffeb07b760d120139ed77ba61bf",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc09-installed-23/qualification.json": "e9caf477946b8ee91b1ad7656ce653f8fbbaec5ccf345d9a732bf0cc914d4cff",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc28-posix-paths/qualification.json": "404af75ad36ef47f1793207bdffe968573142e13514c7777a93f6df04edeaed5",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc31-multisession-browser/qualification.json": "9e715c16810b1cafb578a25bf5181397696ed1e1d6ecee2b71d773e2a5f34c8f",
+    "NEXUS_QUICK_CONNECT_R1/execution/documentation-review.json": "37faa078a01d65412b2284445bc9a0f1c346ae92e051663c2824ab76a2a001df",
+    "NEXUS_UI_R1/NEXUS_UI_EXECUTION_LEDGER_R1.json": "297d61e1d0d50a4e93a33e065a3410b5127b16c00075c6812a9a7931214db3e1",
+    "NEXUS_QUICK_CONNECT_R1/input/PLANO_CODEX_NEXUS_QUICK_CONNECT_CWD_ID_R1_CONSOLIDADO.md": "827e3a8bc8ba08a139d260026e81171dbc1843d0fd09fab5d488fd46af3a5f39",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-shard-0/qualification.json": "aaf355b6f3570a885b0d0557a9461c6b59b3b28784060e3a899b84bc717917bb",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-shard-0/evidence/tests.xml": "77adc5674b82d34f38b3a3fb8429283b42ea9bf5158ce027836044ada045883e",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-shard-1-final/qualification.json": "24197675c4e0dc29170b604bae4d996740216d05054cdadb5caa55df8592792b",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-shard-1-final/evidence/tests.xml": "59b89701d44e94aedcf7f5cf00a1d3189dfefe39c7fe8650ed57fda9487a0854",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-legacy/qualification.json": "5ffaccdae8ea6beb7ed331b5e5a8732a95cad424897450846739dafa0bbdbd01",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-legacy/evidence/tests.xml": "1e7076beea56792d35749ff3e591ada3fdfcaaedf959529b68f2a8ad352c2993"
+  },
+  "counts": {
+    "scenarios": {
+      "PASS": 146,
+      "BLOCKED": 1
+    },
+    "tasks": {
+      "VERIFIED": 31,
+      "IMPLEMENTED": 1,
+      "BLOCKED": 1
+    },
+    "requirements": {
+      "VERIFIED": 19,
+      "PARTIAL": 1
+    }
+  },
+  "cuts": [
+    {
+      "path": "execution/qc36-final-package/installed-shard-0",
+      "actual_counts": {
+        "passed": 164,
+        "skipped": 8
+      },
+      "qualification_hash_matches": true
+    },
+    {
+      "path": "execution/qc36-final-package/installed-shard-1-final",
+      "actual_counts": {
+        "passed": 394
+      },
+      "qualification_hash_matches": true
+    },
+    {
+      "path": "execution/qc36-final-package/installed-legacy",
+      "actual_counts": {
+        "passed": 3
+      },
+      "qualification_hash_matches": true
+    }
+  ],
+  "exact_node_map_matches_xml": true,
+  "duplicate_nodes_between_qualifying_cuts": 0,
+  "installed_cancel_nodes": [
+    "tests.quick_connect.test_qc35_review_cancel::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state[quick]",
+    "tests.quick_connect.test_qc35_review_cancel::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state[legacy]",
+    "tests.quick_connect.test_qc35_review_cancel::test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[c]",
+    "tests.quick_connect.test_qc35_review_cancel::test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[empty]",
+    "tests.quick_connect.test_qc35_review_cancel::test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[picker_eof]",
+    "tests.quick_connect.test_qc35_review_cancel::test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[field_eof]",
+    "tests.quick_connect.test_qc35_review_cancel::test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[review_eof]",
+    "tests.quick_connect.test_qc35_review_cancel::test_resume_eof_cancels_honestly_without_replaying_test"
+  ],
+  "installed_renderer_nodes": [
+    "tests.quick_connect.test_quick_connect_render::test_local_public_resume_keeps_home_root_and_full_selectors_without_technical_profile",
+    "tests.quick_connect.test_quick_connect_render::test_remote_public_resume_keeps_operator_and_exact_refs_without_execution_host_path",
+    "tests.quick_connect.test_quick_connect_render::test_remote_missing_operator_does_not_print_a_command_that_could_select_local_service",
+    "tests.quick_connect.test_quick_connect_render::test_pending_shortcut_never_removes_the_same_technical_recovery_intent",
+    "tests.quick_connect.test_quick_connect_render::test_posix_render_roundtrips_arguments_without_side_effects[values0]",
+    "tests.quick_connect.test_quick_connect_render::test_posix_render_roundtrips_arguments_without_side_effects[values1]",
+    "tests.quick_connect.test_quick_connect_render::test_unpasteable_control_arguments_are_refused[posix-line\\nbreak]",
+    "tests.quick_connect.test_quick_connect_render::test_unpasteable_control_arguments_are_refused[posix-line\\rbreak]",
+    "tests.quick_connect.test_quick_connect_render::test_unpasteable_control_arguments_are_refused[posix-nul\\x00byte]",
+    "tests.quick_connect.test_quick_connect_render::test_unpasteable_control_arguments_are_refused[powershell-line\\nbreak]",
+    "tests.quick_connect.test_quick_connect_render::test_unpasteable_control_arguments_are_refused[powershell-line\\rbreak]",
+    "tests.quick_connect.test_quick_connect_render::test_unpasteable_control_arguments_are_refused[powershell-nul\\x00byte]",
+    "tests.quick_connect.test_quick_connect_render::test_cmd_is_not_misrepresented_as_powershell_or_posix",
+    "tests.quick_connect.test_quick_connect_render::test_option_like_project_names_are_data_not_selector_names[--profile]",
+    "tests.quick_connect.test_quick_connect_render::test_option_like_project_names_are_data_not_selector_names[--home]",
+    "tests.quick_connect.test_quick_connect_render::test_option_like_project_names_are_data_not_selector_names[--binding-id]",
+    "tests.quick_connect.test_quick_connect_render::test_option_like_selector_values_keep_their_arity_and_parse_as_values"
+  ],
+  "skips_preserved": [
+    "tests.quick_connect.test_posix_physical_paths::test_c15_real_case_sensitive_repo_and_repo_are_distinct",
+    "tests.quick_connect.test_posix_physical_paths::test_posix_symlink_resolves_same_physical_identity_and_profile",
+    "tests.quick_connect.test_posix_physical_paths::test_posix_backslash_is_filename_not_directory_separator",
+    "tests.quick_connect.test_quick_connect_pty::test_real_terminal_measurement",
+    "tests.quick_connect.test_quick_connect_pty::test_json_with_real_tty_never_requests_input",
+    "tests.quick_connect.test_quick_connect_pty::test_cancel_from_actual_terminal_does_not_check_or_test",
+    "tests.quick_connect.test_quick_connect_pty::test_confirm_and_resume_use_actual_terminal_without_replaying_test",
+    "tests.quick_connect.test_quick_connect_pty::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation"
+  ],
+  "checks": [
+    {
+      "id": "gates",
+      "outcome": "PASS",
+      "evidence": "I09/QC031 BLOCKED; QC033 IMPLEMENTED/G6 unapproved; R20 PARTIAL; real_qualification_gate and qualification_gate BLOCKED; broad NOT_GREEN."
+    },
+    {
+      "id": "counts",
+      "outcome": "PASS",
+      "evidence": "XML independently sums 164PASS/8SKIP +394PASS +3PASS; no failed/incomplete antecedent counted."
+    },
+    {
+      "id": "versions",
+      "outcome": "PASS",
+      "evidence": "Final source9bc/wheeld2c/1028payloads match; a36 WSL/browser proofs remain scoped antecedents. Only connect.py, outcome.py and new renderer differ between a36/final Nexus payloads; Git/path modules retain bytes."
+    },
+    {
+      "id": "skips",
+      "outcome": "PASS",
+      "evidence": "Three POSIX and five real-terminal skips remain skipped in exact_nodes; C15 uses separate WSL evidence and G09 separate installed real-console proof. No conversion of PIPE skips to PASS."
+    },
+    {
+      "id": "shells",
+      "outcome": "PASS",
+      "evidence": "Installed helper PS7.6.10/WSLsh echoes; PS5.1 refuses before invocation; cmd unqualified. No authenticated Nexus/provider command is claimed."
+    },
+    {
+      "id": "human_and_broad",
+      "outcome": "PASS",
+      "evidence": "Final delivery retains original UI human/AT/session gates, UNKNOWN real-campaign guard, broad1821PASS/36FAIL/54SKIP and incomplete other shards; original UI release approved=False."
+    },
+    {
+      "id": "references",
+      "outcome": "PASS",
+      "evidence": "All evidence paths on requirements/tasks/scenarios exist. Qualifying report hashes match reconciliation exactly."
+    },
+    {
+      "id": "tool",
+      "outcome": "PASS",
+      "evidence": "Both final flags are true only after the final reconciled gate; finalize_technical_gate preserves QC031/QC033/R20 and broad/real/human blocks. No generator executed by audit."
+    },
+    {
+      "id": "nested_provenance",
+      "outcome": "PASS",
+      "evidence": "Reconciliation explicitly limits nested-child provenance; final delivery claims guarded family origins and no src copied, not universal all-child installed provenance."
+    }
+  ],
+  "findings": [
+    {
+      "id": "INFO-I08-ANTECEDENT-WORDING",
+      "severity": "informational",
+      "blocking": false,
+      "path": "NEXUS_QUICK_CONNECT_R1/NEXUS_QUICK_CONNECT_LEDGER_R1.json#/tests/QC-T-I08/execution_notes",
+      "finding": "I08 current execution_notes describes QC11/12/13 and1027payloads. Its evidence also correctly includes QC36 final1028. This is valid antecedent scope, not an incorrect final-wheel claim, but a current-reader can miss the newer evidence.",
+      "recommendation": "Optionally label1027 explicitly as antecedent and mention final1028 in current note; do not erase prior evidence or change PASS/broad gates."
+    }
+  ],
+  "protected_inputs_unchanged": true,
+  "tests_executed": 0,
+  "source_or_prefix_mutations": false,
+  "limits": [
+    "This audit does not certify the blocked real campaign, broad regression, human/AT or universal platform acceptance.",
+    "No remote GitHub CI conclusion was inferred from the queued observation.",
+    "A scoped implementation-complete gate is not a release/deploy approval."
+  ],
+  "inputs_sha256": {
+    "NEXUS_QUICK_CONNECT_R1/NEXUS_QUICK_CONNECT_LEDGER_R1.json": "8f1376f1af076c22bb3ba58af14fa74fbac0df33b66590554cb3e6950cf032ac",
+    "tools/reconcile_quick_connect_qualification.py": "cf68e9d6f313ee23a0a89439b8f6c065ddda59715bb69d811441e600390aabc6",
+    "NEXUS_QUICK_CONNECT_R1/execution/final-delivery.md": "dee4052cd3328b3eacb29b0c2e146d3504c4b1fd1a716bcedc57792c17c6b170",
+    "NEXUS_QUICK_CONNECT_R1/execution/final-installed-reconciliation.json": "f65bcbc78ed3f19011ba37150c6f60a69ee81c4a317aeccb8d382064dd265bfd",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/qualification.json": "643964662e4fa872c4bd92feda92d2debe43eb5276058c7c6c3838a3aa71e7ee",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-shells/qualification.json": "497a40de8507455fc46528411fe1b2c65f07407a61351b4d2d19bfdfcabcab52",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-console/qualification.json": "e6a64df999dbb7891ca0ee8ef9141ca6345fa0909b3b0cdade3651faebe10e25",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc09-installed-01/qualification.json": "fd02ad1dc992ddd3184f42584a3e3e8b8c6a7ffeb07b760d120139ed77ba61bf",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc09-installed-23/qualification.json": "e9caf477946b8ee91b1ad7656ce653f8fbbaec5ccf345d9a732bf0cc914d4cff",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc28-posix-paths/qualification.json": "404af75ad36ef47f1793207bdffe968573142e13514c7777a93f6df04edeaed5",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc31-multisession-browser/qualification.json": "9e715c16810b1cafb578a25bf5181397696ed1e1d6ecee2b71d773e2a5f34c8f",
+    "NEXUS_QUICK_CONNECT_R1/execution/documentation-review.json": "37faa078a01d65412b2284445bc9a0f1c346ae92e051663c2824ab76a2a001df",
+    "NEXUS_UI_R1/NEXUS_UI_EXECUTION_LEDGER_R1.json": "297d61e1d0d50a4e93a33e065a3410b5127b16c00075c6812a9a7931214db3e1",
+    "NEXUS_QUICK_CONNECT_R1/input/PLANO_CODEX_NEXUS_QUICK_CONNECT_CWD_ID_R1_CONSOLIDADO.md": "827e3a8bc8ba08a139d260026e81171dbc1843d0fd09fab5d488fd46af3a5f39",
+    "NEXUS_QUICK_CONNECT_R1/execution/final-checks.json": "c51b3eebc455b9e62996da1b3cdcc4c8481cebfe51ecaed08485a67e856313a9",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-shard-0/qualification.json": "aaf355b6f3570a885b0d0557a9461c6b59b3b28784060e3a899b84bc717917bb",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-shard-0/evidence/tests.xml": "77adc5674b82d34f38b3a3fb8429283b42ea9bf5158ce027836044ada045883e",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-shard-1-final/qualification.json": "24197675c4e0dc29170b604bae4d996740216d05054cdadb5caa55df8592792b",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-shard-1-final/evidence/tests.xml": "59b89701d44e94aedcf7f5cf00a1d3189dfefe39c7fe8650ed57fda9487a0854",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-legacy/qualification.json": "5ffaccdae8ea6beb7ed331b5e5a8732a95cad424897450846739dafa0bbdbd01",
+    "NEXUS_QUICK_CONNECT_R1/execution/qc36-final-package/installed-legacy/evidence/tests.xml": "1e7076beea56792d35749ff3e591ada3fdfcaaedf959529b68f2a8ad352c2993"
+  },
+  "checked_at": "2026-11-17T11:28:56.449743+00:00",
+  "final_checks_review": {
+    "path": "NEXUS_QUICK_CONNECT_R1/execution/final-checks.json",
+    "source_pins": {
+      "files": 1804,
+      "drift": []
+    },
+    "evidence_regex_scan": {
+      "files": 2274,
+      "bytes": 45195975,
+      "matches": [],
+      "universal_secrecy_claim": false
+    },
+    "ruff_rules": "E4,E7,E9,F",
+    "diff_scope": "src tests tools docs .gitattributes",
+    "new_tests_executed_by_auditor": 0,
+    "remote_ci": {
+      "status": "queued",
+      "conclusion": null
+    }
+  },
+  "final_qualifying_cuts": [
+    {
+      "path": "execution/qc36-final-package/installed-shard-0",
+      "counts": {
+        "passed": 164,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 8
+      },
+      "qualification_sha256": "aaf355b6f3570a885b0d0557a9461c6b59b3b28784060e3a899b84bc717917bb"
+    },
+    {
+      "path": "execution/qc36-final-package/installed-shard-1-final",
+      "counts": {
+        "passed": 394,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "qualification_sha256": "24197675c4e0dc29170b604bae4d996740216d05054cdadb5caa55df8592792b"
+    },
+    {
+      "path": "execution/qc36-final-package/installed-legacy",
+      "counts": {
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "qualification_sha256": "5ffaccdae8ea6beb7ed331b5e5a8732a95cad424897450846739dafa0bbdbd01"
+    }
+  ],
+  "xml_reconciliation": {
+    "exact_node_map_matches": true,
+    "node_duplicates": 0,
+    "counts": {
+      "passed": 561,
+      "skipped": 8,
+      "failed": 0,
+      "errors": 0
+    },
+    "cancel_pass": 8,
+    "render_pass": 17,
+    "legacy_pass": 3,
+    "skipped_nodes": [
+      "tests.quick_connect.test_posix_physical_paths::test_c15_real_case_sensitive_repo_and_repo_are_distinct",
+      "tests.quick_connect.test_posix_physical_paths::test_posix_symlink_resolves_same_physical_identity_and_profile",
+      "tests.quick_connect.test_posix_physical_paths::test_posix_backslash_is_filename_not_directory_separator",
+      "tests.quick_connect.test_quick_connect_pty::test_real_terminal_measurement",
+      "tests.quick_connect.test_quick_connect_pty::test_json_with_real_tty_never_requests_input",
+      "tests.quick_connect.test_quick_connect_pty::test_cancel_from_actual_terminal_does_not_check_or_test",
+      "tests.quick_connect.test_quick_connect_pty::test_confirm_and_resume_use_actual_terminal_without_replaying_test",
+      "tests.quick_connect.test_quick_connect_pty::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation"
+    ]
+  },
+  "package_change_review": {
+    "from": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+    "to": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+    "changed_product_files": [
+      "okto_nexus/adapters/inbound/cli/connect.py",
+      "okto_nexus/adapters/inbound/cli/quick_connect_outcome.py",
+      "okto_nexus/adapters/inbound/cli/quick_connect_render.py"
+    ],
+    "comparison_read_only": true
+  }
+}

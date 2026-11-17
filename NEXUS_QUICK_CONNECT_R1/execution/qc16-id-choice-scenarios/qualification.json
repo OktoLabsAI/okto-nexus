@@ -1,0 +1,75 @@
+{
+  "at": "2026-11-17T08:23:27.468213+00:00",
+  "status": "PASS_STRICT_INSTALLED_NINE_ID_CHOICES",
+  "source_commit": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "cuts": [
+    {
+      "label": "original-probe-oracle",
+      "counts": {
+        "tests": 3,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 2
+      },
+      "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc16-id-choices-u85w78xj",
+      "exit_code": 1,
+      "signals": [],
+      "all_observed_owned_processes_exited": true,
+      "installed_payload_files": 1027,
+      "payload_drift": [],
+      "source_drift": []
+    },
+    {
+      "label": "final-nine",
+      "counts": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 9
+      },
+      "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc16-id-choices-final-lpx96e5q",
+      "exit_code": 0,
+      "signals": [],
+      "all_observed_owned_processes_exited": true,
+      "installed_payload_files": 1027,
+      "payload_drift": [],
+      "source_drift": []
+    }
+  ],
+  "test_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc16-id-choices-final-lpx96e5q\\after\\tests\\quick_connect\\test_id_choice_scenarios.py",
+  "test_sha256": "9962874236c44748fccf812ec79aad0c3e55a0310c3ed52df8c4e508c2fc7a2c",
+  "cases": [
+    "F03 same-family explicit r+y reuse",
+    "F04 requested Claude explicitly resumes actual Codex r+y",
+    "F05 manual alternate ID review then exact-profile approval",
+    "F06 suggested alternate ID review then exact-profile approval",
+    "F07 cancel truthfully reports lifecycle/canonical metadata and effects_started=None",
+    "F08 explicit add never offers resume; r rejected then c",
+    "F11 JSON cross-family conflict without stdin",
+    "F23 contradictory exact binding refused before collision menu",
+    "F12 canonical reservation by another intent remains pending, with no owner/ref exposure or extra setup"
+  ],
+  "authority_proofs": [
+    "Seed connection full seven-field reference and effective adapter are preserved on resume.",
+    "The first profile remains byte-identical in every case.",
+    "Before explicit approval, all protected table rows and Test/probe counts stay unchanged.",
+    "Approved alternate IDs produce distinct bindings in the same workspace while all original protected rows remain present.",
+    "Pending reservation is created explicitly through the approved canonical endpoint before the refusal baseline; collision does not mutate it.",
+    "Requests, setup/grant/binding/session/operation/public-ID state remain exact for refusal/cancel/reuse paths."
+  ],
+  "oracle_antecedent": "Original 2PASS/1FAIL is preserved: it wrongly required a second technical probe for the same already-qualified installation. The final oracle requires a second synthetic connection Test, version_check_required=False and exactly one cached technical probe.",
+  "ruff": "PASS default repository configuration; no formatting after execution",
+  "provider_calls": 0,
+  "all_observed_owned_processes_exited": true,
+  "signals": [],
+  "limitations": [
+    "Input/isatty are scripted TTY branches over a verified closed-PIPE parent; not real PTY or human acceptance.",
+    "Discovery/version/Test/lifecycle boundaries are explicit synthetic fixtures; canonical HTTP/SQLite handlers and installed application modules are real.",
+    "Only agents last_seen_at activity metadata is excluded from protected-row equality; all authority and identity fields remain exact.",
+    "Raw failed namespace repr stays in owned Temp; curated failure reports contain only the short assertion and hashes.",
+    "No repository source/tests/docs, installed prefix, personal account, provider or prior artifact was edited."
+  ]
+}

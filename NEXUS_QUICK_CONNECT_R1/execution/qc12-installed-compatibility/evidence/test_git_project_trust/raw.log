@@ -1,0 +1,24 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 3 items
+
+after\tests\quick_connect\test_git_project_trust.py::test_absolute_path_executable_inside_parent_repository_is_not_trusted IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_project_trust.py::test_absolute_path_executable_inside_parent_repository_is_not_trusted", "when": "setup", "outcome": "passed", "duration": 0.010723300045356154}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_project_trust.py::test_absolute_path_executable_inside_parent_repository_is_not_trusted", "when": "call", "outcome": "passed", "duration": 0.0043735000072047114}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_project_trust.py::test_absolute_path_executable_inside_parent_repository_is_not_trusted", "when": "teardown", "outcome": "passed", "duration": 0.0003630999708548188}
+
+after\tests\quick_connect\test_git_project_trust.py::test_encoded_separator_in_parent_origin_component_is_ambiguous IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_project_trust.py::test_encoded_separator_in_parent_origin_component_is_ambiguous", "when": "setup", "outcome": "passed", "duration": 0.00012099999003112316}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_project_trust.py::test_encoded_separator_in_parent_origin_component_is_ambiguous", "when": "call", "outcome": "passed", "duration": 0.00022310006897896528}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_project_trust.py::test_encoded_separator_in_parent_origin_component_is_ambiguous", "when": "teardown", "outcome": "passed", "duration": 7.730000652372837e-05}
+
+after\tests\quick_connect\test_git_project_trust.py::test_cleanup_uncertainty_has_a_fixed_safe_public_reason IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_project_trust.py::test_cleanup_uncertainty_has_a_fixed_safe_public_reason", "when": "setup", "outcome": "passed", "duration": 8.789997082203627e-05}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_project_trust.py::test_cleanup_uncertainty_has_a_fixed_safe_public_reason", "when": "call", "outcome": "passed", "duration": 9.089999366551638e-05}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_project_trust.py::test_cleanup_uncertainty_has_a_fixed_safe_public_reason", "when": "teardown", "outcome": "passed", "duration": 9.139999747276306e-05}
+
+
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_git_project_trust\junit.xml -
+============================== 3 passed in 0.27s ==============================

@@ -1,0 +1,34 @@
+{
+  "scope": "Read-only review of WIP TerminalConnection public metadata integration",
+  "status": "OWNER_REVIEW_REQUIRED_NOT_EXECUTED",
+  "observed_mechanisms": [
+    "Reserve after version confirmation before model Test; response validates ID/ref/intent",
+    "test_submitted and finish recover durable setup receipt before another action",
+    "Association has exact review hash and association_submitted checkpoint before metadata POST",
+    "Committed shortcut failure carries committed_public_connection; old checkpoint remains for recovery"
+  ],
+  "findings": [
+    {
+      "kind": "source_gap",
+      "path": "src/okto_nexus/application/terminal_connection.py",
+      "area": "RemoteTerminalConnection.observe",
+      "finding": "Returns configured without public registry revalidation or public_connection; public Quick Connect cannot report bound metadata on this path"
+    },
+    {
+      "kind": "source_gap",
+      "path": "src/okto_nexus/application/terminal_connection.py",
+      "area": "review_public_association with RemoteTerminalConnection",
+      "finding": "Calls self.observe with temporary document lacking remote_scope; remote override indexes remote_scope. CLI can select this inherited path."
+    },
+    {
+      "kind": "unverified_risk",
+      "area": "TerminalConnection.apply reserve response state bound while local approved",
+      "finding": "Code continues toward Test. Must establish recovery/no-replay behavior for already committed same intent before treating this case as covered."
+    }
+  ],
+  "limits": [
+    "Source was in progress and Root owns fixes; these findings are not a current frozen release audit",
+    "No TerminalConnection integration test or provider/host/lifecycle execution performed here",
+    "Await Root signal before creating test_terminal_public_connection.py"
+  ]
+}

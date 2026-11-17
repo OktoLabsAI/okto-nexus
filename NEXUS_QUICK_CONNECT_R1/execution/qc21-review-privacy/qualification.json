@@ -1,0 +1,83 @@
+{
+  "status": "FOCAL_ASSERTIONS_PASS_RUNNER_CLEANUP_ASSERTION_PRESERVED",
+  "passed": 2,
+  "deselected": 8,
+  "exact_nodes": [
+    "tests.quick_connect.test_git_cli_integration::test_origin_first_connect_and_changed_metadata_exact_resume[https://fake-user:PRIVATE@example.invalid/team/logical-origin.git?token=PRIVATE#PRIVATE]",
+    "tests.quick_connect.test_git_cli_integration::test_monorepo_ancestor_origin_does_not_expand_execution_root"
+  ],
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc21-review-privacy-_ayk2nlj\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc21-review-privacy-_ayk2nlj\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc21-review-privacy-_ayk2nlj\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc21-review-privacy-_ayk2nlj\\after\\tests\\quick_connect\\test_git_cli_integration.py",
+    "-v",
+    "-s",
+    "-x",
+    "-k",
+    "monorepo or PRIVATE",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc21-review-privacy-_ayk2nlj\\review-privacy\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc21-review-privacy-_ayk2nlj\\review-privacy\\cwd",
+  "stdin": "PIPE closed immediately",
+  "deadline_seconds": 180,
+  "installed_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "antecedent_test_sha256": "9e6cf1fe0f1c0aaad850ed1f2dbdf6f93dcd031a286bda70d6a30594b90bf78d",
+  "executed_test_sha256": "91addb099dfa7e91ba24962742bb20a6fb5f624397dcd34b638eab09774dcfa2",
+  "delta": "test-delta.patch",
+  "review_proof": "final/review-proof.json",
+  "privacy_proof": "final/privacy-proof.json",
+  "scenarios": [
+    {
+      "id": "QC-T-F20",
+      "proposed_status": "PASS",
+      "evidence": "final/review-proof.json",
+      "scope": "Actual printed canonical review/checkpoint before confirmation; subsequent original Finish/resume invariants retained"
+    },
+    {
+      "id": "QC-T-D25",
+      "proposed_status": "PASS_SCOPED_PERSISTENCE",
+      "evidence": "final/privacy-proof.json",
+      "scope": "Owned Nexus JSON checkpoints, six compared SQLite tables, both resume JSONs and captured pytest logs; original .git/config excluded input"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_pins": 1751,
+  "repository_input_drift": [],
+  "origins": [
+    "final/origins.json",
+    "final/origins-finish.json"
+  ],
+  "cleanup": "cleanup.json",
+  "own_candidate_readers_absent": true,
+  "process_antecedent": {
+    "status": "INCONCLUSIVE",
+    "exit_code": 3221225477,
+    "reason": "Windows Python access violation during PRIVATE call, before call report/XML; no assertions qualified",
+    "evidence": "process-antecedent/raw.log",
+    "runner_result": "process-antecedent/result.json"
+  },
+  "final_runner": {
+    "status": "POST_PYTEST_CLEANUP_ASSERTION_FAILURE",
+    "detail": "Two pytest call and teardown PASS reports plus terminal XML exist. Wrapper failed its immediate all-retained-handles-dead assertion after launcher exit; no runner.json/result.json was written. Later independent own-root Python/Git process query is empty.",
+    "signals": "No termination was issued; malformed diagnostic observer ended naturally. Subsequent PID stop identity check refused to act."
+  },
+  "limitations": [
+    "Exactly two tests executed from modified file; eight other tests remain qualified only on the original 9e6cf1fe antecedent.",
+    "CLI installed + actual local Git + canonical HTTP/SQLite; input/isatty, lifecycle, version and provider Test peers synthetic, no real PTY/provider/model/authentication.",
+    "The privacy assertion is scoped to the listed checkpoints/tables/JSONs/logs. pytest captured zero log messages; this is not universal telemetry audit.",
+    "First cut input/payload postchecks passed. Second runner aborted before its postchecks; curation independently compared all source pins and1027 files to exact wheels. Session origins at start and finish were preserved.",
+    "No product/normative test/docs/ledger/Git/build/installed package mutation. Raw owned databases, keys and Git input remain Temp only."
+  ]
+}

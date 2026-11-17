@@ -1,0 +1,323 @@
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+[11/17/26 06:57:26] INFO     Runtime recovery:         embedded_dispatch.py:241
+                             RECOVERY_READY Local host                         
+                             ready. Agents with                                
+                             retained history recover                          
+                             independently; previous                           
+                             work was not replayed.                            
+                    INFO     StreamableHTTP      streamable_http_manager.py:164
+                             session manager                                   
+                             started                                           
+[11/17/26 06:57:28] INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/me "HTTP/1.1                
+                             200 OK"                                           
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/setup/qc31-c                
+                             ollaborator "HTTP/1.1 200 OK"                     
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/agents/qc31-collaborator                
+                             /executors?limit=100 "HTTP/1.1 200                
+                             OK"                                               
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/agents/qc31-collaborator                
+                             /runtime-options?executor_id=exe_1                
+                             0f086f6d393ee7dbfe3c801409bafc0                   
+                             "HTTP/1.1 200 OK"                                 
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/me "HTTP/1.1                
+                             200 OK"                                           
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/runtime/executors/exe_10                
+                             f086f6d393ee7dbfe3c801409bafc0/ins                
+                             tallations:check "HTTP/1.1 200 OK"                
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/me "HTTP/1.1                
+                             200 OK"                                           
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/agents/qc31-collaborator                
+                             /runtime-options?executor_id=exe_1                
+                             0f086f6d393ee7dbfe3c801409bafc0                   
+                             "HTTP/1.1 200 OK"                                 
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/setup:test                  
+                             "HTTP/1.1 200 OK"                                 
+[11/17/26 06:57:29] INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/setup-tests/                
+                             connect_e966b644cfc6456d99fcd7e57b                
+                             4c867b "HTTP/1.1 200 OK"                          
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/setup:finish                
+                              "HTTP/1.1 200 OK"                                
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/me "HTTP/1.1                
+                             200 OK"                                           
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/setup/qc31-c                
+                             ollaborator?binding_id=bind_2c736a                
+                             1386440bd1526c933b95efb073                        
+                             "HTTP/1.1 200 OK"                                 
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/bindings/bin                
+                             d_2c736a1386440bd1526c933b95efb073                
+                              "HTTP/1.1 200 OK"                                
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/public-ids/a                
+                             ssociate-existing "HTTP/1.1 200                   
+                             OK"                                               
+[11/17/26 06:57:30] INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/v1/runtime/inten                
+                             ts:resolve "HTTP/1.1 200 OK"                      
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions "HTTP/1.1 202 Accepted"                     
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+[11/17/26 06:57:31] INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_57a093cdae832324f133e2fb6                
+                             e17b19d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/runtime/sessions/ses_1ee                
+                             21888d9b2b0e17b7b81f9f920099b?exec                
+                             utor_id=exe_10f086f6d393ee7dbfe3c8                
+                             01409bafc0 "HTTP/1.1 200 OK"                      
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/v1/runtime/inten                
+                             ts:resolve "HTTP/1.1 200 OK"                      
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions "HTTP/1.1 202 Accepted"                     
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_97f60b03487a5062f42f4b652                
+                             08f108d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_97f60b03487a5062f42f4b652                
+                             08f108d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_97f60b03487a5062f42f4b652                
+                             08f108d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_97f60b03487a5062f42f4b652                
+                             08f108d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_97f60b03487a5062f42f4b652                
+                             08f108d "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/v1/runtime/inten                
+                             ts:resolve "HTTP/1.1 200 OK"                      
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions "HTTP/1.1 202 Accepted"                     
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_0abb1380f2f6bde1c577bc48b                
+                             bd6f2c7 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_0abb1380f2f6bde1c577bc48b                
+                             bd6f2c7 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_0abb1380f2f6bde1c577bc48b                
+                             bd6f2c7 "HTTP/1.1 200 OK"                         
+[11/17/26 06:57:32] INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_0abb1380f2f6bde1c577bc48b                
+                             bd6f2c7 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/v1/runtime/inten                
+                             ts:resolve "HTTP/1.1 200 OK"                      
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions "HTTP/1.1 202 Accepted"                     
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+[11/17/26 06:57:33] INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_922015b12ca74a91e7ad7877a                
+                             2ee9565 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/runtime/sessions/ses_625                
+                             a768d420d3914e270ab50530c28d2?exec                
+                             utor_id=exe_10f086f6d393ee7dbfe3c8                
+                             01409bafc0 "HTTP/1.1 200 OK"                      
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/v1/runtime/inten                
+                             ts:resolve "HTTP/1.1 200 OK"                      
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions "HTTP/1.1 202 Accepted"                     
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_c3167554f40dcb0ed208ad128                
+                             ec0bf44 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_c3167554f40dcb0ed208ad128                
+                             ec0bf44 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_c3167554f40dcb0ed208ad128                
+                             ec0bf44 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_c3167554f40dcb0ed208ad128                
+                             ec0bf44 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_c3167554f40dcb0ed208ad128                
+                             ec0bf44 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_c3167554f40dcb0ed208ad128                
+                             ec0bf44 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/runtime/sessions/ses_1ee                
+                             21888d9b2b0e17b7b81f9f920099b/even                
+                             ts?executor_id=exe_10f086f6d393ee7                
+                             dbfe3c801409bafc0&after_sequence=0                
+                             &limit=100 "HTTP/1.1 200 OK"                      
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/runtime/sessions/ses_625                
+                             a768d420d3914e270ab50530c28d2/even                
+                             ts?executor_id=exe_10f086f6d393ee7                
+                             dbfe3c801409bafc0&after_sequence=0                
+                             &limit=100 "HTTP/1.1 200 OK"                      
+[11/17/26 07:00:34] INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/v1/runtime/inten                
+                             ts:resolve "HTTP/1.1 200 OK"                      
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions "HTTP/1.1 202 Accepted"                     
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_3cb94e74c2a09c9e34635a65d                
+                             1067554 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_3cb94e74c2a09c9e34635a65d                
+                             1067554 "HTTP/1.1 200 OK"                         
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/opera                
+                             tions/op_3cb94e74c2a09c9e34635a65d                
+                             1067554 "HTTP/1.1 200 OK"                         
+                    INFO     StreamableHTTP      streamable_http_manager.py:168
+                             session manager                                   
+                             shutting down                                     

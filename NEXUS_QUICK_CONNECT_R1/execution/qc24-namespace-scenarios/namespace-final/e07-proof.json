@@ -1,0 +1,30 @@
+{
+  "connect_id": "reviewer",
+  "canonical_refs": [
+    {
+      "server_id": "srv_1a1e0861bae02a7960cfed3b1228bda9",
+      "executor_id": "exe_48ba9d27eca832a52eacbb2919105b41",
+      "binding_id": "bind_5f89ffab61053d13138f920b03010e72",
+      "endpoint_id": "ep_405b50bf9e999aee41dd5af87bcd28e1",
+      "agent_id": "subject",
+      "workspace_id": "wsr_8c529db382c94cb62cb4bae85bc2e856",
+      "workspace_binding_id": "wxb_e6a6cb871e09fc20e21855fd1646a91f"
+    },
+    {
+      "server_id": "srv_1a1e0861bae02a7960cfed3b1228bda9",
+      "executor_id": "exe_48ba9d27eca832a52eacbb2919105b41",
+      "binding_id": "bind_6cba3b1605cf2c18050cefb93cf36eee",
+      "endpoint_id": "ep_d35b18e53865e74f5b1933772252e9dd",
+      "agent_id": "subject",
+      "workspace_id": "wsr_5ff8ddce7f19f6ebea0b7399d72924b2",
+      "workspace_binding_id": "wxb_71dbdb07a95358ba1a3c532a2534614e"
+    }
+  ],
+  "workspace_count": 2,
+  "distinct_grants": 2,
+  "shared_grants": false,
+  "finish_commits": 2,
+  "operations": 0,
+  "sessions": 0,
+  "workspace_origin": "Each workspace created by canonical HTTP Finish, not seeded SQL"
+}

@@ -1,0 +1,52 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 10 items
+
+after\tests\quick_connect\test_harness_alternatives.py::test_known_missing_harness_tty_can_explicitly_choose_available_supported_family IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_known_missing_harness_tty_can_explicitly_choose_available_supported_family", "when": "setup", "outcome": "passed", "duration": 0.0003519000019878149}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_known_missing_harness_tty_can_explicitly_choose_available_supported_family", "when": "call", "outcome": "passed", "duration": 0.00025040004402399063}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_known_missing_harness_tty_can_explicitly_choose_available_supported_family", "when": "teardown", "outcome": "passed", "duration": 0.00014000001829117537}
+
+after\tests\quick_connect\test_harness_alternatives.py::test_known_missing_harness_tty_can_cancel_without_install_or_test[c] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_known_missing_harness_tty_can_cancel_without_install_or_test[c]", "when": "setup", "outcome": "passed", "duration": 0.0003728000447154045}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_known_missing_harness_tty_can_cancel_without_install_or_test[c]", "when": "call", "outcome": "passed", "duration": 0.00026460003573447466}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_known_missing_harness_tty_can_cancel_without_install_or_test[c]", "when": "teardown", "outcome": "passed", "duration": 0.00016259995754808187}
+
+after\tests\quick_connect\test_harness_alternatives.py::test_known_missing_harness_tty_can_cancel_without_install_or_test[] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_known_missing_harness_tty_can_cancel_without_install_or_test[]", "when": "setup", "outcome": "passed", "duration": 0.00025209994055330753}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_known_missing_harness_tty_can_cancel_without_install_or_test[]", "when": "call", "outcome": "passed", "duration": 0.00021199998445808887}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_known_missing_harness_tty_can_cancel_without_install_or_test[]", "when": "teardown", "outcome": "passed", "duration": 0.00010980002116411924}
+
+after\tests\quick_connect\test_harness_alternatives.py::test_known_missing_noninteractive_exposes_three_safe_supported_alternatives IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_known_missing_noninteractive_exposes_three_safe_supported_alternatives", "when": "setup", "outcome": "passed", "duration": 0.0001221999991685152}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_known_missing_noninteractive_exposes_three_safe_supported_alternatives", "when": "call", "outcome": "passed", "duration": 0.00022050004918128252}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_known_missing_noninteractive_exposes_three_safe_supported_alternatives", "when": "teardown", "outcome": "passed", "duration": 7.800001185387373e-05}
+
+after\tests\quick_connect\test_harness_alternatives.py::test_stale_requested_harness_is_unconfirmed_not_missing_or_auto_switched IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_stale_requested_harness_is_unconfirmed_not_missing_or_auto_switched", "when": "setup", "outcome": "passed", "duration": 0.00010559998918324709}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_stale_requested_harness_is_unconfirmed_not_missing_or_auto_switched", "when": "call", "outcome": "passed", "duration": 0.00019609997980296612}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_stale_requested_harness_is_unconfirmed_not_missing_or_auto_switched", "when": "teardown", "outcome": "passed", "duration": 7.609999738633633e-05}
+
+after\tests\quick_connect\test_harness_alternatives.py::test_stale_tty_request_never_switches_harness_without_explicit_answer IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_stale_tty_request_never_switches_harness_without_explicit_answer", "when": "setup", "outcome": "passed", "duration": 0.00011150003410875797}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_stale_tty_request_never_switches_harness_without_explicit_answer", "when": "call", "outcome": "passed", "duration": 0.00019890000112354755}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_stale_tty_request_never_switches_harness_without_explicit_answer", "when": "teardown", "outcome": "passed", "duration": 7.199996616691351e-05}
+
+after\tests\quick_connect\test_harness_alternatives.py::test_denied_requested_candidate_cannot_bypass_policy_noninteractive IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_denied_requested_candidate_cannot_bypass_policy_noninteractive", "when": "setup", "outcome": "passed", "duration": 9.61000332608819e-05}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_denied_requested_candidate_cannot_bypass_policy_noninteractive", "when": "call", "outcome": "passed", "duration": 0.00018430000636726618}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_denied_requested_candidate_cannot_bypass_policy_noninteractive", "when": "teardown", "outcome": "passed", "duration": 8.459994569420815e-05}
+
+after\tests\quick_connect\test_harness_alternatives.py::test_denied_candidate_can_explicitly_choose_different_fresh_authorized_family IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_denied_candidate_can_explicitly_choose_different_fresh_authorized_family", "when": "setup", "outcome": "passed", "duration": 0.00010390009265393019}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_denied_candidate_can_explicitly_choose_different_fresh_authorized_family", "when": "call", "outcome": "passed", "duration": 0.00018099998123943806}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_denied_candidate_can_explicitly_choose_different_fresh_authorized_family", "when": "teardown", "outcome": "passed", "duration": 7.98000255599618e-05}
+
+after\tests\quick_connect\test_harness_alternatives.py::test_explicitly_selected_denied_alternative_is_still_refused IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_explicitly_selected_denied_alternative_is_still_refused", "when": "setup", "outcome": "passed", "duration": 0.00011760008055716753}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_explicitly_selected_denied_alternative_is_still_refused", "when": "call", "outcome": "passed", "duration": 0.0001970999874174595}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_explicitly_selected_denied_alternative_is_still_refused", "when": "teardown", "outcome": "passed", "duration": 8.370005525648594e-05}
+
+after\tests\quick_connect\test_harness_alternatives.py::test_explicitly_selected_stale_alternative_is_not_usable IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_explicitly_selected_stale_alternative_is_not_usable", "when": "setup", "outcome": "passed", "duration": 0.00010350008960813284}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_explicitly_selected_stale_alternative_is_not_usable", "when": "call", "outcome": "passed", "duration": 0.00019699998665601015}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_harness_alternatives.py::test_explicitly_selected_stale_alternative_is_not_usable", "when": "teardown", "outcome": "passed", "duration": 0.00011849997099488974}
+
+
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_harness_alternatives\junit.xml -
+============================= 10 passed in 0.60s ==============================

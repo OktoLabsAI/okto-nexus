@@ -1,0 +1,204 @@
+{
+  "results": [
+    {
+      "profile": "race-a",
+      "code": 0,
+      "value": {
+        "state": "configured",
+        "server_id": "srv_929a35ebb90677351305589de916e7d2",
+        "agent_id": "app-f0c8552996a2",
+        "binding_id": "bind_82e218534955db0ffb08d748b308a04e",
+        "workspace_id": "wsr_d87063ac5703901d9290a1cddbfdc29e",
+        "configuration": {
+          "baseline": {
+            "execution_revision": 1,
+            "runtime_revision": 1,
+            "defaults_revision": 1,
+            "binding_revision": 1,
+            "endpoint_revision": 1
+          },
+          "runtime_policy": {
+            "agent_id": "app-f0c8552996a2",
+            "runtime_enabled": true,
+            "revision": 1,
+            "inherit_global_mcps": null,
+            "session_policy": "per_sender",
+            "broadcast_handoff_auto_claim": false,
+            "defaults": {
+              "runtime_enabled": true,
+              "session_policy": "shared",
+              "revision": 1,
+              "automatic_recovery": true,
+              "inherit_global_mcps": false,
+              "broadcast_handoff_auto_claim": false
+            },
+            "effective": {
+              "runtime_enabled": true,
+              "session_policy": "per_sender",
+              "inherit_global_mcps": false,
+              "broadcast_handoff_auto_claim": false
+            },
+            "handoff_auto_claim_rollout_enabled": false
+          },
+          "runtime_default": true,
+          "native_decision_policy": {
+            "value": true,
+            "source": "stored",
+            "editable": true,
+            "revision": "50d276c7bb37e74b15f3b725466dd78a74ec0439043a88ee22b9a844c386398f",
+            "can_initialize": false
+          },
+          "connections": [
+            {
+              "binding_id": "bind_82e218534955db0ffb08d748b308a04e",
+              "candidate_ref": "nexus-install-v1:9473e4c10b4d6b099bf530ec301debe4dfbbf083091cebff87ff4e22fcc5718a",
+              "executor_id": "exe_6a15c4e10119e49c93d1df1f627861bd",
+              "workspace_id": "wsr_d87063ac5703901d9290a1cddbfdc29e",
+              "adapter_id": "codex_app_server",
+              "execution_location": "local"
+            }
+          ],
+          "project_preset": {
+            "id": "project-generalist",
+            "revision": 1
+          },
+          "mcp_preset": {
+            "revision": 0,
+            "servers": [],
+            "configuration_digest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "folders": {
+            "workspace_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "provider_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\own-provider-home",
+            "secret_bindings": {}
+          },
+          "public_config": {
+            "alias": "App",
+            "relay_results": true
+          },
+          "automatic_reply": true,
+          "authorization": {
+            "minutes": 60,
+            "actions": 20
+          }
+        },
+        "setup_run_id": "connect_4cdec86578e640808f3726a82b469bcf",
+        "session_state": "not_checked",
+        "work_state": "not_submitted",
+        "public_connection": {
+          "version": 1,
+          "state": "bound",
+          "connect_id": "codex",
+          "canonical_ref": {
+            "server_id": "srv_929a35ebb90677351305589de916e7d2",
+            "executor_id": "exe_6a15c4e10119e49c93d1df1f627861bd",
+            "workspace_id": "wsr_d87063ac5703901d9290a1cddbfdc29e",
+            "binding_id": "bind_82e218534955db0ffb08d748b308a04e",
+            "workspace_binding_id": "wxb_517e094d597bfa7d81b18a4bd2902a3f",
+            "agent_id": "app-f0c8552996a2",
+            "endpoint_id": "ep_6d4fc52107be3dc76a75b958dabbac4a"
+          }
+        },
+        "profile": "race-a",
+        "quick_connect": {
+          "status": "connected",
+          "version": 1,
+          "connect_id": "codex",
+          "connect_id_status": "bound",
+          "operation": "created",
+          "harness": "codex",
+          "project_name": "App",
+          "project_name_source": "explicit",
+          "name_discovery": {
+            "status": "not_needed",
+            "reason": "explicit_name"
+          },
+          "execution_location": "local",
+          "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+          "cwd_resolution": {
+            "invocation_cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "root_explicit": false,
+            "source": "cwd"
+          },
+          "resume_argv": [
+            "okto-nexus",
+            "connect",
+            "codex",
+            "App",
+            "--id",
+            "codex",
+            "--home",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\quick-cli-home",
+            "--profile",
+            "race-a",
+            "--project",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "--workspace-id",
+            "wsr_d87063ac5703901d9290a1cddbfdc29e",
+            "--binding-id",
+            "bind_82e218534955db0ffb08d748b308a04e"
+          ],
+          "canonical_reference": {
+            "server_id": "srv_929a35ebb90677351305589de916e7d2",
+            "executor_id": "exe_6a15c4e10119e49c93d1df1f627861bd",
+            "workspace_id": "wsr_d87063ac5703901d9290a1cddbfdc29e",
+            "binding_id": "bind_82e218534955db0ffb08d748b308a04e",
+            "workspace_binding_id": "wxb_517e094d597bfa7d81b18a4bd2902a3f",
+            "agent_id": "app-f0c8552996a2",
+            "endpoint_id": "ep_6d4fc52107be3dc76a75b958dabbac4a"
+          }
+        }
+      }
+    },
+    {
+      "profile": "race-b",
+      "code": 3,
+      "value": {
+        "state": "refused",
+        "code": "CONNECT_ID_PENDING",
+        "message": "This Harness ID or project directory is already reserved. Recover its original intent.",
+        "possible_effect": false,
+        "effects_started": null,
+        "canonical_metadata_revalidation_requested": true,
+        "profile": "race-b",
+        "quick_connect": {
+          "status": "failed",
+          "version": 1,
+          "proposed_connect_id": "codex",
+          "connect_id_status": "proposed",
+          "harness": "codex",
+          "project_name": "App",
+          "project_name_source": "explicit",
+          "name_discovery": {
+            "status": "not_needed",
+            "reason": "explicit_name"
+          },
+          "execution_location": "local",
+          "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+          "cwd_resolution": {
+            "invocation_cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace",
+            "root_explicit": false,
+            "source": "cwd"
+          },
+          "resume_argv": [
+            "okto-nexus",
+            "connect",
+            "codex",
+            "App",
+            "--id",
+            "codex",
+            "--home",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\quick-cli-home",
+            "--profile",
+            "race-b",
+            "--project",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-rilplc1y\\tmp\\pytest-of-unknown\\pytest-0\\test_c18_g15_two_initial_revie0\\workspace"
+          ]
+        }
+      }
+    }
+  ],
+  "canonical_barrier_arrivals": 2
+}

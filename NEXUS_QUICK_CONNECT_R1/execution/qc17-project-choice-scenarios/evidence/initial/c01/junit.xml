@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="11.480" timestamp="2026-11-17T05:15:51.482466-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_quick_connect_project_scenarios" name="test_c01_mapped_cwd_bare_and_harness_resume_exact_reference" time="8.957"><failure message="AssertionError: {&quot;state&quot;: &quot;selection_required&quot;, &quot;reason&quot;: &quot;connection_selection_required&quot;, &quot;effects_started&quot;: null, &quot;lifecycle_requested&quot;: true, &quot;canonical_metadata_revalidation_requested&quot;: false, &quot;choices&quot;: [], &quot;catalog_complete&quot;: false, &quot;issues&quot;: [{&quot;profile&quot;: null, &quot;reason&quot;: &quot;instance_unconfirmed&quot;}]}&#10;  &#10;assert 3 == 0">C:\Users\jpamb\AppData\Local\Temp\nexus-qc17-projects-adfkhdps\after\tests\quick_connect\test_quick_connect_project_scenarios.py:44: in test_c01_mapped_cwd_bare_and_harness_resume_exact_reference
+    result = invoke(c, capsys, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc17-projects-adfkhdps\after\tests\quick_connect\test_quick_connect_cli.py:85: in invoke
+    assert code == expected, captured.out + captured.err
+E   AssertionError: {"state": "selection_required", "reason": "connection_selection_required", "effects_started": null, "lifecycle_requested": true, "canonical_metadata_revalidation_requested": false, "choices": [], "catalog_complete": false, "issues": [{"profile": null, "reason": "instance_unconfirmed"}]}
+E     
+E   assert 3 == 0</failure></testcase></testsuite></testsuites>

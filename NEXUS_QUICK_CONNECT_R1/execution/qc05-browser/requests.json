@@ -1,0 +1,2510 @@
+[
+  {
+    "method": "GET",
+    "path": "/",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CfDr8rCI.js",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Ds-MK2FR.css",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator-auth/status",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/logos/nexus-icon.svg",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/logos/nexus-wordmark-light.svg",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/logos/nexus-wordmark-dark.svg",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/agents",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/info",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "query": "workspace=all&window_hours=24",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/sessions",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "query": "page=1",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "query": "page=1&page_size=6",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "query": "view=attention",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/info",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "query": "workspace=all&window_hours=24",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/metrics/local/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/settings",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/metrics/local/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/metrics/publish-health",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "query": "workspace=all&window_hours=24",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "query": "workspace=all&window_hours=24",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "query": "page=1&page_size=6",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "query": "page=1",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "query": "page=1&page_size=6",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "query": "workspace=all&window_hours=24",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "query": "page=1",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "query": "page=1&page_size=6",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "query": "workspace=all&window_hours=24",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "query": "page=1",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CfDr8rCI.js",
+    "query": "",
+    "status": 304
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Ds-MK2FR.css",
+    "query": "",
+    "status": 304
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator-auth/status",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/agents",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/info",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "query": "workspace=all&window_hours=24",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/sessions",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "query": "view=attention",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/info",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "query": "workspace=all&window_hours=24",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/me",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/project-preset",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/workspaces",
+    "query": "limit=100",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/catalog",
+    "query": "limit=100",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/catalog",
+    "query": "workspace_id=ws&limit=100",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/agents",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/settings",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "query": "agent=operator&page=1&page_size=20&include_body=true",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/handoffs",
+    "query": "from_agent=operator",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "query": "agent=operator&page=1&page_size=20&include_body=true",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/handoffs",
+    "query": "from_agent=operator",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "query": "page=1",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/me",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/project-preset",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/workspaces",
+    "query": "limit=100",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/catalog",
+    "query": "limit=100",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/catalog",
+    "query": "workspace_id=ws&limit=100",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/bindings/ui-binding-2",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "query": "target=%7B%22agent_id%22%3A%22subject%22%2C%22binding_id%22%3A%22ui-binding-2%22%2C%22executor_id%22%3A%22exe_656dcdfda4b4a3a8a750e956cebfe7bd%22%2C%22kind%22%3A%22connection%22%2C%22server_id%22%3A%22srv_dd5c93d11520f3a389bcb8b13e4b8a0f%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "query": "agent=operator&page=1&page_size=20&include_body=true&workspace=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/handoffs",
+    "query": "from_agent=operator&workspace=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "query": "workspace=ws&window_hours=24",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "query": "view=attention&workspace=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "query": "agent=operator&page=1&page_size=20&include_body=true&workspace=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/handoffs",
+    "query": "from_agent=operator&workspace=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "query": "page=1&workspace=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/bindings/ui-binding-2",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "query": "target=%7B%22executor_id%22%3A%22exe_656dcdfda4b4a3a8a750e956cebfe7bd%22%2C%22kind%22%3A%22result%22%2C%22operation_id%22%3A%22ui-success%22%2C%22server_id%22%3A%22srv_dd5c93d11520f3a389bcb8b13e4b8a0f%22%2C%22session_id%22%3A%22ui-session-2%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "query": "target=%7B%22executor_id%22%3A%22exe_656dcdfda4b4a3a8a750e956cebfe7bd%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_dd5c93d11520f3a389bcb8b13e4b8a0f%22%2C%22session_id%22%3A%22ui-session-2%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "query": "target=%7B%22executor_id%22%3A%22exe_656dcdfda4b4a3a8a750e956cebfe7bd%22%2C%22kind%22%3A%22result%22%2C%22operation_id%22%3A%22ui-success%22%2C%22server_id%22%3A%22srv_dd5c93d11520f3a389bcb8b13e4b8a0f%22%2C%22session_id%22%3A%22ui-session-2%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/sessions/ui-session-2",
+    "query": "executor_id=exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/agents/subject/runtime-executions/ui-success",
+    "query": "executor_id=exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+    "status": 503
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/sessions/ui-session-2/events",
+    "query": "executor_id=exe_656dcdfda4b4a3a8a750e956cebfe7bd&after_sequence=0&limit=100",
+    "status": 404
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/agents/subject/runtime-executions/ui-success",
+    "query": "executor_id=exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+    "status": 503
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "query": "target=%7B%22executor_id%22%3A%22exe_656dcdfda4b4a3a8a750e956cebfe7bd%22%2C%22kind%22%3A%22execution%22%2C%22operation_id%22%3A%22op_9676471341278d16a29634398569f8ce%22%2C%22server_id%22%3A%22srv_dd5c93d11520f3a389bcb8b13e4b8a0f%22%2C%22session_id%22%3A%22ses_1b39d87c3b67e1ae4da4e8e9899731cd%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "query": "target=%7B%22executor_id%22%3A%22exe_656dcdfda4b4a3a8a750e956cebfe7bd%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_dd5c93d11520f3a389bcb8b13e4b8a0f%22%2C%22session_id%22%3A%22ses_1b39d87c3b67e1ae4da4e8e9899731cd%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/approvals/r4request_dbe210da169f1f3f3bb0dc0e70ae6f5c3aabc9637dfa0ffe8a5ed087977d1ee8",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/agents/subject/runtime-policy",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/sessions/ses_1b39d87c3b67e1ae4da4e8e9899731cd",
+    "query": "executor_id=exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/sessions/ses_1b39d87c3b67e1ae4da4e8e9899731cd/events",
+    "query": "executor_id=exe_656dcdfda4b4a3a8a750e956cebfe7bd&after_sequence=0&limit=100",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/sessions/ses_1b39d87c3b67e1ae4da4e8e9899731cd",
+    "query": "executor_id=exe_656dcdfda4b4a3a8a750e956cebfe7bd",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "workspace_id=ws",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "query": "workspace_id=ws&limit=10&preview=3",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "query": "state=active&seen=all",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "query": "",
+    "status": 200
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "label": "remote",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc30-remote-id-lb9li7uo\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc30-remote-id-lb9li7uo\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc30-remote-id-lb9li7uo\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc30-remote-id-lb9li7uo\\after\\tests\\execution_r4\\test_qc30_remote_public_id.py",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc30-remote-id-lb9li7uo\\remote\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc30-remote-id-lb9li7uo\\remote\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T09:21:03.311891+00:00",
+  "signals": [],
+  "exit_code": 1,
+  "processes_after": [
+    {
+      "pid": 52336,
+      "parent_pid": null,
+      "birth_filetime": 134393808633145991,
+      "alive": false
+    },
+    {
+      "pid": 2836,
+      "parent_pid": 52336,
+      "birth_filetime": 134393808633327985,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T09:21:21.764069+00:00"
+}

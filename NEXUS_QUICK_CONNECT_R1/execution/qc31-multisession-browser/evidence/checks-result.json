@@ -1,0 +1,366 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "GET /api/v1/runtime-management/connections/bindings/bind_2031131ed8e50a9b2d9d0eedf0d10f56",
+      "status": "PASS",
+      "http_status": 200
+    },
+    {
+      "name": "One registered Harness ID retains full canonical connection",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/v1/home/target",
+      "status": "PASS",
+      "http_status": 200
+    },
+    {
+      "name": "Canonical target A selects exact session",
+      "status": "PASS",
+      "context": {
+        "server_id": "srv_269d2c9d741d98a06c07785dbac027f6",
+        "executor_id": "exe_296d2a3065262178625196a0f342e3cb",
+        "workspace_id": "wsr_ae4eded1d27ae3a1d28a36df18d38e38",
+        "binding_id": "bind_2031131ed8e50a9b2d9d0eedf0d10f56",
+        "workspace_binding_id": "wxb_331c26efb8c44f0479b107c424299f72",
+        "agent_id": "qc31-collaborator",
+        "session_id": "ses_93ddc63ff779ec4b449f1680425a99c4",
+        "lifecycle_state": "CLOSED"
+      }
+    },
+    {
+      "name": "Only exact output region A",
+      "status": "PASS"
+    },
+    {
+      "name": "History A never falls through to latest/sibling",
+      "status": "PASS",
+      "session_id": "ses_93ddc63ff779ec4b449f1680425a99c4",
+      "text": "CLOSED \u00b7 Read only\n\nses_93ddc63ff779ec4b449f1680425a99c4\n\nLive tail\nHistory\nRecorded session events\n Auto-scroll\nRefresh history\n\nShowing 1\u20137 of 7 committed events. Scroll up to load earlier events.\n\nSession \u00b7 terminal\nRead only\n12px\nCore codex thread configuration\n07:10:14\nAdapter id\ncodex_app_server\nFields \u00b7 Approval Policy \u00b7 Status\nmissing\nFields \u00b7 Approvals Reviewer \u00b7 Status\nmissing\nFields \u00b7 Cwd \u00b7 Status\nmissing\nFields \u00b7 Instruction Sources \u00b7 Status\nmissing\nFields \u00b7 Model \u00b7 Status\nmissing\nFields \u00b7 Model Provider \u00b7 Status\nmissing\nFields \u00b7 Reasoning Effort \u00b7 Status\nmissing\nFields \u00b7 Sandbox \u00b7 Status\nmissing\nSchema version\n1\nSource\nthread/start/response\nHarness ready\n07:10:14\nTurn started\n07:10:15\nAssistant\n07:10:15\n\nQC31 Alpha retained exact output\n\nTurn completed\n07:10:15"
+    },
+    {
+      "name": "GET /api/v1/runtime-management/runtime/sessions/ses_93ddc63ff779ec4b449f1680425a99c4/events",
+      "status": "PASS",
+      "http_status": 200
+    },
+    {
+      "name": "Real events A match only requested session",
+      "status": "PASS",
+      "scope": {
+        "server_id": "srv_269d2c9d741d98a06c07785dbac027f6",
+        "executor_id": "exe_296d2a3065262178625196a0f342e3cb",
+        "binding_id": "bind_2031131ed8e50a9b2d9d0eedf0d10f56",
+        "agent_id": "qc31-collaborator",
+        "workspace_id": "wsr_ae4eded1d27ae3a1d28a36df18d38e38",
+        "workspace_binding_id": "wxb_331c26efb8c44f0479b107c424299f72",
+        "session_id": "ses_93ddc63ff779ec4b449f1680425a99c4",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      },
+      "stream_epoch": "stream_89a1f0d2bd0862cc1f87969b546897b2",
+      "events": 7
+    },
+    {
+      "name": "GET /api/v1/home/target",
+      "status": "PASS",
+      "http_status": 200
+    },
+    {
+      "name": "Canonical target B selects exact session",
+      "status": "PASS",
+      "context": {
+        "server_id": "srv_269d2c9d741d98a06c07785dbac027f6",
+        "executor_id": "exe_296d2a3065262178625196a0f342e3cb",
+        "workspace_id": "wsr_ae4eded1d27ae3a1d28a36df18d38e38",
+        "binding_id": "bind_2031131ed8e50a9b2d9d0eedf0d10f56",
+        "workspace_binding_id": "wxb_331c26efb8c44f0479b107c424299f72",
+        "agent_id": "qc31-collaborator",
+        "session_id": "ses_b2cee5c26f2666b0d9064363b290dcb1",
+        "lifecycle_state": "READY"
+      }
+    },
+    {
+      "name": "Only exact output region B",
+      "status": "PASS"
+    },
+    {
+      "name": "History B never falls through to latest/sibling",
+      "status": "PASS",
+      "session_id": "ses_b2cee5c26f2666b0d9064363b290dcb1",
+      "text": "READY \u00b7 Read only\n\nses_b2cee5c26f2666b0d9064363b290dcb1\n\nLive tail\nHistory\nRecorded session events\n Auto-scroll\nRefresh history\n\nShowing 1\u20137 of 7 committed events. Scroll up to load earlier events.\n\nSession \u00b7 terminal\nRead only\n12px\nCore codex thread configuration\n07:10:16\nAdapter id\ncodex_app_server\nFields \u00b7 Approval Policy \u00b7 Status\nmissing\nFields \u00b7 Approvals Reviewer \u00b7 Status\nmissing\nFields \u00b7 Cwd \u00b7 Status\nmissing\nFields \u00b7 Instruction Sources \u00b7 Status\nmissing\nFields \u00b7 Model \u00b7 Status\nmissing\nFields \u00b7 Model Provider \u00b7 Status\nmissing\nFields \u00b7 Reasoning Effort \u00b7 Status\nmissing\nFields \u00b7 Sandbox \u00b7 Status\nmissing\nSchema version\n1\nSource\nthread/start/response\nHarness ready\n07:10:16\nTurn started\n07:10:16\nAssistant\n07:10:16\n\nQC31 Beta current exact output\n\nTurn completed\n07:10:17"
+    },
+    {
+      "name": "GET /api/v1/runtime-management/runtime/sessions/ses_b2cee5c26f2666b0d9064363b290dcb1/events",
+      "status": "PASS",
+      "http_status": 200
+    },
+    {
+      "name": "Real events B match only requested session",
+      "status": "PASS",
+      "scope": {
+        "server_id": "srv_269d2c9d741d98a06c07785dbac027f6",
+        "executor_id": "exe_296d2a3065262178625196a0f342e3cb",
+        "binding_id": "bind_2031131ed8e50a9b2d9d0eedf0d10f56",
+        "agent_id": "qc31-collaborator",
+        "workspace_id": "wsr_ae4eded1d27ae3a1d28a36df18d38e38",
+        "workspace_binding_id": "wxb_331c26efb8c44f0479b107c424299f72",
+        "session_id": "ses_b2cee5c26f2666b0d9064363b290dcb1",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      },
+      "stream_epoch": "stream_1905b00573694a1b8a2ccc1a9198ee91",
+      "events": 7
+    },
+    {
+      "name": "Distinct session IDs and only GET observation",
+      "status": "PASS",
+      "errors": []
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-CfDr8rCI.js"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Ds-MK2FR.css"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sessions"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_93ddc63ff779ec4b449f1680425a99c4"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_93ddc63ff779ec4b449f1680425a99c4"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_93ddc63ff779ec4b449f1680425a99c4/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/bindings/bind_2031131ed8e50a9b2d9d0eedf0d10f56"
+    },
+    {
+      "method": "GET",
+      "path": "/"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-CfDr8rCI.js"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Ds-MK2FR.css"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sessions"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b2cee5c26f2666b0d9064363b290dcb1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b2cee5c26f2666b0d9064363b290dcb1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b2cee5c26f2666b0d9064363b290dcb1/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b2cee5c26f2666b0d9064363b290dcb1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/bindings/bind_2031131ed8e50a9b2d9d0eedf0d10f56"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b2cee5c26f2666b0d9064363b290dcb1/events"
+    }
+  ],
+  "errors": []
+}

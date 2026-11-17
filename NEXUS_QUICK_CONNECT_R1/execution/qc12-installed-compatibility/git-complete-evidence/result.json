@@ -1,0 +1,58 @@
+{
+  "cases": [
+    {
+      "label": "git-cli-composed",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\after\\tests\\quick_connect\\test_git_cli_integration.py",
+        "-v",
+        "-s",
+        "-x",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\cwd",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T08:08:42.917918+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 25056,
+          "parent_pid": null,
+          "birth_filetime": 134393765229200778,
+          "alive": false
+        },
+        {
+          "pid": 56748,
+          "parent_pid": 25056,
+          "birth_filetime": 134393765229463812,
+          "alive": false
+        },
+        {
+          "pid": 8664,
+          "parent_pid": 56748,
+          "birth_filetime": 134393765229595894,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T08:10:03.295056+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

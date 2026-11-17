@@ -1,0 +1,52 @@
+{
+  "at": "2026-11-17T08:02:23.316740+00:00",
+  "status": "FAILED_STRICT_CHECKPOINT_ORACLE_REVIEW_REQUIRED",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "cuts": [
+    {
+      "label": "original-nine-interrupted",
+      "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-installed-aj280rc3",
+      "exit_code": 3221225786,
+      "signals": [
+        "CTRL_BREAK to this own new process group"
+      ],
+      "junit_counts": null,
+      "all_owned_processes_exited": true,
+      "payload_files": 1027,
+      "payload_drift": [],
+      "source_drift": []
+    },
+    {
+      "label": "strict-derivative-ten-first-case",
+      "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-derivative-kq_sepcf",
+      "exit_code": 1,
+      "signals": [],
+      "junit_counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "all_owned_processes_exited": true,
+      "payload_files": 1027,
+      "payload_drift": [],
+      "source_drift": []
+    }
+  ],
+  "provider_calls": 0,
+  "findings": [
+    "The first composed case proves one-confirmation short entry with real local Git, logical origin name, unchanged physical root, bound public ID and full canonical seven-field reference.",
+    "Changing local origin metadata did not invoke Git during exact profile or ID resume. Canonical binding, grants, setup Test count, session count and all DB snapshot assertions passed before the checkpoint assertion.",
+    "Exact profile resume changed no checkpoint JSON fields.",
+    "Exact ID resume changed selection.public_connection.project_revision and reservation_ref; selection.quick_connect.name_discovery.reason/status, operation and project_name_source.",
+    "The derivative allowed only created-to-reused operation metadata and correctly failed on the other five paths. No further relaxation or product change was made.",
+    "The original runner interrupted active progress after a failed-call watchdog; that was not proof of a teardown hang. The derivative used pytest -x plus a whole-cut deadline and exited normally on its first failed assertion."
+  ],
+  "limitations": [
+    "The remaining derivative cases, including the added monorepo case, were NOT_RUN after -x.",
+    "These cuts do not qualify all nine/ten scenarios or close the proposed requirement mapping.",
+    "Input/isatty are controlled by fixtures; no real PTY or human acceptance claim.",
+    "Private request/review/identity/authority fields were not whitelisted for mutation; full deep comparison remains strict.",
+    "No repository source/tests or installed prefix was changed. Temporary data retained outside checkout."
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "status": "PASS_SCOPED_CANONICAL_OCCUPANCY",
+  "result": {
+    "passed": 2,
+    "pytest_seconds": 11.21,
+    "tool": "dd66b3",
+    "exit_code": 0,
+    "source_drift": []
+  },
+  "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc07-public-id-occupancy/run_focal.py",
+  "xml": "pytest.xml",
+  "executed_nodes": [
+    "tests.execution_r4.test_public_id_retirement::test_disabled_canonical_endpoint_keeps_bound_public_id_occupied_without_reactivation",
+    "tests.execution_r4.test_public_id_retirement::test_old_uncertain_reservation_timestamps_do_not_make_new_intent_available"
+  ],
+  "source_record": "focal-run.json",
+  "scope": [
+    "Owned canonical SQLite Finish with synthetic verified directory/Test setup peer; no native/provider process",
+    "Real canonical HTTP PATCH endpoint enabled:false with CAS; HTTP public-ID reserve conflict afterward",
+    "Uncertain reserved row with deliberately old SQL fixture timestamps; actual new HTTP reserve still conflicts and original intent recovers same reserved row"
+  ],
+  "demonstrated": [
+    "Disabling endpoint returns200/false and canonically revokes existing grants without adding grants",
+    "Public row remains bound to identical seven-field canonical tuple and reviewer ID after disable",
+    "Replacement intent HTTP409 HARNESS_ID_ALREADY_EXISTS; no reactivation, new binding, public row, identity, grant, operation or session",
+    "Timestamp1900 reserved/draft rows are not recycled automatically by actual new reserve; HTTP409 CONNECT_ID_PENDING; same original reservation recovered; no canonical configuration created"
+  ],
+  "scenario_proposals": [
+    {
+      "id": "QC-T-E13",
+      "status": "PASS_FOR_DISABLED_VARIANT",
+      "limit": "No nonexistent retired endpoint or binding-delete lifecycle claimed"
+    },
+    {
+      "id": "QC-T-F13",
+      "status": "PASS_FOR_DISABLED_VARIANT",
+      "limit": "Existing bound row preserves occupancy after canonical endpoint disable; no reactivation"
+    },
+    {
+      "id": "QC-T-G10",
+      "status": "PASS_FOR_NO_IMPLICIT_TTL_REUSE_ON_RESERVE",
+      "limit": "Deliberate SQL temporal fixture, not a wall-clock wait or invocation of an unknown cleanup routine"
+    }
+  ],
+  "antecedent": {
+    "tool": "1d12d2",
+    "result": "2FAIL/0PASS",
+    "cause": "Test snapshot wrongly treated normal authenticated operator last_seen_at telemetry as authority mutation. Only that one telemetry column is excluded; all remaining agent/config/authority/public rows still compared.",
+    "records": [
+      "antecedent-focal-run.json",
+      "antecedent-focal-stdout.txt",
+      "antecedent-pytest.xml"
+    ]
+  },
+  "lint": {
+    "tool": "4efa59",
+    "exit_code": 0
+  },
+  "limits": [
+    "No actual harness/provider/version probe/native session started",
+    "No native process exit or task completion inferred from disabling endpoint",
+    "No real wait/cleanup scheduler/Windows/installed package/PTY qualification",
+    "Source-first Nexus, PR27 installed dependency prefix unchanged"
+  ],
+  "cleanup": {
+    "exit_code": 0,
+    "all_testclient_contexts_closed": true,
+    "services_or_provider_processes_started": 0,
+    "pytest_temp": "Owned ordinary pytest retention; no physical purge claimed"
+  }
+}

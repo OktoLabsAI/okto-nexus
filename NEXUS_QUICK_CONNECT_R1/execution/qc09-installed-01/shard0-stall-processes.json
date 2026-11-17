@@ -1,0 +1,54 @@
+[
+  {
+    "pid": 45392,
+    "ppid": 22788,
+    "name": "python.exe",
+    "threads": 24,
+    "cpu": {
+      "user": 283.46875,
+      "system": 65.1875,
+      "children_user": 0.0,
+      "children_system": 0.0
+    },
+    "created": 1794894958.067144
+  },
+  {
+    "pid": 22788,
+    "ppid": 49800,
+    "name": "python.exe",
+    "threads": 2,
+    "cpu": {
+      "user": 0.0,
+      "system": 0.0,
+      "children_user": 0.0,
+      "children_system": 0.0
+    },
+    "created": 1794894958.0536115
+  },
+  {
+    "pid": 49800,
+    "ppid": 49180,
+    "name": "python.exe",
+    "threads": 1,
+    "cpu": {
+      "user": 0.671875,
+      "system": 1.53125,
+      "children_user": 0.0,
+      "children_system": 0.0
+    },
+    "created": 1794894948.5401337
+  },
+  {
+    "pid": 49180,
+    "ppid": 24116,
+    "name": "python.exe",
+    "threads": 1,
+    "cpu": {
+      "user": 0.0,
+      "system": 0.015625,
+      "children_user": 0.0,
+      "children_system": 0.0
+    },
+    "created": 1794894948.5264723
+  }
+]

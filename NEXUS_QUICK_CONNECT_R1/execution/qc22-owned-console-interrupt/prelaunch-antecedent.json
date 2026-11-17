@@ -1,0 +1,9 @@
+{
+  "stage": "environment-preparation",
+  "outcome": "FileNotFoundError creating environment/tmp because parent directory was absent",
+  "child_or_controller_started": false,
+  "pytest_started": false,
+  "console_created": false,
+  "input_or_signal_sent": false,
+  "correction": "Create only the owned environment directory before invoking the existing environment helper."
+}

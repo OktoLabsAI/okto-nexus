@@ -1,5 +1,5 @@
 import type {ConnectionConfiguration, SetupRequest, SetupTest} from './connectionConfiguration';
-import {parseConnectionConfiguration} from './connectionConfiguration';
+import {assertSetupPublicConnection,parseConnectionConfiguration} from './connectionConfiguration';
 import type {runtimeApi, ConnectionCatalogItem, ProjectPresetOverview, RuntimeOptions, SetupDraftView, SetupFinishResult} from './runtimeApi';
 import {RuntimeManagementError, type DefinitiveSetupTestRejection} from './runtimeApi';
 
@@ -55,6 +55,18 @@ function presetAuthorization(value:ProjectPresetOverview['configuration']['autho
 const identityFields=['server_id','executor_id','binding_id','endpoint_id','agent_id','workspace_id','workspace_binding_id'] as const;
 function identifier(value:unknown):value is string{return typeof value==='string'&&value.length>0&&value.length<=160&&!/[\u0000-\u001f\u007f]/.test(value);}
 function sameScope(value:Record<string,string>,expected:Record<string,string>){return value!==null&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).sort().join('|')===Object.keys(expected).sort().join('|')&&Object.keys(expected).every(key=>value[key]===expected[key]);}
+
+/** Public name confirmation augments, and never replaces, exact binding checks. */
+export function hasConfirmedPublicConnection(request:SetupRequest,result:SetupFinishResult):boolean {
+  const wanted=request.public_connection,confirmed=result.public_connection,binding=result.binding;
+  if(wanted===undefined)return confirmed===undefined;
+  try{assertSetupPublicConnection(wanted);}catch{return false;}
+  return !!confirmed&&!!binding&&Object.keys(confirmed).sort().join()==='canonical_ref,connect_id,reservation_ref,revision,state,version'&&
+    confirmed.version===1&&confirmed.state==='bound'&&confirmed.connect_id===wanted.connect_id&&confirmed.reservation_ref===wanted.reservation_ref&&
+    Number.isSafeInteger(confirmed.revision)&&confirmed.revision>=1&&!!confirmed.canonical_ref&&
+    Object.keys(confirmed.canonical_ref).sort().join()===[...identityFields].sort().join()&&
+    identityFields.every(field=>identifier(confirmed.canonical_ref[field])&&confirmed.canonical_ref[field]===binding[field]);
+}
 
 export function connectCheckpointKey(identity: string, server: string, workspace: string | null) {
   return 'okto-nexus:project-connect:v1:' + [identity, server, workspace || 'new-project'].map(encodeURIComponent).join(':');
@@ -122,8 +134,9 @@ export class ProjectConnectModel {
         throw new Error('This saved setup belongs to another identity, Server or project.');
       safeConfiguration(item.configuration);
       if(item.request?.mcp_preset)throw new Error('MCP material cannot be restored by this short setup flow.');
-      if(item.request&&Object.keys(item.request).some(key=>!['client_intent_id','agent_id','executor_id','candidate_ref','inventory_revision','workspace_id','binding_id','baseline','configuration','broadcast_handoff_auto_claim','project_preset','agent_creation','native_decision_policy'].includes(key)))
+      if(item.request&&Object.keys(item.request).some(key=>!['client_intent_id','agent_id','executor_id','candidate_ref','inventory_revision','workspace_id','binding_id','baseline','configuration','broadcast_handoff_auto_claim','project_preset','agent_creation','native_decision_policy','public_connection'].includes(key)))
         throw new Error('The retained request contains unsupported material.');
+      if(item.request&&Object.hasOwn(item.request,'public_connection'))assertSetupPublicConnection(item.request.public_connection);
       if(!['version','test','finish'].includes(item.kind)||typeof item.agentId!=='string'||!item.agentId||
           item.request&&(item.request.agent_id!==item.agentId||item.request.executor_id!==item.executorId||
             item.request.workspace_id!==item.workspace||item.request.candidate_ref!==item.candidateRef||
@@ -197,6 +210,7 @@ export class ProjectConnectModel {
               !identifier(item.adapter_id)||!identifier(item.activation_state)||
               [item.binding_revision,item.realization_revision,item.endpoint_revision].some(value=>!Number.isSafeInteger(value)||value<1)||
               [item.endpoint_enabled,item.agent_active,item.executor_revoked].some(value=>typeof value!=='boolean')||
+              item.connect_id!==undefined&&item.connect_id!==null&&!(typeof item.connect_id==='string'&&/^[a-z][a-z0-9_-]{0,63}$/.test(item.connect_id))||
               [item.agent_label,item.workspace_label,item.host_label].some(value=>value!==null&&(typeof value!=='string'||value.length>120)))
             throw new Error('The connection catalog contains a foreign or invalid context.');
           const key=item.server_id+':'+item.binding_id;if(ids.has(key))throw new Error('The connection catalog repeats a binding.');ids.add(key);
@@ -204,7 +218,8 @@ export class ProjectConnectModel {
             workspace_binding_id:item.workspace_binding_id,agent_id:item.agent_id,workspace_id:item.workspace_id,adapter_id:item.adapter_id,
             binding_revision:item.binding_revision,realization_revision:item.realization_revision,endpoint_revision:item.endpoint_revision,
             activation_state:item.activation_state,endpoint_enabled:item.endpoint_enabled,agent_active:item.agent_active,executor_revoked:item.executor_revoked,
-            execution_location:item.execution_location,agent_label:item.agent_label,workspace_label:item.workspace_label,host_label:item.host_label,needs_revalidation:true});
+            execution_location:item.execution_location,agent_label:item.agent_label,workspace_label:item.workspace_label,host_label:item.host_label,needs_revalidation:true,
+            ...(Object.hasOwn(item,'connect_id')?{connect_id:item.connect_id}:{})});
         }
         if(!page.has_more){if(page.next_cursor!==null||items.length!==total)throw new Error('The connection catalog is incomplete.');complete=true;break;}
         if(items.length>=total)throw new Error('The connection continuation contradicts its total.');
@@ -424,6 +439,8 @@ export class ProjectConnectModel {
         request.workspace_id!==null&&binding.workspace_id!==request.workspace_id||result.project_preset&&
         (result.project_preset.id!==request.project_preset?.id||result.project_preset.revision!==request.project_preset?.revision))
       throw new Error('The Server result does not confirm this exact reviewed identity, installation and project. The retained request was preserved.');
+    if(!hasConfirmedPublicConnection(request,result))
+      throw new Error('The Server has not confirmed the exact reviewed Harness ID and canonical connection. The retained request was preserved.');
     this.storage.removeItem(this.key());this.checkpoint=null;this.set({phase:'complete',result,retained:false});
   }
   private validateTest(test:SetupTest,request:SetupRequest) {

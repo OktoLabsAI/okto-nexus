@@ -1,0 +1,26 @@
+{
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-compat-regression-x3q8154p",
+  "test_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-compat-regression-x3q8154p\\test_entry_compatibility.py",
+  "proposed_repository_path": "tests/quick_connect/test_entry_compatibility.py",
+  "scenarios": {
+    "gate": 32,
+    "http": 16,
+    "network": 2,
+    "total": 50
+  },
+  "executed": false,
+  "originals_unchanged": [
+    "tests/execution_r4/test_connection_catalog.py",
+    "tests/execution_r4/test_terminal_multi_harness.py"
+  ],
+  "sha256": "8bad0d91860855bad901eb33b00b5ccc70ea9b89edaaa95335278d38c879d5ad",
+  "plan": [
+    "Apply reviewed I02 and gate product patches after input freeze.",
+    "Copy this file into tests/quick_connect without editing the three legacy nodes.",
+    "Build a fresh wheel and install into a new owned prefix; preserve 0s9 and all older prefixes.",
+    "Copy quick_connect fixtures/helpers without checkout src and run the whole quick_connect directory plus the three legacy nodes under -I -B.",
+    "Record installed module origins, wheel/payload equality, commands, JUnit, source/input pins and owned cleanup.",
+    "Do not repeat old-Server HTTP proof, provider/native campaign, or unrelated broad suite."
+  ],
+  "static_checks": "AST parse and Ruff I/F/E4/E7/E9; no test execution"
+}

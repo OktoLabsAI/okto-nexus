@@ -229,6 +229,8 @@ def _finish_setup(deps, context, owner, fresh, request, *, verified, settings):
             if prior['request_hash'] != digest:
                 raise conflict('This Finish request has different content.')
             return json.loads(prior['result_json'])
+        from .connection_public_ids import validate_reserved, bind_public_id
+        validate_reserved(uow, context, request)
         if baseline(uow, agent_id, request.get('binding_id')) != request['baseline']:
             raise conflict('The active configuration changed while you were editing. Reopen Connections to review it.')
         from .project_preset_update import validate_preset_update, validate_origin
@@ -339,6 +341,7 @@ def _finish_setup(deps, context, owner, fresh, request, *, verified, settings):
             settings.stage_native_decisions(uow, request['native_decision_policy'])
             result['native_decision_policy'] = dict(enabled_at_commit=True,
                 initialized=request['native_decision_policy']['initialize'])
+        bind_public_id(uow, context, request, result, now=deps.clock.now_iso())
         uow.connection.execute('INSERT INTO connection_setup_commits VALUES(?,?,?,?,?)',
             (commit_actor, request['client_intent_id'], digest, json.dumps(result), deps.clock.now_iso()))
         return result

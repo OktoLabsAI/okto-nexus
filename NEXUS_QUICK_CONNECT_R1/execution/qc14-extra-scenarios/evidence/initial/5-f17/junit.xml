@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="11.222" timestamp="2026-11-17T05:03:12.407666-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_quick_connect_extra_scenarios" name="test_f17_free_id_review_loses_race_before_new_test_identity_or_grant" time="9.150"><failure message="AssertionError: assert 'CONFLICT' == 'HARNESS_ID_ALREADY_EXISTS'&#10;  &#10;  - HARNESS_ID_ALREADY_EXISTS&#10;  + CONFLICT">C:\Users\jpamb\AppData\Local\Temp\nexus-qc14-installed-ewrhfzrv\after\tests\quick_connect\test_quick_connect_extra_scenarios.py:125: in test_f17_free_id_review_loses_race_before_new_test_identity_or_grant
+    assert result['code'] == 'HARNESS_ID_ALREADY_EXISTS'
+E   AssertionError: assert 'CONFLICT' == 'HARNESS_ID_ALREADY_EXISTS'
+E     
+E     - HARNESS_ID_ALREADY_EXISTS
+E     + CONFLICT</failure></testcase></testsuite></testsuites>

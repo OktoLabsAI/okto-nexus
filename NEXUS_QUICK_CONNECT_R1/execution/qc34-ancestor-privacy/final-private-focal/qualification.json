@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "tests": 1,
+  "pytest_node": "test_d25_private_origin_does_not_enter_observed_logs_json_homes_or_sqlite",
+  "node_seconds": "10.386",
+  "installed_wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "payload_files": 1027,
+  "payload_drift": [],
+  "source_drift": [],
+  "runtime_assertions": "Four JSON outputs, scripted-TTY stdout/resume, checkpoints, trace absence and real active local logging sink; all files read completely except exact live-owned one-byte lock proven incapable of containing any encoded marker.",
+  "sink_httpx_events": 75,
+  "sqlite_live_tables": 163,
+  "sqlite_live_rows": 251,
+  "sqlite_live_text_blob_cells": 602,
+  "lock_length_proof": [
+    {
+      "path": "home\\runtime-journal-v1\\writer.lock",
+      "before": {
+        "size": 1,
+        "device": 14764524303808498864,
+        "inode": 49539595904074904,
+        "mode": 33206,
+        "attributes": 32
+      },
+      "after": {
+        "size": 1,
+        "device": 14764524303808498864,
+        "inode": 49539595904074904,
+        "mode": 33206,
+        "attributes": 32
+      },
+      "outcome": "length_proof",
+      "minimum_marker_encoded_bytes": 7,
+      "producer": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\harness\\event_journal.py",
+      "producer_sha256": "9262ee2742029bf4826d022fc2bd7fec54c2ff5234f193ef3261f1a306cdf274",
+      "same_live_owner_identity": true
+    }
+  ],
+  "all_sqlite_tables_and_files": "privacy-proof.json",
+  "cleanup": {
+    "all_owned_processes_exited": true,
+    "signals": [],
+    "force": false
+  },
+  "raw_log": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-private-final-ttxkkkri\\final-private-focal\\raw.log",
+    "sha256": "03a14f61cf9d3c8d2c79d3bb9e0a23232890e292765537dd2324c742740a7236",
+    "exported": false
+  },
+  "limits": [
+    "Earlier access violation and failed live scanner remain preserved as separate NOT_GREEN cuts; no retrospective cause attribution.",
+    "One new focal passes; this is not a single combined ancestor/privacy green run.",
+    "Observed configured local logging channels only; no outbound analytics or all-transient-history claim.",
+    "Synthetic canonical setup/test boundary, zero real provider/native CLI calls."
+  ]
+}

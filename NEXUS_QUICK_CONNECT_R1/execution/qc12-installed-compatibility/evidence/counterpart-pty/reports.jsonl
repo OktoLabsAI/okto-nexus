@@ -1,0 +1,10 @@
+{"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_real_terminal_measurement", "when": "setup", "outcome": "skipped", "duration": 0.008359499974176288}
+{"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_real_terminal_measurement", "when": "teardown", "outcome": "passed", "duration": 0.00017919996753335}
+{"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_json_with_real_tty_never_requests_input", "when": "setup", "outcome": "skipped", "duration": 0.0017401999793946743}
+{"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_json_with_real_tty_never_requests_input", "when": "teardown", "outcome": "passed", "duration": 0.00014180003199726343}
+{"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_cancel_from_actual_terminal_does_not_check_or_test", "when": "setup", "outcome": "skipped", "duration": 0.0019440000178292394}
+{"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_cancel_from_actual_terminal_does_not_check_or_test", "when": "teardown", "outcome": "passed", "duration": 0.00013019994366914034}
+{"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_confirm_and_resume_use_actual_terminal_without_replaying_test", "when": "setup", "outcome": "skipped", "duration": 0.0016802999889478087}
+{"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_confirm_and_resume_use_actual_terminal_without_replaying_test", "when": "teardown", "outcome": "passed", "duration": 0.00011709996033459902}
+{"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation", "when": "setup", "outcome": "skipped", "duration": 0.0016757999546825886}
+{"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation", "when": "teardown", "outcome": "passed", "duration": 0.00015390000771731138}

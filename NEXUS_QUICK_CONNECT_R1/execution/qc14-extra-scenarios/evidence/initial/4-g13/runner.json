@@ -1,0 +1,49 @@
+{
+  "label": "4-g13",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-installed-ewrhfzrv\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-installed-ewrhfzrv\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-installed-ewrhfzrv\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-installed-ewrhfzrv\\after\\tests\\quick_connect\\test_quick_connect_extra_scenarios.py::test_g13_expired_canonical_grants_are_not_renewed_by_resume",
+    "-v",
+    "-s",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-installed-ewrhfzrv\\4-g13\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-installed-ewrhfzrv",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T08:02:56.308694+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 48436,
+      "parent_pid": null,
+      "birth_filetime": 134393761763113653,
+      "alive": false
+    },
+    {
+      "pid": 61168,
+      "parent_pid": 48436,
+      "birth_filetime": 134393761763369587,
+      "alive": false
+    },
+    {
+      "pid": 59744,
+      "parent_pid": 61168,
+      "birth_filetime": 134393761763518925,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T08:03:11.479227+00:00"
+}

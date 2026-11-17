@@ -1,0 +1,37 @@
+{
+  "at": 1794900520.5666845,
+  "latest": {
+    "wave": "wave2",
+    "progress": {
+      "nodeid": "tests/test_attention_authority.py::test_exhausted_budget_blocks_new_turn_but_not_response_to_existing_native_request",
+      "phase": "start",
+      "at": 1794900518.8311815
+    },
+    "idle_seconds": 1.6383612155914307
+  },
+  "derivative_finished": 1004,
+  "failed_nodes": 27,
+  "hung_nodes": 1,
+  "original_finished": 108,
+  "still_not_run_or_inflight": 1133,
+  "tree": [
+    {
+      "pid": 45140,
+      "ppid": 41220,
+      "created": 1794896780.6569908,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 48144,
+      "ppid": 45140,
+      "created": 1794897196.823898,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 40944,
+      "ppid": 48144,
+      "created": 1794897196.8627276,
+      "exe": "C:\\Python313\\python.exe"
+    }
+  ]
+}

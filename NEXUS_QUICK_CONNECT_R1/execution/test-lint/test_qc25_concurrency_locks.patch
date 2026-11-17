@@ -1,0 +1,19 @@
+--- persistence-applied-final/tests/quick_connect/test_qc25_concurrency_locks.py
++++ tests/quick_connect/test_qc25_concurrency_locks.py
+@@ -11,7 +11,7 @@
+ 
+ import pytest
+ from types import SimpleNamespace
+-from test_quick_connect_cli import quick_cli,terminal,checking,local_setup,isolated_provider_environment
++from test_quick_connect_cli import quick_cli as quick_cli,terminal as terminal,checking as checking,local_setup as local_setup,isolated_provider_environment as isolated_provider_environment
+ from test_connection_setup_recovery import snapshot
+ from okto_nexus.adapters.inbound.cli import connect
+ from okto_nexus.adapters.outbound.service_manager.locking import ExclusiveFileLock
+@@ -219,3 +219,7 @@
+     probe([catalog,old_guard,c.home/'terminal/profiles'/(new_profile+'.guard')])
+     proof('input-lock-proof.json',dict(confirmations=2,customized_new_review=True,tests=0,probes=0,
+         subprocesses=probes,old_profile_released_before_new_input=True,catalog_free_during_input=True))
++
++
++# Explicit public exports include pytest fixtures used through injection.
++__all__ = ['Barrier', 'ExclusiveFileLock', 'PROBE', 'Path', 'SimpleNamespace', 'ThreadOutput', 'ThreadPoolExecutor', 'checking', 'connect', 'get_ident', 'io', 'isolated_provider_environment', 'json', 'local_setup', 'os', 'plan', 'proof', 'pytest', 'quick_cli', 'snapshot', 'subprocess', 'sys', 'terminal', 'test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes', 'test_g12_catalog_lock_free_during_input_and_old_profile_released_after_customize', 'test_g12_profile_guard_busy_fails_fast_then_same_review_recovers', 'time']

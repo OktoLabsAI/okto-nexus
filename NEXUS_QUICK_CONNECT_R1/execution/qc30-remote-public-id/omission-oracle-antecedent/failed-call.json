@@ -1,0 +1,7 @@
+{
+  "nodeid": "tests/execution_r4/test_qc30_remote_public_id.py::test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects",
+  "when": "call",
+  "outcome": "failed",
+  "duration": 0.6786815000232309,
+  "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc30-remote-id-swftyxe_\\after\\tests\\execution_r4\\test_qc30_remote_public_id.py:73: in test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects\n    assert quick['execution_location']=='remote' and quick['project_root'] is None\n                                                     ^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: 'project_root'"
+}

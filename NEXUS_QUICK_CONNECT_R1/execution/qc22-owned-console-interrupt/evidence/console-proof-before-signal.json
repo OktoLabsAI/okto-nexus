@@ -1,0 +1,35 @@
+{
+  "stage": "before-signal",
+  "members": [
+    49620,
+    49916,
+    56800
+  ],
+  "proofs": [
+    {
+      "pid": 49620,
+      "parent_pid": null,
+      "birth_filetime": 134393788985481317,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+      "alive": true
+    },
+    {
+      "pid": 49916,
+      "parent_pid": null,
+      "birth_filetime": 134393788986423756,
+      "image": "C:\\Python313\\python.exe",
+      "alive": true
+    },
+    {
+      "pid": 56800,
+      "parent_pid": null,
+      "birth_filetime": 134393789034350012,
+      "image": "C:\\Python313\\python.exe",
+      "alive": true
+    }
+  ],
+  "window": {
+    "hwnd": 35784254,
+    "visible": false
+  }
+}

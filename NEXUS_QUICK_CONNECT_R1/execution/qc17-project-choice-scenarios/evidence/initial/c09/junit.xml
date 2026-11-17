@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="12.016" timestamp="2026-11-17T05:16:18.587647-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_quick_connect_project_scenarios" name="test_c09_other_mapped_project_root_requires_explicit_tty_choice" time="9.959"><failure message="KeyError: 'canonical_reference'">C:\Users\jpamb\AppData\Local\Temp\nexus-qc17-projects-adfkhdps\after\tests\quick_connect\test_quick_connect_project_scenarios.py:102: in test_c09_other_mapped_project_root_requires_explicit_tty_choice
+    assert result['quick_connect']['canonical_reference'] == second['quick_connect']['canonical_reference']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'canonical_reference'</failure></testcase></testsuite></testsuites>

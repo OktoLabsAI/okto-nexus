@@ -1,5 +1,4 @@
 """Project setup from the terminal, with a retained review and canonical receipt."""
-import argparse
 from copy import deepcopy
 import hashlib
 import json
@@ -29,6 +28,10 @@ def project_profile(project, explicit_profile):
 
 def saved_selection(saved, args, project):
     selection = dict(saved['selection'])
+    if (getattr(args, 'connect_id', None) is not None
+            and selection.get('public_connection', {}).get('connect_id') != args.connect_id
+            or getattr(args, 'project_name', None) is not None and selection.get('label') != args.project_name):
+        raise ConnectionError('PROFILE_CONFLICT', 'The explicit project name or Harness ID conflicts with this retained connection.')
     supplied = {key: getattr(args, key) for key in ('agent', 'client', 'workspace_id', 'binding_id', 'candidate_ref', 'provider_home')}
     if args.agent is not None and saved['state'] != 'done':
         supplied['create_agent'] = False
@@ -58,9 +61,14 @@ def saved_selection(saved, args, project):
 
 def _display(value, as_json):
     if as_json:
+        from .quick_connect_outcome import public_wire
+        value = public_wire(value)
         print(json.dumps(value, ensure_ascii=False))
         return
-    if value.get('profile'):
+    from .quick_connect_outcome import display_public
+    if display_public(value):
+        return
+    if value.get('profile') and not value.get('quick_connect'):
         print('Connection shortcut: ' + value['profile'])
     if value.get('canonical_metadata_revalidation_requested'):
         print('Canonical metadata revalidation was requested; existing revision metadata may change.')
@@ -83,6 +91,13 @@ def _display(value, as_json):
             print('Identity and workspace are committed, but this client did not confirm receiving the one-shot key.')
             print('The Server cannot recover its plaintext. Import a copy you retained, or inspect this partial setup; no rotation was performed.')
         print('No project task was submitted.')
+    elif value.get('state') == 'review' and value.get('kind') == 'public_id_association':
+        selection = value['selection']
+        print(f"Project: {selection['label']} | Harness: {selection['client']}")
+        print('ID do Harness (proposed): ' + selection['public_connection']['connect_id'])
+        for effect in value['effects']:
+            print('- ' + effect)
+        print('Review revision: ' + value['review_revision'])
     elif value.get('state') == 'review':
         request = value['request']
         config = request['configuration']
@@ -96,6 +111,12 @@ def _display(value, as_json):
             print(f"Communication limits: {limits['messages_per_minute']} messages/minute; {limits['max_recipients']} recipients.")
         print(f"Project: {config['workspace_root']}")
         print(f"Workspace: {request['workspace_id'] or 'create ' + config['workspace_label']}")
+        if value['selection'].get('quick_connect'):
+            quick = value['selection']['quick_connect']
+            print('ID do Harness (proposed): ' + request['public_connection']['connect_id'])
+            print('Project name source: ' + quick['project_name_source'])
+            print('Invocation directory: ' + quick['cwd_resolution']['invocation_cwd'])
+            print('Execution host: ' + request['executor_id'])
         print(f"Provider home: {config['provider_home'] or 'harness default'}")
         if value['version_check_required']:
             print('The selected executable will run its version check before the connection test.')
@@ -122,62 +143,61 @@ def _display(value, as_json):
 
 
 def run_connect(argv):
-    mode_parser = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
-    mode_parser.add_argument('--mode', choices=('managed', 'participant'), default='managed')
-    mode, argv = mode_parser.parse_known_args(argv)
-    if mode.mode == 'participant':
-        from .participant import run_participant
-        return run_participant(argv)
-    parser = argparse.ArgumentParser(prog='okto-nexus connect',
-        description='Review and connect this local project using the canonical managed setup.')
-    parser.add_argument('--profile', help='saved local project profile name')
-    parser.add_argument('--new-connection', action='store_true',
-        help='explicitly add another connection without replacing an existing profile')
-    parser.add_argument('--operator-profile', help='use this saved human operator profile on a remote Server')
-    parser.add_argument('--remote-draft', type=Path,
-        help='review a remote host draft exported by Connector connect --setup-draft')
-    parser.add_argument('--setup-receipt-output', type=Path,
-        help='export the public remote host handoff here (contains no key)')
-    parser.add_argument('--review-current', action='store_true',
-        help='explicitly refresh a pending remote setup review while retaining its original bootstrap')
-    startup = parser.add_mutually_exclusive_group()
-    startup.add_argument('--start-at-login', dest='start_at_login', action='store_true', default=None,
-        help='include user login startup and controlled supervisor transition in this review')
-    startup.add_argument('--no-start-at-login', dest='start_at_login', action='store_false',
-        help='omit login startup from an unapproved review; existing integrations are preserved')
-    identity = parser.add_mutually_exclusive_group()
-    identity.add_argument('--agent', help='reuse this authorized existing canonical agent ID')
-    identity.add_argument('--new-agent', help='propose this unused ID instead of generating a new project identity ID')
-    parser.add_argument('--name', help='display name for the new project identity')
-    parser.add_argument('--client', choices=['codex', 'claude', 'pi'])
-    parser.add_argument('--project', type=Path)
-    parser.add_argument('--workspace-id')
-    parser.add_argument('--binding-id')
-    parser.add_argument('--candidate-ref')
-    parser.add_argument('--provider-home')
-    parser.add_argument('--plan', action='store_true', help='save/show the review without starting service, probes or model turns')
-    parser.add_argument('--approve', help='apply the exact displayed review revision')
-    parser.add_argument('--json', action='store_true')
-    parser.add_argument('--no-chat', action='store_true', help='return after connection setup, without entering interactive project work')
-    parser.add_argument('--timeout', type=float, default=300, help='maximum test observation time; does not cancel execution')
-    args, service_args = parser.parse_known_args(argv)
-    if args.plan and args.approve:
-        parser.error('--plan and --approve are mutually exclusive')
-    if args.review_current and args.approve:
-        parser.error('--review-current shows a new review; approve its exact revision in a later command')
-    if args.agent and args.name:
-        parser.error('--name is for a new identity; existing names are preserved')
-    if not 0 < args.timeout <= 300:
-        parser.error('--timeout must be greater than 0 and at most 300 seconds')
+    from .quick_connect_customize import ReviewRestart
+    invocation_cwd = frozen_name = None
+    while True:
+        try:
+            return _run_connect_once(argv, invocation_cwd=invocation_cwd, frozen_name=frozen_name)
+        except ReviewRestart as restart:
+            argv, invocation_cwd, frozen_name = restart.argv, restart.invocation_cwd, restart.frozen_name
+
+
+def _quick_entry_requested(args):
+    # Public syntax opts in explicitly. Legacy selectors keep their old flow;
+    # a retained Quick checkpoint is handled after the exact profile is read.
+    if args.harness or args.project_name or args.connect_id:
+        return True
+    legacy = ('profile', 'project', 'client', 'agent', 'new_agent', 'name',
+        'workspace_id', 'binding_id', 'candidate_ref', 'provider_home',
+        'operator_profile', 'remote_draft', 'setup_receipt_output', 'approve')
+    return not (any(getattr(args, key, None) is not None for key in legacy)
+        or args.new_connection or args.review_current)
+
+
+def _run_connect_once(argv, *, invocation_cwd=None, frozen_name=None):
+    from .connect_arguments import parse_connect_args, parse_mode
+    try:
+        mode, remaining = parse_mode(argv)
+        if mode == 'participant':
+            from .participant import run_participant
+            return run_participant(remaining)
+        args, service_args = parse_connect_args(remaining)
+    except SystemExit as error:
+        if error.code and '--json' in argv:
+            _display(dict(state='refused', code='INVALID_ARGUMENTS',
+                message='Invalid connect arguments. Use connect --help.',
+                effects_started=False, lifecycle_requested=False), True)
+            return int(error.code)
+        raise
+    from .quick_connect_policy import entry_enabled
+    enabled = entry_enabled()
+    if not enabled and (args.harness or args.project_name or args.connect_id):
+        _display(dict(state='refused', code='QUICK_CONNECT_DISABLED',
+            message='Quick Connect entry is disabled; existing profiles remain available.',
+            effects_started=False, lifecycle_requested=False), args.json)
+        return 3
     if args.new_connection and not args.profile and (args.json or not sys.stdin.isatty()):
         _display(dict(state='selection_required', reason='new_connection_requires_profile',
             effects_started=False, lifecycle_requested=False, choices=[]), args.json)
         return 3
-    guard = checkpoint = reservation = selected_choice = None
+    guard = checkpoint = reservation = selected_choice = quick_prepared = quick_previous = None
+    quick_operation = None
+    quick_enabled = enabled and _quick_entry_requested(args)
     canonical_metadata = False
     try:
         from .terminal_target import resolve_terminal_target, terminal_target_selection
-        project, profile = project_profile(args.project, args.profile)
+        invocation_cwd = invocation_cwd or str(Path.cwd())  # Capture once, including across customization.
+        project, profile = project_profile(args.project or Path(invocation_cwd), args.profile)
         if args.new_connection:
             _, remote_operator = terminal_target_selection(service_args, profile, args.operator_profile)
             if remote_operator:
@@ -199,6 +219,7 @@ def run_connect(argv):
             atomic_json(target, value)
             checkpoint = deepcopy(value)
         prior = read_json(target) if target.exists() else None
+        quick_enabled = quick_enabled or bool(args.profile and (prior or {}).get('selection', {}).get('quick_connect'))
         checkpoint = prior
         status = None
         if (args.profile and not args.plan and prior and prior.get('login_start_operation', {}).get('state') in ('pending', 'installed')):
@@ -216,7 +237,48 @@ def run_connect(argv):
         if status['state'] != 'ready':
             _display({'state': 'service_not_ready', 'service': status}, args.json)
             return 3
-        if not hasattr(service, 'operator_profile') and not args.profile:
+        if quick_enabled:
+            canonical_metadata = True
+            from .quick_connect_selection import prepare
+            call = service.operator_http if hasattr(service, 'operator_profile') else LocalOperatorHTTP(
+                host=service.adapter.host, port=service.adapter.port)
+            if hasattr(service, 'operator_profile'):
+                from .quick_connect_selection import prepare_remote
+                prepare_choice = prepare_remote
+            else:
+                prepare_choice = prepare
+            own_saved = prior
+            if not args.profile and prior and prior.get('state') in ('done', 'superseded'):
+                own_saved = None  # The basic flow offers resume/add, not implicit profile priority.
+            if args.new_connection and not args.profile:
+                own_saved = None
+                profile = 'connection-' + uuid.uuid4().hex[:24]
+            if not hasattr(service, 'operator_profile') and not own_saved and (not prior or prior.get('state') not in ('done', 'superseded')):
+                from .connection_reservation import read_reservation
+                retained = read_reservation(service.adapter.home, profile)
+                if retained and retained.get('selection', {}).get('quick_connect'):
+                    own_saved = dict(state='reserved', server_id=retained['server_id'], selection=retained['selection'])
+            quick_prepared = prepare_choice(call, args, root=project, invocation_cwd=invocation_cwd,
+                saved=own_saved, interactive=sys.stdin.isatty() and not args.json, read=input, frozen_name=frozen_name)
+            project = quick_prepared['selection']['project']
+            if not args.profile and quick_prepared['action'] in ('resume', 'associate'):
+                binding = quick_prepared['selection']['binding_id']
+                prior_binding = (prior or {}).get('result', {}).get('binding', {}).get('binding_id')
+                if prior_binding != binding:
+                    key = [quick_prepared['server_id'], quick_prepared['selection']['agent'], binding, project]
+                    profile = 'canonical-' + hashlib.sha256(json.dumps(key, separators=(',', ':')).encode()).hexdigest()[:24]
+            if quick_prepared['action'] == 'new':
+                if not args.profile and prior and prior.get('state') in ('done', 'superseded'):
+                    profile = 'connection-' + uuid.uuid4().hex[:24]
+                args.new_connection = True
+            if quick_prepared['action'] == 'resume':
+                args.client = quick_prepared['selection']['client']  # Explicit collision choice may use another harness.
+            args.profile = profile
+            target = directory / (profile + '.json')
+            prior = read_json(target) if target.exists() else None
+            checkpoint = prior
+            quick_operation = 'reused' if prior and prior.get('state') == 'done' else None
+        if not quick_enabled and not hasattr(service, 'operator_profile') and not args.profile:
             from .connection_choices import ConnectionChoiceScope, list_connection_choices, ConnectionChoiceCatalog, ChoiceIssue
             from .connection_picker import pick_connection, selection_required
             if args.new_connection and (args.json or not sys.stdin.isatty()):
@@ -271,6 +333,16 @@ def run_connect(argv):
         checkpoint = saved
         from .connection_reservation import read_reservation, reserve_connection
         reservation = read_reservation(service.adapter.home, profile) if not hasattr(service, 'operator_profile') else None
+        if quick_prepared and quick_prepared['action'] == 'associate':
+            quick_previous, saved, reservation = saved, None, None
+        elif quick_prepared and quick_prepared['action'] == 'resume' and saved:
+            binding = saved.get('result', {}).get('binding', {}).get('binding_id')
+            prepared_selection = quick_prepared['selection']
+            if binding != prepared_selection['binding_id'] or saved['selection']['agent'] != prepared_selection['agent']:
+                raise ConnectionError('PROFILE_CONFLICT', 'The saved shortcut belongs to another connection.')
+            saved = deepcopy(saved)
+            saved['selection'].update(public_connection=prepared_selection['public_connection'],
+                quick_connect=prepared_selection['quick_connect'])
         if selected_choice is not None and selected_choice.canonical_ref is not None and not saved:
             if reservation is not None:
                 raise ConnectionError('PROFILE_CONFLICT', 'The canonical shortcut name is reserved by another local intent.')
@@ -310,13 +382,13 @@ def run_connect(argv):
         elif saved:
             selection = saved_selection(saved, args, project)
         else:
-            if (hasattr(service, 'operator_profile') and not args.remote_draft
+            if (not quick_prepared and hasattr(service, 'operator_profile') and not args.remote_draft
                     and (not args.agent or not args.binding_id or args.new_agent)):
                 raise ConnectionError('REMOTE_BINDING_REQUIRED', 'Select --agent and --binding-id for an existing approved remote connection. Connector onboarding remains on its execution host.')
             label = Path(project).name or 'Project'
             slug = re.sub(r'[^a-z0-9]+', '-', label.lower()).strip('-')[:40] or 'project'
             agent = args.agent or args.new_agent or slug + '-' + uuid.uuid4().hex[:12]
-            selection = dict(agent=agent, client=args.client, project=project, label=Path(project).name or 'Project',
+            selection = quick_prepared['selection'] if quick_prepared is not None else dict(agent=agent, client=args.client, project=project, label=Path(project).name or 'Project',
                 workspace_id=args.workspace_id, binding_id=args.binding_id, candidate_ref=args.candidate_ref,
                 provider_home=args.provider_home, create_agent=args.agent is None, display_name=args.name)
             if hasattr(service, 'operator_profile'):
@@ -324,7 +396,7 @@ def run_connect(argv):
                 if args.remote_draft:
                     from .remote_setup_io import read_draft
                     selection['remote_draft'] = read_draft(args.remote_draft)
-        if args.new_connection and reservation is None and not saved and not selection.get('workspace_id'):
+        if not quick_enabled and args.new_connection and reservation is None and not saved and not selection.get('workspace_id'):
             from .connection_choices import ConnectionChoiceScope, list_connection_choices
             from .connection_project import project_workspace_choices, pick_project_workspace
             call = LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port)
@@ -388,12 +460,12 @@ def run_connect(argv):
         elif hasattr(service, 'operator_profile') or saved and saved.get('remote_scope'):
             call = service.operator_http if hasattr(service, 'operator_profile') else LocalOperatorHTTP(
                 host=service.adapter.host, port=service.adapter.port)
-            flow = RemoteTerminalConnection(call, lambda value: atomic_json(target, value))
+            flow = RemoteTerminalConnection(call, save)
         else:
             def save_local_setup(value):
                 if reservation is not None and value.get('server_id') != reservation['server_id']:
                     raise ConnectionError('SERVER_ID_MISMATCH', 'The Server changed after the addition was reserved.')
-                atomic_json(target, value)
+                save(value)
             flow = TerminalConnection(LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port),
                                       save_local_setup)
         recovered_review = bool(remote_setup and saved and saved['state'] == 'review_submitted')
@@ -405,7 +477,7 @@ def run_connect(argv):
             saved = flow.review(selection, previous=saved)
         elif not saved:
             try:
-                saved = flow.review(selection)
+                saved = flow.review_public_association(selection, previous=quick_previous) if quick_prepared and quick_prepared['action'] == 'associate' else flow.review(selection)
             except ConnectionError as error:
                 if (error.code != 'CLIENT_SELECTION_REQUIRED' or not error.choices
                         or args.json or not sys.stdin.isatty() or remote_setup
@@ -421,6 +493,22 @@ def run_connect(argv):
                 saved = flow.review(selection)
             if saved['state'] == 'configured':
                 saved = read_json(target)  # Reused bindings can still review local startup.
+        if quick_enabled and saved['state'] == 'done':
+            summary = flow.observe(saved)
+            save(saved)  # Additive shortcut metadata, after exact canonical revalidation.
+        if quick_enabled and saved['state'] == 'done' and not args.plan and not args.json and sys.stdin.isatty():
+            public = summary.get('public_connection')
+            if public:
+                print(f"Retomar {selection['client']} — ID do Harness: {public['connect_id']} | Project: {selection['label']}")
+                print('No model test, grant renewal or new session will be submitted.')
+                try:
+                    resume_answer = input('Confirm resume? [y/N] ').strip().lower()
+                except EOFError:
+                    resume_answer = ''
+                if resume_answer != 'y':
+                    _display(dict(state='canceled', lifecycle_requested=not args.plan,
+                        canonical_metadata_revalidation_requested=True, effects_started=None), args.json)
+                    return 0
         if saved['state'] == 'done':
             result = flow.observe(saved)
         elif args.plan or args.review_current or recovered_review:
@@ -430,12 +518,33 @@ def run_connect(argv):
                 service.adapter.check_login_start_review(connect_login.selected(saved))
             approval = args.approve
             if saved['state'] == 'review' and not approval:
-                _display(saved, args.json)
+                from .quick_connect_outcome import annotate
+                _display(annotate(saved, saved, profile=profile, home=service.adapter.home), args.json)
                 if args.json or not sys.stdin.isatty():
                     return 3
                 prompt = ('Apply this remote project review? [y/N] ' if remote_setup
-                    else 'Apply this review, including the model connection test? [y/N] ')
-                if input(prompt).strip().lower() != 'y':
+                    else 'Associate this Harness ID with the existing connection? [y/N] ' if saved.get('kind') == 'public_id_association'
+                    else 'Confirm this review, including the model connection test? [y/N] ')
+                if quick_enabled:
+                    prompt = prompt.replace('[y/N]', '[y/customize/cancel]')
+                try:
+                    answer = input(prompt).strip().lower()
+                except EOFError:
+                    answer = ''
+                if quick_enabled and answer in ('customize', 'p', 'personalizar'):
+                    from .quick_connect_customize import customize
+                    restart = customize(args, service_args, saved, invocation_cwd=invocation_cwd, read=input)
+                    if restart is None:
+                        _display(dict(state='canceled', lifecycle_requested=not args.plan,
+                            canonical_metadata_revalidation_requested=canonical_metadata, effects_started=None), args.json)
+                        return 0
+                    saved['state'] = 'superseded'
+                    saved['superseded_by_profile'] = next(restart.argv[i + 1] for i, value in enumerate(restart.argv) if value == '--profile')
+                    save(saved)
+                    raise restart  # finally releases the old profile lock before another is acquired.
+                if answer != 'y':
+                    _display(dict(state='canceled', lifecycle_requested=not args.plan,
+                        canonical_metadata_revalidation_requested=canonical_metadata, effects_started=None), args.json)
                     return 0
                 approval = saved['review_revision']
             result = flow.apply(saved, approval=approval, timeout=args.timeout)
@@ -466,6 +575,10 @@ def run_connect(argv):
             result['handoff_path'] = handoff_path
         if reservation is not None:
             result = dict(result, profile=profile)
+        if quick_enabled:
+            from .quick_connect_outcome import annotate
+            result = annotate(result, saved, profile=profile, home=service.adapter.home,
+                plan=args.plan, operation=quick_operation)
         _display(result, args.json)
         if result['state'] == 'configured' and not args.plan and not args.json and not args.no_chat and sys.stdin.isatty():
             from .work import interactive_work
@@ -474,15 +587,30 @@ def run_connect(argv):
     except KeyboardInterrupt:
         return 130  # The service and any submitted test retain ownership.
     except (ConnectionError, OktoNexusError, LockBusy, OSError, ValueError, KeyError, TypeError) as error:
+        if getattr(error, 'code', None) == 'CONNECT_CANCELLED':
+            _display(dict(state='canceled', effects_started=None if not args.plan or canonical_metadata else False,
+                lifecycle_requested=not args.plan, canonical_metadata_revalidation_requested=canonical_metadata), args.json)
+            return 0
         pending_effect = (isinstance(checkpoint, dict) and checkpoint.get('kind') == 'remote_project_setup'
             and checkpoint.get('state') in ('bootstrap_submitted', 'decision_submitted'))
         possible_effect = bool(getattr(error, 'possible_effect', False) or pending_effect)
-        _display({'state': 'unconfirmed' if possible_effect else 'refused',
+        partial = getattr(error, 'code', None) == 'CONFIGURED_SHORTCUT_PENDING'
+        needs_selection = getattr(error, 'code', None) in ('CLIENT_SELECTION_REQUIRED', 'INSTALLATION_SELECTION_REQUIRED',
+            'PROJECT_SELECTION_REQUIRED', 'HARNESS_ID_SELECTION_REQUIRED', 'CONNECTION_SELECTION_REQUIRED')
+        value = {'state': 'configured_shortcut_pending' if partial else 'unconfirmed' if possible_effect else 'selection_required' if needs_selection else 'refused',
                   'code': getattr(error, 'code', 'PROFILE_BUSY' if isinstance(error, LockBusy) else 'CONFIG_ERROR'),
                   'message': getattr(error, 'message', getattr(error, 'action', 'Inspect the selected service and saved profile before continuing.')),
                   'possible_effect': possible_effect,
                   **({'effects_started': None, 'canonical_metadata_revalidation_requested': True} if canonical_metadata else {}),
-                  **({'profile': profile} if reservation is not None else {})}, args.json)
+                  **({'profile': profile} if reservation is not None else {})}
+        if getattr(error, 'choices', None) is not None:
+            value['choices'] = error.choices
+        if partial and getattr(error, 'committed_public_connection', None):
+            value['public_connection'] = error.committed_public_connection
+        if quick_enabled and checkpoint and checkpoint.get('selection', {}).get('quick_connect'):
+            from .quick_connect_outcome import annotate
+            value = annotate(value, checkpoint, profile=profile, home=service.adapter.home, operation=quick_operation)
+        _display(value, args.json)
         return 3
     finally:
         if guard is not None:

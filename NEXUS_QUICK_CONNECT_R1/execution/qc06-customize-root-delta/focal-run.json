@@ -1,0 +1,32 @@
+{
+  "exit_code": 0,
+  "duration_seconds": 1.9005611999891698,
+  "argv": [
+    "C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\src');import okto_nexus;print(\"SOURCE_PROVENANCE\",sys.executable,okto_nexus.__file__,flush=True);import pytest;raise SystemExit(pytest.main([\"-q\",\"tests/quick_connect/test_quick_connect_customize.py\"]))"
+  ],
+  "source_before": {
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_customize.py": "63499c6324708b0ae5ad7c39f52ba40331163c2a36e9ede8676ea4de7cb50fca",
+    "src/okto_nexus/adapters/inbound/cli/connect_arguments.py": "9ba2169ef628c8eb9b16a378e15d194faf01b65e03fe1963b125d7d9e39b4cae",
+    "src/okto_nexus/adapters/inbound/cli/connect.py": "ce55b0bede9ef32f7f2bde52e770c2a7fc8dc36a0cd7c7fa0a4d862c7515d923",
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_outcome.py": "5ebbe3dc2dc9dc0365bdd8bffbdc97be2b22fabc822076af0ab71b72db34a69a",
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_selection.py": "e37d4fe130130596d7eddf2210c3427cfd2b6bc282e361f45c7e97af8bd27c5a",
+    "tests/quick_connect/test_quick_connect_customize.py": "82ecc00e3d2ca02956d96e63ce1eaf392c1ea9ecba7be9b3cf2b6b67303378fc",
+    "src/okto_nexus/application/terminal_connection.py": "1f607e5a3e8faeb9d87981ee3231d0e66151a2efbe60ae539effa7fe052cde3c"
+  },
+  "source_after": {
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_customize.py": "63499c6324708b0ae5ad7c39f52ba40331163c2a36e9ede8676ea4de7cb50fca",
+    "src/okto_nexus/adapters/inbound/cli/connect_arguments.py": "9ba2169ef628c8eb9b16a378e15d194faf01b65e03fe1963b125d7d9e39b4cae",
+    "src/okto_nexus/adapters/inbound/cli/connect.py": "ce55b0bede9ef32f7f2bde52e770c2a7fc8dc36a0cd7c7fa0a4d862c7515d923",
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_outcome.py": "5ebbe3dc2dc9dc0365bdd8bffbdc97be2b22fabc822076af0ab71b72db34a69a",
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_selection.py": "e37d4fe130130596d7eddf2210c3427cfd2b6bc282e361f45c7e97af8bd27c5a",
+    "tests/quick_connect/test_quick_connect_customize.py": "82ecc00e3d2ca02956d96e63ce1eaf392c1ea9ecba7be9b3cf2b6b67303378fc",
+    "src/okto_nexus/application/terminal_connection.py": "1f607e5a3e8faeb9d87981ee3231d0e66151a2efbe60ae539effa7fe052cde3c"
+  },
+  "source_drift": []
+}

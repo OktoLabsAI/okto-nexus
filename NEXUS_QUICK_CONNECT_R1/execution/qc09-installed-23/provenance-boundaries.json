@@ -1,0 +1,112 @@
+{
+  "scope": "Static read-only subprocess provenance audit of shard2/3; not observed child module.__file__ tracing",
+  "parent": "Pytest origin guard verifies all loaded modules of three application families originate inside frozen installed prefix at sessionstart/sessionfinish",
+  "child_exception": "Some unchanged legacy tests explicitly prepend checkout src to child PYTHONPATH. Their results do not prove installed-child isolation. Original full-suite campaign is not modified or normalized retroactively.",
+  "authorization": "Root explicitly authorized continuing original source-child regression with isolated homes, PATH and zero provider credentials; no source edits/shim in flight.",
+  "expected_installed_child_exception": "test_canonical_owner_process derives package root from imported okto_nexus.__file__; parent origin is installed",
+  "windows_note": "test_linux_process_ownership is Linux-specific and should be skipped here; inspect final XML, not assumed PASS",
+  "items": [
+    {
+      "path": "tests/execution_r4/test_agent_recovery_isolation.py",
+      "sha256": "da7fb517e8e46ec9ba260ec153b3f79714d8db9d758bc9eee24d63ddf68c8549",
+      "source_lines": [
+        {
+          "line": 423,
+          "text": "env = dict(os.environ, PYTHONPATH=os.pathsep.join(["
+        }
+      ]
+    },
+    {
+      "path": "tests/test_multiprocess.py",
+      "sha256": "e0894c2022bbf6133bec3e7c425b2c28a8c654961de78148f4873d2c08e240b9",
+      "source_lines": [
+        {
+          "line": 186,
+          "text": "repo's ``src/`` on PYTHONPATH so every process imports ONE source tree."
+        },
+        {
+          "line": 198,
+          "text": "existing = env.get(\"PYTHONPATH\")"
+        },
+        {
+          "line": 199,
+          "text": "env[\"PYTHONPATH\"] = src if not existing else src + os.pathsep + existing"
+        }
+      ]
+    },
+    {
+      "path": "tests/test_pr34_remediation.py",
+      "sha256": "e836e561ed403a26c6a9db369d4bad3ee3248fc9916ba5e5248aaeea2355b9a2",
+      "source_lines": [
+        {
+          "line": 164,
+          "text": "env[\"PYTHONPATH\"] = str(Path(__file__).resolve().parents[1] / \"src\")"
+        }
+      ]
+    },
+    {
+      "path": "tests/test_runtime_process_ownership.py",
+      "sha256": "1400f571efe6893376af7a763b2548c562a47538f625ca2ae7deddc4d0c37312",
+      "source_lines": [
+        {
+          "line": 123,
+          "text": "environment[\"PYTHONPATH\"] = os.pathsep.join([str(Path(__file__).resolve().parents[1] / \"src\"), str(Path(__file__).resolve().parent)])"
+        }
+      ]
+    },
+    {
+      "path": "tests/test_runtime_relay_process_restart.py",
+      "sha256": "4a5810008692014b332e18d1510341370d02630e4b9527d023c0368992cda173",
+      "source_lines": [
+        {
+          "line": 29,
+          "text": "env.update(PYTHONPATH=os.pathsep.join([str(repo / \"src\"), str(repo / \"tests\")]),"
+        }
+      ]
+    },
+    {
+      "path": "tests/test_tokenizer.py",
+      "sha256": "d4e270e6379f107a91c5ba49fa61cf955affc119596381b156d23abe80886150",
+      "source_lines": [
+        {
+          "line": 168,
+          "text": "# The child must be able to import okto_nexus; point PYTHONPATH at the src"
+        },
+        {
+          "line": 173,
+          "text": "child_env = {**os.environ, \"PYTHONPATH\": src_root}"
+        }
+      ]
+    },
+    {
+      "path": "tests/test_dependency_light_tiktoken.py",
+      "sha256": "129c2699238f8d0042eb60c1a5a4f824a237599923718c0e9c22117f374eb46c",
+      "source_lines": [
+        {
+          "line": 74,
+          "text": "env = {**os.environ, \"PYTHONPATH\": str(SRC.parent)}"
+        }
+      ]
+    },
+    {
+      "path": "tests/test_linux_process_ownership.py",
+      "sha256": "86227b0378877cba4da98b621715923442cbf7eacca530fe7d648f6e0c660be4",
+      "source_lines": [
+        {
+          "line": 189,
+          "text": "env = {\"PATH\": os.defpath, \"PYTHONPATH\": os.pathsep.join([str(Path(__file__).resolve().parents[1] / \"src\"), str(Path(__file__).resolve().parent)])}"
+        }
+      ]
+    },
+    {
+      "path": "tests/execution_r4/test_canonical_owner_process.py",
+      "sha256": "bde2506d0dd50377071f7b524de46d861f3ec50f6f70007a650f13dbbfc0e876",
+      "source_lines": [
+        {
+          "line": 28,
+          "text": "PYTHONPATH=os.pathsep.join((str(Path(okto_nexus.__file__).resolve().parent.parent),"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="16.115" timestamp="2026-11-17T06:04:35.742913-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_qc25_concurrency_locks" name="test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes" time="11.176"><failure message="KeyError: 'error'">C:\Users\jpamb\AppData\Local\Temp\nexus-qc25-concurrency-2xaguvpm\after\tests\quick_connect\test_qc25_concurrency_locks.py:49: in test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes
+    inventory=c.t.call('GET','/api/v1/runtime-management/runtime/executors/'+executor+'/inventory')['snapshot']
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc25-concurrency-2xaguvpm\after\tests\execution_r4\test_terminal_connect.py:48: in call
+    error = value['error']
+            ^^^^^^^^^^^^^^
+E   KeyError: 'error'</failure></testcase></testsuite></testsuites>

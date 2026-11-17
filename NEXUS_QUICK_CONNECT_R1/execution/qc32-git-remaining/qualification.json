@@ -1,0 +1,112 @@
+{
+  "at": "2026-11-17T09:43:46.292419+00:00",
+  "status": "QUALIFIED_EIGHT_UNIQUE_CASES_IN_SEPARATE_CUTS",
+  "cuts": [
+    {
+      "label": "original-six-pass-help-oracle-fail",
+      "counts": {
+        "tests": 7,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 6
+      },
+      "exit_code": 1,
+      "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-git-remaining-hi6rd6jr",
+      "signals": [],
+      "all_observed_owned_processes_exited": true,
+      "payload_files": 1027,
+      "payload_drift": [],
+      "source_drift": []
+    },
+    {
+      "label": "detailed-help-plan-focal",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 1
+      },
+      "exit_code": 0,
+      "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-help-bare-dgty_zcj",
+      "signals": [],
+      "all_observed_owned_processes_exited": true,
+      "payload_files": 1027,
+      "payload_drift": [],
+      "source_drift": []
+    },
+    {
+      "label": "bare-exact-node-focal",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 1
+      },
+      "exit_code": 0,
+      "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-help-bare-dgty_zcj",
+      "signals": [],
+      "all_observed_owned_processes_exited": true,
+      "payload_files": 1027,
+      "payload_drift": [],
+      "source_drift": []
+    }
+  ],
+  "unique_passing_cases": [
+    "tests.quick_connect.test_git_remaining::test_dubious_ownership_diagnostic_never_changes_safe_directory",
+    "tests.quick_connect.test_git_remaining::test_explicit_project_reads_its_origin_while_cwd_stays_elsewhere",
+    "tests.quick_connect.test_git_remaining::test_origin_wins_over_other_remote_names",
+    "tests.quick_connect.test_git_remaining::test_reader_fault_reaches_cli_fallback_without_implicit_test[invalid-output-git_config_unavailable]",
+    "tests.quick_connect.test_git_remaining::test_reader_fault_reaches_cli_fallback_without_implicit_test[timeout-git_timeout]",
+    "tests.quick_connect.test_git_remaining::test_real_bare_repository_has_explicit_directory_fallback_not_origin_identity",
+    "tests.quick_connect.test_git_remaining::test_real_repository_help_and_plan_never_execute_git",
+    "tests.quick_connect.test_git_remaining::test_two_local_clones_same_origin_have_distinct_workspace_namespaces"
+  ],
+  "unique_passing_case_count": 8,
+  "not_a_single_eight_pass_round": true,
+  "source_commit": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "test_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-help-bare-dgty_zcj\\after\\tests\\quick_connect\\test_git_remaining.py",
+  "test_sha256": "77d0a7500ae35ad31a3a8068b430ac4a2430ff5eede66dd84c71dd54bd7a3dd8",
+  "proofs": [
+    "Valid origin determines the CLI proposal even with upstream/backup remotes; raw remote URLs are not printed and local config is unchanged.",
+    "Reader-only timeout and invalid-UTF8 substitutions produce specific CLI fallback metadata, without a model Test, grant or root change.",
+    "Two actual local clones of an owned source repo, configured with the same origin/name, require an explicit new-project choice and obtain distinct roots/workspaces/full canonical references. Both may use codex in their separate workspace namespaces.",
+    "The first clone profile remains byte-identical and all original protected configuration/identity/grant/registry rows survive the second Finish.",
+    "Explicit --project B reads B origin while captured CWD remains A; reviewed physical execution root stays B.",
+    "Controlled dubious-ownership reader failure becomes a specific safe fallback, without safe.directory override/global write or private diagnostic disclosure.",
+    "Detailed help and plan over a real repo never resolve or execute Git and create no Test/probe/authority effects; plan only inspects the fake existing service.",
+    "A real bare repo uses explicit directory/not_a_repository fallback, retains its physical CWD, ignores its origin as identity and applies no setup."
+  ],
+  "requirements_targeted": [
+    "D07",
+    "D10",
+    "D16",
+    "D19",
+    "D20",
+    "D23",
+    "D24"
+  ],
+  "oracle_antecedents": [
+    "Original help assertion mistakenly expected project-name instead of the actual argparse destination project_name. Only that help-text oracle changed; original failure remains.",
+    "The first focused -k expression selected help/plan only because it used an inaccurate bare-node name. XML showed one passing case, never two; the exact bare node then passed in its own cut.",
+    "All other helper/test function bodies are byte-identical between original and final files, verified by AST source-segment comparison."
+  ],
+  "ruff": "PASS default repository configuration",
+  "provider_calls": 0,
+  "all_observed_owned_processes_exited": true,
+  "signals": [],
+  "installed_payload_files": 1027,
+  "installed_payload_drift": [],
+  "source_drift": [],
+  "limitations": [
+    "Eight variations cover seven requested categories; no eight-pass single-run claim is made.",
+    "Input/isatty are scripted TTY branches over a closed-PIPE parent, not human or real-PTY acceptance.",
+    "Only _GitReader.run/_ReadFailure are substituted for timeout/invalid-output/dubious ownership; no authoritative project DTO is forged. Real subprocess timeout/output bounds remain separate prior unit evidence.",
+    "Local clones use only the explicit file protocol and owned source repository; HTTPS origins are local metadata text, never network requests.",
+    "Setup/version/Test/lifecycle boundaries are synthetic; canonical HTTP/SQLite and installed application code are real.",
+    "No user ownership change, safe.directory bypass, repository source/tests/docs, installed prefix, personal account/provider, Git/ledger or previous evidence was modified."
+  ]
+}

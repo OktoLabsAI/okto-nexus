@@ -1,0 +1,124 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 28 items
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[1-NEW-id] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[1-NEW-id]", "when": "setup", "outcome": "passed", "duration": 0.010875800042413175}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[1-NEW-id]", "when": "call", "outcome": "passed", "duration": 0.0028288000030443072}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[1-NEW-id]", "when": "teardown", "outcome": "passed", "duration": 0.0001669999910518527}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[2-New project] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[2-New project]", "when": "setup", "outcome": "passed", "duration": 0.0022613999899476767}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[2-New project]", "when": "call", "outcome": "passed", "duration": 0.0025086000096052885}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[2-New project]", "when": "teardown", "outcome": "passed", "duration": 0.00015759991947561502}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[3-CLAUDE] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[3-CLAUDE]", "when": "setup", "outcome": "passed", "duration": 0.0023306000512093306}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[3-CLAUDE]", "when": "call", "outcome": "passed", "duration": 0.002586800022982061}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[3-CLAUDE]", "when": "teardown", "outcome": "passed", "duration": 0.0001330999657511711}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[4-None] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[4-None]", "when": "setup", "outcome": "passed", "duration": 0.0022992000449448824}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[4-None]", "when": "call", "outcome": "passed", "duration": 0.0034667999716475606}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[4-None]", "when": "teardown", "outcome": "passed", "duration": 0.00010910001583397388}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_repeated_customization_does_not_reuse_generated_profile IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_repeated_customization_does_not_reuse_generated_profile", "when": "setup", "outcome": "passed", "duration": 0.0018993000267073512}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_repeated_customization_does_not_reuse_generated_profile", "when": "call", "outcome": "passed", "duration": 0.0027954999823123217}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_repeated_customization_does_not_reuse_generated_profile", "when": "teardown", "outcome": "passed", "duration": 0.00012590002734214067}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_explicit_name_is_retained_instead_of_git_rediscovery IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_explicit_name_is_retained_instead_of_git_rediscovery", "when": "setup", "outcome": "passed", "duration": 0.001873799948953092}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_explicit_name_is_retained_instead_of_git_rediscovery", "when": "call", "outcome": "passed", "duration": 0.001967600081115961}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_explicit_name_is_retained_instead_of_git_rediscovery", "when": "teardown", "outcome": "passed", "duration": 0.00012059998698532581}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_id_or_harness_change_preserves_previously_chosen_root_and_prepare_provenance[1-replacement] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_id_or_harness_change_preserves_previously_chosen_root_and_prepare_provenance[1-replacement]", "when": "setup", "outcome": "passed", "duration": 0.0020360000198706985}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_id_or_harness_change_preserves_previously_chosen_root_and_prepare_provenance[1-replacement]", "when": "call", "outcome": "passed", "duration": 0.019311000010930002}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_id_or_harness_change_preserves_previously_chosen_root_and_prepare_provenance[1-replacement]", "when": "teardown", "outcome": "passed", "duration": 0.00014239992015063763}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_id_or_harness_change_preserves_previously_chosen_root_and_prepare_provenance[3-claude] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_id_or_harness_change_preserves_previously_chosen_root_and_prepare_provenance[3-claude]", "when": "setup", "outcome": "passed", "duration": 0.00213939999230206}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_id_or_harness_change_preserves_previously_chosen_root_and_prepare_provenance[3-claude]", "when": "call", "outcome": "passed", "duration": 0.002886999980546534}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_id_or_harness_change_preserves_previously_chosen_root_and_prepare_provenance[3-claude]", "when": "teardown", "outcome": "passed", "duration": 0.00010649999603629112}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[2---workspace-id] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[2---workspace-id]", "when": "setup", "outcome": "passed", "duration": 0.0015887999907135963}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[2---workspace-id]", "when": "call", "outcome": "passed", "duration": 0.001006999984383583}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[2---workspace-id]", "when": "teardown", "outcome": "passed", "duration": 9.029998909682035e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[2---binding-id] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[2---binding-id]", "when": "setup", "outcome": "passed", "duration": 0.0019196999492123723}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[2---binding-id]", "when": "call", "outcome": "passed", "duration": 0.0009973000269383192}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[2---binding-id]", "when": "teardown", "outcome": "passed", "duration": 8.499994874000549e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[2---agent] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[2---agent]", "when": "setup", "outcome": "passed", "duration": 0.002256500069051981}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[2---agent]", "when": "call", "outcome": "passed", "duration": 0.0009691000450402498}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[2---agent]", "when": "teardown", "outcome": "passed", "duration": 9.14999982342124e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[4---workspace-id] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[4---workspace-id]", "when": "setup", "outcome": "passed", "duration": 0.0017111999914050102}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[4---workspace-id]", "when": "call", "outcome": "passed", "duration": 0.0009581999620422721}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[4---workspace-id]", "when": "teardown", "outcome": "passed", "duration": 9.220000356435776e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[4---binding-id] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[4---binding-id]", "when": "setup", "outcome": "passed", "duration": 0.0020311999833211303}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[4---binding-id]", "when": "call", "outcome": "passed", "duration": 0.0009452999802306294}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[4---binding-id]", "when": "teardown", "outcome": "passed", "duration": 8.739996701478958e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[4---agent] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[4---agent]", "when": "setup", "outcome": "passed", "duration": 0.0017997000832110643}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[4---agent]", "when": "call", "outcome": "passed", "duration": 0.0010222999844700098}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_exact_tuple_cannot_be_silently_retargeted[4---agent]", "when": "teardown", "outcome": "passed", "duration": 9.829993359744549e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_existing_identity_cannot_change_harness[--binding-id] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_existing_identity_cannot_change_harness[--binding-id]", "when": "setup", "outcome": "passed", "duration": 0.0016836998984217644}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_existing_identity_cannot_change_harness[--binding-id]", "when": "call", "outcome": "passed", "duration": 0.0009338000090792775}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_existing_identity_cannot_change_harness[--binding-id]", "when": "teardown", "outcome": "passed", "duration": 8.359993807971478e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_existing_identity_cannot_change_harness[--agent] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_existing_identity_cannot_change_harness[--agent]", "when": "setup", "outcome": "passed", "duration": 0.001805800013244152}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_existing_identity_cannot_change_harness[--agent]", "when": "call", "outcome": "passed", "duration": 0.001184099935926497}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_existing_identity_cannot_change_harness[--agent]", "when": "teardown", "outcome": "passed", "duration": 9.970006067305803e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_association_changes_only_public_id_and_retains_exact_identity IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_association_changes_only_public_id_and_retains_exact_identity", "when": "setup", "outcome": "passed", "duration": 0.001523100072517991}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_association_changes_only_public_id_and_retains_exact_identity", "when": "call", "outcome": "passed", "duration": 0.001676199957728386}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_association_changes_only_public_id_and_retains_exact_identity", "when": "teardown", "outcome": "passed", "duration": 7.700000423938036e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_cancel_does_not_create_profile_or_mutate_review[] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_cancel_does_not_create_profile_or_mutate_review[]", "when": "setup", "outcome": "passed", "duration": 0.001486700028181076}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_cancel_does_not_create_profile_or_mutate_review[]", "when": "call", "outcome": "passed", "duration": 0.0009925999911502004}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_cancel_does_not_create_profile_or_mutate_review[]", "when": "teardown", "outcome": "passed", "duration": 0.00010210007894784212}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_cancel_does_not_create_profile_or_mutate_review[c] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_cancel_does_not_create_profile_or_mutate_review[c]", "when": "setup", "outcome": "passed", "duration": 0.0017830000724643469}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_cancel_does_not_create_profile_or_mutate_review[c]", "when": "call", "outcome": "passed", "duration": 0.0009188000112771988}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_cancel_does_not_create_profile_or_mutate_review[c]", "when": "teardown", "outcome": "passed", "duration": 8.9599983766675e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_cancel_does_not_create_profile_or_mutate_review[C] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_cancel_does_not_create_profile_or_mutate_review[C]", "when": "setup", "outcome": "passed", "duration": 0.0018469999777153134}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_cancel_does_not_create_profile_or_mutate_review[C]", "when": "call", "outcome": "passed", "duration": 0.0009397000540047884}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_cancel_does_not_create_profile_or_mutate_review[C]", "when": "teardown", "outcome": "passed", "duration": 9.119999594986439e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_eof_before_or_after_field_selection_cancels IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_eof_before_or_after_field_selection_cancels", "when": "setup", "outcome": "passed", "duration": 0.0014143999433144927}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_eof_before_or_after_field_selection_cancels", "when": "call", "outcome": "passed", "duration": 0.0009307999862357974}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_eof_before_or_after_field_selection_cancels", "when": "teardown", "outcome": "passed", "duration": 7.71000050008297e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_invalid_values_do_not_mutate_review[1-../invalid] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_invalid_values_do_not_mutate_review[1-../invalid]", "when": "setup", "outcome": "passed", "duration": 0.0016653999919071794}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_invalid_values_do_not_mutate_review[1-../invalid]", "when": "call", "outcome": "passed", "duration": 0.0009732999606058002}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_invalid_values_do_not_mutate_review[1-../invalid]", "when": "teardown", "outcome": "passed", "duration": 9.699992369860411e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_invalid_values_do_not_mutate_review[2-] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_invalid_values_do_not_mutate_review[2-]", "when": "setup", "outcome": "passed", "duration": 0.0019778000423684716}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_invalid_values_do_not_mutate_review[2-]", "when": "call", "outcome": "passed", "duration": 0.0013725999742746353}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_invalid_values_do_not_mutate_review[2-]", "when": "teardown", "outcome": "passed", "duration": 9.850005153566599e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_invalid_values_do_not_mutate_review[2-bad\nname] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_invalid_values_do_not_mutate_review[2-bad\\nname]", "when": "setup", "outcome": "passed", "duration": 0.0019256999948993325}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_invalid_values_do_not_mutate_review[2-bad\\nname]", "when": "call", "outcome": "passed", "duration": 0.0010312999365851283}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_invalid_values_do_not_mutate_review[2-bad\\nname]", "when": "teardown", "outcome": "passed", "duration": 9.80000477284193e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_restart_trampoline_reenters_only_after_previous_invocation_unwinds IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_restart_trampoline_reenters_only_after_previous_invocation_unwinds", "when": "setup", "outcome": "passed", "duration": 0.00014309992548078299}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_restart_trampoline_reenters_only_after_previous_invocation_unwinds", "when": "call", "outcome": "passed", "duration": 0.03159069991670549}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_restart_trampoline_reenters_only_after_previous_invocation_unwinds", "when": "teardown", "outcome": "passed", "duration": 0.00011639995500445366}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_json_allowlist_does_not_expose_or_mutate_unknown_private_members IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_json_allowlist_does_not_expose_or_mutate_unknown_private_members", "when": "setup", "outcome": "passed", "duration": 0.0018693999154493213}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_json_allowlist_does_not_expose_or_mutate_unknown_private_members", "when": "call", "outcome": "passed", "duration": 0.000990200089290738}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_json_allowlist_does_not_expose_or_mutate_unknown_private_members", "when": "teardown", "outcome": "passed", "duration": 8.969998452812433e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_legacy_document_wire_is_unchanged IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_legacy_document_wire_is_unchanged", "when": "setup", "outcome": "passed", "duration": 0.000112100038677454}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_legacy_document_wire_is_unchanged", "when": "call", "outcome": "passed", "duration": 9.099999442696571e-05}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_legacy_document_wire_is_unchanged", "when": "teardown", "outcome": "passed", "duration": 6.410002242773771e-05}
+
+after\tests\quick_connect\test_quick_connect_customize.py::test_association_commit_retains_private_future_selection_without_echoing_it IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_association_commit_retains_private_future_selection_without_echoing_it", "when": "setup", "outcome": "passed", "duration": 0.00010269996710121632}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_association_commit_retains_private_future_selection_without_echoing_it", "when": "call", "outcome": "passed", "duration": 0.0003746999427676201}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_customize.py::test_association_commit_retains_private_future_selection_without_echoing_it", "when": "teardown", "outcome": "passed", "duration": 0.0001373999984934926}
+
+
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_customize\junit.xml -
+============================= 28 passed in 0.79s ==============================

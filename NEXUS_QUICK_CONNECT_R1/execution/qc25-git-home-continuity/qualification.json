@@ -1,0 +1,345 @@
+{
+  "status": "PASS_F24_D18_REGISTERED_CONNECTION_CONTINUITY_VARIANT",
+  "source_candidate": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "fixture_provenance": "QC12 git-complete case0, previously connected from Git origin logical-origin and resumed after origin changed to different-name. Original home/DB/root reused, not copied/rekeyed.",
+  "fixture": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\tmp\\pytest-of-unknown\\pytest-0\\test_origin_first_connect_and_0",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\tmp\\pytest-of-unknown\\pytest-0\\test_origin_first_connect_and_0\\home",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\tmp\\pytest-of-unknown\\pytest-0\\test_origin_first_connect_and_0\\workspace",
+  "original_server_id": "srv_8fd39ed3535a1679f5fd61207e3ff189",
+  "reference": {
+    "agent_id": "logical-origin-8fa97a7587f4",
+    "binding_id": "bind_8120aeebd683f8185deac2e8a37915dc",
+    "endpoint_id": "ep_3a88cec4171e3351622e533e727389f8",
+    "executor_id": "exe_e5d3beb45d6f3313bd795992e421098b",
+    "server_id": "srv_8fd39ed3535a1679f5fd61207e3ff189",
+    "workspace_binding_id": "wxb_1ce60854c5daa44a44dbb7f355db2069",
+    "workspace_id": "wsr_20e617a81d8c3c6f8b39ad77f747dd67"
+  },
+  "logical_name": "logical-origin",
+  "connect_id": "codex",
+  "browser": {
+    "engine": "Playwright CLI real Chrome, automated desktop1440x1100",
+    "session": "qc25-git-home",
+    "profile": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-continuity-wi9joyyc\\browser-profile",
+    "profile_personal": false,
+    "account_authentication": false,
+    "readonly_route": "Mutating browser methods aborted; no response fulfillment/DTO replacement.",
+    "dynamic_request_log_count": 126,
+    "dynamic_methods": [
+      "GET"
+    ],
+    "screenshots": [
+      "evidence/desktop-home.png",
+      "evidence/connection-context.png"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Old logical project stays selected",
+      "status": "PASS"
+    },
+    {
+      "name": "Same bound Harness ID visible after changed Git origin",
+      "status": "PASS",
+      "main": "Home\n\nFollow work, questions and deliveries.\n\nFollow each harness below. Open an activity to see its exact context, or add a harness to this project.\n\nNew request\nRefresh\nPause display\nProject\n\nlogical-origin\n\nChoose a project and follow its registered harnesses below.\n\nAdd harness\nChoose a project\nAll projects\nlogical-origin\nWork\n\nNot available\n\nActivities in this view\n\nSessions\n\nNot available\n\nSession contexts\n\nQuestions and updates\n\nNot available\n\nItems to review in this view\n\nResults\n\nNot available\n\nDeliveries in this view\n\nActive work, items needing you and retained results stay visible together. Each card keeps its linked sessions, questions and deliveries.\n\nSome information is incomplete or unavailable. Totals may be unknown; refresh before acting.\n\nFollow-up\nActive\nTotal unknown\nHarness ID: codex\n\nCollaborator: Codex \u2014 logical-origin\n\nCodex \u00b7 Host not reported\n\nRegistered harness\n\nUnknown questions and updates \u00b7 Unknown results \u00b7 Unknown work \u00b7 Unknown sessions \u00b7 Unknown external\n\nInspect execution\nReconnect\n\nIndividual reconnection is not available for this host.\n\nNeeds you\nTotal unknown\n\nTracking is incomplete or unavailable. Refresh to read this column.\n\nResults\nTotal unknown\n\nTracking is incomplete or unavailable. Refresh to read this column.\n\nSome activity has incomplete connection tracking. These are separate from harness cards.\n\nView other activity"
+    },
+    {
+      "name": "Basic navigation remains unchanged",
+      "status": "PASS",
+      "labels": [
+        "Home",
+        "Conversations",
+        "Graph",
+        "Artifacts"
+      ]
+    },
+    {
+      "name": "Real canonical GET /api/v1/home/harness-board",
+      "status": "PASS",
+      "http_status": 200
+    },
+    {
+      "name": "Home card retains the original canonical connection",
+      "status": "PASS",
+      "connection": {
+        "server_id": "srv_8fd39ed3535a1679f5fd61207e3ff189",
+        "executor_id": "exe_e5d3beb45d6f3313bd795992e421098b",
+        "workspace_id": "wsr_20e617a81d8c3c6f8b39ad77f747dd67",
+        "binding_id": "bind_8120aeebd683f8185deac2e8a37915dc",
+        "workspace_binding_id": "wxb_1ce60854c5daa44a44dbb7f355db2069",
+        "agent_id": "logical-origin-8fa97a7587f4",
+        "harness_id": "codex_app_server",
+        "workspace_label": "logical-origin",
+        "host_label": null,
+        "agent_label": "Codex \u2014 logical-origin",
+        "connect_id": "codex"
+      },
+      "board_status": "partial",
+      "source_status": {
+        "attention": "ready",
+        "work": "ready",
+        "results": "ready",
+        "connections": "ready",
+        "sessions": "ready",
+        "correlations": "ready",
+        "external": "disabled"
+      }
+    },
+    {
+      "name": "Real canonical GET /api/v1/runtime-management/connections/bindings/bind_8120aeebd683f8185deac2e8a37915dc",
+      "status": "PASS",
+      "http_status": 200
+    },
+    {
+      "name": "Binding GET retains all seven canonical fields",
+      "status": "PASS",
+      "reference": {
+        "agent_id": "logical-origin-8fa97a7587f4",
+        "binding_id": "bind_8120aeebd683f8185deac2e8a37915dc",
+        "endpoint_id": "ep_3a88cec4171e3351622e533e727389f8",
+        "executor_id": "exe_e5d3beb45d6f3313bd795992e421098b",
+        "server_id": "srv_8fd39ed3535a1679f5fd61207e3ff189",
+        "workspace_binding_id": "wxb_1ce60854c5daa44a44dbb7f355db2069",
+        "workspace_id": "wsr_20e617a81d8c3c6f8b39ad77f747dd67"
+      },
+      "state": "STALE"
+    },
+    {
+      "name": "Real canonical GET /api/v1/home/target",
+      "status": "PASS",
+      "http_status": 200
+    },
+    {
+      "name": "Original connection target remains available",
+      "status": "PASS",
+      "target": {
+        "kind": "connection",
+        "server_id": "srv_8fd39ed3535a1679f5fd61207e3ff189",
+        "executor_id": "exe_e5d3beb45d6f3313bd795992e421098b",
+        "workspace_id": "wsr_20e617a81d8c3c6f8b39ad77f747dd67",
+        "binding_id": "bind_8120aeebd683f8185deac2e8a37915dc",
+        "agent_id": "logical-origin-8fa97a7587f4"
+      },
+      "context": {
+        "server_id": "srv_8fd39ed3535a1679f5fd61207e3ff189",
+        "executor_id": "exe_e5d3beb45d6f3313bd795992e421098b",
+        "workspace_id": "wsr_20e617a81d8c3c6f8b39ad77f747dd67",
+        "binding_id": "bind_8120aeebd683f8185deac2e8a37915dc",
+        "workspace_binding_id": "wxb_1ce60854c5daa44a44dbb7f355db2069",
+        "agent_id": "logical-origin-8fa97a7587f4"
+      }
+    },
+    {
+      "name": "Inspect opens one passive context",
+      "status": "PASS",
+      "dialog": "Activity detail\nCodex \u2014 logical-origin\n\nActivity total unknown. Select an activity to review its canonical context.\n\nConnection\n\nUnknown\n\nView connection"
+    },
+    {
+      "name": "No mutating requests or frontend errors during focused observation",
+      "status": "PASS",
+      "pageErrors": [],
+      "consoleErrors": []
+    }
+  ],
+  "service": {
+    "start": {
+      "component": "server",
+      "instance_id": "svc_bbff79f4054a91c0dea3e775df19bb3f5fb25454a15537ffac7655035734f8df",
+      "installed_version": "0.3.6",
+      "active_version": "0.3.6",
+      "generation": "81802c1dedc7cfce4a8d96d3b936cbac",
+      "state": "ready",
+      "ready_for_queries": true,
+      "work_state": "not_checked",
+      "reason": null,
+      "next_action": null,
+      "effective_configuration": {
+        "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\tmp\\pytest-of-unknown\\pytest-0\\test_origin_first_connect_and_0\\home",
+        "database": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\tmp\\pytest-of-unknown\\pytest-0\\test_origin_first_connect_and_0\\home\\nexus.db",
+        "bind_host": "127.0.0.1",
+        "port": 63600
+      },
+      "pid": 59064,
+      "supervisor": "detached",
+      "protocol_revision": 1,
+      "storage_initialized": true,
+      "admission": "canonical_scope_checks_required"
+    },
+    "stop": {
+      "component": "server",
+      "instance_id": "svc_bbff79f4054a91c0dea3e775df19bb3f5fb25454a15537ffac7655035734f8df",
+      "installed_version": "0.3.6",
+      "active_version": null,
+      "generation": null,
+      "state": "stopped",
+      "ready_for_queries": false,
+      "work_state": "not_checked",
+      "reason": "SHUTDOWN_COMPLETE",
+      "next_action": null,
+      "effective_configuration": {
+        "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\tmp\\pytest-of-unknown\\pytest-0\\test_origin_first_connect_and_0\\home",
+        "database": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\tmp\\pytest-of-unknown\\pytest-0\\test_origin_first_connect_and_0\\home\\nexus.db",
+        "bind_host": "127.0.0.1",
+        "port": 63600
+      },
+      "shutdown_outcome": "drained"
+    },
+    "PATH_empty": true,
+    "own_environment_homes": true,
+    "canonical_lifecycle_only": true,
+    "installed_same_home": true,
+    "sql_repairs": false,
+    "leases_renewed_manually": false
+  },
+  "persistence": {
+    "comparison": {
+      "changed": [],
+      "sessions_before": 0,
+      "sessions_after": 0,
+      "payload_unchanged": true
+    },
+    "before": {
+      "execution_bindings": {
+        "count": 1,
+        "sha256": "2eae0cc83d80d31282d318adc9f630a47348005e27bd5ecaa9c8f7dd4478ee58"
+      },
+      "agent_endpoints": {
+        "count": 1,
+        "sha256": "3a286331301938798791a89e9098d12cb29b9ac583e3a16b782696c5a022f5be"
+      },
+      "runtime_execution_grants": {
+        "count": 1,
+        "sha256": "1bfd0ccdb3f002f69f82536b6690fd49d44f4f293aaea6be73f075f607effc03"
+      },
+      "connection_setup_commits": {
+        "count": 1,
+        "sha256": "2194e4904c68bac52c9eb2eb6a4e5b917471807a4774dff31aa99c9ba375ec28"
+      },
+      "connection_public_ids": {
+        "count": 1,
+        "sha256": "8f25a0ba24661c3f38c9a663c19da0dba65b83aa11698aae1d8ec032ab02b8c6"
+      },
+      "connection_project_drafts": {
+        "count": 1,
+        "sha256": "b17ebf884e7f5cc823377769d7a308c7f725a92134f732424c0a5134f777989b"
+      },
+      "execution_sessions": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "execution_operations": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "reference": {
+        "agent_id": "logical-origin-8fa97a7587f4",
+        "binding_id": "bind_8120aeebd683f8185deac2e8a37915dc",
+        "endpoint_id": "ep_3a88cec4171e3351622e533e727389f8",
+        "executor_id": "exe_e5d3beb45d6f3313bd795992e421098b",
+        "server_id": "srv_8fd39ed3535a1679f5fd61207e3ff189",
+        "workspace_binding_id": "wxb_1ce60854c5daa44a44dbb7f355db2069",
+        "workspace_id": "wsr_20e617a81d8c3c6f8b39ad77f747dd67"
+      },
+      "connect_id": "codex",
+      "workspaces": [
+        {
+          "workspace_id": "wsr_20e617a81d8c3c6f8b39ad77f747dd67",
+          "display_name": "logical-origin",
+          "root_realpath": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\tmp\\pytest-of-unknown\\pytest-0\\test_origin_first_connect_and_0\\workspace"
+        }
+      ]
+    },
+    "after": {
+      "execution_bindings": {
+        "count": 1,
+        "sha256": "2eae0cc83d80d31282d318adc9f630a47348005e27bd5ecaa9c8f7dd4478ee58"
+      },
+      "agent_endpoints": {
+        "count": 1,
+        "sha256": "3a286331301938798791a89e9098d12cb29b9ac583e3a16b782696c5a022f5be"
+      },
+      "runtime_execution_grants": {
+        "count": 1,
+        "sha256": "1bfd0ccdb3f002f69f82536b6690fd49d44f4f293aaea6be73f075f607effc03"
+      },
+      "connection_setup_commits": {
+        "count": 1,
+        "sha256": "2194e4904c68bac52c9eb2eb6a4e5b917471807a4774dff31aa99c9ba375ec28"
+      },
+      "connection_public_ids": {
+        "count": 1,
+        "sha256": "8f25a0ba24661c3f38c9a663c19da0dba65b83aa11698aae1d8ec032ab02b8c6"
+      },
+      "connection_project_drafts": {
+        "count": 1,
+        "sha256": "b17ebf884e7f5cc823377769d7a308c7f725a92134f732424c0a5134f777989b"
+      },
+      "execution_sessions": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "execution_operations": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "reference": {
+        "agent_id": "logical-origin-8fa97a7587f4",
+        "binding_id": "bind_8120aeebd683f8185deac2e8a37915dc",
+        "endpoint_id": "ep_3a88cec4171e3351622e533e727389f8",
+        "executor_id": "exe_e5d3beb45d6f3313bd795992e421098b",
+        "server_id": "srv_8fd39ed3535a1679f5fd61207e3ff189",
+        "workspace_binding_id": "wxb_1ce60854c5daa44a44dbb7f355db2069",
+        "workspace_id": "wsr_20e617a81d8c3c6f8b39ad77f747dd67"
+      },
+      "connect_id": "codex",
+      "workspaces": [
+        {
+          "workspace_id": "wsr_20e617a81d8c3c6f8b39ad77f747dd67",
+          "display_name": "logical-origin",
+          "root_realpath": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\tmp\\pytest-of-unknown\\pytest-0\\test_origin_first_connect_and_0\\workspace"
+        }
+      ]
+    },
+    "cli_profile_unchanged": true,
+    "sessions_before": 0,
+    "sessions_after": 0,
+    "operations_before": 0,
+    "operations_after": 0
+  },
+  "integrity": {
+    "payload_files": 1027,
+    "payload_drift": [],
+    "source_files": 1780,
+    "source_drift": [],
+    "assets": {
+      "okto_nexus/adapters/inbound/http/static/index.html": "cc0eb2e2efdf2be288ed5e3f1605f237d51fd1986fb5e1856c302f7ebb162775",
+      "okto_nexus/adapters/inbound/http/static/assets/index-CfDr8rCI.js": "03278c86e467207f48b1ef8ce88f3640fe04d27053c4041604e77b034914a7cc",
+      "okto_nexus/adapters/inbound/http/static/assets/index-Ds-MK2FR.css": "f761e905e0d9642c4c7d0f96d9e0f73404012f0d69d4fead8509e6fd9130b7b7",
+      "okto_nexus/adapters/inbound/http/static/logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+      "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-dark.svg": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+      "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-light.svg": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+      "okto_nexus/adapters/inbound/http/static/logos/oktolabs-icon.svg": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+    }
+  },
+  "cleanup": {
+    "all_recorded_processes_absent": true,
+    "still_alive": [],
+    "port": 63600,
+    "connect_ex": 10035,
+    "listener_absent": true,
+    "listeners": [],
+    "listener_evidence": "OS TCP LISTEN table filtered to exact own port; connect_ex nonzero alone is not absence proof."
+  },
+  "antecedent": "First wrapper used nonexistent package __main__, exited before lifecycle. Log preserved; only wrapper entrypoint corrected to installed CLI module. One actual lifecycle start succeeded; no start repair/retry.",
+  "limits": [
+    "Registered connection identity/name continuity, not runtime readiness: binding GET reports STALE after retained inert installation disappears under empty PATH.",
+    "Board status partial because external source is disabled; other listed sources ready. Unknown totals remain unknown, not zero.",
+    "Zero persisted sessions/operations before and after is observed, not multiple-session or I06 qualification.",
+    "Inspect execution opens a passive Harness activity dialog. Exact connection target is also resolved by real canonical GET; no execution controls used.",
+    "No provider/native invocation, Test/Finish, grant issuance, new identity, Git discovery, credential access, SQL repair, human usability or assistive technology test.",
+    "GET request log excludes eight static requests; initialization separately observed static GETs. No full-window console audit claim; initialization/focused checks recorded no errors.",
+    "HTTP GET checks in raw result use numeric status200; these are observed HTTP status fields, not a separate failed status classification.",
+    "Canonical lifecycle writes its own service/owner metadata; protected binding/grant/receipt/ID/session/operation table snapshots remain exactly unchanged."
+  ]
+}

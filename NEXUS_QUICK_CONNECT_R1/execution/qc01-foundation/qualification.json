@@ -1,0 +1,51 @@
+{
+  "recorded_at": "2026-11-17T05:03:53.277895+00:00",
+  "scope": "Source-only pure DTO/grammar/dispatch/Git fixtures/project and public-ID decisions. Not installed QC or real harness.",
+  "command": [
+    "rtk",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/quick_connect/test_quick_connect_contracts.py",
+    "tests/quick_connect/test_connect_arguments.py",
+    "tests/quick_connect/test_connect_dispatch.py",
+    "tests/quick_connect/test_git_project_hint.py",
+    "tests/quick_connect/test_quick_connect_id_choices.py",
+    "tests/quick_connect/test_quick_connect_project.py",
+    "tests/execution_r4/test_cli_http_only.py",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc01-foundation\\pytest.xml"
+  ],
+  "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+  "exit_code": 1,
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+  "dependency_environment": "Frozen PR27 Core 0.0.14, interpreter read-only with -B; Nexus imported from checkout via pytest pythonpath.",
+  "source_pins": {
+    "src/okto_nexus/domain/quick_connect.py": "b45cc4c86437fa0c720205fcad078248bb5a73bb3d666f280b05097ee61b9680",
+    "src/okto_nexus/adapters/inbound/cli/connect_arguments.py": "5029339ff67bcd1ad9cd44aab653790f7b1e273e20b65efec988465536e41eaf",
+    "src/okto_nexus/adapters/inbound/cli/main.py": "0591c4685a8dfe6e2e71d0de46ae30fddde0ad06275bb6ceba1acc7149e87307",
+    "src/okto_nexus/adapters/inbound/cli/connect.py": "61aa5f22da1d55df01b31901c1279f7ea91c4ce51a2330f86ed94110ad112580",
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_project.py": "4bbb099d669004e5f691d7fce4a0bef76d80fd0a85208e83691c11d033f568fa",
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_ids.py": "c33f718020b1e56a070d4235f8099ea6dd905f5eb6cd963a052eb040eb434c22",
+    "src/okto_nexus/adapters/outbound/git_project_hint.py": "d882321ace6d98f28d2879709d3b5f588832a179e55e90e3fd31cd682787bf32",
+    "tests/quick_connect/test_quick_connect_contracts.py": "f1c7d193ba01de680f221d99e633f1eea6db4878bcd81b9a925c9d615514f9e4",
+    "tests/quick_connect/test_connect_arguments.py": "561671f010d967ec3223a4ee6430108dcb027fd546d82c70994dbdb4ffcd0af8",
+    "tests/quick_connect/test_connect_dispatch.py": "e04863d71d981424149bbeb033a944a4d6bbe30b6950f29596135f740b05aaa6",
+    "tests/quick_connect/test_git_project_hint.py": "a72d49700ff5ee985f882abdfbef45f36df98a1d7080bdd4d5594cb9f02e009d",
+    "tests/quick_connect/test_quick_connect_id_choices.py": "da562cf8ce1150aac2f4a746ca5525613e590ce9dc6cacde91455c936a9ad41b",
+    "tests/quick_connect/test_quick_connect_project.py": "590373218212ab505bb3a0cbda6f5ef9ddba17e3adf878a52021ed0ae861bc01",
+    "tests/execution_r4/test_cli_http_only.py": "06227a65fd49fe3a744882b69d7e0f478c571cba728801bb9f90e04fa2563ba8"
+  },
+  "antecedents": [
+    "Legacy explicit stdio dispatch initially lost its HTTP migration hint: 88 PASS/1 FAIL; restored only for explicit old entries, unknown typo remains useful.",
+    "Root .venv collection lacks Core user_service_definition; no dependency or user install changed. Re-ran with the frozen PR27 dependency interpreter.",
+    "Additional unit-test red runs and exact source pins are preserved in the per-component evidence directories."
+  ],
+  "limitations": [
+    "No provider, service lifecycle, real PTY, browser, human, installed 0.3.6 or OS matrix qualification."
+  ]
+}

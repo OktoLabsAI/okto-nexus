@@ -19,6 +19,7 @@ def build_router():
         'connection_setup_commit_read', 'connection_setup_recover',
         'connection_authorization_review', 'connection_authorization_issue',
         'workspace_paths_read', 'connection_workspaces',
+        'public_ids', 'project_context', 'reserve', 'associate',
         'retry_runtime_recovery',
         'runtime_recovery_plan', 'confirm_runtime_stopped',
         'accept_installation_succession', 'list_installation_successions',

@@ -1,0 +1,109 @@
+--- antecedent/test_git_cli_integration.py
++++ qc21/test_git_cli_integration.py
+@@ -5,6 +5,7 @@
+ No provider, native executable, account, remote Git transport or service starts.
+ """
+ import json
++import hashlib
+ import os
+ from pathlib import Path
+ import subprocess
+@@ -60,10 +61,23 @@
+     r'C:\fixture\logical-origin.git',
+     'https://fake-user:PRIVATE@example.invalid/team/logical-origin.git?token=PRIVATE#PRIVATE',
+ ])
+-def test_origin_first_connect_and_changed_metadata_exact_resume(quick_cli, tmp_path, monkeypatch, capsys, origin):
++def test_origin_first_connect_and_changed_metadata_exact_resume(quick_cli, tmp_path, monkeypatch, capsys, caplog, origin):
+     c = quick_cli
+     git = local_git(c, tmp_path)
+     git('config', '--local', 'remote.origin.url', origin)
++
++    def private_origin_absent(value, label):
++        if 'PRIVATE' not in origin:
++            return
++        text=json.dumps(value,ensure_ascii=False,default=str)
++        if any(needle in text for needle in ('PRIVATE',origin,'example.invalid','fake-user','changed.invalid')):
++            pytest.fail('Private Git origin metadata reached '+label,pytrace=False)
++
++    def private_checkpoints_absent():
++        if 'PRIVATE' not in origin:
++            return
++        for checkpoint in c.home.rglob('*.json'):
++            private_origin_absent(json.loads(checkpoint.read_text()),'owned Nexus checkpoint')
+     monkeypatch.setattr(hints, '_trusted_git', c.trusted_git)
+     monkeypatch.setattr(connect.sys, 'stdin', SimpleNamespace(isatty=lambda: True))
+     prompts = []
+@@ -97,6 +111,8 @@
+     assert session_count(c) == before_sessions
+     before = snapshot(c.t.deps)
+     original_profile = json.loads(profile.read_text())
++    private_checkpoints_absent()
++    private_origin_absent(before,'compared SQLite snapshot')
+     git('config', '--local', 'remote.origin.url', 'https://changed.invalid/different-name.git')
+ 
+     def forbidden(*args, **kwargs):
+@@ -108,6 +124,10 @@
+             ['connect', '--id', 'codex', '--json', '--no-chat']):
+         assert c.run(tokens) == 0
+         resumed = json.loads(capsys.readouterr().out)
++        private_origin_absent(resumed,'resume JSON')
++        private_origin_absent(snapshot(c.t.deps),'resumed compared SQLite snapshot')
++        private_checkpoints_absent()
++        private_origin_absent([r.getMessage() for r in caplog.records],'captured pytest log messages')
+         assert resumed['quick_connect']['status'] == 'connected'
+         assert resumed['quick_connect']['canonical_reference'] == reference
+         assert resumed['quick_connect']['project_name'] == 'logical-origin'
+@@ -145,6 +165,13 @@
+         # receipt, seven-field identities, approvals and unknown/private fields.
+         assert observed_profile == expected_profile
+ 
++    if 'PRIVATE' in origin:
++        proof=dict(private_parameter=True,checkpoint_json_count=len(list(c.home.rglob('*.json'))),
++            compared_tables=list(before),resume_json_count=2,pytest_log_messages=len(caplog.records),
++            private_origin_absent=True,git_config_is_excluded_input=True,
++            telemetry_scope='Only owned Nexus JSON checkpoints, compared SQLite tables, two resume JSONs and pytest-captured log messages')
++        (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'privacy-proof.json').write_text(json.dumps(proof,indent=2))
++
+ 
+ 
+ @pytest.mark.parametrize('mode,expected_reason', [
+@@ -197,6 +224,39 @@
+     def confirm(prompt):
+         prompts.append(prompt)
+         assert len(prompts) == 1
++        captured=capsys.readouterr()
++        review_text=captured.out
++        checkpoint,=(c.home/'terminal/profiles').glob('*.json')
++        retained=json.loads(checkpoint.read_text())
++        assert retained['state']=='review'
++        selection=retained['selection']
++        request=retained['review_request']
++        config=request['configuration']
++        assert selection['label']=='ancestor-logical'
++        assert selection['quick_connect']['project_name_source']=='git_origin'
++        assert selection['quick_connect']['cwd_resolution']['invocation_cwd']==str(c.project)
++        assert selection['project']==config['workspace_root']==str(c.project)
++        assert config['adapter_id']=='codex_app_server'
++        proposed=request['public_connection']['connect_id']
++        assert proposed==selection['public_connection']['connect_id']=='codex'
++        required={
++            'name': 'ancestor-logical', 'source':'Project name source: git_origin',
++            'cwd':'Invocation directory: '+str(c.project),
++            'root':'Project: '+str(c.project), 'host':'Execution host: '+request['executor_id'],
++            'adapter':'Harness: '+config['adapter_id'], 'proposed_id':'ID do Harness (proposed): '+proposed}
++        assert all(text in review_text for text in required.values())
++        effects=retained['effects']
++        assert effects and all('- '+effect in review_text for effect in effects)
++        assert c.t.turns==c.t.probes==[]
++        proof=dict(before_confirmation=True,checkpoint_state='review',
++            displayed_fields=list(required),effect_count=len(effects),all_effects_printed=True,
++            tests=0,probes=0,checkpoint_sha256=hashlib.sha256(checkpoint.read_bytes()).hexdigest())
++        (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'review-proof.json').write_text(json.dumps(proof,indent=2))
++        # Recompose captured output so original downstream output assertions keep
++        # the same entire transcript; no production display behavior is changed.
++        print(captured.out,end='')
++        if captured.err:
++            print(captured.err,end='',file=__import__('sys').stderr)
+         return 'y'
+     monkeypatch.setattr('builtins.input', confirm)
+     assert Path.cwd() == c.project

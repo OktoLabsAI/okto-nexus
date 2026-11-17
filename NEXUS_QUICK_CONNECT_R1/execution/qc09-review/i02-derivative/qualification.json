@@ -1,0 +1,261 @@
+{
+  "at": "2026-11-17T06:47:28.954092+00:00",
+  "status": "PASS_DERIVATIVE_ONLY",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-i02-derivative-6a7io_w5",
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc09-review\\run_i02.py"
+  ],
+  "overlay_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-i02-derivative-6a7io_w5\\overlay\\okto_nexus\\__init__.py",
+  "installed_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv",
+  "installed_files": 732,
+  "installed_drift": [],
+  "checks": [
+    {
+      "transport": "LocalOperatorHTTP",
+      "status": 404,
+      "error_code": null,
+      "malformed": false,
+      "result": {
+        "code": "CONNECT_ID_UNSUPPORTED_SERVER",
+        "http_status": null,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "LocalOperatorHTTP",
+      "status": 405,
+      "error_code": null,
+      "malformed": false,
+      "result": {
+        "code": "CONNECT_ID_UNSUPPORTED_SERVER",
+        "http_status": null,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "LocalOperatorHTTP",
+      "status": 404,
+      "error_code": null,
+      "malformed": true,
+      "result": {
+        "code": "CONNECT_ID_UNSUPPORTED_SERVER",
+        "http_status": null,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "LocalOperatorHTTP",
+      "status": 401,
+      "error_code": "AUTH_FAILED",
+      "malformed": false,
+      "result": {
+        "code": "AUTH_FAILED",
+        "http_status": 401,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "LocalOperatorHTTP",
+      "status": 403,
+      "error_code": "PERMISSION_DENIED",
+      "malformed": false,
+      "result": {
+        "code": "PERMISSION_DENIED",
+        "http_status": 403,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "LocalOperatorHTTP",
+      "status": 403,
+      "error_code": "HTTP_ERROR",
+      "malformed": false,
+      "result": {
+        "code": "HTTP_ERROR",
+        "http_status": 403,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "LocalOperatorHTTP",
+      "status": 403,
+      "error_code": null,
+      "malformed": false,
+      "result": {
+        "code": "REQUEST_REFUSED",
+        "http_status": 403,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "LocalOperatorHTTP",
+      "status": 500,
+      "error_code": "HTTP_ERROR",
+      "malformed": false,
+      "result": {
+        "code": "HTTP_ERROR",
+        "http_status": 500,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "RemoteOperatorHTTP",
+      "status": 404,
+      "error_code": null,
+      "malformed": false,
+      "result": {
+        "code": "CONNECT_ID_UNSUPPORTED_SERVER",
+        "http_status": null,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "RemoteOperatorHTTP",
+      "status": 405,
+      "error_code": null,
+      "malformed": false,
+      "result": {
+        "code": "CONNECT_ID_UNSUPPORTED_SERVER",
+        "http_status": null,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "RemoteOperatorHTTP",
+      "status": 404,
+      "error_code": null,
+      "malformed": true,
+      "result": {
+        "code": "CONNECT_ID_UNSUPPORTED_SERVER",
+        "http_status": null,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "RemoteOperatorHTTP",
+      "status": 401,
+      "error_code": "AUTH_FAILED",
+      "malformed": false,
+      "result": {
+        "code": "OPERATOR_LOGIN_REQUIRED",
+        "http_status": 401,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "RemoteOperatorHTTP",
+      "status": 403,
+      "error_code": "PERMISSION_DENIED",
+      "malformed": false,
+      "result": {
+        "code": "PERMISSION_DENIED",
+        "http_status": 403,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "RemoteOperatorHTTP",
+      "status": 403,
+      "error_code": "HTTP_ERROR",
+      "malformed": false,
+      "result": {
+        "code": "HTTP_ERROR",
+        "http_status": 403,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "RemoteOperatorHTTP",
+      "status": 403,
+      "error_code": null,
+      "malformed": false,
+      "result": {
+        "code": "REQUEST_REFUSED",
+        "http_status": 403,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "RemoteOperatorHTTP",
+      "status": 500,
+      "error_code": "HTTP_ERROR",
+      "malformed": false,
+      "result": {
+        "code": "HTTP_ERROR",
+        "http_status": 500,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "LocalOperatorHTTP",
+      "network": "closed-own-port",
+      "result": {
+        "code": "SERVER_UNREACHABLE",
+        "http_status": null,
+        "possible_effect": false
+      }
+    },
+    {
+      "transport": "RemoteOperatorHTTP",
+      "network": "closed-own-port",
+      "result": {
+        "code": "SERVER_UNREACHABLE",
+        "http_status": null,
+        "possible_effect": false
+      }
+    },
+    {
+      "legacy_code": "NOT_FOUND",
+      "result": {
+        "code": "CONNECT_ID_UNSUPPORTED_SERVER",
+        "http_status": null,
+        "possible_effect": false
+      }
+    },
+    {
+      "legacy_code": "HTTP_ERROR",
+      "result": {
+        "code": "CONNECT_ID_UNSUPPORTED_SERVER",
+        "http_status": null,
+        "possible_effect": false
+      }
+    },
+    {
+      "legacy_code": "VALIDATION_ERROR",
+      "result": {
+        "code": "CONNECT_ID_UNSUPPORTED_SERVER",
+        "http_status": null,
+        "possible_effect": false
+      }
+    },
+    {
+      "actual_old_server": "0.3.5 installed PR27",
+      "me_status": 200,
+      "direct": {
+        "code": "REQUEST_REFUSED",
+        "http_status": 404,
+        "possible_effect": false
+      },
+      "capability_refusal": {
+        "code": "CONNECT_ID_UNSUPPORTED_SERVER",
+        "http_status": null,
+        "possible_effect": false
+      }
+    }
+  ],
+  "cleanup": {
+    "canonical_exit": 0,
+    "physical_exit": 0,
+    "pid": 28780,
+    "forced": false
+  },
+  "provider_calls": 0,
+  "limitations": [
+    "Derivative overlay is not the shipped installed candidate.",
+    "No new Server upgrade or provider work executed.",
+    "CI inputs, source, and installed prefix unchanged."
+  ]
+}

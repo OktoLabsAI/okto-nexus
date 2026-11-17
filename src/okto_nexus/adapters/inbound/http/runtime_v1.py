@@ -36,7 +36,7 @@ from ...outbound.sqlite.execution_tickets import (
     verify_execution_history_ticket, verify_execution_ticket,
 )
 from .app import extract_bearer, v1_err
-from .identity_ctx import get_authenticated_agent, runtime_request_context, trusted_local_operator
+from .identity_ctx import get_authenticated_agent, runtime_request_context, trusted_local_operator, current_operator
 
 
 MAX_INVENTORY_BODY_BYTES = 1024 * 1024
@@ -110,6 +110,7 @@ class ConnectionSetupRequest(BaseModel):
     preset_update: SetupPresetUpdate | None = None
     agent_creation: SetupAgentCreation | None = None
     native_decision_policy: SetupNativeDecisionPolicy | None = None
+    public_connection: dict | None = None
 
 
 class LocalInstallationCheckRequest(BaseModel):
@@ -630,6 +631,16 @@ def build_router() -> APIRouter:
         )
 
     def runtime_error(error, stage):
+        public_code = (error.details or {}).get('reason')
+        if error.code == ErrorCode.CONFLICT and public_code in {'HARNESS_ID_ALREADY_EXISTS', 'CONNECT_ID_PENDING'}:
+            response = v1_err(409, public_code, error.message, stage=stage)
+            response.headers['Cache-Control'] = 'no-store'
+            return response
+        public_code = (error.details or {}).get('reason')
+        if public_code in {'HARNESS_ID_ALREADY_EXISTS', 'CONNECT_ID_PENDING'}:
+            response = v1_err(409, public_code, error.message, stage=stage)
+            response.headers['Cache-Control'] = 'no-store'
+            return response
         if (error.details or {}).get('reason') == 'SETUP_ACTIVATION_PENDING':
             return JSONResponse({'error': {'code': error.code, 'stage': stage, 'message': error.message,
                 'possible_effect': True, 'retry_safe': False, 'operation_id': None, 'action': ''}},
@@ -988,11 +999,13 @@ def build_router() -> APIRouter:
             return runtime_error(error, 'connection.preset_update')
 
     @router.get('/connections/workspaces')
-    async def connection_workspaces(request: Request, limit: int = 100, after_workspace_id: str | None = None):
+    async def connection_workspaces(request: Request, limit: int = 100, after_workspace_id: str | None = None,
+                                    cursor: str | None = None):
         from ....application.connection_workspaces import list_connection_workspaces
         try:
             result = await anyio.to_thread.run_sync(lambda: list_connection_workspaces(
-                request.app.state.deps, runtime_request_context(), limit=limit, after_workspace_id=after_workspace_id))
+                request.app.state.deps, runtime_request_context(), limit=limit, after_workspace_id=after_workspace_id,
+                cursor=cursor, principal=current_operator.get()))
             return JSONResponse(result, headers={'Cache-Control': 'no-store'})
         except OktoNexusError as error:
             return runtime_error(error, 'connection.workspaces')
@@ -1012,6 +1025,11 @@ def build_router() -> APIRouter:
         from nexus_connector_core.connection_configuration import parse_connection_configuration
         from nexus_connector_core import CoreError
         result = body.model_dump()
+        if result.get('public_connection') is None:
+            result.pop('public_connection', None)
+        else:
+            from ....domain.connection_public_ids import normalize
+            result['public_connection'] = normalize(result['public_connection'])
         # Omission preserves policy for older clients; explicit null inherits.
         if 'broadcast_handoff_auto_claim' not in body.model_fields_set:
             result.pop('broadcast_handoff_auto_claim', None)
@@ -1121,4 +1139,6 @@ def build_router() -> APIRouter:
 
     from .remote_setup import build_router as remote_setup_router
     router.routes.extend(remote_setup_router(runtime_error).routes)
+    from .connection_public_ids import build_router as public_ids_router
+    router.routes.extend(public_ids_router(runtime_error, setup_request, ConnectionSetupRequest).routes)
     return router

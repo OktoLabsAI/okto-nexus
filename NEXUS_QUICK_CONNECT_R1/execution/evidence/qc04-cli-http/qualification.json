@@ -1,0 +1,60 @@
+{
+  "qualification": "CLI_WITH_CANONICAL_SQLITE_HTTP_SYNTHETIC_PROVIDER_BOUNDARIES_PASS",
+  "green": {
+    "tool_handles": ["b3af0e", "c608de"],
+    "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe -B -Xutf8 -m pytest tests/quick_connect/test_quick_connect_cli.py -q --junitxml=NEXUS_QUICK_CONNECT_R1/execution/evidence/qc04-cli-http/pytest-final.xml",
+    "exit_code": 0,
+    "passed": 17,
+    "elapsed_seconds": 119.09
+  },
+  "ruff": {
+    "tool_handle": "ec71d9",
+    "command": "rtk proxy ruff check tests/quick_connect/test_quick_connect_cli.py",
+    "exit_code": 0,
+    "observed": "All checks passed!"
+  },
+  "antecedents": [
+    {"tool_handle": "500881", "xml": "pytest-initial.xml", "exit_code": 0, "passed": 1, "elapsed_seconds": 11.13, "note": "Initial plan/apply/profile recovery journey"},
+    {"tool_handle": "9375e1", "xml": "pytest-second.xml", "exit_code": 1, "passed": 9, "failed": 3, "elapsed_seconds": 86.76, "note": "Test oracle wrongly expected exit2 for connection refusals; observed structured expected codes with historical exit3. Corrected tests only, not product."},
+    {"tool_handle": "cf9cb3", "xml": "pytest-third.xml", "exit_code": 1, "passed": 15, "failed": 1, "elapsed_seconds": 104.56, "note": "Real product defect: metadata adoption lost unknown legacy selection extension on disk while preserving top-level extension and not echoing either. Root owner fixed preservation after association commit."},
+    {"tool_handle": "e86924", "xml": "pytest-legacy-fixed.xml", "exit_code": 0, "passed": 1, "elapsed_seconds": 11.10, "note": "Focused proof of legacy preservation fix before the final 17-case cut"}
+  ],
+  "observed_journeys": [
+    "connect codex with explicit logical name in invocation CWD: plan, exact approve, public codex bound/created, later profile reused with same binding and unchanged setup commits/grants/configuration",
+    "Second explicitly approved Codex connection named reviewer uses the same canonical workspace and a different agent/binding; two synthetic Test admissions only",
+    "Exact --id codex with no --profile and noninteractive JSON resumes exact canonical reference without another version check/Test/grant",
+    "Explicit occupied-ID addition refuses before another Test; proposed alternative is not silently applied",
+    "Conflicting harness flags, abbreviated/unknown flags refuse before lifecycle/HTTP; JSON new addition without profile refuses before lifecycle and does not use --id as idempotency key",
+    "Service stopped + --plan performs inspect only, no daemon start, HTTP, Git or model Test",
+    "Unknown and supported-unavailable harness JSON never reads stdin or tests; root alias creates the same managed review; unknown TTY token changes family only by mapped explicit choice",
+    "Lost response after setup:test or setup:finish recovers the original addition intent before namespace collision handling; one version check/Test, one binding/grant, no replay",
+    "Legacy connection adopts legacy-public by one metadata-only POST; existing binding/grants/receipts remain unchanged, unknown top-level and selection fields remain on disk and are absent from public JSON",
+    "TTY customize ID: initial read-only Git hint of own temporary nonrepository; customize→field1→reviewer→confirmy creates fresh review hash/intent, supersedes original review, performs one version check/Test; old hash refuses and subsequent basic connect resumes reviewer. Only one discovery call; ID customization keeps frozen name."
+  ],
+  "environment_and_isolation": {
+    "interpreter": "existing preserved PR27 Python 3.13.1 Windows x64 with -B -Xutf8",
+    "nexus": "current checkout source via pytest pythonpath; NOT installed 0.3.6 qualification",
+    "core": "existing preserved PR27 installed Core; no pip, installation or prefix change",
+    "api": "real FastAPI TestClient HTTP handlers and SQLite migrations/transactions in per-test temporary homes, authorized loopback operator context",
+    "service": "inert mock only: inspect/ensure calls recorded, no subprocess/daemon/native service starts",
+    "harness": "existing terminal/checking/local_setup fixtures: fake byte-bound executable candidate, stub availability/containment, version probe async stub, ConnectionTests.run async synthetic success; no actual native executable/provider call",
+    "personal_configuration": "Every CLI invocation explicitly passes its own --home before topology resolution. Candidate discovery is replaced before constructing app. No personal auth/profile/provider home read.",
+    "input": "noninteractive stdin cannot supply data; TTY answers are explicit test-owned strings, not a human study",
+    "concurrency": "root ran independent legacy tests during portions of this qualification; no exclusive-host/performance/SLO claim",
+    "warnings": "Existing pytest_asyncio loop-scope and Starlette/httpx deprecation warnings, not page/runtime/provider errors"
+  },
+  "cleanup": {
+    "all_testclient_contexts_closed": true,
+    "service_browser_or_provider_processes_started": 0,
+    "native_provider_calls": 0,
+    "installation_or_windows_session_actions": 0,
+    "notes": "Fixture context managers close in-process app lifespans on pass/fail. The customization case uses only the bounded local Git read adapter, which reaps its owned read-only process. No persistent server/listener/browser was created."
+  },
+  "limits": [
+    "Not real Codex/Claude/Pi model execution, authentication, user TTY/PTY interaction, installed-package or cross-platform qualification",
+    "Not the full 147-scenario matrix: no complete concurrency/remote/adversarial campaign promotion",
+    "Synthetic successful connection Test does not prove provider availability, model readiness or runtime session/work execution; results explicitly retain not_checked/not_submitted",
+    "Lifecycle mock proves CLI decisions/call counts, not operating-system service behavior",
+    "Agent edited only this test module and evidence. Product fixes/wiring owned by root; no Git/ledger/installed prefix changes by this agent."
+  ]
+}

@@ -1,0 +1,251 @@
+{
+  "status": "PASS_202_SELECTED_INSTALLED_POSIX_CASES",
+  "passed": 202,
+  "failed": 0,
+  "skipped": 0,
+  "cuts": [
+    {
+      "label": "test_posix_physical_paths",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "test_connect_arguments",
+      "passed": 41,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "test_git_project_hint",
+      "passed": 43,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "test_git_project_trust",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "test_quick_connect_project",
+      "passed": 47,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "test_quick_connect_id_choices",
+      "passed": 65,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "source_candidate": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_pins": {
+    "okto_nexus-0.3.6-py3-none-any.whl": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+    "okto_nexus_connector_core-0.0.14-py3-none-any.whl": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+    "okto_nexus_connector-0.0.13-py3-none-any.whl": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90"
+  },
+  "uv_release": {
+    "release": "https://github.com/astral-sh/uv/releases/tag/0.10.7",
+    "archive_url": "https://github.com/astral-sh/uv/releases/download/0.10.7/uv-x86_64-unknown-linux-gnu.tar.gz",
+    "sha256_url": "https://github.com/astral-sh/uv/releases/download/0.10.7/uv-x86_64-unknown-linux-gnu.tar.gz.sha256",
+    "expected_sha256": "9ac6cee4e379a5abfca06e78a777b26b7ba1f81cb7935b97054d80d85ac00774",
+    "actual_sha256": "9ac6cee4e379a5abfca06e78a777b26b7ba1f81cb7935b97054d80d85ac00774",
+    "uv_binary_sha256": "3b9d43bace955a409eb6f012b0932a4935534bdb54b85b9fd696cabbb15979a0",
+    "extracted_members": [
+      "uv-x86_64-unknown-linux-gnu/uv"
+    ],
+    "TLS_verified": true
+  },
+  "environment": {
+    "OS": "Linux-5.15.146.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "distro": "PRETTY_NAME=\"Ubuntu 22.04.3 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"22.04\"\nVERSION=\"22.04.3 LTS (Jammy Jellyfish)\"\nVERSION_CODENAME=jammy\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=jammy\n",
+    "WSL": true,
+    "python": "3.13.1 (main, Jan 14 2025, 22:47:38) [Clang 19.1.6 ]",
+    "executable": "/tmp/nexus-qc28-xmlie7rv/venv/bin/python",
+    "executable_resolved": "/tmp/nexus-qc28-xmlie7rv/python/cpython-3.13.1-linux-x86_64-gnu/bin/python3.13",
+    "python_sha256": "ec7b1b2dee7cbff2a22f3ea2a1efb1ce7535f26db78aff2aa45d29feab8c9646",
+    "prefix": "/tmp/nexus-qc28-xmlie7rv/venv",
+    "origins": {
+      "okto_nexus": "/tmp/nexus-qc28-xmlie7rv/venv/lib/python3.13/site-packages/okto_nexus/__init__.py",
+      "nexus_connector_core": "/tmp/nexus-qc28-xmlie7rv/venv/lib/python3.13/site-packages/nexus_connector_core/__init__.py",
+      "okto_nexus_connector": "/tmp/nexus-qc28-xmlie7rv/venv/lib/python3.13/site-packages/okto_nexus_connector/__init__.py"
+    },
+    "versions": {
+      "okto-nexus": "0.3.6",
+      "okto-nexus-connector-core": "0.0.14",
+      "okto-nexus-connector": "0.0.13"
+    },
+    "dependencies": {
+      "starlette": "1.10.0",
+      "cffi": "2.1.1",
+      "jsonschema-specifications": "2025.9.1",
+      "cryptography": "50.0.2",
+      "iniconfig": "2.3.1",
+      "jaraco.context": "6.1.2",
+      "keyring": "25.7.0",
+      "okto-nexus": "0.3.6",
+      "PyJWT": "2.15.1",
+      "sse-starlette": "3.7.0",
+      "python-multipart": "0.0.34",
+      "idna": "3.20",
+      "pytest-asyncio": "1.5.0",
+      "packaging": "26.3",
+      "mcp": "1.30.0",
+      "rfc8785": "0.1.4",
+      "anyio": "4.16.0",
+      "jsonschema": "4.26.0",
+      "typing-inspection": "0.4.5",
+      "click": "8.5.1",
+      "pluggy": "1.7.0",
+      "jeepney": "0.9.0",
+      "httpx-sse": "0.4.3",
+      "referencing": "0.37.0",
+      "pydantic-settings": "2.16.3",
+      "okto-nexus-connector": "0.0.13",
+      "uvicorn": "0.54.0",
+      "more-itertools": "11.2.1",
+      "fastapi": "0.163.1",
+      "typing_extensions": "4.16.0",
+      "attrs": "26.1.0",
+      "okto-nexus-connector-core": "0.0.14",
+      "python-dotenv": "1.2.4",
+      "pycparser": "3.12",
+      "SecretStorage": "3.5.0",
+      "pydantic_core": "2.50.4",
+      "jaraco.functools": "4.6.0",
+      "opentelemetry-api": "1.45.2",
+      "pydantic": "2.14.3",
+      "wsproto": "1.3.2",
+      "annotated-doc": "0.0.6",
+      "jaraco.classes": "3.4.0",
+      "httpcore": "1.0.9",
+      "rpds-py": "2026.9.1",
+      "certifi": "2026.10.23",
+      "Pygments": "2.21.0",
+      "websockets": "17.4",
+      "pytest": "9.2.0",
+      "annotated-types": "0.8.0",
+      "httpx": "0.28.1",
+      "h11": "0.16.0"
+    },
+    "system_python_observed_after": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+    "system_python_observed_before": "3.10.12",
+    "git_version": "git version 2.34.1",
+    "scope": "All tools/runtime/deps installed exclusively under own /tmp root."
+  },
+  "real_filesystem": [
+    {
+      "path": "/tmp/nexus-qc28-xmlie7rv/test-tmp/test_posix_physical_paths/test_posix_backslash_is_filena0/folder\\leaf",
+      "resolved": "/tmp/nexus-qc28-xmlie7rv/test-tmp/test_posix_physical_paths/test_posix_backslash_is_filena0/folder\\leaf",
+      "symlink": false,
+      "device": 2080,
+      "inode": 150159
+    },
+    {
+      "path": "/tmp/nexus-qc28-xmlie7rv/test-tmp/test_posix_physical_paths/test_posix_symlink_resolves_sa0/LogicalLink",
+      "resolved": "/tmp/nexus-qc28-xmlie7rv/test-tmp/test_posix_physical_paths/test_posix_symlink_resolves_sa0/Physical",
+      "symlink": true,
+      "device": 2080,
+      "inode": 150153
+    },
+    {
+      "path": "/tmp/nexus-qc28-xmlie7rv/test-tmp/test_posix_physical_paths/test_posix_symlink_resolves_sa0/Physical",
+      "resolved": "/tmp/nexus-qc28-xmlie7rv/test-tmp/test_posix_physical_paths/test_posix_symlink_resolves_sa0/Physical",
+      "symlink": false,
+      "device": 2080,
+      "inode": 150153
+    },
+    {
+      "path": "/tmp/nexus-qc28-xmlie7rv/test-tmp/test_posix_physical_paths/test_c15_real_case_sensitive_r0/Repo",
+      "resolved": "/tmp/nexus-qc28-xmlie7rv/test-tmp/test_posix_physical_paths/test_c15_real_case_sensitive_r0/Repo",
+      "symlink": false,
+      "device": 2080,
+      "inode": 150149
+    },
+    {
+      "path": "/tmp/nexus-qc28-xmlie7rv/test-tmp/test_posix_physical_paths/test_c15_real_case_sensitive_r0/repo",
+      "resolved": "/tmp/nexus-qc28-xmlie7rv/test-tmp/test_posix_physical_paths/test_c15_real_case_sensitive_r0/repo",
+      "symlink": false,
+      "device": 2080,
+      "inode": 150150
+    },
+    {
+      "path": "/tmp/nexus-qc28-xmlie7rv/test-tmp/test_posix_physical_paths/test_posix_backslash_is_filena0/folder/leaf",
+      "resolved": "/tmp/nexus-qc28-xmlie7rv/test-tmp/test_posix_physical_paths/test_posix_backslash_is_filena0/folder/leaf",
+      "symlink": false,
+      "device": 2080,
+      "inode": 150158
+    }
+  ],
+  "integrity": {
+    "payload_files": 1027,
+    "payload_drift": [],
+    "source_files": 1780,
+    "source_drift": [],
+    "copied_test_pins": {
+      "tests/quick_connect/test_connect_arguments.py": "561671f010d967ec3223a4ee6430108dcb027fd546d82c70994dbdb4ffcd0af8",
+      "tests/quick_connect/test_git_project_hint.py": "a72d49700ff5ee985f882abdfbef45f36df98a1d7080bdd4d5594cb9f02e009d",
+      "tests/quick_connect/test_git_project_trust.py": "3890691e1b0e15e4ab543827a34fdf42ec1320157328eb59aba902317b1c66d7",
+      "tests/quick_connect/test_quick_connect_project.py": "590373218212ab505bb3a0cbda6f5ef9ddba17e3adf878a52021ed0ae861bc01",
+      "tests/quick_connect/test_quick_connect_id_choices.py": "da562cf8ce1150aac2f4a746ca5525613e590ce9dc6cacde91455c936a9ad41b"
+    },
+    "no_src_copy": true
+  },
+  "isolation": {
+    "env_allowlist": true,
+    "HOME_XDG_caches_tmp_owned": true,
+    "pytest_parent_python_flags": [
+      "-I",
+      "-B"
+    ],
+    "stdin_pipe_closed": true,
+    "cwd_tmp_siblings": true,
+    "per_cut_deadline_seconds": 180,
+    "own_process_groups": true,
+    "pytest_groups_remaining": [],
+    "service_started": false,
+    "provider_invocations": 0,
+    "global_user_installs": false,
+    "apt_sudo_used": false,
+    "WSL_configuration_changed": false
+  },
+  "antecedents": [
+    "First isolated /tmp directory disappeared between WSL invocations before any download/install. A finite own keeper then preserved the temporary guest window; no WSL configuration changed.",
+    "Original uv-version oracle expected a trailing build annotation. Official binary prints uv 0.10.7 newline; failed before Python install. The continuation verifies exact version tokens and the already-verified binary SHA."
+  ],
+  "limits": [
+    "Ubuntu22.04 under Windows WSL2, not a native Ubuntu host or full Linux CI/platform matrix.",
+    "Selected parser/project/ID tests include fake authorized GET DTOs as declared by their existing source; they do not establish real Linux SQLite/HTTP authority or service execution.",
+    "Three added POSIX cases use real /tmp filesystem and installed path/identity functions: case sensitivity, symlink resolution and literal backslash filename.",
+    "Git tests use actual own local repositories plus explicit unit mocks for error/budget branches; no remote Git transport/account access.",
+    "uv archive SHA is checked against the official release SHA256 over verified HTTPS; no separate artifact-attestation verification claim.",
+    "Runtime/venv/cache are temporary and may disappear when WSL becomes idle. Curated evidence is copied to Windows before stopping the own keeper.",
+    "Windows system/personal prefixes and Ubuntu system/user installation locations were not targeted."
+  ],
+  "cleanup": {
+    "linux": {
+      "observed_at": "2026-11-17T09:25:49.728688+00:00",
+      "keeper_pid": 398,
+      "birth_ticks": "7101",
+      "command_sha256": "4f19c24cb7e0369080bd9e6af21857ad11b331fa60a57da952f07bfd22a0049a",
+      "stop": "own stop-keeper file",
+      "alive": false,
+      "final_state": "absent",
+      "signal_used": false,
+      "WSL_shutdown_or_terminate_used": false,
+      "pytest_groups_remaining": [],
+      "copied_evidence_verified_before_stop": true,
+      "exact_keeper_exit_code": "Not reaped by this process; normal stop and /proc state observed separately."
+    },
+    "windows_keeper": {
+      "own_keeper_wsl_processes": [],
+      "absent": true
+    },
+    "signals_used": false,
+    "evidence_copied_before_stop": true,
+    "temporary_runtime_retention": "Not guaranteed after WSL idle; Windows evidence retained."
+  }
+}

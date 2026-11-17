@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="10.309" timestamp="2026-11-17T02:34:47.766895-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_public_id_retirement" name="test_disabled_canonical_endpoint_keeps_bound_public_id_occupied_without_reactivation" time="4.543"><failure message="AssertionError: assert {'agents': [(...0271Z')], ...} == {'agents': [(...0271Z')], ...}&#10;  &#10;  Omitting 7 identical items, use -vv to show&#10;  Differing items:&#10;[+2 more lines; full report in element text]">local_setup = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11211/test_dis...d', version=None, architecture=None, launch_script=None, build_identity=None, installation_ref=None, reason=None), ...)
+
+    def test_disabled_canonical_endpoint_keeps_bound_public_id_occupied_without_reactivation(local_setup):
+        deps, _, client, headers, *_ = local_setup
+        context, request = public_request(local_setup)
+        reserve_public_id(deps, context, request, approved=True)
+        result = finish(local_setup, context, request, verified={
+            'root': directory_identity(request['configuration']['workspace_root']), 'home': None})
+        binding = result['binding']
+        endpoint_id, workspace_id = binding['endpoint_id'], binding['workspace_id']
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            revision = uow.connection.execute('SELECT revision FROM agent_endpoints WHERE endpoint_id=?',
+                                              (endpoint_id,)).fetchone()[0]
+            grants_before = [dict(row) for row in uow.connection.execute('SELECT * FROM runtime_execution_grants')]
+        assert grants_before and any(row['revoked_at'] is None for row in grants_before)
+        disabled = client.patch('/api/v1/harness/endpoints/' + endpoint_id, headers=headers['operator'],
+                                json=dict(expected_revision=revision, enabled=False))
+        assert disabled.status_code == 200, disabled.text
+        assert disabled.json()['data']['enabled'] is False
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            after_grants = [dict(row) for row in uow.connection.execute('SELECT * FROM runtime_execution_grants')]
+        assert len(after_grants) == len(grants_before) and all(row['revoked_at'] for row in after_grants)
+        before_retry = authority_rows(local_setup)
+        public = list_public_ids(deps, context, workspace_id=workspace_id)['items']
+        assert len(public) == 1 and public[0]['connect_id'] == 'reviewer'
+        assert public[0]['state'] == 'bound' and public[0]['canonical_ref'] == result['public_connection']['canonical_ref']
+        _, replacement = public_request(local_setup, workspace_id=workspace_id)
+        path = '/api/v1/runtime-management/connections/public-ids/reserve'
+        refused = client.post(path, headers=headers['operator'], json=dict(approved=True, request=replacement))
+        assert refused.status_code == 409, refused.text
+        assert refused.json()['error']['code'] == 'HARNESS_ID_ALREADY_EXISTS'
+&gt;       assert authority_rows(local_setup) == before_retry
+E       AssertionError: assert {'agents': [(...0271Z')], ...} == {'agents': [(...0271Z')], ...}
+E         
+E         Omitting 7 identical items, use -vv to show
+E         Differing items:
+E         {'agents': [('operator', 'operator', None, None, '2026-11-17T05:34:50.760153Z', '2026-11-17T05:34:53.224885Z', ...), ('subject', None, None, None, '2026-11-17T05:34:52.216972Z', None, ...)]} != {'agents': [('operator', 'operator', None, None, '2026-11-17T05:34:50.760153Z', '2026-11-17T05:34:53.078019Z', ...), ('subject', None, None, None, '2026-11-17T05:34:52.216972Z', None, ...)]}
+E         Use -v to get more diff
+
+tests\execution_r4\test_public_id_retirement.py:50: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_public_id_retirement" name="test_old_uncertain_reservation_timestamps_do_not_make_new_intent_available" time="3.706"><failure message="AssertionError: assert {'agents': [(...its': [], ...} == {'agents': [(...its': [], ...}&#10;  &#10;  Omitting 7 identical items, use -vv to show&#10;  Differing items:&#10;[+2 more lines; full report in element text]">local_setup = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11211/test_old...d', version=None, architecture=None, launch_script=None, build_identity=None, installation_ref=None, reason=None), ...)
+
+    def test_old_uncertain_reservation_timestamps_do_not_make_new_intent_available(local_setup):
+        deps = local_setup[0]
+        context, request = public_request(local_setup)
+        reserved = reserve_public_id(deps, context, request, approved=True)
+        # Deliberate fixture aging, not a canonical expiry mutation or execution of a cleanup job.
+        with deps.connection_factory.unit_of_work() as uow:
+            for table in ('connection_public_ids', 'connection_project_drafts'):
+                uow.connection.execute('UPDATE ' + table + ' SET created_at=?,updated_at=?',
+                                       ('1900-01-01T00:00:00Z', '1900-01-01T00:00:00Z'))
+        before = authority_rows(local_setup)
+        _, other = public_request(local_setup)
+        client, headers = local_setup[2:4]
+        refused = client.post('/api/v1/runtime-management/connections/public-ids/reserve',
+            headers=headers['operator'], json=dict(approved=True, request=other))
+        assert refused.status_code == 409, refused.text
+        assert refused.json()['error']['code'] == 'CONNECT_ID_PENDING'
+&gt;       assert authority_rows(local_setup) == before
+E       AssertionError: assert {'agents': [(...its': [], ...} == {'agents': [(...its': [], ...}
+E         
+E         Omitting 7 identical items, use -vv to show
+E         Differing items:
+E         {'agents': [('operator', 'operator', None, None, '2026-11-17T05:34:55.496291Z', '2026-11-17T05:34:57.129832Z', ...), ('subject', None, None, None, '2026-11-17T05:34:55.859468Z', None, ...)]} != {'agents': [('operator', 'operator', None, None, '2026-11-17T05:34:55.496291Z', '2026-11-17T05:34:57.056313Z', ...), ('subject', None, None, None, '2026-11-17T05:34:55.859468Z', None, ...)]}
+E         Use -v to get more diff
+
+tests\execution_r4\test_public_id_retirement.py:70: AssertionError</failure></testcase></testsuite></testsuites>

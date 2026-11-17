@@ -1,0 +1,19 @@
+--- persistence-applied-final/tests/quick_connect/test_qc24_namespace_http.py
++++ tests/quick_connect/test_qc24_namespace_http.py
+@@ -6,7 +6,7 @@
+ import uuid
+ 
+ from test_public_connection_ids import public_request
+-from test_connection_setup import local_setup,request_for
++from test_connection_setup import local_setup as local_setup,request_for
+ from test_connection_setup_recovery import snapshot
+ from okto_nexus.application.execution_local_realizations import directory_identity
+ from okto_nexus.application.connection_project_context import read_project_context
+@@ -109,3 +109,7 @@
+     write_proof('e07-proof.json',dict(connect_id='reviewer',canonical_refs=[ra,rb],workspace_count=2,
+         distinct_grants=2,shared_grants=False,finish_commits=2,operations=0,sessions=0,
+         workspace_origin='Each workspace created by canonical HTTP Finish, not seeded SQL'))
++
++
++# Explicit public exports include pytest fixtures used through injection.
++__all__ = ['BASE', 'Path', 'deepcopy', 'directory_identity', 'finish_http', 'json', 'local_setup', 'os', 'public_request', 'read_project_context', 'request_for', 'reserve', 'snapshot', 'test_e07_same_id_two_finish_created_workspaces_bound_with_distinct_refs_and_grants', 'test_e09_http_mixed_case_reserve_collision_and_query_share_namespace', 'uuid', 'write_proof']

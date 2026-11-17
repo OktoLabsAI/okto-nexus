@@ -1,0 +1,19 @@
+--- persistence-applied-final/tests/quick_connect/test_qc24_namespace_executor_http.py
++++ tests/quick_connect/test_qc24_namespace_executor_http.py
+@@ -3,7 +3,7 @@
+ import uuid
+ import pytest
+ 
+-from test_qc24_namespace_http import local_setup,finish_http,reserve,write_proof,BASE
++from test_qc24_namespace_http import local_setup as local_setup,finish_http,reserve,write_proof,BASE
+ from test_public_connection_ids import public_request
+ from test_connection_setup import request_for
+ from test_connection_setup_recovery import snapshot
+@@ -60,3 +60,7 @@
+         executor_count=2,second_executor_origin='canonical subject-authorized POST executors:register',
+         new_reservation_refused=True,collision_code='CONNECT_ID_PENDING',canonical_refs_or_grants_unchanged=True,
+         remote_transport_or_daemon_started=False))
++
++
++# Explicit public exports include pytest fixtures used through injection.
++__all__ = ['BASE', 'deepcopy', 'finish_http', 'local_setup', 'public_request', 'pytest', 'request_for', 'reserve', 'snapshot', 'test_e06_same_workspace_id_collision_spans_two_canonically_registered_executors', 'uuid', 'write_proof']

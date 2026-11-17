@@ -1,0 +1,364 @@
+{
+  "status": "PASS",
+  "mode": "SOURCE_ONLY_NOT_NEW_INSTALLED_PACKAGE",
+  "nodes": [
+    {
+      "cut": "render-and-outcome",
+      "name": "test_legacy_value_is_unchanged_and_output_helper_defers_to_legacy_display",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_created_connection_reports_bound_full_reference_without_claiming_work_or_mutating_inputs",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_reuse_preserves_the_same_public_id_and_reference_and_names_the_reuse",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_partial_server_commit_keeps_bound_identity_and_shortcut_repair_explicit",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_plan_never_promotes_proposal_or_existing_observation_to_connected",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_known_non_success_states_are_not_relabelled_as_pending[cancelled-cancelled]",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_known_non_success_states_are_not_relabelled_as_pending[conflict-conflict]",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_known_non_success_states_are_not_relabelled_as_pending[test_failed-failed]",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_known_non_success_states_are_not_relabelled_as_pending[outcome_unknown-unknown]",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_incomplete_canonical_reference_never_satisfies_connected[server_id]",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_incomplete_canonical_reference_never_satisfies_connected[executor_id]",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_incomplete_canonical_reference_never_satisfies_connected[workspace_id]",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_incomplete_canonical_reference_never_satisfies_connected[binding_id]",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_incomplete_canonical_reference_never_satisfies_connected[workspace_binding_id]",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_incomplete_canonical_reference_never_satisfies_connected[agent_id]",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_incomplete_canonical_reference_never_satisfies_connected[endpoint_id]",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_public_reference_must_match_the_observed_connection_and_reviewed_id",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_resume_argv_uses_public_id_and_preserves_metacharacters_as_unexecuted_arguments",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_positive_basic_output_identifies_project_origin_and_approved_root_before_chat",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_unsafe_discovery_provenance_is_rejected_without_leaking_origin_or_credentials",
+      "classname": "tests.quick_connect.test_quick_connect_outcome",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_local_public_resume_keeps_home_root_and_full_selectors_without_technical_profile",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_remote_public_resume_keeps_operator_and_exact_refs_without_execution_host_path",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_remote_missing_operator_does_not_print_a_command_that_could_select_local_service",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_pending_shortcut_never_removes_the_same_technical_recovery_intent",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_posix_render_roundtrips_arguments_without_side_effects[values0]",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_posix_render_roundtrips_arguments_without_side_effects[values1]",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_unpasteable_control_arguments_are_refused[posix-line\\nbreak]",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_unpasteable_control_arguments_are_refused[posix-line\\rbreak]",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_unpasteable_control_arguments_are_refused[posix-nul\\x00byte]",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_unpasteable_control_arguments_are_refused[powershell-line\\nbreak]",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_unpasteable_control_arguments_are_refused[powershell-line\\rbreak]",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_unpasteable_control_arguments_are_refused[powershell-nul\\x00byte]",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_cmd_is_not_misrepresented_as_powershell_or_posix",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.000",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_option_like_project_names_are_data_not_selector_names[--profile]",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_option_like_project_names_are_data_not_selector_names[--home]",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_option_like_project_names_are_data_not_selector_names[--binding-id]",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.001",
+      "status": "PASS"
+    },
+    {
+      "cut": "render-and-outcome",
+      "name": "test_option_like_selector_values_keep_their_arity_and_parse_as_values",
+      "classname": "tests.quick_connect.test_quick_connect_render",
+      "seconds": "0.002",
+      "status": "PASS"
+    }
+  ],
+  "passed": 37,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "label": "render-and-outcome",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-racvlr37\\bootstrap.py",
+        "-p",
+        "qc39_plugin",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-racvlr37\\pytest.ini",
+        "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect",
+        "-v",
+        "-s",
+        "--tb=short",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-racvlr37\\render-and-outcome\\junit.xml",
+        "-k",
+        "test_quick_connect_render or test_quick_connect_outcome"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-racvlr37\\render-and-outcome\\cwd",
+      "deadline_seconds": 180,
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 46108,
+          "parent_pid": null,
+          "birth_filetime": 134393863607058541,
+          "alive": false
+        },
+        {
+          "pid": 43120,
+          "parent_pid": 46108,
+          "birth_filetime": 134393863607192431,
+          "alive": false
+        }
+      ],
+      "signals": [],
+      "rejected_nonowned_births": []
+    }
+  ],
+  "payload_files": 1013,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "raw_refs": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-racvlr37\\render-and-outcome\\junit.xml",
+      "sha256": "cc0bbcd1a071cea3a63c26116fc7330cb14f84d922f6536544c2fa5ce9b13215",
+      "exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-racvlr37\\render-and-outcome\\raw.log",
+      "sha256": "111643cae55caeb4a470bf1acf7d38c1835e551cb3f6ef5641110ab4dbafe0b9",
+      "exported": false
+    }
+  ],
+  "cleanup": {
+    "all_owned_processes_exited": true,
+    "signals": [],
+    "data_preserved_in_owned_temp": true
+  },
+  "limits": [
+    "Nexus imports are repository src, not the PR27 installed Nexus or a new candidate wheel.",
+    "Core/Connector and Python dependencies come from the qualified PR27 prefix. Payload files matched exact three wheels before and after.",
+    "Setup/Test/version/lifecycle fixture peers are synthetic, no native/provider account or real credential backend.",
+    "Only renderer/output feature tests were selected; the other 529 collected quick_connect cases were deselected.",
+    "Two earlier renderer test cuts failed on remote fixture cwd_resolution mismatch and then an omitted nullable field oracle. They remain separate antecedents.",
+    "Raw fixture logs, SQLite, homes and vault contents stay in owned Temp. Sanitized XML omits stdout/stderr."
+  ],
+  "shell_proof": "shell-proof.json",
+  "ruff": "PASS rtk proxy ruff check (two product modules and new test)",
+  "antecedents": [
+    {
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-k65ndbkv",
+      "reason": "Remote fixture reused local cwd_resolution; two tests fail before exercising their assertions.",
+      "passed": 31,
+      "failed": 2,
+      "xml_sha256": "93e1f08b530bfe61b118d125b25dc512618ea54b38aadc6619b08ad2cc30d154",
+      "raw_retained_in_own_temp": true
+    },
+    {
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-s1l5ma79",
+      "reason": "DTO omits nullable project_root; one test incorrectly indexed the absent key.",
+      "passed": 32,
+      "failed": 1,
+      "xml_sha256": "fea9866f9a019f256becd2e90922c1ce714f4b74f21797ea855b0e898a981e85",
+      "raw_retained_in_own_temp": true
+    }
+  ],
+  "prelaunch_antecedents": [
+    "Shell-proof script initially supplied stdin and input together; Python refused before launching any shell. Corrected to input=b empty (implicitly PIPE).",
+    "Attempted PR27 python -m ruff found no ruff module; system ruff then passed, no install performed.",
+    "First runner preparation command had PowerShell quoting error and created no runner/test process; safe encoded preparation succeeded."
+  ]
+}

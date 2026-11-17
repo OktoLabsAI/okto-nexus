@@ -1,0 +1,19 @@
+{
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc31-multisession-874oulj_",
+  "prefix": "C:/Users/jpamb/AppData/Local/Temp/nexus-qc-r1-package-t24_dnfc/venv",
+  "python": "C:/Users/jpamb/AppData/Local/Temp/nexus-qc-r1-package-t24_dnfc/venv/Scripts/python.exe",
+  "stop": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc31-multisession-874oulj_\\control\\stop",
+  "ready": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc31-multisession-874oulj_\\control\\ready.json",
+  "final": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc31-multisession-874oulj_\\control\\final.json",
+  "helper_pins": {
+    "full_helper_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_canonical_native_protocol_regressions.py",
+    "full_helper_source_sha256": "2a36c5b89e04cb121f7dc0e076965b09336de71b865964141fd2f102993f2da2",
+    "full_install_native_function_sha256": "861624cb9ba03ac5b3d5462c0849cb4083cdc8af09e634cf2936c13580fea4cd",
+    "fake_source_file": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_harness_codex_connector.py",
+    "fake_source_file_sha256": "ed6cb4bafaed47899f10534934c1458fcc2d07b1467803cf0c42354b51551bf3",
+    "fake_protocol_source_sha256": "ac1f7a472379257534cab6fb85d93ecf5b469901605f9ab126cb4df577533bbb",
+    "extracted_helper_sha256": "f639c53814c07b0f04dd7544bcea04b4371f7332f389f3e76e9f9f71b69ab007",
+    "method": "Complete original install_native function and literal fake source, no protocol/body edits or SQL fixture imports."
+  },
+  "prepared_only": true
+}

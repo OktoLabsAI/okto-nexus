@@ -1,0 +1,47 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-u",
+    "-c",
+    "import sys,json,pathlib;sys.path.insert(0,'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc09-git-cwd-counterpart-8chtfkah\\\\run\\\\guard');import pytest;raise SystemExit(pytest.main(json.loads(pathlib.Path('C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc09-git-cwd-counterpart-8chtfkah\\\\run\\\\pytest-args.json').read_text())))"
+  ],
+  "pytest_args": [
+    "-p",
+    "qc_installed_origin_guard",
+    "-p",
+    "qc_wave_report",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-git-cwd-counterpart-8chtfkah\\run\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_git_project_hint.py::test_path_search_has_entry_and_time_budgets",
+    "-v",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-git-cwd-counterpart-8chtfkah\\run\\output\\tests.xml"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 2.9321327209472656,
+  "phases": [],
+  "tracked_processes": [
+    {
+      "pid": 60848,
+      "ppid": 61316,
+      "create_time": 1794898554.1094804,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 55328,
+      "ppid": 60848,
+      "create_time": 1794898554.1311417,
+      "exe": "C:\\Python313\\python.exe"
+    }
+  ],
+  "physically_exited": {
+    "60848": true,
+    "55328": true
+  }
+}

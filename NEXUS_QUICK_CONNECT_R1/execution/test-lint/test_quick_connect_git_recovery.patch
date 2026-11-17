@@ -1,0 +1,19 @@
+--- persistence-applied-final/tests/quick_connect/test_quick_connect_git_recovery.py
++++ tests/quick_connect/test_quick_connect_git_recovery.py
+@@ -6,7 +6,7 @@
+ 
+ import pytest
+ from test_quick_connect_cli import (  # noqa: F401
+-    checking, invoke, isolated_provider_environment, local_setup, quick_cli, terminal,
++    checking as checking, invoke, isolated_provider_environment as isolated_provider_environment, local_setup as local_setup, quick_cli as quick_cli, terminal as terminal,
+ )
+ from test_quick_connect_extra_scenarios import canonical_snapshot, public_row
+ 
+@@ -80,3 +80,7 @@
+     assert public_row(c, 'codex', reference['workspace_id']) == old_public
+     assert tuple(c.t.turns) == turns and tuple(c.t.probes) == probes
+     assert all(row['exit_code'] == 0 for row in commands)
++
++
++# Explicit public exports include pytest fixtures used through injection.
++__all__ = ['Path', 'canonical_snapshot', 'checking', 'invoke', 'isolated_provider_environment', 'json', 'local_setup', 'os', 'public_row', 'pytest', 'quick_cli', 'subprocess', 'terminal', 'test_d26_explicit_name_finish_recovery_ignores_changed_local_git']

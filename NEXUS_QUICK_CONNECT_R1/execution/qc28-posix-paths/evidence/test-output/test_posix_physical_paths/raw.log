@@ -1,0 +1,24 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- /tmp/nexus-qc28-xmlie7rv/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /tmp/nexus-qc28-xmlie7rv/tests
+configfile: ../pytest.ini
+plugins: asyncio-1.5.0, anyio-4.16.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 3 items
+
+../tests/test_posix_physical_paths.py::test_c15_real_case_sensitive_repo_and_repo_are_distinct IMMEDIATE_REPORT {"nodeid": "test_posix_physical_paths.py::test_c15_real_case_sensitive_repo_and_repo_are_distinct", "when": "setup", "outcome": "passed", "duration": 0.0020184239999707643}
+IMMEDIATE_REPORT {"nodeid": "test_posix_physical_paths.py::test_c15_real_case_sensitive_repo_and_repo_are_distinct", "when": "call", "outcome": "passed", "duration": 0.001290795999977945}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_posix_physical_paths.py::test_c15_real_case_sensitive_repo_and_repo_are_distinct", "when": "teardown", "outcome": "passed", "duration": 0.0002178649999677873}
+
+../tests/test_posix_physical_paths.py::test_posix_symlink_resolves_same_physical_identity_and_profile IMMEDIATE_REPORT {"nodeid": "test_posix_physical_paths.py::test_posix_symlink_resolves_same_physical_identity_and_profile", "when": "setup", "outcome": "passed", "duration": 0.0011327719999485453}
+IMMEDIATE_REPORT {"nodeid": "test_posix_physical_paths.py::test_posix_symlink_resolves_same_physical_identity_and_profile", "when": "call", "outcome": "passed", "duration": 0.0010101110000277913}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_posix_physical_paths.py::test_posix_symlink_resolves_same_physical_identity_and_profile", "when": "teardown", "outcome": "passed", "duration": 0.00012872500002458764}
+
+../tests/test_posix_physical_paths.py::test_posix_backslash_is_filename_not_directory_separator IMMEDIATE_REPORT {"nodeid": "test_posix_physical_paths.py::test_posix_backslash_is_filename_not_directory_separator", "when": "setup", "outcome": "passed", "duration": 0.000756298999988303}
+IMMEDIATE_REPORT {"nodeid": "test_posix_physical_paths.py::test_posix_backslash_is_filename_not_directory_separator", "when": "call", "outcome": "passed", "duration": 0.00092088399998147}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_posix_physical_paths.py::test_posix_backslash_is_filename_not_directory_separator", "when": "teardown", "outcome": "passed", "duration": 0.0001417610000089553}
+
+
+- generated xml file: /tmp/nexus-qc28-xmlie7rv/test-output/test_posix_physical_paths/junit.xml -
+============================== 3 passed in 0.28s ===============================

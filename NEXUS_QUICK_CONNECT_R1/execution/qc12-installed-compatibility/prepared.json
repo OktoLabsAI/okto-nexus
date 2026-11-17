@@ -1,0 +1,89 @@
+{
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki",
+  "status": "PREPARED_WAITING_PACKAGE_READY",
+  "copied_files": 61,
+  "source_pins": 799,
+  "cuts": 18,
+  "nodes": [
+    [
+      "test_connect_arguments",
+      "tests/quick_connect/test_connect_arguments.py"
+    ],
+    [
+      "test_connect_dispatch",
+      "tests/quick_connect/test_connect_dispatch.py"
+    ],
+    [
+      "test_entry_compatibility",
+      "tests/quick_connect/test_entry_compatibility.py"
+    ],
+    [
+      "test_git_project_hint",
+      "tests/quick_connect/test_git_project_hint.py"
+    ],
+    [
+      "test_git_project_trust",
+      "tests/quick_connect/test_git_project_trust.py"
+    ],
+    [
+      "test_harness_alternatives",
+      "tests/quick_connect/test_harness_alternatives.py"
+    ],
+    [
+      "test_quick_connect_cli",
+      "tests/quick_connect/test_quick_connect_cli.py"
+    ],
+    [
+      "test_quick_connect_contracts",
+      "tests/quick_connect/test_quick_connect_contracts.py"
+    ],
+    [
+      "test_quick_connect_customize",
+      "tests/quick_connect/test_quick_connect_customize.py"
+    ],
+    [
+      "test_quick_connect_id_choices",
+      "tests/quick_connect/test_quick_connect_id_choices.py"
+    ],
+    [
+      "test_quick_connect_outcome",
+      "tests/quick_connect/test_quick_connect_outcome.py"
+    ],
+    [
+      "test_quick_connect_project",
+      "tests/quick_connect/test_quick_connect_project.py"
+    ],
+    [
+      "test_quick_connect_pty",
+      "tests/quick_connect/test_quick_connect_pty.py"
+    ],
+    [
+      "test_quick_connect_selection",
+      "tests/quick_connect/test_quick_connect_selection.py"
+    ],
+    [
+      "test_terminal_public_connection",
+      "tests/quick_connect/test_terminal_public_connection.py"
+    ],
+    [
+      "legacy-canonical-shortcut",
+      "tests/execution_r4/test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut"
+    ],
+    [
+      "legacy-single-harness",
+      "tests/execution_r4/test_terminal_multi_harness.py::test_single_observed_harness_needs_no_profile_and_existing_connection_offers_all_intents"
+    ],
+    [
+      "legacy-two-harnesses",
+      "tests/execution_r4/test_terminal_multi_harness.py::test_two_distinct_harnesses_share_project_keep_custom_a_and_recover_b_finish"
+    ]
+  ],
+  "pytest_started": false,
+  "fixture_src_present": false,
+  "git_path": "C:/Program Files/Git/cmd",
+  "limitations": [
+    "PTY-specific tests require real input and will honestly skip in this non-PTY automated cut.",
+    "This run checks copied test fixtures, with installed application imports only; no source child APP path is inserted.",
+    "Git fixtures operate only on temporary repositories with global/system configuration disabled; no network or provider."
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "started_at": "2026-11-17T11:01:09.665517+00:00",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-0_ffblkq",
+  "selected": [
+    "tests\\quick_connect\\test_ancestor_privacy.py",
+    "tests\\quick_connect\\test_connect_dispatch.py",
+    "tests\\quick_connect\\test_git_cli_integration.py",
+    "tests\\quick_connect\\test_git_project_trust.py",
+    "tests\\quick_connect\\test_harness_alternatives.py",
+    "tests\\quick_connect\\test_local_edge_scenarios.py",
+    "tests\\quick_connect\\test_posix_physical_paths.py",
+    "tests\\quick_connect\\test_qc15_policy_denial.py",
+    "tests\\quick_connect\\test_qc24_namespace_http.py",
+    "tests\\quick_connect\\test_qc30_remote_public_id.py",
+    "tests\\quick_connect\\test_qc35_review_cancel.py",
+    "tests\\quick_connect\\test_quick_connect_cli.py",
+    "tests\\quick_connect\\test_quick_connect_customization_output.py",
+    "tests\\quick_connect\\test_quick_connect_extra_scenarios.py",
+    "tests\\quick_connect\\test_quick_connect_git_recovery.py",
+    "tests\\quick_connect\\test_quick_connect_outcome.py",
+    "tests\\quick_connect\\test_quick_connect_project_directory_scenarios.py",
+    "tests\\quick_connect\\test_quick_connect_pty.py",
+    "tests\\quick_connect\\test_quick_connect_selection.py"
+  ],
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path[:0]=['C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\guard', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\execution_r4', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\home_evolution', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\legacy_native_fixture', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\ui_simplification'];import pytest;raise SystemExit(pytest.main(['-p', 'qc36_origin_guard', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\pytest.ini', '--rootdir=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree', '--confcutdir=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_ancestor_privacy.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_connect_dispatch.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_git_cli_integration.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_git_project_trust.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_harness_alternatives.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_local_edge_scenarios.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_posix_physical_paths.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_qc15_policy_denial.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_qc24_namespace_http.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_qc30_remote_public_id.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_qc35_review_cancel.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_cli.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_customization_output.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_extra_scenarios.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_git_recovery.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_outcome.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_project_directory_scenarios.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_pty.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_selection.py', '-v', '--tb=short', '-x', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc36-installed-0_ffblkq\\\\reports\\\\tests.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-0_ffblkq\\cwd",
+  "helper_paths": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-0_ffblkq\\tree\\tests",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-0_ffblkq\\tree\\tests\\execution_r4",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-0_ffblkq\\tree\\tests\\home_evolution",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-0_ffblkq\\tree\\tests\\legacy_native_fixture",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-0_ffblkq\\tree\\tests\\quick_connect",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-0_ffblkq\\tree\\tests\\ui_simplification"
+  ],
+  "stdin": "closed PIPE; no NUL console reopening",
+  "timeout": 1800,
+  "signals": [],
+  "exit_code": 0,
+  "ended_at": "2026-11-17T11:08:17.834484+00:00",
+  "payload_files": 1028,
+  "payload_drift": [],
+  "source_drift": [],
+  "known_processes": [
+    {
+      "pid": 58160,
+      "birth": 1794913269.6686473,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 15832,
+      "birth": 1794913269.6879692,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 36068,
+      "birth": 1794913290.6764288,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 49116,
+      "birth": 1794913290.6972053,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 23872,
+      "birth": 1794913290.9232395,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 30168,
+      "birth": 1794913290.9372904,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 56092,
+      "birth": 1794913290.9780476,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 18928,
+      "birth": 1794913310.4620245,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 53008,
+      "birth": 1794913310.4729028,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 55760,
+      "birth": 1794913312.0874062,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 47428,
+      "birth": 1794913312.1020682,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 56356,
+      "birth": 1794913318.1108718,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 28128,
+      "birth": 1794913326.5018725,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 55960,
+      "birth": 1794913326.5219784,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 61056,
+      "birth": 1794913326.8105876,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 58912,
+      "birth": 1794913328.4497972,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 56332,
+      "birth": 1794913349.303126,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 26772,
+      "birth": 1794913355.967095,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 24552,
+      "birth": 1794913355.9797902,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 60132,
+      "birth": 1794913361.6498756,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 39424,
+      "birth": 1794913368.108294,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 26956,
+      "birth": 1794913368.115398,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 48456,
+      "birth": 1794913393.3833869,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 53164,
+      "birth": 1794913393.3959608,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 50308,
+      "birth": 1794913393.4155078,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 42332,
+      "birth": 1794913665.821623,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 22572,
+      "birth": 1794913665.8353033,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    }
+  ]
+}

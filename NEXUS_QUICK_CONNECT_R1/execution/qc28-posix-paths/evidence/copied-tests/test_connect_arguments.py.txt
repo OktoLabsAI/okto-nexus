@@ -1,0 +1,160 @@
+"""QC-004 grammar only; no service, provider, identity or directory probes."""
+from pathlib import Path
+
+import pytest
+
+from okto_nexus import config
+from okto_nexus.adapters.inbound.cli import connect_arguments as grammar
+from okto_nexus.application.project_preset import CLIENTS
+
+
+@pytest.mark.parametrize('argv,harness,name', [(['codex', 'app'], 'codex', 'app'), (['codex'], 'codex', None),
+    ([], None, None), (['CoDeX', '--client', 'codex'], 'codex', None),
+    (['codex', 'Minha aplicação'], 'codex', 'Minha aplicação'),
+    (['codex', '--id', 'Reviewer', 'My App'], 'codex', 'My App'),
+    (['--client', 'CLAUDE'], 'claude', None), (['codxe'], 'codxe', None)])
+def test_positionals_normalize_only_harness_and_preserve_project_label(argv, harness, name):
+    args, service = grammar.parse_connect_args(argv)
+    assert args.client == harness and args.project_name == name
+    assert service == []
+    if '--id' in argv:
+        assert args.connect_id == 'reviewer'
+
+
+def test_legacy_path_flags_and_defaults_keep_their_original_types():
+    args, service = grammar.parse_connect_args(['--client', 'codex', '--project', '.', '--profile', 'legacy',
+        '--remote-draft', 'draft.json', '--setup-receipt-output', 'receipt.json', '--no-start-at-login',
+        '--candidate-ref', 'candidate', '--provider-home', 'provider-home', '--workspace-id', 'workspace',
+        '--binding-id', 'binding', '--operator-profile', 'remote', '--timeout', '15', '--json', '--no-chat'])
+    assert args.project == Path('.') and args.project_name is None and args.harness is None
+    assert args.remote_draft == Path('draft.json') and args.setup_receipt_output == Path('receipt.json')
+    assert args.profile == 'legacy' and args.start_at_login is False and args.timeout == 15.0
+    assert args.workspace_id == 'workspace' and args.binding_id == 'binding'
+    assert args.operator_profile == 'remote' and args.json and args.no_chat and service == []
+    defaults, _ = grammar.parse_connect_args([])
+    assert defaults.start_at_login is None and defaults.timeout == 300 and defaults.new_connection is False
+
+
+@pytest.mark.parametrize('argv', [['codex', '--client', 'claude'], ['--client', 'codex', 'app'],
+    ['codex', 'app', 'extra'], ['codex', '--clinet', 'pi'], ['codex', '--pro', '/tmp'],
+    ['--agent', 'A', '--new-agent', 'B'], ['--agent', 'A', '--name', 'new'],
+    ['--start-at-login', '--no-start-at-login'], ['--plan', '--approve', 'revision'],
+    ['--review-current', '--approve', 'revision'], ['--timeout', 'nan'], ['--timeout', 'inf'],
+    ['--timeout', '0'], ['--timeout', '301'], ['--id', '../bad'], ['--home'], ['--port', '--json'],
+    ['--mode', 'invalid'], ['--unknown=value']])
+def test_conflicting_or_invalid_grammar_fails_before_any_execution(argv, capsys):
+    with pytest.raises(SystemExit) as failure:
+        grammar.parse_connect_args(argv)
+    assert failure.value.code == 2
+    assert 'error:' in capsys.readouterr().err
+
+
+def test_service_value_arity_is_removed_before_positional_parsing(tmp_path):
+    home = str(tmp_path / 'home')
+    argv = ['--home', home, 'codex', '--port=8300', 'Logical app', '--host', '127.0.0.1',
+        '--project-root', str(tmp_path), '--log-level', 'warning', '--handoff-notify-expiry', 'false', '--json']
+    args, service = grammar.parse_connect_args(argv)
+    assert args.client == 'codex' and args.project_name == 'Logical app'
+    assert service == ['--home', home, '--port=8300', '--host', '127.0.0.1',
+        '--project-root', str(tmp_path), '--log-level', 'warning', '--handoff-notify-expiry', 'false']
+    assert argv[0] == '--home'  # Input vector is never rewritten.
+
+
+def test_config_flag_set_is_derived_from_the_real_configuration_tables():
+    expected = {row[1] for table in (config._PATH_FIELDS, config._INT_FIELDS, config._ENUM_FIELDS,
+        config._FLOAT_FIELDS, config._STRING_FIELDS, config._BOOL_FIELDS) for row in table.values()}
+    assert grammar._config_flags() == expected
+    for flag in expected:
+        args, rest = grammar.parse_connect_args([flag, 'value', 'codex'])
+        assert args.client == 'codex' and rest == [flag, 'value']
+
+
+def test_service_validation_uses_real_parsers_without_loading_configuration(monkeypatch):
+    calls = []
+    serve, flat = grammar._split_serve_args, config._parse_cli
+    def serve_spy(argv, env):
+        calls.append(('serve', argv, env))
+        return serve(argv, env)
+    def flat_spy(argv):
+        calls.append(('config', argv))
+        return flat(argv)
+    monkeypatch.setattr(grammar, '_split_serve_args', serve_spy)
+    monkeypatch.setattr(config, '_parse_cli', flat_spy)
+    monkeypatch.setattr(config, 'load_config', lambda *a, **kw: pytest.fail('No load_config in pure parsing'))
+    monkeypatch.setenv('OKTO_NEXUS_PORT', 'not-a-port')
+    args, rest = grammar.parse_connect_args(['--port', '8300', '--home', 'relative-home', 'codex'])
+    assert args.client == 'codex' and rest == ['--port', '8300', '--home', 'relative-home']
+    assert calls == [('serve', rest, {}), ('config', ['--home', 'relative-home'])]
+    with pytest.raises(SystemExit):
+        grammar.parse_connect_args(['codex', '--port', 'not-a-port'])
+
+
+def test_discovery_paths_are_structural_and_never_resolved_or_probed(tmp_path, monkeypatch):
+    def forbidden(*args, **kwargs):
+        pytest.fail('Pure parsing must not resolve or probe discovery paths')
+    with monkeypatch.context() as scoped:
+        for method in ('resolve', 'exists', 'is_dir', 'is_file'):
+            scoped.setattr(Path, method, forbidden)
+        root, node = str(tmp_path / 'not-created'), str(tmp_path / 'node-not-created')
+        args, service = grammar.parse_connect_args(['--harness-root', root, 'claude',
+            '--pi-install-root=' + root, '--pi-node', node])
+    assert args.client == 'claude'
+    assert service == ['--harness-root', root, '--pi-install-root=' + root, '--pi-node', node]
+
+
+@pytest.mark.parametrize('tail', [['--harness-root', 'relative'], ['--pi-install-root', '/root'],
+    ['--pi-node', '/node'], ['--pi-install-root', '/root', '--pi-node', '/node', '--pi-node', '/node'],
+    ['--harness-root=']])
+def test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved(tail):
+    with pytest.raises(SystemExit) as failure:
+        grammar.parse_connect_args(['codex', *tail])
+    assert failure.value.code == 2
+
+
+def test_discovery_roots_deduplicate_lexically_with_the_existing_32_root_budget(tmp_path):
+    root = str(tmp_path)
+    _, service = grammar.parse_connect_args(['codex', *sum((['--harness-root', root] for _ in range(40)), [])])
+    assert service.count('--harness-root') == 40  # Preserve argv; runtime owns canonical deduplication.
+    roots = sum((['--harness-root', str(tmp_path / str(n))] for n in range(33)), [])
+    with pytest.raises(SystemExit):
+        grammar.parse_connect_args(['codex', *roots])
+
+
+def test_managed_mode_is_consumed_but_participant_options_are_left_for_its_real_parser():
+    assert grammar.parse_mode(['--mode=managed', 'codex']) == ('managed', ['codex'])
+    participant = ['--server', 'https://example.invalid', '--client', 'codex', '--project', '.', '--key-stdin', '--json']
+    assert grammar.parse_mode(['--mode', 'participant', *participant]) == ('participant', participant)
+    for argv in (['codex', 'app', '--mode', 'participant'], ['--mode', 'participant', '--id', 'reviewer'],
+        ['--mode', 'participant', '--server', 'https://example.invalid', 'codex'],
+        ['--mode', 'participant', '--json', 'codex']):
+        with pytest.raises(SystemExit) as failure:
+            grammar.parse_mode(argv)
+        assert failure.value.code == 2
+
+
+def test_help_is_immediate_and_uses_the_single_harness_registry(monkeypatch, capsys):
+    def forbidden(*args, **kwargs):
+        pytest.fail('Help cannot parse mode/service, read files or execute')
+    monkeypatch.setattr(grammar, 'parse_mode', forbidden)
+    monkeypatch.setattr(grammar, '_validate_discovery', forbidden)
+    monkeypatch.setattr(grammar, '_split_serve_args', forbidden)
+    with pytest.raises(SystemExit) as result:
+        grammar.parse_connect_args(['--harness-root', 'invalid', '--help'])
+    assert result.value.code == 0
+    output = capsys.readouterr().out
+    assert 'Harness ID' in output
+    assert all(token in output for token in CLIENTS)
+
+
+def test_parsing_never_reads_stdin_environment_files_or_runs_processes(monkeypatch):
+    def forbidden(*args, **kwargs):
+        pytest.fail('Pure parsing must not perform IO')
+    with monkeypatch.context() as scoped:
+        scoped.setattr('builtins.input', forbidden)
+        scoped.setattr('builtins.open', forbidden)
+        scoped.setattr('os.getcwd', forbidden)
+        scoped.setattr('subprocess.Popen', forbidden)
+        scoped.setattr('subprocess.run', forbidden)
+        scoped.setattr(Path, 'resolve', forbidden)
+        args, service = grammar.parse_connect_args(['codxe', 'Logical app', '--home', 'relative-home', '--plan', '--json'])
+    assert args.client == 'codxe' and args.plan and args.json and service == ['--home', 'relative-home']

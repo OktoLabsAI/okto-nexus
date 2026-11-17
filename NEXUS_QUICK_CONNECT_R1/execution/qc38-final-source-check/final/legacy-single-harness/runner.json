@@ -1,0 +1,41 @@
+{
+  "label": "legacy-single-harness",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\bootstrap.py",
+    "-p",
+    "qc38_plugin",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_terminal_multi_harness.py::test_single_observed_harness_needs_no_profile_and_existing_connection_offers_all_intents",
+    "-v",
+    "-s",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-single-harness\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-single-harness\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T10:40:19.245476+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 57108,
+      "parent_pid": null,
+      "birth_filetime": 134393856192477518,
+      "alive": false
+    },
+    {
+      "pid": 16176,
+      "parent_pid": 57108,
+      "birth_filetime": 134393856192586500,
+      "alive": false
+    }
+  ],
+  "rejected_nonowned_births": [],
+  "ended_at": "2026-11-17T10:40:33.020300+00:00"
+}

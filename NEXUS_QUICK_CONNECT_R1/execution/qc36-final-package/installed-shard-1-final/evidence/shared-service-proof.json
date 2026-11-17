@@ -1,0 +1,82 @@
+{
+  "pid": 32672,
+  "instance_id": "svc_7d5a495edc6c70a953ef6a6ee3d67bb76c1c5121921369283f1f2561aa8ca579",
+  "generation": "979c40b5a78eb926f5221e30a4e92e6e",
+  "server_kind": "genuine foreground app/portal, not detached daemon",
+  "http_port": 51045,
+  "readiness": "Unmodified inspect_local_server + real held ServeLock + real HTTP /api/v1/service",
+  "local_operator_http": "real loopback socket, no transport stub",
+  "resolver": "unmodified production resolver",
+  "statuses": [
+    {
+      "pid": 32672,
+      "instance_id": "svc_7d5a495edc6c70a953ef6a6ee3d67bb76c1c5121921369283f1f2561aa8ca579",
+      "generation": "979c40b5a78eb926f5221e30a4e92e6e",
+      "state": "ready",
+      "ready_for_queries": true
+    },
+    {
+      "pid": 32672,
+      "instance_id": "svc_7d5a495edc6c70a953ef6a6ee3d67bb76c1c5121921369283f1f2561aa8ca579",
+      "generation": "979c40b5a78eb926f5221e30a4e92e6e",
+      "state": "ready",
+      "ready_for_queries": true
+    },
+    {
+      "pid": 32672,
+      "instance_id": "svc_7d5a495edc6c70a953ef6a6ee3d67bb76c1c5121921369283f1f2561aa8ca579",
+      "generation": "979c40b5a78eb926f5221e30a4e92e6e",
+      "state": "ready",
+      "ready_for_queries": true
+    },
+    {
+      "pid": 32672,
+      "instance_id": "svc_7d5a495edc6c70a953ef6a6ee3d67bb76c1c5121921369283f1f2561aa8ca579",
+      "generation": "979c40b5a78eb926f5221e30a4e92e6e",
+      "state": "ready",
+      "ready_for_queries": true
+    },
+    {
+      "pid": 32672,
+      "instance_id": "svc_7d5a495edc6c70a953ef6a6ee3d67bb76c1c5121921369283f1f2561aa8ca579",
+      "generation": "979c40b5a78eb926f5221e30a4e92e6e",
+      "state": "ready",
+      "ready_for_queries": true
+    }
+  ],
+  "canonical_refs": [
+    {
+      "server_id": "srv_202ea644b4ab1e6e7ced9e869f4b3a85",
+      "executor_id": "exe_6e368ccfac775f8fd01d1d9d4e34a624",
+      "binding_id": "bind_1bf10c345c831ca2323919088c31ab56",
+      "endpoint_id": "ep_803d5631810f255a127bed4a6d76ac40",
+      "agent_id": "app-f8d9d5313143",
+      "workspace_id": "wsr_6e0a547e583af5ef0fc43cd664d0cefb",
+      "workspace_binding_id": "wxb_55b6c23bf65de4696210375d7f4575df"
+    },
+    {
+      "server_id": "srv_202ea644b4ab1e6e7ced9e869f4b3a85",
+      "executor_id": "exe_6e368ccfac775f8fd01d1d9d4e34a624",
+      "binding_id": "bind_a22228bd1a10c703031ae91befc410d2",
+      "endpoint_id": "ep_ba02fff8d4f11a1ad4da3171cd6bea79",
+      "agent_id": "app-d5579c02f866",
+      "workspace_id": "wsr_6e0a547e583af5ef0fc43cd664d0cefb",
+      "workspace_binding_id": "wxb_0e4806a580d5ae65009255ed1b1783f5"
+    }
+  ],
+  "counts": {
+    "workspaces": 1,
+    "connection_public_ids": 2,
+    "execution_bindings": 2,
+    "runtime_execution_grants": 2,
+    "connection_setup_commits": 2,
+    "execution_operations": 0,
+    "execution_sessions": 0
+  },
+  "synthetic_tests": 2,
+  "version_probes": 1,
+  "process_launch_attempts": 0,
+  "first_connection_rows_unchanged": true,
+  "first_profile_bytes_unchanged": true,
+  "user_service_installed": false
+}

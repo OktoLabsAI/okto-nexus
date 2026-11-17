@@ -1,0 +1,20 @@
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\starlette\datastructures.py", line 696, in __getattr__
+    return self._state[key]
+           ~~~~~~~~~~~^^^^^
+KeyError: 'connection_tests'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc31-multisession-browser\fixture.py", line 238, in <module>
+    main()
+    ~~~~^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc31-multisession-browser\fixture.py", line 76, in main
+    patch.setattr(app.state.connection_tests, 'run', simulated_connection_test)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\starlette\datastructures.py", line 699, in __getattr__
+    raise AttributeError(message.format(self.__class__.__name__, key))
+AttributeError: 'State' object has no attribute 'connection_tests'

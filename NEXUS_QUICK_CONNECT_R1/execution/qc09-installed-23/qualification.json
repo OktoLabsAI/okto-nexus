@@ -1,0 +1,34 @@
+{
+  "status": "FAIL_INCOMPLETE_FULLSUITE_NOT_RELEASE_PASS",
+  "frozen_at": "2026-11-17T07:31:36.350774+00:00",
+  "wheel_sha256": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+  "shard3": {
+    "status": "FAIL_COMPLETED_NATURALLY",
+    "passed": 1821,
+    "failed": 36,
+    "skipped": 54,
+    "warnings": 17,
+    "pytest_seconds": 5271.4,
+    "exit_code": 1,
+    "changed_inputs": [],
+    "process_absent": true
+  },
+  "shard2": {
+    "status": "INTERRUPTED_HUNG_TEARDOWN_THEN_DERIVATIVE_STOPPED_AT_BOUNDARY",
+    "original_pass_calls": 145,
+    "original_failed_calls": 3,
+    "derivative_failed_calls": 3,
+    "derivative_complete_passes": 0,
+    "not_run": 2031,
+    "changed_inputs": []
+  },
+  "provenance": "Parent pytest imports all three installed families with no bad origins. Some unchanged regression tests spawn explicit source-PYTHONPATH children; this is not an all-child installed qualification.",
+  "safety": "Own temporary homes, sanitized environment, inert/fake test peers, no paid provider invocation. No product/test/CI/prefix changes by this curation.",
+  "limits": [
+    "No failures relabeled PASS.",
+    "No new tests or reruns after shard3 completion.",
+    "Migration tests fail before downstream semantic assertions.",
+    "Multi-harness scripted-input mismatch does not qualify its unexecuted recovery assertions.",
+    "No baseline attribution for unresolved failures without comparative evidence."
+  ]
+}

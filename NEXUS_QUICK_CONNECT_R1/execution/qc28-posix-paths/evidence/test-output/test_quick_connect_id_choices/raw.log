@@ -1,0 +1,272 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- /tmp/nexus-qc28-xmlie7rv/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /tmp/nexus-qc28-xmlie7rv/tests
+configfile: ../pytest.ini
+plugins: asyncio-1.5.0, anyio-4.16.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 65 items
+
+../tests/test_quick_connect_id_choices.py::test_unused_default_and_explicit_id_are_proposals_only[codex] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unused_default_and_explicit_id_are_proposals_only[codex]", "when": "setup", "outcome": "passed", "duration": 0.0005523219999759021}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unused_default_and_explicit_id_are_proposals_only[codex]", "when": "call", "outcome": "passed", "duration": 0.00017479999996794504}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unused_default_and_explicit_id_are_proposals_only[codex]", "when": "teardown", "outcome": "passed", "duration": 0.0002120259999855989}
+
+../tests/test_quick_connect_id_choices.py::test_unused_default_and_explicit_id_are_proposals_only[claude] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unused_default_and_explicit_id_are_proposals_only[claude]", "when": "setup", "outcome": "passed", "duration": 0.00047653399997216184}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unused_default_and_explicit_id_are_proposals_only[claude]", "when": "call", "outcome": "passed", "duration": 0.00020237399996858585}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unused_default_and_explicit_id_are_proposals_only[claude]", "when": "teardown", "outcome": "passed", "duration": 0.00013285299996823596}
+
+../tests/test_quick_connect_id_choices.py::test_unused_default_and_explicit_id_are_proposals_only[pi] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unused_default_and_explicit_id_are_proposals_only[pi]", "when": "setup", "outcome": "passed", "duration": 0.0003342170000451006}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unused_default_and_explicit_id_are_proposals_only[pi]", "when": "call", "outcome": "passed", "duration": 0.00016070099991338793}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unused_default_and_explicit_id_are_proposals_only[pi]", "when": "teardown", "outcome": "passed", "duration": 0.00012736599990148534}
+
+../tests/test_quick_connect_id_choices.py::test_suffix_uses_requested_family_and_all_occupied_states_without_mutation IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_suffix_uses_requested_family_and_all_occupied_states_without_mutation", "when": "setup", "outcome": "passed", "duration": 0.00015026599999146129}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_suffix_uses_requested_family_and_all_occupied_states_without_mutation", "when": "call", "outcome": "passed", "duration": 0.00023364699995909177}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_suffix_uses_requested_family_and_all_occupied_states_without_mutation", "when": "teardown", "outcome": "passed", "duration": 9.830400006194395e-05}
+
+../tests/test_quick_connect_id_choices.py::test_no_suffix_can_be_implicitly_applied_to_explicit_occupied_id IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_no_suffix_can_be_implicitly_applied_to_explicit_occupied_id", "when": "setup", "outcome": "passed", "duration": 0.00014895699996486655}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_no_suffix_can_be_implicitly_applied_to_explicit_occupied_id", "when": "call", "outcome": "passed", "duration": 0.0002639350000208651}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_no_suffix_can_be_implicitly_applied_to_explicit_occupied_id", "when": "teardown", "outcome": "passed", "duration": 8.931699994718656e-05}
+
+../tests/test_quick_connect_id_choices.py::test_pending_and_retired_never_resume_or_release[reserved-HARNESS_ID_PENDING] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_pending_and_retired_never_resume_or_release[reserved-HARNESS_ID_PENDING]", "when": "setup", "outcome": "passed", "duration": 0.00045768699999371165}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_pending_and_retired_never_resume_or_release[reserved-HARNESS_ID_PENDING]", "when": "call", "outcome": "passed", "duration": 0.00026184000000739616}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_pending_and_retired_never_resume_or_release[reserved-HARNESS_ID_PENDING]", "when": "teardown", "outcome": "passed", "duration": 0.00012965999997049948}
+
+../tests/test_quick_connect_id_choices.py::test_pending_and_retired_never_resume_or_release[retired-HARNESS_ID_ALREADY_EXISTS] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_pending_and_retired_never_resume_or_release[retired-HARNESS_ID_ALREADY_EXISTS]", "when": "setup", "outcome": "passed", "duration": 0.0005108599999630314}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_pending_and_retired_never_resume_or_release[retired-HARNESS_ID_ALREADY_EXISTS]", "when": "call", "outcome": "passed", "duration": 0.00022407599999496597}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_pending_and_retired_never_resume_or_release[retired-HARNESS_ID_ALREADY_EXISTS]", "when": "teardown", "outcome": "passed", "duration": 0.00018953599999349535}
+
+../tests/test_quick_connect_id_choices.py::test_noninteractive_agreeing_exact_reference_resumes_without_new_setup IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_noninteractive_agreeing_exact_reference_resumes_without_new_setup", "when": "setup", "outcome": "passed", "duration": 0.00015050199999677716}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_noninteractive_agreeing_exact_reference_resumes_without_new_setup", "when": "call", "outcome": "passed", "duration": 0.0001804400000082751}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_noninteractive_agreeing_exact_reference_resumes_without_new_setup", "when": "teardown", "outcome": "passed", "duration": 0.00011255200001869525}
+
+../tests/test_quick_connect_id_choices.py::test_noninteractive_cross_family_returns_conflict_not_another_harness IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_noninteractive_cross_family_returns_conflict_not_another_harness", "when": "setup", "outcome": "passed", "duration": 0.0001443290000224806}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_noninteractive_cross_family_returns_conflict_not_another_harness", "when": "call", "outcome": "passed", "duration": 0.00020124999991821824}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_noninteractive_cross_family_returns_conflict_not_another_harness", "when": "teardown", "outcome": "passed", "duration": 9.663299999829178e-05}
+
+../tests/test_quick_connect_id_choices.py::test_tty_resume_requires_explicit_choice_and_returns_actual_family[codex-codex] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_resume_requires_explicit_choice_and_returns_actual_family[codex-codex]", "when": "setup", "outcome": "passed", "duration": 0.0005007460000570063}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_resume_requires_explicit_choice_and_returns_actual_family[codex-codex]", "when": "call", "outcome": "passed", "duration": 0.0003239669999857142}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_resume_requires_explicit_choice_and_returns_actual_family[codex-codex]", "when": "teardown", "outcome": "passed", "duration": 0.00013534499998968386}
+
+../tests/test_quick_connect_id_choices.py::test_tty_resume_requires_explicit_choice_and_returns_actual_family[claude-codex] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_resume_requires_explicit_choice_and_returns_actual_family[claude-codex]", "when": "setup", "outcome": "passed", "duration": 0.0004488399999900139}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_resume_requires_explicit_choice_and_returns_actual_family[claude-codex]", "when": "call", "outcome": "passed", "duration": 0.00026162200003909675}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_resume_requires_explicit_choice_and_returns_actual_family[claude-codex]", "when": "teardown", "outcome": "passed", "duration": 0.00012374399989312224}
+
+../tests/test_quick_connect_id_choices.py::test_tty_cross_family_can_propose_separate_requested_harness_id[answers0-reviewer] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_cross_family_can_propose_separate_requested_harness_id[answers0-reviewer]", "when": "setup", "outcome": "passed", "duration": 0.0004800010000280963}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_cross_family_can_propose_separate_requested_harness_id[answers0-reviewer]", "when": "call", "outcome": "passed", "duration": 0.00023265499999070016}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_cross_family_can_propose_separate_requested_harness_id[answers0-reviewer]", "when": "teardown", "outcome": "passed", "duration": 0.00013983700000608223}
+
+../tests/test_quick_connect_id_choices.py::test_tty_cross_family_can_propose_separate_requested_harness_id[answers1-claude] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_cross_family_can_propose_separate_requested_harness_id[answers1-claude]", "when": "setup", "outcome": "passed", "duration": 0.000543891999996049}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_cross_family_can_propose_separate_requested_harness_id[answers1-claude]", "when": "call", "outcome": "passed", "duration": 0.00022471299996595917}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_cross_family_can_propose_separate_requested_harness_id[answers1-claude]", "when": "teardown", "outcome": "passed", "duration": 0.00012151999999332475}
+
+../tests/test_quick_connect_id_choices.py::test_tty_nonresumable_has_no_resume_option[bound-True] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_nonresumable_has_no_resume_option[bound-True]", "when": "setup", "outcome": "passed", "duration": 0.000512737000008201}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_nonresumable_has_no_resume_option[bound-True]", "when": "call", "outcome": "passed", "duration": 0.00022424700000556186}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_nonresumable_has_no_resume_option[bound-True]", "when": "teardown", "outcome": "passed", "duration": 0.00012689100003626663}
+
+../tests/test_quick_connect_id_choices.py::test_tty_nonresumable_has_no_resume_option[reserved-False] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_nonresumable_has_no_resume_option[reserved-False]", "when": "setup", "outcome": "passed", "duration": 0.00044048799998108734}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_nonresumable_has_no_resume_option[reserved-False]", "when": "call", "outcome": "passed", "duration": 0.0002197890000843472}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_nonresumable_has_no_resume_option[reserved-False]", "when": "teardown", "outcome": "passed", "duration": 0.00016107900000861264}
+
+../tests/test_quick_connect_id_choices.py::test_tty_nonresumable_has_no_resume_option[retired-False] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_nonresumable_has_no_resume_option[retired-False]", "when": "setup", "outcome": "passed", "duration": 0.00042187600001852843}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_nonresumable_has_no_resume_option[retired-False]", "when": "call", "outcome": "passed", "duration": 0.0001868450000301891}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_nonresumable_has_no_resume_option[retired-False]", "when": "teardown", "outcome": "passed", "duration": 0.00010968699996283249}
+
+../tests/test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[server_id] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[server_id]", "when": "setup", "outcome": "passed", "duration": 0.00030787599996529025}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[server_id]", "when": "call", "outcome": "passed", "duration": 0.0004536870000038107}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[server_id]", "when": "teardown", "outcome": "passed", "duration": 0.00011733700000604586}
+
+../tests/test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[executor_id] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[executor_id]", "when": "setup", "outcome": "passed", "duration": 0.00035497499993653037}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[executor_id]", "when": "call", "outcome": "passed", "duration": 0.00024084300002868986}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[executor_id]", "when": "teardown", "outcome": "passed", "duration": 0.00011056700009248743}
+
+../tests/test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[binding_id] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[binding_id]", "when": "setup", "outcome": "passed", "duration": 0.0003218829999696027}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[binding_id]", "when": "call", "outcome": "passed", "duration": 0.00019886899997345608}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[binding_id]", "when": "teardown", "outcome": "passed", "duration": 0.00012385399998038338}
+
+../tests/test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[endpoint_id] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[endpoint_id]", "when": "setup", "outcome": "passed", "duration": 0.0003819859999794062}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[endpoint_id]", "when": "call", "outcome": "passed", "duration": 0.0002004560000159472}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[endpoint_id]", "when": "teardown", "outcome": "passed", "duration": 0.00010289599993029697}
+
+../tests/test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[agent_id] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[agent_id]", "when": "setup", "outcome": "passed", "duration": 0.0002834790000179055}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[agent_id]", "when": "call", "outcome": "passed", "duration": 0.00019513200004439568}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[agent_id]", "when": "teardown", "outcome": "passed", "duration": 0.00010218700003861159}
+
+../tests/test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[workspace_id] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[workspace_id]", "when": "setup", "outcome": "passed", "duration": 0.0002761009999403541}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[workspace_id]", "when": "call", "outcome": "passed", "duration": 0.00018561800004590623}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[workspace_id]", "when": "teardown", "outcome": "passed", "duration": 9.41060000059224e-05}
+
+../tests/test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[workspace_binding_id] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[workspace_binding_id]", "when": "setup", "outcome": "passed", "duration": 0.00028060700003607053}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[workspace_binding_id]", "when": "call", "outcome": "passed", "duration": 0.00021988200001032965}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_conflicts_never_offer_override_menu[workspace_binding_id]", "when": "teardown", "outcome": "passed", "duration": 0.00010254099993289856}
+
+../tests/test_quick_connect_id_choices.py::test_multiple_same_family_connections_require_selection_without_tty IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_multiple_same_family_connections_require_selection_without_tty", "when": "setup", "outcome": "passed", "duration": 0.00012675400000716763}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_multiple_same_family_connections_require_selection_without_tty", "when": "call", "outcome": "passed", "duration": 0.0001703909999832831}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_multiple_same_family_connections_require_selection_without_tty", "when": "teardown", "outcome": "passed", "duration": 7.869899991419516e-05}
+
+../tests/test_quick_connect_id_choices.py::test_tty_multiple_can_select_exact_connection_or_explicitly_add[2-second] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_multiple_can_select_exact_connection_or_explicitly_add[2-second]", "when": "setup", "outcome": "passed", "duration": 0.0005460419999963051}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_multiple_can_select_exact_connection_or_explicitly_add[2-second]", "when": "call", "outcome": "passed", "duration": 0.0001838689998976406}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_multiple_can_select_exact_connection_or_explicitly_add[2-second]", "when": "teardown", "outcome": "passed", "duration": 0.00019500099995184428}
+
+../tests/test_quick_connect_id_choices.py::test_tty_multiple_can_select_exact_connection_or_explicitly_add[a-codex] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_multiple_can_select_exact_connection_or_explicitly_add[a-codex]", "when": "setup", "outcome": "passed", "duration": 0.0005506450000893892}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_multiple_can_select_exact_connection_or_explicitly_add[a-codex]", "when": "call", "outcome": "passed", "duration": 0.0002315099999350423}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_tty_multiple_can_select_exact_connection_or_explicitly_add[a-codex]", "when": "teardown", "outcome": "passed", "duration": 0.00011619800000062241}
+
+../tests/test_quick_connect_id_choices.py::test_exact_selector_filters_multiple_actors_and_hosts_without_latest_heuristic IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_filters_multiple_actors_and_hosts_without_latest_heuristic", "when": "setup", "outcome": "passed", "duration": 0.0001252960000783787}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_filters_multiple_actors_and_hosts_without_latest_heuristic", "when": "call", "outcome": "passed", "duration": 0.00014218800004073273}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_exact_selector_filters_multiple_actors_and_hosts_without_latest_heuristic", "when": "teardown", "outcome": "passed", "duration": 8.626300007108512e-05}
+
+../tests/test_quick_connect_id_choices.py::test_generic_pending_collision_does_not_disclose_unrelated_metadata IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_generic_pending_collision_does_not_disclose_unrelated_metadata", "when": "setup", "outcome": "passed", "duration": 0.00011604400003761839}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_generic_pending_collision_does_not_disclose_unrelated_metadata", "when": "call", "outcome": "passed", "duration": 0.00019405600005484303}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_generic_pending_collision_does_not_disclose_unrelated_metadata", "when": "teardown", "outcome": "passed", "duration": 8.114499996736413e-05}
+
+../tests/test_quick_connect_id_choices.py::test_binding_reference_contains_only_exact_canonical_identity_and_is_copied IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_binding_reference_contains_only_exact_canonical_identity_and_is_copied", "when": "setup", "outcome": "passed", "duration": 0.00011319100008222449}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_binding_reference_contains_only_exact_canonical_identity_and_is_copied", "when": "call", "outcome": "passed", "duration": 0.00013491700008216867}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_binding_reference_contains_only_exact_canonical_identity_and_is_copied", "when": "teardown", "outcome": "passed", "duration": 7.924200008346816e-05}
+
+../tests/test_quick_connect_id_choices.py::test_complete_paging_preserves_exact_server_workspace_actor_host IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_complete_paging_preserves_exact_server_workspace_actor_host", "when": "setup", "outcome": "passed", "duration": 0.000127792000057525}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_complete_paging_preserves_exact_server_workspace_actor_host", "when": "call", "outcome": "passed", "duration": 0.00041850500008422387}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_complete_paging_preserves_exact_server_workspace_actor_host", "when": "teardown", "outcome": "passed", "duration": 8.667200006584608e-05}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed0] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed0]", "when": "setup", "outcome": "passed", "duration": 0.00031694899996637105}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed0]", "when": "call", "outcome": "passed", "duration": 0.0002634300000181611}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed0]", "when": "teardown", "outcome": "passed", "duration": 9.450799996102432e-05}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed1] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed1]", "when": "setup", "outcome": "passed", "duration": 0.00027812700000140467}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed1]", "when": "call", "outcome": "passed", "duration": 0.00020148900000549474}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed1]", "when": "teardown", "outcome": "passed", "duration": 0.00010646900000210735}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed2] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed2]", "when": "setup", "outcome": "passed", "duration": 0.0002815760000203227}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed2]", "when": "call", "outcome": "passed", "duration": 0.0002078449999771692}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed2]", "when": "teardown", "outcome": "passed", "duration": 9.199099997658777e-05}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed3] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed3]", "when": "setup", "outcome": "passed", "duration": 0.0012235359999976936}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed3]", "when": "call", "outcome": "passed", "duration": 0.00043348700000933604}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed3]", "when": "teardown", "outcome": "passed", "duration": 0.000485521999962657}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed4] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed4]", "when": "setup", "outcome": "passed", "duration": 0.00039958499996828323}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed4]", "when": "call", "outcome": "passed", "duration": 0.0003570939999235634}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed4]", "when": "teardown", "outcome": "passed", "duration": 0.00012834599999678176}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed5] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed5]", "when": "setup", "outcome": "passed", "duration": 0.0002717370000482333}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed5]", "when": "call", "outcome": "passed", "duration": 0.0002458850000266466}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed5]", "when": "teardown", "outcome": "passed", "duration": 9.910400001444941e-05}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed6] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed6]", "when": "setup", "outcome": "passed", "duration": 0.0002587920000678423}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed6]", "when": "call", "outcome": "passed", "duration": 0.00024059700001544115}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed6]", "when": "teardown", "outcome": "passed", "duration": 9.29440000163595e-05}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed7] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed7]", "when": "setup", "outcome": "passed", "duration": 0.00024227300002621632}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed7]", "when": "call", "outcome": "passed", "duration": 0.00019234799992773333}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed7]", "when": "teardown", "outcome": "passed", "duration": 0.00013103800006319943}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed8] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed8]", "when": "setup", "outcome": "passed", "duration": 0.0003637419999904523}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed8]", "when": "call", "outcome": "passed", "duration": 0.00019724099990980903}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed8]", "when": "teardown", "outcome": "passed", "duration": 9.155499992630212e-05}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed9] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed9]", "when": "setup", "outcome": "passed", "duration": 0.00027728099996693345}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed9]", "when": "call", "outcome": "passed", "duration": 0.00019783499999448395}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed9]", "when": "teardown", "outcome": "passed", "duration": 0.0001097669999126083}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed10] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed10]", "when": "setup", "outcome": "passed", "duration": 0.00045100600004843727}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed10]", "when": "call", "outcome": "passed", "duration": 0.00021198599995386758}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed10]", "when": "teardown", "outcome": "passed", "duration": 9.505200000603509e-05}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed11] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed11]", "when": "setup", "outcome": "passed", "duration": 0.0003205120000302486}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed11]", "when": "call", "outcome": "passed", "duration": 0.0002028100000188715}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed11]", "when": "teardown", "outcome": "passed", "duration": 8.959799993135675e-05}
+
+../tests/test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed12] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed12]", "when": "setup", "outcome": "passed", "duration": 0.0002666780000026847}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed12]", "when": "call", "outcome": "passed", "duration": 0.00021801699995194213}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unconfirmed_page_never_becomes_empty_namespace[changed12]", "when": "teardown", "outcome": "passed", "duration": 9.418399997684901e-05}
+
+../tests/test_quick_connect_id_choices.py::test_page_revision_and_total_drift_fail_closed[revision-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_page_revision_and_total_drift_fail_closed[revision-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb]", "when": "setup", "outcome": "passed", "duration": 0.0003733369999281422}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_page_revision_and_total_drift_fail_closed[revision-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb]", "when": "call", "outcome": "passed", "duration": 0.0003330299999788622}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_page_revision_and_total_drift_fail_closed[revision-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb]", "when": "teardown", "outcome": "passed", "duration": 0.00011010500008978852}
+
+../tests/test_quick_connect_id_choices.py::test_page_revision_and_total_drift_fail_closed[total-3] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_page_revision_and_total_drift_fail_closed[total-3]", "when": "setup", "outcome": "passed", "duration": 0.0003623260000722439}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_page_revision_and_total_drift_fail_closed[total-3]", "when": "call", "outcome": "passed", "duration": 0.0003029429999514832}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_page_revision_and_total_drift_fail_closed[total-3]", "when": "teardown", "outcome": "passed", "duration": 0.000107189000004837}
+
+../tests/test_quick_connect_id_choices.py::test_nonadjacent_cursor_cycle_is_rejected_without_exhausting_page_budget IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_nonadjacent_cursor_cycle_is_rejected_without_exhausting_page_budget", "when": "setup", "outcome": "passed", "duration": 0.00012185599996428209}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_nonadjacent_cursor_cycle_is_rejected_without_exhausting_page_budget", "when": "call", "outcome": "passed", "duration": 0.0003124389999129562}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_nonadjacent_cursor_cycle_is_rejected_without_exhausting_page_budget", "when": "teardown", "outcome": "passed", "duration": 8.710499992048426e-05}
+
+../tests/test_quick_connect_id_choices.py::test_duplicate_public_ids_across_actors_hosts_are_not_silently_deduplicated IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_duplicate_public_ids_across_actors_hosts_are_not_silently_deduplicated", "when": "setup", "outcome": "passed", "duration": 0.00011009899992586725}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_duplicate_public_ids_across_actors_hosts_are_not_silently_deduplicated", "when": "call", "outcome": "passed", "duration": 0.00024685699997917254}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_duplicate_public_ids_across_actors_hosts_are_not_silently_deduplicated", "when": "teardown", "outcome": "passed", "duration": 0.00010686899997836008}
+
+../tests/test_quick_connect_id_choices.py::test_bound_reference_scope_cannot_cross_server_or_project[scope0] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_bound_reference_scope_cannot_cross_server_or_project[scope0]", "when": "setup", "outcome": "passed", "duration": 0.0002987239998901714}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_bound_reference_scope_cannot_cross_server_or_project[scope0]", "when": "call", "outcome": "passed", "duration": 0.00024415799998678267}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_bound_reference_scope_cannot_cross_server_or_project[scope0]", "when": "teardown", "outcome": "passed", "duration": 9.647199999562872e-05}
+
+../tests/test_quick_connect_id_choices.py::test_bound_reference_scope_cannot_cross_server_or_project[scope1] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_bound_reference_scope_cannot_cross_server_or_project[scope1]", "when": "setup", "outcome": "passed", "duration": 0.000270294999950238}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_bound_reference_scope_cannot_cross_server_or_project[scope1]", "when": "call", "outcome": "passed", "duration": 0.00035150799999428273}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_bound_reference_scope_cannot_cross_server_or_project[scope1]", "when": "teardown", "outcome": "passed", "duration": 0.0001332509999656395}
+
+../tests/test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[Reviewer] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[Reviewer]", "when": "setup", "outcome": "passed", "duration": 0.00026369600004727545}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[Reviewer]", "when": "call", "outcome": "passed", "duration": 0.00022608599999784929}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[Reviewer]", "when": "teardown", "outcome": "passed", "duration": 9.796200004075217e-05}
+
+../tests/test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[]", "when": "setup", "outcome": "passed", "duration": 0.00023673700002291298}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[]", "when": "call", "outcome": "passed", "duration": 0.00022225299994715897}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[]", "when": "teardown", "outcome": "passed", "duration": 8.590799995999987e-05}
+
+../tests/test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[../secret] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[../secret]", "when": "setup", "outcome": "passed", "duration": 0.0003051569999570347}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[../secret]", "when": "call", "outcome": "passed", "duration": 0.00022182499992595694}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[../secret]", "when": "teardown", "outcome": "passed", "duration": 8.709799999451207e-05}
+
+../tests/test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[bad\x1bname] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[bad\\x1bname]", "when": "setup", "outcome": "passed", "duration": 0.0009293379999917306}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[bad\\x1bname]", "when": "call", "outcome": "passed", "duration": 0.00023455200005173538}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[bad\\x1bname]", "when": "teardown", "outcome": "passed", "duration": 9.206899994751438e-05}
+
+../tests/test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]", "when": "setup", "outcome": "passed", "duration": 0.0002989329999536494}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]", "when": "call", "outcome": "passed", "duration": 0.00020806199995604402}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]", "when": "teardown", "outcome": "passed", "duration": 9.217500007707713e-05}
+
+../tests/test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[None] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[None]", "when": "setup", "outcome": "passed", "duration": 0.00024755000004006433}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[None]", "when": "call", "outcome": "passed", "duration": 0.0003026609999778884}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[None]", "when": "teardown", "outcome": "passed", "duration": 9.26600000639155e-05}
+
+../tests/test_quick_connect_id_choices.py::test_malformed_nested_catalog_shape_has_structured_failure[patch0] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_malformed_nested_catalog_shape_has_structured_failure[patch0]", "when": "setup", "outcome": "passed", "duration": 0.00023794400010501704}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_malformed_nested_catalog_shape_has_structured_failure[patch0]", "when": "call", "outcome": "passed", "duration": 0.0001733029999968494}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_malformed_nested_catalog_shape_has_structured_failure[patch0]", "when": "teardown", "outcome": "passed", "duration": 8.56640000392872e-05}
+
+../tests/test_quick_connect_id_choices.py::test_malformed_nested_catalog_shape_has_structured_failure[patch1] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_malformed_nested_catalog_shape_has_structured_failure[patch1]", "when": "setup", "outcome": "passed", "duration": 0.00023827000006804155}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_malformed_nested_catalog_shape_has_structured_failure[patch1]", "when": "call", "outcome": "passed", "duration": 0.0001876929999298227}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_malformed_nested_catalog_shape_has_structured_failure[patch1]", "when": "teardown", "outcome": "passed", "duration": 8.753999998134532e-05}
+
+../tests/test_quick_connect_id_choices.py::test_old_server_capability_errors_request_upgrade_without_writes[NOT_FOUND] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_old_server_capability_errors_request_upgrade_without_writes[NOT_FOUND]", "when": "setup", "outcome": "passed", "duration": 0.0003169589999743039}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_old_server_capability_errors_request_upgrade_without_writes[NOT_FOUND]", "when": "call", "outcome": "passed", "duration": 0.0001533299999891824}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_old_server_capability_errors_request_upgrade_without_writes[NOT_FOUND]", "when": "teardown", "outcome": "passed", "duration": 8.740700002363155e-05}
+
+../tests/test_quick_connect_id_choices.py::test_old_server_capability_errors_request_upgrade_without_writes[HTTP_ERROR] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_old_server_capability_errors_request_upgrade_without_writes[HTTP_ERROR]", "when": "setup", "outcome": "passed", "duration": 0.0002454889998944054}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_old_server_capability_errors_request_upgrade_without_writes[HTTP_ERROR]", "when": "call", "outcome": "passed", "duration": 0.00014697899996463093}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_old_server_capability_errors_request_upgrade_without_writes[HTTP_ERROR]", "when": "teardown", "outcome": "passed", "duration": 8.964300002389791e-05}
+
+../tests/test_quick_connect_id_choices.py::test_old_server_capability_errors_request_upgrade_without_writes[VALIDATION_ERROR] IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_old_server_capability_errors_request_upgrade_without_writes[VALIDATION_ERROR]", "when": "setup", "outcome": "passed", "duration": 0.000238860999957069}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_old_server_capability_errors_request_upgrade_without_writes[VALIDATION_ERROR]", "when": "call", "outcome": "passed", "duration": 0.00014822299999650568}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_old_server_capability_errors_request_upgrade_without_writes[VALIDATION_ERROR]", "when": "teardown", "outcome": "passed", "duration": 8.972099999482452e-05}
+
+../tests/test_quick_connect_id_choices.py::test_capability_probe_is_server_exact_and_no_scope_cache_is_created IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_capability_probe_is_server_exact_and_no_scope_cache_is_created", "when": "setup", "outcome": "passed", "duration": 0.00011165800003709592}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_capability_probe_is_server_exact_and_no_scope_cache_is_created", "when": "call", "outcome": "passed", "duration": 0.00019492000001264387}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_capability_probe_is_server_exact_and_no_scope_cache_is_created", "when": "teardown", "outcome": "passed", "duration": 8.04920000518905e-05}
+
+../tests/test_quick_connect_id_choices.py::test_unauthorized_capability_failure_is_not_reclassified_as_old_server IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unauthorized_capability_failure_is_not_reclassified_as_old_server", "when": "setup", "outcome": "passed", "duration": 0.00011036499995498161}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unauthorized_capability_failure_is_not_reclassified_as_old_server", "when": "call", "outcome": "passed", "duration": 0.0001281510000126218}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_unauthorized_capability_failure_is_not_reclassified_as_old_server", "when": "teardown", "outcome": "passed", "duration": 7.755599995107332e-05}
+
+../tests/test_quick_connect_id_choices.py::test_eof_cancels_without_new_name_or_resume IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_eof_cancels_without_new_name_or_resume", "when": "setup", "outcome": "passed", "duration": 0.00010925000003680907}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_eof_cancels_without_new_name_or_resume", "when": "call", "outcome": "passed", "duration": 0.0002107560000013109}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_eof_cancels_without_new_name_or_resume", "when": "teardown", "outcome": "passed", "duration": 7.133300005079946e-05}
+
+../tests/test_quick_connect_id_choices.py::test_maximum_public_id_is_never_truncated_into_filename_or_another_id IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_maximum_public_id_is_never_truncated_into_filename_or_another_id", "when": "setup", "outcome": "passed", "duration": 0.00011118099996565434}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_maximum_public_id_is_never_truncated_into_filename_or_another_id", "when": "call", "outcome": "passed", "duration": 0.00011213100003715226}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_maximum_public_id_is_never_truncated_into_filename_or_another_id", "when": "teardown", "outcome": "passed", "duration": 7.517299991377513e-05}
+
+../tests/test_quick_connect_id_choices.py::test_same_label_in_distinct_projects_is_resolved_only_in_explicit_scope IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_same_label_in_distinct_projects_is_resolved_only_in_explicit_scope", "when": "setup", "outcome": "passed", "duration": 0.00018034599997918122}
+IMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_same_label_in_distinct_projects_is_resolved_only_in_explicit_scope", "when": "call", "outcome": "passed", "duration": 0.0002723159999504787}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_quick_connect_id_choices.py::test_same_label_in_distinct_projects_is_resolved_only_in_explicit_scope", "when": "teardown", "outcome": "passed", "duration": 9.742999998252344e-05}
+
+
+- generated xml file: /tmp/nexus-qc28-xmlie7rv/test-output/test_quick_connect_id_choices/junit.xml -
+============================== 65 passed in 0.28s ==============================

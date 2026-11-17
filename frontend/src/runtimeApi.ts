@@ -13,6 +13,7 @@ export interface ProjectPresetOverview {
 }
 
 export interface ConnectionCatalogItem {
+  connect_id?: string | null;
   server_id: string; binding_id: string; executor_id: string; endpoint_id: string;
   workspace_binding_id: string; agent_id: string; workspace_id: string; adapter_id: string;
   binding_revision: number; realization_revision: number; endpoint_revision: number;
@@ -27,7 +28,11 @@ export interface ConnectionCatalogPage {
   has_more: boolean; next_cursor: string | null; requires_canonical_revalidation: true;
   cursor_integrity: 'unsigned_scope_checked';
 }
-export interface SetupFinishResult {saved: boolean; agent_id?: string; agent_created?: boolean; binding?: BindingView; project_preset?: {id:string;revision:number}}
+export interface PublicConnectionReceipt {
+  version:1;connect_id:string;reservation_ref:string;revision:number;state:'bound';
+  canonical_ref:Pick<ConnectionCatalogItem,'server_id'|'executor_id'|'binding_id'|'endpoint_id'|'agent_id'|'workspace_id'|'workspace_binding_id'>;
+}
+export interface SetupFinishResult {saved: boolean; agent_id?: string; agent_created?: boolean; binding?: BindingView; project_preset?: {id:string;revision:number};public_connection?:PublicConnectionReceipt}
 export interface SetupReceipt {setup_run_id: string; request_hash: string; state: 'committed'; result: SetupFinishResult}
 export interface SetupDraftView {
   baseline: SetupBaseline; runtime_policy: import('./api').RuntimePolicy;

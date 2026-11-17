@@ -1,0 +1,118 @@
+{
+  "status": "PASS_EIGHT_INSTALLED_SCENARIOS",
+  "passed": 8,
+  "failed": 0,
+  "skipped": 0,
+  "source_candidate": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "external_test": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\after\\tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+  "sha256": "41138bb66954a0fbbc45f243015d5f6944306688cd88a4f5233d3ceb89572324",
+  "cases": [
+    {
+      "label": "d08",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "signals": []
+    },
+    {
+      "label": "d09",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "signals": []
+    },
+    {
+      "label": "d11",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "signals": []
+    },
+    {
+      "label": "d12",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "signals": []
+    },
+    {
+      "label": "d13",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "signals": []
+    },
+    {
+      "label": "d14",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "signals": []
+    },
+    {
+      "label": "d21",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "signals": []
+    },
+    {
+      "label": "d22",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "signals": []
+    }
+  ],
+  "coverage": {
+    "D08": "PATH empty: directory/git_unavailable fallback, no Test.",
+    "D09": "Actual nonrepository: directory/not_a_repository fallback, no Test.",
+    "D11": "Malformed origin containing synthetic PRIVATE marker: origin_invalid fallback without marker in CLI DTO; root retained.",
+    "D12": "Real linked worktree: origin name and physical linked root retained through configure and exact seven-field resume.",
+    "D13": "Actual extensions.worktreeConfig and worktree-specific origin with no shared origin; configure/resume exact reference.",
+    "D14": "Nested actual repository uses inner origin; configure/resume exact root/reference.",
+    "D21": "Own hostile GIT_DIR/GIT_WORK_TREE stripped by discovery; chosen repository wins, configure/resume unchanged.",
+    "D22": "Project CWD and ancestor-repository PATH candidates rejected before Popen; tripwire marker absent, safe fallback."
+  },
+  "safety": {
+    "git_absolute_preparation": "C:/Program Files/Git/cmd/git.exe",
+    "git_shell": false,
+    "git_command_timeout_seconds": 5,
+    "git_hooks_templates": "own empty directories",
+    "git_transport": "protocol.allow=never; no remote commands",
+    "global_config_changed": false,
+    "safe_directory_changed": false,
+    "commits": "Local allow-empty synthetic identity only for linked-worktree setup.",
+    "stdin_pipe_closed": true,
+    "python_flags": [
+      "-I",
+      "-B"
+    ],
+    "copied_product_src": false,
+    "installed_origins_three_families_start_finish": true,
+    "payload_files": 1027,
+    "payload_drift": [],
+    "source_drift": [],
+    "owned_process_handles_exited": true,
+    "native_provider_invocations": 0,
+    "prefix_modified": false
+  },
+  "limits": [
+    "D08/D09/D11/D22 qualify discovery/review only, not a configured seven-field connection.",
+    "D13 covers sole worktree origin with shared origin absent; no override-precedence claim for conflicting origins.",
+    "D22 uses inert non-executable bytes plus a Popen launch-attempt marker tripwire. No hostile executable was actually launched or compiled; marker absence proves no attempted launch of these candidates.",
+    "Version/Test peers synthetic and inert; Git operations are real local metadata, not live provider qualification.",
+    "Input environment and directories are owned temporary fixtures; no personal Git config, safe.directory, network, credentials or installation touched.",
+    "Only agents.last_seen_at telemetry excluded from canonical snapshots; all other compared columns retained.",
+    "No PTY, human usability, fullsuite or platform-matrix qualification."
+  ]
+}

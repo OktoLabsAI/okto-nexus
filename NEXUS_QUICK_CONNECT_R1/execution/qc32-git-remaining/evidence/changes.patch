@@ -1,0 +1,13 @@
+--- original/test_git_remaining.py
++++ reviewed/test_git_remaining.py
+@@ -205,7 +205,9 @@
+         assert c.run(['connect', '--help']) == 0
+     except SystemExit as error:
+         assert error.code == 0
+-    assert 'project-name' in capsys.readouterr().out
++    help_text = capsys.readouterr().out
++    assert '[harness] [project_name]' in help_text
++    assert 'logical project name; never a directory path' in help_text
+     assert c.lifecycle == []
+     review = fixtures.invoke(c, capsys, ['connect', 'codex', '--profile', 'plan', '--plan', '--json'])
+     assert review['state'] == 'review' and review['quick_connect']['status'] == 'planned'

@@ -1,0 +1,129 @@
+[
+  {
+    "at": "2026-11-17T10:00:25.423150+00:00",
+    "label": "venv",
+    "argv": [
+      "rtk",
+      "proxy",
+      "uv",
+      "venv",
+      "--python",
+      "C:/Python313/python.exe",
+      "--seed",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+    "exit_code": 0
+  },
+  {
+    "at": "2026-11-17T10:56:11.814580+00:00",
+    "label": "build",
+    "argv": [
+      "rtk",
+      "proxy",
+      "uv",
+      "build",
+      "--out-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\artifacts",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\source"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+    "exit_code": 0
+  },
+  {
+    "at": "2026-11-17T10:57:23.529699+00:00",
+    "label": "ci-install",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+      "-I",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+      "install",
+      "--wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\artifacts\\okto_nexus-0.3.6-py3-none-any.whl",
+      "--output",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\ci"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+    "exit_code": 0
+  },
+  {
+    "at": "2026-11-17T10:59:01.830623+00:00",
+    "label": "ci-smoke",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+      "-I",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+      "smoke",
+      "--wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\artifacts\\okto_nexus-0.3.6-py3-none-any.whl",
+      "--output",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\ci"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+    "exit_code": 0
+  },
+  {
+    "at": "2026-11-17T10:59:11.786760+00:00",
+    "label": "twine-install",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+      "-m",
+      "pip",
+      "install",
+      "twine"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+    "exit_code": 0
+  },
+  {
+    "at": "2026-11-17T10:59:26.569514+00:00",
+    "label": "twine",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+      "-m",
+      "twine",
+      "check",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\artifacts\\okto_nexus-0.3.6-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\artifacts\\okto_nexus-0.3.6.tar.gz",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\ci\\okto_nexus_connector-0.0.13-py3-none-any.whl"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+    "exit_code": 0
+  },
+  {
+    "at": "2026-11-17T10:59:27.795955+00:00",
+    "label": "pip-check",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+      "-m",
+      "pip",
+      "check"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+    "exit_code": 0
+  },
+  {
+    "at": "2026-11-17T10:59:57.636254+00:00",
+    "label": "installed-audit",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+      "-I",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc36-final-package\\audit.py"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+    "exit_code": 0
+  }
+]

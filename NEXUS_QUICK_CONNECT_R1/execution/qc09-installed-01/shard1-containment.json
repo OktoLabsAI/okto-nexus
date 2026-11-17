@@ -1,0 +1,39 @@
+{
+  "status": "INTERRUPTED_HUNG_TEST",
+  "verified_tree": [
+    {
+      "pid": 45632,
+      "ppid": 46036,
+      "create_time": 1794894948.534592,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 46036,
+      "ppid": 27452,
+      "create_time": 1794894948.5194428,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 34580,
+      "ppid": 58808,
+      "create_time": 1794894958.0585208,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 58808,
+      "ppid": 45632,
+      "create_time": 1794894958.0429015,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe"
+    }
+  ],
+  "normal_interrupt": "Original helper created no dedicated group; no unsafe shared-console CTRL_C/CTRL_BREAK sent",
+  "action": "Terminate only verified pytestPID34580; no other shard touched",
+  "requested_at": 1794896204.538251,
+  "target_physically_exited": true,
+  "tree_exit_observed": {
+    "45632": true,
+    "46036": true,
+    "34580": true,
+    "58808": true
+  }
+}

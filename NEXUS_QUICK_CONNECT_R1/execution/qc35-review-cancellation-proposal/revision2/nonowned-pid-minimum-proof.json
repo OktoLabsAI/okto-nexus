@@ -1,0 +1,10 @@
+[
+  {
+    "pid": 29004,
+    "claimed_parent_pid": 17236,
+    "birth_filetime": 134390402663962653,
+    "parent_birth_filetime": 134393834000150711,
+    "reason": "Child predates claimed parent; stale/reused parent PID, not owned",
+    "signal_sent": false
+  }
+]

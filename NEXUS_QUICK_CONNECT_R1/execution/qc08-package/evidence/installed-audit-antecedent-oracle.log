@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc08-package\audit.py", line 86, in <module>
+    assert value.get('state')=='error',value
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'state': 'refused', 'code': 'INVALID_ARGUMENTS', 'message': 'Invalid connect arguments. Use connect --help.', 'effects_started': False, 'lifecycle_requested': False}

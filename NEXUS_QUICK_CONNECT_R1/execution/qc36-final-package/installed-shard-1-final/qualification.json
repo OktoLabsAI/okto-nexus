@@ -1,0 +1,52 @@
+{
+  "status": "PASS_SCOPED_INSTALLED",
+  "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+  "counts": {
+    "passed": 394,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "selected_files": [
+    "tests\\quick_connect\\test_connect_arguments.py",
+    "tests\\quick_connect\\test_entry_compatibility.py",
+    "tests\\quick_connect\\test_git_project_hint.py",
+    "tests\\quick_connect\\test_git_remaining.py",
+    "tests\\quick_connect\\test_id_choice_scenarios.py",
+    "tests\\quick_connect\\test_pending_selector_fences.py",
+    "tests\\quick_connect\\test_qc15_cli_choices.py",
+    "tests\\quick_connect\\test_qc24_namespace_executor_http.py",
+    "tests\\quick_connect\\test_qc25_concurrency_locks.py",
+    "tests\\quick_connect\\test_qc33_shared_service.py",
+    "tests\\quick_connect\\test_quick_connect_autoid_race.py",
+    "tests\\quick_connect\\test_quick_connect_contracts.py",
+    "tests\\quick_connect\\test_quick_connect_customize.py",
+    "tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+    "tests\\quick_connect\\test_quick_connect_id_choices.py",
+    "tests\\quick_connect\\test_quick_connect_project.py",
+    "tests\\quick_connect\\test_quick_connect_project_scenarios.py",
+    "tests\\quick_connect\\test_quick_connect_render.py",
+    "tests\\quick_connect\\test_terminal_public_connection.py"
+  ],
+  "collected": 394,
+  "finished": 394,
+  "not_run": [],
+  "exit_code": 0,
+  "payload_files": 1028,
+  "payload_drift": [],
+  "source_drift": [],
+  "cleanup": {
+    "at": "2026-11-17T11:21:16.366638+00:00",
+    "recorded_births_remaining": [],
+    "own_root_processes": [],
+    "owned_listeners": [],
+    "note": "Process-tree sampling every 0.25s cannot inventory every short-lived child; only recorded births and current own-root processes/listeners are claimed absent."
+  },
+  "limits": [
+    "No provider or real harness qualification.",
+    "Closed stdin PIPE; PTY tests may skip and are never promoted.",
+    "Origin guard covers parent pytest and all its loaded application/Core/Connector modules. Nested subprocess argv are unchanged; child provenance is separate, not implicitly proven by parent origins.",
+    "Test helpers copied verbatim without src; copied-tests.json pins all bytes.",
+    "Fixture data and original raw logs remain in own Temp; public text redacts ephemeral API-key token prefixes."
+  ]
+}

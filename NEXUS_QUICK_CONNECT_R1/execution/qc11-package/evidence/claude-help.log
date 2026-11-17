@@ -1,0 +1,53 @@
+usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]
+                          [--new-connection]
+                          [--operator-profile OPERATOR_PROFILE]
+                          [--remote-draft REMOTE_DRAFT]
+                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]
+                          [--review-current] [--start-at-login |
+                          --no-start-at-login] [--agent AGENT |
+                          --new-agent NEW_AGENT] [--name NAME]
+                          [--client CLIENT] [--project PROJECT]
+                          [--workspace-id WORKSPACE_ID]
+                          [--binding-id BINDING_ID]
+                          [--candidate-ref CANDIDATE_REF]
+                          [--provider-home PROVIDER_HOME] [--plan]
+                          [--approve APPROVE] [--json] [--no-chat]
+                          [--timeout TIMEOUT]
+                          [harness] [project_name]
+
+Review and connect this project using the canonical managed setup.
+
+positional arguments:
+  harness               public harness token (codex, claude, pi)
+  project_name          logical project name; never a directory path
+
+options:
+  -h, --help            show this help message and exit
+  --id HARNESS_ID       ID do Harness (Harness ID) in this project
+  --profile PROFILE     technical saved local profile; retained for scripts
+                        and recovery
+  --new-connection      explicitly add another connection
+  --operator-profile OPERATOR_PROFILE
+                        saved human operator profile on a remote Server
+  --remote-draft REMOTE_DRAFT
+                        remote host draft exported by Connector
+  --setup-receipt-output SETUP_RECEIPT_OUTPUT
+                        export the public remote handoff
+  --review-current
+  --start-at-login
+  --no-start-at-login
+  --agent AGENT         existing canonical agent ID
+  --new-agent NEW_AGENT
+                        proposed unused canonical identity ID
+  --name NAME           display name of the new identity
+  --client CLIENT       legacy harness selector; tokens resolve after parsing
+  --project PROJECT     physical directory, independently of project name
+  --workspace-id WORKSPACE_ID
+  --binding-id BINDING_ID
+  --candidate-ref CANDIDATE_REF
+  --provider-home PROVIDER_HOME
+  --plan                review without service, Git, probes or model turns
+  --approve APPROVE     apply the exact displayed review revision
+  --json
+  --no-chat
+  --timeout TIMEOUT

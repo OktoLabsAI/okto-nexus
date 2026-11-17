@@ -1,0 +1,22 @@
+--- original/test_local_edge_scenarios.py
++++ reviewed/test_local_edge_scenarios.py
+@@ -56,8 +56,8 @@
+     assert link.parent.resolve().is_relative_to(own.resolve())
+     assert target.resolve().is_relative_to(own.resolve())
+     assert not any(character in str(link) + str(target) for character in '&|<>^%!"')
+-    result = subprocess.run([r'C:/Windows/System32/cmd.exe', '/d', '/c', 'mklink', '/J', str(link), str(target)],
+-        cwd=own, stdin=subprocess.DEVNULL, capture_output=True, timeout=5)
++    result = subprocess.run([str(Path('C:/Windows/System32/cmd.exe')), '/d', '/c', 'mklink', '/J', str(link), str(target)],
++        cwd=own, stdin=subprocess.DEVNULL, capture_output=True, timeout=5, creationflags=subprocess.CREATE_NO_WINDOW)
+     if result.returncode:
+         pytest.skip('Host cannot create an owned directory junction; return code ' + str(result.returncode))
+     assert link.is_junction() and link.resolve(strict=True) == target.resolve(strict=True)
+@@ -131,7 +131,7 @@
+     env.update(TEMP=str(temporary), TMP=str(temporary), HOME=str(home), USERPROFILE=str(home), APPDATA=str(home), LOCALAPPDATA=str(home), PATH=str(home))
+     before = authority(c)
+     result = subprocess.run([sys.executable, '-I', '-B', str(echo), *loaded], cwd=cwd, env=env,
+-        stdin=subprocess.PIPE, input=b'', capture_output=True, shell=False, timeout=10)
++        input=b'', capture_output=True, shell=False, timeout=10, creationflags=subprocess.CREATE_NO_WINDOW)
+     assert result.returncode == 0 and result.stderr == b''
+     assert result.stdout == wire and json.loads(result.stdout) == vector
+     assert not (cwd / 'H09_MARKER.txt').exists()

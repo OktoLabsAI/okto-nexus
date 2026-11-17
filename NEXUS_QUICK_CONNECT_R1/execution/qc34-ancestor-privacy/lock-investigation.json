@@ -1,0 +1,25 @@
+{
+  "mode": "READ_ONLY_NO_NEW_TEST",
+  "historical_failure_exact_path": null,
+  "historical_failure_reason": "The original traceback exposes only data = path.read_bytes() followed by f.read() PermissionError without filename or loop-local path. The scanner did not persist each attempted file or stat before reading. An exact historical pathname is therefore not proven.",
+  "candidate": {
+    "relative_path": "home/runtime-journal-v1/writer.lock",
+    "evidence": "Present in the preserved case; post-exit scan records 1 byte. Current independent lstat/read confirms the same 1-byte regular non-reparse file, attributes 32, mtime_ns 1794909996484088000, SHA256 below.",
+    "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+    "size": 1,
+    "producer": "src/okto_nexus/adapters/outbound/harness/event_journal.py:93-101",
+    "producer_behavior": "Opens writer.lock O_CREAT|O_RDWR. On Windows, writes one zero byte only if initially empty, seeks to zero and locks one byte with msvcrt.LK_NBLCK. close() closes the owner handle; it does not unlink the file. It does not truncate a preexisting nonempty file, so suffix alone never proves length.",
+    "interpretation": "Strong candidate for a read-time Windows byte-lock denial, but current size and producer are not an exact historical path proof. No categorical attribution of the previous failure."
+  },
+  "proposed_scanner_change": {
+    "scope": "External test helper only, not product",
+    "before_each_read": "Persist relative path, lstat size/type/attributes and attempted-read sequence before reading; reject symlinks/reparse points.",
+    "permission_error_rule": "Only for the exact owned canonical journal writer.lock path, with fixture-owned live journal producer, regular non-reparse file, same identity and size exactly one byte before and after the failed read, and size strictly below every private marker encoding's minimum byte length: record a length-exclusion proof rather than a generic skip. Any missing stat/changed identity/size, other file path, DB/log/text or unexpected error fails the scanner.",
+    "minimum_marker": "PRIVATE has 7 UTF-8 bytes and 14 UTF-16 bytes; a proven 1-byte file cannot contain any whole configured marker. Compute this bound from actual encoded markers, do not hardcode suffix assumptions.",
+    "all_other_files": "Read every byte and scan all configured encodings; exclude only positively verified synthetic Git input config as before.",
+    "sql": "Continue the complete read-only live SQLite scan of all tables, independently of file-lock length proof.",
+    "post_exit": "Verify retained lock bytes and size again after fixture shutdown; preserve prior failed and inconclusive cuts separately."
+  },
+  "decision": "Maintain existing D25 FAIL/partial. A future specifically instrumented focal can establish the exact denied file and narrow one-byte proof; this read-only investigation does not rerun or retroactively turn the original runner green.",
+  "new_processes_or_provider_calls": 0
+}

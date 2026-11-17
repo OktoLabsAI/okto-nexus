@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="11.534" timestamp="2026-11-17T05:00:14.346156-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_git_cli_integration" name="test_origin_first_connect_and_changed_metadata_exact_resume[https://example.invalid/team/logical-origin.git]" time="9.194"><failure message="AssertionError: ['selection.public_connection.project_revision', 'selection.public_connection.reservation_ref', 'selection.quick_connect.name_discovery.reason', 'selection.quick_connect.name_discovery.status', 'selection.quick_connect.operation', 'selection.quick_connect.project_name_source']&#10;assert {'selection.p..._name_source'} &lt;= {'selection.q...ct.operation'}&#10;  &#10;  Extra items in the left set:&#10;  'selection.quick_connect.project_name_source'&#10;  'selection.public_connection.project_revision'&#10;[+3 more lines; full report in element text]">C:\Users\jpamb\AppData\Local\Temp\nexus-qc-git-cli-derivative-kq_sepcf\after\tests\quick_connect\test_git_cli_integration.py:123: in test_origin_first_connect_and_changed_metadata_exact_resume
+    assert set(changes) &lt;= {'selection.quick_connect.operation'}, changes
+E   AssertionError: ['selection.public_connection.project_revision', 'selection.public_connection.reservation_ref', 'selection.quick_connect.name_discovery.reason', 'selection.quick_connect.name_discovery.status', 'selection.quick_connect.operation', 'selection.quick_connect.project_name_source']
+E   assert {'selection.p..._name_source'} &lt;= {'selection.q...ct.operation'}
+E     
+E     Extra items in the left set:
+E     'selection.quick_connect.project_name_source'
+E     'selection.public_connection.project_revision'
+E     'selection.quick_connect.name_discovery.status'
+E     'selection.public_connection.reservation_ref'
+E     'selection.quick_connect.name_discovery.reason'</failure></testcase></testsuite></testsuites>

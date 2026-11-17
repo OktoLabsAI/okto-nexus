@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="16" time="104.107" timestamp="2026-11-17T02:12:45.375212-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay" time="8.689" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_second_codex_explicit_add_uses_reviewer_id_in_same_workspace" time="8.858" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_exact_public_id_noninteractive_without_profile_reuses_canonical_reference" time="6.901" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_explicit_occupied_id_add_fails_before_another_model_test" time="7.079" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens0]" time="4.914" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens1]" time="5.762" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens2]" time="5.732" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_new_connection_json_id_without_profile_never_invents_idempotency" time="5.992" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_plan_with_service_off_never_starts_daemon_or_discovers_git" time="5.756" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_unknown_or_unavailable_harness_json_does_not_read_or_test[codxe-CLIENT_SELECTION_REQUIRED]" time="5.729" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_unknown_or_unavailable_harness_json_does_not_read_or_test[claude-INSTALLATION_UNAVAILABLE]" time="5.916" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_root_alias_uses_same_managed_review_not_external_cli" time="6.222" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_unknown_harness_tty_choice_is_explicit_and_plan_does_not_test" time="5.798" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:test]" time="5.662" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:finish]" time="6.729" /><testcase classname="tests.quick_connect.test_quick_connect_cli" name="test_legacy_public_id_adoption_only_writes_metadata_preserves_unknown_fields_without_echo" time="6.335"><failure message="KeyError: 'legacy_extension'">quick_cli = namespace(t=namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x0000019C98FDF000...indowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11195/test_legacy_public_id_adoption0/workspace'))
+capsys = &lt;_pytest.capture.CaptureFixture object at 0x0000019C99267410&gt;
+
+    def test_legacy_public_id_adoption_only_writes_metadata_preserves_unknown_fields_without_echo(quick_cli, capsys):
+        c = quick_cli
+        base = ['connect', '--client', 'codex', '--agent', 'subject', '--profile', 'legacy',
+                '--project', str(c.project), '--json']
+        review = invoke(c, capsys, [*base, '--plan'])
+        legacy = invoke(c, capsys, [*base, '--approve', review['review_revision']])
+        assert legacy['state'] == 'configured' and 'quick_connect' not in legacy
+        path = c.home / 'terminal' / 'profiles' / 'legacy.json'
+        saved = json.loads(path.read_text(encoding='utf-8'))
+        saved['legacy_private'] = 'PRIVATE_opaque_NOT_PUBLIC'
+        saved['selection']['legacy_extension'] = {'opaque': 'PRIVATE_opaque_NOT_PUBLIC'}
+        path.write_text(json.dumps(saved), encoding='utf-8')
+        before = _terminal.snapshot(c.t.deps)
+        posts_before = sum(method == 'POST' for method, _ in c.t.calls)
+        adopt = ['connect', 'codex', '--id', 'legacy-public', '--profile', 'legacy', '--json']
+        proposal = invoke(c, capsys, [*adopt, '--plan'])
+        assert proposal['kind'] == 'public_id_association'
+        assert 'PRIVATE_opaque_NOT_PUBLIC' not in json.dumps(proposal)
+        result = invoke(c, capsys, [*adopt, '--approve', proposal['review_revision']])
+        assert result['quick_connect']['operation'] == 'associated_existing'
+        assert result['quick_connect']['connect_id'] == 'legacy-public'
+        assert result['binding_id'] == legacy['binding_id']
+        assert 'PRIVATE_opaque_NOT_PUBLIC' not in json.dumps(result)
+        assert _terminal.snapshot(c.t.deps) == before
+        assert len(c.t.turns) == len(c.t.probes) == 1
+        assert sum(method == 'POST' for method, _ in c.t.calls) == posts_before + 1
+        on_disk = json.loads(path.read_text(encoding='utf-8'))
+        assert on_disk['legacy_private'] == 'PRIVATE_opaque_NOT_PUBLIC'
+&gt;       assert on_disk['selection']['legacy_extension'] == {'opaque': 'PRIVATE_opaque_NOT_PUBLIC'}
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'legacy_extension'
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\quick_connect\test_quick_connect_cli.py:263: KeyError</failure></testcase></testsuite></testsuites>
