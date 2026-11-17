@@ -1,0 +1,126 @@
+{
+  "started_at": "2026-11-17T05:58:26.270180+00:00",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-live-2d6ixbzv",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\scripts\\live_client.py"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-live-2d6ixbzv",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+  "isolated": true,
+  "main_no_bytecode": true,
+  "script_sha256": "c45643a809319861f21d73a3ddb2fc536b39f2e19e408563fd6cf907d26f2aa8",
+  "wheel_sha256": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+  "installed_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+  "installed_payload_files": 732,
+  "environment": "allowlisted before bootstrap, own profiles/appdata/TEMP; PATH own empty directory",
+  "provider_calls": 0,
+  "real_harnesses": false,
+  "observed_processes": [
+    {
+      "ProcessId": 45916,
+      "ParentProcessId": 56860,
+      "CreationDate": "/Date(1794895106319)/",
+      "ExecutablePath": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+      "CommandLine": "\"C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe\" -I -B D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\scripts\\live_client.py"
+    },
+    {
+      "ProcessId": 34304,
+      "ParentProcessId": 45916,
+      "CreationDate": "/Date(1794895106332)/",
+      "ExecutablePath": "C:\\Python313\\python.exe",
+      "CommandLine": "\"C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe\" -I -B D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\scripts\\live_client.py"
+    },
+    {
+      "ProcessId": 50440,
+      "ParentProcessId": 34304,
+      "CreationDate": "/Date(1794895110401)/",
+      "ExecutablePath": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+      "CommandLine": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe -I -m okto_nexus.adapters.inbound.mcp.server serve --home C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-live-2d6ixbzv\\tmp\\okto-live-http-mcp-bz8k23ps\\home --host 127.0.0.1 --port 56195 --project-root C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-live-2d6ixbzv\\tmp\\okto-live-http-mcp-bz8k23ps\\project --embedding-mode off"
+    },
+    {
+      "ProcessId": 9436,
+      "ParentProcessId": 50440,
+      "CreationDate": "/Date(1794895110417)/",
+      "ExecutablePath": "C:\\Python313\\python.exe",
+      "CommandLine": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe -I -m okto_nexus.adapters.inbound.mcp.server serve --home C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-live-2d6ixbzv\\tmp\\okto-live-http-mcp-bz8k23ps\\home --host 127.0.0.1 --port 56195 --project-root C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-live-2d6ixbzv\\tmp\\okto-live-http-mcp-bz8k23ps\\project --embedding-mode off"
+    },
+    {
+      "ProcessId": 47116,
+      "ParentProcessId": 34304,
+      "CreationDate": "/Date(1794895118009)/",
+      "ExecutablePath": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+      "CommandLine": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe -I -m okto_nexus.adapters.inbound.mcp.server service stop --home C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-live-2d6ixbzv\\tmp\\okto-live-http-mcp-bz8k23ps\\home --host 127.0.0.1 --port 56195 --timeout 15 --json"
+    },
+    {
+      "ProcessId": 25144,
+      "ParentProcessId": 47116,
+      "CreationDate": "/Date(1794895118026)/",
+      "ExecutablePath": "C:\\Python313\\python.exe",
+      "CommandLine": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe -I -m okto_nexus.adapters.inbound.mcp.server service stop --home C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-live-2d6ixbzv\\tmp\\okto-live-http-mcp-bz8k23ps\\home --host 127.0.0.1 --port 56195 --timeout 15 --json"
+    }
+  ],
+  "launcher_pid": 56860,
+  "exit_code": 0,
+  "installed_payload_drift": [],
+  "script_drift": false,
+  "result_marker": true,
+  "summary": {
+    "transport": "HTTP /mcp/",
+    "authenticated_agents": 2,
+    "provider_calls": 0,
+    "real_harnesses_tested": false,
+    "tools_count": 54,
+    "message_observed_via_event_wait": true,
+    "handoff_completed": true,
+    "artifact_round_trip": true,
+    "shared_md_written": true,
+    "workspace_id": "b7e0a219725cede19ef17b975c241f20c45666ed7882622bb8d133c514032867",
+    "all_envelopes_ok": true,
+    "cleanup": {
+      "physical_exit": true,
+      "exit_code": 0,
+      "canonical_stop_exit_code": 0
+    }
+  },
+  "observed_processes_physically_absent": [
+    9436,
+    25144,
+    34304,
+    45916,
+    47116,
+    50440,
+    56860
+  ],
+  "script_allocated_roots_remaining": [],
+  "status": "PASS",
+  "ended_at": "2026-11-17T05:58:44.826086+00:00",
+  "module_origins": {
+    "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+    "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+    "mcp": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Lib\\site-packages\\mcp\\__init__.py"
+  },
+  "versions": {
+    "okto-nexus": "0.3.6",
+    "okto-nexus-connector-core": "0.0.14",
+    "mcp": "1.30.0"
+  },
+  "physical_cleanup": {
+    "processes": [],
+    "listeners": [],
+    "port": 56195,
+    "proof": "cleanup-physical.json",
+    "force_used": false,
+    "deleted": "Only script-allocated okto-live-http-mcp-* root, after canonical stop and owned process wait.",
+    "retained": "Outer driver root contains only logs/profile directories; no DB archived into repository."
+  },
+  "executed_driver": "run-executed.txt",
+  "executed_driver_sha256": "d3611db4642188d3024c86e601586fab2c45cf9f33bafcda1bd07942c4ae2afb",
+  "driver_postrun_change": "Unused import removed and lambda changed to def for Ruff only; literal executed driver retained. LiveMCP was not repeated.",
+  "source_script_sha256_after": "c45643a809319861f21d73a3ddb2fc536b39f2e19e408563fd6cf907d26f2aa8",
+  "scope_limit": "Real installed HTTP MCP coordination smoke, not a model/native harness campaign or CI platform matrix."
+}

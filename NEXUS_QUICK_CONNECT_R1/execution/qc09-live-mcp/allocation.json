@@ -1,0 +1,24 @@
+{
+  "started_at": "2026-11-17T05:58:26.270180+00:00",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-live-2d6ixbzv",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\scripts\\live_client.py"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-live-2d6ixbzv",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+  "isolated": true,
+  "main_no_bytecode": true,
+  "script_sha256": "c45643a809319861f21d73a3ddb2fc536b39f2e19e408563fd6cf907d26f2aa8",
+  "wheel_sha256": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+  "installed_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+  "installed_payload_files": 732,
+  "environment": "allowlisted before bootstrap, own profiles/appdata/TEMP; PATH own empty directory",
+  "provider_calls": 0,
+  "real_harnesses": false,
+  "observed_processes": []
+}

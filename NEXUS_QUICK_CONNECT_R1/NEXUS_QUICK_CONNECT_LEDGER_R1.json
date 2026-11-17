@@ -348,6 +348,11 @@
           "path": "execution/qc00-contracts/qualification.json",
           "scope": "Pure frozen DTO contracts: 46 tests; CLI, namespace and integrated matrix qualification pending",
           "commit": "3c774f0f"
+        },
+        {
+          "path": "execution/qc06-foundation-security/qualification.json",
+          "scope": "Current pure contracts, grammar, dispatch, local Git and project decisions; 260 source-level checks. Installed and native qualification separate.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
         }
       ]
     },
@@ -422,7 +427,7 @@
       "id": "QC-004",
       "phase": "QC-01",
       "title": "Implementar normalização de posicionais e flags",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-002"
       ],
@@ -464,6 +469,11 @@
           "path": "execution/qc00-contracts/parser-qualification.json",
           "scope": "Pure parser: 41 tests; complete CLI wiring remains in progress; current bilingual help checked in foundation-final",
           "commit": "3c774f0f"
+        },
+        {
+          "path": "execution/qc06-foundation-security/qualification.json",
+          "scope": "Current pure contracts, grammar, dispatch, local Git and project decisions; 260 source-level checks. Installed and native qualification separate.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
         }
       ]
     },
@@ -471,7 +481,7 @@
       "id": "QC-005",
       "phase": "QC-01",
       "title": "Implementar aliases raiz e ajuda inicial",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-004"
       ],
@@ -506,13 +516,19 @@
         "QC-T-A15",
         "QC-T-A16"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc06-foundation-security/qualification.json",
+          "scope": "Current pure contracts, grammar, dispatch, local Git and project decisions; 260 source-level checks. Installed and native qualification separate.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-006",
       "phase": "QC-01",
       "title": "Unificar registro e picker de harness",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-004"
       ],
@@ -542,13 +558,19 @@
         "QC-T-B09",
         "QC-T-B10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/evidence/qc03-harness-alternatives/qualification.json",
+          "scope": "Explicit supported-family alternatives and policy/freshness fences; source CLI plus inert HTTP. No real provider readiness claim.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-007",
       "phase": "QC-01",
       "title": "Fixar comportamento não interativo",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-004",
         "QC-006"
@@ -605,13 +627,19 @@
         "QC-T-H09",
         "QC-T-H10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/evidence/qc03-harness-alternatives/qualification.json",
+          "scope": "Explicit supported-family alternatives and policy/freshness fences; source CLI plus inert HTTP. No real provider readiness claim.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-008",
       "phase": "QC-01",
       "title": "Adotar ID do Harness como vocabulário público",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-004"
       ],
@@ -657,13 +685,19 @@
         "QC-T-F23",
         "QC-T-F24"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc05-frontend/qualification.json",
+          "scope": "Additive public ID vocabulary and projections; 360 Node tests and TypeScript/Vite. Browser limitations retained separately.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-009",
       "phase": "QC-02",
       "title": "Resolver CWD e raiz explícita com proveniência",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-002"
       ],
@@ -703,7 +737,13 @@
         "QC-T-C17",
         "QC-T-C18"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc06-foundation-security/qualification.json",
+          "scope": "Current pure contracts, grammar, dispatch, local Git and project decisions; 260 source-level checks. Installed and native qualification separate.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-010",
@@ -765,6 +805,11 @@
           "path": "execution/evidence/qc02-git/qualification.json",
           "scope": "43 adapter tests including real local Git fixtures and bounded inherited pipes; integrated CLI and real providers not qualified",
           "commit": "3c774f0f"
+        },
+        {
+          "path": "execution/qc06-foundation-security/qualification.json",
+          "scope": "Current pure contracts, grammar, dispatch, local Git and project decisions; 260 source-level checks. Installed and native qualification separate.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
         }
       ]
     },
@@ -772,7 +817,7 @@
       "id": "QC-011",
       "phase": "QC-02",
       "title": "Estender consulta de projetos autorizados",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-009"
       ],
@@ -813,13 +858,19 @@
         "QC-T-C17",
         "QC-T-C18"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc03-backend/qualification.json",
+          "scope": "Authorized directory, canonical proof, persistent registry and atomic setup/receipt with fixed legacy digest. Faults and concurrency are synthetic HTTP/SQLite.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-012",
       "phase": "QC-02",
       "title": "Aplicar precedência do nome e conservar a raiz aprovada",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-010",
         "QC-011"
@@ -870,13 +921,19 @@
         "QC-T-D25",
         "QC-T-D26"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/evidence/qc04-cli-http/qualification.json",
+          "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-013",
       "phase": "QC-02",
       "title": "Implementar seletor e proposta de projeto novo",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-011",
         "QC-006",
@@ -945,13 +1002,19 @@
         "QC-T-D25",
         "QC-T-D26"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/evidence/qc04-cli-http/qualification.json",
+          "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-014",
       "phase": "QC-02",
       "title": "Revalidar projetos em retomada e concorrência",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-013"
       ],
@@ -1008,7 +1071,13 @@
         "QC-T-G14",
         "QC-T-G15"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc03-backend/qualification.json",
+          "scope": "Authorized directory, canonical proof, persistent registry and atomic setup/receipt with fixed legacy digest. Faults and concurrency are synthetic HTTP/SQLite.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-015",
@@ -1057,6 +1126,11 @@
           "path": "execution/qc03-backend/qualification.json",
           "scope": "Migration 168, Server registry, constraints and transactional tests; integrated CLI/package qualification pending",
           "commit": "cd88162e"
+        },
+        {
+          "path": "execution/qc03-backend/qualification.json",
+          "scope": "Authorized directory, canonical proof, persistent registry and atomic setup/receipt with fixed legacy digest. Faults and concurrency are synthetic HTTP/SQLite.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
         }
       ]
     },
@@ -1064,7 +1138,7 @@
       "id": "QC-016",
       "phase": "QC-03",
       "title": "Reservar proposta e preservar intenção",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-015",
         "QC-014"
@@ -1119,7 +1193,13 @@
         "QC-T-G14",
         "QC-T-G15"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/evidence/qc04-cli-http/qualification.json",
+          "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-017",
@@ -1185,6 +1265,11 @@
           "path": "execution/qc03-backend/qualification.json",
           "scope": "Optional envelope omitted from legacy digests; fixed installed-PR27 golden; atomic Finish and receipt rollback/recovery",
           "commit": "cd88162e"
+        },
+        {
+          "path": "execution/qc03-backend/qualification.json",
+          "scope": "Authorized directory, canonical proof, persistent registry and atomic setup/receipt with fixed legacy digest. Faults and concurrency are synthetic HTTP/SQLite.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
         }
       ]
     },
@@ -1192,7 +1277,7 @@
       "id": "QC-018",
       "phase": "QC-03",
       "title": "Resolver e associar conexões antigas",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-015",
         "QC-017"
@@ -1234,13 +1319,19 @@
         "QC-T-E17",
         "QC-T-E18"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc03-backend/qualification.json",
+          "scope": "Authorized directory, canonical proof, persistent registry and atomic setup/receipt with fixed legacy digest. Faults and concurrency are synthetic HTTP/SQLite.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-019",
       "phase": "QC-03",
       "title": "Qualificar locks, reservas incertas e tombstones",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-017",
         "QC-018"
@@ -1295,13 +1386,19 @@
         "QC-T-G14",
         "QC-T-G15"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc07-public-id-occupancy/qualification.json",
+          "scope": "Canonical disable preserves occupied public ID; old-timestamp reservation remains unavailable. No automatic cleanup or native termination asserted.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-020",
       "phase": "QC-03",
       "title": "Tratar colisão de ID com decisão explícita e sem sobrescrita",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-018",
         "QC-006",
@@ -1351,13 +1448,19 @@
         "QC-T-F23",
         "QC-T-F24"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/evidence/qc04-cli-http/qualification.json",
+          "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-021",
       "phase": "QC-04",
       "title": "Consolidar a revisão final e congelar escolhas aprovadas",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-019",
         "QC-012",
@@ -1411,13 +1514,19 @@
         "QC-T-F23",
         "QC-T-F24"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/evidence/qc04-cli-http/qualification.json",
+          "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-022",
       "phase": "QC-04",
       "title": "Orquestrar Quick Connect no fluxo existente",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-007",
         "QC-014",
@@ -1456,13 +1565,19 @@
         "QC-T-H01",
         "QC-T-I09"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/evidence/qc04-cli-http/qualification.json",
+          "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-023",
       "phase": "QC-04",
       "title": "Implementar resumo positivo com ID",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-022",
         "QC-008"
@@ -1518,13 +1633,19 @@
         "QC-T-H09",
         "QC-T-H10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/evidence/qc04-cli-http/qualification.json",
+          "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-024",
       "phase": "QC-04",
       "title": "Versionar JSON e efeitos por estágio",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-023"
       ],
@@ -1581,13 +1702,19 @@
         "QC-T-H09",
         "QC-T-H10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/evidence/qc04-cli-http/qualification.json",
+          "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-025",
       "phase": "QC-04",
       "title": "Recuperar commit com falha de persistência local",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-024"
       ],
@@ -1624,13 +1751,19 @@
         "QC-T-G14",
         "QC-T-G15"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc04-terminal/qualification.json",
+          "scope": "Commit recovery, local shortcut repair, metadata adoption and remote canonical scope. Full installed regressions remain in progress.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-026",
       "phase": "QC-05",
       "title": "Projetar ID no catálogo e UI existente",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-018",
         "QC-024",
@@ -1666,13 +1799,19 @@
         "QC-T-I09",
         "QC-T-I10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc05-frontend/qualification.json",
+          "scope": "Additive public ID vocabulary and projections; 360 Node tests and TypeScript/Vite. Browser limitations retained separately.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-027",
       "phase": "QC-05",
       "title": "Preservar remoto, participant e Server antigo",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-022",
         "QC-026"
@@ -1709,13 +1848,19 @@
         "QC-T-I09",
         "QC-T-I10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc04-terminal/qualification.json",
+          "scope": "Commit recovery, local shortcut repair, metadata adoption and remote canonical scope. Full installed regressions remain in progress.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-028",
       "phase": "QC-05",
       "title": "Cobrir migração de perfis e recibos legados",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-025",
         "QC-027"
@@ -1747,13 +1892,19 @@
         "QC-T-I09",
         "QC-T-I10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc04-terminal/qualification.json",
+          "scope": "Commit recovery, local shortcut repair, metadata adoption and remote canonical scope. Full installed regressions remain in progress.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-029",
       "phase": "QC-06",
       "title": "Executar matriz integrada e adversarial",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "QC-026",
         "QC-027",
@@ -1845,7 +1996,7 @@
       "id": "QC-030",
       "phase": "QC-06",
       "title": "Validar experiência no terminal e plataformas",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "QC-029"
       ],
@@ -1921,7 +2072,7 @@
       "id": "QC-031",
       "phase": "QC-06",
       "title": "Executar jornada real isolada consentida",
-      "status": "TODO",
+      "status": "BLOCKED",
       "depends_on": [
         "QC-030"
       ],
@@ -1957,13 +2108,20 @@
         "QC-T-I09",
         "QC-T-I10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/coverage-review.json",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c",
+          "scope": "A new real-provider campaign needs its own consent/budget and resolution of the retained UNKNOWN usage guard; no new provider call made."
+        }
+      ],
+      "execution_notes": "Implementation work continues independently; synthetic/native-PTY/installed tests do not clear the real-campaign gate."
     },
     {
       "id": "QC-032",
       "phase": "QC-06",
       "title": "Atualizar documentação e prompt operacional",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-029"
       ],
@@ -2078,13 +2236,19 @@
         "QC-T-I09",
         "QC-T-I10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/baseline.md",
+          "scope": "Guide docs/quick-connect.md at 0a1cbaba documents tested syntax, authority, partial outcomes and presentation rollback.",
+          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        }
+      ]
     },
     {
       "id": "QC-033",
       "phase": "QC-06",
       "title": "Empacotar, revisar gates e definir rollback",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "QC-030",
         "QC-031",
@@ -5022,5 +5186,19 @@
     }
   ],
   "evidence_policy": "VERIFIED/PASS exige comando, ambiente, commit e resultado observado. Fixture não comprova harness real. Este pacote não executou testes do Nexus.",
-  "initialization_policy": "Iniciar o acompanhamento deste plano com TODO/NOT_RUN. Preservar registros de outras frentes do produto; reutilizar código existente após revalidação dos critérios pertinentes."
+  "initialization_policy": "Iniciar o acompanhamento deste plano com TODO/NOT_RUN. Preservar registros de outras frentes do produto; reutilizar código existente após revalidação dos critérios pertinentes.",
+  "execution": {
+    "candidate": "a0fa79129d8760eef945fc1445c2355430d5b54c",
+    "branch": "feature/v0.3.6",
+    "version": "0.3.6",
+    "draft_pr": "https://github.com/OktoLabsAI/okto-nexus/pull/139",
+    "implementation_gate": "IN_PROGRESS: installed regression and final matrix reconciliation",
+    "real_qualification_gate": "BLOCKED: fresh campaign consent and prior UNKNOWN usage guard",
+    "limitations": [
+      "UI-R1 original qualification ledger and prior human failures remain unchanged.",
+      "No further human testing, Windows session events, personal install changes or paid provider runs.",
+      "Browser malformed historical viewer and unattributed sessions digest change retained as limits.",
+      "PTY Ctrl-C interrupted the tool transport; checkpoint survived, CLI return-130 not qualified."
+    ]
+  }
 }

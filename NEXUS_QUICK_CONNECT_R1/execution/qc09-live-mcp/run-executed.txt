@@ -1,0 +1,107 @@
+"""Run the unchanged installed LiveMCP smoke with own environment and provenance."""
+from datetime import datetime, timezone
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+import zipfile
+
+HERE=Path(__file__).resolve().parent
+REPO=HERE.parents[2]
+package_root=Path(json.loads((HERE.parent/'qc08-package/allocation.json').read_text())['root']).resolve()
+python=package_root/'venv/Scripts/python.exe'
+wheel=package_root/'artifacts/okto_nexus-0.3.6-py3-none-any.whl'
+script=REPO/'scripts/live_client.py'
+assert Path(sys.prefix).resolve()==(package_root/'venv').resolve() and sys.flags.isolated and sys.dont_write_bytecode
+rtk=shutil.which('rtk')
+assert rtk
+root=Path(tempfile.mkdtemp(prefix='nexus-qc09-live-')).resolve()
+sha=lambda path:hashlib.sha256(path.read_bytes()).hexdigest()
+spec=importlib.util.spec_from_file_location('qc09_environment',HERE.parent/'qc08-package/package.py')
+builder=importlib.util.module_from_spec(spec)
+spec.loader.exec_module(builder)
+env=builder.environment(root)
+(root/'empty-path').mkdir()
+env['PATH']=str(root/'empty-path')
+env['OKTO_NEXUS_NO_BANNER']='1'
+
+
+def payload():
+    origin=Path(importlib.util.find_spec('okto_nexus').origin).resolve()
+    assert origin.is_relative_to(Path(sys.prefix).resolve())
+    checked={}
+    with zipfile.ZipFile(wheel) as archive:
+        for name in archive.namelist():
+            if name.startswith('okto_nexus/') and not name.endswith('/'):
+                actual=(origin.parent/name.split('/',1)[1]).read_bytes()
+                assert actual==archive.read(name),name
+                checked[name]=hashlib.sha256(actual).hexdigest()
+    assert len(checked)==732
+    return dict(origin=str(origin),files=checked)
+
+
+before=payload()
+before_script=sha(script)
+assert sha(wheel)=='01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6'
+argv=[rtk,'proxy',str(python),'-I','-B',str(script)]
+report=dict(started_at=datetime.now(timezone.utc).isoformat(),root=str(root),argv=argv,cwd=str(root),
+    python=str(python),isolated=True,main_no_bytecode=True,script_sha256=before_script,wheel_sha256=sha(wheel),
+    installed_origin=before['origin'],installed_payload_files=732,environment='allowlisted before bootstrap, own profiles/appdata/TEMP; PATH own empty directory',
+    provider_calls=0,real_harnesses=False,observed_processes=[])
+(HERE/'allocation.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+with (root/'live.log').open('w',encoding='utf-8') as log:
+    process=subprocess.Popen(argv,cwd=root,env=env,stdin=subprocess.DEVNULL,stdout=log,stderr=subprocess.STDOUT)
+    report['launcher_pid']=process.pid
+    known={process.pid}
+    deadline=time.monotonic()+180
+    while process.poll() is None:
+        if time.monotonic()>deadline:
+            raise RuntimeError('Live runner exceeded outer deadline; own data preserved, no retry or forced kill.')
+        # Inspect only descendants of PIDs owned by this exact launcher. No global process inventory.
+        query=' OR '.join('ParentProcessId='+str(pid) for pid in sorted(known))
+        ps='Get-CimInstance Win32_Process -Filter "'+query+'" | Select-Object ProcessId,ParentProcessId,CreationDate,ExecutablePath,CommandLine | ConvertTo-Json -Depth 3'
+        result=subprocess.run([rtk,'proxy','C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe',
+            '-NoProfile','-Command',ps],cwd=root,env=env,capture_output=True,text=True,timeout=12)
+        if result.stdout.strip():
+            values=json.loads(result.stdout)
+            values=values if isinstance(values,list) else [values]
+            for value in values:
+                if value['ProcessId'] not in known:
+                    known.add(value['ProcessId'])
+                    report['observed_processes'].append(value)
+        time.sleep(.1)
+    report['exit_code']=process.returncode
+after=payload()
+assert before==after and before_script==sha(script)
+raw=(root/'live.log').read_text(encoding='utf-8')
+shutil.copyfile(root/'live.log',HERE/'live-raw.log')
+report['installed_payload_drift']=[]
+report['script_drift']=False
+report['result_marker']='LIVE E2E RESULT: PASS' in raw
+start=raw.find('{\n  "transport"')
+assert start>=0,raw[-1000:]
+summary=json.JSONDecoder().raw_decode(raw[start:])[0]
+report['summary']=summary
+assert report['exit_code']==0 and report['result_marker'] and summary['cleanup']['physical_exit']
+assert summary['cleanup']['exit_code']==0 and summary['cleanup']['canonical_stop_exit_code']==0
+assert summary['authenticated_agents']==2 and summary['provider_calls']==0 and summary['all_envelopes_ok']
+query=' OR '.join('ProcessId='+str(pid) for pid in sorted(known))
+result=subprocess.run([rtk,'proxy','C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe','-NoProfile',
+    '-Command','@(Get-CimInstance Win32_Process -Filter "'+query+'" | Select-Object ProcessId,ParentProcessId) | ConvertTo-Json'],
+    cwd=root,env=env,capture_output=True,text=True,timeout=12)
+assert not result.stdout.strip(),result.stdout
+report['observed_processes_physically_absent']=sorted(known)
+report['script_allocated_roots_remaining']=[str(p) for p in (root/'tmp').glob('okto-live-http-mcp-*')]
+assert not report['script_allocated_roots_remaining']
+report['status']='PASS'
+report['ended_at']=datetime.now(timezone.utc).isoformat()
+(HERE/'qualification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+(HERE/'payload-pins.json').write_text(json.dumps(before,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(status='PASS',exit_code=report['exit_code'],summary=summary,
+                     report_sha256=sha(HERE/'qualification.json'))))
