@@ -1,0 +1,56 @@
+{
+  "status": "TECHNICAL_READINESS_ONLY_NO_HUMAN_TASK_PERFORMED",
+  "root_reported_head": "7491b691",
+  "url": "http://127.0.0.1:49774",
+  "fixture_pid": 36324,
+  "board_http_status": 200,
+  "source_status": {
+    "attention": "ready",
+    "work": "ready",
+    "results": "ready",
+    "connections": "ready",
+    "sessions": "ready",
+    "correlations": "ready",
+    "external": "ready"
+  },
+  "column_totals": {
+    "active": 5,
+    "needs_you": 1,
+    "results": 0
+  },
+  "bundle_sha256": {
+    "assets/index-DXslPEEE.js": "c9c8537f3c411cbf5182e6db1f486d72247cc4943d67f969f24f84001456157e",
+    "assets/index-Ds-MK2FR.css": "f761e905e0d9642c4c7d0f96d9e0f73404012f0d69d4fead8509e6fd9130b7b7",
+    "index.html": "6c2dd0f7744b123a80e5d725055d97b422459a4e6acc24198f5afa7b0a468f56"
+  },
+  "source_sha256": {
+    "frontend/src/components/home/OperationalHome.tsx": "d63dc66e7863b06c177ec923207f27befee6bdc1949f8e3dafa631fbc925bb02",
+    "frontend/src/components/home/HomeBoardCards.tsx": "eca50a55b8dc4925072dc7fdc6654c88f93b897f500a3a45ee473cb874581944",
+    "frontend/src/components/onboarding/ProjectConnectFlow.tsx": "e772035fbb943db170ea9c15a4d4514061bd94eb01a88ea55160ccec979f1c91",
+    "frontend/src/components/ConnectionWorkflow.tsx": "f1b656e725400a5638ecaeb3b76dde84c1a21c33d549d8a33804cd9681ef0231",
+    "frontend/src/homeController.ts": "7c0c024c2150864dd4c43e49560bfc5ee343a03db78112b20db9d7c7fb885ad8",
+    "src/okto_nexus/application/home_entries.py": "a0bc17868a16297b1c7f997a7d9fc3d43d6d465cc9dccd93448badc5bd4add91",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "d34154693d527fa96df452c0b2ff4e7ee918ccef5c1dd7205742ac159e434e5e",
+    "src/okto_nexus/domain/home_board.py": "f93443cdd9e8100ab7541667a14a97c4512d0dee3c1799a470690eb55e0a77f8"
+  },
+  "workspace_id": "ws",
+  "project_label": "Sample project",
+  "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-fourth-clca8on7\\participant-project",
+  "original_authority_expiries": [
+    {
+      "binding_id": "binding",
+      "lane_ticket_expires_at": "2026-11-17T03:21:52.896005+00:00"
+    }
+  ],
+  "original_grants": [
+    {
+      "grant_id": "grant_78ff646aa3e242a5b7e253e66c924d22",
+      "expires_at": "2026-11-17T04:11:52.339115Z",
+      "max_executions": 10
+    }
+  ],
+  "read_window_seconds": 3600,
+  "control": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-fourth-control-0e3arciw",
+  "provider_calls": 0,
+  "native_binary_calls": 0
+}

@@ -3107,7 +3107,11 @@
         "NEXUS_UI_R1/execution/evidence/pr14-human-session/second-run/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr15-human-third-prepare/third-run/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/readiness.json",
+        "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/runtime-state.json",
+        "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/task1-notification.json",
+        "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/README.md"
       ],
       "limitations": [
         "Primeiro percurso humano falhou explicitamente. Correcoes tecnicas e segundo percurso emandamento nao substituem aceite humano; sem sucesso/tempo inventados.",
@@ -5938,6 +5942,10 @@
     {
       "at": "2026-11-17T02:26:24.745787+00:00",
       "event": "Final Board browser PR20:24PASS/0FAIL/1NOT_RUN, three status columns and scoped exact counters, disjoint cards, Active/Results paging, exact connection GET/context,360px stack/no overflow, request-driven Test/Finish loaders, confirmed Connected and separate lost-response UNKNOWN without replay. Exactly3 inert POSTs, no provider. Source14pins and PR15preserved46pins unchanged;51evidencepins verified byRoot. Own browser/fixture exited0 and PIDs/listener absent. Root visually inspected desktop/mobile/Connected/UNKNOWN. Human TQUAL05 remainsFAIL and native TQUAL02BLOCKED; no scenario promotion or release/default approval."
+    },
+    {
+      "at": "2026-11-17T03:16:09.704292+00:00",
+      "event": "User requested fourth iterative human simulation. Fresh own app/DB and visible browser at49774 on unchanged7491b691/DXslPEEE; readiness is read-only,14 preparation pins verified,0 baseline human clicks/POST. Task1 invited through async question: open any existing project connection, no Add/work. Test peers inert, no provider/native/personal authentication. Original lane/grant/request expiries preserved; observation60min has independent bounded extension. Duplicate catalog display labels and expired initial native request are fixture limitations, not participant failures. Keep browser/fixture open for handoff; no human acceptance inferred. TQUAL05 remains previousFAIL and TQUAL02BLOCKED."
     }
   ],
   "risk_acceptances": [],
