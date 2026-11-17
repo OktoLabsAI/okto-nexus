@@ -70,8 +70,14 @@ checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
   e atenção órfã. Totais/resumos seguem escopo e retenção, estados desconhecidos
   não viram zero, e atenção resolvida não permanece em Active. Os testes de
   controller cobrem movimentação entre colunas, 409, cursor antigo, 403 tardio,
-  pausa/foco e rejeição de duplicatas. Navegador e pacote instalado desse ajuste
-  estão em qualificação, sem promover cenários por inferência.
+  pausa/foco e rejeição de duplicatas. O browser PR20 passou 24 verificações:
+  três colunas, cards disjuntos, paginação Active/Results, contexto exato,
+  empilhamento a 360 px, loaders de pedidos reais, Connected após Finish e
+  UNKNOWN separado após perda de resposta, sem replay. Needs you não tinha
+  página adicional na fixture: essa paginação browser continua NOT_RUN.
+  Os três POSTs foram Test/Finish inertes e um Test incerto separado; zero
+  provedores. Navegador/fixture encerrados e ausência física comprovada.
+  Não há novo aceite humano ou dispensa dos cenários amplos do ledger.
 - Os focais ATTN-02/06 comprovaram autoridade humana e fallback clássico no
   navegador, sem aplicação nativa. PANEL-08 passou em HTTP/Core com dois peers
   Python inertes: interrupção exata e replay da mesma operação, irmão preservado,
@@ -253,8 +259,9 @@ próprio, sem confundir este procedimento com teste executado.
 
 ## Próximo gate
 
-Concluir as verificações isoladas pendentes, o artefato instalado posterior aos
-deltas e a avaliação humana, registrando a conclusão da CI no SHA correspondente.
+Concluir os cenários literais pendentes da matriz e a avaliação humana,
+registrando a conclusão da CI no SHA correspondente. O quadro atual já tem
+build, navegador focal e pacote instalado identificados separadamente.
 A campanha permanece bloqueada por modelo recusado e uso desconhecido; não
 executar outra admissão por inferência. Qualificar as fronteiras assistivas e
 topológicas disponíveis. A aprovação de release/default

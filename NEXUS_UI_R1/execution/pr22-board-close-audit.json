@@ -1,0 +1,46 @@
+{
+  "at": "2026-11-17T02:26:26.370529+00:00",
+  "scope": "Board milestone audit, not complete plan acceptance",
+  "repositories": {
+    "nexus": {
+      "branch": "feature/v0.3.5",
+      "head_at_audit": "83cc6b95fcf60170cc938c88db8d8e83bdaeaeb0",
+      "origin_main_at_last_successful_fetch": "8d77b50c00b417c86818d027aed7497fababac34",
+      "missing_commits_from_that_main": 0,
+      "working_tree": "M NEXUS_UI_R1/NEXUS_UI_EXECUTION_LEDGER_R1.json\n?? NEXUS_UI_R1/execution/evidence/pr20-board-browser/\n?? NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+    },
+    "connector": {
+      "branch": "feature/v0.0.13",
+      "head_at_audit": "a4d510080d7a685fa442a4c5c30419952589fe04",
+      "origin_main_at_last_successful_fetch": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "missing_commits_from_that_main": 0,
+      "working_tree": ""
+    },
+    "core": {
+      "branch": "feature/v0.0.14",
+      "head_at_audit": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "origin_main_at_last_successful_fetch": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "missing_commits_from_that_main": 0,
+      "working_tree": ""
+    }
+  },
+  "last_fetch_limit": "Three repos fetched successfully before this milestone;0missing main commits. Final refresh attempt failed on all3 with github.com443 timeout after21s; remote refs here are that last successful snapshot, not a new remote verification.",
+  "qualification_counts": {
+    "PASS": 87,
+    "NOT_RUN": 56,
+    "BLOCKED": 1,
+    "FAIL": 1
+  },
+  "root_visual_inspection": [
+    "desktop-board-clear.png",
+    "mobile-needs_you-clear.png",
+    "desktop-connected.png",
+    "mobile-connected.png",
+    "unknown.png"
+  ],
+  "new_provider_calls": 0,
+  "personal_installation_changed": false,
+  "release_approved": false,
+  "rollback": "Disable operational Home preference or revert feature commits with new commits and rebuild assets; preserve data/aliases/checkpoints/unknown attempts.",
+  "next_gate": "Remaining literal matrix scenarios and human clarity acceptance; real campaign remains blocked by refused model/unknown accounting. No new inference authorized by this milestone."
+}
