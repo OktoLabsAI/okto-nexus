@@ -4,7 +4,8 @@
 has not started.** The selected local functional/context flows have now been
 reviewed against source, installed and browser evidence. Additional supported
 functional/security/compatibility checks remain before the human invitation;
-a newly reproduced unnamed menu control is being corrected in R8. The whole
+a reproduced unnamed menu control has been corrected and packaged in R8;
+its browser confirmation is pending. The whole
 plan's remaining qualification is explicit. Following the user's clarification about other
 processes on this shared machine, performance timings are diagnostic and
 non-blocking for this local delivery; no further tuning is required solely
@@ -12,10 +13,12 @@ to chase these numbers.
 
 ## Candidate and preserved work
 
-Nexus is version0.3.7 on `feature/v0.3.7`. The frozen R7 runtime source is
-`01b0de385398950ac4547aa8a5dcbc29473c12cb`, wheel
-`18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681`.
-Later evidence-only commits do not change that runtime. The draft stacked
+Nexus is version0.3.7 on `feature/v0.3.7`. The current frozen R8 runtime source is
+`6eaa325ea3ddf1dec1b03475b27f373211c81e53`, wheel
+`fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e`.
+The R7 source `01b0de385398950ac4547aa8a5dcbc29473c12cb` and its wheel
+`18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681`
+remain immutable predecessor evidence. The draft stacked
 PR is [140](https://github.com/OktoLabsAI/okto-nexus/pull/140), based on
 `feature/v0.3.6` to preserve the existing UI and Quick Connect work.
 
@@ -68,8 +71,19 @@ header menu had no accessible name in the real R7 browser AX tree. It now has
 the name Application menu and exposes its actual expanded state. The original
 checkout's404Node cases, TypeScript and Vite build pass with unchanged inputs.
 Its new bundle is `index-Cyg0aKfe.js`; CSS remains `index-Bh2ghaTD.css`. A fresh
-R8 package and installed/browser confirmation are pending. R7 prefixes and
-the original failing AX capture remain immutable. No Python behavior changed.
+R8 package passes build/install/base-Core/local-lite/Connector/Twine/pip-check,
+audit and actual HTTP/MCP smoke (54tools, two synthetic identities). All1829
+source pins and1031 payload files remain unchanged; owned processes exited
+normally and physical absence was checked. Browser confirmation is pending.
+R7 prefixes and the original failing AX capture remain immutable. No Python
+behavior changed.
+
+[Raw-byte comparison](package-hst-r8/runtime-equivalence-vs-r7.json) proves
+equality of1024 nonstatic Nexus/Core/Connector files, equal Python/dependency
+versions and unchanged packaging/lock inputs. The326+7 installed predecessor
+tests therefore support only that unchanged backend. They were actually run
+on R7; no pytest run on R8 or browser equivalence is claimed. Third-party
+dependency versions were compared, not all dependency file bytes.
 
 | Layer | Observed scope | Evidence |
 |---|---|---|

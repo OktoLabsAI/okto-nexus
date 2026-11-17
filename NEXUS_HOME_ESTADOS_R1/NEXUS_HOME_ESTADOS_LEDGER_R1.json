@@ -3530,6 +3530,15 @@
           "command_or_procedure": "Read header-menu actual ariaSnapshot and label/title/text; preserve real failing predicate before source edit",
           "result": "FAIL real I01 accessible name: AX button unnamed, aria-label/title null and text empty; normal0/physical0/payload1031drift0",
           "limitations": "This is a product naming defect, not an oracle failure. No complete keyboard or screen-reader qualification."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:19:14.553525+00:00",
+          "artifact_path": "execution/package-hst-r8/qualification.json",
+          "environment": "New isolated R8 prefix; pinned Core0.0.14/Connector0.0.13; original installation untouched",
+          "command_or_procedure": "Build/install/base Core/local lite/Connector/pip check/Twine/audit/CLI plus actual HTTP-MCP smoke",
+          "result": "PASS fresh R8 package; 1829 source pins/1031 payload files unchanged; 54 MCP tools/two fixture identities; normal exit and physical absence",
+          "limitations": "No real harness/provider or new pytest run. R7 installed 326+7 tests are reusable only for 1024 byte-identical nonstatic backend files; frontend requires R8 browser evidence."
         }
       ]
     },
@@ -3742,6 +3751,15 @@
           "command_or_procedure": "Read header-menu actual ariaSnapshot and label/title/text; preserve real failing predicate before source edit",
           "result": "FAIL real I01 accessible name: AX button unnamed, aria-label/title null and text empty; normal0/physical0/payload1031drift0",
           "limitations": "This is a product naming defect, not an oracle failure. No complete keyboard or screen-reader qualification."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:19:14.553525+00:00",
+          "artifact_path": "execution/package-hst-r8/qualification.json",
+          "environment": "New isolated R8 prefix; pinned Core0.0.14/Connector0.0.13; original installation untouched",
+          "command_or_procedure": "Build/install/base Core/local lite/Connector/pip check/Twine/audit/CLI plus actual HTTP-MCP smoke",
+          "result": "PASS fresh R8 package; 1829 source pins/1031 payload files unchanged; 54 MCP tools/two fixture identities; normal exit and physical absence",
+          "limitations": "No real harness/provider or new pytest run. R7 installed 326+7 tests are reusable only for 1024 byte-identical nonstatic backend files; frontend requires R8 browser evidence."
         }
       ]
     },
@@ -3891,6 +3909,15 @@
           "command_or_procedure": "Read header-menu actual ariaSnapshot and label/title/text; preserve real failing predicate before source edit",
           "result": "FAIL real I01 accessible name: AX button unnamed, aria-label/title null and text empty; normal0/physical0/payload1031drift0",
           "limitations": "This is a product naming defect, not an oracle failure. No complete keyboard or screen-reader qualification."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:19:14.553525+00:00",
+          "artifact_path": "execution/package-hst-r8/qualification.json",
+          "environment": "New isolated R8 prefix; pinned Core0.0.14/Connector0.0.13; original installation untouched",
+          "command_or_procedure": "Build/install/base Core/local lite/Connector/pip check/Twine/audit/CLI plus actual HTTP-MCP smoke",
+          "result": "PASS fresh R8 package; 1829 source pins/1031 payload files unchanged; 54 MCP tools/two fixture identities; normal exit and physical absence",
+          "limitations": "No real harness/provider or new pytest run. R7 installed 326+7 tests are reusable only for 1024 byte-identical nonstatic backend files; frontend requires R8 browser evidence."
         }
       ]
     }
@@ -7237,9 +7264,9 @@
       "human": false
     },
     "local_usability_candidate": {
-      "state": "ADDITIONAL_FUNCTIONAL_QUALIFICATION_IN_PROGRESS; menu fix awaits installed proof",
-      "runtime_source": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
-      "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+      "state": "ADDITIONAL_FUNCTIONAL_QUALIFICATION_IN_PROGRESS; fresh R8 package ready, browser pending",
+      "runtime_source": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+      "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
       "supported_scope": [
         "Working/Idle/unknown and partial/full blocking",
         "Exact request/session/result context; same receipt after response loss and stale second screen",
@@ -7278,10 +7305,24 @@
       "input_drift": [],
       "bundle": "assets/index-Cyg0aKfe.js",
       "css": "assets/index-Bh2ghaTD.css",
-      "installed": "PENDING_NEW_R8_PREFIX",
+      "installed": "PASS_FRESH_R8_PACKAGE; browser still pending",
       "browser": "PENDING_NAMING_THEN_EXPERIENCE",
       "backend_source_changed": false,
       "human": "NOT_INVITED"
+    },
+    "r8_package": {
+      "source": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+      "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+      "ready": "execution/package-hst-r8/READY.json",
+      "qualification": "execution/package-hst-r8/qualification.json",
+      "live": "execution/package-hst-r8/live-qualification.json",
+      "equivalence": "execution/package-hst-r8/runtime-equivalence-vs-r7.json",
+      "runtime_equal_files": 1024,
+      "pytest_r8_executed": false,
+      "predecessor_installed_backend_tests": "326+7, actually executed on immutable R7 prefix",
+      "frontend_reuse": false,
+      "default_approved": false,
+      "provider_calls": 0
     }
   }
 }
