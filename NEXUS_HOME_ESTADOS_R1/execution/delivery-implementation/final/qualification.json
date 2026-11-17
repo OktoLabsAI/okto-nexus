@@ -1,0 +1,894 @@
+{
+  "at": "2026-11-17T13:02:44.579403+00:00",
+  "status": "PASS_FOCUSED_SOURCE_ONLY",
+  "final_tests": 58,
+  "cuts": {
+    "initial": {
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-b0_znex4",
+      "nodes": [
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[SUCCEEDED-succeeded]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[FAILED-failed]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[CANCELLED-cancelled]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[OPEN-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[CLAIMED-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[VERIFYING-pending]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[COMPLETED-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[REJECTED-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_exact_verification_proof_has_opaque_reference[pass-approved]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_exact_verification_proof_has_opaque_reference[fail-rejected]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[claim_epoch-2]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[workspace_id-foreign]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[handoff_id-other]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[delivery_revision-sha256:0000000000000000000000000000000000000000000000000000000000000000]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[event_type-handoff.created]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[actor_agent_id-executor]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[event_id-0]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[version-2]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_cleanup_and_content_do_not_overwrite_productive_outcome",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_historical_claim_is_explicit_and_never_inherits_current_verifying",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_external_report_has_no_native_success_and_revision_changes_without_mutation",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_rejected_delivery_uses_old_epoch_and_never_verifies_next_delivery",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_completed_without_verification_contract_has_no_approved_badge",
+          "case": "verification",
+          "status": "PASS"
+        }
+      ],
+      "counts": {
+        "PASS": 24
+      },
+      "source_drift": [
+        "src/okto_nexus/domain/home_operational_status.py",
+        "src/okto_nexus/domain/home_harness_blocking.py"
+      ],
+      "payload_files": 1013,
+      "signals": [],
+      "all_owned_processes_exited": true
+    },
+    "sql-error": {
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-h4gndlfo",
+      "nodes": [
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[SUCCEEDED-succeeded]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[FAILED-failed]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[CANCELLED-cancelled]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[OPEN-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[CLAIMED-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[VERIFYING-pending]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[COMPLETED-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[REJECTED-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_exact_verification_proof_has_opaque_reference[pass-approved]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_exact_verification_proof_has_opaque_reference[fail-rejected]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[claim_epoch-2]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[workspace_id-foreign]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[handoff_id-other]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[delivery_revision-sha256:0000000000000000000000000000000000000000000000000000000000000000]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[event_type-handoff.created]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[actor_agent_id-executor]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[event_id-0]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[version-2]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[version-True]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[event_claim_epoch-2]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[kind-external_report]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_cleanup_and_content_do_not_overwrite_productive_outcome",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_historical_claim_is_explicit_and_never_inherits_current_verifying",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_external_report_has_no_native_success_and_revision_changes_without_mutation",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership",
+          "case": "verification",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_rejected_delivery_uses_old_epoch_and_never_verifies_next_delivery",
+          "case": "verification",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_completed_without_verification_contract_has_no_approved_badge",
+          "case": "verification",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_http_result_collects_same_claim_files_once_and_excludes_foreign_claim_and_workspace",
+          "case": "legacy-result-artifacts",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_http_artifact_group_uses_authorized_terminal_relation_with_history_and_other_executor",
+          "case": "legacy-result-artifacts",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_newest_foreign_workspace_operation_stays_direct_and_cannot_hide_legitimate_handoff",
+          "case": "legacy-result-artifacts",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_overview_real_fixture_is_read_only_and_scoped",
+          "case": "legacy-home-queries",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_workspace_pages_are_complete_and_cursor_bound",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_operator_authority_not_an_agent_name",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_disabled_external_and_failed_work_are_not_empty_success",
+          "case": "legacy-home-queries",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_exact_target_server_workspace_and_session",
+          "case": "legacy-home-queries",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_each_page_uses_one_read_uow",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_overview_shares_one_attention_projection_statement",
+          "case": "legacy-home-queries",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_agent_and_external_pages_have_reachable_continuations",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_unclaimed_direct_recipient_is_workspace_member_without_presence",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_invalid_filter_contract[params0]",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_invalid_filter_contract[params1]",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_invalid_filter_contract[params2]",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_started_event_requires_current_owner_stream_and_nonterminal",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_result_preview_seen_and_bounded_artifact_metadata",
+          "case": "legacy-home-queries",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_business_feed_uses_real_events_not_unread_or_private_payload",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_native_delivery_and_handoff_are_one_activity_then_claim_change_separates_history",
+          "case": "legacy-home-queries",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_direct_delegation_keeps_each_handoff_and_canonical_task_title",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_result_artifact_reference_uses_exact_durable_operation_without_paths",
+          "case": "legacy-home-queries",
+          "status": "FAIL"
+        },
+        {
+          "name": "test_retries_share_handoff_controls_do_not_become_work",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_expired_claim_is_unknown_not_a_current_native_activity",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_ts4_complete_with_criteria_parks_in_verifying",
+          "case": "canonical-verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_ts5_verify_pass_completes_with_verified_by_on_the_canonical_event",
+          "case": "canonical-verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_ts6_verify_fail_drives_rework_cycles_with_renewed_lease",
+          "case": "canonical-verification",
+          "status": "PASS"
+        }
+      ],
+      "counts": {
+        "PASS": 40,
+        "FAIL": 13
+      },
+      "source_drift": [],
+      "payload_files": 1013,
+      "signals": [],
+      "all_owned_processes_exited": true
+    },
+    "sql-fixed": {
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-juyj8901",
+      "nodes": [
+        {
+          "name": "test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_rejected_delivery_uses_old_epoch_and_never_verifies_next_delivery",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_completed_without_verification_contract_has_no_approved_badge",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_http_result_collects_same_claim_files_once_and_excludes_foreign_claim_and_workspace",
+          "case": "legacy-result-artifacts",
+          "status": "PASS"
+        },
+        {
+          "name": "test_http_artifact_group_uses_authorized_terminal_relation_with_history_and_other_executor",
+          "case": "legacy-result-artifacts",
+          "status": "PASS"
+        },
+        {
+          "name": "test_newest_foreign_workspace_operation_stays_direct_and_cannot_hide_legitimate_handoff",
+          "case": "legacy-result-artifacts",
+          "status": "PASS"
+        },
+        {
+          "name": "test_overview_real_fixture_is_read_only_and_scoped",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_workspace_pages_are_complete_and_cursor_bound",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_operator_authority_not_an_agent_name",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_disabled_external_and_failed_work_are_not_empty_success",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_exact_target_server_workspace_and_session",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_each_page_uses_one_read_uow",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_overview_shares_one_attention_projection_statement",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_agent_and_external_pages_have_reachable_continuations",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_unclaimed_direct_recipient_is_workspace_member_without_presence",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_invalid_filter_contract[params0]",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_invalid_filter_contract[params1]",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_invalid_filter_contract[params2]",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_started_event_requires_current_owner_stream_and_nonterminal",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_result_preview_seen_and_bounded_artifact_metadata",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_business_feed_uses_real_events_not_unread_or_private_payload",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_native_delivery_and_handoff_are_one_activity_then_claim_change_separates_history",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_direct_delegation_keeps_each_handoff_and_canonical_task_title",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_result_artifact_reference_uses_exact_durable_operation_without_paths",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_retries_share_handoff_controls_do_not_become_work",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_expired_claim_is_unknown_not_a_current_native_activity",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        }
+      ],
+      "counts": {
+        "PASS": 26
+      },
+      "source_drift": [],
+      "payload_files": 1013,
+      "signals": [],
+      "all_owned_processes_exited": true
+    },
+    "metadata-final": {
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-y5wv07yk",
+      "nodes": [
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[SUCCEEDED-succeeded]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[FAILED-failed]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[CANCELLED-cancelled]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[OPEN-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[CLAIMED-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[VERIFYING-pending]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[COMPLETED-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[REJECTED-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_exact_verification_proof_has_opaque_reference[pass-approved]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_exact_verification_proof_has_opaque_reference[fail-rejected]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[claim_epoch-2]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[workspace_id-foreign]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[handoff_id-other]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[delivery_revision-sha256:0000000000000000000000000000000000000000000000000000000000000000]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[event_type-handoff.created]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[actor_agent_id-executor]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[event_id-0]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[version-2]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[version-True]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[event_claim_epoch-2]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[kind-external_report]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[submission_event_id-19]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[submission_event_id-0]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_cleanup_and_content_do_not_overwrite_productive_outcome",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_historical_claim_is_explicit_and_never_inherits_current_verifying",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_external_report_has_no_native_success_and_revision_changes_without_mutation",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_rejected_delivery_uses_old_epoch_and_never_verifies_next_delivery",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_completed_without_verification_contract_has_no_approved_badge",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_verification_authority_and_old_claim_cannot_emit_a_delivery_proof",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_same_claim_is_immutable_and_none_rework_references_the_persisted_delivery",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_standalone_sql_null_comparison_never_implies_historical_task",
+          "case": "standalone-sqlite",
+          "status": "PASS"
+        },
+        {
+          "name": "test_http_result_collects_same_claim_files_once_and_excludes_foreign_claim_and_workspace",
+          "case": "legacy-result-artifacts",
+          "status": "PASS"
+        },
+        {
+          "name": "test_http_artifact_group_uses_authorized_terminal_relation_with_history_and_other_executor",
+          "case": "legacy-result-artifacts",
+          "status": "PASS"
+        },
+        {
+          "name": "test_newest_foreign_workspace_operation_stays_direct_and_cannot_hide_legitimate_handoff",
+          "case": "legacy-result-artifacts",
+          "status": "PASS"
+        },
+        {
+          "name": "test_overview_real_fixture_is_read_only_and_scoped",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_workspace_pages_are_complete_and_cursor_bound",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_operator_authority_not_an_agent_name",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_disabled_external_and_failed_work_are_not_empty_success",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_exact_target_server_workspace_and_session",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_each_page_uses_one_read_uow",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_overview_shares_one_attention_projection_statement",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_agent_and_external_pages_have_reachable_continuations",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_unclaimed_direct_recipient_is_workspace_member_without_presence",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_invalid_filter_contract[params0]",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_invalid_filter_contract[params1]",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_invalid_filter_contract[params2]",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_started_event_requires_current_owner_stream_and_nonterminal",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_result_preview_seen_and_bounded_artifact_metadata",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_business_feed_uses_real_events_not_unread_or_private_payload",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_native_delivery_and_handoff_are_one_activity_then_claim_change_separates_history",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_direct_delegation_keeps_each_handoff_and_canonical_task_title",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_result_artifact_reference_uses_exact_durable_operation_without_paths",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_retries_share_handoff_controls_do_not_become_work",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_expired_claim_is_unknown_not_a_current_native_activity",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_ts4_complete_with_criteria_parks_in_verifying",
+          "case": "canonical-verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_ts5_verify_pass_completes_with_verified_by_on_the_canonical_event",
+          "case": "canonical-verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_ts6_verify_fail_drives_rework_cycles_with_renewed_lease",
+          "case": "canonical-verification",
+          "status": "PASS"
+        }
+      ],
+      "counts": {
+        "PASS": 58
+      },
+      "source_drift": [
+        "src/okto_nexus/domain/home_harness_board.py",
+        "src/okto_nexus/adapters/outbound/sqlite/home_operational_facts.py"
+      ],
+      "payload_files": 1013,
+      "signals": [],
+      "all_owned_processes_exited": true
+    }
+  },
+  "source_mode": "Nexus checkout source explicitly selected; Core/Connector from owned PR27 venv. Not a final installed Home States artifact.",
+  "own_source_drift": [],
+  "unrelated_parallel_source_drift": [
+    "src/okto_nexus/domain/home_harness_board.py",
+    "src/okto_nexus/adapters/outbound/sqlite/home_operational_facts.py"
+  ],
+  "payload_files": 1013,
+  "payload_drift": [],
+  "all_owned_processes_exited": true,
+  "provider_calls": 0,
+  "proof_contract": "Write-time hash of exact persisted result; requested/verdict metadata joined by workspace/handoff/claim/revision and causal event ID. No content hash UDF in Home GET.",
+  "regression_scope": [
+    "Standalone NULL comparison, same/historical claims, canonical pass/fail and authority/stale-claim denials, persisted None-rework, no GET writes/one SQL statement, artifact grouping/workspace separation and existing Home queries."
+  ],
+  "lint": {
+    "owned_exit": 0,
+    "legacy_home_baseline": 0,
+    "legacy_home_current": 0,
+    "new_home_diagnostics": []
+  },
+  "limits": [
+    "SOURCE_ONLY, not installed package/browser/AT/native harness qualification.",
+    "No unified success claim for earlier failed SQL cut; its failures and cleanup are retained.",
+    "Global source changes in operational board/facts belong to parallel owners; only these six owned source files are asserted unchanged during the final cut.",
+    "No throughput/p95 claim from these focal tests; 1/10/100 and large-volume measurements remain separate.",
+    "Event retention or historical events without matching submitted-delivery metadata yield unknown, never a fabricated approved badge."
+  ]
+}

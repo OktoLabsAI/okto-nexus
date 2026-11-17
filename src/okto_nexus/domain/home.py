@@ -4,6 +4,7 @@ from __future__ import annotations
 import base64
 import json
 from typing import Generic, Literal, NotRequired, TypedDict, TypeVar
+from .home_delivery_semantics import DeliverySemantics
 
 from ..errors import ErrorCode, OktoNexusError
 from .attention import canonical, digest
@@ -95,6 +96,7 @@ class HomeActivity(TypedDict):
 
 
 class HomeResult(TypedDict):
+    delivery_semantics: NotRequired[DeliverySemantics]
     id: str
     source_ref: SourceRef
     workspace_id: str

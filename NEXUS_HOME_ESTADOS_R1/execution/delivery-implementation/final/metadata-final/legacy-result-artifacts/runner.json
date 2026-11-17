@@ -1,0 +1,43 @@
+{
+  "label": "legacy-result-artifacts",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-y5wv07yk\\bootstrap.py",
+    "-p",
+    "qc38_plugin",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-y5wv07yk\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\home_evolution\\test_home_result_artifact_grouping.py",
+    "-v",
+    "-s",
+    "-o",
+    "faulthandler_timeout=0",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-y5wv07yk\\legacy-result-artifacts\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-y5wv07yk\\legacy-result-artifacts\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T12:58:54.174912+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 46264,
+      "parent_pid": null,
+      "birth_filetime": 134393939341770418,
+      "alive": false
+    },
+    {
+      "pid": 59088,
+      "parent_pid": 46264,
+      "birth_filetime": 134393939341888961,
+      "alive": false
+    }
+  ],
+  "rejected_nonowned_births": [],
+  "ended_at": "2026-11-17T12:59:09.890773+00:00"
+}

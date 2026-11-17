@@ -127,7 +127,7 @@
     {
       "id": "HST-01",
       "gate": "G1",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "task_ids": [
         "HST-005",
         "HST-006",
@@ -140,7 +140,7 @@
     {
       "id": "HST-02",
       "gate": "G2",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "task_ids": [
         "HST-011",
         "HST-012",
@@ -161,7 +161,7 @@
     {
       "id": "HST-04",
       "gate": "G4",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "task_ids": [
         "HST-018",
         "HST-019",
@@ -331,8 +331,27 @@
         "HST-T-H09",
         "HST-T-H10"
       ],
-      "status": "IN_PROGRESS",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb",
+          "command_or_procedure": "Read pinned Nexus/Core/Connector producers and reducers",
+          "environment": "Windows; current source, existing Node dependencies; no provider",
+          "timestamp": "2026-11-17T12:49:31.700625+00:00",
+          "result": "PASS source-proof matrix",
+          "artifact_path": "execution/source-proof-map.md",
+          "limitations": "Static source contracts only, not real harness qualification"
+        },
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb",
+          "command_or_procedure": "Trace canonical handoff_complete/verify and RESULTS",
+          "environment": "Windows; current source, existing Node dependencies; no provider",
+          "timestamp": "2026-11-17T12:49:31.700625+00:00",
+          "result": "PASS verification-provenance mapping",
+          "artifact_path": "execution/results-proof-map.md",
+          "limitations": "Historical uncorrelated proof remains unknown"
+        }
+      ]
     },
     {
       "id": "HST-003",
@@ -431,8 +450,18 @@
         "HST-T-K05",
         "HST-T-K06"
       ],
-      "status": "IN_PROGRESS",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb",
+          "command_or_procedure": "node --test tests/homeStatesContracts.test.mjs; tsc -b --noEmit",
+          "environment": "Windows; current source, existing Node dependencies; no provider",
+          "timestamp": "2026-11-17T12:49:31.700625+00:00",
+          "result": "PASS10 Node contract tests and TypeScript",
+          "artifact_path": "execution/hst00-contracts/qualification.json",
+          "limitations": "Backend integration and compatibility HTTP remain in progress"
+        }
+      ]
     },
     {
       "id": "HST-004",
@@ -528,7 +557,7 @@
         "HST-T-J05",
         "HST-T-J06"
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "evidence": []
     },
     {
@@ -867,8 +896,18 @@
         "HST-T-E15",
         "HST-T-E16"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Focused delivery domain/SQLite/canonical verification and legacy results tests",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:49:50.378167+00:00",
+          "result": "PASS58 focused source tests; expanded source regression PASS368 before operational currentness delta",
+          "artifact_path": "execution/delivery-implementation/final/qualification.json",
+          "limitations": "Not installed HTTP/browser/harness qualification; legacy proofs without exact reference remain unknown; full scenario acceptance pending."
+        }
+      ]
     },
     {
       "id": "HST-012",
@@ -910,8 +949,18 @@
         "HST-T-E15",
         "HST-T-E16"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Focused delivery domain/SQLite/canonical verification and legacy results tests",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:49:50.378167+00:00",
+          "result": "PASS58 focused source tests; expanded source regression PASS368 before operational currentness delta",
+          "artifact_path": "execution/delivery-implementation/final/qualification.json",
+          "limitations": "Not installed HTTP/browser/harness qualification; legacy proofs without exact reference remain unknown; full scenario acceptance pending."
+        }
+      ]
     },
     {
       "id": "HST-013",
@@ -966,8 +1015,18 @@
         "HST-T-H09",
         "HST-T-H10"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Focused delivery domain/SQLite/canonical verification and legacy results tests",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:49:50.378167+00:00",
+          "result": "PASS58 focused source tests; expanded source regression PASS368 before operational currentness delta",
+          "artifact_path": "execution/delivery-implementation/final/qualification.json",
+          "limitations": "Not installed HTTP/browser/harness qualification; legacy proofs without exact reference remain unknown; full scenario acceptance pending."
+        }
+      ]
     },
     {
       "id": "HST-014",
@@ -1286,8 +1345,18 @@
         "HST-T-F13",
         "HST-T-F14"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb",
+          "command_or_procedure": "Controlled RED reproduction then Node controller/detail tests",
+          "environment": "Windows; current source, existing Node dependencies; no provider",
+          "timestamp": "2026-11-17T12:49:31.700625+00:00",
+          "result": "PASS67 Node tests; TSC PASS",
+          "artifact_path": "execution/hst04-controller/qualification.json",
+          "limitations": "Not browser/human; wider task acceptance pending"
+        }
+      ]
     },
     {
       "id": "HST-019",
@@ -1338,8 +1407,18 @@
         "HST-T-H09",
         "HST-T-H10"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb",
+          "command_or_procedure": "Controlled RED reproduction then Node controller/detail tests",
+          "environment": "Windows; current source, existing Node dependencies; no provider",
+          "timestamp": "2026-11-17T12:49:31.700625+00:00",
+          "result": "PASS67 Node tests; TSC PASS",
+          "artifact_path": "execution/hst04-controller/qualification.json",
+          "limitations": "Not browser/human; wider task acceptance pending"
+        }
+      ]
     },
     {
       "id": "HST-020",
@@ -3358,6 +3437,22 @@
       "UI-R1 human/qualification",
       "Quick Connect UNKNOWN usage and QC031",
       "Original broad regression NOT_GREEN"
-    ]
+    ],
+    "milestones": [
+      {
+        "commit": "b2436d3b",
+        "scope": "baseline/version/input integrity"
+      },
+      {
+        "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb",
+        "scope": "semantic pause/detail fix and shared types",
+        "tests": "Node67 + contracts10; TypeScript; browser/package not yet run"
+      }
+    ],
+    "source_regression": {
+      "result": "PASS368",
+      "artifact": "execution/source-tests/home-global/qualification.json",
+      "limitations": "Pre-currentness delta; SOURCE_ONLY, not final package/browser/real harness."
+    }
   }
 }

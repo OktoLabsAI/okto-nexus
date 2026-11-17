@@ -1,0 +1,38 @@
+{
+  "mode": "SOURCE_ONLY_NOT_INSTALLED_NEXUS",
+  "started_at": "2026-11-17T13:36:45.237594+00:00",
+  "ended_at": "2026-11-17T13:48:36.345160+00:00",
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus');sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\src');import pytest;raise SystemExit(pytest.main(['-p', 'pytest_asyncio.plugin', '-p', 'no:cacheprovider', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-p6o_bguj\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--basetemp=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-p6o_bguj\\\\cases', '-q', '--tb=short', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-p6o_bguj\\\\tests.xml', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\ui_simplification', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_evolution\\\\test_home_queries.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_evolution\\\\test_home_semantics.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_evolution\\\\test_home_http.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_evolution\\\\test_home_boundaries.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_evolution\\\\test_home_namespaces.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_evolution\\\\test_home_server_attention.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_evolution\\\\test_home_result_artifact_grouping.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_handoff.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_handoff_dependencies.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_handoff_lease_watch.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_handoff_outcome_push.py']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-source-p6o_bguj\\cwd",
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-source-p6o_bguj",
+  "exit_code": 0,
+  "original_pid": 23384,
+  "process_exited": true,
+  "stdin": "closed PIPE",
+  "provider_auth_environment_copied": false,
+  "test_files": {
+    "tests\\home_evolution\\test_home_queries.py": "48ea97f6f704428886c92dadb0f9edf2a1eab502bb7ab7f13a3596f9aff18349",
+    "tests\\home_evolution\\test_home_semantics.py": "b64277862dc8919d36f24be610c788f80ebd84b15de2d3270666126661536745",
+    "tests\\home_evolution\\test_home_http.py": "3d42e2d758cd3b39e265db23272dd8bd0b147018ccb3698c25ffbdc8e474cd96",
+    "tests\\home_evolution\\test_home_boundaries.py": "9b375d71902a83ed05476efee88d3540339309b49563cde2d85ce5282e6f3e0f",
+    "tests\\home_evolution\\test_home_namespaces.py": "ef1d43ae2602ffeb55df0ed172d5e3025beabe5c353dbf19ea13d96ec8f4f3e8",
+    "tests\\home_evolution\\test_home_server_attention.py": "4e81946e6b07601ccf8e88ef99ccfbc9fc93a7002f8aaa71452da01277e9cd2d",
+    "tests\\home_evolution\\test_home_result_artifact_grouping.py": "d329ad50e8328434ab0cbd9ecc3e56ed14ec4f93b04d631476352f3c6d16ac46",
+    "tests\\test_handoff.py": "d538de56d35cbe4ce31035807c26d09d0ed32df54a048ede822f668951a6d09d",
+    "tests\\test_handoff_dependencies.py": "89993bf6ba52ee0b5366ae501faac5d99457e5d0bc8fe9d2fbaf55065a1f3bb3",
+    "tests\\test_handoff_lease_watch.py": "ed0cf35241bba665b5f8514ecd5e2972282a33041480688e0934aff3638fc25f",
+    "tests\\test_handoff_outcome_push.py": "e52c1272d3d5783b8fce366b735ed4fbdff50fab4c21b5826ce638d211565bc5"
+  },
+  "limitations": [
+    "No installed app/browser/real harness/human qualification.",
+    "No automatic process containment; only this test process exit is claimed."
+  ]
+}
