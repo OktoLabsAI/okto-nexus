@@ -1,0 +1,57 @@
+{
+  "at": "2026-11-17T20:03:07.406142+00:00",
+  "status": "PASS_INSTALLED_HOME_SCOPED",
+  "source_commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+  "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+  "counts": {
+    "PASS": 326,
+    "SKIP": 0,
+    "FAIL": 0,
+    "NOT_RUN": 0
+  },
+  "cuts": [
+    {
+      "status": "PASS",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-ua5qfz74",
+      "shard": 0,
+      "counts": {
+        "PASS": 326,
+        "SKIP": 0,
+        "FAIL": 0,
+        "NOT_RUN": 0
+      },
+      "collected": 326,
+      "junit_errors": 0,
+      "junit_seconds": 761.219,
+      "pytest_exit_code": 0,
+      "source_pins": 1828,
+      "payload_files": 1031,
+      "full_source_equal": true,
+      "full_payload_equal": true,
+      "copied_test_files": 893,
+      "copied_test_drift": [],
+      "copied_source_mismatch": [],
+      "helper_drift": [],
+      "signals": [],
+      "timed_out": false,
+      "forced": false,
+      "known_processes_still_alive": [],
+      "origins": "Every loaded Nexus/Core/Connector module must resolve inside the frozen installed prefix; see origins start/end.",
+      "raw_logs": {
+        "stdout_sha256": "d2847b97f75852a331fa6e19693ed4942243d52f52283dff8a2a288c2d7b680a",
+        "junit_sha256": "32e1ba845a9793b73cc36d8b4e1f71d8ca3a0074b7927ee103a69fd59889c352",
+        "copied": false
+      },
+      "limits": [
+        "Functional browser and Root source Home regression ran concurrently; no benchmark claim.",
+        "SKIP is non-execution; no PTY/POSIX/human/real harness qualification inferred.",
+        "Installed pytest counts alone do not verify every complete HST acceptance scenario.",
+        "250ms descendant sampling does not enumerate every short-lived child; nested-child provenance is separate."
+      ]
+    }
+  ],
+  "antecedents": [],
+  "source_assertions_rewritten": false,
+  "provider_calls": 0,
+  "personal_prefix_changed": false
+}

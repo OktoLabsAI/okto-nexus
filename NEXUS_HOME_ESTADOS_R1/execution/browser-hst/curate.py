@@ -34,7 +34,7 @@ def main():
     names=['runtime-ready.json','fixture.py','timing.js','functional.js','functional2.js','initialize.js',
            'partial.js','logout.js','j5-claimed.js','j5-verifying.js','j5-completed.js',
            'question-parallel.js','question-blocked.js','question-confirmation.js','question-form.js','r4-freshness.js',
-           'after-terminal.js','alerts.js','info-upgrade.js','scope-race.js','negative.js','final-smoke.js','mobile-intents.js','case-steps.json']
+           'after-terminal.js','alerts.js','info-upgrade.js','scope-race.js','negative.js','final-smoke.js','mobile-intents.js','r7-context.js','case-steps.json']
     names+=[p.name for p in root.glob('cli-*.txt')]
     names+=['control/initial-board.json','control/final.json','control/origins.json','control/j5-preflight.json',
             'control/controls.json','control/failure.json','control/blocked.json','control/supervisor-cleanup.json','control/negative-preflight.json']

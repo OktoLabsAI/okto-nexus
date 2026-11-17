@@ -918,6 +918,33 @@
           "result": "PASS87 corrected; prior cut104PASS/12FAIL retained; drift/timeout/force/remaining known processes0",
           "artifact_path": "execution/source-tests/r7-performance-corrected/qualification.json",
           "limitations": "Initial domain failure was a shadowed envelope variable, repaired before packaging; six new SQL oracle failures were trace/scope assumptions. Root identity-cache twelve cases passed in the first cut. R7 installed/browser/performance not yet run."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS321 source-only; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-home/qualification.json",
+          "command_or_procedure": "Full selected Home source regression with exact XML and source/test guards",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Isolated dependencies with repository source imports. This is not the installed regression or browser."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ]
     },
@@ -1307,6 +1334,33 @@
           "result": "PASS87 corrected; prior cut104PASS/12FAIL retained; drift/timeout/force/remaining known processes0",
           "artifact_path": "execution/source-tests/r7-performance-corrected/qualification.json",
           "limitations": "Initial domain failure was a shadowed envelope variable, repaired before packaging; six new SQL oracle failures were trace/scope assumptions. Root identity-cache twelve cases passed in the first cut. R7 installed/browser/performance not yet run."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS321 source-only; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-home/qualification.json",
+          "command_or_procedure": "Full selected Home source regression with exact XML and source/test guards",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Isolated dependencies with repository source imports. This is not the installed regression or browser."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ]
     },
@@ -1425,6 +1479,33 @@
           "result": "PASS87 corrected; prior cut104PASS/12FAIL retained; drift/timeout/force/remaining known processes0",
           "artifact_path": "execution/source-tests/r7-performance-corrected/qualification.json",
           "limitations": "Initial domain failure was a shadowed envelope variable, repaired before packaging; six new SQL oracle failures were trace/scope assumptions. Root identity-cache twelve cases passed in the first cut. R7 installed/browser/performance not yet run."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS321 source-only; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-home/qualification.json",
+          "command_or_procedure": "Full selected Home source regression with exact XML and source/test guards",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Isolated dependencies with repository source imports. This is not the installed regression or browser."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ]
     },
@@ -1488,6 +1569,33 @@
           "result": "PASS_SUBSET15: turn result/task open, awaiting verification, exact delivery verified",
           "artifact_path": "execution/browser-hst/cuts/r3-governed-result/qualification.json",
           "limitations": "Inert native peer, not provider inference. No assertion that every Results criterion is covered."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS321 source-only; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-home/qualification.json",
+          "command_or_procedure": "Full selected Home source regression with exact XML and source/test guards",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Isolated dependencies with repository source imports. This is not the installed regression or browser."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ]
     },
@@ -1550,6 +1658,33 @@
           "result": "PASS_SUBSET15: turn result/task open, awaiting verification, exact delivery verified",
           "artifact_path": "execution/browser-hst/cuts/r3-governed-result/qualification.json",
           "limitations": "Inert native peer, not provider inference. No assertion that every Results criterion is covered."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS321 source-only; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-home/qualification.json",
+          "command_or_procedure": "Full selected Home source regression with exact XML and source/test guards",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Isolated dependencies with repository source imports. This is not the installed regression or browser."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ]
     },
@@ -2627,6 +2762,33 @@
           "result": "PASS87 corrected; prior cut104PASS/12FAIL retained; drift/timeout/force/remaining known processes0",
           "artifact_path": "execution/source-tests/r7-performance-corrected/qualification.json",
           "limitations": "Initial domain failure was a shadowed envelope variable, repaired before packaging; six new SQL oracle failures were trace/scope assumptions. Root identity-cache twelve cases passed in the first cut. R7 installed/browser/performance not yet run."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS321 source-only; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-home/qualification.json",
+          "command_or_procedure": "Full selected Home source regression with exact XML and source/test guards",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Isolated dependencies with repository source imports. This is not the installed regression or browser."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ]
     },
@@ -2737,6 +2899,33 @@
           "result": "PASS87 corrected; prior cut104PASS/12FAIL retained; drift/timeout/force/remaining known processes0",
           "artifact_path": "execution/source-tests/r7-performance-corrected/qualification.json",
           "limitations": "Initial domain failure was a shadowed envelope variable, repaired before packaging; six new SQL oracle failures were trace/scope assumptions. Root identity-cache twelve cases passed in the first cut. R7 installed/browser/performance not yet run."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS321 source-only; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-home/qualification.json",
+          "command_or_procedure": "Full selected Home source regression with exact XML and source/test guards",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Isolated dependencies with repository source imports. This is not the installed regression or browser."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ]
     },
@@ -2872,6 +3061,33 @@
           "result": "PASS87 corrected; prior cut104PASS/12FAIL retained; drift/timeout/force/remaining known processes0",
           "artifact_path": "execution/source-tests/r7-performance-corrected/qualification.json",
           "limitations": "Initial domain failure was a shadowed envelope variable, repaired before packaging; six new SQL oracle failures were trace/scope assumptions. Root identity-cache twelve cases passed in the first cut. R7 installed/browser/performance not yet run."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS321 source-only; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-home/qualification.json",
+          "command_or_procedure": "Full selected Home source regression with exact XML and source/test guards",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Isolated dependencies with repository source imports. This is not the installed regression or browser."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ]
     },
@@ -3061,6 +3277,33 @@
           "result": "FAIL: selected option lost, old form node disconnected and focus moved when presentation1 upgraded to2; zero POST",
           "artifact_path": "execution/browser-hst/cuts/r5-info-upgrade-observables/qualification.json",
           "limitations": "R5 antecedent retained. Normal physical exit0, but runtime-close helper reached its thirty-second guard before lifespan drain; not a timeout-free cleanup claim. R6 reader/UI correction awaits its own browser proof."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS321 source-only; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-home/qualification.json",
+          "command_or_procedure": "Full selected Home source regression with exact XML and source/test guards",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Isolated dependencies with repository source imports. This is not the installed regression or browser."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ]
     },
@@ -3228,6 +3471,33 @@
           "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
           "artifact_path": "execution/package-hst-r5/installed-qualification.json",
           "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS321 source-only; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-home/qualification.json",
+          "command_or_procedure": "Full selected Home source regression with exact XML and source/test guards",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Isolated dependencies with repository source imports. This is not the installed regression or browser."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ]
     },
@@ -3287,6 +3557,33 @@
           "result": "FAIL500ms: six large cases; four small cases PASS. All ten measured/ready with no drift, retry or timeout.",
           "artifact_path": "execution/performance-hst/persistent-r6-final/qualification.json",
           "limitations": "First HTTP proxy is not DOM. Mixed V2 regressed in this series; no optimization win or target waiver. Profile R6 is diagnostic only."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS321 source-only; drift/timeout/force/remaining known processes0",
+          "artifact_path": "execution/source-tests/r7-home/qualification.json",
+          "command_or_procedure": "Full selected Home source regression with exact XML and source/test guards",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Isolated dependencies with repository source imports. This is not the installed regression or browser."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ]
     }
@@ -3824,6 +4121,15 @@
           "result": "PASS scoped canonical Core/SQLite and browser transition chain",
           "artifact_path": "execution/browser-hst/cuts/r5-working-draft-terminal/qualification.json",
           "limitations": "R5 execution, backend bytes identical in R6. No real adapter/provider or causal application acknowledgement; D08 remains blocked."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ],
       "execution_notes": "R5 execution, backend bytes identical in R6. No real adapter/provider or causal application acknowledgement; D08 remains blocked."
@@ -3855,6 +4161,15 @@
           "result": "PASS scoped canonical Core/SQLite and browser transition chain",
           "artifact_path": "execution/browser-hst/cuts/r5-working-draft-terminal/qualification.json",
           "limitations": "R5 execution, backend bytes identical in R6. No real adapter/provider or causal application acknowledgement; D08 remains blocked."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ],
       "execution_notes": "R5 execution, backend bytes identical in R6. No real adapter/provider or causal application acknowledgement; D08 remains blocked."
@@ -4281,6 +4596,15 @@
           "result": "PASS scoped canonical Core/SQLite and browser transition chain",
           "artifact_path": "execution/browser-hst/cuts/r5-working-draft-terminal/qualification.json",
           "limitations": "R5 execution, backend bytes identical in R6. No real adapter/provider or causal application acknowledgement; D08 remains blocked."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS21 browser; zero failed checks, browser POST or provider invocation",
+          "artifact_path": "execution/browser-hst/r7-functional-report.md",
+          "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
         }
       ],
       "execution_notes": "R5 execution, backend bytes identical in R6. No real adapter/provider or causal application acknowledgement; D08 remains blocked."
@@ -5881,6 +6205,15 @@
           "result": "PASS scoped contract and installed artifact",
           "artifact_path": "execution/package-hst-r6/qualification.json",
           "limitations": "251 backend tests ran on R5 with exact R6 backend equivalence; eleven additional tests actually ran on R6. No old-client browser, all-OS, native campaign or default activation claim."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
         }
       ],
       "execution_notes": "251 backend tests ran on R5 with exact R6 backend equivalence; eleven additional tests actually ran on R6. No old-client browser, all-OS, native campaign or default activation claim."
@@ -5956,6 +6289,15 @@
           "result": "PASS scoped contract and installed artifact",
           "artifact_path": "execution/package-hst-r6/qualification.json",
           "limitations": "251 backend tests ran on R5 with exact R6 backend equivalence; eleven additional tests actually ran on R6. No old-client browser, all-OS, native campaign or default activation claim."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:03:27.829435+00:00",
+          "result": "PASS326 actually installed; zero skip/fail/not-run",
+          "artifact_path": "execution/package-hst-r7/installed-qualification.json",
+          "command_or_procedure": "One exact 326-node installed regression; copied test/helper guards and all module origins",
+          "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
+          "limitations": "Selected Home regression plus original-recipient and private operator message/handoff cases. Counts do not qualify every complete ledger scenario, native adapter or operating system."
         }
       ],
       "execution_notes": "251 backend tests ran on R5 with exact R6 backend equivalence; eleven additional tests actually ran on R6. No old-client browser, all-OS, native campaign or default activation claim."
@@ -6269,9 +6611,27 @@
       "core_connector_protocol_changes": false,
       "previous_failure": "execution/source-tests/r7-performance-focal/qualification.json",
       "corrected": "execution/source-tests/r7-performance-corrected/qualification.json",
-      "installed": "PENDING_FRESH_R7",
-      "browser": "PENDING",
+      "installed": "PASS326 on fresh frozen R7 prefix",
+      "browser": "PASS21 scoped functional checks; performance remains separate",
       "performance": "PENDING_ORIGINAL_THRESHOLDS"
+    },
+    "r7_validation": {
+      "source_commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+      "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+      "source_tests": "PASS321",
+      "installed_tests": "PASS326",
+      "browser_checks": "PASS21",
+      "source": "execution/source-tests/r7-home/qualification.json",
+      "installed": "execution/package-hst-r7/installed-qualification.json",
+      "browser": "execution/browser-hst/r7-functional-report.md",
+      "package_ready": "execution/package-hst-r7/READY.json",
+      "performance": "PENDING_EXCLUSIVE_R7_WINDOW",
+      "first_useful_dom": "NOT_RUN",
+      "literal_scenario_promotions": 0,
+      "default_rollout": false,
+      "human": "DEFERRED_UNTIL_AUTOMATED_READINESS_REVIEW",
+      "schema_migration": false,
+      "core_connector_changes": false
     }
   }
 }

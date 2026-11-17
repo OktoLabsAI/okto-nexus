@@ -1,0 +1,67 @@
+{
+  "case": "r7",
+  "steps": [
+    {
+      "step": "open",
+      "exit_code": 0,
+      "status": null,
+      "failed_checks": []
+    },
+    {
+      "step": "state",
+      "exit_code": 0,
+      "status": null,
+      "failed_checks": []
+    },
+    {
+      "step": "initialize",
+      "exit_code": 0,
+      "status": null,
+      "failed_checks": []
+    },
+    {
+      "step": "r7",
+      "exit_code": 0,
+      "status": "PASS_SUBSET",
+      "failed_checks": []
+    },
+    {
+      "step": "blocked",
+      "exit_code": 0,
+      "status": "PASS_SUBSET",
+      "failed_checks": []
+    },
+    {
+      "step": "context",
+      "exit_code": 0,
+      "status": "PASS_SUBSET",
+      "failed_checks": []
+    },
+    {
+      "step": "partial",
+      "exit_code": 0,
+      "status": "PASS_SUBSET",
+      "failed_checks": []
+    },
+    {
+      "step": "logout",
+      "exit_code": 0,
+      "status": "PASS_SUBSET",
+      "failed_checks": []
+    },
+    {
+      "step": "close",
+      "exit_code": 0,
+      "status": null,
+      "failed_checks": []
+    }
+  ],
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  }
+}

@@ -14,10 +14,10 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument('--ready',type=Path,required=True)
     p.add_argument('--source',required=True)
-    p.add_argument('--case',choices=['scope','negative','info','pause','smoke','visual'],required=True)
+    p.add_argument('--case',choices=['scope','negative','info','pause','smoke','visual','r7'],required=True)
     p.add_argument('--session',required=True)
     a=p.parse_args();assert a.session.startswith('hst-')
-    mode={'scope':'scope_two','negative':'failed_cancelled','info':'delayed_info','pause':'delayed_info','smoke':'question','visual':'baseline'}[a.case]
+    mode={'scope':'scope_two','negative':'failed_cancelled','info':'delayed_info','pause':'delayed_info','smoke':'question','visual':'baseline','r7':'question'}[a.case]
     prepared=subprocess.run([sys.executable,'-B',str(HERE/'prepare_runtime.py'),'--package-ready',str(a.ready.resolve()),
         '--expected-source',a.source,'--mode',mode,'--browser-window-open'],capture_output=True,text=True,encoding='utf-8',check=True)
     allocation=json.loads(prepared.stdout);root=Path(allocation['root'])
@@ -63,6 +63,11 @@ def main():
         elif a.case in ['info','pause']:
             case_cfg=dict(url=cfg['url'],workspace_id=cfg['workspace_id'],screenshot=str((HERE.parents[2]/'output/playwright/home-states/r6-info-draft.png').resolve()))
             test=script('info-r6-template.js'if a.case=='info'else 'pause-info-template.js','info-upgrade.js',case_cfg)
+        elif a.case=='r7':
+            request=json.loads((root/'control/question-preflight.json').read_text())['requests'][0]
+            request_id=request.get('request_id')or request['approval_id']
+            case_cfg=dict(url=cfg['url'],workspace_id=cfg['workspace_id'],card_id=cfg['card_id'],request_id=request_id,stage='parallel',activity='working',apiOnly=False)
+            test=script('question-state-template.js','question-parallel.js',case_cfg)
         elif a.case=='smoke':
             case_cfg=dict(url=cfg['url'],workspace_id=cfg['workspace_id'],screenshot=str((HERE.parents[2]/'output/playwright/home-states/r6-final-mobile.png').resolve()))
             test=script('final-smoke-template.js','final-smoke.js',case_cfg)
@@ -74,6 +79,19 @@ def main():
         cli('state','state-load',cfg['storage'])
         if a.case not in ['info','pause']:cli('initialize','run-code','--filename='+init)
         cli(a.case,'run-code','--filename='+test)
+        if a.case=='r7':
+            (root/'control/release-1').touch()
+            blocked=script('question-state-template.js','question-blocked.js',dict(case_cfg,stage='blocked',activity='waiting_user'))
+            cli('blocked','run-code','--filename='+blocked)
+            context=script('r7-context-template.js','r7-context.js',dict(case_cfg,reference=cfg['references'][0],session_a=cfg['sessions'][0]['session_id'],session_b=cfg['sessions'][1]['session_id']))
+            cli('context','run-code','--filename='+context)
+            (root/'control/partial-results').touch();time.sleep(.5)
+            partial=script('partial-logout-template.js','partial.js',dict(url=cfg['url'],workspace_id=cfg['workspace_id']))
+            cli('partial','run-code','--filename='+partial)
+            (root/'control/restore-results').touch();time.sleep(.3)
+            (root/'control/revoke-reader').touch();time.sleep(.5)
+            logout=script('logout-template.js','logout.js',dict(url=cfg['url'],workspace_id=cfg['workspace_id']))
+            cli('logout','run-code','--filename='+logout)
         if a.case=='pause':
             (root/'control/revoke-reader').touch()
             deadline=time.monotonic()+10

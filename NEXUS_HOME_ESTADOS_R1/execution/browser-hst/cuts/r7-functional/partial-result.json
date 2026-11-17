@@ -1,0 +1,87 @@
+{
+  "status": "PASS_SUBSET",
+  "checks": [
+    {
+      "id": "actual-results-source-failed",
+      "ok": true,
+      "detail": {
+        "attention": "ready",
+        "work": "ready",
+        "results": "unavailable",
+        "connections": "ready",
+        "sessions": "ready",
+        "correlations": "ready",
+        "external": "disabled"
+      }
+    },
+    {
+      "id": "other-sources-retained",
+      "ok": true,
+      "detail": {
+        "connected": {
+          "value": 1,
+          "total_is_exact": true
+        },
+        "working": {
+          "value": 0,
+          "total_is_exact": true
+        },
+        "idle": {
+          "value": 0,
+          "total_is_exact": true
+        },
+        "queued": {
+          "value": 0,
+          "total_is_exact": true
+        },
+        "unconfirmed": {
+          "value": 0,
+          "total_is_exact": true
+        },
+        "disconnected": {
+          "value": 0,
+          "total_is_exact": true
+        },
+        "blocked_harnesses": {
+          "value": 1,
+          "total_is_exact": true
+        },
+        "pending_actions": {
+          "value": 1,
+          "total_is_exact": true
+        },
+        "visible_notifications": {
+          "value": 1,
+          "total_is_exact": true
+        },
+        "resume_confirmations": {
+          "value": 0,
+          "total_is_exact": true
+        }
+      }
+    },
+    {
+      "id": "results-unknown-never-zero",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "id": "partial-notice-rendered",
+      "ok": true,
+      "detail": true
+    }
+  ],
+  "http": {
+    "status": 200,
+    "source_status": {
+      "attention": "ready",
+      "work": "ready",
+      "results": "unavailable",
+      "connections": "ready",
+      "sessions": "ready",
+      "correlations": "ready",
+      "external": "disabled"
+    }
+  },
+  "body": "/ Home\nNeeds attention\n2\n\u25cf LIVE\nHome\nConversations\nGraph\nArtifacts\nAdvanced\nHome\n\nFollow each harness below. Open an activity to see its exact context, or add a harness to this project.\n\nAsk for work or chat\nRefresh\nPause display\nProject\nAll projects\nHST Demo Project\nHST Demo Project\nAdd harness\n\n1 connected \u00b7 0 working \u00b7 0 Idle\n\n1 action \u00b7 1 harness paused\n\nUpdated harness activity changed the board. All columns were revalidated.\n\nHome updated. New work, attention or results are available.\n\nSome information is incomplete or unavailable. Totals may be unknown; refresh before acting.\n\nFollow-up\nActive\nTotal unknown\n\nTracking is incomplete or unavailable. Refresh to read this column.\n\nNeeds you\nTotal unknown\nHarness ID: reviewer-1\n\nCollaborator: Hst Worker\n\nCodex \u00b7 Host not reported\n\nWaiting for your response\n\nWork request\n\nNeeds your response\n\nWork request\n\nTurn completed\n\nWork request\n\nTurn completed\n\nView work\n\nActivity coverage incomplete.\n\nRespond\nConnection details\nResults\nTotal unknown\n\nTracking is incomplete or unavailable. Refresh to read this column.\n\nSome activity has incomplete connection tracking. These are separate from harness cards.\n\nView other activity"
+}

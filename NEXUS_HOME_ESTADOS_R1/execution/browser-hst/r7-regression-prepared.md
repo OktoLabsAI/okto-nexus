@@ -1,0 +1,11 @@
+# R7 browser regression — prepared, not executed
+
+Await a new R7 READY, source SHA and explicit browser window. Allocate a new private Temp home/profile from that installed package; do not reuse or modify an R6 prefix, fixture, grant or captured cut. No provider, personal authentication, human participant or frontend rebuild.
+
+Use the existing canonical inert protocol fixture and finite owner containment. A short question-mode pass can verify current Working with its independent exact operator request, matching registered harness full tuple and visible card. Request and session targets must retain the exact session IDs, never the newest session by heuristic. Capture the authorized v2 board response and DOM together before the native request's unchanged120s expiry. Do not decide or send a composer request for this regression.
+
+For identity/cache validation, compare the returned harness ID with `home_group_` plus the original canonical digest of the full tuple from that same fixture. Re-read through board, exact harness children/session endpoints and entry detail using the returned parent ID, revision and cursor. Repeated reads must preserve the ID while current canonical facts remain observable. Root's source regressions cover mutations to identity components and metadata; the browser does not manufacture DB mutations or authority to reproduce them.
+
+If authorized, a separate small retained-Idle baseline may verify both exact session selectors and historical output markers, with the known read-only viewer and zero non-GET requests. Avoid repeating the entire R6 layout/composer matrix because compiled UI is unchanged. A changed compiled asset or contract requires a new cut rather than silently assuming equivalence.
+
+Prepare all commands before READY to avoid consuming native authority windows. Run only after Root releases CPU; any timing claim requires its own exclusive window. Always close the own CLI browser, write the fixture's normal stopfile, await the canonical owner drain and verify PID/birth/listener absence. Preserve any failed or incomplete predecessor and private raw data; publish no cookies, CAS tokens or wire credentials. No performance or full scenario PASS follows from this short functional subset.
