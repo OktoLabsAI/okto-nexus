@@ -195,8 +195,12 @@ export class HomeController {
   holdOrder(holding:boolean):void{this.context={...this.context,holdOrder:holding};}
   apply(): void {
     if(!this.allowed())return;
-    if(this.trackingFamily()){this.emit({...this.entryCache,hasPendingUpdate:false,
-      status:(this.harnessFamily()?this.entryCache.harnessBoard:this.boardFamily()?this.entryCache.board:this.entryCache.entries)?.status==='ready'&&!this.refreshPending?'ready':'stale',staleSections:this.refreshPending?[...sections]:[]});return;}
+    if(this.trackingFamily()){
+      const value=this.harnessFamily()?this.entryCache.harnessBoard:this.boardFamily()?this.entryCache.board:this.entryCache.entries;
+      const currentReply=value?.status==='ready'||this.harnessFamily()&&this.context.presentationVersion===2&&value?.status==='partial';
+      this.emit({...this.entryCache,hasPendingUpdate:false,
+        status:currentReply&&!this.refreshPending&&!this.state.error?'ready':'stale',staleSections:this.refreshPending?[...sections]:[]});return;
+    }
     this.emit({ snapshot: this.latest, activity: this.latestActivity, hasPendingUpdate: false });
   }
   onStreamStatus(status: HomeStreamStatus): void {
@@ -596,8 +600,11 @@ export class HomeController {
       card.kind==='harness'?[card.id,card.events_preview.map(event=>event.id)]:[card.id,card.kind==='request'?card.request.source_revision:card.result?.id??card.report?.source_revision])]));
     const held=!!(!appendOnly&&this.context.holdOrder&&prior&&(prior.revision!==value.revision||order(prior)!==order(value)));
     const changed=homeSnapshotSignature(value)!==homeSnapshotSignature(prior);
+    // A current response can have incomplete coverage. Its per-source and
+    // per-harness proof remains explicit; coverage is not snapshot age.
+    const currentReply=value.status==='ready'||this.context.presentationVersion===2&&value.status==='partial';
     this.emit({...(changed&&(this.state.paused||held)?{hasPendingUpdate:true}:{...this.entryCache,hasPendingUpdate:false}),
-      status:held||this.refreshPending||value.status!=='ready'?'stale':'ready',error:null,notice,staleSections:this.refreshPending?[...sections]:[]});
+      status:held||this.refreshPending||!currentReply?'stale':'ready',error:null,notice,staleSections:this.refreshPending?[...sections]:[]});
   }
   private async readHarness(boardJob:HomeBoardJob|null,childJob:HomeHarnessJob|null,signal:AbortSignal,current:()=>boolean):Promise<string|null>{
     const before=this.entryCache.harnessBoard,job=boardJob??childJob;
