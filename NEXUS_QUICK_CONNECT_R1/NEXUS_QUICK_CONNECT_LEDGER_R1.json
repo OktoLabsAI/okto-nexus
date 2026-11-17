@@ -1,0 +1,4979 @@
+{
+  "plan": "QCONNECT-R1",
+  "edition": "consolidated_initial_delivery",
+  "created": "2026-11-17",
+  "repo": "OktoLabsAI/okto-nexus",
+  "branch_reference": "feature/v0.3.5",
+  "sha_reference": "2463c05833f533bc5a5676a5644774cff949ca28",
+  "baseline_note": "Snapshot de código documentado; a consolidação não constitui nova auditoria do HEAD. Conferir checkout antes de editar.",
+  "nature": "specification_not_implemented",
+  "specification_status": "initial_complete_specification",
+  "plan_file": "PLANO_CODEX_NEXUS_QUICK_CONNECT_CWD_ID_R1_CONSOLIDADO.md",
+  "prompt_file": "PROMPT_CODEX_NEXUS_QUICK_CONNECT_R1.md",
+  "external_plan_dependencies": [],
+  "counts": {
+    "tasks": 33,
+    "tests": 147,
+    "requirements": 20,
+    "increments": 7
+  },
+  "phases": [
+    {
+      "id": "QC-00",
+      "title": "Baseline, contratos e fixtures",
+      "gate": "G0: escopo reconciliado e regras fechadas.",
+      "task_ids": [
+        "QC-001",
+        "QC-002",
+        "QC-003"
+      ]
+    },
+    {
+      "id": "QC-01",
+      "title": "Gramática, aliases, escolha de harness e vocabulário público",
+      "gate": "G1: parser e seletores corretos, sem efeitos indevidos.",
+      "task_ids": [
+        "QC-004",
+        "QC-005",
+        "QC-006",
+        "QC-007",
+        "QC-008"
+      ]
+    },
+    {
+      "id": "QC-02",
+      "title": "CWD, sugestão Git/fallback e seleção do projeto",
+      "gate": "G2: nome útil sem associação ou expansão de raiz implícitas.",
+      "task_ids": [
+        "QC-009",
+        "QC-010",
+        "QC-011",
+        "QC-012",
+        "QC-013",
+        "QC-014"
+      ]
+    },
+    {
+      "id": "QC-03",
+      "title": "ID público, reserva, Finish, colisões e legado",
+      "gate": "G3: unicidade, decisões e recuperação comprovadas.",
+      "task_ids": [
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019",
+        "QC-020"
+      ]
+    },
+    {
+      "id": "QC-04",
+      "title": "Revisão final, fluxo completo e resultado positivo",
+      "gate": "G4: primeiro e segundo harness sem nome técnico de perfil nem confirmação redundante.",
+      "task_ids": [
+        "QC-021",
+        "QC-022",
+        "QC-023",
+        "QC-024",
+        "QC-025"
+      ]
+    },
+    {
+      "id": "QC-05",
+      "title": "Compatibilidade de UI, legado e acesso remoto",
+      "gate": "G5: dados e autoridade preservados nas superfícies existentes.",
+      "task_ids": [
+        "QC-026",
+        "QC-027",
+        "QC-028"
+      ]
+    },
+    {
+      "id": "QC-06",
+      "title": "Qualificação, documentação, pacote e entrega",
+      "gate": "G6: evidências, limitações e rollback registrados.",
+      "task_ids": [
+        "QC-029",
+        "QC-030",
+        "QC-031",
+        "QC-032",
+        "QC-033"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "QC-R01",
+      "status": "NOT_VERIFIED",
+      "description": "Aceitar harness e nome de projeto posicionais, preservando flags legadas."
+    },
+    {
+      "id": "QC-R02",
+      "status": "NOT_VERIFIED",
+      "description": "Oferecer aliases raiz explícitos `codex`, `claude`, `pi` para o mesmo fluxo."
+    },
+    {
+      "id": "QC-R03",
+      "status": "NOT_VERIFIED",
+      "description": "Capturar e considerar CWD; `--project` continua caminho, não nome lógico."
+    },
+    {
+      "id": "QC-R04",
+      "status": "NOT_VERIFIED",
+      "description": "Resolver projetos autorizados por identidade/nome e vínculo físico; criar somente após revisão explícita."
+    },
+    {
+      "id": "QC-R05",
+      "description": "Sugerir nome por escolha explícita → associação Nexus validada → origin Git local inequívoco → basename da raiz do working tree → basename da raiz física selecionada; nenhuma origem Git confere identidade ou autoridade.",
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "QC-R06",
+      "description": "Separar descoberta do nome de raiz de execução; preservar CWD/--project e exigir escolha explícita para qualquer ampliação, inclusive subdiretórios, monorepos e worktrees.",
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "QC-R07",
+      "status": "NOT_VERIFIED",
+      "description": "Harness ausente/desconhecido ou indisponível gera escolha guiada em terminal interativo, sem executar texto arbitrário."
+    },
+    {
+      "id": "QC-R08",
+      "status": "NOT_VERIFIED",
+      "description": "Aceitar `--id` opcional e gerar um identificador amigável quando ausente numa adição."
+    },
+    {
+      "id": "QC-R09",
+      "status": "NOT_VERIFIED",
+      "description": "Garantir unicidade do ID definitivo por Server + workspace, com persistência, concorrência e recuperação."
+    },
+    {
+      "id": "QC-R10",
+      "description": "Usar ID do Harness (Harness ID na UI inglesa) em confirmação, seletores, conflito e sucesso; perfil técnico permanece interno ou em ajuda avançada/JSON.",
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "QC-R11",
+      "description": "ID existente nunca é sobrescrito: retomada explícita quando compatível, outro ID para nova conexão, conflito estruturado não interativo e recuperação da própria intenção antes de colisão.",
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "QC-R12",
+      "status": "NOT_VERIFIED",
+      "description": "Preservar retomar/adicionar, identidade, grants, sessões e escolhas existentes."
+    },
+    {
+      "id": "QC-R13",
+      "description": "Reunir projeto, origem do nome, diretório, harness real, ID do Harness e efeitos novos na revisão final única; personalização invalida aprovação anterior e cancelamento não produz setup.",
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "QC-R14",
+      "status": "NOT_VERIFIED",
+      "description": "Sucesso Quick Connect sempre informa o ID definitivo criado, reutilizado ou associado."
+    },
+    {
+      "id": "QC-R15",
+      "status": "NOT_VERIFIED",
+      "description": "JSON/noninteractive não abre prompts, não escolhe ambiguidades e não bloqueia stdin."
+    },
+    {
+      "id": "QC-R16",
+      "status": "NOT_VERIFIED",
+      "description": "Reusar setup, revisão, reserva, recibos, catálogo e daemon canônicos."
+    },
+    {
+      "id": "QC-R17",
+      "status": "NOT_VERIFIED",
+      "description": "Preservar topologia remota: CWD do operador não vira caminho do Connector."
+    },
+    {
+      "id": "QC-R18",
+      "status": "NOT_VERIFIED",
+      "description": "Mostrar o ID na projeção UI existente, sem novos menus e sem roteamento de mensagens por alias implícito."
+    },
+    {
+      "id": "QC-R19",
+      "status": "NOT_VERIFIED",
+      "description": "Migrar/adotar conexões antigas sem renomear identidade, binding, sessão ou perfil."
+    },
+    {
+      "id": "QC-R20",
+      "status": "NOT_VERIFIED",
+      "description": "Comprovar parser, domínio, HTTP, concorrência, CLI e instalação; distinguir testes simulados de execução real."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "QC-001",
+      "phase": "QC-00",
+      "title": "Reconciliar o checkout e a implementação existente",
+      "status": "VERIFIED",
+      "depends_on": [],
+      "requirements": [
+        "QC-R16",
+        "QC-R20"
+      ],
+      "areas": [
+        "AGENTS.md/CI",
+        "connect.py",
+        "registros existentes de desenvolvimento da UI e do onboarding"
+      ],
+      "steps": [
+        "Registrar branch, HEAD, status e mudanças em curso; preservar trabalho local.",
+        "Comparar módulos citados com o snapshot; identificar testes existentes e fontes de schema.",
+        "Registrar o que já atende a esta especificação e as diferenças de contrato; reaproveitar a Home, o onboarding e os mecanismos de conexão já implementados.",
+        "Registrar diferenças entre o snapshot de referência e o checkout real. Inicializar o ledger deste pacote sem modificar os registros e as evidências dos demais trabalhos em andamento."
+      ],
+      "acceptance": "Baseline e mapa de delta verificáveis; nenhum reset/checkout destrutivo.",
+      "test_ids": [
+        "QC-T-A01",
+        "QC-T-A02",
+        "QC-T-A03",
+        "QC-T-A04",
+        "QC-T-A05",
+        "QC-T-A06",
+        "QC-T-A07",
+        "QC-T-A08",
+        "QC-T-A09",
+        "QC-T-A10",
+        "QC-T-A11",
+        "QC-T-A12",
+        "QC-T-A13",
+        "QC-T-A14",
+        "QC-T-A15",
+        "QC-T-A16",
+        "QC-T-I01",
+        "QC-T-I02",
+        "QC-T-I03",
+        "QC-T-I04",
+        "QC-T-I05",
+        "QC-T-I06",
+        "QC-T-I07",
+        "QC-T-I08",
+        "QC-T-I09",
+        "QC-T-I10"
+      ],
+      "evidence": [{"path":"execution/qc00-baseline.json","scope":"read-only checkout baseline, refs, drift and input hashes; not product qualification","commit":"7f114698e178c415488cd7a112d6ed0cb2ded214"},{"path":"execution/baseline.md","scope":"instruction, source and test map; previous implementation gate before new package inspection","commit":"7f114698e178c415488cd7a112d6ed0cb2ded214"}]
+    },
+    {
+      "id": "QC-002",
+      "phase": "QC-00",
+      "title": "Fixar gramática e decisões de resolução",
+      "status": "TODO",
+      "depends_on": [
+        "QC-001"
+      ],
+      "requirements": [
+        "QC-R01",
+        "QC-R02",
+        "QC-R03",
+        "QC-R04",
+        "QC-R05",
+        "QC-R06",
+        "QC-R11",
+        "QC-R13",
+        "QC-R15"
+      ],
+      "areas": [
+        "DTOs de intenção",
+        "parser e topologia"
+      ],
+      "steps": [
+        "Escrever tabela de casos dos capítulos 3–4 e tipar intenção/resultado de resolução.",
+        "Decidir como compor opções de serviço sem sobras indevidas; preservar Python 3.11.",
+        "Documentar no ADR o tratamento de root conflitante e a exceção de --plan.",
+        "Fixar a distinção entre sugestão Git, seleção de workspace e raiz autorizada; definir colisões TTY/JSON e a exceção de leitura Git em --plan (não executar subprocessos)."
+      ],
+      "acceptance": "Um mesmo argv tem uma interpretação; erros de sintaxe não iniciam serviço.",
+      "test_ids": [
+        "QC-T-A01",
+        "QC-T-A02",
+        "QC-T-A03",
+        "QC-T-A04",
+        "QC-T-A05",
+        "QC-T-A06",
+        "QC-T-A07",
+        "QC-T-A08",
+        "QC-T-A09",
+        "QC-T-A10",
+        "QC-T-A11",
+        "QC-T-A12",
+        "QC-T-A13",
+        "QC-T-A14",
+        "QC-T-A15",
+        "QC-T-A16",
+        "QC-T-C01",
+        "QC-T-C02",
+        "QC-T-C03",
+        "QC-T-C04",
+        "QC-T-C05",
+        "QC-T-C06",
+        "QC-T-C07",
+        "QC-T-C08",
+        "QC-T-C09",
+        "QC-T-C10",
+        "QC-T-C11",
+        "QC-T-C12",
+        "QC-T-C13",
+        "QC-T-C14",
+        "QC-T-C15",
+        "QC-T-C16",
+        "QC-T-C17",
+        "QC-T-C18",
+        "QC-T-H01",
+        "QC-T-H02",
+        "QC-T-H03",
+        "QC-T-H04",
+        "QC-T-H05",
+        "QC-T-H06",
+        "QC-T-H07",
+        "QC-T-H08",
+        "QC-T-H09",
+        "QC-T-H10"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-003",
+      "phase": "QC-00",
+      "title": "Modelar namespace público e preparar fixtures",
+      "status": "TODO",
+      "depends_on": [
+        "QC-001"
+      ],
+      "requirements": [
+        "QC-R08",
+        "QC-R09",
+        "QC-R12",
+        "QC-R19"
+      ],
+      "areas": [
+        "schema de bindings/alias",
+        "fixtures SQLite e catálogos"
+      ],
+      "steps": [
+        "Conferir o namespace de alias interno e fixar o metadado público separado.",
+        "Desenhar transação para workspace existente e draft novo, com idempotência e revalidação.",
+        "Criar fixtures de dois Servers, workspaces homônimos, múltiplos hosts, legado e setup incerto."
+      ],
+      "acceptance": "ADR de ID público com schema/recuperação; fixtures não confundidas com qualificação real.",
+      "test_ids": [
+        "QC-T-E01",
+        "QC-T-E02",
+        "QC-T-E03",
+        "QC-T-E04",
+        "QC-T-E05",
+        "QC-T-E06",
+        "QC-T-E07",
+        "QC-T-E08",
+        "QC-T-E09",
+        "QC-T-E10",
+        "QC-T-E11",
+        "QC-T-E12",
+        "QC-T-E13",
+        "QC-T-E14",
+        "QC-T-E15",
+        "QC-T-E16",
+        "QC-T-E17",
+        "QC-T-E18",
+        "QC-T-G01",
+        "QC-T-G02",
+        "QC-T-G03",
+        "QC-T-G04",
+        "QC-T-G05",
+        "QC-T-G06",
+        "QC-T-G07",
+        "QC-T-G08",
+        "QC-T-G09",
+        "QC-T-G10",
+        "QC-T-G11",
+        "QC-T-G12",
+        "QC-T-G13",
+        "QC-T-G14",
+        "QC-T-G15"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-004",
+      "phase": "QC-01",
+      "title": "Implementar normalização de posicionais e flags",
+      "status": "TODO",
+      "depends_on": [
+        "QC-002"
+      ],
+      "requirements": [
+        "QC-R01",
+        "QC-R15"
+      ],
+      "areas": [
+        "main.py",
+        "connect.py",
+        "quick_connect_args.py proposto"
+      ],
+      "steps": [
+        "Extrair parse puro e tratar posicionais antes de opções de serviço.",
+        "Adicionar --id e regras de concordância sem remover --client/--project/--profile.",
+        "Desabilitar abreviação; recusar excesso, unknown flag e combinações fora do escopo."
+      ],
+      "acceptance": "Tabela de gramática automatizada; entradas legadas mantêm semântica.",
+      "test_ids": [
+        "QC-T-A01",
+        "QC-T-A02",
+        "QC-T-A03",
+        "QC-T-A04",
+        "QC-T-A05",
+        "QC-T-A06",
+        "QC-T-A07",
+        "QC-T-A08",
+        "QC-T-A09",
+        "QC-T-A10",
+        "QC-T-A11",
+        "QC-T-A12",
+        "QC-T-A13",
+        "QC-T-A14",
+        "QC-T-A15",
+        "QC-T-A16"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-005",
+      "phase": "QC-01",
+      "title": "Implementar aliases raiz e ajuda inicial",
+      "status": "TODO",
+      "depends_on": [
+        "QC-004"
+      ],
+      "requirements": [
+        "QC-R02"
+      ],
+      "areas": [
+        "main.py",
+        "help"
+      ],
+      "steps": [
+        "Adicionar allowlist codex/claude/pi direcionando à mesma normalização.",
+        "Preservar precedência dos comandos de produto e help sem efeitos.",
+        "Trocar erro genérico de comando desconhecido por diagnóstico correto; não abrir picker para service digitado errado."
+      ],
+      "acceptance": "Alias equivale ao connect correspondente; nunca chama shell/subprocesso para redespachar.",
+      "test_ids": [
+        "QC-T-A01",
+        "QC-T-A02",
+        "QC-T-A03",
+        "QC-T-A04",
+        "QC-T-A05",
+        "QC-T-A06",
+        "QC-T-A07",
+        "QC-T-A08",
+        "QC-T-A09",
+        "QC-T-A10",
+        "QC-T-A11",
+        "QC-T-A12",
+        "QC-T-A13",
+        "QC-T-A14",
+        "QC-T-A15",
+        "QC-T-A16"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-006",
+      "phase": "QC-01",
+      "title": "Unificar registro e picker de harness",
+      "status": "TODO",
+      "depends_on": [
+        "QC-004"
+      ],
+      "requirements": [
+        "QC-R07"
+      ],
+      "areas": [
+        "project_preset.py CLIENTS",
+        "connection_picker.py",
+        "runtime-options"
+      ],
+      "steps": [
+        "Reusar registro declarativo; normalizar case e aliases conhecidos.",
+        "Validar token depois do parse; em TTY recuperar unknown/not-detected com lista.",
+        "Distinguir inventário stale, múltiplas instalações e restrição de política; preservar candidate_ref."
+      ],
+      "acceptance": "Erro de enum não mata o fluxo interativo nem executa caminho fornecido pelo usuário.",
+      "test_ids": [
+        "QC-T-B01",
+        "QC-T-B02",
+        "QC-T-B03",
+        "QC-T-B04",
+        "QC-T-B05",
+        "QC-T-B06",
+        "QC-T-B07",
+        "QC-T-B08",
+        "QC-T-B09",
+        "QC-T-B10"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-007",
+      "phase": "QC-01",
+      "title": "Fixar comportamento não interativo",
+      "status": "TODO",
+      "depends_on": [
+        "QC-004",
+        "QC-006"
+      ],
+      "requirements": [
+        "QC-R15"
+      ],
+      "areas": [
+        "connect.py",
+        "output",
+        "argument validation"
+      ],
+      "steps": [
+        "Garantir que JSON e stdin não TTY não chamem input/chat.",
+        "Serializar alternativas/reason/catalog_complete e preservar efeitos reais.",
+        "Conservar perfil estável em adição automatizada; --id não substitui a intenção."
+      ],
+      "acceptance": "Processo não bloqueia em automação e stdout JSON permanece parseável.",
+      "test_ids": [
+        "QC-T-A01",
+        "QC-T-A02",
+        "QC-T-A03",
+        "QC-T-A04",
+        "QC-T-A05",
+        "QC-T-A06",
+        "QC-T-A07",
+        "QC-T-A08",
+        "QC-T-A09",
+        "QC-T-A10",
+        "QC-T-A11",
+        "QC-T-A12",
+        "QC-T-A13",
+        "QC-T-A14",
+        "QC-T-A15",
+        "QC-T-A16",
+        "QC-T-B01",
+        "QC-T-B02",
+        "QC-T-B03",
+        "QC-T-B04",
+        "QC-T-B05",
+        "QC-T-B06",
+        "QC-T-B07",
+        "QC-T-B08",
+        "QC-T-B09",
+        "QC-T-B10",
+        "QC-T-H01",
+        "QC-T-H02",
+        "QC-T-H03",
+        "QC-T-H04",
+        "QC-T-H05",
+        "QC-T-H06",
+        "QC-T-H07",
+        "QC-T-H08",
+        "QC-T-H09",
+        "QC-T-H10"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-008",
+      "phase": "QC-01",
+      "title": "Adotar ID do Harness como vocabulário público",
+      "status": "TODO",
+      "depends_on": [
+        "QC-004"
+      ],
+      "requirements": [
+        "QC-R10",
+        "QC-R14"
+      ],
+      "areas": [
+        "help/pickers/output",
+        "DTOs JSON",
+        "rótulos frontend de conexão"
+      ],
+      "steps": [
+        "Padronizar textos básicos como ID do Harness em português ou Harness ID no frontend inglês atual; não iniciar uma tradução global.",
+        "Manter connect_id em contratos/armazenamento, --id na CLI e --profile como opção técnica avançada. Não criar outra identidade chamada harness_id.",
+        "Remover Perfil: Assistente de projeto e nomes de arquivo dos resumos básicos; quando a função do agente for relevante, rotular Função do agente, separadamente.",
+        "Atualizar templates de confirmação, sucesso, conflito, reconnect e golden outputs; UI usa o mesmo nome público e referências canônicas."
+      ],
+      "acceptance": "Usuário vê o identificador escolhido/gerado e não precisa inventar um perfil; campos técnicos legados continuam disponíveis sem quebra de JSON.",
+      "test_ids": [
+        "QC-T-F01",
+        "QC-T-F02",
+        "QC-T-F03",
+        "QC-T-F04",
+        "QC-T-F05",
+        "QC-T-F06",
+        "QC-T-F07",
+        "QC-T-F08",
+        "QC-T-F09",
+        "QC-T-F10",
+        "QC-T-F11",
+        "QC-T-F12",
+        "QC-T-F13",
+        "QC-T-F14",
+        "QC-T-F15",
+        "QC-T-F16",
+        "QC-T-F17",
+        "QC-T-F18",
+        "QC-T-F19",
+        "QC-T-F20",
+        "QC-T-F21",
+        "QC-T-F22",
+        "QC-T-F23",
+        "QC-T-F24"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-009",
+      "phase": "QC-02",
+      "title": "Resolver CWD e raiz explícita com proveniência",
+      "status": "TODO",
+      "depends_on": [
+        "QC-002"
+      ],
+      "requirements": [
+        "QC-R03",
+        "QC-R06",
+        "QC-R17"
+      ],
+      "areas": [
+        "project_profile",
+        "terminal_target",
+        "directory_identity"
+      ],
+      "steps": [
+        "Capturar CWD uma vez; --project válido prevalece como diretório físico de descoberta e execução, mantendo invocation_cwd para diagnóstico.",
+        "Separar diretório físico, raiz Git, nome sugerido, workspace e ID do Harness; descoberta do nome nunca amplia raiz de execução.",
+        "Preservar canonicalização e provas de diretório; detectar symlink/junction alterado entre revisão e Finish sem lowercase global ou os.chdir."
+      ],
+      "acceptance": "Destino físico é conhecido e uma troca exige decisão registrada.",
+      "test_ids": [
+        "QC-T-C01",
+        "QC-T-C02",
+        "QC-T-C03",
+        "QC-T-C04",
+        "QC-T-C05",
+        "QC-T-C06",
+        "QC-T-C07",
+        "QC-T-C08",
+        "QC-T-C09",
+        "QC-T-C10",
+        "QC-T-C11",
+        "QC-T-C12",
+        "QC-T-C13",
+        "QC-T-C14",
+        "QC-T-C15",
+        "QC-T-C16",
+        "QC-T-C17",
+        "QC-T-C18"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-010",
+      "phase": "QC-02",
+      "title": "Descobrir metadados Git locais com limites e privacidade",
+      "status": "TODO",
+      "depends_on": [
+        "QC-002",
+        "QC-009"
+      ],
+      "requirements": [
+        "QC-R05",
+        "QC-R06",
+        "QC-R20"
+      ],
+      "areas": [
+        "adapter Git local proposto",
+        "runner de subprocessos existente",
+        "tests Git isolados"
+      ],
+      "steps": [
+        "Localizar Git de instalação confiável sem procurar executável no repositório; invocar allowlist rev-parse/config por argv sem shell, stdin fechado e orçamento total limitado.",
+        "Detectar working tree a partir da raiz física selecionada e origem local inequívoca; tratar .git como arquivo/worktrees/submodules com Git, não por concatenação de paths.",
+        "Retornar somente basename seguro, raiz descoberta, source/reason e estado. Nunca persistir/imprimir URL bruta, userinfo, query, fragmento ou stderr bruto.",
+        "Tratar Git ausente, timeout, safe.directory e configuração inválida como descoberta não confirmada com fallback, sem modificar config, autenticar ou fazer rede.",
+        "Em help/erro de gramática/--plan não executar Git. Na retomada/recovery priorizar seleção salva, sem recalcular nome."
+      ],
+      "acceptance": "Fixtures comprovam consulta local limitada, sem rede/mutação e com raiz de execução inalterada; falha Git não vira ausência de catálogo Nexus.",
+      "test_ids": [
+        "QC-T-D01",
+        "QC-T-D02",
+        "QC-T-D03",
+        "QC-T-D04",
+        "QC-T-D05",
+        "QC-T-D06",
+        "QC-T-D07",
+        "QC-T-D08",
+        "QC-T-D09",
+        "QC-T-D10",
+        "QC-T-D11",
+        "QC-T-D12",
+        "QC-T-D13",
+        "QC-T-D14",
+        "QC-T-D15",
+        "QC-T-D16",
+        "QC-T-D17",
+        "QC-T-D18",
+        "QC-T-D19",
+        "QC-T-D20",
+        "QC-T-D21",
+        "QC-T-D22",
+        "QC-T-D23",
+        "QC-T-D24",
+        "QC-T-D25",
+        "QC-T-D26"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-011",
+      "phase": "QC-02",
+      "title": "Estender consulta de projetos autorizados",
+      "status": "TODO",
+      "depends_on": [
+        "QC-009"
+      ],
+      "requirements": [
+        "QC-R04",
+        "QC-R05",
+        "QC-R17"
+      ],
+      "areas": [
+        "connection_project.py",
+        "workspaces API",
+        "ConnectionCatalog"
+      ],
+      "steps": [
+        "Mapear os serviços reais de workspace e conexões, incluindo projetos sem conexão.",
+        "Adicionar projeção paginada filtrada quando necessário; comprovar completude e revisão.",
+        "Resolver nome exato/ID e root com fontes canônicas; não expor roots remotos indiscriminadamente.",
+        "Nome derivado de Git só ordena/sugere opções; não usar URL, repo-name, branch, CWD ou labels homônimos como chave de workspace ou autorização."
+      ],
+      "acceptance": "Nomes duplicados geram escolha; catálogo incompleto nunca autoriza criar duplicata.",
+      "test_ids": [
+        "QC-T-C01",
+        "QC-T-C02",
+        "QC-T-C03",
+        "QC-T-C04",
+        "QC-T-C05",
+        "QC-T-C06",
+        "QC-T-C07",
+        "QC-T-C08",
+        "QC-T-C09",
+        "QC-T-C10",
+        "QC-T-C11",
+        "QC-T-C12",
+        "QC-T-C13",
+        "QC-T-C14",
+        "QC-T-C15",
+        "QC-T-C16",
+        "QC-T-C17",
+        "QC-T-C18"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-012",
+      "phase": "QC-02",
+      "title": "Aplicar precedência do nome e conservar a raiz aprovada",
+      "status": "TODO",
+      "depends_on": [
+        "QC-010",
+        "QC-011"
+      ],
+      "requirements": [
+        "QC-R05",
+        "QC-R06",
+        "QC-R13"
+      ],
+      "areas": [
+        "quick_connect_resolution proposto",
+        "connection_project.py",
+        "ResolvedProject/checkpoint"
+      ],
+      "steps": [
+        "Resolver seletores explícitos concordantes e associações Nexus antes de usar Git; origem Git não seleciona nem renomeia workspace por conta própria.",
+        "Aplicar origin local inequívoco → basename do working tree → basename da raiz física; respeitar --project e fornecer source/reason sem URL.",
+        "CWD em subpasta mantém subpasta por padrão. Raiz Git é opção explícita, nunca expansão de permissões; monorepos, clones e worktrees distintos não são mesclados.",
+        "Persistir nome escolhido e proveniência mínima na intenção, sem guardar segredo Git. Personalização invalida revisão; recuperação usa intenção congelada.",
+        "Em --plan usar seleção salva ou fallback de diretório rotulado não verificado; nunca alegar consulta Git que não ocorreu."
+      ],
+      "acceptance": "Mesma entrada resolve deterministicamente a sugestão; resumo mostra nome e diretório independentes; escolhas explícitas e projetos existentes são preservados.",
+      "test_ids": [
+        "QC-T-D01",
+        "QC-T-D02",
+        "QC-T-D03",
+        "QC-T-D04",
+        "QC-T-D05",
+        "QC-T-D06",
+        "QC-T-D07",
+        "QC-T-D08",
+        "QC-T-D09",
+        "QC-T-D10",
+        "QC-T-D11",
+        "QC-T-D12",
+        "QC-T-D13",
+        "QC-T-D14",
+        "QC-T-D15",
+        "QC-T-D16",
+        "QC-T-D17",
+        "QC-T-D18",
+        "QC-T-D19",
+        "QC-T-D20",
+        "QC-T-D21",
+        "QC-T-D22",
+        "QC-T-D23",
+        "QC-T-D24",
+        "QC-T-D25",
+        "QC-T-D26"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-013",
+      "phase": "QC-02",
+      "title": "Implementar seletor e proposta de projeto novo",
+      "status": "TODO",
+      "depends_on": [
+        "QC-011",
+        "QC-006",
+        "QC-012"
+      ],
+      "requirements": [
+        "QC-R03",
+        "QC-R04",
+        "QC-R05",
+        "QC-R06",
+        "QC-R13"
+      ],
+      "areas": [
+        "CLI picker",
+        "TerminalConnection.review"
+      ],
+      "steps": [
+        "Reutilizar associação exata e autorizada quando inequívoca. Caso contrário apresentar seleção/criação com nome sugerido e fonte produzidos por QC-012.",
+        "Manter CWD/--project como raiz padrão; oferecer raiz Git/raiz aprovada ancestral somente como alteração explícita, com impacto mostrado na revisão.",
+        "Permitir personalizar o nome e voltar à mesma revisão final; não criar diretório nem workspace ao navegar nas escolhas; não duplicar confirmações de setup."
+      ],
+      "acceptance": "Criar projeto não cria diretório nem modifica mapeamento de outro projeto.",
+      "test_ids": [
+        "QC-T-C01",
+        "QC-T-C02",
+        "QC-T-C03",
+        "QC-T-C04",
+        "QC-T-C05",
+        "QC-T-C06",
+        "QC-T-C07",
+        "QC-T-C08",
+        "QC-T-C09",
+        "QC-T-C10",
+        "QC-T-C11",
+        "QC-T-C12",
+        "QC-T-C13",
+        "QC-T-C14",
+        "QC-T-C15",
+        "QC-T-C16",
+        "QC-T-C17",
+        "QC-T-C18",
+        "QC-T-D01",
+        "QC-T-D02",
+        "QC-T-D03",
+        "QC-T-D04",
+        "QC-T-D05",
+        "QC-T-D06",
+        "QC-T-D07",
+        "QC-T-D08",
+        "QC-T-D09",
+        "QC-T-D10",
+        "QC-T-D11",
+        "QC-T-D12",
+        "QC-T-D13",
+        "QC-T-D14",
+        "QC-T-D15",
+        "QC-T-D16",
+        "QC-T-D17",
+        "QC-T-D18",
+        "QC-T-D19",
+        "QC-T-D20",
+        "QC-T-D21",
+        "QC-T-D22",
+        "QC-T-D23",
+        "QC-T-D24",
+        "QC-T-D25",
+        "QC-T-D26"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-014",
+      "phase": "QC-02",
+      "title": "Revalidar projetos em retomada e concorrência",
+      "status": "TODO",
+      "depends_on": [
+        "QC-013"
+      ],
+      "requirements": [
+        "QC-R04",
+        "QC-R05",
+        "QC-R06",
+        "QC-R12"
+      ],
+      "areas": [
+        "canonical_connections.py",
+        "selection/reservation",
+        "setup preconditions"
+      ],
+      "steps": [
+        "Incluir referência/revisão de resolução nos checkpoints novos.",
+        "Detectar mudança entre catálogo, seleção e Finish; não escolher projeto substituto.",
+        "Tratar drafts equivalentes de primeiro projeto sem criar workspaces duplicados silenciosamente.",
+        "Retomada recupera nome/ID já persistidos sem redescobrir Git para renomear. Mudança apenas de remote/branch não reconfigura conexão; mudança de raiz continua sujeita à validação canônica."
+      ],
+      "acceptance": "Corridas de projeto falham/revisam com estado preservado e sem identidade canônica parcial.",
+      "test_ids": [
+        "QC-T-C01",
+        "QC-T-C02",
+        "QC-T-C03",
+        "QC-T-C04",
+        "QC-T-C05",
+        "QC-T-C06",
+        "QC-T-C07",
+        "QC-T-C08",
+        "QC-T-C09",
+        "QC-T-C10",
+        "QC-T-C11",
+        "QC-T-C12",
+        "QC-T-C13",
+        "QC-T-C14",
+        "QC-T-C15",
+        "QC-T-C16",
+        "QC-T-C17",
+        "QC-T-C18",
+        "QC-T-G01",
+        "QC-T-G02",
+        "QC-T-G03",
+        "QC-T-G04",
+        "QC-T-G05",
+        "QC-T-G06",
+        "QC-T-G07",
+        "QC-T-G08",
+        "QC-T-G09",
+        "QC-T-G10",
+        "QC-T-G11",
+        "QC-T-G12",
+        "QC-T-G13",
+        "QC-T-G14",
+        "QC-T-G15"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-015",
+      "phase": "QC-03",
+      "title": "Adicionar registro canônico de IDs públicos",
+      "status": "TODO",
+      "depends_on": [
+        "QC-003"
+      ],
+      "requirements": [
+        "QC-R08",
+        "QC-R09"
+      ],
+      "areas": [
+        "migration aditiva",
+        "serviço/porta/adapter public IDs"
+      ],
+      "steps": [
+        "Implementar validação compartilhada e uniqueness por Server/workspace.",
+        "Representar reserva e vínculo sem duplicar o runtime; não usar nomes como paths.",
+        "Adicionar revisão/consultas autorizadas e transações de alocação com rollback."
+      ],
+      "acceptance": "Duas instâncias concorrentes não vinculam o mesmo ID ao mesmo workspace.",
+      "test_ids": [
+        "QC-T-E01",
+        "QC-T-E02",
+        "QC-T-E03",
+        "QC-T-E04",
+        "QC-T-E05",
+        "QC-T-E06",
+        "QC-T-E07",
+        "QC-T-E08",
+        "QC-T-E09",
+        "QC-T-E10",
+        "QC-T-E11",
+        "QC-T-E12",
+        "QC-T-E13",
+        "QC-T-E14",
+        "QC-T-E15",
+        "QC-T-E16",
+        "QC-T-E17",
+        "QC-T-E18"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-016",
+      "phase": "QC-03",
+      "title": "Reservar proposta e preservar intenção",
+      "status": "TODO",
+      "depends_on": [
+        "QC-015",
+        "QC-014"
+      ],
+      "requirements": [
+        "QC-R08",
+        "QC-R09",
+        "QC-R16"
+      ],
+      "areas": [
+        "connection_reservation.py",
+        "public ID reservation"
+      ],
+      "steps": [
+        "Reusar profile/intent/checkpoint, registrando pedido explícito ou proposta automática.",
+        "Reservar no Server após aprovação antes do teste quando namespace existir; drafts novos seguem capítulo 6.",
+        "Recuperar resposta perdida por mesma intenção; não renovar indevidamente nem reatribuir nome ocupado."
+      ],
+      "acceptance": "Reexecução da mesma intenção recupera o mesmo nome; conflito precede teste quando detectável.",
+      "test_ids": [
+        "QC-T-E01",
+        "QC-T-E02",
+        "QC-T-E03",
+        "QC-T-E04",
+        "QC-T-E05",
+        "QC-T-E06",
+        "QC-T-E07",
+        "QC-T-E08",
+        "QC-T-E09",
+        "QC-T-E10",
+        "QC-T-E11",
+        "QC-T-E12",
+        "QC-T-E13",
+        "QC-T-E14",
+        "QC-T-E15",
+        "QC-T-E16",
+        "QC-T-E17",
+        "QC-T-E18",
+        "QC-T-G01",
+        "QC-T-G02",
+        "QC-T-G03",
+        "QC-T-G04",
+        "QC-T-G05",
+        "QC-T-G06",
+        "QC-T-G07",
+        "QC-T-G08",
+        "QC-T-G09",
+        "QC-T-G10",
+        "QC-T-G11",
+        "QC-T-G12",
+        "QC-T-G13",
+        "QC-T-G14",
+        "QC-T-G15"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-017",
+      "phase": "QC-03",
+      "title": "Integrar ID ao request, Finish e recibo",
+      "status": "TODO",
+      "depends_on": [
+        "QC-016"
+      ],
+      "requirements": [
+        "QC-R09",
+        "QC-R14",
+        "QC-R16"
+      ],
+      "areas": [
+        "terminal_connection.py",
+        "connection_setup.py",
+        "schemas HTTP"
+      ],
+      "steps": [
+        "Transportar membro versionado opcional no envelope de produto.",
+        "Incluir nome/namespace/revisão no hash; confirmar binding do ID junto ao Finish.",
+        "Preservar requests/recibos antigos sem campo; testar falha entre todas as gravações."
+      ],
+      "acceptance": "Setup e vínculo público commitam juntos ou retornam recuperação parcial explícita; não há sucesso falso.",
+      "test_ids": [
+        "QC-T-E01",
+        "QC-T-E02",
+        "QC-T-E03",
+        "QC-T-E04",
+        "QC-T-E05",
+        "QC-T-E06",
+        "QC-T-E07",
+        "QC-T-E08",
+        "QC-T-E09",
+        "QC-T-E10",
+        "QC-T-E11",
+        "QC-T-E12",
+        "QC-T-E13",
+        "QC-T-E14",
+        "QC-T-E15",
+        "QC-T-E16",
+        "QC-T-E17",
+        "QC-T-E18",
+        "QC-T-G01",
+        "QC-T-G02",
+        "QC-T-G03",
+        "QC-T-G04",
+        "QC-T-G05",
+        "QC-T-G06",
+        "QC-T-G07",
+        "QC-T-G08",
+        "QC-T-G09",
+        "QC-T-G10",
+        "QC-T-G11",
+        "QC-T-G12",
+        "QC-T-G13",
+        "QC-T-G14",
+        "QC-T-G15"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-018",
+      "phase": "QC-03",
+      "title": "Resolver e associar conexões antigas",
+      "status": "TODO",
+      "depends_on": [
+        "QC-015",
+        "QC-017"
+      ],
+      "requirements": [
+        "QC-R11",
+        "QC-R12",
+        "QC-R19"
+      ],
+      "areas": [
+        "public ID resolve/associate",
+        "catalog",
+        "canonical association"
+      ],
+      "steps": [
+        "Resolver --id por namespace e revalidar a tupla completa.",
+        "Associar metadado a conexão antiga mediante ação autorizada, sem Finish produtivo.",
+        "Preservar ID desativado/retired; negar rename/rebind implícito.",
+        "Consultar recuperação pelo fingerprint da própria intenção antes de classificar ID bound como colisão; ID amigável sozinho não prova propriedade de uma intenção."
+      ],
+      "acceptance": "Adotar nome não cria agente, grant, sessão ou teste e não altera alias interno legado.",
+      "test_ids": [
+        "QC-T-E01",
+        "QC-T-E02",
+        "QC-T-E03",
+        "QC-T-E04",
+        "QC-T-E05",
+        "QC-T-E06",
+        "QC-T-E07",
+        "QC-T-E08",
+        "QC-T-E09",
+        "QC-T-E10",
+        "QC-T-E11",
+        "QC-T-E12",
+        "QC-T-E13",
+        "QC-T-E14",
+        "QC-T-E15",
+        "QC-T-E16",
+        "QC-T-E17",
+        "QC-T-E18"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-019",
+      "phase": "QC-03",
+      "title": "Qualificar locks, reservas incertas e tombstones",
+      "status": "TODO",
+      "depends_on": [
+        "QC-017",
+        "QC-018"
+      ],
+      "requirements": [
+        "QC-R09",
+        "QC-R16"
+      ],
+      "areas": [
+        "SQLite concurrency",
+        "local file locks",
+        "cleanup rules"
+      ],
+      "steps": [
+        "Documentar ordem de locks e manter transações curtas.",
+        "Cobrir duas máquinas, duas intenções iguais/diferentes e perda de resposta.",
+        "Limpeza só quando ausência de efeitos é comprovada; IDs vinculados não são reciclados automaticamente."
+      ],
+      "acceptance": "Resultados incertos não liberam um nome para abrir outro contexto por engano.",
+      "test_ids": [
+        "QC-T-E01",
+        "QC-T-E02",
+        "QC-T-E03",
+        "QC-T-E04",
+        "QC-T-E05",
+        "QC-T-E06",
+        "QC-T-E07",
+        "QC-T-E08",
+        "QC-T-E09",
+        "QC-T-E10",
+        "QC-T-E11",
+        "QC-T-E12",
+        "QC-T-E13",
+        "QC-T-E14",
+        "QC-T-E15",
+        "QC-T-E16",
+        "QC-T-E17",
+        "QC-T-E18",
+        "QC-T-G01",
+        "QC-T-G02",
+        "QC-T-G03",
+        "QC-T-G04",
+        "QC-T-G05",
+        "QC-T-G06",
+        "QC-T-G07",
+        "QC-T-G08",
+        "QC-T-G09",
+        "QC-T-G10",
+        "QC-T-G11",
+        "QC-T-G12",
+        "QC-T-G13",
+        "QC-T-G14",
+        "QC-T-G15"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-020",
+      "phase": "QC-03",
+      "title": "Tratar colisão de ID com decisão explícita e sem sobrescrita",
+      "status": "TODO",
+      "depends_on": [
+        "QC-018",
+        "QC-006",
+        "QC-008"
+      ],
+      "requirements": [
+        "QC-R09",
+        "QC-R11",
+        "QC-R12"
+      ],
+      "areas": [
+        "connection_picker.py",
+        "public ID resolver",
+        "CLI structured errors"
+      ],
+      "steps": [
+        "Implementar matriz do capítulo 5: mesmo harness, harness diferente, ID pendente, ID revogado/retired, --new-connection e própria intenção recuperável.",
+        "Em TTY permitir retomar conexão real, escolher outro ID, solicitar sugestão ou cancelar conforme elegibilidade. Retomada incompatible com harness solicitado exige escolha explícita, nunca troca silenciosa.",
+        "Com --new-connection e ID de outra intenção, remover a alternativa retomar: outro ID/sugestão/cancelamento. Preservar a recuperação idempotente da própria criação.",
+        "Não TTY: retorno estruturado para colisão; sem sugestão aplicada, prompts ou novo ID automático. Retomada exata determinística sem --new-connection continua válida.",
+        "Revalidar tupla/estado/namespace depois da escolha e antes do efeito; não expor dados de conexão inacessível e não transformar erro de catálogo em ID livre."
+      ],
+      "acceptance": "Nenhuma escolha sobrescreve, reativa ou amplia a conexão ocupante; a seleção produz a intenção correta ou cancela, inclusive sob corrida.",
+      "test_ids": [
+        "QC-T-F01",
+        "QC-T-F02",
+        "QC-T-F03",
+        "QC-T-F04",
+        "QC-T-F05",
+        "QC-T-F06",
+        "QC-T-F07",
+        "QC-T-F08",
+        "QC-T-F09",
+        "QC-T-F10",
+        "QC-T-F11",
+        "QC-T-F12",
+        "QC-T-F13",
+        "QC-T-F14",
+        "QC-T-F15",
+        "QC-T-F16",
+        "QC-T-F17",
+        "QC-T-F18",
+        "QC-T-F19",
+        "QC-T-F20",
+        "QC-T-F21",
+        "QC-T-F22",
+        "QC-T-F23",
+        "QC-T-F24"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-021",
+      "phase": "QC-04",
+      "title": "Consolidar a revisão final e congelar escolhas aprovadas",
+      "status": "TODO",
+      "depends_on": [
+        "QC-019",
+        "QC-012",
+        "QC-008",
+        "QC-020"
+      ],
+      "requirements": [
+        "QC-R05",
+        "QC-R06",
+        "QC-R10",
+        "QC-R11",
+        "QC-R13"
+      ],
+      "areas": [
+        "TerminalConnection.review",
+        "quick_connect output",
+        "review fingerprint",
+        "retomada sem efeito"
+      ],
+      "steps": [
+        "Montar um resumo com harness efetivo, projeto/nome+fonte, CWD/raiz efetiva quando distintos, ID do Harness, host e efeitos de teste/autorização/configuração.",
+        "Seleções intermediárias não autorizam setup. Confirmar/Personalizar/Cancelar fazem parte da mesma revisão final; não acrescentar confirmação de nome seguida de confirmação idêntica de setup.",
+        "Personalização de nome, ID, harness, host ou raiz recompõe hash/revisão e exige aprovação atual. Não reusar --approve antigo.",
+        "Retomada exata não reaplica teste/preset/grant; a escolha Retomar acompanhada do resumo pode ser a confirmação final. Não TTY exige decisões exatas por flags/receipt.",
+        "Persistir somente dados necessários, emitir ID bound no sucesso antes do chat e preservar relato honesto de lifecycle/metadados já solicitados após cancelamento ou colisão."
+      ],
+      "acceptance": "Uma confirmação de setup para uma seleção nova e inequívoca; escolhas e efeitos legíveis, sem autorização oculta ou segunda transação de configuração.",
+      "test_ids": [
+        "QC-T-F01",
+        "QC-T-F02",
+        "QC-T-F03",
+        "QC-T-F04",
+        "QC-T-F05",
+        "QC-T-F06",
+        "QC-T-F07",
+        "QC-T-F08",
+        "QC-T-F09",
+        "QC-T-F10",
+        "QC-T-F11",
+        "QC-T-F12",
+        "QC-T-F13",
+        "QC-T-F14",
+        "QC-T-F15",
+        "QC-T-F16",
+        "QC-T-F17",
+        "QC-T-F18",
+        "QC-T-F19",
+        "QC-T-F20",
+        "QC-T-F21",
+        "QC-T-F22",
+        "QC-T-F23",
+        "QC-T-F24"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-022",
+      "phase": "QC-04",
+      "title": "Orquestrar Quick Connect no fluxo existente",
+      "status": "TODO",
+      "depends_on": [
+        "QC-007",
+        "QC-014",
+        "QC-019",
+        "QC-021"
+      ],
+      "requirements": [
+        "QC-R01",
+        "QC-R05",
+        "QC-R08",
+        "QC-R10",
+        "QC-R11",
+        "QC-R12",
+        "QC-R13",
+        "QC-R16"
+      ],
+      "areas": [
+        "connect.py",
+        "TerminalConnection",
+        "pickers"
+      ],
+      "steps": [
+        "Encadear resolução e setup sem duplicar review/apply/observe.",
+        "Preservar caminho retomar/adicionar, prompts existentes e filtros de harness.",
+        "Manter recuperação de grants/testes/sessões separada da simples reconexão.",
+        "Usar picker explícito de colisão e revisão consolidada; selecionar outra conexão invalida escolhas incompatíveis sem reinterpretar flags exatas silenciosamente."
+      ],
+      "acceptance": "Primeiro e segundo harness entram no mesmo projeto sem profile manual em TTY.",
+      "test_ids": [
+        "QC-T-A01",
+        "QC-T-C01",
+        "QC-T-C02",
+        "QC-T-E04",
+        "QC-T-E11",
+        "QC-T-G06",
+        "QC-T-H01",
+        "QC-T-I09"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-023",
+      "phase": "QC-04",
+      "title": "Implementar resumo positivo com ID",
+      "status": "TODO",
+      "depends_on": [
+        "QC-022",
+        "QC-008"
+      ],
+      "requirements": [
+        "QC-R10",
+        "QC-R13",
+        "QC-R14"
+      ],
+      "areas": [
+        "quick_connect_output proposto",
+        "_display"
+      ],
+      "steps": [
+        "Imprimir ID do Harness, harness efetivamente selecionado, nome/origem do projeto, diretório aprovado e operação antes do prompt.",
+        "Não mostrar perfil técnico nem Project assistant como identificador. Reservar --profile para ajuda avançada, recuperação técnica e JSON; retorno básico usa --id.",
+        "Produzir resume_argv seguro; distinguir configurado de sessão ativa, nome proposto de bound, criação de reutilização e conflito de resultado incerto."
+      ],
+      "acceptance": "Usuário sabe o ID definitivo sem sair do prompt; cancel/review não usam mensagem de sucesso.",
+      "test_ids": [
+        "QC-T-F01",
+        "QC-T-F02",
+        "QC-T-F03",
+        "QC-T-F04",
+        "QC-T-F05",
+        "QC-T-F06",
+        "QC-T-F07",
+        "QC-T-F08",
+        "QC-T-F09",
+        "QC-T-F10",
+        "QC-T-F11",
+        "QC-T-F12",
+        "QC-T-F13",
+        "QC-T-F14",
+        "QC-T-F15",
+        "QC-T-F16",
+        "QC-T-F17",
+        "QC-T-F18",
+        "QC-T-F19",
+        "QC-T-F20",
+        "QC-T-F21",
+        "QC-T-F22",
+        "QC-T-F23",
+        "QC-T-F24",
+        "QC-T-H01",
+        "QC-T-H02",
+        "QC-T-H03",
+        "QC-T-H04",
+        "QC-T-H05",
+        "QC-T-H06",
+        "QC-T-H07",
+        "QC-T-H08",
+        "QC-T-H09",
+        "QC-T-H10"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-024",
+      "phase": "QC-04",
+      "title": "Versionar JSON e efeitos por estágio",
+      "status": "TODO",
+      "depends_on": [
+        "QC-023"
+      ],
+      "requirements": [
+        "QC-R10",
+        "QC-R11",
+        "QC-R14",
+        "QC-R15"
+      ],
+      "areas": [
+        "DTO outcome",
+        "JSON serialization"
+      ],
+      "steps": [
+        "Adicionar quick_connect.version/status sem quebrar campos legados.",
+        "Preservar proposed versus bound, partial/unknown e efeitos de lifecycle/metadados.",
+        "Validar invariantes e exemplos JSON com testes golden.",
+        "Conservar quick_connect.connect_id como chave de dados única; acrescentar provenance segura e código público de colisão documentado. Não introduzir harness_id com valor independente nem expor remote bruto."
+      ],
+      "acceptance": "connected sempre contém ID bound; retorno legado sem envelope não é vendido como Quick Connect completo.",
+      "test_ids": [
+        "QC-T-F01",
+        "QC-T-F02",
+        "QC-T-F03",
+        "QC-T-F04",
+        "QC-T-F05",
+        "QC-T-F06",
+        "QC-T-F07",
+        "QC-T-F08",
+        "QC-T-F09",
+        "QC-T-F10",
+        "QC-T-F11",
+        "QC-T-F12",
+        "QC-T-F13",
+        "QC-T-F14",
+        "QC-T-F15",
+        "QC-T-F16",
+        "QC-T-F17",
+        "QC-T-F18",
+        "QC-T-F19",
+        "QC-T-F20",
+        "QC-T-F21",
+        "QC-T-F22",
+        "QC-T-F23",
+        "QC-T-F24",
+        "QC-T-H01",
+        "QC-T-H02",
+        "QC-T-H03",
+        "QC-T-H04",
+        "QC-T-H05",
+        "QC-T-H06",
+        "QC-T-H07",
+        "QC-T-H08",
+        "QC-T-H09",
+        "QC-T-H10"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-025",
+      "phase": "QC-04",
+      "title": "Recuperar commit com falha de persistência local",
+      "status": "TODO",
+      "depends_on": [
+        "QC-024"
+      ],
+      "requirements": [
+        "QC-R09",
+        "QC-R12",
+        "QC-R14"
+      ],
+      "areas": [
+        "atomic_json",
+        "canonical receipt lookup",
+        "resume"
+      ],
+      "steps": [
+        "Injetar falha depois do Finish e antes do arquivo de perfil.",
+        "Retornar configured_shortcut_pending com referência recuperável e sem replay.",
+        "Reparar apenas o atalho em retomada, validando namespace e Server."
+      ],
+      "acceptance": "Conexão canônica não se duplica porque o disco do cliente falhou.",
+      "test_ids": [
+        "QC-T-G01",
+        "QC-T-G02",
+        "QC-T-G03",
+        "QC-T-G04",
+        "QC-T-G05",
+        "QC-T-G06",
+        "QC-T-G07",
+        "QC-T-G08",
+        "QC-T-G09",
+        "QC-T-G10",
+        "QC-T-G11",
+        "QC-T-G12",
+        "QC-T-G13",
+        "QC-T-G14",
+        "QC-T-G15"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-026",
+      "phase": "QC-05",
+      "title": "Projetar ID no catálogo e UI existente",
+      "status": "TODO",
+      "depends_on": [
+        "QC-018",
+        "QC-024",
+        "QC-008"
+      ],
+      "requirements": [
+        "QC-R10",
+        "QC-R11",
+        "QC-R18",
+        "QC-R19"
+      ],
+      "areas": [
+        "ConnectionCatalog",
+        "connection DTOs frontend",
+        "Home seletor"
+      ],
+      "steps": [
+        "Adicionar campo nullable e revisão de catálogo; GET não associa nomes.",
+        "Mostrar connect_id quando presente mantendo referências e fallbacks existentes.",
+        "Não adicionar menu e não alterar alvos MCP/handoff por nome.",
+        "Rótulos curtos ID do Harness/Harness ID, mesmo namespace e conflito do CLI; UI não renomeia agent_id, profile nem sessões por alterar a apresentação."
+      ],
+      "acceptance": "CLI e Home identificam a mesma conexão; múltiplas sessões mantêm IDs próprios.",
+      "test_ids": [
+        "QC-T-I01",
+        "QC-T-I02",
+        "QC-T-I03",
+        "QC-T-I04",
+        "QC-T-I05",
+        "QC-T-I06",
+        "QC-T-I07",
+        "QC-T-I08",
+        "QC-T-I09",
+        "QC-T-I10"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-027",
+      "phase": "QC-05",
+      "title": "Preservar remoto, participant e Server antigo",
+      "status": "TODO",
+      "depends_on": [
+        "QC-022",
+        "QC-026"
+      ],
+      "requirements": [
+        "QC-R05",
+        "QC-R06",
+        "QC-R15",
+        "QC-R17",
+        "QC-R19"
+      ],
+      "areas": [
+        "terminal_target",
+        "remote setup",
+        "participant legacy",
+        "capability detection"
+      ],
+      "steps": [
+        "Testar retomada remota com workspace explícito e root local não transferido.",
+        "Rejeitar nova gramática em participant com ajuda antes de efeitos; preservar comandos antigos.",
+        "Detectar Server sem public IDs; não criar namespace só no cache e afirmar sucesso.",
+        "Git do computador do operador não atribui nome ou raiz à execução remota por inferência. Manter metadados do host e o fluxo Connector atual."
+      ],
+      "acceptance": "Sem fallback local indevido, chamada de Connector inventada ou efeito de autoridade por alias.",
+      "test_ids": [
+        "QC-T-I01",
+        "QC-T-I02",
+        "QC-T-I03",
+        "QC-T-I04",
+        "QC-T-I05",
+        "QC-T-I06",
+        "QC-T-I07",
+        "QC-T-I08",
+        "QC-T-I09",
+        "QC-T-I10"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-028",
+      "phase": "QC-05",
+      "title": "Cobrir migração de perfis e recibos legados",
+      "status": "TODO",
+      "depends_on": [
+        "QC-025",
+        "QC-027"
+      ],
+      "requirements": [
+        "QC-R12",
+        "QC-R19"
+      ],
+      "areas": [
+        "legacy fixtures",
+        "setup receipts",
+        "profile parsing"
+      ],
+      "steps": [
+        "Abrir perfis pré-0.3.5 e 0.3.5 sem sobrescrever campos privados/desconhecidos.",
+        "Validar golden hashes e execução por --profile/--client/--project.",
+        "Reexecutar os testes existentes de seleção retomar/adicionar afetados pelo parser."
+      ],
+      "acceptance": "Nenhuma quebra de script legado ou nova autorização na reconexão.",
+      "test_ids": [
+        "QC-T-I01",
+        "QC-T-I02",
+        "QC-T-I03",
+        "QC-T-I04",
+        "QC-T-I05",
+        "QC-T-I06",
+        "QC-T-I07",
+        "QC-T-I08",
+        "QC-T-I09",
+        "QC-T-I10"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-029",
+      "phase": "QC-06",
+      "title": "Executar matriz integrada e adversarial",
+      "status": "TODO",
+      "depends_on": [
+        "QC-026",
+        "QC-027",
+        "QC-028"
+      ],
+      "requirements": [
+        "QC-R05",
+        "QC-R06",
+        "QC-R10",
+        "QC-R11",
+        "QC-R13",
+        "QC-R20"
+      ],
+      "areas": [
+        "unit/SQLite/HTTP/CLI tests"
+      ],
+      "steps": [
+        "Executar cenários com relógio controlado e barreiras de concorrência.",
+        "Repetir os testes afetados da interface, do onboarding e da aplicação; não usar somente busca de strings no código como prova.",
+        "Registrar saídas, SHAs, falhas e cenários não executados separadamente.",
+        "Executar os cenários de descoberta Git e de decisão sobre IDs ocupados, incluindo ausência de rede, proteção de segredos no origin, TTY/JSON e nenhum setup após cancelamento."
+      ],
+      "acceptance": "Ledger associa evidência real a cada cenário sem promover fixture a harness real.",
+      "test_ids": [
+        "QC-T-D01",
+        "QC-T-D02",
+        "QC-T-D03",
+        "QC-T-D04",
+        "QC-T-D05",
+        "QC-T-D06",
+        "QC-T-D07",
+        "QC-T-D08",
+        "QC-T-D09",
+        "QC-T-D10",
+        "QC-T-D11",
+        "QC-T-D12",
+        "QC-T-D13",
+        "QC-T-D14",
+        "QC-T-D15",
+        "QC-T-D16",
+        "QC-T-D17",
+        "QC-T-D18",
+        "QC-T-D19",
+        "QC-T-D20",
+        "QC-T-D21",
+        "QC-T-D22",
+        "QC-T-D23",
+        "QC-T-D24",
+        "QC-T-D25",
+        "QC-T-D26",
+        "QC-T-F01",
+        "QC-T-F02",
+        "QC-T-F03",
+        "QC-T-F04",
+        "QC-T-F05",
+        "QC-T-F06",
+        "QC-T-F07",
+        "QC-T-F08",
+        "QC-T-F09",
+        "QC-T-F10",
+        "QC-T-F11",
+        "QC-T-F12",
+        "QC-T-F13",
+        "QC-T-F14",
+        "QC-T-F15",
+        "QC-T-F16",
+        "QC-T-F17",
+        "QC-T-F18",
+        "QC-T-F19",
+        "QC-T-F20",
+        "QC-T-F21",
+        "QC-T-F22",
+        "QC-T-F23",
+        "QC-T-F24",
+        "QC-T-I01",
+        "QC-T-I02",
+        "QC-T-I03",
+        "QC-T-I04",
+        "QC-T-I05",
+        "QC-T-I06",
+        "QC-T-I07",
+        "QC-T-I08",
+        "QC-T-I09",
+        "QC-T-I10"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-030",
+      "phase": "QC-06",
+      "title": "Validar experiência no terminal e plataformas",
+      "status": "TODO",
+      "depends_on": [
+        "QC-029"
+      ],
+      "requirements": [
+        "QC-R03",
+        "QC-R07",
+        "QC-R14",
+        "QC-R20"
+      ],
+      "areas": [
+        "TTY/pseudoterminal tests",
+        "Windows/POSIX shell",
+        "packaged CLI"
+      ],
+      "steps": [
+        "Testar teclado/Enter/cancelamento, espaços/Unicode em paths, quoting e resize.",
+        "Verificar linhas JSON sem ANSI e mensagens de erro sem secrets.",
+        "Executar binário instalado do pacote; documentar cada OS efetivamente usado.",
+        "Testar locale/rótulos, fallback Git, prompts de conflito, stdin reservado e limites reais de subprocesso; não confundir teste de fixtures Git com teste Nexus/harness."
+      ],
+      "acceptance": "Comandos documentados funcionam no ambiente declarado; suporte não testado fica explícito.",
+      "test_ids": [
+        "QC-T-D01",
+        "QC-T-D02",
+        "QC-T-D03",
+        "QC-T-D04",
+        "QC-T-D05",
+        "QC-T-D06",
+        "QC-T-D07",
+        "QC-T-D08",
+        "QC-T-D09",
+        "QC-T-D10",
+        "QC-T-D11",
+        "QC-T-D12",
+        "QC-T-D13",
+        "QC-T-D14",
+        "QC-T-D15",
+        "QC-T-D16",
+        "QC-T-D17",
+        "QC-T-D18",
+        "QC-T-D19",
+        "QC-T-D20",
+        "QC-T-D21",
+        "QC-T-D22",
+        "QC-T-D23",
+        "QC-T-D24",
+        "QC-T-D25",
+        "QC-T-D26",
+        "QC-T-H01",
+        "QC-T-H02",
+        "QC-T-H03",
+        "QC-T-H04",
+        "QC-T-H05",
+        "QC-T-H06",
+        "QC-T-H07",
+        "QC-T-H08",
+        "QC-T-H09",
+        "QC-T-H10",
+        "QC-T-I01",
+        "QC-T-I02",
+        "QC-T-I03",
+        "QC-T-I04",
+        "QC-T-I05",
+        "QC-T-I06",
+        "QC-T-I07",
+        "QC-T-I08",
+        "QC-T-I09",
+        "QC-T-I10"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-031",
+      "phase": "QC-06",
+      "title": "Executar jornada real isolada consentida",
+      "status": "TODO",
+      "depends_on": [
+        "QC-030"
+      ],
+      "requirements": [
+        "QC-R05",
+        "QC-R10",
+        "QC-R11",
+        "QC-R12",
+        "QC-R13",
+        "QC-R14",
+        "QC-R20"
+      ],
+      "areas": [
+        "harness real já suportado",
+        "workspace descartável"
+      ],
+      "steps": [
+        "Com consentimento, conectar um harness sem ID e outro com ID explícito no mesmo projeto.",
+        "Confirmar IDs na UI, sair e retomar, sem recriar grants/testes.",
+        "Registrar custos/limpeza conforme práticas do repo; não executar usando credenciais pessoais sem autorização.",
+        "Na campanha consentida, usar clone com pasta diferente do nome Git; testar ID ocupado por outro harness e confirmar que nenhum binding existente foi modificado."
+      ],
+      "acceptance": "Campanha real separada dos testes sintéticos; sem consentimento marcar NOT_RUN/BLOCKED, não PASS.",
+      "test_ids": [
+        "QC-T-I01",
+        "QC-T-I02",
+        "QC-T-I03",
+        "QC-T-I04",
+        "QC-T-I05",
+        "QC-T-I06",
+        "QC-T-I07",
+        "QC-T-I08",
+        "QC-T-I09",
+        "QC-T-I10"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-032",
+      "phase": "QC-06",
+      "title": "Atualizar documentação e prompt operacional",
+      "status": "TODO",
+      "depends_on": [
+        "QC-029"
+      ],
+      "requirements": [
+        "QC-R01",
+        "QC-R03",
+        "QC-R05",
+        "QC-R06",
+        "QC-R10",
+        "QC-R11",
+        "QC-R13",
+        "QC-R14",
+        "QC-R15"
+      ],
+      "areas": [
+        "docs/terminal-connect.md",
+        "README/help",
+        "troubleshooting"
+      ],
+      "steps": [
+        "Documentar CWD versus nome lógico, --id versus agent/profile e aliases raiz.",
+        "Publicar exemplos testados interativos/JSON/legado, conflitos e estados parciais.",
+        "Explicar que criar projeto não cria diretório e que conectar não envia tarefa.",
+        "Documentar precedência Git/fallback, raiz independente, rótulo ID do Harness, menu de colisão, contrato JSON compatível e revisão final única."
+      ],
+      "acceptance": "Exemplos não prometem gramática ou estado além dos testes; notas de migração disponíveis.",
+      "test_ids": [
+        "QC-T-A01",
+        "QC-T-A02",
+        "QC-T-A03",
+        "QC-T-A04",
+        "QC-T-A05",
+        "QC-T-A06",
+        "QC-T-A07",
+        "QC-T-A08",
+        "QC-T-A09",
+        "QC-T-A10",
+        "QC-T-A11",
+        "QC-T-A12",
+        "QC-T-A13",
+        "QC-T-A14",
+        "QC-T-A15",
+        "QC-T-A16",
+        "QC-T-D01",
+        "QC-T-D02",
+        "QC-T-D03",
+        "QC-T-D04",
+        "QC-T-D05",
+        "QC-T-D06",
+        "QC-T-D07",
+        "QC-T-D08",
+        "QC-T-D09",
+        "QC-T-D10",
+        "QC-T-D11",
+        "QC-T-D12",
+        "QC-T-D13",
+        "QC-T-D14",
+        "QC-T-D15",
+        "QC-T-D16",
+        "QC-T-D17",
+        "QC-T-D18",
+        "QC-T-D19",
+        "QC-T-D20",
+        "QC-T-D21",
+        "QC-T-D22",
+        "QC-T-D23",
+        "QC-T-D24",
+        "QC-T-D25",
+        "QC-T-D26",
+        "QC-T-F01",
+        "QC-T-F02",
+        "QC-T-F03",
+        "QC-T-F04",
+        "QC-T-F05",
+        "QC-T-F06",
+        "QC-T-F07",
+        "QC-T-F08",
+        "QC-T-F09",
+        "QC-T-F10",
+        "QC-T-F11",
+        "QC-T-F12",
+        "QC-T-F13",
+        "QC-T-F14",
+        "QC-T-F15",
+        "QC-T-F16",
+        "QC-T-F17",
+        "QC-T-F18",
+        "QC-T-F19",
+        "QC-T-F20",
+        "QC-T-F21",
+        "QC-T-F22",
+        "QC-T-F23",
+        "QC-T-F24",
+        "QC-T-H01",
+        "QC-T-H02",
+        "QC-T-H03",
+        "QC-T-H04",
+        "QC-T-H05",
+        "QC-T-H06",
+        "QC-T-H07",
+        "QC-T-H08",
+        "QC-T-H09",
+        "QC-T-H10",
+        "QC-T-I01",
+        "QC-T-I02",
+        "QC-T-I03",
+        "QC-T-I04",
+        "QC-T-I05",
+        "QC-T-I06",
+        "QC-T-I07",
+        "QC-T-I08",
+        "QC-T-I09",
+        "QC-T-I10"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "QC-033",
+      "phase": "QC-06",
+      "title": "Empacotar, revisar gates e definir rollback",
+      "status": "TODO",
+      "depends_on": [
+        "QC-030",
+        "QC-031",
+        "QC-032"
+      ],
+      "requirements": [
+        "QC-R16",
+        "QC-R19",
+        "QC-R20"
+      ],
+      "areas": [
+        "wheel/sdist/frontend",
+        "release report",
+        "rollback"
+      ],
+      "steps": [
+        "Conferir instalação limpa com dependências do checkout e metadados públicos na UI.",
+        "Demonstrar desabilitar nova entrada mantendo perfis/IDs/daemon e dados.",
+        "Relatar implementação, qualificação e bloqueios; não publicar release/deploy automaticamente.",
+        "O gate G6 exige todos os requisitos deste plano, incluindo Git, vocabulário, colisões e confirmação; registrar limitações reais e preservar o namespace público e os recibos ao reverter a apresentação."
+      ],
+      "acceptance": "G6 decidido por evidências; não encerrar a feature se ID/concurrency/CWD estiverem apenas documentados.",
+      "test_ids": [
+        "QC-T-D01",
+        "QC-T-D02",
+        "QC-T-D03",
+        "QC-T-D04",
+        "QC-T-D05",
+        "QC-T-D06",
+        "QC-T-D07",
+        "QC-T-D08",
+        "QC-T-D09",
+        "QC-T-D10",
+        "QC-T-D11",
+        "QC-T-D12",
+        "QC-T-D13",
+        "QC-T-D14",
+        "QC-T-D15",
+        "QC-T-D16",
+        "QC-T-D17",
+        "QC-T-D18",
+        "QC-T-D19",
+        "QC-T-D20",
+        "QC-T-D21",
+        "QC-T-D22",
+        "QC-T-D23",
+        "QC-T-D24",
+        "QC-T-D25",
+        "QC-T-D26",
+        "QC-T-F01",
+        "QC-T-F02",
+        "QC-T-F03",
+        "QC-T-F04",
+        "QC-T-F05",
+        "QC-T-F06",
+        "QC-T-F07",
+        "QC-T-F08",
+        "QC-T-F09",
+        "QC-T-F10",
+        "QC-T-F11",
+        "QC-T-F12",
+        "QC-T-F13",
+        "QC-T-F14",
+        "QC-T-F15",
+        "QC-T-F16",
+        "QC-T-F17",
+        "QC-T-F18",
+        "QC-T-F19",
+        "QC-T-F20",
+        "QC-T-F21",
+        "QC-T-F22",
+        "QC-T-F23",
+        "QC-T-F24",
+        "QC-T-I01",
+        "QC-T-I02",
+        "QC-T-I03",
+        "QC-T-I04",
+        "QC-T-I05",
+        "QC-T-I06",
+        "QC-T-I07",
+        "QC-T-I08",
+        "QC-T-I09",
+        "QC-T-I10"
+      ],
+      "evidence": []
+    }
+  ],
+  "tests": [
+    {
+      "id": "QC-T-A01",
+      "group": "A",
+      "title": "Dois posicionais",
+      "given": "argv connect codex app",
+      "when": "normalizar",
+      "then": "harness codex e nome app; nenhum path derivado de app",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-022",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A02",
+      "group": "A",
+      "title": "Apenas harness",
+      "given": "argv connect codex",
+      "when": "normalizar",
+      "then": "projeto fica não resolvido até CWD/catálogo",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A03",
+      "group": "A",
+      "title": "Sem posicionais",
+      "given": "argv connect",
+      "when": "normalizar",
+      "then": "wizard autorizado, sem erro de argumentos",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A04",
+      "group": "A",
+      "title": "Alias raiz",
+      "given": "argv claude app --id reviewer",
+      "when": "comparar ao connect equivalente",
+      "then": "mesma intenção normalizada, sem subprocesso",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A05",
+      "group": "A",
+      "title": "Precedência de subcomando",
+      "given": "argv service status",
+      "when": "despachar",
+      "then": "service original, sem resolução de harness",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A06",
+      "group": "A",
+      "title": "Comando raiz desconhecido",
+      "given": "argv claud",
+      "when": "despachar",
+      "then": "erro útil e sugestões, nenhum daemon/picker de connect",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A07",
+      "group": "A",
+      "title": "Duplicação concordante",
+      "given": "connect codex --client codex",
+      "when": "normalizar",
+      "then": "uma única escolha codex",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A08",
+      "group": "A",
+      "title": "Duplicação conflitante",
+      "given": "connect codex --client claude",
+      "when": "normalizar",
+      "then": "erro antes de lifecycle ou reserva",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A09",
+      "group": "A",
+      "title": "Nome com espaços",
+      "given": "argv já separado com Minha aplicação",
+      "when": "normalizar",
+      "then": "label preservado como uma string",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A10",
+      "group": "A",
+      "title": "Posicional em excesso",
+      "given": "connect codex app extra",
+      "when": "parse",
+      "then": "erro de gramática sem efeitos",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A11",
+      "group": "A",
+      "title": "Flag desconhecido",
+      "given": "connect codex --clinet pi",
+      "when": "parse completo",
+      "then": "erro e nenhuma sobra encaminhada ao daemon",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A12",
+      "group": "A",
+      "title": "Sem abreviação",
+      "given": "connect codex --pro /tmp",
+      "when": "parse",
+      "then": "não assumir --project nem --profile",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A13",
+      "group": "A",
+      "title": "Help puro",
+      "given": "connect --help e claude --help",
+      "when": "executar help",
+      "then": "sem cofre/HTTP/FS de configuração/serviço",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A14",
+      "group": "A",
+      "title": "Legado preservado",
+      "given": "connect --client codex --project .",
+      "when": "normalizar",
+      "then": "path e token mantêm semântica histórica",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A15",
+      "group": "A",
+      "title": "Mistura ambígua",
+      "given": "connect --client codex app",
+      "when": "normalizar",
+      "then": "conflito documentado, não converter app em projeto por heurística",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-A16",
+      "group": "A",
+      "title": "Participant incompatível",
+      "given": "connect codex app --mode participant",
+      "when": "normalizar",
+      "then": "erro específico sem entrar em setup managed ou alterar MCP",
+      "level": "unidade + CLI",
+      "tasks": [
+        "QC-001",
+        "QC-002",
+        "QC-004",
+        "QC-005",
+        "QC-007",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-B01",
+      "group": "B",
+      "title": "Enum inválido em TTY",
+      "given": "connect codxe com inventário válido",
+      "when": "escolher Codex na lista",
+      "then": "seguir somente após escolha explícita",
+      "level": "unidade + integração CLI/HTTP",
+      "tasks": [
+        "QC-006",
+        "QC-007"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-B02",
+      "group": "B",
+      "title": "Enum inválido em JSON",
+      "given": "connect codxe --json",
+      "when": "executar",
+      "then": "selection_required/código e alternativas, sem input",
+      "level": "unidade + integração CLI/HTTP",
+      "tasks": [
+        "QC-006",
+        "QC-007"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-B03",
+      "group": "B",
+      "title": "Enum ausente",
+      "given": "vários harnesses detectados",
+      "when": "connect em TTY",
+      "then": "lista útil com cancelar",
+      "level": "unidade + integração CLI/HTTP",
+      "tasks": [
+        "QC-006",
+        "QC-007"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-B04",
+      "group": "B",
+      "title": "Instalação ausente",
+      "given": "Claude suportado, nenhum candidato confirmado",
+      "when": "selecionar Claude",
+      "then": "motivo/alternativa, nenhuma instalação automática",
+      "level": "unidade + integração CLI/HTTP",
+      "tasks": [
+        "QC-006",
+        "QC-007"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-B05",
+      "group": "B",
+      "title": "Inventário stale",
+      "given": "fonte não atual",
+      "when": "listar",
+      "then": "não classificar como ausência ou selecionar outro",
+      "level": "unidade + integração CLI/HTTP",
+      "tasks": [
+        "QC-006",
+        "QC-007"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-B06",
+      "group": "B",
+      "title": "Dois candidatos",
+      "given": "duas instalações Codex",
+      "when": "resolver harness",
+      "then": "escolha de candidate_ref; não usar primeira por ordem",
+      "level": "unidade + integração CLI/HTTP",
+      "tasks": [
+        "QC-006",
+        "QC-007"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-B07",
+      "group": "B",
+      "title": "Permissão negada",
+      "given": "candidato detectado mas can_configure false",
+      "when": "selecionar",
+      "then": "bloqueio de política mantido",
+      "level": "unidade + integração CLI/HTTP",
+      "tasks": [
+        "QC-006",
+        "QC-007"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-B08",
+      "group": "B",
+      "title": "Texto malicioso",
+      "given": "token com separadores shell",
+      "when": "resolver",
+      "then": "nunca executar o texto como comando",
+      "level": "unidade + integração CLI/HTTP",
+      "tasks": [
+        "QC-006",
+        "QC-007"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-B09",
+      "group": "B",
+      "title": "Case normalizado",
+      "given": "connect CoDeX",
+      "when": "resolver",
+      "then": "codex pela regra pública, sem fuzzy silencioso",
+      "level": "unidade + integração CLI/HTTP",
+      "tasks": [
+        "QC-006",
+        "QC-007"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-B10",
+      "group": "B",
+      "title": "Listagem passiva",
+      "given": "catálogo existente",
+      "when": "abrir picker",
+      "then": "nenhum version probe ou turno pago antes de consentimento",
+      "level": "unidade + integração CLI/HTTP",
+      "tasks": [
+        "QC-006",
+        "QC-007"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C01",
+      "group": "C",
+      "title": "CWD já associado",
+      "given": "um vínculo exato autorizado",
+      "when": "connect codex sem nome",
+      "then": "workspace reutilizado sem lista redundante",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014",
+        "QC-022"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C02",
+      "group": "C",
+      "title": "CWD novo",
+      "given": "pasta existente sem associação e sem metadados Git utilizáveis",
+      "when": "connect codex",
+      "then": "oferta de projetos/criar, basename só sugestão identificada; nenhuma criação antes da revisão",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014",
+        "QC-022"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C03",
+      "group": "C",
+      "title": "Label explícito",
+      "given": "label único e raiz correspondente",
+      "when": "connect codex app",
+      "then": "workspace correto, label não vira pasta",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C04",
+      "group": "C",
+      "title": "Label inexistente",
+      "given": "projeto app ausente",
+      "when": "connect codex app",
+      "then": "proposta de novo workspace, confirmação antes de Finish",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C05",
+      "group": "C",
+      "title": "Label duplicado",
+      "given": "dois projetos autorizados chamados app",
+      "when": "resolver",
+      "then": "lista identificada; sem TTY erro estruturado",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C06",
+      "group": "C",
+      "title": "ID exato",
+      "given": "--workspace-id W e nome concordante",
+      "when": "resolver",
+      "then": "W e nenhum substituto",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C07",
+      "group": "C",
+      "title": "Nome/ID discordante",
+      "given": "--workspace-id A e nome de B",
+      "when": "resolver",
+      "then": "conflito; não renomear A",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C08",
+      "group": "C",
+      "title": "Override físico",
+      "given": "CWD /A, --project /B",
+      "when": "resolver",
+      "then": "/B como raiz explícita e CWD original registrado",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C09",
+      "group": "C",
+      "title": "Raiz diferente em TTY",
+      "given": "nome B cuja raiz /B difere de CWD /A",
+      "when": "selecionar B",
+      "then": "confirmação da mudança, sem os.chdir global",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C10",
+      "group": "C",
+      "title": "Raiz explícita não substituída",
+      "given": "--project /A e nome B mapeado /B",
+      "when": "resolver",
+      "then": "conflito, não oferecer troca automática de --project",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C11",
+      "group": "C",
+      "title": "Root diferente em script",
+      "given": "sem TTY e mapa discordante",
+      "when": "resolver",
+      "then": "PROJECT_DIRECTORY_MISMATCH, sem setup",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C12",
+      "group": "C",
+      "title": "CWD inexistente",
+      "given": "diretório foi removido",
+      "when": "resolver",
+      "then": "diagnóstico, nenhum fallback para home",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C13",
+      "group": "C",
+      "title": "Subdiretório",
+      "given": "CWD /repo/sub, origem Git válida e apenas /repo registrado",
+      "when": "resolver",
+      "then": "sugerir nome do repositório sem herdar raiz /repo; mudança exige escolha explícita e revisão final",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C14",
+      "group": "C",
+      "title": "Link alterado",
+      "given": "symlink/junction muda após revisão",
+      "when": "testar/Finish",
+      "then": "revalidação detecta drift, sem aprovação antiga aproveitada",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C15",
+      "group": "C",
+      "title": "Plataforma de paths",
+      "given": "diferenças de case/separador",
+      "when": "comparar evidência",
+      "then": "respeitar utilitários canônicos, sem lowercase global",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C16",
+      "group": "C",
+      "title": "Catálogo incompleto",
+      "given": "uma página falha ou cursor/revisão muda",
+      "when": "resolver/criar",
+      "then": "recusa de seleção; não criar projeto substituto",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C17",
+      "group": "C",
+      "title": "Sem mkdir",
+      "given": "proposta de novo projeto no CWD",
+      "when": "cancelar/aprovar",
+      "then": "nenhuma criação de pasta/git clone em ambos",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-C18",
+      "group": "C",
+      "title": "Dois primeiros connects",
+      "given": "mesma raiz e label em duas intenções",
+      "when": "executar com barreiras",
+      "then": "workspace não duplicado silenciosamente; conflito reavaliado",
+      "level": "unidade + SQLite/HTTP + CLI",
+      "tasks": [
+        "QC-002",
+        "QC-009",
+        "QC-011",
+        "QC-013",
+        "QC-014"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D01",
+      "group": "D",
+      "title": "Nome do origin HTTPS",
+      "given": "clone /repos/copia com origin https://host/org/projeto.git",
+      "when": "descobrir nome",
+      "then": "sugerir projeto com source git_origin; raiz física continua /repos/copia",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D02",
+      "group": "D",
+      "title": "Origin SSH formato SCP",
+      "given": "origin git@host:org/projeto.git",
+      "when": "descobrir",
+      "then": "sugerir projeto sem chamar SSH ou rede",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D03",
+      "group": "D",
+      "title": "Origin ssh URL com porta",
+      "given": "origin ssh://git@host:2222/org/projeto.git",
+      "when": "parsear localmente",
+      "then": "sugerir projeto e não incorporar usuário/host/porta ao nome",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D04",
+      "group": "D",
+      "title": "Origin local",
+      "given": "origin file:///srv/git/projeto.git ou caminho local de repositório",
+      "when": "extrair basename",
+      "then": "sugerir projeto sem abrir outro repositório nem resolver sua existência",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D05",
+      "group": "D",
+      "title": "Sem origin",
+      "given": "working tree /repos/projeto com origin ausente",
+      "when": "descobrir",
+      "then": "usar basename do working tree com source git_worktree, não upstream ou branch",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D06",
+      "group": "D",
+      "title": "Origins conflitantes",
+      "given": "origin retorna dois valores distintos",
+      "when": "descobrir",
+      "then": "não escolher primeiro/último; usar root basename já comprovado e motivo origin_ambiguous",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D07",
+      "group": "D",
+      "title": "Outros remotes não substituem origin",
+      "given": "origin ausente e remotes upstream/personal distintos",
+      "when": "descobrir",
+      "then": "usar basename Git; não escolher remote arbitrário",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D08",
+      "group": "D",
+      "title": "Git indisponível",
+      "given": "binário Git não encontrado e diretório válido",
+      "when": "conectar",
+      "then": "usar basename físico e motivo git_unavailable, sem instalar Git",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D09",
+      "group": "D",
+      "title": "Diretório sem Git",
+      "given": "CWD válido fora de repo",
+      "when": "conectar",
+      "then": "fallback basename físico com source directory; fluxo continua sob confirmação",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D10",
+      "group": "D",
+      "title": "Git lento ou inválido",
+      "given": "timeout, saída excessiva ou configuração malformada",
+      "when": "descobrir",
+      "then": "respeitar orçamento e fallback explícito; não travar prompt ou tratar catálogo Nexus como vazio",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D11",
+      "group": "D",
+      "title": "Remote inválido e caracteres de controle",
+      "given": "origin inválido ou basename com ANSI/invisíveis/percent-encoded separador",
+      "when": "parsear e renderizar",
+      "then": "rejeitar candidato e usar fallback seguro; nenhum comando executado ou caractere de controle impresso",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D12",
+      "group": "D",
+      "title": "Working tree ligado",
+      "given": "checkout com .git como arquivo apontando a metadados compartilhados",
+      "when": "descobrir",
+      "then": "usar working tree atual e origin permitido; não presumir .git/config como caminho direto",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D13",
+      "group": "D",
+      "title": "Configuração específica de worktree",
+      "given": "worktreeConfig com origin somente no config.worktree e configuração comum válida",
+      "when": "consultar configuração local",
+      "then": "considerar escopo worktree comprovado; ambiguidades entre valores geram fallback, nenhuma escrita de configuração",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D14",
+      "group": "D",
+      "title": "Submodule ou repo aninhado",
+      "given": "CWD dentro de repo Git próprio contido em outro",
+      "when": "descobrir",
+      "then": "usar repositório mais próximo que contém a raiz física; não promover para superproject",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D15",
+      "group": "D",
+      "title": "Monorepo sem expansão",
+      "given": "CWD /mono/apps/api e origin monorepo.git",
+      "when": "preparar revisão",
+      "then": "nome pode ser monorepo; raiz de execução permanece /mono/apps/api até escolha explícita",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D16",
+      "group": "D",
+      "title": "Clones/worktrees homônimos",
+      "given": "duas raízes e mesmo nome derivado de origin",
+      "when": "resolver projeto",
+      "then": "não mesclar workspace, binding ou ID do Harness por igualdade de nome/URL",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D17",
+      "group": "D",
+      "title": "Nome explícito prevalece",
+      "given": "nome posicional meu-servico e origin repo.git",
+      "when": "resolver nome",
+      "then": "meu-servico preservado; seletores exatos incompatíveis geram conflito, não rename",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D18",
+      "group": "D",
+      "title": "Associação existente prevalece",
+      "given": "CWD mapeado a Projeto X e origin mudado para Y",
+      "when": "retomar",
+      "then": "Projeto X e ID existentes preservados sem nova configuração ou teste",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D19",
+      "group": "D",
+      "title": "Override físico de descoberta",
+      "given": "CWD /A, --project /B e origins diferentes",
+      "when": "resolver",
+      "then": "Git consulta /B, guarda invocation_cwd /A e não sugere o repo de A",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D20",
+      "group": "D",
+      "title": "Dubious ownership",
+      "given": "Git recusa por safe.directory",
+      "when": "descobrir",
+      "then": "diagnóstico sem stderr bruto; não gravar safe.directory nem contornar segurança; fallback físico sob confirmação",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D21",
+      "group": "D",
+      "title": "Ambiente Git redirecionado",
+      "given": "GIT_DIR/GIT_WORK_TREE/GIT_CONFIG_COUNT apontam a outro repo",
+      "when": "descobrir pelo CWD",
+      "then": "sanear override para esta consulta; não usar repositório ou config injetados como fonte da sugestão",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D22",
+      "group": "D",
+      "title": "Executável falso no CWD",
+      "given": "arquivo git/git.exe na pasta de projeto com PATH relativo inseguro",
+      "when": "localizar Git",
+      "then": "não executar binário vindo da pasta do projeto; usar instalação confiável ou fallback explícito",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D23",
+      "group": "D",
+      "title": "Help e plan sem subprocessos Git",
+      "given": "--help ou --plan com/sem sugestão salva",
+      "when": "executar",
+      "then": "nenhum Git/harness/provedor iniciado; plan sem proveniência confiável declara fallback não verificado",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D24",
+      "group": "D",
+      "title": "Repositório bare ou raiz imprópria",
+      "given": "sem working tree ou raiz física sem basename útil",
+      "when": "sugerir",
+      "then": "não inventar working tree; fallback válido ou solicitar nome explícito, sem mudar o diretório",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D25",
+      "group": "D",
+      "title": "Privacidade do origin",
+      "given": "origin inclui usuário/token, query e fragmento",
+      "when": "descobrir/revisar/persistir/JSON",
+      "then": "extrair somente componente seguro; URL, credenciais e stderr bruto ausentes dos arquivos, saída e telemetria",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-D26",
+      "group": "D",
+      "title": "Recuperação depois de alteração Git",
+      "given": "setup aprovado/pendente com nome congelado, origin ou branch alterados",
+      "when": "recuperar mesma intenção",
+      "then": "não renomear projeto/ID nem invalidar pedido só por metadados Git; revalidar raiz e autorização reais",
+      "level": "unidade + fixtures Git locais + CLI; sem provedor",
+      "tasks": [
+        "QC-010",
+        "QC-012",
+        "QC-013",
+        "QC-029",
+        "QC-030",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E01",
+      "group": "E",
+      "title": "ID explícito novo",
+      "given": "--id reviewer livre",
+      "when": "adicionar",
+      "then": "reviewer vinculado ao binding correto",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E02",
+      "group": "E",
+      "title": "ID automático inicial",
+      "given": "sem ID e namespace livre",
+      "when": "adicionar Codex",
+      "then": "codex persistido e retornado",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E03",
+      "group": "E",
+      "title": "Segundo mesmo harness",
+      "given": "codex existente, usuário escolhe adicionar",
+      "when": "continuar",
+      "then": "codex-2 proposto e vinculado após revisão",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E04",
+      "group": "E",
+      "title": "Repetição não adiciona",
+      "given": "codex existente, sem --new-connection",
+      "when": "repetir connect codex",
+      "then": "retomar/adicionar, sem geração automática de irmão",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019",
+        "QC-022"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E05",
+      "group": "E",
+      "title": "Unicidade entre agentes",
+      "given": "agente A já tem reviewer no projeto",
+      "when": "agente B pede reviewer",
+      "then": "conflito público apesar do alias interno distinto",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E06",
+      "group": "E",
+      "title": "Unicidade entre hosts",
+      "given": "host A usa reviewer no projeto",
+      "when": "host B pede reviewer",
+      "then": "constraint compartilhada impede segundo binding",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E07",
+      "group": "E",
+      "title": "Namespace entre projetos",
+      "given": "projeto A tem reviewer",
+      "when": "criar reviewer em B",
+      "then": "permitido; resolução exige projeto correto",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E08",
+      "group": "E",
+      "title": "Namespace entre Servers",
+      "given": "Server A tem reviewer",
+      "when": "criar reviewer em Server B",
+      "then": "permitido sem cruzar cache/topologia",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E09",
+      "group": "E",
+      "title": "Case do ID",
+      "given": "--id Reviewer e reviewer",
+      "when": "normalizar/reservar",
+      "then": "mesma chave normalizada",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E10",
+      "group": "E",
+      "title": "ID inválido",
+      "given": "ID com path/ANSI/espaço invisível/tamanho excedido",
+      "when": "validar",
+      "then": "erro; nunca nome de arquivo nem truncamento silencioso",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E11",
+      "group": "E",
+      "title": "ID existente concordante",
+      "given": "mesma tupla e harness",
+      "when": "connect --id reviewer",
+      "then": "em TTY oferecer retomada e confirmá-la explicitamente; em script concordante retomar sem --new-connection; mesmos agent/binding/grants",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019",
+        "QC-022"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E12",
+      "group": "E",
+      "title": "ID harness conflitante",
+      "given": "reviewer é Claude e pedido é Codex",
+      "when": "resolver",
+      "then": "menu distingue harness solicitado e existente, outro ID/sugestão/cancelamento; usar o existente exige escolha explícita; scripts retornam conflito",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E13",
+      "group": "E",
+      "title": "ID aposentado",
+      "given": "reviewer retired/desativado",
+      "when": "nova adição com reviewer",
+      "then": "não reutilizar para binding diferente",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E14",
+      "group": "E",
+      "title": "Adotar legado",
+      "given": "binding sem ID",
+      "when": "associar reviewer",
+      "then": "somente metadados; nenhum teste, agent create ou grant",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E15",
+      "group": "E",
+      "title": "GET passivo",
+      "given": "binding legado sem nome",
+      "when": "listar catálogo/Home",
+      "then": "não atribuir ID por leitura",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E16",
+      "group": "E",
+      "title": "Alias interno preservado",
+      "given": "binding alias interno app",
+      "when": "associar connect_id reviewer",
+      "then": "não reescrever configuração histórica",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E17",
+      "group": "E",
+      "title": "Flags conflitantes",
+      "given": "--profile A e --id de B",
+      "when": "resolver",
+      "then": "conflito, nenhum seletor ganha silenciosamente",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-E18",
+      "group": "E",
+      "title": "New com ID ocupado",
+      "given": "--new-connection --id bound por outra intenção",
+      "when": "resolver",
+      "then": "conflito, não retomar nem renomear automaticamente",
+      "level": "unidade + SQLite/HTTP",
+      "tasks": [
+        "QC-003",
+        "QC-015",
+        "QC-016",
+        "QC-017",
+        "QC-018",
+        "QC-019"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F01",
+      "group": "F",
+      "title": "Rótulo básico do identificador",
+      "given": "primeiro connect com ID automático",
+      "when": "revisar/concluir",
+      "then": "usar ID do Harness (ou Harness ID na interface inglesa), não Perfil/Project assistant como identificador",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F02",
+      "group": "F",
+      "title": "ID explícito independente do perfil",
+      "given": "--id reviewer e profile técnico opaco",
+      "when": "mostrar confirmação e sucesso",
+      "then": "reviewer é o ID do Harness; profile interno não precisa ser escolhido nem aparece como nome público",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F03",
+      "group": "F",
+      "title": "Mesmo harness existente em TTY",
+      "given": "implementer é Codex, pedido connect codex --id implementer",
+      "when": "abrir resolução",
+      "then": "retomar é opção principal com resumo; adicionar exige outro ID; nada muda antes da escolha",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F04",
+      "group": "F",
+      "title": "Harness diferente e escolha do existente",
+      "given": "implementer é Codex, pedido claude --id implementer sem outros seletores contraditórios",
+      "when": "escolher explicitamente utilizar Codex",
+      "then": "revalidar e retomar Codex com resumo correto; não criar/trocar para Claude nem usar aprovação anterior",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F05",
+      "group": "F",
+      "title": "Colisão com ID manual alternativo",
+      "given": "implementer ocupado por Codex, pedido Claude",
+      "when": "escolher reviewer livre",
+      "then": "preparar apenas nova conexão Claude/reviewer; conexão implementer intocada",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F06",
+      "group": "F",
+      "title": "Sugestão em colisão",
+      "given": "implementer ocupado, Claude solicitado e claude livre",
+      "when": "escolher sugerir automaticamente",
+      "then": "propor claude baseado no harness solicitado, salvar proposta e só reservar após revisão; não trocar ID sem consentimento",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F07",
+      "group": "F",
+      "title": "Cancelar colisão",
+      "given": "ID ocupado, serviço possivelmente já iniciado",
+      "when": "cancelar",
+      "then": "nenhum setup/teste/grant/rename; informar lifecycle/metadados reais sem afirmar efeito zero indevido",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F08",
+      "group": "F",
+      "title": "Adição explícita proíbe retomada alternativa",
+      "given": "--new-connection com ID bound por outra intenção",
+      "when": "mostrar menu",
+      "then": "somente outro ID, sugestão e cancelar; não oferecer usar a existente como sucesso da adição",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F09",
+      "group": "F",
+      "title": "Adição não interativa em conflito",
+      "given": "--new-connection --id ocupado --profile estável --json",
+      "when": "executar",
+      "then": "HARNESS_ID_ALREADY_EXISTS/contrato compatível, sem menu, novo nome aplicado ou teste",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F10",
+      "group": "F",
+      "title": "Retomada determinística não interativa",
+      "given": "--id existente e seletores concordantes sem --new-connection",
+      "when": "executar --json",
+      "then": "revalidar referência exata e retornar reused; sem reaprovação produtiva, teste ou grant",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F11",
+      "group": "F",
+      "title": "Harness conflitante em script",
+      "given": "Claude solicitado e ID de Codex",
+      "when": "executar sem TTY",
+      "then": "erro estruturado, nunca selecionar Codex ou atribuir claude-2 por conta própria",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F12",
+      "group": "F",
+      "title": "Reserva de outra intenção",
+      "given": "ID reservado por outra intenção com resultado pendente",
+      "when": "resolver",
+      "then": "estado pending/occupied, sem tomada da reserva; opções permitidas não ocultam incerteza",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F13",
+      "group": "F",
+      "title": "ID revogado/desativado/aposentado",
+      "given": "registro público ainda ocupa nome, binding indisponível",
+      "when": "resolver",
+      "then": "não reativar nem reciclar; diagnóstico e possibilidade de outra conexão com outro ID",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F14",
+      "group": "F",
+      "title": "Retry próprio antes de colisão",
+      "given": "Finish commitado sem resposta e --new-connection com perfil/intenção original",
+      "when": "repetir",
+      "then": "recuperar mesmo recibo e ID, sem erro falso de colisão nem grant/teste adicional",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F15",
+      "group": "F",
+      "title": "Mesmo perfil com conteúdo alterado",
+      "given": "intenção recuperável e pedido muda harness/root/ID",
+      "when": "repetir",
+      "then": "recusar fingerprint incompatível; não tratar como retry nem sobrescrever checkpoint",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F16",
+      "group": "F",
+      "title": "Colisão não autoriza revelar dados",
+      "given": "ID ocupado por conexão não visível ao solicitante",
+      "when": "consultar",
+      "then": "retornar conflito genérico quando autorizado sem expor identidade, host, path ou credenciais alheios",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F17",
+      "group": "F",
+      "title": "Corrida depois da sugestão",
+      "given": "nome mostrado livre foi reservado por outra intenção antes do approve",
+      "when": "reservar",
+      "then": "recusar antes do teste e exigir revisão nova; não aceitar próximo sufixo com hash anterior",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F18",
+      "group": "F",
+      "title": "JSON com identificador único",
+      "given": "output inclui resumo público e metadados",
+      "when": "serializar",
+      "then": "usar quick_connect.connect_id; não publicar harness_id divergente; código/motivo de colisão documentados",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F19",
+      "group": "F",
+      "title": "Uma confirmação final",
+      "given": "nome Git e ID automático resolvidos sem ambiguidade",
+      "when": "concluir onboarding interativo",
+      "then": "um resumo final de efeitos novos, sem confirmação separada de nome e outra idêntica de setup",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F20",
+      "group": "F",
+      "title": "Revisão inclui fontes e raiz",
+      "given": "nome veio de Git e CWD é subdiretório",
+      "when": "mostrar revisão",
+      "then": "nome+origem, raiz efetiva, host, harness real, ID e efeitos presentes; nenhuma expansão implícita",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F21",
+      "group": "F",
+      "title": "Personalização invalida aprovação",
+      "given": "revisão A seguida de mudança manual de nome/ID/raiz/harness",
+      "when": "aplicar hash de A",
+      "then": "recusa; revisão B precisa de confirmação nova e conexão antiga não muda",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F22",
+      "group": "F",
+      "title": "Rótulos respeitam idioma existente",
+      "given": "frontend atual em inglês e documentação/CLI localizada em português",
+      "when": "inspecionar templates",
+      "then": "Harness ID/ID do Harness com mesma semântica; não fazer tradução global ou misturar nomes técnicos no fluxo básico",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F23",
+      "group": "F",
+      "title": "Seletores exatos contraditórios",
+      "given": "--profile/--agent/--binding-id fixam B e --id aponta A",
+      "when": "resolver conflito",
+      "then": "não usar menu para ignorar flag exata; recusar ou exigir correção explícita do comando, sem sobrescrita",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-F24",
+      "group": "F",
+      "title": "ID imutável após mudar Git",
+      "given": "conexão salva com reviewer e projeto X, remote agora Y",
+      "when": "retomar e abrir Home",
+      "then": "mesmo reviewer e X, mesmas sessões; identificação do harness não deriva do nome Git",
+      "level": "unidade + CLI TTY/JSON + HTTP/SQLite quando houver efeitos",
+      "tasks": [
+        "QC-008",
+        "QC-020",
+        "QC-021",
+        "QC-023",
+        "QC-024",
+        "QC-029",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G01",
+      "group": "G",
+      "title": "Reserva antes do teste",
+      "given": "workspace conhecido e aprovação válida",
+      "when": "colisão ao reservar",
+      "then": "não iniciar teste pago",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G02",
+      "group": "G",
+      "title": "Duas reservas automáticas",
+      "given": "namespace livre e dois add confirmados",
+      "when": "concorrer",
+      "then": "nomes únicos; alteração de proposta requer revisão",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G03",
+      "group": "G",
+      "title": "Resposta de reserva perdida",
+      "given": "intenção reservou mas cliente não recebeu",
+      "when": "repetir mesma intenção",
+      "then": "mesma reserva/ID; não alocar outro",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G04",
+      "group": "G",
+      "title": "Reserva não é sucesso",
+      "given": "ID reservado sem Finish",
+      "when": "imprimir resultado",
+      "then": "proposed/pending, nunca connected",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G05",
+      "group": "G",
+      "title": "Rollback no Finish",
+      "given": "erro após criar binding antes de recibo",
+      "when": "abortar transação",
+      "then": "binding/grant/ID definitivos não ficam parcialmente commitados",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G06",
+      "group": "G",
+      "title": "Resposta Finish perdida",
+      "given": "commit completo, HTTP falhou",
+      "when": "recuperar setup ID inclusive repetindo --new-connection e perfil original",
+      "then": "mesmo ID/binding, sem novo teste/grant; recuperação precede conflito por ID ocupado",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-022",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G07",
+      "group": "G",
+      "title": "Disco local falha",
+      "given": "Finish confirmado, atomic_json falha",
+      "when": "retornar e retomar",
+      "then": "configured_shortcut_pending e reparo somente do atalho",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G08",
+      "group": "G",
+      "title": "Cancelar revisão",
+      "given": "revisão nova antes de aprovação",
+      "when": "cancelar",
+      "then": "nenhum setup produtivo; lifecycle já feito descrito corretamente",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G09",
+      "group": "G",
+      "title": "Ctrl+C após efeito",
+      "given": "teste emitido",
+      "when": "interromper terminal",
+      "then": "checkpoint preservado; não cancelar servidor/tarefa automaticamente",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G10",
+      "group": "G",
+      "title": "Reserva incerta expira",
+      "given": "resultado não determinado",
+      "when": "rotina de limpeza",
+      "then": "não liberar nome para outra conexão só por TTL",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G11",
+      "group": "G",
+      "title": "Hash de review",
+      "given": "alterar connect_id após revisão",
+      "when": "approve hash anterior",
+      "then": "recusa antes de efeito",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G12",
+      "group": "G",
+      "title": "Locks sem deadlock",
+      "given": "duas adições/perfis com catálogo comum",
+      "when": "forçar interleavings",
+      "then": "ordem única e lock global curto, sem input dentro dele",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G13",
+      "group": "G",
+      "title": "Reusar não renova",
+      "given": "grant expirado e binding válido",
+      "when": "reconectar",
+      "then": "ID reusado, grant continua expirado",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G14",
+      "group": "G",
+      "title": "Serviço compartilhado",
+      "given": "dois perfis mesmo Server",
+      "when": "connect outro harness",
+      "then": "um daemon apropriado; nenhum daemon por ID",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-G15",
+      "group": "G",
+      "title": "Novo workspace draft",
+      "given": "proposta sem workspace_id",
+      "when": "commit concorrente do projeto",
+      "then": "revalidar namespace final; nunca inventar ID público antes do Finish",
+      "level": "integração transacional + fault injection",
+      "tasks": [
+        "QC-003",
+        "QC-014",
+        "QC-016",
+        "QC-017",
+        "QC-019",
+        "QC-025"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-H01",
+      "group": "H",
+      "title": "ID antes do chat",
+      "given": "setup conectado com sucesso",
+      "when": "abrir prompt",
+      "then": "resumo com rótulo ID do Harness e ID definitivo já emitido, sem perfil técnico no caminho básico",
+      "level": "CLI + golden JSON",
+      "tasks": [
+        "QC-002",
+        "QC-007",
+        "QC-022",
+        "QC-023",
+        "QC-024",
+        "QC-030",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-H02",
+      "group": "H",
+      "title": "Resultado criado/reusado",
+      "given": "primeiro connect e reconexão",
+      "when": "observar output",
+      "then": "operation correta e mesmo ID na retomada",
+      "level": "CLI + golden JSON",
+      "tasks": [
+        "QC-002",
+        "QC-007",
+        "QC-023",
+        "QC-024",
+        "QC-030",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-H03",
+      "group": "H",
+      "title": "Estado de sessão honesto",
+      "given": "configured sem sessão de trabalho",
+      "when": "output",
+      "then": "not_checked/not_submitted, não execução pronta",
+      "level": "CLI + golden JSON",
+      "tasks": [
+        "QC-002",
+        "QC-007",
+        "QC-023",
+        "QC-024",
+        "QC-030",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-H04",
+      "group": "H",
+      "title": "Invariante connected",
+      "given": "outcomes variados",
+      "when": "validar DTO",
+      "then": "connected exige ID bound e refs verificadas",
+      "level": "CLI + golden JSON",
+      "tasks": [
+        "QC-002",
+        "QC-007",
+        "QC-023",
+        "QC-024",
+        "QC-030",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-H05",
+      "group": "H",
+      "title": "JSON limpo",
+      "given": "--json com erro/seleção/sucesso",
+      "when": "capturar stdout",
+      "then": "documento parseável, sem menu/ANSI/segredo",
+      "level": "CLI + golden JSON",
+      "tasks": [
+        "QC-002",
+        "QC-007",
+        "QC-023",
+        "QC-024",
+        "QC-030",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-H06",
+      "group": "H",
+      "title": "Plan não reserva",
+      "given": "--plan com Server pronto",
+      "when": "revisar ID",
+      "then": "proposed_connect_id; sem reserva canônica nova nem teste",
+      "level": "CLI + golden JSON",
+      "tasks": [
+        "QC-002",
+        "QC-007",
+        "QC-023",
+        "QC-024",
+        "QC-030",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-H07",
+      "group": "H",
+      "title": "Plan com Server parado",
+      "given": "--plan",
+      "when": "executar",
+      "then": "não subir daemon para satisfazer resolução",
+      "level": "CLI + golden JSON",
+      "tasks": [
+        "QC-002",
+        "QC-007",
+        "QC-023",
+        "QC-024",
+        "QC-030",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-H08",
+      "group": "H",
+      "title": "Adição script sem profile",
+      "given": "--new-connection --json --id x",
+      "when": "executar",
+      "then": "selection_required, sem tentativa de inventar idempotency key",
+      "level": "CLI + golden JSON",
+      "tasks": [
+        "QC-002",
+        "QC-007",
+        "QC-023",
+        "QC-024",
+        "QC-030",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-H09",
+      "group": "H",
+      "title": "Quoting de retorno",
+      "given": "label/path com espaços/metacaracteres válidos",
+      "when": "gerar resume_argv",
+      "then": "vetor seguro e render próprio por shell; nada executado",
+      "level": "CLI + golden JSON",
+      "tasks": [
+        "QC-002",
+        "QC-007",
+        "QC-023",
+        "QC-024",
+        "QC-030",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-H10",
+      "group": "H",
+      "title": "Exit 0 legado",
+      "given": "plano válido ou cancelamento",
+      "when": "inspecionar JSON",
+      "then": "não afirmar conectado somente pelo exit code",
+      "level": "CLI + golden JSON",
+      "tasks": [
+        "QC-002",
+        "QC-007",
+        "QC-023",
+        "QC-024",
+        "QC-030",
+        "QC-032"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-I01",
+      "group": "I",
+      "title": "CLI antiga",
+      "given": "fixtures --client/--project/--profile",
+      "when": "executar suites",
+      "then": "fluxos legados e hashes preservados",
+      "level": "integração + instalação + campanha separada",
+      "tasks": [
+        "QC-001",
+        "QC-026",
+        "QC-027",
+        "QC-028",
+        "QC-029",
+        "QC-030",
+        "QC-031",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-I02",
+      "group": "I",
+      "title": "Server antigo",
+      "given": "capability de public IDs ausente",
+      "when": "novo connect --id",
+      "then": "erro explícito/upgrade, sem namespace local fictício",
+      "level": "integração + instalação + campanha separada",
+      "tasks": [
+        "QC-001",
+        "QC-026",
+        "QC-027",
+        "QC-028",
+        "QC-029",
+        "QC-030",
+        "QC-031",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-I03",
+      "group": "I",
+      "title": "Retomar remoto",
+      "given": "binding remoto aprovado",
+      "when": "selecionar por ID",
+      "then": "tupla exata; CWD local não muda root remoto",
+      "level": "integração + instalação + campanha separada",
+      "tasks": [
+        "QC-001",
+        "QC-026",
+        "QC-027",
+        "QC-028",
+        "QC-029",
+        "QC-030",
+        "QC-031",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-I04",
+      "group": "I",
+      "title": "Remoto indisponível",
+      "given": "operator-profile remoto falha",
+      "when": "connect",
+      "then": "não criar Server local substituto",
+      "level": "integração + instalação + campanha separada",
+      "tasks": [
+        "QC-001",
+        "QC-026",
+        "QC-027",
+        "QC-028",
+        "QC-029",
+        "QC-030",
+        "QC-031",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-I05",
+      "group": "I",
+      "title": "Participant legado",
+      "given": "init/connect --mode participant legado",
+      "when": "executar regressão",
+      "then": "config/credencial intactas e nenhum efeito managed",
+      "level": "integração + instalação + campanha separada",
+      "tasks": [
+        "QC-001",
+        "QC-026",
+        "QC-027",
+        "QC-028",
+        "QC-029",
+        "QC-030",
+        "QC-031",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-I06",
+      "group": "I",
+      "title": "UI sem novo menu",
+      "given": "connect_id persistido",
+      "when": "abrir Home/seletores",
+      "then": "mesmo ID do Harness/Harness ID e mesmas refs; connect_id permanece a única chave de dados desse identificador, múltiplas sessões distintas",
+      "level": "integração + instalação + campanha separada",
+      "tasks": [
+        "QC-001",
+        "QC-026",
+        "QC-027",
+        "QC-028",
+        "QC-029",
+        "QC-030",
+        "QC-031",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-I07",
+      "group": "I",
+      "title": "Privacidade de saída",
+      "given": "dados maliciosos e secrets em campos não públicos",
+      "when": "render CLI/JSON",
+      "then": "redação/escaping e nenhum material de segredo",
+      "level": "integração + instalação + campanha separada",
+      "tasks": [
+        "QC-001",
+        "QC-026",
+        "QC-027",
+        "QC-028",
+        "QC-029",
+        "QC-030",
+        "QC-031",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-I08",
+      "group": "I",
+      "title": "Regressão pacote",
+      "given": "wheel/sdist gerados",
+      "when": "instalar e --help/parse/connect isolado",
+      "then": "entrada instalada inclui feature e dependências corretas",
+      "level": "integração + instalação + campanha separada",
+      "tasks": [
+        "QC-001",
+        "QC-026",
+        "QC-027",
+        "QC-028",
+        "QC-029",
+        "QC-030",
+        "QC-031",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-I09",
+      "group": "I",
+      "title": "Jornada real consentida",
+      "given": "sandbox e harnesses suportados",
+      "when": "primeiro automático, segundo explícito, sair/retomar",
+      "then": "IDs estáveis, projeto comum, nenhum replay na reconexão",
+      "level": "integração + instalação + campanha separada",
+      "tasks": [
+        "QC-001",
+        "QC-022",
+        "QC-026",
+        "QC-027",
+        "QC-028",
+        "QC-029",
+        "QC-030",
+        "QC-031",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "QC-T-I10",
+      "group": "I",
+      "title": "Rollback de apresentação",
+      "given": "IDs e conexões já existem",
+      "when": "desabilitar nova entrada",
+      "then": "daemon/perfis/bindings/dados continuam operantes",
+      "level": "integração + instalação + campanha separada",
+      "tasks": [
+        "QC-001",
+        "QC-026",
+        "QC-027",
+        "QC-028",
+        "QC-029",
+        "QC-030",
+        "QC-031",
+        "QC-032",
+        "QC-033"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    }
+  ],
+  "evidence_policy": "VERIFIED/PASS exige comando, ambiente, commit e resultado observado. Fixture não comprova harness real. Este pacote não executou testes do Nexus.",
+  "initialization_policy": "Iniciar o acompanhamento deste plano com TODO/NOT_RUN. Preservar registros de outras frentes do produto; reutilizar código existente após revalidação dos critérios pertinentes."
+}

@@ -1,0 +1,58 @@
+{
+  "recorded_at": "2026-11-17T04:37:07.150409+00:00",
+  "baseline_before_branch": "7f114698e178c415488cd7a112d6ed0cb2ded214",
+  "analysis_reference": "2463c05833f533bc5a5676a5644774cff949ca28",
+  "analysis_delta": "1081 files changed, 223780 insertions(+), 1946 deletions(-)",
+  "main_fetch": "Successfully fetched all three origin/main refs before QC inspection; no merge/reset.",
+  "repositories": {
+    "nexus": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+      "branch": "feature/v0.3.6",
+      "head": "7f114698e178c415488cd7a112d6ed0cb2ded214",
+      "status": "M .gitattributes\n M frontend/package-lock.json\n M frontend/package.json\n M pyproject.toml\n M uv.lock\n?? NEXUS_QUICK_CONNECT_R1/\n?? tools/quick_connect_baseline.py",
+      "origin_main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "main_drift": "243\t0",
+      "version_file_sha256": "cff901f1591533e86094889021346f6f1cd318736be4d4f6450d452425bc5142"
+    },
+    "connector": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector",
+      "branch": "feature/v0.0.13",
+      "head": "a4d510080d7a685fa442a4c5c30419952589fe04",
+      "status": "",
+      "origin_main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "main_drift": "36\t0",
+      "version_file_sha256": "7c51af7bf6a8e5c233b90ae57d659b966f96b6386d0c55bfa65ff27de4a28f57"
+    },
+    "core": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core",
+      "branch": "feature/v0.0.14",
+      "head": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "status": "",
+      "origin_main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "main_drift": "14\t0",
+      "version_file_sha256": "50620bd6aed430cf25244cd08a5e53134d18059f7cbf71d1df738eecacf9cd2f"
+    }
+  },
+  "inputs": {
+    "LEIA-ME.md": "7c140ee84437d3a41d9bbec155ec446f59524a68c0c4904658817f10b59b5951",
+    "NEXUS_QUICK_CONNECT_LEDGER_R1.json": "6ea33515134e6eca19e5f17092954484d22b89efdbae5defc5b56e217614037e",
+    "PLANO_CODEX_NEXUS_QUICK_CONNECT_CWD_ID_R1_CONSOLIDADO.md": "827e3a8bc8ba08a139d260026e81171dbc1843d0fd09fab5d488fd46af3a5f39",
+    "PROMPT_CODEX_NEXUS_QUICK_CONNECT_R1.md": "d8c6673dbe57b8affc98cf6c5609e0facd491cc3d692187920297723f7ddeccf",
+    "SHA256.json": "59b7bc41478b12e8aa44f86d05c9b5a5a45815aef33f4b31a3c7343a88633b82",
+    "VALIDACAO_PACOTE_R1.json": "f50b7319b3b9d94e9931cf967ff2fd60d664a02ed1ce0f3e9ae210194d874ca3",
+    "VALIDAR_PACOTE.py": "e46344fcf01d1af6f66ce16f5c878c622a00d2f53d47e049fb30e19fda418451"
+  },
+  "pins": {
+    "connector_core": "0.0.14",
+    "connector_reference": "0.0.13"
+  },
+  "inspected_instructions": [
+    "User AGENTS -> C:/Users/jpamb/.codex/RTK.md",
+    "CONTRIBUTING.md",
+    "pyproject.toml",
+    ".github/workflows/ci.yml"
+  ],
+  "instructions_note": "No AGENTS.md exists in the Nexus checkout; user supplied AGENTS applies.",
+  "preserved_qualification": "UI-R1 global ledger unchanged; native usage UNKNOWN guard retained.",
+  "effects": "Only repo branch/version/documents; no provider, user installation or runtime migration."
+}

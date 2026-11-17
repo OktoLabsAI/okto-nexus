@@ -152,5 +152,6 @@ plans/home_evolution/evidence/** -text -whitespace
 tests/home_evolution/browser_human_preview.js -text
 # UI-R1 inputs and evidence retain their original byte hashes.
 NEXUS_UI_R1/** -text -whitespace
+NEXUS_QUICK_CONNECT_R1/** -text -whitespace
 # These fixture sources are pinned by UI-R1 qualification evidence.
 tests/ui_simplification/** -text
