@@ -1,20 +1,23 @@
 import type { HomeApi } from './homeApi';
 import type { HomeActivity, HomeAgent, HomeFeedEvent, HomeFilters, HomeOverview, HomePage, HomePageSection,
   HomeResult, HomeSection, HomeSectionName, HomeQuickFilter, HomeEntryQuery, HomeEntryPage, HomeEntryGroup,
-  HomeEntry, HomeSessionRef, HomeEntryPartition } from './homeTypes';
+  HomeEntry, HomeSessionRef, HomeEntryPartition,HomeBoard,HomeBoardPage,HomeBoardColumn,HomeBoardMetadata,HomeBoardSlice,HomeBoardEntry } from './homeTypes';
 import type { ExternalObservation } from './observationTypes';
 import type { AttentionOccurrence } from './attentionTypes';
 
 export interface HomeContext {
   workspace: string | null; identityKey: string; origin?: string; enabled?: boolean; visible?: boolean;
   agent_id?: string; state?: string;
-  family?: 'legacy'|'entries'; quick?:HomeQuickFilter; harness?:string; host?:string;
+  family?: 'legacy'|'entries'|'board'; quick?:HomeQuickFilter; harness?:string; host?:string;
   holdOrder?:boolean;
 }
-export interface HomeEntryJob {partition:HomeEntryPartition;groupId?:string;entryId?:string}
+export interface HomeEntryJob {partition:HomeEntryPartition;groupId?:string;entryId?:string;boardRevision?:string|null;entryRevision?:string|null}
+interface HomeBoardJob {column:HomeBoardColumn;revision:string;entryRevision:string|null;cursor:string}
+export const homeBoardColumns:readonly HomeBoardColumn[]=['active','needs_you','results'];
 export const homeEntryPageKey=(groupId:string,entryId:string)=>JSON.stringify([groupId,entryId]);
 interface HomeEntryCache {
   entries:HomeEntryPage<HomeEntryGroup>|null;
+  board:HomeBoard|null;
   entryChildren:Record<string,HomeEntryPage<HomeEntry>>;
   entrySessions:Record<string,HomeEntryPage<HomeSessionRef>>;
   entryAttention:Record<string,HomeEntryPage<AttentionOccurrence>>;
@@ -29,13 +32,14 @@ export interface HomeState extends HomeEntryCache {
   error: string | null; staleSections: HomeSectionName[]; generation: number;
   scopeKey: string | null;
   entryLoading:HomeEntryJob|null;
+  boardLoading:HomeBoardColumn|null;
 }
 export interface HomeDependencies {
   api: HomeApi; now(): number; setTimeout(callback: () => void, milliseconds: number): unknown;
   clearTimeout(handle: unknown): void; onChange?(state: HomeState): void;
 }
-const emptyEntryCache=():HomeEntryCache=>({entries:null,entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{}});
-export const initialHomeState = (): HomeState => ({ ...emptyEntryCache(),entryLoading:null,snapshot: null, activity: null, status: 'loading',
+const emptyEntryCache=():HomeEntryCache=>({entries:null,board:null,entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{}});
+export const initialHomeState = (): HomeState => ({ ...emptyEntryCache(),entryLoading:null,boardLoading:null,snapshot: null, activity: null, status: 'loading',
   loading: false, loadingMore: null, paused: false, hasPendingUpdate: false, error: null, staleSections: [], generation: 0, scopeKey: null });
 const sections = ['work', 'attention', 'results', 'agents', 'external_activity', 'server_attention'] as const;
 /** Hints only. The fallback/TTL still covers sources without a workspace event. */
@@ -79,6 +83,7 @@ export class HomeController {
   private refreshPending = false;
   private morePending: HomePageSection | null = null;
   private entryPending:HomeEntryJob|null=null;
+  private boardPending:HomeBoardJob|null=null;
   private entryCache=emptyEntryCache();
   private timer: unknown;
   private poll: unknown;
@@ -107,7 +112,9 @@ export class HomeController {
       ...(this.context.agent_id ? { agent_id: this.context.agent_id } : {}), ...(this.context.state ? { state: this.context.state } : {}) };
   }
   private entriesFamily():boolean{return this.context.family==='entries';}
-  private hasSnapshot():boolean{return this.entriesFamily()?!!this.state.entries:!!this.state.snapshot;}
+  private boardFamily():boolean{return this.context.family==='board';}
+  private trackingFamily():boolean{return this.entriesFamily()||this.boardFamily();}
+  private hasSnapshot():boolean{return this.boardFamily()?!!this.state.board:this.entriesFamily()?!!this.state.entries:!!this.state.snapshot;}
   private entryFilters():HomeEntryQuery{return {...this.filters(),...(this.context.quick?{quick:this.context.quick}:{}),
     ...(this.context.harness?{harness:this.context.harness}:{}),...(this.context.host?{host:this.context.host}:{})};}
   configure(next: HomeContext): void {
@@ -121,7 +128,7 @@ export class HomeController {
       this.active?.abort.abort(); // Keep it owned until finally; no concurrent replacement.
       this.cancel('timer'); this.cancel('poll');
       this.latest = null; this.latestActivity = null; this.activityDirty = false; this.eventId = null;
-      this.entryCache=emptyEntryCache();this.entryPending=null;
+      this.entryCache=emptyEntryCache();this.entryPending=null;this.boardPending=null;
       this.resetPages = false;
       this.refreshPending = false; this.morePending = null; this.dirtySince = null;
       this.blocked = false;
@@ -141,14 +148,14 @@ export class HomeController {
     this.generation++; this.blocked = true; this.active?.abort.abort();
     this.cancel('timer'); this.cancel('poll'); this.refreshPending = false; this.morePending = null;
     this.latest = null; this.latestActivity = null; this.activityDirty = false;
-    this.entryCache=emptyEntryCache();this.entryPending=null;
+    this.entryCache=emptyEntryCache();this.entryPending=null;this.boardPending=null;
     this.resetPages = false;
     this.emit({ ...initialHomeState(), status: 'forbidden' });
   }
   dispose(): void { this.clear(); this.disposed = true; }
   refresh(): void {
     if (!this.allowed()) return;
-    this.refreshPending = true; this.morePending = null;this.entryPending=null; this.dirtySince = null;
+    this.refreshPending = true; this.morePending = null;this.entryPending=null;this.boardPending=null; this.dirtySince = null;
     this.cancel('poll'); this.schedule(0);
   }
   pause(paused = !this.state.paused): void {
@@ -158,8 +165,8 @@ export class HomeController {
   holdOrder(holding:boolean):void{this.context={...this.context,holdOrder:holding};}
   apply(): void {
     if(!this.allowed())return;
-    if(this.entriesFamily()){this.emit({...this.entryCache,hasPendingUpdate:false,
-      status:this.entryCache.entries?.status==='ready'&&!this.refreshPending?'ready':'stale',staleSections:this.refreshPending?[...sections]:[]});return;}
+    if(this.trackingFamily()){this.emit({...this.entryCache,hasPendingUpdate:false,
+      status:(this.boardFamily()?this.entryCache.board:this.entryCache.entries)?.status==='ready'&&!this.refreshPending?'ready':'stale',staleSections:this.refreshPending?[...sections]:[]});return;}
     this.emit({ snapshot: this.latest, activity: this.latestActivity, hasPendingUpdate: false });
   }
   onStreamStatus(status: HomeStreamStatus): void {
@@ -171,7 +178,7 @@ export class HomeController {
   }
   invalidate(event?: HomeInvalidation): void {
     if (!this.allowed()) return;
-    const affected = event ? this.entriesFamily()&&/^(connection|binding|executor|workspace|policy|guardrail|settings)[.:-]/.test(event.type)
+    const affected = event ? this.trackingFamily()&&/^(connection|binding|executor|workspace|policy|guardrail|settings)[.:-]/.test(event.type)
       ? [...sections] : homeInvalidatedSections(event.type) : [...sections];
     if (event) {
       const id = event.event_id ?? event.id;
@@ -182,13 +189,13 @@ export class HomeController {
     }
     this.emit({ status: this.hasSnapshot() ? 'stale' : 'loading',
       staleSections: [...new Set([...this.state.staleSections, ...affected])] });
-    this.refreshPending = true; this.morePending = null;this.entryPending=null;
+    this.refreshPending = true; this.morePending = null;this.entryPending=null;this.boardPending=null;
     if (this.context.visible === false) { this.schedulePoll(); return; }
     this.dirtySince ??= this.deps.now();
     this.schedule(Math.max(0, Math.min(350, this.dirtySince + 500 - this.deps.now())));
   }
   loadMore(section: HomePageSection): void {
-    if(this.entriesFamily())return;
+    if(this.trackingFamily())return;
     if (!this.allowed() || this.context.visible === false || this.state.paused || this.refreshPending || this.active) return;
     const current = section === 'activity' ? this.latestActivity : this.latest?.[section === 'external' ? 'external_activity' : section];
     if (current && !(section === 'activity' && this.activityDirty) && (!usable(current) || !current.next_cursor)) return;
@@ -200,11 +207,20 @@ export class HomeController {
   loadEntrySessions(groupId:string,entryId:string):void{this.loadEntryPage({partition:'sessions',groupId,entryId});}
   loadEntryAttention(groupId:string,entryId:string):void{this.loadEntryPage({partition:'attention',groupId,entryId});}
   loadEntryResults(groupId:string,entryId:string):void{this.loadEntryPage({partition:'results',groupId,entryId});}
+  loadBoardColumn(column:HomeBoardColumn):void{
+    const root=this.entryCache.board;
+    if(!this.boardFamily()||!root?.revision||!this.allowed()||this.context.visible===false||this.state.paused||
+      this.state.hasPendingUpdate||this.state.staleSections.length||this.refreshPending||this.active)return;
+    const page=root.columns[column];
+    if(!['ready','partial'].includes(root.status)||!page.has_more||!page.next_cursor)return;
+    this.entryPending=null;this.boardPending={column,revision:root.revision,entryRevision:root.entry_revision,cursor:page.next_cursor};this.schedule(0);
+  }
   private loadEntryPage(job:HomeEntryJob):void{
-    if(!this.entriesFamily()||!this.allowed()||this.context.visible===false||this.state.paused||this.state.hasPendingUpdate||this.refreshPending||this.active)return;
+    if(!this.trackingFamily()||!this.allowed()||this.context.visible===false||this.state.paused||this.state.hasPendingUpdate||this.refreshPending||this.active)return;
+    if(this.boardFamily()&&(job.partition==='groups'||job.partition==='children'))return;
     const previous=this.previousEntryPage(job);
     if(!previous||!['ready','partial'].includes(previous.status)||!previous.next_cursor)return;
-    this.entryPending=job;this.schedule(0);
+    this.boardPending=null;this.entryPending=this.boardFamily()?{...job,boardRevision:this.entryCache.board?.revision,entryRevision:this.entryCache.board?.entry_revision}:job;this.schedule(0);
   }
   private schedule(delay: number): void {
     this.cancel('timer');
@@ -216,8 +232,8 @@ export class HomeController {
     this.cancel('poll');
     if (!this.allowed()) return;
     let delay = this.context.visible === false ? 60000 : 15000;
-    const entries=this.entryCache.entries;
-    if(this.entriesFamily()&&entries&&this.context.visible!==false&&entries.next_refresh_at){
+    const entries=this.boardFamily()?this.entryCache.board:this.entryCache.entries;
+    if(this.trackingFamily()&&entries&&this.context.visible!==false&&entries.next_refresh_at){
       const interval=Date.parse(entries.next_refresh_at)-Date.parse(entries.generated_at);
       if(Number.isFinite(interval))delay=Math.min(delay,Math.max(1000,this.snapshotStarted+interval-this.deps.now()));
     }
@@ -239,6 +255,25 @@ export class HomeController {
       (!this.latest || value.server_id === this.latest.server_id);
   }
   private previousEntryPage(job:HomeEntryJob):HomeEntryPage<unknown>|null{
+    if(this.boardFamily()){
+      const root=this.entryCache.board;if(!root)return null;
+      const entry=homeBoardColumns.flatMap(name=>root.columns[name].items).find(item=>item.group_id===job.groupId&&item.id===job.entryId);
+      if(!entry)return null;
+      const base:Omit<HomeEntryPage<unknown>,'items'|'total'|'total_is_exact'|'has_more'|'next_cursor'>={
+        version:1,scope:root.scope,server_id:root.server_id,generated_at:root.generated_at,snapshot_id:root.entry_revision,
+        revision:root.entry_revision,partition:job.partition,group_id:entry.group_id,entry_id:entry.id,
+        event_cursor:root.event_cursor,event_low_watermark:root.event_low_watermark,source_status:root.source_status,
+        coverage:root.coverage,summary:root.summary,inventory:root.inventory,server_attention:root.server_attention,
+        status:root.status,as_of:root.as_of,next_refresh_at:root.next_refresh_at};
+      const key=homeEntryPageKey(entry.group_id,entry.id);
+      if(job.partition==='sessions')return this.entryCache.entrySessions[key]??{...base,items:entry.sessions,total:entry.sessions_total,
+        total_is_exact:entry.sessions_total!==null,has_more:entry.has_more_sessions,next_cursor:entry.sessions_cursor};
+      if(job.partition==='attention')return this.entryCache.entryAttention[key]??{...base,items:entry.attention_preview,total:entry.attention_total,
+        total_is_exact:entry.attention_total!==null,has_more:entry.has_more_attention,next_cursor:entry.attention_cursor};
+      if(job.partition==='results')return this.entryCache.entryResults[key]??{...base,items:entry.results_preview,total:entry.results_total,
+        total_is_exact:entry.results_total!==null,has_more:entry.has_more_results,next_cursor:entry.results_cursor};
+      return null;
+    }
     const root=this.entryCache.entries;if(!root)return null;
     if(job.partition==='groups')return root;
     const group=root.items.find(item=>item.id===job.groupId);if(!group)return null;
@@ -255,7 +290,8 @@ export class HomeController {
       total_is_exact:entry.results_total!==null,has_more:entry.has_more_results,next_cursor:entry.results_cursor};
   }
   private validEntryScope(value:HomeEntryPage<unknown>,job:HomeEntryJob):boolean{
-    const expected=this.entryFilters(),scope=value.scope,root=this.entryCache.entries;
+    const expected={...this.entryFilters(),...(this.boardFamily()?{quick:'all' as const}:{})},scope=value.scope,
+      root=this.boardFamily()?this.entryCache.board:this.entryCache.entries;
     return value.version===1&&scope.workspace_id===(expected.workspace_id??null)&&
       (scope.agent_id??'')===(expected.agent_id??'')&&(scope.state??'')===(expected.state??'')&&
       scope.quick===(expected.quick??'active')&&scope.include_recent_results===(expected.quick===undefined)&&
@@ -275,8 +311,9 @@ export class HomeController {
       status:stale?'stale':'ready',error:notice,staleSections:this.refreshPending?[...sections]:[]});
   }
   private async readEntries(job:HomeEntryJob|null,signal:AbortSignal,current:()=>boolean):Promise<string|null>{
+    if(this.boardFamily()&&(!job||job.boardRevision!==this.entryCache.board?.revision||job.entryRevision!==this.entryCache.board?.entry_revision))return null;
     const previous=job?this.previousEntryPage(job):null;
-    const query={...this.entryFilters(),limit:10,preview:3,...(previous?.next_cursor?{cursor:previous.next_cursor}:{})};
+    const query={...this.entryFilters(),...(this.boardFamily()?{quick:'all' as const}:{}),limit:10,preview:3,...(previous?.next_cursor?{cursor:previous.next_cursor}:{})};
     let value:HomeEntryPage<unknown>;
     if(!job||job.partition==='groups')value=await this.deps.api.entries(query,signal);
     else if(job.partition==='children')value=await this.deps.api.entryChildren(job.groupId!,query,signal);
@@ -316,6 +353,86 @@ export class HomeController {
     }
     return null;
   }
+  private validBoardScope(value:HomeBoardMetadata):boolean{
+    const expected=this.entryFilters(),scope=value.scope,root=this.entryCache.board;
+    return value.version===1&&scope.workspace_id===(expected.workspace_id??null)&&
+      (scope.agent_id??'')===(expected.agent_id??'')&&(scope.state??'')===(expected.state??'')&&
+      scope.quick==='all'&&scope.include_recent_results===false&&
+      (scope.harness??'')===(expected.harness??'')&&(scope.host??'')===(expected.host??'')&&
+      !!value.server_id&&(!root||value.server_id===root.server_id);
+  }
+  private validBoardSlice(page:HomeBoardSlice,value:HomeBoardMetadata,seen:Set<string>):boolean{
+    if(!page||!Array.isArray(page.items)||typeof page.total_is_exact!=='boolean'||typeof page.has_more!=='boolean'||
+      !(page.total===null||Number.isInteger(page.total)&&page.total>=page.items.length)||
+      page.total_is_exact&&page.total===null||
+      (page.has_more?typeof page.next_cursor!=='string'||!page.next_cursor:page.next_cursor!==null))return false;
+    for(const entry of page.items){
+      if(typeof entry.id!=='string'||!entry.id||seen.has(entry.id)||typeof entry.group_id!=='string'||!entry.group_id||
+        !value.entry_revision||entry.entry_revision!==value.entry_revision||
+        value.scope.workspace_id!==null&&entry.workspace_id!==value.scope.workspace_id||
+        entry.target&&entry.target.server_id!==value.server_id)return false;
+      seen.add(entry.id);
+    }
+    return true;
+  }
+  private resetBoardPages():void{
+    const board=this.entryCache.board;
+    this.entryCache={...emptyEntryCache(),board:board?{...board,columns:Object.fromEntries(homeBoardColumns.map(name=>
+      [name,{...board.columns[name],has_more:false,next_cursor:null}])) as HomeBoard['columns']}:null};
+    this.entryPending=null;this.boardPending=null;
+  }
+  private publishBoard(notice:string|null=null,appendOnly=false):void{
+    const value=this.entryCache.board,prior=this.state.board;if(!value)return;
+    const order=(board:HomeBoard)=>JSON.stringify(homeBoardColumns.map(name=>[name,board.columns[name].items.map(entry=>
+      [entry.id,entry.sessions.map(ref=>[ref.server_id,ref.executor_id,ref.session_id]),entry.attention_refs,entry.result_refs])]));
+    const loaded=Object.keys(this.state.entrySessions).length+Object.keys(this.state.entryAttention).length+Object.keys(this.state.entryResults).length>0;
+    const held=!!(!appendOnly&&this.context.holdOrder&&prior&&(order(prior)!==order(value)||loaded&&prior.revision!==value.revision));
+    this.emit({...(this.state.paused||held?{hasPendingUpdate:true}:{...this.entryCache,hasPendingUpdate:false}),
+      status:held||this.refreshPending||value.status!=='ready'?'stale':'ready',error:notice,
+      staleSections:this.refreshPending?[...sections]:[]});
+  }
+  private async readBoard(job:HomeBoardJob|null,signal:AbortSignal,current:()=>boolean):Promise<string|null>{
+    const before=this.entryCache.board;
+    if(job&&(!before||job.revision!==before.revision||job.entryRevision!==before.entry_revision||
+      job.cursor!==before.columns[job.column].next_cursor))return null;
+    const {quick:_quick,...filters}=this.entryFilters();
+    const query={...filters,limit:10,preview:3,...(job?{cursor:job.cursor}:{})};
+    const value=job?await this.deps.api.boardColumn(job.column,query,signal):await this.deps.api.board(query,signal);
+    if(!current())return null;
+    if(!this.validBoardScope(value))throw Error('HOME_BOARD_SCOPE_CHANGED');
+    if(value.status==='forbidden')throw Object.assign(Error('Home board forbidden'),{status:403});
+    if(value.status==='disabled')throw Object.assign(Error('Home board disabled'),{code:'HOME_DISABLED'});
+    if(job){
+      const page=value as HomeBoardPage;
+      if(page.partition!=='board_column'||page.column!==job.column)throw Error('HOME_BOARD_COLUMN_CHANGED');
+      if(page.revision!==job.revision||page.entry_revision!==job.entryRevision)throw Object.assign(Error('Home board changed'),{status:409});
+      if(!['ready','partial'].includes(page.status))throw Error('HOME_BOARD_UNAVAILABLE');
+      const previous=before!.columns[job.column],seen=new Set(homeBoardColumns.flatMap(name=>before!.columns[name].items.map(entry=>entry.id)));
+      if(!this.validBoardSlice(page,page,seen)||previous.total!==page.total||previous.total_is_exact!==page.total_is_exact)
+        throw Object.assign(Error('Home board page changed'),{status:409});
+      this.entryCache={...this.entryCache,board:{...before!,columns:{...before!.columns,
+        [job.column]:{items:[...previous.items,...page.items],total:page.total,total_is_exact:page.total_is_exact,
+          has_more:page.has_more,next_cursor:page.next_cursor}}}};
+      return null;
+    }
+    const next=value as HomeBoard,seen=new Set<string>();
+    if(next.partition!=='board'||!next.columns||!homeBoardColumns.every(name=>this.validBoardSlice(next.columns[name],next,seen)))throw Error('HOME_BOARD_INVALID');
+    this.snapshotStarted=this.lastStarted;
+    if(next.status==='unavailable'&&before){
+      this.entryCache={...this.entryCache,board:{...next,columns:Object.fromEntries(homeBoardColumns.map(name=>
+        [name,{...next.columns[name],items:before.columns[name].items,has_more:false,next_cursor:null}])) as HomeBoard['columns']}};
+      return null;
+    }
+    const same=!this.resetPages&&before&&before.revision===next.revision&&before.entry_revision===next.entry_revision;
+    if(!same){this.entryCache=emptyEntryCache();this.entryPending=null;this.boardPending=null;}
+    this.entryCache={...this.entryCache,board:same?{...next,columns:Object.fromEntries(homeBoardColumns.map(name=>{
+      const old=before.columns[name],fresh=next.columns[name];
+      return [name,old.items.length>fresh.items.length?{...fresh,items:[...fresh.items,...old.items.slice(fresh.items.length)],
+        next_cursor:old.next_cursor,has_more:old.has_more}:fresh];
+    })) as HomeBoard['columns']}:next};
+    this.resetPages=false;
+    return before&&!same?'Updated work changed the board. All columns were revalidated.':null;
+  }
   private publish(notice: string | null = null): void {
     const staleSections: HomeSectionName[] = sections.filter(name => ['partial', 'unavailable', 'forbidden'].includes(this.latest?.[name].status ?? 'unavailable'));
     if (this.activityDirty) staleSections.push('activity');
@@ -323,17 +440,21 @@ export class HomeController {
       status: staleSections.length ? 'stale' : 'ready', staleSections, error: notice });
   }
   private async pump(): Promise<void> {
-    if (!this.allowed() || this.active || (!this.refreshPending && !this.morePending&&!this.entryPending)) return;
-    const entryJob=this.entriesFamily()&&!this.refreshPending?this.entryPending:null;
+    if (!this.allowed() || this.active || (!this.refreshPending && !this.morePending&&!this.entryPending&&!this.boardPending)) return;
+    const entryJob=this.trackingFamily()&&!this.refreshPending?this.entryPending:null;
+    const boardJob=this.boardFamily()&&!this.refreshPending?this.boardPending:null;
     const section = this.refreshPending ? null : this.morePending;
-    this.refreshPending = false; this.morePending = null;this.entryPending=null; this.dirtySince = null;
+    this.refreshPending = false; this.morePending = null;this.entryPending=null;this.boardPending=null; this.dirtySince = null;
     const job = { generation: this.generation, abort: new AbortController() };
     this.active = job; this.lastStarted = this.deps.now();
-    this.emit({ loading: this.entriesFamily()?entryJob===null:section===null, loadingMore: section,entryLoading:entryJob });
+    this.emit({ loading: this.trackingFamily()?entryJob===null&&boardJob===null:section===null, loadingMore: section,entryLoading:entryJob,boardLoading:boardJob?.column??null });
     let notice: string | null = null;
     const current = () => this.allowed() && this.active === job && job.generation === this.generation;
     try {
-      if(this.entriesFamily()){
+      if(this.boardFamily()){
+        notice=entryJob?await this.readEntries(entryJob,job.abort.signal,current):await this.readBoard(boardJob,job.abort.signal,current);
+        if(!current())return;
+      } else if(this.entriesFamily()){
         notice=await this.readEntries(entryJob,job.abort.signal,current);
         if(!current())return;
       } else if (section === null) {
@@ -376,22 +497,26 @@ export class HomeController {
           this.activityDirty = false;
         }
       }
-      if(this.entriesFamily())this.publishEntries(notice);else this.publish(notice);
+      if(this.boardFamily())this.publishBoard(notice,!!boardJob);else if(this.entriesFamily())this.publishEntries(notice);else this.publish(notice);
     } catch (error: unknown) {
       if (!current()) return;
       const failure = info(error);
       if (failure.status === 401 || failure.status === 403) { this.clear(); return; }
-      if (failure.status === 409 && (section||entryJob)) {
+      if(failure.code==='HOME_DISABLED'){
+        this.entryCache=emptyEntryCache();this.boardPending=null;this.entryPending=null;this.emit({...initialHomeState(),status:'disabled'});return;
+      }
+      if (failure.status === 409 && (section||entryJob||boardJob)) {
         this.resetPages = true;
         this.refreshPending = true; this.activityDirty = !!this.latestActivity;
-        this.emit({ status: 'stale', error: 'Page changed. Refreshing the snapshot.' });
+        if(this.boardFamily())this.resetBoardPages();
+        this.emit({ ...(this.boardFamily()?this.entryCache:{}),status: 'stale',staleSections:[...sections], error: 'Page changed. Refreshing the snapshot.' });
       } else if (failure.name !== 'AbortError') this.emit({ status: this.hasSnapshot() ? 'stale' : 'error',
         error: failure.code ?? 'HOME_READ_FAILED', staleSections: [...sections, 'activity'] });
     } finally {
       if (this.active === job) this.active = null;
-      if (job.generation === this.generation) this.emit({ loading: false, loadingMore: null,entryLoading:null });
+      if (job.generation === this.generation) this.emit({ loading: false, loadingMore: null,entryLoading:null,boardLoading:null });
       if (this.allowed()) {
-        if ((this.refreshPending || this.morePending||this.entryPending) && this.context.visible !== false) this.schedule(0);
+        if ((this.refreshPending || this.morePending||this.entryPending||this.boardPending) && this.context.visible !== false) this.schedule(0);
         else this.schedulePoll();
       }
     }

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { homeApi } from '../homeApi';
 import { HomeController, homeContextKey, initialHomeState, type HomeContext, type HomeInvalidation, type HomeStreamStatus } from '../homeController';
-import type { HomePageSection } from '../homeTypes';
+import type { HomePageSection,HomeBoardColumn } from '../homeTypes';
 
 export interface HomeOverviewOptions extends HomeContext {
   latestEvent?: HomeInvalidation | null; streamStatus?: HomeStreamStatus;
@@ -54,10 +54,11 @@ export function useHomeOverview(options: HomeOverviewOptions) {
   const loadEntrySessions=useCallback((groupId:string,entryId:string)=>controller.current?.loadEntrySessions(groupId,entryId),[]);
   const loadEntryAttention=useCallback((groupId:string,entryId:string)=>controller.current?.loadEntryAttention(groupId,entryId),[]);
   const loadEntryResults=useCallback((groupId:string,entryId:string)=>controller.current?.loadEntryResults(groupId,entryId),[]);
+  const loadBoardColumn=useCallback((column:HomeBoardColumn)=>controller.current?.loadBoardColumn(column),[]);
   // Effects run after paint: never render a previous identity/workspace during
   // the intervening render before configure has cleared its controller cache.
   const expected = homeContextKey({ ...options, origin: typeof window === 'undefined' ? '' : window.location.origin });
   const visibleState = state.scopeKey === expected && options.enabled !== false && options.identityKey
     ? state : { ...initialHomeState(), status: options.enabled === false || !options.identityKey ? 'disabled' as const : 'loading' as const };
-  return { state: visibleState, refresh, loadMore, pause, apply, clear,holdOrder,loadEntries,loadGroupChildren,loadEntrySessions,loadEntryAttention,loadEntryResults };
+  return { state: visibleState, refresh, loadMore, pause, apply, clear,holdOrder,loadEntries,loadGroupChildren,loadEntrySessions,loadEntryAttention,loadEntryResults,loadBoardColumn };
 }

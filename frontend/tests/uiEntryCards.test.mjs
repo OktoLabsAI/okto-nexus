@@ -42,7 +42,7 @@ test('one entry is directly readable without an expansion step and multiple entr
 test('two exact sessions use separate targets without operation, latest or identity heuristics',()=>{
   const sessions=['session-one','session-two'].map(session_id=>({server_id:'server',executor_id:'executor',workspace_id:'ws',session_id}));
   const opened=[],tree=HomeEntryRow(rowProps({entry:entry({sessions,sessions_total:2}),onOpen:t=>opened.push(t)}));
-  for(const button of buttons(tree))if(String(button.props.children).startsWith('Open session'))button.props.onClick();
+  for(const button of buttons(tree))if(String(button.props.children).startsWith('View session'))button.props.onClick();
   assert.deepEqual(opened,sessions.map(ref=>({kind:'session',...ref})));assert.ok(opened.every(t=>!Object.hasOwn(t,'operation_id')));
 });
 

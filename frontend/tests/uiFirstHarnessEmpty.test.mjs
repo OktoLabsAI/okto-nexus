@@ -28,9 +28,12 @@ const snapshot=(patch={})=>({version:1,partition:'groups',server_id:'server',sta
   server_attention:{status:'ready',total:0,items:[]},...patch});
 const noop=()=>{};
 function render(page,patch={}){
-  observed={state:{entries:page,status:'ready',loading:false,paused:false,staleSections:[],hasPendingUpdate:false,entryLoading:null,
+  const empty={items:[],total:0,total_is_exact:true,has_more:false,next_cursor:null};
+  const board={...page,partition:'board',scope:{...page.scope,quick:'all',include_recent_results:false},entry_revision:page.revision??'entry-revision',
+    columns:{active:{...empty,total:page.total,total_is_exact:page.total_is_exact},needs_you:{...empty},results:{...empty}}};
+  observed={state:{entries:null,board,status:'ready',loading:false,paused:false,staleSections:[],hasPendingUpdate:false,entryLoading:null,boardLoading:null,
     generation:1,entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{},...patch},
-    refresh:noop,pause:noop,apply:noop,holdOrder:noop,loadEntries:noop,loadGroupChildren:noop,loadEntrySessions:noop,loadEntryAttention:noop,loadEntryResults:noop};
+    refresh:noop,pause:noop,apply:noop,holdOrder:noop,loadEntries:noop,loadGroupChildren:noop,loadEntrySessions:noop,loadEntryAttention:noop,loadEntryResults:noop,loadBoardColumn:noop};
   return renderToStaticMarkup(React.createElement(OperationalHome,{workspace:'ws',workspaces:[],identityKey:'operator',refreshTick:0,
     latestEvent:null,streamStatus:'live',onNavigate:noop,onAttentionChanged:noop,onSetupAgent:noop,registerLeaveGuard:noop}));
 }

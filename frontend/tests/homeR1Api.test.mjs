@@ -5,6 +5,17 @@ const canonical = await moduleURL('api.ts');
 const navigation = await moduleURL('homeNavigation.ts');
 const { homeApi } = await import(await moduleURL('homeApi.ts', { './api': canonical, './homeNavigation': navigation }));
 
+test('board root and exact column are one passive API family with scoped opaque cursor and no quick tab',async()=>{
+  const original=globalThis.fetch,calls=[];globalThis.fetch=async(path,init)=>{calls.push({path,init});return Response.json({ok:true,data:{}});};
+  try{
+    const abort=new AbortController(),query={workspace_id:'project/&?',agent_id:'agent',host:'host',harness:'codex_app_server',limit:10,preview:3};
+    await homeApi.board(query,abort.signal);await homeApi.boardColumn('needs_you',{...query,cursor:'opaque:/&?'},abort.signal);
+    assert.deepEqual(calls.map(c=>new URL(c.path,'http://fixture').pathname),['/api/v1/home/board','/api/v1/home/board/needs_you']);
+    assert.equal(new URL(calls[1].path,'http://fixture').searchParams.get('cursor'),'opaque:/&?');
+    for(const c of calls){assert.equal(new URL(c.path,'http://fixture').searchParams.has('quick'),false);assert.equal(c.init.signal,abort.signal);assert.equal(c.init.cache,'no-store');assert.equal(c.init.method,undefined);assert.equal(c.init.body,undefined);}
+  }finally{globalThis.fetch=original;}
+});
+
 test('Home adapter uses canonical envelope/auth headers, GET-only no-store, encoded filters and opaque target', async () => {
   const original = globalThis.fetch, calls = [];
   globalThis.fetch = async (path, init) => { calls.push({ path, init }); return Response.json({ ok: true, data: overview() }); };

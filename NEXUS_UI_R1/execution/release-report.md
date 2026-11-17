@@ -28,8 +28,11 @@ checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
 
 - O ledger é a fonte de status por cenário. Testes parcialmente cobertos mantêm
   NOT_RUN ou BLOCKED; ter arquivos de implementação não os transforma em PASS.
-- O frontend completo tem302 testes Node aprovados no corte Zyb_20X4 e
-  TypeScript/Vite aprovados. Node/SSR não são navegador nem leitor de tela.
+- O corte DXslPEEE/Ds-MK2FR tem 328 testes Node e TypeScript/Vite aprovados.
+  Substitui a apresentação CKl/BP1 (316 testes), sem substituir suas evidências
+  históricas. O quadro por colunas usa a mesma fila de atualização; mudança de
+  revisão invalida todas as páginas e mantém os detalhes na revisão de entrada.
+  Node/SSR não são navegador nem leitor de tela.
 - A Home teve 19 checks de navegador no corte dfy1, mais oito checks humanos de
   formulário/guard/CAS no corte vmh. Duas abas enviaram decisões reais à API,
   retornaram 202/409 e produziram uma decisão, uma operação `input.provide` e um
@@ -50,6 +53,29 @@ checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
   IDs e URLs; escolha de apresentação agora em Settings. Três checks técnicos
   de navegador passaram. Isso não transforma a tentativa humana falha em PASS;
   o segundo percurso usa participante já exposto à interface.
+- O segundo percurso confirmou Add tecnicamente, mas o participante relatou
+  demora, configuração excessiva e dúvida sobre a conclusão. O terceiro usou
+  projeto dentro da Home, quatro resumos familiares e confirmação persistente.
+  Teve 22 cliques no corte funcional, dois POSTs simulados Test/Finish e 47 cliques
+  no log final incluindo exploração posterior. O participante conseguiu avançar,
+  mas ainda relatou ruído, dúvida com Open context e ausência de confirmação
+  suficientemente clara. Os três percursos estão encerrados e preservados;
+  UI-043 continua IN_PROGRESS e T-QUAL-05 FAIL. Não há aprovação humana inferida.
+- O usuário pediu substituir Active/Needs you/Results por três colunas sempre
+  visíveis, com cards na mesma região. O ajuste está em `BOARD_R2_AMENDMENT.md`.
+  O backend aditivo usa a mesma relação autorizada e uma UoW de leitura, faz
+  classificação exclusiva e paginação por coluna, com revisão global separada
+  da revisão dos detalhes. Nove focais Board passaram no corte final; 17
+  regressões relacionadas passaram antes das duas correções finais de resumo
+  e atenção órfã. Totais/resumos seguem escopo e retenção, estados desconhecidos
+  não viram zero, e atenção resolvida não permanece em Active. Os testes de
+  controller cobrem movimentação entre colunas, 409, cursor antigo, 403 tardio,
+  pausa/foco e rejeição de duplicatas. Navegador e pacote instalado desse ajuste
+  estão em qualificação, sem promover cenários por inferência.
+- Os focais ATTN-02/06 comprovaram autoridade humana e fallback clássico no
+  navegador, sem aplicação nativa. PANEL-08 passou em HTTP/Core com dois peers
+  Python inertes: interrupção exata e replay da mesma operação, irmão preservado,
+  cleanup físico comprovado. Isso não equivale a uma interrupção de Codex real.
 - O inventário HTTP/SQLite paginado de Todos manteve dois bindings do mesmo
   agente separados, incluindo pergunta bloqueada e resultado do outro contexto.
   Um segundo projeto autorizado acrescentou um trabalho sem multiplicá-lo pelos
@@ -117,7 +143,17 @@ O wheel BGONN `070e10fc…f8d0b31` foi construído, instalado em outro prefix pr
 validado com Twine e smoke do console;538 Python/708 payloads não estáticos
 permaneceram iguais ao BXP. Correções backend posteriores requerem novo corte.
 
-A proposta real foi vinculada a esse pacote, teve 21 testes offline e um smoke
+O pacote PR16 `3374b69e…2b35576` inclui a correção do leitor de resultados:
+707 dos 708 payloads não estáticos iguais ao BXP e apenas `sqlite/home.py`
+diferente. Sete focais instalados, smoke, entrypoints, Twine e origens isoladas
+passaram. A instrumentação quente adicional de 100 agentes teve p95 de
+655,84 ms (entries) e 646,50 ms (children), ainda acima de 500 ms; três amostras
+com dois eventos não substituem o benchmark maior. O pacote PR18
+`bfcd3a56…41b116` preserva os 708 payloads não estáticos do PR16 e altera somente
+os assets CKl/BP1. Ambos são antecedentes imutáveis do novo quadro, que altera
+backend e frontend e requer nova qualificação instalada.
+
+A proposta real foi vinculada ao pacote BXP, teve 21 testes offline e um smoke
 de lifecycle real com zero admissões. A revisão independente e a conferência de
 1.047 pins passaram. O candidato `3ea51229…fafb88e` foi apresentado ao usuário
 para uma autorização específica; o usuário autorizou depois somente Codex.
@@ -152,10 +188,12 @@ cenário e mantém a entrega em andamento.
    de Claude ocorreu nesta campanha.
 2. Uma máquina remota real com Connector e pastas diferentes não foi qualificada
    por peers locais. Não há declaração de suporte universal de plataforma/harness.
-3. UI-043 tem uma tentativa humana falha documentada e correções técnicas
-   posteriores. O segundo percurso foi aberto, com tarefas ainda sem conclusão
-   neste corte. Não há duração de sucesso ou compreensão humana inferida; a
-   autoridade de decisão da fixture tem prazo independente da janela de leitura.
+3. UI-043 conserva três percursos documentados, o primeiro sem conclusão e os
+   dois posteriores com avanço técnico e clareza insuficiente. Os últimos
+   pedidos motivaram colunas, rótulos específicos e indicadores de estado.
+   Esses ajustes não receberam novo aceite humano. Não há duração de sucesso
+   ou compreensão inferida; a autoridade de decisão da fixture tem prazo
+   independente da janela de leitura.
 4. Leitor de tela real não foi comprovado. O zoom nativo de 200% foi exercitado
    depois por `chrome.tabs.setZoom/getZoom=2`, em extensão/perfil temporários
    próprios: mesma janela, innerWidth 1424→712 e DPR 1→2, sem overflow geométrico
@@ -167,7 +205,7 @@ cenário e mantém a entrega em andamento.
    teve p95 de 1.031,41 ms. Foram 55 SQLs/uma UoW/zero writes na leitura inicial.
    A projeção é O(N + relações), limitada por orçamento, não O(página).
 6. Cenários de scrollback, maximizar/restaurar, revogação com rascunho/Voltar,
-   interrupção exata, rollback com trabalho vivo e
+   rollback com trabalho vivo e
    lifecycle específico só podem fechar com suas evidências literais. As coberturas
    parciais estão separadas no ledger.
 

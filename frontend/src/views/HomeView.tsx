@@ -1,6 +1,6 @@
 import { useEffect, type ReactNode } from 'react';
 import { ArrowUpRight, Bell, Bot, MessagesSquare, RefreshCw, Users, Waypoints } from 'lucide-react';
-import { api, type GraphSnapshot, type MessageRow, type MetaHarnessSessions } from '../api';
+import { api, type GraphSnapshot, type MessageRow, type MetaHarnessSessions, type WorkspaceListItem } from '../api';
 import type { AttentionState } from '../attentionTypes';
 import type { ObservationReadState } from '../observationReader';
 import type { ObservationSummary } from '../observationTypes';
@@ -11,6 +11,7 @@ import { formatTime } from '../timeFormat';
 import { actionLabel } from '../graph/lastAction';
 import { getNavigationEntry } from '../navigationRegistry';
 import { useWorkspaceName } from '../components/WorkspaceNames';
+import {HomeProjectCard} from '../components/home/HomeContextCards';
 
 type Destination = 'Graph' | 'Meta-harness' | 'Messages' | 'Agents' | 'Attention';
 type Messages = { items: MessageRow[]; total: number };
@@ -19,8 +20,9 @@ const interval = () => 15;
 const focus = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500';
 
 /** Bounded canonical reads, no per-agent requests and no seen/decision writes. */
-export function HomeView({workspace, refreshTick, attention, onRefreshAttention, onNavigate}: {
+export function HomeView({workspace, refreshTick, attention, onRefreshAttention, onNavigate,workspaces=[],onWorkspaceChange,onSetupAgent}: {
   workspace: string; refreshTick: number; attention: AttentionState; onRefreshAttention: () => void; onNavigate: (view: Destination) => void;
+  workspaces?:WorkspaceListItem[];onWorkspaceChange?:(id:string)=>void;onSetupAgent?:()=>void;
 }) {
   const projectName=useWorkspaceName(workspace);
   const graph = useObservationRead(workspace, (scope, signal) => api.graph(scope, 24, signal), interval);
@@ -34,7 +36,8 @@ export function HomeView({workspace, refreshTick, attention, onRefreshAttention,
   useEffect(() => { if (refreshTick > 0) refresh(); }, [refreshTick]);
   return <HomeOverview workspace={workspace} graph={graph.state} sessions={sessions.state}
     messages={messages.state} observations={observations.state} attention={attention}
-    onNavigate={onNavigate} onRefresh={refresh} projectName={projectName} />;
+    onNavigate={onNavigate} onRefresh={refresh} projectName={projectName}
+    projectControl={onSetupAgent?<HomeProjectCard workspace={workspace} workspaces={workspaces} onChange={onWorkspaceChange} onConnect={onSetupAgent}/>:undefined}/>;
 }
 
 function ReadNotice({state}: {state: Read<unknown>}) {
@@ -58,11 +61,12 @@ function Section({title, detail, children, destination, onNavigate}: {
   </section>;
 }
 
-export function HomeOverview({workspace, graph, sessions, messages, observations, attention, onNavigate, onRefresh, projectName}: {
+export function HomeOverview({workspace, graph, sessions, messages, observations, attention, onNavigate, onRefresh, projectName,projectControl}: {
   workspace: string; graph: Read<GraphSnapshot>; sessions: Read<MetaHarnessSessions>; messages: Read<Messages>;
   observations: Read<ObservationSummary>; attention: AttentionState;
   onNavigate: (view: Destination) => void; onRefresh: () => void;
   projectName?: string;
+  projectControl?:ReactNode;
 }) {
   const nodes = graph.value?.nodes;
   const summary = ['disabled', 'forbidden'].includes(attention.status) ||
@@ -78,12 +82,13 @@ export function HomeOverview({workspace, graph, sessions, messages, observations
     <header className="flex flex-wrap items-start justify-between gap-4">
       <div><p className="text-xs uppercase tracking-wider text-accent-600 dark:text-accent-300">Project overview</p>
         <h1 className="text-2xl font-semibold mt-1">Home</h1>
-        <p className="text-sm text-surface-500 mt-2">Choose a project above. Use Connect or resume to find an existing connection or add a collaborator.</p>
+        <p className="text-sm text-surface-500 mt-2">Connect or resume a collaborator in the Project card, then follow progress and questions here.</p>
         <p className="text-xs text-surface-500 mt-1">{workspace === 'all' ? 'All projects' : `Project: ${projectName || 'Selected project'}`} · Updates every 15 seconds</p>
         <p className="text-sm text-surface-500 mt-2">Follow your agents, conversations and pending questions here.</p>
       </div>
       <button onClick={onRefresh} className={`btn btn-secondary ${focus}`}><RefreshCw size={15}/> Refresh overview</button>
     </header>
+    {projectControl}
     <nav aria-label="Overview shortcuts" className="grid grid-cols-2 xl:grid-cols-4 gap-3">
       {links.map(({name, detail, icon: Icon}) => <button key={name} onClick={() => onNavigate(name)} className={`panel p-4 text-left hover:border-accent-400 transition-colors ${focus}`}>
         <Icon size={19} className="text-accent-600 dark:text-accent-300 mb-3"/><span className="block font-semibold">{getNavigationEntry(name).label}</span><span className="block text-xs text-surface-500 mt-1">{detail}</span>

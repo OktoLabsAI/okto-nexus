@@ -2,7 +2,7 @@ import { call } from './api';
 import { encodeHomeTarget } from './homeNavigation';
 import type { HomeActivity, HomeAgent, HomeFeedEvent, HomeFilters, HomeOverview, HomePage,
   HomePageQuery, HomeResolvedTarget, HomeResult, HomeTarget, HomeEntryFilters, HomeEntryQuery, HomeEntryPage,
-  HomeEntryGroup, HomeEntry, HomeSessionRef } from './homeTypes';
+  HomeEntryGroup, HomeEntry, HomeSessionRef,HomeBoard,HomeBoardPage,HomeBoardColumn,HomeBoardQuery } from './homeTypes';
 import type { ExternalObservation } from './observationTypes';
 import type { AttentionOccurrence } from './attentionTypes';
 
@@ -20,6 +20,8 @@ export interface HomeApi {
   entrySessions(groupId:string,entryId:string,query:HomeEntryQuery,signal?:AbortSignal):Promise<HomeEntryPage<HomeSessionRef>>;
   entryAttention(groupId:string,entryId:string,query:HomeEntryQuery,signal?:AbortSignal):Promise<HomeEntryPage<AttentionOccurrence>>;
   entryResults(groupId:string,entryId:string,query:HomeEntryQuery,signal?:AbortSignal):Promise<HomeEntryPage<HomeResult>>;
+  board(query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeBoard>;
+  boardColumn(column:HomeBoardColumn,query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeBoardPage>;
   target(target: HomeTarget, workspace: string | null, signal?: AbortSignal): Promise<HomeResolvedTarget>;
   resolveTarget(target: HomeTarget, workspace: string | null, signal?: AbortSignal): Promise<HomeResolvedTarget>;
 }
@@ -50,5 +52,7 @@ export const homeApi: HomeApi = {
   entrySessions:(group,entry,query,signal)=>get<HomeEntryPage<HomeSessionRef>>(`entries/${encodeURIComponent(group)}/children/${encodeURIComponent(entry)}/sessions?${queryString(query)}`,signal),
   entryAttention:(group,entry,query,signal)=>get<HomeEntryPage<AttentionOccurrence>>(`entries/${encodeURIComponent(group)}/children/${encodeURIComponent(entry)}/attention?${queryString(query)}`,signal),
   entryResults:(group,entry,query,signal)=>get<HomeEntryPage<HomeResult>>(`entries/${encodeURIComponent(group)}/children/${encodeURIComponent(entry)}/results?${queryString(query)}`,signal),
+  board:(query,signal)=>get<HomeBoard>(`board?${queryString(query)}`,signal),
+  boardColumn:(column,query,signal)=>get<HomeBoardPage>(`board/${encodeURIComponent(column)}?${queryString(query)}`,signal),
   target, resolveTarget: target,
 };

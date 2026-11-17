@@ -167,13 +167,17 @@ const serverOccurrence = () => ({attention_id:'canonical-server-attention',kind:
 const quietSnapshot = item => ({version:1,server_id:'server',scope:{workspace_id:'ws'},generated_at:'2030-01-01T00:00:00Z',
   work:section({}),attention:section({}),results:section({}),agents:section({}),external_activity:section({status:'disabled'}),server_attention:section({items:[item],total:1}),summary:{}});
 let renderedHomeState,entryRows=[];
-modules.set(fileURLToPath(new URL('../src/hooks/useHomeOverview.ts',import.meta.url)),{exports:{useHomeOverview:()=>({state:renderedHomeState,refresh(){},pause(){},apply(){},loadMore(){},holdOrder(){},loadEntries(){},loadGroupChildren(){},loadEntrySessions(){},loadEntryAttention(){},loadEntryResults(){}})}});
+modules.set(fileURLToPath(new URL('../src/hooks/useHomeOverview.ts',import.meta.url)),{exports:{useHomeOverview:()=>({state:renderedHomeState,refresh(){},pause(){},apply(){},loadMore(){},holdOrder(){},loadEntries(){},loadGroupChildren(){},loadEntrySessions(){},loadEntryAttention(){},loadEntryResults(){},loadBoardColumn(){}})}});
 const EntryRow=cards.HomeEntryRow;
 cards.HomeEntryRow=props=>{entryRows.push(props);return React.createElement(EntryRow,props);};
 const {OperationalHome}=load(new URL('../src/components/home/OperationalHome.tsx',import.meta.url));
 const homeProps={workspace:'ws',workspaces:[],identityKey:'operator',refreshTick:0,latestEvent:null,streamStatus:'live',onNavigate(){},onAttentionChanged(){},onSetupAgent(){},registerLeaveGuard(){}};
 const renderHome = snapshot => {
-  entryRows=[];renderedHomeState={entries:snapshot,entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{},status:'ready',staleSections:[],paused:false,generation:1,loading:false,entryLoading:null,error:null,hasPendingUpdate:false};
+  const empty={items:[],total:0,total_is_exact:true,has_more:false,next_cursor:null};
+  const children=snapshot.items.flatMap(group=>group.children.map(entry=>({...entry,group_id:group.id,entry_revision:snapshot.revision})));
+  const board={...snapshot,partition:'board',entry_revision:snapshot.revision,scope:{workspace_id:'ws',quick:'all',include_recent_results:false},
+    columns:{active:{...empty,items:children,total:children.length},needs_you:{...empty},results:{...empty}}};
+  entryRows=[];renderedHomeState={entries:null,board,entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{},status:'ready',staleSections:[],paused:false,generation:1,loading:false,entryLoading:null,boardLoading:null,error:null,hasPendingUpdate:false};
   return html(OperationalHome,homeProps);
 };
 const entriesSnapshot=(item,children=[])=>({version:1,server_id:'server',revision:'entry-revision',status:'ready',items:children.length?[{id:'group',label:'Agent context',children,children_total:children.length,has_more_children:false}]:[],

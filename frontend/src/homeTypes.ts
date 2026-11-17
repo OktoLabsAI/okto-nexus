@@ -114,6 +114,22 @@ export interface HomeEntrySummary {
   sessions:HomeEntryCount; results:HomeEntryCount; unseen_results:HomeEntryCount;
 }
 export type HomeEntryPartition = 'groups'|'children'|'sessions'|'attention'|'results';
+export type HomeBoardColumn = 'active'|'needs_you'|'results';
+export interface HomeBoardEntry extends HomeEntry {group_id:string;entry_revision:string}
+export interface HomeBoardSlice {
+  items:HomeBoardEntry[];total:number|null;total_is_exact:boolean;has_more:boolean;next_cursor:string|null;
+}
+export interface HomeBoardMetadata {
+  version:1;scope:HomeEntryScope;server_id:string;generated_at:string;as_of:string|null;next_refresh_at:string|null;
+  snapshot_id:string|null;revision:string|null;entry_revision:string|null;status:HomeSectionStatus;
+  source_status:Record<string,HomeSectionStatus>;coverage:{result_tracking:'unknown'|'partial'|'ready'};
+  inventory?:{connections:{value:number|null;total_is_exact:boolean;unit:'connections'}};
+  summary:HomeEntrySummary;event_cursor:number;event_low_watermark:number|null;
+  server_attention:Pick<HomeSection<AttentionOccurrence>,'status'|'items'|'total'|'total_is_exact'|'has_more'>;
+}
+export interface HomeBoard extends HomeBoardMetadata {partition:'board';columns:Record<HomeBoardColumn,HomeBoardSlice>}
+export interface HomeBoardPage extends HomeBoardMetadata,HomeBoardSlice {partition:'board_column';column:HomeBoardColumn}
+export type HomeBoardQuery = Omit<HomeEntryQuery,'quick'>;
 export interface HomeEntryPage<T> extends Omit<HomeSection<T>, 'revision'> {
   version:1; scope:HomeEntryScope; server_id:string; generated_at:string; snapshot_id:string|null;
   revision:string|null; partition:HomeEntryPartition; group_id:string|null; entry_id:string|null;

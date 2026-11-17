@@ -283,9 +283,10 @@ function Dashboard({
     setAttentionNavigationNotice(null);
   }, [workspace, view]);
   const pickWorkspace = (id: string) => {
-    if (!mayLeavePanel()) return;
+    if (!mayLeavePanel()) return false;
     localStorage.setItem("okto-nexus-workspace", id);
     setWorkspace(id);
+    return true;
   };
   const [graph, setGraph] = useState<GraphSnapshot | null>(null);
   const [eventLog, setEventLog] = useState<NexusEvent[]>([]);
@@ -323,9 +324,24 @@ function Dashboard({
   const [onboardingOpen, setOnboardingOpen] = useState(false);
   const [connectFlowOpen,setConnectFlowOpen]=useState(false);
   const [connectionTarget,setConnectionTarget]=useState<HomeTarget|null>(null);
-  const openConnectFlow=()=>{if(mayLeavePanel()){setConnectionTarget(null);setConnectFlowOpen(true);}};
+  const [pendingConnectionReturn,setPendingConnectionReturn]=useState<{identityKey:string;workspaceId:string;target:HomeTarget|null;openContext:boolean}|null>(null);
+  const openConnectFlow=()=>{if(mayLeavePanel()){setPendingConnectionReturn(null);setConnectionTarget(null);setConnectFlowOpen(true);}};
+  const applyConnectionReturn=(next:NonNullable<typeof pendingConnectionReturn>)=>{
+    if(next.identityKey!==identityKey)return;
+    if(!pickWorkspace(next.workspaceId)){
+      setWorkspaceNotice('Keep or close the current draft before changing projects.');return;
+    }
+    if(next.openContext){if(next.target)setConnectionTarget(next.target);}
+    else setView('Home');
+  };
   useEffect(()=>{
-    const clear=()=>{setConnectFlowOpen(false);setConnectionTarget(null);};
+    // The owning modal must unmount before the existing navigation guard can
+    // revalidate a project change; React batches its close state with callbacks.
+    if(connectFlowOpen||!pendingConnectionReturn)return;
+    const next=pendingConnectionReturn;setPendingConnectionReturn(null);applyConnectionReturn(next);
+  },[connectFlowOpen,pendingConnectionReturn,identityKey]);
+  useEffect(()=>{
+    const clear=()=>{setConnectFlowOpen(false);setConnectionTarget(null);setPendingConnectionReturn(null);};
     window.addEventListener('nexus-auth-expired',clear);window.addEventListener('nexus-operator-logout',clear);
     return()=>{window.removeEventListener('nexus-auth-expired',clear);window.removeEventListener('nexus-operator-logout',clear);};
   },[]);
@@ -627,7 +643,7 @@ function Dashboard({
           </span>)}
         </nav>
         <div className="ml-auto w-full sm:w-auto min-w-0 flex items-center gap-2 text-xs">
-          <label className="flex min-w-0 flex-1 sm:flex-none items-center gap-2">
+          {view!=='Home'&&<label className="flex min-w-0 flex-1 sm:flex-none items-center gap-2">
           <span className="font-medium">Project</span>
           <select
             value={workspace}
@@ -653,7 +669,7 @@ function Dashboard({
               </option>
             ))}
           </select>
-          </label>
+          </label>}
           <GlobalAttentionButton state={globalAttention.state} onOpen={() => {globalAttention.refresh();setView('Attention');}}/>
           <LiveChip status={sseStatus} />
           <button
@@ -774,10 +790,11 @@ function Dashboard({
       )}
       {connectFlowOpen&&<AgentActionModal title="Connect a project agent" presentation="drawer" wide testId="project-connect-detail" onClose={()=>setConnectFlowOpen(false)}>
         <ProjectConnectFlow identityKey={identityKey} workspace={workspaces.find(item=>item.workspace_id===workspace)??null} serverOrigin={window.location.origin}
-          onClose={()=>setConnectFlowOpen(false)} onResume={item=>{setConnectFlowOpen(false);setConnectionTarget({kind:'connection',server_id:item.server_id,executor_id:item.executor_id,
-            workspace_id:item.workspace_id,binding_id:item.binding_id,agent_id:item.agent_id});}}
-          onComplete={result=>{setConnectFlowOpen(false);setRefreshTick(value=>value+1);attention.refresh();
-            if(result.binding){const b=result.binding;if(b.server_id)setConnectionTarget({kind:'connection',server_id:b.server_id,executor_id:b.executor_id,workspace_id:b.workspace_id,binding_id:b.binding_id,agent_id:b.agent_id});}}}/>
+          onClose={()=>setConnectFlowOpen(false)} onResume={item=>{setConnectFlowOpen(false);setPendingConnectionReturn({identityKey,workspaceId:item.workspace_id,openContext:true,
+            target:{kind:'connection',server_id:item.server_id,executor_id:item.executor_id,workspace_id:item.workspace_id,binding_id:item.binding_id,agent_id:item.agent_id}});}}
+          onComplete={(result,options?:{openContext?:boolean})=>{setConnectFlowOpen(false);setRefreshTick(value=>value+1);attention.refresh();
+            if(result.binding){const b=result.binding;setPendingConnectionReturn({identityKey,workspaceId:b.workspace_id,openContext:options?.openContext!==false,
+              target:b.server_id?{kind:'connection',server_id:b.server_id,executor_id:b.executor_id,workspace_id:b.workspace_id,binding_id:b.binding_id,agent_id:b.agent_id}:null});}}}/>
       </AgentActionModal>}
       {connectionTarget&&<AgentActionModal title="Connection context" presentation="drawer" wide testId="connection-context-detail" onClose={()=>setConnectionTarget(null)}>
         <HomeInspection target={connectionTarget} serverId={connectionTarget.server_id} workspace={connectionTarget.workspace_id} onClose={()=>setConnectionTarget(null)}
@@ -834,16 +851,13 @@ function Dashboard({
 
       <main className="flex-1 min-w-0 overflow-hidden">
           {view === 'Home' && <div className="h-full flex flex-col min-h-0">
-            {(!homeOperational||info?.features?.feature_home===false)&&<div className="shrink-0 px-4 pt-2 flex justify-end">
-              <button type="button" className="btn btn-secondary" onClick={openConnectFlow}>Connect or resume</button>
-            </div>}
             <div className="min-h-0 flex-1">
               {homeOperational && info?.features?.feature_home !== false
                 ? <OperationalHome key={workspace} workspace={workspace} workspaces={workspaces} identityKey={identityKey}
                     refreshTick={refreshTick} latestEvent={latestHomeEvent} streamStatus={sseStatus} onNavigate={setView}
-                    onAttentionChanged={attention.refresh} onSetupAgent={openConnectFlow} registerLeaveGuard={registerHomeLeaveGuard}/>
+                    onAttentionChanged={attention.refresh} onSetupAgent={openConnectFlow} onWorkspaceChange={pickWorkspace} registerLeaveGuard={registerHomeLeaveGuard}/>
                 : <HomeView key={workspace} workspace={workspace} refreshTick={refreshTick} attention={attention.state}
-                    onRefreshAttention={attention.refresh} onNavigate={setView}/>}
+                    onRefreshAttention={attention.refresh} onNavigate={setView} workspaces={workspaces} onWorkspaceChange={pickWorkspace} onSetupAgent={openConnectFlow}/>}
             </div>
           </div>}
           {view === 'Advanced' && <AdvancedView memoryEnabled={memoryEnabled} onNavigate={setView}/>}

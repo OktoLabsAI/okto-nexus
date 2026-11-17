@@ -240,7 +240,7 @@ test('Connector bootstrap command is public, host-local and cannot carry URL cre
 
 test('actual short flow renders inline progress and no advanced modal, managed launch or pre-created identity',()=>{
   const html=renderToStaticMarkup(React.createElement(ProjectConnectFlow,{identityKey:'human-1',workspace,serverOrigin:'https://nexus.example.test',onClose(){},onResume(){},onComplete(){},api:fixture().api,storage:store()}));
-  assert.match(html,/Connect agent/);assert.match(html,/Choose connection/);assert.match(html,/Project and harness/);assert.match(html,/Test and finish/);
+  assert.match(html,/Connect agent/);assert.match(html,/1\. Connection/);assert.match(html,/2\. Setup/);assert.match(html,/3\. Confirm/);
   assert.doesNotMatch(html,/role="dialog"|agent-connections-|<iframe|Advanced settings/);
 });
 
@@ -292,6 +292,166 @@ test('actual review and Finish visibly disclose Server-wide native policy, exact
     await model.test(true);const finish=render();assert.match(finish,/Apply this exact reviewed identity/);assert.match(finish,/Server-wide native decision policy change/);
     assert.match(finish,/<button[^>]*disabled=""[^>]*>Finish<\/button>/);
   } finally {React.useSyncExternalStore=original;model.dispose();}
+});
+
+function renderExistingModel(model,f,extra={}) {
+  const exported=load(new URL('../src/projectConnectFlowModel.ts',import.meta.url)),original=exported.ProjectConnectModel;
+  exported.ProjectConnectModel=function(){return model;};
+  try{return renderToStaticMarkup(React.createElement(ProjectConnectFlow,{identityKey:'human-1',workspace,serverOrigin:'https://nexus.example.test',onClose(){},onResume(){},onComplete(){},api:f.api,storage:f.storage,...extra}));}
+  finally{exported.ProjectConnectModel=original;}
+}
+
+const flowSource=ts.createSourceFile('ProjectConnectFlow.tsx',readFileSync(new URL('../src/components/onboarding/ProjectConnectFlow.tsx',import.meta.url),'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+function expressionCode(expression) {return ts.transpileModule('const value='+expression.getText(flowSource),{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText+';return value;';}
+function actualButtonHandler(label,values) {
+  let expression;
+  const visit=node=>{if(ts.isJsxElement(node)&&node.openingElement.tagName.getText(flowSource)==='button'&&node.children.some(child=>ts.isJsxText(child)&&child.text.trim()===label)){
+    expression=node.openingElement.attributes.properties.find(attr=>ts.isJsxAttribute(attr)&&attr.name.getText(flowSource)==='onClick')?.initializer.expression;
+  }ts.forEachChild(node,visit);};visit(flowSource);assert.ok(expression,label);
+  return new Function(...Object.keys(values),expressionCode(expression))(...Object.values(values));
+}
+
+test('canonical Finish remains visibly Connected until an explicit navigation choice; effects never auto-complete',async()=>{
+  const f=fixture(),model=await reviewed(f);await model.test(true);await model.finish();
+  const state=model.getSnapshot(),calls=[],effects=[],originalEffect=React.useEffect;
+  const facade=Object.create(model);facade.initialize=()=>{};facade.dispose=()=>{};
+  React.useEffect=effect=>effects.push(effect);
+  let html;
+  try{html=renderExistingModel(facade,f,{onComplete:(...args)=>calls.push(args)});}finally{React.useEffect=originalEffect;}
+  for(const effect of effects)effect();
+  await Promise.resolve();assert.deepEqual(calls,[]);
+  assert.match(html,/aria-label="Connection confirmed"/);assert.match(html,/>Connected<\/h3>/);
+  assert.match(html,/Fixture project/);assert.match(html,/Fixture Server/);assert.match(html,/>Codex<\/dd>/);
+  assert.match(html,/Harness default \(model not specified\)/);
+  assert.match(html,/>Open connection<\/button>/);assert.match(html,/>Back to project<\/button>/);
+  let transitions=0;
+  const values={transition:fn=>{transitions++;fn();},onComplete:(...args)=>calls.push(args),state};
+  actualButtonHandler('Open connection',values)();actualButtonHandler('Back to project',values)();
+  assert.equal(transitions,2);assert.deepEqual(calls,[[state.result,{openContext:true}],[state.result,{openContext:false}]]);
+  assert.equal(f.calls.filter(c=>c.name==='testSetup').length,1);assert.equal(f.calls.filter(c=>c.name==='finishSetup').length,1);model.dispose();
+});
+
+test('successful Test is not Connected and Finish still requires separate explicit consent; full review stays in closed details',async()=>{
+  const f=fixture(),model=await reviewed(f);await model.test(true);
+  const html=renderExistingModel(model,f);
+  assert.match(html,/Test passed\. Finish to create this connection\./);assert.doesNotMatch(html,/>Connected<\/h3>/);
+  assert.match(html,/<button[^>]*disabled=""[^>]*>Finish<\/button>/);
+  const details=html.indexOf('<details><summary>Permissions, limits and technical details');
+  assert.ok(details>0);assert.match(html.slice(details),/messages per minute/);assert.match(html.slice(details),/sha256:ffff/);
+  assert.ok(html.indexOf('Server-wide change at Finish:')<details);
+  assert.equal(f.calls.filter(c=>c.name==='finishSetup').length,0);model.dispose();
+});
+
+test('pending indicators follow actual Test and Finish responses; success waits for validated Finish',async()=>{
+  const f=fixture();
+  let releaseTest,releaseFinish;
+  const testGate=new Promise(resolve=>releaseTest=resolve),finishGate=new Promise(resolve=>releaseFinish=resolve);
+  const originalTest=f.api.testSetup,originalFinish=f.api.finishSetup;
+  f.api.testSetup=async body=>{await testGate;return originalTest(body);};
+  f.api.finishSetup=async body=>{await finishGate;return originalFinish(body);};
+  const model=await reviewed(f);
+  const testing=model.test(true);
+  let html=renderExistingModel(model,f);
+  assert.match(html,/data-connection-outcome="pending"/);assert.match(html,/Testing reviewed connection/);
+  assert.match(html,/lucide-loader-circle/);assert.match(html,/animate-spin motion-reduce:animate-none/);
+  assert.doesNotMatch(html,/data-connection-outcome="success"|>Connected<\/h3>/);
+  releaseTest();await testing;
+  html=renderExistingModel(model,f);
+  assert.doesNotMatch(html,/data-connection-outcome="pending"|data-connection-outcome="success"/);
+  assert.match(html,/<button[^>]*disabled=""[^>]*>Finish<\/button>/);
+  const finishing=model.finish();
+  html=renderExistingModel(model,f);
+  assert.match(html,/data-connection-outcome="pending"/);assert.match(html,/Saving connection/);
+  assert.doesNotMatch(html,/data-connection-outcome="success"|>Connected<\/h3>/);
+  releaseFinish();await finishing;
+  html=renderExistingModel(model,f);
+  assert.match(html,/data-connection-outcome="success"/);assert.match(html,/lucide-circle-check/);
+  assert.match(html,/>Connected<\/h3>/);assert.doesNotMatch(html,/data-connection-outcome="pending"/);
+  assert.equal(f.calls.filter(c=>c.name==='testSetup').length,1);assert.equal(f.calls.filter(c=>c.name==='finishSetup').length,1);
+  model.dispose();
+});
+
+test('known test failure and unknown outcomes have distinct graphics without invented success or replay',async()=>{
+  for(const known of [false,true]){
+    const f=fixture({async testSetup(body){if(!known)throw new Error('response lost');return {test_id:body.client_intent_id,status:'failed',stage:'Test failed',details:[],retryable_failure:false};}});
+    const model=await reviewed(f);await model.test(true);
+    const html=renderExistingModel(model,f);
+    assert.match(html,new RegExp('data-connection-outcome="'+(known?'failure':'unknown')+'"'));
+    assert.match(html,known?/Connection test failed/:/Connection outcome unknown/);
+    assert.match(html,known?/lucide-circle-x/:/lucide-circle-question-mark/);
+    assert.doesNotMatch(html,/data-connection-outcome="success"|data-connection-outcome="pending"/);
+    assert.match(html,/Recover existing attempt/);
+    assert.equal(f.calls.filter(c=>c.name==='finishSetup').length,0);model.dispose();
+  }
+});
+
+test('catalog and confirmed connection keep IDs in one closed Technical details entry',async()=>{
+  const f=fixture();f.setCatalog([row()]);
+  const catalog=f.model();await catalog.initialize();let html=renderExistingModel(catalog,f);
+  assert.match(html,/<details><summary>Technical details<\/summary>/);
+  assert.ok(html.indexOf('binding-1')>html.indexOf('<details><summary>Technical details'));
+  assert.doesNotMatch(html,/<details open/);assert.match(html,/does not start a session, renew authorization or change its configuration/);
+  catalog.dispose();
+  const model=await reviewed(f);await model.test(true);await model.finish();html=renderExistingModel(model,f);
+  assert.equal((html.match(/<summary>Technical details<\/summary>/g)||[]).length,1);
+  assert.ok(html.indexOf(model.getSnapshot().result.binding.binding_id)>html.indexOf('<details><summary>Technical details'));
+  assert.doesNotMatch(html,/<details open/);assert.match(html,/No project task has been started/);model.dispose();
+});
+
+test('review displays an explicitly configured canonical model and never invents a default model',async()=>{
+  const f=fixture(),model=await reviewed(f);
+  model.editReview();model.customize({harness_settings:{model:'fixture-observed-model'}});model.review();
+  const html=renderExistingModel(model,f);
+  assert.match(html,/<dt>Model<\/dt><dd[^>]*>fixture-observed-model<\/dd>/);assert.doesNotMatch(html,/Harness default \(model not specified\)/);
+  assert.equal(f.calls.filter(c=>['testSetup','finishSetup'].includes(c.name)).length,0);model.dispose();
+});
+
+test('missing required Server folder gives a visible error and focuses that exact field before any review or effect',async()=>{
+  const f=fixture(),model=await reviewed(f);model.editReview();model.customize({workspace_root:''});
+  const state=model.getSnapshot(),before=state.agentId;
+  const html=renderExistingModel(model,f);assert.match(html,/Project folder required on the Server/);assert.match(html,/<input[^>]*required=""[^>]*aria-label="Project folder on the Nexus Server"/);
+  let reviewExpression,focusExpression;
+  const visit=node=>{if(ts.isVariableDeclaration(node)&&node.name.getText(flowSource)==='review')reviewExpression=node.initializer;
+    if(ts.isCallExpression(node)&&node.expression.getText(flowSource)==='useEffect'&&node.arguments[0]?.getText(flowSource).includes('field?.closest'))focusExpression=node.arguments[0];
+    ts.forEachChild(node,visit);};visit(flowSource);assert.ok(reviewExpression);assert.ok(focusExpression);
+  let invalid=null,error='',expanded=false,focused=0;
+  new Function('state','setInvalid','setError','setFolderOpen','setCustomize','act','model',expressionCode(reviewExpression))(
+    state,value=>invalid=value,value=>error=value,value=>expanded=value,()=>{},()=>assert.fail('must not review'),model)();
+  assert.equal(invalid,'folder');assert.match(error,/project folder on the Nexus Server/);assert.equal(expanded,true);
+  const details={open:false},field={closest:()=>details,focus:()=>focused++};
+  new Function('error','state','invalid','nameField','projectField','folderField','providerField','alert',expressionCode(focusExpression))(
+    error,state,invalid,{current:null},{current:null},{current:field},{current:null},{current:null})();
+  assert.equal(focused,1);assert.equal(details.open,true);assert.equal(model.getSnapshot().agentId,before);
+  assert.equal(f.calls.filter(c=>['testSetup','finishSetup'].includes(c.name)).length,0);model.dispose();
+});
+
+test('unconfirmed or foreign complete snapshot cannot display Connected or offer navigation',async()=>{
+  const f=fixture(),model=await reviewed(f);await model.test(true);await model.finish();
+  const original=model.getSnapshot,result=clone(original().result);result.binding.workspace_id='foreign';
+  const facade=Object.create(model);facade.getSnapshot=()=>({...original(),result});
+  const html=renderExistingModel(facade,f);assert.doesNotMatch(html,/>Connected<\/h3>|>Back to project<\/button>/);assert.match(html,/saved connection has not been confirmed/);model.dispose();
+});
+
+test('UI review preserves canonical Claude provider-home null without imposing a new required field',async()=>{
+  const f=fixture(),model=await reviewed(f,'claude_stream');model.editReview();model.customize({provider_home:null});
+  const state=model.getSnapshot();let expression;
+  const visit=node=>{if(ts.isVariableDeclaration(node)&&node.name.getText(flowSource)==='review')expression=node.initializer;ts.forEachChild(node,visit);};visit(flowSource);
+  new Function('state','setInvalid','setError','setFolderOpen','setCustomize','act','model',expressionCode(expression))(
+    state,()=>assert.fail('canonical default must remain valid'),()=>assert.fail('must not add provider-home error'),()=>{},()=>{},fn=>fn(),model)();
+  assert.equal(model.getSnapshot().phase,'review');assert.equal(model.getSnapshot().request.configuration.provider_home,null);
+  assert.match(renderExistingModel(model,f),/Harness default on the Server/);
+  assert.equal(f.calls.filter(c=>['testSetup','finishSetup'].includes(c.name)).length,0);model.dispose();
+});
+
+test('catalog and summary use public harness names while technical IDs remain in references',async()=>{
+  const f=fixture();f.setCatalog([row('codex_app_server','codex-binding'),row('claude_stream','claude-binding'),row('pi_rpc','pi-binding'),row('custom_adapter','custom-binding')]);
+  const catalog=f.model();await catalog.initialize();const html=renderExistingModel(catalog,f);
+  for(const label of ['Codex','Claude','Pi','custom_adapter'])assert.match(html,new RegExp(' · '+label+'<\\/p>'));
+  for(const id of ['codex_app_server','claude_stream','pi_rpc'])assert.match(html,new RegExp('Harness reference: '+id));
+  assert.doesNotMatch(html,/ · (codex_app_server|claude_stream|pi_rpc)<\/p>/);catalog.dispose();
+  const reviewedModel=await reviewed(f),state=reviewedModel.getSnapshot(),facade=Object.create(reviewedModel);
+  facade.getSnapshot=()=>({...state,options:{...state.options,catalog:{...state.options.catalog,runtimes:[]}}});
+  assert.match(renderExistingModel(facade,f),/<dd>Codex · Fixture Server<\/dd>/);reviewedModel.dispose();
 });
 
 test('foreign test/Finish/recovery results preserve intent and cannot complete another selection',async()=>{
