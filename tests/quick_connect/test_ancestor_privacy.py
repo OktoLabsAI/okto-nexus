@@ -232,7 +232,7 @@ def test_d25_private_origin_does_not_enter_observed_logs_json_homes_or_sqlite(qu
                 for value in row:
                     if isinstance(value, (str, bytes)):
                         cells += 1
-                        
+
                         if isinstance(value, str):
                             no_secret(value)
                         else:
