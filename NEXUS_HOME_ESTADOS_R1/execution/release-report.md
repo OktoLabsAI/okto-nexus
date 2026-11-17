@@ -2,9 +2,10 @@
 
 **Delivery is not fully qualified or approved for default. Human evaluation
 has not started.** The selected local functional/context flows have now been
-reviewed against source, installed and browser evidence. A representative local
-usability evaluation can be scheduled when the participant is available;
-the whole plan's remaining qualification is explicitly separate. Following the user's clarification about other
+reviewed against source, installed and browser evidence. Additional supported
+functional/security/compatibility checks remain before the human invitation;
+a newly reproduced unnamed menu control is being corrected in R8. The whole
+plan's remaining qualification is explicit. Following the user's clarification about other
 processes on this shared machine, performance timings are diagnostic and
 non-blocking for this local delivery; no further tuning is required solely
 to chase these numbers.
@@ -61,6 +62,14 @@ complete authorized result-attention index with legacy fallbacks. They do not
 cache authority or freshness across reads/principals or weaken resource limits.
 
 ## Executed evidence
+
+The new R8 source fixes a reproduced shell accessibility defect: the icon-only
+header menu had no accessible name in the real R7 browser AX tree. It now has
+the name Application menu and exposes its actual expanded state. The original
+checkout's404Node cases, TypeScript and Vite build pass with unchanged inputs.
+Its new bundle is `index-Cyg0aKfe.js`; CSS remains `index-Bh2ghaTD.css`. A fresh
+R8 package and installed/browser confirmation are pending. R7 prefixes and
+the original failing AX capture remain immutable. No Python behavior changed.
 
 | Layer | Observed scope | Evidence |
 |---|---|---|
@@ -124,7 +133,9 @@ The [116-scenario audit](remaining-qualification-review-r7.md) records the
 unexecuted clauses and partial layers rather than treating every test count
 as qualification. The [ledger](../NEXUS_HOME_ESTADOS_LEDGER_R1.json) remains
 authoritative for individual task/scenario status. After the subsequent literal
-reviews it has42PASS,66NOT_RUN and8BLOCKED. Partial browser/native clauses
+reviews it has44PASS,63NOT_RUN,1FAIL and8BLOCKED. The current failure is the
+R7 menu's actual missing accessible name; R8 source is fixed but its new
+installed/browser validation is pending. Partial browser/native clauses
 remain NOT_RUN. This is not a whole-plan completion or default approval.
 
 The [contract blockers](contract-blockers-r6-review.md) remain precise:
@@ -168,10 +179,13 @@ force-push, release, deployment, merge or default activation was performed.
 
 ## Next gate
 
-The selected recovery/isolation/context follow-ups are reviewed. The useful-DOM
+The selected recovery/isolation/context follow-ups are reviewed. Finish the
+additional supported functional/security/compatibility increments and confirm
+the R8 menu correction in its new installed browser before inviting a participant.
+The useful-DOM
 observation and shared-machine limitation are already recorded above. No
 further performance-only optimization round is required for this local delivery.
-Invite the participant for the representative supported local flows using the
+Then invite the participant for the representative supported local flows using the
 neutral [human script](human-usability-preparation.md), while keeping the
 remaining technical qualification explicit.
 Provision a fresh temporary fixture after availability is confirmed; do not

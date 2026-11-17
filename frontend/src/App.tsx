@@ -703,6 +703,8 @@ function Dashboard({
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setShowMenu((v) => !v)}
+              aria-label="Application menu"
+              aria-expanded={showMenu}
               className={`btn btn-secondary flex items-center gap-1 !px-2 ${
                 showMenu ? "ring-2 ring-accent-300" : ""
               }`}
