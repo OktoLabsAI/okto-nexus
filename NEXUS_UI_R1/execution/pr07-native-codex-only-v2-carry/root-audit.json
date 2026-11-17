@@ -1,0 +1,23 @@
+{
+  "at": "2026-11-16T23:47:55.679441+00:00",
+  "status": "ROOT_TECHNICAL_REVIEW_PASS_BOUNDED_CONTINUATION",
+  "candidate_sha256": "cc8888f6b09376cb575a184c1e46886e6f5175176f9169f043ac36944b5fbccf",
+  "genuine_consent_sha256": "21df89b17e8546a06ea52ae0f27fcead65c5c24b100e5b1e765710805a5aa4a5",
+  "checked_pins_including_carry": 1055,
+  "mismatches": 0,
+  "native_binary_bindings": 2,
+  "claude": 0,
+  "prior_zero_effect_sqlite_rechecked": true,
+  "prior_cleanup_drained_physical_exit": true,
+  "global_maximum_slots": 6,
+  "permanent_carry": 75000,
+  "new_maximum_slots": 5,
+  "offline_pass": 28,
+  "code_review": "Read carry proofs and RO SQLite guards, exact GET inventory gate with120s deadline before reserve/review, and Budget.charged permanent carry. No refund, fallback, unknown replay, extra model or broadened scope.",
+  "limits": [
+    "Not a new user permission request or budget increase.",
+    "Inventory version unknown remains unqualified; gate cannot fabricate support.",
+    "Observed Codex accounting is not an atomic billing cap or final billing fence.",
+    "Same frozen BXP runtime; later presentation/reader deltas separately qualified."
+  ]
+}

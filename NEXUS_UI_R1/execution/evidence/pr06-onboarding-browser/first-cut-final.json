@@ -1,0 +1,135 @@
+{
+  "before": {
+    "counts": {
+      "agents": 3,
+      "execution_bindings": 1,
+      "runtime_execution_grants": 1,
+      "execution_sessions": 0,
+      "execution_operations": 0,
+      "connection_setup_commits": 1
+    },
+    "agents": [
+      "operator",
+      "subject",
+      "collaborator-a"
+    ],
+    "bindings": [
+      {
+        "binding_id": "bind_69b97cb5431ed01fad8b51052f97bb74",
+        "agent_id": null,
+        "executor_id": "exe_99360654abc07eb0c1d5e0f2272c9013",
+        "workspace_id": null,
+        "workspace_binding_id": "wxb_0693b6d7828bf0da9974a3b7f00fc147",
+        "adapter_id": null
+      }
+    ],
+    "row_digests": {
+      "agents": "df98f4e7036ae7f6b69b4494b27c995c8e72f10fd1e7e282ec8d0f78e1082387",
+      "execution_bindings": "c896860f049796e8828f846ecd6e20546969e3b759c77d890bd9b9ad59e55324",
+      "runtime_execution_grants": "29f69a49194d1918196af7a11eab78e954cd4d75b0b759460b85f7e9de690f81",
+      "execution_sessions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "execution_operations": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "connection_setup_commits": "0473d2421ba2d71bb1d260907007cb5f0cbfd73c3f5d8b7492c4815ef45f0135"
+    },
+    "a_agent_digest": "ddb2fc42241db10e8f48bd2f8fdfca3f52c0b77cc4b7d41792a7e5bc3fa99825",
+    "turns": [
+      "connect_6d77952d989444de922bdc164650dd5f"
+    ],
+    "probes": 1,
+    "calls": [
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:test",
+        "intent": "setup_8e8b75b9fa372f0785045598f9c62522",
+        "agent": "project_1bb6448ed80b598d991690fb5588dc92",
+        "workspace": "wsr_1a7b7f5ae9ac5bddc6327abbd9bca601"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:finish",
+        "intent": "setup_8e8b75b9fa372f0785045598f9c62522",
+        "agent": "project_1bb6448ed80b598d991690fb5588dc92",
+        "workspace": "wsr_1a7b7f5ae9ac5bddc6327abbd9bca601"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:recover",
+        "intent": "setup_8e8b75b9fa372f0785045598f9c62522",
+        "agent": "project_1bb6448ed80b598d991690fb5588dc92",
+        "workspace": "wsr_1a7b7f5ae9ac5bddc6327abbd9bca601"
+      }
+    ]
+  },
+  "after": {
+    "counts": {
+      "agents": 4,
+      "execution_bindings": 2,
+      "runtime_execution_grants": 2,
+      "execution_sessions": 0,
+      "execution_operations": 0,
+      "connection_setup_commits": 2
+    },
+    "agents": [
+      "operator",
+      "subject",
+      "collaborator-a",
+      "project_1bb6448ed80b598d991690fb5588dc92"
+    ],
+    "bindings": [
+      {
+        "binding_id": "bind_69b97cb5431ed01fad8b51052f97bb74",
+        "agent_id": null,
+        "executor_id": "exe_99360654abc07eb0c1d5e0f2272c9013",
+        "workspace_id": null,
+        "workspace_binding_id": "wxb_0693b6d7828bf0da9974a3b7f00fc147",
+        "adapter_id": null
+      },
+      {
+        "binding_id": "bind_bc992738d8d0a9607f053caea944a128",
+        "agent_id": null,
+        "executor_id": "exe_99360654abc07eb0c1d5e0f2272c9013",
+        "workspace_id": null,
+        "workspace_binding_id": "wxb_bfdea99f96a6cf6c09d5b8b593208f0d",
+        "adapter_id": null
+      }
+    ],
+    "row_digests": {
+      "agents": "779331f2fa35ca8f6702628d43efaa49d549e1c0f4163f764931f5a30c649ea9",
+      "execution_bindings": "3bb7dfec59d704c3c25b445a7d17a5ad1e862a991ef0ad4e9124e4c9a08a7a43",
+      "runtime_execution_grants": "5041706bfc38c27c906c6c5c5e12b1ce05ef6d5b4a23ba3e9913e6174feb35a3",
+      "execution_sessions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "execution_operations": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "connection_setup_commits": "f1344193bd5373177e1f319ba70b4d5147595bfa34de084d36d1f4b2bcf330e5"
+    },
+    "a_agent_digest": "ddb2fc42241db10e8f48bd2f8fdfca3f52c0b77cc4b7d41792a7e5bc3fa99825",
+    "turns": [
+      "connect_6d77952d989444de922bdc164650dd5f",
+      "setup_8e8b75b9fa372f0785045598f9c62522"
+    ],
+    "probes": 1,
+    "calls": [
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:test",
+        "intent": "setup_8e8b75b9fa372f0785045598f9c62522",
+        "agent": "project_1bb6448ed80b598d991690fb5588dc92",
+        "workspace": "wsr_1a7b7f5ae9ac5bddc6327abbd9bca601"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:finish",
+        "intent": "setup_8e8b75b9fa372f0785045598f9c62522",
+        "agent": "project_1bb6448ed80b598d991690fb5588dc92",
+        "workspace": "wsr_1a7b7f5ae9ac5bddc6327abbd9bca601"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:recover",
+        "intent": "setup_8e8b75b9fa372f0785045598f9c62522",
+        "agent": "project_1bb6448ed80b598d991690fb5588dc92",
+        "workspace": "wsr_1a7b7f5ae9ac5bddc6327abbd9bca601"
+      }
+    ]
+  },
+  "fixture_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui039-browser-99hxjqkx"
+}

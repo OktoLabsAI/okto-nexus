@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="10.236" timestamp="2026-11-16T17:44:00.195238-03:00" hostname="Alienware_m15"><testcase classname="" name="test_missing_claude_home_is_definitive_real_http_refusal_without_model_or_identity_effect[claude_stream]" time="7.191"><failure message="okto_nexus.application.terminal_connection.ConnectionError: Pass --provider-home for the Claude login on this Server host.">terminal = namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x0000018F504BACF0&gt;, selection...stapi.applications.FastAPI object at 0x0000018F4EDC9E80&gt;, call=&lt;function terminal.&lt;locals&gt;.call at 0x0000018F505C85E0&gt;)
+checking = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-11096/test_mis...95d009dd16146e4139ba09d1', ...}, '/v1/runtime/executors/exe_d6408ac6acf81ba575f58bb90d0c9e19/installations:check', ...)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000018F4E578510&gt;
+
+    @pytest.mark.parametrize('local_setup', ['claude_stream'], indirect=True)
+    def test_missing_claude_home_is_definitive_real_http_refusal_without_model_or_identity_effect(terminal, checking, monkeypatch):
+        monkeypatch.setattr(nexus_connector_core, 'discover_provider_home', lambda *_a, **_k: None)
+        t=terminal
+&gt;       document=t.flow.review(t.selection|{'agent':'uncreated-claude','create_agent':True,'client':'claude'})
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\jpamb\AppData\Local\Temp\nexus-ui039-patch-bricw5pp\test_project_connect_rejection.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x0000018F504BACF0&gt;
+selection = {'agent': 'uncreated-claude', 'client': 'claude', 'project': 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-11096\\test_missing_claude_home_is_de0\\workspace', 'label': 'Project', ...}
+
+    def review(self, selection):
+        me = self.api('GET', '/connections/me')
+        creating = selection.get('create_agent', False)
+        current = self.current(selection['agent'], new_agent_draft=creating)
+        if creating and selection.get('binding_id'):
+            raise ConnectionError('IDENTITY_REVIEW_CONFLICT', 'A new identity cannot adopt an existing binding.')
+        binding = selection.get('binding_id')
+        if selection.get('setup_intent_id') and (binding or current['connections']):
+            raise ConnectionError('ADDITION_CONFLICT',
+                'Adding a connection cannot resume or replace this existing binding. Resume it explicitly or review a separate project identity.')
+        if binding:
+            match = next((row for row in current['connections'] if row['binding_id'] == binding), None)
+            if not match:
+                raise ConnectionError('BINDING_UNAVAILABLE', 'The selected agent has no active connection with this binding ID.')
+            if not selection['client']:
+                selection['client'] = next((name for name, adapter in CLIENTS.items() if adapter == match['adapter_id']), None)
+            if not selection['client']:
+                raise ConnectionError('CLIENT_UNSUPPORTED', 'This binding has no supported project client.')
+            return self._reused(selection, me['server_id'], binding)
+        if current['connections']:
+            # The agent was explicitly selected and the operator API has already
+            # authorized these canonical bindings. Paths only select its local
+            # destination; they never discover or create an agent identity.
+            matches = []
+            for row in current['connections'][:100]:
+                if (row['execution_location'] != 'local' or row['adapter_id'] not in CLIENTS.values() or
+                        selection['client'] and row['adapter_id'] != CLIENTS[selection['client']] or
+                        selection.get('workspace_id') and row['workspace_id'] != selection['workspace_id'] or
+                        selection.get('candidate_ref') and row['candidate_ref'] != selection['candidate_ref']):
+                    continue
+                existing = self.current(selection['agent'], row['binding_id'])
+                if existing.get('folders', {}).get('workspace_root') == selection['project']:
+                    matches.append(row)
+            if len(matches) == 1 and len(current['connections']) &lt;= 100:
+                selected_binding = matches[0]
+                selection['client'] = next(name for name, adapter in CLIENTS.items() if adapter == selected_binding['adapter_id'])
+                return self._reused(selection, me['server_id'], selected_binding['binding_id'])
+            raise ConnectionError('CONNECTION_SELECTION_REQUIRED',
+                'This agent has no unique matching connection. Select --binding-id from its canonical connection list.')
+        hosts, cursor = [], None
+        for _ in range(10):
+            page = self.api('GET', '/agents/' + quote(me['agent_id'] if creating else selection['agent'], safe='') + '/executors?' +
+                urlencode({'limit': 100, **({'after_executor_id': cursor} if cursor else {})}))
+            hosts.extend(row for row in page['items'] if row['kind'] == 'embedded')
+            if not page['has_more']:
+                break
+            following = page['next_executor_id']
+            if not following or following == cursor:
+                raise ConnectionError('INVENTORY_UNCONFIRMED', 'The executor listing changed. Inspect the Server inventory.')
+            cursor = following
+        else:
+            raise ConnectionError('INVENTORY_UNCONFIRMED', 'The executor listing exceeded its bounded page limit.')
+        if len(hosts) != 1:
+            raise ConnectionError('LOCAL_EXECUTOR_UNAVAILABLE', 'The selected Server has no unique local execution host.')
+        request = {'client_intent_id': selection.get('setup_intent_id') or 'connect_' + uuid.uuid4().hex, 'agent_id': selection['agent'],
+            'executor_id': hosts[0]['executor_id'], 'workspace_id': selection.get('workspace_id'), 'binding_id': None}
+        if creating:
+            request['agent_creation'] = {'display_name': '',
+                'defaults_hash': current['agent_creation_defaults']['defaults_hash']}
+        available = self.options(request)
+        if not selection['client']:
+            clients = {name for name, adapter in CLIENTS.items() for row in available['options']
+                       if row['adapter_id'] == adapter and row.get('candidate_ref')}
+            if len(clients) != 1:
+                raise ConnectionError('CLIENT_SELECTION_REQUIRED',
+                    'Choose --client from the observed harnesses: ' + ', '.join(sorted(clients)),
+                    choices=sorted(clients))
+            selection['client'] = clients.pop()
+        rows = [row for row in available['options'] if row['adapter_id'] == CLIENTS[selection['client']]
+                and row.get('candidate_ref') and (not selection.get('candidate_ref') or
+                                                 row['candidate_ref'] == selection['candidate_ref'])]
+        if len(rows) != 1:
+            raise ConnectionError('INSTALLATION_SELECTION_REQUIRED',
+                'Select one observed installation with --candidate-ref; discovery does not prove provider login.')
+        selected = rows[0]
+        if not selected.get('can_configure'):
+            raise ConnectionError('CONFIGURATION_NOT_AUTHORIZED', 'The canonical policy does not permit configuring this installation.')
+        home = selection.get('provider_home') or selected.get('provider_home_suggestion')
+        if selection['client'] == 'claude' and not home:
+&gt;           raise ConnectionError('PROVIDER_HOME_REQUIRED', 'Pass --provider-home for the Claude login on this Server host.')
+E           okto_nexus.application.terminal_connection.ConnectionError: Pass --provider-home for the Claude login on this Server host.
+
+src\okto_nexus\application\terminal_connection.py:144: ConnectionError</failure></testcase></testsuite></testsuites>

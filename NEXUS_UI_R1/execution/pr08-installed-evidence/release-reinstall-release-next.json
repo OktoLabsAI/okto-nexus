@@ -1,0 +1,18 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+    "-I",
+    "-m",
+    "pip",
+    "install",
+    "--no-deps",
+    "--force-reinstall",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-release-next\\okto_nexus-0.3.5-py3-none-any.whl"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9",
+  "started_at": "2026-11-16T20:56:48.472291+00:00",
+  "exit_code": 0,
+  "ended_at": "2026-11-16T20:57:01.262179+00:00"
+}

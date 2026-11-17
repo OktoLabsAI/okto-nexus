@@ -1,0 +1,97 @@
+{
+  "admission_order": [
+    "codex.setup",
+    "claude.setup",
+    "codex.work",
+    "codex.continue",
+    "claude.work",
+    "claude.continue"
+  ],
+  "agent_ids": {
+    "claude": "ui042-claude-062496549c9340cc",
+    "codex": "ui042-codex-062496549c9340cc"
+  },
+  "campaign_id": "062496549c9340ccb78271b640c8849a",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-062496549c9340ccb78271b640c8849a",
+  "created_at": "2026-11-16T21:49:59.272507+00:00",
+  "driver_pins": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\driver.py",
+      "sha256": "bec16e074ccc219a3fdf516cbb90bbf4e268236c77a88e2a2d34a150fa145215"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\safety.py",
+      "sha256": "3d8fcfaf5a4c324886fe8e9f42b361ef057bce46f7179d1656aac418c2fb2e7e"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\usage.py",
+      "sha256": "8203b0c2f9c8b01f77003bb503fd554d0fd9fb83c56960f9cbef2d1210070c37"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\own_process.py",
+      "sha256": "40b999f642e78de0828e1bb5031ece7fa92bb3bcb3368d9af7aebbbe9a0103fa"
+    }
+  ],
+  "intent_ids": {
+    "claude.continue": "ui042_062496549c9340ccb78271b640c8849a_claude_continue",
+    "claude.setup": "ui042_062496549c9340ccb78271b640c8849a_claude_setup",
+    "claude.work": "ui042_062496549c9340ccb78271b640c8849a_claude_work",
+    "codex.continue": "ui042_062496549c9340ccb78271b640c8849a_codex_continue",
+    "codex.setup": "ui042_062496549c9340ccb78271b640c8849a_codex_setup",
+    "codex.work": "ui042_062496549c9340ccb78271b640c8849a_codex_work"
+  },
+  "native": {
+    "claude": {
+      "account": "currently_authenticated_cli",
+      "adapter_id": "claude_stream",
+      "build_identity": "sha256:daf20aa9eb7de46efb97032a4a1592dde7c0cb2edf68b8e5d1b074acda079c04",
+      "candidate_ref": "nexus-install-v1:cf87799010465f0cc6012cf0dec649059684bb5d87e716aa18c0326f7e79e2fa",
+      "executable": "C:\\Users\\jpamb\\.local\\bin\\claude.exe",
+      "executable_sha256": "87e0cb6ae0f4775da388cd3043f4d8097ef961dcddbf55fe90bc61ffc3f57a30",
+      "fingerprint": "sha256:87e0cb6ae0f4775da388cd3043f4d8097ef961dcddbf55fe90bc61ffc3f57a30",
+      "installation_root": "C:\\Users\\jpamb\\.local\\bin",
+      "model_access_verified": false,
+      "model_family": "Sonnet",
+      "model_id": "claude-sonnet-4-6",
+      "provider_home": "C:\\Users\\jpamb",
+      "provider_home_declaration": "Current user home path literal only; no auth/config/home content opened; authentication remains unverified.",
+      "version_verified": false
+    },
+    "codex": {
+      "account": "currently_authenticated_cli",
+      "adapter_id": "codex_app_server",
+      "build_identity": "sha256:d0ef36daa032e1fe21907f7257c51572f7f99f475bc4353573ad03af23d54265",
+      "candidate_ref": "nexus-install-v1:24d6773e4cffb30762d80c87461061629bd2937636ab099786d74dc00e0bee48",
+      "executable": "C:\\Users\\jpamb\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "executable_sha256": "ce1945eb440b5481ed1233ebaf32b7056ee7e4e452fa62ffe1cbfb26103cdee0",
+      "fingerprint": "sha256:ce1945eb440b5481ed1233ebaf32b7056ee7e4e452fa62ffe1cbfb26103cdee0",
+      "installation_root": "C:\\Users\\jpamb\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin",
+      "model_access_verified": false,
+      "model_family": "Codex",
+      "model_id": "gpt-5.3-codex",
+      "provider_home": "C:\\Users\\jpamb",
+      "provider_home_declaration": "Current user home path literal only; no auth/config/home content opened; authentication remains unverified.",
+      "version_verified": false
+    }
+  },
+  "native_bindings_bound": true,
+  "package_bound": false,
+  "policy": {
+    "accounting": "observed_plus_permanent_per_admission_v1",
+    "claude_scope": "full_result_per_admission_conservative_sum",
+    "codex_final_usage_claim": false,
+    "max_admissions": 6,
+    "observed_limit": 500000,
+    "preventive": 450000,
+    "provision_per_admission": 75000,
+    "provision_refund": false,
+    "reserve": 50000
+  },
+  "port": 51076,
+  "prompts": {
+    "continue": "Continue in this same session. Independently verify your preceding expense total and calculate a hypothetical 10 percent surcharge. Return only JSON with verified_total, surcharge and total_with_surcharge as exact decimal strings. Do not use tools, network or subagents.",
+    "work": "Analyze this expense CSV without tools, network, subagents, or any additional request. date,category,amount\\n2026-11-01,hosting,12.50\\n2026-11-02,software,8.25\\n2026-11-03,hosting,2.25\\n2026-11-04,refund,-3.00. Return only JSON containing row_count, exact decimal total and totals_by_category. This is the entire task."
+  },
+  "schema": "ui042-campaign-v1",
+  "temporary_parent": "C:\\Users\\jpamb\\AppData\\Local\\Temp"
+}

@@ -1,0 +1,110 @@
+{
+  "status": "FINAL_CARRY_V2_BOUND_READY_FOR_ROOT_AUDIT_NOT_EXECUTED",
+  "candidate_sha256": "cc8888f6b09376cb575a184c1e46886e6f5175176f9169f043ac36944b5fbccf",
+  "campaign_id": "dd47c48b74b44711bfb140b542ccbfcc",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-carry-dd47c48b74b44711bfb140b542ccbfcc",
+  "port": 58107,
+  "carry": {
+    "charged_tokens": 75000,
+    "maximum_global_slots": 6,
+    "maximum_new_slots": 5,
+    "observed_tokens": 0,
+    "previous_campaign_id": "a3c54686f9db4229b26fba3f9d6b468b",
+    "previous_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-a3c54686f9db4229b26fba3f9d6b468b",
+    "proof_pins": [
+      {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only\\candidate-final.json",
+        "sha256": "e9fd2b81e0f7e9d79841a47cf3f337b1047b46d808812a963d364d9994c8d8c3"
+      },
+      {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only\\genuine-consent.json",
+        "sha256": "04614e25bf01b24746e894c509126daf0fc954e77a2f466b95c39459c07df91a"
+      },
+      {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only\\execution-attempt-qualification.json",
+        "sha256": "8b3c5af353727d425f18db5b697a329a2480eb9680564fb0b63df95684ff9639"
+      },
+      {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only\\execution-pre-setup-proof.json",
+        "sha256": "bcdef0bec124042c2025ab09a5e805cbfaaa0854a827e9c089174b47680923f9"
+      },
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-a3c54686f9db4229b26fba3f9d6b468b\\private\\codex_a.setup.reserved.json",
+        "sha256": "8b675200e40d3aad0fa02f18c900b481f9fde32bad99ce61ad2d7e3088ab96f9"
+      },
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-a3c54686f9db4229b26fba3f9d6b468b\\public\\cleanup.json",
+        "sha256": "3b3f61a5a3f748a6f15c1f12892039b2b6e185ac38c57dffa9aa40e1f3f6be86"
+      },
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-a3c54686f9db4229b26fba3f9d6b468b\\home\\service-shutdown.json",
+        "sha256": "3d3fe03430c85789ac6464771e8fbc6eedf6eccc3515fa2816024c68f1171bf0"
+      }
+    ],
+    "reserved_slots": 1,
+    "schema": "ui042-carry-v1"
+  },
+  "new_admission_order": [
+    "codex_a.setup",
+    "codex_b.setup",
+    "codex_a.work",
+    "codex_a.continue",
+    "codex_b.work"
+  ],
+  "pins": {
+    "driver_pins": 9,
+    "package_pins": 4,
+    "installed_payloads": 1035
+  },
+  "read_only_preflight": "PASS_SYNTHETIC_IN_MEMORY_GATE_ONLY_NOT_EXECUTED",
+  "previous_all_files_unchanged": true,
+  "installed_payloads_unchanged": 1035,
+  "commands": {
+    "dry-run": {
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only-v2-carry\\driver.py",
+        "dry-run",
+        "--plan",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only-v2-carry\\candidate-final.json",
+        "--expected-plan-sha256",
+        "cc8888f6b09376cb575a184c1e46886e6f5175176f9169f043ac36944b5fbccf"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"campaign_id\": \"dd47c48b74b44711bfb140b542ccbfcc\",\n  \"policy\": {\n    \"accounting\": \"observed_plus_permanent_per_admission_v1\",\n    \"codex_final_usage_claim\": false,\n    \"codex_scope\": \"cumulative_thread_delta_per_exact_session\",\n    \"max_admissions\": 6,\n    \"observed_limit\": 500000,\n    \"preventive\": 450000,\n    \"provision_per_admission\": 75000,\n    \"provision_refund\": false,\n    \"reserve\": 50000\n  },\n  \"order\": [\n    \"codex_a.setup\",\n    \"codex_b.setup\",\n    \"codex_a.work\",\n    \"codex_a.continue\",\n    \"codex_b.work\"\n  ],\n  \"effects_started\": false,\n  \"provider_called\": false,\n  \"package_bound\": true,\n  \"native_bindings_bound\": true\n}\n",
+      "stderr": ""
+    },
+    "execute": {
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only-v2-carry\\driver.py",
+        "execute",
+        "--plan",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only-v2-carry\\candidate-final.json",
+        "--expected-plan-sha256",
+        "cc8888f6b09376cb575a184c1e46886e6f5175176f9169f043ac36944b5fbccf"
+      ],
+      "exit_code": 2,
+      "stdout": "{\"status\": \"REFUSED\", \"reason\": \"NEW_CAMPAIGN_CONSENT_REQUIRED\", \"no_automatic_replay\": true}\n",
+      "stderr": ""
+    }
+  },
+  "campaign_root_created": false,
+  "genuine_consent_issued": false,
+  "offline_passed": 28,
+  "consent_template_sha256": "bd41e1078fc7120fb8858cc75509cda74917e97352ee1706c25df92e86ba6f73",
+  "execute_command_after_root_audit": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+    "-I",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only-v2-carry\\driver.py",
+    "execute",
+    "--plan",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only-v2-carry\\candidate-final.json",
+    "--expected-plan-sha256",
+    "cc8888f6b09376cb575a184c1e46886e6f5175176f9169f043ac36944b5fbccf",
+    "--consent",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only-v2-carry\\genuine-consent.json"
+  ]
+}

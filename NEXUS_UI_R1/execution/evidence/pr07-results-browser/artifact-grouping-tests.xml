@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="5.853" timestamp="2026-11-16T20:23:06.838378-03:00" hostname="Alienware_m15"><testcase classname="tests.home_evolution.test_home_result_artifact_grouping" name="test_http_result_collects_same_claim_files_once_and_excludes_foreign_claim_and_workspace" time="3.907"><failure message="sqlite3.IntegrityError: UNIQUE constraint failed: delivery_outbox.delivery_id">tests\home_evolution\test_home_result_artifact_grouping.py:20: in test_http_result_collects_same_claim_files_once_and_excludes_foreign_claim_and_workspace
+    copy_row(c,'delivery_outbox',domain,operation_id='other-claim-domain')
+tests\home_evolution\test_home_final_scope.py:18: in copy_row
+    conn.execute('INSERT INTO '+table+'('+','.join(value)+') VALUES('
+E   sqlite3.IntegrityError: UNIQUE constraint failed: delivery_outbox.delivery_id</failure></testcase></testsuite></testsuites>

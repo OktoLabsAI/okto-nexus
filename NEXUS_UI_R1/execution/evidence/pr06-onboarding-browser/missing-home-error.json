@@ -1,0 +1,20 @@
+{
+  "status": 422,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "stage": "connection.test",
+    "message": "provider_home is required for claude_stream. Set provider_home to the Claude Code home directory, so the agent can use the operator login.",
+    "possible_effect": false,
+    "retry_safe": false,
+    "operation_id": null,
+    "action": ""
+  },
+  "provenance": {
+    "tool_result": "565d73",
+    "method": "POST",
+    "path": "/api/v1/runtime-management/connections/setup:test",
+    "real_sqlite_and_http": true,
+    "provider_calls": 0,
+    "note": "Copied verbatim error envelope from actual HTTP response. Request is intentionally omitted; synthetic counterpart and counts are in the neighboring ready/final evidence."
+  }
+}

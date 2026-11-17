@@ -1,0 +1,30 @@
+{
+  "status": "ANTECEDENT_PASS_NOT_FINAL",
+  "at": "2026-11-16T20:27:58.491351+00:00",
+  "temporary_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9",
+  "cut": "index-CIRJLndB.js / index-CXFy-VnM.css",
+  "nexus_wheel_sha256": "280027cc36a8d9e92ef03f9c5a54f2d40d7f2081ae45e1440bfaa006918a96ad",
+  "base_boot_core_without_connector_or_torch": true,
+  "serve_lite_boot_without_connector": true,
+  "installed_three_wheels_byte_identical": true,
+  "twine_four_artifacts_pass": true,
+  "installed_tests_started": false,
+  "live_mcp_started": false,
+  "provider_qualified": false,
+  "superseded_reason": "Awaiting frontend onboarding authorization-limit adapter fix and copy alignment found by native browser review.",
+  "evidence_files_sha256": {
+    "antecedent-nexus-manifest.json": "c01ef3b5d88cc4456ff930cfac42afb53127c9082d5389c5a2d5a9faa4dcb415",
+    "antecedent-nexus-build.log": "a3050d2077956b7f2cbde14ae3a82f10e5c477a4e3555d00577798c50fed8cd0",
+    "antecedent-install.json": "805fab7d170a1fcc6a260bf0f74f98716f1e6b515f946e93774bc1620ab8a1b9",
+    "antecedent-install.log": "52b1519d16340cb13b51aad2de5d27e38e995de280bb8d1cd92224405023cde1",
+    "antecedent-smoke.json": "3f96514e7b300b3d47214486cb885533f2e18336ede86f8baa696502594beb6b",
+    "antecedent-smoke.log": "3077f218331c19faf36a45a20d29459b675100e7b4e157f94a67484fb398b5e1",
+    "antecedent-twine.json": "346e87676bd5b2690aa497a0a0edd0b759175e042bc55fb8a26ec3723d28bdfd",
+    "antecedent-twine.log": "251bc2627f30b5fd2dc6f6ad9d19e678251b5ef35f613852ee97e73307950284",
+    "antecedent-installed-environment.json": "c365f7ed00ee82cff29360f27ce3c6bd81d910e6969439d59907ef4187fb8d2c",
+    "antecedent-ci-base-with-core.log": "3f81d54da2b157bee33efe3474d86cad98c336910af7bbba0ca7bf5ad72ec547",
+    "antecedent-ci-local-without-connector.log": "65ee172f84deedac3a51971d40adabcc789c23b73aeb899ecb010aa1c8adac0e",
+    "antecedent-ci-installed.json": "c80d73f63912a7858f0188708002a15fc33a8d9db7c730efcf1152d20ea34680",
+    "antecedent-before.json": "5dcb37bee2e075b932eb52b92513fdfbc281e8518e492f58b74c78d9167efecd"
+  }
+}

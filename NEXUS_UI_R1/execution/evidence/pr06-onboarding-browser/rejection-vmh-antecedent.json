@@ -1,0 +1,148 @@
+{
+  "state": {
+    "counts": {
+      "agents": 4,
+      "execution_bindings": 2,
+      "runtime_execution_grants": 2,
+      "execution_sessions": 0,
+      "execution_operations": 0,
+      "connection_setup_commits": 2
+    },
+    "agents": [
+      "operator",
+      "subject",
+      "collaborator-a",
+      "project_009f093b8daea15979c85656d8f7401d"
+    ],
+    "bindings": [
+      {
+        "binding_id": "bind_cd3a5e2396ae67578646d2ecb2fe8a43",
+        "agent_id": null,
+        "executor_id": "exe_07c0afee9edaf5928e4e70d5e2aa5104",
+        "workspace_id": null,
+        "workspace_binding_id": "wxb_471d613a7166935fc059559d92ed189a",
+        "adapter_id": null
+      },
+      {
+        "binding_id": "bind_9e0288e8205bc9c9791b64e29afa1891",
+        "agent_id": null,
+        "executor_id": "exe_07c0afee9edaf5928e4e70d5e2aa5104",
+        "workspace_id": null,
+        "workspace_binding_id": "wxb_e7ff4d75776319a5e0a850418eff8032",
+        "adapter_id": null
+      }
+    ],
+    "row_digests": {
+      "agents": "1dacf671185daa52d634981ed742a84eb0ce6fb3d23515b897208f10b39bc286",
+      "execution_bindings": "ebd4b2f0067a72ca23786e6084f8418f303096c0feb3af3b045e32867fd3cfb1",
+      "runtime_execution_grants": "0b026f8c41b3ce9dc178b330702d539ff2d1ad77500e61b3270b02982be9c706",
+      "execution_sessions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "execution_operations": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "connection_setup_commits": "39cae05cb698157d3a088a887130aff280a5e5ddd4968224401edf610eeef29c"
+    },
+    "a_agent_digest": "51f9d210a9b7d0219b2d32ff19ac5b0bfb83aa3e2c7d4d461ba531fa04108468",
+    "a_configuration_digests": {
+      "binding": "b877da8692abe7dd9572e753f5245161547c4781d4a5d3fe505cc94c5787ce36",
+      "grant": "f5cd78983e781c9be0193be3841742365ca7d7a830fe15f1f2188f8d2dff5acd",
+      "endpoint": "64eb697842ffc8c02569a88f12497d4963fc4674e45179d943086f40d6abebc7",
+      "profile": "8a6c36d9942c7200597da39ba9f978d5f721e8181d25abde485376029a1c08e7"
+    },
+    "turns": [
+      "connect_910de20ebcc84b70bc42997df1c3e90f",
+      "setup_22720776eee9339ee509af38bdb1e7fb",
+      "setup_fd509d14dc7426647218d6fde6a759f6"
+    ],
+    "probes": 1,
+    "calls": [
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:test",
+        "intent": "setup_22720776eee9339ee509af38bdb1e7fb",
+        "agent": "project_009f093b8daea15979c85656d8f7401d",
+        "workspace": "wsr_90c0738851792056457ff4d939c556d9"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:test",
+        "intent": "setup_22720776eee9339ee509af38bdb1e7fb",
+        "agent": "project_009f093b8daea15979c85656d8f7401d",
+        "workspace": "wsr_90c0738851792056457ff4d939c556d9"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:finish",
+        "intent": "setup_22720776eee9339ee509af38bdb1e7fb",
+        "agent": "project_009f093b8daea15979c85656d8f7401d",
+        "workspace": "wsr_90c0738851792056457ff4d939c556d9"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:test",
+        "intent": "setup_fd509d14dc7426647218d6fde6a759f6",
+        "agent": "project_8ffd3e171f955117fdb84b99a42b991a",
+        "workspace": "wsr_90c0738851792056457ff4d939c556d9"
+      },
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:test",
+        "intent": "setup_070aa6969f68624fc518b10024a6d393",
+        "agent": "project_7c758eaa70aea3d81343e468a308a5a7",
+        "workspace": "wsr_90c0738851792056457ff4d939c556d9"
+      }
+    ]
+  },
+  "storage": [
+    {
+      "archived": true,
+      "intent": "setup_070aa6969f68624fc518b10024a6d393",
+      "agent": "project_7c758eaa70aea3d81343e468a308a5a7",
+      "workspace": "wsr_90c0738851792056457ff4d939c556d9",
+      "configuration": {
+        "format": "okto-nexus-connection",
+        "version": 1,
+        "adapter_id": "claude_stream",
+        "execution_location": "local",
+        "workspace_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui039-browser-doa4crxs\\workspace",
+        "workspace_label": "UI039 reviewed project",
+        "provider_home": null,
+        "secret_bindings": {},
+        "alias": "Claude Code (stream) 2 — UI039 project",
+        "automatic_reply": true,
+        "runtime_enabled": true,
+        "session_policy": "per_sender",
+        "harness_settings": {},
+        "tool_access": "ask",
+        "authorization": {
+          "minutes": 60,
+          "actions": 20
+        }
+      },
+      "rejection": {
+        "status": 422,
+        "code": "VALIDATION_ERROR",
+        "stage": "connection.test",
+        "possible_effect": false,
+        "operation_id": null,
+        "retry_safe": false
+      }
+    }
+  ],
+  "bundle": [
+    "http://127.0.0.1:57473/assets/index-vmhGy86G.js"
+  ],
+  "qualification": {
+    "execution_tool": "2461d2",
+    "passed": true,
+    "assertions": [
+      "name/project name/root/home/tool input values persist after Tab",
+      "exact review reflects edits before Test",
+      "definitive HTTP422 shows explicit edit action",
+      "reload preserves rejection",
+      "explicit edit archives old request",
+      "no replay/Finish/new agent/grant before new consent"
+    ],
+    "provider_calls": 0,
+    "antecedent_bundle": "index-dfy1_5aT.js",
+    "final_bundle": "index-vmhGy86G.js"
+  }
+}

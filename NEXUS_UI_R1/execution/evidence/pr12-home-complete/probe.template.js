@@ -1,0 +1,23 @@
+async page=>{
+ const cfg=__CFG__,checks=[],requests=[],errors=[],consoleErrors=[],envelopes=[];page.setDefaultTimeout(15000);
+ const check=(id,name,ok,data={})=>{checks.push({id,name,status:ok?'PASS':'FAIL',...data});if(!ok)throw Error(name);};
+ page.on('request',r=>requests.push({method:r.method(),url:r.url()}));page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')consoleErrors.push(m.text());});
+ await page.addInitScript(()=>{if(location.protocol==='http:'){localStorage.setItem('okto-nexus-home-operational','enabled');localStorage.setItem('okto-nexus-workspace','ws');localStorage.setItem('okto.nexus.onboarding.completed.v1','true');localStorage.setItem('okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0','test');}});
+ try{
+  await page.setViewportSize({width:1440,height:1100});await page.goto(cfg.url);await page.getByTestId('home-follow-up').waitFor();
+  const read=()=>page.waitForResponse(r=>r.url().includes('/api/v1/home/entries?')&&r.status()===200);
+  const response=read();await page.getByRole('group',{name:'Follow-up filter',exact:true}).getByRole('button',{name:'All',exact:true}).click();const all=(await(await response).json()).data;envelopes.push({phase:'all',data:all});
+  const idle=all.items.flatMap(g=>g.children.map(e=>({g,e}))).find(({e})=>e.kind==='connection'&&e.target.binding_id==='ui12-idle-binding');
+  const work=all.items.flatMap(g=>g.children.map(e=>({g,e}))).find(({e})=>e.kind==='work'&&e.source_ref.id===cfg.identities.multi_session_source);
+  check('T-HOME-05','All includes canonical connection with no session and another connection with work',!!idle&&!!work&&idle.e.sessions_total===0&&idle.e.sessions.length===0&&idle.e.display_state==='configured'&&work.e.sessions_total>0&&work.g.connection.binding_id!==idle.g.connection.binding_id,{idle:idle?.e,work:work?.e,summary:all.summary,inventory:all.inventory});
+  for(const pair of [idle,work]){const group=page.locator(`[data-home-group="${pair.g.id}"]`);const expand=group.getByRole('button',{name:'Expand',exact:true});if(await expand.count())await expand.click();await group.locator(`[data-home-entry="${pair.e.id}"] [data-home-entry-open]`).click();await page.getByTestId('home-detail').waitFor();await page.getByTestId('home-detail').getByRole('button',{name:'Close modal',exact:true}).click();await page.getByTestId('home-detail').waitFor({state:'detached'});}
+  check('T-HOME-05','both exact contexts are reachable and passive connection adds no execution',idle.e.sessions_total===0&&idle.e.attention_total===0&&idle.e.results_total===0&&idle.e.target.kind==='connection'&&!('operation_id'in idle.e.target));
+  await page.screenshot({path:cfg.out+'/all-idle-and-work.png',fullPage:true});
+  await page.evaluate(async url=>await(await fetch(url+'/__ui10/fail-results')).json(),cfg.url);
+  const refreshed=read();await page.getByRole('button',{name:'Refresh',exact:true}).click();const partial=(await(await refreshed).json()).data;envelopes.push({phase:'literal_refresh_partial',data:partial});
+  await page.getByText('Some information is incomplete or unavailable. Totals may be unknown; refresh before acting.',{exact:true}).waitFor();
+  check('T-HOME-07','literal same-scope Refresh shows partiality while valid sources remain',partial.status==='partial'&&partial.source_status.results==='unavailable'&&['work','attention','connections','sessions','correlations','external'].every(k=>partial.source_status[k]==='ready')&&partial.items.length>0&&partial.total===null&&await page.locator('[data-home-group]').count()>0&&await page.getByRole('button',{name:'Connect your first harness',exact:true}).count()===0,{source_status:partial.source_status,total:partial.total,inventory:partial.inventory});
+  await page.screenshot({path:cfg.out+'/literal-refresh-partial.png',fullPage:true});
+  check('all','real frozen GET-only browser is exception-free',requests.every(r=>r.method==='GET')&&errors.length===0&&consoleErrors.length===0,{errors,consoleErrors});return{status:'PASS',checks,envelopes,requests,errors,consoleErrors};
+ }catch(e){await page.screenshot({path:cfg.out+'/failure.png',fullPage:true});return{status:'FAIL',message:e.message,checks,envelopes,requests,errors,consoleErrors};}
+}

@@ -1,0 +1,28 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+    "-I",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\src');import pytest;sys.exit(pytest.main(['D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_evolution\\\\test_home_interrupt_scope.py', '-q', '-o', 'pythonpath=', '--basetemp=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-ui-r1-fake-interrupt-pyawd7mm\\\\e2e-pytest', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-ui-r1-fake-interrupt-pyawd7mm\\\\e2e.xml']))"
+  ],
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-fake-interrupt-pyawd7mm\\guard-e2e",
+  "pid": 32984,
+  "deadline_seconds": 180.0,
+  "owned_tree_before": {
+    "pids": [
+      32984
+    ],
+    "count": 1,
+    "overflow": false,
+    "requested_limit": 32,
+    "limit_enforced": true,
+    "supported": true
+  },
+  "timed_out": false,
+  "exit_code": 1,
+  "elapsed_seconds": 5.326547999982722,
+  "launcher_physical_exit": true,
+  "owned_tree_cleanup": "Parent own WindowsJob closed only after child exit or deadline containment; no historical PID signaling."
+}

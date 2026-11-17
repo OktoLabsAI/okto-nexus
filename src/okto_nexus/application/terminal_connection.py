@@ -27,8 +27,9 @@ def _same_local_path(actual, selected):
 
 
 class ConnectionError(Exception):
-    def __init__(self, code, message, *, possible_effect=False, stage='connect'):
+    def __init__(self, code, message, *, possible_effect=False, stage='connect', choices=None):
         self.code, self.message, self.possible_effect, self.stage = code, message, possible_effect, stage
+        self.choices = choices
         super().__init__(message)
 
 
@@ -68,6 +69,9 @@ class TerminalConnection:
         if creating and selection.get('binding_id'):
             raise ConnectionError('IDENTITY_REVIEW_CONFLICT', 'A new identity cannot adopt an existing binding.')
         binding = selection.get('binding_id')
+        if selection.get('setup_intent_id') and (binding or current['connections']):
+            raise ConnectionError('ADDITION_CONFLICT',
+                'Adding a connection cannot resume or replace this existing binding. Resume it explicitly or review a separate project identity.')
         if binding:
             match = next((row for row in current['connections'] if row['binding_id'] == binding), None)
             if not match:
@@ -112,7 +116,7 @@ class TerminalConnection:
             raise ConnectionError('INVENTORY_UNCONFIRMED', 'The executor listing exceeded its bounded page limit.')
         if len(hosts) != 1:
             raise ConnectionError('LOCAL_EXECUTOR_UNAVAILABLE', 'The selected Server has no unique local execution host.')
-        request = {'client_intent_id': 'connect_' + uuid.uuid4().hex, 'agent_id': selection['agent'],
+        request = {'client_intent_id': selection.get('setup_intent_id') or 'connect_' + uuid.uuid4().hex, 'agent_id': selection['agent'],
             'executor_id': hosts[0]['executor_id'], 'workspace_id': selection.get('workspace_id'), 'binding_id': None}
         if creating:
             request['agent_creation'] = {'display_name': '',
@@ -123,7 +127,8 @@ class TerminalConnection:
                        if row['adapter_id'] == adapter and row.get('candidate_ref')}
             if len(clients) != 1:
                 raise ConnectionError('CLIENT_SELECTION_REQUIRED',
-                    'Choose --client from the observed harnesses: ' + ', '.join(sorted(clients)))
+                    'Choose --client from the observed harnesses: ' + ', '.join(sorted(clients)),
+                    choices=sorted(clients))
             selection['client'] = clients.pop()
         rows = [row for row in available['options'] if row['adapter_id'] == CLIENTS[selection['client']]
                 and row.get('candidate_ref') and (not selection.get('candidate_ref') or

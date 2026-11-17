@@ -1,0 +1,54 @@
+{
+  "status": "PASS_OFFLINE_SCOPED",
+  "tests": [
+    "T-PERF-01",
+    "T-DATA-12",
+    "T-DATA-14"
+  ],
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "python_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+  "product_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "cpu_count": 16,
+  "sqlite": "3.45.3",
+  "source_pins": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\home_entries.py": "2ad5704dbf61526dc6a1be8d099da017997e38c93c9ad80cea359c7597e9e005",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entries.py": "c28203f88d69bd22b4e1dd7544ff58716fd2e96862c67433d75dd5f462c0ef1d",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py": "abca8cf04b8ef225a70dbaf23dcfaa4fff6fea25af53d95c9676af8f566dc617",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py": "d34154693d527fa96df452c0b2ff4e7ee918ccef5c1dd7205742ac159e434e5e",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr09-offline-data-performance\\run.py": "669a19ca7d6bbf6cb3d8b3abffbe6a92fba1bbe3e9539313c4710226c8bac72f",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr03-performance\\measure.py": "0a502e5c900ac50c4e5e200a1e03495072acfb9a8e9ace109a20eb5d81c16053",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20"
+  },
+  "source_drift": [],
+  "sql_counts_by_agents_1_10_100": {
+    "entries": [
+      55,
+      55,
+      55
+    ],
+    "children": [
+      55,
+      55,
+      55
+    ],
+    "sessions": [
+      55,
+      55,
+      55
+    ]
+  },
+  "latency_scope": "HomeEntriesService.read only;3warm samples+1warmup per series;not HTTP/browser/SLO",
+  "provider_or_native_invoked": false,
+  "installed_prefix_modified": false,
+  "limits": [
+    "Synthetic SQLite durable read facts; no native lifecycle/billing claim.",
+    "Warm/cleanup technical facts are not projected as activity; this does not qualify browser labels.",
+    "Three samples only diagnose query-growth, not production latency percentiles. Existing PR03 larger benchmark retained."
+  ],
+  "files_sha256": {
+    "agents-1.json": "c80f39b89ca5c4ac657ea007becf10f0fa543734870ce5276b3527c77bb86099",
+    "agents-10.json": "3ed346eeafcafa288de485dc782d9fb4cb756c7221d0c1bdfdb84f9a8a8489f5",
+    "agents-100.json": "d3e5f08c1869e5f41e8112ac3f6379134a51b4ef4f9c47d7eda1f067b6f1f680"
+  }
+}

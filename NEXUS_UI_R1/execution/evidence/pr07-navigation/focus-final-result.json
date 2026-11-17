@@ -1,0 +1,286 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "Exact final JS/CSS served",
+      "status": "PASS",
+      "assets": {
+        "scripts": [
+          "http://127.0.0.1:60153/assets/index-BXpHvePH.js"
+        ],
+        "css": [
+          "http://127.0.0.1:60153/assets/index-C-ZFb395.css"
+        ]
+      }
+    },
+    {
+      "name": "Canonical Server feature_memory false",
+      "status": "PASS"
+    },
+    {
+      "name": "Mobile route Home closes and restores focus",
+      "status": "PASS",
+      "focus": {
+        "tag": "BUTTON",
+        "testid": "sidebar-toggle",
+        "label": "Expand navigation",
+        "hidden": false,
+        "visible": true,
+        "width": 360
+      }
+    },
+    {
+      "name": "Mobile route Conversations closes and restores focus",
+      "status": "PASS",
+      "focus": {
+        "tag": "BUTTON",
+        "testid": "sidebar-toggle",
+        "label": "Expand navigation",
+        "hidden": false,
+        "visible": true,
+        "width": 360
+      }
+    },
+    {
+      "name": "Mobile route Graph closes and restores focus",
+      "status": "PASS",
+      "focus": {
+        "tag": "BUTTON",
+        "testid": "sidebar-toggle",
+        "label": "Expand navigation",
+        "hidden": false,
+        "visible": true,
+        "width": 360
+      }
+    },
+    {
+      "name": "Mobile route Artifacts closes and restores focus",
+      "status": "PASS",
+      "focus": {
+        "tag": "BUTTON",
+        "testid": "sidebar-toggle",
+        "label": "Expand navigation",
+        "hidden": false,
+        "visible": true,
+        "width": 360
+      }
+    },
+    {
+      "name": "Mobile route Advanced closes and restores focus",
+      "status": "PASS",
+      "focus": {
+        "tag": "BUTTON",
+        "testid": "sidebar-toggle",
+        "label": "Expand navigation",
+        "hidden": false,
+        "visible": true,
+        "width": 360
+      }
+    },
+    {
+      "name": "Sixth global Attention route keeps legitimate bell focus",
+      "status": "PASS",
+      "focus": {
+        "tag": "BUTTON",
+        "testid": "global-attention-button",
+        "label": "Needs attention. All projects and Server. 0 need action, 3 to watch. Last known counts, out of date.",
+        "hidden": false,
+        "visible": true,
+        "width": 360
+      }
+    },
+    {
+      "name": "Escape restores controlling trigger",
+      "status": "PASS",
+      "focus": {
+        "tag": "BUTTON",
+        "testid": "sidebar-toggle",
+        "label": "Expand navigation",
+        "hidden": false,
+        "visible": true,
+        "width": 360
+      }
+    },
+    {
+      "name": "Backdrop closes without hidden focus",
+      "status": "PASS",
+      "focus": {
+        "tag": "BODY",
+        "testid": null,
+        "label": "/ Needs attentionAll workspacesWorkspace 1Needs attention3*● LiveHomeConversatio",
+        "hidden": false,
+        "visible": true,
+        "width": 360
+      }
+    },
+    {
+      "name": "External workspace selector focus is not stolen",
+      "status": "PASS"
+    },
+    {
+      "name": "Desktop to narrow resize restores hidden navigation focus",
+      "status": "PASS",
+      "focus": {
+        "tag": "BUTTON",
+        "testid": "sidebar-toggle",
+        "label": "Expand navigation",
+        "hidden": false,
+        "visible": true,
+        "width": 360
+      }
+    },
+    {
+      "name": "No mutation requested",
+      "status": "PASS"
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/assets/index-BXpHvePH.js"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/assets/index-C-ZFb395.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/stream?view=attention&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/stream?"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/runtime-management/runtime/input-requests?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/settings"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/messages?agent=operator&page=1&page_size=20&include_body=true&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/handoffs?from_agent=operator&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/artifacts?workspace=ws&page=1&page_size=20"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/stream?view=attention"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/attention?state=active&seen=all&limit=50"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/attention/summary?state=active&seen=all"
+    }
+  ],
+  "limits": [
+    "No physical mobile device or assistive-technology speech test."
+  ]
+}

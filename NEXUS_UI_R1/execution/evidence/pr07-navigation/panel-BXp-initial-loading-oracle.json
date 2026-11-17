@@ -1,0 +1,110 @@
+{
+  "status": "FAIL",
+  "normal": {
+    "dialogs": 1,
+    "outputs": 1,
+    "viewer": "READY · Read only\n\nui04-no-turn-session\n\nLive tail\nHistory\nLoading events…\nPause tail\n Auto-scroll\nLatest events\nSession · terminal\nRead only\n12px\nWaiting for session events…",
+    "width": 896,
+    "className": "agent-action-modal agent-action-drawer agent-action-modal-wide  "
+  },
+  "expanded": {
+    "dialogs": 1,
+    "outputs": 1,
+    "viewer": "READY · Read only\n\nui04-no-turn-session\n\nLive tail\nHistory\nFollowing live events\nPause tail\n Auto-scroll\nLatest events\n\nShowing 0 of 0 committed events. Scroll up to load earlier events.\n\nSession · terminal\nRead only\n12px\nNo activity to display yet.",
+    "width": 1368,
+    "className": "agent-action-modal agent-action-drawer agent-action-modal-wide  agent-action-modal-expanded"
+  },
+  "restored": {
+    "dialogs": 1,
+    "outputs": 1,
+    "viewer": "READY · Read only\n\nui04-no-turn-session\n\nLive tail\nHistory\nFollowing live events\nPause tail\n Auto-scroll\nLatest events\n\nShowing 0 of 0 committed events. Scroll up to load earlier events.\n\nSession · terminal\nRead only\n12px\nNo activity to display yet.",
+    "width": 896,
+    "className": "agent-action-modal agent-action-drawer agent-action-modal-wide  "
+  },
+  "target": {
+    "kind": "session",
+    "server_id": "srv_0b40c4625eb0368f04de64b9425bb03d",
+    "executor_id": "exe_8e83d8dc59e9384bdefea6d2f7ddd13e",
+    "workspace_id": "ws",
+    "session_id": "ui04-no-turn-session"
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/stream?view=attention&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_8e83d8dc59e9384bdefea6d2f7ddd13e%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_0b40c4625eb0368f04de64b9425bb03d%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_8e83d8dc59e9384bdefea6d2f7ddd13e%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_0b40c4625eb0368f04de64b9425bb03d%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_8e83d8dc59e9384bdefea6d2f7ddd13e%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_0b40c4625eb0368f04de64b9425bb03d%22%2C%22session_id%22%3A%22ui04-no-turn-session%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_8e83d8dc59e9384bdefea6d2f7ddd13e"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session/events?executor_id=exe_8e83d8dc59e9384bdefea6d2f7ddd13e&after_sequence=0&limit=100"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_8e83d8dc59e9384bdefea6d2f7ddd13e"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/runtime-management/runtime/sessions/ui04-no-turn-session?executor_id=exe_8e83d8dc59e9384bdefea6d2f7ddd13e"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/api/v1/runtime-management/connections/bindings/binding"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:60153/logos/nexus-icon.svg"
+    }
+  ],
+  "scope": "Parent drawer expand/restore, exact retained session, one passive output; no native zoom, output-growth, provider or assistive-technology speech claim."
+}

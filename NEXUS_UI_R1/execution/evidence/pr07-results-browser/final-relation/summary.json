@@ -1,0 +1,37 @@
+{
+  "summary": {
+    "activities": {
+      "value": 10,
+      "total_is_exact": true,
+      "unit": "activities"
+    },
+    "external_instances": {
+      "value": 1,
+      "total_is_exact": true,
+      "unit": "external_instances"
+    },
+    "occurrences": {
+      "value": 0,
+      "total_is_exact": true,
+      "unit": "occurrences"
+    },
+    "sessions": {
+      "value": 2,
+      "total_is_exact": true,
+      "unit": "sessions"
+    },
+    "results": {
+      "value": 6,
+      "total_is_exact": true,
+      "unit": "results"
+    },
+    "unseen_results": {
+      "value": null,
+      "total_is_exact": false,
+      "unit": "results"
+    }
+  },
+  "coverage": {
+    "result_tracking": "partial"
+  }
+}

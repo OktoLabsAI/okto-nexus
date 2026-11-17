@@ -1,0 +1,39 @@
+{
+  "status": "MODEL_OPTIONS_ONLY_NOT_EXECUTABLE",
+  "source": "preserved-model-options.json; same attempt native core/harness_configuration event sequence2",
+  "new_cli_or_provider_invoked": false,
+  "options": [
+    {
+      "id": "same_model_sol_low",
+      "codex_a_model": "gpt-6.1-sol",
+      "codex_b_model": "gpt-6.1-sol",
+      "effort": "low",
+      "basis": "Exact ID and low effort observed in preserved native model metadata; same model on both connections keeps the connection/session comparison simple."
+    },
+    {
+      "id": "same_model_luna_low",
+      "codex_a_model": "gpt-6-luna",
+      "codex_b_model": "gpt-6-luna",
+      "effort": "low",
+      "basis": "Alternative exact ID and low effort observed in the same metadata. No price, quality, availability or inference-success guarantee is inferred."
+    }
+  ],
+  "selected": null,
+  "fallback_allowed": false,
+  "model_choice_requires_specific_user_approval": true,
+  "old_consent_or_candidate_changed": false,
+  "budget_state": {
+    "minimum_permanent_charge": 150000,
+    "historical_reserved_slots": 2,
+    "last_setup_usage": "UNKNOWN",
+    "existing_unknown_usage_guard_remains": "BLOCK_NEW_ADMISSIONS",
+    "remaining_slots_arithmetic_only": 4,
+    "arithmetic_is_not_permission_to_execute": true
+  },
+  "next_step": "Root can present the observed exact model IDs/efforts. A later executable plan must separately preserve the two permanent charges and resolve the existing unknown-usage policy explicitly; choosing a model alone does not bypass that guard.",
+  "limits": [
+    "Metadata observation is not proof of a successful paid request or future account access.",
+    "No browser/native success or M3 qualification is claimed.",
+    "No fresh metadata query is needed to present these already-preserved options."
+  ]
+}

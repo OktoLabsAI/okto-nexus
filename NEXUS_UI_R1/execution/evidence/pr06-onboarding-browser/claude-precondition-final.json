@@ -1,0 +1,109 @@
+{
+  "before": {
+    "counts": {
+      "agents": 3,
+      "execution_bindings": 1,
+      "runtime_execution_grants": 1,
+      "execution_sessions": 0,
+      "execution_operations": 0,
+      "connection_setup_commits": 1
+    },
+    "agents": [
+      "operator",
+      "subject",
+      "collaborator-a"
+    ],
+    "bindings": [
+      {
+        "binding_id": "bind_21f7e11c824ff49cb3769576b89f0cd4",
+        "agent_id": null,
+        "executor_id": "exe_c6c23195a661c178701b4b0c12be0f11",
+        "workspace_id": null,
+        "workspace_binding_id": "wxb_bb5f08e7fcd5b8870d945130c29e488a",
+        "adapter_id": null
+      }
+    ],
+    "row_digests": {
+      "agents": "04d61de4aaec7edb6d907045d0938f9f56d317c154cb4a8f0bf486bb602acba9",
+      "execution_bindings": "79376c35875ad4e5fa1e9cac3f9e07c6259ed775463c6bb040e06c06f69aebd2",
+      "runtime_execution_grants": "17a79cf2a865541af8be320e01763334fb758f5c8fab0730c2074d0370ea845a",
+      "execution_sessions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "execution_operations": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "connection_setup_commits": "f8c9f669ac68d074edba2e8ad0150234032eb44e41a97d04c17c35d3ef599a4a"
+    },
+    "a_agent_digest": "788eedc0dbfbf98c0531304119c8009034a79b4fc7154bdbc53943497b356595",
+    "a_configuration_digests": {
+      "binding": "79376c35875ad4e5fa1e9cac3f9e07c6259ed775463c6bb040e06c06f69aebd2",
+      "grant": "17a79cf2a865541af8be320e01763334fb758f5c8fab0730c2074d0370ea845a",
+      "endpoint": "5329545b0f918e196d165b27ccb47096642f7928c125c1ac7405085c6ad2ce88",
+      "profile": "a99397a094092b6dac4c815f8711d31810dfaa2f050eee72a2d511af628f4b24"
+    },
+    "turns": [
+      "connect_49673b2c28f342bfa781dec4a35ae725"
+    ],
+    "probes": 1,
+    "calls": [
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:test",
+        "intent": "setup_b6d8f797c4dbc81a2d6c260f1a3f2568",
+        "agent": "project_5c83463eec4e4ecbfee600941574c419",
+        "workspace": "wsr_9079260199529026fdeab2e635d82c35"
+      }
+    ]
+  },
+  "after": {
+    "counts": {
+      "agents": 3,
+      "execution_bindings": 1,
+      "runtime_execution_grants": 1,
+      "execution_sessions": 0,
+      "execution_operations": 0,
+      "connection_setup_commits": 1
+    },
+    "agents": [
+      "operator",
+      "subject",
+      "collaborator-a"
+    ],
+    "bindings": [
+      {
+        "binding_id": "bind_21f7e11c824ff49cb3769576b89f0cd4",
+        "agent_id": null,
+        "executor_id": "exe_c6c23195a661c178701b4b0c12be0f11",
+        "workspace_id": null,
+        "workspace_binding_id": "wxb_bb5f08e7fcd5b8870d945130c29e488a",
+        "adapter_id": null
+      }
+    ],
+    "row_digests": {
+      "agents": "04d61de4aaec7edb6d907045d0938f9f56d317c154cb4a8f0bf486bb602acba9",
+      "execution_bindings": "79376c35875ad4e5fa1e9cac3f9e07c6259ed775463c6bb040e06c06f69aebd2",
+      "runtime_execution_grants": "17a79cf2a865541af8be320e01763334fb758f5c8fab0730c2074d0370ea845a",
+      "execution_sessions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "execution_operations": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "connection_setup_commits": "f8c9f669ac68d074edba2e8ad0150234032eb44e41a97d04c17c35d3ef599a4a"
+    },
+    "a_agent_digest": "788eedc0dbfbf98c0531304119c8009034a79b4fc7154bdbc53943497b356595",
+    "a_configuration_digests": {
+      "binding": "79376c35875ad4e5fa1e9cac3f9e07c6259ed775463c6bb040e06c06f69aebd2",
+      "grant": "17a79cf2a865541af8be320e01763334fb758f5c8fab0730c2074d0370ea845a",
+      "endpoint": "5329545b0f918e196d165b27ccb47096642f7928c125c1ac7405085c6ad2ce88",
+      "profile": "a99397a094092b6dac4c815f8711d31810dfaa2f050eee72a2d511af628f4b24"
+    },
+    "turns": [
+      "connect_49673b2c28f342bfa781dec4a35ae725"
+    ],
+    "probes": 1,
+    "calls": [
+      {
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:test",
+        "intent": "setup_b6d8f797c4dbc81a2d6c260f1a3f2568",
+        "agent": "project_5c83463eec4e4ecbfee600941574c419",
+        "workspace": "wsr_9079260199529026fdeab2e635d82c35"
+      }
+    ]
+  },
+  "fixture_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui039-browser-tsjevyij"
+}

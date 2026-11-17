@@ -1,0 +1,83 @@
+{
+  "status": "PASS_WITH_EXPLICIT_UNQUALIFIED_CASES",
+  "bundle": "index-dfy1_5aT.js",
+  "js_sha256": "d4361240c4405978aefb39034e3c07e549766d338d290b313f719e282de62409",
+  "pass_checks": 19,
+  "not_run_checks": [
+    {
+      "name": "human native question dirty session switch",
+      "status": "NOT_RUN",
+      "reason": "Shared canonical fixture produces agent-origin question addressed to subject; recipient was not rewritten to fabricate human controls."
+    },
+    {
+      "name": "native 200% browser zoom",
+      "status": "NOT_RUN",
+      "before": {
+        "innerWidth": 1440,
+        "ratio": 1
+      },
+      "after": {
+        "innerWidth": 1440,
+        "ratio": 1
+      },
+      "reason": "Keyboard shortcut did not establish a verified native200% zoom level; viewport/CSS are not substituted."
+    }
+  ],
+  "source_pin_drift": [],
+  "primary_console_errors": [],
+  "page_errors": [],
+  "mutations": [],
+  "expected_fence_statuses": [
+    {
+      "url": "http://127.0.0.1:63560/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3",
+      "status": 403
+    }
+  ],
+  "scope": [
+    "single Follow-up desktop and360px",
+    "exact2sessions no latest heuristic",
+    "one root dialog and one embedded viewer",
+    "passive no-turn context",
+    "Home display pause and focus return",
+    "real unsent composer Escape/close/Back guards",
+    "actual agent-key Home403 removes protected entries"
+  ],
+  "limits": [
+    "DOM/HTTP only, no AT speech or provider/native campaign",
+    "Synthetic clone streams have explicit empty watermarks; does not qualify nonempty captured output in those clones",
+    "Original admitted session has canonical captured input-request history",
+    "Dirty Back test seeds one same-origin history entry with history.pushState; actual popstate guard, not cross-document beforeunload proof",
+    "Other-agent Home403 is tested after passive panel closes; live panel/viewer403 not qualified",
+    "Agent-origin question remains correctly addressed to subject; no human responder fabricated",
+    "Agent-admin entry transition, result-specific panel, further cursor/CAS and native200percent zoom remain separately unqualified"
+  ],
+  "cleanup": {
+    "browser_pid": 57896,
+    "browser_close_exit": 0,
+    "fixture_exit": 0,
+    "normal_stop_file": true,
+    "browser_pid_absent": true,
+    "port": 63560,
+    "port_absent": true,
+    "evidence_tools": [
+      "051eed",
+      "088f91",
+      "519469"
+    ],
+    "fixture_context": "WSS/lifespan generator and factory closed normally"
+  },
+  "sha256": {
+    "composer-dirty-guard.png": "9cefc4cc08c279834761045fade38dff61e2fabded0476cbc7dcf69d6d03b88f",
+    "desktop-exact-session-history.png": "1413cfd0c7a4de53f2e4a8756c992c7dd778144be48d4e69f7399e30c6a90aab",
+    "desktop-home.png": "19f84a1ce624545426ac60808cd4a7df94caf71634f0ea2f1d1c30d195b4660c",
+    "fences-output.txt": "01d3d4c8f3c682da02b577fc50734bf7b855b4960890780c408c3684d53b0e45",
+    "fences-results.json": "6e313add4f936af8837fdb02bf05021046b2f3a6b6142e0984f592b907d345f7",
+    "index.html": "05d0113a3218fb47a6206884437834bfce9215a7fd2f6c8b270345ecab1f0bde",
+    "mobile-exact-session.png": "8e8525987965103690d649438c0e0919b76d9f0d5fb2b18133cf4ca0ba1779c7",
+    "no-turn-session.png": "752f072d633e606ccde43ec96eb8abe004cb034dd617d05574641b2867a8297b",
+    "output.txt": "a4f51e1040505776ac95d8174515aa6b511dd5bfd620b0a28946f1beca464095",
+    "ready.json": "68d9dde4632fa2f05a7f7b19cedb003c76bf283a51831076e34a65e254444dc1",
+    "real403-home-cleared.png": "a03dd3a2e2220fea82517bec772b01746b36979ba4326c96dc3bbb16eeb4f1bc",
+    "results.json": "b9427a53c9fef482a434380ac850a366221ff27fafbcaf6b36ca1d5d7826e114"
+  }
+}

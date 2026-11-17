@@ -1,0 +1,849 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "human question context switch guard preserves exact draft",
+      "status": "PASS"
+    },
+    {
+      "name": "human question Escape guard keeps draft",
+      "status": "PASS"
+    },
+    {
+      "name": "explicit discard changes only inner context, one root dialog",
+      "status": "PASS"
+    },
+    {
+      "name": "two actual browser tabs canonical CAS returns202 and409",
+      "status": "PASS",
+      "actual": [
+        {
+          "status": 202,
+          "body": {
+            "decision_id": "r4decision_a1e351ffda1308ece515acbeeb427c90",
+            "client_intent_id": "ui_f4169bc14479350d15cb03561f1435f2",
+            "approval_key": {
+              "server_id": "srv_bd164c82e438a76076ea57288e533e91",
+              "executor_id": "exe_509f4d6aa3bb501caf6c3f62680c3184",
+              "binding_id": "binding",
+              "agent_id": "subject",
+              "workspace_id": "ws",
+              "session_id": "ses_84c759810c99e54a76863906c902ecf9",
+              "session_owner_generation": 1,
+              "canonical_request_id": "r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6",
+              "kind": "native_input"
+            },
+            "request_hash": "sha256:d15644413c5773d80f765353a251eb7b53f87ab934fddcc0e6b82f77314ab8ae",
+            "request_revision": 1,
+            "proposal_decision": "approve",
+            "native_decision": "accept",
+            "actor_agent_id": "operator",
+            "subject_agent_id": "subject",
+            "canonical_state": "CONFIRMED",
+            "native_operation_id": "r4op_75e676d9471699e4cae01767b40aacd3",
+            "native_stage": "DISPATCH_PENDING",
+            "possible_effect": false,
+            "retry_safe": true,
+            "response_digest": "sha256:a2c3012b0ed17f1980330276f26832643c7c28f0218a35b42feecaa55d51a97d",
+            "expires_at": "2026-11-16T20:57:15.413000+00:00"
+          }
+        },
+        {
+          "status": 409,
+          "body": {
+            "error": {
+              "code": "CONFLICT",
+              "stage": "approval.decision",
+              "message": "The native request already has a decision or is no longer pending.",
+              "possible_effect": false,
+              "retry_safe": false,
+              "operation_id": null,
+              "action": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "accepted human decision is dispatch pending, not applied",
+      "status": "PASS",
+      "canonical_state": "CONFIRMED",
+      "native_stage": "DISPATCH_PENDING",
+      "possible_effect": false
+    },
+    {
+      "name": "UI distinguishes recorded decision from provider application",
+      "status": "PASS",
+      "visible": "Decision: CONFIRMED. Native delivery: DISPATCH_PENDING.\n\nA recorded decision does not prove application by the provider."
+    },
+    {
+      "name": "only allowlisted native decision POSTs occurred",
+      "status": "PASS",
+      "posts": [
+        {
+          "method": "POST",
+          "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/approval-decisions"
+        },
+        {
+          "method": "POST",
+          "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/approval-decisions"
+        }
+      ]
+    },
+    {
+      "name": "human focal has no page exceptions",
+      "status": "PASS",
+      "errors": []
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/assets/index-vmhGy86G.js"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/assets/index-CXFy-VnM.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/stream?view=attention&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/stream?"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_509f4d6aa3bb501caf6c3f62680c3184%22%2C%22kind%22%3A%22execution%22%2C%22operation_id%22%3A%22op_7ad43e616bf323190b6aaad640c78138%22%2C%22server_id%22%3A%22srv_bd164c82e438a76076ea57288e533e91%22%2C%22session_id%22%3A%22ses_84c759810c99e54a76863906c902ecf9%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_509f4d6aa3bb501caf6c3f62680c3184%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_bd164c82e438a76076ea57288e533e91%22%2C%22session_id%22%3A%22ses_84c759810c99e54a76863906c902ecf9%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184&after_sequence=0&limit=100"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_509f4d6aa3bb501caf6c3f62680c3184%22%2C%22kind%22%3A%22execution%22%2C%22operation_id%22%3A%22op_7ad43e616bf323190b6aaad640c78138%22%2C%22server_id%22%3A%22srv_bd164c82e438a76076ea57288e533e91%22%2C%22session_id%22%3A%22ses_84c759810c99e54a76863906c902ecf9%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/agents/subject/runtime-executions/op_7ad43e616bf323190b6aaad640c78138?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/connections/bindings/binding"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/assets/index-vmhGy86G.js"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/assets/index-CXFy-VnM.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/stream?view=attention&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/stream?"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_509f4d6aa3bb501caf6c3f62680c3184%22%2C%22kind%22%3A%22execution%22%2C%22operation_id%22%3A%22op_7ad43e616bf323190b6aaad640c78138%22%2C%22server_id%22%3A%22srv_bd164c82e438a76076ea57288e533e91%22%2C%22session_id%22%3A%22ses_84c759810c99e54a76863906c902ecf9%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_509f4d6aa3bb501caf6c3f62680c3184%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_bd164c82e438a76076ea57288e533e91%22%2C%22session_id%22%3A%22ses_84c759810c99e54a76863906c902ecf9%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184&after_sequence=0&limit=100"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184&after_sequence=1&limit=100&stream_epoch=native-epoch"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/approval-decisions"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/approval-decisions"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184&after_sequence=1&limit=100&stream_epoch=native-epoch"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184&after_sequence=1&limit=100&stream_epoch=native-epoch"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90"
+    }
+  ],
+  "responses": [
+    {
+      "url": "http://127.0.0.1:53807/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/assets/index-CXFy-VnM.css",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/assets/index-vmhGy86G.js",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/logos/nexus-icon.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/logos/nexus-wordmark-dark.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/logos/nexus-wordmark-light.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/info",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/graph?workspace=ws&window_hours=24",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/stream?",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/stream?view=attention&workspace=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/graph?workspace=ws&window_hours=24",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?state=active&seen=all",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?state=active&seen=all",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_509f4d6aa3bb501caf6c3f62680c3184%22%2C%22kind%22%3A%22execution%22%2C%22operation_id%22%3A%22op_7ad43e616bf323190b6aaad640c78138%22%2C%22server_id%22%3A%22srv_bd164c82e438a76076ea57288e533e91%22%2C%22session_id%22%3A%22ses_84c759810c99e54a76863906c902ecf9%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/logos/nexus-icon.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_509f4d6aa3bb501caf6c3f62680c3184%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_bd164c82e438a76076ea57288e533e91%22%2C%22session_id%22%3A%22ses_84c759810c99e54a76863906c902ecf9%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184&after_sequence=0&limit=100",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_509f4d6aa3bb501caf6c3f62680c3184%22%2C%22kind%22%3A%22execution%22%2C%22operation_id%22%3A%22op_7ad43e616bf323190b6aaad640c78138%22%2C%22server_id%22%3A%22srv_bd164c82e438a76076ea57288e533e91%22%2C%22session_id%22%3A%22ses_84c759810c99e54a76863906c902ecf9%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/agents/subject/runtime-executions/op_7ad43e616bf323190b6aaad640c78138?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/connections/bindings/binding",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/assets/index-CXFy-VnM.css",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/assets/index-vmhGy86G.js",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/logos/nexus-icon.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/logos/nexus-wordmark-light.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/logos/nexus-wordmark-dark.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/info",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/graph?workspace=ws&window_hours=24",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/stream?view=attention&workspace=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/stream?",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?state=active&seen=all",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?state=active&seen=all",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/graph?workspace=ws&window_hours=24",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_509f4d6aa3bb501caf6c3f62680c3184%22%2C%22kind%22%3A%22execution%22%2C%22operation_id%22%3A%22op_7ad43e616bf323190b6aaad640c78138%22%2C%22server_id%22%3A%22srv_bd164c82e438a76076ea57288e533e91%22%2C%22session_id%22%3A%22ses_84c759810c99e54a76863906c902ecf9%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/logos/nexus-icon.svg",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_509f4d6aa3bb501caf6c3f62680c3184%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_bd164c82e438a76076ea57288e533e91%22%2C%22session_id%22%3A%22ses_84c759810c99e54a76863906c902ecf9%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184&after_sequence=0&limit=100",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184&after_sequence=1&limit=100&stream_epoch=native-epoch",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/approval-decisions",
+      "status": 202,
+      "body": {
+        "decision_id": "r4decision_a1e351ffda1308ece515acbeeb427c90",
+        "client_intent_id": "ui_f4169bc14479350d15cb03561f1435f2",
+        "approval_key": {
+          "server_id": "srv_bd164c82e438a76076ea57288e533e91",
+          "executor_id": "exe_509f4d6aa3bb501caf6c3f62680c3184",
+          "binding_id": "binding",
+          "agent_id": "subject",
+          "workspace_id": "ws",
+          "session_id": "ses_84c759810c99e54a76863906c902ecf9",
+          "session_owner_generation": 1,
+          "canonical_request_id": "r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6",
+          "kind": "native_input"
+        },
+        "request_hash": "sha256:d15644413c5773d80f765353a251eb7b53f87ab934fddcc0e6b82f77314ab8ae",
+        "request_revision": 1,
+        "proposal_decision": "approve",
+        "native_decision": "accept",
+        "actor_agent_id": "operator",
+        "subject_agent_id": "subject",
+        "canonical_state": "CONFIRMED",
+        "native_operation_id": "r4op_75e676d9471699e4cae01767b40aacd3",
+        "native_stage": "DISPATCH_PENDING",
+        "possible_effect": false,
+        "retry_safe": true,
+        "response_digest": "sha256:a2c3012b0ed17f1980330276f26832643c7c28f0218a35b42feecaa55d51a97d",
+        "expires_at": "2026-11-16T20:57:15.413000+00:00"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/approval-decisions",
+      "status": 409,
+      "body": {
+        "error": {
+          "code": "CONFLICT",
+          "stage": "approval.decision",
+          "message": "The native request already has a decision or is no longer pending.",
+          "possible_effect": false,
+          "retry_safe": false,
+          "operation_id": null,
+          "action": ""
+        }
+      }
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/graph?workspace=ws&window_hours=24",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184&after_sequence=1&limit=100&stream_epoch=native-epoch",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9/events?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184&after_sequence=1&limit=100&stream_epoch=native-epoch",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/sessions/ses_84c759810c99e54a76863906c902ecf9?executor_id=exe_509f4d6aa3bb501caf6c3f62680c3184",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/attention/summary?workspace_id=ws",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/graph?workspace=ws&window_hours=24",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/home/entries?workspace_id=ws&limit=10&preview=3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/approvals/r4request_b3f0381f5bcf104120037e3236541c2f779bcd2387a7155f546b8fd22dac0dd6",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:53807/api/v1/runtime-management/runtime/approval-decisions/r4decision_a1e351ffda1308ece515acbeeb427c90",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "scope": "human origin intact; synthetic admitted WSS, canonical decision persistence only; no dispatch/native provider application",
+  "session": "ses_84c759810c99e54a76863906c902ecf9"
+}

@@ -1,0 +1,14 @@
+{
+  "status": "PASS_SCOPED_MOBILE_FOCUS_AND_PANEL_EXPANSION",
+  "scenarios": ["T-NAV-12", "T-PANEL-05"],
+  "bundle": {"js": "index-BXpHvePH.js", "js_sha256": "6872da3cff0444e43226a5aafdcb061f320f217e2eb6ceb83f80266e29a4d6c7", "css": "index-C-ZFb395.css", "css_sha256": "cf9d0698234d975279e0da1a1cfb10dd2e8f0f88d15c074515049a556bf43683"},
+  "node": {"passed": 299, "duration_ms": 7641.7627, "exit_code": 0, "tool_ref": "58fc86"},
+  "build": {"exit_code": 0, "session": 32146, "tool_ref": "3c2e6d"},
+  "browser": {"focus_tool_ref": "7e8834", "panel_tool_ref": "d2c643", "focus_checks": 13, "mutating_requests": 0, "drawer_widths": [896,1368,896], "root_dialogs": 1, "session_viewers": 1},
+  "fixes": ["Closing mobile navigation restores focus to its controlling trigger only when focus belongs to that navigation; legitimate external/dialog focus is preserved.", "The managed drawer's expansion now changes its actual width and restores it without a second modal or viewer; mobile width remains100vw."],
+  "evidence": "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
+  "limits": ["Other navigation checks retain the earlier CIX cut and explicit partial coverage.", "Not screen-reader/speech, native200percent zoom, active output scrollback, provider or remote-host qualification."],
+  "migrations": 0,
+  "provider_calls": 0,
+  "rollback": "Revert the focus/CSS commits and rebuild packaged assets; no persisted project, connection, execution or checkpoint data changes."
+}

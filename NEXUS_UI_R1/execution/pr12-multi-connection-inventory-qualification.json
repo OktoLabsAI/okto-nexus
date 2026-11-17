@@ -1,0 +1,63 @@
+{
+  "scenarios": [
+    "T-DATA-04",
+    "T-SCOPE-03"
+  ],
+  "scope": "Actual loopback ASGI HTTP handlers and SQLite; own deterministic historical fixture. Two bindings of the same agent, same executor, exact distinct sessions; one blocked question and one completed turn/cleanup pending.",
+  "command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/ui_simplification/test_multi_connection_inventory.py -q",
+  "final": {
+    "pass": 1,
+    "fail": 0,
+    "duration_seconds": 8.18,
+    "tool": "cb8516"
+  },
+  "checks": [
+    "All groups paginated with limit1 and no workspace filter; child pages exhausted with the same authenticated principal.",
+    "Distinct connection groups retain blocked session attention and sibling completed result separately.",
+    "Every child ID unique; productive summary equals full productive inventory, not multiplied by binding count.",
+    "Additional authorized project contributes exactly one productive item to All; original project filter excludes it before counts.",
+    "Inventory remains2 connections when work is added in the other project."
+  ],
+  "antecedents": [
+    {
+      "tool": "c4ee7e",
+      "status": "FAIL_TEST_ORACLE",
+      "detail": "Test incorrectly expected group_id duplicated inside child DTO; fixed assertion uses actual parent-child membership. No product change."
+    },
+    {
+      "tool": "d003ef",
+      "status": "PASS",
+      "duration_seconds": 7.97,
+      "detail": "Initial single-project cut before cross-project extension."
+    },
+    {
+      "tool": "db0302",
+      "status": "PASS",
+      "duration_seconds": 7.82,
+      "detail": "Same cut after import-only Ruff fix."
+    },
+    {
+      "tool": "68675b",
+      "status": "FAIL_LINT",
+      "detail": "Redundant fixture alias and redundant noqa; corrected only new test."
+    }
+  ],
+  "lint": {
+    "tool": "e95b98",
+    "command": "rtk proxy uvx ruff check tests/ui_simplification/test_multi_connection_inventory.py",
+    "exit_code": 0
+  },
+  "source_sha256": {
+    "tests/ui_simplification/test_multi_connection_inventory.py": "fa2ac39c837a1b17a8f5d58a4d4851c47f56b7d317ed922907e7a17006bf1454",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "d34154693d527fa96df452c0b2ff4e7ee918ccef5c1dd7205742ac159e434e5e",
+    "src/okto_nexus/application/home_entries.py": "2ad5704dbf61526dc6a1be8d099da017997e38c93c9ad80cea359c7597e9e005",
+    "src/okto_nexus/domain/home_entry_pages.py": "abca8cf04b8ef225a70dbaf23dcfaa4fff6fea25af53d95c9676af8f566dc617"
+  },
+  "limits": [
+    "Read facts seeded through existing fixture schema are not two real harnesses or two physical hosts.",
+    "One executor with two bindings; no proof of Windows task, remote connector, provider output, browser presentation or assistive technology.",
+    "Existing Starlette/httpx deprecation warning retained. No product, package, campaign pins, personal configuration or schema migration changed."
+  ],
+  "rollback": "Test/evidence-only commit can be reverted without changing runtime data or configuration."
+}

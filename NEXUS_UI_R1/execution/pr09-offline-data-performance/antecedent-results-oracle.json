@@ -1,0 +1,8 @@
+{
+  "toolrefs": ["dfeb93", "f61181"],
+  "exit_code": 1,
+  "cause": "Test oracle used internal EntryRecord.results key against the public DTO, whose field is results_preview.",
+  "correction": "Use actual public DTO results_preview; no product change.",
+  "cleanup": "Fixture context exited normally; no external process or provider invoked.",
+  "results_published": false
+}

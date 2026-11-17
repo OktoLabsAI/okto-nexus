@@ -1,0 +1,28 @@
+{
+  "private_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-service-nexus-passive-bzh6dg_z",
+  "installed": {
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+    "isolated": 1,
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv",
+    "packages": {
+      "okto-nexus": {
+        "version": "0.3.5",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+        "payload_files": 715,
+        "payload_sha256": "50892e69d50fb80eb1794dd3663fa8382b0a76c2b978750709060ede8cc19019"
+      },
+      "okto-nexus-connector": {
+        "version": "0.0.13",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+        "payload_files": 127,
+        "payload_sha256": "41a22c5200a6c06faf81c842a462d45db2fbb7a4acafc0779f0197279c07378f"
+      },
+      "okto-nexus-connector-core": {
+        "version": "0.0.14",
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+        "payload_files": 168,
+        "payload_sha256": "8f1cdc596a664325a9ce72bff492154f50b4fd9e7cdba9a22a56a8012d668b5d"
+      }
+    }
+  }
+}

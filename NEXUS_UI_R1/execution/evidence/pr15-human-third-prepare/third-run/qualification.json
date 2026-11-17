@@ -1,0 +1,270 @@
+{
+  "status": "NOT_COMPLETE_CLARITY_INSUFFICIENT_NO_PASS",
+  "participant": "Same participant, already exposed and given feedback in two previous journeys; iterative third journey, not a new blind novice study.",
+  "anonymous_feedback_literal": "Consegui, mas ainda acho que tem muito ruído desnecessário com informacoes colapsáveis que nao entendi e nao vi valia. O botão Open Context me causou dúvida no entendimento. No final, fiquei na duvida se a conexao tinha ocorrido tambem. Acho que se nesse momento algo mais gráfico, um loader com icone de sucesso/erro pode ser aplicado pra facilitar o entendimento. No lugar do botao Open Context podemos ter algo mais util para o contexto.",
+  "feedback_source": "Parent /root final feedback message; exact chat send/response times not available.",
+  "observations": {
+    "reported_functional_cut_click_count": 22,
+    "reported_cut_read_at": "2026-11-17T01:35:45.158934+00:00",
+    "final_raw_click_count": 47,
+    "later_exploration_clicks": [
+      {
+        "at": "2026-11-17T01:35:49.568466+00:00",
+        "type": "ui_action",
+        "label": "Home"
+      },
+      {
+        "at": "2026-11-17T01:35:56.878957+00:00",
+        "type": "ui_action",
+        "label": "Needs you"
+      },
+      {
+        "at": "2026-11-17T01:36:03.746780+00:00",
+        "type": "ui_action",
+        "label": "Results"
+      },
+      {
+        "at": "2026-11-17T01:36:06.385600+00:00",
+        "type": "ui_action",
+        "label": "Needs you"
+      },
+      {
+        "at": "2026-11-17T01:36:17.956579+00:00",
+        "type": "ui_action",
+        "label": "All"
+      },
+      {
+        "at": "2026-11-17T01:36:21.072362+00:00",
+        "type": "ui_action",
+        "label": "Active"
+      },
+      {
+        "at": "2026-11-17T01:40:53.986957+00:00",
+        "type": "ui_action",
+        "label": "Open context"
+      },
+      {
+        "at": "2026-11-17T01:41:22.097607+00:00",
+        "type": "ui_action",
+        "label": "Open handoff"
+      },
+      {
+        "at": "2026-11-17T01:41:24.259683+00:00",
+        "type": "ui_action",
+        "label": "Open handoff"
+      },
+      {
+        "at": "2026-11-17T01:41:25.313813+00:00",
+        "type": "ui_action",
+        "label": "Open handoff"
+      },
+      {
+        "at": "2026-11-17T01:41:29.255457+00:00",
+        "type": "ui_action",
+        "label": "Close modal"
+      },
+      {
+        "at": "2026-11-17T01:41:31.991863+00:00",
+        "type": "ui_action",
+        "label": "Open handoff"
+      },
+      {
+        "at": "2026-11-17T01:41:33.661806+00:00",
+        "type": "ui_action",
+        "label": "Open handoff"
+      },
+      {
+        "at": "2026-11-17T01:41:37.831496+00:00",
+        "type": "ui_action",
+        "label": "Close modal"
+      },
+      {
+        "at": "2026-11-17T01:41:44.793161+00:00",
+        "type": "ui_action",
+        "label": "Needs you"
+      },
+      {
+        "at": "2026-11-17T01:41:49.241396+00:00",
+        "type": "ui_action",
+        "label": "Active"
+      },
+      {
+        "at": "2026-11-17T01:41:53.379174+00:00",
+        "type": "ui_action",
+        "label": "Open handoff"
+      },
+      {
+        "at": "2026-11-17T01:42:02.852645+00:00",
+        "type": "ui_action",
+        "label": "Open handoff"
+      },
+      {
+        "at": "2026-11-17T01:42:03.234569+00:00",
+        "type": "ui_action",
+        "label": "Open handoff"
+      },
+      {
+        "at": "2026-11-17T01:42:03.451425+00:00",
+        "type": "ui_action",
+        "label": "Open handoff"
+      },
+      {
+        "at": "2026-11-17T01:42:04.577364+00:00",
+        "type": "ui_action",
+        "label": "Close modal"
+      },
+      {
+        "at": "2026-11-17T01:42:06.276515+00:00",
+        "type": "ui_action",
+        "label": ""
+      },
+      {
+        "at": "2026-11-17T01:42:13.436485+00:00",
+        "type": "ui_action",
+        "label": "Advanced"
+      },
+      {
+        "at": "2026-11-17T01:42:33.842116+00:00",
+        "type": "ui_action",
+        "label": "Agent administrationInspect agent identities and configure their connections."
+      },
+      {
+        "at": "2026-11-17T01:42:38.994478+00:00",
+        "type": "ui_action",
+        "label": "Home"
+      }
+    ],
+    "first_click_at": "2026-11-17T01:30:15.665094+00:00",
+    "last_click_at": "2026-11-17T01:42:38.994478+00:00",
+    "writes": [
+      {
+        "at": "2026-11-17T01:31:12.002871+00:00",
+        "type": "http",
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:test",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T01:31:25.849160+00:00",
+        "type": "http",
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:finish",
+        "status": 200
+      }
+    ],
+    "original_connection_read": [
+      {
+        "at": "2026-11-17T01:30:27.125133+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/runtime-management/connections/bindings/binding",
+        "status": 200
+      }
+    ],
+    "post_finish_target_reads": [
+      {
+        "at": "2026-11-17T01:31:34.330152+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T01:31:53.966559+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T01:31:53.985677+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T01:40:53.990555+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T01:40:54.017298+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T01:41:31.994735+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T01:41:53.381320+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      }
+    ]
+  },
+  "technical_result": "Original connection opened via canonical GET200; simulated Test and canonical Finish both200; one setup commit and three retained bindings. Technical success does not establish clear completion for the participant.",
+  "facts": {
+    "setup_commits": 1,
+    "bindings": [
+      {
+        "binding_id": "binding",
+        "binding_revision": 1
+      },
+      {
+        "binding_id": "ui-binding-2",
+        "binding_revision": 1
+      },
+      {
+        "binding_id": "bind_1ca7e62dddd2d9765eb1ca6ace8a6e51",
+        "binding_revision": 1
+      }
+    ],
+    "sessions": 2,
+    "original_grants_preserved": true
+  },
+  "context": {
+    "project": "Sample project",
+    "workspace_id": "ws",
+    "authorized_owned_local_folder": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-third-4fdt3y97\\participant-project",
+    "folder_precondition": "Existing two connections were remote; no local Server-folder mapping was fabricated. Root was supplied the real owned local project folder as neutral fixture data before Add. Delivery to participant is not independently logged here."
+  },
+  "limits": [
+    "No completion duration or exact task-send/feedback time inferred from click timestamps. Functional cut had22 clicks; final raw log has25 additional exploration clicks, not automatically attributed to task completion.",
+    "HTTP log intentionally records path/status, not query strings, response bodies or typed input. Post-Finish target reads200 are proven, but their binding/group identities are not retained.",
+    "No provider or native binary invocation; ConnectionTests peer is simulated. This is a usability journey, not real harness qualification.",
+    "Read observation window60min is independent of original lane10min and native request120s. No authority renewal, extension request or facilitator HITL trigger used.",
+    "Participant reported success but continuing noise and uncertainty about connection completion; no usability scenario promoted to PASS."
+  ],
+  "cleanup": {
+    "browser_session": "ui043-third-human",
+    "browser_close_exit_code": 0,
+    "fixture_exec_session": 99505,
+    "fixture_exit_code": 0,
+    "physical_check_at_utc": "2026-11-17T01:43:58.0185709Z",
+    "browser_pid43120_present": false,
+    "fixture_pid57448_present": false,
+    "listener57276_present": false,
+    "peer_wss_factory_closed": {
+      "peer_thread_stopped": true,
+      "wss_lifespan_factory_closed": true
+    },
+    "data_preserved": true
+  },
+  "product_source_at_curation_sha256": {
+    "frontend/src/components/onboarding/ProjectConnectFlow.tsx": "54ca14cd412c1da1d33d4eafc2f98fd00f48acb1fceb89b1457648bbaf03f160",
+    "frontend/src/components/ConnectionWorkflow.tsx": "6bc9f558cd87bba3e1d9f05904eab9d91ac87853ed5911778a4cb8b510d33f04",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-CKlKNFgD.js": "b3344814b6699b7ca1dd9b9e2cd9d9415ed44e5e476da9cac7f44200666966f3",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-BP1to-F2.css": "6efb2b626483e4f1b0c0c5bd986040a898c49feb4403afb28f963a4fac7a9811"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "url": "http://127.0.0.1:55351",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-human-_xi3do8t",
+  "identities": {
+    "artifact_id": "art_003cdbca565f41e88df6f99382ccc0e3",
+    "workspace": "ws",
+    "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-human-_xi3do8t\\participant-project",
+    "question_session": "ses_838f34b4a5059440edadcf0010fa5c2d",
+    "closed_session": "ui-session-2"
+  },
+  "observation_window_seconds": 160,
+  "decision_authority_times": [
+    {
+      "binding_id": "binding",
+      "lane_ticket_expires_at": "2026-11-16T23:58:13.419456+00:00"
+    }
+  ],
+  "original_grants": [
+    {
+      "grant_id": "grant_c47b1c3e17894b64826425c86c326ba6",
+      "expires_at": "2026-11-17T00:48:13.065034Z",
+      "max_executions": 10
+    }
+  ],
+  "authority_limit": "Original control-lane ticket expiry bounds decidability (normally10min). No hidden grant or lane-ticket renewal; UI observation can stay30min.",
+  "provider_calls": 0,
+  "native_binary_calls": 0,
+  "test_is_simulated": true,
+  "loopback_operator": true,
+  "source_sha256": {
+    "NEXUS_UI_R1/execution/evidence/pr14-human-session/fixture.py": "121de1398f537712d3c339c486efc958895cdce444befde378bb0bf3c34ee0b8",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "9890caef5b5c1aed92989b4400e7a8468b11d1104b99e7be8d8fab432a74bc78",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-BGONNtiX.js": "dfef7675dea3918117e0df676e3e6d1ef72dd03dec61086e0d24a1b91f6430c9"
+  },
+  "fixture_pid": 50588
+}

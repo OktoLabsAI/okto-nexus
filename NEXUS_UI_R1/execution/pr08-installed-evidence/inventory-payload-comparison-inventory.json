@@ -1,0 +1,61 @@
+{
+  "nexus": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus\\okto_nexus-0.3.5-py3-none-any.whl",
+    "wheel_sha256": "280027cc36a8d9e92ef03f9c5a54f2d40d7f2081ae45e1440bfaa006918a96ad",
+    "module_payload_files": 708,
+    "changed_module_payload": []
+  },
+  "nexus-final": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-final\\okto_nexus-0.3.5-py3-none-any.whl",
+    "wheel_sha256": "74c9ecafacbe1e77e90de3e0a3bae05b87e59c3f8862f70df68e415273e68711",
+    "module_payload_files": 708,
+    "changed_module_payload": []
+  },
+  "nexus-release": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-release\\okto_nexus-0.3.5-py3-none-any.whl",
+    "wheel_sha256": "a78b8b3ecf4a050314c55759b2ebc0ec474621819dba019f5b9648438f11990e",
+    "module_payload_files": 708,
+    "changed_module_payload": []
+  },
+  "nexus-release-next": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-release-next\\okto_nexus-0.3.5-py3-none-any.whl",
+    "wheel_sha256": "39897b89334416497012d47f6db02282ffa310c3c7889ef352ee3e1311d33dc3",
+    "module_payload_files": 708,
+    "changed_module_payload": []
+  },
+  "nexus-release-labels": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-release-labels\\okto_nexus-0.3.5-py3-none-any.whl",
+    "wheel_sha256": "d596027d5a75620c502cf1337c1b96196da51e82ddd6bb3780d324024cdc2972",
+    "module_payload_files": 708,
+    "changed_module_payload": []
+  },
+  "nexus-release-inventory": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-release-inventory\\okto_nexus-0.3.5-py3-none-any.whl",
+    "wheel_sha256": "3e7f259e36f7dbb0dc1bc4f4633a32b527dda1df64a1db12cc904d3f5e1b36dc",
+    "module_payload_files": 708,
+    "changed_module_payload": [
+      "okto_nexus/adapters/outbound/sqlite/home_entries.py",
+      "okto_nexus/application/home_entries.py",
+      "okto_nexus/domain/home_entries.py",
+      "okto_nexus/domain/home_entry_pages.py"
+    ],
+    "changed_file_hashes": {
+      "okto_nexus/adapters/outbound/sqlite/home_entries.py": {
+        "antecedent": "710284fdfc2d8728905dabeb9b9aaa2af6eb8592227ec2baaa1a7e1e84b35342",
+        "current": "d34154693d527fa96df452c0b2ff4e7ee918ccef5c1dd7205742ac159e434e5e"
+      },
+      "okto_nexus/application/home_entries.py": {
+        "antecedent": "1675551db67015f0fecbc8f03691f5044a6a4880d58f65c36fee342b322839e5",
+        "current": "2ad5704dbf61526dc6a1be8d099da017997e38c93c9ad80cea359c7597e9e005"
+      },
+      "okto_nexus/domain/home_entries.py": {
+        "antecedent": "df16b1f6c755983ec99fc380ce88661454c076289905d1a8855d47adb7161d22",
+        "current": "c28203f88d69bd22b4e1dd7544ff58716fd2e96862c67433d75dd5f462c0ef1d"
+      },
+      "okto_nexus/domain/home_entry_pages.py": {
+        "antecedent": "6e34e7d198fe9821d61591c2334753f35bb3f8a610a238afd1e01a27d24cf40e",
+        "current": "abca8cf04b8ef225a70dbaf23dcfaa4fff6fea25af53d95c9676af8f566dc617"
+      }
+    }
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "url": "http://127.0.0.1:57473",
+  "fixture_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui039-browser-doa4crxs",
+  "synthetic_peer": true,
+  "real_provider_calls": 0,
+  "configured": {
+    "state": "configured",
+    "server_id": "srv_04c5d7b9fd7f095ab53cd9695fe99391",
+    "agent_id": "collaborator-a",
+    "binding_id": "bind_cd3a5e2396ae67578646d2ecb2fe8a43",
+    "workspace_id": "wsr_90c0738851792056457ff4d939c556d9",
+    "configuration": {
+      "baseline": {
+        "execution_revision": 1,
+        "runtime_revision": 1,
+        "defaults_revision": 1,
+        "binding_revision": 1,
+        "endpoint_revision": 1
+      },
+      "runtime_policy": {
+        "agent_id": "collaborator-a",
+        "runtime_enabled": true,
+        "revision": 1,
+        "inherit_global_mcps": null,
+        "session_policy": "per_sender",
+        "broadcast_handoff_auto_claim": false,
+        "defaults": {
+          "runtime_enabled": true,
+          "session_policy": "shared",
+          "revision": 1,
+          "automatic_recovery": true,
+          "inherit_global_mcps": false,
+          "broadcast_handoff_auto_claim": false
+        },
+        "effective": {
+          "runtime_enabled": true,
+          "session_policy": "per_sender",
+          "inherit_global_mcps": false,
+          "broadcast_handoff_auto_claim": false
+        },
+        "handoff_auto_claim_rollout_enabled": false
+      },
+      "runtime_default": true,
+      "native_decision_policy": {
+        "value": true,
+        "source": "stored",
+        "editable": true,
+        "revision": "67064212fd032e313918d873d4979d68ea45094a4a591eb24a550d9b839d948b",
+        "can_initialize": false
+      },
+      "connections": [
+        {
+          "binding_id": "bind_cd3a5e2396ae67578646d2ecb2fe8a43",
+          "candidate_ref": "nexus-install-v1:50f00f0bd16c750440f40b329de61cfa9883ea141485750e9cabae89f14b8149",
+          "executor_id": "exe_07c0afee9edaf5928e4e70d5e2aa5104",
+          "workspace_id": "wsr_90c0738851792056457ff4d939c556d9",
+          "adapter_id": "codex_app_server",
+          "execution_location": "local"
+        }
+      ],
+      "project_preset": {
+        "id": "project-generalist",
+        "revision": 1
+      },
+      "mcp_preset": {
+        "revision": 0,
+        "servers": [],
+        "configuration_digest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "folders": {
+        "workspace_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui039-browser-doa4crxs\\workspace",
+        "provider_home": null,
+        "secret_bindings": {}
+      },
+      "public_config": {
+        "alias": "UI039 project",
+        "relay_results": true
+      },
+      "automatic_reply": true,
+      "authorization": {
+        "minutes": 60,
+        "actions": 20
+      }
+    },
+    "setup_run_id": "connect_910de20ebcc84b70bc42997df1c3e90f",
+    "session_state": "not_checked",
+    "work_state": "not_submitted"
+  },
+  "before": {
+    "counts": {
+      "agents": 3,
+      "execution_bindings": 1,
+      "runtime_execution_grants": 1,
+      "execution_sessions": 0,
+      "execution_operations": 0,
+      "connection_setup_commits": 1
+    },
+    "agents": [
+      "operator",
+      "subject",
+      "collaborator-a"
+    ],
+    "bindings": [
+      {
+        "binding_id": "bind_cd3a5e2396ae67578646d2ecb2fe8a43",
+        "agent_id": null,
+        "executor_id": "exe_07c0afee9edaf5928e4e70d5e2aa5104",
+        "workspace_id": null,
+        "workspace_binding_id": "wxb_471d613a7166935fc059559d92ed189a",
+        "adapter_id": null
+      }
+    ],
+    "row_digests": {
+      "agents": "1ee24bf5ec8fc22754340a30be07df0d66d09482ddecf2fb013b2fa28a8677a8",
+      "execution_bindings": "b877da8692abe7dd9572e753f5245161547c4781d4a5d3fe505cc94c5787ce36",
+      "runtime_execution_grants": "f5cd78983e781c9be0193be3841742365ca7d7a830fe15f1f2188f8d2dff5acd",
+      "execution_sessions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "execution_operations": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "connection_setup_commits": "8925d3530d793c5d1c82bf0058985303e5be470defd77470e88cb32a65c20e83"
+    },
+    "a_agent_digest": "51f9d210a9b7d0219b2d32ff19ac5b0bfb83aa3e2c7d4d461ba531fa04108468",
+    "a_configuration_digests": {
+      "binding": "b877da8692abe7dd9572e753f5245161547c4781d4a5d3fe505cc94c5787ce36",
+      "grant": "f5cd78983e781c9be0193be3841742365ca7d7a830fe15f1f2188f8d2dff5acd",
+      "endpoint": "64eb697842ffc8c02569a88f12497d4963fc4674e45179d943086f40d6abebc7",
+      "profile": "8a6c36d9942c7200597da39ba9f978d5f721e8181d25abde485376029a1c08e7"
+    },
+    "turns": [
+      "connect_910de20ebcc84b70bc42997df1c3e90f"
+    ],
+    "probes": 1,
+    "calls": []
+  },
+  "source_pins": {
+    "tests\\ui_simplification\\browser_project_connect_fixture.py": "c9932e8ea3fd58014db5833aef90d0889d8eeba6784a715dd1e5c1d9bf814d17",
+    "frontend\\src\\projectConnectFlowModel.ts": "a3ea00d748b087867323ad18741db1c83320b8e49d5e5c553d09500b6eae9d48",
+    "frontend\\src\\components\\onboarding\\ProjectConnectFlow.tsx": "88d82739d93d3b9276f20e6110cab9198c8d339505e28e5c52ba0886a9f5eec7",
+    "src\\okto_nexus\\adapters\\inbound\\http\\static\\assets\\index-CXFy-VnM.css": "36054c625504c406bff2dcd5a38d66952b72ded0d7c88d44e53658eae1b6316b",
+    "src\\okto_nexus\\adapters\\inbound\\http\\static\\assets\\index-dfy1_5aT.js": "d4361240c4405978aefb39034e3c07e549766d338d290b313f719e282de62409"
+  }
+}

@@ -9,7 +9,7 @@ request for every change; the `main` branch is protected.
 - [uv](https://docs.astral.sh/uv/)
 - Node.js and npm when changing the dashboard
 
-## Lightweight Python and stdio development
+## Lightweight Python development
 
 The development extra installs the test suite and the lightweight HTTP test
 dependencies without the local embedding model:
@@ -20,8 +20,8 @@ uv run pytest -q
 uv run okto-nexus
 ```
 
-The final command starts the stdio MCP server. This path is appropriate when a
-change does not need the bundled dashboard or real local semantic search.
+The final command displays the CLI overview. Nexus serves MCP through
+`okto-nexus serve` and its HTTP `/mcp` endpoint; stdio is not a Nexus transport.
 
 ### Live MCP smoke test
 
@@ -38,12 +38,16 @@ On Windows PowerShell, use the virtual environment's Windows interpreter:
 .\.venv\Scripts\python.exe scripts\live_client.py
 ```
 
-Unlike the unit suite, this script starts the real stdio MCP server and drives
-an end-to-end two-agent flow through registration, sessions, messaging, event
-delivery, handoff, artifact storage, and `shared.md` rendering. It uses temporary
-home and project directories, then removes them on exit, so it does not touch
-the user's `~/.okto_nexus` data. A successful run ends with
-`LIVE E2E RESULT: PASS`.
+Unlike the unit suite, this script starts a real foreground HTTP Server on an
+ephemeral loopback port and uses two authenticated official SDK MCP clients.
+It provisions two identities locally in an isolated home, keeps their keys in
+memory, and exercises sessions, messaging, event delivery, handoff, artifact
+storage, and `shared.md` rendering. Embeddings are off, provider discovery uses
+an empty PATH, and no model or harness is executed. The script requests a
+canonical stop and confirms the child process exits before removing its
+temporary home and project; an unconfirmed stop preserves that state for
+inspection. It does not touch the user's `~/.okto_nexus` data. A successful run
+ends with `LIVE E2E RESULT: PASS`.
 
 ## Full HTTP and dashboard development
 

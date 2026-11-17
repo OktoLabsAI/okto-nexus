@@ -1,0 +1,16 @@
+{
+  "status": "PASS_TWO_CANONICAL_HTTP_SAFETY_SCENARIOS",
+  "scenarios": ["T-SCOPE-01", "T-SEC-01"],
+  "runs": [
+    {"command": "rtk proxy .venv\\Scripts\\python.exe -X utf8 -m pytest -q tests/ui_simplification/test_workspace_scope.py", "passed": 1, "seconds": 8.75, "exit_code": 0, "tool_ref": "756f42"},
+    {"command": "rtk proxy .venv\\Scripts\\python.exe -X utf8 -m pytest -q tests/ui_simplification/test_passive_effects.py", "passed": 1, "seconds": 8.56, "exit_code": 0, "tool_ref": "403870"}
+  ],
+  "ruff": {"exit_code": 0, "tool_ref": "e6de46"},
+  "workspace_scope": "A global sender has work in A and B. Actual bearer HTTP pages with limit1 preserve all A entries, counters and prefilter inventory after B is introduced; B exposes only B work and unrelated global operator identity does not become a participant.",
+  "passive_reads": "Two repeated HTTP snapshots plus every group expansion and exact supported target preserve byte-canonical contents of18 execution/session/grant/message/handoff/decision/receipt/setup tables; setup-test cache remains empty. Existing authentication usage metadata is outside this no-productive-effect claim.",
+  "browser_complement": "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json",
+  "limits": ["Canonical HTTP/SQLite with deterministic own admitted fixture; not native/provider execution or a real remote topology.", "Not a claim that every HTTP handler in the repository is side-effect free."],
+  "product_changes": 0,
+  "migrations": 0,
+  "provider_calls": 0
+}

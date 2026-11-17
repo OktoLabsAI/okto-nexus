@@ -1,0 +1,305 @@
+{
+  "status": "PASS_WITH_STATED_LIMITS",
+  "created_at": "2026-11-17T04:06:23.221926+00:00",
+  "source_pins": {
+    "src/okto_nexus/domain/home_entries.py": "8064505e83f783522a22a3a2a65827d2fd52b92d56e305c5f5339f7bfc1295cc",
+    "src/okto_nexus/domain/home_entry_pages.py": "473c8c199189e8d364468da7c11c1ea8d27a6259a71d0940461bee835d342f05",
+    "src/okto_nexus/domain/home_harness_board.py": "e3714d2e3601a0a611baaf14dc4fea594c52ff7851944d4364f0b8ceaf3197d0",
+    "src/okto_nexus/domain/home_harness_blocking.py": "f3fe6b223e4340d1a4cbdd93ee206459f60335c59b0da9a911d953790795b5ef",
+    "src/okto_nexus/application/home_entries.py": "35929e7a3c768b12dc43a99f8c8e4de5bb06bdea7ac64c34e9f0d64fb11caf8c",
+    "src/okto_nexus/application/home_ports.py": "d451b14cb5806b423a6f202ba6293c32af41da8cb49c129d50eddac810d08748",
+    "src/okto_nexus/adapters/inbound/http/home_entries.py": "909bed37f0a311edcac0d7cc307cfb9bccc5f5701521754745f2968792da5e39",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "a3a998518891893aeb541167af4b2f6f8e226090a7020fde3ae6a7a976674e20",
+    "tests/ui_simplification/test_harness_board.py": "44bde6c7ef6fbeb598b36d7d2da4b9c8c73139c5592129e32550749d2a276c4b",
+    "tests/ui_simplification/test_harness_blocking.py": "26e251db6d866c31e462a338996d77a033dfefbe69aefe3537ee6aa99ac1a409"
+  },
+  "routes": [
+    "GET /api/v1/home/harness-board",
+    "GET /api/v1/home/harness-board/{active|needs_you|results}",
+    "GET /api/v1/home/harness-board/cards/{card_id}/children",
+    "GET /api/v1/home/harness-board/unlinked"
+  ],
+  "contract": {
+    "active": "One card per registered full(server,executor,binding,workspace,workspace_binding,agent) connection. Registered/idle context is not productive RUNNING and not grant/readiness authority. Individual reconnect is explicitly unavailable.",
+    "needs_you": "Confirmed globally blocked harness incorporates its canonical requests. Otherwise a visible canonical user request has one independent notification, identified by its own operational scope. Unknown pause never fabricates a paused harness.",
+    "results": "Unique delivery notifications coexist with active harnesses. canonical/report evidence is explicit; reported finish and decision-recorded202 never imply native success, acceptance, or resumed work.",
+    "proof": "Registered inventory and complete per-entry connection matrix reuse existing relation queries. Native request provenance follows its own exact session/executor/source-operation/binding/workspace/agent metadata, not every connection of shared work.",
+    "blocking": "One safe batch reads current operation receipt/dispatch metadata and native request method/isBlocking/state/expiry/epoch. Only validated requestUserInput boolean plus live canonical operator authority/current scope proves waiting. All pending operations must be blocked to move the harness; known other RUNNING work keeps it Active. Unknown/expired/stale/mismatched/partial proofs stay unknown. Seen/snooze are preferences, not resumed execution. Decision-recorded without later native progress is awaiting_confirmation.",
+    "events": "Server builds and sorts useful event candidates over all retained children before topN. Native questionA is excluded from harnessB preview/event counts even for shared work; original shared detail context remains intact. Delivery watch is deduplicated against its result signal.",
+    "identity": "Shared work retains one logical ID and original detail group/target; references may occur under multiple proven registered bindings. Global work/session/result counts deduplicate identities.",
+    "paging": "All source aggregation precedes paging. Root/global revision covers canonically sorted extra metadata and memberships. Original entry_revision excludes R3-only metadata and is reproduced by legacy exact related endpoints. Cursors are unsigned base64 JSON with reauthorization/scope/partition/parent/principal/server/revision checks, not MACs.",
+    "fallback": "Unlinked project/agent/external origins stay accessible through a counted contextual page in the same Home region, never fake harness cards. Current human requests independently remain Needs you. Historical external completion cannot be assigned by a current correlation.",
+    "counts": "inventory.registered_harnesses counts all scoped registered cards before pagination, not loaded cards. delivery_counts distinguishes canonical versus reported. Summary/results reflects unique retained deliveries; action/request counters do not confer authority.",
+    "compatibility": "Old /home/entries and /home/board URLs/identities/targets remain. Additive relation metadata legitimately changes opaque relation revision, consistently across old/detail APIs. No Core/Attention/setup/receipt/protocol/control intent or migration change."
+  },
+  "qualification": {
+    "final_contract": "pr22-harness-contract-final-junit.xml:14PASS (13metadata-contract cases plus actual SQLite admitted-input+snooze)",
+    "final_parallel_and_detail": "pr22-harness-parallel-final-junit.xml:1PASS11.28s, actual SQLite/Bearer HTTP plus original entry detail and related cursor after extra query.",
+    "metadata_order": "pr22-harness-revision-order-junit.xml:1PASS0.69s, reversing raw batch order leaves global and detail revisions unchanged.",
+    "cost_and_compatibility": "pr22-harness-board-cost-legacy-junit.xml:15PASS62.54s (1/10/100 new SQL cases +9oldR2Board+3productionapp cases).",
+    "earlier_scopes": "pr22-harness-board-conditional-junit.xml:6PASS33.13s at earlier conditional cut; registry/shared scopes/negative actor/host/harness/workspace/principal/cursors/18table invariants/no productive writes.",
+    "ruff": {
+      "tool": "90a2e0",
+      "status": "PASS",
+      "files": [
+        "src/okto_nexus/domain/home_entries.py",
+        "src/okto_nexus/domain/home_entry_pages.py",
+        "src/okto_nexus/domain/home_harness_board.py",
+        "src/okto_nexus/domain/home_harness_blocking.py",
+        "src/okto_nexus/application/home_entries.py",
+        "src/okto_nexus/application/home_ports.py",
+        "src/okto_nexus/adapters/inbound/http/home_entries.py",
+        "src/okto_nexus/adapters/outbound/sqlite/home_entries.py",
+        "tests/ui_simplification/test_harness_board.py",
+        "tests/ui_simplification/test_harness_blocking.py"
+      ]
+    },
+    "all_cuts": {
+      "pr22-harness-blocking-final-junit.xml": {
+        "tests": 14,
+        "failures": 1,
+        "errors": 0,
+        "time_seconds": 18.524,
+        "sha256": "8246a2ef1199a92d17d12383973584e9b0e77966099812dce33ff8ef15e70fa1",
+        "nodes": [
+          "tests.ui_simplification.test_harness_blocking.test_confirmed_blocking_moves_only_own_harness_and_snooze_does_not_resume_it",
+          "tests.ui_simplification.test_harness_blocking.test_another_execution_keeps_harness_active_and_request_independent",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[unknown-method]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[stale]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[expired]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[epoch]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[missing-metadata]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[partial-source]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[outcome-unknown]",
+          "tests.ui_simplification.test_harness_blocking.test_decision_recorded_is_awaiting_confirmation_not_native_success",
+          "tests.ui_simplification.test_harness_blocking.test_shared_work_does_not_share_request_scope_and_delivery_remains_independent",
+          "tests.ui_simplification.test_harness_board.test_server_events_cover_all_children_and_deduplicate_delivery_watch",
+          "tests.ui_simplification.test_harness_board.test_real_native_input_metadata_and_snooze_preserve_waiting_harness",
+          "tests.ui_simplification.test_harness_board.test_real_parallel_work_and_bearer_detail_revisions_after_extra_query"
+        ]
+      },
+      "pr22-harness-blocking-junit.xml": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "time_seconds": 0.833,
+        "sha256": "80b1635cf8b21ea9d3a23e9f6e61bdc0db49cffdd5f3d3acdc6d3c4a81ea27a2",
+        "nodes": [
+          "tests.ui_simplification.test_harness_blocking.test_confirmed_blocking_moves_only_own_harness_and_snooze_does_not_resume_it",
+          "tests.ui_simplification.test_harness_blocking.test_another_execution_keeps_harness_active_and_request_independent",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[unknown-method]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[stale]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[expired]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[epoch]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[missing-metadata]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[partial-source]",
+          "tests.ui_simplification.test_harness_blocking.test_decision_recorded_is_awaiting_confirmation_not_native_success",
+          "tests.ui_simplification.test_harness_blocking.test_shared_work_does_not_share_request_scope_and_delivery_remains_independent"
+        ]
+      },
+      "pr22-harness-blocking-related-final-junit.xml": {
+        "tests": 13,
+        "failures": 1,
+        "errors": 0,
+        "time_seconds": 8.147,
+        "sha256": "a537605c5f4cab8fff67c25c625c3bc5cb858576bc2c76935298643b0febd68c",
+        "nodes": [
+          "tests.ui_simplification.test_harness_blocking.test_confirmed_blocking_moves_only_own_harness_and_snooze_does_not_resume_it",
+          "tests.ui_simplification.test_harness_blocking.test_another_execution_keeps_harness_active_and_request_independent",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[unknown-method]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[stale]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[expired]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[epoch]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[missing-metadata]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[partial-source]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[outcome-unknown]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[accepted-only]",
+          "tests.ui_simplification.test_harness_blocking.test_decision_recorded_is_awaiting_confirmation_not_native_success",
+          "tests.ui_simplification.test_harness_blocking.test_shared_work_does_not_share_request_scope_and_delivery_remains_independent",
+          "tests.ui_simplification.test_harness_board.test_real_parallel_work_and_bearer_detail_revisions_after_extra_query"
+        ]
+      },
+      "pr22-harness-board-conditional-junit.xml": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "time_seconds": 32.763,
+        "sha256": "338592c8c69dcee8a88fa1738124269eeeb7fd2ec30c7a863d5aaa83613ad985",
+        "nodes": [
+          "tests.ui_simplification.test_harness_board.test_registered_cards_are_complete_and_unlinked_origins_are_not_harnesses",
+          "tests.ui_simplification.test_harness_board.test_shared_logical_work_keeps_two_proven_bindings_and_original_detail_identity",
+          "tests.ui_simplification.test_harness_board.test_server_events_cover_all_children_and_deduplicate_delivery_watch",
+          "tests.ui_simplification.test_harness_board.test_http_card_children_unlinked_cursor_scope_and_revision",
+          "tests.ui_simplification.test_harness_board.test_one_uow_no_new_source_query_or_productive_changes",
+          "tests.ui_simplification.test_harness_board.test_unknown_registry_budget_principal_and_auth_are_fail_closed"
+        ]
+      },
+      "pr22-harness-board-cost-legacy-junit.xml": {
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "time_seconds": 62.156,
+        "sha256": "fea6160f49e8e417d57c636993736e6e965fc4a173350a9eb5af95e859c259ea",
+        "nodes": [
+          "tests.ui_simplification.test_harness_board.test_metadata_query_count_is_constant_at_registered_volumes[1]",
+          "tests.ui_simplification.test_harness_board.test_metadata_query_count_is_constant_at_registered_volumes[10]",
+          "tests.ui_simplification.test_harness_board.test_metadata_query_count_is_constant_at_registered_volumes[100]",
+          "tests.ui_simplification.test_home_board.test_exclusive_columns_precedence_retention_and_reported_context",
+          "tests.ui_simplification.test_home_board.test_board_summary_uses_only_retained_scoped_entries_and_unique_refs",
+          "tests.ui_simplification.test_home_board.test_resolved_orphan_attention_is_not_active_but_informative_open_attention_remains",
+          "tests.ui_simplification.test_home_board.test_sqlite_board_is_one_read_no_writes_and_entries_are_disjoint",
+          "tests.ui_simplification.test_home_board.test_http_column_pagination_details_and_all_scope_fences",
+          "tests.ui_simplification.test_home_board.test_principal_scope_and_partial_budget_are_explicit",
+          "tests.ui_simplification.test_home_board.test_unauthorized_board_never_reads_relations",
+          "tests.ui_simplification.test_home_board.test_repeated_http_board_and_columns_preserve_canonical_tables",
+          "tests.ui_simplification.test_home_board.test_sqlite_retains_old_unseen_and_drops_old_seen_canonical_result",
+          "tests.ui_simplification.test_entry_app_integration.test_production_app_exposes_entries_without_manual_route_install",
+          "tests.ui_simplification.test_entry_app_integration.test_entries_cursor_is_bound_to_authenticated_human_without_exposing_identity",
+          "tests.ui_simplification.test_entry_app_integration.test_agent_is_denied_before_any_entry_source_query"
+        ]
+      },
+      "pr22-harness-board-junit.xml": {
+        "tests": 6,
+        "failures": 1,
+        "errors": 0,
+        "time_seconds": 47.926,
+        "sha256": "c4bc0fe7583f770a8089ca64a8f58b8bbe7b5534e32e06d524c6d93f0f0cd9ff",
+        "nodes": [
+          "tests.ui_simplification.test_harness_board.test_registered_cards_are_complete_and_unlinked_origins_are_not_harnesses",
+          "tests.ui_simplification.test_harness_board.test_shared_logical_work_keeps_two_proven_bindings_and_original_detail_identity",
+          "tests.ui_simplification.test_harness_board.test_server_events_cover_all_children_and_deduplicate_delivery_watch",
+          "tests.ui_simplification.test_harness_board.test_http_card_children_unlinked_cursor_scope_and_revision",
+          "tests.ui_simplification.test_harness_board.test_one_uow_no_new_source_query_or_productive_changes",
+          "tests.ui_simplification.test_harness_board.test_unknown_registry_budget_principal_and_auth_are_fail_closed"
+        ]
+      },
+      "pr22-harness-board-native-metadata-junit.xml": {
+        "tests": 2,
+        "failures": 1,
+        "errors": 0,
+        "time_seconds": 14.005,
+        "sha256": "4d05e44cbc354ffca0a0650d772798349f44a8f2539022cc7bf3fa1943d1405a",
+        "nodes": [
+          "tests.ui_simplification.test_harness_board.test_real_native_input_metadata_and_snooze_preserve_waiting_harness",
+          "tests.ui_simplification.test_harness_board.test_real_parallel_work_and_bearer_detail_revisions_after_extra_query"
+        ]
+      },
+      "pr22-harness-contract-final-junit.xml": {
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "time_seconds": 8.848,
+        "sha256": "f9afd2c8a2787fd6455a9cc254344b627d7db6d3a59fa57a88df80a49a342ad3",
+        "nodes": [
+          "tests.ui_simplification.test_harness_blocking.test_confirmed_blocking_moves_only_own_harness_and_snooze_does_not_resume_it",
+          "tests.ui_simplification.test_harness_blocking.test_another_execution_keeps_harness_active_and_request_independent",
+          "tests.ui_simplification.test_harness_blocking.test_explicit_nonblocking_question_is_independent_of_running_harness",
+          "tests.ui_simplification.test_harness_blocking.test_reported_finish_is_a_delivery_without_invented_harness_or_success",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[unknown-method]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[stale]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[expired]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[epoch]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[missing-metadata]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[partial-source]",
+          "tests.ui_simplification.test_harness_blocking.test_missing_or_stale_proof_never_claims_global_pause_or_native_resume[outcome-unknown]",
+          "tests.ui_simplification.test_harness_blocking.test_decision_recorded_is_awaiting_confirmation_not_native_success",
+          "tests.ui_simplification.test_harness_blocking.test_shared_work_does_not_share_request_scope_and_delivery_remains_independent",
+          "tests.ui_simplification.test_harness_board.test_real_native_input_metadata_and_snooze_preserve_waiting_harness"
+        ]
+      },
+      "pr22-harness-parallel-diagnostic-junit.xml": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "time_seconds": 8.52,
+        "sha256": "5ab9d440b53778d422f9572a931e8ca1a1802319940b1879eacda97b689cff10",
+        "nodes": [
+          "tests.ui_simplification.test_harness_board.test_real_parallel_work_and_bearer_detail_revisions_after_extra_query"
+        ]
+      },
+      "pr22-harness-parallel-final-junit.xml": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "time_seconds": 10.872,
+        "sha256": "4b3193cb01eb11e054e2dbef2cd35ac6922e60bb471b9b861a9a1f2c5f4e0c5b",
+        "nodes": [
+          "tests.ui_simplification.test_harness_board.test_real_parallel_work_and_bearer_detail_revisions_after_extra_query"
+        ]
+      },
+      "pr22-harness-revision-order-junit.xml": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "time_seconds": 0.393,
+        "sha256": "aeff20a001322c96a79c50743149b5b08897c58cb39bc1050efbca960a1ae697",
+        "nodes": [
+          "tests.ui_simplification.test_harness_blocking.test_metadata_row_order_does_not_change_global_or_detail_revision"
+        ]
+      }
+    },
+    "samples": [
+      {
+        "registered": 1,
+        "read_uows": 1,
+        "writes": 0,
+        "sql_statements": 58,
+        "preceding_board_sql": 57,
+        "elapsed_ms": 168.085,
+        "payload_bytes": 49776,
+        "sampling": "one finite source-first read, not a p95/SLO"
+      },
+      {
+        "registered": 10,
+        "read_uows": 1,
+        "writes": 0,
+        "sql_statements": 58,
+        "preceding_board_sql": 57,
+        "elapsed_ms": 209.202,
+        "payload_bytes": 80605,
+        "sampling": "one finite source-first read, not a p95/SLO"
+      },
+      {
+        "registered": 100,
+        "read_uows": 1,
+        "writes": 0,
+        "sql_statements": 58,
+        "preceding_board_sql": 57,
+        "elapsed_ms": 715.086,
+        "payload_bytes": 85950,
+        "sampling": "one finite source-first read, not a p95/SLO"
+      }
+    ]
+  },
+  "antecedent_failures_preserved": [
+    "Initial event fixture used nonexistent native_result_available kind; corrected to canonical result_unseen and qualified against the existing enum.",
+    "Initial blocking contract incorrectly used EXECUTING; actual receipt stage is RUNNING. Product and contract fixture corrected before final freeze.",
+    "Parallel read helper copied no receipt because the original admitted-input fixture intentionally has no operation receipt. Unknown was therefore correct. Helper now explicitly inserts a synthetic RUNNING receipt/DISPATCHED operation in its own SQLite fixture; this is not a new native admission or proof of a real process executing.",
+    "Earlier passed/failing cuts remain separate. No single fresh combined test-count claim is made, and invalid-stage antecedents are not final native-stage qualification."
+  ],
+  "limits": [
+    "Source-first new Nexus using pytest/Core dependencies from own PR21 prefix. Not yet an installed-package qualification of R3.",
+    "One finite service-read sample per volume;100registered case715.086ms exceeds500ms. This is not p95/SLO qualification, not HTTP latency, and does not replace the prior100k-event benchmark.",
+    "Measured SQL is58vs57 in the scoped workload, constant+1batch at1/10/100. Earlier55/56 expectations were estimates, not these measurements.",
+    "Native-input fixture uses real canonical admission/WSS/lease/event-ingress with explicit inert test boundary. Parallel RUNNING/session and historical delivery are explicitly synthetic schema-valid read facts, not real Codex/Claude/model/provider execution.",
+    "No provider/account authentication/personal configuration/Windows session/service installation/campaign/oldprefix installation. No Git/ledger actions. Browser/human/installed evidence is separate."
+  ],
+  "cleanup": {
+    "owned_pytest_commands_completed": true,
+    "fixtures_closed_by_finally": true,
+    "native_cli_or_provider_process_started": false
+  },
+  "evidence_manifest": {
+    "pr22-harness-blocking-final-junit.xml": "8246a2ef1199a92d17d12383973584e9b0e77966099812dce33ff8ef15e70fa1",
+    "pr22-harness-blocking-junit.xml": "80b1635cf8b21ea9d3a23e9f6e61bdc0db49cffdd5f3d3acdc6d3c4a81ea27a2",
+    "pr22-harness-blocking-related-final-junit.xml": "a537605c5f4cab8fff67c25c625c3bc5cb858576bc2c76935298643b0febd68c",
+    "pr22-harness-board-conditional-junit.xml": "338592c8c69dcee8a88fa1738124269eeeb7fd2ec30c7a863d5aaa83613ad985",
+    "pr22-harness-board-cost-legacy-junit.xml": "fea6160f49e8e417d57c636993736e6e965fc4a173350a9eb5af95e859c259ea",
+    "pr22-harness-board-junit.xml": "c4bc0fe7583f770a8089ca64a8f58b8bbe7b5534e32e06d524c6d93f0f0cd9ff",
+    "pr22-harness-board-native-metadata-junit.xml": "4d05e44cbc354ffca0a0650d772798349f44a8f2539022cc7bf3fa1943d1405a",
+    "pr22-harness-contract-final-junit.xml": "f9afd2c8a2787fd6455a9cc254344b627d7db6d3a59fa57a88df80a49a342ad3",
+    "pr22-harness-parallel-diagnostic-junit.xml": "5ab9d440b53778d422f9572a931e8ca1a1802319940b1879eacda97b689cff10",
+    "pr22-harness-parallel-final-junit.xml": "4b3193cb01eb11e054e2dbef2cd35ac6922e60bb471b9b861a9a1f2c5f4e0c5b",
+    "pr22-harness-revision-order-junit.xml": "aeff20a001322c96a79c50743149b5b08897c58cb39bc1050efbca960a1ae697"
+  }
+}

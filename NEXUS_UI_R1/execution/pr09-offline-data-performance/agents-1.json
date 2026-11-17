@@ -1,0 +1,541 @@
+{
+  "own_temp": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-offline-_7mgap1_",
+  "agents": 1,
+  "volume": {
+    "agents": 1,
+    "activities": 10,
+    "added_events": 0,
+    "total_events": 2
+  },
+  "entries": {
+    "instrumentation": {
+      "uows": [
+        {
+          "write": false
+        }
+      ],
+      "writes": 0,
+      "sql_statements": 55,
+      "sql_sha256": "0053201a7152ffd095ef91434af3af87b321451dc48b5de685c9b8389de7136f",
+      "transcript_or_journal_reads": 0,
+      "payload_bytes": 7622
+    },
+    "samples_ms": [
+      84.3557000043802,
+      97.23539999686182,
+      101.50250000879169
+    ],
+    "p50_ms": 97.23539999686182,
+    "nearest_rank_p95_ms": 101.50250000879169
+  },
+  "children": {
+    "instrumentation": {
+      "uows": [
+        {
+          "write": false
+        }
+      ],
+      "writes": 0,
+      "sql_statements": 55,
+      "sql_sha256": "0053201a7152ffd095ef91434af3af87b321451dc48b5de685c9b8389de7136f",
+      "transcript_or_journal_reads": 0,
+      "payload_bytes": 12844
+    },
+    "samples_ms": [
+      96.86879999935627,
+      85.63479996519163,
+      88.75609998358414
+    ],
+    "p50_ms": 88.75609998358414,
+    "nearest_rank_p95_ms": 96.86879999935627
+  },
+  "sessions": {
+    "instrumentation": {
+      "uows": [
+        {
+          "write": false
+        }
+      ],
+      "writes": 0,
+      "sql_statements": 55,
+      "sql_sha256": "0053201a7152ffd095ef91434af3af87b321451dc48b5de685c9b8389de7136f",
+      "transcript_or_journal_reads": 0,
+      "payload_bytes": 1726
+    },
+    "samples_ms": [
+      94.42729997681454,
+      90.87870002258569,
+      87.46730000711977
+    ],
+    "p50_ms": 90.87870002258569,
+    "nearest_rank_p95_ms": 94.42729997681454
+  },
+  "semantics": {
+    "status": "PASS",
+    "T-DATA-12": {
+      "passive_sessions": [
+        {
+          "id": "home_entry_4291a40ba50a6f507409c579903ffeac62882691459bcf63c4a9b8057f1cd639",
+          "kind": "session",
+          "source_ref": {
+            "type": "session",
+            "id": "data-opening",
+            "revision": "a7263699b13c58a9413c172443d30ae130a359bd3bdc057d3df669176af09a4f"
+          },
+          "workspace_id": "ws",
+          "agent_id": "subject",
+          "title": "Session",
+          "agent_label": null,
+          "harness_label": "codex_app_server",
+          "host_label": null,
+          "display_state": "offline",
+          "evidence": "confirmed",
+          "state_since": null,
+          "sessions": [
+            {
+              "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+              "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+              "workspace_id": "ws",
+              "session_id": "data-opening"
+            }
+          ],
+          "sessions_total": 1,
+          "has_more_sessions": false,
+          "sessions_cursor": null,
+          "attention_preview": [],
+          "attention_total": 0,
+          "has_more_attention": false,
+          "attention_cursor": null,
+          "results_preview": [],
+          "results_total": 0,
+          "has_more_results": false,
+          "results_cursor": null,
+          "related_coverage": {
+            "attention": "ready",
+            "results": "ready"
+          },
+          "attention_refs": [],
+          "result_refs": [],
+          "target": {
+            "kind": "session",
+            "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+            "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+            "workspace_id": "ws",
+            "session_id": "data-opening"
+          },
+          "result_tracking": "not_applicable",
+          "actions": [
+            {
+              "kind": "inspect",
+              "target": {
+                "kind": "session",
+                "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+                "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+                "workspace_id": "ws",
+                "session_id": "data-opening"
+              }
+            }
+          ],
+          "external": [],
+          "as_of": "2026-11-16T12:00:00.000000Z",
+          "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+        },
+        {
+          "id": "home_entry_58ab71f42a9dbe1ba1b39df5e85244c55f8bc5bacd8a88fb8d1b3892c5dd47e1",
+          "kind": "session",
+          "source_ref": {
+            "type": "session",
+            "id": "data-cleanup",
+            "revision": "c5fdcdf4ab3c40b5064870d864737e4c2f764f7bd2dc81bd8c4ec3f66c0a4022"
+          },
+          "workspace_id": "ws",
+          "agent_id": "subject",
+          "title": "Session",
+          "agent_label": null,
+          "harness_label": "codex_app_server",
+          "host_label": null,
+          "display_state": "offline",
+          "evidence": "confirmed",
+          "state_since": null,
+          "sessions": [
+            {
+              "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+              "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+              "workspace_id": "ws",
+              "session_id": "data-cleanup"
+            }
+          ],
+          "sessions_total": 1,
+          "has_more_sessions": false,
+          "sessions_cursor": null,
+          "attention_preview": [],
+          "attention_total": 0,
+          "has_more_attention": false,
+          "attention_cursor": null,
+          "results_preview": [],
+          "results_total": 0,
+          "has_more_results": false,
+          "results_cursor": null,
+          "related_coverage": {
+            "attention": "ready",
+            "results": "ready"
+          },
+          "attention_refs": [],
+          "result_refs": [],
+          "target": {
+            "kind": "session",
+            "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+            "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+            "workspace_id": "ws",
+            "session_id": "data-cleanup"
+          },
+          "result_tracking": "not_applicable",
+          "actions": [
+            {
+              "kind": "inspect",
+              "target": {
+                "kind": "session",
+                "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+                "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+                "workspace_id": "ws",
+                "session_id": "data-cleanup"
+              }
+            }
+          ],
+          "external": [],
+          "as_of": "2026-11-16T12:00:00.000000Z",
+          "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+        },
+        {
+          "id": "home_entry_9f31a836f7e2a5e0c38c2c9ee25070b9b4bcb9dd4e8dbbb82a2200d69943eb03",
+          "kind": "session",
+          "source_ref": {
+            "type": "session",
+            "id": "data-ready",
+            "revision": "701f15f292e7548cefc55cd98ad34f5bd407c4faf3d61f84b49da53742780f1b"
+          },
+          "workspace_id": "ws",
+          "agent_id": "subject",
+          "title": "Session",
+          "agent_label": null,
+          "harness_label": "codex_app_server",
+          "host_label": null,
+          "display_state": "idle",
+          "evidence": "confirmed",
+          "state_since": null,
+          "sessions": [
+            {
+              "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+              "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+              "workspace_id": "ws",
+              "session_id": "data-ready"
+            }
+          ],
+          "sessions_total": 1,
+          "has_more_sessions": false,
+          "sessions_cursor": null,
+          "attention_preview": [],
+          "attention_total": 0,
+          "has_more_attention": false,
+          "attention_cursor": null,
+          "results_preview": [],
+          "results_total": 0,
+          "has_more_results": false,
+          "results_cursor": null,
+          "related_coverage": {
+            "attention": "ready",
+            "results": "ready"
+          },
+          "attention_refs": [],
+          "result_refs": [],
+          "target": {
+            "kind": "session",
+            "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+            "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+            "workspace_id": "ws",
+            "session_id": "data-ready"
+          },
+          "result_tracking": "not_applicable",
+          "actions": [
+            {
+              "kind": "inspect",
+              "target": {
+                "kind": "session",
+                "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+                "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+                "workspace_id": "ws",
+                "session_id": "data-ready"
+              }
+            }
+          ],
+          "external": [],
+          "as_of": "2026-11-16T12:00:00.000000Z",
+          "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+        },
+        {
+          "id": "home_entry_f9305dfbd0fa7217251de10d1ad9f0def9fbe3fc7f7c7289c9c029d7fe40145c",
+          "kind": "session",
+          "source_ref": {
+            "type": "session",
+            "id": "data-warm",
+            "revision": "4e33ca36af0387b5f90a88dac4803408a984dfea40930454736295f19eaa9aa1"
+          },
+          "workspace_id": "ws",
+          "agent_id": "subject",
+          "title": "Session",
+          "agent_label": null,
+          "harness_label": "codex_app_server",
+          "host_label": null,
+          "display_state": "idle",
+          "evidence": "confirmed",
+          "state_since": null,
+          "sessions": [
+            {
+              "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+              "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+              "workspace_id": "ws",
+              "session_id": "data-warm"
+            }
+          ],
+          "sessions_total": 1,
+          "has_more_sessions": false,
+          "sessions_cursor": null,
+          "attention_preview": [],
+          "attention_total": 0,
+          "has_more_attention": false,
+          "attention_cursor": null,
+          "results_preview": [],
+          "results_total": 0,
+          "has_more_results": false,
+          "results_cursor": null,
+          "related_coverage": {
+            "attention": "ready",
+            "results": "ready"
+          },
+          "attention_refs": [],
+          "result_refs": [],
+          "target": {
+            "kind": "session",
+            "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+            "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+            "workspace_id": "ws",
+            "session_id": "data-warm"
+          },
+          "result_tracking": "not_applicable",
+          "actions": [
+            {
+              "kind": "inspect",
+              "target": {
+                "kind": "session",
+                "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+                "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+                "workspace_id": "ws",
+                "session_id": "data-warm"
+              }
+            }
+          ],
+          "external": [],
+          "as_of": "2026-11-16T12:00:00.000000Z",
+          "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+        }
+      ],
+      "summary_before": {
+        "activities": {
+          "value": 16,
+          "total_is_exact": true,
+          "unit": "activities"
+        },
+        "external_instances": {
+          "value": 1,
+          "total_is_exact": true,
+          "unit": "external_instances"
+        },
+        "occurrences": {
+          "value": 1,
+          "total_is_exact": true,
+          "unit": "occurrences"
+        },
+        "sessions": {
+          "value": 3,
+          "total_is_exact": true,
+          "unit": "sessions"
+        },
+        "results": {
+          "value": 1,
+          "total_is_exact": true,
+          "unit": "results"
+        },
+        "unseen_results": {
+          "value": null,
+          "total_is_exact": false,
+          "unit": "results"
+        }
+      },
+      "summary_after": {
+        "activities": {
+          "value": 16,
+          "total_is_exact": true,
+          "unit": "activities"
+        },
+        "external_instances": {
+          "value": 1,
+          "total_is_exact": true,
+          "unit": "external_instances"
+        },
+        "occurrences": {
+          "value": 1,
+          "total_is_exact": true,
+          "unit": "occurrences"
+        },
+        "sessions": {
+          "value": 7,
+          "total_is_exact": true,
+          "unit": "sessions"
+        },
+        "results": {
+          "value": 1,
+          "total_is_exact": true,
+          "unit": "results"
+        },
+        "unseen_results": {
+          "value": null,
+          "total_is_exact": false,
+          "unit": "results"
+        }
+      },
+      "warm_pool_state": "WARM",
+      "cleanup_containment": "REQUESTED",
+      "turns_for_four_sessions": 0
+    },
+    "T-DATA-14": {
+      "handoff_status": "OPEN",
+      "entry": {
+        "id": "home_f900deb5e2fae92e985ce243f4435f6e31de3d822836977710ca79081964ef9f",
+        "kind": "work",
+        "source_ref": {
+          "id": "ui-handoff-0",
+          "revision": "22522473968a8bedbefc74642c6a7a97a307a0a85371d066866c1de1a39d446a",
+          "type": "handoff"
+        },
+        "workspace_id": "ws",
+        "agent_id": "subject",
+        "title": "Handoff",
+        "agent_label": null,
+        "harness_label": "codex_app_server",
+        "host_label": null,
+        "display_state": "awaiting_owner",
+        "evidence": "confirmed",
+        "state_since": "2026-11-16T12:00:00.000000Z",
+        "sessions": [
+          {
+            "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+            "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+            "workspace_id": "ws",
+            "session_id": "ui-session-2"
+          }
+        ],
+        "sessions_total": 1,
+        "has_more_sessions": false,
+        "sessions_cursor": null,
+        "attention_preview": [],
+        "attention_total": 0,
+        "has_more_attention": false,
+        "attention_cursor": null,
+        "results_preview": [
+          {
+            "agent_id": "subject",
+            "artifacts": [],
+            "attention": null,
+            "cleanup_state": "pending",
+            "created_at": "2026-11-16T12:00:00.000000Z",
+            "detail_target": {
+              "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+              "kind": "result",
+              "operation_id": "ui-success",
+              "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+              "session_id": "ui-session-2",
+              "workspace_id": "ws"
+            },
+            "id": "result_0ada84e2b76499026b08da478dcffaf4df917e058cd358f140f18fba96c049d5",
+            "outcome": "SUCCEEDED",
+            "preview": null,
+            "source_ref": {
+              "id": "ui-handoff-0",
+              "revision": "ece4d04596dae8c475e9fbafc60588e861d8983bb96ccad165aa7967f3eacf64",
+              "type": "handoff_result"
+            },
+            "title": "Handoff result",
+            "truncated": false,
+            "verification_state": "OPEN",
+            "view_state": "not_tracked",
+            "workspace_id": "ws"
+          }
+        ],
+        "results_total": 1,
+        "has_more_results": false,
+        "results_cursor": null,
+        "related_coverage": {
+          "attention": "ready",
+          "results": "ready"
+        },
+        "attention_refs": [],
+        "result_refs": [
+          "result_0ada84e2b76499026b08da478dcffaf4df917e058cd358f140f18fba96c049d5"
+        ],
+        "target": {
+          "handoff_id": "ui-handoff-0",
+          "kind": "handoff",
+          "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+          "workspace_id": "ws"
+        },
+        "result_tracking": "unknown",
+        "actions": [
+          {
+            "kind": "inspect",
+            "target": {
+              "handoff_id": "ui-handoff-0",
+              "kind": "handoff",
+              "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+              "workspace_id": "ws"
+            }
+          }
+        ],
+        "external": [],
+        "as_of": "2026-11-16T12:00:00.000000Z",
+        "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+      },
+      "result": {
+        "agent_id": "subject",
+        "artifacts": [],
+        "attention": null,
+        "cleanup_state": "pending",
+        "created_at": "2026-11-16T12:00:00.000000Z",
+        "detail_target": {
+          "executor_id": "exe_6d3a2811510fcbda5d550275791bfe3f",
+          "kind": "result",
+          "operation_id": "ui-success",
+          "server_id": "srv_f6ea383c8d359fb351118d31faeb698b",
+          "session_id": "ui-session-2",
+          "workspace_id": "ws"
+        },
+        "id": "result_0ada84e2b76499026b08da478dcffaf4df917e058cd358f140f18fba96c049d5",
+        "outcome": "SUCCEEDED",
+        "preview": null,
+        "source_ref": {
+          "id": "ui-handoff-0",
+          "revision": "ece4d04596dae8c475e9fbafc60588e861d8983bb96ccad165aa7967f3eacf64",
+          "type": "handoff_result"
+        },
+        "title": "Handoff result",
+        "truncated": false,
+        "verification_state": "OPEN",
+        "view_state": "not_tracked",
+        "workspace_id": "ws"
+      },
+      "productive_replay_action_exposed": false
+    },
+    "limits": "SQLite synthetic persisted facts; no browser copy/interaction or native lifecycle qualification; READY/OPENING/WARM/CLOSING are not productive evidence."
+  },
+  "cleanup": "Own fixture WSS/lifespan/factory context exited normally; no browser, native CLI or server process launched.",
+  "status": "PASS"
+}

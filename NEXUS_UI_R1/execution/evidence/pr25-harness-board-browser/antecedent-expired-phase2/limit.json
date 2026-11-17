@@ -1,0 +1,15 @@
+{
+  "status": "PARTIAL_ANTECEDENT_NATIVE_REQUEST_EXPIRED_BEFORE_PHASE2",
+  "first_phase_checks_pass": 5,
+  "first_phase_completion_checks_pass": 3,
+  "first_phase_harness_error": "Expected /handoffs/id but actual canonical UI uses /handoffs?handoff_id=...; actual GET200 preserved.",
+  "second_phase": "Harness working/blocksfalse shown, but initial120second question expired before parallel read fact at04:13:24.503Z. No TTL/authority change or replay performed.",
+  "fixture_exit_code": 0,
+  "fixture_exit_tool": "621b15",
+  "physical_exit_tool": "8156c5",
+  "fixture58152_absent": true,
+  "listener60106_absent": true,
+  "browser": "Own existing named technical CLI retained for the next fresh origin; no concurrent extra browser.",
+  "provider_calls": 0,
+  "POST": 0
+}

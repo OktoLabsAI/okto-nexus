@@ -1,0 +1,562 @@
+{
+  "status": "HOME06_SUPPORTED_LIVE05_LIVE06_SUBSETS_ONLY",
+  "T-HOME-06": {
+    "status": "PASS",
+    "checks": [
+      {
+        "id": "T-HOME-06",
+        "name": "changed canonical priority preserves expanded order and exact focused line until Apply",
+        "status": "PASS",
+        "before": [
+          {
+            "group": "home_group_d9252b3f00fb093bfd9738243530d777ce389088d78347ee23daa318d59cf511",
+            "entries": [
+              "home_d520cf4c94621356b0041f7ffb7de148a42f81ac7b9ce0ec0bd8bc8a207afec0",
+              "home_63d554da54bb2e49ca8d4736536aa0c2668b5ff06ace2c5ca964e3752a12c093"
+            ]
+          },
+          {
+            "group": "home_group_a49d9a79d3d4e8d2250144ee6e35b8243d2168db943eede6b45976ea4d29421c",
+            "entries": [
+              "home_entry_7e614f26e8e8c8effe405b650053ca4c160041c2b9c5ab140c36331226340ffe",
+              "home_0dfe904d87797d169c20dd0a11a9a855f79752df3756ca998c00f76eae4ebf43",
+              "home_entry_0818f8458fb24d7e1cc77a4786f53da5181c164dfbcffb2976cae720cad744d8",
+              "home_entry_11ca1ade25a791332563595feda857ea9763a531e1cd8b7b41e97580278364df",
+              "home_entry_1412a623bf8643cd479c55b5564e16ceb0555c43298eeb3eca5a6e45cb26512d",
+              "home_entry_198186660e95e7383fa9ac269e20da110904d4278cfed36c9ed653390a53c435",
+              "home_entry_1a337d5c971b8c1d6253bf93fd32b9b985a4b613c0f4734a25bbd8b1c76d4574",
+              "home_entry_236ab3f75beecd52c962308b1e72c59c1b3b1aa5bf25d60829dff0207ba05fef",
+              "home_entry_48a32cf9af99d99e54627c563856e861b8de2419858d967739a4447579ced74c",
+              "home_entry_48ad910278e2aa5494183397710eee08105ebaa240f48516aef19e152417488b",
+              "home_entry_5483dd05a28f084d33d892e5a9af0b66063f51ce9ac84efdd986c76f6c0fd1ac",
+              "home_entry_57ce2a36f2f2d558479d65812ce29222cda8b5629378c68cce3b15c8dc2ce860",
+              "home_entry_5f89d712bb6dc78ffab64ea6474785d4f0afe46c8715b0d36791fa2feea01148",
+              "home_entry_6b19e43f8e376e60305933d44945b9a307d77bb06ab3b1d926c79e978fa6b23c",
+              "home_entry_6fe20ccfd6e5c6c1107a68f9b503db7faeffa3e41187eb3c6d1a0d1f3f8d9004",
+              "home_entry_7b2aeb6c82fd912de0df1559dcf1e5e53b2c025c6093b7f183b79230c34a58a1",
+              "home_entry_81c639afab4e457595c2c8d82e0dde0b5507eed0642c9b373421dd5aff97e32c",
+              "home_entry_8d633b77c4b6b6ca37771a9ea969f1a670fc2b0af18f71ee4708bfd45eab2133",
+              "home_entry_944224275d45e9ef780adb59e3eeab4411bc5a7f9113a4345214b8e87ea0826d",
+              "home_entry_b8fec05a145ac4fd62561d4dd6181cd243ff74d68e7770287a95651c6d578d79",
+              "home_entry_c2d8f7301acb11964206783eea5cfa2e3ece506e51232934ecc969ef994f907e",
+              "home_entry_d7351680656cf13ee73cc17373f46d2e7782c204db5a09ad66948db4b6039cc8",
+              "home_entry_dba054d32a39129c8792084e58eb2aeada34f530f883b0e91c5e0d8c4efaf724"
+            ]
+          },
+          {
+            "group": "home_group_e236f0fd290d40fb77aafb6b01790eb4cad9468308d787fb359d8e1e1fd8b76a",
+            "entries": [
+              "home_external_98bbcdaf9654ddcc4c219ba200045bbe57b96697d648bdbd3e8200f400feedef"
+            ]
+          },
+          {
+            "group": "home_group_570f96c3f8a3813471a627b6696f959dcbe751bfc529e224212c65e1120270d7",
+            "entries": [
+              "home_3a7d75757c596b967e4c8fce0703b02cc7f8917668187d0612dfa10cab19f993"
+            ]
+          },
+          {
+            "group": "home_group_c738cab415e7ac879e0a32356b64070050b4c1825e874df035305ae5be91fd1d",
+            "entries": [
+              "home_f70f69b1f97b7c29ab89e0eaddbb7a73c13a4068ef502b65902624253ded1441"
+            ]
+          }
+        ],
+        "after": [
+          {
+            "group": "home_group_d9252b3f00fb093bfd9738243530d777ce389088d78347ee23daa318d59cf511",
+            "entries": [
+              "home_d520cf4c94621356b0041f7ffb7de148a42f81ac7b9ce0ec0bd8bc8a207afec0",
+              "home_63d554da54bb2e49ca8d4736536aa0c2668b5ff06ace2c5ca964e3752a12c093"
+            ]
+          },
+          {
+            "group": "home_group_a49d9a79d3d4e8d2250144ee6e35b8243d2168db943eede6b45976ea4d29421c",
+            "entries": [
+              "home_entry_7e614f26e8e8c8effe405b650053ca4c160041c2b9c5ab140c36331226340ffe",
+              "home_0dfe904d87797d169c20dd0a11a9a855f79752df3756ca998c00f76eae4ebf43",
+              "home_entry_0818f8458fb24d7e1cc77a4786f53da5181c164dfbcffb2976cae720cad744d8",
+              "home_entry_11ca1ade25a791332563595feda857ea9763a531e1cd8b7b41e97580278364df",
+              "home_entry_1412a623bf8643cd479c55b5564e16ceb0555c43298eeb3eca5a6e45cb26512d",
+              "home_entry_198186660e95e7383fa9ac269e20da110904d4278cfed36c9ed653390a53c435",
+              "home_entry_1a337d5c971b8c1d6253bf93fd32b9b985a4b613c0f4734a25bbd8b1c76d4574",
+              "home_entry_236ab3f75beecd52c962308b1e72c59c1b3b1aa5bf25d60829dff0207ba05fef",
+              "home_entry_48a32cf9af99d99e54627c563856e861b8de2419858d967739a4447579ced74c",
+              "home_entry_48ad910278e2aa5494183397710eee08105ebaa240f48516aef19e152417488b",
+              "home_entry_5483dd05a28f084d33d892e5a9af0b66063f51ce9ac84efdd986c76f6c0fd1ac",
+              "home_entry_57ce2a36f2f2d558479d65812ce29222cda8b5629378c68cce3b15c8dc2ce860",
+              "home_entry_5f89d712bb6dc78ffab64ea6474785d4f0afe46c8715b0d36791fa2feea01148",
+              "home_entry_6b19e43f8e376e60305933d44945b9a307d77bb06ab3b1d926c79e978fa6b23c",
+              "home_entry_6fe20ccfd6e5c6c1107a68f9b503db7faeffa3e41187eb3c6d1a0d1f3f8d9004",
+              "home_entry_7b2aeb6c82fd912de0df1559dcf1e5e53b2c025c6093b7f183b79230c34a58a1",
+              "home_entry_81c639afab4e457595c2c8d82e0dde0b5507eed0642c9b373421dd5aff97e32c",
+              "home_entry_8d633b77c4b6b6ca37771a9ea969f1a670fc2b0af18f71ee4708bfd45eab2133",
+              "home_entry_944224275d45e9ef780adb59e3eeab4411bc5a7f9113a4345214b8e87ea0826d",
+              "home_entry_b8fec05a145ac4fd62561d4dd6181cd243ff74d68e7770287a95651c6d578d79",
+              "home_entry_c2d8f7301acb11964206783eea5cfa2e3ece506e51232934ecc969ef994f907e",
+              "home_entry_d7351680656cf13ee73cc17373f46d2e7782c204db5a09ad66948db4b6039cc8",
+              "home_entry_dba054d32a39129c8792084e58eb2aeada34f530f883b0e91c5e0d8c4efaf724"
+            ]
+          },
+          {
+            "group": "home_group_e236f0fd290d40fb77aafb6b01790eb4cad9468308d787fb359d8e1e1fd8b76a",
+            "entries": [
+              "home_external_98bbcdaf9654ddcc4c219ba200045bbe57b96697d648bdbd3e8200f400feedef"
+            ]
+          },
+          {
+            "group": "home_group_570f96c3f8a3813471a627b6696f959dcbe751bfc529e224212c65e1120270d7",
+            "entries": [
+              "home_3a7d75757c596b967e4c8fce0703b02cc7f8917668187d0612dfa10cab19f993"
+            ]
+          },
+          {
+            "group": "home_group_c738cab415e7ac879e0a32356b64070050b4c1825e874df035305ae5be91fd1d",
+            "entries": [
+              "home_f70f69b1f97b7c29ab89e0eaddbb7a73c13a4068ef502b65902624253ded1441"
+            ]
+          }
+        ],
+        "stableId": "home_entry_dba054d32a39129c8792084e58eb2aeada34f530f883b0e91c5e0d8c4efaf724",
+        "canonicalNewOrder": [
+          "home_group_d9252b3f00fb093bfd9738243530d777ce389088d78347ee23daa318d59cf511",
+          "home_group_a49d9a79d3d4e8d2250144ee6e35b8243d2168db943eede6b45976ea4d29421c",
+          "home_group_570f96c3f8a3813471a627b6696f959dcbe751bfc529e224212c65e1120270d7",
+          "home_group_c738cab415e7ac879e0a32356b64070050b4c1825e874df035305ae5be91fd1d",
+          "home_group_e236f0fd290d40fb77aafb6b01790eb4cad9468308d787fb359d8e1e1fd8b76a"
+        ],
+        "limit": "Blocked external is watch/configured, not action_required. Canonical priority running2\u2192passive5 changes group order."
+      },
+      {
+        "id": "T-HOME-06",
+        "name": "explicit Apply exposes current priority ordering",
+        "status": "PASS",
+        "afterApply": [
+          {
+            "group": "home_group_d9252b3f00fb093bfd9738243530d777ce389088d78347ee23daa318d59cf511",
+            "entries": [
+              "home_d520cf4c94621356b0041f7ffb7de148a42f81ac7b9ce0ec0bd8bc8a207afec0",
+              "home_63d554da54bb2e49ca8d4736536aa0c2668b5ff06ace2c5ca964e3752a12c093"
+            ]
+          },
+          {
+            "group": "home_group_a49d9a79d3d4e8d2250144ee6e35b8243d2168db943eede6b45976ea4d29421c",
+            "entries": [
+              "home_entry_7e614f26e8e8c8effe405b650053ca4c160041c2b9c5ab140c36331226340ffe",
+              "home_0dfe904d87797d169c20dd0a11a9a855f79752df3756ca998c00f76eae4ebf43",
+              "home_entry_0818f8458fb24d7e1cc77a4786f53da5181c164dfbcffb2976cae720cad744d8"
+            ]
+          },
+          {
+            "group": "home_group_570f96c3f8a3813471a627b6696f959dcbe751bfc529e224212c65e1120270d7",
+            "entries": [
+              "home_3a7d75757c596b967e4c8fce0703b02cc7f8917668187d0612dfa10cab19f993"
+            ]
+          },
+          {
+            "group": "home_group_c738cab415e7ac879e0a32356b64070050b4c1825e874df035305ae5be91fd1d",
+            "entries": [
+              "home_f70f69b1f97b7c29ab89e0eaddbb7a73c13a4068ef502b65902624253ded1441"
+            ]
+          },
+          {
+            "group": "home_group_e236f0fd290d40fb77aafb6b01790eb4cad9468308d787fb359d8e1e1fd8b76a",
+            "entries": [
+              "home_external_98bbcdaf9654ddcc4c219ba200045bbe57b96697d648bdbd3e8200f400feedef"
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "cross-group real reported priority running2\u2192passive5, exact focused row/group order held until explicit Apply"
+  },
+  "T-LIVE-05": {
+    "status": "NOT_RUN",
+    "subset_checks": [
+      {
+        "id": "T-LIVE-05",
+        "name": "many session rows do not start detail or tail observations",
+        "status": "PASS",
+        "shown": 23,
+        "preDetail": []
+      },
+      {
+        "id": "T-LIVE-05",
+        "name": "one open panel observes only its exact session, no tail per row",
+        "status": "PASS",
+        "sessionGets": [
+          {
+            "method": "GET",
+            "url": "http://127.0.0.1:64561/api/v1/runtime-management/runtime/sessions/ui13-passive-02?executor_id=exe_6de9e2375e2788e3528327287b8786ce"
+          },
+          {
+            "method": "GET",
+            "url": "http://127.0.0.1:64561/api/v1/runtime-management/runtime/sessions/ui13-passive-02?executor_id=exe_6de9e2375e2788e3528327287b8786ce"
+          },
+          {
+            "method": "GET",
+            "url": "http://127.0.0.1:64561/api/v1/runtime-management/runtime/sessions/ui13-passive-02/events?executor_id=exe_6de9e2375e2788e3528327287b8786ce&after_sequence=0&limit=100"
+          },
+          {
+            "method": "GET",
+            "url": "http://127.0.0.1:64561/api/v1/runtime-management/runtime/sessions/ui13-passive-02?executor_id=exe_6de9e2375e2788e3528327287b8786ce"
+          }
+        ],
+        "sessionIds": [
+          "ui13-passive-02"
+        ],
+        "shown": 23
+      }
+    ],
+    "limit": "23rows shown before Apply; Apply reset preview3 before panel opened. No claim of simultaneously23visible behind panel.",
+    "unique_detail_session_ids": [
+      "ui13-passive-02"
+    ]
+  },
+  "T-LIVE-06": {
+    "status": "NOT_RUN",
+    "subset_checks": [
+      {
+        "id": "T-LIVE-06 SUBSET",
+        "name": "visual pause buffers canonical reported progress without control mutations",
+        "status": "PASS",
+        "progress": {
+          "pulses": [
+            {
+              "sequence": 2,
+              "state": "blocked",
+              "result": {
+                "receipts": [
+                  {
+                    "observed_instance_id": "obs_inst_0000000000000002",
+                    "generation": 2,
+                    "sequence": 2,
+                    "report_hash": "sha256:7a2c6e790276f6e51804cf9d4471020d34a2d1115ac13595d28f47f78050ba24",
+                    "received_at": "2026-11-16T23:21:26.015333Z",
+                    "valid_until": "2026-11-16T23:22:56.015333Z",
+                    "replayed": false
+                  }
+                ]
+              }
+            },
+            {
+              "sequence": 3,
+              "state": "working",
+              "result": {
+                "receipts": [
+                  {
+                    "observed_instance_id": "obs_inst_0000000000000002",
+                    "generation": 2,
+                    "sequence": 3,
+                    "report_hash": "sha256:2f917171d5900afd19b8957cfdf1f68ddac7d8baeef55085c53e0b6fe075c735",
+                    "received_at": "2026-11-16T23:21:26.015333Z",
+                    "valid_until": "2026-11-16T23:22:56.015333Z",
+                    "replayed": false
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "pausedBefore": [
+          {
+            "group": "home_group_d9252b3f00fb093bfd9738243530d777ce389088d78347ee23daa318d59cf511",
+            "entries": [
+              "home_d520cf4c94621356b0041f7ffb7de148a42f81ac7b9ce0ec0bd8bc8a207afec0",
+              "home_63d554da54bb2e49ca8d4736536aa0c2668b5ff06ace2c5ca964e3752a12c093"
+            ]
+          },
+          {
+            "group": "home_group_a49d9a79d3d4e8d2250144ee6e35b8243d2168db943eede6b45976ea4d29421c",
+            "entries": [
+              "home_entry_7e614f26e8e8c8effe405b650053ca4c160041c2b9c5ab140c36331226340ffe",
+              "home_0dfe904d87797d169c20dd0a11a9a855f79752df3756ca998c00f76eae4ebf43",
+              "home_entry_0818f8458fb24d7e1cc77a4786f53da5181c164dfbcffb2976cae720cad744d8"
+            ]
+          },
+          {
+            "group": "home_group_570f96c3f8a3813471a627b6696f959dcbe751bfc529e224212c65e1120270d7",
+            "entries": [
+              "home_3a7d75757c596b967e4c8fce0703b02cc7f8917668187d0612dfa10cab19f993"
+            ]
+          },
+          {
+            "group": "home_group_c738cab415e7ac879e0a32356b64070050b4c1825e874df035305ae5be91fd1d",
+            "entries": [
+              "home_f70f69b1f97b7c29ab89e0eaddbb7a73c13a4068ef502b65902624253ded1441"
+            ]
+          },
+          {
+            "group": "home_group_e236f0fd290d40fb77aafb6b01790eb4cad9468308d787fb359d8e1e1fd8b76a",
+            "entries": [
+              "home_external_98bbcdaf9654ddcc4c219ba200045bbe57b96697d648bdbd3e8200f400feedef"
+            ]
+          }
+        ],
+        "whilePaused": [
+          {
+            "group": "home_group_d9252b3f00fb093bfd9738243530d777ce389088d78347ee23daa318d59cf511",
+            "entries": [
+              "home_d520cf4c94621356b0041f7ffb7de148a42f81ac7b9ce0ec0bd8bc8a207afec0",
+              "home_63d554da54bb2e49ca8d4736536aa0c2668b5ff06ace2c5ca964e3752a12c093"
+            ]
+          },
+          {
+            "group": "home_group_a49d9a79d3d4e8d2250144ee6e35b8243d2168db943eede6b45976ea4d29421c",
+            "entries": [
+              "home_entry_7e614f26e8e8c8effe405b650053ca4c160041c2b9c5ab140c36331226340ffe",
+              "home_0dfe904d87797d169c20dd0a11a9a855f79752df3756ca998c00f76eae4ebf43",
+              "home_entry_0818f8458fb24d7e1cc77a4786f53da5181c164dfbcffb2976cae720cad744d8"
+            ]
+          },
+          {
+            "group": "home_group_570f96c3f8a3813471a627b6696f959dcbe751bfc529e224212c65e1120270d7",
+            "entries": [
+              "home_3a7d75757c596b967e4c8fce0703b02cc7f8917668187d0612dfa10cab19f993"
+            ]
+          },
+          {
+            "group": "home_group_c738cab415e7ac879e0a32356b64070050b4c1825e874df035305ae5be91fd1d",
+            "entries": [
+              "home_f70f69b1f97b7c29ab89e0eaddbb7a73c13a4068ef502b65902624253ded1441"
+            ]
+          },
+          {
+            "group": "home_group_e236f0fd290d40fb77aafb6b01790eb4cad9468308d787fb359d8e1e1fd8b76a",
+            "entries": [
+              "home_external_98bbcdaf9654ddcc4c219ba200045bbe57b96697d648bdbd3e8200f400feedef"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "T-LIVE-06 SUBSET",
+        "name": "explicit Apply resumes display with current canonical page",
+        "status": "PASS",
+        "latestRevision": "9a2fa06d73e681f46e3185ce07fbea3d7877f7ccf2110d82254bab7b5f913326"
+      }
+    ],
+    "limit": "Own canonical reported-progress pulse, no actual worker/provider execution or decision/draft submission/revalidation."
+  },
+  "raw_antecedents": {
+    "initial": "locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-home-group=\"home_group_a49d9a79d3d4e8d2250144ee6e35b8243d2168db943eede6b45976ea4d29421c\"]').getByRole('button', { name: 'Load more items', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" class=\"btn btn-secondary mt-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500\">Load more items</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 \u00d7 waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is not enabled\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 100ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m  - element was detached from the DOM, retrying\u001b[22m\n",
+    "continuation": "real priority update retains expanded line order and exact focus until Apply"
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/assets/index-BGONNtiX.js"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/assets/index-C-ZFb395.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/stream?view=attention&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/stream?"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/home/entries/home_group_a49d9a79d3d4e8d2250144ee6e35b8243d2168db943eede6b45976ea4d29421c/children?workspace_id=ws&quick=all&limit=10&preview=3&cursor=eyJiaW5kaW5nIjp7ImVudHJ5X2lkIjpudWxsLCJncm91cF9pZCI6ImhvbWVfZ3JvdXBfYTQ5ZDlhNzlkM2Q0ZThkMjI1MDE0NGVlNmUzNWI4MjQzZDIxNjhkYjk0M2VlZGU2YjQ1OTc2ZWE0ZDI5NDIxYyIsInBhcnRpdGlvbiI6ImNoaWxkcmVuIiwicHJpbmNpcGFsIjoiMjk5OGRjMWU3YmM4NzIxYThjMjE3NDJkMGU3ZWYyMmQ3Y2ExNGU0MTkxZTU5MWEyNDg1M2EwMmE4NzJkNDJhNyIsInNjb3BlIjp7ImluY2x1ZGVfcmVjZW50X3Jlc3VsdHMiOmZhbHNlLCJxdWljayI6ImFsbCIsIndvcmtzcGFjZV9pZCI6IndzIn0sInNlcnZlcl9pZCI6InNydl9iMGMwN2QwMDMzOGNhZTBmMjQwMGUyNTVkMDE0NmY3NiJ9LCJrZXkiOls1LCI5OTk5OTk5OTk5OTk5OTk5OTk5OSIsImhvbWVfZW50cnlfMDgxOGY4NDU4ZmIyNGQ3ZTFjYzc3YTQ3ODZmNTNkYTUxODFjMTY0ZGZiY2ZmYjI5NzZjYWU3MjBjYWQ3NDRkOCJdLCJyZXZpc2lvbiI6IjY4MWJkZGI5ZTU4NDk0ZWIxMGZkNTU2ZGFjMjkxYjIwM2Q0NmVhNzgwNjlmYjRjMTMwNDI2NjRiZTE3YmQ4NzQiLCJ2IjoxfQ"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/home/entries/home_group_a49d9a79d3d4e8d2250144ee6e35b8243d2168db943eede6b45976ea4d29421c/children?workspace_id=ws&quick=all&limit=10&preview=3&cursor=eyJiaW5kaW5nIjp7ImVudHJ5X2lkIjpudWxsLCJncm91cF9pZCI6ImhvbWVfZ3JvdXBfYTQ5ZDlhNzlkM2Q0ZThkMjI1MDE0NGVlNmUzNWI4MjQzZDIxNjhkYjk0M2VlZGU2YjQ1OTc2ZWE0ZDI5NDIxYyIsInBhcnRpdGlvbiI6ImNoaWxkcmVuIiwicHJpbmNpcGFsIjoiMjk5OGRjMWU3YmM4NzIxYThjMjE3NDJkMGU3ZWYyMmQ3Y2ExNGU0MTkxZTU5MWEyNDg1M2EwMmE4NzJkNDJhNyIsInNjb3BlIjp7ImluY2x1ZGVfcmVjZW50X3Jlc3VsdHMiOmZhbHNlLCJxdWljayI6ImFsbCIsIndvcmtzcGFjZV9pZCI6IndzIn0sInNlcnZlcl9pZCI6InNydl9iMGMwN2QwMDMzOGNhZTBmMjQwMGUyNTVkMDE0NmY3NiJ9LCJrZXkiOls1LCI5OTk5OTk5OTk5OTk5OTk5OTk5OSIsImhvbWVfZW50cnlfNWY4OWQ3MTJiYjZkYzc4ZmZhYjY0ZWE2NDc0Nzg1ZDRmMGFmZTQ2Yzg3MTViMGQzNjc5MWZhMmZlZWEwMTE0OCJdLCJyZXZpc2lvbiI6IjY4MWJkZGI5ZTU4NDk0ZWIxMGZkNTU2ZGFjMjkxYjIwM2Q0NmVhNzgwNjlmYjRjMTMwNDI2NjRiZTE3YmQ4NzQiLCJ2IjoxfQ"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/__ui13/priority"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_6de9e2375e2788e3528327287b8786ce%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_b0c07d00338cae0f2400e255d0146f76%22%2C%22session_id%22%3A%22ui13-passive-02%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_6de9e2375e2788e3528327287b8786ce%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_b0c07d00338cae0f2400e255d0146f76%22%2C%22session_id%22%3A%22ui13-passive-02%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_6de9e2375e2788e3528327287b8786ce%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_b0c07d00338cae0f2400e255d0146f76%22%2C%22session_id%22%3A%22ui13-passive-02%22%2C%22workspace_id%22%3A%22ws%22%7D&workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/runtime-management/runtime/sessions/ui13-passive-02?executor_id=exe_6de9e2375e2788e3528327287b8786ce"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/runtime-management/runtime/sessions/ui13-passive-02?executor_id=exe_6de9e2375e2788e3528327287b8786ce"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/runtime-management/runtime/sessions/ui13-passive-02/events?executor_id=exe_6de9e2375e2788e3528327287b8786ce&after_sequence=0&limit=100"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/runtime-management/runtime/sessions/ui13-passive-02?executor_id=exe_6de9e2375e2788e3528327287b8786ce"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/runtime-management/connections/bindings/binding"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/__ui13/progress"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/home/entries?workspace_id=ws&quick=all&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:64561/api/v1/graph?workspace=ws&window_hours=24"
+    }
+  ],
+  "all_methods_GET": true,
+  "page_errors": [],
+  "console_errors": [],
+  "cleanup": {
+    "browser_pid": 46120,
+    "browser_close_exit": 0,
+    "browser_absent": true,
+    "fixture_session": 84165,
+    "fixture_exit": 0,
+    "wss_lifespan_factory": "CLOSED",
+    "listener64561_absent": true
+  },
+  "dependency_sha256": {
+    "NEXUS_UI_R1/execution/evidence/pr04-browser/fixture.py": "f775aff38cc7fccbfcea3381bac12239769595b36035140f51c77b4c1493c083",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "tests/ui_simplification/test_entry_relations.py": "b3f4ced0c15ac5fc4060aa954713602fb889752eaa16f97861625f25bbb010fc",
+    "src/okto_nexus/domain/home_entry_pages.py": "abca8cf04b8ef225a70dbaf23dcfaa4fff6fea25af53d95c9676af8f566dc617",
+    "frontend/src/homeController.ts": "5427a9c1246993244a99745a4c37507023e2b840143bcae9c18850d5ab62ba2a"
+  }
+}

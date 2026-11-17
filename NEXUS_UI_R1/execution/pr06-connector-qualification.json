@@ -1,0 +1,16 @@
+{
+  "task": "UI-036",
+  "repository": "OktoLabsAI/okto-nexus-connector",
+  "branch": "feature/v0.0.13",
+  "commit": "daa7f2b",
+  "pushed": true,
+  "status": "IMPLEMENTED",
+  "evidence_path_in_repository": "docs/evidence/ui-r1/qualification.json",
+  "tests": {"final_picker_pass": 14, "tool_ref": "be6576", "pipeline_recovery_pass": 13, "pipeline_tool_ref": "ae7e6c"},
+  "behavior": "Explicit Resume/Add/Cancel before credential/discovery effects; separate operator-reviewed addition root; durable recovery and generated shortcut; previous workspace is a revalidated reference only.",
+  "limitations": ["Synthetic host transports and temporary vaults; no native harness/provider or full UI journey qualification."],
+  "core_pin": "0.0.14 unchanged",
+  "migrations": 0,
+  "provider_calls": 0,
+  "rollback": "Revert Connector picker commit preserving retained roots, bindings and daemon data; explicit request and receipt paths remain supported."
+}

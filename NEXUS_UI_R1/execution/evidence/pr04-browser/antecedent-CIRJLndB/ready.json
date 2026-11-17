@@ -1,0 +1,42 @@
+{
+  "url": "http://127.0.0.1:49754",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui04-browser-o14kc8jc",
+  "identities": {
+    "original_session": "ses_69e198675927e377d66163b60ce81d92",
+    "second_session": "ui04-second-exact-session",
+    "no_turn_session": "ui04-no-turn-session",
+    "multi_session_source": "ui-handoff-0",
+    "closed_session": "ui-session-2",
+    "synthetic_additions": true
+  },
+  "source_sha256": {
+    "frontend/src/components/home/HomeInspection.tsx": "fbe6c27987a46b0d26031929acaf0ac79dfc24e9532c7f3301d1448f6715bb3e",
+    "frontend/src/components/home/HomeEntryInspection.tsx": "db3049fb2fd70bc7a4b925f0ae2fa51b4c7517d1bd957fd16687a483dfdfd108",
+    "frontend/src/components/home/HomeSessionInspection.tsx": "c57af1af1c54731008391f43ab833207d7f6c8823642ee643b622736d67ffb31",
+    "frontend/src/components/AgentActionModal.tsx": "7a7bdfa6079608dc0beb2a18120155d2ffb6041104c9bdbcde0a27571ded158b",
+    "frontend/src/components/home/OperationalHome.tsx": "af48b0183d618c509449115d239ac7f0557ddd0854c436c3b2d0d4da9a6a29b1",
+    "frontend/src/components/home/HomeCards.tsx": "97538322e7f7473f4874b19d695f57f898ccd82e9260fd3314135c706b82f948",
+    "frontend/src/homeController.ts": "5427a9c1246993244a99745a4c37507023e2b840143bcae9c18850d5ab62ba2a",
+    "frontend/src/homeEntryInspection.ts": "0990f4ad7fc7f62c48995f17d9efb217fd3030070fd79cfd51b67db6c769bb3e",
+    "frontend/src/components/RuntimeOperations.tsx": "4eb63fd34f8dc277f86d0d6144e1b50a59217b26c1ce80c8807cd039501a1c8f",
+    "src/okto_nexus/application/home_entries.py": "1675551db67015f0fecbc8f03691f5044a6a4880d58f65c36fee342b322839e5",
+    "src/okto_nexus/domain/home_entry_pages.py": "6e34e7d198fe9821d61591c2334753f35bb3f8a610a238afd1e01a27d24cf40e",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "710284fdfc2d8728905dabeb9b9aaa2af6eb8592227ec2baaa1a7e1e84b35342",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "NEXUS_UI_R1/execution/evidence/pr04-browser/fixture.py": "05037245cf7cd060e5a063d0d58e61c2f68075048bdac22ae5b28d68056b5ac1",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "304b6de28d367875bb81811ea8d822f662894673899b6d4f457179708c34c00c",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-CIRJLndB.js": "62a32c7149838be294295adc621365545cc9004ea2dd73f6da9eb5358daac7d1",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-CXFy-VnM.css": "36054c625504c406bff2dcd5a38d66952b72ded0d7c88d44e53658eae1b6316b",
+    "src/okto_nexus/adapters/inbound/http/static/logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+    "src/okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-dark.svg": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+    "src/okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-light.svg": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+    "src/okto_nexus/adapters/inbound/http/static/logos/oktolabs-icon.svg": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+  },
+  "synthetic": true,
+  "read_only": true,
+  "static_build_verified_by_root": "index-CIRJLndB.js",
+  "app_lifespan": "off; shared fixture owns its admitted mock WSS lifecycle",
+  "personal_auth": false,
+  "provider": false,
+  "native_binary": false
+}

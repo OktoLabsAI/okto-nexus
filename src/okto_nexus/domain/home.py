@@ -32,6 +32,23 @@ class ExecutionTarget(_TargetScope):
     operation_id: str
 
 
+class SessionTarget(TypedDict):
+    kind: Literal['session']
+    server_id: str
+    executor_id: str
+    workspace_id: str
+    session_id: str
+
+
+class ConnectionTarget(TypedDict):
+    kind: Literal['connection']
+    server_id: str
+    executor_id: str
+    workspace_id: str
+    binding_id: str
+    agent_id: str
+
+
 class MessageTarget(_TargetScope):
     kind: Literal['message']
     message_id: str
@@ -49,7 +66,7 @@ class ExternalTarget(_TargetScope):
     generation: int
 
 
-HomeTarget = HandoffTarget | ExecutionTarget | MessageTarget | ApprovalTarget | ExternalTarget
+HomeTarget = HandoffTarget | ExecutionTarget | SessionTarget | ConnectionTarget | MessageTarget | ApprovalTarget | ExternalTarget
 
 
 class RuntimeRef(TypedDict):
@@ -174,6 +191,7 @@ TARGET_FIELDS = {
     'handoff': {'handoff_id'}, 'execution': {'executor_id', 'session_id', 'operation_id'},
     'result': {'executor_id', 'session_id', 'operation_id'}, 'message': {'message_id'},
     'approval': {'approval_id'}, 'external_observation': {'source_id', 'observed_instance_id', 'generation'},
+    'session': {'executor_id', 'session_id'}, 'connection': {'executor_id', 'binding_id', 'agent_id'},
 }
 
 
@@ -220,6 +238,8 @@ def target(value):
         identity(value[key])
     if value['workspace_id'] is not None:
         identity(value['workspace_id'])
+    elif value['kind'] in ('session', 'connection'):
+        invalid('Session and connection targets require their exact workspace.')
     if 'generation' in value and (type(value['generation']) is not int or value['generation'] < 1):
         invalid()
     return value

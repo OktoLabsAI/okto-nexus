@@ -1,0 +1,52 @@
+{
+  "status": "IMPLEMENTED_BROWSER_RECOVERY_OBSERVED",
+  "tasks": [
+    "UI-035",
+    "UI-039",
+    "UI-044"
+  ],
+  "problem": "Real project-preset authorization includes no_expiry and unlimited_actions. The short flow passed those wire fields directly to the strict portable configuration parser, blocking Add before Test/Finish.",
+  "fix": "Normalize the canonical four-field authorization into the portable minutes/actions shape after validating consistency. Preserve explicit unlimited semantics; reject contradictory flags or extra fields. Keep the portable parser strict.",
+  "copy": "Introduction CTA and Help now point to Connect agent instead of claiming to open administration. Introduction renders explicit unlimited authorization correctly.",
+  "validation": {
+    "real_shape_focal": {
+      "passed": 19,
+      "tool_ref": "780289"
+    },
+    "typescript": {
+      "exit_code": 0,
+      "tool_ref": "bc3c38"
+    },
+    "frontend_complete": {
+      "passed": 292,
+      "exit_code": 0,
+      "duration_ms": 17983.8263,
+      "session": 84788,
+      "tool_ref": "d4344f"
+    },
+    "build": {
+      "exit_code": 0,
+      "session": 17248,
+      "tool_ref": "93b0eb",
+      "bundle": "index-dfy1_5aT.js",
+      "bundle_sha256": "d4361240c4405978aefb39034e3c07e549766d338d290b313f719e282de62409",
+      "css": "index-CXFy-VnM.css",
+      "css_sha256": "36054c625504c406bff2dcd5a38d66952b72ded0d7c88d44e53658eae1b6316b"
+    }
+  },
+  "limitations": [
+    "Full sanitized browser recovery evidence is recorded separately; initial antecedent failure did not create the additional identity, test or Finish.",
+    "A synthetic Test service is not native provider execution or a real test-session cleanup qualification.",
+    "Installed final artifact and Codex/Claude browser journey are separate qualifications in progress."
+  ],
+  "migrations": 0,
+  "provider_calls": 0,
+  "rollback": "Revert this adapter/copy patch and rebuild assets; retain all setup IDs and receipts. The antecedent short flow would again reject the canonical preset before productive effects.",
+  "working_tree_raw_sha256": {
+    "frontend/src/projectConnectFlowModel.ts": "a3ea00d748b087867323ad18741db1c83320b8e49d5e5c553d09500b6eae9d48",
+    "frontend/src/runtimeApi.ts": "cee7fc761272e7407c66a4181fd5f9e981a8451186f149679eab0fa10494893c",
+    "frontend/tests/projectConnectFlow.test.mjs": "82378bd0b5bb56d0f57e3aebb1edbcd23f238e32bb0bd93b06198779cba1d0e4",
+    "frontend/src/components/HelpModal.tsx": "ad96b5ac45e82f9be09826021e1e9b7c3ebdc831a861b5713402f04d9047eb18",
+    "frontend/src/components/onboarding/OnboardingModal.tsx": "8fa1e493c9418204cfc2bc604537c07c97d37d3ec9608bcc3736721a13d9553d"
+  }
+}

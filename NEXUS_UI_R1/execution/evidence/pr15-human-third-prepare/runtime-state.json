@@ -1,0 +1,35 @@
+{
+  "status": "NOT_COMPLETE_CLARITY_INSUFFICIENT_NO_PASS",
+  "technical_qualification": "technical/qualification.json",
+  "url": "http://127.0.0.1:57276/",
+  "browser_session": "ui043-third-human",
+  "browser_pid": 43120,
+  "fixture_session": 99505,
+  "fixture_pid": 57448,
+  "control_directory": "C:/Users/jpamb/AppData/Local/Temp/nexus-ui043-third-human-control-v1h34gtf",
+  "stop_file": "C:/Users/jpamb/AppData/Local/Temp/nexus-ui043-third-human-control-v1h34gtf/stop",
+  "extend_read_window_file": "C:/Users/jpamb/AppData/Local/Temp/nexus-ui043-third-human-control-v1h34gtf/extend-read-window.json",
+  "observation_window_seconds": 3600,
+  "extension_policy": "Explicit unique request_id and seconds1..3600 before expiry; read-window only; total cap2hours. No authority/TTL/grant/ticket extension.",
+  "native_request_trigger_used": false,
+  "human_task_scope": "Find project/topics, open existing connection, add simulated collaborator and recognize Connected; no HITL/native-provider task",
+  "participant": "Same participant already exposed/oriented twice; iterative third journey, not a new blind novice study",
+  "provider_calls": 0,
+  "native_binary_calls": 0,
+  "cleanup": {
+    "browser_session": "ui043-third-human",
+    "browser_close_exit_code": 0,
+    "fixture_exec_session": 99505,
+    "fixture_exit_code": 0,
+    "physical_check_at_utc": "2026-11-17T01:43:58.0185709Z",
+    "browser_pid43120_present": false,
+    "fixture_pid57448_present": false,
+    "listener57276_present": false,
+    "peer_wss_factory_closed": {
+      "peer_thread_stopped": true,
+      "wss_lifespan_factory_closed": true
+    },
+    "data_preserved": true
+  },
+  "human_qualification": "third-run/qualification.json"
+}

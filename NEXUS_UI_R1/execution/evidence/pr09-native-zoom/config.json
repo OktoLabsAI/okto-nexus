@@ -1,0 +1,22 @@
+{
+  "browser": {
+    "browserName": "chromium",
+    "isolated": false,
+    "userDataDir": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui09-zoom-control-qpg2mndt\\profile",
+    "launchOptions": {
+      "executablePath": "C:\\Users\\jpamb\\AppData\\Local\\ms-playwright\\chromium-1254\\chrome-win64\\chrome.exe",
+      "channel": "chromium",
+      "headless": true,
+      "args": [
+        "--disable-extensions-except=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui09-zoom-control-qpg2mndt\\extension",
+        "--load-extension=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui09-zoom-control-qpg2mndt\\extension",
+        "--window-size=1440,1100"
+      ]
+    },
+    "contextOptions": {
+      "viewport": null
+    }
+  },
+  "outputDir": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\output\\playwright\\ui09-native-zoom",
+  "outputMode": "stdout"
+}

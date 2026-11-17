@@ -1,0 +1,40 @@
+{
+  "schema": "ui042-carry-v1",
+  "previous_campaign_id": "a3c54686f9db4229b26fba3f9d6b468b",
+  "previous_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-a3c54686f9db4229b26fba3f9d6b468b",
+  "charged_tokens": 75000,
+  "reserved_slots": 1,
+  "observed_tokens": 0,
+  "maximum_new_slots": 5,
+  "maximum_global_slots": 6,
+  "proof_pins": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only\\candidate-final.json",
+      "sha256": "e9fd2b81e0f7e9d79841a47cf3f337b1047b46d808812a963d364d9994c8d8c3"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only\\genuine-consent.json",
+      "sha256": "04614e25bf01b24746e894c509126daf0fc954e77a2f466b95c39459c07df91a"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only\\execution-attempt-qualification.json",
+      "sha256": "8b3c5af353727d425f18db5b697a329a2480eb9680564fb0b63df95684ff9639"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-codex-only\\execution-pre-setup-proof.json",
+      "sha256": "bcdef0bec124042c2025ab09a5e805cbfaaa0854a827e9c089174b47680923f9"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-a3c54686f9db4229b26fba3f9d6b468b\\private\\codex_a.setup.reserved.json",
+      "sha256": "8b675200e40d3aad0fa02f18c900b481f9fde32bad99ce61ad2d7e3088ab96f9"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-a3c54686f9db4229b26fba3f9d6b468b\\public\\cleanup.json",
+      "sha256": "3b3f61a5a3f748a6f15c1f12892039b2b6e185ac38c57dffa9aa40e1f3f6be86"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-a3c54686f9db4229b26fba3f9d6b468b\\home\\service-shutdown.json",
+      "sha256": "3d3fe03430c85789ac6464771e8fbc6eedf6eccc3515fa2816024c68f1171bf0"
+    }
+  ]
+}

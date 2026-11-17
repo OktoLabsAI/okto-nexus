@@ -1,0 +1,65 @@
+{
+  "scope": "Canonical recorded connection inventory and cross-surface local shortcut convergence",
+  "status": "IMPLEMENTED",
+  "tests": [
+    {
+      "passed": 63,
+      "duration_seconds": 8.87,
+      "tool_ref": "da0819",
+      "scope": "Complete bounded catalog consumer and existing local picker/catalog/project regressions; antecedent before final version-type guard"
+    },
+    {
+      "passed": 7,
+      "duration_seconds": 73.16,
+      "tool_ref": "5d9c4e",
+      "scope": "Real HTTP/SQLite catalog, CLI association without profile, explicit remote workspace association and prior remote operator regressions; antecedent before public-label scalar guard"
+    },
+    {
+      "passed": 16,
+      "duration_seconds": 58.81,
+      "session": 73802,
+      "tool_ref": "c880d1",
+      "scope": "Final test_connection_catalog.py + test_canonical_connection_choices.py after production app wiring, scalar/redacted public labels and strict integer version guard"
+    },
+    {
+      "passed": 1,
+      "duration_seconds": 15.37,
+      "session": 81061,
+      "tool_ref": "953f43",
+      "scope": "Production dashboard exposes existing workspace listing with bounded public projection and no-store"
+    }
+  ],
+  "environment": "Owned antecedent Temp venv313 with current Nexus checkout/src first on sys.path. No installation changes.",
+  "behavior": [
+    "Operator-only GET catalog applies scope before exact count/fingerprint/keyset pagination. One read UoW, three SELECTs and write barrier pass.",
+    "Catalog projects only bounded public labels/IDs/revisions and declared state. No paths, credentials, grants, provider probes or inferred approval/readiness.",
+    "Unsigned cursor is scope/principal/revision checked, never an authorization credential.",
+    "CLI consumes every bounded page before selection; incomplete/foreign/changed catalogs cannot become an empty project or authorize duplicate setup.",
+    "Canonical local connection without a profile creates only a format-1 shortcut after exact setup/binding revalidation.",
+    "Remote association requires explicit logical workspace and retains remote_scope; resume and work use the same remote facade without copying host paths.",
+    "Existing binding GET may materialize authorization revision metadata; CLI discloses requested metadata revalidation and never claims effects_started=false for that path."
+  ],
+  "limitations": [
+    "Catalog is inventory, not execution authority; every resume/action revalidates canonical binding and access.",
+    "CLI fixture integration does not qualify native provider execution, installed package or browser onboarding.",
+    "Dashboard workspace listing allowlist is the existing canonical handler; its UI integration is qualified separately."
+  ],
+  "migrations": 0,
+  "provider_calls": 0,
+  "rollback": "Revert additive catalog and picker integration; existing explicit --profile format1 remains compatible. Preserve all shortcut/checkpoint data.",
+  "next": "Integrate and qualify UI onboarding and Connector journey; retain final multi-connection gate.",
+  "working_tree_raw_sha256": {
+    "src/okto_nexus/adapters/inbound/http/app.py": "f845a56ac4abee2085ce1bb953eb84ac012ebf80cb7b9c92f0c50ed8e6655cda",
+    "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py": "6e8f7b17daa4a42a8b1a8776ab84d087bb925d5ef873b0c00146e90e045cc1b3",
+    "src/okto_nexus/application/connection_catalog.py": "80bd60949099a836de8def1dae25ee1fca47374d8ff271322f4d6033e627f837",
+    "src/okto_nexus/adapters/outbound/sqlite/connection_catalog.py": "cb6ea85f5e70fe76f3b82bda6d5e60323e75270f7c7385801149df9778d45735",
+    "src/okto_nexus/adapters/inbound/http/connection_catalog.py": "7b25550308a51217a6f1c45afcf7fba044aaa08c276bef15bda9c6ed4cb8ecb1",
+    "src/okto_nexus/bootstrap/connection_catalog.py": "c7ddc5e1b228b59d6bf4c470599571e3410b0f7327678ed5a7fa16dfa007ab9c",
+    "src/okto_nexus/adapters/inbound/cli/canonical_connections.py": "193b001315a51678f84c962d5bd2088e9a371cc6c40c9aefcfb3d391aadc0713",
+    "src/okto_nexus/adapters/inbound/cli/connect.py": "d494b37e3668a3ba1825c2cecf2c9e527ad427e6f4403c8641957865b54e66dc",
+    "src/okto_nexus/application/terminal_work.py": "0e8fcfc6e5c904232184f6400ed5e2d2696b245bd5636c7c7a2539f6f61e91a3",
+    "tests/execution_r4/test_canonical_connection_choices.py": "b420b8a55a38522579fcb563a9970395c0946876cb63867defc1e7461c0bb799",
+    "tests/execution_r4/test_connection_catalog.py": "e4a9c8db428b74189953ad44e8ee2bf4cc4fc4b07b815744112f6faba9a8589e",
+    "tests/execution_r4/test_connection_catalog_remote.py": "c5712f8f6956ce25e9ec64a59d048a66e4c3f30883b552fa320c5c109fc6e7d5"
+  }
+}

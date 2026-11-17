@@ -1,0 +1,29 @@
+{
+  "status": "LEGACY_FAKE_ACCOUNT_READ_MISSING_REPRODUCED",
+  "error": {
+    "type": "NativeAdapterError",
+    "code": "ErrorCode.CONFLICT",
+    "reason": "protocol_incompatible"
+  },
+  "methods": [
+    "initialize",
+    "initialized",
+    "account/read"
+  ],
+  "births": [
+    {
+      "platform": "win32",
+      "pid": 37024,
+      "birth_token": "filetime:01dd762ab92482c5",
+      "containment": "windows_job",
+      "container_id": "Global\\nexus-core-dc5a6d4b455545928f18f21c211abfff"
+    }
+  ],
+  "physical_stop_observations": [
+    "NOT_OBSERVED"
+  ],
+  "close": "forced",
+  "native_executable": "Only sys._base_executable Python scripted peer",
+  "provider_or_model_invoked": false,
+  "authority_or_journal_or_receipt_changed": false
+}

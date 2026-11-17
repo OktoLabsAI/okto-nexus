@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="6.168" timestamp="2026-11-16T21:02:56.676453-03:00" hostname="Alienware_m15"><testcase classname="tests.home_evolution.test_home_result_artifact_grouping" name="test_newest_foreign_workspace_operation_stays_direct_and_cannot_hide_legitimate_handoff" time="4.088"><failure message="AssertionError: assert 'handoff_result' == 'execution_result'&#10;  &#10;  - execution_result&#10;  + handoff_result">http = namespace(client=&lt;starlette.testclient.TestClient object at 0x000001DFC7560440&gt;, app=&lt;fastapi.applications.FastAPI obj...me_availability=&lt;okto_nexus.application.runtime_availability.RuntimeAvailabilityService object at 0x000001DFC67B38C0&gt;))
+service = &lt;okto_nexus.application.home.HomeOverviewService object at 0x000001DFC8638910&gt;
+home_scenario = HomeScenario(factory=&lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x000001DFC8619090&gt;, ...', 'C', 'operator', 'revoked'), source_id='obs_src_0000000000000001', observed_instance_id='obs_inst_0000000000000002')
+
+    def test_newest_foreign_workspace_operation_stays_direct_and_cannot_hide_legitimate_handoff(
+        http, service, home_scenario
+    ):
+        s = home_scenario
+        link_handoff(s)
+        legitimate_workspace, foreign_workspace = WORKSPACES
+        with s.factory.unit_of_work() as uow:
+            c, now = uow.connection, s.clock.now_iso()
+            operation = c.execute(
+                "SELECT * FROM execution_operations WHERE operation_id='fixture-success'"
+            ).fetchone()
+            receipt = c.execute(
+                "SELECT * FROM execution_receipts WHERE operation_id='fixture-success'"
+            ).fetchone()
+            session = c.execute(
+                "SELECT * FROM execution_sessions WHERE session_id='fixture-native-session'"
+            ).fetchone()
+            opening = c.execute(
+                "SELECT * FROM execution_operations WHERE operation_id=?",
+                (session["open_operation_id"],),
+            ).fetchone()
+            wxb = c.execute(
+                "SELECT * FROM execution_workspace_bindings WHERE workspace_binding_id=?",
+                (operation["workspace_binding_id"],),
+            ).fetchone()
+            binding = c.execute(
+                "SELECT * FROM execution_bindings WHERE binding_id=?",
+                (operation["binding_id"],),
+            ).fetchone()
+            endpoint = c.execute(
+                "SELECT * FROM agent_endpoints WHERE endpoint_id=?",
+                (binding["endpoint_id"],),
+            ).fetchone()
+            copy_row(
+                c,
+                "execution_workspace_bindings",
+                wxb,
+                workspace_binding_id="foreign-result-wxb",
+                workspace_id=foreign_workspace,
+            )
+            copy_row(
+                c,
+                "agent_endpoints",
+                endpoint,
+                endpoint_id="foreign-result-endpoint",
+                workspace_id=foreign_workspace,
+            )
+            copy_row(
+                c,
+                "execution_bindings",
+                binding,
+                binding_id="foreign-result-binding",
+                workspace_binding_id="foreign-result-wxb",
+                endpoint_id="foreign-result-endpoint",
+            )
+            scope = dict(
+                json.loads(opening["expected_revisions_json"]),
+                workspace_id=foreign_workspace,
+                workspace_binding_id="foreign-result-wxb",
+                binding_id="foreign-result-binding",
+                session_id="foreign-result-session",
+            )
+            context = {
+                "workspace_id": foreign_workspace,
+                "workspace_binding_id": "foreign-result-wxb",
+                "binding_id": "foreign-result-binding",
+                "session_id": "foreign-result-session",
+                "expected_revisions_json": json.dumps(scope),
+            }
+            copy_row(
+                c,
+                "execution_operations",
+                opening,
+                operation_id="foreign-result-open",
+                **context,
+            )
+            copy_row(
+                c,
+                "execution_sessions",
+                session,
+                session_id="foreign-result-session",
+                workspace_id=foreign_workspace,
+                workspace_binding_id="foreign-result-wxb",
+                binding_id="foreign-result-binding",
+                open_operation_id="foreign-result-open",
+            )
+            copy_row(
+                c,
+                "execution_operations",
+                operation,
+                operation_id="foreign-result-turn",
+                **context,
+            )
+            latest = (
+                (
+                    datetime.fromisoformat(receipt["received_at"].replace("Z", "+00:00"))
+                    + timedelta(seconds=10)
+                )
+                .isoformat()
+                .replace("+00:00", "Z")
+            )
+            copy_row(
+                c,
+                "execution_receipts",
+                receipt,
+                operation_id="foreign-result-turn",
+                received_at=latest,
+            )
+            # Persisted link points at another project's domain operation. Retain
+            # the authorized direct terminal fact; this link cannot confer origin.
+            c.execute(
+                "INSERT INTO execution_domain_deliveries VALUES('fixture-server','fixture-executor','foreign-result-turn','domain-work')"
+            )
+            for index, (op, sid, workspace, artifact) in enumerate(
+                (
+                    (
+                        "fixture-success",
+                        "fixture-native-session",
+                        legitimate_workspace,
+                        "legitimate-file",
+                    ),
+                    (
+                        "foreign-result-turn",
+                        "foreign-result-session",
+                        foreign_workspace,
+                        "foreign-file",
+                    ),
+                )
+            ):
+                c.execute(
+                    "INSERT INTO execution_event_ingress VALUES('fixture-server','fixture-executor',?,'current-stream',?,?,'turn.completed','{}',?)",
+                    (sid, index + 50, "foreign-scope-event-" + str(index), now),
+                )
+                c.execute(
+                    "INSERT INTO execution_results VALUES('fixture-server','fixture-executor',?,?,'current-stream',?,'Synthetic terminal read fact',0,1,'success',?)",
+                    (op, sid, index + 50, now),
+                )
+                c.execute(
+                    "INSERT INTO artifacts(artifact_id,workspace_id,artifact_type,name,path,created_at) VALUES(?,?,'file',?,'never-read-private-path',?)",
+                    (artifact, workspace, artifact + ".txt", now),
+                )
+                c.execute(
+                    "INSERT INTO runtime_results(result_id,payload,captured_at,operation_id,canonical_server_id,canonical_executor_id,canonical_operation_id,output_artifact_id) VALUES(?,'{}',?,'domain-work','fixture-server','fixture-executor',?,?)",
+                    ("result-" + artifact, now, op, artifact),
+                )
+        before = s.counts()
+        legitimate = read_http(
+            http, service, "results", workspace_id=legitimate_workspace, limit=100
+        )["items"]
+        original = next(
+            row for row in legitimate if row["source_ref"]["id"] == "fixture-handoff-0000"
+        )
+        foreign = read_http(
+            http, service, "results", workspace_id=foreign_workspace, limit=100
+        )["items"]
+        direct = next(
+            row
+            for row in foreign
+            if row["detail_target"].get("operation_id") == "foreign-result-turn"
+        )
+&gt;       assert direct["source_ref"]["type"] == "execution_result"
+E       AssertionError: assert 'handoff_result' == 'execution_result'
+E         
+E         - execution_result
+E         + handoff_result
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\home_evolution\test_home_result_artifact_grouping.py:488: AssertionError</failure></testcase></testsuite></testsuites>

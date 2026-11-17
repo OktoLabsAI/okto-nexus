@@ -1,0 +1,26 @@
+{
+  "schema": "ui042-codex-only-carry-consent-v2",
+  "campaign_id": "dd47c48b74b44711bfb140b542ccbfcc",
+  "candidate_sha256": "cc8888f6b09376cb575a184c1e46886e6f5175176f9169f043ac36944b5fbccf",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-carry-dd47c48b74b44711bfb140b542ccbfcc",
+  "policy": {
+    "accounting": "observed_plus_permanent_per_admission_v1",
+    "codex_final_usage_claim": false,
+    "codex_scope": "cumulative_thread_delta_per_exact_session",
+    "max_admissions": 6,
+    "observed_limit": 500000,
+    "preventive": 450000,
+    "provision_per_admission": 75000,
+    "provision_refund": false,
+    "reserve": 50000
+  },
+  "issued_at": null,
+  "user_response_reference": null,
+  "user_authorized_new_campaign": false,
+  "allow_current_authenticated_codex_cli": false,
+  "disallow_claude": false,
+  "acknowledges_observed_not_atomic_billing_cap": false,
+  "acknowledges_admissions_not_upstream_http_count": false,
+  "allow_owned_canonical_force_after_normal_deadline": false,
+  "acknowledges_native_cli_may_write_its_own_login_home": false
+}

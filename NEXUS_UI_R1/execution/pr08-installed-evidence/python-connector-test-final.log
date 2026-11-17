@@ -1,0 +1,90 @@
+okto-nexus - local agent coordination bus
+
+Usage:
+  okto-nexus connect [options] Review and connect a local project
+  okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
+  okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
+  okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
+  okto-nexus participant smoke exchange|handoff|status|observe [options]  Review optional cooperation with a peer
+  okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
+  okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus message send [options]  Send conversation using a participant profile
+  okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
+  okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
+  okto-nexus observe herdr bind|run|status [options]  Publish optional external activity observations
+  okto-nexus operator login|status|logout --profile NAME [options]
+  okto-nexus operator approval APPROVAL_ID --profile NAME [options]
+  okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
+  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
+  okto-nexus tail [options]    Stream the event log as NDJSON
+  okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
+
+Use `okto-nexus serve --help` for server options. Agents connect to /mcp
+over HTTP with their existing API key.
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Projetos\Techridy\okto_labs_okto_nexus
+configfile: C:\Users\jpamb\AppData\Local\Temp\nexus-ci-installed-7ze8dz_t\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 52 items
+
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_single_legacy_connection_requires_choice_before_vault PASSED [  1%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_add_uses_new_operator_bootstrap_and_keeps_previous_identity_and_binding PASSED [  3%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_add_review_cancel_does_not_create_checkpoint_or_identity PASSED [  5%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_pending_draft_picker_recovers_same_root_without_discovery_or_new_identity PASSED [  7%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_explicit_request_id_bypasses_picker_and_preserves_original_checkpoint PASSED [  9%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_add_cannot_use_old_credential_or_replace_alias PASSED [ 11%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_destination_and_project_filter_do_not_merge_by_path PASSED [ 13%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_other_destination_missing_identity_does_not_retarget_or_block_selected_server PASSED [ 15%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_invalid_pending_root_is_not_treated_as_permission_for_new_setup[revision] PASSED [ 17%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_invalid_pending_root_is_not_treated_as_permission_for_new_setup[unreadable] PASSED [ 19%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_wizard_json_contract_refused_before_catalog_or_credentials[flags0] PASSED [ 21%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_wizard_json_contract_refused_before_catalog_or_credentials[flags1] PASSED [ 23%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_picker_recovers_lost_stage_on_original_root_without_reimport_or_new_proposal[identity_import] PASSED [ 25%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_picker_recovers_lost_stage_on_original_root_without_reimport_or_new_proposal[host_pipeline] PASSED [ 26%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_selected_connect_reuses_project_and_current_authority_without_rewrite PASSED [ 28%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_customization_cannot_rewrite_retained_project_by_reconnect PASSED [ 30%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_explicit_saved_identity_reuses_vault[identity-selected] PASSED [ 32%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_explicit_saved_identity_reuses_vault[alias-selected] PASSED [ 34%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_explicit_saved_identity_reuses_vault[agent-agent] PASSED [ 36%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_imported_identity_can_start_a_new_project_without_key_reentry PASSED [ 38%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_explicit_credential_import_still_validates_and_reactivates_local_identity PASSED [ 40%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_current_remote_refusal_never_starts_or_recreates[REVOKED] PASSED [ 42%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_current_remote_refusal_never_starts_or_recreates[DISABLED] PASSED [ 44%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_current_remote_refusal_never_starts_or_recreates[STALE] PASSED [ 46%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_current_remote_refusal_never_starts_or_recreates[PENDING_REVIEW] PASSED [ 48%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_remote_mapping_drift_is_not_adopted[agent_id] PASSED [ 50%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_remote_mapping_drift_is_not_adopted[workspace_id] PASSED [ 51%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_remote_mapping_drift_is_not_adopted[candidate_ref] PASSED [ 53%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_remote_mapping_drift_is_not_adopted[binding_revision] PASSED [ 55%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_malformed_server_revision_is_not_success[None] PASSED [ 57%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_malformed_server_revision_is_not_success[True] PASSED [ 59%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_malformed_server_revision_is_not_success[0] PASSED [ 61%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_malformed_server_revision_is_not_success[1] PASSED [ 63%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_unavailable_credential_never_falls_back_to_import PASSED [ 65%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_saved_folder_cannot_retarget_an_existing_binding PASSED [ 67%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_conflicting_scope_refuses_before_vault_or_effects[revoked] PASSED [ 69%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_conflicting_scope_refuses_before_vault_or_effects[profile] PASSED [ 71%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_conflicting_scope_refuses_before_vault_or_effects[server] PASSED [ 73%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_conflicting_scope_refuses_before_vault_or_effects[agent] PASSED [ 75%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_conflicting_scope_refuses_before_vault_or_effects[project] PASSED [ 76%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_conflicting_scope_refuses_before_vault_or_effects[harness] PASSED [ 78%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_conflicting_scope_refuses_before_vault_or_effects[executable] PASSED [ 80%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_stored_key_is_authenticated_for_exact_identity[server_id] PASSED [ 82%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_stored_key_is_authenticated_for_exact_identity[agent_id] PASSED [ 84%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_stored_key_is_authenticated_for_exact_identity[credential_epoch] PASSED [ 86%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_local_change_during_authentication_is_not_used[identity] PASSED [ 88%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_local_change_during_authentication_is_not_used[request] PASSED [ 90%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_missing_saved_identity_does_not_guess_or_prompt_for_another_key PASSED [ 92%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_same_path_with_replaced_directory_does_not_reuse_physical_consent PASSED [ 94%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_ambiguous_saved_connections_require_selection PASSED [ 96%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_pending_saved_request_resumes_without_credential_import_or_new_id PASSED [ 98%]
+D:\Projetos\Techridy\okto_labs_okto_nexus::test_new_project_without_identity_requires_explicit_server PASSED [100%]
+
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\ci-connector-final\tests.xml -
+============================= 52 passed in 32.13s =============================

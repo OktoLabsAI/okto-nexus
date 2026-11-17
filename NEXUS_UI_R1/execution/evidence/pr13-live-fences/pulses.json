@@ -1,0 +1,36 @@
+[
+  {
+    "sequence": 2,
+    "state": "blocked",
+    "result": {
+      "receipts": [
+        {
+          "observed_instance_id": "obs_inst_0000000000000002",
+          "generation": 2,
+          "sequence": 2,
+          "report_hash": "sha256:7a2c6e790276f6e51804cf9d4471020d34a2d1115ac13595d28f47f78050ba24",
+          "received_at": "2026-11-16T23:21:26.015333Z",
+          "valid_until": "2026-11-16T23:22:56.015333Z",
+          "replayed": false
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 3,
+    "state": "working",
+    "result": {
+      "receipts": [
+        {
+          "observed_instance_id": "obs_inst_0000000000000002",
+          "generation": 2,
+          "sequence": 3,
+          "report_hash": "sha256:2f917171d5900afd19b8957cfdf1f68ddac7d8baeef55085c53e0b6fe075c735",
+          "received_at": "2026-11-16T23:21:26.015333Z",
+          "valid_until": "2026-11-16T23:22:56.015333Z",
+          "replayed": false
+        }
+      ]
+    }
+  }
+]

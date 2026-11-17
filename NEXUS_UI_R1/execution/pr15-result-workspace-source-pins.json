@@ -1,0 +1,16 @@
+{
+  "at": "2026-11-17T00:04:39.893481+00:00",
+  "source_sha256": {
+    "src/okto_nexus/adapters/outbound/sqlite/home.py": "e457a441560631b81f6a3cc78b299f04ead79265594d5b5b6e959577c57759c5",
+    "tests/home_evolution/test_home_result_artifact_grouping.py": "d329ad50e8328434ab0cbd9ecc3e56ed14ec4f93b04d631476352f3c6d16ac46",
+    "tests/home_evolution/test_home_queries.py": "48ea97f6f704428886c92dadb0f9edf2a1eab502bb7ab7f13a3596f9aff18349",
+    "tests/home_evolution/test_home_final_scope.py": "2e9caeee9393cdc891ebae37c87da6acc76350dc013fd57e6fff3c6c7f91b9ce"
+  },
+  "origins": {
+    "Home": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\home.py",
+    "Core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+    "pytest": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\pytest\\__init__.py"
+  },
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+  "scope": "Checkout Nexus source-first with installed own BXP dependencies, not an installed modified Home payload test. Pin capture during six related tests; focal before/after XML retained separately."
+}

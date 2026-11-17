@@ -959,6 +959,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     # capability issuance and executor publication are not dashboard surfaces.
     from .dashboard_runtime import build_router as dashboard_runtime_router
     app.include_router(dashboard_runtime_router(), prefix="/api/v1/runtime-management")
+    from .connection_catalog import build_router as connection_catalog_router
+    app.include_router(connection_catalog_router(), prefix="/api/v1/runtime-management")
     from .native_actions_v1 import build_router as native_actions_router
     app.include_router(native_actions_router(), prefix="/v1")
     app.include_router(executor_link_router(), prefix="/v1")
@@ -967,6 +969,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     app.include_router(attention_router(), prefix="/api/v1")
     from .home import build_router as home_router
     app.include_router(home_router(), prefix="/api/v1")
+    from ....bootstrap.home_entries import install_home_entries
+    install_home_entries(app, app.state.home)
     from .observations import management_router as observation_management_router, publish_router as observation_publish_router
     app.include_router(observation_management_router(), prefix="/api/v1")
     app.include_router(observation_publish_router(), prefix="/v1")

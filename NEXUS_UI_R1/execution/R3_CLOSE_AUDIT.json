@@ -1,0 +1,39 @@
+{
+  "at": "2026-11-17T04:25:34.217494+00:00",
+  "current_agreed_scope": "Conditional R3 Home/harness action notifications plus automated qualification, separate from complete UI-R1 release/human qualification.",
+  "implementation": "COMPLETE",
+  "automated_qualification": "COMPLETE_WITH_RECORDED_LIMITS",
+  "code_commit": "ae1809f850c46a7de6738a4d3fb5160432521b12",
+  "tests": {
+    "frontend_node": 350,
+    "installed": 42,
+    "browser_functional": 14,
+    "human": "NOT_RUN_R3_USER_UNAVAILABLE",
+    "remote_CI": "Check final pushed commit separately; no approval inferred."
+  },
+  "source_and_static_pins": 234,
+  "source_drift": [],
+  "repositories": {
+    "nexus": {
+      "head": "ae1809f850c46a7de6738a4d3fb5160432521b12",
+      "branch": "feature/v0.3.5",
+      "status_at_audit": "M NEXUS_UI_R1/NEXUS_UI_EXECUTION_LEDGER_R1.json\n M NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md\n M NEXUS_UI_R1/execution/release-report.md\n?? NEXUS_UI_R1/execution/evidence/pr25-harness-board-browser/"
+    },
+    "connector": {
+      "head": "a4d510080d7a685fa442a4c5c30419952589fe04",
+      "branch": "feature/v0.0.13",
+      "status_at_audit": ""
+    },
+    "core": {
+      "head": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "branch": "feature/v0.0.14",
+      "status_at_audit": ""
+    }
+  },
+  "individual_reconnect": "Unavailable in current canonical per-instance API; explicitly disabled, no global daemon restart wired.",
+  "global_UI_R1_qualification": "IN_PROGRESS: no prior blocker waived, not release/AT/native/SLO approval.",
+  "cleanup": "Browser/Chrome/Node/fixture/listener absence proven in PR25; new package prefix process absence proven in PR27.",
+  "next_plan_path": "C:\\Users\\jpamb\\Downloads\\NEXUS_QUICK_CONNECT_R1_CONSOLIDADO_PACOTE_CODEX",
+  "next_plan_inspected": false,
+  "sequence_gate": "May start only after this final evidence/ledger commit and push, clean working tree and PR/check update. No package contents read before that."
+}

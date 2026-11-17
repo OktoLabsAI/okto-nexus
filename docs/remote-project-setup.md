@@ -21,6 +21,19 @@ login stays on that host and is not performed by this flow.
 
 ## 1. Save the draft on the execution host
 
+Interactive `okto-nexus-connector connect --project .` first offers **Resume**,
+**Add another collaborator**, and **Cancel** when that host has retained
+connections or pending setup. Add creates a distinct operator-reviewed root
+and a generated connection alias. It does not replace a previous binding or
+reuse its identity key for the new collaborator. A previous workspace reference
+is only a hint that the operator revalidates. Pending setup resumes the same
+root and handoff before discovery or replacement. Explicit request IDs,
+credential inputs and receipt scripts retain their existing contracts.
+
+The host prints a deterministic operator-side connection shortcut derived from
+that root. You may use it instead of inventing `NAME` below. `OP` remains the
+explicit authenticated human operator profile; it is never copied to the host.
+
 Run the interactive Connector wizard on the computer that will execute work:
 
 ```sh

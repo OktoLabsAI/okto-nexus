@@ -1,0 +1,21 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+    "-I",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+    "test",
+    "--wheel",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\nexus-final\\okto_nexus-0.3.5-py3-none-any.whl",
+    "--output",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\ci-connector-final",
+    "--tests",
+    "../okto-nexus-connector/tests/unit/test_connection_choices.py",
+    "../okto-nexus-connector/tests/unit/test_connect_reuse.py"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9",
+  "started_at": "2026-11-16T20:33:58.130440+00:00",
+  "exit_code": 0,
+  "ended_at": "2026-11-16T20:34:41.493140+00:00"
+}

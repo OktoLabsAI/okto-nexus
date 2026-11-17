@@ -1,0 +1,48 @@
+{
+  "status": "FRONTEND_FROZEN_TECHNICAL_FOCALS_PASS",
+  "focused_run": {
+    "tests": 53,
+    "passed": 53,
+    "milliseconds": 3155.4484,
+    "handle": "3ad1ee"
+  },
+  "antecedent": {
+    "passed": 45,
+    "failed": 1,
+    "handle": "3c8167",
+    "reason": "Existing exact-session button selector expected Open session; changed to View session without relaxing target assertions"
+  },
+  "root_reported_global_validation": {
+    "node_passed": 328,
+    "node_failed": 0,
+    "typescript": "PASS",
+    "vite": "PASS",
+    "run_owner": "root"
+  },
+  "source_sha256": {
+    "frontend/src/homeTypes.ts": "189c5fd4c74d30a720f69b9abbeb852e31ad67fbb22369ec35a6f45e7525a272",
+    "frontend/src/homeApi.ts": "b2e429ae33e8b116f8d753f7ac9e0ae2a956683852d7a92aa65806b39acc4865",
+    "frontend/src/homeController.ts": "7c0c024c2150864dd4c43e49560bfc5ee343a03db78112b20db9d7c7fb885ad8",
+    "frontend/src/hooks/useHomeOverview.ts": "db760bca87cc8e723d3be5b93dd23cd5207c2d61f77dd4d44faf1981919592f9",
+    "frontend/src/homePresentation.ts": "e52279896dc1e0802c27e6b803bdcb62ffb027dd1931f4981da6d6bada542045",
+    "frontend/src/components/home/HomeCards.tsx": "9b9e7138e43135834c601f97823f1fdb8c863d1b2e47279f5c8340bff6609349",
+    "frontend/src/components/home/HomeBoardCards.tsx": "eca50a55b8dc4925072dc7fdc6654c88f93b897f500a3a45ee473cb874581944",
+    "frontend/src/components/home/OperationalHome.tsx": "d63dc66e7863b06c177ec923207f27befee6bdc1949f8e3dafa631fbc925bb02",
+    "frontend/tests/uiBoardController.test.mjs": "7e28490192b86d492f45880280ff952058ee09ee38c1ed7bed44015ca3ad23c8",
+    "frontend/tests/uiBoardCards.test.mjs": "38fa98f51cfcaee7d989d544797c249a1be79ceb71a47f4ae280c03ef9304989",
+    "frontend/tests/homeR1Api.test.mjs": "1dbb8132306ebc79473489706acb39b3b34eafc3d32f31c85dea1b8ce9d8431a",
+    "frontend/tests/homeUI.test.mjs": "16b80e9d011cfe59415bbb53fbff6a7c89710e3b1ce5245889dcb080395b9daa",
+    "frontend/tests/uiEntryCards.test.mjs": "101d11c4334335b441ea5b08dd218f2b74015122677e082ee55623a88031abe3",
+    "frontend/tests/uiFirstHarnessEmpty.test.mjs": "0cbd8de83c70caabd0495394a1dd1180eef56934c5e546d90f29401e09f1ee3a"
+  },
+  "root_build_assets_sha256": {
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-DXslPEEE.js": "c9c8537f3c411cbf5182e6db1f486d72247cc4943d67f969f24f84001456157e",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-Ds-MK2FR.css": "f761e905e0d9642c4c7d0f96d9e0f73404012f0d69d4fead8509e6fd9130b7b7"
+  },
+  "backend_contract": "GET /home/board and GET /home/board/{active|needs_you|results}; entry_revision is separate from board revision; explicit group_id per card",
+  "write_authority_changed": false,
+  "provider_calls": 0,
+  "own_build_run": false,
+  "human_acceptance": "NOT_RUN; previous failed journeys preserved",
+  "report": "pr20-home-board-frontend.md"
+}

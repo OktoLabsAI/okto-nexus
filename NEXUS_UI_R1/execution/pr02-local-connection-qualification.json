@@ -1,0 +1,97 @@
+{
+  "status": "PASS_SCOPED_LOCAL_CONNECTION_IMPLEMENTATION",
+  "at": "2026-11-16T18:26:02.151729+00:00",
+  "tasks": [
+    "UI-011",
+    "UI-012",
+    "UI-013"
+  ],
+  "source_sha256_working_tree": {
+    "src/okto_nexus/adapters/inbound/cli/connect.py": "82560dd387c4cf2d6339bfd14ae16a9fd6b12b0ac1ae0e7e7fd52d730d7df28c",
+    "src/okto_nexus/adapters/inbound/cli/connection_choices.py": "78004e99347a26e7059716487ca94436a60cdc4227789d7957adb3eef1f46b3b",
+    "src/okto_nexus/adapters/inbound/cli/connection_picker.py": "c43fd873b47c57710f6a0872005f874db7ee1149d344b64e24c4c396548955bb",
+    "src/okto_nexus/adapters/inbound/cli/connection_reservation.py": "c82aafb98a0d7c4fb65e931651d2f73e6e09819ad3b60ee99331d0c6426465a0",
+    "src/okto_nexus/adapters/inbound/cli/connection_project.py": "e04e3d582fad8dae8eb39bc360589006511ae2814414fce2c549ed438148e369",
+    "src/okto_nexus/application/terminal_connection.py": "b82e6376d8b0e4101c91caabf0b895b8c282044bb29501864278e83dd8b7593e",
+    "tests/execution_r4/test_connection_choices.py": "9e25c8dde894a78049da9a743fe65d2db1325787d5f6a8e573d1768474d1f3a9",
+    "tests/execution_r4/test_connection_picker.py": "76355bb4a582d9a11fab51a9c780911c8b70c17073392d409e12621d83f66f14",
+    "tests/execution_r4/test_connection_project.py": "fed526b8303f1588012a85085c7626c04a984c1e90f2569c2cb531160199dcf3",
+    "tests/execution_r4/test_terminal_connect.py": "a26a7463446f3dd45d601e778107a6f99ec2b53ab0947882a9b1ad406248a232",
+    "tests/execution_r4/test_terminal_identity.py": "b377b97766039da370f70e3ca7163e3219d1e73c70726386532ff2ec8d9db6a5"
+  },
+  "environment": {
+    "python": "C:/Users/jpamb/AppData/Local/Temp/home-r1-installed-package-aq98yeg_/venv313/Scripts/python.exe",
+    "nexus_origin": "D:/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus",
+    "core_pytest_origin": "Qualified owned Temp venv313; Core0.0.14 includes user_service_definition",
+    "import_strategy": "sys.path.insert(0, checkout/src), then pytest.main",
+    "environment_changed": false
+  },
+  "runs": [
+    {
+      "nodes": [
+        "tests/execution_r4/test_connection_picker.py",
+        "tests/execution_r4/test_connection_choices.py",
+        "tests/execution_r4/test_connection_project.py"
+      ],
+      "flags": [
+        "-q"
+      ],
+      "passed": 53,
+      "exit_code": 0,
+      "seconds": 4.24,
+      "tool_ref": "9fc77c"
+    },
+    {
+      "nodes": [
+        "tests/execution_r4/test_terminal_identity.py::test_addition_finish_reuses_canonical_project_without_changing_first_connection",
+        "tests/execution_r4/test_terminal_identity.py::test_addition_existing_agent_does_not_silently_reuse_binding"
+      ],
+      "flags": [
+        "-q"
+      ],
+      "passed": 2,
+      "exit_code": 0,
+      "seconds": 21.3,
+      "session": 21131,
+      "tool_refs": [
+        "6e3062",
+        "712540"
+      ]
+    }
+  ],
+  "regression_antecedent": {
+    "passed": 90,
+    "seconds": 427.98,
+    "exit_code": 0,
+    "session": 97519,
+    "tool_refs": [
+      "9f56bb",
+      "9b8dde"
+    ],
+    "scope": "Earlier loaded source before final fence/race/envelope/workspace corrections; not a final90-case rerun"
+  },
+  "findings_fixed": [
+    "Path preflight before any directory creation/lock, including explicit profile; physical symlink tests executed without skips.",
+    "Picker-to-lock profile replacement refuses PROFILE_DRIFT.",
+    "Same reservation preserves identity/setup intent, including canonical enrichment and response loss.",
+    "Actual runtime-management HTTP body is direct, not data envelope; initial integration1FAIL/1PASS corrected.",
+    "New connection uses canonically approved existing workspace from exact binding+root mapping, not path-name authority.",
+    "New connection with existing bound agent explicitly refuses ADDITION_CONFLICT instead of silently resuming."
+  ],
+  "real_integration_scope": "Actual CLI parser and HTTP app/SQLite canonical review/Finish, with fake lifecycle and synthetic setup-test peer. Both connections same harness, distinct IDs, same canonical workspace; original profile/binding/grant unchanged.",
+  "limitations": [
+    "Not two real harnesses or a provider/account test. Claude selection is covered at the fake boundary, not real login/native execution.",
+    "Session intent picker UI014 and JSON/service regressions UI015/UI016 remain separate.",
+    "Connector/UI onboarding still pending; this does not close M1/M3.",
+    "Raw source pins describe the tested working tree; Git may normalize text line endings."
+  ],
+  "effects": {
+    "provider_calls": 0,
+    "personal_credentials_read": false,
+    "personal_installation_changed": false,
+    "real_service_start": false,
+    "sqlite_migrations": 0,
+    "local_store_change": "New terminal/connection-intents sidecar format1; legacy profile format1 remains unchanged"
+  },
+  "rollback": "Revert new CLI commits; retained completed/reviewed profiles remain consumable by explicit legacy --profile. Preserve reservation/checkpoint files; never delete uncertain intents to unblock."
+}

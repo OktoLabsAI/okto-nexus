@@ -1,0 +1,40 @@
+### Result
+{"status":"PASS","checks":[{"name":"Memory ON remains feature-driven in Advanced index","status":"PASS","visible":1},{"name":"Attention OFF retains globally reachable bell with explicit unavailable count","status":"PASS","label":"Needs attention. All projects and Server. Attention is disabled. Open available questions and approval controls.","badge":"!"},{"name":"Classic fallback provides canonical approval and conversation shortcuts","status":"PASS","approve":1,"converse":1},{"name":"Attention OFF shortcut reaches existing canonical approvals page","status":"PASS","text":"Approvals\n\nRuntime requests and actions intercepted by require_approval policies wait here until you decide. Review native questions to provide an explicit answer. A recorded decision does not prove delivery to the runtime.\n\nInterception disabled — the feature_hitl flag is off, so no new actions are being intercepted. Pending items below remain decidable. Enable it under Settings › Features.\n\nAll 1\nPending 1\nApproved 0\nRejected 0\nArchived 0\nCreated from\nCreated through\nAction\nAll actions\nmessage_create\nAgent\nAll agents\nA\nClear filters\n\n1 approval(s) · Dates use local time.\n\nPending\n1 WAITING\noldest first\n\tWAITING\tAGENT\tACTION\tSUMMARY\tPOLICY\tDECISION\n\n\t1m\tA\tMESSAGE_CREATE\tdirect → B · 56 bytes\tui-r1-qual-p…\tApproveRejectArchive"},{"name":"Real canonical HTTP middleware rejects invalid credential on advanced API","status":401,"body":{"ok":false,"error":{"code":"AUTH_FAILED","message":"Authentication failed: unknown or inactive api_key"}}},{"name":"Real cross-origin operator read response (not delegated-agent ACL test)","status":"OBSERVED","httpStatus":403,"body":{"ok":false,"error":{"code":"CROSS_ORIGIN_BLOCKED","message":"Refused a cross-origin or rebound-host request on the loopback trust path; authenticate with an api_key."}}},{"name":"Flag variant browser performs no mutations and has no frontend errors","status":"PASS","errors":[],"consoleErrors":[],"mutations":[]}],"requests":[{"method":"GET","url":"http://127.0.0.1:64945/"},{"method":"GET","url":"http://127.0.0.1:64945/assets/index-6o2k3pzt.js"},{"method":"GET","url":"http://127.0.0.1:64945/assets/index-CqPDZl5S.css"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/operator-auth/status"},{"method":"GET","url":"http://127.0.0.1:64945/logos/nexus-icon.svg"},{"method":"GET","url":"http://127.0.0.1:64945/logos/nexus-wordmark-light.svg"},{"method":"GET","url":"http://127.0.0.1:64945/logos/nexus-wordmark-dark.svg"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/info"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/graph?workspace=home-alpha&window_hours=24"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/workspaces"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/graph?workspace=home-alpha&window_hours=24"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/meta-harness/runtime-sessions?page=1&workspace=home-alpha"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/messages?page=1&page_size=6&workspace=home-alpha"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/observations/summary?workspace_id=home-alpha"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/attention/summary?workspace_id=home-alpha"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/attention/summary?state=active&seen=all"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/stream?view=attention&workspace=home-alpha"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/stream?"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/workspaces"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/workspaces"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/approvals?workspace=home-alpha&status=all&limit=100&offset=0"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/workspaces"},{"method":"GET","url":"http://127.0.0.1:64945/api/v1/settings"}],"errors":[],"consoleErrors":[]}
+### Ran Playwright code
+```js
+await (async page => {
+  page.setDefaultTimeout(8000);
+  const checks=[],errors=[],consoleErrors=[],requests=[];
+  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')consoleErrors.push(m.text());});
+  page.on('request',r=>requests.push({method:r.method(),url:r.url()}));
+  const check=(name,data,ok)=>{checks.push({name,status:ok?'PASS':'FAIL',...data});if(!ok)throw Error(name);};
+  try {
+    await page.addInitScript(()=>{if(location.protocol==='http:'){
+      localStorage.setItem('okto-nexus-home-operational','disabled');localStorage.setItem('okto-nexus-workspace','home-alpha');
+      localStorage.setItem('okto.nexus.onboarding.completed.v1','true');localStorage.setItem('okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0','test');
+    }});
+    await page.setViewportSize({width:1440,height:1100});await page.goto('http://127.0.0.1:64945');
+    const nav=page.getByRole('navigation',{name:'Main navigation',exact:true});
+    await nav.locator('[data-view="Advanced"]').click();await page.getByTestId('advanced-view').waitFor();
+    await page.getByRole('button',{name:/^Shared memory/}).waitFor();
+    check('Memory ON remains feature-driven in Advanced index',{visible:await page.getByRole('button',{name:/^Shared memory/}).count()},await page.getByRole('button',{name:/^Shared memory/}).count()===1);
+    await page.screenshot({path:'D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/ui-r1-shell/memory-on.png'});
+    const bell=page.getByTestId('global-attention-button');const label=await bell.getAttribute('aria-label');
+    check('Attention OFF retains globally reachable bell with explicit unavailable count',{label,badge:await page.getByTestId('attention-badge').innerText()},label.includes('disabled')&&await bell.isEnabled()&&await page.getByTestId('attention-badge').innerText()==='!');
+    await bell.click();await page.getByRole('button',{name:'Review approvals',exact:true}).waitFor();
+    check('Classic fallback provides canonical approval and conversation shortcuts',{approve:await page.getByRole('button',{name:'Review approvals',exact:true}).count(),converse:await page.getByRole('button',{name:'Open Conversations',exact:true}).count()},await page.getByRole('button',{name:'Review approvals',exact:true}).count()===1&&await page.getByRole('button',{name:'Open Conversations',exact:true}).count()===1);
+    await page.getByRole('button',{name:'Review approvals',exact:true}).click();await page.getByRole('heading',{name:'Approvals',exact:true}).waitFor();
+    await page.getByRole('tab',{name:/^Pending/}).waitFor();
+    check('Attention OFF shortcut reaches existing canonical approvals page',{text:await page.locator('main').innerText()},(await page.locator('main').innerText()).toLowerCase().includes('pending'));
+    await page.screenshot({path:'D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/ui-r1-shell/attention-off-approvals.png'});
+    const denied=await page.request.get('http://127.0.0.1:64945/api/v1/approvals?api_key=ui-r1-invalid-qualification-key');
+    check('Real canonical HTTP middleware rejects invalid credential on advanced API',{status:denied.status(),body:await denied.json()},denied.status()===401);
+    const cross=await page.request.get('http://127.0.0.1:64945/api/v1/approvals',{headers:{Origin:'https://invalid-qualification.example'}});
+    checks.push({name:'Real cross-origin operator read response (not delegated-agent ACL test)',status:'OBSERVED',httpStatus:cross.status(),body:await cross.json()});
+    check('Flag variant browser performs no mutations and has no frontend errors',{errors,consoleErrors,mutations:requests.filter(r=>!['GET','HEAD','OPTIONS'].includes(r.method))},!errors.length&&!consoleErrors.length&&!requests.some(r=>!['GET','HEAD','OPTIONS'].includes(r.method)));
+    return {status:'PASS',checks,requests,errors,consoleErrors};
+  }catch(e){return {status:'FAIL',message:e.message,checks,requests,errors,consoleErrors};}
+  finally{await page.goto('about:blank');}
+}
+)(page);
+```

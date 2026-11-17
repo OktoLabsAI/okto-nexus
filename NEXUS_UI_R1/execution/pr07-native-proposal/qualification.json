@@ -1,0 +1,74 @@
+{
+  "at": "2026-11-16T22:16:07.021262+00:00",
+  "status": "OFFLINE_GUARDS_AND_REAL_ZERO_ADMISSION_LIFECYCLE_PASS_FINAL_BIND_NEXT",
+  "candidate": "candidate-draft-v2.json",
+  "candidate_sha256": "5b676433646ec78d5a9ca2dc530aec3bef3372ba8cdc0d97b2800157e643e433",
+  "offline_tests": {
+    "passed": 21,
+    "elapsed_seconds": 1.02,
+    "toolref": "53bf4a",
+    "junit": "offline.xml",
+    "scope": "Synthetic six-slot/budget/controller; pure observer deadlines/marker; non-mutating canonical snapshot fake; environment and cleanup guards."
+  },
+  "ruff": {
+    "status": "PASS",
+    "toolref": "eb0e0c"
+  },
+  "commands": {
+    "dry-run": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\driver.py",
+        "dry-run",
+        "--plan",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\candidate-draft-v2.json",
+        "--expected-plan-sha256",
+        "5b676433646ec78d5a9ca2dc530aec3bef3372ba8cdc0d97b2800157e643e433"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"campaign_id\": \"062496549c9340ccb78271b640c8849a\",\n  \"policy\": {\n    \"accounting\": \"observed_plus_permanent_per_admission_v1\",\n    \"claude_scope\": \"full_result_per_admission_conservative_sum\",\n    \"codex_final_usage_claim\": false,\n    \"max_admissions\": 6,\n    \"observed_limit\": 500000,\n    \"preventive\": 450000,\n    \"provision_per_admission\": 75000,\n    \"provision_refund\": false,\n    \"reserve\": 50000\n  },\n  \"order\": [\n    \"codex.setup\",\n    \"claude.setup\",\n    \"codex.work\",\n    \"codex.continue\",\n    \"claude.work\",\n    \"claude.continue\"\n  ],\n  \"effects_started\": false,\n  \"provider_called\": false,\n  \"package_bound\": false,\n  \"native_bindings_bound\": true\n}\n",
+      "stderr": ""
+    },
+    "execute": {
+      "command": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\driver.py",
+        "execute",
+        "--plan",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\candidate-draft-v2.json",
+        "--expected-plan-sha256",
+        "5b676433646ec78d5a9ca2dc530aec3bef3372ba8cdc0d97b2800157e643e433"
+      ],
+      "exit_code": 2,
+      "stdout": "{\"status\": \"REFUSED\", \"reason\": \"NEW_CAMPAIGN_CONSENT_REQUIRED\", \"no_automatic_replay\": true}\n",
+      "stderr": ""
+    }
+  },
+  "campaign_root_created": false,
+  "native_invoked": false,
+  "provider_called": false,
+  "provider_auth_or_configuration_content_read": false,
+  "provider_home_scanned": false,
+  "passive_discovery": "passive-discovery.json (Root explicitly authorized PATH/layout/executable SHA reads only)",
+  "old_draft": "candidate-draft.json is superseded, never authorized, no user consent exists.",
+  "remaining": "Final BXP package bound next; final candidate/template require ONE new real user approval. No paid consent has been created.",
+  "lifecycle": {
+    "status": "PASS",
+    "toolref": "aae7aa",
+    "file": "lifecycle-qualification.json",
+    "scope": "Real installed own foreground/inertPATH/empty provider home;0perform/0operations/0grants/0setup;generation+handle;DRAINED+physicalexit;not paid campaign.",
+    "antecedent": "lifecycle-antecedent-wrong-oracle.json: old SQL table name in test oracle; Server already drained. Corrected isolated rerun passed."
+  },
+  "final_scope_deltas": [
+    "Case-insensitive own child environment filtering.",
+    "Passive Home observer window max180s after6admissions beforecleanup; exact campaign marker;NOT_RUN on deadline.",
+    "Canonical grant review is direct read-only POST with stable request ID; no Work checkpoint save/UUID/issuance;2snapshot regression passed.",
+    "CSV prompt uses actual newlines, exact four rows and no punctuation in amounts."
+  ]
+}

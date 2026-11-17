@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:53807",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui04-human-live-4rx2as_a",
+  "bundle": "index-vmhGy86G.js",
+  "original_session": "ses_84c759810c99e54a76863906c902ecf9",
+  "closed_session": "ui-session-2",
+  "preflight": {
+    "operator": {
+      "status": 200,
+      "items": 1
+    },
+    "subject": {
+      "status": 200,
+      "items": 0
+    },
+    "other": {
+      "status": 200,
+      "items": 0
+    }
+  },
+  "origin": "intact base fixture; NO execution_domain_deliveries or runtime_handoff_binding added",
+  "source_sha256": {
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "6131ec47d220dc3e7201940dc0fce737abd8ba3981b7e121e9a2bfe20c115ba3",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-CXFy-VnM.css": "36054c625504c406bff2dcd5a38d66952b72ded0d7c88d44e53658eae1b6316b",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-vmhGy86G.js": "e4a1b963969fe42a195a904fe8238b0e5e9c927f67e97d47ba9db0eac2b926c8",
+    "src/okto_nexus/adapters/inbound/http/static/logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+    "src/okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-dark.svg": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+    "src/okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-light.svg": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+    "src/okto_nexus/adapters/inbound/http/static/logos/oktolabs-icon.svg": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820",
+    "NEXUS_UI_R1/execution/evidence/pr04-browser/human-fixture.py": "e017e34595bb76cbe23c8497d9f2e553143b9851fe40c2c8ca01c7cef20cc2cb",
+    "NEXUS_UI_R1/execution/evidence/pr04-browser/fixture.py": "f775aff38cc7fccbfcea3381bac12239769595b36035140f51c77b4c1493c083",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "frontend/src/components/home/HomeEntryInspection.tsx": "db3049fb2fd70bc7a4b925f0ae2fa51b4c7517d1bd957fd16687a483dfdfd108",
+    "frontend/src/components/CanonicalNativeDecision.tsx": "7756a0d966fddd7f1c8c7bb976f0f3e858b1022c48d555312484528620ed0455"
+  }
+}

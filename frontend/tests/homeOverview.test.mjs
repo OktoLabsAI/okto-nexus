@@ -58,6 +58,14 @@ test('presence, lifecycle, external reports and messages remain distinct', () =>
   assert.ok(html.includes('Open describes the session, not whether work is running.'));
 });
 
+test('classic Home presents Conversations and friendly destination labels while preserving callbacks', () => {
+  const html = render(fixture());
+  assert.match(html, /Conversations/);
+  assert.match(html, /aria-label="Open Conversations"/);
+  assert.match(html, /Message history/);
+  assert.doesNotMatch(html, />Meta-harness<|Open Meta-harness/);
+});
+
 test('failed and unauthorized reads do not masquerade as empty lists', () => {
   for (const status of ['error', 'forbidden', 'unavailable', 'loading']) {
     const props = fixture();

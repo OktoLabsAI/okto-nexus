@@ -1,0 +1,349 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "frozen empty Home is backed by exact pre-filter inventory0",
+      "status": "PASS",
+      "envelope": {
+        "version": 1,
+        "scope": {
+          "workspace_id": "ui04-empty",
+          "quick": "active",
+          "include_recent_results": true
+        },
+        "server_id": "srv_2985cee73b6223d98736a0157935e299",
+        "generated_at": "2026-11-16T21:21:52.167705Z",
+        "snapshot_id": "ccbf99c1e869deea52ad6438516a57115f7cad3b23bcaa6e78763e256259677c",
+        "revision": "ccbf99c1e869deea52ad6438516a57115f7cad3b23bcaa6e78763e256259677c",
+        "partition": "groups",
+        "group_id": null,
+        "entry_id": null,
+        "status": "ready",
+        "source_status": {
+          "attention": "ready",
+          "work": "ready",
+          "results": "ready",
+          "connections": "ready",
+          "sessions": "ready",
+          "correlations": "ready",
+          "external": "ready"
+        },
+        "items": [],
+        "total": 0,
+        "total_is_exact": true,
+        "has_more": false,
+        "inventory": {
+          "connections": {
+            "value": 0,
+            "total_is_exact": true,
+            "unit": "connections"
+          }
+        },
+        "coverage": {
+          "result_tracking": "ready"
+        },
+        "next_cursor": null,
+        "as_of": "2026-11-16T21:21:52.167705Z",
+        "next_refresh_at": "2026-11-16T21:22:07.167705Z",
+        "server_attention": {
+          "status": "ready",
+          "items": [],
+          "total": 0,
+          "total_is_exact": true,
+          "has_more": false
+        },
+        "summary": {
+          "activities": {
+            "value": 0,
+            "total_is_exact": true,
+            "unit": "activities"
+          },
+          "external_instances": {
+            "value": 0,
+            "total_is_exact": true,
+            "unit": "external_instances"
+          },
+          "occurrences": {
+            "value": 0,
+            "total_is_exact": true,
+            "unit": "occurrences"
+          },
+          "sessions": {
+            "value": 0,
+            "total_is_exact": true,
+            "unit": "sessions"
+          },
+          "results": {
+            "value": 0,
+            "total_is_exact": true,
+            "unit": "results"
+          },
+          "unseen_results": {
+            "value": 0,
+            "total_is_exact": true,
+            "unit": "results"
+          }
+        },
+        "event_cursor": 2,
+        "event_low_watermark": 1
+      }
+    },
+    {
+      "name": "T-HOME03 one first-harness CTA, New request disabled",
+      "status": "PASS"
+    },
+    {
+      "name": "existing canonical connections survive filtered total0 without onboarding",
+      "status": "PASS",
+      "beforeInventory": {
+        "connections": {
+          "value": 2,
+          "total_is_exact": true,
+          "unit": "connections"
+        }
+      },
+      "filteredInventory": {
+        "connections": {
+          "value": 2,
+          "total_is_exact": true,
+          "unit": "connections"
+        }
+      },
+      "filteredTotal": 0
+    },
+    {
+      "name": "cut JS is exactly current frozen asset",
+      "status": "PASS"
+    },
+    {
+      "name": "empty qualification is read-only and has no frontend exceptions",
+      "status": "PASS",
+      "errors": [],
+      "consoleErrors": []
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/assets/index-CIXUIG91.js"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/assets/index-CXFy-VnM.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/graph?workspace=ui04-empty&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?workspace_id=ui04-empty"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/home/entries?workspace_id=ui04-empty&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/stream?view=attention&workspace=ui04-empty"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/stream?"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?workspace_id=ui04-empty"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/graph?workspace=ui04-empty&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/home/entries?workspace_id=ui04-empty&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/stream?view=attention&workspace=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:55059/api/v1/home/entries?workspace_id=ws&harness=ui04-no-such-harness&limit=10&preview=3"
+    }
+  ],
+  "responses": [
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/assets/index-CXFy-VnM.css"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/assets/index-CIXUIG91.js"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/operator-auth/status"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/logos/nexus-icon.svg"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/workspaces"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/graph?workspace=ui04-empty&window_hours=24"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/stream?"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/info"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/stream?view=attention&workspace=ui04-empty"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/operator/unread-count"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?workspace_id=ui04-empty"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/home/entries?workspace_id=ui04-empty&limit=10&preview=3"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/graph?workspace=ui04-empty&window_hours=24"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?workspace_id=ui04-empty"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/home/entries?workspace_id=ui04-empty&limit=10&preview=3"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/stream?view=attention&workspace=ws"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/graph?workspace=ws&window_hours=24"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/home/entries?workspace_id=ws&limit=10&preview=3"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?state=active&seen=all"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/attention/summary?workspace_id=ws"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:55059/api/v1/home/entries?workspace_id=ws&harness=ui04-no-such-harness&limit=10&preview=3"
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "bundle": "index-CIXUIG91.js",
+  "scope": "canonical empty workspace and existing-connection filtered empty only; no native/provider action"
+}

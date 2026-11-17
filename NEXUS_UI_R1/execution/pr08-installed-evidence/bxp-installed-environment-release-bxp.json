@@ -1,0 +1,46 @@
+{
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+  "os": "Windows-11-10.0.26300-SP0",
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9",
+  "isolated": 1,
+  "sys_path": [
+    "C:\\Python313\\python313.zip",
+    "C:\\Python313\\DLLs",
+    "C:\\Python313\\Lib",
+    "C:\\Python313",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\win32",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\win32\\lib",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\pythonwin"
+  ],
+  "packages": {
+    "okto-nexus": {
+      "version": "0.3.5",
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py"
+    },
+    "okto-nexus-connector": {
+      "version": "0.0.13",
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+    },
+    "okto-nexus-connector-core": {
+      "version": "0.0.14",
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py"
+    },
+    "pytest": {
+      "version": "9.2.0",
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\pytest\\__init__.py"
+    }
+  },
+  "assets": {
+    "okto_nexus/adapters/inbound/http/static/index.html": "57106acf826e0f8098dffb435fe9e371e4b7ed9e860253603ab68ebe22ce4cd3",
+    "okto_nexus/adapters/inbound/http/static/assets/index-BXpHvePH.js": "6872da3cff0444e43226a5aafdcb061f320f217e2eb6ceb83f80266e29a4d6c7",
+    "okto_nexus/adapters/inbound/http/static/assets/index-C-ZFb395.css": "cf9d0698234d975279e0da1a1cfb10dd2e8f0f88d15c074515049a556bf43683",
+    "okto_nexus/adapters/inbound/http/static/logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+    "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-dark.svg": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+    "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-light.svg": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+    "okto_nexus/adapters/inbound/http/static/logos/oktolabs-icon.svg": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+  },
+  "provider_qualified": false
+}

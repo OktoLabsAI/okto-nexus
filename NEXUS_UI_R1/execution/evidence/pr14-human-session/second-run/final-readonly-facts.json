@@ -1,0 +1,29 @@
+{
+  "bindings": [
+    {
+      "binding_id": "binding",
+      "executor_id": "exe_8053b0814cef61f663240163faad5569",
+      "endpoint_id": "ep",
+      "workspace_binding_id": "wxb",
+      "binding_revision": 1
+    },
+    {
+      "binding_id": "ui-binding-2",
+      "executor_id": "exe_8053b0814cef61f663240163faad5569",
+      "endpoint_id": "ui-ep-2",
+      "workspace_binding_id": "wxb",
+      "binding_revision": 1
+    },
+    {
+      "binding_id": "bind_24caceaaa26a994e0eb1c3bf4a2d76e2",
+      "executor_id": "exe_7f880b37b03afebd55018981dc8eaaad",
+      "endpoint_id": "ep_5860dede6a8a226244f6ad2c9e079ed3",
+      "workspace_binding_id": "wxb_eb86333b0dce392ccf4f9e939501255a",
+      "binding_revision": 1
+    }
+  ],
+  "setup_commits": 1,
+  "original_grants_preserved": true,
+  "fresh_trigger_exists": false,
+  "native_decisions": 0
+}

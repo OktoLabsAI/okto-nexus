@@ -1,0 +1,57 @@
+{
+  "scenario": "T-PANEL-09",
+  "status": "PASS_DECLARED_SYNTHETIC_BOUNDARIES",
+  "browser_handle": "1c5fd0",
+  "http_accepted_before_response_aborted": 202,
+  "request_mutated": false,
+  "response_dto_mocked": false,
+  "decision_id": "r4decision_7bbdd7456d3b1116125684448cf111ee",
+  "operation_id": "r4op_389ba237bed71382153abfc7f5a45f38",
+  "approval_id": "r4request_a08c152569b185cad37b01e036aad6ca7eaf21256c1543e874a0f2b12cb96c3e",
+  "recovered_state": "CONFIRMED",
+  "native_stage": "DISPATCH_PENDING",
+  "native_application": "NOT_EXECUTED",
+  "canonical_decisions": 1,
+  "matching_input_operations": 1,
+  "matching_execution_dispatch_outbox": 1,
+  "server_post_count": 1,
+  "preflight": {
+    "operator": {
+      "status": 200,
+      "items": 1
+    },
+    "subject": {
+      "status": 200,
+      "items": 0
+    },
+    "other": {
+      "status": 200,
+      "items": 0
+    }
+  },
+  "liveness": {
+    "heartbeats": 47,
+    "renew_applied": 3,
+    "failed_authority_checks": 0,
+    "peer_errors": [],
+    "thread_stopped": true
+  },
+  "retained_oracles": {
+    "reopen_expected_wrong_component_timeout": "6297ec",
+    "exact_inspection_confirmed": [
+      "8171f3",
+      "c6ed5d"
+    ],
+    "delivery_outbox_legacy_count_zero": "final-db.json; exact-outbox.json separately proves execution_dispatch_outbox1"
+  },
+  "source_pins_at_qualification": {
+    "tests\\ui_simplification\\browser_native_lost_response.js": "7aab82c44deca06666ce50969ad7497f03f9d33c2b156ed1ba58481ef8e2cea4",
+    "tests\\ui_simplification\\prepare_panel09_fixture.py": "3fc023056dee03ae4b156b996f5d402f95a0245e179b82229f154da0e5c5f6fb"
+  },
+  "cleanup": "cleanup.json",
+  "limits": [
+    "Inert canonical peer, no provider/native application",
+    "Existing controlled clock preserved, no full180s wall-time lease claim",
+    "Post-stop screenshot retained DOM; no clean live console claim"
+  ]
+}

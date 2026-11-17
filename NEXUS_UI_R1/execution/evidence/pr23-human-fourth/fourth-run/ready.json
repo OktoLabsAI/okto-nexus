@@ -1,0 +1,42 @@
+{
+  "url": "http://127.0.0.1:49774",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-fourth-clca8on7",
+  "identities": {
+    "artifact_id": "art_44a2b12f1d474d8f9e328a6afd190b58",
+    "workspace": "ws",
+    "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-fourth-clca8on7\\participant-project",
+    "question_session": "ses_a7f4c17aaf32ab1789e0f1c0f288dfd7",
+    "closed_session": "ui-session-2"
+  },
+  "observation_window_seconds": 3600,
+  "extend_read_window_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-fourth-control-0e3arciw\\extend-read-window.json",
+  "extension_scope": "Observation only; no grant, ticket or native request expiry change",
+  "decision_authority_times": [
+    {
+      "binding_id": "binding",
+      "lane_ticket_expires_at": "2026-11-17T03:21:52.896005+00:00"
+    }
+  ],
+  "original_grants": [
+    {
+      "grant_id": "grant_78ff646aa3e242a5b7e253e66c924d22",
+      "expires_at": "2026-11-17T04:11:52.339115Z",
+      "max_executions": 10
+    }
+  ],
+  "authority_limit": "Each native request expires120s after ingress; original control-lane ticket normally10min. No hidden grant or lane-ticket renewal; UI observation starts60min and can be extended explicitly without changing authority.",
+  "facilitator_trigger": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-fourth-control-0e3arciw\\publish-fresh-question",
+  "trigger_policy": "Only after root starts task3, never under an existing human draft. New request8/source-sequence, same admitted operator turn/grant; old request expiry remains immutable.",
+  "provider_calls": 0,
+  "native_binary_calls": 0,
+  "test_is_simulated": true,
+  "loopback_operator": true,
+  "source_sha256": {
+    "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/fixture.py": "3d6a220edbd42a214bd7b92b77ce668e6c618b793bef2a4f2a794bd6c432c196",
+    "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/observation_window.py": "fb32e8cdaceac860f1d95b588dcbdac2efcca6c7034d0ca83869d8f5be29c2df",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "6c2dd0f7744b123a80e5d725055d97b422459a4e6acc24198f5afa7b0a468f56",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-DXslPEEE.js": "c9c8537f3c411cbf5182e6db1f486d72247cc4943d67f969f24f84001456157e"
+  },
+  "fixture_pid": 36324
+}

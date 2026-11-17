@@ -36,18 +36,18 @@ function Action({action}: {action: TerminalAction}) {
   </li>;
 }
 
-export function RuntimeTerminal({events, harness, scrollRef, scrollback, label='Session terminal', empty='No activity to display yet.'}: {
-  events: RuntimeEventPage['events']; harness?: string; scrollRef?: Ref<HTMLOListElement>; scrollback?: Scrollback; label?: string; empty?: string;
+export function RuntimeTerminal({events, harness, scrollRef, scrollback, label='Session terminal', empty='No activity to display yet.', allowMaximize=true}: {
+  events: RuntimeEventPage['events']; harness?: string; scrollRef?: Ref<HTMLOListElement>; scrollback?: Scrollback; label?: string; empty?: string; allowMaximize?: boolean;
 }) {
   const actions=useMemo(()=>presentEvents(events,harness),[events,harness]);
-  return <TerminalView actions={actions} harness={harness} scrollRef={scrollRef} scrollback={scrollback} label={label} empty={empty}/>;
+  return <TerminalView actions={actions} harness={harness} scrollRef={scrollRef} scrollback={scrollback} label={label} empty={empty} allowMaximize={allowMaximize}/>;
 }
 
 export function RuntimeFinalOutput({text}: {text: string}) {
   return <TerminalView actions={[{id:'final',kind:'assistant',title:'Assistant',text}]} label="Execution output"/>;
 }
 
-function TerminalView({actions,harness,scrollRef,scrollback,label,empty}: {actions:TerminalAction[];harness?:string;scrollRef?:Ref<HTMLOListElement>;scrollback?:Scrollback;label:string;empty?:string}) {
+function TerminalView({actions,harness,scrollRef,scrollback,label,empty,allowMaximize=true}: {actions:TerminalAction[];harness?:string;scrollRef?:Ref<HTMLOListElement>;scrollback?:Scrollback;label:string;empty?:string;allowMaximize?:boolean}) {
   const [maximized,setMaximized]=useState(false);
   const [fontSize,setFontSize]=useState(readFontSize);
   useEffect(()=>{
@@ -101,10 +101,10 @@ function TerminalView({actions,harness,scrollRef,scrollback,label,empty}: {actio
     if (upwards && el.scrollTop<120) loadPrevious();
   };
   useEffect(()=>{
-    if (!maximized) return;
+    if (!maximized||!allowMaximize) return;
     const element=dialog.current!;element.showModal();
     return ()=>{element.close();trigger.current?.focus({preventScroll:true});};
-  },[maximized]);
+  },[maximized,allowMaximize]);
   const toggle=()=>{position.current=screen.current?.scrollTop || 0;setMaximized(v=>!v);};
   const setScreen=useCallback((element:HTMLOListElement|null)=>{
     if (!element && screen.current) position.current=screen.current.scrollTop;
@@ -120,8 +120,8 @@ function TerminalView({actions,harness,scrollRef,scrollback,label,empty}: {actio
         <button type="button" className="runtime-terminal-expand runtime-terminal-font-size" aria-label="Reset terminal font size" title="Reset font size to 12px" onClick={()=>resizeFont(defaultFontSize)}><span aria-live="polite">{fontSize}px</span></button>
         <button type="button" className="runtime-terminal-expand" aria-label="Increase terminal font size" title="Increase font size" disabled={fontSize>=maxFontSize} onClick={()=>resizeFont(fontSize+1)}><Plus size={15}/></button>
       </div>
-      <button type="button" ref={maximized?undefined:trigger} className="runtime-terminal-expand" aria-label={maximized?'Restore terminal':'Maximize terminal'} title={maximized?'Restore terminal (Esc)':'Maximize terminal'} onClick={toggle}>
-        {maximized?<Minimize2 size={15}/>:<Maximize2 size={15}/>}</button>
+      {allowMaximize&&<button type="button" ref={maximized?undefined:trigger} className="runtime-terminal-expand" aria-label={maximized?'Restore terminal':'Maximize terminal'} title={maximized?'Restore terminal (Esc)':'Maximize terminal'} onClick={toggle}>
+        {maximized?<Minimize2 size={15}/>:<Maximize2 size={15}/>}</button>}
     </header>
     <ol ref={setScreen} className="runtime-terminal-screen" aria-label={label} tabIndex={0} onScroll={onScroll}
       onWheel={event=>{if(event.deltaY<0 && (screen.current?.scrollTop ?? Infinity)<120) loadPrevious();}}>
@@ -131,6 +131,6 @@ function TerminalView({actions,harness,scrollRef,scrollback,label,empty}: {actio
       {!actions.length && <li className="runtime-terminal-empty">{empty}</li>}
     </ol>
   </div>;
-  return maximized ? createPortal(<dialog ref={dialog} className="runtime-terminal-dialog" aria-label={`${label} · maximized`} aria-modal="true"
+  return maximized&&allowMaximize ? createPortal(<dialog ref={dialog} className="runtime-terminal-dialog" aria-label={`${label} · maximized`} aria-modal="true"
     onCancel={event=>{event.preventDefault();event.stopPropagation();toggle();}}>{terminal}</dialog>,document.body) : terminal;
 }

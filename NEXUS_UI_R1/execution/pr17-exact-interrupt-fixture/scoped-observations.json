@@ -1,0 +1,175 @@
+{
+  "controls_after_sibling_cleanup": [
+    {
+      "fixture_pid": 58188,
+      "method": "turn/interrupt",
+      "threadId": "th_1",
+      "turnId": "turn_1"
+    },
+    {
+      "fixture_pid": 52464,
+      "method": "turn/interrupt",
+      "threadId": "th_1",
+      "turnId": "turn_1"
+    }
+  ],
+  "owned_peer_exits": [
+    {
+      "pid": 58188,
+      "exit_code": 1
+    },
+    {
+      "pid": 52464,
+      "exit_code": 1
+    }
+  ],
+  "final_sessions": [
+    {
+      "session_id": "ses_01f0ee45e533697e71d3e02539dacfac",
+      "lifecycle_state": "CLOSED",
+      "lease_state": "CLOSED"
+    },
+    {
+      "session_id": "ses_db4d722eba0eea57716d4da89a2c335e",
+      "lifecycle_state": "CLOSED",
+      "lease_state": "CLOSED"
+    }
+  ],
+  "latest_operation_receipts": [
+    {
+      "operation_id": "op_7aa20d51adfef83f255e4603c58b1751",
+      "action": "runtime.open",
+      "session_id": "ses_01f0ee45e533697e71d3e02539dacfac",
+      "stage": "SUBMITTED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    },
+    {
+      "operation_id": "op_8d1686aa468b7046956e2b90c82548e5",
+      "action": "turn.submit",
+      "session_id": "ses_01f0ee45e533697e71d3e02539dacfac",
+      "stage": "CANCELLED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    },
+    {
+      "operation_id": "op_d4f5f29c10ab39f8100f2a9b2e8d9d7c",
+      "action": "runtime.open",
+      "session_id": "ses_db4d722eba0eea57716d4da89a2c335e",
+      "stage": "SUBMITTED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    },
+    {
+      "operation_id": "op_6cf14eb572be0ab056c8454e4b8f508a",
+      "action": "turn.submit",
+      "session_id": "ses_db4d722eba0eea57716d4da89a2c335e",
+      "stage": "CANCELLED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    },
+    {
+      "operation_id": "op_360c26a7f863602116e4db1774a91ae1",
+      "action": "turn.interrupt",
+      "session_id": "ses_01f0ee45e533697e71d3e02539dacfac",
+      "stage": "FAILED",
+      "possible_effect": 0,
+      "retry_safe": 1,
+      "error_code": "STALE_TURN"
+    },
+    {
+      "operation_id": "op_adfa43951658d72cdbfef2c1fdd06709",
+      "action": "turn.interrupt",
+      "session_id": "ses_01f0ee45e533697e71d3e02539dacfac",
+      "stage": "SUBMITTED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    },
+    {
+      "operation_id": "op_cbaa1ecbd460295d98837945a787ec44",
+      "action": "runtime.close",
+      "session_id": "ses_01f0ee45e533697e71d3e02539dacfac",
+      "stage": "SUCCEEDED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    },
+    {
+      "operation_id": "op_d4874608a2cb9d1d07f015309d9996b9",
+      "action": "turn.interrupt",
+      "session_id": "ses_db4d722eba0eea57716d4da89a2c335e",
+      "stage": "SUBMITTED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    },
+    {
+      "operation_id": "op_90fd68b7ab5be32a1bac4058564e9b00",
+      "action": "runtime.close",
+      "session_id": "ses_db4d722eba0eea57716d4da89a2c335e",
+      "stage": "SUCCEEDED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    }
+  ],
+  "core_launch_journals": [
+    {
+      "file": "session-23bc6d47f718efc326ad28d16dacab3b2e41539d6a200c21b334a3adb4ee3a6e.db",
+      "births": [
+        {
+          "platform": "win32",
+          "pid": 52464,
+          "birth_token": "filetime:01dd762b89b25bda",
+          "containment": "windows_job",
+          "observation": "NOT_OBSERVED"
+        }
+      ],
+      "launches": [
+        {
+          "container_id": "f9949eaba76ba72ccf8e2c795eb96efc03be0dc58534051ab9952825d333b115",
+          "spawn_claimed": 1,
+          "producer_fenced": 0,
+          "stop_proof": null
+        }
+      ],
+      "containers": [
+        {
+          "container_sha256": "f9949eaba76ba72ccf8e2c795eb96efc03be0dc58534051ab9952825d333b115",
+          "state": "STOPPED"
+        }
+      ]
+    },
+    {
+      "file": "session-c9eca664403a72472df6eb49d64a7833e29f062a9b27d930d80973498115471b.db",
+      "births": [
+        {
+          "platform": "win32",
+          "pid": 58188,
+          "birth_token": "filetime:01dd762b892f02ba",
+          "containment": "windows_job",
+          "observation": "NOT_OBSERVED"
+        }
+      ],
+      "launches": [
+        {
+          "container_id": "7fb78ed82da4e46a4b6b6954f7be6eb74adcd475f3393890e7c9bc6798328f38",
+          "spawn_claimed": 1,
+          "producer_fenced": 0,
+          "stop_proof": null
+        }
+      ],
+      "containers": [
+        {
+          "container_sha256": "7fb78ed82da4e46a4b6b6954f7be6eb74adcd475f3393890e7c9bc6798328f38",
+          "state": "STOPPED"
+        }
+      ]
+    }
+  ]
+}

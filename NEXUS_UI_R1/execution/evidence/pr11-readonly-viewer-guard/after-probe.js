@@ -1,0 +1,21 @@
+async page=>{
+ const cfg={"url": "http://127.0.0.1:50898", "out": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/ui11-viewer-guard", "identities": {"original_session": "ses_492d0f369c08fcd1c94cccda755b568c", "second_session": "ui04-second-exact-session", "no_turn_session": "ui04-no-turn-session", "multi_session_source": "ui-handoff-0", "closed_session": "ui-session-2", "synthetic_additions": true}},requests=[],errors=[];page.on('request',r=>requests.push({method:r.method(),url:r.url()}));page.on('pageerror',e=>errors.push(e.message));
+ await page.addInitScript(()=>{if(location.protocol==='http:'){localStorage.setItem('okto-nexus-home-operational','enabled');localStorage.setItem('okto-nexus-workspace','ws');localStorage.setItem('okto.nexus.onboarding.completed.v1','true');localStorage.setItem('okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0','test');}});
+ await page.goto(cfg.url);await page.getByTestId('home-follow-up').waitFor();
+ const response=page.waitForResponse(r=>r.url().includes('/api/v1/home/entries?')&&r.url().includes('quick=all')&&r.status()===200);await page.getByRole('group',{name:'Follow-up filter',exact:true}).getByRole('button',{name:'All',exact:true}).click();
+ const groups=(await(await response).json()).data.items;const pair=groups.flatMap(g=>g.children.map(e=>({g,e}))).find(({e})=>e.source_ref.id===cfg.identities.multi_session_source);
+ const group=page.locator(`[data-home-group="${pair.g.id}"]`);const expand=group.getByRole('button',{name:'Expand',exact:true});if(await expand.count())await expand.click();await group.locator(`[data-home-entry="${pair.e.id}"] [data-home-entry-open]`).click();
+ const dialog=page.getByTestId('home-detail');const select=dialog.getByRole('combobox',{name:'Choose the exact session',exact:true});await select.waitFor();const opts=await select.locator('option').evaluateAll(ns=>ns.map(n=>({value:n.value,text:n.textContent})));await select.selectOption(opts.find(o=>o.text.includes(cfg.identities.original_session)).value);
+ const output=dialog.getByRole('region',{name:'Session execution output',exact:true});await output.getByText(cfg.identities.original_session,{exact:true}).waitFor();
+ const checks=[];const check=(name,ok,data={})=>{checks.push({name,status:ok?'PASS':'FAIL',...data});if(!ok)throw Error(name);};
+ const auto=output.getByRole('checkbox',{name:'Auto-scroll',exact:true});const protectedByAncestor=await auto.evaluate(el=>!!el.closest('[data-modal-passive]'));await auto.click();
+ await page.screenshot({path:cfg.out+'/after-auto-scroll-passive.png',fullPage:true});await dialog.getByRole('button',{name:'Close modal',exact:true}).click();await dialog.waitFor({state:'detached'});
+ check('read-only Auto-scroll followed by Close creates no dirty guard',protectedByAncestor&&await page.getByText('Discard unsaved changes?',{exact:true}).count()===0&&await page.getByRole('dialog').count()===0,{protectedByAncestor});
+ await page.getByRole('button',{name:'New request',exact:true}).click();const message=dialog.getByRole('textbox',{name:'Message',exact:true});await message.fill('Own unsent canonical form guard regression');
+ const formPassive=await message.evaluate(el=>!!el.closest('[data-modal-passive]'));await dialog.getByRole('button',{name:'Close modal',exact:true}).click();await dialog.getByText('Discard unsaved changes?',{exact:true}).waitFor();
+ check('edited canonical composer still requires discard',!formPassive&&await dialog.getByText('Discard unsaved changes?',{exact:true}).count()===1,{formPassive});
+ await page.screenshot({path:cfg.out+'/after-canonical-form-guard.png',fullPage:true});await dialog.getByRole('button',{name:'Keep editing',exact:true}).click();check('Keep editing preserves exact unsent draft',await message.inputValue()==='Own unsent canonical form guard regression');
+ await dialog.getByRole('button',{name:'Close modal',exact:true}).click();await dialog.getByRole('button',{name:'Discard changes',exact:true}).click();await dialog.waitFor({state:'detached'});
+ const assets=await page.locator('script[src]').evaluateAll(ns=>ns.map(n=>n.getAttribute('src')));
+ check('new frozen bundle and no protected action executed',assets.some(x=>x.includes('index-BGONNtiX.js'))&&requests.every(r=>r.method==='GET')&&errors.length===0,{assets,errors});return{status:'PASS',checks,requests,errors};
+}

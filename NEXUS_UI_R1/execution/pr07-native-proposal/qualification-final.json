@@ -1,0 +1,63 @@
+{
+  "status": "FINAL_BOUND_OFFLINE_AND_ZERO_ADMISSION_LIFECYCLE_PASS_NOT_AUTHORIZED",
+  "candidate_sha256": "3ea51229df9bcc4d93d7f42dbe5e4d62a97741d97c99907a49a21cde6fafb88e",
+  "candidate": "candidate-final.json",
+  "campaign_id": "062496549c9340ccb78271b640c8849a",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-062496549c9340ccb78271b640c8849a",
+  "port": 51076,
+  "pins_validated": {
+    "driver_pins": 8,
+    "package_pins": 4,
+    "installed_payloads": 1035
+  },
+  "native_executable_hashes_validated": true,
+  "native_invoked": false,
+  "provider_called": false,
+  "auth_contents_read": false,
+  "campaign_root_created": false,
+  "consent_template_sha256": "5656d29dfad18204e00a23a92c57b4250e86886070104662da286eb27a370bad",
+  "consent_all_flags_false": true,
+  "offline_tests": {
+    "passed": 21,
+    "toolref": "53bf4a",
+    "junit": "offline.xml"
+  },
+  "real_zero_admission_lifecycle": {
+    "status": "PASS",
+    "toolref": "aae7aa",
+    "report": "lifecycle-qualification.json"
+  },
+  "commands": {
+    "dry-run": {
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\driver.py",
+        "dry-run",
+        "--plan",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\candidate-final.json",
+        "--expected-plan-sha256",
+        "3ea51229df9bcc4d93d7f42dbe5e4d62a97741d97c99907a49a21cde6fafb88e"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"campaign_id\": \"062496549c9340ccb78271b640c8849a\",\n  \"policy\": {\n    \"accounting\": \"observed_plus_permanent_per_admission_v1\",\n    \"claude_scope\": \"full_result_per_admission_conservative_sum\",\n    \"codex_final_usage_claim\": false,\n    \"max_admissions\": 6,\n    \"observed_limit\": 500000,\n    \"preventive\": 450000,\n    \"provision_per_admission\": 75000,\n    \"provision_refund\": false,\n    \"reserve\": 50000\n  },\n  \"order\": [\n    \"codex.setup\",\n    \"claude.setup\",\n    \"codex.work\",\n    \"codex.continue\",\n    \"claude.work\",\n    \"claude.continue\"\n  ],\n  \"effects_started\": false,\n  \"provider_called\": false,\n  \"package_bound\": true,\n  \"native_bindings_bound\": true\n}\n",
+      "stderr": ""
+    },
+    "execute": {
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\driver.py",
+        "execute",
+        "--plan",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr07-native-proposal\\candidate-final.json",
+        "--expected-plan-sha256",
+        "3ea51229df9bcc4d93d7f42dbe5e4d62a97741d97c99907a49a21cde6fafb88e"
+      ],
+      "exit_code": 2,
+      "stdout": "{\"status\": \"REFUSED\", \"reason\": \"NEW_CAMPAIGN_CONSENT_REQUIRED\", \"no_automatic_replay\": true}\n",
+      "stderr": ""
+    }
+  },
+  "remaining": "ONE new user approval bound to this candidate; real M3, provider availability and passive Home observation are NOT_RUN."
+}

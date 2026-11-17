@@ -1,0 +1,18 @@
+{
+  "status": "PREPARED_NOT_STARTED",
+  "old_cut_before": {
+    "manifest_sha256": "c74f9098b90080f107e1713c6f36b2c0ba03f5b7e20c59b5b942d9cefce45d44",
+    "entries": 51,
+    "mismatches": []
+  },
+  "old_cut_after": {
+    "manifest_sha256": "c74f9098b90080f107e1713c6f36b2c0ba03f5b7e20c59b5b942d9cefce45d44",
+    "entries": 51,
+    "mismatches": []
+  },
+  "builder_sha256": "4946d754465fcfea10cc03a90b74b912d0c00bff22a82ace9aafd5c1c777262b",
+  "observation_window_default_seconds": 3600,
+  "observation_window_explicit_ceiling_seconds": 7200,
+  "authority": "No grant/ticket/TTL change; original lane10min and native request120s remain.",
+  "human_trial": "Await root new bundle and explicit human start; participant already exposed/oriented."
+}

@@ -1,0 +1,445 @@
+{
+  "state": {
+    "decisions": 0,
+    "inputs": 0,
+    "input_outbox": 0,
+    "native_requests": [
+      {
+        "canonical_request_id": "r4request_fdbc43b37bfa9c18c28bc069b89459d162ded46817cdb0eb75bd929aa566742a",
+        "state": "PENDING",
+        "received_at": "2026-11-17T00:27:05.539Z",
+        "expires_at": "2026-11-17T00:29:05.539000+00:00"
+      }
+    ],
+    "grants": [
+      {
+        "grant_id": "grant_32742798da5946dfa6217c9681781144",
+        "expires_at": "2026-11-17T01:27:04.558151Z",
+        "max_executions": 10,
+        "used_executions": 0
+      }
+    ]
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Zyb_20X4.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-DLUGhrP6.css",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-icon.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta-harness/runtime-sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/messages",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/local/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/publish-health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/local/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta-harness/runtime-sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/messages",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta-harness/runtime-sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/messages",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta-harness/runtime-sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/messages",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta-harness/runtime-sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/messages",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta-harness/runtime-sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/messages",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/summary",
+      "status": 200
+    }
+  ]
+}

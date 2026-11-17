@@ -1,0 +1,75 @@
+{
+  "own_temp": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-offline-wvtclc15",
+  "agents": 100,
+  "volume": {
+    "agents": 100,
+    "activities": 1000,
+    "added_events": 0,
+    "total_events": 2
+  },
+  "entries": {
+    "instrumentation": {
+      "uows": [
+        {
+          "write": false
+        }
+      ],
+      "writes": 0,
+      "sql_statements": 55,
+      "sql_sha256": "583fba150e3bfbb70049846f4012a4b62006ac2d776b830e7cf26fe2cc4bace2",
+      "transcript_or_journal_reads": 0,
+      "payload_bytes": 64064
+    },
+    "samples_ms": [
+      392.38320000004023,
+      405.53709998494014,
+      415.3093000059016
+    ],
+    "p50_ms": 405.53709998494014,
+    "nearest_rank_p95_ms": 415.3093000059016
+  },
+  "children": {
+    "instrumentation": {
+      "uows": [
+        {
+          "write": false
+        }
+      ],
+      "writes": 0,
+      "sql_statements": 55,
+      "sql_sha256": "583fba150e3bfbb70049846f4012a4b62006ac2d776b830e7cf26fe2cc4bace2",
+      "transcript_or_journal_reads": 0,
+      "payload_bytes": 12850
+    },
+    "samples_ms": [
+      434.2117999913171,
+      386.337400006596,
+      372.7301000035368
+    ],
+    "p50_ms": 386.337400006596,
+    "nearest_rank_p95_ms": 434.2117999913171
+  },
+  "sessions": {
+    "instrumentation": {
+      "uows": [
+        {
+          "write": false
+        }
+      ],
+      "writes": 0,
+      "sql_statements": 55,
+      "sql_sha256": "583fba150e3bfbb70049846f4012a4b62006ac2d776b830e7cf26fe2cc4bace2",
+      "transcript_or_journal_reads": 0,
+      "payload_bytes": 1732
+    },
+    "samples_ms": [
+      399.841699982062,
+      403.1819000374526,
+      483.88410004554316
+    ],
+    "p50_ms": 403.1819000374526,
+    "nearest_rank_p95_ms": 483.88410004554316
+  },
+  "cleanup": "Own fixture WSS/lifespan/factory context exited normally; no browser, native CLI or server process launched.",
+  "status": "PASS"
+}

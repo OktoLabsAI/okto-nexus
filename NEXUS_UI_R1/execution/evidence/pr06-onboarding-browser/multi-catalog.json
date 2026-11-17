@@ -1,0 +1,61 @@
+{
+    "version":  1,
+    "server_id":  "srv_04c5d7b9fd7f095ab53cd9695fe99391",
+    "scope":  {
+
+              },
+    "revision":  "2a2c9ac886e481813bc866410bc1a918e2b190d856b0164a5396070aa667d4e7",
+    "generated_at":  "2026-11-16T20:38:30.513984Z",
+    "items":  [
+                  {
+                      "server_id":  "srv_04c5d7b9fd7f095ab53cd9695fe99391",
+                      "binding_id":  "bind_9e0288e8205bc9c9791b64e29afa1891",
+                      "executor_id":  "exe_07c0afee9edaf5928e4e70d5e2aa5104",
+                      "endpoint_id":  "ep_a747145d02e5dcd270cd912c9e876397",
+                      "workspace_binding_id":  "wxb_e7ff4d75776319a5e0a850418eff8032",
+                      "agent_id":  "project_009f093b8daea15979c85656d8f7401d",
+                      "workspace_id":  "wsr_90c0738851792056457ff4d939c556d9",
+                      "adapter_id":  "claude_stream",
+                      "binding_revision":  1,
+                      "realization_revision":  1,
+                      "endpoint_revision":  1,
+                      "activation_state":  "approved",
+                      "endpoint_enabled":  true,
+                      "agent_active":  true,
+                      "executor_revoked":  false,
+                      "execution_location":  "local",
+                      "agent_label":  "Claude Code (stream) â?? UI039 project",
+                      "workspace_label":  "UI039 project",
+                      "host_label":  "exe_07c0afee9edaf5928e4e70d5e2aa5104",
+                      "needs_revalidation":  true
+                  },
+                  {
+                      "server_id":  "srv_04c5d7b9fd7f095ab53cd9695fe99391",
+                      "binding_id":  "bind_cd3a5e2396ae67578646d2ecb2fe8a43",
+                      "executor_id":  "exe_07c0afee9edaf5928e4e70d5e2aa5104",
+                      "endpoint_id":  "ep_e4380d1a7c87cfdee42db79efe2836fc",
+                      "workspace_binding_id":  "wxb_471d613a7166935fc059559d92ed189a",
+                      "agent_id":  "collaborator-a",
+                      "workspace_id":  "wsr_90c0738851792056457ff4d939c556d9",
+                      "adapter_id":  "codex_app_server",
+                      "binding_revision":  1,
+                      "realization_revision":  1,
+                      "endpoint_revision":  1,
+                      "activation_state":  "approved",
+                      "endpoint_enabled":  true,
+                      "agent_active":  true,
+                      "executor_revoked":  false,
+                      "execution_location":  "local",
+                      "agent_label":  "Codex â?? UI039 project",
+                      "workspace_label":  "UI039 project",
+                      "host_label":  "exe_07c0afee9edaf5928e4e70d5e2aa5104",
+                      "needs_revalidation":  true
+                  }
+              ],
+    "total":  2,
+    "total_is_exact":  true,
+    "has_more":  false,
+    "next_cursor":  null,
+    "cursor_integrity":  "unsigned_scope_checked",
+    "requires_canonical_revalidation":  true
+}

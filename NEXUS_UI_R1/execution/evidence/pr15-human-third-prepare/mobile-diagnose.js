@@ -1,0 +1,1 @@
+async page=>{const b=page.getByTestId('home-project-card').getByRole('button',{name:'Connect or resume',exact:true});return await b.evaluate(el=>{const r=el.getBoundingClientRect(),n=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{button:{x:r.x,y:r.y,w:r.width,h:r.height},hit:n?.outerHTML.slice(0,300),innerWidth,innerHeight,scrollY};});}

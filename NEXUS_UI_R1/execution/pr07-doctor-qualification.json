@@ -1,0 +1,14 @@
+{
+  "status": "PASS_ACTUAL_INSTALLED_ABSENT_INSTANCE_DOCTOR",
+  "scenarios": ["T-CLI-13", "T-SVC-04"],
+  "result": {"passed": 1, "seconds": 1.39, "exit_code": 0, "tool_ref": "96ad1d"},
+  "command": "Owned installed Python3.13 -I pytest -c nul tests/test_terminal_doctor_absence.py; the test spawns that same installed Python -I -m okto_nexus.adapters.inbound.cli.main doctor --home OWN_ABSENT --project OWN --profile absent --json",
+  "facts": ["Doctor returns rc3 with PROFILE_ABSENT and stopped local-service evidence.", "Provider/session/work checks stay explicitly NOT_CHECKED; all productive-effects flags are false.", "Own home remains absent and own profile/empty PATH directories remain empty; no provider executable is available."],
+  "complement": "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json contains earlier actual absent connect --plan, work status and canonical service status cases. These plus this doctor focal cover the planned absent-instance variants; no startup or inference claim is inferred from fake ready-service tests.",
+  "xml": "NEXUS_UI_R1/execution/pr07-doctor-tests.xml",
+  "ruff": {"exit_code": 0, "tool_ref": "9e1d29"},
+  "limits": ["Windows Python3.13 installed qualification only; not remote outage, native login or existing pending-checkpoint recovery."],
+  "product_changes": 0,
+  "provider_calls": 0,
+  "personal_installation_changed": false
+}

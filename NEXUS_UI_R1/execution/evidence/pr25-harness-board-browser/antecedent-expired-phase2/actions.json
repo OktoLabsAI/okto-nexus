@@ -1,0 +1,632 @@
+[
+  {
+    "at": "2026-11-17T04:11:43.884571+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:43.992141+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/assets/index-Bljabqt3.js",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:43.994208+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/assets/index-Ds-MK2FR.css",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.149237+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/logos/nexus-icon.svg",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.148266+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator-auth/status",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.184392+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/logos/nexus-wordmark-dark.svg",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.183244+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/logos/nexus-wordmark-light.svg",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.241809+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/info",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.451673+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.242689+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.572646+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.538895+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.581065+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.459405+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:45.005787+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.456311+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:44.460390+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:45.047235+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:45.043393+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:45.402928+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:45.295026+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:46.387333+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:46.418105+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/agents",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:46.417311+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/handoffs",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:11:54.251519+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:00.055233+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:00.151033+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:00.303253+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:04.254415+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:14.256352+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:15.067974+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:15.165163+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:15.302807+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:15.307665+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:24.254001+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:30.073497+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:30.197707+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:30.308434+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:34.254852+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:44.258123+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:45.072686+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:45.165949+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:45.308879+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:53.454238+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:12:54.253210+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:00.077160+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:00.169090+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:00.365571+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:04.249100+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:08.462093+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:13.534561+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/me",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:13.555943+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/project-preset",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:13.567345+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:13.580384+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/catalog",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:13.606746+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/setup/project_c3a681fce700f539e9d233af4272ae62",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:13.620192+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/agents/operator/executors",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:13.637238+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/me",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:13.660645+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/agents/operator/runtime-options",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:13.713052+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/workspaces/ws/paths",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:14.254206+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:15.089391+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:15.176571+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:23.435429+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:23.433796+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:23.438907+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:23.909590+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:24.244882+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:34.254282+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:38.435220+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:38.595861+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:38.439087+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:42.245451+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:44.251235+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:53.440409+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:53.536803+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:54.250915+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:13:57.252723+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:04.259776+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:08.442163+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:08.515115+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:12.262282+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:14.255318+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:23.446515+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:23.524683+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:23.617788+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:24.244660+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:27.268689+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:34.250650+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:38.447066+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T04:14:38.547442+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  }
+]

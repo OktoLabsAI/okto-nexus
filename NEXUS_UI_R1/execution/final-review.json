@@ -1,0 +1,31 @@
+{
+  "status": "IMPLEMENTATION_REVIEWED_QUALIFICATION_IN_PROGRESS",
+  "release_approved": false,
+  "default_activation_approved": false,
+  "candidate_campaign_sha256": "3ea51229df9bcc4d93d7f42dbe5e4d62a97741d97c99907a49a21cde6fafb88e",
+  "candidate_package_wheel_sha256": "544c48099db0793c66af54a48c70585e620fb0e56e02b145ab1bb38e5e743a64",
+  "candidate_package_report_sha256": "a34b19a83e9fd11e2643794bc4a771832fce2c6928b68a21d2d22184b71be1ad",
+  "review": {
+    "root_exact_pins_checked": 1047,
+    "root_exact_pins_mismatched": 0,
+    "tool_ref": "cea396",
+    "independent_reviewer": "browser_evidence_review",
+    "independent_result": "Favorable final read-only review; 8 driver +4 package +1035 installed payload pins,21 offline tests and real zero-admission lifecycle confirmed. No provider/credential access or campaign authorization inferred."
+  },
+  "main_refresh": {
+    "method": "git fetch origin main; no checkout/reset/rebase/merge",
+    "missing_main_commits": {"nexus": 0, "connector": 0, "core": 0},
+    "tool_refs": ["92258d", "034870", "0a40c8", "d659e2", "99af29", "b04f1d"]
+  },
+  "required_gates": {
+    "navigation": "Implemented; scoped browser contracts verified. AT and some matrix cases remain separate.",
+    "single_home": "Implemented; backend complete scoped correlation/pagination, exact targets and canonical zero-inventory proof. No React inventory union.",
+    "local_ui_connector_multi_connection": "Implemented in allthree surfaces and synthetic canonical journeys tested. Real provider/topology qualification is mandatory and not waived.",
+    "native_campaign": "Prepared and specifically presented for new user approval; not yet executed by this review.",
+    "human_usability": "Participant requested; no uninformed-human metrics invented.",
+    "accessibility_performance": "Native200% zoom geometry/actions and360px exercised; speech/AT/live scrollback incomplete. Large-size p95 misses500ms.",
+    "regression_rollout": "Focal installed and real-process evidence recorded with failed antecedents. Full matrix/CI/rollback gates remain; classic fallback retained, no default activation or release."
+  },
+  "source_preservation": "Analysis SHAs were not rollback instructions. Core0.0.14 is unchanged; Connector's latest a4d5100 changes only test fixtures/docs after runtime artifact daa7f2b.",
+  "approval_scope": "The new request is only the exact isolated provider campaign, not merge/release/deploy/default activation. Historical budget or per-PID approvals were not reused as campaign consent."
+}

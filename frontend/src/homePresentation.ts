@@ -1,4 +1,4 @@
-import type { HomeActivity, HomeCounter, HomeDisplayState, HomeResult, HomeSection } from './homeTypes';
+import type { HomeActivity, HomeCounter, HomeDisplayState, HomeResult, HomeSection,HomeTarget } from './homeTypes';
 import type { ExternalObservation } from './observationTypes';
 
 const labels: Record<HomeDisplayState, string> = {
@@ -9,6 +9,10 @@ const labels: Record<HomeDisplayState, string> = {
   result_available_cleanup_pending: 'Result available · cleanup pending', failed: 'Failed', cancelled: 'Cancelled', unknown: 'Unknown',
 };
 export function homeStateLabel(state: string): string { return labels[state as HomeDisplayState] ?? 'Unknown'; }
+export function homeTargetActionLabel(target:HomeTarget):string{
+  return ({handoff:'View work',execution:'View work',result:'View delivery',session:'View session',
+    connection:'View connection',message:'View message',approval:'Review request',external_observation:'View external signal'})[target.kind];
+}
 export function homeCounterLabel(counter: HomeCounter): string {
   return counter.value === null ? 'Not available' : `${counter.total_is_exact ? '' : 'At least '}${counter.value}`;
 }

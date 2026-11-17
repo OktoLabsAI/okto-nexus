@@ -1,0 +1,58 @@
+{
+  "status": "OFFLINE_PASS_REAL_ZERO_ADMISSION_LIFECYCLE_PASS_ROOT_AUDIT_REQUIRED",
+  "offline_tests": {
+    "passed": 24,
+    "seconds": 2.04,
+    "toolref": "6b4862",
+    "junit": "offline.xml"
+  },
+  "ruff": {
+    "status": "PASS",
+    "toolref": "b7978e"
+  },
+  "lifecycle": {
+    "status": "PASS",
+    "toolrefs": [
+      "bd0493",
+      "70d255"
+    ],
+    "file": "lifecycle-qualification.json",
+    "native_invoked": false,
+    "perform_calls": 0,
+    "DRAINED_and_physical_exit": true
+  },
+  "journal_path_fix": "Direct offline equality with installed EmbeddedRuntimeHost._journal_path; no runtime created.",
+  "new_scoped_guards": [
+    "Only codex_a/codex_b+codex_app_server+gpt-5.3-codex; Claude/third binding rejects before package/native reads.",
+    "Two exact journals cumulative counters have independent delta baselines.",
+    "Permanent75k provision, max6,500kobserved/450kpreventive/50kreserve unchanged."
+  ],
+  "antecedents": [
+    {
+      "toolref": "e15f39",
+      "passed": 21
+    },
+    {
+      "toolref": "324abf",
+      "passed": 22,
+      "failed": 1,
+      "cause": "Wrong test-only class name EmbeddedCoreHost; corrected to EmbeddedRuntimeHost."
+    },
+    {
+      "toolref": "b4dafc",
+      "passed": 23
+    },
+    {
+      "toolref": "e1eedd",
+      "passed": 23,
+      "failed": 1,
+      "cause": "Negative-binding test mutated synthetic plan but had not refreshed synthetic consent digest; corrected oracle."
+    }
+  ],
+  "original_preserved": true,
+  "original_candidate_sha256": "3ea51229df9bcc4d93d7f42dbe5e4d62a97741d97c99907a49a21cde6fafb88e",
+  "installed_prefix_modified": false,
+  "campaign_native_provider_invoked": false,
+  "authorization_reference": "call_7b291505d2a349ddb591321ccaefe5f7 item0",
+  "remaining": "Root technical audit and genuine consent file mapped to actual user authorization before execute. No further user question required for narrowed scope."
+}

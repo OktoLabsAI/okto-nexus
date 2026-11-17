@@ -1,0 +1,49 @@
+{
+  "status": "VISIBLE_INITIAL_HOME_READY_AWAITING_HUMAN_TASK",
+  "url": "http://127.0.0.1:49774",
+  "browser_session": "ui043-fourth-human",
+  "browser_pid": 52712,
+  "fixture_exec_session": 56736,
+  "fixture_pid": 36324,
+  "control_directory": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-fourth-control-0e3arciw",
+  "stop_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-fourth-control-0e3arciw\\stop",
+  "extend_read_window_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-fourth-control-0e3arciw\\extend-read-window.json",
+  "read_window_seconds": 3600,
+  "read_window_deadline_approx_from_ready_file": "2026-11-17T04:11:55.487174+00:00",
+  "extension_format": {
+    "request_id": "unique explicit facilitator ID",
+    "seconds": "1..3600 before expiry; total2hours maximum"
+  },
+  "extension_scope": "Observation only; never renews original grant/ticket or request120sTTL.",
+  "original_authority_expiries": [
+    {
+      "binding_id": "binding",
+      "lane_ticket_expires_at": "2026-11-17T03:21:52.896005+00:00"
+    }
+  ],
+  "original_grants": [
+    {
+      "grant_id": "grant_78ff646aa3e242a5b7e253e66c924d22",
+      "expires_at": "2026-11-17T04:11:52.339115Z",
+      "max_executions": 10
+    }
+  ],
+  "initial_native_requests": [
+    {
+      "canonical_request_id": "r4request_7baa34c4d9a87d082cd75cbf8e3f3bc9a849048a611c1416edbffe32abaef181",
+      "received_at": "2026-11-17T03:11:54.125Z",
+      "expires_at": "2026-11-17T03:13:54.125000+00:00"
+    }
+  ],
+  "fresh_question_trigger_used": false,
+  "human_window_operated_after_handoff": false,
+  "tasks_performed_by_agent": false,
+  "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-fourth-clca8on7\\participant-project",
+  "project_label": "Sample project",
+  "workspace_id": "ws",
+  "baseline_catalog_limit": "Both canonical connections belong to subject/Codex on the same unnamed Connector host; exact binding/session identities differ but display labels are not distinct. Root notified before handoff; no authority/DTO altered.",
+  "provider_calls": 0,
+  "native_binary_calls": 0,
+  "personal_auth": false,
+  "cleanup": "Pending end of human handoff or finite observation deadline; do not close active human form automatically."
+}

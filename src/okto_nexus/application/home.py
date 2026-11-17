@@ -179,5 +179,12 @@ class HomeOverviewService:
                 raise OktoNexusError(ErrorCode.NOT_FOUND, 'Home target is no longer available.', {})
             if value['workspace_id'] != selected['workspace_id']:
                 raise OktoNexusError(ErrorCode.CONFLICT, 'Home target scope changed.', {})
-            return dict(version=1, target=selected, available=True, source_revision=digest(value),
+            result = dict(version=1, target=selected, available=True, source_revision=digest(value),
                 agent_id=value.get('agent_id'), observed_at=now)
+            if selected['kind'] in ('session', 'connection'):
+                keys = ('server_id', 'executor_id', 'workspace_id', 'binding_id', 'workspace_binding_id', 'agent_id')
+                context_value = {key: value[key] for key in keys}
+                if selected['kind'] == 'session':
+                    context_value.update(session_id=value['session_id'], lifecycle_state=value['lifecycle_state'])
+                result[selected['kind'] + '_context'] = context_value
+            return result

@@ -1,0 +1,16 @@
+{
+  "source_head": "9de55d950739ed5d7348e946506e4c05464ccb13",
+  "command": "rtk proxy npm test",
+  "cwd": "frontend",
+  "session": 7212,
+  "tool_refs": [
+    "a6736c",
+    "05d535"
+  ],
+  "exit_code": 0,
+  "tests": 210,
+  "passed": 210,
+  "failed": 0,
+  "duration_ms": 13825.3567,
+  "scope": "Existing frontend suite selected before new UI-R1 test files; no browser/reader/native/provider certification"
+}

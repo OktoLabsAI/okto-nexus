@@ -370,6 +370,11 @@ They cannot call MCP or mutate state.
 
 The bundled dashboard provides:
 
+The primary destinations are **Home**, **Conversations**, **Graph** and
+**Artifacts**. **Advanced** groups the existing administration and diagnostic
+pages; it does not change access permissions. The global bell keeps questions,
+approvals, errors and unseen results reachable from every destination.
+
 - **Graph** — toggle between detailed agent cards and compact activity-sized
   circles, with profile colours, live presence status badges, recent
   message flow, unread traffic, open handoffs, and claimed relationships;
@@ -377,7 +382,7 @@ The bundled dashboard provides:
   outcomes, receipts, and optional semantic search;
 - **Handoffs** — a six-column Kanban including `VERIFYING`, claim details,
   dependency state, verification, cancellation, and results;
-- **Meta-harness** — an OpenAI-style chat for private or broadcast messages
+- **Conversations** (the existing `Meta-harness` view identity) — a chat for private or broadcast messages
   and handoffs, with agent filtering, aggregated acknowledgement flags, and
   replies/results in one timeline;
 - **Artifacts** — paginated deliverables with list/Explorer-style grid views,

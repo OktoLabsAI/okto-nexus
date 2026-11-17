@@ -1,0 +1,505 @@
+{
+  "state": {
+    "decisions": 1,
+    "inputs": 1,
+    "input_outbox": 1,
+    "native_requests": [
+      {
+        "canonical_request_id": "r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+        "state": "DECIDED",
+        "received_at": "2026-11-17T00:29:04.437Z",
+        "expires_at": "2026-11-17T00:31:04.437000+00:00"
+      }
+    ],
+    "grants": [
+      {
+        "grant_id": "grant_60f31cfea54742128deb04b0d96ad2c6",
+        "expires_at": "2026-11-17T01:29:03.520801Z",
+        "max_executions": 10,
+        "used_executions": 0
+      }
+    ]
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Zyb_20X4.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-DLUGhrP6.css",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-icon.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta-harness/runtime-sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/messages",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/local/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/local/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/publish-health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta-harness/runtime-sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/messages",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_ab1419734bdb450a4be1dc5cb2c586b3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_ab1419734bdb450a4be1dc5cb2c586b3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_ab1419734bdb450a4be1dc5cb2c586b3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_ab1419734bdb450a4be1dc5cb2c586b3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_ab1419734bdb450a4be1dc5cb2c586b3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_ab1419734bdb450a4be1dc5cb2c586b3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_ab1419734bdb450a4be1dc5cb2c586b3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_ab1419734bdb450a4be1dc5cb2c586b3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    }
+  ]
+}

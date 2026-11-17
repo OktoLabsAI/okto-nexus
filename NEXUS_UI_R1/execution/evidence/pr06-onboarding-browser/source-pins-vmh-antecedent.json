@@ -1,0 +1,45 @@
+{
+  "final_pins": {
+    "frontend/src/projectConnectFlowModel.ts": "c71e4c6f478135e8d3424825682de6a3c10e1bc189c1f4dd3f3a0ec1fa89fa21",
+    "frontend/src/runtimeApi.ts": "3435f6bc8c75cc1ea55341d59890ab5c3c71897354e33b2c64c99104605eee0a",
+    "frontend/src/components/onboarding/ProjectConnectFlow.tsx": "8a1e971b5e25f679f0a00973dd6f08175af7b19ccd7d12cd4eb96ef7dd2847d3",
+    "frontend/tests/projectConnectFlow.test.mjs": "c4c094f8865f4e0f8a6b437a8f3606c549f4d46a82fb33b3a4f1488868ebe875",
+    "tests/ui_simplification/browser_project_connect_fixture.py": "c9932e8ea3fd58014db5833aef90d0889d8eeba6784a715dd1e5c1d9bf814d17",
+    "tests/ui_simplification/browser_project_connect_rejection_checks.js": "bb60e69940cde84da319cd88bc5d27cef30cf162d49594e88b7facc7507ce13b",
+    "tests/ui_simplification/test_project_connect_rejection.py": "8c4ef912e2af2123fc60a1979749ee91536b8335065234a4494fa2b57b073e17",
+    "src/okto_nexus/application/connection_setup.py": "ed43ab293fe8c8834897c98cc627399526c467f771982f74d91edff12f7ac287",
+    "src/okto_nexus/application/connection_test.py": "8454fbe2659b32c0addf579fb700d5383d2826c9d582f8a9dab1d089893a172c",
+    "src/okto_nexus/application/project_preset.py": "06e51f4d05774bee9300010782ac61cafe2172b387ee7b190059fe0493d9605f",
+    "src/okto_nexus/application/execution_binding_proposals.py": "af4dd8b579095e2d9a55d13e67f2c6e9fe92d629b77d86f4d78056562543ccab",
+    "src/okto_nexus/adapters/inbound/http/runtime_v1.py": "80774ebaf407d9381df80ec6936383f6f1f8771a234487b1f960b0897c109fc2",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "6131ec47d220dc3e7201940dc0fce737abd8ba3981b7e121e9a2bfe20c115ba3",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-vmhGy86G.js": "e4a1b963969fe42a195a904fe8238b0e5e9c927f67e97d47ba9db0eac2b926c8",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-CXFy-VnM.css": "36054c625504c406bff2dcd5a38d66952b72ded0d7c88d44e53658eae1b6316b"
+  },
+  "available_antecedent_comparison": {
+    "tests/ui_simplification/browser_project_connect_fixture.py": {
+      "before": "c9932e8ea3fd58014db5833aef90d0889d8eeba6784a715dd1e5c1d9bf814d17",
+      "after": "c9932e8ea3fd58014db5833aef90d0889d8eeba6784a715dd1e5c1d9bf814d17",
+      "changed": false
+    },
+    "frontend/src/projectConnectFlowModel.ts": {
+      "before": "a3ea00d748b087867323ad18741db1c83320b8e49d5e5c553d09500b6eae9d48",
+      "after": "c71e4c6f478135e8d3424825682de6a3c10e1bc189c1f4dd3f3a0ec1fa89fa21",
+      "changed": true
+    },
+    "frontend/src/components/onboarding/ProjectConnectFlow.tsx": {
+      "before": "88d82739d93d3b9276f20e6110cab9198c8d339505e28e5c52ba0886a9f5eec7",
+      "after": "8a1e971b5e25f679f0a00973dd6f08175af7b19ccd7d12cd4eb96ef7dd2847d3",
+      "changed": true
+    },
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-CXFy-VnM.css": {
+      "before": "36054c625504c406bff2dcd5a38d66952b72ded0d7c88d44e53658eae1b6316b",
+      "after": "36054c625504c406bff2dcd5a38d66952b72ded0d7c88d44e53658eae1b6316b",
+      "changed": false
+    }
+  },
+  "antecedent_client": "index-dfy1_5aT.js",
+  "final_client": "index-vmhGy86G.js",
+  "comparison_limit": "Only files actually pinned at antecedent start are compared. Backend pins here are final-state pins; they are not retroactively claimed as measured before that start.",
+  "behavioral_scope": "Full synthetic Codex/Claude connection/Finish/Resume is antecedent dfy1; final vmh proves edited inputs and strict refusal/reload/edit without replay. Neither cut launches native/provider sessions."
+}

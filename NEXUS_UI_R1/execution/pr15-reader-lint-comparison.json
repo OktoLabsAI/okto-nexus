@@ -1,0 +1,22 @@
+{
+  "status": "NO_NEW_READER_PYTHON_LINT_FINDINGS_VS_HEAD",
+  "comparison_parent": "d2de4207",
+  "file": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+  "baseline_errors": 17,
+  "current_errors": 17,
+  "signature_equal": true,
+  "new_errors": 0,
+  "baseline_exit": 1,
+  "current_exit": 1,
+  "codes": {
+    "I001": 2,
+    "C408": 15
+  },
+  "baseline_sha256": "67079e23ab7e357595a30eb880c3182d277adb68e7283bf2969553e2970467a2",
+  "current_sha256": "e457a441560631b81f6a3cc78b299f04ead79265594d5b5b6e959577c57759c5",
+  "method": "Same rtk proxy uvx ruff check --output-format=json --stdin-filename actual relative source path -; baseline from current Git HEAD. Compare code/message multiplicity, ignoring shifted line positions.",
+  "limits": [
+    "Legacy reader is not lint-clean; no broad formatting or suppression added to production.",
+    "Earlier combined invocation also found new test import/dict findings; corrected only the new test, with focal pass recorded separately."
+  ]
+}

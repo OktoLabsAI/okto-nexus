@@ -1,0 +1,4570 @@
+{
+  "schema_version": 1,
+  "plan_id": "NEXUS-UI-R1",
+  "language": "pt-BR",
+  "created_date": "2026-11-16",
+  "status": "PLANNED_NOT_EXECUTED",
+  "baseline": {
+    "nexus": {
+      "repository": "OktoLabsAI/okto-nexus",
+      "branch": "feature/v0.3.4",
+      "sha": "3d95aad8c1b5d2e6354cd872512586fd7a02aec9",
+      "version": "0.3.4",
+      "core_dependency": "0.0.14"
+    },
+    "connector": {
+      "repository": "OktoLabsAI/okto-nexus-connector",
+      "branch": "feature/v0.0.12",
+      "sha": "a8bd48bdc6d6e835c55eb601a7e7fa316453aa7b"
+    },
+    "inspection": "selected_files_static_only"
+  },
+  "counts": {
+    "tasks": 47,
+    "test_scenarios": 145,
+    "pull_requests": 9,
+    "requirements": 18
+  },
+  "mandatory_gates": [
+    "four_primary_destinations_and_advanced",
+    "single_home_tracking_region",
+    "exact_session_context",
+    "resume_or_add_new_connection_local_ui_connector",
+    "terminal_and_daemon_regression",
+    "no_authorization_bypass",
+    "evidence_and_release_decision"
+  ],
+  "previous_ledgers": "Preservar HOME-R1 e R3. Não promover evidências antigas sem verificar corte e aplicabilidade.",
+  "prs": [
+    {
+      "id": "PR-00",
+      "title": "Baseline e contratos",
+      "milestone": "M0",
+      "status": "TODO",
+      "tasks": [
+        "UI-001",
+        "UI-002",
+        "UI-003",
+        "UI-004",
+        "UI-005"
+      ]
+    },
+    {
+      "id": "PR-01",
+      "title": "Navegação simples e pendências globais",
+      "milestone": "M1",
+      "status": "TODO",
+      "tasks": [
+        "UI-006",
+        "UI-007",
+        "UI-008",
+        "UI-009",
+        "UI-010"
+      ]
+    },
+    {
+      "id": "PR-02",
+      "title": "Seletor local obrigatório retomar/adicionar",
+      "milestone": "M1",
+      "status": "TODO",
+      "tasks": [
+        "UI-011",
+        "UI-012",
+        "UI-013",
+        "UI-014",
+        "UI-015",
+        "UI-016"
+      ]
+    },
+    {
+      "id": "PR-03",
+      "title": "Projeção unificada e alvos de sessão",
+      "milestone": "M2",
+      "status": "TODO",
+      "tasks": [
+        "UI-017",
+        "UI-018",
+        "UI-019",
+        "UI-020",
+        "UI-021",
+        "UI-022"
+      ]
+    },
+    {
+      "id": "PR-04",
+      "title": "Home com acompanhamento único",
+      "milestone": "M2",
+      "status": "TODO",
+      "tasks": [
+        "UI-023",
+        "UI-024",
+        "UI-025",
+        "UI-026",
+        "UI-027",
+        "UI-028"
+      ]
+    },
+    {
+      "id": "PR-05",
+      "title": "Painel contextual e interações",
+      "milestone": "M2",
+      "status": "TODO",
+      "tasks": [
+        "UI-029",
+        "UI-030",
+        "UI-031",
+        "UI-032",
+        "UI-033",
+        "UI-034"
+      ]
+    },
+    {
+      "id": "PR-06",
+      "title": "Onboarding UI e Connector integrado",
+      "milestone": "M3",
+      "status": "TODO",
+      "tasks": [
+        "UI-035",
+        "UI-036",
+        "UI-037",
+        "UI-038",
+        "UI-039"
+      ]
+    },
+    {
+      "id": "PR-07",
+      "title": "Regressão e qualificação",
+      "milestone": "M3",
+      "status": "TODO",
+      "tasks": [
+        "UI-040",
+        "UI-041",
+        "UI-042",
+        "UI-043"
+      ]
+    },
+    {
+      "id": "PR-08",
+      "title": "Documentação, pacote e rollout",
+      "milestone": "M3",
+      "status": "TODO",
+      "tasks": [
+        "UI-044",
+        "UI-045",
+        "UI-046",
+        "UI-047"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "R01",
+      "task_ids": [
+        "UI-003",
+        "UI-006",
+        "UI-009",
+        "UI-010",
+        "UI-043",
+        "UI-044",
+        "UI-047"
+      ],
+      "description": "Barra lateral com quatro destinos principais: Home, Conversas, Grafo e Artefatos.",
+      "test_ids": [
+        "T-A11Y-01",
+        "T-CLI-13",
+        "T-DATA-01",
+        "T-DATA-06",
+        "T-NAV-01",
+        "T-NAV-02",
+        "T-NAV-04",
+        "T-NAV-06",
+        "T-NAV-07",
+        "T-NAV-09",
+        "T-NAV-10",
+        "T-NAV-11",
+        "T-NAV-12",
+        "T-PANEL-01",
+        "T-QUAL-05",
+        "T-QUAL-06",
+        "T-REL-01",
+        "T-REL-07",
+        "T-REL-08",
+        "T-RESULT-04",
+        "T-SVC-04"
+      ]
+    },
+    {
+      "id": "R02",
+      "task_ids": [
+        "UI-003",
+        "UI-006",
+        "UI-007",
+        "UI-010",
+        "UI-043",
+        "UI-044"
+      ],
+      "description": "Uma única entrada secundária Avançado, organizada por finalidade; não expandir todas as opções avançadas na barra principal.",
+      "test_ids": [
+        "T-A11Y-01",
+        "T-CLI-13",
+        "T-DATA-01",
+        "T-DATA-06",
+        "T-NAV-01",
+        "T-NAV-02",
+        "T-NAV-03",
+        "T-NAV-04",
+        "T-NAV-05",
+        "T-NAV-06",
+        "T-NAV-07",
+        "T-NAV-11",
+        "T-NAV-12",
+        "T-PANEL-01",
+        "T-QUAL-05",
+        "T-QUAL-06",
+        "T-REL-01",
+        "T-SVC-04"
+      ]
+    },
+    {
+      "id": "R03",
+      "task_ids": [
+        "UI-003",
+        "UI-017",
+        "UI-018",
+        "UI-020",
+        "UI-021",
+        "UI-023",
+        "UI-024",
+        "UI-025",
+        "UI-027",
+        "UI-028",
+        "UI-033",
+        "UI-041",
+        "UI-043",
+        "UI-047"
+      ],
+      "description": "Home com uma única região principal de acompanhamento, reunindo trabalho, harness/sessão, perguntas e resultados relacionados.",
+      "test_ids": [
+        "T-A11Y-01",
+        "T-A11Y-02",
+        "T-A11Y-03",
+        "T-A11Y-04",
+        "T-ATTN-02",
+        "T-DATA-01",
+        "T-DATA-02",
+        "T-DATA-03",
+        "T-DATA-04",
+        "T-DATA-05",
+        "T-DATA-06",
+        "T-DATA-07",
+        "T-DATA-08",
+        "T-DATA-09",
+        "T-DATA-10",
+        "T-DATA-11",
+        "T-DATA-12",
+        "T-HOME-01",
+        "T-HOME-02",
+        "T-HOME-03",
+        "T-HOME-04",
+        "T-HOME-05",
+        "T-HOME-06",
+        "T-HOME-07",
+        "T-HOME-08",
+        "T-HOME-09",
+        "T-HOME-10",
+        "T-LIVE-01",
+        "T-LIVE-02",
+        "T-LIVE-03",
+        "T-LIVE-04",
+        "T-LIVE-05",
+        "T-LIVE-06",
+        "T-NAV-01",
+        "T-PANEL-01",
+        "T-PANEL-04",
+        "T-PERF-01",
+        "T-PERF-02",
+        "T-PERF-04",
+        "T-QUAL-05",
+        "T-QUAL-06",
+        "T-REL-07",
+        "T-REL-08",
+        "T-RESULT-01",
+        "T-RESULT-02",
+        "T-RESULT-03",
+        "T-RESULT-04",
+        "T-RESULT-05",
+        "T-RESULT-06",
+        "T-SCOPE-01",
+        "T-SCOPE-03",
+        "T-SCOPE-04",
+        "T-SCOPE-05",
+        "T-SCOPE-07",
+        "T-SEC-01"
+      ]
+    },
+    {
+      "id": "R04",
+      "task_ids": [
+        "UI-003",
+        "UI-023",
+        "UI-028"
+      ],
+      "description": "Não criar menu/tela adicional de Harnesses, Execuções, Sessões ou Monitoramento.",
+      "test_ids": [
+        "T-DATA-01",
+        "T-DATA-06",
+        "T-HOME-01",
+        "T-HOME-02",
+        "T-HOME-03",
+        "T-HOME-04",
+        "T-HOME-08",
+        "T-HOME-10",
+        "T-LIVE-06",
+        "T-NAV-01",
+        "T-PANEL-01"
+      ]
+    },
+    {
+      "id": "R05",
+      "task_ids": [
+        "UI-003",
+        "UI-014",
+        "UI-019",
+        "UI-024",
+        "UI-028",
+        "UI-029",
+        "UI-030",
+        "UI-032",
+        "UI-034",
+        "UI-041",
+        "UI-043"
+      ],
+      "description": "Clicar em uma atividade/sessão abre seu contexto exato dentro do Nexus, num painel contextual, sem procurar novamente em outra página.",
+      "test_ids": [
+        "T-A11Y-01",
+        "T-A11Y-02",
+        "T-A11Y-03",
+        "T-A11Y-04",
+        "T-ATTN-04",
+        "T-CLI-16",
+        "T-CLI-17",
+        "T-CLI-18",
+        "T-CLI-19",
+        "T-DATA-01",
+        "T-DATA-03",
+        "T-DATA-06",
+        "T-DATA-12",
+        "T-EXT-03",
+        "T-HOME-01",
+        "T-HOME-04",
+        "T-HOME-05",
+        "T-HOME-08",
+        "T-HOME-10",
+        "T-LIVE-06",
+        "T-NAV-01",
+        "T-NAV-10",
+        "T-PANEL-01",
+        "T-PANEL-02",
+        "T-PANEL-03",
+        "T-PANEL-04",
+        "T-PANEL-05",
+        "T-PANEL-06",
+        "T-PANEL-07",
+        "T-PANEL-09",
+        "T-PANEL-10",
+        "T-PANEL-11",
+        "T-PANEL-12",
+        "T-PERF-01",
+        "T-PERF-02",
+        "T-PERF-04",
+        "T-QUAL-05",
+        "T-QUAL-06",
+        "T-SCOPE-02",
+        "T-SEC-03"
+      ]
+    },
+    {
+      "id": "R06",
+      "task_ids": [
+        "UI-002",
+        "UI-003",
+        "UI-005",
+        "UI-017",
+        "UI-019",
+        "UI-020",
+        "UI-022",
+        "UI-024",
+        "UI-027",
+        "UI-028",
+        "UI-029",
+        "UI-040"
+      ],
+      "description": "Múltiplas sessões/harnesses da mesma identidade permanecem distinguíveis; trabalho iniciado por agentes também aparece.",
+      "test_ids": [
+        "T-BASE-03",
+        "T-BASE-04",
+        "T-DATA-01",
+        "T-DATA-02",
+        "T-DATA-03",
+        "T-DATA-04",
+        "T-DATA-05",
+        "T-DATA-06",
+        "T-DATA-08",
+        "T-DATA-09",
+        "T-DATA-10",
+        "T-DATA-12",
+        "T-DATA-13",
+        "T-DATA-14",
+        "T-EXT-01",
+        "T-EXT-02",
+        "T-HOME-01",
+        "T-HOME-04",
+        "T-HOME-05",
+        "T-HOME-08",
+        "T-HOME-10",
+        "T-LIVE-01",
+        "T-LIVE-02",
+        "T-LIVE-03",
+        "T-LIVE-04",
+        "T-LIVE-05",
+        "T-LIVE-06",
+        "T-NAV-01",
+        "T-NAV-10",
+        "T-PANEL-01",
+        "T-PANEL-02",
+        "T-PANEL-03",
+        "T-PANEL-04",
+        "T-PANEL-05",
+        "T-PANEL-06",
+        "T-PERF-01",
+        "T-PERF-02",
+        "T-PERF-03",
+        "T-QUAL-01",
+        "T-SCOPE-01",
+        "T-SCOPE-02",
+        "T-SCOPE-03",
+        "T-SCOPE-05",
+        "T-SEC-01",
+        "T-SEC-02"
+      ]
+    },
+    {
+      "id": "R07",
+      "task_ids": [
+        "UI-002",
+        "UI-008",
+        "UI-009",
+        "UI-010",
+        "UI-018",
+        "UI-023",
+        "UI-025",
+        "UI-026",
+        "UI-030",
+        "UI-031",
+        "UI-033",
+        "UI-034"
+      ],
+      "description": "Perguntas, aprovações, problemas e resultados fazem parte do básico; não ficam disponíveis somente em Avançado.",
+      "test_ids": [
+        "T-A11Y-01",
+        "T-ATTN-01",
+        "T-ATTN-02",
+        "T-ATTN-03",
+        "T-ATTN-04",
+        "T-ATTN-05",
+        "T-ATTN-06",
+        "T-BASE-03",
+        "T-DATA-06",
+        "T-DATA-07",
+        "T-EXT-03",
+        "T-HOME-01",
+        "T-HOME-02",
+        "T-HOME-03",
+        "T-HOME-06",
+        "T-HOME-07",
+        "T-HOME-08",
+        "T-HOME-09",
+        "T-HOME-10",
+        "T-NAV-01",
+        "T-NAV-06",
+        "T-NAV-07",
+        "T-NAV-08",
+        "T-NAV-09",
+        "T-NAV-10",
+        "T-NAV-11",
+        "T-NAV-12",
+        "T-PANEL-02",
+        "T-PANEL-03",
+        "T-PANEL-06",
+        "T-PANEL-07",
+        "T-PANEL-08",
+        "T-PANEL-09",
+        "T-PANEL-11",
+        "T-RESULT-01",
+        "T-RESULT-02",
+        "T-RESULT-03",
+        "T-RESULT-04",
+        "T-RESULT-05",
+        "T-RESULT-06",
+        "T-SCOPE-01",
+        "T-SCOPE-04",
+        "T-SEC-03"
+      ]
+    },
+    {
+      "id": "R08",
+      "task_ids": [
+        "UI-008",
+        "UI-010",
+        "UI-026",
+        "UI-046"
+      ],
+      "description": "Indicador global de pendências acessível em qualquer página, inclusive na Home clássica durante a transição.",
+      "test_ids": [
+        "T-A11Y-01",
+        "T-ATTN-01",
+        "T-ATTN-03",
+        "T-ATTN-06",
+        "T-HOME-10",
+        "T-NAV-01",
+        "T-NAV-06",
+        "T-NAV-07",
+        "T-NAV-08",
+        "T-NAV-12",
+        "T-REL-04",
+        "T-REL-05",
+        "T-REL-06",
+        "T-SVC-02"
+      ]
+    },
+    {
+      "id": "R09",
+      "task_ids": [
+        "UI-004",
+        "UI-011",
+        "UI-012",
+        "UI-013",
+        "UI-015",
+        "UI-016",
+        "UI-035",
+        "UI-036",
+        "UI-039",
+        "UI-042",
+        "UI-043",
+        "UI-044",
+        "UI-047"
+      ],
+      "description": "Adicionar outro harness ao mesmo projeto é obrigatório e não exige o usuário inventar nome de perfil.",
+      "test_ids": [
+        "T-CLI-01",
+        "T-CLI-02",
+        "T-CLI-03",
+        "T-CLI-04",
+        "T-CLI-05",
+        "T-CLI-06",
+        "T-CLI-07",
+        "T-CLI-08",
+        "T-CLI-09",
+        "T-CLI-10",
+        "T-CLI-11",
+        "T-CLI-12",
+        "T-CLI-13",
+        "T-CLI-14",
+        "T-CLI-15",
+        "T-CLI-20",
+        "T-CLI-21",
+        "T-CONN-01",
+        "T-CONN-02",
+        "T-CONN-03",
+        "T-CONN-04",
+        "T-CONN-07",
+        "T-NAV-11",
+        "T-ONB-01",
+        "T-ONB-02",
+        "T-ONB-03",
+        "T-ONB-04",
+        "T-ONB-05",
+        "T-ONB-06",
+        "T-QUAL-02",
+        "T-QUAL-03",
+        "T-QUAL-04",
+        "T-QUAL-05",
+        "T-QUAL-06",
+        "T-REL-01",
+        "T-REL-07",
+        "T-REL-08",
+        "T-SCOPE-06",
+        "T-SVC-04"
+      ]
+    },
+    {
+      "id": "R10",
+      "task_ids": [
+        "UI-004",
+        "UI-011",
+        "UI-012",
+        "UI-014",
+        "UI-015",
+        "UI-016",
+        "UI-031",
+        "UI-033",
+        "UI-035",
+        "UI-036",
+        "UI-039",
+        "UI-042",
+        "UI-044"
+      ],
+      "description": "Retomar conexão, continuar sessão e recuperar envio pendente são intenções distintas, apresentadas corretamente.",
+      "test_ids": [
+        "T-ATTN-02",
+        "T-ATTN-04",
+        "T-ATTN-05",
+        "T-CLI-01",
+        "T-CLI-02",
+        "T-CLI-03",
+        "T-CLI-04",
+        "T-CLI-05",
+        "T-CLI-06",
+        "T-CLI-07",
+        "T-CLI-08",
+        "T-CLI-10",
+        "T-CLI-11",
+        "T-CLI-12",
+        "T-CLI-13",
+        "T-CLI-14",
+        "T-CLI-16",
+        "T-CLI-17",
+        "T-CLI-18",
+        "T-CLI-19",
+        "T-CLI-20",
+        "T-CLI-21",
+        "T-CONN-01",
+        "T-CONN-02",
+        "T-CONN-03",
+        "T-CONN-04",
+        "T-CONN-07",
+        "T-NAV-11",
+        "T-ONB-01",
+        "T-ONB-02",
+        "T-ONB-03",
+        "T-ONB-04",
+        "T-ONB-05",
+        "T-ONB-06",
+        "T-PANEL-03",
+        "T-PANEL-08",
+        "T-PANEL-09",
+        "T-QUAL-02",
+        "T-QUAL-03",
+        "T-QUAL-04",
+        "T-REL-01",
+        "T-RESULT-01",
+        "T-RESULT-02",
+        "T-RESULT-03",
+        "T-RESULT-04",
+        "T-RESULT-06",
+        "T-SCOPE-06",
+        "T-SVC-04"
+      ]
+    },
+    {
+      "id": "R11",
+      "task_ids": [
+        "UI-004",
+        "UI-012",
+        "UI-015",
+        "UI-016",
+        "UI-037",
+        "UI-038",
+        "UI-039",
+        "UI-042",
+        "UI-044",
+        "UI-045",
+        "UI-046"
+      ],
+      "description": "Terminal continua completo; `connect` preserva inicialização/reutilização do serviço e o dashboard continua opcional.",
+      "test_ids": [
+        "T-CLI-01",
+        "T-CLI-04",
+        "T-CLI-05",
+        "T-CLI-06",
+        "T-CLI-07",
+        "T-CLI-08",
+        "T-CLI-10",
+        "T-CLI-11",
+        "T-CLI-12",
+        "T-CLI-13",
+        "T-CLI-20",
+        "T-CLI-21",
+        "T-CONN-01",
+        "T-CONN-05",
+        "T-CONN-06",
+        "T-CONN-07",
+        "T-NAV-11",
+        "T-ONB-05",
+        "T-ONB-06",
+        "T-QUAL-02",
+        "T-QUAL-03",
+        "T-QUAL-04",
+        "T-REL-01",
+        "T-REL-02",
+        "T-REL-03",
+        "T-REL-04",
+        "T-REL-05",
+        "T-REL-06",
+        "T-SVC-01",
+        "T-SVC-02",
+        "T-SVC-03",
+        "T-SVC-04",
+        "T-SVC-05",
+        "T-SVC-06"
+      ]
+    },
+    {
+      "id": "R12",
+      "task_ids": [
+        "UI-004",
+        "UI-011",
+        "UI-013",
+        "UI-014",
+        "UI-016",
+        "UI-036",
+        "UI-037",
+        "UI-038",
+        "UI-039",
+        "UI-040",
+        "UI-046"
+      ],
+      "description": "Reconectar não recria identidade, não reaplica defaults, não renova grants nem repete tarefas.",
+      "test_ids": [
+        "T-CLI-01",
+        "T-CLI-02",
+        "T-CLI-03",
+        "T-CLI-04",
+        "T-CLI-05",
+        "T-CLI-08",
+        "T-CLI-09",
+        "T-CLI-10",
+        "T-CLI-11",
+        "T-CLI-14",
+        "T-CLI-15",
+        "T-CLI-16",
+        "T-CLI-17",
+        "T-CLI-18",
+        "T-CLI-19",
+        "T-CLI-20",
+        "T-CLI-21",
+        "T-CONN-01",
+        "T-CONN-02",
+        "T-CONN-03",
+        "T-CONN-04",
+        "T-CONN-05",
+        "T-CONN-06",
+        "T-CONN-07",
+        "T-EXT-01",
+        "T-EXT-02",
+        "T-ONB-05",
+        "T-ONB-06",
+        "T-PANEL-03",
+        "T-QUAL-02",
+        "T-REL-04",
+        "T-REL-05",
+        "T-REL-06",
+        "T-SCOPE-01",
+        "T-SCOPE-02",
+        "T-SCOPE-05",
+        "T-SCOPE-06",
+        "T-SEC-01",
+        "T-SEC-02",
+        "T-SVC-01",
+        "T-SVC-02",
+        "T-SVC-03",
+        "T-SVC-05",
+        "T-SVC-06"
+      ]
+    },
+    {
+      "id": "R13",
+      "task_ids": [
+        "UI-001",
+        "UI-002",
+        "UI-017",
+        "UI-018",
+        "UI-021",
+        "UI-029",
+        "UI-030",
+        "UI-040",
+        "UI-045"
+      ],
+      "description": "Usar serviços e componentes canônicos; não criar domínio paralelo de trabalho, decisões ou execução.",
+      "test_ids": [
+        "T-ATTN-02",
+        "T-BASE-01",
+        "T-BASE-02",
+        "T-BASE-03",
+        "T-DATA-01",
+        "T-DATA-02",
+        "T-DATA-03",
+        "T-DATA-04",
+        "T-DATA-05",
+        "T-DATA-06",
+        "T-DATA-07",
+        "T-DATA-11",
+        "T-EXT-01",
+        "T-EXT-02",
+        "T-EXT-03",
+        "T-PANEL-01",
+        "T-PANEL-02",
+        "T-PANEL-03",
+        "T-PANEL-04",
+        "T-PANEL-05",
+        "T-PANEL-06",
+        "T-PANEL-07",
+        "T-PERF-01",
+        "T-REL-01",
+        "T-REL-02",
+        "T-REL-03",
+        "T-RESULT-01",
+        "T-SCOPE-01",
+        "T-SCOPE-02",
+        "T-SCOPE-04",
+        "T-SCOPE-05",
+        "T-SCOPE-07",
+        "T-SEC-01",
+        "T-SEC-02"
+      ]
+    },
+    {
+      "id": "R14",
+      "task_ids": [
+        "UI-002",
+        "UI-005",
+        "UI-007",
+        "UI-013",
+        "UI-015",
+        "UI-019",
+        "UI-020",
+        "UI-021",
+        "UI-022",
+        "UI-031",
+        "UI-032",
+        "UI-033",
+        "UI-034",
+        "UI-037",
+        "UI-038",
+        "UI-040"
+      ],
+      "description": "Simplicidade visual não remove autorização, revisão, limites, auditoria ou tratamento de resultado incerto.",
+      "test_ids": [
+        "T-A11Y-02",
+        "T-A11Y-03",
+        "T-ATTN-02",
+        "T-ATTN-04",
+        "T-ATTN-05",
+        "T-BASE-03",
+        "T-BASE-04",
+        "T-CLI-08",
+        "T-CLI-09",
+        "T-CLI-10",
+        "T-CLI-11",
+        "T-CLI-12",
+        "T-CLI-13",
+        "T-CLI-15",
+        "T-CONN-05",
+        "T-CONN-06",
+        "T-CONN-07",
+        "T-DATA-08",
+        "T-DATA-09",
+        "T-DATA-10",
+        "T-DATA-11",
+        "T-DATA-12",
+        "T-DATA-13",
+        "T-DATA-14",
+        "T-EXT-01",
+        "T-EXT-02",
+        "T-NAV-03",
+        "T-NAV-05",
+        "T-NAV-06",
+        "T-NAV-10",
+        "T-PANEL-01",
+        "T-PANEL-02",
+        "T-PANEL-03",
+        "T-PANEL-06",
+        "T-PANEL-08",
+        "T-PANEL-09",
+        "T-PANEL-10",
+        "T-PANEL-11",
+        "T-PANEL-12",
+        "T-PERF-01",
+        "T-PERF-02",
+        "T-PERF-03",
+        "T-QUAL-01",
+        "T-RESULT-01",
+        "T-RESULT-02",
+        "T-RESULT-03",
+        "T-RESULT-04",
+        "T-RESULT-06",
+        "T-SCOPE-01",
+        "T-SCOPE-02",
+        "T-SCOPE-03",
+        "T-SCOPE-05",
+        "T-SCOPE-07",
+        "T-SEC-01",
+        "T-SEC-02",
+        "T-SEC-03",
+        "T-SVC-01",
+        "T-SVC-02",
+        "T-SVC-03",
+        "T-SVC-04",
+        "T-SVC-05",
+        "T-SVC-06"
+      ]
+    },
+    {
+      "id": "R15",
+      "task_ids": [
+        "UI-002",
+        "UI-003",
+        "UI-006",
+        "UI-007",
+        "UI-009",
+        "UI-010",
+        "UI-032",
+        "UI-044",
+        "UI-046"
+      ],
+      "description": "Configurações e links antigos continuam acessíveis; rótulos amigáveis não quebram identificadores internos.",
+      "test_ids": [
+        "T-A11Y-01",
+        "T-A11Y-02",
+        "T-A11Y-03",
+        "T-BASE-03",
+        "T-CLI-13",
+        "T-DATA-01",
+        "T-DATA-06",
+        "T-NAV-01",
+        "T-NAV-02",
+        "T-NAV-03",
+        "T-NAV-04",
+        "T-NAV-05",
+        "T-NAV-06",
+        "T-NAV-07",
+        "T-NAV-09",
+        "T-NAV-10",
+        "T-NAV-11",
+        "T-NAV-12",
+        "T-PANEL-01",
+        "T-PANEL-10",
+        "T-PANEL-11",
+        "T-PANEL-12",
+        "T-REL-01",
+        "T-REL-04",
+        "T-REL-05",
+        "T-REL-06",
+        "T-RESULT-04",
+        "T-SCOPE-01",
+        "T-SVC-02",
+        "T-SVC-04"
+      ]
+    },
+    {
+      "id": "R16",
+      "task_ids": [
+        "UI-005",
+        "UI-008",
+        "UI-018",
+        "UI-020",
+        "UI-021",
+        "UI-022",
+        "UI-025",
+        "UI-026",
+        "UI-027",
+        "UI-028",
+        "UI-032",
+        "UI-034",
+        "UI-040",
+        "UI-041",
+        "UI-046"
+      ],
+      "description": "Falhas, dados antigos, partes inacessíveis e suporte ausente são explícitos, nunca apresentados como vazio/ocioso/sucesso.",
+      "test_ids": [
+        "T-A11Y-01",
+        "T-A11Y-02",
+        "T-A11Y-03",
+        "T-A11Y-04",
+        "T-ATTN-01",
+        "T-ATTN-02",
+        "T-ATTN-03",
+        "T-ATTN-04",
+        "T-ATTN-06",
+        "T-BASE-04",
+        "T-DATA-06",
+        "T-DATA-07",
+        "T-DATA-08",
+        "T-DATA-09",
+        "T-DATA-10",
+        "T-DATA-11",
+        "T-DATA-12",
+        "T-DATA-13",
+        "T-DATA-14",
+        "T-EXT-01",
+        "T-EXT-02",
+        "T-HOME-01",
+        "T-HOME-04",
+        "T-HOME-06",
+        "T-HOME-07",
+        "T-HOME-08",
+        "T-HOME-09",
+        "T-HOME-10",
+        "T-LIVE-01",
+        "T-LIVE-02",
+        "T-LIVE-03",
+        "T-LIVE-04",
+        "T-LIVE-05",
+        "T-LIVE-06",
+        "T-NAV-07",
+        "T-NAV-08",
+        "T-PANEL-06",
+        "T-PANEL-09",
+        "T-PANEL-10",
+        "T-PANEL-11",
+        "T-PANEL-12",
+        "T-PERF-01",
+        "T-PERF-02",
+        "T-PERF-03",
+        "T-PERF-04",
+        "T-QUAL-01",
+        "T-REL-04",
+        "T-REL-05",
+        "T-REL-06",
+        "T-RESULT-01",
+        "T-RESULT-05",
+        "T-SCOPE-01",
+        "T-SCOPE-02",
+        "T-SCOPE-03",
+        "T-SCOPE-04",
+        "T-SCOPE-05",
+        "T-SCOPE-07",
+        "T-SEC-01",
+        "T-SEC-02",
+        "T-SEC-03",
+        "T-SVC-02"
+      ]
+    },
+    {
+      "id": "R17",
+      "task_ids": [
+        "UI-004",
+        "UI-035",
+        "UI-036",
+        "UI-037",
+        "UI-038",
+        "UI-039",
+        "UI-042",
+        "UI-045"
+      ],
+      "description": "Mesmo fluxo semântico de retomar/adicionar no Nexus local, no atalho da UI e no Connector remoto, respeitando autoridades distintas.",
+      "test_ids": [
+        "T-CLI-01",
+        "T-CLI-05",
+        "T-CLI-11",
+        "T-CLI-21",
+        "T-CONN-01",
+        "T-CONN-02",
+        "T-CONN-03",
+        "T-CONN-04",
+        "T-CONN-05",
+        "T-CONN-06",
+        "T-CONN-07",
+        "T-ONB-01",
+        "T-ONB-02",
+        "T-ONB-03",
+        "T-ONB-04",
+        "T-ONB-05",
+        "T-ONB-06",
+        "T-QUAL-02",
+        "T-QUAL-03",
+        "T-QUAL-04",
+        "T-REL-01",
+        "T-REL-02",
+        "T-REL-03",
+        "T-SVC-01",
+        "T-SVC-02",
+        "T-SVC-03",
+        "T-SVC-05",
+        "T-SVC-06"
+      ]
+    },
+    {
+      "id": "R18",
+      "task_ids": [
+        "UI-001",
+        "UI-005",
+        "UI-016",
+        "UI-039",
+        "UI-041",
+        "UI-042",
+        "UI-043",
+        "UI-045",
+        "UI-047"
+      ],
+      "description": "Entrega final exige navegação simplificada e onboarding múltiplo funcionando; não é concluída com apenas a alteração visual.",
+      "test_ids": [
+        "T-A11Y-01",
+        "T-A11Y-02",
+        "T-A11Y-03",
+        "T-A11Y-04",
+        "T-BASE-01",
+        "T-BASE-02",
+        "T-BASE-04",
+        "T-CLI-04",
+        "T-CLI-08",
+        "T-CLI-10",
+        "T-CLI-20",
+        "T-CLI-21",
+        "T-CONN-07",
+        "T-DATA-10",
+        "T-ONB-05",
+        "T-ONB-06",
+        "T-PERF-01",
+        "T-PERF-02",
+        "T-PERF-04",
+        "T-QUAL-01",
+        "T-QUAL-02",
+        "T-QUAL-03",
+        "T-QUAL-04",
+        "T-QUAL-05",
+        "T-QUAL-06",
+        "T-REL-01",
+        "T-REL-02",
+        "T-REL-03",
+        "T-REL-07",
+        "T-REL-08"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "UI-001",
+      "pr": "PR-00",
+      "title": "Fixar baseline e coordenar trabalho em andamento",
+      "status": "TODO",
+      "depends_on": [],
+      "requirements": [
+        "R13",
+        "R18"
+      ],
+      "implementation_areas": [
+        "AGENTS.md/CONTRIBUTING/CI atuais",
+        "git status/branch/HEAD dos repositórios"
+      ],
+      "steps": [
+        "Registrar HEAD real, árvore de trabalho, instruções e versões/pins sem reset/checkout destrutivo.",
+        "Comparar o SHA do plano e os commits posteriores; localizar quem está editando App, Home e CLI.",
+        "Definir branch/worktree e ownership de arquivos; registrar o que já existe e não será refeito."
+      ],
+      "acceptance": "Baseline reproduzível e mapa de drift; nenhum trabalho local sobrescrito.",
+      "test_ids": [
+        "T-BASE-01",
+        "T-BASE-02"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-002",
+      "pr": "PR-00",
+      "title": "Mapear fontes, destinos e invariantes atuais",
+      "status": "TODO",
+      "depends_on": [
+        "UI-001"
+      ],
+      "requirements": [
+        "R06",
+        "R07",
+        "R13",
+        "R14",
+        "R15"
+      ],
+      "implementation_areas": [
+        "App.tsx",
+        "plans/home_evolution/source-map.md",
+        "APIs de sessão, atenção, setup e conexão"
+      ],
+      "steps": [
+        "Inventariar destinos, links, callbacks, comparadores de view e preferências.",
+        "Rastrear work/sessions/bindings/attention/results até fontes/autorização/atualidade.",
+        "Mapear serviços e autoridade distintos no Server e Connector; identificar gates pendentes."
+      ],
+      "acceptance": "Matriz origem→escopo→autorização→correlação→evento/fallback e tabela completa de destinos.",
+      "test_ids": [
+        "T-BASE-03",
+        "T-SCOPE-01"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-003",
+      "pr": "PR-00",
+      "title": "Congelar contratos de navegação e acompanhamento",
+      "status": "TODO",
+      "depends_on": [
+        "UI-002"
+      ],
+      "requirements": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R15"
+      ],
+      "implementation_areas": [
+        "homeTypes.ts/homeNavigation.ts",
+        "contrato de leitura Home",
+        "registro de navegação proposto"
+      ],
+      "steps": [
+        "Documentar IDs internos versus rótulos públicos, sem troca global de strings.",
+        "Especificar HomeEntryGroup, deduplicação, itens sem sessão e novo alvo session.",
+        "Definir paginação por grupo/filhos, contadores e contratos de erro/versionamento."
+      ],
+      "acceptance": "Contratos completos, exemplos válidos/inválidos e tabela de compatibilidade; sem any para campos críticos.",
+      "test_ids": [
+        "T-NAV-01",
+        "T-DATA-01",
+        "T-DATA-06",
+        "T-PANEL-01"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-004",
+      "pr": "PR-00",
+      "title": "Congelar a escolha de conexão e sessão",
+      "status": "TODO",
+      "depends_on": [
+        "UI-002"
+      ],
+      "requirements": [
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R17"
+      ],
+      "implementation_areas": [
+        "connect.py",
+        "terminal_connection.py",
+        "CLI e store do Connector"
+      ],
+      "steps": [
+        "Especificar candidatos por Server/instância/operador/projeto e preservação de perfis legados.",
+        "Definir separadamente retomar conexão, nova conexão, continuar sessão e recuperar envio.",
+        "Definir comportamento de --profile, --client, novo flag explícito, JSON e checkpoints incertos."
+      ],
+      "acceptance": "Tabela da seção 8 rastreada a handlers atuais; nenhuma dependência de dashboard para o padrão.",
+      "test_ids": [
+        "T-CLI-01",
+        "T-CLI-05",
+        "T-CLI-11",
+        "T-CONN-01"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-005",
+      "pr": "PR-00",
+      "title": "Preparar fixtures e cenários de produto",
+      "status": "TODO",
+      "depends_on": [
+        "UI-003",
+        "UI-004"
+      ],
+      "requirements": [
+        "R06",
+        "R14",
+        "R16",
+        "R18"
+      ],
+      "implementation_areas": [
+        "testes/fixtures atuais",
+        "homes e workspaces temporários"
+      ],
+      "steps": [
+        "Criar fixtures com duas conexões, duas sessões no mesmo agente, A→B→C e tarefa sem executor.",
+        "Incluir pergunta ao operador/agente, resultado incerto, cleanup após sucesso, observação externa e erro parcial.",
+        "Registrar baseline de número de consultas, payload e navegação; sem usar dados reais."
+      ],
+      "acceptance": "Fixtures determinísticas compartilháveis entre testes e navegador, com relógio controlado.",
+      "test_ids": [
+        "T-BASE-04",
+        "T-DATA-10",
+        "T-QUAL-01"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-006",
+      "pr": "PR-01",
+      "title": "Implementar registro de navegação com IDs estáveis",
+      "status": "TODO",
+      "depends_on": [
+        "UI-003"
+      ],
+      "requirements": [
+        "R01",
+        "R02",
+        "R15"
+      ],
+      "implementation_areas": [
+        "frontend/src/App.tsx",
+        "navigationRegistry proposto"
+      ],
+      "steps": [
+        "Extrair definição dos destinos e seu placement preservando componentes/renderers.",
+        "Exibir quatro primários e uma entrada Advanced; tratar Settings/Memory/utilitários por regra existente.",
+        "Adicionar aliases de rótulos antigos quando necessários; nenhuma alteração de ACL."
+      ],
+      "acceptance": "Sidebar mínima; todos os destinos antigos resolvem para o mesmo componente e estado.",
+      "test_ids": [
+        "T-NAV-01",
+        "T-NAV-02",
+        "T-NAV-04"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-007",
+      "pr": "PR-01",
+      "title": "Criar índice Avançado e breadcrumb",
+      "status": "TODO",
+      "depends_on": [
+        "UI-006"
+      ],
+      "requirements": [
+        "R02",
+        "R14",
+        "R15"
+      ],
+      "implementation_areas": [
+        "AdvancedView proposto",
+        "shell e renderização de páginas atuais"
+      ],
+      "steps": [
+        "Agrupar os destinos pela matriz aprovada, com descrição curta.",
+        "Manter sidebar mínima ao abrir destino avançado e breadcrumb navegável.",
+        "Respeitar feature Memory e acesso; preferências simples ficam globais."
+      ],
+      "acceptance": "Não há submenu lateral expandido com todos os destinos; nenhum recurso perdido.",
+      "test_ids": [
+        "T-NAV-03",
+        "T-NAV-05",
+        "T-NAV-06"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-008",
+      "pr": "PR-01",
+      "title": "Garantir sino e fila de pendências em qualquer Home",
+      "status": "TODO",
+      "depends_on": [
+        "UI-006"
+      ],
+      "requirements": [
+        "R07",
+        "R08",
+        "R16"
+      ],
+      "implementation_areas": [
+        "useAttention",
+        "AttentionView/AttentionInspection",
+        "App.tsx"
+      ],
+      "steps": [
+        "Reutilizar contador/fila/ações canônicos em painel sob demanda.",
+        "Separar escopo global do filtro da Home e preservar incidente Server.",
+        "Funcionar na Home clássica/operacional com guard de edição e sem dialogs empilhados."
+      ],
+      "acceptance": "Pergunta/aprovação continua alcançável sem item Attention lateral e sem ativar Home nova.",
+      "test_ids": [
+        "T-NAV-07",
+        "T-NAV-08",
+        "T-ATTN-01",
+        "T-ATTN-06"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-009",
+      "pr": "PR-01",
+      "title": "Migrar rótulos, links e preferências sem quebrar fluxos",
+      "status": "TODO",
+      "depends_on": [
+        "UI-006",
+        "UI-007",
+        "UI-008"
+      ],
+      "requirements": [
+        "R01",
+        "R07",
+        "R15"
+      ],
+      "implementation_areas": [
+        "App.tsx",
+        "operatorUnread.ts",
+        "HelpModal/onboarding",
+        "links de Graph/MetaHarness"
+      ],
+      "steps": [
+        "Mostrar Conversations no lugar público de Meta-harness sem quebrar OPERATOR_VIEWS.",
+        "Atualizar atalhos/ajuda/docs visíveis e referências a Settings/Agents.",
+        "Preservar bookmarks, seleção salva, workspace, guard e retorno por histórico."
+      ],
+      "acceptance": "Destino específico abre diretamente; visitante não precisa reaprender identificadores; vistos mantêm semântica.",
+      "test_ids": [
+        "T-NAV-09",
+        "T-NAV-10",
+        "T-NAV-11",
+        "T-RESULT-04"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-010",
+      "pr": "PR-01",
+      "title": "Validar shell simples e acesso operacional",
+      "status": "TODO",
+      "depends_on": [
+        "UI-009",
+        "UI-005"
+      ],
+      "requirements": [
+        "R01",
+        "R02",
+        "R07",
+        "R08",
+        "R15"
+      ],
+      "implementation_areas": [
+        "testes frontend",
+        "testes de navegador"
+      ],
+      "steps": [
+        "Testar quatro primários e Advanced com flags ON/OFF.",
+        "Testar acesso direto antigo, 401/403, preferências, mobile e teclado.",
+        "Rodar regressão de navegação e visto; atualizar snapshots somente com justificativa semântica."
+      ],
+      "acceptance": "Navegação simplificada qualificada independentemente do novo layout da Home.",
+      "test_ids": [
+        "T-NAV-01",
+        "T-NAV-06",
+        "T-NAV-07",
+        "T-NAV-12",
+        "T-A11Y-01"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-011",
+      "pr": "PR-02",
+      "title": "Catalogar conexões do projeto sem mudar sua autoridade",
+      "status": "TODO",
+      "depends_on": [
+        "UI-004",
+        "UI-005"
+      ],
+      "requirements": [
+        "R09",
+        "R10",
+        "R12"
+      ],
+      "implementation_areas": [
+        "connect.py/project_profile",
+        "terminal/profiles e resolução de destino existentes"
+      ],
+      "steps": [
+        "Implementar descoberta limitada de perfis/atalhos do destino/projeto, inclusive hash legado.",
+        "Separar nome amigável, profile e IDs canônicos; revalidar metadado no Server.",
+        "Isolar Server/origem/instância/operador; índice novo, se houver, é reconstruível."
+      ],
+      "acceptance": "Candidatos corretos sem cruzar servidores/identidades; nenhum perfil/grant refeito por leitura.",
+      "test_ids": [
+        "T-CLI-02",
+        "T-CLI-03",
+        "T-CLI-14",
+        "T-SCOPE-06"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-012",
+      "pr": "PR-02",
+      "title": "Implementar picker retomar/adicionar no connect",
+      "status": "TODO",
+      "depends_on": [
+        "UI-011"
+      ],
+      "requirements": [
+        "R09",
+        "R10",
+        "R11"
+      ],
+      "implementation_areas": [
+        "connect.py",
+        "apresentação de terminal atual"
+      ],
+      "steps": [
+        "Executar a tabela de decisão de zero/uma/várias conexões.",
+        "Permitir novo harness ou segunda conexão do mesmo harness com rótulos claros.",
+        "Gerar atalho único sem pedir nome técnico e manter --profile explícito compatível."
+      ],
+      "acceptance": "Segundo harness no mesmo projeto não depende de --profile inventado nem substitui o primeiro.",
+      "test_ids": [
+        "T-CLI-01",
+        "T-CLI-04",
+        "T-CLI-05",
+        "T-CLI-06",
+        "T-CLI-07"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-013",
+      "pr": "PR-02",
+      "title": "Persistir nova intenção e proteger concorrência",
+      "status": "TODO",
+      "depends_on": [
+        "UI-012"
+      ],
+      "requirements": [
+        "R09",
+        "R12",
+        "R14"
+      ],
+      "implementation_areas": [
+        "checkpoint/atomic_json/ExclusiveFileLock existentes",
+        "reserva de atalho proposta"
+      ],
+      "steps": [
+        "Definir uma vez o profile/agent candidato e o ID de setup antes dos efeitos.",
+        "Usar reserva/CAS curta sem lock global durante perguntas ou rede.",
+        "Recuperar a mesma intenção após crash; conflitos explícitos nunca apagam checkpoints."
+      ],
+      "acceptance": "Dois comandos não sobrescrevem atalhos; retry não cria segunda identidade; pedido incerto fica recuperável.",
+      "test_ids": [
+        "T-CLI-08",
+        "T-CLI-09",
+        "T-CLI-10",
+        "T-CLI-15"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-014",
+      "pr": "PR-02",
+      "title": "Separar seleção de sessão de recuperação de envio",
+      "status": "TODO",
+      "depends_on": [
+        "UI-012",
+        "UI-013"
+      ],
+      "requirements": [
+        "R05",
+        "R10",
+        "R12"
+      ],
+      "implementation_areas": [
+        "work.py/terminal work atuais",
+        "APIs de sessão/intenção existentes"
+      ],
+      "steps": [
+        "Depois da conexão, recuperar envio pendente antes de oferecer nova tarefa.",
+        "Listar sessões autorizadas e permitir continuar exata ou abrir novo contexto por intenção explícita.",
+        "Preservar --session-id/--new-session e semântica de work resume; respeitar PROFILE_BUSY."
+      ],
+      "acceptance": "Nenhuma sessão mais recente escolhida por heurística; nenhuma inferência ao apenas observar.",
+      "test_ids": [
+        "T-CLI-16",
+        "T-CLI-17",
+        "T-CLI-18",
+        "T-CLI-19",
+        "T-PANEL-03"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-015",
+      "pr": "PR-02",
+      "title": "Implementar seleção explícita para scripts sem prompts",
+      "status": "TODO",
+      "depends_on": [
+        "UI-013",
+        "UI-014"
+      ],
+      "requirements": [
+        "R09",
+        "R10",
+        "R11",
+        "R14"
+      ],
+      "implementation_areas": [
+        "parser connect",
+        "envelopes e exit codes do CLI"
+      ],
+      "steps": [
+        "Adicionar --new-connection ou equivalente; em execução não interativa exigir --profile explícito e estável para recuperar o mesmo setup.",
+        "Retornar selection_required redigido quando faltar seleção; preservar --approve e --plan.",
+        "Não mudar automaticamente o contrato JSON do Connector; manter stdout estruturado e efeitos reais declarados."
+      ],
+      "acceptance": "Scripts antigos continuam; comandos ambíguos não criam agente, binding, grant ou trabalho; eventual autostart permitido é declarado. Plan/doctor não iniciam serviço/modelo.",
+      "test_ids": [
+        "T-CLI-11",
+        "T-CLI-12",
+        "T-CLI-13",
+        "T-SVC-04"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-016",
+      "pr": "PR-02",
+      "title": "Testar o segundo harness e retomada ponta a ponta sintética",
+      "status": "TODO",
+      "depends_on": [
+        "UI-015",
+        "UI-005"
+      ],
+      "requirements": [
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R18"
+      ],
+      "implementation_areas": [
+        "testes CLI/application/HTTP",
+        "fixtures de providers sintéticos"
+      ],
+      "steps": [
+        "Configurar A, adicionar B no mesmo projeto e retomar ambos; comparar IDs/permissões antes/depois.",
+        "Simular resposta perdida antes/depois de Finish, cancelamento, serviço indisponível e grant expirado.",
+        "Separar resultado de fixture e campanha real posterior; registrar evidências por cenário."
+      ],
+      "acceptance": "M1 não depende de usuário entender perfis; A não muda ao criar B; falhas não viram duplicação.",
+      "test_ids": [
+        "T-CLI-04",
+        "T-CLI-08",
+        "T-CLI-10",
+        "T-CLI-20",
+        "T-CLI-21"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-017",
+      "pr": "PR-03",
+      "title": "Projetar relações unificadas de trabalho e sessões",
+      "status": "TODO",
+      "depends_on": [
+        "UI-003",
+        "UI-005"
+      ],
+      "requirements": [
+        "R03",
+        "R06",
+        "R13"
+      ],
+      "implementation_areas": [
+        "serviços/portas atuais da Home",
+        "queries SQLite de work/sessions/bindings"
+      ],
+      "steps": [
+        "Criar relações por handoff/entrega/operação e grupos por contexto comprovado.",
+        "Cobrir tarefas operador→agente e agente→agente sem expandir o diretório operator-only por acidente.",
+        "Acrescentar sessões/conexões não cobertas; trabalho sem executor permanece explícito."
+      ],
+      "acceptance": "Todos os contextos conhecidos são alcançáveis, sem item técnico duplicando trabalho produtivo.",
+      "test_ids": [
+        "T-DATA-01",
+        "T-DATA-02",
+        "T-DATA-03",
+        "T-DATA-04",
+        "T-DATA-05"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-018",
+      "pr": "PR-03",
+      "title": "Unir atenção e resultados por correlação",
+      "status": "TODO",
+      "depends_on": [
+        "UI-017"
+      ],
+      "requirements": [
+        "R03",
+        "R07",
+        "R13",
+        "R16"
+      ],
+      "implementation_areas": [
+        "projeções Attention/resultados",
+        "Home source-map/famílias atuais"
+      ],
+      "steps": [
+        "Anexar ocorrências e entregas pelos IDs/épocas persistidos, não por texto.",
+        "Preservar fatos do destinatário ao filtrar remetente e separar Server global.",
+        "Manter ocorrências/resultados sem pai retido como itens distintos com proveniência."
+      ],
+      "acceptance": "Sem segunda lista de duplicatas; pergunta de outro agente não vira decisão do operador; A08 preservada.",
+      "test_ids": [
+        "T-DATA-06",
+        "T-DATA-07",
+        "T-SCOPE-04",
+        "T-ATTN-02",
+        "T-RESULT-01"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-019",
+      "pr": "PR-03",
+      "title": "Adicionar sessões sem operação aos alvos tipados",
+      "status": "TODO",
+      "depends_on": [
+        "UI-003",
+        "UI-017"
+      ],
+      "requirements": [
+        "R05",
+        "R06",
+        "R14"
+      ],
+      "implementation_areas": [
+        "homeTypes.ts",
+        "homeNavigation.ts",
+        "resolver/backend Home"
+      ],
+      "steps": [
+        "Acrescentar kind session e, se necessário, connection com schema fechado.",
+        "Atualizar encode/decode, validação HTTP, resolver e inspector conjuntamente.",
+        "Conferir Server/executor/workspace/session/binding reais; indisponível nunca cai para latest."
+      ],
+      "acceptance": "É possível inspecionar sessão ociosa sem inventar operation_id; links legados preservados.",
+      "test_ids": [
+        "T-PANEL-01",
+        "T-PANEL-02",
+        "T-PANEL-03",
+        "T-SCOPE-02",
+        "T-NAV-10"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-020",
+      "pr": "PR-03",
+      "title": "Aplicar escopo, contagem e paginação por grupo",
+      "status": "TODO",
+      "depends_on": [
+        "UI-017",
+        "UI-018"
+      ],
+      "requirements": [
+        "R03",
+        "R06",
+        "R14",
+        "R16"
+      ],
+      "implementation_areas": [
+        "portas de consulta Home",
+        "SQLite e cursor atual"
+      ],
+      "steps": [
+        "Filtrar permissões/projeto antes de agrupamento, total e paginação.",
+        "Produzir total de filhos e paginação de expansão sem usar páginas parciais como inventário.",
+        "Definir ordenação/cursor estáveis e tratar mudança de revisão sem gaps silenciosos."
+      ],
+      "acceptance": "Total não deriva do tamanho da página; grupos grandes expandem corretamente; desconhecido não é zero.",
+      "test_ids": [
+        "T-DATA-08",
+        "T-DATA-09",
+        "T-DATA-10",
+        "T-SCOPE-01",
+        "T-SCOPE-03"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-021",
+      "pr": "PR-03",
+      "title": "Expor contrato de entries compatível e limitado",
+      "status": "TODO",
+      "depends_on": [
+        "UI-019",
+        "UI-020"
+      ],
+      "requirements": [
+        "R03",
+        "R13",
+        "R14",
+        "R16"
+      ],
+      "implementation_areas": [
+        "adapters HTTP Home",
+        "homeApi.ts/homeTypes.ts"
+      ],
+      "steps": [
+        "Publicar GET entries e filhos ou equivalente reconciliado sem quebrar overview V1.",
+        "Retornar resumo, freshness, aviso global, cursor, parcialidade e referências limitadas.",
+        "Manter efeitos fora da leitura e conteúdo completo lazy; validar caches e parâmetros."
+      ],
+      "acceptance": "Home nova precisa de uma projeção principal, não seis listas escondidas; consumidores antigos operam.",
+      "test_ids": [
+        "T-DATA-11",
+        "T-SCOPE-05",
+        "T-SCOPE-07",
+        "T-SEC-01",
+        "T-PERF-01"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-022",
+      "pr": "PR-03",
+      "title": "Qualificar consultas e semântica de estados",
+      "status": "TODO",
+      "depends_on": [
+        "UI-021"
+      ],
+      "requirements": [
+        "R06",
+        "R14",
+        "R16"
+      ],
+      "implementation_areas": [
+        "testes domain/SQLite/HTTP",
+        "instrumentação query/payload"
+      ],
+      "steps": [
+        "Executar casos CLAIMED/SUBMITTED/RUNNING/incerto/cleanup e duas sessões.",
+        "Provar ausência de N+1 com 1/10/100 agentes e grupos paginados.",
+        "Registrar EXPLAIN, p50/p95 e custos; não promover meta não atingida a PASS."
+      ],
+      "acceptance": "Estado, contador e plano de consulta corretos com evidência; suporte nativo não é inferido.",
+      "test_ids": [
+        "T-DATA-12",
+        "T-DATA-13",
+        "T-DATA-14",
+        "T-PERF-01",
+        "T-PERF-02",
+        "T-PERF-03"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-023",
+      "pr": "PR-04",
+      "title": "Substituir listas paralelas pela região única",
+      "status": "TODO",
+      "depends_on": [
+        "UI-010",
+        "UI-021"
+      ],
+      "requirements": [
+        "R03",
+        "R04",
+        "R07"
+      ],
+      "implementation_areas": [
+        "OperationalHome.tsx",
+        "HomeCards e componentes de entries"
+      ],
+      "steps": [
+        "Renderizar cabeçalho, filtros compactos e uma lista paginada de grupos.",
+        "Incorporar pergunta/resultado na linha; remover da composição padrão listas duplicadas e feed independente.",
+        "Preservar componentes antigos para consumidores/fallback sem carregá-los ocultos por CSS."
+      ],
+      "acceptance": "Nenhum novo menu Harnesses/Execuções; usuário vê a mesma atividade uma vez.",
+      "test_ids": [
+        "T-HOME-01",
+        "T-HOME-02",
+        "T-HOME-03"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-024",
+      "pr": "PR-04",
+      "title": "Implementar expansão de sessões e conexões ociosas",
+      "status": "TODO",
+      "depends_on": [
+        "UI-023"
+      ],
+      "requirements": [
+        "R03",
+        "R05",
+        "R06"
+      ],
+      "implementation_areas": [
+        "HomeEntryGroup/row propostos",
+        "carregamento de filhos"
+      ],
+      "steps": [
+        "Grupo com um item não exige expansão extra; múltiplos itens têm nomes e estados individuais.",
+        "Mostrar conexões/sessões não cobertas pelo trabalho com label correto e ação de observação/conversa.",
+        "Preservar IDs e anchors quando tarefa recebe executor ou sai da página."
+      ],
+      "acceptance": "Duas sessões do mesmo agente abrem individualmente; warm e idle não contam como trabalho.",
+      "test_ids": [
+        "T-HOME-04",
+        "T-HOME-05",
+        "T-DATA-03",
+        "T-DATA-12",
+        "T-PANEL-04"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-025",
+      "pr": "PR-04",
+      "title": "Aplicar filtros, ordem e vazio proporcionais",
+      "status": "TODO",
+      "depends_on": [
+        "UI-023",
+        "UI-024"
+      ],
+      "requirements": [
+        "R03",
+        "R07",
+        "R16"
+      ],
+      "implementation_areas": [
+        "OperationalHome/controller",
+        "preferências de apresentação"
+      ],
+      "steps": [
+        "Filtros rápidos selecionam o mesmo conjunto; janela de recentes não oculta unseen rastreável.",
+        "Manter item sob interação estável e oferecer aplicação controlada de reordenação.",
+        "Tratar zero/um agente, erro parcial, projeto sem atividade e acesso revogado."
+      ],
+      "acceptance": "Home simples com poucos dados; erro não vira onboarding nem atividade zero.",
+      "test_ids": [
+        "T-HOME-06",
+        "T-HOME-07",
+        "T-HOME-08",
+        "T-HOME-09",
+        "T-RESULT-05"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-026",
+      "pr": "PR-04",
+      "title": "Ligar ações básicas e incidentes globais",
+      "status": "TODO",
+      "depends_on": [
+        "UI-008",
+        "UI-025"
+      ],
+      "requirements": [
+        "R07",
+        "R08",
+        "R16"
+      ],
+      "implementation_areas": [
+        "Home rows",
+        "AttentionInspection",
+        "shell global"
+      ],
+      "steps": [
+        "Responder/acompanhar/ver resultado abre alvo exato, sem página genérica intermediária.",
+        "Incidente Server gera aviso compacto somente quando existe, excluído das contagens de projeto.",
+        "Fila integral é painel do sino; nenhuma lista constante concorrente."
+      ],
+      "acceptance": "Toda pendência essencial é alcançável no básico, incluindo o fallback.",
+      "test_ids": [
+        "T-ATTN-01",
+        "T-ATTN-03",
+        "T-ATTN-06",
+        "T-HOME-10"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-027",
+      "pr": "PR-04",
+      "title": "Adaptar atualização compartilhada à lista única",
+      "status": "TODO",
+      "depends_on": [
+        "UI-021",
+        "UI-025"
+      ],
+      "requirements": [
+        "R03",
+        "R06",
+        "R16"
+      ],
+      "implementation_areas": [
+        "useHomeOverview/homeController",
+        "useSSE/Attention existentes"
+      ],
+      "steps": [
+        "Mapear invalidações de entries/filhos e relógio; agrupar bursts e limitar requisições.",
+        "Descartar resposta antiga por geração; ressincronizar após reconnect/gap/aba retornada.",
+        "Não consultar transcript de todas as sessões nem abrir streams por item."
+      ],
+      "acceptance": "Atualização não duplica/move indevidamente linhas, não perde eventos finais nem mascara fonte stale.",
+      "test_ids": [
+        "T-LIVE-01",
+        "T-LIVE-02",
+        "T-LIVE-03",
+        "T-LIVE-04",
+        "T-LIVE-05"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-028",
+      "pr": "PR-04",
+      "title": "Qualificar comportamento da Home no navegador",
+      "status": "TODO",
+      "depends_on": [
+        "UI-026",
+        "UI-027"
+      ],
+      "requirements": [
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R16"
+      ],
+      "implementation_areas": [
+        "testes frontend/browser",
+        "fixtures de UI"
+      ],
+      "steps": [
+        "Abrir Home, filtrar, expandir, paginar, tratar falha e trocar projetos.",
+        "Conferir uma única região principal de listas no estado padrão e ausência de dados ocultos pesados.",
+        "Medir acesso à sessão/resultados e estabilidade visual; registrar capturas de fixture."
+      ],
+      "acceptance": "M2 parcial: acompanhamento único real, sem substituir comportamento por mock estático.",
+      "test_ids": [
+        "T-HOME-01",
+        "T-HOME-04",
+        "T-HOME-08",
+        "T-HOME-10",
+        "T-LIVE-06"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-029",
+      "pr": "PR-05",
+      "title": "Extrair viewer de sessão reutilizável",
+      "status": "TODO",
+      "depends_on": [
+        "UI-019"
+      ],
+      "requirements": [
+        "R05",
+        "R06",
+        "R13"
+      ],
+      "implementation_areas": [
+        "SessionTerminalModal.tsx",
+        "RuntimeSessionTail/RuntimeHistory",
+        "RuntimeTerminal.tsx"
+      ],
+      "steps": [
+        "Separar corpo de sessão e wrapper modal mantendo consumidores existentes.",
+        "Revalidar scope completo e preservar tail/histórico/erros de refresh.",
+        "Adaptar maximizar para a camada contextual atual, sem dialog aninhado quando embutido."
+      ],
+      "acceptance": "Um viewer compartilhado abre sessão exata com ou sem operação; saída continua read only.",
+      "test_ids": [
+        "T-PANEL-01",
+        "T-PANEL-04",
+        "T-PANEL-05",
+        "T-PANEL-06"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-030",
+      "pr": "PR-05",
+      "title": "Compor painel com contexto, sessão e entrega",
+      "status": "TODO",
+      "depends_on": [
+        "UI-029",
+        "UI-026"
+      ],
+      "requirements": [
+        "R05",
+        "R07",
+        "R13"
+      ],
+      "implementation_areas": [
+        "HomeInspection.tsx",
+        "CanonicalInspection",
+        "drawer atual"
+      ],
+      "steps": [
+        "Abrir aba adequada para acompanhar/responder/resultado; manter sessão selecionada.",
+        "Mostrar pedido/autoria, saída, artefatos e detalhes técnicos sob demanda.",
+        "Mais de uma sessão exige seleção explícita; ausência de captura externa é explicada."
+      ],
+      "acceptance": "Não há navegação para procurar o registro; painel não promete memória/TUI nativa.",
+      "test_ids": [
+        "T-PANEL-02",
+        "T-PANEL-03",
+        "T-PANEL-07",
+        "T-EXT-03"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-031",
+      "pr": "PR-05",
+      "title": "Reutilizar decisões e controles exatos",
+      "status": "TODO",
+      "depends_on": [
+        "UI-030"
+      ],
+      "requirements": [
+        "R07",
+        "R10",
+        "R14"
+      ],
+      "implementation_areas": [
+        "NativeQuestions/CanonicalNativeDecision",
+        "RuntimeOperations e recovery existentes"
+      ],
+      "steps": [
+        "Conectar perguntas, permissões, interrupt e close apenas conforme capacidade e autoridade atuais.",
+        "Preservar revisão/CAS/intenção e distinguir decisão registrada de aplicada.",
+        "Resultado incerto oferece inspeção; pergunta de agente não aceita personificação."
+      ],
+      "acceptance": "Nenhum efeito genérico/duplicado ou interrupção de sessão irmã.",
+      "test_ids": [
+        "T-ATTN-02",
+        "T-ATTN-04",
+        "T-ATTN-05",
+        "T-PANEL-08",
+        "T-PANEL-09"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-032",
+      "pr": "PR-05",
+      "title": "Proteger foco, rascunho, histórico e scroll",
+      "status": "TODO",
+      "depends_on": [
+        "UI-030",
+        "UI-031"
+      ],
+      "requirements": [
+        "R05",
+        "R14",
+        "R15",
+        "R16"
+      ],
+      "implementation_areas": [
+        "AgentActionModal/home guard",
+        "home_target/history",
+        "RuntimeTerminal scrollback"
+      ],
+      "steps": [
+        "Usar uma camada ativa; guard antes de trocar alvo/projeto/sino.",
+        "Preservar scroll/foco na volta e não remontar formulário em refresh.",
+        "Limpar em logout/revogação e validar browser history/links antigos."
+      ],
+      "acceptance": "Fluxo teclado/voltar/maximizar coerente, sem respostas perdidas ou enviadas ao alvo errado.",
+      "test_ids": [
+        "T-PANEL-10",
+        "T-PANEL-11",
+        "T-PANEL-12",
+        "T-A11Y-02",
+        "T-A11Y-03"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-033",
+      "pr": "PR-05",
+      "title": "Integrar vistos, artefatos e continuidade",
+      "status": "TODO",
+      "depends_on": [
+        "UI-031",
+        "UI-032"
+      ],
+      "requirements": [
+        "R03",
+        "R07",
+        "R10",
+        "R14"
+      ],
+      "implementation_areas": [
+        "result_unseen/preferences",
+        "Artifacts preview",
+        "continuation.ts"
+      ],
+      "steps": [
+        "Marcar visto pela ocorrência/revisão sem watermark em massa ou inbox ACK.",
+        "Abrir preview/download existente com autorização e sanitização.",
+        "Continuar só contexto validado; sessão fechada pede intenção nova e não latest."
+      ],
+      "acceptance": "Entrega permanece correlacionada, leitura não conclui/autoriza nada e continuidade é explícita.",
+      "test_ids": [
+        "T-RESULT-01",
+        "T-RESULT-02",
+        "T-RESULT-03",
+        "T-RESULT-04",
+        "T-RESULT-06"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-034",
+      "pr": "PR-05",
+      "title": "Qualificar inspeção e concorrência no navegador",
+      "status": "TODO",
+      "depends_on": [
+        "UI-033"
+      ],
+      "requirements": [
+        "R05",
+        "R07",
+        "R14",
+        "R16"
+      ],
+      "implementation_areas": [
+        "testes reais browser",
+        "peers sintéticos controlados"
+      ],
+      "steps": [
+        "Testar output ao vivo e histórico, edição com refresh e duas abas decidindo o mesmo pedido.",
+        "Testar session end, auth expired, campo modificado e erro após decisão commitada.",
+        "Distinguir teste de componente e campanha com harness real em evidências."
+      ],
+      "acceptance": "M2 tem sessão e decisões utilizáveis; race e retorno visual foram exercitados.",
+      "test_ids": [
+        "T-PANEL-06",
+        "T-PANEL-09",
+        "T-PANEL-11",
+        "T-ATTN-04",
+        "T-SEC-03"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-035",
+      "pr": "PR-06",
+      "title": "Expor retomar/adicionar no onboarding da UI",
+      "status": "TODO",
+      "depends_on": [
+        "UI-016",
+        "UI-030"
+      ],
+      "requirements": [
+        "R09",
+        "R10",
+        "R17"
+      ],
+      "implementation_areas": [
+        "Home Conectar agente",
+        "fluxo de conexão existente",
+        "lookup autorizado de bindings"
+      ],
+      "steps": [
+        "Abrir fluxo curto com conexões do projeto e opção adicionar, sem grade administrativa.",
+        "Reutilizar seleção/revisão/Finish; personalização apenas como expansão secundária.",
+        "Distinguir browser, host Server e host Connector; não descobrir binários no browser."
+      ],
+      "acceptance": "Usuário conecta outro harness pela Home sem entrar em Avançado nem duplicar identidade existente.",
+      "test_ids": [
+        "T-ONB-01",
+        "T-ONB-02",
+        "T-ONB-03",
+        "T-ONB-04"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-036",
+      "pr": "PR-06",
+      "title": "Implementar retomar/adicionar no Connector",
+      "status": "TODO",
+      "depends_on": [
+        "UI-004",
+        "UI-016"
+      ],
+      "requirements": [
+        "R09",
+        "R10",
+        "R12",
+        "R17"
+      ],
+      "implementation_areas": [
+        "Connector CLI connect/configure",
+        "aliases/checkpoints/drafts existentes"
+      ],
+      "steps": [
+        "Consultar conexões do mesmo destino/projeto/identidade e oferecer retomar/adicionar antes de replace.",
+        "Preservar bootstrap, workspace e caminhos locais do host; identificar necessidade de novo agente.",
+        "Manter perfil ocupado, revisões pendentes e contrato interativo/JSON atual."
+      ],
+      "acceptance": "Adicionar não revoga máquina anterior por engano e não contorna política de identidade.",
+      "test_ids": [
+        "T-CONN-01",
+        "T-CONN-02",
+        "T-CONN-03",
+        "T-CONN-04"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-037",
+      "pr": "PR-06",
+      "title": "Conectar revisão remota e continuidade sem dashboard obrigatório",
+      "status": "TODO",
+      "depends_on": [
+        "UI-036",
+        "UI-035"
+      ],
+      "requirements": [
+        "R11",
+        "R12",
+        "R14",
+        "R17"
+      ],
+      "implementation_areas": [
+        "remote-project-setup/remote terminal",
+        "proposal/receipt atuais",
+        "controls básicos de aprovação"
+      ],
+      "steps": [
+        "Operador aprova pelo terminal ou UI básica com sua própria autoridade.",
+        "Connector recupera mesmo root e daemon após fechar CLI; nunca recebe chave de operador.",
+        "Publicar estado da conexão na Home sem cadastro manual extra ou segundo Finish."
+      ],
+      "acceptance": "Fluxo remoto convergente; await approval não é Ready; perda de resposta não duplica setup.",
+      "test_ids": [
+        "T-CONN-05",
+        "T-CONN-06",
+        "T-CONN-07",
+        "T-SVC-03"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-038",
+      "pr": "PR-06",
+      "title": "Preservar daemon e opção de login no novo fluxo",
+      "status": "TODO",
+      "depends_on": [
+        "UI-015",
+        "UI-036"
+      ],
+      "requirements": [
+        "R11",
+        "R12",
+        "R14",
+        "R17"
+      ],
+      "implementation_areas": [
+        "service lifecycle Server/Connector",
+        "connect_login e startup existentes"
+      ],
+      "steps": [
+        "Reutilizar instância/supervisor único em retomar/adicionar; não iniciar daemon por perfil.",
+        "Mostrar suporte real de login e pedir consentimento separado quando necessário.",
+        "Preservar intents de startup pendente, parada explícita e tratamento de Server remoto offline."
+      ],
+      "acceptance": "Nova conexão não reinicia os outros trabalhos, renova grants ou instala serviço ocultamente.",
+      "test_ids": [
+        "T-SVC-01",
+        "T-SVC-02",
+        "T-SVC-03",
+        "T-SVC-05",
+        "T-SVC-06"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-039",
+      "pr": "PR-06",
+      "title": "Qualificar a jornada multi-harness entre superfícies",
+      "status": "TODO",
+      "depends_on": [
+        "UI-035",
+        "UI-037",
+        "UI-038"
+      ],
+      "requirements": [
+        "R09",
+        "R10",
+        "R11",
+        "R12",
+        "R17",
+        "R18"
+      ],
+      "implementation_areas": [
+        "tests CLI/HTTP/browser/Connector",
+        "fixtures por host"
+      ],
+      "steps": [
+        "Criar Codex e Claude no mesmo projeto, retomar cada conexão e abrir sessões na Home.",
+        "Comparar IDs, bindings, permissões e history antes/depois nos três caminhos.",
+        "Testar cancelamento, autoridade revogada, pasta homônima e concorrência de cadastro."
+      ],
+      "acceptance": "Jornada completa sem nome técnico de perfil e sem interferência entre conexões; remoto coberto no nível apropriado.",
+      "test_ids": [
+        "T-ONB-05",
+        "T-ONB-06",
+        "T-CONN-07",
+        "T-CLI-21",
+        "T-QUAL-02"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-040",
+      "pr": "PR-07",
+      "title": "Executar regressão de segurança e semântica",
+      "status": "TODO",
+      "depends_on": [
+        "UI-022",
+        "UI-028",
+        "UI-034",
+        "UI-039"
+      ],
+      "requirements": [
+        "R06",
+        "R12",
+        "R13",
+        "R14",
+        "R16"
+      ],
+      "implementation_areas": [
+        "suite Python/HTTP",
+        "testes auth/contexto/ações"
+      ],
+      "steps": [
+        "Rodar matrizes de escopo e operador/agent key, 403 e referências forjadas.",
+        "Verificar consultas sem efeitos, fatos nativos versus externos e nenhuma deduplicação por nome.",
+        "Verificar receipts/incerteza, grant e claim/epoch após reconexão e UI rollback."
+      ],
+      "acceptance": "Todos os cenários críticos passam ou bloqueiam explicitamente a qualificação; nenhum bypass aceito.",
+      "test_ids": [
+        "T-SCOPE-01",
+        "T-SCOPE-02",
+        "T-SCOPE-05",
+        "T-SEC-01",
+        "T-SEC-02",
+        "T-EXT-01",
+        "T-EXT-02"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-041",
+      "pr": "PR-07",
+      "title": "Qualificar acessibilidade, responsividade e desempenho",
+      "status": "TODO",
+      "depends_on": [
+        "UI-028",
+        "UI-034"
+      ],
+      "requirements": [
+        "R03",
+        "R05",
+        "R16",
+        "R18"
+      ],
+      "implementation_areas": [
+        "navegador real",
+        "fixtures de volume",
+        "medição atualizada"
+      ],
+      "steps": [
+        "Executar teclado, focus restore, zoom 200%, 360px e tema claro/escuro.",
+        "Conferir live announcements agrupados, pausa visual e scrollback.",
+        "Medir p50/p95, payload, queries e polling; registrar bloqueio de leitor de tela real sem falso PASS."
+      ],
+      "acceptance": "Relatório compara baseline e resultado; limites atuais são explícitos e não dispensados pela aparência.",
+      "test_ids": [
+        "T-A11Y-01",
+        "T-A11Y-02",
+        "T-A11Y-03",
+        "T-A11Y-04",
+        "T-PERF-01",
+        "T-PERF-02",
+        "T-PERF-04"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-042",
+      "pr": "PR-07",
+      "title": "Executar campanha produtiva real isolada",
+      "status": "TODO",
+      "depends_on": [
+        "UI-039",
+        "UI-040"
+      ],
+      "requirements": [
+        "R09",
+        "R10",
+        "R11",
+        "R17",
+        "R18"
+      ],
+      "implementation_areas": [
+        "artefatos instalados",
+        "workspace/home descartáveis",
+        "harnesses qualificados disponíveis"
+      ],
+      "steps": [
+        "Pedir autorização específica para uso de provedor/credenciais e preparar isolamento.",
+        "Conectar um harness, adicionar outro, pedir trabalho, observar/decidir/obter resultado e retomar.",
+        "Qualificar remoto e plataforma somente com ambiente real correspondente; registrar NOT_RUN/BLOCKED separado."
+      ],
+      "acceptance": "Evidência real de dois harnesses no mesmo projeto e fluxo terminal/UI; teste sintético não substitui campanha.",
+      "test_ids": [
+        "T-QUAL-02",
+        "T-QUAL-03",
+        "T-QUAL-04"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-043",
+      "pr": "PR-07",
+      "title": "Validar compreensão e objetivo do produto",
+      "status": "TODO",
+      "depends_on": [
+        "UI-041",
+        "UI-042"
+      ],
+      "requirements": [
+        "R01",
+        "R02",
+        "R03",
+        "R05",
+        "R09",
+        "R18"
+      ],
+      "implementation_areas": [
+        "roteiro de usabilidade com fixture",
+        "relatório sem dados pessoais"
+      ],
+      "steps": [
+        "Pedir a alguém sem conhecimento da arquitetura conectar/retomar, abrir sessão e encontrar resultado.",
+        "Contar trocas de tela e interações sem coletar prompts; verificar que Avançado não é etapa obrigatória.",
+        "Registrar falhas de linguagem/descoberta e corrigir as que impedem o ciclo essencial."
+      ],
+      "acceptance": "Critério de poucos passos exercitado; números observados separados de metas.",
+      "test_ids": [
+        "T-QUAL-05",
+        "T-QUAL-06"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-044",
+      "pr": "PR-08",
+      "title": "Atualizar documentação e compatibilidade pública",
+      "status": "TODO",
+      "depends_on": [
+        "UI-039",
+        "UI-040"
+      ],
+      "requirements": [
+        "R01",
+        "R02",
+        "R09",
+        "R10",
+        "R11",
+        "R15"
+      ],
+      "implementation_areas": [
+        "HelpModal/onboarding",
+        "README/docs CLI",
+        "guias de service e conexão"
+      ],
+      "steps": [
+        "Documentar quatro destinos/Advanced e ações no painel, incluindo o terminal read only.",
+        "Separar comandos existentes de novos, adicionar exemplos retomar/adicionar e semântica de --plan/JSON.",
+        "Documentar perfil legado, grant expirado, serviço/login e diagnóstico sem revelar segredos."
+      ],
+      "acceptance": "Manual corresponde ao produto entregue; nenhum link para página removida ou instrução insegura.",
+      "test_ids": [
+        "T-NAV-11",
+        "T-CLI-13",
+        "T-SVC-04",
+        "T-REL-01"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-045",
+      "pr": "PR-08",
+      "title": "Empacotar e validar o conjunto compatível",
+      "status": "TODO",
+      "depends_on": [
+        "UI-040",
+        "UI-041",
+        "UI-044"
+      ],
+      "requirements": [
+        "R11",
+        "R13",
+        "R17",
+        "R18"
+      ],
+      "implementation_areas": [
+        "frontend build",
+        "wheel/sdist/manifests atuais",
+        "compatibilidade Core/Connector"
+      ],
+      "steps": [
+        "Executar build/tests e empacotamento conforme CI real, sem atualizar dependências incidentalmente.",
+        "Instalar em ambiente isolado e provar assets/CLI/API no pacote, não só dev server.",
+        "Conferir pins/artefatos compatíveis; Core sem mudança passa regressão necessária."
+      ],
+      "acceptance": "Pacote exato testado identificado por hash; instalação não depende de checkout irmão ou Node de desenvolvimento.",
+      "test_ids": [
+        "T-REL-01",
+        "T-REL-02",
+        "T-REL-03"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-046",
+      "pr": "PR-08",
+      "title": "Qualificar migração, fallback e rollback",
+      "status": "TODO",
+      "depends_on": [
+        "UI-045"
+      ],
+      "requirements": [
+        "R08",
+        "R11",
+        "R12",
+        "R15",
+        "R16"
+      ],
+      "implementation_areas": [
+        "preferências/aliases UI",
+        "profiles legados/novos",
+        "flag de apresentação"
+      ],
+      "steps": [
+        "Testar browser e perfil antigos com novas rotas, reabertura e guarda de rascunhos.",
+        "Desativar UI nova preservando pendências, sessões, daemon e comandos --profile.",
+        "Verificar que apresentação não muda flags de execução, autorização ou retenção."
+      ],
+      "acceptance": "Rollback não destrói configurações nem reexecuta trabalho; ações básicas seguem disponíveis.",
+      "test_ids": [
+        "T-REL-04",
+        "T-REL-05",
+        "T-REL-06",
+        "T-SVC-02"
+      ],
+      "evidence": [],
+      "limitations": []
+    },
+    {
+      "id": "UI-047",
+      "pr": "PR-08",
+      "title": "Fechar rastreabilidade e decidir ativação padrão",
+      "status": "TODO",
+      "depends_on": [
+        "UI-043",
+        "UI-045",
+        "UI-046"
+      ],
+      "requirements": [
+        "R01",
+        "R03",
+        "R09",
+        "R18"
+      ],
+      "implementation_areas": [
+        "execution/test ledger UI-R1",
+        "release-report e limitações"
+      ],
+      "steps": [
+        "Ligar todo requisito às tarefas/cenários/evidências e preservar bloqueios anteriores relevantes.",
+        "Conferir que onboarding local/UI/Connector não foi deixado como opcional ou posterior.",
+        "Propor ativação padrão da experiência simples apenas com gates cumpridos e autorização de release."
+      ],
+      "acceptance": "Relatório final distingue implementado/verificado/bloqueado; plano não declara completo um subconjunto visual.",
+      "test_ids": [
+        "T-REL-07",
+        "T-REL-08"
+      ],
+      "evidence": [],
+      "limitations": []
+    }
+  ],
+  "tests": [
+    {
+      "id": "T-BASE-01",
+      "status": "NOT_RUN",
+      "level": "processo",
+      "given": "Checkout possui alterações locais e HEAD mais novo.",
+      "when": "Iniciar PR-00.",
+      "expected": "Registrar drift e preservar working tree; não resetar para o SHA do plano.",
+      "evidence": [],
+      "tasks": [
+        "UI-001"
+      ]
+    },
+    {
+      "id": "T-BASE-02",
+      "status": "NOT_RUN",
+      "level": "processo",
+      "given": "Outro Codex edita os mesmos arquivos.",
+      "when": "Definir implementação incremental.",
+      "expected": "Estabelecer ownership/worktree e integração antes de escrita concorrente.",
+      "evidence": [],
+      "tasks": [
+        "UI-001"
+      ]
+    },
+    {
+      "id": "T-BASE-03",
+      "status": "NOT_RUN",
+      "level": "contrato",
+      "given": "Há páginas com comparadores de nome e flags.",
+      "when": "Mapear navegação.",
+      "expected": "Todos os destinos, controles e dependências de nomes possuem destino preservado.",
+      "evidence": [],
+      "tasks": [
+        "UI-002"
+      ]
+    },
+    {
+      "id": "T-BASE-04",
+      "status": "NOT_RUN",
+      "level": "fixture",
+      "given": "Sem credenciais/dados pessoais.",
+      "when": "Criar casos de UI e backend.",
+      "expected": "Reproduzir multi-harness, A→B e falhas com relógio e barreiras determinísticos.",
+      "evidence": [],
+      "tasks": [
+        "UI-005"
+      ]
+    },
+    {
+      "id": "T-NAV-01",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Dashboard autenticado padrão.",
+      "when": "Abrir sidebar.",
+      "expected": "Exibir somente Home/Conversations/Graph/Artifacts como destinos principais e Advanced secundário.",
+      "evidence": [],
+      "tasks": [
+        "UI-003",
+        "UI-006",
+        "UI-010"
+      ]
+    },
+    {
+      "id": "T-NAV-02",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Lista antiga contém Runtimes/Agents/Handoffs.",
+      "when": "Abrir novo shell.",
+      "expected": "Não criar novos destinos Harnesses/Execuções/Sessões ou duplicar atalhos como menus.",
+      "evidence": [],
+      "tasks": [
+        "UI-006"
+      ]
+    },
+    {
+      "id": "T-NAV-03",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Índice Advanced aberto.",
+      "when": "Acessar cada grupo.",
+      "expected": "Todos os destinos da matriz estão acessíveis, sem sidebar expandir para dezenas de itens.",
+      "evidence": [],
+      "tasks": [
+        "UI-007"
+      ]
+    },
+    {
+      "id": "T-NAV-04",
+      "status": "NOT_RUN",
+      "level": "contrato/browser",
+      "given": "Bookmark/seleção salva de Meta-harness ou Policies.",
+      "when": "Carregar aplicação nova.",
+      "expected": "Resolver o componente correto e novo rótulo sem alterar identidade lógica ou permissões.",
+      "evidence": [],
+      "tasks": [
+        "UI-006"
+      ]
+    },
+    {
+      "id": "T-NAV-05",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Memory desabilitada.",
+      "when": "Abrir Advanced e tentar link direto.",
+      "expected": "Visibilidade/recusa seguem contratos atuais; navegação não habilita a feature.",
+      "evidence": [],
+      "tasks": [
+        "UI-007"
+      ]
+    },
+    {
+      "id": "T-NAV-06",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Usuário sem autoridade para ação avançada.",
+      "when": "Abrir índice/link direto e chamar API.",
+      "expected": "API mantém autorização; o índice não concede acesso.",
+      "evidence": [],
+      "tasks": [
+        "UI-007",
+        "UI-010"
+      ]
+    },
+    {
+      "id": "T-NAV-07",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Home operacional OFF e aprovação pendente.",
+      "when": "Usar shell simples.",
+      "expected": "Sino/fila básica e controle canônico permanecem disponíveis.",
+      "evidence": [],
+      "tasks": [
+        "UI-008",
+        "UI-010"
+      ]
+    },
+    {
+      "id": "T-NAV-08",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Em Graph ou Artifacts surge pergunta.",
+      "when": "Abrir sino.",
+      "expected": "Fila abre no contexto global, sem exigir rota Advanced ou outra Home.",
+      "evidence": [],
+      "tasks": [
+        "UI-008"
+      ]
+    },
+    {
+      "id": "T-NAV-09",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Conversations renomeada e mensagens novas.",
+      "when": "Entrar/sair e abrir Home.",
+      "expected": "Comportamento de OPERATOR_VIEWS/vistos preservado; Home não marca tudo visto.",
+      "evidence": [],
+      "tasks": [
+        "UI-009"
+      ]
+    },
+    {
+      "id": "T-NAV-10",
+      "status": "NOT_RUN",
+      "level": "contrato/browser",
+      "given": "Link antigo home_target e novo alvo session.",
+      "when": "Validar ida/volta, voltar/avançar.",
+      "expected": "Alvo exato preservado; parâmetros inválidos não abrem outro registro.",
+      "evidence": [],
+      "tasks": [
+        "UI-009",
+        "UI-019"
+      ]
+    },
+    {
+      "id": "T-NAV-11",
+      "status": "NOT_RUN",
+      "level": "documentação",
+      "given": "Guias e introdução antigos.",
+      "when": "Pesquisar nomes/caminhos visíveis.",
+      "expected": "Orientações apontam para acessos reais e diferenciam Conversations de Messages.",
+      "evidence": [],
+      "tasks": [
+        "UI-009",
+        "UI-044"
+      ]
+    },
+    {
+      "id": "T-NAV-12",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "360px e menu móvel.",
+      "when": "Navegar pelos destinos básicos e Advanced.",
+      "expected": "Menu fecha corretamente, foco e rótulos acessíveis; sem overflow obrigatório.",
+      "evidence": [],
+      "tasks": [
+        "UI-010"
+      ]
+    },
+    {
+      "id": "T-DATA-01",
+      "status": "NOT_RUN",
+      "level": "SQLite/HTTP",
+      "given": "Handoff possui abertura, submissão, steer e retries.",
+      "when": "Projetar Home.",
+      "expected": "Uma atividade produtiva com tentativas em detalhe, não múltiplas tarefas.",
+      "evidence": [],
+      "tasks": [
+        "UI-003",
+        "UI-017"
+      ]
+    },
+    {
+      "id": "T-DATA-02",
+      "status": "NOT_RUN",
+      "level": "SQLite/HTTP",
+      "given": "Agente A delega a B sem mensagem do operador.",
+      "when": "Ler projeto.",
+      "expected": "Trabalho de B aparece, com autoria/parentesco corretos.",
+      "evidence": [],
+      "tasks": [
+        "UI-017"
+      ]
+    },
+    {
+      "id": "T-DATA-03",
+      "status": "NOT_RUN",
+      "level": "SQLite/HTTP",
+      "given": "Sessão viva sem operação ativa.",
+      "when": "Listar acompanhamento.",
+      "expected": "Sessão é alcançável como ociosa/conectada, sem operation_id fictício.",
+      "evidence": [],
+      "tasks": [
+        "UI-017",
+        "UI-024"
+      ]
+    },
+    {
+      "id": "T-DATA-04",
+      "status": "NOT_RUN",
+      "level": "SQLite/HTTP",
+      "given": "Mesmo agente tem duas conexões/hosts no projeto.",
+      "when": "Agrupar.",
+      "expected": "Contextos distintos; nenhum estado único esconde a sessão bloqueada.",
+      "evidence": [],
+      "tasks": [
+        "UI-017"
+      ]
+    },
+    {
+      "id": "T-DATA-05",
+      "status": "NOT_RUN",
+      "level": "SQLite/HTTP",
+      "given": "Handoff broadcast ainda OPEN sem claim.",
+      "when": "Listar.",
+      "expected": "Mostrar aguardando responsável; não atribuir ao primeiro candidato/harness.",
+      "evidence": [],
+      "tasks": [
+        "UI-017"
+      ]
+    },
+    {
+      "id": "T-DATA-06",
+      "status": "NOT_RUN",
+      "level": "SQLite/HTTP",
+      "given": "Resultado, pergunta e arquivos vinculados à atividade.",
+      "when": "Compor entries.",
+      "expected": "Enriquecer a mesma linha; nenhuma segunda lista duplicada.",
+      "evidence": [],
+      "tasks": [
+        "UI-003",
+        "UI-018"
+      ]
+    },
+    {
+      "id": "T-DATA-07",
+      "status": "NOT_RUN",
+      "level": "SQLite/HTTP",
+      "given": "Resultado retido perdeu o pai por retenção.",
+      "when": "Listar Resultados.",
+      "expected": "Item independente com proveniência e limitação; não fabricar correlação.",
+      "evidence": [],
+      "tasks": [
+        "UI-018"
+      ]
+    },
+    {
+      "id": "T-DATA-08",
+      "status": "NOT_RUN",
+      "level": "SQLite/HTTP",
+      "given": "Grupo com mais filhos que o limite e vários grupos.",
+      "when": "Paginar/expandir.",
+      "expected": "Todos alcançáveis com total/has_more corretos, sem juntar apenas primeiras páginas.",
+      "evidence": [],
+      "tasks": [
+        "UI-020"
+      ]
+    },
+    {
+      "id": "T-DATA-09",
+      "status": "NOT_RUN",
+      "level": "SQLite/HTTP",
+      "given": "20 grupos, primeira página de 10.",
+      "when": "Obter resumo.",
+      "expected": "Total completo autorizado; quantidade de grupos não é quantidade de tarefas.",
+      "evidence": [],
+      "tasks": [
+        "UI-020"
+      ]
+    },
+    {
+      "id": "T-DATA-10",
+      "status": "NOT_RUN",
+      "level": "SQLite/HTTP",
+      "given": "Join de mensagens/recibos gera multiplicidade.",
+      "when": "Contar e paginar.",
+      "expected": "IDs lógicos únicos e desempate determinístico; nenhum salto silencioso.",
+      "evidence": [],
+      "tasks": [
+        "UI-005",
+        "UI-020"
+      ]
+    },
+    {
+      "id": "T-DATA-11",
+      "status": "NOT_RUN",
+      "level": "HTTP",
+      "given": "Clientes antigos usam overview V1.",
+      "when": "Ativar entries na Home nova.",
+      "expected": "Contrato antigo continua; endpoint novo segue envelope/limites/revisão.",
+      "evidence": [],
+      "tasks": [
+        "UI-021"
+      ]
+    },
+    {
+      "id": "T-DATA-12",
+      "status": "NOT_RUN",
+      "level": "unitário/SQLite",
+      "given": "Sessões READY, OPENING, warm e cleanup sem turno.",
+      "when": "Classificar atividade.",
+      "expected": "Não contar como RUNNING produtivo; tipos técnicos disponíveis só como contexto.",
+      "evidence": [],
+      "tasks": [
+        "UI-022",
+        "UI-024"
+      ]
+    },
+    {
+      "id": "T-DATA-13",
+      "status": "NOT_RUN",
+      "level": "unitário/SQLite",
+      "given": "Claim ou SUBMITTED sem RUNNING.",
+      "when": "Apresentar estado.",
+      "expected": "Mostrar assumido/recebido, não executando ou concluído.",
+      "evidence": [],
+      "tasks": [
+        "UI-022"
+      ]
+    },
+    {
+      "id": "T-DATA-14",
+      "status": "NOT_RUN",
+      "level": "unitário/SQLite",
+      "given": "Turno SUCCEEDED mas handoff aberto ou cleanup pendente.",
+      "when": "Projetar resultado.",
+      "expected": "Sucesso do turno separado de handoff/limpeza; nenhum convite automático a repetir.",
+      "evidence": [],
+      "tasks": [
+        "UI-022"
+      ]
+    },
+    {
+      "id": "T-SCOPE-01",
+      "status": "NOT_RUN",
+      "level": "HTTP/SQLite",
+      "given": "Agente global atua em A e B.",
+      "when": "Filtrar A antes de total/paginação.",
+      "expected": "Nenhum dado/contador de B; agentes globais não viram participantes de A sem vínculo.",
+      "evidence": [],
+      "tasks": [
+        "UI-002",
+        "UI-020",
+        "UI-040"
+      ]
+    },
+    {
+      "id": "T-SCOPE-02",
+      "status": "NOT_RUN",
+      "level": "HTTP/SQLite",
+      "given": "Alvo session pertence a outro executor/projeto.",
+      "when": "Forjar URL e resolver.",
+      "expected": "Recusar sob contrato atual; não vazar existência/conteúdo nem selecionar latest.",
+      "evidence": [],
+      "tasks": [
+        "UI-019",
+        "UI-040"
+      ]
+    },
+    {
+      "id": "T-SCOPE-03",
+      "status": "NOT_RUN",
+      "level": "HTTP/SQLite",
+      "given": "Visão Todos e vários vínculos por agente.",
+      "when": "Ler/paginar.",
+      "expected": "União autorizada sem duplicar trabalho por vínculo.",
+      "evidence": [],
+      "tasks": [
+        "UI-020"
+      ]
+    },
+    {
+      "id": "T-SCOPE-04",
+      "status": "NOT_RUN",
+      "level": "HTTP/SQLite",
+      "given": "A envia trabalho a B; filtro visual em A.",
+      "when": "Compor estado com fatos de B.",
+      "expected": "Manter evidência necessária de B e escopo da pendência; não perder classificação de espera.",
+      "evidence": [],
+      "tasks": [
+        "UI-018"
+      ]
+    },
+    {
+      "id": "T-SCOPE-05",
+      "status": "NOT_RUN",
+      "level": "HTTP/SQLite",
+      "given": "Credencial de agente/monitor em vez de operador.",
+      "when": "Consultar Home privilegiada.",
+      "expected": "Sem herdar trust de operador; comportamento conforme autenticação canônica.",
+      "evidence": [],
+      "tasks": [
+        "UI-021",
+        "UI-040"
+      ]
+    },
+    {
+      "id": "T-SCOPE-06",
+      "status": "NOT_RUN",
+      "level": "HTTP/SQLite",
+      "given": "Mesmo path local aponta a Servers distintos.",
+      "when": "Catalogar candidatos de connect.",
+      "expected": "Isolar destinos e humanos; não reusar configuração do Server errado.",
+      "evidence": [],
+      "tasks": [
+        "UI-011"
+      ]
+    },
+    {
+      "id": "T-SCOPE-07",
+      "status": "NOT_RUN",
+      "level": "HTTP/SQLite",
+      "given": "Ocorrência global de Server autorizada.",
+      "when": "Filtrar projeto/estado/agente.",
+      "expected": "Aviso global separado, não multiplicado nos totais de projeto.",
+      "evidence": [],
+      "tasks": [
+        "UI-021"
+      ]
+    },
+    {
+      "id": "T-HOME-01",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Vários trabalhos, pendências e resultados.",
+      "when": "Abrir Home padrão.",
+      "expected": "Uma única região principal de acompanhamento, sem seis listas paralelas.",
+      "evidence": [],
+      "tasks": [
+        "UI-023",
+        "UI-028"
+      ]
+    },
+    {
+      "id": "T-HOME-02",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Uma atividade produz resultado e pergunta.",
+      "when": "Atualizar Home.",
+      "expected": "Mesma linha muda/enriquece estado; não reaparece em outro bloco.",
+      "evidence": [],
+      "tasks": [
+        "UI-023"
+      ]
+    },
+    {
+      "id": "T-HOME-03",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Sem agentes e dados carregados com sucesso.",
+      "when": "Abrir Home.",
+      "expected": "Uma ação conectar primeiro agente; sem grade de zeros.",
+      "evidence": [],
+      "tasks": [
+        "UI-023"
+      ]
+    },
+    {
+      "id": "T-HOME-04",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Duas sessões do mesmo Codex.",
+      "when": "Expandir e abrir cada sessão.",
+      "expected": "Contextos distintos identificados, sem navegação para novo menu.",
+      "evidence": [],
+      "tasks": [
+        "UI-024",
+        "UI-028"
+      ]
+    },
+    {
+      "id": "T-HOME-05",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Uma conexão sem sessão e outra com tarefa.",
+      "when": "Abrir Todos.",
+      "expected": "Ambas alcançáveis; conexão sem tarefa não soma execução.",
+      "evidence": [],
+      "tasks": [
+        "UI-024"
+      ]
+    },
+    {
+      "id": "T-HOME-06",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Usuário lê grupo expandido enquanto há mudança de prioridade.",
+      "when": "Receber atualização.",
+      "expected": "Não deslocar foco/linha sob interação; atualização controlada.",
+      "evidence": [],
+      "tasks": [
+        "UI-025"
+      ]
+    },
+    {
+      "id": "T-HOME-07",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Fonte falha mas outras respondem.",
+      "when": "Atualizar.",
+      "expected": "Mostrar parcialidade e dados válidos; não fingir ausência de agentes.",
+      "evidence": [],
+      "tasks": [
+        "UI-025"
+      ]
+    },
+    {
+      "id": "T-HOME-08",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Troca A→B com resposta lenta de A.",
+      "when": "Resolver requests fora de ordem.",
+      "expected": "Descartar A e preservar somente escopo B.",
+      "evidence": [],
+      "tasks": [
+        "UI-025",
+        "UI-028"
+      ]
+    },
+    {
+      "id": "T-HOME-09",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Filtro Resultados e resultado unseen antigo dentro da retenção.",
+      "when": "Aplicar janela padrão.",
+      "expected": "Unseen continua alcançável; janela de recentes não apaga novidade.",
+      "evidence": [],
+      "tasks": [
+        "UI-025"
+      ]
+    },
+    {
+      "id": "T-HOME-10",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Nenhuma ocorrência global ou de atenção.",
+      "when": "Renderizar.",
+      "expected": "Sem painel vazio Server/Needs you; recursos continuam no sino/filtro.",
+      "evidence": [],
+      "tasks": [
+        "UI-026",
+        "UI-028"
+      ]
+    },
+    {
+      "id": "T-PANEL-01",
+      "status": "NOT_RUN",
+      "level": "contrato/HTTP",
+      "given": "Sessão sem operação.",
+      "when": "Codificar/resolver alvo session.",
+      "expected": "Abertura sem operation_id e escopo canônico conferido.",
+      "evidence": [],
+      "tasks": [
+        "UI-003",
+        "UI-019",
+        "UI-029"
+      ]
+    },
+    {
+      "id": "T-PANEL-02",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Uma linha de execução.",
+      "when": "Clicar Abrir.",
+      "expected": "Painel do registro correto, não página genérica para pesquisar.",
+      "evidence": [],
+      "tasks": [
+        "UI-019",
+        "UI-030"
+      ]
+    },
+    {
+      "id": "T-PANEL-03",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Sessão selecionada fechou/revogou.",
+      "when": "Tentar continuar.",
+      "expected": "Histórico/recusa explícitos; não substituir por última sessão.",
+      "evidence": [],
+      "tasks": [
+        "UI-014",
+        "UI-019",
+        "UI-030"
+      ]
+    },
+    {
+      "id": "T-PANEL-04",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Atividade com mais de uma sessão vinculada.",
+      "when": "Acompanhar.",
+      "expected": "Seletor explícito de contexto/host; nenhum primeiro item automático ambíguo.",
+      "evidence": [],
+      "tasks": [
+        "UI-024",
+        "UI-029"
+      ]
+    },
+    {
+      "id": "T-PANEL-05",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Drawer contém terminal.",
+      "when": "Maximizar/restaurar.",
+      "expected": "Uma camada gerenciada, sem dois dialogs modais/foco concorrente.",
+      "evidence": [],
+      "tasks": [
+        "UI-029"
+      ]
+    },
+    {
+      "id": "T-PANEL-06",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Output cresce durante scrollback antigo.",
+      "when": "Receber eventos e carregar anteriores.",
+      "expected": "Preservar âncora; auto-scroll somente quando ativado; gaps explícitos.",
+      "evidence": [],
+      "tasks": [
+        "UI-029",
+        "UI-034"
+      ]
+    },
+    {
+      "id": "T-PANEL-07",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Pedido, decisões e arquivos da atividade.",
+      "when": "Inspecionar.",
+      "expected": "Conteúdo autorizado reunido; detalhes técnicos recolhidos e lazy.",
+      "evidence": [],
+      "tasks": [
+        "UI-030"
+      ]
+    },
+    {
+      "id": "T-PANEL-08",
+      "status": "NOT_RUN",
+      "level": "HTTP/integrado",
+      "given": "Dois turnos/sessões do mesmo agente.",
+      "when": "Interromper um alvo específico.",
+      "expected": "Outro turno/sessão intacto; efeito e resultado corretamente correlacionados.",
+      "evidence": [],
+      "tasks": [
+        "UI-031"
+      ]
+    },
+    {
+      "id": "T-PANEL-09",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Decisão commitada com resposta perdida.",
+      "when": "Reabrir/repetir recuperação.",
+      "expected": "Mesma decisão/operação; não duplicar nem assumir aplicação nativa.",
+      "evidence": [],
+      "tasks": [
+        "UI-031",
+        "UI-034"
+      ]
+    },
+    {
+      "id": "T-PANEL-10",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Rascunho de resposta ativo.",
+      "when": "Mudar projeto/sino/alvo ou pressionar Escape.",
+      "expected": "Guard funciona e não transporta resposta a outro pedido.",
+      "evidence": [],
+      "tasks": [
+        "UI-032"
+      ]
+    },
+    {
+      "id": "T-PANEL-11",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Formulário em edição recebe refresh/reauth.",
+      "when": "Atualizar/revogar.",
+      "expected": "Refresh preserva; revogação limpa e bloqueia envio.",
+      "evidence": [],
+      "tasks": [
+        "UI-032",
+        "UI-034"
+      ]
+    },
+    {
+      "id": "T-PANEL-12",
+      "status": "NOT_RUN",
+      "level": "browser",
+      "given": "Item mudou grupo/saiu do filtro.",
+      "when": "Fechar drawer ou usar Voltar.",
+      "expected": "Restaurar foco/scroll em âncora válida, sem abrir a linha que tomou sua posição.",
+      "evidence": [],
+      "tasks": [
+        "UI-032"
+      ]
+    },
+    {
+      "id": "T-ATTN-01",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Pergunta ao operador em sessão ativa.",
+      "when": "Clicar Responder.",
+      "expected": "Abrir formulário canônico exato com opções/tipos originais.",
+      "evidence": [],
+      "tasks": [
+        "UI-008",
+        "UI-026"
+      ]
+    },
+    {
+      "id": "T-ATTN-02",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Pergunta destinada a outro agente.",
+      "when": "Abrir a mesma atividade como operador.",
+      "expected": "Acompanhar sem personificar destinatário ou ganhar direito de resposta.",
+      "evidence": [],
+      "tasks": [
+        "UI-018",
+        "UI-031"
+      ]
+    },
+    {
+      "id": "T-ATTN-03",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Aprovação expira ou é decidida em outra aba.",
+      "when": "Confirmar de tela antiga.",
+      "expected": "Revalidar revisão/prazo e mostrar resolução/conflito, sem segunda decisão.",
+      "evidence": [],
+      "tasks": [
+        "UI-026"
+      ]
+    },
+    {
+      "id": "T-ATTN-04",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Duas abas/duplo clique para mesma decisão.",
+      "when": "Enviar simultaneamente.",
+      "expected": "CAS/idempotência atuais preservam uma decisão efetiva.",
+      "evidence": [],
+      "tasks": [
+        "UI-031",
+        "UI-034"
+      ]
+    },
+    {
+      "id": "T-ATTN-05",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Permissão e pergunta textual coexistem.",
+      "when": "Enviar conversa ao modelo.",
+      "expected": "Texto comum não conta como aprovação/resposta canônica.",
+      "evidence": [],
+      "tasks": [
+        "UI-031"
+      ]
+    },
+    {
+      "id": "T-ATTN-06",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Home nova OFF ou função de interceptar novas aprovações OFF.",
+      "when": "Abrir pendência antiga ainda decidível.",
+      "expected": "Acesso básico/canônico permanece; não esconder somente por flag.",
+      "evidence": [],
+      "tasks": [
+        "UI-008",
+        "UI-026"
+      ]
+    },
+    {
+      "id": "T-RESULT-01",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Entrega correlacionada com três arquivos.",
+      "when": "Renderizar Resultados.",
+      "expected": "Um item com arquivos, não quatro tarefas.",
+      "evidence": [],
+      "tasks": [
+        "UI-018",
+        "UI-033"
+      ]
+    },
+    {
+      "id": "T-RESULT-02",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Resultado em VERIFYING.",
+      "when": "Abrir.",
+      "expected": "Aguardando verificação; não concluir/aceitar ao visualizar.",
+      "evidence": [],
+      "tasks": [
+        "UI-033"
+      ]
+    },
+    {
+      "id": "T-RESULT-03",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Preferência result_unseen revisionada.",
+      "when": "Marcar visto e publicar revisão nova.",
+      "expected": "A primeira preferência não oculta o novo episódio e não gera ACK.",
+      "evidence": [],
+      "tasks": [
+        "UI-033"
+      ]
+    },
+    {
+      "id": "T-RESULT-04",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Resultados fora da página/projeto.",
+      "when": "Abrir Home ou prévia.",
+      "expected": "Nenhum watermark em massa nem marcação invisível.",
+      "evidence": [],
+      "tasks": [
+        "UI-009",
+        "UI-033"
+      ]
+    },
+    {
+      "id": "T-RESULT-05",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Fonte sem contrato de visto.",
+      "when": "Mostrar resumo.",
+      "expected": "Usar Recentes/not_tracked, sem número inventado de novos.",
+      "evidence": [],
+      "tasks": [
+        "UI-025"
+      ]
+    },
+    {
+      "id": "T-RESULT-06",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Artefato HTML/conteúdo não autorizado.",
+      "when": "Preview/download.",
+      "expected": "Sanitização/isolamento/autorização preservados; sem privilégios novos.",
+      "evidence": [],
+      "tasks": [
+        "UI-033"
+      ]
+    },
+    {
+      "id": "T-LIVE-01",
+      "status": "NOT_RUN",
+      "level": "controller/browser",
+      "given": "Commit entre snapshot e assinatura/reconnect.",
+      "when": "Atualizar Home.",
+      "expected": "Releitura cobre janela; resultado final não é perdido.",
+      "evidence": [],
+      "tasks": [
+        "UI-027"
+      ]
+    },
+    {
+      "id": "T-LIVE-02",
+      "status": "NOT_RUN",
+      "level": "controller/browser",
+      "given": "Eventos duplicados/fora de ordem e burst de tokens.",
+      "when": "Processar invalidações.",
+      "expected": "Sem cartões duplicados/regressão de estado; requests agrupados/limitados.",
+      "evidence": [],
+      "tasks": [
+        "UI-027"
+      ]
+    },
+    {
+      "id": "T-LIVE-03",
+      "status": "NOT_RUN",
+      "level": "controller/browser",
+      "given": "Fonte externa expira com SSE conectado.",
+      "when": "Avançar relógio.",
+      "expected": "Fonte permanece stale; conexão ao stream não revalida seu conteúdo.",
+      "evidence": [],
+      "tasks": [
+        "UI-027"
+      ]
+    },
+    {
+      "id": "T-LIVE-04",
+      "status": "NOT_RUN",
+      "level": "controller/browser",
+      "given": "Navegador vai background e retorna.",
+      "when": "Retomar interação.",
+      "expected": "Reduz carga e revalida snapshot/ações; não usa estado antigo como consentimento.",
+      "evidence": [],
+      "tasks": [
+        "UI-027"
+      ]
+    },
+    {
+      "id": "T-LIVE-05",
+      "status": "NOT_RUN",
+      "level": "controller/browser",
+      "given": "Muitas sessões aparecem na lista.",
+      "when": "Deixar só um painel aberto.",
+      "expected": "Uma observação de detalhe ativa; não abrir tail/SSE por linha.",
+      "evidence": [],
+      "tasks": [
+        "UI-027"
+      ]
+    },
+    {
+      "id": "T-LIVE-06",
+      "status": "NOT_RUN",
+      "level": "controller/browser",
+      "given": "Pausa visual e trabalho real prossegue.",
+      "when": "Pausar e aplicar atualizações.",
+      "expected": "Agentes não são pausados; rascunhos/decisões mantêm validação.",
+      "evidence": [],
+      "tasks": [
+        "UI-028"
+      ]
+    },
+    {
+      "id": "T-CLI-01",
+      "status": "NOT_RUN",
+      "level": "CLI/integrado",
+      "given": "Projeto novo com único harness qualificado.",
+      "when": "connect interativo.",
+      "expected": "Sugerir seleção/revisão curta; nenhum nome de profile obrigatório.",
+      "evidence": [],
+      "tasks": [
+        "UI-004",
+        "UI-012"
+      ]
+    },
+    {
+      "id": "T-CLI-02",
+      "status": "NOT_RUN",
+      "level": "unitário/CLI",
+      "given": "Perfil legado project-hash e novo perfil.",
+      "when": "Descobrir conexões.",
+      "expected": "Ambos encontrados sem renomear nem alterar seus checkpoints.",
+      "evidence": [],
+      "tasks": [
+        "UI-011"
+      ]
+    },
+    {
+      "id": "T-CLI-03",
+      "status": "NOT_RUN",
+      "level": "unitário/CLI",
+      "given": "Nomes/path iguais em contextos diferentes.",
+      "when": "Resolver candidatos.",
+      "expected": "Não deduplicar identidades ou destinos por string amigável.",
+      "evidence": [],
+      "tasks": [
+        "UI-011"
+      ]
+    },
+    {
+      "id": "T-CLI-04",
+      "status": "NOT_RUN",
+      "level": "CLI/integrado",
+      "given": "Codex configurado no projeto.",
+      "when": "Adicionar Claude pelo picker.",
+      "expected": "Novo profile/identidade sugeridos e persistidos; Codex inalterado.",
+      "evidence": [],
+      "tasks": [
+        "UI-012",
+        "UI-016"
+      ]
+    },
+    {
+      "id": "T-CLI-05",
+      "status": "NOT_RUN",
+      "level": "CLI",
+      "given": "Há uma conexão e nenhum seletor explícito.",
+      "when": "connect.",
+      "expected": "Oferecer Retomar/Adicionar/Cancelar em vez de adoção ou criação silenciosa.",
+      "evidence": [],
+      "tasks": [
+        "UI-004",
+        "UI-012"
+      ]
+    },
+    {
+      "id": "T-CLI-06",
+      "status": "NOT_RUN",
+      "level": "CLI",
+      "given": "Há várias conexões, duas de Codex.",
+      "when": "Escolher retomar.",
+      "expected": "Exigir identificação da conexão correta; nunca a primeira/latest.",
+      "evidence": [],
+      "tasks": [
+        "UI-012"
+      ]
+    },
+    {
+      "id": "T-CLI-07",
+      "status": "NOT_RUN",
+      "level": "CLI",
+      "given": "--profile existente e --client incompatível.",
+      "when": "Invocar connect.",
+      "expected": "Recusar substituição explícita com orientação; sem criar outra conexão inesperada.",
+      "evidence": [],
+      "tasks": [
+        "UI-012"
+      ]
+    },
+    {
+      "id": "T-CLI-08",
+      "status": "NOT_RUN",
+      "level": "CLI/HTTP",
+      "given": "Resposta de Finish foi perdida.",
+      "when": "Retomar a mesma solicitação.",
+      "expected": "Mesmo receipt, agent_id e binding; sem novo teste ou grant.",
+      "evidence": [],
+      "tasks": [
+        "UI-013",
+        "UI-016"
+      ]
+    },
+    {
+      "id": "T-CLI-09",
+      "status": "NOT_RUN",
+      "level": "CLI/concorrência",
+      "given": "Dois terminais adicionam conexões simultaneamente.",
+      "when": "Reservar perfis/commitar setup.",
+      "expected": "Sem overwrite; intents independentes ou conflito honesto; locks curtos.",
+      "evidence": [],
+      "tasks": [
+        "UI-013"
+      ]
+    },
+    {
+      "id": "T-CLI-10",
+      "status": "NOT_RUN",
+      "level": "CLI/HTTP",
+      "given": "Checkpoint com efeito incerto anterior.",
+      "when": "connect sem nova intenção.",
+      "expected": "Recuperar o mesmo pedido; não criar substituto para escapar do estado.",
+      "evidence": [],
+      "tasks": [
+        "UI-013",
+        "UI-016"
+      ]
+    },
+    {
+      "id": "T-CLI-11",
+      "status": "NOT_RUN",
+      "level": "CLI",
+      "given": "JSON/noninteractive com várias conexões e sem seletor.",
+      "when": "connect --json.",
+      "expected": "Retornar seleção necessária estruturada, sem perguntar nem criar modelo/identidade.",
+      "evidence": [],
+      "tasks": [
+        "UI-004",
+        "UI-015"
+      ]
+    },
+    {
+      "id": "T-CLI-12",
+      "status": "NOT_RUN",
+      "level": "CLI",
+      "given": "Nova conexão scriptada com --new-connection e --profile explícito e estável.",
+      "when": "Repetir comando após falha de resposta.",
+      "expected": "Recuperar a mesma criação; conteúdo diferente conflita.",
+      "evidence": [],
+      "tasks": [
+        "UI-015"
+      ]
+    },
+    {
+      "id": "T-CLI-13",
+      "status": "NOT_RUN",
+      "level": "CLI",
+      "given": "Server ausente.",
+      "when": "connect --plan, status ou doctor.",
+      "expected": "Não autostart nem probe/inferência; limite relatado corretamente.",
+      "evidence": [],
+      "tasks": [
+        "UI-015",
+        "UI-044"
+      ]
+    },
+    {
+      "id": "T-CLI-14",
+      "status": "NOT_RUN",
+      "level": "CLI",
+      "given": "Mesmo diretório usado com operator profiles remotos diferentes.",
+      "when": "Escolher/retomar.",
+      "expected": "Contextos isolados; metadado local não vira autoridade sobre outro Server.",
+      "evidence": [],
+      "tasks": [
+        "UI-011"
+      ]
+    },
+    {
+      "id": "T-CLI-15",
+      "status": "NOT_RUN",
+      "level": "CLI",
+      "given": "Perfil com escritor ativo.",
+      "when": "Tentar retomar em outro terminal.",
+      "expected": "PROFILE_BUSY/caminho canônico; não remover lock ou clonar como workaround.",
+      "evidence": [],
+      "tasks": [
+        "UI-013"
+      ]
+    },
+    {
+      "id": "T-CLI-16",
+      "status": "NOT_RUN",
+      "level": "CLI/HTTP",
+      "given": "Envio pendente de resolução.",
+      "when": "work resume ou retomada no connect.",
+      "expected": "Recuperar intenção exata antes de pedir sessão nova.",
+      "evidence": [],
+      "tasks": [
+        "UI-014"
+      ]
+    },
+    {
+      "id": "T-CLI-17",
+      "status": "NOT_RUN",
+      "level": "CLI/HTTP",
+      "given": "Uma sessão compatível lembrada.",
+      "when": "Selecionar continuar.",
+      "expected": "Apresentar contexto correto; nada produtivo enviado antes do pedido.",
+      "evidence": [],
+      "tasks": [
+        "UI-014"
+      ]
+    },
+    {
+      "id": "T-CLI-18",
+      "status": "NOT_RUN",
+      "level": "CLI/HTTP",
+      "given": "Várias sessões autorizadas na conexão.",
+      "when": "Continuar contexto.",
+      "expected": "Escolha explícita; --session-id é respeitado e verificado.",
+      "evidence": [],
+      "tasks": [
+        "UI-014"
+      ]
+    },
+    {
+      "id": "T-CLI-19",
+      "status": "NOT_RUN",
+      "level": "CLI/HTTP",
+      "given": "Sessão fechada/grant incompatível.",
+      "when": "Retomar.",
+      "expected": "Histórico ou recusa; nova sessão/autoridade requer intenção e revisão próprias.",
+      "evidence": [],
+      "tasks": [
+        "UI-014"
+      ]
+    },
+    {
+      "id": "T-CLI-20",
+      "status": "NOT_RUN",
+      "level": "CLI",
+      "given": "Usuário cancela picker/revisão antes do teste.",
+      "when": "Cancelar.",
+      "expected": "Nenhum agente/binding/grant/trabalho novo; declarar se serviço já permaneceu ativo.",
+      "evidence": [],
+      "tasks": [
+        "UI-016"
+      ]
+    },
+    {
+      "id": "T-CLI-21",
+      "status": "NOT_RUN",
+      "level": "CLI/HTTP",
+      "given": "Agente teve papel/modelo/permissões customizados.",
+      "when": "Reconectar e adicionar outro agente.",
+      "expected": "O primeiro mantém suas escolhas; o novo usa apenas o preset consentido.",
+      "evidence": [],
+      "tasks": [
+        "UI-016",
+        "UI-039"
+      ]
+    },
+    {
+      "id": "T-ONB-01",
+      "status": "NOT_RUN",
+      "level": "browser/HTTP",
+      "given": "Home com uma conexão.",
+      "when": "Conectar agente.",
+      "expected": "Oferecer abrir existente/adicionar sem abrir administração avançada.",
+      "evidence": [],
+      "tasks": [
+        "UI-035"
+      ]
+    },
+    {
+      "id": "T-ONB-02",
+      "status": "NOT_RUN",
+      "level": "browser/HTTP",
+      "given": "Novo harness local selecionado.",
+      "when": "Revisar/confirmar.",
+      "expected": "Mesmos serviços de setup/Finish do CLI, sem segunda implementação de autoridade.",
+      "evidence": [],
+      "tasks": [
+        "UI-035"
+      ]
+    },
+    {
+      "id": "T-ONB-03",
+      "status": "NOT_RUN",
+      "level": "browser/HTTP",
+      "given": "Dashboard aberto em device diferente do Server.",
+      "when": "Escolher execução local/remota.",
+      "expected": "Explicar host real; navegador não detecta executáveis da máquina do usuário por suposição.",
+      "evidence": [],
+      "tasks": [
+        "UI-035"
+      ]
+    },
+    {
+      "id": "T-ONB-04",
+      "status": "NOT_RUN",
+      "level": "browser/HTTP",
+      "given": "Usuário escolhe Personalizar.",
+      "when": "Editar configuração.",
+      "expected": "Expandir controles existentes sem trocar identidade/preset já salvo ou tornar personalização obrigatória.",
+      "evidence": [],
+      "tasks": [
+        "UI-035"
+      ]
+    },
+    {
+      "id": "T-ONB-05",
+      "status": "NOT_RUN",
+      "level": "browser/HTTP",
+      "given": "Conexão criada no CLI e UI aberta depois.",
+      "when": "Listar/retomar.",
+      "expected": "Mesmo agente/binding/sessão; sem novo cadastro manual na UI.",
+      "evidence": [],
+      "tasks": [
+        "UI-039"
+      ]
+    },
+    {
+      "id": "T-ONB-06",
+      "status": "NOT_RUN",
+      "level": "browser/HTTP",
+      "given": "Pasta/nome iguais mas workspace sem permissão.",
+      "when": "Adicionar conexão no projeto.",
+      "expected": "Não conceder acesso por semelhança; seleção/autorização canônicas.",
+      "evidence": [],
+      "tasks": [
+        "UI-039"
+      ]
+    },
+    {
+      "id": "T-CONN-01",
+      "status": "NOT_RUN",
+      "level": "Connector/integração",
+      "given": "Connector tem alias/conexão compatível.",
+      "when": "connect no projeto.",
+      "expected": "Retomar/adicionar vem antes de tratar criação como Replace/Abort obrigatório.",
+      "evidence": [],
+      "tasks": [
+        "UI-004",
+        "UI-036"
+      ]
+    },
+    {
+      "id": "T-CONN-02",
+      "status": "NOT_RUN",
+      "level": "Connector/integração",
+      "given": "Outro harness no mesmo host/projeto.",
+      "when": "Adicionar nova conexão.",
+      "expected": "Alias/checkpoint próprio e configuração anterior preservada.",
+      "evidence": [],
+      "tasks": [
+        "UI-036"
+      ]
+    },
+    {
+      "id": "T-CONN-03",
+      "status": "NOT_RUN",
+      "level": "Connector/integração",
+      "given": "Mesmo agente já vinculado a outra máquina.",
+      "when": "Solicitar nova conexão.",
+      "expected": "Política de máquina respeitada; nenhum revoke/replacement oculto.",
+      "evidence": [],
+      "tasks": [
+        "UI-036"
+      ]
+    },
+    {
+      "id": "T-CONN-04",
+      "status": "NOT_RUN",
+      "level": "Connector/integração",
+      "given": "Wizard Connector atual rejeita --json.",
+      "when": "Invocar com JSON/noninteractive.",
+      "expected": "Contrato antigo preservado; sem pergunta de credencial ou prompt escondido.",
+      "evidence": [],
+      "tasks": [
+        "UI-036"
+      ]
+    },
+    {
+      "id": "T-CONN-05",
+      "status": "NOT_RUN",
+      "level": "Connector/integração",
+      "given": "Host aguarda aprovação remota.",
+      "when": "Fechar CLI e aprovar como operador pelo terminal.",
+      "expected": "Daemon/mesmo root continuam; sem credencial de operador no host.",
+      "evidence": [],
+      "tasks": [
+        "UI-037"
+      ]
+    },
+    {
+      "id": "T-CONN-06",
+      "status": "NOT_RUN",
+      "level": "Connector/integração",
+      "given": "Workspace compartilhado e pastas distintas nos hosts.",
+      "when": "Retomar/bootstrap.",
+      "expected": "Workspace lógico preservado e cada pasta local mantida; sem copiar path do Server.",
+      "evidence": [],
+      "tasks": [
+        "UI-037"
+      ]
+    },
+    {
+      "id": "T-CONN-07",
+      "status": "NOT_RUN",
+      "level": "Connector/integração",
+      "given": "Perda de resposta durante aprovação/Finish/reconnect.",
+      "when": "Retomar mesmo root.",
+      "expected": "Receipts/child IDs recuperados; não renovar grant ou duplicar identidade/proposta.",
+      "evidence": [],
+      "tasks": [
+        "UI-037",
+        "UI-039"
+      ]
+    },
+    {
+      "id": "T-SVC-01",
+      "status": "NOT_RUN",
+      "level": "integração/lifecycle",
+      "given": "Server já ativo e nova conexão no mesmo projeto.",
+      "when": "connect adicionar.",
+      "expected": "Reutilizar a instância/supervisor; não daemon por profile.",
+      "evidence": [],
+      "tasks": [
+        "UI-038"
+      ]
+    },
+    {
+      "id": "T-SVC-02",
+      "status": "NOT_RUN",
+      "level": "integração/lifecycle",
+      "given": "Trabalho admitido e painel/CLI fechados.",
+      "when": "Fechar UI, /quit, Ctrl+C do observador.",
+      "expected": "Não interromper trabalho nem encerrar serviço.",
+      "evidence": [],
+      "tasks": [
+        "UI-038",
+        "UI-046"
+      ]
+    },
+    {
+      "id": "T-SVC-03",
+      "status": "NOT_RUN",
+      "level": "integração/lifecycle",
+      "given": "Destino é Server remoto indisponível.",
+      "when": "Conectar/reconectar.",
+      "expected": "Erro/espera remota; nenhum Server local substituto.",
+      "evidence": [],
+      "tasks": [
+        "UI-037",
+        "UI-038"
+      ]
+    },
+    {
+      "id": "T-SVC-04",
+      "status": "NOT_RUN",
+      "level": "integração/lifecycle",
+      "given": "Comando de leitura/plano e serviço ausente.",
+      "when": "status/doctor/plan.",
+      "expected": "Sem autostart/inferência; checkpoints declarados somente nos comandos que os admitem.",
+      "evidence": [],
+      "tasks": [
+        "UI-015",
+        "UI-044"
+      ]
+    },
+    {
+      "id": "T-SVC-05",
+      "status": "NOT_RUN",
+      "level": "integração/lifecycle",
+      "given": "Tarefa de login instalada/desabilitada ou startup pendente.",
+      "when": "Retomar/adicionar.",
+      "expected": "Não reinstalar/habilitar silenciosamente; usar operação já revisada.",
+      "evidence": [],
+      "tasks": [
+        "UI-038"
+      ]
+    },
+    {
+      "id": "T-SVC-06",
+      "status": "NOT_RUN",
+      "level": "integração/lifecycle",
+      "given": "Grant expirado/resultado incerto e serviço reinicia.",
+      "when": "Reconnect.",
+      "expected": "Não renovar orçamento nem reexecutar; reconciliar pela identidade original.",
+      "evidence": [],
+      "tasks": [
+        "UI-038"
+      ]
+    },
+    {
+      "id": "T-EXT-01",
+      "status": "NOT_RUN",
+      "level": "projeção/browser",
+      "given": "Herdr reporta working ou done.",
+      "when": "Projetar Home.",
+      "expected": "Rótulo de observação; não RUNNING gerenciado, sucesso canônico, ACK ou claim release.",
+      "evidence": [],
+      "tasks": [
+        "UI-040"
+      ]
+    },
+    {
+      "id": "T-EXT-02",
+      "status": "NOT_RUN",
+      "level": "projeção/browser",
+      "given": "Mesmo nome/agente aparece em telemetria e runtime sem associação comprovada.",
+      "when": "Agrupar.",
+      "expected": "Não fundir por nome/PID; preservar origens e contagens.",
+      "evidence": [],
+      "tasks": [
+        "UI-040"
+      ]
+    },
+    {
+      "id": "T-EXT-03",
+      "status": "NOT_RUN",
+      "level": "projeção/browser",
+      "given": "Harness externo sem captura de output.",
+      "when": "Abrir contexto.",
+      "expected": "Mostrar somente evidências disponíveis e limitação; não inventar terminal/histórico.",
+      "evidence": [],
+      "tasks": [
+        "UI-030"
+      ]
+    },
+    {
+      "id": "T-SEC-01",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Snapshot/expansão/detail GET repetidos.",
+      "when": "Ler Home e abrir painel.",
+      "expected": "Não criar session, grant, mensagem, claim, ACK, teste ou decisão; auth metadata existente separada.",
+      "evidence": [],
+      "tasks": [
+        "UI-021",
+        "UI-040"
+      ]
+    },
+    {
+      "id": "T-SEC-02",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "URL/log/output contém dado malicioso ou segredo.",
+      "when": "Renderizar/abrir link.",
+      "expected": "Sem ação arbitrária, segredo em URL, HTML privilegiado ou ampliacão de escopo.",
+      "evidence": [],
+      "tasks": [
+        "UI-040"
+      ]
+    },
+    {
+      "id": "T-SEC-03",
+      "status": "NOT_RUN",
+      "level": "HTTP/browser",
+      "given": "Logout/403 enquanto há snapshot/rascunho.",
+      "when": "Atualizar e usar Voltar.",
+      "expected": "Limpar protegido e bloquear submit; histórico não restaura payload autorizado anteriormente.",
+      "evidence": [],
+      "tasks": [
+        "UI-034"
+      ]
+    },
+    {
+      "id": "T-A11Y-01",
+      "status": "NOT_RUN",
+      "level": "browser/assistivo",
+      "given": "Sem mouse.",
+      "when": "Navegar sidebar/filtros/expansão/Advanced.",
+      "expected": "Controles operáveis e rótulos/estado acessíveis sem role menu artificial.",
+      "evidence": [],
+      "tasks": [
+        "UI-010",
+        "UI-041"
+      ]
+    },
+    {
+      "id": "T-A11Y-02",
+      "status": "NOT_RUN",
+      "level": "browser/assistivo",
+      "given": "Drawer/modal aberto.",
+      "when": "Tab/Escape/fechar/maximizar.",
+      "expected": "Foco conforme modalidade, guard e retorno estável; nenhuma armadilha em dialogs aninhados.",
+      "evidence": [],
+      "tasks": [
+        "UI-032",
+        "UI-041"
+      ]
+    },
+    {
+      "id": "T-A11Y-03",
+      "status": "NOT_RUN",
+      "level": "browser/assistivo",
+      "given": "Output ao vivo, zoom 200% e 360px.",
+      "when": "Ler/pausar/scrollback.",
+      "expected": "Ações alcançáveis, avisos agrupados, estado com texto e sem perda de leitura.",
+      "evidence": [],
+      "tasks": [
+        "UI-032",
+        "UI-041"
+      ]
+    },
+    {
+      "id": "T-A11Y-04",
+      "status": "NOT_RUN",
+      "level": "browser/assistivo",
+      "given": "Leitor de tela real/ponte do SO indisponível.",
+      "when": "Qualificar acessibilidade.",
+      "expected": "Registrar bloqueio; resultado Node/DOM não é promovido a campanha assistiva real.",
+      "evidence": [],
+      "tasks": [
+        "UI-041"
+      ]
+    },
+    {
+      "id": "T-PERF-01",
+      "status": "NOT_RUN",
+      "level": "carga/instrumentação",
+      "given": "Fixtures de 1/10/100 agentes.",
+      "when": "Medir entries e expansão.",
+      "expected": "Queries não crescem por agente; overview não traz transcripts ou consulta provedores.",
+      "evidence": [],
+      "tasks": [
+        "UI-021",
+        "UI-022",
+        "UI-041"
+      ]
+    },
+    {
+      "id": "T-PERF-02",
+      "status": "NOT_RUN",
+      "level": "carga/instrumentação",
+      "given": "1.000 atividades e 100.000 eventos.",
+      "when": "Paginar e medir p50/p95.",
+      "expected": "Limites/cursors funcionam; registrar hardware/volume/meta atingida ou não.",
+      "evidence": [],
+      "tasks": [
+        "UI-022",
+        "UI-041"
+      ]
+    },
+    {
+      "id": "T-PERF-03",
+      "status": "NOT_RUN",
+      "level": "carga/instrumentação",
+      "given": "Novo índice proposto.",
+      "when": "Comparar EXPLAIN e escrita.",
+      "expected": "Justificar ganho e custo; migração aditiva com próxima revisão real.",
+      "evidence": [],
+      "tasks": [
+        "UI-022"
+      ]
+    },
+    {
+      "id": "T-PERF-04",
+      "status": "NOT_RUN",
+      "level": "carga/instrumentação",
+      "given": "Burst de stream e painel único.",
+      "when": "Medir requests/streams/payload.",
+      "expected": "Sem N streams, loops por token ou listas ocultas carregadas; payload inicial com limite.",
+      "evidence": [],
+      "tasks": [
+        "UI-041"
+      ]
+    },
+    {
+      "id": "T-QUAL-01",
+      "status": "NOT_RUN",
+      "level": "campanha/usuário",
+      "given": "Fixture reproduzível de jornada.",
+      "when": "Executar sem produção.",
+      "expected": "Trabalhos, perguntas e resultados controlados com evidência por cenário.",
+      "evidence": [],
+      "tasks": [
+        "UI-005"
+      ]
+    },
+    {
+      "id": "T-QUAL-02",
+      "status": "NOT_RUN",
+      "level": "campanha/usuário",
+      "given": "Dois harnesses reais qualificados e consentimento.",
+      "when": "Conectar A, adicionar B, pedir e retomar.",
+      "expected": "IDs/permissões preservados; resultados e sessão na Home; nenhuma exigência de nome de profile.",
+      "evidence": [],
+      "tasks": [
+        "UI-039",
+        "UI-042"
+      ]
+    },
+    {
+      "id": "T-QUAL-03",
+      "status": "NOT_RUN",
+      "level": "campanha/usuário",
+      "given": "Host remoto real e consentimento.",
+      "when": "Usar Connector, aprovar e observar.",
+      "expected": "Publicação, sessão, perguntas e resultado comprovados na topologia; sem inferir de peers sintéticos.",
+      "evidence": [],
+      "tasks": [
+        "UI-042"
+      ]
+    },
+    {
+      "id": "T-QUAL-04",
+      "status": "NOT_RUN",
+      "level": "campanha/usuário",
+      "given": "Sistema operacional/plataforma não exercitado.",
+      "when": "Preparar relatório.",
+      "expected": "Não anunciar qualificação universal de login/reboot ou harness.",
+      "evidence": [],
+      "tasks": [
+        "UI-042"
+      ]
+    },
+    {
+      "id": "T-QUAL-05",
+      "status": "NOT_RUN",
+      "level": "campanha/usuário",
+      "given": "Pessoa sem conhecer a arquitetura do Nexus.",
+      "when": "Conectar/retomar, pedir, acompanhar, responder e achar entrega.",
+      "expected": "Concluir sem Advanced; registrar atritos e tempo observados, sem inventar métricas.",
+      "evidence": [],
+      "tasks": [
+        "UI-043"
+      ]
+    },
+    {
+      "id": "T-QUAL-06",
+      "status": "NOT_RUN",
+      "level": "campanha/usuário",
+      "given": "Conjunto conhecido com execução, bloqueio e resultado.",
+      "when": "Abrir Home.",
+      "expected": "Conseguir identificar os três e abrir a sessão em uma ação quando não ambígua; medir e registrar.",
+      "evidence": [],
+      "tasks": [
+        "UI-043"
+      ]
+    },
+    {
+      "id": "T-REL-01",
+      "status": "NOT_RUN",
+      "level": "integração/processo",
+      "given": "Checkout atualizado.",
+      "when": "Executar scripts/documentação/build.",
+      "expected": "Comandos existentes conferidos; front empacotado corresponde aos contratos novos.",
+      "evidence": [],
+      "tasks": [
+        "UI-044",
+        "UI-045"
+      ]
+    },
+    {
+      "id": "T-REL-02",
+      "status": "NOT_RUN",
+      "level": "integração/processo",
+      "given": "Wheel/sdist construídos.",
+      "when": "Instalar em ambiente isolado sem checkout irmão.",
+      "expected": "Assets, APIs e CLI funcionam no pacote real; hashes e comando registrados.",
+      "evidence": [],
+      "tasks": [
+        "UI-045"
+      ]
+    },
+    {
+      "id": "T-REL-03",
+      "status": "NOT_RUN",
+      "level": "integração/processo",
+      "given": "Server/Connector/Core com pins/manifestos.",
+      "when": "Rodar integração.",
+      "expected": "Tuple compatível; não downgrade incidental nem alteração de Core desnecessária.",
+      "evidence": [],
+      "tasks": [
+        "UI-045"
+      ]
+    },
+    {
+      "id": "T-REL-04",
+      "status": "NOT_RUN",
+      "level": "integração/processo",
+      "given": "Browser e perfis anteriores.",
+      "when": "Atualizar e reabrir.",
+      "expected": "Aliases, seleção e checkpoints preservados; IDs de setup não mudam.",
+      "evidence": [],
+      "tasks": [
+        "UI-046"
+      ]
+    },
+    {
+      "id": "T-REL-05",
+      "status": "NOT_RUN",
+      "level": "integração/processo",
+      "given": "Home simples ativada e trabalho em andamento.",
+      "when": "Voltar à apresentação anterior.",
+      "expected": "Daemon/sessões/grants intactos; sino e ações básicas acessíveis.",
+      "evidence": [],
+      "tasks": [
+        "UI-046"
+      ]
+    },
+    {
+      "id": "T-REL-06",
+      "status": "NOT_RUN",
+      "level": "integração/processo",
+      "given": "Novos perfis gerados pelo picker.",
+      "when": "Usar comando explícito --profile ou fallback qualificado.",
+      "expected": "Conexões continuam utilizáveis; reversão não apaga atalhos/identidades.",
+      "evidence": [],
+      "tasks": [
+        "UI-046"
+      ]
+    },
+    {
+      "id": "T-REL-07",
+      "status": "NOT_RUN",
+      "level": "integração/processo",
+      "given": "UI visual concluída, onboarding de segundo harness não.",
+      "when": "Avaliar entrega.",
+      "expected": "Plano permanece incompleto; R09/R17/R18 são gates obrigatórios.",
+      "evidence": [],
+      "tasks": [
+        "UI-047"
+      ]
+    },
+    {
+      "id": "T-REL-08",
+      "status": "NOT_RUN",
+      "level": "integração/processo",
+      "given": "Testes/campanhas pendentes e flag atual OFF.",
+      "when": "Decidir release/default.",
+      "expected": "Registrar limites e aprovação; não marcar pronto/ativar em produção automaticamente.",
+      "evidence": [],
+      "tasks": [
+        "UI-047"
+      ]
+    }
+  ],
+  "execution_notes": [],
+  "risk_acceptances": [],
+  "release_decision": {
+    "approved": false,
+    "actor": null,
+    "evidence": []
+  },
+  "document": {
+    "filename": "PLANO_CODEX_NEXUS_UI_SIMPLIFICADA_HOME_ONBOARDING_R1.md",
+    "sha256": "25e209c78536b233accc8723af4db384036aa38884c566b9e539556b04c807ce"
+  },
+  "validation_notice": "Este ledger contém requisitos e cenários planejados. TODO e NOT_RUN não representam execução de testes do produto. Validação estrutural do pacote não qualifica Nexus, Connector ou Core."
+}

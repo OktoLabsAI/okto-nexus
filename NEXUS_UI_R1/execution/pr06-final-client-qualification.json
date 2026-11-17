@@ -1,0 +1,36 @@
+{
+  "status": "IMPLEMENTED_AND_SCOPED_SYNTHETIC_BROWSER_QUALIFIED",
+  "tasks": ["UI-035", "UI-039"],
+  "final_bundle": {
+    "js": "index-CdDUCMon.js",
+    "js_sha256": "d5b986b54f8a7cad92d504707aedca7796a16ebbf80b6e9ca0a9e2e3f951a09e",
+    "css": "index-CXFy-VnM.css",
+    "css_sha256": "36054c625504c406bff2dcd5a38d66952b72ded0d7c88d44e53658eae1b6316b"
+  },
+  "checks": {
+    "full_node_suite": {"passed": 295, "duration_ms": 7337.1334, "exit_code": 0, "tool_ref": "8c93d2"},
+    "typescript_and_vite_build": {"exit_code": 0, "session": 55175, "tool_ref": "849ed0"},
+    "onboarding_node_focal": {"passed": 22, "exit_code": 0, "tool_ref": "69ff3d"},
+    "typescript_focal": {"exit_code": 0, "tool_ref": "37b76a"},
+    "real_http_precondition_refusal": {"passed": 1, "seconds": 9.57, "tool_ref": "19e95c"},
+    "final_browser_rejection_restore_edit": {"exit_code": 0, "tool_ref": "7e640e"},
+    "focused_python_ruff": {"exit_code": 0, "tool_ref": "74d5e3"}
+  },
+  "changes": [
+    "Only the exact definitive pre-execution 422 refusal enables explicit editing. Unknown effects, missing metadata and NOT_FOUND remain recover-only.",
+    "Editing revalidates authenticated Server, authorized complete project directory, exact retained executor, catalog, absent Finish receipt, draft and options; the rejected request is archived before clearing its active checkpoint.",
+    "Controlled inputs capture values synchronously before asynchronous model dispatch.",
+    "Restored editing hydrates canonical project choices and the retained execution-host label without changing the reviewed identity or configuration."
+  ],
+  "browser_evidence": "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md",
+  "browser_manifest": "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/manifest.json",
+  "provenance": "The full synthetic Codex/Claude Test/Finish/Resume and response-loss checks used dfy1_5aT. Final CdDUCMon checks cover the intervening rejection, input and rehydration corrections. Earlier failures are preserved, not relabeled as final passes.",
+  "effects": {"paid_calls": 0, "personal_installation_changed": false, "database_migrations": 0},
+  "limitations": [
+    "Synthetic setup-test peers do not create native runtime sessions. Connection qualification alone does not verify the complete UI039 terminal/Home/runtime journey.",
+    "No real provider, personal authentication, remote host, screen reader or Windows login/reboot qualification.",
+    "Repository-wide Ruff remains failing as recorded in pr05-panel-onboarding-source-qualification.json; focused checks do not waive that result."
+  ],
+  "rollback": "Revert this client milestone and rebuild the bundled assets. Preserve all setup checkpoints, archived attempts, receipts, connections and canonical service state; uncertain effects never authorize replacement execution.",
+  "next": "Verify the final installed artifact, finish scenario traceability and retain separate real-harness, accessibility, usability and rollout gates."
+}

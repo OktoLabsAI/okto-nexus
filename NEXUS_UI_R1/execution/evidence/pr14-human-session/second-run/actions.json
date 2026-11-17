@@ -1,0 +1,4890 @@
+[
+  {
+    "at": "2026-11-16T23:55:26.336826+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.409922+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/assets/index-Zyb_20X4.js",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.411210+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/assets/index-DLUGhrP6.css",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.500106+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator-auth/status",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.511077+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/logos/nexus-icon.svg",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.528210+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/logos/nexus-wordmark-light.svg",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.529078+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/logos/nexus-wordmark-dark.svg",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.569632+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/info",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.813924+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.570653+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.905185+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.936103+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.905013+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.818722+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.817562+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:27.364186+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:26.821584+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:27.329406+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:27.324386+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:27.657589+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:27.600796+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:36.579777+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:42.347139+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:42.442052+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:42.604875+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:46.578633+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:56.575985+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:57.352558+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:57.420140+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:55:57.620542+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:06.583794+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:12.353729+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:12.431712+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:12.512068+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:12.621026+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:16.585200+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:26.583279+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:27.361830+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:27.419234+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:27.629215+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:36.573313+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:42.265122+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:42.383345+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:42.433639+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:42.725582+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:46.585338+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:56.576723+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:57.272302+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:57.377291+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:56:57.497007+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:06.581398+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:12.228489+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:12.257916+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:12.395487+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:12.261041+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:12.549752+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:12.705781+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:16.582777+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:26.572161+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:27.268674+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:27.392076+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:27.471933+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:36.579719+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:42.276951+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:42.393691+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:42.476931+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:42.559404+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:46.575501+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:56.577455+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:57.289115+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:57.410805+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:57:57.518881+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:06.582923+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:12.291986+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:12.401353+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:12.522773+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:12.665741+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:16.575178+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:26.573928+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:27.294560+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:27.408185+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:27.532588+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:36.581709+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:42.302702+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:42.411515+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:42.535901+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:42.649405+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:46.577853+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:56.574142+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:57.313995+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:57.411726+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:58:57.491814+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:06.587269+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:12.322708+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:12.413597+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:12.492534+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:12.618777+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:16.571253+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:26.585400+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:27.323423+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:27.412878+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:27.545777+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:36.574803+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:42.328871+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:42.418567+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:42.550566+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:42.669308+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:46.574424+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:56.585590+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:57.337184+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:57.431808+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:59:57.504394+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:06.584385+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:12.344368+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:12.433574+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:12.506258+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:12.681756+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:16.582852+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:26.581704+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:27.354095+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:27.435495+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:27.529002+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:36.577775+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:42.361194+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:42.438406+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:42.528538+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:42.680709+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:46.573764+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:56.575411+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:57.374611+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:57.439757+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:00:57.588555+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:06.580375+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:12.382000+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:12.446026+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:12.565962+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:16.578432+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:26.576111+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:27.390235+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:27.447703+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:27.566425+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:27.645835+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:36.578581+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:42.400702+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:42.447396+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:42.618450+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:46.580569+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:56.575608+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:57.409315+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:57.450652+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:57.609700+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:01:57.663624+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:06.575805+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:12.420779+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:12.457849+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:12.595155+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:16.575582+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:26.577258+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:27.451805+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:27.426243+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:27.589922+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:36.586391+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:42.453470+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:42.442682+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:42.606516+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:42.806044+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:46.571387+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:56.586059+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:57.454648+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:57.450155+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:02:57.647505+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:06.580979+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:12.455658+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:12.452574+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:12.649851+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:12.744556+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:16.586063+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:26.586868+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:27.467863+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:27.597130+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:27.469930+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:36.580076+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:42.469223+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:42.599393+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:42.470335+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:42.749733+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:46.573922+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:56.580204+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:57.482589+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:57.486328+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:03:57.650150+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:06.573362+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:12.488060+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:12.489113+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:12.625526+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:16.571986+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:26.572638+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:27.499507+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:27.593155+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:27.502413+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:36.581195+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:42.503745+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:42.598576+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:42.504813+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:42.826646+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:46.578806+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:56.575649+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:57.504729+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:57.506250+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:04:57.648338+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:06.582019+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:12.520870+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:12.657958+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:12.521428+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:12.817613+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:16.577304+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:26.581090+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:27.526299+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:27.651078+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:27.529949+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:36.578372+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:42.541637+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:42.652988+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:42.542698+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:42.875715+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:46.579262+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:56.586459+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:57.548722+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:57.673545+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:05:57.552043+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:06.580458+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:12.561421+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:12.562603+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:12.674168+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:12.826930+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:16.586343+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:26.586466+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:27.565758+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:27.668787+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:27.568169+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:36.579800+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:42.574783+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:42.575904+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:42.672070+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:42.862587+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:46.578558+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:56.575208+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:57.582219+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:57.706485+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:06:57.585505+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:06.588938+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:12.585937+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:12.708546+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:12.587316+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:12.915654+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:16.575894+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:26.579583+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:27.594870+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:27.598396+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:27.769822+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:36.575101+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:42.599881+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:42.601283+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:42.782361+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:42.957703+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:46.580567+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:56.578191+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:57.610703+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:57.613819+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:07:57.723117+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:06.573689+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:12.617585+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:12.618897+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:12.725692+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:12.975398+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:16.570503+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:26.584952+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:27.628731+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:27.775542+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:27.632213+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:36.584079+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:42.634911+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:42.637854+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:42.776122+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:42.900781+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:46.584440+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:56.576275+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:57.635057+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:57.755617+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:08:57.638323+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:06.586683+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:12.642744+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:12.643797+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:12.755687+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:12.917802+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:16.584464+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:26.585572+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:27.649688+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:27.653057+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:27.772872+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:36.577719+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:42.662799+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:42.775200+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:42.664012+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:42.975404+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:46.579438+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:56.582247+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:57.666745+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:57.670179+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:09:57.753965+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:06.575114+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:12.668780+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:12.757612+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:12.669914+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:12.949362+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:16.581314+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:26.580108+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:27.681715+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:27.860525+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:27.686380+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:36.574131+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:42.421294+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:42.477160+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:42.478687+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:42.874750+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:43.844190+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:46.572650+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:56.573502+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:57.485973+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:57.573321+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:10:58.859698+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:06.578613+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:12.489581+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:12.584217+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:12.748665+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:13.873584+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:16.570803+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:26.585821+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:27.502345+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:27.593229+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:28.882747+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:36.581468+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:42.505227+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:42.564648+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:43.885083+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:46.572173+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:56.572221+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:57.514453+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:57.578921+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:57.649648+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:11:58.892735+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:06.575686+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:12.518161+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:12.591981+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:13.906878+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:16.579528+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:26.586609+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:27.527640+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:27.592271+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:27.720531+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:28.918702+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:36.580349+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:42.541872+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:42.624666+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:43.933354+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:46.571725+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:56.586813+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:57.547995+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:57.610310+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:12:58.941457+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:06.584624+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:12.557503+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:12.620235+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:12.700041+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:13.943655+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:16.578773+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:26.572094+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:27.569126+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:27.612513+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:28.955878+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:36.576506+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:42.582353+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:42.614014+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:42.741414+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:43.968598+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:46.580797+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:56.574307+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:57.583345+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:57.628006+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:13:58.970817+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:06.579407+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:12.599746+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:12.631146+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:12.749491+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:13.971323+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:16.578048+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:26.575197+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:27.600004+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:27.670000+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:28.984668+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:36.572156+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:42.614257+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:42.677544+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:42.778772+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:44.000204+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:46.584289+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:56.583550+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:57.624361+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:57.681287+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:14:59.010144+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:06.573829+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:12.633892+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:12.696606+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:12.797341+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:14.020987+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:16.574549+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:26.582626+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:27.640968+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:27.731717+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:29.031934+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:36.586068+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:42.645711+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:42.711241+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:44.041266+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:46.579433+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:56.587039+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:57.646248+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:57.705403+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:15:59.050438+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:06.575988+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:12.660214+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:12.708347+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:12.842888+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:14.053519+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:16.578451+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:26.582060+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:27.674177+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:27.736661+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:29.063431+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:36.581741+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:42.681878+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:42.745753+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:42.825105+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:44.068188+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:46.572588+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:56.574017+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:57.689227+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:57.746040+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:16:59.078763+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:06.578383+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:12.702775+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:12.750412+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:12.878132+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:14.083741+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:16.585496+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:26.583290+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:27.715577+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:27.761250+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:29.086697+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:36.585115+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:42.717501+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:42.765045+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:42.851257+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:44.085932+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:46.582745+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:56.583310+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:57.716597+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:57.782091+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:17:59.095638+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:06.572311+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:12.719444+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:12.782458+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:12.836847+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:14.108235+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:16.582115+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:26.573527+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:27.720751+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:27.784077+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:29.121911+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:36.573183+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:42.737136+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:42.785377+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:42.855789+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:44.126501+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:46.573326+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:56.580230+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:57.744574+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:57.809306+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:18:59.132411+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:06.576606+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:12.745308+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:12.807397+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:14.144051+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:16.585409+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:26.579104+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:27.758691+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:27.821281+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:27.886831+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:29.150582+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:36.582252+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:42.763565+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:42.827131+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:44.156112+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:46.578676+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:56.582810+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:57.765724+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:57.824250+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:19:59.157418+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:06.576329+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:12.768445+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:12.831766+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:12.934263+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:14.170454+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:16.572319+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:26.581351+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:27.771538+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:27.817412+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:29.174650+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:36.580785+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:42.786699+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:42.833279+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:42.940663+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:44.183854+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:46.575996+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:56.575045+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:57.796907+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:57.865435+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:20:59.190817+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:06.576901+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:09.597924+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:09.613819+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/assets/index-Zyb_20X4.js",
+    "status": 304
+  },
+  {
+    "at": "2026-11-17T00:21:09.615433+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/assets/index-DLUGhrP6.css",
+    "status": 304
+  },
+  {
+    "at": "2026-11-17T00:21:09.642922+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator-auth/status",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:09.609008+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:09.671998+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/info",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:09.769620+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:09.673012+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:09.784455+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:09.676444+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:09.933969+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:09.678062+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:09.683280+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:10.200470+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:09.685296+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:10.048530+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:10.064291+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:10.283437+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:10.685121+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:19.678319+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:24.568700+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:24.583270+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:24.570527+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:24.691985+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:24.582721+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:24.844705+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:24.996137+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:29.686861+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:31.230119+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:31.245550+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:31.232768+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:31.397763+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:31.245217+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:31.527618+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:31.637266+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:39.675111+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:39.768519+00:00",
+    "type": "ui_action",
+    "label": "Connect or resume"
+  },
+  {
+    "at": "2026-11-17T00:21:39.774783+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/me",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:39.791310+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/project-preset",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:39.802138+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:39.813573+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/catalog",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:46.246738+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:46.530879+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:46.627013+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:47.807392+00:00",
+    "type": "ui_action",
+    "label": "Connection reference"
+  },
+  {
+    "at": "2026-11-17T00:21:48.632786+00:00",
+    "type": "ui_action",
+    "label": "Connection reference"
+  },
+  {
+    "at": "2026-11-17T00:21:49.676327+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:21:59.673810+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:01.249694+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:01.532132+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:01.604659+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:04.426661+00:00",
+    "type": "ui_action",
+    "label": "Open connection"
+  },
+  {
+    "at": "2026-11-17T00:22:04.428248+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/bindings/binding",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:04.444479+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:09.675040+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:13.336079+00:00",
+    "type": "ui_action",
+    "label": "Close modal"
+  },
+  {
+    "at": "2026-11-17T00:22:16.253707+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:16.532441+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:16.604926+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:16.818740+00:00",
+    "type": "ui_action",
+    "label": "Connect or resume"
+  },
+  {
+    "at": "2026-11-17T00:22:16.821302+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/me",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:16.829829+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/project-preset",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:16.836800+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:16.843216+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/catalog",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:19.672735+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:29.688309+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:29.862247+00:00",
+    "type": "ui_action",
+    "label": "Open connection"
+  },
+  {
+    "at": "2026-11-17T00:22:29.863909+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/bindings/ui-binding-2",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:29.877346+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:31.262131+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:31.537519+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:31.609647+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:31.694682+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:33.596626+00:00",
+    "type": "ui_action",
+    "label": "Close modal"
+  },
+  {
+    "at": "2026-11-17T00:22:39.678360+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:46.274717+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:46.539712+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:46.609039+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:49.678279+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:22:59.679769+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:01.278458+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:01.540175+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:01.608365+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:01.675408+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:09.677644+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:09.839462+00:00",
+    "type": "ui_action",
+    "label": "Home"
+  },
+  {
+    "at": "2026-11-17T00:23:11.991143+00:00",
+    "type": "ui_action",
+    "label": "Needs attention. All projects and Server. 2 need action, 5 to watch."
+  },
+  {
+    "at": "2026-11-17T00:23:12.005327+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:11.994325+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:11.998115+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:11.995945+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:12.256879+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:12.205065+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:12.215281+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:12.395233+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:12.491184+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:12.497749+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:17.091286+00:00",
+    "type": "ui_action",
+    "label": "Home"
+  },
+  {
+    "at": "2026-11-17T00:23:17.101076+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:17.093968+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:17.094631+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:17.358739+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:17.240415+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:17.100888+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:17.366407+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:17.459549+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:19.673895+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:29.686564+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:32.112177+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:32.370476+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:32.422012+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:39.690337+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:45.970462+00:00",
+    "type": "ui_action",
+    "label": "Connect or resume"
+  },
+  {
+    "at": "2026-11-17T00:23:45.972588+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/me",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:45.983690+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/project-preset",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:45.991685+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:45.998513+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/catalog",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:47.112575+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:47.374426+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:47.422963+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:47.526631+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:49.679858+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:51.117853+00:00",
+    "type": "ui_action",
+    "label": "Add another harness on this Server"
+  },
+  {
+    "at": "2026-11-17T00:23:51.118746+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/setup/project_a861f3a04b344395a2628914a1a5dfdf",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:51.126138+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/agents/operator/executors",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:51.144415+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/me",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:51.151055+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/agents/operator/runtime-options",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:51.182689+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/workspaces/ws/paths",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:23:59.675233+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:02.121131+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:02.435986+00:00",
+    "type": "ui_action",
+    "label": "Review this connection"
+  },
+  {
+    "at": "2026-11-17T00:24:02.379716+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:02.456976+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:09.679148+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:16.043047+00:00",
+    "type": "ui_action",
+    "label": "Review this connection"
+  },
+  {
+    "at": "2026-11-17T00:24:17.121222+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:17.381995+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:17.456962+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:17.507770+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:17.705502+00:00",
+    "type": "ui_action",
+    "label": "Review this connection"
+  },
+  {
+    "at": "2026-11-17T00:24:19.675177+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:25.660319+00:00",
+    "type": "ui_action",
+    "label": "Review this connection"
+  },
+  {
+    "at": "2026-11-17T00:24:29.674035+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:32.122934+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:32.386805+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:32.490709+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:39.687428+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:43.186175+00:00",
+    "type": "ui_action",
+    "label": "Test reviewed connection"
+  },
+  {
+    "at": "2026-11-17T00:24:43.189283+00:00",
+    "type": "http",
+    "method": "POST",
+    "path": "/api/v1/runtime-management/connections/setup:test",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:44.731358+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/setup-tests/setup_c693ff643e40a3b3bf811860ac3c3ab0",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:47.134405+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:47.389548+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:47.480516+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:49.673275+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:52.166222+00:00",
+    "type": "ui_action",
+    "label": "Finish"
+  },
+  {
+    "at": "2026-11-17T00:24:52.168174+00:00",
+    "type": "http",
+    "method": "POST",
+    "path": "/api/v1/runtime-management/connections/setup:finish",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:52.291700+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:52.300467+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:52.322110+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:52.297602+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/info",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:52.555898+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:52.284564+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:52.308380+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:52.332570+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:52.596961+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:52.666938+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:52.851023+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:24:59.682628+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:25:07.302248+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:25:07.597701+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:25:07.695397+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:25:08.513552+00:00",
+    "type": "ui_action",
+    "label": "Close modal"
+  },
+  {
+    "at": "2026-11-17T00:25:09.676340+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:25:14.177516+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-17T00:25:14.181827+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  }
+]

@@ -6,8 +6,33 @@ export interface ProjectPresetOverview {
   origin: {id: string; revision: number};
   identity: {role: string; permissions: Record<string, unknown>; defaults_hash: string};
   configuration: Pick<import('./connectionConfiguration').ConnectionConfiguration,
-    'runtime_enabled' | 'session_policy' | 'harness_settings' | 'tool_access' | 'authorization'>;
+    'runtime_enabled' | 'session_policy' | 'harness_settings' | 'tool_access'> & {
+      authorization: {minutes:number|null; actions:number|null; no_expiry:boolean; unlimited_actions:boolean};
+    };
   effects: string[];
+}
+
+export interface ConnectionCatalogItem {
+  server_id: string; binding_id: string; executor_id: string; endpoint_id: string;
+  workspace_binding_id: string; agent_id: string; workspace_id: string; adapter_id: string;
+  binding_revision: number; realization_revision: number; endpoint_revision: number;
+  activation_state: string; endpoint_enabled: number | boolean; agent_active: number | boolean;
+  executor_revoked: number | boolean; execution_location: 'local' | 'remote';
+  agent_label: string | null; workspace_label: string | null; host_label: string | null;
+  needs_revalidation: true;
+}
+export interface ConnectionCatalogPage {
+  version: 1; server_id: string; scope: Record<string, string>; revision: string; generated_at: string;
+  items: ConnectionCatalogItem[]; total: number; total_is_exact: true;
+  has_more: boolean; next_cursor: string | null; requires_canonical_revalidation: true;
+  cursor_integrity: 'unsigned_scope_checked';
+}
+export interface SetupFinishResult {saved: boolean; agent_id?: string; agent_created?: boolean; binding?: BindingView; project_preset?: {id:string;revision:number}}
+export interface SetupReceipt {setup_run_id: string; request_hash: string; state: 'committed'; result: SetupFinishResult}
+export interface SetupDraftView {
+  baseline: SetupBaseline; runtime_policy: import('./api').RuntimePolicy;
+  agent_creation_defaults: ProjectPresetOverview['identity'];
+  native_decision_policy?: {value: boolean; source: string; editable: boolean; revision: string; can_initialize: boolean};
 }
 
 export interface ExecutorChoice {
@@ -46,6 +71,7 @@ export interface HarnessConfiguration {
 }
 
 export interface BindingView {
+  server_id?: string;
   binding_id: string; binding_revision: number; state: string; endpoint_id: string;
   executor_id: string; agent_id: string; workspace_id: string;
   workspace_binding_id: string; adapter_id: string; candidate_ref: string;
@@ -163,6 +189,20 @@ export interface NativeDecisionView {
 }
 
 // R4 uses Bearer authentication and direct JSON, unlike the legacy /api envelope.
+export interface DefinitiveSetupTestRejection {
+  status:422; code:'VALIDATION_ERROR'; stage:'connection.test'; possible_effect:false;
+  operation_id:null; retry_safe:false;
+}
+export class RuntimeManagementError extends ApiError {
+  readonly definitiveTestRejection:DefinitiveSetupTestRejection|null;
+  constructor(status:number, code:string, message:string, details:unknown, metadata:unknown) {
+    super(status,code,message,details);
+    const value=metadata as Record<string,unknown>|null;
+    this.definitiveTestRejection=status===422&&code==='VALIDATION_ERROR'&&value?.stage==='connection.test'&&
+      value.possible_effect===false&&value.operation_id===null&&value.retry_safe===false&&value.action===''?
+      {status:422,code:'VALIDATION_ERROR',stage:'connection.test',possible_effect:false,operation_id:null,retry_safe:false}:null;
+  }
+}
 async function read<T>(path: string, signal: AbortSignal | undefined, body?: unknown): Promise<T> {
   const headers = new Headers();
   headers.set("x-nexus-ui", "1");
@@ -176,7 +216,7 @@ async function read<T>(path: string, signal: AbortSignal | undefined, body?: unk
   catch { throw new ApiError(response.status, `HTTP_${response.status}`, response.statusText || "Invalid server response"); }
   if (!response.ok) {
     const error = value.error ?? value;
-    throw new ApiError(response.status, error.code ?? `HTTP_${response.status}`, error.message ?? response.statusText, error.details);
+    throw new RuntimeManagementError(response.status, error.code ?? `HTTP_${response.status}`, error.message ?? response.statusText, error.details,error);
   }
   return value as T;
 }
@@ -214,6 +254,17 @@ export interface RecoveryPlan {
 }
 
 export const runtimeApi = {
+  connectionCatalog: (filters: {workspace_id?: string; agent_id?: string; executor_id?: string; execution_location?: 'local' | 'remote'}, cursor: string | null, signal?: AbortSignal) => {
+    const query = new URLSearchParams({...filters, limit: '100'});
+    if (cursor) query.set('cursor', cursor);
+    return read<ConnectionCatalogPage>(`/v1/connections/catalog?${query}`, signal);
+  },
+  setupDraft: (agent: string, signal?: AbortSignal) => read<SetupDraftView>(`/v1/connections/setup/${encodeURIComponent(agent)}?new_agent_draft=true`, signal),
+  recoverSetup: (body: SetupRequest, signal?: AbortSignal) => read<SetupReceipt>('/v1/connections/setup:recover', signal, body),
+  setupReceipt: (id: string, signal?: AbortSignal) => read<SetupReceipt>(`/v1/connections/setup-commits/${encodeURIComponent(id)}`, signal),
+  connectionWorkspaces: (after: string | null, signal?: AbortSignal) => read<{
+    items: {workspace_id: string; display_name: string | null}[]; has_more: boolean; next_workspace_id: string | null;
+  }>(`/v1/connections/workspaces?limit=100${after ? '&after_workspace_id='+encodeURIComponent(after) : ''}`, signal),
   recoveryPlan: (agentId: string) => read<RecoveryPlan>(`/v1/runtime/recovery/plan?agent_id=${encodeURIComponent(agentId)}`, undefined),
   confirmStopped: (plan: RecoveryPlan) => read<{state: string; message: string}>(
     '/v1/runtime/recovery/confirm-stopped', undefined,
@@ -237,7 +288,7 @@ export const runtimeApi = {
     ),
   testSetup: (body: SetupRequest) => read<SetupTest>('/v1/connections/setup:test', undefined, body),
   setupTest: (id: string, signal?: AbortSignal) => read<SetupTest>(`/v1/connections/setup-tests/${encodeURIComponent(id)}`, signal),
-  finishSetup: (body: SetupRequest) => read<{saved: boolean}>('/v1/connections/setup:finish', undefined, body),
+  finishSetup: (body: SetupRequest) => read<SetupFinishResult>('/v1/connections/setup:finish', undefined, body),
   nativeInputs: (workspace: string, signal?: AbortSignal) => read<{items: ApprovalDetail[]}>(
     `/v1/runtime/input-requests${workspace && workspace !== "all" ? `?workspace_id=${encodeURIComponent(workspace)}` : ""}`, signal),
   decideNative: (body: NativeDecisionRequest) => read<NativeDecisionView>("/v1/runtime/approval-decisions", undefined, body),

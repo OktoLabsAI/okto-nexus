@@ -13,6 +13,52 @@ returns after setup. `configured` itself does not mean a live session or complet
 okto-nexus connect --client codex --project .
 ```
 
+## Resume or add a connection
+
+From the same project, interactive `connect` offers existing connections,
+**Add another harness**, and **Cancel** before creating another identity.
+The shortcut name is generated; you do not need to invent `--profile`.
+Connections created through the dashboard or Connector are discovered through
+the authorized canonical catalog. Resuming such a connection can save a local
+shortcut after revalidating its exact binding and project. It does not run a
+model test, renew a grant, or recreate the connection. Remote catalog choices
+require an explicit `--workspace-id`; a local folder is only the shortcut's
+namespace and does not replace the remote host mapping.
+
+Choose Add to propose a separate collaborator on the same logical project.
+The existing identity, custom permissions, model settings, grants and session
+history stay associated with their original connection. Creating a second
+connection with the same harness is supported too. An ambiguous project or
+installation requires an explicit choice.
+
+```sh
+okto-nexus connect --project .
+okto-nexus connect --new-connection --client claude --project .
+```
+
+Explicit scripts and existing profiles remain supported. JSON/noninteractive
+addition requires a stable caller-selected profile, so retries retain the same
+identity/setup intent:
+
+```sh
+okto-nexus connect --new-connection --profile second-helper --client claude --project . --plan --json
+```
+
+`--plan` does not start a service or run installation/model probes. It may save
+review/shortcut metadata, and canonical binding revalidation can materialize
+existing authorization revision metadata. JSON reports
+`canonical_metadata_revalidation_requested` separately; an unknown effect is
+not reported as `effects_started=false`. An incomplete catalog is a refusal to
+choose, rather than permission to create a replacement identity.
+
+Resuming a connection, continuing an exact session, opening a new session and
+recovering a pending send are separate choices in the [work prompt](terminal-work.md).
+Session ordering never selects the most recent session implicitly. If a send
+or test has an uncertain result, recover its retained ID before considering a
+new request.
+
+## Review the proposed collaborator
+
 The review shows the new identity's suggested name, role and coordination
 permissions, local project, workspace, provider login directory, installation
 check and execution limits. The project preset keeps the harness's

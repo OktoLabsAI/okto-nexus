@@ -1,0 +1,32 @@
+{
+  "scope": "Readonly viewer presentation delta after frozen BXP provider candidate",
+  "source_parent_commit": "6d54c4ab7e8221092ed31e2cd2f40265beee23b7",
+  "node": {
+    "command": "rtk npm test",
+    "exit_code": 0,
+    "pass": 300,
+    "fail": 0,
+    "duration_ms": 9128.6931,
+    "tool": "3557fc",
+    "limits": [
+      "Existing RuntimeTerminal useLayoutEffect SSR warnings retained. Node is not browser or AT."
+    ]
+  },
+  "build": {
+    "command": "rtk npm run build",
+    "exit_code": 0,
+    "duration_seconds": 12.64,
+    "tool": "cff676",
+    "warnings": [
+      "Existing bundle exceeds500kB minified."
+    ]
+  },
+  "browser": "NEXUS_UI_R1/execution/evidence/pr11-readonly-viewer-guard/qualification.json",
+  "lost_decision_response": "NEXUS_UI_R1/execution/evidence/pr07-panel09-lost-response/qualification.json",
+  "js_sha256": "dfef7675dea3918117e0df676e3e6d1ef72dd03dec61086e0d24a1b91f6430c9",
+  "css_sha256": "cf9d0698234d975279e0da1a1cfb10dd2e8f0f88d15c074515049a556bf43683",
+  "effects": "No DB migration or personal installation change; no productive browser POST. Readonly section excludes observation-only controls from outer modal draft capture.",
+  "rollback": "Revert this attribute/test/generated-asset commit using a new commit and rebuild. Preserve canonical forms, data, sessions, grants and all pending intents.",
+  "candidate_boundary": "Installed BXP wheel, candidate3ea51229 and pr08-installed-qualification.json remain frozen. BGONN is a separately qualified UI delta, not a retroactive replacement of any prior artifact.",
+  "next": "Continue remaining literal ledger scenarios; providers require pending specific consent, human and assistive gates remain open."
+}

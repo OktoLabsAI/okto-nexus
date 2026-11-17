@@ -1,0 +1,50 @@
+{
+  "snapshot": {
+    "handoffs": {
+      "count": 4,
+      "sha256": "c90d7db69954fb9b14754918bfabe3660228a948812e8837a2e8f4abdd529bba"
+    },
+    "message_deliveries": {
+      "count": 2,
+      "sha256": "efcc4ec3968202e367eb6b59d1ed3620f82eb8207e8a07e540b379d07cce0db5"
+    },
+    "execution_operations": {
+      "count": 12,
+      "sha256": "0e0cff05c90477be85106c855bc7df963aaf914326c77f3a797372a3219818b0"
+    },
+    "execution_receipts": {
+      "count": 9,
+      "sha256": "6731907253c7a33eb657ced70be3a09f5456b56d8ff92d72a78094e7d32d92c8"
+    },
+    "execution_event_watermarks": {
+      "count": 1,
+      "sha256": "99ef27d40f1a983f2382b0a0e237dbfbc97ef9a5e5b212350b64477c86be7785"
+    },
+    "attention_preferences": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/home/results"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/operations/ui-success"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/operations/ui-file-op-1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/operations/ui-file-op-2"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/operations/ui-success"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "scope": "Own CLI Node process and its observed Chrome descendants only; no command lines or personal profiles read",
+  "node_pid": 54688,
+  "chrome": {"pid":15792,"parent":54688,"created_epoch_ms":1794873320248},
+  "chrome_children": [
+    {"pid":58048,"parent":15792,"created_epoch_ms":1794873320270},
+    {"pid":46260,"parent":15792,"created_epoch_ms":1794873320498},
+    {"pid":30304,"parent":15792,"created_epoch_ms":1794873320605},
+    {"pid":52540,"parent":15792,"created_epoch_ms":1794873320633},
+    {"pid":29496,"parent":15792,"created_epoch_ms":1794873320753},
+    {"pid":35220,"parent":15792,"created_epoch_ms":1794873320786},
+    {"pid":29964,"parent":15792,"created_epoch_ms":1794873320787}
+  ],
+  "observation_tools": ["2520ec","2a896f"],
+  "cleanup_verification": "Pending normal named-session close after human handoff/auto-stop"
+}

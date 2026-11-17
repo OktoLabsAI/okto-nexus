@@ -1,0 +1,92 @@
+{
+  "scenarios": {
+    "T-ATTN-02": {
+      "status": "PASS_INERT_CANONICAL_NATIVE_SCOPE",
+      "handle": "e31956",
+      "recipient": "subject",
+      "browser_actor": "canonical_loopback_operator",
+      "kind": "question_waiting_for_agent",
+      "allowed_actions": [
+        "inspect_approval"
+      ],
+      "answer_control_present": false,
+      "canonical_post_http": 403,
+      "error_code": "APPROVAL_AUTHORITY_REQUIRED",
+      "possible_effect": false
+    },
+    "T-ATTN-06": {
+      "status": "PASS_HOME_OFF_ALTERNATIVE_ONLY",
+      "handle": "d28f1d",
+      "preference": {
+        "key": "okto-nexus-home-operational",
+        "value": "disabled"
+      },
+      "classic_present": true,
+      "operational_present": false,
+      "old_question_http": 202,
+      "native_stage": "DISPATCH_PENDING",
+      "native_application": "NOT_EXECUTED",
+      "interception_off_branch": "NOT_RUN"
+    },
+    "T-NAV-06": {
+      "status": "NOT_RUN_GIVEN_UNAVAILABLE",
+      "reason": "No supported reduced-role human operator account or generic advanced view link; no agent impersonation or invented DTO used"
+    }
+  },
+  "fixture_antecedents": [
+    {
+      "handle": "fc8488",
+      "reason": "Scenario field decision_body correction; HTTP not started"
+    },
+    {
+      "handle": "0c6233",
+      "reason": "Unsupported feature_home info oracle; no POST; actual browser-local preference used in final run"
+    }
+  ],
+  "source_pins": {
+    "tests/ui_simplification/browser_attention_authority_fixture.py": "19494cc326f5f83cabab0722b6765a796927832495c2aa8d41aaaa38b52e4b69",
+    "tests/ui_simplification/browser_attention_authority_checks.js": "2e468be9d16ba5e971feb43842b84e4a6a940d0dd66a0e084e9c26ec3da552fe",
+    "tests/execution_r4/ns14_load.py": "20ba0b4eedd09d97bbfdf37155b3c8c26588a9e0059f9899733304aa2058c707",
+    "src/okto_nexus/adapters/inbound/http/operator_auth.py": "2cccffe44ec27baacdc9b277cc808a22d205377c1bddced46dfbaf67d162dfcc"
+  },
+  "provider_calls": 0,
+  "native_binary_calls": 0,
+  "product_changed": false,
+  "runs": {
+    "agent": {
+      "final_decisions": 0,
+      "final_input_operations": 0,
+      "final_input_outbox": 0,
+      "grants_unchanged": true,
+      "native_expiry_unchanged": true,
+      "entire_selected_state_unchanged": true,
+      "posts": [
+        {
+          "method": "POST",
+          "path": "/api/v1/runtime-management/runtime/approval-decisions",
+          "status": 403
+        }
+      ],
+      "peer_errors": [],
+      "thread_stopped": true
+    },
+    "home-off": {
+      "final_decisions": 1,
+      "final_input_operations": 1,
+      "final_input_outbox": 1,
+      "grants_unchanged": true,
+      "native_expiry_unchanged": true,
+      "entire_selected_state_unchanged": false,
+      "posts": [
+        {
+          "method": "POST",
+          "path": "/api/v1/runtime-management/runtime/approval-decisions",
+          "status": 202
+        }
+      ],
+      "peer_errors": [],
+      "thread_stopped": true
+    }
+  },
+  "cleanup": "cleanup.json"
+}

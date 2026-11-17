@@ -1,0 +1,6 @@
+from pathlib import Path
+import json
+here=Path(__file__).resolve().parent;root=here.parents[3];out=root/'output/playwright/ui043-third-technical'
+prior=json.loads((here/'technical-final-cli.txt').read_text().split('### Result\n',1)[1].split('\n### Ran',1)[0])
+source="""async page=>{const prior=__PRIOR__;const assets=await page.locator('script[src]').evaluateAll(ns=>ns.map(n=>n.getAttribute('src')));const ok=assets.some(x=>x.includes('index-CKlKNFgD.js'))&&prior.requests.filter(r=>r.method==='POST').length===2&&prior.requests.filter(r=>r.method==='POST').every(r=>r.url.endsWith('/connections/setup:test')||r.url.endsWith('/connections/setup:finish'))&&prior.errors.length===0&&prior.consoleErrors.length===0;if(!ok)throw Error('final asset/request/exception checks');return{...prior,status:'PASS',message:undefined,checks:[...prior.checks,{name:'Exact frozen asset and exactly two allowed POSTs without frontend errors',status:'PASS',assets,errors:prior.errors,consoleErrors:prior.consoleErrors}],antecedentLimit:'Nine functional checks passed; original final metadata assertion called url() on a logged URL string. This continuation fixes that assertion without replaying setup.'};}"""
+(out/'complete.js').write_text(source.replace('__PRIOR__',json.dumps(prior)),encoding='utf-8')

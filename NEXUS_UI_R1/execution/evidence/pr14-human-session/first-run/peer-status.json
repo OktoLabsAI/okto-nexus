@@ -1,0 +1,43 @@
+[
+  {
+    "at": "2026-11-16T23:36:23.534620Z",
+    "kind": "lease_applied",
+    "serial": 2
+  },
+  {
+    "at": "2026-11-16T23:36:39.708459Z",
+    "kind": "lease_applied",
+    "serial": 3
+  },
+  {
+    "at": "2026-11-16T23:36:55.961528Z",
+    "kind": "lease_applied",
+    "serial": 4
+  },
+  {
+    "at": "2026-11-16T23:37:12.218467Z",
+    "kind": "lease_applied",
+    "serial": 5
+  },
+  {
+    "at": "2026-11-16T23:37:28.433206Z",
+    "kind": "lease_applied",
+    "serial": 6
+  },
+  {
+    "at": "2026-11-16T23:37:44.609462Z",
+    "kind": "lease_applied",
+    "serial": 7
+  },
+  {
+    "at": "2026-11-16T23:38:00.752701Z",
+    "kind": "lease_applied",
+    "serial": 8
+  },
+  {
+    "at": "2026-11-16T23:38:16.910285Z",
+    "kind": "peer_failed",
+    "type": "OktoNexusError",
+    "error": "CONFLICT: The lease inventory is no longer fresh."
+  }
+]

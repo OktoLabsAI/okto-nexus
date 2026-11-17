@@ -1,0 +1,41 @@
+MCP workspace_resolve: OK
+MCP agent_register: OK
+MCP agent_register: OK
+MCP agent_whoami: OK
+MCP agent_whoami: OK
+MCP session_open: OK
+MCP session_open: OK
+MCP channel_list: OK
+MCP message_create: OK
+MCP event_wait: OK
+MCP handoff_create: OK
+MCP handoff_claim: OK
+MCP handoff_complete: OK
+MCP artifact_put: OK
+MCP artifact_get: OK
+MCP shared_md_render: OK
+Traceback (most recent call last):
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\scripts\live_client.py", line 378, in <module>
+    raise SystemExit(asyncio.run(run()))
+                     ~~~~~~~~~~~^^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\scripts\live_client.py", line 369, in run
+    shutil.rmtree(root)
+    ~~~~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\shutil.py", line 790, in rmtree
+    return _rmtree_unsafe(path, onexc)
+  File "C:\Python313\Lib\shutil.py", line 629, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\shutil.py", line 625, in _rmtree_unsafe
+    os.unlink(fullname)
+    ~~~~~~~~~^^^^^^^^^^
+PermissionError: [WinError 32] O arquivo já está sendo usado por outro processo: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-live-http-mcp-qjmahm12\\home\\nexus.db'

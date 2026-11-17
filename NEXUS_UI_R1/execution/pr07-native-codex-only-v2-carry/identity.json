@@ -1,0 +1,18 @@
+{
+  "campaign_id": "dd47c48b74b44711bfb140b542ccbfcc",
+  "created_at": "2026-11-16T23:41:23.839580+00:00",
+  "temporary_parent": "C:\\Users\\jpamb\\AppData\\Local\\Temp",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-carry-dd47c48b74b44711bfb140b542ccbfcc",
+  "port": 58107,
+  "agent_ids": {
+    "codex_a": "ui042-codex-a-dd47c48b74b44711",
+    "codex_b": "ui042-codex-b-dd47c48b74b44711"
+  },
+  "intent_ids": {
+    "codex_a.setup": "ui042_dd47c48b74b44711bfb140b542ccbfcc_codex_a_setup",
+    "codex_b.setup": "ui042_dd47c48b74b44711bfb140b542ccbfcc_codex_b_setup",
+    "codex_a.work": "ui042_dd47c48b74b44711bfb140b542ccbfcc_codex_a_work",
+    "codex_a.continue": "ui042_dd47c48b74b44711bfb140b542ccbfcc_codex_a_continue",
+    "codex_b.work": "ui042_dd47c48b74b44711bfb140b542ccbfcc_codex_b_work"
+  }
+}

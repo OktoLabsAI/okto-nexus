@@ -1,0 +1,23 @@
+{
+  "diagnostics": [
+    {
+      "kind": "canonical_inventory_put"
+    },
+    {
+      "kind": "canonical_lease_applied",
+      "serial": 2
+    },
+    {
+      "kind": "canonical_inventory_put"
+    },
+    {
+      "kind": "canonical_lease_applied",
+      "serial": 3
+    },
+    {
+      "kind": "canonical_lease_applied",
+      "serial": 4
+    }
+  ],
+  "thread_stopped": true
+}

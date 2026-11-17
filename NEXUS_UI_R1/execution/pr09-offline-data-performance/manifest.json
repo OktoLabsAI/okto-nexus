@@ -1,0 +1,109 @@
+{
+  "status": "PASS_SCOPED_OFFLINE",
+  "runner_toolrefs": [
+    "2d1a5b",
+    "6ccd45"
+  ],
+  "process_exit": 0,
+  "command": [
+    "rtk",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+    "-I",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_UI_R1\\execution\\pr09-offline-data-performance\\run.py"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9",
+  "samples_per_series": 3,
+  "warmup_per_series": 1,
+  "latency_milliseconds": {
+    "1": {
+      "entries": {
+        "p50_ms": 97.23539999686182,
+        "nearest_rank_p95_ms": 101.50250000879169
+      },
+      "children": {
+        "p50_ms": 88.75609998358414,
+        "nearest_rank_p95_ms": 96.86879999935627
+      },
+      "sessions": {
+        "p50_ms": 90.87870002258569,
+        "nearest_rank_p95_ms": 94.42729997681454
+      }
+    },
+    "10": {
+      "entries": {
+        "p50_ms": 140.66919998731464,
+        "nearest_rank_p95_ms": 150.48979996936396
+      },
+      "children": {
+        "p50_ms": 163.01890002796426,
+        "nearest_rank_p95_ms": 175.19580002408475
+      },
+      "sessions": {
+        "p50_ms": 131.9554999936372,
+        "nearest_rank_p95_ms": 143.07540003210306
+      }
+    },
+    "100": {
+      "entries": {
+        "p50_ms": 405.53709998494014,
+        "nearest_rank_p95_ms": 415.3093000059016
+      },
+      "children": {
+        "p50_ms": 386.337400006596,
+        "nearest_rank_p95_ms": 434.2117999913171
+      },
+      "sessions": {
+        "p50_ms": 403.1819000374526,
+        "nearest_rank_p95_ms": 483.88410004554316
+      }
+    }
+  },
+  "query_counts": {
+    "entries": [
+      55,
+      55,
+      55
+    ],
+    "children": [
+      55,
+      55,
+      55
+    ],
+    "sessions": [
+      55,
+      55,
+      55
+    ]
+  },
+  "uows_per_read": 1,
+  "read_only_uows": true,
+  "writes_per_read": 0,
+  "transcript_or_journal_queries": 0,
+  "product_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+  "source_pin_drift": [],
+  "installed_payload_comparison_after_run": {
+    "compared": 1035,
+    "mismatches": 0
+  },
+  "frozen_campaign_candidate_sha256": "3ea51229df9bcc4d93d7f42dbe5e4d62a97741d97c99907a49a21cde6fafb88e",
+  "frozen_proposal_and_pr08_pins_unchanged": true,
+  "files_sha256": {
+    "agents-1.json": "c80f39b89ca5c4ac657ea007becf10f0fa543734870ce5276b3527c77bb86099",
+    "agents-10.json": "3ed346eeafcafa288de485dc782d9fb4cb756c7221d0c1bdfdb84f9a8a8489f5",
+    "agents-100.json": "d3e5f08c1869e5f41e8112ac3f6379134a51b4ef4f9c47d7eda1f067b6f1f680",
+    "antecedent-fixture-fk.json": "c444d12eb9b87342d42fbec0034444b48507e3761b0690b68ace812b533280c8",
+    "antecedent-oracle.json": "8b2a0d3909ae054844ad236e214a7db69b5f824d9b7f8ef61e457ca2ace7d004",
+    "antecedent-results-oracle.json": "20fff3761d2dd1d8e4c0991a005612f01adc6d46755319de3b9c729f0800c499",
+    "qualification.json": "6d4b92538b049da9625e764f4a263d1dac828008466866bbc2ffa913eb7dc0cc",
+    "run.py": "669a19ca7d6bbf6cb3d8b3abffbe6a92fba1bbe3e9539313c4710226c8bac72f"
+  },
+  "limits": [
+    "Synthetic SQLite durable read facts; no native lifecycle/billing claim.",
+    "Warm/cleanup technical facts are not projected as activity; this does not qualify browser labels.",
+    "Three samples only diagnose query-growth, not production latency percentiles. Existing PR03 larger benchmark retained."
+  ],
+  "provider_or_native_invoked": false,
+  "browser_claim": false,
+  "cleanup": "Runner exited0; all3ownfixture lifespan/WSS/factory contexts exited; no childServer/native/browser process created."
+}

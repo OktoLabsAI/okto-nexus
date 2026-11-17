@@ -1,0 +1,802 @@
+{
+  "snapshot": {
+    "handoffs": {
+      "count": 4,
+      "sha256": "270308a11fad322e5e21386363e2d31a91dd3f4c1361338ed4cf783bb5644350"
+    },
+    "message_deliveries": {
+      "count": 2,
+      "sha256": "a166a418df1e21d6341b4bf5ac1a860d52c3867e72930f5ebbdd34d76e800d4b"
+    },
+    "execution_operations": {
+      "count": 12,
+      "sha256": "989a574173aa1a885ee8f94c36af435e66ec8c22274e2192d80ea0f2262ff44c"
+    },
+    "execution_receipts": {
+      "count": 9,
+      "sha256": "f32a2cbc32deec96fb1d4fd9a90d0a598e4f607a287781f4de211a9c9ed0a063"
+    },
+    "execution_event_watermarks": {
+      "count": 1,
+      "sha256": "965efe533b4130979b52c6a66ddf32a0e7cef8ccf5bc62e53ae4c7bb7b68aa00"
+    },
+    "attention_preferences": {
+      "count": 1,
+      "sha256": "df64d7770e42e7362217d0a77c1e75f1734dcf737297a37578a0eae0ea02047d"
+    }
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-BGONNtiX.js"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-C-ZFb395.css"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sessions"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta-harness/runtime-sessions"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/messages"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/local/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/local/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/publish-health"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/results"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/results"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/results"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries/home_group_9c73d7a6a5fcd397aa50a9905f9af1a33982345392b4d30b920bcad71fd66f52/children"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/results"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/results"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/results"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/results"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries/home_group_9c73d7a6a5fcd397aa50a9905f9af1a33982345392b4d30b920bcad71fd66f52/children"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries/home_group_9c73d7a6a5fcd397aa50a9905f9af1a33982345392b4d30b920bcad71fd66f52/children"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ui-session-2"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents/subject/runtime-executions/ui-success"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ui-session-2/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/results"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/attention/att_65955cd6b3f1a94b91717caa710884b5f4b3a29f15a96a9aea0083c1de16463c/seen"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/results"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents/subject/runtime-executions/ui-success"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ui-session-2"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ui-session-2/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/entries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    }
+  ]
+}

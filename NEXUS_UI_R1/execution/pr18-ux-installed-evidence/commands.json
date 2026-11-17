@@ -1,0 +1,45 @@
+[
+  {
+    "name": "install",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "pip",
+      "install",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\artifacts\\okto_nexus-0.3.5-py3-none-any.whl[serve-lite]",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\ci\\okto_nexus_connector-0.0.13-py3-none-any.whl",
+      "packaging>=24"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "ci-smoke",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Scripts\\python.exe",
+      "-I",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+      "smoke",
+      "--wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\artifacts\\okto_nexus-0.3.5-py3-none-any.whl",
+      "--output",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\ci-smoke"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "nexus-help",
+    "command": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Scripts\\nexus.exe",
+      "--help"
+    ],
+    "exit_code": 1
+  }
+]

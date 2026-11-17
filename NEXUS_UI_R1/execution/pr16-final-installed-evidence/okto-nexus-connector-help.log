@@ -1,0 +1,41 @@
+usage: okto-nexus-connector [-h] [--version] [--json] [--verbose]
+                            [--non-interactive] [--state-dir STATE_DIR]
+                            {clean,proxy,reach,configure,connect,identity,executor,discover,bind,runtime,daemon,service,reconnect,status,logs,doctor,approvals,mcp-config,harness-config,connection-config} ...
+
+Remote harness connector for Okto Nexus
+
+positional arguments:
+  {clean,proxy,reach,configure,connect,identity,executor,discover,bind,runtime,daemon,service,reconnect,status,logs,doctor,approvals,mcp-config,harness-config,connection-config}
+    clean               reset local Connector state, credentials and pending
+                        configurations
+    proxy               configure the host-local HTTP and WebSocket proxy
+    reach               test Server reachability and report supported versions
+                        (no credentials required)
+    configure           interactive connection wizard (JSON optional)
+    connect             guided first-use flow
+    identity            imported identity management
+    executor            R4 executor registration
+    discover            local harness inventory (redacted)
+    bind                advanced binding management
+    runtime             managed runtime operations
+    daemon              local daemon lifecycle
+    service             OS autostart management
+    reconnect           gracefully restart the daemon to reconnect all
+                        configured connections
+    status              show live server and agent connection health
+    logs                inspect persistent daemon logs
+    doctor              layered diagnostics
+    approvals           pending HITL requests (decision authority stays on the
+                        Server)
+    mcp-config          direct-HTTP MCP client configuration
+    harness-config      inspect, validate and apply Core harness parameters
+    connection-config   reuse a complete Nexus connection JSON
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --json                machine-readable JSON output
+  --verbose             include technical details
+  --non-interactive     never prompt; ambiguity fails with guidance
+  --state-dir STATE_DIR
+                        override the per-user state directory

@@ -1,0 +1,15 @@
+async page=>{
+ const cfg=__CFG__,checks=[],requests=[],pageErrors=[],consoleErrors=[];
+ page.setDefaultTimeout(15000);page.on('request',r=>requests.push({method:r.method(),url:r.url()}));page.on('pageerror',e=>pageErrors.push(e.message));page.on('console',m=>{if(m.type()==='error')consoleErrors.push(m.text());});
+ const check=(name,ok,data={})=>{checks.push({name,status:ok?'PASS':'FAIL',...data});if(!ok)throw Error(name);};
+ try{
+  const target=JSON.parse(new URL(page.url()).searchParams.get('home_target'));
+  check('Canonical operator handoff Review opened its exact target and actual filtered handoff route',target.kind==='handoff'&&target.handoff_id==='r3-operator-handoff'&&target.workspace_id==='ws'&&await page.getByRole('dialog').count()===1&&cfg.handoffProof.some(r=>new URL(r.url).pathname==='/api/v1/handoffs'&&new URL(r.url).searchParams.get('handoff_id')==='r3-operator-handoff'&&r.status===200),{target,proof:cfg.handoffProof,limit:'Original script expected a different route shape; this checks preserved real target/filter responses without repeating the click or any decision.'});
+  await page.getByTestId('home-detail').getByRole('button',{name:'Close modal',exact:true}).click();
+  await page.getByTestId('home-project-card').getByRole('button',{name:'Add harness',exact:true}).click();const flow=page.getByTestId('project-connect-detail');await flow.getByRole('textbox',{name:'Collaborator name',exact:true}).waitFor();
+  check('Selected-project Add enters configuration directly through canonical GET reads without chooser or Test/Finish',await flow.getByTestId('project-connect-flow').getByRole('heading',{name:'Add harness',exact:true}).count()===1&&await flow.getByRole('region',{name:'Existing project connections',exact:true}).count()===0&&requests.every(r=>r.method==='GET'),{requests});
+  await page.screenshot({path:cfg.out+'/add-get-only.png',fullPage:false});await flow.getByRole('button',{name:'Close',exact:true}).click();if(await page.getByRole('button',{name:'Discard changes',exact:true}).count())await page.getByRole('button',{name:'Discard changes',exact:true}).click();await flow.waitFor({state:'detached'});
+  check('Completion uses frozen bundle and no mutations or frontend errors',(await page.locator('script[src]').evaluateAll(ns=>ns.map(n=>n.src))).some(s=>s.includes(cfg.bundle))&&requests.every(r=>r.method==='GET')&&pageErrors.length===0&&consoleErrors.length===0,{pageErrors,consoleErrors});
+  return{status:'PASS',checks,requests,pageErrors,consoleErrors};
+ }catch(e){await page.screenshot({path:cfg.out+'/completion-failure.png',fullPage:false});return{status:'FAIL',message:e.message,checks,requests,pageErrors,consoleErrors};}
+}

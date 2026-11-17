@@ -1,0 +1,32 @@
+async page=>{
+ const cfg={"url": "http://127.0.0.1:60106", "out": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/r3-harness-board", "bundle": "index-Bljabqt3.js"},checks=[],requests=[],responses=[],pageErrors=[],consoleErrors=[];page.setDefaultTimeout(15000);
+ const check=(name,ok,data={})=>{checks.push({name,status:ok?'PASS':'FAIL',...data});if(!ok)throw Error(name);};
+ const card=id=>page.locator('[data-home-harness='+JSON.stringify(id)+']');
+ page.on('request',r=>requests.push({method:r.method(),url:r.url()}));page.on('response',r=>responses.push({status:r.status(),url:r.url()}));page.on('pageerror',e=>pageErrors.push(e.message));page.on('console',m=>{if(m.type()==='error')consoleErrors.push(m.text());});let board=null;
+ try{
+  await page.setViewportSize({width:1440,height:1100});const received=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/v1/home/harness-board'&&r.status()===200);await page.getByRole('button',{name:'Refresh',exact:true}).click();board=(await(await received).json()).data;
+  const all=Object.values(board.columns).flatMap(c=>c.items),harnesses=all.filter(i=>i.kind==='harness'),a=harnesses.find(c=>c.connection.binding_id==='binding');
+  await page.waitForFunction(id=>document.querySelector('[data-home-column="active"] [data-home-harness="'+id+'"]')!==null,a.id);
+  const request=board.columns.needs_you.items.find(i=>i.kind==='request'&&i.request.kind==='native_question_pending'&&i.harness_refs.some(r=>r.connection.binding_id==='binding'));
+  check('Scoped parallel RUNNING read fact keeps its harness Active while its other request remains independent in Needs you',a.blocks_harness===false&&a.activity_state==='working'&&board.columns.active.items.some(i=>i.id===a.id)&&!!request&&request.blocks_harness===false&&harnesses.length===2,{harness:a,request,fixtureLayer:'Synthetic schema-valid scoped session/operation/dispatch/RUNNING receipt added to the owned SQLite fixture; not native execution.'});
+  check('Active request preview has no duplicate decision CTA and reconnect is explicitly unavailable',await card(a.id).getByRole('button',{name:'Review question',exact:true}).count()===0&&await card(a.id).getByRole('button',{name:'Inspect execution',exact:true}).count()===1&&await card(a.id).getByRole('button',{name:'Reconnect',exact:true}).isDisabled()&&await card(a.id).getByText('Individual reconnection is not available for this host.',{exact:true}).count()===1);
+  const actual=await page.locator('[data-home-harness]').evaluateAll(ns=>ns.map(n=>n.dataset.homeHarness));check('Other work and signals do not create phantom registered harness cards',actual.length===2&&new Set(actual).size===2&&harnesses.every(c=>actual.includes(c.id)),{actual});
+  await page.getByRole('heading',{name:'Follow-up',exact:true}).evaluate(el=>el.scrollIntoView({block:'start'}));await page.screenshot({path:cfg.out+'/phase2-desktop.png',fullPage:false});
+  await card(a.id).getByRole('button',{name:'Inspect execution',exact:true}).click();const activity=page.getByRole('region',{name:'Harness activity',exact:true});await activity.waitFor();const ids=await activity.locator('[data-home-activity]').evaluateAll(ns=>ns.map(n=>n.dataset.homeActivity));
+  check('Inspect execution opens one read-only contextual activity panel for the selected exact harness',await page.getByRole('dialog').count()===1&&JSON.stringify(ids)===JSON.stringify(a.children.map(c=>c.id))&&requests.every(r=>r.method==='GET'),{card_id:a.id,connection:a.connection,childIds:ids});await page.getByTestId('home-detail').getByRole('button',{name:'Close modal',exact:true}).click();
+  if(board.unlinked.has_more){
+   await page.getByRole('button',{name:'View other activity',exact:true}).click();const panel=page.getByRole('region',{name:'Harness activity',exact:true});await panel.waitFor();
+   const initial=await panel.locator('[data-home-activity]').evaluateAll(ns=>ns.map(n=>n.dataset.homeActivity));
+   const next=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/v1/home/harness-board/unlinked'&&r.status()===200);await panel.getByRole('button',{name:'Load more activity',exact:true}).click();const response=await next,data=(await response.json()).data;
+   await page.waitForFunction(count=>document.querySelectorAll('[aria-label="Harness activity"] [data-home-activity]').length===count,initial.length+data.items.length);
+   const after=await panel.locator('[data-home-activity]').evaluateAll(ns=>ns.map(n=>n.dataset.homeActivity));
+   check('Unlinked activity paginates with its exact canonical cursor without creating a harness or changing parent identity',new URL(response.url()).searchParams.get('cursor')===board.unlinked.next_cursor&&data.revision===board.revision&&data.entry_revision===board.entry_revision&&new Set(after).size===after.length&&await page.locator('[data-home-harness]').count()===2,{initial,after,page:data});
+   await page.getByTestId('home-detail').getByRole('button',{name:'Close modal',exact:true}).click();
+  }else checks.push({name:'Small dataset unlinked activity cursor browser pagination',status:'NOT_RUN',reason:'Actual backend has no additional page; no mass seed introduced.'});
+  await page.setViewportSize({width:360,height:1000});await page.waitForTimeout(300);const geometry=await page.locator('[data-home-column]').evaluateAll(ns=>({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth,columns:ns.map(n=>({name:n.dataset.homeColumn,rect:n.getBoundingClientRect().toJSON()}))}));
+  check('Phase2 retains all categories stacked at360 without overflow',geometry.scrollWidth<=geometry.clientWidth+1&&geometry.columns[0].rect.y<geometry.columns[1].rect.y&&geometry.columns[1].rect.y<geometry.columns[2].rect.y,{geometry});
+  for(const n of ['active','needs_you','results']){await page.locator('[data-home-column="'+n+'"]').getByRole('heading',{level:3}).evaluate(el=>el.scrollIntoView({block:'start'}));await page.screenshot({path:cfg.out+'/phase2-mobile-'+n+'.png',fullPage:false});}
+  check('Phase2 has zero mutations, decision submissions, provider actions or frontend exceptions',requests.every(r=>r.method==='GET')&&pageErrors.length===0&&consoleErrors.length===0,{pageErrors,consoleErrors});
+  return{status:'PASS',checks,board,requests,responses,pageErrors,consoleErrors};
+ }catch(e){await page.screenshot({path:cfg.out+'/phase2-failure.png',fullPage:false});return{status:'FAIL',message:e.message,checks,board,requests,responses,pageErrors,consoleErrors};}
+}

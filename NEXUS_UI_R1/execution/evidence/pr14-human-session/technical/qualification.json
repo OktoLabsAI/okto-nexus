@@ -1,0 +1,127 @@
+{
+  "browser_ui": "PASS3 focused technical checks only; not human comprehension",
+  "maintenance_inventory_lease": "Canonical PUT200 periodic +lease serial2..10; no hidden grant renewal",
+  "original_grants_unchanged": true,
+  "request_limit": "Native request120s immutable. Current/read respond_native at110s (tool a270ce); expired at149.26s (d4561d), even though inventory/lease stayed valid.",
+  "delayed_probe_limit": "Separate130s delayed observer started37s after160s fixture and overran auto-stop; connection-refused exit1, not PASS.",
+  "facts": {
+    "native_requests": [
+      {
+        "state": "PENDING",
+        "received_at": "2026-11-16T23:48:14.191Z",
+        "expires_at": "2026-11-16T23:50:14.191000+00:00"
+      }
+    ],
+    "leases": [
+      {
+        "lease_serial": 1,
+        "valid_until_server": "2026-11-16T23:50:14.078346+00:00"
+      },
+      {
+        "lease_serial": 2,
+        "valid_until_server": "2026-11-16T23:50:31.608228+00:00"
+      },
+      {
+        "lease_serial": 3,
+        "valid_until_server": "2026-11-16T23:50:47.852625+00:00"
+      },
+      {
+        "lease_serial": 4,
+        "valid_until_server": "2026-11-16T23:51:04.207011+00:00"
+      },
+      {
+        "lease_serial": 5,
+        "valid_until_server": "2026-11-16T23:51:20.482222+00:00"
+      },
+      {
+        "lease_serial": 6,
+        "valid_until_server": "2026-11-16T23:51:36.606156+00:00"
+      },
+      {
+        "lease_serial": 7,
+        "valid_until_server": "2026-11-16T23:51:52.794764+00:00"
+      },
+      {
+        "lease_serial": 8,
+        "valid_until_server": "2026-11-16T23:52:08.963485+00:00"
+      },
+      {
+        "lease_serial": 9,
+        "valid_until_server": "2026-11-16T23:52:25.170734+00:00"
+      },
+      {
+        "lease_serial": 10,
+        "valid_until_server": "2026-11-16T23:52:41.302069+00:00"
+      }
+    ],
+    "inventory_sequences": [
+      {
+        "publication_sequence": 6,
+        "inventory_revision": "sha256:677ccd7da3512310af6ea0ac497780475905a2646d6ae71907f474e490e8dbbb",
+        "received_at": "2026-11-16T23:50:19.103Z"
+      },
+      {
+        "publication_sequence": 7,
+        "inventory_revision": "sha256:677ccd7da3512310af6ea0ac497780475905a2646d6ae71907f474e490e8dbbb",
+        "received_at": "2026-11-16T23:50:49.413Z"
+      }
+    ],
+    "original_grants_after": [
+      {
+        "grant_id": "grant_c47b1c3e17894b64826425c86c326ba6",
+        "expires_at": "2026-11-17T00:48:13.065034Z",
+        "max_executions": 10
+      }
+    ]
+  },
+  "cleanup": {
+    "maintenance49055_exit": 0,
+    "maintenance_listener55351_absent": true,
+    "technical_browser56972_close_exit": 0,
+    "technical_browser56972_absent": true,
+    "technical_fixture50562_exit": 0,
+    "technical_listener50192_absent": true,
+    "peer_wss_factory_closed": true
+  },
+  "browser_evidence": {
+    "raw": "browser-cli.txt",
+    "tool_reference": "7dd373",
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "one Home without classic toggle, named Project visible",
+        "status": "PASS"
+      },
+      {
+        "name": "Connect or resume displays same canonical two-connection catalog",
+        "status": "PASS",
+        "items": [
+          {
+            "binding_id": "binding",
+            "workspace_id": "ws"
+          },
+          {
+            "binding_id": "ui-binding-2",
+            "workspace_id": "ws"
+          }
+        ]
+      },
+      {
+        "name": "existing exact binding is opened by canonical GET without creating work",
+        "status": "PASS",
+        "binding_id": "binding",
+        "errors": []
+      }
+    ],
+    "methods": [
+      "GET"
+    ],
+    "page_errors": [],
+    "import_source_sha256": {
+      "NEXUS_UI_R1/execution/evidence/pr14-human-session/fixture.py": "121de1398f537712d3c339c486efc958895cdce444befde378bb0bf3c34ee0b8",
+      "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+      "src/okto_nexus/adapters/inbound/http/static/index.html": "1ce087992dd442b5a66ec36afbff60135dd17fbe800c1a5042e699a367bd5098",
+      "src/okto_nexus/adapters/inbound/http/static/assets/index-Zyb_20X4.js": "8370b675268ba80f3745c0376eedf66973aeea4cf06a80393bb77a8910767474"
+    }
+  }
+}

@@ -1,0 +1,432 @@
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='okto-nexus - local agent coordination bus\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 1 column 1 [type=json_invalid, input_value='\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Usage:\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus connect [op...nnect a local project\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value="  okto-nexus init --mode...nal MCP configuration\r", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus participant... protected credential\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value="  okto-nexus participant... entry and credential\r", input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus participant...operation with a peer\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus doctor [--m...ependent proof levels\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus preset [--p...tional preset updates\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus work [chat|...rupt|close] [options]\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus message sen...a participant profile\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus handoff cre... canonical completion\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus request ins...oordination reference\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus observe her...activity observations\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus operator lo...rofile NAME [options]\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus operator ap...rofile NAME [options]\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus serve [opti...P, REST and dashboard\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus service sta...nage the local Server\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus tail [optio...e event log as NDJSON\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus admin <comm... maintenance commands\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 3 [type=json_invalid, input_value='  okto-nexus provider-cr...nage provider secrets\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 1 column 1 [type=json_invalid, input_value='\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='Use `okto-nexus serve --...gents connect to /mcp\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='over HTTP with their existing API key.\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+Failed to parse JSONRPC message from server
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 155, in stdout_reader
+    message = types.JSONRPCMessage.model_validate_json(line)
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pydantic\main.py", line 847, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 1 column 1 [type=json_invalid, input_value='\r', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+
+========================================================================
+0) live MCP stdio session setup
+========================================================================
+command (venv python): C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Scripts\python.exe
+server args          : -m okto_nexus.adapters.inbound.mcp.server
+OKTO_NEXUS_HOME (temp): C:\Users\jpamb\AppData\Local\Temp\okto_nexus_home_p9jj1opw
+project_root    (temp): C:\Users\jpamb\AppData\Local\Temp\okto_proj_v1jzcrbw
+
+========================================================================
+1) initialize
+========================================================================
+  + Exception Group Traceback (most recent call last):
+  |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\scripts\live_client.py", line 334, in <module>
+  |     raise SystemExit(asyncio.run(run()))
+  |                      ~~~~~~~~~~~^^^^^^^
+  |   File "C:\Python313\Lib\asyncio\runners.py", line 194, in run
+  |     return runner.run(main)
+  |            ~~~~~~~~~~^^^^^^
+  |   File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+  |     return self._loop.run_until_complete(task)
+  |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  |   File "C:\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+  |     return future.result()
+  |            ~~~~~~~~~~~~~^^
+  |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\scripts\live_client.py", line 144, in run
+  |     async with stdio_client(params) as (read, write):
+  |                ~~~~~~~~~~~~^^^^^^^^
+  |   File "C:\Python313\Lib\contextlib.py", line 235, in __aexit__
+  |     await self.gen.athrow(value)
+  |   File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 183, in stdio_client
+  |     anyio.create_task_group() as tg,
+  |     ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 871, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Exception Group Traceback (most recent call last):
+    |   File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 189, in stdio_client
+    |     yield read_stream, write_stream
+    |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\scripts\live_client.py", line 146, in run
+    |     async with ClientSession(read, write) as session:
+    |                ~~~~~~~~~~~~~^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\shared\session.py", line 238, in __aexit__
+    |     return await self._task_group.__aexit__(exc_type, exc_val, exc_tb)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 871, in __aexit__
+    |     raise BaseExceptionGroup(
+    |         "unhandled errors in a TaskGroup", self._exceptions
+    |     ) from None
+    | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    +-+---------------- 1 ----------------
+      | Traceback (most recent call last):
+      |   File "D:\Projetos\Techridy\okto_labs_okto_nexus\scripts\live_client.py", line 149, in run
+      |     init = await session.initialize()
+      |            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+      |   File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\client\session.py", line 183, in initialize
+      |     result = await self.send_request(
+      |              ^^^^^^^^^^^^^^^^^^^^^^^^
+      |     ...<16 lines>...
+      |     )
+      |     ^
+      |   File "C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\mcp\shared\session.py", line 306, in send_request
+      |     raise McpError(response_or_error.error)
+      | mcp.shared.exceptions.McpError: Connection closed
+      +------------------------------------

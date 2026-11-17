@@ -1,0 +1,216 @@
+{
+  "checks": [
+    "same agent: exact second session running; original session awaiting_operator, distinct stable IDs",
+    "READY and OPENING without turn stay passive session context, never productive running",
+    "CLAIMED remains claimed; uncertain remains outcome_unknown; SUCCEEDED plus containment remains result_available_cleanup_pending"
+  ],
+  "status": "PASS",
+  "summary": {
+    "activities": {
+      "value": 7,
+      "total_is_exact": true,
+      "unit": "activities"
+    },
+    "external_instances": {
+      "value": 1,
+      "total_is_exact": true,
+      "unit": "external_instances"
+    },
+    "occurrences": {
+      "value": 1,
+      "total_is_exact": true,
+      "unit": "occurrences"
+    },
+    "sessions": {
+      "value": 5,
+      "total_is_exact": true,
+      "unit": "sessions"
+    },
+    "results": {
+      "value": 1,
+      "total_is_exact": true,
+      "unit": "results"
+    },
+    "unseen_results": {
+      "value": null,
+      "total_is_exact": false,
+      "unit": "results"
+    }
+  },
+  "entries": [
+    {
+      "id": "home_41b8577c1b09573a29f33c1ac9f4932fd6bd9297e8f45f68cb60f809fa22deb1",
+      "kind": "work",
+      "state": "awaiting_operator",
+      "source_ref": {
+        "id": "op_00347b87992ba4ab7761ede23855d322",
+        "revision": "6e9354b0efd679c6f9d25a5765b30d7578182055d8d5c0c687edaae3f21d26b9",
+        "type": "direct_operation"
+      },
+      "target": {
+        "executor_id": "exe_ab751df1e71f8e7b8d8e199443561238",
+        "kind": "execution",
+        "operation_id": "op_00347b87992ba4ab7761ede23855d322",
+        "server_id": "srv_337dc57e2c7f1f35ac72c469efe95f90",
+        "session_id": "ses_213b47fb661c328c047740d51e8be2a1",
+        "workspace_id": "ws"
+      }
+    },
+    {
+      "id": "home_bc4f20eafed7741e0960241188c1049cc61412b2f68bff9847b80bbf27c546b2",
+      "kind": "work",
+      "state": "running",
+      "source_ref": {
+        "id": "ui022-running-turn",
+        "revision": "2ff60805da60bac879e4bf51be4c6c9a32db0ad999dd9e92e2099a9a4aa53846",
+        "type": "direct_operation"
+      },
+      "target": {
+        "executor_id": "exe_ab751df1e71f8e7b8d8e199443561238",
+        "kind": "execution",
+        "operation_id": "ui022-running-turn",
+        "server_id": "srv_337dc57e2c7f1f35ac72c469efe95f90",
+        "session_id": "ui022-running",
+        "workspace_id": "ws"
+      }
+    },
+    {
+      "id": "home_entry_0e12efec8f6e20e86a522a99d93cbf401c97d7749d7ca83e44568592030e64d9",
+      "kind": "session",
+      "state": "offline",
+      "source_ref": {
+        "type": "session",
+        "id": "ui022-opening",
+        "revision": "8578647a95457ee50c14b0bb928bb68381008d5fe30060ed8eea76c819f51601"
+      },
+      "target": {
+        "kind": "session",
+        "server_id": "srv_337dc57e2c7f1f35ac72c469efe95f90",
+        "executor_id": "exe_ab751df1e71f8e7b8d8e199443561238",
+        "workspace_id": "ws",
+        "session_id": "ui022-opening"
+      }
+    },
+    {
+      "id": "home_entry_45843e85d90d1721f0294f242f16577c32bf1f1a4bc6b41fb29b56eb79104421",
+      "kind": "session",
+      "state": "idle",
+      "source_ref": {
+        "type": "session",
+        "id": "ui022-idle",
+        "revision": "6769d5026025215b242df108612262e240957a0cc9636d04e1a8f607ac1e54e2"
+      },
+      "target": {
+        "kind": "session",
+        "server_id": "srv_337dc57e2c7f1f35ac72c469efe95f90",
+        "executor_id": "exe_ab751df1e71f8e7b8d8e199443561238",
+        "workspace_id": "ws",
+        "session_id": "ui022-idle"
+      }
+    },
+    {
+      "id": "home_38dbeeebff6b2307ca7622ffd3dc5d8fd5a3f61f2d8f8cf31d56cd94c52354b8",
+      "kind": "work",
+      "state": "outcome_unknown",
+      "source_ref": {
+        "id": "ui-unknown",
+        "revision": "65aa205378d6ed8847287bb82d1cce02ec8f5c8779feeeeaaffb8633ad307648",
+        "type": "direct_operation"
+      },
+      "target": {
+        "executor_id": "exe_ab751df1e71f8e7b8d8e199443561238",
+        "kind": "execution",
+        "operation_id": "ui-unknown",
+        "server_id": "srv_337dc57e2c7f1f35ac72c469efe95f90",
+        "session_id": "ui-session-2",
+        "workspace_id": "ws"
+      }
+    },
+    {
+      "id": "home_d4c55d95a51327d77380027e1b011938539f68fb7580bb1bf95fa097ef67103b",
+      "kind": "work",
+      "state": "result_available_cleanup_pending",
+      "source_ref": {
+        "id": "ui-success",
+        "revision": "96e295703bffd23ea6195d184a985ec84bcb5ff6c1631490de219ff27c7fb693",
+        "type": "direct_operation"
+      },
+      "target": {
+        "executor_id": "exe_ab751df1e71f8e7b8d8e199443561238",
+        "kind": "execution",
+        "operation_id": "ui-success",
+        "server_id": "srv_337dc57e2c7f1f35ac72c469efe95f90",
+        "session_id": "ui-session-2",
+        "workspace_id": "ws"
+      }
+    },
+    {
+      "id": "home_external_e10aac1144827594a8bc444df985ed5df8360ba1160266a2a8e55fdc1011fef7",
+      "kind": "external",
+      "state": "running",
+      "source_ref": {
+        "type": "external_observation",
+        "id": "obs_inst_0000000000000002",
+        "revision": "88561c93a48dee04f590e9f4c5f20110cc9faa666de19d9d667a226a512abfe7"
+      },
+      "target": {
+        "kind": "external_observation",
+        "server_id": "srv_337dc57e2c7f1f35ac72c469efe95f90",
+        "workspace_id": "ws",
+        "source_id": "obs_src_0000000000000001",
+        "observed_instance_id": "obs_inst_0000000000000002",
+        "generation": 2
+      }
+    },
+    {
+      "id": "home_4497557fd80af2349d58482d79e2d75c2005463ae0df54d046ab54ddcc561ccf",
+      "kind": "work",
+      "state": "claimed",
+      "source_ref": {
+        "id": "ui-handoff-0",
+        "revision": "188a67e105bc0e83c3befaddb928bb6b7a0b63ef5f50063913b57fe0bc7b1702",
+        "type": "handoff"
+      },
+      "target": {
+        "handoff_id": "ui-handoff-0",
+        "kind": "handoff",
+        "server_id": "srv_337dc57e2c7f1f35ac72c469efe95f90",
+        "workspace_id": "ws"
+      }
+    },
+    {
+      "id": "home_d1f59355e55c8f343dec3d2b7b7e4edf64ef99ee268702010349c3252afdc850",
+      "kind": "work",
+      "state": "awaiting_owner",
+      "source_ref": {
+        "id": "ui-handoff-1",
+        "revision": "7589407339bb540611310c802db603724c7be310ce79dc84a0fa8f4a790ccfef",
+        "type": "handoff"
+      },
+      "target": {
+        "handoff_id": "ui-handoff-1",
+        "kind": "handoff",
+        "server_id": "srv_337dc57e2c7f1f35ac72c469efe95f90",
+        "workspace_id": "ws"
+      }
+    },
+    {
+      "id": "home_02a6e67884669efef17e40a72f56bff4636ec356002cdd1977c5e10634750c23",
+      "kind": "work",
+      "state": "awaiting_owner",
+      "source_ref": {
+        "id": "ui-unassigned",
+        "revision": "de8cc6d909e2266d24b85af63120409d976ecd618c2e1fcb41f084a89c91c19a",
+        "type": "handoff"
+      },
+      "target": {
+        "handoff_id": "ui-unassigned",
+        "kind": "handoff",
+        "server_id": "srv_337dc57e2c7f1f35ac72c469efe95f90",
+        "workspace_id": "ws"
+      }
+    }
+  ],
+  "limitation": "Synthetic persisted read facts including started ingress; no native binary/provider/dispatch qualification. Warm lease alone not qualified as execution.",
+  "cleanup": "shared own fixture context exited normally; WSS/lifespan/factory closed; no browser or server process created"
+}

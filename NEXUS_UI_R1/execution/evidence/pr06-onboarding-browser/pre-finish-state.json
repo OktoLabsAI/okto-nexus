@@ -1,0 +1,41 @@
+{
+    "counts":  {
+                   "agents":  3,
+                   "execution_bindings":  1,
+                   "runtime_execution_grants":  1,
+                   "execution_sessions":  0,
+                   "execution_operations":  0,
+                   "connection_setup_commits":  1
+               },
+    "agents":  [
+                   "operator",
+                   "subject",
+                   "collaborator-a"
+               ],
+    "bindings":  [
+                     {
+                         "binding_id":  "bind_69b97cb5431ed01fad8b51052f97bb74",
+                         "agent_id":  null,
+                         "executor_id":  "exe_99360654abc07eb0c1d5e0f2272c9013",
+                         "workspace_id":  null,
+                         "workspace_binding_id":  "wxb_0693b6d7828bf0da9974a3b7f00fc147",
+                         "adapter_id":  null
+                     }
+                 ],
+    "row_digests":  {
+                        "agents":  "df98f4e7036ae7f6b69b4494b27c995c8e72f10fd1e7e282ec8d0f78e1082387",
+                        "execution_bindings":  "c896860f049796e8828f846ecd6e20546969e3b759c77d890bd9b9ad59e55324",
+                        "runtime_execution_grants":  "29f69a49194d1918196af7a11eab78e954cd4d75b0b759460b85f7e9de690f81",
+                        "execution_sessions":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                        "execution_operations":  "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                        "connection_setup_commits":  "0473d2421ba2d71bb1d260907007cb5f0cbfd73c3f5d8b7492c4815ef45f0135"
+                    },
+    "a_agent_digest":  "ddb2fc42241db10e8f48bd2f8fdfca3f52c0b77cc4b7d41792a7e5bc3fa99825",
+    "turns":  [
+                  "connect_6d77952d989444de922bdc164650dd5f"
+              ],
+    "probes":  1,
+    "calls":  [
+
+              ]
+}

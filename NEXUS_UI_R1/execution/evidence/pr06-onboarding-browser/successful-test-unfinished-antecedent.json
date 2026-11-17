@@ -1,0 +1,146 @@
+{
+  "attempts": [
+    {
+      "version": 1,
+      "identity": "[true,null]",
+      "server": "srv_04c5d7b9fd7f095ab53cd9695fe99391",
+      "workspace": "wsr_90c0738851792056457ff4d939c556d9",
+      "kind": "test",
+      "agentId": "project_8ffd3e171f955117fdb84b99a42b991a",
+      "displayName": "Claude Code (stream) 2 — UI039 project",
+      "executorId": "exe_07c0afee9edaf5928e4e70d5e2aa5104",
+      "candidateRef": "nexus-install-v1:659ae3e8c406f42a2c209963bcac8078afc4106a9659c38745cf200137b1c7fc",
+      "configuration": {
+        "format": "okto-nexus-connection",
+        "version": 1,
+        "adapter_id": "claude_stream",
+        "execution_location": "local",
+        "workspace_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui039-browser-doa4crxs\\workspace",
+        "workspace_label": "UI039 project",
+        "provider_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui039-browser-doa4crxs\\synthetic-provider-home",
+        "secret_bindings": {},
+        "alias": "Claude Code (stream) 2 — UI039 project",
+        "automatic_reply": true,
+        "runtime_enabled": true,
+        "session_policy": "per_sender",
+        "harness_settings": {},
+        "tool_access": "ask",
+        "authorization": {
+          "minutes": 60,
+          "actions": 20
+        }
+      },
+      "request": {
+        "client_intent_id": "setup_fd509d14dc7426647218d6fde6a759f6",
+        "agent_id": "project_8ffd3e171f955117fdb84b99a42b991a",
+        "executor_id": "exe_07c0afee9edaf5928e4e70d5e2aa5104",
+        "candidate_ref": "nexus-install-v1:659ae3e8c406f42a2c209963bcac8078afc4106a9659c38745cf200137b1c7fc",
+        "inventory_revision": "sha256:294bf31ff19986fb58bd06d170101f049c7a723795f288dd15e2fcf4bd5379f5",
+        "workspace_id": "wsr_90c0738851792056457ff4d939c556d9",
+        "binding_id": null,
+        "baseline": {
+          "execution_revision": 0,
+          "runtime_revision": 0,
+          "defaults_revision": 1,
+          "binding_revision": null,
+          "endpoint_revision": null
+        },
+        "configuration": {
+          "format": "okto-nexus-connection",
+          "version": 1,
+          "adapter_id": "claude_stream",
+          "execution_location": "local",
+          "workspace_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui039-browser-doa4crxs\\workspace",
+          "workspace_label": "UI039 project",
+          "provider_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui039-browser-doa4crxs\\synthetic-provider-home",
+          "secret_bindings": {},
+          "alias": "Claude Code (stream) 2 — UI039 project",
+          "automatic_reply": true,
+          "runtime_enabled": true,
+          "session_policy": "per_sender",
+          "harness_settings": {},
+          "tool_access": "ask",
+          "authorization": {
+            "minutes": 60,
+            "actions": 20
+          }
+        },
+        "project_preset": {
+          "id": "project-generalist",
+          "revision": 1
+        },
+        "agent_creation": {
+          "display_name": "Claude Code (stream) 2 — UI039 project",
+          "defaults_hash": "sha256:6324ab87d77e9be205e191bec96469118655aff30133a27f6948d3d513c77663"
+        },
+        "broadcast_handoff_auto_claim": false,
+        "native_decision_policy": {
+          "expected_revision": "67064212fd032e313918d873d4979d68ea45094a4a591eb24a550d9b839d948b",
+          "initialize": false
+        }
+      },
+      "reviewIdentity": {
+        "role": "Project assistant",
+        "permissions": {
+          "messages": {
+            "send_direct": true,
+            "send_broadcast": false,
+            "send_channel": true
+          },
+          "handoffs": {
+            "create": true,
+            "work": true,
+            "cancel": true
+          },
+          "channels": {
+            "create": false
+          },
+          "artifacts": {
+            "put": true
+          },
+          "events": {
+            "read": true
+          },
+          "observations": {
+            "manage_self": false,
+            "publish": false
+          },
+          "identity": {
+            "update_profile": true,
+            "update_capabilities": false
+          },
+          "workspaces": {
+            "list": true,
+            "include_paths": false
+          },
+          "shared_md": {
+            "render": true
+          },
+          "health": {
+            "read": true
+          },
+          "experimental": {
+            "memory_write": false,
+            "memory_read": false,
+            "memory_search": false
+          },
+          "limits": {
+            "messages_per_minute": 60,
+            "max_recipients": 10
+          }
+        },
+        "defaults_hash": "sha256:6324ab87d77e9be205e191bec96469118655aff30133a27f6948d3d513c77663"
+      },
+      "reviewEffects": [
+        "Use the selected agent and project workspace through the existing managed connection.",
+        "Allow authorized sessions and eligible Nexus messages for 60 minutes and at most 20 runtime actions.",
+        "Keep native tool decisions and existing model/project instructions; no sandbox settings are replaced.",
+        "The connection test opens the harness and requests a model response; provider usage may be charged.",
+        "Finish saves the connection and execution grant. It does not submit a project task."
+      ],
+      "nativePolicySource": "stored"
+    }
+  ],
+  "visible": "Connect agent\n\nUI039 project · Nexus Server\n\nClose and keep attempt\n1. Choose connection\nUI039 project\n2. Project and harness\nClaude Code (stream) 2 — UI039 project\n3. Review\nExact selection ready\n4. Test and finish\nConnection verified\nTest completed and its temporary session closed\nServer execution host\nNexus Server\nLogical project\nUI039 project\nServer folder\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui039-browser-doa4crxs\\workspace\nHarness\nclaude_stream\nNew collaborator\nClaude Code (stream) 2 — UI039 project\nProvider login directory\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui039-browser-doa4crxs\\synthetic-provider-home\nExecution authorization applied at Finish\n60 minutes · 20 actions\nIdentity role\nProject assistant\nCoordination permissions for the new identity\nmessages → send direct\nmessages → send channel\nhandoffs → create\nhandoffs → work\nhandoffs → cancel\nartifacts → put\nevents → read\nidentity → update profile\nworkspaces → list\nshared md → render\nhealth → read\nCoordination rate and recipient limits\nmessages per minute\n60\nmax recipients\n10\n\nThe existing Server-wide native decision policy is preserved.\n\nCanonical identity, host and policy references\n\nFinish creates the reviewed collaborator, saves this project connection and its authorization. It does not submit a project task.\n\n Apply this exact reviewed identity, permissions, authorization and preserved native decision policy now.\nFinish",
+  "note": "Preserved successful synthetic Test from the Cwgv input-reversion antecedent. No Finish was submitted for this intent. No provider executed; this is not promoted as negative recovery."
+}

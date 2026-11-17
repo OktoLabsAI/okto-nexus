@@ -1,0 +1,27 @@
+{
+  "schema": "ui042-codex-only-consent-v1",
+  "campaign_id": "a3c54686f9db4229b26fba3f9d6b468b",
+  "candidate_sha256": "e9fd2b81e0f7e9d79841a47cf3f337b1047b46d808812a963d364d9994c8d8c3",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-a3c54686f9db4229b26fba3f9d6b468b",
+  "policy": {
+    "accounting": "observed_plus_permanent_per_admission_v1",
+    "codex_final_usage_claim": false,
+    "codex_scope": "cumulative_thread_delta_per_exact_session",
+    "max_admissions": 6,
+    "observed_limit": 500000,
+    "preventive": 450000,
+    "provision_per_admission": 75000,
+    "provision_refund": false,
+    "reserve": 50000
+  },
+  "issued_at": "2026-11-16T23:35:18.721652+00:00",
+  "user_response_reference": "User reply call_7b291505d2a349ddb591321ccaefe5f7 item0, delivered in root conversation2026-11-16; restricted to Codex only and permitted multiple Codex instances.",
+  "user_authorized_new_campaign": true,
+  "allow_current_authenticated_codex_cli": true,
+  "disallow_claude": true,
+  "acknowledges_observed_not_atomic_billing_cap": true,
+  "acknowledges_admissions_not_upstream_http_count": true,
+  "allow_owned_canonical_force_after_normal_deadline": true,
+  "acknowledges_native_cli_may_write_its_own_login_home": true,
+  "user_response_quote": "Autorizado, execute apenas com o codex pois o Claude está sem limite de uso disponível. Mais tarde quando liberar faremos um novo teste. Por hora siga com o Codex somente - pode usar multiplas instancias do codex se isso ajudar em algo."
+}

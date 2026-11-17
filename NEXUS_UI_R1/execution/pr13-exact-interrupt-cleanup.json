@@ -1,0 +1,44 @@
+{
+  "status": "FAILED_TEST_RUNNER_CLEANUP_ONLY_NOT_PASS",
+  "permission": "Root explicit cleanup authorization after readonly diagnosis; no native peers remained.",
+  "checks": [
+    {
+      "ProcessId": 60412,
+      "ParentProcessId": 10780,
+      "CreationDate": "/Date(1794870636129)/",
+      "ExecutablePath": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe",
+      "CommandLine": "\"C:/Users/jpamb/AppData/Local/Temp/home-r1-installed-package-aq98yeg_/venv313/Scripts\\python.exe\" -X utf8 -c \"import sys;sys.path.insert(0,'D:/Projetos/Techridy/okto_labs_okto_nexus/src');import pytest;sys.exit(pytest.main(['tests/home_evolution/test_home_interrupt_scope.py','-q','--junitxml=NEXUS_UI_R1/execution/pr13-exact-interrupt-junit.xml']))\""
+    },
+    {
+      "ProcessId": 7004,
+      "ParentProcessId": 60412,
+      "CreationDate": "/Date(1794870636143)/",
+      "ExecutablePath": "C:\\Python313\\python.exe",
+      "CommandLine": "\"C:/Users/jpamb/AppData/Local/Temp/home-r1-installed-package-aq98yeg_/venv313/Scripts\\python.exe\" -X utf8 -c \"import sys;sys.path.insert(0,'D:/Projetos/Techridy/okto_labs_okto_nexus/src');import pytest;sys.exit(pytest.main(['tests/home_evolution/test_home_interrupt_scope.py','-q','--junitxml=NEXUS_UI_R1/execution/pr13-exact-interrupt-junit.xml']))\""
+    }
+  ],
+  "effects": [
+    {
+      "pid": 7004,
+      "action": "forced_owned_failed_test_runner_cleanup"
+    },
+    {
+      "pid": 60412,
+      "action": "already_exited_after_child_termination"
+    }
+  ],
+  "physical_absence_confirmed": true,
+  "after": [],
+  "graceful_shutdown_claim": false,
+  "DRAINED_claim": false,
+  "DB_or_grants_or_lease_modified": false,
+  "own_data_preserved": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-11126\\test_home_exact_target_interru0",
+  "diagnosis": "First runtime.open OUTCOME_UNKNOWN/RECONCILING,sessionOPEN_PENDING;no native-wire/process_launch/process_birth rows; no native child. TestClient teardown waits for canonical uncertain owner, so bounded observation did not end lifetime.",
+  "toolrefs": [
+    "4eaccd",
+    "87682e",
+    "52ab93",
+    "9f7267"
+  ],
+  "model_provider_invoked": false
+}

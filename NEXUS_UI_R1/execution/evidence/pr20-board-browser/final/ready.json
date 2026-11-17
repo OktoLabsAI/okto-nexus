@@ -1,0 +1,49 @@
+{
+  "url": "http://127.0.0.1:56034",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-board-qmzx4iu7",
+  "identities": {
+    "artifact_id": "art_6ca71c497bd043a9b745ad345695a252",
+    "workspace": "ws",
+    "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-board-qmzx4iu7\\participant-project",
+    "question_session": "ses_54a04472c0ebdfa9f5d781cecbe64843",
+    "closed_session": "ui-session-2",
+    "board_seed": {
+      "idle_bindings": 12,
+      "retained_unknown_operations": 12,
+      "historical_results": 12,
+      "historical_containment_absent": true,
+      "native_execution_claim": false
+    }
+  },
+  "observation_window_seconds": 900,
+  "extend_read_window_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-board-control-l0mkd8sb\\extend-read-window.json",
+  "extension_scope": "Observation only; no grant, ticket or native request expiry change",
+  "decision_authority_times": [
+    {
+      "binding_id": "binding",
+      "lane_ticket_expires_at": "2026-11-17T02:27:15.926891+00:00"
+    }
+  ],
+  "original_grants": [
+    {
+      "grant_id": "grant_28912a397ad340bd884725cccefabf8f",
+      "expires_at": "2026-11-17T03:17:15.556778Z",
+      "max_executions": 10
+    }
+  ],
+  "authority_limit": "Each native request expires120s after ingress; original control-lane ticket normally10min. No hidden grant or lane-ticket renewal; UI observation starts60min and can be extended explicitly without changing authority.",
+  "facilitator_trigger": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-board-control-l0mkd8sb\\publish-fresh-question",
+  "trigger_policy": "Only after root starts task3, never under an existing human draft. New request8/source-sequence, same admitted operator turn/grant; old request expiry remains immutable.",
+  "provider_calls": 0,
+  "native_binary_calls": 0,
+  "test_is_simulated": true,
+  "loopback_operator": true,
+  "source_sha256": {
+    "NEXUS_UI_R1/execution/evidence/pr20-board-browser/fixture.py": "67d18a37f2f4880adc7f7c595cb1ddb970f316ae9df4cad91addaadfb1b62725",
+    "NEXUS_UI_R1/execution/evidence/pr20-board-browser/observation_window.py": "fb32e8cdaceac860f1d95b588dcbdac2efcca6c7034d0ca83869d8f5be29c2df",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "6c2dd0f7744b123a80e5d725055d97b422459a4e6acc24198f5afa7b0a468f56",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-DXslPEEE.js": "c9c8537f3c411cbf5182e6db1f486d72247cc4943d67f969f24f84001456157e"
+  },
+  "fixture_pid": 12964
+}

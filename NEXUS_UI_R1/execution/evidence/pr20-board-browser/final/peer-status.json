@@ -1,0 +1,12 @@
+[
+  {
+    "at": "2026-11-17T02:17:19.874413Z",
+    "kind": "canonical_inventory_published"
+  },
+  {
+    "at": "2026-11-17T02:17:34.001486Z",
+    "kind": "peer_failed",
+    "type": "OktoNexusError",
+    "error": "CONFLICT: The lease authority changed."
+  }
+]

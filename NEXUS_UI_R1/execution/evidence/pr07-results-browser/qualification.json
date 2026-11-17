@@ -1,0 +1,53 @@
+{
+  "status": "SCOPED_RESULTS_QUALIFICATION_WITH_READER_FIX",
+  "scenarios": {
+    "T-RESULT-01": "PASS_HISTORICAL_FACT_HTTP_AND_BROWSER_CUT",
+    "T-RESULT-02": "PASS_PASSIVE_VERIFYING_BROWSER_CUT",
+    "T-RESULT-03": "PARTIAL_MARK_SEEN_ONLY_NEW_REVISION_NOT_RUN",
+    "T-RESULT-04": "PASS_NO_BULK_MARK_BROWSER_CUT",
+    "T-RESULT-05": "PASS_NOT_TRACKED_UNKNOWN_COUNT_BROWSER_CUT",
+    "T-HOME-09": "PASS_OLD_UNSEEN_DEFAULT_AND_RESULTS_BROWSER_CUT"
+  },
+  "final_tests": {
+    "passed": 6,
+    "seconds": 17.97,
+    "handle": "784e57",
+    "xml": "artifact-final-workspace-six-tests.xml"
+  },
+  "browser": {
+    "main": "116ba7",
+    "completion": "8455fc",
+    "explicit_verification": "31dccc",
+    "mark_seen": "77ffa3",
+    "legacy_watermark_null": "6355e7",
+    "bundle": "index-BGONNtiX.js",
+    "js_sha256": "dfef7675dea3918117e0df676e3e6d1ef72dd03dec61086e0d24a1b91f6430c9",
+    "sql_pin_at_browser": "6669ede7bcfc90228ef613e982e70d258e53ef533e8a673f1c1f8c00401f1596",
+    "final_workspace_fence_follows_browser": true
+  },
+  "invariants": {
+    "selected_tables_unchanged_by_view": true,
+    "tables_changed_only_after_explicit_seen": [
+      "attention_preferences"
+    ],
+    "preferences_before_after": [
+      0,
+      1
+    ],
+    "final_state_equals_explicit_preference_snapshot": true
+  },
+  "source_pins_at_final_qualification": {
+    "src\\okto_nexus\\adapters\\outbound\\sqlite\\home.py": "e1038145179252498184f1e22d8a2459048b5d6c6e0c567be88582660cbf3aaf",
+    "tests\\home_evolution\\test_home_result_artifact_grouping.py": "e957869e435583f497bb998742612f24145a7564b9b7c7811710842823905a26",
+    "tests\\ui_simplification\\browser_result_fixture.py": "13b1b965d17cf003d768372b92b096ea0eccd512b9bf486c2bd416faa29a5063",
+    "tests\\ui_simplification\\browser_result_checks.js": "fa118c39104666e6aecd50f00ebdd419cb71dde8e6e310611429de6243f56537"
+  },
+  "limits": [
+    "Synthetic historical terminal facts do not form complete runtime receipt chains; operation.read500 retained",
+    "No provider/native execution or application",
+    "No new result revision publication for RESULT03",
+    "No artifact page/memory/latency guarantee; existing query budget applies",
+    "Final workspace fence has HTTP tests, not a newly repeated browser run"
+  ],
+  "cleanup": "cleanup.json"
+}

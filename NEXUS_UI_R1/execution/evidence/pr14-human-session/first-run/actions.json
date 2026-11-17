@@ -1,0 +1,3511 @@
+[
+  {
+    "at": "2026-11-16T23:36:42.739500+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:42.809083+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/catalog",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:42.835953+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.055416+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.160784+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/assets/index-BGONNtiX.js",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.162721+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/assets/index-C-ZFb395.css",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.295436+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator-auth/status",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.307777+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/logos/nexus-icon.svg",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.362310+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/logos/nexus-wordmark-light.svg",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.363401+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/logos/nexus-wordmark-dark.svg",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.444381+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.443102+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/info",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.504392+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.566520+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.453108+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.702270+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.457521+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.982706+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.463548+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.464886+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:54.993306+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:55.018724+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:55.406693+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:36:55.451530+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:04.457250+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:10.002882+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:10.129915+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:10.455207+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:14.453964+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:15.056916+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:24.460267+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:25.005166+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:25.120542+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:25.459762+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:34.453128+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:36.106365+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:40.012904+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:40.125737+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:40.258362+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:44.445484+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:51.119789+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:54.455552+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:55.019033+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:37:55.122575+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:04.455336+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:06.072643+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:06.069836+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:06.073383+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:06.319170+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:14.458464+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:16.608835+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:16.759309+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/assets/index-BGONNtiX.js",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:16.845424+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/assets/index-C-ZFb395.css",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.075098+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator-auth/status",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.222345+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/logos/nexus-wordmark-light.svg",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.257288+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/logos/nexus-wordmark-dark.svg",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.264601+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/agents",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.271873+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.310051+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.346507+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.271394+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/info",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.273526+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.412393+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.406726+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.309778+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.275938+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.434796+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/logos/nexus-icon.svg",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.457508+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/info",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.436033+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/metrics/local/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.503249+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.527041+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.360656+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.272077+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.683059+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/metrics/publish-health",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.681693+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/settings",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.682932+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/metrics/local/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.699511+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.732735+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:17.930576+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:18.040101+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:21.074783+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:21.076711+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:21.262922+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:24.454321+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:27.860500+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:32.845344+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:32.841808+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:32.845487+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:32.844090+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:32.853999+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:32.949300+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:34.449624+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:36.073725+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:36.257795+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:36.078277+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:37.105291+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:37.104313+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:37.104469+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:37.102617+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:37.242910+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:37.144843+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:37.145969+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:37.376572+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:44.460525+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:47.229594+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:51.089207+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:51.090807+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:51.238418+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:52.090318+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:52.087867+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:52.103378+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:52.089549+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:52.087596+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:52.205063+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:54.453081+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:38:57.231572+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:00.033001+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:04.447548+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:04.577868+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:04.579854+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:04.580523+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:04.578353+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:06.088701+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:06.239342+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:06.092739+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:06.467999+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:07.094616+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:07.232408+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:07.197058+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:14.451499+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:17.231411+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:17.077481+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:21.104484+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:21.105999+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:21.284865+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:22.093338+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:22.175562+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:24.456897+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:26.338805+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:26.338646+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:26.338441+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:26.336885+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:27.235302+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:34.458031+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:36.118193+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:36.287858+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:36.123769+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:36.484611+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:37.855899+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:37.851961+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:37.853271+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:37.993684+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:41.008109+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:41.027112+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:41.055277+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:41.006615+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:41.004761+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:41.005961+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:41.227734+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:44.450176+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:47.845657+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:51.129341+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:51.130797+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:51.314685+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:54.444110+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:56.857682+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:56.856339+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:56.858603+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:56.871766+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:56.855581+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:56.868218+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:57.003096+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:39:57.844360+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:04.461069+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:06.133384+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:06.137598+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:06.319513+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:06.602412+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:07.842391+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:12.846289+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:12.844552+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:12.857702+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:12.845774+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:12.841096+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:12.854496+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:13.018501+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:14.460321+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:17.855131+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:18.393845+00:00",
+    "type": "ui_action",
+    "label": "Expand"
+  },
+  {
+    "at": "2026-11-16T23:40:21.139275+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:21.379045+00:00",
+    "type": "ui_action",
+    "label": "Open context"
+  },
+  {
+    "at": "2026-11-16T23:40:21.380548+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:21.405875+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:21.407738+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:21.143382+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:21.422961+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/agents/subject/runtime-executions/ui-unknown",
+    "status": 503
+  },
+  {
+    "at": "2026-11-16T23:40:21.302234+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:21.421945+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/sessions/ui-session-2",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:21.476758+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/sessions/ui-session-2/events",
+    "status": 404
+  },
+  {
+    "at": "2026-11-16T23:40:24.444072+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:27.845368+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:28.856999+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:28.853227+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:28.857801+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:28.871126+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:28.869848+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:28.854723+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:29.024823+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:34.446759+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:36.139561+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:36.145857+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:36.306565+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:36.542527+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:37.844304+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:44.449318+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:44.855666+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:44.856496+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:44.878000+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:44.850997+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:45.003304+00:00",
+    "type": "ui_action",
+    "label": "Refresh this exact execution"
+  },
+  {
+    "at": "2026-11-16T23:40:45.005454+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/agents/subject/runtime-executions/ui-unknown",
+    "status": 503
+  },
+  {
+    "at": "2026-11-16T23:40:44.849356+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:44.867396+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:45.102492+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:47.606332+00:00",
+    "type": "ui_action",
+    "label": "Continue this exact session"
+  },
+  {
+    "at": "2026-11-16T23:40:47.608795+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:47.619054+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/sessions/ui-session-2",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:50.156525+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/setup/subject",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:50.177657+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/setup/ui043_new_draft",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:51.142992+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:51.147154+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:51.320000+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:52.297688+00:00",
+    "type": "ui_action",
+    "label": "Continue this exact session"
+  },
+  {
+    "at": "2026-11-16T23:40:53.962283+00:00",
+    "type": "ui_action",
+    "label": "Close modal"
+  },
+  {
+    "at": "2026-11-16T23:40:54.444871+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:58.834078+00:00",
+    "type": "ui_action",
+    "label": "Use classic Home"
+  },
+  {
+    "at": "2026-11-16T23:40:58.840030+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:58.837363+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:58.841996+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:40:58.841481+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:00.850846+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:00.850948+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:00.866292+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:00.851980+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:00.850023+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:00.861900+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:01.079563+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:04.448208+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:06.142572+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:06.240980+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:13.842607+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:13.843695+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:13.845720+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:13.846277+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:14.444709+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:16.856030+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:16.856604+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:16.858413+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:16.866285+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:16.855339+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:16.865877+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:17.000297+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:21.144252+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:21.205404+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:24.446005+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:28.813576+00:00",
+    "type": "ui_action",
+    "label": "Use operational Home"
+  },
+  {
+    "at": "2026-11-16T23:41:28.819621+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:32.849887+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:32.869472+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:32.882239+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:32.850668+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:32.855843+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:32.852326+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:33.100457+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:34.447689+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:35.723930+00:00",
+    "type": "ui_action",
+    "label": "Connect agent"
+  },
+  {
+    "at": "2026-11-16T23:41:35.731075+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/me",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:35.748847+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/project-preset",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:35.757666+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:35.775122+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/catalog",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:36.144151+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:36.206909+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:36.267090+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:37.927817+00:00",
+    "type": "ui_action",
+    "label": "Close"
+  },
+  {
+    "at": "2026-11-16T23:41:41.854411+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:43.833451+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:44.446918+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:48.847315+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:48.848052+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:48.959968+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:48.850227+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:48.984301+00:00",
+    "type": "ui_action",
+    "label": "Expand"
+  },
+  {
+    "at": "2026-11-16T23:41:48.860263+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:48.845764+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:49.096378+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:51.156245+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:51.206156+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:52.327719+00:00",
+    "type": "ui_action",
+    "label": "Open session ui-session-2 \u00b7 ws \u00b7 exe_b841828b4999f6f6fbbc2057d07683bc"
+  },
+  {
+    "at": "2026-11-16T23:41:52.329946+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:52.346254+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:52.348075+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/target",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:52.360486+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/me",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:52.359242+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/sessions/ui-session-2",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:52.369156+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/sessions/ui-session-2",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:52.373361+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/sessions/ui-session-2/events",
+    "status": 404
+  },
+  {
+    "at": "2026-11-16T23:41:52.381225+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/connections/bindings/ui-binding-2",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:54.451730+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:41:54.894312+00:00",
+    "type": "ui_action",
+    "label": "Close modal"
+  },
+  {
+    "at": "2026-11-16T23:41:58.846126+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:04.446160+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:04.846382+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:04.855974+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:04.863487+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:04.843229+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:04.841816+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:04.845669+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:05.023404+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:06.164011+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:06.211647+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:06.317148+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:13.850449+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:14.447185+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:20.845458+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:20.855482+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:20.850831+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:20.868050+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:20.844383+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:20.860872+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:21.172937+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:21.196498+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:21.288858+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:24.445352+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:28.860135+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:34.459383+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:36.173124+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:36.227621+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:36.846167+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:36.848631+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:36.861961+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:36.847114+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:36.847627+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:36.856249+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:37.034481+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:41.852327+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:43.863563+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:44.458923+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:51.186033+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:51.233105+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:51.316153+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:52.851249+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:52.850231+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:52.848503+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:52.961851+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:52.847452+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:52.864793+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:53.058305+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:54.450407+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:42:58.866293+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:04.449272+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:06.194804+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:06.281098+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:08.858018+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:08.855605+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:08.859107+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:08.867705+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:08.866768+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:08.856957+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:09.026449+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:13.878848+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:14.458730+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:21.206942+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:21.259788+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:24.444403+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:24.854183+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:24.856775+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:24.908073+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:24.857143+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:24.862126+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:24.855868+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:25.024920+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:28.888400+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:34.451992+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:36.215455+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:36.260361+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:36.304226+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:40.857174+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:40.854728+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:40.853649+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:40.957959+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:40.852193+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:40.951768+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:41.056667+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:41.853839+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:43.889402+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:44.451456+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:46.902689+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:46.900111+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:46.903136+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/home/entries",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:47.219429+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:47.854545+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:47.856989+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:47.979044+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:54.458043+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:56.853961+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:56.860471+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:56.854910+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:56.859048+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:58.131016+00:00",
+    "type": "ui_action",
+    "label": "Use classic Home"
+  },
+  {
+    "at": "2026-11-16T23:43:58.137672+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:58.138146+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:58.136266+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:43:58.133509+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:01.890618+00:00",
+    "type": "ui_action",
+    "label": "GraphConnections and handoffs"
+  },
+  {
+    "at": "2026-11-16T23:44:02.096217+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:02.110573+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:02.194915+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:02.349837+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:03.848143+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:03.846862+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:04.014031+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:04.457141+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:06.421756+00:00",
+    "type": "ui_action",
+    "label": "Home"
+  },
+  {
+    "at": "2026-11-16T23:44:06.433310+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:06.432546+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:06.429910+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:06.442204+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:06.432281+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:06.695948+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:08.325037+00:00",
+    "type": "ui_action",
+    "label": "ConversationsConversations and sessions"
+  },
+  {
+    "at": "2026-11-16T23:44:08.330899+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:08.340742+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/settings",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:08.341612+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/handoffs",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:08.341481+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:08.340162+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/agents",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:08.354287+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:08.598198+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:08.803386+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/handoffs",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:08.802759+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:09.841945+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:10.837303+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:12.855466+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:12.856544+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:12.858908+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:12.858293+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:13.331946+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:14.447369+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:15.836488+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/runtime-management/runtime/input-requests",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:16.489554+00:00",
+    "type": "ui_action",
+    "label": "Home"
+  },
+  {
+    "at": "2026-11-16T23:44:16.496552+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:16.491674+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:16.495906+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:16.505126+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:16.494394+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:16.748364+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:17.125549+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:17.202943+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:17.276659+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:19.251564+00:00",
+    "type": "ui_action",
+    "label": "Needs attentionReview pending items"
+  },
+  {
+    "at": "2026-11-16T23:44:19.256480+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:19.264827+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:19.256938+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:19.344644+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:19.340744+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:19.516940+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:19.523348+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:19.605723+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:19.602616+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:19.846991+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:19.848428+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:19.996409+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:24.449648+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:28.849042+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:28.854157+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:28.851842+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:28.851018+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:30.939402+00:00",
+    "type": "ui_action",
+    "label": "Home"
+  },
+  {
+    "at": "2026-11-16T23:44:30.941081+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/workspaces",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:30.949605+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:30.946487+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:30.966381+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/stream",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:30.942747+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:30.945463+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:30.959745+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:31.076219+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:31.206049+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:31.236867+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:31.321469+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:34.443758+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:35.845277+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:35.844052+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:36.016980+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:41.853362+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:44.448411+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:44.854528+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:44.856269+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:44.854938+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:44.855238+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:45.950006+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/observations/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:45.953149+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/messages",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:45.954325+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/meta-harness/runtime-sessions",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:45.954844+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/graph",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:46.245378+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:46.301928+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:51.844342+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:51.846197+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:51.960318+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/attention/summary",
+    "status": 200
+  },
+  {
+    "at": "2026-11-16T23:44:54.448939+00:00",
+    "type": "http",
+    "method": "GET",
+    "path": "/api/v1/operator/unread-count",
+    "status": 200
+  }
+]

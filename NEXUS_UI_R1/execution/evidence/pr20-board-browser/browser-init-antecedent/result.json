@@ -1,0 +1,8 @@
+{
+  "status": "HARNESS_INIT_PREF_MISSING",
+  "tool": "b574b6",
+  "error": "page.waitForResponse: Timeout 20000ms exceeded while waiting for response /api/v1/home/board",
+  "checks": 0,
+  "POST": 0,
+  "cause": "Operational Home preference was omitted; default classic Home loaded. Runner now explicitly selects operational Home as prior PR15 technical fixture did."
+}

@@ -1,0 +1,19 @@
+{
+  "at": "2026-11-16T23:35:18.721652+00:00",
+  "status": "ROOT_TECHNICAL_REVIEW_PASS_EXECUTION_AUTHORIZED",
+  "candidate_sha256": "e9fd2b81e0f7e9d79841a47cf3f337b1047b46d808812a963d364d9994c8d8c3",
+  "genuine_consent_sha256": "04614e25bf01b24746e894c509126daf0fc954e77a2f466b95c39459c07df91a",
+  "checked_driver_package_installed_pins": 1048,
+  "mismatches": 0,
+  "native_executable_bindings_checked": 2,
+  "claude_bindings": 0,
+  "scope": "Narrow explicit user authorization to two Codex connections, original six-admission and500k observed policy. Original both-provider candidate and false template preserved.",
+  "code_review": "Compared derivative driver with original: replaces clients with codex_a/b, forces client=codex/model exact; retains consent/pins/fresh root/ledger/receipt/no-replay/force-owner checks. Fixes work journal path to canonical EmbeddedRuntimeHost .db with offline regression. No provider admitted during review.",
+  "offline_pass": 24,
+  "zero_admission_lifecycle": "DRAINED with physical exit, qualification-final.json",
+  "limits": [
+    "Observed accounting is not an atomic billing cap or final Codex usage claim.",
+    "Same adapter/model twice; no Claude, remote topology, AT or human qualification inferred.",
+    "Frozen BXP runtime is an antecedent to the later readonly attribute/artifact projection deltas."
+  ]
+}

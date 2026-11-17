@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="3.507" timestamp="2026-11-16T21:33:53.371145-03:00" hostname="Alienware_m15"><testcase classname="tests.home_evolution.test_home_interrupt_scope" name="test_home_exact_target_interrupt_leaves_sibling_turn_and_process_alive" time="1.523"><error message="failed on setup with &quot;RuntimeError: Could not determine home directory.&quot;">fixturedef = &lt;FixtureDef argname='local_setup' scope='function' baseid='tests/home_evolution/test_home_interrupt_scope.py'&gt;
+request = &lt;SubRequest 'local_setup' for &lt;Function test_home_exact_target_interrupt_leaves_sibling_turn_and_process_alive&gt;&gt;
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -&gt; object | None:
+        if (
+            fixturedef.argname == "event_loop_policy"
+            and fixturedef.func.__module__ != __name__
+        ):
+            warnings.warn(
+                PytestDeprecationWarning(_EVENT_LOOP_POLICY_FIXTURE_DEPRECATION_WARNING),
+            )
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+&gt;               return (yield)
+                        ^^^^^
+
+..\..\nexus-ui-r1-packages-wry3ter9\venv\Lib\site-packages\pytest_asyncio\plugin.py:934: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_local_realization.py:30: in local_setup
+    deps, app = app_for(tmp_path / "home")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_inventory.py:23: in app_for
+    return deps, build_app(deps)
+                 ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\inbound\http\app.py:580: in build_app
+    deps.config, deps.clock, detect_pinned_fields(deps.config),
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\application\settings.py:755: in detect_pinned_fields
+    defaults = NexusConfig()
+               ^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\config.py:176: in &lt;lambda&gt;
+    home_dir: Path = field(default_factory=lambda: Path.home() / ".okto_nexus")
+                                                   ^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:758: in home
+    return cls("~").expanduser()
+           ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('~')
+
+    def expanduser(self):
+        """ Return a new path with expanded ~ and ~user constructs
+        (as returned by os.path.expanduser)
+        """
+        if (not (self.drive or self.root) and
+            self._tail and self._tail[0][:1] == '~'):
+            homedir = os.path.expanduser(self._tail[0])
+            if homedir[:1] == "~":
+&gt;               raise RuntimeError("Could not determine home directory.")
+E               RuntimeError: Could not determine home directory.
+
+C:\Python313\Lib\pathlib\_local.py:808: RuntimeError</error></testcase></testsuite></testsuites>

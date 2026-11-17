@@ -1,0 +1,12 @@
+{
+  "status": "HARNESS_PRE_READY_ERROR",
+  "tool_output": "270270",
+  "exit_code": 1,
+  "error": "sqlite3.OperationalError: table execution_results has no column named sequence",
+  "cause": "Seed used sequence/summary rather than canonical terminal_sequence/output_text columns.",
+  "correction": "Only own seed and derived fixture corrected; product unchanged.",
+  "server_ready": false,
+  "browser_started": false,
+  "provider_calls": 0,
+  "cleanup_observed": "StreamableHTTP session manager shutting down; shared context exited before any server binding."
+}

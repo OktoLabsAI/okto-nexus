@@ -75,7 +75,7 @@ export function OnboardingModal({onClose, onOpenAgents}: {onClose: () => void; o
               <dt>Model and project instructions</dt><dd>Keep the harness configuration</dd>
               <dt>Conversation context</dt><dd>{preset.configuration.session_policy?.replaceAll('_', ' ') || 'Global setting'}</dd>
               <dt>Nexus tool approval</dt><dd>{preset.configuration.tool_access}</dd>
-              <dt>Execution authorization</dt><dd>{preset.configuration.authorization.minutes} minutes / {preset.configuration.authorization.actions} actions</dd>
+              <dt>Execution authorization</dt><dd>{preset.configuration.authorization.no_expiry?'Unlimited':`${preset.configuration.authorization.minutes} minutes`} / {preset.configuration.authorization.unlimited_actions?'Unlimited':`${preset.configuration.authorization.actions} actions`}</dd>
             </dl>
             <p className="text-sm text-surface-600 dark:text-surface-300">Visible collaborators, messages and workspace handoffs stay within the granted scope. Native questions and permissions remain subject to the authorized recipient.</p>
             <details className="text-sm"><summary className="cursor-pointer">Review the effects</summary><ul className="list-disc pl-5 space-y-2 mt-2">{preset.effects.map(effect => <li key={effect}>{effect}</li>)}</ul></details>
@@ -91,12 +91,12 @@ export function OnboardingModal({onClose, onOpenAgents}: {onClose: () => void; o
         </section>}
         <aside className="border-t border-surface-200 dark:border-surface-700 pt-4 text-sm text-surface-600 dark:text-surface-300">
           <h2 className="font-semibold text-surface-900 dark:text-white mb-1">Already connected from the terminal?</h2>
-          <p>Open Agents to inspect the same identity and saved Connections. Changing a display name or role keeps the agent ID and history. A running service, an authenticated client, a ready session and a completed result are different states.</p>
+          <p>Choose Connect agent on Home or Conversations to open an existing project connection or add another harness. Connection, session and pending-send recovery are separate choices. Changing presentation does not change the agent ID, service or history.</p>
         </aside>
       </main>
       <footer className="flex shrink-0 flex-wrap justify-end gap-2 border-t border-surface-200 dark:border-surface-700 p-4">
         <button type="button" className={button} onClick={close}>Continue in terminal</button>
-        <button type="button" className={button + ' bg-accent-600 text-white'} onClick={openAgents} data-testid="onboarding-cta">Open Agents</button>
+        <button type="button" className={button + ' bg-accent-600 text-white'} onClick={openAgents} data-testid="onboarding-cta">Connect or resume an agent</button>
       </footer>
     </div>
   </div>;

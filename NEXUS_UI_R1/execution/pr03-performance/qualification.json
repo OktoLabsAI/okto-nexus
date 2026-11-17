@@ -1,0 +1,28 @@
+{
+  "task": "UI-022",
+  "status": "MEASURED_WITH_TARGET_MISS",
+  "service_latency_only": true,
+  "production_slo_qualified": false,
+  "target_500ms_met_all_sizes": false,
+  "no_query_per_agent_observed": true,
+  "query_count_scope": "separate initial groups read at each size",
+  "sql_count_each_size": 55,
+  "source_complexity": "bounded O(N+relationships), not O(page)",
+  "semantic_assertion_groups": 3,
+  "provider_native_personal_auth": false,
+  "ledger_promotion": "not automatic; large-size latency target missed",
+  "concurrent_host_workload": "Root TypeScript and real-fixture HTTP pytest; no exclusive CPU or cache",
+  "benchmark_process_exit": 0,
+  "semantic_process_exit": 0,
+  "source_pin_drift": [],
+  "sha256": {
+    "agents-1.json": "07fdd19d0728b6e4270af6b9de9d6ff69f469ae249cd01c02b1a2615ad3ae4ec",
+    "agents-10.json": "f003ca870ee256f519451de405a3253b01e85ac534c31ff1596f14ba42cd76bc",
+    "agents-100.json": "264cb889b0a884a09eba683e0cdd7e9d356541a379aeb633c83a30dba5bb4f61",
+    "environment.json": "8a1d9809e177cf7e73a55e8b44c32ae2efade359606d39e01e2a657709e77c98",
+    "measure.py": "0a502e5c900ac50c4e5e200a1e03495072acfb9a8e9ace109a20eb5d81c16053",
+    "README.md": "bcfaf24e4269047ff58e4ac664f544223328965ada3f053d57f03c6e0d28c506",
+    "semantics.json": "8691b8d4d6435a05531a009b627cacb4fca85acdc01b627a6b25bcbbcfd1adf5",
+    "semantic_probe.py": "8ce622ec807664cfce5e1737bf437a6c28a32c690f57bbd670bbad3fcc967f09"
+  }
+}

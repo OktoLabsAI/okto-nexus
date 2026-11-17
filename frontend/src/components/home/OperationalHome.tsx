@@ -1,42 +1,87 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {Pause, Play, Plus, RefreshCw} from 'lucide-react';
-import {api, type WorkspaceListItem} from '../../api';
+import type {WorkspaceListItem} from '../../api';
 import type {AttentionAction, AttentionOccurrence} from '../../attentionTypes';
-import type {HomeTarget, HomeDisplayState} from '../../homeTypes';
-import type {HomeInvalidation, HomeStreamStatus} from '../../homeController';
+import type {HomeTarget,HomeEntryPage,HomeEntryGroup,HomeBoard,HomeHarnessBoard,HomeHarnessChild,HomeHarnessEvent} from '../../homeTypes';
+import {primaryAttentionAction} from '../../attentionPresentation';
+import {type HomeInvalidation,type HomeStreamStatus} from '../../homeController';
 import {useHomeOverview} from '../../hooks/useHomeOverview';
 import {decodeHomeTarget, encodeHomeTarget} from '../../homeNavigation';
-import {homeExternalLabel, homeStateLabel, homeFeedLabel} from '../../homePresentation';
+import {homeStateLabel} from '../../homePresentation';
+import {homeTargetActionLabel} from '../../homePresentation';
+import type {HomeState} from '../../homeController';
 import {AgentActionModal} from '../AgentActionModal';
 import {PageContainer} from '../PageContainer';
-import {useWorkspaceName} from '../WorkspaceNames';
+import {HomeProjectCard,HomeSummaryCards} from './HomeContextCards';
 import {HomeNewRequest, HomeInspection, HomeAttentionInspection} from './HomeInspection';
-import {AgentRow, AttentionRow, HomeBlock, HomeCounters, HomeWelcome, isQuietHome, ResultRow, WorkRow, homeFocus, homeAnnouncementIds, freshHomeOccurrence} from './HomeCards';
+import {homeFocus,homeEntriesAnnouncementIds,isQuietEntries} from './HomeCards';
+import {HomeBoardCards,isQuietBoard} from './HomeBoardCards';
+import {HomeHarnessCard,HomeHarnessSignalCard} from './HomeHarnessCard';
+import type {HomeEntrySelection} from '../../homeEntryInspection';
 
-type Panel = {kind: 'request'} | {kind: 'target'; target: HomeTarget; continuation?: boolean}
-  | {kind: 'attention'; item: AttentionOccurrence; action: AttentionAction};
-const states: HomeDisplayState[] = ['running', 'awaiting_owner', 'claimed', 'queued', 'native_accepted', 'awaiting_operator', 'awaiting_agent', 'awaiting_dependency', 'awaiting_verification', 'outcome_unknown'];
+type Panel = {kind: 'request'} | {kind: 'target'; target: HomeTarget; continuation?: boolean;entrySelection?:HomeEntrySelection}
+  | {kind: 'attention'; item: AttentionOccurrence; action: AttentionAction}
+  | {kind:'harness';cardId:string|null};
+/** Only the authorized pre-filter inventory can prove the first-connection case. */
+export function isFirstHarnessEmpty(page:HomeEntryPage<HomeEntryGroup>|null,stale=false,filtered=false):boolean {
+  if(!page||stale||filtered||!isQuietEntries(page)||page.partition!=='groups')return false;
+  const scope=page.scope,count=page.inventory?.connections;
+  return page.source_status.connections==='ready'&&
+    ['work','results','attention','connections','sessions','correlations','external'].every(key=>['ready','disabled'].includes(page.source_status[key]))&&
+    scope.quick==='active'&&scope.include_recent_results===true&&
+    !scope.agent_id&&!scope.state&&!scope.harness&&!scope.host&&
+    count?.unit==='connections'&&count.total_is_exact===true&&count.value===0;
+}
+
+/** Contextual activity page, never a second inventory or a synthesized harness. */
+function HarnessActivityPanel({cardId,state,onMore,onEntry}: {
+  cardId:string|null;state:HomeState;onMore:()=>void;onEntry:(entry:HomeHarnessChild)=>void;
+}) {
+  const root=state.harnessBoard;
+  const card=root&&cardId!==null?Object.values(root.columns).flatMap(column=>column.items).filter(item=>item.kind==='harness').find(item=>item.id===cardId):null;
+  const page=cardId===null?state.harnessUnlinked??root?.unlinked:state.harnessChildren[cardId];
+  const items=page?.items??card?.children??[],total=page?.total??card?.children_total;
+  const more=page?.has_more??card?.has_more_children;
+  const stale=state.hasPendingUpdate||state.staleSections.length>0||['forbidden','disabled','error'].includes(state.status);
+  return <section aria-label="Harness activity" className="space-y-4">
+    <h3 className="font-semibold">{cardId===null?'Other activity':card?.connection.agent_label||'Harness activity'}</h3>
+    <p className="text-sm text-surface-500">{total===null||total===undefined?'Activity total unknown':`${total} linked activities`}. Select an activity to review its canonical context.</p>
+    {stale&&<p role="status">This activity list changed. Close and reopen it for the current page.</p>}
+    <ul className="space-y-3">{items.map(entry=><li key={entry.id} className="border-b pb-3" data-home-activity={entry.id}>
+      <p className="font-medium break-words">{entry.title}</p><p className="text-sm">{homeStateLabel(entry.display_state)}</p>
+      {entry.shared_reference&&<p className="text-xs text-surface-500">Shared activity</p>}
+      {entry.target?<button type="button" className={"underline "+homeFocus} disabled={stale} onClick={()=>onEntry(entry)}>{homeTargetActionLabel(entry.target)}</button>:
+        <p className="text-sm text-surface-500">Exact context unavailable.</p>}
+    </li>)}</ul>
+    {more&&<button type="button" className="btn btn-secondary" disabled={stale||state.harnessLoading!==null} onClick={onMore}>{state.harnessLoading!==null?'Loading activity…':'Load more activity'}</button>}
+  </section>;
+}
+export function isFirstHarnessBoardEmpty(page:HomeBoard|HomeHarnessBoard|null,stale=false,filtered=false):boolean{
+  if(!page||stale||filtered||!isQuietBoard(page))return false;
+  const count=page.inventory?.connections;
+  return ['work','results','attention','connections','sessions','correlations','external'].every(key=>['ready','disabled'].includes(page.source_status[key]))&&
+    page.source_status.connections==='ready'&&!page.scope.agent_id&&!page.scope.state&&!page.scope.harness&&!page.scope.host&&
+    count?.unit==='connections'&&count.total_is_exact===true&&count.value===0;
+}
 export function OperationalHome({workspace, workspaces, identityKey, refreshTick, latestEvent, streamStatus, onNavigate,
-  onAttentionChanged, onSetupAgent, registerLeaveGuard}: {
+  onAttentionChanged, onSetupAgent, onWorkspaceChange, registerLeaveGuard}: {
   workspace: string; workspaces: WorkspaceListItem[]; identityKey: string; refreshTick: number;
   latestEvent: HomeInvalidation | null; streamStatus: HomeStreamStatus;
   onNavigate: (view: 'Agents' | 'Attention' | 'Graph' | 'Meta-harness') => void; onAttentionChanged: () => void; onSetupAgent: () => void;
   registerLeaveGuard: (guard: (() => boolean) | null) => void;
+  onWorkspaceChange?:(id:string)=>void;
 }) {
-  const [agentFilter, setAgentFilter] = useState(''), [agentDraft, setAgentDraft] = useState(''), [stateFilter, setStateFilter] = useState('');
-  const home = useHomeOverview({workspace: workspace === 'all' ? null : workspace, identityKey,
-    agent_id: agentFilter || undefined, state: stateFilter || undefined, latestEvent, streamStatus});
-  const {state, refresh, pause, apply, loadMore} = home;
-  const snapshot = state.snapshot;
+  const [listFocused,setListFocused]=useState(false);
+  const home = useHomeOverview({family:'harness',workspace: workspace === 'all' ? null : workspace, identityKey,
+    holdOrder:listFocused,latestEvent,streamStatus});
+  const {state,refresh,pause,apply,holdOrder,loadBoardColumn,loadHarnessChildren}=home;
+  const snapshot = state.harnessBoard;
   const [panel, setPanel] = useState<Panel | null>(null), [manualPause, setManualPause] = useState(false);
-  const [notice, setNotice] = useState(''), [pending, setPending] = useState<string[]>([]);
-  const locks = useRef(new Set<string>()), mounted = useRef(true);
-  const current = useRef(state);current.current = state;
+  const [notice, setNotice] = useState('');
   const heading = useRef<HTMLHeadingElement>(null), focusReturn = useRef<HTMLElement | null>(null);
+  const focusEntry=useRef<string|null>(null);
   const scrollReturn = useRef<{element: HTMLElement; top: number} | null>(null);
-  const workspaceName = useWorkspaceName(workspace === 'all' ? null : workspace);
   const initialTarget = useRef(false);
-  const activityRequested = useRef(-1);
   const [announcement, setAnnouncement] = useState('');
   const announced = useRef<{generation: number; ids: Set<string>}>({generation:-1, ids:new Set()});
   const announceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -46,7 +91,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
       setAnnouncement('');
     }
     if (!snapshot) return;
-    const ids = homeAnnouncementIds(snapshot);
+    const ids = homeEntriesAnnouncementIds(state);
     const previous = announced.current;
     announced.current = {generation:state.generation,ids};
     if (previous.generation !== state.generation) {setAnnouncement('');return;}
@@ -56,14 +101,9 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
       setAnnouncement('');
       announceTimer.current = setTimeout(() => {announceTimer.current=null;setAnnouncement('Home updated. New work, attention or results are available.');}, 2000);
     }
-  }, [snapshot, state.generation]);
+  }, [snapshot,state.entryChildren, state.generation]);
   useEffect(() => () => {if (announceTimer.current) clearTimeout(announceTimer.current);}, []);
-  useEffect(() => {
-    if (snapshot && !state.activity && !state.loading && !state.loadingMore && state.status === 'ready' && !state.paused && activityRequested.current !== state.generation) {
-      activityRequested.current = state.generation;loadMore('activity');
-    }
-  }, [snapshot, state.activity, state.loading, state.loadingMore, state.status, state.paused, state.generation, loadMore]);
-  useEffect(() => {mounted.current = true;return () => {mounted.current = false;};}, []);
+  useEffect(()=>{setListFocused(false);},[state.generation]);
   useEffect(() => {if (refreshTick) refresh();}, [refreshTick, refresh]);
   useEffect(() => {pause(manualPause || !!panel);}, [manualPause, !!panel, pause]);
   const close = useCallback(() => {
@@ -71,7 +111,9 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     const url = new URL(window.location.href);url.searchParams.delete('home_target');window.history.replaceState(null, '', url);
     window.requestAnimationFrame(() => {
       const scroll = scrollReturn.current;if (scroll?.element.isConnected) scroll.element.scrollTop = scroll.top;
-      (focusReturn.current?.isConnected ? focusReturn.current : heading.current)?.focus({preventScroll:true});
+      const moved=focusEntry.current?Array.from(document.querySelectorAll<HTMLElement>('[data-home-entry]')).find(el=>el.dataset.homeEntry===focusEntry.current):null;
+      const destination=focusReturn.current?.isConnected?focusReturn.current:moved?.querySelector<HTMLElement>('[data-home-entry-open]')??moved??heading.current;
+      destination?.focus({preventScroll:true});
     });
   }, []);
   const dismiss = useCallback(() => {
@@ -88,6 +130,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   const open = (next: Panel) => {
     if (panel) {dismiss();return;}
     focusReturn.current = document.activeElement as HTMLElement | null;
+    focusEntry.current=focusReturn.current?.closest<HTMLElement>('[data-home-entry]')?.dataset.homeEntry??null;
     const scroll = heading.current?.closest('main');if (scroll) scrollReturn.current = {element:scroll, top:scroll.scrollTop};
     if (next.kind === 'target') {
       const url = new URL(window.location.href);url.searchParams.set('home_target', encodeHomeTarget(next.target));window.history.pushState(null, '', url);
@@ -110,92 +153,76 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   }, [snapshot]);
   useEffect(() => {if (state.status === 'forbidden' || state.status === 'disabled') {setPanel(null);setNotice('');}}, [state.status]);
   const changed = () => {refresh();onAttentionChanged();};
-  const preference = async (item: AttentionOccurrence, seen?: boolean) => {
-    const before = current.current, snap = before.snapshot;
-    const canonical = freshHomeOccurrence(snap, before.staleSections, item);
-    if (!snap || !['ready', 'stale'].includes(before.status) || before.paused || !canonical || canonical.source_revision !== item.source_revision ||
-        canonical.seen_state.revision !== item.seen_state.revision || locks.current.has(item.attention_id)) {setNotice('Refresh this occurrence before changing its viewing preference.');return;}
-    locks.current.add(item.attention_id);setPending([...locks.current]);setNotice('');
-    try {
-      if (seen !== undefined) await api.attentionSeen(item.attention_id, {seen, source_revision:item.source_revision, preference_revision:item.seen_state.revision});
-      else await api.attentionSnooze(item.attention_id, {until:item.seen_state.snoozed ? null : new Date(Date.now()+3600000).toISOString(), source_revision:item.source_revision, preference_revision:item.seen_state.revision});
-    } catch {if (mounted.current && current.current.generation === before.generation) setNotice('The viewing preference could not be confirmed. Refreshing the canonical occurrence; it will not be replayed.');}
-    finally {locks.current.delete(item.attention_id);if (mounted.current && current.current.generation === before.generation) {setPending([...locks.current]);changed();}}
+  const selectEntry=(entry:HomeHarnessChild,target:HomeTarget,attention?:HomeEntrySelection['attention'])=>{
+    const selection:HomeEntrySelection={groupId:entry.group_id,revision:entry.entry_revision,entry,
+      filters:{workspace_id:workspace==='all'?undefined:workspace,quick:'all'},attention};
+    return {kind:'target' as const,target,entrySelection:selection};
   };
-  const isStale = (section: 'work'|'attention'|'results'|'agents'|'external_activity'|'server_attention') => !['ready', 'stale'].includes(state.status) || state.staleSections.includes(section) || state.paused;
-  const quiet = !agentFilter && !stateFilter && isQuietHome(snapshot, !['ready', 'stale'].includes(state.status) || state.staleSections.some(section => ['work','results','attention','agents','external_activity'].includes(section)));
-  const agentsBlock = snapshot && <HomeBlock title="Agents" section={snapshot.agents} stale={isStale('agents')} onMore={() => loadMore('agents')} loadingMore={state.loadingMore === 'agents'} empty="No visible agents in this scope."><ul className="divide-y divide-surface-200 dark:divide-surface-700">{snapshot.agents.items.map(item => <AgentRow key={item.agent_id} item={item}/>)}</ul></HomeBlock>;
+  const eventPanel=(event:HomeHarnessEvent):Panel|null=>{
+    const action=event.attention?primaryAttentionAction(event.attention):null;
+    if(event.attention&&action){
+      return event.target?selectEntry(event.entry,event.target,{item:event.attention,action}):{kind:'attention',item:event.attention,action};
+    }
+    return event.target?selectEntry(event.entry,event.target):null;
+  };
+  const blocked=state.loading||!!state.entryLoading||!!state.boardLoading||state.paused||state.hasPendingUpdate||state.staleSections.length>0||!snapshot||
+    !['ready','partial'].includes(snapshot.status)||['forbidden','disabled','error'].includes(state.status);
+  const quiet=isQuietBoard(snapshot,blocked);
+  const filtered=false;
+  const firstHarness=isFirstHarnessBoardEmpty(snapshot,blocked||state.status!=='ready',filtered);
   return <PageContainer testId="operational-home" className="space-y-5">
     <header className="flex flex-wrap justify-between items-start gap-3">
-      <div><p className="text-xs uppercase tracking-wider text-accent-600 dark:text-accent-300">Operational overview</p>
-        <h1 ref={heading} tabIndex={-1} className="text-2xl font-semibold mt-1">Home</h1>
-        <p className="text-sm text-surface-500 mt-1">{workspace === 'all' ? 'All workspaces' : workspaceName} · Work, decisions and results</p></div>
+      <div><h1 ref={heading} tabIndex={-1} className="text-2xl font-semibold">Home</h1>
+        <p className="text-sm text-surface-500 mt-1">Follow work, questions and deliveries.</p>
+        <p className="text-sm text-surface-500 mt-2">Follow each harness below. Open an activity to see its exact context, or add a harness to this project.</p></div>
       <div className="flex flex-wrap gap-2">
-        {!quiet && <button className={`btn btn-primary ${homeFocus}`} onClick={() => open({kind:'request'})} disabled={!snapshot || state.status === 'forbidden'}><Plus size={15}/> New request</button>}
-        <button className={`btn btn-secondary ${homeFocus}`} onClick={refresh} disabled={state.loading}><RefreshCw size={15}/> Refresh</button>
-        <button className={`btn btn-secondary ${homeFocus}`} aria-pressed={manualPause} onClick={() => setManualPause(value => !value)}>{manualPause ? <Play size={15}/> : <Pause size={15}/>} {manualPause ? 'Resume display' : 'Pause display'}</button>
+        <button type="button" className={`btn btn-primary ${homeFocus}`} onClick={()=>open({kind:'request'})} disabled={firstHarness||!snapshot||['forbidden','disabled'].includes(state.status)}><Plus size={15}/> New request</button>
+        <button type="button" className={`btn btn-secondary ${homeFocus}`} onClick={refresh} disabled={state.loading||!!state.entryLoading}><RefreshCw size={15}/> Refresh</button>
+        <button type="button" className={`btn btn-secondary ${homeFocus}`} aria-pressed={manualPause} onClick={()=>setManualPause(value=>!value)}>{manualPause?<Play size={15}/>:<Pause size={15}/>} {manualPause?'Resume display':'Pause display'}</button>
       </div>
     </header>
-    {state.paused && <p role="status" className="text-sm text-surface-500">Display updates paused. Agents keep running; decisions still require a fresh canonical review.</p>}
-    {state.hasPendingUpdate && <div role="status" className="flex flex-wrap gap-3 items-center text-sm"><span>Updates are available.</span><button className="btn btn-secondary" disabled={!!panel} onClick={() => {setManualPause(false);apply();}}>Apply updates</button></div>}
+    <HomeProjectCard workspace={workspace} workspaces={workspaces} onChange={onWorkspaceChange} onConnect={onSetupAgent} setupLabel="Add harness" connectDisabled={state.status==='forbidden'}/>
+    {snapshot&&<HomeSummaryCards summary={snapshot.summary} stale={blocked}/>}
+    {state.paused&&<p role="status" className="text-sm text-surface-500">Display updates paused. Agents keep running; decisions require a fresh canonical review.</p>}
+    {state.hasPendingUpdate&&<div role="status" className="flex flex-wrap gap-3 items-center text-sm"><span>Updates are available.</span><button type="button" className="btn btn-secondary" disabled={!!panel} onClick={()=>{setManualPause(false);apply();}}>Apply updates</button></div>}
     <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
-    {notice && <p role="alert" className="text-sm">{notice}</p>}
-    {state.error && <p role="alert" className="text-sm">{state.error}</p>}
-      <div className="flex flex-wrap gap-3 items-end" aria-label="Home filters">
-        <label className="text-xs text-surface-500">Agent<input className="block mt-1 border rounded-lg p-2 bg-transparent text-sm" aria-label="Filter Home by agent" list="home-agents" value={agentDraft} onChange={event => setAgentDraft(event.target.value)} onKeyDown={event => {if (event.key === 'Enter') setAgentFilter(agentDraft.trim());}}/></label>
-        <datalist id="home-agents">{(snapshot?.agents.items ?? []).map(agent => <option key={agent.agent_id} value={agent.agent_id}>{agent.name}</option>)}</datalist>
-        <button className="btn btn-secondary" onClick={() => setAgentFilter(agentDraft.trim())}>Apply agent filter</button>
-        <label className="text-xs text-surface-500">Work state<select className="block mt-1 border rounded-lg p-2 bg-transparent text-sm" value={stateFilter} onChange={event => setStateFilter(event.target.value)}><option value="">All states</option>{states.map(value => <option value={value} key={value}>{homeStateLabel(value)}</option>)}</select></label>
-        {(agentFilter || agentDraft || stateFilter) && <button className="btn btn-secondary" onClick={() => {setAgentFilter('');setAgentDraft('');setStateFilter('');}}>Clear filters</button>}
-      </div>
-    {!snapshot && <p role="status" className="panel p-5">{state.status === 'forbidden' ? 'Operator access is required. Protected Home data has been cleared.' : state.status === 'disabled' ? 'Operational Home is disabled.' : state.status === 'error' ? 'Home information is unavailable. Refresh to try again.' : 'Loading operational overview…'}</p>}
-    {snapshot && <>
-      <HomeBlock title="Server" section={snapshot.server_attention} stale={isStale('server_attention')} onMore={() => loadMore('server_attention')} loadingMore={state.loadingMore === 'server_attention'} empty="No active server-wide attention.">
-        <p className="text-xs text-surface-500 mt-3">Server-wide attention is independent of the selected workspace, agent and work-state filters.</p>
-        <ul className="divide-y divide-surface-200 dark:divide-surface-700">{snapshot.server_attention.items.map(item => <AttentionRow key={item.attention_id} item={item} pending={pending.includes(item.attention_id)} stale={isStale('server_attention')} onOpen={(item,action) => open({kind:'attention',item,action})} onSeen={(item,seen) => void preference(item,seen)} onSnooze={item => void preference(item)}/>)}</ul>
-      </HomeBlock>
-      {quiet ? <>
-        <HomeWelcome needsSetup={snapshot.agents.total === 0} externalDisabled={snapshot.external_activity.status === 'disabled'} onSetup={onSetupAgent} onRequest={() => open({kind:'request'})}/>
-        {snapshot.agents.total !== 0 && agentsBlock}
-      </> : <>
-      <HomeCounters summary={snapshot.summary}/>
-
-      <div className="grid xl:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] gap-5 items-start">
-        <div className="space-y-5 min-w-0">
-          <HomeBlock title="Needs you" section={snapshot.attention} stale={isStale('attention')} onMore={() => loadMore('attention')} loadingMore={state.loadingMore === 'attention'} empty="No matching attention occurrences. Work may still be running or waiting elsewhere.">
-            <ul className="divide-y divide-surface-200 dark:divide-surface-700">{snapshot.attention.items.map(item => <AttentionRow key={item.attention_id} item={item} pending={pending.includes(item.attention_id)} stale={isStale('attention')} onOpen={(item,action) => open({kind:'attention',item,action})} onSeen={(item,seen) => void preference(item,seen)} onSnooze={item => void preference(item)}/>)}</ul>
-          </HomeBlock>
-          <HomeBlock title="Work" section={snapshot.work} stale={isStale('work')} empty={snapshot.agents.total === 0 ? <><p>No agents are visible in this scope.</p><button className="btn btn-secondary mt-3" onClick={onSetupAgent}>Set up an agent</button></> : 'No matching work. Start a tracked handoff or a conversation with New request.'} onMore={() => loadMore('work')} loadingMore={state.loadingMore === 'work'}>
-            <ul className="divide-y divide-surface-200 dark:divide-surface-700">{snapshot.work.items.map(item => <WorkRow key={item.id} item={item} onOpen={target => open({kind:'target',target})}/>)}</ul>
-          </HomeBlock>
-        </div>
-        <div className="space-y-5 min-w-0">
-          <HomeBlock title="Results" section={snapshot.results} stale={isStale('results')} empty="No matching results in this snapshot." onMore={() => loadMore('results')} loadingMore={state.loadingMore === 'results'}>
-            <ul className="divide-y divide-surface-200 dark:divide-surface-700">{snapshot.results.items.map(item => <ResultRow key={item.id} item={item} stale={isStale('results') || !!item.attention && pending.includes(item.attention.attention_id)} onOpen={target => open({kind:'target',target})} onSeen={(item,seen) => void preference(item,seen)} onContinue={target => open({kind:'target',target,continuation:true})}/>)}</ul>
-          </HomeBlock>
-          {agentsBlock}
-        </div>
-      </div>
-      <HomeBlock title="External reports" section={snapshot.external_activity} stale={isStale('external_activity')} onMore={() => loadMore('external')} loadingMore={state.loadingMore === 'external'} empty="No external activity reported. Native work above is independent of external telemetry.">
-        <p className="text-xs text-surface-500 mt-3">External reports do not confirm native execution, capacity or successful completion.</p>
-        <ul className="divide-y divide-surface-200 dark:divide-surface-700">{snapshot.external_activity.items.map(item => <li key={JSON.stringify([item.source_id,item.observed_instance_id,item.generation])} className="py-3 text-sm">
-          <strong>{item.agent_id}</strong><p>{homeExternalLabel(item)}</p><p className="text-xs text-surface-500">{item.source_kind} · generation {item.generation} · {item.last_report?.evidence || 'No activity evidence'}</p>
-          <button className="btn btn-secondary mt-2" onClick={() => open({kind:'target',target:{kind:'external_observation',server_id:snapshot.server_id,workspace_id:item.workspace_id,source_id:item.source_id,observed_instance_id:item.observed_instance_id,generation:item.generation}})}>Inspect source</button>
-        </li>)}</ul>
-      </HomeBlock>
-      </>}
-      {(!quiet || state.activity && (state.activity.items.length > 0 || state.activity.status !== 'ready')) && (state.activity ? <HomeBlock title="Recent activity" section={state.activity} stale={state.staleSections.includes('activity')} empty="No recent business events in this scope." onMore={() => loadMore('activity')} loadingMore={state.loadingMore === 'activity'}>
-        <ul className="divide-y divide-surface-200 dark:divide-surface-700">{state.activity.items.map(event => {
-          const label = homeFeedLabel(event.kind);if (!label) return null;
-          return <li key={event.id} className="py-2 text-sm flex flex-wrap justify-between gap-2"><span>{label}{event.agent_id ? ` · ${event.agent_id}` : ''}</span>
-            {event.detail_target && <button type="button" className={`text-xs underline ${homeFocus}`} onClick={() => open({kind:'target',target:event.detail_target!})}>Inspect event source</button>}</li>;
-        })}</ul>
-      </HomeBlock> : <section className="panel p-4"><h2 className="font-semibold">Recent activity</h2><button className="btn btn-secondary mt-3" disabled={!!state.loadingMore || state.loading} onClick={() => loadMore('activity')}>Load recent activity</button></section>)}
+    {notice&&<p role="alert" className="text-sm">{notice}</p>}
+    {state.error&&<p role="alert" className="text-sm">{/^[A-Z0-9_]+$/.test(state.error)?'Tracking information could not be refreshed. Try Refresh or narrow the filters.':state.error}</p>}
+    <p className="text-xs text-surface-500">Active work, items needing you and retained results stay visible together. Each card keeps its linked sessions, questions and deliveries.</p>
+    {!snapshot&&<p role="status" className="panel p-5">{state.status==='forbidden'?'Operator access is required. Protected Home data has been cleared.':state.status==='disabled'?'Operational Home is disabled.':state.status==='error'?'Home information is unavailable. Refresh to try again.':'Loading follow-up…'}</p>}
+    {snapshot&&<>
+      {(snapshot.server_attention.total===null||snapshot.server_attention.total>0)&&<div role="status" className="rounded-lg border border-surface-200 dark:border-surface-700 p-3 text-sm">
+        <button type="button" className={`underline ${homeFocus}`} onClick={()=>onNavigate('Attention')}>{snapshot.server_attention.total===null?'Server attention unavailable':`${snapshot.server_attention.total} Server attention ${snapshot.server_attention.total===1?'item':'items'}`}. Open Needs attention</button>
+        <p className="text-xs text-surface-500 mt-1">All projects and Server. These incidents are separate from project work.</p>
+      </div>}
+        {snapshot.status!=='ready'&&<p role="status" className="text-sm text-surface-500">Some information is incomplete or unavailable. Totals may be unknown; refresh before acting.</p>}
+        {snapshot.coverage.result_tracking!=='ready'&&<p className="text-xs text-surface-500">Some result viewing states are untracked. Those deliveries are labeled recent.</p>}
+        {quiet&&<div className="panel p-5">{firstHarness?<>
+          <p className="font-medium">Connect a collaborator</p>
+          <p className="text-sm text-surface-500 mt-2">Connect a collaborator to start work in this project.</p>
+        </>:<><p className="font-medium">No matching activity{filtered?' for these filters':''}.</p><p className="text-sm text-surface-500 mt-2">Use New request to ask for work, or Connect or resume to find an existing connection or add a collaborator.</p></>}</div>}
     </>}
-    {panel && snapshot && <AgentActionModal title={panel.kind === 'request' ? 'New request' : panel.kind === 'attention' ? 'Canonical attention record' : panel.continuation ? 'Continue this exact session' : 'Activity detail'} onClose={close} presentation="drawer" wide testId="home-detail">
-      {panel.kind === 'request' ? <HomeNewRequest workspace={workspace} workspaces={workspaces} onChanged={changed}/>
-        : panel.kind === 'attention' ? <HomeAttentionInspection item={panel.item} action={panel.action} onClose={close} onChanged={changed}/>
-          : <HomeInspection target={panel.target} serverId={snapshot.server_id} workspace={workspace === 'all' ? null : workspace} continuation={panel.continuation} onClose={close} onChanged={changed}/>}
+    <HomeBoardCards board={snapshot} blocked={blocked} loading={state.boardLoading} initialLoading={state.status==='loading'||state.loading} onMore={loadBoardColumn} countLabel={{active:'harnesses',needs_you:'items',results:'deliveries'}}
+      onFocus={()=>{holdOrder(true);setListFocused(true);}} onBlur={inside=>{if(!inside){holdOrder(false);setListFocused(false);}}}
+      renderEntry={card=>card.kind==='harness'?<HomeHarnessCard key={card.id} card={card} column={snapshot!.columns.needs_you.items.some(item=>item.id===card.id)?'needs_you':'active'}
+        blocked={blocked} onActivity={()=>open({kind:'harness',cardId:card.id})}
+        onEvent={event=>{const next=eventPanel(event);if(next)open(next);}}/>:
+        <HomeHarnessSignalCard key={card.id} item={card} blocked={blocked} onOpen={()=>{
+          if(card.kind==='request'){
+            const action=primaryAttentionAction(card.request);if(!action)return;
+            open(card.entry.target?selectEntry(card.entry,card.entry.target,{item:card.request,action}):{kind:'attention',item:card.request,action});
+          }else if(card.result?.detail_target)open(selectEntry(card.entry,card.result.detail_target));
+          else if(card.report){const action=primaryAttentionAction(card.report);if(action)open({kind:'attention',item:card.report,action});}
+        }}/>}
+      footer={snapshot&&(snapshot.unlinked.total===null||snapshot.unlinked.total>0)&&<div className="text-sm rounded-lg border p-3" data-testid="home-unlinked">
+      <p>{snapshot.unlinked.total===null?'Some activity has incomplete connection tracking':`${snapshot.unlinked.total} activities without a proven registered connection`}. These are separate from harness cards.</p>
+      <button type="button" className={"underline "+homeFocus} disabled={blocked} onClick={()=>open({kind:'harness',cardId:null})}>View other activity</button>
+      </div>}/>
+    {panel&&snapshot&&<AgentActionModal title={panel.kind==='request'?'New request':panel.kind==='attention'?'Canonical attention record':panel.kind==='target'&&panel.continuation?'Continue this exact session':'Activity detail'} onClose={close} presentation="drawer" wide testId="home-detail">
+      {panel.kind==='request'?<HomeNewRequest workspace={workspace} workspaces={workspaces} onChanged={changed}/>
+        :panel.kind==='harness'?<HarnessActivityPanel cardId={panel.cardId} state={state} onMore={()=>loadHarnessChildren(panel.cardId)} onEntry={entry=>{if(entry.target)setPanel(selectEntry(entry,entry.target));}}/>
+        :panel.kind==='attention'?<HomeAttentionInspection item={panel.item} action={panel.action} onClose={close} onChanged={changed}/>
+          :<HomeInspection target={panel.target} serverId={snapshot.server_id} workspace={workspace==='all'?null:workspace} continuation={panel.continuation} entrySelection={panel.entrySelection} onClose={close} onChanged={changed}/>}
     </AgentActionModal>}
   </PageContainer>;
 }
