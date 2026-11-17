@@ -6,8 +6,8 @@ reviewed against source, installed and browser evidence. Additional supported
 functional/security/compatibility checks remain before the human invitation;
 a reproduced unnamed menu control has been corrected and packaged in R8;
 its accessible name and expanded state are verified in the actual R8 browser.
-A later exact move/close test reproduced a focus-return defect and is being
-corrected before human evaluation. The whole
+A later exact move/close test reproduced a focus-return defect; the same
+predicates now pass on the fresh R9 installed browser. The whole
 plan's remaining qualification is explicit. Following the user's clarification about other
 processes on this shared machine, performance timings are diagnostic and
 non-blocking for this local delivery; no further tuning is required solely
@@ -15,9 +15,12 @@ to chase these numbers.
 
 ## Candidate and preserved work
 
-Nexus is version0.3.7 on `feature/v0.3.7`. The current frozen R8 runtime source is
-`6eaa325ea3ddf1dec1b03475b27f373211c81e53`, wheel
-`fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e`.
+Nexus is version0.3.7 on `feature/v0.3.7`. The current frozen R9 runtime source is
+`f07163ab7fd618b2ff4247ba6cdb2547b5d4e038`, wheel
+`e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628`.
+The R8 source `6eaa325ea3ddf1dec1b03475b27f373211c81e53`, wheel
+`fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e`,
+is immutable predecessor evidence.
 The R7 source `01b0de385398950ac4547aa8a5dcbc29473c12cb` and its wheel
 `18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681`
 remain immutable predecessor evidence. The draft stacked
@@ -143,8 +146,9 @@ browser or three real executions. The six PASS cases were not repeated.
 Prior attempts and the original6PASS/1FAIL remain preserved. Pytest retention
 left only two raw cleanup JSONs; all six passing teardown close assertions ran,
 and missing raw snapshots were not reconstructed. Current ledger counts are
-59PASS/47NOT_RUN/8BLOCKED/2FAIL. The failures are F07/I02's real focus return,
-described below, not performance timing targets.
+61PASS/47NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
+original evidence; fresh R9 focus predicates now pass. No timing target caused
+or resolved these functional qualifications.
 
 The [focused R8 move test](remaining-qualification-r7-next/experience-batch/focus-r8-body-focus-failure/qualification.json)
 removed the host-revision equality assumption and captured received snapshots.
@@ -165,10 +169,22 @@ This places the cached board update in the same close transition, avoiding a
 later pause effect removing the old trigger after focus was restored. It
 preserves manual display pause and all existing authorization/scope clearing.
 The original checkout's404Node tests and TypeScript/Vite build pass, with
-unchanged inputs and actual new bundle `index-ZSaBIkKg.js`. This is implemented
-source, not verified focus behavior: a fresh installed R9 package and the same
-actual browser predicate are still required. No Python, Core, schema, protocol,
-personal installation or default flag changed.
+unchanged inputs and actual new bundle `index-ZSaBIkKg.js`. A fresh R9
+build/install/audit/CLI/live HTTP-MCP54tools/two-identity smoke also passes,
+with normal canonical stop and physical absence. Raw comparison proves1024
+unchanged backend files against R8, equal Python/dependency versions and lock
+inputs. A separate raw comparison covers the two actual E16 TypeScript inputs
+and compiler. This supports their original scoped evidence, not new pytest or
+blanket browser execution on R9.
+
+The [R9 focus replay](remaining-qualification-r7-next/experience-batch/focus-r9-positive/qualification.json)
+ran the unchanged browser predicates and passed16checks. The exact move,
+original A2 question and successful A1 delivery remained correct; after Escape,
+focus returned to a button in the same canonical A card in Needs you, with one
+A card and none in Active. Zero browser POST/provider/page errors and no
+payload drift were observed. Normal fixture/CLI exit and physical absence are
+confirmed; two of three canonical closes confirmed and A2 close stays unknown.
+No Python, Core, schema, protocol, personal installation or default flag changed.
 R7 prefixes and the original failing AX capture remain immutable. No Python
 behavior changed.
 
@@ -184,10 +200,11 @@ dependency versions were compared, not all dependency file bytes.
 |---|---|---|
 | Predecessor source selection |321PASS,0failure/error/skip; source/test drift0 |[R7 source qualification](source-tests/r7-home/qualification.json)|
 | Predecessor installed selection |326PASS,0failure/error/skip/not-run;1828pins/1031payload files and copied helpers unchanged |[R7 installed qualification](package-hst-r7/installed-qualification.json)|
-| Current frontend |404Node cases plus TypeScript/Vite on the original checkout; actual packaged assetsCyg0aKfe/Bh2ghaTD |[R8 frontend qualification](frontend-r8-menu/qualification.json)|
-| Current package |fresh wheel/sdist/build/install/audit/pip-check/CLI smoke and actual HTTP/MCP54tools/two synthetic identities |[R8 package](package-hst-r8/qualification.json), [R8 live smoke](package-hst-r8/live-qualification.json)|
+| Current frontend |404Node cases plus TypeScript/Vite on the original checkout; actual packaged assetsZSaBIkKg/Bh2ghaTD |[R9 frontend qualification](frontend-r9-focus/qualification.json)|
+| Current package |fresh wheel/sdist/build/install/audit/pip-check/CLI smoke and actual HTTP/MCP54tools/two synthetic identities |[R9 package](package-hst-r9/qualification.json), [R9 live smoke](package-hst-r9/live-qualification.json)|
 | Predecessor browser |21PASS: Working/independent request/full block/exact request-result sessions/partial source/logout;0POST |[R7 browser](browser-hst/r7-functional-report.md)|
 | Current browser subset |44positive predicates; actual singleton/multi-session context, external failure, preserved panel, normal notices and scoped keyboard/mobile evidence; final move/focus incomplete and cleanup unknown retained |[R8 browser subset](remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json)|
+| Fresh focus regression |16PASS on R9: exact move/context/delivery and same canonical harness focus; original failure and A2 cleanup unknown retained |[R9 focus](remaining-qualification-r7-next/experience-batch/focus-r9-positive/qualification.json)|
 | Current installed functional batch |6PASS/1presentation-oracleFAIL; seven literal backend scenarios qualified; no provider/browser claim |[R8 installed batch](remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json)|
 | Post-build supplement |7sourcePASS and7actually installedPASS, separate cuts;1828base+1exact additional test/1031payload files unchanged |[supplement](installed-supplement-r7/qualification.json)|
 | Recovery and paging |Same accepted decision after lost response; stale second-screen409; one durable write admission; actual paging409/current200 in the same panel |[scoped captured predicates](browser-hst/nextcuts-report.md)|
@@ -244,10 +261,10 @@ The [116-scenario audit](remaining-qualification-review-r7.md) records the
 unexecuted clauses and partial layers rather than treating every test count
 as qualification. The [ledger](../NEXUS_HOME_ESTADOS_LEDGER_R1.json) remains
 authoritative for individual task/scenario status. After the subsequent literal
-reviews it has44PASS,63NOT_RUN,1FAIL and8BLOCKED. The current failure is the
-R7 menu's actual missing accessible name; R8 source is fixed but its new
-installed/browser validation is pending. Partial browser/native clauses
-remain NOT_RUN. This is not a whole-plan completion or default approval.
+reviews it has61PASS,47NOT_RUN and8BLOCKED. The original menu and focus
+defects are corrected and have separate actual installed-browser evidence.
+Partial browser/native clauses remain NOT_RUN. This is not a whole-plan
+completion or default approval.
 
 The [contract blockers](contract-blockers-r6-review.md) remain precise:
 independently admissible queued work lacks its required producer proof;
@@ -262,13 +279,12 @@ this plan and were not run. Actual screen-reader and native200% browser zoom
 qualification remain unexecuted. The prior UI-R1 novice-user gate, Quick
 Connect UNKNOWN usage/QC031 and broader regression NOT_GREEN are retained.
 CI status is a separate remote observation, not inferred from local passes.
-At the checkpoint, the GitHub connector reported source run
-[44161118859](https://github.com/OktoLabsAI/okto-nexus/actions/runs/44161118859)
-and evidence-commit run
-[44167762093](https://github.com/OktoLabsAI/okto-nexus/actions/runs/44167762093)
+At the R9 checkpoint, the GitHub connector reported source run
+[44197874014](https://github.com/OktoLabsAI/okto-nexus/actions/runs/44197874014)
 as queued, without a conclusion. An empty combined-status response is not a
-passing check. The [repository checkpoint](repo-checkpoint-r7.json) records
-refetched main refs, unchanged dependency pins and clean Core/Connector trees.
+passing check. The [repository checkpoint](repo-checkpoint-r9.json) records
+unchanged main refs/pins, the preserved worktree and clean Core/Connector trees
+before the focus edit; Nexus main was fetched again without moving checkout.
 No real user accepted this delivery on their own behalf or through automation.
 
 ## Effects, migration and rollback
@@ -291,8 +307,10 @@ force-push, release, deployment, merge or default activation was performed.
 ## Next gate
 
 The selected recovery/isolation/context follow-ups are reviewed. Finish the
-additional supported functional/security/compatibility increments and confirm
-the R8 menu correction in its new installed browser before inviting a participant.
+additional supported functional/security/compatibility increments before
+inviting a participant. The menu and focus corrections have actual browser
+proof; the passive/security, foreground CLI, rollback and old-state increments
+remain distinct pending qualifications.
 The useful-DOM
 observation and shared-machine limitation are already recorded above. No
 further performance-only optimization round is required for this local delivery.

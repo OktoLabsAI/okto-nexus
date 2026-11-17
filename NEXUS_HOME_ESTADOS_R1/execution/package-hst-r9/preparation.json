@@ -1,0 +1,27 @@
+{
+  "status": "PREPARED_STATIC_ONLY",
+  "python_files": [
+    "audit.py",
+    "curate.py",
+    "curate_live.py",
+    "curate_runtime_equivalence.py",
+    "live_mcp.py",
+    "owned_commands.py",
+    "package.py"
+  ],
+  "gate_exists": false,
+  "allocation_exists": false,
+  "build_started": false,
+  "pins": {
+    "audit.py": "2b15a007c410e2276beb7017a05e376471ccc7fc89c6f6fd2ad64b849c1dd0ea",
+    "baseline-evidence-refs.json": "fb40bf833b1d889db3957efb655f413bf4dcee5716464c98e4ea7acebbec02a5",
+    "curate.py": "1a8400762c2e77832a901a3268109737ff9aaf81a5da99d139dfc9f085ffedec",
+    "curate_live.py": "a3d3a17c3ce29a6120e64b0aff9f19a849ea87be167cffa84ca0676cdabf1f07",
+    "curate_runtime_equivalence.py": "0ff632f8a9841f821442e233b0c0df0afb2878b08a881c4d47d62b5422f99edd",
+    "live_mcp.py": "b5030b279c21144e2e043b578a47499a03dff7b3044c9f870f05d94832eeed8e",
+    "owned_commands.py": "20bbab168db33bafa2f46e68020fbc77f19c418a5a99514d941c35002704c3e0",
+    "package.py": "fbc035a3811a5a8165b64f8746ad5bc9dabe7d03dd5766ea210046bb04b4a869",
+    "README.md": "baddae51d3b8420f0dd47d79187f5794879ea1dd3591383394158c3e51f57c7d"
+  },
+  "additional_reference_state": "EXACT_SCOPED_6_PLUS_1_R8_REFERENCES"
+}

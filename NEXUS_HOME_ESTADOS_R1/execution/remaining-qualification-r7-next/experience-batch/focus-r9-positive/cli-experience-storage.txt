@@ -1,0 +1,6 @@
+### Result
+Storage state restored from C:\Users\jpamb\AppData\Local\Temp\nexus-hst-browser-b4rw4ka5\control\browser-storage.private.json
+### Ran Playwright code
+```js
+await page.context().setStorageState('C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-b4rw4ka5\\control\\browser-storage.private.json');
+```

@@ -5841,7 +5841,7 @@
       "when": "Publicar novo estado",
       "then": "Uma identidade, painel independente da coluna, retorno de foco correto.",
       "level": "unidade com relógio/promessas + browser",
-      "status": "FAIL",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5860,9 +5860,18 @@
           "command_or_procedure": "Observe full exact A tuple move to current/full Needs you plus original A2 request and exact successful A1 delivery; Escape and wait for same-A/stable-heading focus",
           "result": "FAIL real product focus: exact move and same panel pass; after Escape focus stays BODY through2.5s while A exists only in Needs you",
           "limitations": "No AT speech/provider claim. Received semantic snapshot has a different revision from host; equality is not required. Automatic CLI cleanup log-name collision required one own-session close under a distinct log; physical absence confirmed. Two of three canonical session closes confirmed, A2 remains unknown."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-17T23:32:16.349902+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/focus-r9-positive/qualification.json",
+          "environment": "Fresh installed R9 wheel; actual own-profile Chrome and canonical Core with inert protocol peer, original native question validity",
+          "command_or_procedure": "Replay unchanged focus-return.js that failed on R8; observe exact current/full canonical move, original A2 request and exact A1 delivery, close same panel and inspect actual focus/DOM",
+          "result": "PASS16 focal checks: same panel/context survives, A occurs once in Needs you and not Active, Escape restores BUTTON View work inside the same canonical A; no POST/page errors/provider, source/payload1031drift0/normal0/physical0",
+          "limitations": "No AT/native200%/real-provider/performance claim. Host and received revisions may differ; complete semantic identities are asserted. Two of three canonical session closes confirmed; A2 close remains unknown. Physical absence is not all-CLOSED proof. Original real R8 focus failure is retained."
         }
       ],
-      "execution_notes": "Real R8 focus regression. Preserve successful exact move/panel predicates; source fix/new installed browser proof required before qualifying the complete scenario."
+      "execution_notes": "Real R8 focus defect resolved and verified on fresh installed R9 using the same predicates; original negative and canonical-close uncertainty retained."
     },
     {
       "id": "HST-T-F08",
@@ -6587,7 +6596,7 @@
       "when": "Fechar painel",
       "then": "Foco retorna ao mesmo ID canônico ou destino estável, não outro harness.",
       "level": "navegador + AT quando disponível",
-      "status": "FAIL",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -6606,9 +6615,18 @@
           "command_or_procedure": "Observe full exact A tuple move to current/full Needs you plus original A2 request and exact successful A1 delivery; Escape and wait for same-A/stable-heading focus",
           "result": "FAIL real product focus: exact move and same panel pass; after Escape focus stays BODY through2.5s while A exists only in Needs you",
           "limitations": "No AT speech/provider claim. Received semantic snapshot has a different revision from host; equality is not required. Automatic CLI cleanup log-name collision required one own-session close under a distinct log; physical absence confirmed. Two of three canonical session closes confirmed, A2 remains unknown."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-17T23:32:16.349902+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/focus-r9-positive/qualification.json",
+          "environment": "Fresh installed R9 wheel; actual own-profile Chrome and canonical Core with inert protocol peer, original native question validity",
+          "command_or_procedure": "Replay unchanged focus-return.js that failed on R8; observe exact current/full canonical move, original A2 request and exact A1 delivery, close same panel and inspect actual focus/DOM",
+          "result": "PASS16 focal checks: same panel/context survives, A occurs once in Needs you and not Active, Escape restores BUTTON View work inside the same canonical A; no POST/page errors/provider, source/payload1031drift0/normal0/physical0",
+          "limitations": "No AT/native200%/real-provider/performance claim. Host and received revisions may differ; complete semantic identities are asserted. Two of three canonical session closes confirmed; A2 close remains unknown. Physical absence is not all-CLOSED proof. Original real R8 focus failure is retained."
         }
       ],
-      "execution_notes": "Real R8 focus regression. Preserve successful exact move/panel predicates; source fix/new installed browser proof required before qualifying the complete scenario."
+      "execution_notes": "Real R8 focus defect resolved and verified on fresh installed R9 using the same predicates; original negative and canonical-close uncertainty retained."
     },
     {
       "id": "HST-T-I03",
@@ -7498,9 +7516,9 @@
       "human": false
     },
     "local_usability_candidate": {
-      "state": "NOT_READY: R9 focus source correction implemented, fresh installed/browser regression proof pending",
-      "runtime_source": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
-      "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+      "state": "ADDITIONAL_SECURITY_COMPATIBILITY_STREAM_QUALIFICATION_IN_PROGRESS; menu and focus defects resolved",
+      "runtime_source": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+      "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
       "supported_scope": [
         "Working/Idle/unknown and partial/full blocking",
         "Exact request/session/result context; same receipt after response loss and stale second screen",
@@ -7512,10 +7530,10 @@
       "remaining_qualification": "Inspect literal NOT_RUN/BLOCKED rows and remaining-qualification-review-r7.md",
       "provisioning": "No short-lived human fixture until participant confirms availability",
       "pending_local_scopes": [
-        "R8 installed menu-name/keyboard proof",
-        "backend first functional batch",
-        "security/observation/CLI/legacy compatibility increments",
-        "experience/scoped stream follow-ups"
+        "passive/revocation/observation browser security",
+        "foreground CLI and active presentation rollback",
+        "old-producer state read compatibility",
+        "stream/validity and remaining literal supported clauses"
       ]
     },
     "declared_layer_reconciliation_r7": {
@@ -7637,14 +7655,14 @@
     },
     "r8_focus_regression": {
       "evidence": "execution/remaining-qualification-r7-next/experience-batch/focus-r8-body-focus-failure/qualification.json",
-      "status": "FAIL_PRODUCT_BODY_FOCUS",
+      "status": "RESOLVED_ON_R9; original real failure preserved",
       "correct_scope_and_panel": true,
-      "source_fix": "R9 implemented; Node404/TSC/Vite pass, installed browser proof pending",
+      "source_fix": "Verified on fresh R9 installed browser; no all-cleanup claim",
       "human": "NOT_INVITED",
       "provider_invocations": 0
     },
     "r9_focus_source": {
-      "status": "IMPLEMENTED_NOT_VERIFIED",
+      "status": "VERIFIED_FOCAL_F07_I02",
       "source_change": "OperationalHome.close publishes the cached presentation through pause(manualPause) before removing the panel and scheduling focus; callback depends on manualPause and stable pause",
       "manual_pause_preserved": true,
       "backend_source_changed": false,
@@ -7655,10 +7673,25 @@
       "input_drift": [],
       "bundle": "assets/index-ZSaBIkKg.js",
       "css": "assets/index-Bh2ghaTD.css",
-      "source_commit": "To be bound by execution/package-hst-r9/SOURCE_ASSET_READY.json after commit",
-      "installed": "PENDING_NEW_R9_PREFIX",
-      "browser": "PENDING_SAME_CANONICAL_MOVE_FOCUS_PREDICATE",
+      "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+      "installed": "PASS_FRESH_R9_PREFIX",
+      "browser": "PASS16_SAME_MOVE_AND_FOCUS_PREDICATES",
       "human": "NOT_INVITED",
+      "default_approved": false,
+      "browser_evidence": "execution/remaining-qualification-r7-next/experience-batch/focus-r9-positive/qualification.json"
+    },
+    "r9_package": {
+      "source": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+      "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+      "ready": "execution/package-hst-r9/READY.json",
+      "qualification": "execution/package-hst-r9/qualification.json",
+      "live": "execution/package-hst-r9/live-qualification.json",
+      "runtime_equal_files_vs_r8": 1024,
+      "pytest_r9_executed": false,
+      "backend_reuse": "Exact unchanged backend only: R8 six passing cases plus separate E16 focal; R7 chain retains326/+7 and original limits",
+      "typed_presentation_equivalence": "execution/package-hst-r9/presentation-input-equivalence-r8-r9.json",
+      "browser_reuse": false,
+      "provider_calls": 0,
       "default_approved": false
     }
   }

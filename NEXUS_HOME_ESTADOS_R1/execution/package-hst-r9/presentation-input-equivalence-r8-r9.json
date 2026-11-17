@@ -1,0 +1,76 @@
+{
+  "status": "PASS_PRESENTATION_INPUT_EQUIVALENCE_R8_R9",
+  "comparison_mode": "READ_ONLY_RAW_BYTES_AND_QUALIFIED_HASHES",
+  "inputs": [
+    {
+      "path": "frontend/src/homeStateContracts.ts",
+      "bytes": 3981,
+      "current_sha256": "4e0b79a9aafdf985dae5a949bb9696d90270d43288f3c86c05d9e72ed7a3919e",
+      "qualified_external_sha256": "4e0b79a9aafdf985dae5a949bb9696d90270d43288f3c86c05d9e72ed7a3919e",
+      "qualified_inputs_before_sha256": "4e0b79a9aafdf985dae5a949bb9696d90270d43288f3c86c05d9e72ed7a3919e",
+      "qualified_copy_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-backend-batch-r8-s9lhmd71\\ui\\homeStateContracts.ts",
+      "qualified_copy_sha256": "4e0b79a9aafdf985dae5a949bb9696d90270d43288f3c86c05d9e72ed7a3919e",
+      "raw_bytes_equal_qualified_copy": true,
+      "r8_r9_build_source_pin_equal": true,
+      "compiler_is_external_tooling_not_wheel_payload": false
+    },
+    {
+      "path": "frontend/src/homeStatePresentation.ts",
+      "bytes": 6208,
+      "current_sha256": "bd82708b33960d66244d4b5d223693489cc74582b7ae7d2b90896ce2d6833a18",
+      "qualified_external_sha256": "bd82708b33960d66244d4b5d223693489cc74582b7ae7d2b90896ce2d6833a18",
+      "qualified_inputs_before_sha256": "bd82708b33960d66244d4b5d223693489cc74582b7ae7d2b90896ce2d6833a18",
+      "qualified_copy_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-backend-batch-r8-s9lhmd71\\ui\\homeStatePresentation.ts",
+      "qualified_copy_sha256": "bd82708b33960d66244d4b5d223693489cc74582b7ae7d2b90896ce2d6833a18",
+      "raw_bytes_equal_qualified_copy": true,
+      "r8_r9_build_source_pin_equal": true,
+      "compiler_is_external_tooling_not_wheel_payload": false
+    },
+    {
+      "path": "frontend/node_modules/typescript/lib/typescript.js",
+      "bytes": 9112572,
+      "current_sha256": "3ae902c92cc44dace175c0e69e13a4b0899f6983c6121d76b9ab8dd5795e7675",
+      "qualified_external_sha256": "3ae902c92cc44dace175c0e69e13a4b0899f6983c6121d76b9ab8dd5795e7675",
+      "qualified_inputs_before_sha256": "3ae902c92cc44dace175c0e69e13a4b0899f6983c6121d76b9ab8dd5795e7675",
+      "qualified_copy_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-backend-batch-r8-s9lhmd71\\tooling\\typescript.cjs",
+      "qualified_copy_sha256": "3ae902c92cc44dace175c0e69e13a4b0899f6983c6121d76b9ab8dd5795e7675",
+      "raw_bytes_equal_qualified_copy": true,
+      "r8_r9_build_source_pin_equal": null,
+      "compiler_is_external_tooling_not_wheel_payload": true
+    }
+  ],
+  "qualified_references": {
+    "NEXUS_HOME_ESTADOS_R1\\execution\\remaining-qualification-r7-next\\backend-batch\\PREPARED-r8-v7.json": "41e7c96318faaa59703d881cb0dc5585cddb12ad741ccf61723e3ff4e446dbfc",
+    "NEXUS_HOME_ESTADOS_R1\\execution\\remaining-qualification-r7-next\\backend-batch\\attempt7-r8-case7\\inputs-before.json": "c4a148ce56fe2f993a3a1d5c6cf1e92e54d5f731435c5bcf32afcb0016370dd3",
+    "NEXUS_HOME_ESTADOS_R1\\execution\\remaining-qualification-r7-next\\backend-batch\\attempt7-r8-case7\\qualification.json": "dc989f8c81dafe480942fcd7e40b8a3c5ca23db4ceba9fe95d08c219c77ceb01",
+    "NEXUS_HOME_ESTADOS_R1\\execution\\remaining-qualification-r7-next\\backend-batch\\presentation-check-v7.mjs": "0767b68e4434a9dfc87f26bcd65d51e4c72a3a8fb6973a723f0927bcfc28f903"
+  },
+  "qualification_guards_recorded": {
+    "source_drift": [],
+    "payload_drift": [],
+    "copied_drift": [],
+    "presentation_drift": [],
+    "external_helper_tooling_drift": [],
+    "own_helper_closure_drift": [],
+    "r7_r8_nonstatic_drift": []
+  },
+  "executed_mjs_sha256": "0767b68e4434a9dfc87f26bcd65d51e4c72a3a8fb6973a723f0927bcfc28f903",
+  "actual_mjs_inputs": "homeStateContracts.ts and homeStatePresentation.ts transpiled with copied typescript.cjs via transpileModule",
+  "old_presentation_sha256_field_meaning": "Hash of presentation-check-v7.mjs, not hash of homeStatePresentation.ts",
+  "r9_source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "r8_runtime_source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "new_tests_or_build_executed": false,
+  "existing_frozen_reports_unchanged": {
+    "runtime-equivalence-vs-r8.json": "fe7b254f77b7f8e2ef767d9df615156ec98754abe9f979f7fb45f6bd9edaebc3",
+    "curation-manifest.json": "9a41c421faf91bfa85b4ee050e10a1c59dce1ae2757e8aea49e79c8332e50374"
+  },
+  "layer": "R8 actual data-before/after ASGI TestClient/SQLite/in-process canonical handoff functions + source-copy TypeScript assertions in Node",
+  "limits": [
+    "Not a real browser/DOM/MCP transport/network qualification",
+    "No R9 pytest, Node presentation test, app or build rerun",
+    "Proof covers these three actual input files and the qualified MJS identity; no broader frontend/compiler-installation byte claim",
+    "Existing R9 42-file manifest and runtime-equivalence report remain unchanged; this is a separate derivative sidecar"
+  ],
+  "provider_invocations": 0,
+  "prefix_mutated": false
+}

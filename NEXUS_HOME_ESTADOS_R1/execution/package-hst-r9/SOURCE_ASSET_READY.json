@@ -1,0 +1,15 @@
+{
+  "source_asset_ready": true,
+  "version": "0.3.7",
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "assets": {
+    "index.html": "e15defe0d4736936d0ce3621cce64566da524888f1146974bde9a48413c1fbe0",
+    "assets/index-ZSaBIkKg.js": "c36b1cbff59a586b54eece11ae71c3cd0749d280fc25280803b0f8b3ccff7214",
+    "assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036"
+  },
+  "frontend_qualification": "execution/frontend-r9-focus/qualification.json",
+  "scope": "Original-checkout Node404 and TypeScript/Vite pass after actual R8 focus-loss reproduction; cached display update is published with close before focus scheduling. Installed/browser regression proof pending.",
+  "backend_reuse": "Conditional exact1024 nonstatic Nexus/Core/Connector bytes plus Python/dependency/lock equality vs immutable R8. Original6PASS/1FAIL cut and separate1PASS focal retain all limits; require typed-presentation/compiler/source equality for E16 source-copy reuse. No blanket browser reuse.",
+  "performance": "No timing/SLO campaign; shared-machine diagnostics non-blocking per user.",
+  "default_rollout": false
+}

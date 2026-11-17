@@ -1,0 +1,51 @@
+{
+  "status": "EXACT_SCOPED_6_PLUS_1_R8_REFERENCES",
+  "references": [
+    {
+      "path": "remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json",
+      "sha256": "ecaeead45dad95e1953150524cc36aed6e724a087b54dc2d583e79a8dd2f07a1",
+      "original_status": "SIX_PASS_ONE_FAIL",
+      "original_counts": {
+        "PASS": 6,
+        "FAIL": 1
+      },
+      "selected_pass_nodes": [
+        "tests.execution_r4.test_backend_batch_r8::test_shared_owner_bindings_keep_distinct_current_state",
+        "tests.execution_r4.test_backend_batch_r8::test_hidden_productive_sibling_same_binding_prevents_false_full_block",
+        "tests.execution_r4.test_backend_batch_r8::test_current_core_work_survives_external_unavailable_only",
+        "tests.execution_r4.test_backend_batch_r8::test_explicit_nonblocking_input_keeps_working_and_one_independent_action",
+        "tests.execution_r4.test_backend_batch_r8::test_idle_sibling_cannot_make_a_full_block_independent",
+        "tests.execution_r4.test_backend_batch_r8::test_admitted_queued_sibling_has_no_independence_proof"
+      ],
+      "artifacts": {
+        "remaining-qualification-r7-next/backend-batch/attempt5-r8/1/tests.xml": "212d00de4f60323afa727b5b2c10076fbcce8e6a5e4d2f89a332abcde220adea",
+        "remaining-qualification-r7-next/backend-batch/attempt5-r8/2/tests.xml": "a1f2039c8870ec3e0f079b5899ec483611d27062501e0806be48d9fcdb8437b9",
+        "remaining-qualification-r7-next/backend-batch/attempt5-r8/3/tests.xml": "c2553a631148efefead32a93158f723d11fa98d3d2d6fa2303093e0d87af8b96",
+        "remaining-qualification-r7-next/backend-batch/attempt5-r8/4/tests.xml": "2ede3dbd6c0c0481421fa5b5d86c6b45fa02ebe1e5bd5f4aa7e4f5e30e1886ca",
+        "remaining-qualification-r7-next/backend-batch/attempt5-r8/5/tests.xml": "5ef939e1f2388d837ae5efa61c7e3945c5cd2f27079ba5e4dc342d42d843a9de",
+        "remaining-qualification-r7-next/backend-batch/attempt5-r8/6/tests.xml": "ce12ef0e2e84a4e5e607cfd40cb23ae719f88f2dccd3f0a0deef605b2598e329",
+        "remaining-qualification-r7-next/backend-batch/attempt5-r8/7/tests.xml": "82ed58b04eee8fe4103aeab01e77fb1d2fa5728a0d2b0258c1129cc9a7d58911"
+      },
+      "layer": "Installed HTTP/SQLite and actual canonical Core protocol with inert peer; selected six passed nodes only",
+      "failure_antecedent_preserved": true
+    },
+    {
+      "path": "remaining-qualification-r7-next/backend-batch/attempt7-r8-case7/qualification.json",
+      "sha256": "dc989f8c81dafe480942fcd7e40b8a3c5ca23db4ceba9fe95d08c219c77ceb01",
+      "original_status": "PASS_ONE_FOCAL_CASE",
+      "original_counts": {
+        "PASS": 1,
+        "FAIL": 0
+      },
+      "selected_pass_nodes": [
+        "tests/execution_r4/test_backend_batch_r8.py::test_same_delivery_verification_three_files_seen_and_no_ack"
+      ],
+      "artifacts": {
+        "remaining-qualification-r7-next/backend-batch/attempt7-r8-case7/tests.xml": "4c1c55c36582f7dde5992b6ec44664dc546c484fd34cf345ee25540ec87eb50c"
+      },
+      "layer": "ASGI TestClient/SQLite/in-process canonical handoff functions + source-copy TypeScript; no real MCP/network/browser",
+      "failure_antecedent_preserved": true
+    }
+  ],
+  "limit": "No unified7PASS original cut and no R9pytest execution; original6PASS1FAIL plus separate corrected1PASS retained"
+}
