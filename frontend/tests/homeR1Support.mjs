@@ -4,6 +4,8 @@ export async function moduleURL(name, replacements = {}) {
   const source = await readFile(new URL(`../src/${name}`, import.meta.url), 'utf8');
   let code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
   if(name==='homeController.ts')replacements={'./homeStateContracts':await moduleURL('homeStateContracts.ts'),...replacements};
+  if(name==='homeStatePresentation.ts')replacements={'./homeStateContracts':await moduleURL('homeStateContracts.ts'),...replacements};
+  if(name==='homePresentation.ts')replacements={'./homeStatePresentation':await moduleURL('homeStatePresentation.ts'),...replacements};
   for (const [from, to] of Object.entries(replacements)) code = code.replaceAll(`'${from}'`, `'${to}'`).replaceAll(`"${from}"`, `"${to}"`);
   return `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`;
 }

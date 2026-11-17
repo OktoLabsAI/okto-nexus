@@ -71,7 +71,7 @@ test('partial sections disclose totals and load more inside the block', () => {
 });
 test('result preview is escaped and outcome, cleanup and unseen tracking remain separate', () => {
   const markup=html(ResultRow,{item:result(),stale:false,onOpen(){},onSeen(){},onContinue(){}});
-  assert.match(markup,/&lt;script&gt;/);assert.doesNotMatch(markup,/<script>/);assert.match(markup,/cleanup PENDING/);assert.match(markup,/seen state not tracked/);assert.match(markup,/Preview truncated/);
+  assert.match(markup,/&lt;script&gt;/);assert.doesNotMatch(markup,/<script>/);assert.match(markup,/Cleanup pending/);assert.match(markup,/seen state not tracked/);assert.match(markup,/Preview truncated/);
 });
 test('result opening never marks seen or silently continues', () => {
   const calls=[],tree=ResultRow({item:result(),stale:false,onOpen:t=>calls.push(['open',t]),onSeen:()=>calls.push(['seen']),onContinue:t=>calls.push(['continue',t])});
@@ -208,7 +208,7 @@ test('registered harness overview stays passive and reserves occurrence preferen
   try{
     const markup=renderHome(snapshot);await new Promise(setImmediate);
     assert.deepEqual(calls,[]);assert.equal(entryRows.length,0);
-    assert.match(markup,/data-home-harness="harness"/);assert.match(markup,/Inspect execution/);
-    assert.doesNotMatch(markup,/Related attention|Related results|Choose an exact context|Mark seen|Snooze|Filter details|Filter Home by agent|Home filters|<details|<input/);
+    assert.match(markup,/data-home-harness="harness"/);assert.match(markup,/Follow activity/);assert.match(markup,/Connection details/);
+    assert.doesNotMatch(markup,/Related attention|Related results|Choose an exact context|Mark seen|Snooze|Filter details|Filter Home by agent|Home filters|<input/);
   }finally{api.attentionSeen=previous;}
 });

@@ -86,7 +86,7 @@ export interface HomeSessionContext extends HomeConnectionContext {
 export type HomeQuickFilter = 'active' | 'needs_you' | 'results' | 'all';
 export interface HomeEntryFilters extends HomeFilters { quick?: HomeQuickFilter; harness?: string; host?: string }
 export interface HomeEntryScope extends HomeScope { quick: HomeQuickFilter; include_recent_results: boolean; harness?: string; host?: string }
-export interface HomeEntryQuery extends HomeEntryFilters { cursor?: string; limit?: number; preview?: number }
+export interface HomeEntryQuery extends HomeEntryFilters { cursor?: string; limit?: number; preview?: number;presentation_version?:1|2 }
 export interface HomeSessionRef {
   server_id:string;executor_id:string;workspace_id:string;session_id:string;
   lifecycle_state?:string;title?:string|null;workspace_label?:string|null;last_activity_at?:string|null;
@@ -142,6 +142,7 @@ export interface HomeHarnessConnection extends HomeConnectionContext {
   harness_id:string;agent_label:string|null;harness_label?:string|null;host_label:string|null;workspace_label?:string|null;
 }
 export interface HomeHarnessCard {
+  requests_preview?:HomeHarnessRequest[];
   sessions?:HomeSessionRef[];sessions_total?:number|null;has_more_sessions?:boolean;sessions_cursor?:string|null;
   operational_status?:HomeOperationalStatus;
   placement_reason?:HomePlacementReason;
@@ -226,6 +227,7 @@ export interface HomeDeliverySemantics {
   content_state:'available'|'pending'|'not_captured'|'unavailable';historical:boolean;semantic_revision:string;
 }
 export interface HomeEntryPage<T> extends Omit<HomeSection<T>, 'revision'> {
+  presentation_version?:1|2;presentation_versions?:number[];
   version:1; scope:HomeEntryScope; server_id:string; generated_at:string; snapshot_id:string|null;
   revision:string|null; partition:HomeEntryPartition; group_id:string|null; entry_id:string|null;
   event_cursor:number; event_low_watermark:number|null; source_status:Record<string,HomeSectionStatus>;

@@ -10,8 +10,11 @@ test('claim, native acceptance, execution and unknown remain distinct', () => {
   assert.equal(p.homeSectionLabel(section([], { status: 'unavailable' })), 'Unavailable');
 });
 test('result success keeps independent cleanup and verification; keys ignore titles', () => {
-  assert.match(p.homeResultLabel({ outcome: 'SUCCEEDED', cleanup_state: 'pending' }), /cleanup pending/);
-  assert.match(p.homeResultLabel({ outcome: 'SUCCEEDED', verification_state: 'pending' }), /verification pending/);
+  assert.match(p.homeResultLabel({ outcome: 'SUCCEEDED', cleanup_state: 'pending' }), /Cleanup pending/);
+  assert.doesNotMatch(p.homeResultLabel({ outcome: 'SUCCEEDED', verification_state: 'COMPLETED' }), /verifi/i);
+  const delivery_semantics={version:1,scope:'handoff',evidence:'canonical',execution_outcome:'not_applicable',task_state:'verifying',verification:'pending',verification_evidence_ref:null,
+    cleanup:'not_applicable',content_state:'available',historical:false,semantic_revision:'current-delivery'};
+  assert.match(p.homeResultLabel({outcome:'SUCCEEDED',delivery_semantics}),/Awaiting verification/);
   assert.equal(p.homeActivityKey({ id: 'stable', title: 'one' }), p.homeActivityKey({ id: 'stable', title: 'two' }));
 });
 test('external activity is always reported and stale working never becomes native running', () => {

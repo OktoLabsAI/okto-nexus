@@ -1,0 +1,12 @@
+{
+  "result": "PASS401",
+  "command": "rtk proxy npm test",
+  "cwd": "frontend",
+  "node": "v24.15.0",
+  "recorded_at": "2026-11-17T13:53:45.638016+00:00",
+  "log_sha256": "8117a2c126f945dec7731e866c4debb31af3f2060c56a54af51ffd8d5eb3503b",
+  "limitations": [
+    "Node contract/controller/SSR tests, not real browser or user evaluation.",
+    "Two initial old-copy oracle failures retained in node-initial.log; final assertions use current semantic labels."
+  ]
+}

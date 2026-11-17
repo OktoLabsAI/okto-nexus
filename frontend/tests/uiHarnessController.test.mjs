@@ -22,13 +22,15 @@ const operational=(patch={})=>({version:1,connection:'connected',activity:'idle'
   pending_request_ids:[],has_more_pending_requests:false,pending_requests_cursor:null,running_sessions:count(0),blocked_sessions:count(0),awaiting_native_confirmation:false,...patch});
 const operationalSummary=Object.fromEntries(['connected','working','idle','queued','unconfirmed','disconnected','blocked_harnesses','pending_actions','visible_notifications','resume_confirmations'].map(k=>[k,count(0)]));
 const semantics={version:1,scope:'turn',evidence:'canonical',execution_outcome:'succeeded',task_state:'open',verification:'not_applicable',verification_evidence_ref:null,cleanup:'complete',content_state:'available',historical:false,semantic_revision:'s1'};
-const v2card=(patch={})=>({...card(),operational_status:operational(),placement_reason:'normal_monitoring',resume_confirmation_refs:[],...patch});
+const v2card=(patch={})=>({...card(),sessions:[],sessions_total:0,has_more_sessions:false,sessions_cursor:null,operational_status:operational(),placement_reason:'normal_monitoring',resume_confirmation_refs:[],...patch});
 const v2board=(q,patch={})=>board(q,{presentation_version:2,operational_summary:operationalSummary,columns:{active:slice([v2card()]),needs_you:slice([{...request(),blocks_session:false,action_kind:'question'}]),results:slice([{...delivery(),completion_evidence:'canonical',delivery_semantics:semantics,result:{id:'report',delivery_semantics:semantics}}])},...patch});
 function harness(){
   const clock=new Clock(),calls=[];let active=0,peak=0;
   const behavior={harnessBoard:q=>board(q),harnessBoardColumn:(name,q)=>({...board(q),partition:'harness_board_column',column:name,...slice([card('card2')],{total:2})}),
     harnessChildren:(id,q)=>({...board(q),partition:'harness_children',card_id:id,...slice([child('work2')],{total:2})}),
-    harnessUnlinked:q=>({...board(q),partition:'harness_unlinked',...slice([child('unlinked2')],{total:2})})};
+    harnessUnlinked:q=>({...board(q),partition:'harness_unlinked',...slice([child('unlinked2')],{total:2})}),
+    harnessSessions:(id,q)=>({...v2board(q),partition:'harness_sessions',card_id:id,...slice()}),
+    harnessRequests:(id,q)=>({...v2board(q),partition:'harness_requests',card_id:id,...slice()})};
   const api=Object.fromEntries(Object.keys(behavior).map(name=>[name,async(...args)=>{const signal=args.at(-1);calls.push({name,args:args.slice(0,-1),signal});active++;peak=Math.max(active,peak);
     try{return await behavior[name](...args.slice(0,-1));}finally{active--;}}]));
   const controller=new HomeController({api,now:()=>clock.now,setTimeout:clock.set,clearTimeout:clock.clear});
@@ -140,6 +142,41 @@ test('403 clears paused detail caches and queued reads immediately',async()=>{
   assert.equal(h.controller.getState().status,'forbidden');assert.equal(h.controller.getState().harnessBoard,null);
   assert.deepEqual(h.controller.getState().harnessChildren,{});const count=h.calls.length;
   h.controller.refreshHarnessChildren('card');await h.clock.advance(30000);assert.equal(h.calls.length,count);h.controller.dispose();
+});
+
+test('binding sessions and action relations use the same queue and retain exact parents',async()=>{
+  const h=harness();h.behavior.harnessBoard=v2board;
+  h.behavior.harnessSessions=(id,q)=>({...v2board(q),partition:'harness_sessions',card_id:id,
+    ...slice([{server_id:'server',executor_id:'executor',workspace_id:'ws',session_id:q.cursor?'second':'first',lifecycle_state:'READY'}],
+      {total:2,has_more:!q.cursor,next_cursor:q.cursor?null:'sessions-2'})});
+  h.behavior.harnessRequests=(id,q)=>({...v2board(q),partition:'harness_requests',card_id:id,...slice([{...request(),blocks_session:true,action_kind:'question'}])});
+  h.configure({presentationVersion:2});await h.clock.advance();h.controller.pause(true);
+  h.controller.loadHarnessSessions('card');await h.clock.advance(1000);h.controller.loadHarnessSessions('card');await h.clock.advance(1000);
+  assert.deepEqual(h.controller.getState().harnessSessions.card.items.map(s=>s.session_id),['first','second']);
+  assert.equal(h.calls.at(-1).args[1].cursor,'sessions-2');assert.equal(h.calls.at(-1).args[1].presentation_version,2);
+  h.controller.loadHarnessRequests('card');await h.clock.advance(1000);
+  assert.equal(h.controller.getState().harnessRequests.card.items[0].request.attention_id,'question');
+  assert.equal(h.controller.getState().paused,true);assert.equal(h.peak(),1);h.controller.dispose();
+});
+
+test('operational observation time is not a delta, but freshness and transition facts are',async()=>{
+  const h=harness();h.behavior.harnessBoard=v2board;h.configure({presentationVersion:2});await h.clock.advance();h.controller.pause(true);
+  h.behavior.harnessBoard=q=>v2board(q,{columns:{...v2board(q).columns,active:slice([v2card({operational_status:operational({as_of:'2026-11-17T12:01:00Z'})})])}});
+  h.controller.refresh();await h.clock.advance(1000);assert.equal(h.controller.getState().hasPendingUpdate,false);
+  h.behavior.harnessBoard=q=>v2board(q,{columns:{...v2board(q).columns,active:slice([v2card({operational_status:operational({activity:'unknown',freshness:'stale',reason_code:'EXPIRED'})})])}});
+  h.controller.refresh();await h.clock.advance(1000);assert.equal(h.controller.getState().hasPendingUpdate,true);h.controller.dispose();
+});
+
+test('session relation rejects foreign identity and auth failure clears every new relation cache',async()=>{
+  for(const forbidden of [false,true]){
+    const h=harness();h.behavior.harnessBoard=v2board;h.configure({presentationVersion:2});await h.clock.advance();
+    h.behavior.harnessSessions=(id,q)=>{if(forbidden)throw Object.assign(Error('denied'),{status:403});
+      return {...v2board(q),partition:'harness_sessions',card_id:id,...slice([{server_id:'server',executor_id:'foreign',workspace_id:'ws',session_id:'same'}])};};
+    h.controller.loadHarnessSessions('card');await h.clock.advance(1000);
+    assert.deepEqual(h.controller.getState().harnessSessions,{});
+    if(forbidden){assert.equal(h.controller.getState().status,'forbidden');assert.equal(h.controller.getState().harnessBoard,null);}
+    h.controller.dispose();
+  }
 });
 test('a contextual409 invalidates every root/page cursor and resnapshots all columns before any old append',async()=>{
   const h=harness();h.configure();await h.clock.advance();h.controller.loadHarnessChildren('card');await h.clock.advance(1000);

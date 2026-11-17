@@ -1,0 +1,134 @@
+{
+  "status": "IMPLEMENTED_NODE_SCOPED",
+  "at": "2026-11-17T13:13:26.596459+00:00",
+  "tasks": [
+    "HST-020",
+    "HST-021",
+    "HST-023"
+  ],
+  "node_pass": 73,
+  "node_fail": 0,
+  "tsc_exit": 0,
+  "commands": [
+    {
+      "label": "node",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Program Files\\nodejs\\node.EXE",
+        "--test",
+        "--test-reporter=tap",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\tests\\uiHarnessController.test.mjs",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\tests\\uiEntryInspection.test.mjs",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\tests\\homeR1Controller.test.mjs",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\tests\\uiBoardController.test.mjs",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\tests\\uiEntriesController.test.mjs"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+      "exit_code": 0
+    },
+    {
+      "label": "tsc",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Program Files\\nodejs\\npx.cmd",
+        "tsc",
+        "--noEmit"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend",
+      "exit_code": 0
+    }
+  ],
+  "pins": {
+    "frontend/src/homeController.ts": {
+      "bytes": 63360,
+      "sha256": "fc7f1d0f40aefe0737f51d0d190ddc998c75b7fb2f3eb8649214ddd65fe2219e"
+    },
+    "frontend/src/hooks/useHomeOverview.ts": {
+      "bytes": 5399,
+      "sha256": "9072c41b1348472d66807c36e06532079fb4015f7aebcccc8e6e0d9256ddd9fb"
+    },
+    "frontend/src/homeEntryInspection.ts": {
+      "bytes": 5438,
+      "sha256": "2cc2cc468faa13fd0ddae217893ccbab13796076626f630dbcef3c80d57e1a26"
+    },
+    "frontend/src/components/home/OperationalHome.tsx": {
+      "bytes": 29107,
+      "sha256": "d84edee644c9e13bcc6a0075f4251e87ea71be1d594343adaab0c89f5f4871c0"
+    },
+    "frontend/src/components/home/HomeEntryInspection.tsx": {
+      "bytes": 11962,
+      "sha256": "78a5c07efee044f3b0f9b173fa034f510d5bc9ebbcb8b30ca78ed691fb4b199c"
+    },
+    "frontend/tests/uiHarnessController.test.mjs": {
+      "bytes": 24936,
+      "sha256": "34d20103f7daca73226dbfbe471d61d23a98c9bc4e1f98dbd75982f14d7c81c8"
+    },
+    "frontend/tests/uiEntryInspection.test.mjs": {
+      "bytes": 8593,
+      "sha256": "915d0e47b021f6a99ae0e2d791edbc9149521f4fb72492151e8b6338005b7184"
+    },
+    "frontend/src/homeTypes.ts": {
+      "bytes": 16513,
+      "sha256": "ce3b82151d9a9444b61cd4fe84b2682db9ffbf5aefbc5806f50ea4f7cdf5b4a2"
+    },
+    "frontend/src/homeApi.ts": {
+      "bytes": 6602,
+      "sha256": "382256936868c95aa42044e00be621a667989f39f1f05b47d30f8e50ced4e06d"
+    },
+    "frontend/src/homeStateContracts.ts": {
+      "bytes": 3981,
+      "sha256": "4e0b79a9aafdf985dae5a949bb9696d90270d43288f3c86c05d9e72ed7a3919e"
+    },
+    "frontend/src/homeStatePresentation.ts": {
+      "bytes": 6096,
+      "sha256": "e2bff9a139fba890aa8006aa67512f20a8200afea9ea9ec7608ea80b227ef661"
+    },
+    "frontend/src/components/home/HomeHarnessCard.tsx": {
+      "bytes": 8600,
+      "sha256": "20944b2cd4fccfcf69cf493ad8bac5d9cc9598834d367fc18577fa786c54c174"
+    },
+    "frontend/src/components/home/HomeContextCards.tsx": {
+      "bytes": 6135,
+      "sha256": "f8411ccb2dd1a819e869b73ccaa31e59f1672a72c07653da35b96009f465add3"
+    },
+    "frontend/tests/homeR1Support.mjs": {
+      "bytes": 2752,
+      "sha256": "cf77383ae5bb507e32b0ff55da09e6f6bb4aa102307dd3cd92ced41787e59589"
+    }
+  },
+  "source_files": [
+    "frontend/src/homeController.ts",
+    "frontend/src/hooks/useHomeOverview.ts",
+    "frontend/src/homeEntryInspection.ts",
+    "frontend/src/components/home/OperationalHome.tsx",
+    "frontend/src/components/home/HomeEntryInspection.tsx",
+    "frontend/tests/uiHarnessController.test.mjs",
+    "frontend/tests/uiEntryInspection.test.mjs"
+  ],
+  "dependencies": [
+    "frontend/src/homeTypes.ts",
+    "frontend/src/homeApi.ts",
+    "frontend/src/homeStateContracts.ts",
+    "frontend/src/homeStatePresentation.ts",
+    "frontend/src/components/home/HomeHarnessCard.tsx",
+    "frontend/src/components/home/HomeContextCards.tsx",
+    "frontend/tests/homeR1Support.mjs"
+  ],
+  "source_drift": [],
+  "limits": [
+    "No browser, real AT or human qualification; no full-task VERIFIED claim.",
+    "HTTP DTOs are controlled Node fixtures, not a real provider/backend qualification.",
+    "No frontend build, App/default opt-in, paid/native or personal state changed.",
+    "Browser history/focus/dirty transitions require real browser qualification.",
+    "Native session/requests backend and Results rollout owned separately."
+  ],
+  "behavior": [
+    "Only complete binding catalog can auto-open one known readable session; otherwise explicit choice.",
+    "Full connection identity is revalidated before read-only existing viewer; display metadata excluded from target URL.",
+    "Session/action pages share existing scheduler and generation fences.",
+    "Related v2 pages preserve negotiated version; old cursors do not cross contracts.",
+    "Root badge/summary/project components wired without new menus."
+  ]
+}

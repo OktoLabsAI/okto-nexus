@@ -675,7 +675,7 @@ function Dashboard({
           </label>}
           <GlobalAttentionButton state={globalAttention.state} onOpen={() => {globalAttention.refresh();setView('Attention');}}/>
           <LiveChip status={sseStatus} />
-          <button
+          {!(view==='Home'&&homeOperational&&info?.features?.feature_home!==false)&&<button
             className="btn btn-secondary !px-2"
             onClick={() => setRefreshTick((t) => t + 1)}
             title={`Refresh ${getNavigationEntry(view).label}`}
@@ -683,7 +683,7 @@ function Dashboard({
             data-testid="header-refresh"
           >
             <RotateCw size={14} />
-          </button>
+          </button>}
           {!localOpen && (
             <button
               className="btn btn-secondary !px-2"

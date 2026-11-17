@@ -16,7 +16,9 @@ scope/cache identity. Unsupported/repeated versions fail closed.
 
 All harness envelopes advertise `presentation_versions` and identify
 `presentation_version`. Existing `version:1` transport envelope is unchanged.
-Other Home endpoint families reject this query. No old consumer receives new
+Exact related `/home/entries` pages repeat the negotiated version so their
+entry_revision matches the harness projection; the legacy board and overview
+families reject this query. No old consumer receives new
 placement semantics implicitly. Unavailability preserves capability/version but
 never synthesizes exact empty counts or Idle.
 
@@ -42,6 +44,12 @@ Pending request previews are bounded; complete counts precede paging. Additional
 requests use `/home/harness-board/cards/{card_id}/requests?presentation_version=2`
 with a `harness_requests` envelope and a card/principal/scope/version/revision
 bound cursor. Same projection, no new inventory or screen.
+
+Cards also expose a bounded `sessions` preview and sessions_total/has_more_sessions/
+sessions_cursor from the full binding relation. Contextual sessions page through
+`/home/harness-board/cards/{card_id}/sessions?presentation_version=2`; related
+entry pages repeat version 2. Labels include authorized project/lifecycle and
+metadata timestamps, with exact ID targets kept separate from display metadata.
 
 The root adds `operational_summary`, with explicit Count objects for connected,
 working, idle, queued, unconfirmed, disconnected, blocked_harnesses,

@@ -5,6 +5,7 @@ import type { HomeActivity, HomeAgent, HomeFeedEvent, HomeFilters, HomeOverview,
 import type { ExternalObservation } from './observationTypes';
 import type { AttentionOccurrence } from './attentionTypes';
 import type {HomeHarnessBoard,HomeHarnessBoardPage,HomeHarnessCard,HomeHarnessChild,HomeHarnessChildrenPage,HomeHarnessSlice,HomeHarnessConnection} from './homeTypes';
+import type {HomeHarnessRequestsPage,HomeHarnessSessionsPage} from './homeTypes';
 import {validHomeOperationalStatus,validHomeOperationalSummary,validHomePlacement,validHomeDeliverySemantics} from './homeStateContracts';
 
 export interface HomeContext {
@@ -16,7 +17,8 @@ export interface HomeContext {
 }
 export interface HomeEntryJob {partition:HomeEntryPartition;groupId?:string;entryId?:string;boardRevision?:string|null;entryRevision?:string|null}
 interface HomeBoardJob {column:HomeBoardColumn;revision:string;entryRevision:string|null;cursor:string}
-interface HomeHarnessJob {cardId:string|null;revision:string;entryRevision:string|null;cursor:string|null;reset?:boolean;retry?:number}
+type HarnessRelation='children'|'requests'|'sessions';
+interface HomeHarnessJob {cardId:string|null;revision:string;entryRevision:string|null;cursor:string|null;reset?:boolean;retry?:number;partition?:HarnessRelation;connection?:HomeHarnessConnection}
 export const homeBoardColumns:readonly HomeBoardColumn[]=['active','needs_you','results'];
 export const homeEntryPageKey=(groupId:string,entryId:string)=>JSON.stringify([groupId,entryId]);
 interface HomeEntryCache {
@@ -25,6 +27,8 @@ interface HomeEntryCache {
   harnessBoard:HomeHarnessBoard|null;
   harnessChildren:Record<string,HomeHarnessChildrenPage>;
   harnessUnlinked:HomeHarnessChildrenPage|null;
+  harnessRequests:Record<string,HomeHarnessRequestsPage>;
+  harnessSessions:Record<string,HomeHarnessSessionsPage>;
   entryChildren:Record<string,HomeEntryPage<HomeEntry>>;
   entrySessions:Record<string,HomeEntryPage<HomeSessionRef>>;
   entryAttention:Record<string,HomeEntryPage<AttentionOccurrence>>;
@@ -46,7 +50,7 @@ export interface HomeDependencies {
   api: HomeApi; now(): number; setTimeout(callback: () => void, milliseconds: number): unknown;
   clearTimeout(handle: unknown): void; onChange?(state: HomeState): void;
 }
-const emptyEntryCache=():HomeEntryCache=>({entries:null,board:null,harnessBoard:null,harnessChildren:{},harnessUnlinked:null,entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{}});
+const emptyEntryCache=():HomeEntryCache=>({entries:null,board:null,harnessBoard:null,harnessChildren:{},harnessUnlinked:null,harnessRequests:{},harnessSessions:{},entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{}});
 export const initialHomeState = (): HomeState => ({ ...emptyEntryCache(),entryLoading:null,boardLoading:null,harnessLoading:null,snapshot: null, activity: null, status: 'loading',
   loading: false, loadingMore: null, paused: false, hasPendingUpdate: false, error: null, notice:null, staleSections: [], generation: 0, scopeKey: null });
 /** Observation timestamps/cursors are not a visible change. Validity and source
@@ -56,9 +60,10 @@ export function homeSnapshotSignature(value:unknown):string {
     if(Array.isArray(item))return item.map(value=>clean(value));
     if(!item||typeof item!=='object')return item;
     const object=item as Record<string,unknown>;
+    const operational='connection'in object&&'activity'in object&&'freshness'in object&&'pending_actions'in object;
     const metadata=root||('id'in object&&'group_id'in object)||('items'in object&&('status'in object||'partition'in object));
     return Object.fromEntries(Object.keys(object).sort().filter(key=>!(metadata&&
-      ['generated_at','as_of','next_refresh_at','event_cursor','event_low_watermark','snapshot_id'].includes(key)))
+      ['generated_at','as_of','next_refresh_at','event_cursor','event_low_watermark','snapshot_id'].includes(key))&&!(operational&&key==='as_of'))
       .map(key=>[key,clean(object[key])]));
   };
   return JSON.stringify(clean(value,true));
@@ -107,7 +112,7 @@ export class HomeController {
   private entryPending:HomeEntryJob|null=null;
   private boardPending:HomeBoardJob|null=null;
   private harnessPending:HomeHarnessJob|null=null;
-  private harnessReadPending:{cardId:string|null;retry:number}|null=null;
+  private harnessReadPending:{cardId:string|null;retry:number;partition?:HarnessRelation;connection?:HomeHarnessConnection}|null=null;
   private entryCache=emptyEntryCache();
   private timer: unknown;
   private poll: unknown;
@@ -258,6 +263,29 @@ export class HomeController {
   refreshHarnessChildren(cardId:string|null):void{
     if(!this.harnessFamily()||!this.allowed()||this.context.visible===false)return;
     this.harnessReadPending={cardId,retry:0};this.schedule(0);
+  }
+  private harnessCard(cardId:string):HomeHarnessCard|undefined{
+    return [this.entryCache.harnessBoard,this.state.harnessBoard].flatMap(root=>root?homeBoardColumns.flatMap(name=>root.columns[name].items):[])
+      .find((item):item is HomeHarnessCard=>item.kind==='harness'&&item.id===cardId);
+  }
+  loadHarnessRequests(cardId:string):void{this.loadHarnessRelation(cardId,'requests');}
+  loadHarnessSessions(cardId:string):void{this.loadHarnessRelation(cardId,'sessions');}
+  refreshHarnessSessions(cardId:string):void{this.refreshHarnessRelation(cardId,'sessions');}
+  refreshHarnessRequests(cardId:string):void{this.refreshHarnessRelation(cardId,'requests');}
+  private refreshHarnessRelation(cardId:string,partition:'sessions'|'requests'):void{
+    if(!this.harnessFamily()||!this.allowed()||this.context.presentationVersion!==2||this.context.visible===false)return;
+    const card=this.harnessCard(cardId);if(!card)return;
+    this.harnessReadPending={cardId,partition,connection:card.connection,retry:0};this.schedule(0);
+  }
+  private loadHarnessRelation(cardId:string,partition:'requests'|'sessions'):void{
+    if(!this.harnessFamily()||this.context.presentationVersion!==2||!this.allowed()||this.context.visible===false)return;
+    const root=this.entryCache.harnessBoard,card=this.harnessCard(cardId);if(!root||!card)return;
+    const page=partition==='requests'?this.entryCache.harnessRequests[cardId]:this.entryCache.harnessSessions[cardId];
+    if(!page||this.active||this.refreshPending){
+      this.harnessReadPending={cardId,partition,connection:card.connection,retry:0};this.schedule(0);return;
+    }
+    if(!page.has_more||!page.next_cursor)return;
+    this.harnessPending={cardId,partition,connection:card.connection,revision:page.revision!,entryRevision:page.entry_revision,cursor:page.next_cursor};this.schedule(0);
   }
   private loadEntryPage(job:HomeEntryJob):void{
     if(this.harnessFamily()||!this.trackingFamily()||!this.allowed()||this.context.visible===false||this.state.paused||this.state.hasPendingUpdate||this.refreshPending||this.active)return;
@@ -518,9 +546,17 @@ export class HomeController {
       if(meta.presentation_version===2){
         const status=card.operational_status,refs=card.resume_confirmation_refs;
         if(!validHomeOperationalStatus(status)||!validHomePlacement(card.placement_reason)||!Array.isArray(refs)||
+          new Set(refs.map(ref=>JSON.stringify(ref))).size!==refs.length||
           refs.some(ref=>!ref||!['request_id','operation_id','session_id','stream_epoch'].every(key=>typeof ref[key as keyof typeof ref]==='string'&&!!ref[key as keyof typeof ref])||
             ref.decision_id!==null&&(typeof ref.decision_id!=='string'||!ref.decision_id)))return false;
+        if(!Array.isArray(card.sessions)||typeof card.has_more_sessions!=='boolean'||
+          !this.validHarnessPageShape({items:card.sessions,total:card.sessions_total??null,total_is_exact:card.sessions_total!==null&&card.sessions_total!==undefined,
+            has_more:card.has_more_sessions,next_cursor:card.sessions_cursor??null})||
+          card.sessions.some(ref=>!ref||ref.server_id!==card.connection.server_id||ref.executor_id!==card.connection.executor_id||
+            ref.workspace_id!==card.connection.workspace_id||!ref.session_id)||
+          new Set(card.sessions.map(ref=>JSON.stringify([ref.server_id,ref.executor_id,ref.workspace_id,ref.session_id]))).size!==card.sessions.length)return false;
         const full=card.placement_reason==='human_block_confirmed'&&status.blocking==='full'&&card.blocks_harness===true;
+        if(card.requests_preview!==undefined&&!this.validHarnessSlice({items:card.requests_preview,total:card.requests_preview.length,total_is_exact:true,has_more:false,next_cursor:null},meta,new Set(),'needs_you'))return false;
         const awaiting=card.placement_reason==='awaiting_native_confirmation'&&status.awaiting_native_confirmation&&refs.length>0;
         if(column==='needs_you'?!full&&!awaiting:card.blocks_harness===true||status.blocking==='full'||
           !['normal_monitoring','monitoring_unconfirmed'].includes(card.placement_reason))return false;
@@ -568,6 +604,32 @@ export class HomeController {
     if(boardJob&&(!before||boardJob.revision!==before.revision||boardJob.entryRevision!==before.entry_revision))return null;
     const {quick:_quick,...filters}=this.entryFilters(),query={...filters,limit:10,preview:3,
       ...(this.context.presentationVersion===2?{presentation_version:2 as const}:{}),...(job?.cursor?{cursor:job.cursor}:{})};
+    if(childJob?.cardId&&childJob.partition&&childJob.partition!=='children'){
+      const partition=childJob.partition,id=childJob.cardId;
+      const page=partition==='requests'?await this.deps.api.harnessRequests?.(id,query,signal):await this.deps.api.harnessSessions?.(id,query,signal);
+      if(!current())return null;
+      if(page?.status==='forbidden')throw Object.assign(Error('Context forbidden'),{status:403});
+      if(!page||!this.validHarnessScope(page)||page.card_id!==id||page.partition!==`harness_${partition}`||
+        !['ready','partial'].includes(page.status)||!this.validHarnessPageShape(page))throw Error('HOME_CONTEXT_UNAVAILABLE');
+      const key=(item:HomeSessionRef|import('./homeTypes').HomeHarnessRequest)=>'session_id'in item?
+        JSON.stringify([item.server_id,item.executor_id,item.workspace_id,item.session_id]):item.id;
+      const previous=partition==='requests'?this.entryCache.harnessRequests[id]:this.entryCache.harnessSessions[id];
+      if(!childJob.reset&&(!previous||page.revision!==childJob.revision||page.entry_revision!==childJob.entryRevision||
+        page.total!==previous.total||page.total_is_exact!==previous.total_is_exact||page.items.some(item=>previous.items.some(old=>key(old)===key(item)))))
+        throw Object.assign(Error('Context changed'),{status:409});
+      if(page.partition==='harness_requests'){
+        if(!this.validHarnessSlice(page,page,new Set(),'needs_you'))throw Error('HOME_CONTEXT_INVALID');
+        const before=childJob.reset?[]:this.entryCache.harnessRequests[id]?.items??[];
+        this.entryCache={...this.entryCache,harnessRequests:{...this.entryCache.harnessRequests,[id]:{...page,items:[...before,...page.items]}}};
+      }else{
+        const c=childJob.connection;
+        if(!c||page.items.some(ref=>ref.server_id!==c.server_id||ref.executor_id!==c.executor_id||ref.workspace_id!==c.workspace_id||!ref.session_id)||
+          new Set(page.items.map(key)).size!==page.items.length)throw Error('HOME_CONTEXT_INVALID');
+        const before=childJob.reset?[]:this.entryCache.harnessSessions[id]?.items??[];
+        this.entryCache={...this.entryCache,harnessSessions:{...this.entryCache.harnessSessions,[id]:{...page,items:[...before,...page.items]}}};
+      }
+      return null;
+    }
     if(childJob){
       const card=childJob.cardId===null?null:homeBoardColumns.flatMap(name=>before!.columns[name].items).filter(item=>item.kind==='harness').find(item=>item.id===childJob.cardId);
       const previous=childJob.cardId===null?this.entryCache.harnessUnlinked??before!.unlinked:this.entryCache.harnessChildren[childJob.cardId]??
@@ -629,7 +691,7 @@ export class HomeController {
     const contextRead=this.harnessFamily()&&!this.refreshPending?this.harnessReadPending:null;
     const root=this.entryCache.harnessBoard;
     const harnessJob=this.harnessFamily()&&!this.refreshPending?(contextRead&&root?
-      {cardId:contextRead.cardId,revision:root.revision!,entryRevision:root.entry_revision,cursor:null,reset:true,retry:contextRead.retry}:this.harnessPending):null;
+      {...contextRead,revision:root.revision!,entryRevision:root.entry_revision,cursor:null,reset:true}:this.harnessPending):null;
     if(contextRead)this.harnessReadPending=null;
     const section = this.refreshPending ? null : this.morePending;
     this.refreshPending = false; this.morePending = null;this.entryPending=null;this.boardPending=null;this.harnessPending=null; this.dirtySince = null;
@@ -689,7 +751,8 @@ export class HomeController {
         }
       }
       if(this.harnessFamily()){
-        if(harnessJob)this.emit({harnessChildren:this.entryCache.harnessChildren,harnessUnlinked:this.entryCache.harnessUnlinked,error:null,notice});
+        if(harnessJob)this.emit({harnessChildren:this.entryCache.harnessChildren,harnessUnlinked:this.entryCache.harnessUnlinked,
+          harnessRequests:this.entryCache.harnessRequests,harnessSessions:this.entryCache.harnessSessions,error:null,notice});
         else this.publishHarness(notice,!!boardJob||!!harnessJob);
       }else if(this.boardFamily())this.publishBoard(notice,!!boardJob);else if(this.entriesFamily())this.publishEntries(notice);else this.publish(notice);
     } catch (error: unknown) {
@@ -703,7 +766,7 @@ export class HomeController {
         if(harnessJob&&(harnessJob.retry??0)>=1){
           this.emit({notice:'This activity is still changing. Refresh activity to try again.',error:null});return;
         }
-        if(harnessJob)this.harnessReadPending={cardId:harnessJob.cardId,retry:1};
+        if(harnessJob)this.harnessReadPending={cardId:harnessJob.cardId,partition:harnessJob.partition,connection:harnessJob.connection,retry:1};
         this.resetPages = true;
         this.refreshPending = true; this.activityDirty = !!this.latestActivity;
         if(this.boardFamily())this.resetBoardPages();

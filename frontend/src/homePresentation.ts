@@ -1,5 +1,6 @@
 import type { HomeActivity, HomeCounter, HomeDisplayState, HomeResult, HomeSection,HomeTarget } from './homeTypes';
 import type { ExternalObservation } from './observationTypes';
+import {deliveryPresentation} from './homeStatePresentation';
 
 const labels: Record<HomeDisplayState, string> = {
   awaiting_owner: 'Awaiting owner', claimed: 'Claimed', queued: 'Queued', native_accepted: 'Accepted by runtime',
@@ -24,9 +25,10 @@ export function homeSectionLabel(section: HomeSection<unknown> | null): string {
 export function homeActivityKey(item: HomeActivity): string { return item.id; }
 export function homeResultKey(item: HomeResult): string { return item.id; }
 export function homeResultLabel(result: HomeResult): string {
-  if (result.cleanup_state && !['CLOSED', 'RELEASED', 'complete', 'completed'].includes(result.cleanup_state))
-    return `${result.outcome} · cleanup ${result.cleanup_state}`;
-  return result.verification_state ? `${result.outcome} · verification ${result.verification_state}` : result.outcome;
+  const meaning=deliveryPresentation(result.delivery_semantics,{outcome:result.outcome,evidence:'canonical'});
+  const badges=[...meaning.badges];
+  if(!result.delivery_semantics&&result.cleanup_state&&!['CLOSED','RELEASED','complete','completed'].includes(result.cleanup_state))badges.push('Cleanup pending');
+  return [meaning.title,...badges].join(' · ');
 }
 export function homeExternalLabel(item: ExternalObservation): string {
   const evidence = item.last_report?.evidence ?? 'evidence unknown';

@@ -150,7 +150,7 @@
     {
       "id": "HST-03",
       "gate": "G3",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "task_ids": [
         "HST-014",
         "HST-015",
@@ -460,6 +460,15 @@
           "result": "PASS10 Node contract tests and TypeScript",
           "artifact_path": "execution/hst00-contracts/qualification.json",
           "limitations": "Backend integration and compatibility HTTP remain in progress"
+        },
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Real router/HTTP read UoW negotiation and strict Node contracts",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:56:20.867095+00:00",
+          "result": "PASS explicit v1/v2 capability negotiation; invalid/repeated parameters rejected; protected tables unchanged",
+          "artifact_path": "execution/source-tests/negotiation/qualification.json",
+          "limitations": "Synthetic isolated project; not final installed or browser compatibility qualification."
         }
       ]
     },
@@ -1100,8 +1109,18 @@
         "HST-T-I05",
         "HST-T-I06"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "npm test (contract/controller/SSR presentation suite)",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:56:20.867095+00:00",
+          "result": "PASS401 Node tests; normative labels and current action links covered",
+          "artifact_path": "execution/frontend-global/qualification.json",
+          "limitations": "Node/SSR is not browser, assistive technology or human usability; final installed/browser scenarios pending."
+        }
+      ]
     },
     {
       "id": "HST-015",
@@ -1165,8 +1184,18 @@
         "HST-T-J05",
         "HST-T-J06"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "npm test (contract/controller/SSR presentation suite)",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:56:20.867095+00:00",
+          "result": "PASS401 Node tests; normative labels and current action links covered",
+          "artifact_path": "execution/frontend-global/qualification.json",
+          "limitations": "Node/SSR is not browser, assistive technology or human usability; final installed/browser scenarios pending."
+        }
+      ]
     },
     {
       "id": "HST-016",
@@ -1238,8 +1267,18 @@
         "HST-T-I05",
         "HST-T-I06"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "npm test (contract/controller/SSR presentation suite)",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:56:20.867095+00:00",
+          "result": "PASS401 Node tests; normative labels and current action links covered",
+          "artifact_path": "execution/frontend-global/qualification.json",
+          "limitations": "Node/SSR is not browser, assistive technology or human usability; final installed/browser scenarios pending."
+        }
+      ]
     },
     {
       "id": "HST-017",
@@ -1302,8 +1341,18 @@
         "HST-T-H09",
         "HST-T-H10"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "npm test (contract/controller/SSR presentation suite)",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:56:20.867095+00:00",
+          "result": "PASS401 Node tests; normative labels and current action links covered",
+          "artifact_path": "execution/frontend-global/qualification.json",
+          "limitations": "Node/SSR is not browser, assistive technology or human usability; final installed/browser scenarios pending."
+        }
+      ]
     },
     {
       "id": "HST-018",
@@ -1355,6 +1404,15 @@
           "result": "PASS67 Node tests; TSC PASS",
           "artifact_path": "execution/hst04-controller/qualification.json",
           "limitations": "Not browser/human; wider task acceptance pending"
+        },
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Node exact-context, controller, pagination and selection tests; TypeScript",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:56:20.867095+00:00",
+          "result": "PASS73 interaction tests and TypeScript; exact targets and revision resync covered",
+          "artifact_path": "execution/hst04-context/qualification.json",
+          "limitations": "Focus, draft and two-cycle polling acceptance still requires final real browser checks."
         }
       ]
     },
@@ -1417,6 +1475,15 @@
           "result": "PASS67 Node tests; TSC PASS",
           "artifact_path": "execution/hst04-controller/qualification.json",
           "limitations": "Not browser/human; wider task acceptance pending"
+        },
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Node exact-context, controller, pagination and selection tests; TypeScript",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:56:20.867095+00:00",
+          "result": "PASS73 interaction tests and TypeScript; exact targets and revision resync covered",
+          "artifact_path": "execution/hst04-context/qualification.json",
+          "limitations": "Focus, draft and two-cycle polling acceptance still requires final real browser checks."
         }
       ]
     },
@@ -1472,8 +1539,18 @@
         "HST-T-H09",
         "HST-T-H10"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Node exact-context, controller, pagination and selection tests; TypeScript",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:56:20.867095+00:00",
+          "result": "PASS73 interaction tests and TypeScript; exact targets and revision resync covered",
+          "artifact_path": "execution/hst04-context/qualification.json",
+          "limitations": "Focus, draft and two-cycle polling acceptance still requires final real browser checks."
+        }
+      ]
     },
     {
       "id": "HST-021",
@@ -1528,8 +1605,18 @@
         "HST-T-I05",
         "HST-T-I06"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Node exact-context, controller, pagination and selection tests; TypeScript",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:56:20.867095+00:00",
+          "result": "PASS73 interaction tests and TypeScript; exact targets and revision resync covered",
+          "artifact_path": "execution/hst04-context/qualification.json",
+          "limitations": "Focus, draft and two-cycle polling acceptance still requires final real browser checks."
+        }
+      ]
     },
     {
       "id": "HST-022",
@@ -1662,8 +1749,18 @@
         "HST-T-I05",
         "HST-T-I06"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "npm test (contract/controller/SSR presentation suite)",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T13:56:20.867095+00:00",
+          "result": "PASS401 Node tests; normative labels and current action links covered",
+          "artifact_path": "execution/frontend-global/qualification.json",
+          "limitations": "Node/SSR is not browser, assistive technology or human usability; final installed/browser scenarios pending."
+        }
+      ]
     },
     {
       "id": "HST-024",
