@@ -331,7 +331,7 @@
         "HST-T-H09",
         "HST-T-H10"
       ],
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         {
           "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb",
@@ -359,6 +359,15 @@
           "result": "FAIL B02: canonical events materialized but Home readiness required an unwritten watermark; timing NOT_QUALIFIED",
           "artifact_path": "execution/browser-hst/antecedents/r2-unprojected-watermark/qualification.json",
           "limitations": "No journey PASS, real provider or human usability claimed; reader correction and new canonical-ingress regression in progress."
+        },
+        {
+          "commit": "a6e08b6f82a3afb7641b6f1ff2a4855fc1695d41 + exact R3 source/test artifact pins",
+          "command_or_procedure": "Bounded isolated source Home regression, including 33 SQL and 4 canonical ingress cases",
+          "environment": "Windows; source-only Nexus with pinned installed dependencies and inert native peer",
+          "timestamp": "2026-11-17T16:19:46.393574+00:00",
+          "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
+          "artifact_path": "execution/source-tests/r3-home/qualification.json",
+          "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
         }
       ]
     },
@@ -575,7 +584,7 @@
         "HST-T-J05",
         "HST-T-J06"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
         {
           "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
@@ -594,6 +603,15 @@
           "result": "FAIL B02: canonical events materialized but Home readiness required an unwritten watermark; timing NOT_QUALIFIED",
           "artifact_path": "execution/browser-hst/antecedents/r2-unprojected-watermark/qualification.json",
           "limitations": "No journey PASS, real provider or human usability claimed; reader correction and new canonical-ingress regression in progress."
+        },
+        {
+          "commit": "a6e08b6f82a3afb7641b6f1ff2a4855fc1695d41 + exact R3 source/test artifact pins",
+          "command_or_procedure": "Bounded isolated source Home regression, including 33 SQL and 4 canonical ingress cases",
+          "environment": "Windows; source-only Nexus with pinned installed dependencies and inert native peer",
+          "timestamp": "2026-11-17T16:19:46.393574+00:00",
+          "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
+          "artifact_path": "execution/source-tests/r3-home/qualification.json",
+          "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
         }
       ]
     },
@@ -669,6 +687,15 @@
           "result": "PASS40 focused source tests after currentness fences; no provider executed",
           "artifact_path": "execution/operational-currentness/qualification.json",
           "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        },
+        {
+          "commit": "a6e08b6f82a3afb7641b6f1ff2a4855fc1695d41 + exact R3 source/test artifact pins",
+          "command_or_procedure": "Bounded isolated source Home regression, including 33 SQL and 4 canonical ingress cases",
+          "environment": "Windows; source-only Nexus with pinned installed dependencies and inert native peer",
+          "timestamp": "2026-11-17T16:19:46.393574+00:00",
+          "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
+          "artifact_path": "execution/source-tests/r3-home/qualification.json",
+          "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
         }
       ]
     },
@@ -729,7 +756,7 @@
         "HST-T-J05",
         "HST-T-J06"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
         {
           "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
@@ -748,6 +775,15 @@
           "result": "FAIL B02: canonical events materialized but Home readiness required an unwritten watermark; timing NOT_QUALIFIED",
           "artifact_path": "execution/browser-hst/antecedents/r2-unprojected-watermark/qualification.json",
           "limitations": "No journey PASS, real provider or human usability claimed; reader correction and new canonical-ingress regression in progress."
+        },
+        {
+          "commit": "a6e08b6f82a3afb7641b6f1ff2a4855fc1695d41 + exact R3 source/test artifact pins",
+          "command_or_procedure": "Bounded isolated source Home regression, including 33 SQL and 4 canonical ingress cases",
+          "environment": "Windows; source-only Nexus with pinned installed dependencies and inert native peer",
+          "timestamp": "2026-11-17T16:19:46.393574+00:00",
+          "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
+          "artifact_path": "execution/source-tests/r3-home/qualification.json",
+          "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
         }
       ]
     },
@@ -957,6 +993,15 @@
           "result": "PASS178; source/test drift zero; 35 batch/revision cases included",
           "artifact_path": "execution/source-tests/perf-r2-home/qualification.json",
           "limitations": "New package and performance repeat pending. Initial focal cut retained as 31PASS/2FAIL caused by unavailable fixture workspace; explicit unavailable-workspace authority negatives now pass."
+        },
+        {
+          "commit": "a6e08b6f82a3afb7641b6f1ff2a4855fc1695d41 + exact R3 source/test artifact pins",
+          "command_or_procedure": "Bounded isolated source Home regression, including 33 SQL and 4 canonical ingress cases",
+          "environment": "Windows; source-only Nexus with pinned installed dependencies and inert native peer",
+          "timestamp": "2026-11-17T16:19:46.393574+00:00",
+          "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
+          "artifact_path": "execution/source-tests/r3-home/qualification.json",
+          "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
         }
       ]
     },
@@ -1925,6 +1970,15 @@
           "result": "PASS178; source/test drift zero; 35 batch/revision cases included",
           "artifact_path": "execution/source-tests/perf-r2-home/qualification.json",
           "limitations": "New package and performance repeat pending. Initial focal cut retained as 31PASS/2FAIL caused by unavailable fixture workspace; explicit unavailable-workspace authority negatives now pass."
+        },
+        {
+          "commit": "a6e08b6f82a3afb7641b6f1ff2a4855fc1695d41 + exact R3 source/test artifact pins",
+          "command_or_procedure": "Bounded isolated source Home regression, including 33 SQL and 4 canonical ingress cases",
+          "environment": "Windows; source-only Nexus with pinned installed dependencies and inert native peer",
+          "timestamp": "2026-11-17T16:19:46.393574+00:00",
+          "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
+          "artifact_path": "execution/source-tests/r3-home/qualification.json",
+          "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
         }
       ]
     },
@@ -1990,6 +2044,15 @@
           "result": "PASS178; source/test drift zero; 35 batch/revision cases included",
           "artifact_path": "execution/source-tests/perf-r2-home/qualification.json",
           "limitations": "New package and performance repeat pending. Initial focal cut retained as 31PASS/2FAIL caused by unavailable fixture workspace; explicit unavailable-workspace authority negatives now pass."
+        },
+        {
+          "commit": "a6e08b6f82a3afb7641b6f1ff2a4855fc1695d41 + exact R3 source/test artifact pins",
+          "command_or_procedure": "Bounded isolated source Home regression, including 33 SQL and 4 canonical ingress cases",
+          "environment": "Windows; source-only Nexus with pinned installed dependencies and inert native peer",
+          "timestamp": "2026-11-17T16:19:46.393574+00:00",
+          "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
+          "artifact_path": "execution/source-tests/r3-home/qualification.json",
+          "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
         }
       ]
     },
@@ -2089,6 +2152,15 @@
           "result": "FAIL target500ms: all8 large cuts; PASS target500ms all6 small cuts; all14 complete/exited",
           "artifact_path": "execution/performance-hst/persistent-r2-final/qualification.json",
           "limitations": "First useful browser DOM remains NOT_RUN; improvement in paired R2v2 series does not waive capacity target or prove v1 improvement."
+        },
+        {
+          "commit": "a6e08b6f82a3afb7641b6f1ff2a4855fc1695d41 + exact R3 source/test artifact pins",
+          "command_or_procedure": "Bounded isolated source Home regression, including 33 SQL and 4 canonical ingress cases",
+          "environment": "Windows; source-only Nexus with pinned installed dependencies and inert native peer",
+          "timestamp": "2026-11-17T16:19:46.393574+00:00",
+          "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
+          "artifact_path": "execution/source-tests/r3-home/qualification.json",
+          "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
         }
       ]
     },
@@ -3842,6 +3914,18 @@
       "payload_and_source_drift": [],
       "live_mcp": "PASS canonical stop0 and physical exit0",
       "limitation": "Package READY is not feature qualification; R2 browser proof bug remains an antecedent failure."
+    },
+    "r3_source": {
+      "source_regression": "PASS215",
+      "focals": "PASS37",
+      "source_test_drift": [],
+      "proof_correction": "Use the actual atomic committed-ingress projection contract; exclude committed current-stream failure; never use unwritten projected_through as readiness.",
+      "performance_change": "Batch complete progress keys by eligible full session/epoch; preserve correlated fallback for malformed legacy JSON.",
+      "schema_migration": false,
+      "core_or_protocol_changes": false,
+      "package_directory": "execution/package-hst-r3",
+      "installed_browser_performance": "NOT_RUN",
+      "human": "DEFERRED_UNTIL_OUR_IMPLEMENTATION_AND_CHECKS_READY"
     }
   }
 }

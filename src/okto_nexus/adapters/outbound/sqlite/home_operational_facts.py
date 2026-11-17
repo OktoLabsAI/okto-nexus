@@ -35,6 +35,12 @@ SELECT s.*,o.subject_agent_id AS agent_id,o.expected_revisions_json,
  closing.session_id AS closing_session_id,
  COALESCE(wm.gap_state,'none') AS gap_state,
  COALESCE(wm.projected_through,0) AS projected_through,COALESCE(wm.committed_contiguous,0) AS committed_contiguous,
+ EXISTS(SELECT 1 FROM execution_event_ingress failure INDEXED BY idx_event_ingress_error
+  WHERE failure.server_id=s.server_id AND failure.executor_id=s.executor_id
+   AND failure.session_id=s.session_id AND failure.stream_epoch=s.stream_epoch
+   AND failure.event_type='error' AND failure.sequence<=COALESCE(wm.committed_contiguous,0)
+   AND json_extract(failure.payload_json,'$.native_type')='core.event_pump_failed'
+   AND json_extract(failure.payload_json,'$.payload.code')='EVENT_STREAM_UNAVAILABLE') AS stream_unavailable,
  COALESCE(policy.session_policy,defaults.session_policy) AS session_policy,
  CASE WHEN recovery.agent_id IS NOT NULL AND (recovery.state<>'READY' OR recovery.generation<>e.generation)
  THEN 1 ELSE 0 END AS recovering
@@ -118,7 +124,11 @@ def normalize(rows, leases, check_budget):
         result[-1] = SessionRuntimeFact(**{**result[-1].__dict__,
             'runtime_ready': bool(current and row['opening_stage'] in ('SUBMITTED', 'SUCCEEDED')
                 and row['opening_native_id']
+                # commit_execution_events projects newly contiguous results
+                # and native requests atomically with committed_contiguous.
+                # projected_through is an unmaintained legacy column, not a
+                # separate projection checkpoint. Pending gaps still fail shut.
                 and row['closing_session_id'] is None and row['gap_state'] == 'none'
-                and row['projected_through'] == row['committed_contiguous']),
+                and not row['stream_unavailable']),
             'persistent_runtime': row['session_policy'] in ('shared', 'per_sender', 'per_sender_session')})
     return tuple(result)

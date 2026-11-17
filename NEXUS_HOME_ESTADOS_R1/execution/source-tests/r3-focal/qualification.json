@@ -1,0 +1,30 @@
+{
+  "mode": "SOURCE_ONLY_NOT_INSTALLED_NEXUS",
+  "started_at": "2026-11-17T15:43:09.491755+00:00",
+  "ended_at": "2026-11-17T16:03:27.670020+00:00",
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus');sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\src');import pytest;raise SystemExit(pytest.main(['-p', 'pytest_asyncio.plugin', '-p', 'no:cacheprovider', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-8rv1wvh4\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--basetemp=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-8rv1wvh4\\\\cases', '-q', '--tb=short', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-8rv1wvh4\\\\tests.xml', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_progress_equivalence.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_atomic_ingress_readiness.py']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-source-8rv1wvh4\\cwd",
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-source-8rv1wvh4",
+  "exit_code": 15,
+  "original_pid": 52052,
+  "process_exited": true,
+  "stdin": "closed PIPE",
+  "provider_auth_environment_copied": false,
+  "test_files": {
+    "tests\\home_states\\test_progress_equivalence.py": "9772362049d5fcf565a863649d94edb221b83c1393878cf0edfdc48d003928d5",
+    "tests\\home_states\\test_atomic_ingress_readiness.py": "d615a8d66ffa630661f5ed99035d549ad82ad1e97b1e47a4be033c4f9b0498da"
+  },
+  "limitations": [
+    "No installed app/browser/real harness/human qualification.",
+    "No automatic process containment; only this test process exit is claimed."
+  ],
+  "source_and_test_drift": []
+}

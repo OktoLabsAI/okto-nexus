@@ -14,22 +14,47 @@ from .attention import _SetDigest
 
 # Current and historic links are deduplicated before joining receipts. A claim's
 # operations are attached only to that epoch, never to a later owner of the work.
+# Canonical event commit projects and advances committed_contiguous atomically;
+# projected_through is retained schema with no writer. Eligible session history
+# is scanned once. Malformed legacy JSON delegates to the old EXISTS so its
+# short-circuit/error behavior is preserved, rather than silently dropping it.
 FACTS = """
 WITH links AS MATERIALIZED (
  SELECT server_id,executor_id,operation_id,domain_operation_id FROM execution_domain_deliveries
  UNION SELECT server_id,executor_id,operation_id,domain_operation_id FROM execution_delivery_attempt_history
+), progress_sessions AS MATERIALIZED (
+ SELECT DISTINCT o.server_id,o.executor_id,o.session_id,s.stream_epoch
+ FROM execution_operations o JOIN execution_sessions s USING(server_id,executor_id,session_id)
+ JOIN execution_receipts r ON r.server_id=o.server_id AND r.executor_id=o.executor_id AND r.operation_id=o.operation_id
+  AND r.receipt_revision=(SELECT MAX(rr.receipt_revision) FROM execution_receipts rr
+   WHERE rr.server_id=o.server_id AND rr.executor_id=o.executor_id AND rr.operation_id=o.operation_id)
+ WHERE o.server_id=:server_id AND (:workspace_id IS NULL OR o.workspace_id=:workspace_id)
+  AND o.action='turn.submit' AND s.lifecycle_state IN ('READY','ACTIVE') AND s.lease_state='ACTIVE'
+  AND r.stage NOT IN ('SUCCEEDED','FAILED','CANCELLED','OUTCOME_UNKNOWN','REFUSED_BEFORE_EFFECT')
+  AND json_extract(o.expected_revisions_json,'$.session_owner_generation')=s.owner_generation
+), progress_keys AS MATERIALIZED (
+ SELECT DISTINCT e.server_id,e.executor_id,e.session_id,e.stream_epoch,
+  CASE WHEN json_valid(e.payload_json) THEN CAST(json_extract(e.payload_json,'$.operation_id') AS TEXT) END AS operation_id,
+  CASE WHEN json_valid(e.payload_json) THEN 0 ELSE 1 END AS malformed
+ FROM progress_sessions s JOIN execution_event_watermarks w USING(server_id,executor_id,session_id,stream_epoch)
+ JOIN execution_event_ingress e ON e.server_id=s.server_id AND e.executor_id=s.executor_id
+  AND e.session_id=s.session_id AND e.stream_epoch=s.stream_epoch AND e.sequence<=w.committed_contiguous
+ WHERE w.gap_state='none' AND CASE WHEN json_valid(e.payload_json)
+  THEN json_extract(e.payload_json,'$.payload.delivery_phase') IN ('started','progress') ELSE 1 END
 ), scoped_ops AS MATERIALIZED (
  SELECT o.server_id,o.executor_id,o.operation_id,o.session_id,o.workspace_id,o.subject_agent_id,
    o.actor_agent_id,o.admission_state,o.created_at,r.stage,r.received_at,r.receipt_revision,s.lifecycle_state,
    CASE WHEN s.lifecycle_state IN ('READY','ACTIVE') AND s.lease_state='ACTIVE'
      AND r.stage NOT IN ('SUCCEEDED','FAILED','CANCELLED','OUTCOME_UNKNOWN','REFUSED_BEFORE_EFFECT')
      AND json_extract(o.expected_revisions_json,'$.session_owner_generation')=s.owner_generation
-     AND EXISTS(SELECT 1 FROM execution_event_ingress e JOIN execution_event_watermarks w
-       USING(server_id,executor_id,session_id,stream_epoch)
-       WHERE e.server_id=o.server_id AND e.executor_id=o.executor_id AND e.session_id=o.session_id
-         AND e.stream_epoch=s.stream_epoch AND e.sequence<=w.projected_through AND w.gap_state='none'
+     AND CASE WHEN invalid_progress.malformed=1 THEN
+       EXISTS(SELECT 1 FROM execution_event_ingress e JOIN execution_event_watermarks w
+        USING(server_id,executor_id,session_id,stream_epoch)
+        WHERE e.server_id=o.server_id AND e.executor_id=o.executor_id AND e.session_id=o.session_id
+         AND e.stream_epoch=s.stream_epoch AND e.sequence<=w.committed_contiguous AND w.gap_state='none'
          AND json_extract(e.payload_json,'$.operation_id')=o.operation_id
          AND json_extract(e.payload_json,'$.payload.delivery_phase') IN ('started','progress'))
+       ELSE progress.operation_id IS NOT NULL END
      AND NOT EXISTS(SELECT 1 FROM execution_results x WHERE x.server_id=o.server_id AND x.executor_id=o.executor_id
        AND x.operation_id=o.operation_id AND x.terminal_sequence IS NOT NULL)
      THEN 1 ELSE 0 END AS observed_running,
@@ -43,6 +68,11 @@ WITH links AS MATERIALIZED (
    AND r.receipt_revision=(SELECT MAX(rr.receipt_revision) FROM execution_receipts rr
      WHERE rr.server_id=o.server_id AND rr.executor_id=o.executor_id AND rr.operation_id=o.operation_id)
  LEFT JOIN execution_sessions s USING(server_id,executor_id,session_id)
+ LEFT JOIN progress_keys progress ON progress.server_id=o.server_id AND progress.executor_id=o.executor_id
+  AND progress.session_id=o.session_id AND progress.stream_epoch=s.stream_epoch AND progress.operation_id=o.operation_id
+  AND progress.malformed=0
+ LEFT JOIN progress_keys invalid_progress ON invalid_progress.server_id=o.server_id AND invalid_progress.executor_id=o.executor_id
+  AND invalid_progress.session_id=o.session_id AND invalid_progress.stream_epoch=s.stream_epoch AND invalid_progress.malformed=1
  LEFT JOIN execution_session_containment k ON k.server_id=s.server_id AND k.executor_id=s.executor_id
    AND k.session_id=s.session_id AND k.owner_generation=s.owner_generation
  LEFT JOIN links l ON l.server_id=o.server_id AND l.executor_id=o.executor_id AND l.operation_id=o.operation_id

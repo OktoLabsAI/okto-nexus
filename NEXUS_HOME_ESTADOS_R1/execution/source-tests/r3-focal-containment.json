@@ -1,0 +1,33 @@
+{
+  "at": "2026-11-17T16:03:27.622808+00:00",
+  "reason": "Own gap fixture did not exit for over 17 minutes; no live HTTP service endpoint for in-process TestClient teardown.",
+  "result": "INCOMPLETE_NOT_PASS",
+  "known_before": [
+    {
+      "pid": 60580,
+      "birth": 1794930189.1458955,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 52052,
+      "birth": 1794930189.493796,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 53008,
+      "birth": 1794930189.512396,
+      "exe": "C:\\Python313\\python.exe"
+    }
+  ],
+  "action": {
+    "kind": "kill_verified_own_pytest",
+    "pid": 53008,
+    "birth": 1794930189.512396,
+    "exe": "C:\\Python313\\python.exe"
+  },
+  "data_preserved": true,
+  "limitations": [
+    "Late ancestry observation does not establish completeness of all short-lived descendants."
+  ],
+  "remaining_same_identity": []
+}
