@@ -1,0 +1,21 @@
+{
+  "scope": "Read-only review of new quick_connect_selection.py WIP; no source edit or execution of that module, no provider/auth reads.",
+  "observed_source_read_tool": "64886d",
+  "qualification": "REVIEW_FINDINGS_NOT_INTEGRATION_PASS",
+  "positive_controls_observed": [
+    "Unknown harness token does not silently select the only observed family",
+    "Freshness is checked before absence/configuration; stale is not absence",
+    "Explicit candidate_ref filters exact installation; multiple candidates require choice",
+    "can_configure must be exactly true",
+    "Choice preparation uses canonical GETs and does not reserve/Test/Finish",
+    "Public bound ID can resume without probing a new installation"
+  ],
+  "findings_sent_to_source_owner": [
+    {"id": "selection-new-agent-resume", "observation": "In the reviewed WIP, args.new_agent did not enter exact public-ID selectors; a compatible bound ID could produce action=resume and ignore explicit new identity.", "recommendation": "Reject the contradictory new-agent intent before existing-ID resume, or prove caller enforces the same fence."},
+    {"id": "selection-add-adoption", "observation": "In the reviewed WIP, new_connection=true plus explicit agent/binding and a free ID could reach legacy associate.", "recommendation": "Explicit addition must not silently become legacy association; require corrected command/intent."},
+    {"id": "selection-retained-fences", "observation": "Retained Quick Connect early return compared only ID, project label, client and new_agent in this module.", "recommendation": "Before retained return/apply, caller or helper must prove all exact agent/binding/workspace/candidate/provider/root/topology selectors and original Server; do not infer that absence of Git lookup is sufficient recovery validation."},
+    {"id": "selection-legacy-adapter", "observation": "Legacy association selection carries args.client; canonical binding authority is revalidated in downstream flow.", "recommendation": "Prove downstream metadata association checks actual adapter/full exact reference before any metadata write; requested family is not identity proof."},
+    {"id": "selection-remote-boundary", "observation": "prepare selects embedded local_executor and resolves supplied root before public-ID choice.", "recommendation": "Caller must preserve remote-specific path/topology semantics; operator-local CWD must not become Connector execution root. This local helper alone does not qualify QC027."}
+  ],
+  "limits": "Review records a specific WIP read, not final source qualification. Findings may be resolved by subsequent source-owner edits or caller fences; require focused integration tests against that later cut. No PASS for remote, recovery or real authority is implied."
+}

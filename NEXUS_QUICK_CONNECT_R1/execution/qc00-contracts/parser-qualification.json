@@ -1,0 +1,50 @@
+{
+  "scope": "QC-004 pure parser plus QC-002 regression",
+  "status": "FOCAL_PASS",
+  "environment": {
+    "python": "3.13.1",
+    "python_executable": ".venv/Scripts/python.exe",
+    "source": "pytest pythonpath=src; checkout ad189da5d0021eb6a90d468c037a658f273862ed with new files uncommitted"
+  },
+  "validation": [
+    {
+      "command": "rtk proxy .venv/Scripts/python.exe -B -X utf8 -m pytest -q tests/quick_connect/test_connect_arguments.py",
+      "exit_code": 1,
+      "stdout": "1 failed, 40 passed in 1.60s",
+      "tool": "e8359b",
+      "cause": "Test incorrectly supplied nonexistent --feature-home; product correctly rejected it. Test now uses real --handoff-notify-expiry; no product relaxation."
+    },
+    {
+      "command": "rtk proxy .venv/Scripts/python.exe -B -X utf8 -m pytest -q tests/quick_connect/test_connect_arguments.py tests/quick_connect/test_quick_connect_contracts.py",
+      "exit_code": 0,
+      "stdout": "87 passed in 1.13s",
+      "tool": "62a256"
+    },
+    {
+      "command": "rtk proxy C:/Users/jpamb/AppData/Roaming/Python/Python313/Scripts/ruff.exe check src/okto_nexus/domain/quick_connect.py src/okto_nexus/adapters/inbound/cli/connect_arguments.py tests/quick_connect/test_quick_connect_contracts.py tests/quick_connect/test_connect_arguments.py",
+      "exit_code": 0,
+      "stdout": "All checks passed!",
+      "tool": "4cf7ab"
+    }
+  ],
+  "source_sha256": {
+    "src/okto_nexus/adapters/inbound/cli/connect_arguments.py": "a1ea4a3b8454901b3d333f74e9889e1077935fc1243f709090a9d661de6b1087",
+    "tests/quick_connect/test_connect_arguments.py": "561671f010d967ec3223a4ee6430108dcb027fd546d82c70994dbdb4ffcd0af8"
+  },
+  "interfaces": {
+    "parse_mode": "argv -> (mode string, remaining list); participant execution is never imported",
+    "parse_connect_args": "argv -> (argparse Namespace, original validated service argv); managed only",
+    "client": "effective lowercased harness token; unknown token accepted for later authorized resolution",
+    "harness": "lowercased positional harness or null",
+    "project_name": "logical positional string, never a physical path",
+    "connect_id": "normalized public ASCII identifier",
+    "errors": "argparse SystemExit2/stderr; caller owns JSON response"
+  },
+  "limits": [
+    "Parser only; no CLI dispatch, lifecycle, setup, provider or real participant execution qualified",
+    "Configuration grammar checked by real _parse_cli, not load_config value/environment resolution",
+    "Discovery checks are lexical only; later canonical discovery still checks physical paths",
+    "Python3.11 syntax uses standard parse_intermixed_args available there, but runtime tested only on3.13.1",
+    "Unknown participant options remain for its existing parser; no parallel participant parser created"
+  ]
+}

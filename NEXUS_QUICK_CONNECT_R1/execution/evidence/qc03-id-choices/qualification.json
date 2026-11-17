@@ -1,0 +1,48 @@
+{
+  "qualification": "PURE_CLIENT_CHOICE_TESTS_PASS_SERVER_AUTHORITY_PENDING",
+  "scope": "Synthetic, explicitly scoped catalog envelopes and canonical reference tuples. Client helpers issue GET only; no reservation, binding, grant, Test or Finish is performed.",
+  "green": {
+    "tool_handle": "82eba1",
+    "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/quick_connect/test_quick_connect_id_choices.py -q --junitxml=NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-id-choices/pytest.xml",
+    "exit_code": 0,
+    "passed": 65,
+    "elapsed_seconds": 1.13
+  },
+  "ruff": {
+    "tool_handle": "48e914",
+    "command": "rtk proxy ruff check src/okto_nexus/adapters/inbound/cli/quick_connect_ids.py tests/quick_connect/test_quick_connect_id_choices.py",
+    "exit_code": 0,
+    "observed": "All checks passed!"
+  },
+  "antecedent": {
+    "tool_handle": "a21faa",
+    "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/quick_connect/test_quick_connect_id_choices.py -q --junitxml=NEXUS_QUICK_CONNECT_R1/execution/evidence/qc03-id-choices/pytest-initial.xml",
+    "exit_code": 1,
+    "passed": 54,
+    "failed": 7,
+    "observed": "Malformed wire IDs escaped as ValueError (five); null scope/capabilities escaped as AttributeError (two). Source owner fixed structured refusal; tests retained. Four additional positive cases were added before the green run."
+  },
+  "covered_client_behaviors": [
+    "Normalized explicit ID and requested-family proposals; occupied reserved/bound/retired names participate in suffix proposals without mutating input",
+    "TTY compatible/cross-family explicit resume; choose another ID; explicit suggest; cancellation/EOF; new_connection never offers resume",
+    "All seven canonical identity selectors reject mismatch before any menu",
+    "Noninteractive paths never read stdin and cross-family conflicts do not silently switch harness",
+    "Multiple actors/hosts require exact choice, no latest heuristic",
+    "Private metadata omitted from generic collision error; binding reference is a fresh allowlisted tuple",
+    "Server/workspace scope, complete paging, drift, duplicate IDs across actors/hosts, cursor cycles and malformed envelopes fail closed",
+    "Old Server capability errors request upgrade; forbidden remains forbidden; no local namespace substitute"
+  ],
+  "limits": [
+    "Not proof of server-side uniqueness, cross-host transactions, tombstones, authorization filtering, receipt recovery or reservation concurrency",
+    "Not real TTY/PTY, CLI JSON output, installed package, remote host or provider execution",
+    "Exact profile-to-reference resolution and saved intent recovery remain integration responsibilities",
+    "No full E/F/G/I matrix promotion; evidence is a helper-level subset"
+  ],
+  "side_effects": {
+    "provider_calls": 0,
+    "real_http_or_sqlite_writes": 0,
+    "services_or_browser_started": 0,
+    "product_source_edited_by_this_agent": false,
+    "ledger_git_or_installed_prefix_changed": false
+  }
+}

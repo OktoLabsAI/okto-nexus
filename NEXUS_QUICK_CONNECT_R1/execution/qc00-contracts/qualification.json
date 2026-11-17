@@ -1,0 +1,45 @@
+{
+  "scope": "QC-002 pure product contracts only",
+  "status": "FOCAL_PASS",
+  "validation": [
+    {
+      "command": "rtk proxy .venv/Scripts/python.exe -B -X utf8 -m pytest -q tests/quick_connect/test_quick_connect_contracts.py",
+      "exit_code": 0,
+      "stdout": "46 passed in 0.31s",
+      "tool": "cd61f8"
+    },
+    {
+      "command": "rtk proxy .venv/Scripts/python.exe -B -X utf8 -m ruff check src/okto_nexus/domain/quick_connect.py tests/quick_connect/test_quick_connect_contracts.py",
+      "exit_code": 1,
+      "stdout": "No module named ruff",
+      "tool": "fd4b30",
+      "classification": "tool unavailable; no dependency installed"
+    },
+    {
+      "command": "rtk proxy C:/Users/jpamb/AppData/Roaming/Python/Python313/Scripts/ruff.exe check src/okto_nexus/domain/quick_connect.py tests/quick_connect/test_quick_connect_contracts.py",
+      "exit_code": 0,
+      "stdout": "All checks passed!",
+      "tool": "cc1697"
+    }
+  ],
+  "source_sha256": {
+    "src/okto_nexus/domain/quick_connect.py": "b45cc4c86437fa0c720205fcad078248bb5a73bb3d666f280b05097ee61b9680",
+    "tests/quick_connect/test_quick_connect_contracts.py": "f1c7d193ba01de680f221d99e633f1eea6db4878bcd81b9a925c9d615514f9e4"
+  },
+  "bound_reference_fields": [
+    "server_id",
+    "executor_id",
+    "workspace_id",
+    "binding_id",
+    "workspace_binding_id",
+    "agent_id",
+    "endpoint_id"
+  ],
+  "validation_error": "ValueError; inbound layer maps existing validation response; messages do not echo rejected input",
+  "limits": [
+    "No parser/backend integration, setup, provider, personal authentication, service or installed-package execution",
+    "No QC scenario promoted beyond these focal invariants",
+    "Discovery reason is a closed constant set; adding a reason requires coordinated contract update",
+    "cwd_resolution is an immutable DTO serialized as a JSON mapping; argv is immutable data, never executed"
+  ]
+}
