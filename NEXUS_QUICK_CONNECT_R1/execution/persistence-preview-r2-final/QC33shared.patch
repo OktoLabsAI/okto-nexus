@@ -1,0 +1,28 @@
+--- D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc33-shared-service\final\executed-test.py
++++ tests/quick_connect/test_qc33_shared_service.py
+@@ -49,7 +49,8 @@
+         identity=dict(pid=os.getpid(),generation=lock.generation)
+         lock.release()
+         records.append(dict(**identity,guard_released=not lock.owned,metadata_absent=not lock.path.exists()))
+-    (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'owner-cleanup.json').write_text(json.dumps(records,indent=2)+'\n')
++    if os.environ.get('QC_DERIVATIVE_OUTPUT'):
++        (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'owner-cleanup.json').write_text(json.dumps(records,indent=2)+'\n')
+ 
+ 
+ def first_connection_rows(t,agent):
+@@ -159,10 +160,12 @@
+             statuses=statuses,canonical_refs=[ref_a,ref_b],counts=counts,synthetic_tests=2,
+             version_probes=len(t.probes),process_launch_attempts=0,first_connection_rows_unchanged=True,
+             first_profile_bytes_unchanged=True,user_service_installed=False)
+-        (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'shared-service-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
++        if os.environ.get('QC_DERIVATIVE_OUTPUT'):
++            (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'shared-service-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+     finally:
+         server.should_exit=True
+         running.result(timeout=10)
+         sock.close()
+-        (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'http-cleanup.json').write_text(json.dumps(
+-            dict(uvicorn_task_done=running.done(),listener_closed=sock.fileno()==-1),indent=2)+'\n')
++        if os.environ.get('QC_DERIVATIVE_OUTPUT'):
++            (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'http-cleanup.json').write_text(json.dumps(
++                dict(uvicorn_task_done=running.done(),listener_closed=sock.fileno()==-1),indent=2)+'\n')

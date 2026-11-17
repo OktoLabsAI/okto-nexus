@@ -1,0 +1,9 @@
+{
+  "all_recorded_processes_absent": true,
+  "still_alive": [],
+  "port": 63600,
+  "connect_ex": 10035,
+  "listener_absent": true,
+  "listeners": [],
+  "listener_evidence": "OS TCP LISTEN table filtered to exact own port; connect_ex nonzero alone is not absence proof."
+}

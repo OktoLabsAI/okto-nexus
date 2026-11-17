@@ -1,0 +1,124 @@
+{
+  "shard": 1,
+  "scope": [
+    "tests/quick_connect",
+    "tests/execution_r4/test_public_connection_ids.py",
+    "tests/execution_r4/test_public_id_retirement.py",
+    "tests/execution_r4/test_connection_catalog.py",
+    "tests/execution_r4/test_connection_workspaces.py",
+    "tests/execution_r4/test_connection_setup.py",
+    "tests/execution_r4/test_connection_setup_recovery.py",
+    "tests/execution_r4/test_terminal_connect.py",
+    "tests/execution_r4/test_terminal_scripted_recovery.py",
+    "tests/execution_r4/test_remote_operator_terminal.py"
+  ],
+  "selected_files": [
+    "tests/execution_r4/test_connection_catalog.py",
+    "tests/execution_r4/test_connection_setup.py",
+    "tests/execution_r4/test_connection_workspaces.py",
+    "tests/execution_r4/test_public_connection_ids.py",
+    "tests/execution_r4/test_terminal_scripted_recovery.py",
+    "tests/quick_connect/test_harness_alternatives.py",
+    "tests/quick_connect/test_quick_connect_customize.py",
+    "tests/quick_connect/test_quick_connect_id_choices.py",
+    "tests/quick_connect/test_quick_connect_outcome.py",
+    "tests/quick_connect/test_quick_connect_project.py",
+    "tests/quick_connect/test_terminal_public_connection.py"
+  ],
+  "all_partitions": [
+    [
+      "tests/execution_r4/test_connection_setup_recovery.py",
+      "tests/execution_r4/test_public_id_retirement.py",
+      "tests/execution_r4/test_remote_operator_terminal.py",
+      "tests/execution_r4/test_terminal_connect.py",
+      "tests/quick_connect/test_connect_arguments.py",
+      "tests/quick_connect/test_connect_dispatch.py",
+      "tests/quick_connect/test_git_project_hint.py",
+      "tests/quick_connect/test_git_project_trust.py",
+      "tests/quick_connect/test_quick_connect_cli.py",
+      "tests/quick_connect/test_quick_connect_contracts.py",
+      "tests/quick_connect/test_quick_connect_pty.py",
+      "tests/quick_connect/test_quick_connect_selection.py"
+    ],
+    [
+      "tests/execution_r4/test_connection_catalog.py",
+      "tests/execution_r4/test_connection_setup.py",
+      "tests/execution_r4/test_connection_workspaces.py",
+      "tests/execution_r4/test_public_connection_ids.py",
+      "tests/execution_r4/test_terminal_scripted_recovery.py",
+      "tests/quick_connect/test_harness_alternatives.py",
+      "tests/quick_connect/test_quick_connect_customize.py",
+      "tests/quick_connect/test_quick_connect_id_choices.py",
+      "tests/quick_connect/test_quick_connect_outcome.py",
+      "tests/quick_connect/test_quick_connect_project.py",
+      "tests/quick_connect/test_terminal_public_connection.py"
+    ]
+  ],
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-qc-installed-1-7j7wwyz7",
+  "orchestrator_pid": 10188,
+  "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv",
+  "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\artifacts\\okto_nexus-0.3.6-py3-none-any.whl",
+  "wheel_sha256": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+  "excluded_helper": "browser_public_ids_fixture.py is not a collected test module; no browser/service launch",
+  "child_policy": "No checkout app child; own Git and pure synthetic Python peers allowed; no native provider/auth",
+  "result": {
+    "command": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "-u",
+      "-c",
+      "import sys,json,pathlib;sys.path.insert(0,'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc09-qc-installed-1-7j7wwyz7\\\\run\\\\guard');import pytest;raise SystemExit(pytest.main(json.loads(pathlib.Path('C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc09-qc-installed-1-7j7wwyz7\\\\run\\\\pytest-args.json').read_text())))"
+    ],
+    "pytest_args": [
+      "-p",
+      "qc_installed_origin_guard",
+      "-p",
+      "qc_wave_report",
+      "-c",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-qc-installed-1-7j7wwyz7\\run\\pytest.ini",
+      "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+      "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_connection_catalog.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_connection_setup.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_connection_workspaces.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_public_connection_ids.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_terminal_scripted_recovery.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_harness_alternatives.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_customize.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_id_choices.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_outcome.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_quick_connect_project.py",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_terminal_public_connection.py",
+      "-v",
+      "--tb=short",
+      "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-qc-installed-1-7j7wwyz7\\run\\output\\tests.xml"
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 299.58230900764465,
+    "phases": [],
+    "tracked_processes": [
+      {
+        "pid": 56124,
+        "ppid": 10188,
+        "create_time": 1794898616.7990615,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 50856,
+        "ppid": 56124,
+        "create_time": 1794898616.8160448,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "physically_exited": {
+      "56124": true,
+      "50856": true
+    }
+  },
+  "output": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-qc-installed-1-7j7wwyz7\\run\\output",
+  "changed_inputs": [],
+  "status": "FAIL"
+}

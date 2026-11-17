@@ -1,0 +1,7 @@
+{
+  "nodeid": "tests/execution_r4/test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[2-claude]",
+  "when": "call",
+  "outcome": "failed",
+  "duration": 1.38970669999253,
+  "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-wr5oy5i4\\after\\tests\\execution_r4\\test_qc15_cli_choices.py:87: in test_bare_two_families_explicit_choice_or_cancel\n    assert code == 0, out\nE   AssertionError: Choose a supported harness (listing does not test login or run a version command):\nE     1. codex \u2014 observed; FRESH\nE     2. claude \u2014 observed; FRESH\nE     3. pi \u2014 not confirmed in inventory; FRESH\nE     c. Cancel\nE     Connection shortcut: project-73685acea002e659cf166f32\nE     Canonical metadata revalidation was requested; existing revision metadata may change.\nE     {\nE       \"state\": \"refused\",\nE       \"code\": \"PROVIDER_HOME_REQUIRED\",\nE       \"message\": \"Pass --provider-home for the Claude login on this Server host.\",\nE       \"possible_effect\": false,\nE       \"effects_started\": null,\nE       \"canonical_metadata_revalidation_requested\": true,\nE       \"profile\": \"project-73685acea002e659cf166f32\"\nE     }\nE     \nE   assert 3 == 0"
+}

@@ -1,0 +1,2654 @@
+{
+  "status": "PERSISTENCE_PLAN_ONLY_NO_FILES_COPIED_NO_TESTS_RUN",
+  "source_evidence_immutable": true,
+  "final_copy_policy": "Root copies only after freeze, normalizes UTF-8 LF and applies minimal portability fixes to the new test copies. All resulting tests rerun on final package after cancellation fix; historical reports/inputs stay byte-identical.",
+  "entries": [
+    {
+      "id": "QC12Git+QC21",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc21-review-privacy\\final\\executed-test.py",
+      "sha256": "91addb099dfa7e91ba24962742bb20a6fb5f624397dcd34b638eab09774dcfa2",
+      "normalized_utf8_lf_sha256": "786102fb73af7a71471d63fd2a687b44c0be1b0f04e7d416848f07039d4c1f9c",
+      "target": "tests/quick_connect/test_git_cli_integration.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 276,
+        "lf": 276
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence/qualification.json",
+        "NEXUS_QUICK_CONNECT_R1/execution/qc21-review-privacy/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence",
+        "NEXUS_QUICK_CONNECT_R1/execution/qc21-review-privacy"
+      ],
+      "test_functions": [
+        {
+          "name": "test_origin_first_connect_and_changed_metadata_exact_resume",
+          "body_lf_sha256": "26097bb5041adb2eb8e2008e7de656a0d7d1b14d935788befcb1c84e567dd098",
+          "line": 64,
+          "historical_executions": [
+            {
+              "function": "test_origin_first_connect_and_changed_metadata_exact_resume",
+              "node": "tests.quick_connect.test_git_cli_integration::test_origin_first_connect_and_changed_metadata_exact_resume[https://example.invalid/team/logical-origin.git]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence/junit.xml"
+            },
+            {
+              "function": "test_origin_first_connect_and_changed_metadata_exact_resume",
+              "node": "tests.quick_connect.test_git_cli_integration::test_origin_first_connect_and_changed_metadata_exact_resume[git@example.invalid:team/logical-origin.git]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence/junit.xml"
+            },
+            {
+              "function": "test_origin_first_connect_and_changed_metadata_exact_resume",
+              "node": "tests.quick_connect.test_git_cli_integration::test_origin_first_connect_and_changed_metadata_exact_resume[ssh://git@example.invalid:2222/team/logical-origin.git]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence/junit.xml"
+            },
+            {
+              "function": "test_origin_first_connect_and_changed_metadata_exact_resume",
+              "node": "tests.quick_connect.test_git_cli_integration::test_origin_first_connect_and_changed_metadata_exact_resume[file:///srv/git/logical-origin.git]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence/junit.xml"
+            },
+            {
+              "function": "test_origin_first_connect_and_changed_metadata_exact_resume",
+              "node": "tests.quick_connect.test_git_cli_integration::test_origin_first_connect_and_changed_metadata_exact_resume[/srv/git/logical-origin.git]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence/junit.xml"
+            },
+            {
+              "function": "test_origin_first_connect_and_changed_metadata_exact_resume",
+              "node": "tests.quick_connect.test_git_cli_integration::test_origin_first_connect_and_changed_metadata_exact_resume[C:\\\\fixture\\\\logical-origin.git]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence/junit.xml"
+            },
+            {
+              "function": "test_origin_first_connect_and_changed_metadata_exact_resume",
+              "node": "tests.quick_connect.test_git_cli_integration::test_origin_first_connect_and_changed_metadata_exact_resume[https://fake-user:PRIVATE@example.invalid/team/logical-origin.git?token=PRIVATE#PRIVATE]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence/junit.xml"
+            },
+            {
+              "function": "test_origin_first_connect_and_changed_metadata_exact_resume",
+              "node": "tests.quick_connect.test_git_cli_integration::test_origin_first_connect_and_changed_metadata_exact_resume[https://fake-user:PRIVATE@example.invalid/team/logical-origin.git?token=PRIVATE#PRIVATE]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc21-review-privacy/final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_local_git_fallback_enters_canonical_review_without_implicit_test",
+          "body_lf_sha256": "7cb0b39e4248f7e590176eba8ff25e6410e822eb8f8ca0958dbfd7d573d85e1b",
+          "line": 180,
+          "historical_executions": [
+            {
+              "function": "test_local_git_fallback_enters_canonical_review_without_implicit_test",
+              "node": "tests.quick_connect.test_git_cli_integration::test_local_git_fallback_enters_canonical_review_without_implicit_test[no-origin-origin_missing]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence/junit.xml"
+            },
+            {
+              "function": "test_local_git_fallback_enters_canonical_review_without_implicit_test",
+              "node": "tests.quick_connect.test_git_cli_integration::test_local_git_fallback_enters_canonical_review_without_implicit_test[conflicting-origins-origin_ambiguous]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_monorepo_ancestor_origin_does_not_expand_execution_root",
+          "body_lf_sha256": "b2208bde9de6ed6ea62677a8e86f819c15027ddbec4721f96ee0a1597c4007f8",
+          "line": 214,
+          "historical_executions": [
+            {
+              "function": "test_monorepo_ancestor_origin_does_not_expand_execution_root",
+              "node": "tests.quick_connect.test_git_cli_integration::test_monorepo_ancestor_origin_does_not_expand_execution_root",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence/junit.xml"
+            },
+            {
+              "function": "test_monorepo_ancestor_origin_does_not_expand_execution_root",
+              "node": "tests.quick_connect.test_git_cli_integration::test_monorepo_ancestor_origin_does_not_expand_execution_root",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc21-review-privacy/final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "local_git",
+        "session_count",
+        "changed_paths"
+      ],
+      "imports_new_helpers": [],
+      "imports_existing_test_helpers": {
+        "test_connection_setup_recovery": [
+          "tests/execution_r4/test_connection_setup_recovery.py"
+        ],
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [
+          {
+            "line": 173,
+            "text": "(Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'privacy-proof.json').write_text(json.dumps(proof,indent=2))"
+          },
+          {
+            "line": 254,
+            "text": "(Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'review-proof.json').write_text(json.dumps(proof,indent=2))"
+          }
+        ],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": [
+          "Make evidence writes optional when QC_DERIVATIVE_OUTPUT/runner env is absent, or use a tmp_path-backed test-only evidence fixture. Keep all assertions; these env vars are runner configuration, not product prerequisites.",
+          "Final source is QC21 delta. Two modified monorepo/PRIVATE cases passed there; remaining eight cases belong to the earlier 9e6cf1fe file. Rerun the entire final 10-case file; do not inherit ten final-source PASS automatically."
+        ]
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-complete-evidence/qualification.json",
+          "sha256": "ff0bcc5a0fe7fd0cbf242900538ea86f7b4c3a56a3e88dd61448023738f03498"
+        },
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc21-review-privacy/qualification.json",
+          "sha256": "e448c951c422e4573a6e156ba5a5e77b477ca68b2beb03949fef4a164ebeaf48"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC14",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-f17-proof-_nfe3zme\\after\\tests\\quick_connect\\test_quick_connect_extra_scenarios.py",
+      "sha256": "9f64bc7f227f84b237e6a1ed8c376a0ab4463a01934dccfdf65032f39a7fc7f3",
+      "normalized_utf8_lf_sha256": "fdbd7e34f0f773f64d8f955f1c5c4d2583cd63e7a817d047f734a74b35d294d5",
+      "target": "tests/quick_connect/test_quick_connect_extra_scenarios.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 141,
+        "lf": 141
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc14-extra-scenarios/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc14-extra-scenarios"
+      ],
+      "test_functions": [
+        {
+          "name": "test_e03_second_same_harness_add_without_id_proposes_codex_2",
+          "body_lf_sha256": "d80cace1ac303d52ffb5061b3be8bbca28bfb3add83c05024d78e6c6d680b0f1",
+          "line": 38,
+          "historical_executions": [
+            {
+              "function": "test_e03_second_same_harness_add_without_id_proposes_codex_2",
+              "node": "tests.quick_connect.test_quick_connect_extra_scenarios::test_e03_second_same_harness_add_without_id_proposes_codex_2",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc14-extra-scenarios/evidence/initial/1-e03/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_h06_explicit_add_plan_preserves_public_namespace_and_project_drafts",
+          "body_lf_sha256": "e5e4235607ffa1966952a4488c7a722b509c87de25be9d31310821adfbd5aed7",
+          "line": 63,
+          "historical_executions": [
+            {
+              "function": "test_h06_explicit_add_plan_preserves_public_namespace_and_project_drafts",
+              "node": "tests.quick_connect.test_quick_connect_extra_scenarios::test_h06_explicit_add_plan_preserves_public_namespace_and_project_drafts[False]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc14-extra-scenarios/evidence/initial/2-h06/junit.xml"
+            },
+            {
+              "function": "test_h06_explicit_add_plan_preserves_public_namespace_and_project_drafts",
+              "node": "tests.quick_connect.test_quick_connect_extra_scenarios::test_h06_explicit_add_plan_preserves_public_namespace_and_project_drafts[True]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc14-extra-scenarios/evidence/initial/3-h06/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_g13_expired_canonical_grants_are_not_renewed_by_resume",
+          "body_lf_sha256": "d398c658dc3397da54d08341c696405c280b91959b8ddb9dc2b1ef678b0bf3c8",
+          "line": 83,
+          "historical_executions": [
+            {
+              "function": "test_g13_expired_canonical_grants_are_not_renewed_by_resume",
+              "node": "tests.quick_connect.test_quick_connect_extra_scenarios::test_g13_expired_canonical_grants_are_not_renewed_by_resume",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc14-extra-scenarios/evidence/initial/4-g13/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_f17_free_id_review_loses_race_before_new_test_identity_or_grant",
+          "body_lf_sha256": "615a9231e06dfe1bf3c7706b319b23c115c5ef9e9dc913020aa3141dd685f29e",
+          "line": 108,
+          "historical_executions": [
+            {
+              "function": "test_f17_free_id_review_loses_race_before_new_test_identity_or_grant",
+              "node": "tests.quick_connect.test_quick_connect_extra_scenarios::test_f17_free_id_review_loses_race_before_new_test_identity_or_grant",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc14-extra-scenarios/evidence/cas-counterpart/f17-project-cas/junit.xml"
+            },
+            {
+              "function": "test_f17_free_id_review_loses_race_before_new_test_identity_or_grant",
+              "node": "tests.quick_connect.test_quick_connect_extra_scenarios::test_f17_free_id_review_loses_race_before_new_test_identity_or_grant",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc14-extra-scenarios/evidence/final-proof/f17-project-cas/junit.xml"
+            },
+            {
+              "function": "test_f17_free_id_review_loses_race_before_new_test_identity_or_grant",
+              "node": "tests.quick_connect.test_quick_connect_extra_scenarios::test_f17_free_id_review_loses_race_before_new_test_identity_or_grant",
+              "status": "FAIL",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc14-extra-scenarios/evidence/initial/5-f17/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "canonical_snapshot",
+        "public_row"
+      ],
+      "imports_new_helpers": [],
+      "imports_existing_test_helpers": {
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [
+          {
+            "line": 1,
+            "text": "\"\"\"QC14 draft, NOT EXECUTED. Copy beside test_quick_connect_cli after review."
+          }
+        ],
+        "minimal_proposed_corrections": [
+          "Review preparation/NOT_EXECUTED docstrings as historical annotations; update only the persisted copy, preserving original evidence bytes."
+        ]
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc14-extra-scenarios/qualification.json",
+          "sha256": "c584b11aca0e7f4e7ce5a23a5426b580b32e97dd81508f7dbb03c37b181cc2d4"
+        }
+      ],
+      "docstring_review": [
+        {
+          "scope": "module",
+          "docstring": "QC14 draft, NOT EXECUTED. Copy beside test_quick_connect_cli after review.\n\nCanonical SQLite/HTTP authorities with synthetic Test/version peers only.\nNo provider, personal installation or native harness execution."
+        }
+      ],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC14b",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-autoid-fk6jyvc2\\after\\tests\\quick_connect\\test_quick_connect_autoid_race.py",
+      "sha256": "30645881505147693829592cd7d9520a2900af0bf23febffa537462bb63a97a3",
+      "normalized_utf8_lf_sha256": "acedb87ee5f891f26eb51d7b764ce54be5dadc07b3001c5666e92d7cfdce94a1",
+      "target": "tests/quick_connect/test_quick_connect_autoid_race.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 56,
+        "lf": 56
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc14b-autoid-race/qualification-g02.json",
+        "NEXUS_QUICK_CONNECT_R1/execution/qc14b-autoid-race/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc14b-autoid-race"
+      ],
+      "test_functions": [
+        {
+          "name": "test_g02_explicit_new_intent_replans_auto_id_and_requires_its_own_review",
+          "body_lf_sha256": "8065bf30169978fb5c6972fdbdc18bef75e4fd8539c5ac7dff6c29be0404277b",
+          "line": 9,
+          "historical_executions": [
+            {
+              "function": "test_g02_explicit_new_intent_replans_auto_id_and_requires_its_own_review",
+              "node": "tests.quick_connect.test_quick_connect_autoid_race::test_g02_explicit_new_intent_replans_auto_id_and_requires_its_own_review",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc14b-autoid-race/evidence/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [],
+      "imports_new_helpers": [
+        {
+          "module": "test_quick_connect_extra_scenarios",
+          "entry": "QC14"
+        }
+      ],
+      "imports_existing_test_helpers": {
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": []
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc14b-autoid-race/qualification-g02.json",
+          "sha256": "15a1c519a414a8b5a2badae09ccb58df1cfc9f38ab976fbafbab7a376fa32fcd"
+        },
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc14b-autoid-race/qualification.json",
+          "sha256": "643bd2c166f2e1e08c7f46150c73818830f1530b579a0361ecc990812a7d4d77"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC15",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc15-cli-choice-scenarios\\final\\executed-test.py",
+      "sha256": "fdcb4ab7b7b825952fbdd1553c85df917f5155f5cfae2d596eea4932952f4ead",
+      "normalized_utf8_lf_sha256": "d3a98c993e0d2ad0f48149b7b06f3065d1df2a93db8d1570f9324c03399902b4",
+      "target": "tests/quick_connect/test_qc15_cli_choices.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 175,
+        "lf": 175
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/final"
+      ],
+      "test_functions": [
+        {
+          "name": "test_bare_two_families_explicit_choice_or_cancel",
+          "body_lf_sha256": "2f3055fc930b1e3fe12e6dd7ffea5cbf680b44bb76c046d1ab40d4dfad692144",
+          "line": 68,
+          "historical_executions": [
+            {
+              "function": "test_bare_two_families_explicit_choice_or_cancel",
+              "node": "tests.execution_r4.test_qc15_cli_choices::test_bare_two_families_explicit_choice_or_cancel[2-claude]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/final/junit.xml"
+            },
+            {
+              "function": "test_bare_two_families_explicit_choice_or_cancel",
+              "node": "tests.execution_r4.test_qc15_cli_choices::test_bare_two_families_explicit_choice_or_cancel[c-None]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_bare_two_families_noninteractive_requires_choice",
+          "body_lf_sha256": "1dfc9828cee3090e93bba4c14c252b5f55b29a9d2da11a9d9b38a33b8b942674",
+          "line": 96,
+          "historical_executions": [
+            {
+              "function": "test_bare_two_families_noninteractive_requires_choice",
+              "node": "tests.execution_r4.test_qc15_cli_choices::test_bare_two_families_noninteractive_requires_choice",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_two_candidates_explicitly_choose_second_exact_ref",
+          "body_lf_sha256": "88867f04332dea880c28256d313c29700180e137c4db385cd9649347bcf5fcf5",
+          "line": 107,
+          "historical_executions": [
+            {
+              "function": "test_two_candidates_explicitly_choose_second_exact_ref",
+              "node": "tests.execution_r4.test_qc15_cli_choices::test_two_candidates_explicitly_choose_second_exact_ref",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_two_candidates_noninteractive_refuses_first_default",
+          "body_lf_sha256": "a3e006962c3b9b258b3e94b4be8793ffb036b23ae50bed87f5099c4a7bbf0564",
+          "line": 131,
+          "historical_executions": [
+            {
+              "function": "test_two_candidates_noninteractive_refuses_first_default",
+              "node": "tests.execution_r4.test_qc15_cli_choices::test_two_candidates_noninteractive_refuses_first_default",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_unknown_shell_like_token_never_spawns",
+          "body_lf_sha256": "de67c44de5fd226875f6085f4cff4209bb44425f47244116e8f1a094de5f3c2e",
+          "line": 142,
+          "historical_executions": [
+            {
+              "function": "test_unknown_shell_like_token_never_spawns",
+              "node": "tests.execution_r4.test_qc15_cli_choices::test_unknown_shell_like_token_never_spawns",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_mixed_case_harness_is_normalized",
+          "body_lf_sha256": "b925adcf564071e106b006d8af16d2627a07516373ff3e7dece60e1ae7b094ec",
+          "line": 152,
+          "historical_executions": [
+            {
+              "function": "test_mixed_case_harness_is_normalized",
+              "node": "tests.execution_r4.test_qc15_cli_choices::test_mixed_case_harness_is_normalized",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_stale_canonical_publication_is_unconfirmed_not_missing",
+          "body_lf_sha256": "42c03b8a117831ad4366bff5822953bf9bdcc187ecf23c3bac67f096c96d5157",
+          "line": 162,
+          "historical_executions": [
+            {
+              "function": "test_stale_canonical_publication_is_unconfirmed_not_missing",
+              "node": "tests.execution_r4.test_qc15_cli_choices::test_stale_canonical_publication_is_unconfirmed_not_missing",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "cli",
+        "publish",
+        "readonly",
+        "wire"
+      ],
+      "imports_new_helpers": [],
+      "imports_existing_test_helpers": {
+        "test_connection_setup_recovery": [
+          "tests/execution_r4/test_connection_setup_recovery.py"
+        ],
+        "test_terminal_connect": [
+          "tests/execution_r4/test_terminal_connect.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": []
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/qualification.json",
+          "sha256": "aa00435996fce6935d7eda96a5eb3308cc4d10fb4db0bc53463eeeec8334f788"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC15policy",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc15-cli-choice-scenarios\\policy-final\\executed-test.py",
+      "sha256": "75a9344c27c3ce05b7b48921d4e1143f7e25c4fc276636416ad828feca78983c",
+      "normalized_utf8_lf_sha256": "a0eeaefa733b412ca679daa8ed4b4c31c5094ea6298778f03ad29602272b3806",
+      "target": "tests/quick_connect/test_qc15_policy_denial.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 83,
+        "lf": 83
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/policy-qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/policy-final"
+      ],
+      "test_functions": [
+        {
+          "name": "test_existing_method_denial_is_projected_and_cli_refuses_before_effects",
+          "body_lf_sha256": "6d8f0e1f25391bccb363f56e6bc62003cb7ffe4a60adb225d6c55dc9de89c575",
+          "line": 18,
+          "historical_executions": [
+            {
+              "function": "test_existing_method_denial_is_projected_and_cli_refuses_before_effects",
+              "node": "tests.execution_r4.test_qc15_policy_denial::test_existing_method_denial_is_projected_and_cli_refuses_before_effects",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/policy-final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "all_rows"
+      ],
+      "imports_new_helpers": [
+        {
+          "module": "test_qc15_cli_choices",
+          "entry": "QC15"
+        }
+      ],
+      "imports_existing_test_helpers": {},
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [
+          {
+            "line": 82,
+            "text": "(Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'policy-proof.json').write_text("
+          }
+        ],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": [
+          "Make evidence writes optional when QC_DERIVATIVE_OUTPUT/runner env is absent, or use a tmp_path-backed test-only evidence fixture. Keep all assertions; these env vars are runner configuration, not product prerequisites."
+        ]
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc15-cli-choice-scenarios/policy-qualification.json",
+          "sha256": "b8e73a35c13634ec0a8fafc800cb5e8a409573a8ad8644242827db6c4823c2a5"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC16",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc16-id-choices-final-lpx96e5q\\after\\tests\\quick_connect\\test_id_choice_scenarios.py",
+      "sha256": "9962874236c44748fccf812ec79aad0c3e55a0310c3ed52df8c4e508c2fc7a2c",
+      "normalized_utf8_lf_sha256": "9962874236c44748fccf812ec79aad0c3e55a0310c3ed52df8c4e508c2fc7a2c",
+      "target": "tests/quick_connect/test_id_choice_scenarios.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 0,
+        "lf": 194
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios"
+      ],
+      "test_functions": [
+        {
+          "name": "test_explicit_resume_uses_actual_binding_family",
+          "body_lf_sha256": "022bd9b66a023862d7014ab71424f4bf2601a7bd84954c4f380292529b3e0bb4",
+          "line": 65,
+          "historical_executions": [
+            {
+              "function": "test_explicit_resume_uses_actual_binding_family",
+              "node": "tests.quick_connect.test_id_choice_scenarios::test_explicit_resume_uses_actual_binding_family[F03-same-family]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/evidence/final-nine/junit.xml"
+            },
+            {
+              "function": "test_explicit_resume_uses_actual_binding_family",
+              "node": "tests.quick_connect.test_id_choice_scenarios::test_explicit_resume_uses_actual_binding_family[F04-cross-family-explicit-resume]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/evidence/final-nine/junit.xml"
+            },
+            {
+              "function": "test_explicit_resume_uses_actual_binding_family",
+              "node": "tests.quick_connect.test_id_choice_scenarios::test_explicit_resume_uses_actual_binding_family[F03-same-family]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/evidence/original-probe-oracle/junit.xml"
+            },
+            {
+              "function": "test_explicit_resume_uses_actual_binding_family",
+              "node": "tests.quick_connect.test_id_choice_scenarios::test_explicit_resume_uses_actual_binding_family[F04-cross-family-explicit-resume]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/evidence/original-probe-oracle/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_alternate_id_has_new_unapproved_review_then_exact_profile_apply",
+          "body_lf_sha256": "86835d08350727be3184ac91cc559be0eb602489a1ebba3fdf5b9fe56dcbb05f",
+          "line": 90,
+          "historical_executions": [
+            {
+              "function": "test_alternate_id_has_new_unapproved_review_then_exact_profile_apply",
+              "node": "tests.quick_connect.test_id_choice_scenarios::test_alternate_id_has_new_unapproved_review_then_exact_profile_apply[F05-manual-id]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/evidence/final-nine/junit.xml"
+            },
+            {
+              "function": "test_alternate_id_has_new_unapproved_review_then_exact_profile_apply",
+              "node": "tests.quick_connect.test_id_choice_scenarios::test_alternate_id_has_new_unapproved_review_then_exact_profile_apply[F06-suggested-id]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/evidence/final-nine/junit.xml"
+            },
+            {
+              "function": "test_alternate_id_has_new_unapproved_review_then_exact_profile_apply",
+              "node": "tests.quick_connect.test_id_choice_scenarios::test_alternate_id_has_new_unapproved_review_then_exact_profile_apply[F05-manual-id]",
+              "status": "FAIL",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/evidence/original-probe-oracle/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_cancel_reports_lifecycle_and_metadata_without_false_no_effect_claim",
+          "body_lf_sha256": "bf2b6f3bdca009d54ba7eec0f4633ac747796c44e6e2000e6635c02d6f7bf4ea",
+          "line": 125,
+          "historical_executions": [
+            {
+              "function": "test_cancel_reports_lifecycle_and_metadata_without_false_no_effect_claim",
+              "node": "tests.quick_connect.test_id_choice_scenarios::test_cancel_reports_lifecycle_and_metadata_without_false_no_effect_claim",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/evidence/final-nine/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_explicit_add_never_offers_resume_or_accepts_r",
+          "body_lf_sha256": "3a24b2f97b522e7745e0dfffa54095413a4eceadd354350ad7e73d1df0982556",
+          "line": 140,
+          "historical_executions": [
+            {
+              "function": "test_explicit_add_never_offers_resume_or_accepts_r",
+              "node": "tests.quick_connect.test_id_choice_scenarios::test_explicit_add_never_offers_resume_or_accepts_r",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/evidence/final-nine/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_json_cross_family_conflict_never_reads_stdin",
+          "body_lf_sha256": "b67a2225cf2894274c254cb096c555a4c22e3c1939e876b54ef577fcd4dcd1a9",
+          "line": 153,
+          "historical_executions": [
+            {
+              "function": "test_json_cross_family_conflict_never_reads_stdin",
+              "node": "tests.quick_connect.test_id_choice_scenarios::test_json_cross_family_conflict_never_reads_stdin",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/evidence/final-nine/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_exact_binding_contradiction_is_refused_before_collision_menu",
+          "body_lf_sha256": "6a508947f19022266e45ff2097e4ed9e9167f6703d5f18a9dae53241f1525510",
+          "line": 166,
+          "historical_executions": [
+            {
+              "function": "test_exact_binding_contradiction_is_refused_before_collision_menu",
+              "node": "tests.quick_connect.test_id_choice_scenarios::test_exact_binding_contradiction_is_refused_before_collision_menu",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/evidence/final-nine/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_other_intent_reservation_remains_pending_without_another_setup",
+          "body_lf_sha256": "d74af83fb63a8e1926a8f0af229aed31a13b3a1c20accd361c9666771fb161d9",
+          "line": 179,
+          "historical_executions": [
+            {
+              "function": "test_other_intent_reservation_remains_pending_without_another_setup",
+              "node": "tests.quick_connect.test_id_choice_scenarios::test_other_intent_reservation_remains_pending_without_another_setup",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/evidence/final-nine/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "choices",
+        "protected",
+        "scripted",
+        "untouched"
+      ],
+      "imports_new_helpers": [],
+      "imports_existing_test_helpers": {
+        "test_public_connection_ids": [
+          "tests/execution_r4/test_public_connection_ids.py"
+        ],
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": []
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc16-id-choice-scenarios/qualification.json",
+          "sha256": "5af1ebe91b09906170fe30d265e204c945d3981025b477e2396beeb05e5ac8d5"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC17",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc17-final-z0iaeom6\\after\\tests\\quick_connect\\test_quick_connect_project_scenarios.py",
+      "sha256": "190f96cd7b2ddd8922523e0d880048aca0ae1703214b2a0a55d1470a14715e27",
+      "normalized_utf8_lf_sha256": "85d9a7cc7c67afb7683c4a7f01af3f70be0dbf2953c0c3f4c7b24ce17f11696f",
+      "target": "tests/quick_connect/test_quick_connect_project_scenarios.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 184,
+        "lf": 184
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios"
+      ],
+      "test_functions": [
+        {
+          "name": "test_c01_mapped_cwd_bare_and_harness_resume_exact_reference",
+          "body_lf_sha256": "eaabae6bd5bada77db2c24369bf357fa1371b5978066cf26ffd471100f3140e7",
+          "line": 38,
+          "historical_executions": [
+            {
+              "function": "test_c01_mapped_cwd_bare_and_harness_resume_exact_reference",
+              "node": "tests.quick_connect.test_quick_connect_project_scenarios::test_c01_mapped_cwd_bare_and_harness_resume_exact_reference",
+              "status": "FAIL",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios/evidence/corrected/c01/junit.xml"
+            },
+            {
+              "function": "test_c01_mapped_cwd_bare_and_harness_resume_exact_reference",
+              "node": "tests.quick_connect.test_quick_connect_project_scenarios::test_c01_mapped_cwd_bare_and_harness_resume_exact_reference",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios/evidence/final/c01/junit.xml"
+            },
+            {
+              "function": "test_c01_mapped_cwd_bare_and_harness_resume_exact_reference",
+              "node": "tests.quick_connect.test_quick_connect_project_scenarios::test_c01_mapped_cwd_bare_and_harness_resume_exact_reference",
+              "status": "FAIL",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios/evidence/initial/c01/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_c03_c04_concordant_and_new_logical_labels_never_become_paths",
+          "body_lf_sha256": "9f520be55375ed92d8cc32f998baf294f23877adec6e3b273735bc4ad379a175",
+          "line": 61,
+          "historical_executions": [
+            {
+              "function": "test_c03_c04_concordant_and_new_logical_labels_never_become_paths",
+              "node": "tests.quick_connect.test_quick_connect_project_scenarios::test_c03_c04_concordant_and_new_logical_labels_never_become_paths",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios/evidence/initial/c03/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_c09_other_mapped_project_root_requires_explicit_tty_choice",
+          "body_lf_sha256": "5d402feda32b6d577da4118afdde29b76f2cb59208cdfc1b933c69a2032d1863",
+          "line": 83,
+          "historical_executions": [
+            {
+              "function": "test_c09_other_mapped_project_root_requires_explicit_tty_choice",
+              "node": "tests.quick_connect.test_quick_connect_project_scenarios::test_c09_other_mapped_project_root_requires_explicit_tty_choice",
+              "status": "FAIL",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios/evidence/corrected/c09/junit.xml"
+            },
+            {
+              "function": "test_c09_other_mapped_project_root_requires_explicit_tty_choice",
+              "node": "tests.quick_connect.test_quick_connect_project_scenarios::test_c09_other_mapped_project_root_requires_explicit_tty_choice",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios/evidence/final/c09/junit.xml"
+            },
+            {
+              "function": "test_c09_other_mapped_project_root_requires_explicit_tty_choice",
+              "node": "tests.quick_connect.test_quick_connect_project_scenarios::test_c09_other_mapped_project_root_requires_explicit_tty_choice",
+              "status": "FAIL",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios/evidence/initial/c09/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_c10_explicit_project_root_is_not_replaced_by_other_label",
+          "body_lf_sha256": "c8fe94cd5b4dca08f21c7d00b014c398936e343c80b59d7f0546442828560cc7",
+          "line": 134,
+          "historical_executions": [
+            {
+              "function": "test_c10_explicit_project_root_is_not_replaced_by_other_label",
+              "node": "tests.quick_connect.test_quick_connect_project_scenarios::test_c10_explicit_project_root_is_not_replaced_by_other_label",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios/evidence/initial/c10/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_c11_json_root_label_ambiguity_refuses_without_input_or_chdir",
+          "body_lf_sha256": "0d544d154b3d8f68069b5480721a4b374cbdda4ae139af954c9804f082fcec98",
+          "line": 146,
+          "historical_executions": [
+            {
+              "function": "test_c11_json_root_label_ambiguity_refuses_without_input_or_chdir",
+              "node": "tests.quick_connect.test_quick_connect_project_scenarios::test_c11_json_root_label_ambiguity_refuses_without_input_or_chdir",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios/evidence/initial/c11/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_c17_cancel_and_approval_never_mkdir_the_logical_label",
+          "body_lf_sha256": "42974753c0ad9234ff6baa70b8422fc261aa9417efcf9cca52a19050bf3860a8",
+          "line": 158,
+          "historical_executions": [
+            {
+              "function": "test_c17_cancel_and_approval_never_mkdir_the_logical_label",
+              "node": "tests.quick_connect.test_quick_connect_project_scenarios::test_c17_cancel_and_approval_never_mkdir_the_logical_label",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios/evidence/initial/c17/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "create_project",
+        "two_projects",
+        "forbid_input"
+      ],
+      "imports_new_helpers": [
+        {
+          "module": "test_quick_connect_extra_scenarios",
+          "entry": "QC14"
+        }
+      ],
+      "imports_existing_test_helpers": {
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": []
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc17-project-choice-scenarios/qualification.json",
+          "sha256": "40402c6b78f47f525249a230b01776b938edc538ce70b439a8bbcc308a26cd07"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC18",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc18-customize-f15275ix\\after\\tests\\quick_connect\\test_quick_connect_customization_output.py",
+      "sha256": "9b7c730f0f9dacca081b93644aaa691098db688043a18b652cdf3c590e18b496",
+      "normalized_utf8_lf_sha256": "5df5143f5f8ef3eec24aeacc97c9775969f8ec7e0e659e99d1272fa749763d10",
+      "target": "tests/quick_connect/test_quick_connect_customization_output.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 109,
+        "lf": 109
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc18-customization-output/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc18-customization-output"
+      ],
+      "test_functions": [
+        {
+          "name": "test_f21_customize_real_review_creates_fresh_exact_intent",
+          "body_lf_sha256": "9d89bafd3e18bc785bacb4bfe4d8b80136960115356ded1dc4dfb6da3281c792",
+          "line": 15,
+          "historical_executions": [
+            {
+              "function": "test_f21_customize_real_review_creates_fresh_exact_intent",
+              "node": "tests.quick_connect.test_quick_connect_customization_output::test_f21_customize_real_review_creates_fresh_exact_intent[harness]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc18-customization-output/evidence/f21-harness/junit.xml"
+            },
+            {
+              "function": "test_f21_customize_real_review_creates_fresh_exact_intent",
+              "node": "tests.quick_connect.test_quick_connect_customization_output::test_f21_customize_real_review_creates_fresh_exact_intent[name]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc18-customization-output/evidence/f21-name/junit.xml"
+            },
+            {
+              "function": "test_f21_customize_real_review_creates_fresh_exact_intent",
+              "node": "tests.quick_connect.test_quick_connect_customization_output::test_f21_customize_real_review_creates_fresh_exact_intent[root]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc18-customization-output/evidence/f21-root/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_h01_bound_public_id_and_project_are_printed_before_chat_callback",
+          "body_lf_sha256": "8b1c2a49ca53173b0e782309f6e89c94be9378f65bdb32132a1654685d089c3e",
+          "line": 90,
+          "historical_executions": [
+            {
+              "function": "test_h01_bound_public_id_and_project_are_printed_before_chat_callback",
+              "node": "tests.quick_connect.test_quick_connect_customization_output::test_h01_bound_public_id_and_project_are_printed_before_chat_callback",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc18-customization-output/evidence/h01/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [],
+      "imports_new_helpers": [
+        {
+          "module": "test_quick_connect_extra_scenarios",
+          "entry": "QC14"
+        }
+      ],
+      "imports_existing_test_helpers": {
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ],
+        "test_terminal_multi_harness": [
+          "tests/execution_r4/test_terminal_multi_harness.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": []
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc18-customization-output/qualification.json",
+          "sha256": "8b8fb56c3ff36d26b76497e9e4275c91f8ea78d715324948a733bb6d63d3db97"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC19",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc19-pending-fences-hm0o1ead\\after\\tests\\quick_connect\\test_pending_selector_fences.py",
+      "sha256": "555290344d6342529838396604618a670fefa01f1caff04c3070cac72d94c187",
+      "normalized_utf8_lf_sha256": "555290344d6342529838396604618a670fefa01f1caff04c3070cac72d94c187",
+      "target": "tests/quick_connect/test_pending_selector_fences.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 0,
+        "lf": 109
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc19-pending-selector-fences/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc19-pending-selector-fences"
+      ],
+      "test_functions": [
+        {
+          "name": "test_pending_finish_rejects_changed_selector_then_recovers_same_receipt",
+          "body_lf_sha256": "16dfd6166841ceaf17ee3931296585146b6a3395cefed0c0afae96f7498d322e",
+          "line": 44,
+          "historical_executions": [
+            {
+              "function": "test_pending_finish_rejects_changed_selector_then_recovers_same_receipt",
+              "node": "tests.quick_connect.test_pending_selector_fences::test_pending_finish_rejects_changed_selector_then_recovers_same_receipt[harness]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc19-pending-selector-fences/evidence/junit.xml"
+            },
+            {
+              "function": "test_pending_finish_rejects_changed_selector_then_recovers_same_receipt",
+              "node": "tests.quick_connect.test_pending_selector_fences::test_pending_finish_rejects_changed_selector_then_recovers_same_receipt[root]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc19-pending-selector-fences/evidence/junit.xml"
+            },
+            {
+              "function": "test_pending_finish_rejects_changed_selector_then_recovers_same_receipt",
+              "node": "tests.quick_connect.test_pending_selector_fences::test_pending_finish_rejects_changed_selector_then_recovers_same_receipt[id]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc19-pending-selector-fences/evidence/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_non_operator_http_denial_does_not_reveal_namespace_occupant",
+          "body_lf_sha256": "672cdc71a91dad6eddfdc8796614049259dd31680a1432472554f0ddbe87d3d9",
+          "line": 92,
+          "historical_executions": [
+            {
+              "function": "test_non_operator_http_denial_does_not_reveal_namespace_occupant",
+              "node": "tests.quick_connect.test_pending_selector_fences::test_non_operator_http_denial_does_not_reveal_namespace_occupant",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc19-pending-selector-fences/evidence/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "database_fingerprints",
+        "effect_posts"
+      ],
+      "imports_new_helpers": [],
+      "imports_existing_test_helpers": {
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": []
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc19-pending-selector-fences/qualification.json",
+          "sha256": "6c6420b8bc5d450f43843555385104515d60cff1e2f048d0ff9b0fd9d2c91397"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC20",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\after\\tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+      "sha256": "41138bb66954a0fbbc45f243015d5f6944306688cd88a4f5233d3ceb89572324",
+      "normalized_utf8_lf_sha256": "331edca1d70a3de36a3bcd5ccc4e6f7ad32168409830cd3aa5fb544b4b65cb0b",
+      "target": "tests/quick_connect/test_quick_connect_git_boundaries.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 186,
+        "lf": 186
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc20-git-boundary-scenarios/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc20-git-boundary-scenarios"
+      ],
+      "test_functions": [
+        {
+          "name": "test_d08_path_without_git_reports_directory_fallback",
+          "body_lf_sha256": "bb1c0a68c73470043c90aca35528f8e4b713279effdc7983cc2276ab1e602a45",
+          "line": 72,
+          "historical_executions": [
+            {
+              "function": "test_d08_path_without_git_reports_directory_fallback",
+              "node": "tests.quick_connect.test_quick_connect_git_boundaries::test_d08_path_without_git_reports_directory_fallback",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc20-git-boundary-scenarios/evidence/d08/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_d09_nonrepository_reports_directory_fallback",
+          "body_lf_sha256": "bcd36875e44c0fc249dba9c3f660d543ff5fdc8d5c5a405deab8fb1bdca3603a",
+          "line": 81,
+          "historical_executions": [
+            {
+              "function": "test_d09_nonrepository_reports_directory_fallback",
+              "node": "tests.quick_connect.test_quick_connect_git_boundaries::test_d09_nonrepository_reports_directory_fallback",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc20-git-boundary-scenarios/evidence/d09/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_d11_invalid_private_origin_is_not_exposed",
+          "body_lf_sha256": "59f8349374546db59643b0b64d344e2124ffb04935b26a5e99e6850fe65daadb",
+          "line": 90,
+          "historical_executions": [
+            {
+              "function": "test_d11_invalid_private_origin_is_not_exposed",
+              "node": "tests.quick_connect.test_quick_connect_git_boundaries::test_d11_invalid_private_origin_is_not_exposed",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc20-git-boundary-scenarios/evidence/d11/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_d12_real_linked_worktree_keeps_execution_root",
+          "body_lf_sha256": "b1ac2020c1d968a2ad45ac31173058c07997ed5d95ed721469fb21efdc9bc1d8",
+          "line": 116,
+          "historical_executions": [
+            {
+              "function": "test_d12_real_linked_worktree_keeps_execution_root",
+              "node": "tests.quick_connect.test_quick_connect_git_boundaries::test_d12_real_linked_worktree_keeps_execution_root",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc20-git-boundary-scenarios/evidence/d12/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_d13_per_worktree_origin_is_read_without_shared_origin",
+          "body_lf_sha256": "8c9f6f18cc2e0414dedb71d3d5395c52db5dde76bde7c589e6a1926f9bc1b5e3",
+          "line": 125,
+          "historical_executions": [
+            {
+              "function": "test_d13_per_worktree_origin_is_read_without_shared_origin",
+              "node": "tests.quick_connect.test_quick_connect_git_boundaries::test_d13_per_worktree_origin_is_read_without_shared_origin",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc20-git-boundary-scenarios/evidence/d13/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_d14_nested_repository_origin_wins",
+          "body_lf_sha256": "c120c340a244cd16bae6e8488bab25731d4585c8ff355cee80d1d56d883d8b93",
+          "line": 134,
+          "historical_executions": [
+            {
+              "function": "test_d14_nested_repository_origin_wins",
+              "node": "tests.quick_connect.test_quick_connect_git_boundaries::test_d14_nested_repository_origin_wins",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc20-git-boundary-scenarios/evidence/d14/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_d21_hostile_git_directory_environment_cannot_redirect_discovery",
+          "body_lf_sha256": "9bc72ada879fcf588c318d8090bef4746444f2af81cd30ec71d8a50345e4dbff",
+          "line": 148,
+          "historical_executions": [
+            {
+              "function": "test_d21_hostile_git_directory_environment_cannot_redirect_discovery",
+              "node": "tests.quick_connect.test_quick_connect_git_boundaries::test_d21_hostile_git_directory_environment_cannot_redirect_discovery",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc20-git-boundary-scenarios/evidence/d21/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_d22_cwd_and_ancestor_project_git_are_never_launched",
+          "body_lf_sha256": "f827a6d0dd4ece83baa230d9615212614fc3aae8ab5f8c2b6b5895eeddf3e1c0",
+          "line": 161,
+          "historical_executions": [
+            {
+              "function": "test_d22_cwd_and_ancestor_project_git_are_never_launched",
+              "node": "tests.quick_connect.test_quick_connect_git_boundaries::test_d22_cwd_and_ancestor_project_git_are_never_launched",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc20-git-boundary-scenarios/evidence/d22/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "git_local",
+        "init",
+        "actual_review",
+        "configure",
+        "make_worktree"
+      ],
+      "imports_new_helpers": [
+        {
+          "module": "test_quick_connect_extra_scenarios",
+          "entry": "QC14"
+        }
+      ],
+      "imports_existing_test_helpers": {
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": []
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc20-git-boundary-scenarios/qualification.json",
+          "sha256": "f59c2769edb48f4e5f2be96fce53aaca7b0d00a54ff6e75c605094e2e0620eb9"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC23",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc23-directory-sxjx1ycp\\after\\tests\\quick_connect\\test_quick_connect_project_directory_scenarios.py",
+      "sha256": "c47579b339b3b27be18d894914a2a074ea917b2fbe8048c0307058dae4574c3e",
+      "normalized_utf8_lf_sha256": "a98da72877f7cba149afccd313906f51557f8441834eacf39e5edd5c0cb71148",
+      "target": "tests/quick_connect/test_quick_connect_project_directory_scenarios.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 148,
+        "lf": 148
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc23-project-directory-scenarios/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc23-project-directory-scenarios"
+      ],
+      "test_functions": [
+        {
+          "name": "test_c05_duplicate_names_require_explicit_selection_not_first",
+          "body_lf_sha256": "43cbe00b147c10777db74d828511fce1afe978a9611ab5d812019fb8ba9b96fb",
+          "line": 30,
+          "historical_executions": [
+            {
+              "function": "test_c05_duplicate_names_require_explicit_selection_not_first",
+              "node": "tests.quick_connect.test_quick_connect_project_directory_scenarios::test_c05_duplicate_names_require_explicit_selection_not_first",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc23-project-directory-scenarios/evidence/c05/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_c06_exact_workspace_disambiguates_duplicate_names",
+          "body_lf_sha256": "71fdebe380d3d00ec942886701bfcf96df75fd1e6b68cd833903248bad43c530",
+          "line": 58,
+          "historical_executions": [
+            {
+              "function": "test_c06_exact_workspace_disambiguates_duplicate_names",
+              "node": "tests.quick_connect.test_quick_connect_project_directory_scenarios::test_c06_exact_workspace_disambiguates_duplicate_names",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc23-project-directory-scenarios/evidence/c06/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_c07_disagreeing_explicit_name_and_workspace_refuse_without_prompt",
+          "body_lf_sha256": "cbeb145a87f6606f0adee2fb7773468578769b6b8e1bdff740396d42eb418278",
+          "line": 71,
+          "historical_executions": [
+            {
+              "function": "test_c07_disagreeing_explicit_name_and_workspace_refuse_without_prompt",
+              "node": "tests.quick_connect.test_quick_connect_project_directory_scenarios::test_c07_disagreeing_explicit_name_and_workspace_refuse_without_prompt",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc23-project-directory-scenarios/evidence/c07/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_c08_explicit_project_b_is_used_by_finish_while_cwd_remains_a",
+          "body_lf_sha256": "20e5baa95652465894b25fcbb27e435b91921d658314fd214452cf912eec9ad9",
+          "line": 83,
+          "historical_executions": [
+            {
+              "function": "test_c08_explicit_project_b_is_used_by_finish_while_cwd_remains_a",
+              "node": "tests.quick_connect.test_quick_connect_project_directory_scenarios::test_c08_explicit_project_b_is_used_by_finish_while_cwd_remains_a",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc23-project-directory-scenarios/evidence/c08/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_c16_second_page_workspace_selected_from_complete_canonical_directory",
+          "body_lf_sha256": "948becec619c2c5ade3b4a573a4406e198c57f1145d5413a64a4adc2566d2dce",
+          "line": 113,
+          "historical_executions": [
+            {
+              "function": "test_c16_second_page_workspace_selected_from_complete_canonical_directory",
+              "node": "tests.quick_connect.test_quick_connect_project_directory_scenarios::test_c16_second_page_workspace_selected_from_complete_canonical_directory",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc23-project-directory-scenarios/evidence/c16/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "seed_workspace",
+        "duplicates",
+        "forbid_input"
+      ],
+      "imports_new_helpers": [
+        {
+          "module": "test_quick_connect_extra_scenarios",
+          "entry": "QC14"
+        }
+      ],
+      "imports_existing_test_helpers": {
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": []
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc23-project-directory-scenarios/qualification.json",
+          "sha256": "2ebd294914312e053c77b00e7867b18dd963a5213887942c8873a7e5fedbac9e"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC24namespace",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc24-namespace-scenarios\\namespace-final\\executed-namespace-test.py",
+      "sha256": "fa479eb747f3866fe2605972a45edadc92646336216cb00913f2ea4161f79b04",
+      "normalized_utf8_lf_sha256": "fa479eb747f3866fe2605972a45edadc92646336216cb00913f2ea4161f79b04",
+      "target": "tests/quick_connect/test_qc24_namespace_http.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 0,
+        "lf": 110
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc24-namespace-scenarios/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc24-namespace-scenarios/namespace-final"
+      ],
+      "test_functions": [
+        {
+          "name": "test_e09_http_mixed_case_reserve_collision_and_query_share_namespace",
+          "body_lf_sha256": "896f1184953f1039bfb6813a7b6fed7b242102a26368403c7ef136e5cd8e4564",
+          "line": 37,
+          "historical_executions": [
+            {
+              "function": "test_e09_http_mixed_case_reserve_collision_and_query_share_namespace",
+              "node": "tests.execution_r4.test_qc24_namespace_http::test_e09_http_mixed_case_reserve_collision_and_query_share_namespace",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc24-namespace-scenarios/namespace-final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_e07_same_id_two_finish_created_workspaces_bound_with_distinct_refs_and_grants",
+          "body_lf_sha256": "3d859298bdb41a3b4c13540a434950732304ff2c73b5c9d586e0a57f2c0c63e6",
+          "line": 70,
+          "historical_executions": [
+            {
+              "function": "test_e07_same_id_two_finish_created_workspaces_bound_with_distinct_refs_and_grants",
+              "node": "tests.execution_r4.test_qc24_namespace_http::test_e07_same_id_two_finish_created_workspaces_bound_with_distinct_refs_and_grants",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc24-namespace-scenarios/namespace-final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "reserve",
+        "finish_http",
+        "write_proof"
+      ],
+      "imports_new_helpers": [],
+      "imports_existing_test_helpers": {
+        "test_connection_setup": [
+          "tests/execution_r4/test_connection_setup.py"
+        ],
+        "test_connection_setup_recovery": [
+          "tests/execution_r4/test_connection_setup_recovery.py"
+        ],
+        "test_public_connection_ids": [
+          "tests/execution_r4/test_public_connection_ids.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [
+          {
+            "line": 34,
+            "text": "(Path(os.environ['QC_DERIVATIVE_OUTPUT'])/name).write_text(json.dumps(value,indent=2)+'\\n')"
+          }
+        ],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": [
+          "Make evidence writes optional when QC_DERIVATIVE_OUTPUT/runner env is absent, or use a tmp_path-backed test-only evidence fixture. Keep all assertions; these env vars are runner configuration, not product prerequisites."
+        ]
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc24-namespace-scenarios/qualification.json",
+          "sha256": "437d424196e1b856a22160e5414c2d1aaa93df09031cb8f33863356fa46b904f"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC24executor",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc24-namespace-scenarios\\executor-final\\executed-executor-test.py",
+      "sha256": "29a7cbf328aaeb4d786c3c09bb896616f7158aebf5fd79d7b6ca2b36128be400",
+      "normalized_utf8_lf_sha256": "29a7cbf328aaeb4d786c3c09bb896616f7158aebf5fd79d7b6ca2b36128be400",
+      "target": "tests/quick_connect/test_qc24_namespace_executor_http.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 0,
+        "lf": 62
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc24-namespace-scenarios/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc24-namespace-scenarios/executor-final"
+      ],
+      "test_functions": [
+        {
+          "name": "test_e06_same_workspace_id_collision_spans_two_canonically_registered_executors",
+          "body_lf_sha256": "00b69c665c476f9b7378b4bbd671c119fd8cf37872f4d08a162ca95b25e142e4",
+          "line": 12,
+          "historical_executions": [
+            {
+              "function": "test_e06_same_workspace_id_collision_spans_two_canonically_registered_executors",
+              "node": "tests.execution_r4.test_qc24_namespace_executor_http::test_e06_same_workspace_id_collision_spans_two_canonically_registered_executors",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc24-namespace-scenarios/executor-final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [],
+      "imports_new_helpers": [
+        {
+          "module": "test_qc24_namespace_http",
+          "entry": "QC24namespace"
+        }
+      ],
+      "imports_existing_test_helpers": {
+        "test_connection_setup": [
+          "tests/execution_r4/test_connection_setup.py"
+        ],
+        "test_connection_setup_recovery": [
+          "tests/execution_r4/test_connection_setup_recovery.py"
+        ],
+        "test_public_connection_ids": [
+          "tests/execution_r4/test_public_connection_ids.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": [
+          "The imported namespace write_proof helper has the same QC_DERIVATIVE_OUTPUT dependency; fixing that helper once covers this module."
+        ]
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc24-namespace-scenarios/qualification.json",
+          "sha256": "437d424196e1b856a22160e5414c2d1aaa93df09031cb8f33863356fa46b904f"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC25locks",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc25-concurrency-locks\\race-final\\executed-test.py",
+      "sha256": "2b2b27b1fed11d32716030b791b7c5b1f3b9e4ae7aee441446f27d18ffef0a8e",
+      "normalized_utf8_lf_sha256": "2b2b27b1fed11d32716030b791b7c5b1f3b9e4ae7aee441446f27d18ffef0a8e",
+      "target": "tests/quick_connect/test_qc25_concurrency_locks.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 0,
+        "lf": 220
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc25-concurrency-locks/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc25-concurrency-locks/race-final",
+        "NEXUS_QUICK_CONNECT_R1/execution/qc25-concurrency-locks/locks-final-race-antecedent"
+      ],
+      "test_functions": [
+        {
+          "name": "test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes",
+          "body_lf_sha256": "eaaba9e5eda593f16b759b94f66a861bde878e33ca36219bb6fd93e504d893ac",
+          "line": 45,
+          "historical_executions": [
+            {
+              "function": "test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes",
+              "node": "tests.quick_connect.test_qc25_concurrency_locks::test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc25-concurrency-locks/race-final/race/junit.xml"
+            },
+            {
+              "function": "test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes",
+              "node": "tests.quick_connect.test_qc25_concurrency_locks::test_c18_g15_two_initial_reviews_compete_at_canonical_reserve_only_one_finishes",
+              "status": "FAIL",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc25-concurrency-locks/locks-final-race-antecedent/race/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_g12_profile_guard_busy_fails_fast_then_same_review_recovers",
+          "body_lf_sha256": "cc39aa1a9d00e6e247d43fcab67b6abfc8fa437282ea5c30efa3f33baaeeb6b8",
+          "line": 128,
+          "historical_executions": [
+            {
+              "function": "test_g12_profile_guard_busy_fails_fast_then_same_review_recovers",
+              "node": "tests.quick_connect.test_qc25_concurrency_locks::test_g12_profile_guard_busy_fails_fast_then_same_review_recovers",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc25-concurrency-locks/locks-final-race-antecedent/busy/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_g12_catalog_lock_free_during_input_and_old_profile_released_after_customize",
+          "body_lf_sha256": "42d07e51dab0c38fc1100c2f8c7f181707e51e863873ed235538c2ad7256e8d8",
+          "line": 169,
+          "historical_executions": [
+            {
+              "function": "test_g12_catalog_lock_free_during_input_and_old_profile_released_after_customize",
+              "node": "tests.quick_connect.test_qc25_concurrency_locks::test_g12_catalog_lock_free_during_input_and_old_profile_released_after_customize",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc25-concurrency-locks/locks-final-race-antecedent/input/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "proof",
+        "plan"
+      ],
+      "imports_new_helpers": [],
+      "imports_existing_test_helpers": {
+        "test_connection_setup_recovery": [
+          "tests/execution_r4/test_connection_setup_recovery.py"
+        ],
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [
+          {
+            "line": 21,
+            "text": "(Path(os.environ['QC_DERIVATIVE_OUTPUT'])/name).write_text(json.dumps(value,indent=2)+'\\n')"
+          }
+        ],
+        "installed_origin_guards": [
+          {
+            "line": 158,
+            "text": "assert all(pathlib.Path(value).resolve().is_relative_to(pathlib.Path(sys.prefix).resolve()) for value in origins.values())"
+          }
+        ],
+        "platform_lines": [
+          {
+            "line": 179,
+            "text": "text=True,cwd=c.project,creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)"
+          }
+        ],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": [
+          "Make evidence writes optional when QC_DERIVATIVE_OUTPUT/runner env is absent, or use a tmp_path-backed test-only evidence fixture. Keep all assertions; these env vars are runner configuration, not product prerequisites.",
+          "Move installed-prefix provenance enforcement to ci_installed runner/opt-in plugin; normal tests may run source/editable imports. Retain strict final installed-run provenance separately.",
+          "Guard Windows-only subprocess creationflags with os.name/getattr, or mark the specific Windows-only scenario. Do not fail POSIX collection/execution on missing constants.",
+          "Keep final race precheck and canonical barrier. Busy/input functions qualified on prior module cut, not a single three-PASS final-source run. All final persisted functions must rerun.",
+          "Preserve the real subprocess lock probe and 5-second bound; use an own sanitized child environment, and keep installed-origin checks opt-in in the installed runner."
+        ]
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc25-concurrency-locks/qualification.json",
+          "sha256": "e17e7dee7414cf3f6d8ff0bfc644ef7479395aaa79fa30f14a956ecf628fda16"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC27",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-local-edges-final-a6k8pm7g\\after\\tests\\quick_connect\\test_local_edge_scenarios.py",
+      "sha256": "532fd982a570d337860b7f269c6a48d3a653c3a69265621eb2fc6b9bc32539c7",
+      "normalized_utf8_lf_sha256": "532fd982a570d337860b7f269c6a48d3a653c3a69265621eb2fc6b9bc32539c7",
+      "target": "tests/quick_connect/test_local_edge_scenarios.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 0,
+        "lf": 138
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc27-local-edge-scenarios/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc27-local-edge-scenarios"
+      ],
+      "test_functions": [
+        {
+          "name": "test_c12_removed_captured_directory_refuses_before_target_or_home_fallback",
+          "body_lf_sha256": "4d63b5b42e0db1ffc1bda487ac6033132f4d71aa57e8d9ddb5acde9dc8f8067d",
+          "line": 28,
+          "historical_executions": [
+            {
+              "function": "test_c12_removed_captured_directory_refuses_before_target_or_home_fallback",
+              "node": "tests.quick_connect.test_local_edge_scenarios::test_c12_removed_captured_directory_refuses_before_target_or_home_fallback",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc27-local-edge-scenarios/evidence/final-four/junit.xml"
+            },
+            {
+              "function": "test_c12_removed_captured_directory_refuses_before_target_or_home_fallback",
+              "node": "tests.quick_connect.test_local_edge_scenarios::test_c12_removed_captured_directory_refuses_before_target_or_home_fallback",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc27-local-edge-scenarios/evidence/original-fixture-mechanics/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_c14_changed_junction_rejects_old_review_before_test_or_finish",
+          "body_lf_sha256": "bdb4fe434b4378c3e05c3e27e011a84eb501ef1e6b46e265ed317c8ea9843d39",
+          "line": 66,
+          "historical_executions": [
+            {
+              "function": "test_c14_changed_junction_rejects_old_review_before_test_or_finish",
+              "node": "tests.quick_connect.test_local_edge_scenarios::test_c14_changed_junction_rejects_old_review_before_test_or_finish",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc27-local-edge-scenarios/evidence/final-four/junit.xml"
+            },
+            {
+              "function": "test_c14_changed_junction_rejects_old_review_before_test_or_finish",
+              "node": "tests.quick_connect.test_local_edge_scenarios::test_c14_changed_junction_rejects_old_review_before_test_or_finish",
+              "status": "SKIP",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc27-local-edge-scenarios/evidence/original-fixture-mechanics/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_f13_disabled_endpoint_id_stays_occupied_and_resume_is_not_connected",
+          "body_lf_sha256": "513e0d64e4cd59058fdbc92661051ad1e5adedce449a0abf1270f0e8fefb5f71",
+          "line": 95,
+          "historical_executions": [
+            {
+              "function": "test_f13_disabled_endpoint_id_stays_occupied_and_resume_is_not_connected",
+              "node": "tests.quick_connect.test_local_edge_scenarios::test_f13_disabled_endpoint_id_stays_occupied_and_resume_is_not_connected",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc27-local-edge-scenarios/evidence/final-four/junit.xml"
+            },
+            {
+              "function": "test_f13_disabled_endpoint_id_stays_occupied_and_resume_is_not_connected",
+              "node": "tests.quick_connect.test_local_edge_scenarios::test_f13_disabled_endpoint_id_stays_occupied_and_resume_is_not_connected",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc27-local-edge-scenarios/evidence/original-fixture-mechanics/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_h09_windows_json_resume_vector_roundtrip_without_a_shell",
+          "body_lf_sha256": "16545a2b0f1c9fb94d0d06bb5d1f0c06f0c15442b2e174e5b160c98f397e8649",
+          "line": 116,
+          "historical_executions": [
+            {
+              "function": "test_h09_windows_json_resume_vector_roundtrip_without_a_shell",
+              "node": "tests.quick_connect.test_local_edge_scenarios::test_h09_windows_json_resume_vector_roundtrip_without_a_shell",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc27-local-edge-scenarios/evidence/final-four/junit.xml"
+            },
+            {
+              "function": "test_h09_windows_json_resume_vector_roundtrip_without_a_shell",
+              "node": "tests.quick_connect.test_local_edge_scenarios::test_h09_windows_json_resume_vector_roundtrip_without_a_shell",
+              "status": "FAIL",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc27-local-edge-scenarios/evidence/original-fixture-mechanics/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "authority",
+        "junction"
+      ],
+      "imports_new_helpers": [],
+      "imports_existing_test_helpers": {
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [
+          {
+            "line": 55,
+            "text": "assert os.name == 'nt'"
+          },
+          {
+            "line": 60,
+            "text": "cwd=own, stdin=subprocess.DEVNULL, capture_output=True, timeout=5, creationflags=subprocess.CREATE_NO_WINDOW)"
+          },
+          {
+            "line": 63,
+            "text": "assert link.is_junction() and link.resolve(strict=True) == target.resolve(strict=True)"
+          },
+          {
+            "line": 67,
+            "text": "if os.name != 'nt':"
+          },
+          {
+            "line": 81,
+            "text": "assert link.parent.resolve() == tmp_path.resolve() and link.is_junction()"
+          },
+          {
+            "line": 92,
+            "text": "assert link.is_junction() and link.resolve(strict=True) == target_b.resolve(strict=True)"
+          },
+          {
+            "line": 134,
+            "text": "input=b'', capture_output=True, shell=False, timeout=10, creationflags=subprocess.CREATE_NO_WINDOW)"
+          }
+        ],
+        "absolute_path_lines": [
+          {
+            "line": 59,
+            "text": "result = subprocess.run([str(Path('C:/Windows/System32/cmd.exe')), '/d', '/c', 'mklink', '/J', str(link), str(target)],"
+          }
+        ],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": [
+          "QC27 junction is already Windows-guarded; add a Windows skip for the specifically Windows H09 argv case or use getattr(subprocess, CREATE_NO_WINDOW, 0) if preserving cross-platform semantics.",
+          "Absolute paths below are findings, not automatic violations: distinguish own Windows OS executable paths from hardcoded private Temp/prefix dependencies; remove only runner-specific paths in the persisted copy."
+        ]
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc27-local-edge-scenarios/qualification.json",
+          "sha256": "67cfca70895303c3925721c231fdfba24389de2917a1a8cc70171a05463ff04e"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC28POSIX",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc28-posix-paths\\evidence\\copied-tests\\test_posix_physical_paths.py.txt",
+      "sha256": "2facd13f15cdccad1bfe7421ef15b6e8d06c1c3fb83839c73e81420c4371c48a",
+      "normalized_utf8_lf_sha256": "2facd13f15cdccad1bfe7421ef15b6e8d06c1c3fb83839c73e81420c4371c48a",
+      "target": "tests/quick_connect/test_posix_physical_paths.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 0,
+        "lf": 47
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc28-posix-paths/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc28-posix-paths/evidence/test-output/test_posix_physical_paths"
+      ],
+      "test_functions": [
+        {
+          "name": "test_c15_real_case_sensitive_repo_and_repo_are_distinct",
+          "body_lf_sha256": "37ee7823a338cc730d2950ee8b04adbbe81f97bb700b5f854a9e3ca4e1e24bc6",
+          "line": 11,
+          "historical_executions": [
+            {
+              "function": "test_c15_real_case_sensitive_repo_and_repo_are_distinct",
+              "node": "test_posix_physical_paths::test_c15_real_case_sensitive_repo_and_repo_are_distinct",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc28-posix-paths/evidence/test-output/test_posix_physical_paths/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_posix_symlink_resolves_same_physical_identity_and_profile",
+          "body_lf_sha256": "d9cd431a61a9226772fc1205050b4aee2036e100673207600e3920956453ed76",
+          "line": 28,
+          "historical_executions": [
+            {
+              "function": "test_posix_symlink_resolves_same_physical_identity_and_profile",
+              "node": "test_posix_physical_paths::test_posix_symlink_resolves_same_physical_identity_and_profile",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc28-posix-paths/evidence/test-output/test_posix_physical_paths/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_posix_backslash_is_filename_not_directory_separator",
+          "body_lf_sha256": "543e51c31b3da8ccd48d10248260ad326887c73ac5a6d310022735b1d3746998",
+          "line": 38,
+          "historical_executions": [
+            {
+              "function": "test_posix_backslash_is_filename_not_directory_separator",
+              "node": "test_posix_physical_paths::test_posix_backslash_is_filename_not_directory_separator",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc28-posix-paths/evidence/test-output/test_posix_physical_paths/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [],
+      "imports_new_helpers": [],
+      "imports_existing_test_helpers": {},
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [
+          {
+            "line": 12,
+            "text": "assert os.name == 'posix'"
+          },
+          {
+            "line": 31,
+            "text": "link.symlink_to(physical, target_is_directory=True)"
+          }
+        ],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": [
+          "Add explicit pytest skip on Windows. Case-sensitive names/inodes require a capable filesystem (Linux provenance); probe/skip unsupported filesystems rather than asserting every POSIX host is case-sensitive.",
+          "Skip symlink capability when unavailable; historical execution was Linux/WSL2, not every POSIX filesystem."
+        ]
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc28-posix-paths/qualification.json",
+          "sha256": "404af75ad36ef47f1793207bdffe968573142e13514c7777a93f6df04edeaed5"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC30remote",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc30-remote-public-id\\final\\executed-test.py",
+      "sha256": "40abc00451a42d0258cf40e6df231aeba501bb1f18672b9617288da9b121eaed",
+      "normalized_utf8_lf_sha256": "40abc00451a42d0258cf40e6df231aeba501bb1f18672b9617288da9b121eaed",
+      "target": "tests/quick_connect/test_qc30_remote_public_id.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 0,
+        "lf": 96
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc30-remote-public-id/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc30-remote-public-id/final"
+      ],
+      "test_functions": [
+        {
+          "name": "test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects",
+          "body_lf_sha256": "cf0f77c3ca4ccf010d7306437711ff5e7311cb9a5be9b53262402456a1924b79",
+          "line": 26,
+          "historical_executions": [
+            {
+              "function": "test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects",
+              "node": "tests.execution_r4.test_qc30_remote_public_id::test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc30-remote-public-id/final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "rows"
+      ],
+      "imports_new_helpers": [],
+      "imports_existing_test_helpers": {
+        "test_remote_operator_terminal": [
+          "tests/execution_r4/test_remote_operator_terminal.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [
+          {
+            "line": 96,
+            "text": "(Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'remote-proof.json').write_text(json.dumps(proof,indent=2)+'\\n')"
+          }
+        ],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": [
+          "Make evidence writes optional when QC_DERIVATIVE_OUTPUT/runner env is absent, or use a tmp_path-backed test-only evidence fixture. Keep all assertions; these env vars are runner configuration, not product prerequisites."
+        ]
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc30-remote-public-id/qualification.json",
+          "sha256": "d6bbb3b4aa3d0d5e4dbf5e1cffc94d03eec882672eb8f501c8caf648df071841"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC32Git",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-help-bare-dgty_zcj\\after\\tests\\quick_connect\\test_git_remaining.py",
+      "sha256": "77d0a7500ae35ad31a3a8068b430ac4a2430ff5eede66dd84c71dd54bd7a3dd8",
+      "normalized_utf8_lf_sha256": "77d0a7500ae35ad31a3a8068b430ac4a2430ff5eede66dd84c71dd54bd7a3dd8",
+      "target": "tests/quick_connect/test_git_remaining.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 0,
+        "lf": 240
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc32-git-remaining/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc32-git-remaining"
+      ],
+      "test_functions": [
+        {
+          "name": "test_origin_wins_over_other_remote_names",
+          "body_lf_sha256": "16f0e9118dcdd6abbb59bac6c8954a10930a11a312270950993d38293f0c5b6e",
+          "line": 44,
+          "historical_executions": [
+            {
+              "function": "test_origin_wins_over_other_remote_names",
+              "node": "tests.quick_connect.test_git_remaining::test_origin_wins_over_other_remote_names",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc32-git-remaining/evidence/original-six-pass-help-oracle-fail/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_reader_fault_reaches_cli_fallback_without_implicit_test",
+          "body_lf_sha256": "6e094ecbcce2f680867d5bf0011567fbff2b349f642ccb2c52e9335b9bea4e69",
+          "line": 66,
+          "historical_executions": [
+            {
+              "function": "test_reader_fault_reaches_cli_fallback_without_implicit_test",
+              "node": "tests.quick_connect.test_git_remaining::test_reader_fault_reaches_cli_fallback_without_implicit_test[timeout-git_timeout]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc32-git-remaining/evidence/original-six-pass-help-oracle-fail/junit.xml"
+            },
+            {
+              "function": "test_reader_fault_reaches_cli_fallback_without_implicit_test",
+              "node": "tests.quick_connect.test_git_remaining::test_reader_fault_reaches_cli_fallback_without_implicit_test[invalid-output-git_config_unavailable]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc32-git-remaining/evidence/original-six-pass-help-oracle-fail/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_two_local_clones_same_origin_have_distinct_workspace_namespaces",
+          "body_lf_sha256": "097127c09456bcceb6ffa2f8bd7ee89de752679d27302fcdadcf41520d554556",
+          "line": 94,
+          "historical_executions": [
+            {
+              "function": "test_two_local_clones_same_origin_have_distinct_workspace_namespaces",
+              "node": "tests.quick_connect.test_git_remaining::test_two_local_clones_same_origin_have_distinct_workspace_namespaces",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc32-git-remaining/evidence/original-six-pass-help-oracle-fail/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_explicit_project_reads_its_origin_while_cwd_stays_elsewhere",
+          "body_lf_sha256": "d9f3ead67452c0affc988aab1de1c15decef619acf232b1b3c5eea11c4d36a0e",
+          "line": 141,
+          "historical_executions": [
+            {
+              "function": "test_explicit_project_reads_its_origin_while_cwd_stays_elsewhere",
+              "node": "tests.quick_connect.test_git_remaining::test_explicit_project_reads_its_origin_while_cwd_stays_elsewhere",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc32-git-remaining/evidence/original-six-pass-help-oracle-fail/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_dubious_ownership_diagnostic_never_changes_safe_directory",
+          "body_lf_sha256": "2db401034f0e2665e9f7c2887b36a81aeff2ee421509318d689cbe4d1b51b450",
+          "line": 166,
+          "historical_executions": [
+            {
+              "function": "test_dubious_ownership_diagnostic_never_changes_safe_directory",
+              "node": "tests.quick_connect.test_git_remaining::test_dubious_ownership_diagnostic_never_changes_safe_directory",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc32-git-remaining/evidence/original-six-pass-help-oracle-fail/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_real_repository_help_and_plan_never_execute_git",
+          "body_lf_sha256": "4d7484adc6323bb4aa5b75cab3939540676de16493471aab85b14a5ca8038b42",
+          "line": 194,
+          "historical_executions": [
+            {
+              "function": "test_real_repository_help_and_plan_never_execute_git",
+              "node": "tests.quick_connect.test_git_remaining::test_real_repository_help_and_plan_never_execute_git",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc32-git-remaining/evidence/detailed-help-plan-focal/junit.xml"
+            },
+            {
+              "function": "test_real_repository_help_and_plan_never_execute_git",
+              "node": "tests.quick_connect.test_git_remaining::test_real_repository_help_and_plan_never_execute_git",
+              "status": "FAIL",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc32-git-remaining/evidence/original-six-pass-help-oracle-fail/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        },
+        {
+          "name": "test_real_bare_repository_has_explicit_directory_fallback_not_origin_identity",
+          "body_lf_sha256": "016650019e52ba0ac2f5c643bdde6ed4d207db48206ddc4f1116f455c58bcc54",
+          "line": 220,
+          "historical_executions": [
+            {
+              "function": "test_real_bare_repository_has_explicit_directory_fallback_not_origin_identity",
+              "node": "tests.quick_connect.test_git_remaining::test_real_bare_repository_has_explicit_directory_fallback_not_origin_identity",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc32-git-remaining/evidence/bare-exact-node-focal/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "protected",
+        "tty",
+        "saved"
+      ],
+      "imports_new_helpers": [
+        {
+          "module": "test_git_cli_integration",
+          "entry": "QC12Git+QC21"
+        }
+      ],
+      "imports_existing_test_helpers": {
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": []
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc32-git-remaining/qualification.json",
+          "sha256": "3ce5cc74d9885539e7777cedd8cffadde134f3c1fbb9bac40f69a123b688df82"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC33shared",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc33-shared-service\\final\\executed-test.py",
+      "sha256": "7e4725badd72ad31eba978dc1ce8c1674313cb21b4d07a788884f7a169bb739a",
+      "normalized_utf8_lf_sha256": "7e4725badd72ad31eba978dc1ce8c1674313cb21b4d07a788884f7a169bb739a",
+      "target": "tests/quick_connect/test_qc33_shared_service.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 0,
+        "lf": 168
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc33-shared-service/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc33-shared-service/final"
+      ],
+      "test_functions": [
+        {
+          "name": "test_g14_two_confirmations_reuse_one_genuine_ready_http_owner_without_changing_first",
+          "body_lf_sha256": "334973f8c2861daf1a701bb5b72a0c51e4c3e7dfba5040a28ad7926c7348eea3",
+          "line": 71,
+          "historical_executions": [
+            {
+              "function": "test_g14_two_confirmations_reuse_one_genuine_ready_http_owner_without_changing_first",
+              "node": "tests.execution_r4.test_qc33_shared_service::test_g14_two_confirmations_reuse_one_genuine_ready_http_owner_without_changing_first",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc33-shared-service/final/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "real_foreground_owner",
+        "first_connection_rows"
+      ],
+      "imports_new_helpers": [],
+      "imports_existing_test_helpers": {
+        "test_local_realization": [
+          "tests/execution_r4/test_local_realization.py"
+        ],
+        "test_terminal_connect": [
+          "tests/execution_r4/test_terminal_connect.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [
+          {
+            "line": 52,
+            "text": "(Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'owner-cleanup.json').write_text(json.dumps(records,indent=2)+'\\n')"
+          },
+          {
+            "line": 162,
+            "text": "(Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'shared-service-proof.json').write_text(json.dumps(proof,indent=2)+'\\n')"
+          },
+          {
+            "line": 167,
+            "text": "(Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'http-cleanup.json').write_text(json.dumps("
+          }
+        ],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [
+          {
+            "line": 100,
+            "text": "assert not running.done() and time.monotonic()<deadline"
+          }
+        ],
+        "minimal_proposed_corrections": [
+          "Make evidence writes optional when QC_DERIVATIVE_OUTPUT/runner env is absent, or use a tmp_path-backed test-only evidence fixture. Keep all assertions; these env vars are runner configuration, not product prerequisites.",
+          "Review preparation/NOT_EXECUTED docstrings as historical annotations; update only the persisted copy, preserving original evidence bytes."
+        ]
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc33-shared-service/qualification.json",
+          "sha256": "73be9eb7548a7290162043429b04985f4e13f6905cc44074fa59842e40f744a2"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC35v2",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc35-review-cancellation-proposal\\revision2\\final\\executed-test.py",
+      "sha256": "196635cacb2749cb559414fda7414e665968a8f824d4e635154e811784b54377",
+      "normalized_utf8_lf_sha256": "0f4fa9447bec910210d191106919da5160fd0e3379581b7f33edfd96edeb7fc5",
+      "target": "tests/quick_connect/test_qc35_review_cancel.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "crlf": 93,
+        "lf": 93
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc35-review-cancellation-proposal/revision2/qualification.json"
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc35-review-cancellation-proposal/revision2/final/variants"
+      ],
+      "test_functions": [
+        {
+          "name": "test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state",
+          "body_lf_sha256": "fc00952c4a70f51d51533fca6c79fd5cf1c4af04ba7ae41767f340c3b6172aab",
+          "line": 22,
+          "historical_executions": [
+            {
+              "function": "test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state",
+              "node": "tests.quick_connect.test_qc35_review_cancel::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state[quick]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc35-review-cancellation-proposal/revision2/final/variants/junit.xml"
+            },
+            {
+              "function": "test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state",
+              "node": "tests.quick_connect.test_qc35_review_cancel::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state[legacy]",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc35-review-cancellation-proposal/revision2/final/variants/junit.xml"
+            }
+          ],
+          "has_historical_pass": true,
+          "qualification_note": "Historical nodes identify actual executed assertions; exact final normalized/portable copy must be rerun, especially where report describes mixed source cuts."
+        }
+      ],
+      "helper_functions": [
+        "counts"
+      ],
+      "imports_new_helpers": [],
+      "imports_existing_test_helpers": {
+        "test_quick_connect_cli": [
+          "tests/quick_connect/test_quick_connect_cli.py"
+        ]
+      },
+      "basename_collisions": [],
+      "portability": {
+        "required_evidence_env": [
+          {
+            "line": 80,
+            "text": "out=Path(os.environ['QC_DERIVATIVE_OUTPUT'])"
+          }
+        ],
+        "installed_origin_guards": [],
+        "platform_lines": [],
+        "absolute_path_lines": [],
+        "stale_docstring_lines": [],
+        "minimal_proposed_corrections": [
+          "Make evidence writes optional when QC_DERIVATIVE_OUTPUT/runner env is absent, or use a tmp_path-backed test-only evidence fixture. Keep all assertions; these env vars are runner configuration, not product prerequisites.",
+          "Only qualifies the explicit connect.py overlay. Requires the reviewed canonical_metadata cancellation patch in product before final package execution; previous six results and prior patch remain antecedents.",
+          "This test qualified the external revision2 connect.py overlay only. Run it against the rebuilt package containing the reviewed cancellation fix before claiming package PASS."
+        ]
+      },
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc35-review-cancellation-proposal/revision2/qualification.json",
+          "sha256": "482a0320921c3950fddc9bed303ef4be5de40568ab57c1ff547465bfcf0685bc"
+        }
+      ],
+      "docstring_review": [],
+      "source_hash_verified_during_inventory": true
+    },
+    {
+      "id": "QC14bD26",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-d26-u52jkdyq\\after\\tests\\quick_connect\\test_quick_connect_git_recovery.py",
+      "sha256": "a654743ba6beec3638733140e3bb7f71bfcadea57b9f7fe5091aeb183b1ecb55",
+      "normalized_utf8_lf_sha256": "7772a245c2edc54ef80bf8e140a80f959508c22a070b765dbd5af99586e6f368",
+      "target": "tests/quick_connect/test_quick_connect_git_recovery.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "CRLF": 82,
+        "LF": 82
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc14b-autoid-race/qualification.json"
+      ],
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc14b-autoid-race/qualification.json",
+          "sha256": "643bd2c166f2e1e08c7f46150c73818830f1530b579a0361ecc990812a7d4d77"
+        }
+      ],
+      "qualifying_cut_roots": [
+        "qc14b-autoid-race/evidence/d26"
+      ],
+      "qualification_note": "D26 1PASS on final explicit-name source; canonical Finish response loss/recovery with changed local Git, inert peers. Windows allowlisted Git path skips if unavailable.",
+      "test_functions": [
+        {
+          "name": "test_d26_explicit_name_finish_recovery_ignores_changed_local_git",
+          "historical_nodes": [
+            {
+              "node": "tests.quick_connect.test_quick_connect_git_recovery::test_d26_explicit_name_finish_recovery_ignores_changed_local_git",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc14b-autoid-race/evidence/d26/junit.xml"
+            }
+          ],
+          "qualification_note": "D26 1PASS on final explicit-name source; canonical Finish response loss/recovery with changed local Git, inert peers. Windows allowlisted Git path skips if unavailable."
+        }
+      ],
+      "helper_functions": [],
+      "imports_new_helpers": [
+        {
+          "module": "test_quick_connect_extra_scenarios",
+          "entry": "QC14"
+        }
+      ],
+      "imports_existing_test_helpers": [
+        {
+          "module": "test_quick_connect_cli",
+          "paths": [
+            "tests/quick_connect/test_quick_connect_cli.py"
+          ]
+        }
+      ],
+      "basename_collisions": [],
+      "portability": {
+        "minimal_proposed_corrections": [
+          "Existing absolute Windows Git executable path is deliberately allowlisted and skips if absent; retain this scoped provenance or separately review portable Git discovery. Do not silently substitute an untrusted repository executable."
+        ]
+      },
+      "source_hash_verified": true
+    },
+    {
+      "id": "QC34ancestorPrivacy",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc34-ancestor-privacy\\final-private-focal\\test_ancestor_privacy.py",
+      "sha256": "c37b40ba231017633be85a25fcd68606a6855c70beda5c306c774a56c0fb3ad4",
+      "normalized_utf8_lf_sha256": "c37b40ba231017633be85a25fcd68606a6855c70beda5c306c774a56c0fb3ad4",
+      "target": "tests/quick_connect/test_ancestor_privacy.py",
+      "source_bytes_must_remain_immutable": true,
+      "source_line_endings": {
+        "CRLF": 0,
+        "LF": 255
+      },
+      "qualifying_report_candidates": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc34-ancestor-privacy/qualification.json",
+        "NEXUS_QUICK_CONNECT_R1/execution/qc34-ancestor-privacy/final-private-focal/qualification.json"
+      ],
+      "qualifying_reports": [
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc34-ancestor-privacy/qualification.json",
+          "sha256": "48aa0aea476a999a5cafe32bc3c207c9a93f26029d0e974316a71443ecc58149"
+        },
+        {
+          "path": "NEXUS_QUICK_CONNECT_R1/execution/qc34-ancestor-privacy/final-private-focal/qualification.json",
+          "sha256": "f96ee6f81b284ec91cfdfe209190f65e11d388bd98e10aa074ed2df7e4c60722"
+        }
+      ],
+      "qualifying_cut_roots": [
+        "NEXUS_QUICK_CONNECT_R1/execution/qc34-ancestor-privacy/qualification.json#/routed/nodes",
+        "NEXUS_QUICK_CONNECT_R1/execution/qc34-ancestor-privacy/final-private-focal"
+      ],
+      "qualification_note": "D25 final strict scanner 1PASS; C13 PASS only routed antecedent, unchanged function body. Not a combined 2PASS final-source run. Owner interrupt_completion confirmed source/SHA.",
+      "test_functions": [
+        {
+          "name": "test_c13_registered_ancestor_does_not_expand_nested_cwd",
+          "historical_nodes": [],
+          "qualification_note": "D25 final strict scanner 1PASS; C13 PASS only routed antecedent, unchanged function body. Not a combined 2PASS final-source run. Owner interrupt_completion confirmed source/SHA.",
+          "historical_report_nodes": [
+            {
+              "report": "NEXUS_QUICK_CONNECT_R1/execution/qc34-ancestor-privacy/qualification.json",
+              "json_pointer": "/routed/nodes/0",
+              "case": "registered-ancestor-focal",
+              "status": "PASS",
+              "xml_not_exported_in_curated_folder": true
+            }
+          ]
+        },
+        {
+          "name": "test_d25_private_origin_does_not_enter_observed_logs_json_homes_or_sqlite",
+          "historical_nodes": [
+            {
+              "node": "tests.quick_connect.test_ancestor_privacy::test_d25_private_origin_does_not_enter_observed_logs_json_homes_or_sqlite",
+              "status": "PASS",
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc34-ancestor-privacy/final-private-focal/junit.xml"
+            }
+          ],
+          "qualification_note": "D25 final strict scanner 1PASS; C13 PASS only routed antecedent, unchanged function body. Not a combined 2PASS final-source run. Owner interrupt_completion confirmed source/SHA."
+        }
+      ],
+      "helper_functions": [
+        "protected",
+        "scripted"
+      ],
+      "imports_new_helpers": [
+        {
+          "module": "test_git_cli_integration",
+          "entry": "QC12Git+QC21"
+        }
+      ],
+      "imports_existing_test_helpers": [],
+      "basename_collisions": [],
+      "portability": {
+        "minimal_proposed_corrections": [
+          "Use owned tmp_path fallback for audit sink when QC_DERIVATIVE_OUTPUT is absent, keeping every strict live-owner/regular-file/one-byte/producer-hash assertion intact.",
+          "Exact event_journal producer hash is an intentional proof dependency: retain it; any future producer change requires explicit proof review, never removing the assertion for portability."
+        ]
+      },
+      "source_hash_verified": true
+    }
+  ],
+  "entry_count": 22,
+  "recommended_copy_order": [
+    "QC12Git+QC21",
+    "QC14",
+    "QC15",
+    "QC16",
+    "QC19",
+    "QC24namespace",
+    "QC25locks",
+    "QC27",
+    "QC28POSIX",
+    "QC30remote",
+    "QC33shared",
+    "QC35v2",
+    "QC14b",
+    "QC15policy",
+    "QC17",
+    "QC18",
+    "QC20",
+    "QC23",
+    "QC24executor",
+    "QC32Git",
+    "QC14bD26",
+    "QC34ancestorPrivacy"
+  ],
+  "existing_files_not_to_copy": [
+    {
+      "id": "QC22",
+      "reason": "Original real-console Ctrl-C test already exists; keep execution provenance, no duplicate test."
+    },
+    {
+      "id": "QC29",
+      "reason": "Only byte-identical existing participant init/launch tests were executed, no new product test."
+    },
+    {
+      "id": "QC24-E08",
+      "target": "tests/execution_r4/test_public_connection_ids.py",
+      "reason": "Existing namespace test reconciled, not a new file."
+    },
+    {
+      "id": "QC28-existing-199",
+      "reason": "Only three new POSIX physical-path cases are copied; other parser/Git/project/ID tests already exist."
+    },
+    {
+      "id": "Browser runners",
+      "reason": "Remain under execution, not copied into ordinary pytest tests."
+    }
+  ],
+  "runner_only_fixes": [
+    "Keep origin/payload/PID/creation-time bounds in installed runner, not as unconditional source/editable-test assertions.",
+    "Fix external descendant attribution: child creation time must not predate retained actual parent before ownership or containment; preserve QC35v2 observer failure/redaction. No product test should own unrelated PID based on PPID alone.",
+    "QP fixtures must never discover personal providers or open real credential backends; preserve existing synthetic local_setup/MemoryVault/HTTPBridge setup and closed stdin outside intentionally controlled fixtures."
+  ],
+  "limitations": [
+    "This is a persistence inventory, not a new execution/qualification or ledger promotion.",
+    "Historical PASS/FAIL/SKIP nodes are listed conservatively from XML; report/source-cut limits remain authoritative.",
+    "Normalized LF hash precedes proposed code portability corrections; Root must hash final persisted copies and record those as a new cut.",
+    "Targets preserve flat helper module names to avoid import breakage; no duplicate target basenames detected unless explicitly listed.",
+    "QC33 included because it is another approved new G14 test; QC22/browser scripts are intentionally excluded from copying."
+  ],
+  "inspection_summary": {
+    "source_files": 22,
+    "test_function_definitions": 72,
+    "source_hashes_verified": true,
+    "target_basename_collisions": [],
+    "test_code_copied_or_changed": false,
+    "execution_during_inventory": false,
+    "historical_xml_is_not_exact_final_copy_qualification": true,
+    "private_temp_or_prefix_paths_in_test_body": "No such dependency found in scanned test bodies; QC27 intentionally names the Windows OS cmd.exe and must remain Windows-specific/portable as proposed.",
+    "dependency_policy": "Preserve current flat helper basenames and existing fixture imports. Copy helper-bearing QC14/QC15/QC24namespace and QC12Git+QC21 before their dependents. Runner plugins and browser scripts remain execution artifacts.",
+    "stale_docstrings": [
+      {
+        "id": "QC14",
+        "findings": [
+          {
+            "scope": "module",
+            "docstring": "QC14 draft, NOT EXECUTED. Copy beside test_quick_connect_cli after review.\n\nCanonical SQLite/HTTP authorities with synthetic Test/version peers only.\nNo provider, personal installation or native harness execution."
+          }
+        ]
+      }
+    ]
+  },
+  "revision": 2,
+  "previous_inventory": {
+    "path": "NEXUS_QUICK_CONNECT_R1/execution/test-persistence-plan.revision1.json",
+    "sha256": "43f1a540b23c2d4d577eee654a4b1ea835a4ace8cf9f6fa5cfa01aaba878ca00",
+    "existing_twenty_entries_unchanged": true
+  },
+  "revision_changes": [
+    "Append omitted QC14b D26 final explicit-name recovery test.",
+    "Append QC34 final strict one-byte scanner file, preserving separate C13 antecedent and D25 final PASS.",
+    "Prepare separate gated persistence script; no copying/execution now."
+  ],
+  "persistence_script": "NEXUS_QUICK_CONNECT_R1/execution/persist_quick_connect_tests.py",
+  "persistence_recipe_limits": [
+    "No historical assertion or function signature may change. New capability skip fixtures only establish OS/filesystem givens.",
+    "Strict installed provenance and sanitized process environment remain runner responsibilities; no runner PID/containment logic is copied into ordinary tests.",
+    "QC34 tmp_path audit fallback is used only when runner output env is absent; original cut with output env is unchanged.",
+    "Script defaults to execution-only preview. Applying requires explicit release-file acknowledgement with RELEASED_SOURCE and exact inventory SHA; every existing target is refused.",
+    "All copied outputs remain unqualified until final-package rerun."
+  ],
+  "persistence_script_sha256": "35a960bed8fc59878e90f05c9005c7f84c63a019ca2e55b62db22b229d28f654",
+  "release_gate": {
+    "apply_requires": {
+      "author": "/root",
+      "statement": "RELEASED_SOURCE",
+      "inventory_sha256": "SHA256 of this complete inventory after review"
+    },
+    "release_file_created_now": false,
+    "copy_has_run": false,
+    "default": "preview only",
+    "overwrite": "refused, including repeated apply"
+  }
+}

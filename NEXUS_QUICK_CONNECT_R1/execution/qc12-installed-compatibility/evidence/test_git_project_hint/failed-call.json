@@ -1,0 +1,7 @@
+{
+  "nodeid": "tests/quick_connect/test_git_project_hint.py::test_path_search_has_entry_and_time_budgets",
+  "when": "call",
+  "outcome": "failed",
+  "duration": 0.008139199926517904,
+  "failure": "after\\tests\\quick_connect\\test_git_project_hint.py:203: in test_path_search_has_entry_and_time_budgets\n    assert hints._trusted_git(root) == binary\nE   AssertionError: assert None == WindowsPath('C:/Users/jpamb/AppData/Local/Temp/nexus-qc12-installed-ra66oqki/test_git_project_hint/tmp/pytest-of-unknown/pytest-0/test_path_search_has_entry_and0/install/git.exe')\nE    +  where None = <function _trusted_git at 0x000002C510418B80>(WindowsPath('C:/Users/jpamb/AppData/Local/Temp/nexus-qc12-installed-ra66oqki/test_git_project_hint/tmp/pytest-of-unknown/pytest-0/test_path_search_has_entry_and0/project'))\nE    +    where <function _trusted_git at 0x000002C510418B80> = hints._trusted_git"
+}

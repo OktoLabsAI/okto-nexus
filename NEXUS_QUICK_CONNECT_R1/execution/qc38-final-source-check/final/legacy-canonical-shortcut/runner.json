@@ -1,0 +1,41 @@
+{
+  "label": "legacy-canonical-shortcut",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\bootstrap.py",
+    "-p",
+    "qc38_plugin",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut",
+    "-v",
+    "-s",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-canonical-shortcut\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-canonical-shortcut\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T10:40:05.558919+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 59964,
+      "parent_pid": null,
+      "birth_filetime": 134393856055612469,
+      "alive": false
+    },
+    {
+      "pid": 58076,
+      "parent_pid": 59964,
+      "birth_filetime": 134393856055742541,
+      "alive": false
+    }
+  ],
+  "rejected_nonowned_births": [],
+  "ended_at": "2026-11-17T10:40:19.241617+00:00"
+}

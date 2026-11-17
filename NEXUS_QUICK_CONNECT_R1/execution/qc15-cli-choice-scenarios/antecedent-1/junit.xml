@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="11.735" timestamp="2026-11-17T05:17:59.150731-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_qc15_cli_choices" name="test_bare_two_families_explicit_choice_or_cancel[2-claude]" time="8.978"><failure message="AssertionError: Choose a supported harness (listing does not test login or run a version command):&#10;  1. codex — observed; FRESH&#10;  2. claude — observed; FRESH&#10;  3. pi — not confirmed in inventory; FRESH&#10;  c. Cancel&#10;  Connection shortcut: project-73685acea002e659cf166f32&#10;  Canonical metadata revalidation was requested; existing revision metadata may change.&#10;  {&#10;    &quot;state&quot;: &quot;refused&quot;,&#10;    &quot;code&quot;: &quot;PROVIDER_HOME_REQUIRED&quot;,&#10;[+8 more lines; full report in element text]">C:\Users\jpamb\AppData\Local\Temp\nexus-qc15-choice-wr5oy5i4\after\tests\execution_r4\test_qc15_cli_choices.py:87: in test_bare_two_families_explicit_choice_or_cancel
+    assert code == 0, out
+E   AssertionError: Choose a supported harness (listing does not test login or run a version command):
+E     1. codex — observed; FRESH
+E     2. claude — observed; FRESH
+E     3. pi — not confirmed in inventory; FRESH
+E     c. Cancel
+E     Connection shortcut: project-73685acea002e659cf166f32
+E     Canonical metadata revalidation was requested; existing revision metadata may change.
+E     {
+E       "state": "refused",
+E       "code": "PROVIDER_HOME_REQUIRED",
+E       "message": "Pass --provider-home for the Claude login on this Server host.",
+E       "possible_effect": false,
+E       "effects_started": null,
+E       "canonical_metadata_revalidation_requested": true,
+E       "profile": "project-73685acea002e659cf166f32"
+E     }
+E     
+E   assert 3 == 0</failure></testcase></testsuite></testsuites>

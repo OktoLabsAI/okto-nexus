@@ -1,0 +1,19 @@
+--- persistence-applied-final/tests/quick_connect/test_quick_connect_git_boundaries.py
++++ tests/quick_connect/test_quick_connect_git_boundaries.py
+@@ -6,7 +6,7 @@
+ 
+ import pytest
+ from test_quick_connect_cli import (  # noqa: F401
+-    checking, invoke, isolated_provider_environment, local_setup, quick_cli, terminal,
++    checking as checking, invoke, isolated_provider_environment as isolated_provider_environment, local_setup as local_setup, quick_cli as quick_cli, terminal as terminal,
+ )
+ from test_quick_connect_extra_scenarios import canonical_snapshot
+ 
+@@ -184,3 +184,7 @@
+     assert review['selection']['label'] == inner.name
+     assert review['quick_connect']['name_discovery']['reason'] == 'git_unavailable'
+     assert not marker.exists()
++
++
++# Explicit public exports include pytest fixtures used through injection.
++__all__ = ['GIT', 'Path', 'actual_review', 'canonical_snapshot', 'checking', 'configure', 'git_local', 'init', 'invoke', 'isolated_provider_environment', 'json', 'local_setup', 'make_worktree', 'os', 'pytest', 'quick_cli', 'subprocess', 'terminal', 'test_d08_path_without_git_reports_directory_fallback', 'test_d09_nonrepository_reports_directory_fallback', 'test_d11_invalid_private_origin_is_not_exposed', 'test_d12_real_linked_worktree_keeps_execution_root', 'test_d13_per_worktree_origin_is_read_without_shared_origin', 'test_d14_nested_repository_origin_wins', 'test_d21_hostile_git_directory_environment_cannot_redirect_discovery', 'test_d22_cwd_and_ancestor_project_git_are_never_launched']

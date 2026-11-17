@@ -1,0 +1,145 @@
+{
+  "at": "2026-11-17T08:48:37.420179+00:00",
+  "status": "PASS",
+  "failure": null,
+  "commands": [
+    {
+      "kind": "single_pytest_child",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc22-hidden-console-jrfnw60t\\child.py"
+      ],
+      "creationflags": "CREATE_NEW_CONSOLE",
+      "show_window": "SW_HIDE"
+    },
+    {
+      "kind": "isolated_controller",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc22-hidden-console-jrfnw60t\\controller.py"
+      ],
+      "creationflags": "CREATE_NO_WINDOW"
+    }
+  ],
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc22-hidden-console-jrfnw60t",
+  "process_proofs": [
+    {
+      "pid": 49620,
+      "parent_pid": null,
+      "birth_filetime": 134393788985481317,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 49916,
+      "parent_pid": 49620,
+      "birth_filetime": 134393788986423756,
+      "image": "C:\\Python313\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 28032,
+      "parent_pid": null,
+      "birth_filetime": 134393789033799172,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 56800,
+      "parent_pid": 28032,
+      "birth_filetime": 134393789034350012,
+      "image": "C:\\Python313\\python.exe",
+      "alive": false
+    }
+  ],
+  "observed_non_clients": [
+    {
+      "pid": 58292,
+      "parent_pid": 49620,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 58292,
+      "parent_pid": 49620,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 58292,
+      "parent_pid": 49620,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 59232,
+      "parent_pid": 28032,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 58292,
+      "parent_pid": 49620,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 59232,
+      "parent_pid": 28032,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 58292,
+      "parent_pid": 49620,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 59232,
+      "parent_pid": 28032,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 58292,
+      "parent_pid": 49620,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 59232,
+      "parent_pid": 28032,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 58292,
+      "parent_pid": 49620,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 59232,
+      "parent_pid": 28032,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 58292,
+      "parent_pid": 49620,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    }
+  ],
+  "containment": [],
+  "elapsed_seconds": 18.875180599978194,
+  "payload_files": 1027,
+  "payload_drift": [],
+  "source_drift": [],
+  "provider_calls": 0
+}

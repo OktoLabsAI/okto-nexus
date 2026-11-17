@@ -1,0 +1,45 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc22-hidden-console-jrfnw60t\fixtures
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+..\fixtures\tests\quick_connect\test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation PTY_INTERRUPT_BEGIN: send y; wait for issued marker before Ctrl-C
+Agent: pty-interrupt-4c867d146889 | Harness: codex_app_server
+Create identity: Codex — PTY Interrupt | Role: Project assistant
+Coordination: visible collaborators, direct/channel messages, workspace handoffs, artifacts and events.
+No broadcasts, channel creation, capability changes, experimental memory or global administration.
+Communication limits: 60 messages/minute; 10 recipients.
+Project: C:\Users\jpamb\AppData\Local\Temp\nexus-qc22-hidden-console-jrfnw60t\environment\tmp\pytest-of-unknown\pytest-0\test_ctrl_c_after_issued_test_0\workspace
+Workspace: create PTY Interrupt
+ID do Harness (proposed): codex
+Project name source: explicit
+Invocation directory: C:\Users\jpamb\AppData\Local\Temp\nexus-qc22-hidden-console-jrfnw60t\environment\tmp\pytest-of-unknown\pytest-0\test_ctrl_c_after_issued_test_0\workspace
+Execution host: exe_71af814617cca1ca167f9b598e3c18b5
+Provider home: C:\Users\jpamb\AppData\Local\Temp\nexus-qc22-hidden-console-jrfnw60t\environment\tmp\pytest-of-unknown\pytest-0\test_ctrl_c_after_issued_test_0\own-provider-home
+The selected executable will run its version check before the connection test.
+- Create this project identity at Finish with the reviewed coordination permissions; no global administration is granted.
+- Use the selected agent and project workspace through the existing managed connection.
+- Allow authorized sessions and eligible Nexus messages for 60 minutes and at most 20 runtime actions.
+- Keep native tool decisions and existing model/project instructions; no sandbox settings are replaced.
+- The connection test opens the harness and requests a model response; provider usage may be charged.
+- Finish saves the connection and execution grant. It does not submit a project task.
+- Enable Server-wide human review (feature_hitl) at Finish for native decisions and matching coordination approval rules. Each decision still requires its authorized recipient; no permission is approved automatically.
+- Automatic handoff claiming is disabled for this new identity; work still requires canonical authorization.
+Startup: keep the current service mode. Optional user login startup: --start-at-login.
+Review revision: d3d48ca3f5381513d313dc24a356202d16b8c421e362efede9f254d6ad4390d3
+Confirm this review, including the model connection test? [y/customize/cancel] PTY_TEST_ISSUED_SEND_CTRL_C_NOW
+PTY_INTERRUPT_CHECKPOINT_PRESERVED_NO_BINDING_OR_GRANT
+PASSED
+
+============================== warnings summary ===============================
+..\..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc22-hidden-console-jrfnw60t\junit.xml -
+======================== 1 passed, 1 warning in 15.17s ========================

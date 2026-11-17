@@ -1,0 +1,19 @@
+{
+  "at": "2026-11-17T10:12:04.111427+00:00",
+  "remaining_owned_births": [],
+  "own_browser_profile_pids": [],
+  "listener": [],
+  "browser_close_exit": 0,
+  "supervisor_exit": 0,
+  "peer_exit_codes": [
+    {
+      "pid": 60140,
+      "exit_code": 1
+    },
+    {
+      "pid": 49408,
+      "exit_code": 1
+    }
+  ],
+  "note": "Peer codes are observed as 1, not claimed 0. Canonical close completed; every recorded own birth and the own listener are absent. Data retained."
+}

@@ -1,0 +1,169 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 5 items
+
+after\tests\quick_connect\test_quick_connect_pty.py::test_real_terminal_measurement IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_real_terminal_measurement", "when": "setup", "outcome": "passed", "duration": 0.010447800043039024}
+PTY_MEASUREMENT {"stdin_tty": true, "stdout_tty": false, "stderr_tty": false, "platform": "win32"}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_real_terminal_measurement", "when": "call", "outcome": "passed", "duration": 0.0001727000344544649}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_real_terminal_measurement", "when": "teardown", "outcome": "passed", "duration": 0.00027840002439916134}
+
+after\tests\quick_connect\test_quick_connect_pty.py::test_json_with_real_tty_never_requests_input IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_json_with_real_tty_never_requests_input", "when": "setup", "outcome": "passed", "duration": 5.277284999960102}
+PTY_JSON_BEGIN_NO_INPUT_EXPECTED
+PTY_JSON_COMPLETED_WITHOUT_INPUT
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_json_with_real_tty_never_requests_input", "when": "call", "outcome": "passed", "duration": 0.14530410000588745}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_json_with_real_tty_never_requests_input", "when": "teardown", "outcome": "passed", "duration": 1.0445144000696018}
+
+after\tests\quick_connect\test_quick_connect_pty.py::test_cancel_from_actual_terminal_does_not_check_or_test IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_cancel_from_actual_terminal_does_not_check_or_test", "when": "setup", "outcome": "passed", "duration": 5.197530100005679}
+PTY_CANCEL_BEGIN: send cancel at the review prompt
+Agent: pty-demo-448f3381247a | Harness: codex_app_server
+Create identity: Codex — PTY Demo | Role: Project assistant
+Coordination: visible collaborators, direct/channel messages, workspace handoffs, artifacts and events.
+No broadcasts, channel creation, capability changes, experimental memory or global administration.
+Communication limits: 60 messages/minute; 10 recipients.
+Project: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_pty\tmp\pytest-of-unknown\pytest-0\test_cancel_from_actual_termin0\workspace
+Workspace: create PTY Demo
+ID do Harness (proposed): codex
+Project name source: explicit
+Invocation directory: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_pty\tmp\pytest-of-unknown\pytest-0\test_cancel_from_actual_termin0\workspace
+Execution host: exe_1ad721a862d9b5f277d461812066cfca
+Provider home: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_pty\tmp\pytest-of-unknown\pytest-0\test_cancel_from_actual_termin0\own-provider-home
+The selected executable will run its version check before the connection test.
+- Create this project identity at Finish with the reviewed coordination permissions; no global administration is granted.
+- Use the selected agent and project workspace through the existing managed connection.
+- Allow authorized sessions and eligible Nexus messages for 60 minutes and at most 20 runtime actions.
+- Keep native tool decisions and existing model/project instructions; no sandbox settings are replaced.
+- The connection test opens the harness and requests a model response; provider usage may be charged.
+- Finish saves the connection and execution grant. It does not submit a project task.
+- Enable Server-wide human review (feature_hitl) at Finish for native decisions and matching coordination approval rules. Each decision still requires its authorized recipient; no permission is approved automatically.
+- Automatic handoff claiming is disabled for this new identity; work still requires canonical authorization.
+Startup: keep the current service mode. Optional user login startup: --start-at-login.
+Review revision: bd674ee3ded4ea410d7a1451dc66c9d3208190877303c9530abc9a6e3a5daa6a
+Confirm this review, including the model connection test? [y/customize/cancel] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_cancel_from_actual_terminal_does_not_check_or_test", "when": "call", "outcome": "failed", "duration": 0.17741899995598942, "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after\\tests\\quick_connect\\test_quick_connect_pty.py:90: in test_cancel_from_actual_terminal_does_not_check_or_test\n    assert c.run(['connect', 'codex', 'PTY Demo', '--profile', 'cancelled', '--no-chat']) == 0\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after\\tests\\quick_connect\\test_quick_connect_pty.py:61: in run\n    return main.main([*tokens, '--home', str(home), '--provider-home', str(provider)])\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\main.py:54: in main\n    return run_connect(rest)\n           ^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\connect.py:150: in run_connect\n    return _run_connect_once(argv, invocation_cwd=invocation_cwd, frozen_name=frozen_name)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\connect.py:526: in _run_connect_once\n    answer = input(prompt).strip().lower()\n             ^^^^^^^^^^^^^\nE   EOFError: EOF when reading a line"}
+FAILEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_cancel_from_actual_terminal_does_not_check_or_test", "when": "teardown", "outcome": "passed", "duration": 0.2957683999557048}
+
+after\tests\quick_connect\test_quick_connect_pty.py::test_confirm_and_resume_use_actual_terminal_without_replaying_test IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_confirm_and_resume_use_actual_terminal_without_replaying_test", "when": "setup", "outcome": "passed", "duration": 5.202892099972814}
+PTY_CONFIRM_BEGIN: send y at the review prompt
+Agent: pty-demo-f913428f7b32 | Harness: codex_app_server
+Create identity: Codex — PTY Demo | Role: Project assistant
+Coordination: visible collaborators, direct/channel messages, workspace handoffs, artifacts and events.
+No broadcasts, channel creation, capability changes, experimental memory or global administration.
+Communication limits: 60 messages/minute; 10 recipients.
+Project: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_pty\tmp\pytest-of-unknown\pytest-0\test_confirm_and_resume_use_ac0\workspace
+Workspace: create PTY Demo
+ID do Harness (proposed): codex
+Project name source: explicit
+Invocation directory: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_pty\tmp\pytest-of-unknown\pytest-0\test_confirm_and_resume_use_ac0\workspace
+Execution host: exe_2f1f8c16e5705b1a69c03e8276202e0e
+Provider home: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_pty\tmp\pytest-of-unknown\pytest-0\test_confirm_and_resume_use_ac0\own-provider-home
+The selected executable will run its version check before the connection test.
+- Create this project identity at Finish with the reviewed coordination permissions; no global administration is granted.
+- Use the selected agent and project workspace through the existing managed connection.
+- Allow authorized sessions and eligible Nexus messages for 60 minutes and at most 20 runtime actions.
+- Keep native tool decisions and existing model/project instructions; no sandbox settings are replaced.
+- The connection test opens the harness and requests a model response; provider usage may be charged.
+- Finish saves the connection and execution grant. It does not submit a project task.
+- Enable Server-wide human review (feature_hitl) at Finish for native decisions and matching coordination approval rules. Each decision still requires its authorized recipient; no permission is approved automatically.
+- Automatic handoff claiming is disabled for this new identity; work still requires canonical authorization.
+Startup: keep the current service mode. Optional user login startup: --start-at-login.
+Review revision: 51e79660a0bb8376c83e1cf14fd6b8a244f06461eefb5631f6dc008a27747e68
+Confirm this review, including the model connection test? [y/customize/cancel] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_confirm_and_resume_use_actual_terminal_without_replaying_test", "when": "call", "outcome": "failed", "duration": 0.1639388999901712, "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after\\tests\\quick_connect\\test_quick_connect_pty.py:101: in test_confirm_and_resume_use_actual_terminal_without_replaying_test\n    assert c.run(['connect', 'codex', 'PTY Demo', '--profile', 'confirmed', '--no-chat']) == 0\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after\\tests\\quick_connect\\test_quick_connect_pty.py:61: in run\n    return main.main([*tokens, '--home', str(home), '--provider-home', str(provider)])\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\main.py:54: in main\n    return run_connect(rest)\n           ^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\connect.py:150: in run_connect\n    return _run_connect_once(argv, invocation_cwd=invocation_cwd, frozen_name=frozen_name)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\connect.py:526: in _run_connect_once\n    answer = input(prompt).strip().lower()\n             ^^^^^^^^^^^^^\nE   EOFError: EOF when reading a line"}
+FAILEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_confirm_and_resume_use_actual_terminal_without_replaying_test", "when": "teardown", "outcome": "passed", "duration": 0.6009363000048324}
+
+after\tests\quick_connect\test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation", "when": "setup", "outcome": "passed", "duration": 5.041503899963573}
+PTY_INTERRUPT_BEGIN: send y; wait for issued marker before Ctrl-C
+Agent: pty-interrupt-7bc8673bdcc1 | Harness: codex_app_server
+Create identity: Codex — PTY Interrupt | Role: Project assistant
+Coordination: visible collaborators, direct/channel messages, workspace handoffs, artifacts and events.
+No broadcasts, channel creation, capability changes, experimental memory or global administration.
+Communication limits: 60 messages/minute; 10 recipients.
+Project: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_pty\tmp\pytest-of-unknown\pytest-0\test_ctrl_c_after_issued_test_0\workspace
+Workspace: create PTY Interrupt
+ID do Harness (proposed): codex
+Project name source: explicit
+Invocation directory: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_pty\tmp\pytest-of-unknown\pytest-0\test_ctrl_c_after_issued_test_0\workspace
+Execution host: exe_2bd89b8641d18d69e45837cf731691ca
+Provider home: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_pty\tmp\pytest-of-unknown\pytest-0\test_ctrl_c_after_issued_test_0\own-provider-home
+The selected executable will run its version check before the connection test.
+- Create this project identity at Finish with the reviewed coordination permissions; no global administration is granted.
+- Use the selected agent and project workspace through the existing managed connection.
+- Allow authorized sessions and eligible Nexus messages for 60 minutes and at most 20 runtime actions.
+- Keep native tool decisions and existing model/project instructions; no sandbox settings are replaced.
+- The connection test opens the harness and requests a model response; provider usage may be charged.
+- Finish saves the connection and execution grant. It does not submit a project task.
+- Enable Server-wide human review (feature_hitl) at Finish for native decisions and matching coordination approval rules. Each decision still requires its authorized recipient; no permission is approved automatically.
+- Automatic handoff claiming is disabled for this new identity; work still requires canonical authorization.
+Startup: keep the current service mode. Optional user login startup: --start-at-login.
+Review revision: 54adac59096323b089bddf2f485d977727875652efa3dd31e63ce9a923a75505
+Confirm this review, including the model connection test? [y/customize/cancel] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation", "when": "call", "outcome": "failed", "duration": 0.18531059997621924, "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after\\tests\\quick_connect\\test_quick_connect_pty.py:126: in test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation\n    code = c.run(['connect', 'codex', 'PTY Interrupt', '--profile', 'interrupted', '--no-chat'])\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after\\tests\\quick_connect\\test_quick_connect_pty.py:61: in run\n    return main.main([*tokens, '--home', str(home), '--provider-home', str(provider)])\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\main.py:54: in main\n    return run_connect(rest)\n           ^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\connect.py:150: in run_connect\n    return _run_connect_once(argv, invocation_cwd=invocation_cwd, frozen_name=frozen_name)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\connect.py:526: in _run_connect_once\n    answer = input(prompt).strip().lower()\n             ^^^^^^^^^^^^^\nE   EOFError: EOF when reading a line"}
+FAILEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation", "when": "teardown", "outcome": "passed", "duration": 0.5667490999912843}
+
+
+================================== FAILURES ===================================
+___________ test_cancel_from_actual_terminal_does_not_check_or_test ___________
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after\tests\quick_connect\test_quick_connect_pty.py:90: in test_cancel_from_actual_terminal_does_not_check_or_test
+    assert c.run(['connect', 'codex', 'PTY Demo', '--profile', 'cancelled', '--no-chat']) == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after\tests\quick_connect\test_quick_connect_pty.py:61: in run
+    return main.main([*tokens, '--home', str(home), '--provider-home', str(provider)])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\main.py:54: in main
+    return run_connect(rest)
+           ^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:150: in run_connect
+    return _run_connect_once(argv, invocation_cwd=invocation_cwd, frozen_name=frozen_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:526: in _run_connect_once
+    answer = input(prompt).strip().lower()
+             ^^^^^^^^^^^^^
+E   EOFError: EOF when reading a line
+_____ test_confirm_and_resume_use_actual_terminal_without_replaying_test ______
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after\tests\quick_connect\test_quick_connect_pty.py:101: in test_confirm_and_resume_use_actual_terminal_without_replaying_test
+    assert c.run(['connect', 'codex', 'PTY Demo', '--profile', 'confirmed', '--no-chat']) == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after\tests\quick_connect\test_quick_connect_pty.py:61: in run
+    return main.main([*tokens, '--home', str(home), '--provider-home', str(provider)])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\main.py:54: in main
+    return run_connect(rest)
+           ^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:150: in run_connect
+    return _run_connect_once(argv, invocation_cwd=invocation_cwd, frozen_name=frozen_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:526: in _run_connect_once
+    answer = input(prompt).strip().lower()
+             ^^^^^^^^^^^^^
+E   EOFError: EOF when reading a line
+_ test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation _
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after\tests\quick_connect\test_quick_connect_pty.py:126: in test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation
+    code = c.run(['connect', 'codex', 'PTY Interrupt', '--profile', 'interrupted', '--no-chat'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after\tests\quick_connect\test_quick_connect_pty.py:61: in run
+    return main.main([*tokens, '--home', str(home), '--provider-home', str(provider)])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\main.py:54: in main
+    return run_connect(rest)
+           ^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:150: in run_connect
+    return _run_connect_once(argv, invocation_cwd=invocation_cwd, frozen_name=frozen_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:526: in _run_connect_once
+    answer = input(prompt).strip().lower()
+             ^^^^^^^^^^^^^
+E   EOFError: EOF when reading a line
+============================== warnings summary ===============================
+..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_pty\junit.xml -
+=========================== short test summary info ===========================
+FAILED after\tests\quick_connect\test_quick_connect_pty.py::test_cancel_from_actual_terminal_does_not_check_or_test
+FAILED after\tests\quick_connect\test_quick_connect_pty.py::test_confirm_and_resume_use_actual_terminal_without_replaying_test
+FAILED after\tests\quick_connect\test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation
+=================== 3 failed, 2 passed, 1 warning in 26.30s ===================

@@ -1,0 +1,2215 @@
+{
+  "version": 1,
+  "status": "SCOPED_INSTALLED_RESULTS_WITH_FAILURES",
+  "source_reference": "Owner supplied product a0fa7912 / docs0a1cbaba; input hash maps are authoritative byte evidence",
+  "wheel_sha256": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+  "prefix": "C:/Users/jpamb/AppData/Local/Temp/nexus-qc-r1-package-0s9w2_3_/venv",
+  "scope": [
+    "tests/quick_connect",
+    "tests/execution_r4/test_public_connection_ids.py",
+    "tests/execution_r4/test_public_id_retirement.py",
+    "tests/execution_r4/test_connection_catalog.py",
+    "tests/execution_r4/test_connection_workspaces.py",
+    "tests/execution_r4/test_connection_setup.py",
+    "tests/execution_r4/test_connection_setup_recovery.py",
+    "tests/execution_r4/test_terminal_connect.py",
+    "tests/execution_r4/test_terminal_scripted_recovery.py",
+    "tests/execution_r4/test_remote_operator_terminal.py"
+  ],
+  "runs": [
+    {
+      "shard": 0,
+      "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py 0",
+      "exit_code": 1,
+      "status": "FAIL",
+      "elapsed_seconds": 532.0422539710999,
+      "pytest_seconds": 529.21,
+      "xml": "shard0/tests.xml",
+      "changed_inputs": [],
+      "counts": {
+        "PASS": 286,
+        "FAIL": 1,
+        "SKIP": 5
+      },
+      "nodes": [
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup_recovery::test_recovery_matches_durable_receipt_without_reapplying[operator-/v1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup_recovery::test_recovery_matches_durable_receipt_without_reapplying[operator-/api/v1/runtime-management]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup_recovery::test_recovery_matches_durable_receipt_without_reapplying[None-/v1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup_recovery::test_recovery_matches_durable_receipt_without_reapplying[None-/api/v1/runtime-management]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup_recovery::test_missing_or_unauthorized_receipt_is_not_success",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup_recovery::test_receipts_are_scoped_to_authorized_audit_actor",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup_recovery::test_connector_recovers_through_real_http_handlers[finish-True]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup_recovery::test_connector_recovers_through_real_http_handlers[test-False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup_recovery::test_connector_recovers_through_real_http_handlers[test-True]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_id_retirement::test_disabled_canonical_endpoint_keeps_bound_public_id_occupied_without_reactivation",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_id_retirement::test_old_uncertain_reservation_timestamps_do_not_make_new_intent_available",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_remote_operator_work_and_lost_reply_use_canonical_subject_without_admin_credential",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_remote_profile_reuse_selects_remote_before_any_local_service",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_remote_human_renews_and_answers_native_permission_without_agent_key",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_failed_vault_write_revokes_new_login_and_preserves_previous_session",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_cookie_expiry_never_falls_back_to_loopback_or_agent_key",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_profile_pins_origin_and_server_identity_and_never_serializes_password",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_cli_login_status_logout_and_missing_vault_are_redacted",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_unsafe_origins_are_rejected_before_transport[http://nexus.example]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_unsafe_origins_are_rejected_before_transport[https://user:secret@nexus.example]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_unsafe_origins_are_rejected_before_transport[https://nexus.example/path]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_unsafe_origins_are_rejected_before_transport[https://nexus.example/?key=secret]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_unsafe_origins_are_rejected_before_transport[https://nexus.example/#secret]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_unsafe_origins_are_rejected_before_transport[https://nexus.example\\\\evil]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_unsafe_origins_are_rejected_before_transport[https://nexus.example:0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_unsafe_origins_are_rejected_before_transport[ https://nexus.example]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_redirect_does_not_send_operator_cookie_to_other_origin",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_remote_operator_terminal::test_offline_logout_removes_local_session_without_claiming_remote_revocation",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_review_requires_exact_consent_then_finish_and_reconnect_preserve_configuration",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_reserved_addition_setup_id_is_used_by_canonical_review",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_provider_login_guidance_preserves_failed_request_without_replay[None]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_provider_login_guidance_preserves_failed_request_without_replay[approved-provider-home]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_provider_login_guidance_preserves_failed_request_without_replay[.codex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_response_loss_resumes_without_repeating_native_effects[installations:check]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_response_loss_resumes_without_repeating_native_effects[setup:test]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_response_loss_resumes_without_repeating_native_effects[setup:finish]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_reply_loss_observes_same_publication_before_single_test[0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_reply_loss_observes_same_publication_before_single_test[2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_recovery_deadline_retains_checkpoint_without_test[post_deadline]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_recovery_deadline_retains_checkpoint_without_test[get_deadline]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_recovery_deadline_retains_checkpoint_without_test[unreachable]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_recovery_deadline_retains_checkpoint_without_test[stale]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_recovery_rejects_changed_identity_before_test[server]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_recovery_rejects_changed_identity_before_test[subject_server]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_recovery_rejects_changed_identity_before_test[executor]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_recovery_rejects_changed_identity_before_test[adapter]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_recovery_rejects_changed_identity_before_test[candidate]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_recovery_does_not_mask_definite_refusal[post]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_recovery_does_not_mask_definite_refusal[get]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_resumed_check_read_failure_keeps_prior_possible_effect[server]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_resumed_check_read_failure_keeps_prior_possible_effect[permission]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_deadline_gates_each_read_and_following_effect[pre_post_subject]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_deadline_gates_each_read_and_following_effect[recovery_server]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_deadline_gates_each_read_and_following_effect[recovery_subject]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_deadline_gates_each_read_and_following_effect[confirmation_save]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_check_deadline_gates_each_read_and_following_effect[test_submission_save]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_provider_home_separators_survive_finish_and_read_only_resume",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_submitted_test_with_lost_cache_is_not_replayed",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_mutated_review_never_starts_a_test",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_cli_plan_apply_and_reconnect_use_saved_profile",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_existing_agent_binding_is_reused_after_canonical_project_match",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_unknown_preset_origin_is_rejected_before_test[origin0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_unknown_preset_origin_is_rejected_before_test[origin1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_unknown_preset_origin_is_rejected_before_test[origin2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_reconnect_reads_later_customization_without_reissuing_grants",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_connect::test_interactive_connect_enters_work_only_after_configuration",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv0-codex-app]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv1-codex-None]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv2-None-None]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv3-codex-None]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv4-codex-Minha aplica\\xe7\\xe3o]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv5-codex-My App]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv6-claude-None]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv7-codxe-None]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_legacy_path_flags_and_defaults_keep_their_original_types",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv3]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv4]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv5]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv6]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv7]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv8]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv9]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv10]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv11]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv12]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv13]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv14]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv15]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv16]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv17]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv18]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_service_value_arity_is_removed_before_positional_parsing",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_config_flag_set_is_derived_from_the_real_configuration_tables",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_service_validation_uses_real_parsers_without_loading_configuration",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_discovery_paths_are_structural_and_never_resolved_or_probed",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail3]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail4]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_discovery_roots_deduplicate_lexically_with_the_existing_32_root_budget",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_managed_mode_is_consumed_but_participant_options_are_left_for_its_real_parser",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_help_is_immediate_and_uses_the_single_harness_registry",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_arguments::test_parsing_never_reads_stdin_environment_files_or_runs_processes",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_alias_calls_same_function_without_process_or_global_argv[codex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_alias_calls_same_function_without_process_or_global_argv[claude]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_alias_calls_same_function_without_process_or_global_argv[pi]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_product_command_wins_and_unknown_root_never_enters_connect",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args3]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args4]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args5]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args6]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args7]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_connect_dispatch::test_help_stays_pure_when_reached_through_alias",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_origin_formats_are_local_text_and_never_disclose_url[https://example.invalid/org/project.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_origin_formats_are_local_text_and_never_disclose_url[git@example.invalid:org/project.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_origin_formats_are_local_text_and_never_disclose_url[ssh://git@example.invalid:2222/org/project.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_origin_formats_are_local_text_and_never_disclose_url[file:///srv/git/project.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_origin_formats_are_local_text_and_never_disclose_url[/srv/git/project.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_origin_formats_are_local_text_and_never_disclose_url[C:\\\\repos\\\\project.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_origin_formats_are_local_text_and_never_disclose_url[relative/project.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_origin_formats_are_local_text_and_never_disclose_url[https://user:PRIVATE@example.invalid/org/project.git?token=PRIVATE#PRIVATE]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_subdirectory_keeps_physical_root_and_nearest_repository",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_no_origin_uses_worktree_not_upstream",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_distinct_origins_ambiguous_even_with_same_basename",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_exact_duplicate_origins_are_not_ambiguous",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%2fname.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%5cname.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%0aname.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\\x1bname.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\\u200bname.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_invalid_origin_falls_back_without_echo[https://host.invalid/.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\\xa0name.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_invalid_origin_falls_back_without_echo[https://:123/project.git]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_invalid_origin_falls_back_without_echo[ext::evil command]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_invalid_origin_falls_back_without_echo[origin9]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_local_includes_and_global_config_are_not_origin_sources",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_gitfile_and_worktree_only_origin",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_case_insensitive_git_environment_overrides_do_not_redirect",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_plan_and_invalid_directory_never_resolve_or_spawn_git",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_no_git_and_non_repository_are_explicit",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_path_search_rejects_project_relative_and_symlink_candidates",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_path_search_does_not_follow_external_symlink_into_project",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_path_search_has_entry_and_time_budgets",
+          "outcome": "FAIL"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_non_repository_and_malformed_config_never_leak_diagnostics",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_directory_without_usable_name_does_not_invent_one",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_safe_utf8_and_terminal_git_suffix_only_are_preserved",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_discovery_deadline_includes_executable_resolution",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_failed_ownership_is_not_overridden_or_echoed",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_spawn_contract_is_bounded_read_only_and_cleans_environment",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_deadline_and_call_limit_reap_owned_children",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_deadline_is_shared_and_does_not_restart_between_calls",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_parent_exit_with_inherited_pipe_does_not_block_or_kill_descendant",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_output_limit_is_combined_and_reaps_owned_child[stdout]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_output_limit_is_combined_and_reaps_owned_child[stderr]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_output_limit_is_combined_and_reaps_owned_child[combined]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_hint::test_metadata_hint_is_not_an_identity_or_root_selector",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_trust::test_absolute_path_executable_inside_parent_repository_is_not_trusted",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_trust::test_encoded_separator_in_parent_origin_component_is_ambiguous",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_git_project_trust::test_cleanup_uncertainty_has_a_fixed_safe_public_reason",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_second_codex_explicit_add_uses_reviewer_id_in_same_workspace",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_exact_public_id_noninteractive_without_profile_reuses_canonical_reference",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_explicit_occupied_id_add_fails_before_another_model_test",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_new_connection_json_id_without_profile_never_invents_idempotency",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_plan_with_service_off_never_starts_daemon_or_discovers_git",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_unknown_or_unavailable_harness_json_does_not_read_or_test[codxe-CLIENT_SELECTION_REQUIRED]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_unknown_or_unavailable_harness_json_does_not_read_or_test[claude-INSTALLATION_UNAVAILABLE]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_root_alias_uses_same_managed_review_not_external_cli",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_unknown_harness_tty_choice_is_explicit_and_plan_does_not_test",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:test]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:finish]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_legacy_public_id_adoption_only_writes_metadata_preserves_unknown_fields_without_echo",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_tty_customize_id_creates_new_review_preserves_hint_and_invalidates_original_hash",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_json_unknown_exposes_authorized_alternatives_without_input",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_rollback_preserves_exact_existing_profile_without_replay_and_blocks_new_entry_before_context",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[None-codex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_cli::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[reviewer-reviewer]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_public_id_normalization_has_exact_ascii_boundaries[Reviewer-reviewer]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_public_id_normalization_has_exact_ascii_boundaries[A-a]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_public_id_normalization_has_exact_ascii_boundaries[codex-2-codex-2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_public_id_normalization_has_exact_ascii_boundaries[CodeX_3-codex_3]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_public_id_normalization_has_exact_ascii_boundaries[Z999999999999999999999999999999999999999999999999999999999999999-z999999999999999999999999999999999999999999999999999999999999999]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[2codex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[_codex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[-codex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[codex/a]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[codex\\\\a]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[codex..]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[codex a]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[ codex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[codex ]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[codex\\n]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[codex\\x1b[0m]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[c\\xf3dex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[\\uff43odex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[codex\\u200b]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[None]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[True]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_invalid_public_id_is_refused_without_echoing_input[value19]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_intent_preserves_requested_harness_and_separate_physical_context",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_intent_flags_and_required_context_are_not_coerced[patch0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_intent_flags_and_required_context_are_not_coerced[patch1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_intent_flags_and_required_context_are_not_coerced[patch2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_intent_flags_and_required_context_are_not_coerced[patch3]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_intent_flags_and_required_context_are_not_coerced[patch4]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_name_choice_is_only_provenance_and_uses_safe_reason_constants",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_connected_requires_full_bound_reference_but_does_not_rename_canonical_ids",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_unbound_ids_have_a_separate_proposed_field[planned]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_unbound_ids_have_a_separate_proposed_field[selection_required]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_unbound_ids_have_a_separate_proposed_field[conflict]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_unbound_ids_have_a_separate_proposed_field[pending]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_unbound_ids_have_a_separate_proposed_field[cancelled]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_unbound_ids_have_a_separate_proposed_field[unknown]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_unbound_ids_have_a_separate_proposed_field[failed]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_plan_cannot_claim_bound_or_hide_proposed_id_in_final_field",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_committed_shortcut_pending_can_preserve_bound_reference_without_claiming_connected",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_wire_outcome_is_fresh_json_with_structured_cwd_and_no_parallel_public_id",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_versions_and_nested_objects_are_strict_and_deeply_immutable",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_remote_context_can_omit_host_path_without_fabricating_local_root",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_contracts::test_construction_and_serialization_need_no_io",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_pty::test_real_terminal_measurement",
+          "outcome": "SKIP"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_pty::test_json_with_real_tty_never_requests_input",
+          "outcome": "SKIP"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_pty::test_cancel_from_actual_terminal_does_not_check_or_test",
+          "outcome": "SKIP"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_pty::test_confirm_and_resume_use_actual_terminal_without_replaying_test",
+          "outcome": "SKIP"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_pty::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation",
+          "outcome": "SKIP"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_known_harness_selects_exact_passive_candidate_without_running_it[codex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_known_harness_selects_exact_passive_candidate_without_running_it[claude]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_known_harness_selects_exact_passive_candidate_without_running_it[pi]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_absent_token_can_use_unique_detected_family_but_typo_requires_choice",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_unknown_noninteractive_is_selection_required_and_never_executes_token[codxe]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_unknown_noninteractive_is_selection_required_and_never_executes_token[claude; PRIVATE]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_unknown_noninteractive_is_selection_required_and_never_executes_token[$(PRIVATE)]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_unknown_noninteractive_is_selection_required_and_never_executes_token[../../PRIVATE]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_unknown_tty_selection_is_explicit_not_fuzzy_or_first_candidate",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_multiple_families_without_tty_never_choose_first",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_harness_picker_cancel_is_no_effect[c]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_harness_picker_cancel_is_no_effect[]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_supported_but_absent_is_not_installed_automatically",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_stale_never_means_absence_or_ready[False-STALE]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_stale_never_means_absence_or_ready[False-OFFLINE]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_stale_never_means_absence_or_ready[False-UNKNOWN]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_stale_never_means_absence_or_ready[True-STALE]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_stale_never_means_absence_or_ready[True-OFFLINE]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_stale_never_means_absence_or_ready[True-UNKNOWN]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_multiple_installations_require_exact_candidate_noninteractive",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_tty_installation_picker_never_defaults_to_first",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_configuration_policy_requires_boolean_true[False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_configuration_policy_requires_boolean_true[None]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_configuration_policy_requires_boolean_true[1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_configuration_policy_requires_boolean_true[true]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_malformed_inventory_is_structured_unconfirmed[None]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_malformed_inventory_is_structured_unconfirmed[body1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_malformed_inventory_is_structured_unconfirmed[body2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_malformed_inventory_is_structured_unconfirmed[body3]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_inventory_echo_cannot_cross_agent_or_host[agent_id-foreign-agent]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_inventory_echo_cannot_cross_agent_or_host[executor_id-foreign-host]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_new_agent_cannot_resume_existing_public_id",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_add_cannot_turn_into_legacy_binding_association",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_existing_exact_id_returns_resume_without_installation_probe",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_prepare_bound_id_does_not_override_exact_selectors[change0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_prepare_bound_id_does_not_override_exact_selectors[change1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_prepare_bound_id_does_not_override_exact_selectors[change2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_legacy_completed_profile_must_not_override_explicit_selector[change0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_legacy_completed_profile_must_not_override_explicit_selector[change1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_pending_own_intent_recovery_precedes_namespace_collision_and_does_not_discover",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes3]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes4]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes5]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes6]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes7]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes8]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes9]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_retained_exact_flag_mismatch_never_overwrites_or_replays[changes10]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_retained_foreign_server_is_refused_not_relabelled_current",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_pending_legacy_setup_is_not_adopted_or_reconfigured",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_selection::test_free_id_new_choice_only_proposes_metadata_no_test_or_reservation",
+          "outcome": "PASS"
+        }
+      ],
+      "runner_environment": "Original nested cwd/TMP (preserved engine-original-cwd.py)"
+    },
+    {
+      "shard": 1,
+      "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py 1",
+      "exit_code": 1,
+      "status": "FAIL",
+      "elapsed_seconds": 299.58230900764465,
+      "pytest_seconds": 296.69,
+      "xml": "shard1/tests.xml",
+      "changed_inputs": [],
+      "counts": {
+        "PASS": 234,
+        "FAIL": 1,
+        "SKIP": 0
+      },
+      "nodes": [
+        {
+          "xml_node": "tests.execution_r4.test_connection_catalog::test_http_catalog_authorization_projection_filters_and_no_sensitive_fields",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_catalog::test_catalog_public_labels_never_serialize_arbitrary_metadata",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_catalog::test_cursor_scope_limit_revision_and_unknown_parameters",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_catalog::test_catalog_one_read_uow_write_barrier_and_human_cursor_fence",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_catalog::test_cli_existing_canonical_without_profile_creates_only_shortcut",
+          "outcome": "FAIL"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_atomic_idempotent",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_workspace_paths_aggregate_across_agents_on_the_same_host",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_rolls_back_every_configuration_change[no_test]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_rolls_back_every_configuration_change[invalid_settings]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_rolls_back_every_configuration_change[stale_baseline]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_setup_auto_claim_preserves_omission_and_resets_explicit_null",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_setup_auto_claim_rejects_non_boolean_and_stale_revision",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_setup_transport_requires_operator",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_authorizes_work_only_with_effective_handoff_opt_in[False-None-False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_authorizes_work_only_with_effective_handoff_opt_in[True-None-True]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_authorizes_work_only_with_effective_handoff_opt_in[True-False-False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_authorizes_work_only_with_effective_handoff_opt_in[False-True-True]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_offers_scoped_session_choice_and_retries_after_release[NONE-False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_offers_scoped_session_choice_and_retries_after_release[NONE-True]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_offers_scoped_session_choice_and_retries_after_release[CLOSED-False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_offers_scoped_session_choice_and_retries_after_release[CLOSED-True]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_remote_policy_can_finish_before_connector_registration[False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_remote_policy_can_finish_before_connector_registration[True]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_preserves_inherited_runtime_policy[True]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_preserves_inherited_runtime_policy[False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_remote_finish_updates_approved_binding_atomically",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_setup_refuses_concurrent_preset_change_before_any_commit",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_remote_finish_rejects_embedded_binding_without_partial_writes",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_setup::test_finish_refuses_unchecked_or_stale_installation_revision",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_workspaces::test_catalog_paginates_other_workspaces_and_enforces_discovery_permission",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_connection_workspaces::test_existing_workspace_keeps_identity_with_independent_connection_folder",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_public_finish_atomic_receipt_and_lost_reply",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_finish_failure_keeps_reservation_without_canonical_effects",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_second_intent_cannot_split_same_new_project_root",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_http_project_namespace_capability_and_legacy_hash_omission",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_public_id_grammar[]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_public_id_grammar[1worker]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_public_id_grammar[a/b]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_public_id_grammar[a:b]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_public_id_grammar[\\xe9clair]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_public_id_grammar[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_existing_projects_same_label_namespace_and_revision_cursors",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_concurrent_same_id_and_same_new_root_are_serialized",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_legacy_association_metadata_only_and_projection",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_stale_directory_proof_and_foreign_executor_rejected_before_stat",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_two_servers_same_workspace_ids_do_not_share_namespace",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_finish_public_binding_failure_rolls_back_canonical_authority",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_http_reserve_validation_and_principal_cursor_fences",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_legacy_request_hash_matches_frozen_installed_pr27",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_malformed_approved_local_mapping_is_incomplete_not_new_project[not-json]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_malformed_approved_local_mapping_is_incomplete_not_new_project[{}]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_malformed_approved_local_mapping_is_incomplete_not_new_project[{\"root\":{\"path\":\"relative\",\"device\":\"1\",\"inode\":\"2\"}}]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_malformed_approved_local_mapping_is_incomplete_not_new_project[{\"root\":{\"path\":\"C:/project\",\"device\":null,\"inode\":\"2\"}}]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_remote_logical_proof_never_reads_private_local_mapping",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_http_bound_and_pending_collision_codes_are_distinct",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_public_connection_ids::test_committed_legacy_intent_cannot_acquire_different_public_content",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.execution_r4.test_terminal_scripted_recovery::test_scripted_new_connection_exact_review_recovers_lost_finish_without_replay",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_harness_alternatives::test_known_missing_harness_tty_can_explicitly_choose_available_supported_family",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_harness_alternatives::test_known_missing_harness_tty_can_cancel_without_install_or_test[c]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_harness_alternatives::test_known_missing_harness_tty_can_cancel_without_install_or_test[]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_harness_alternatives::test_known_missing_noninteractive_exposes_three_safe_supported_alternatives",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_harness_alternatives::test_stale_requested_harness_is_unconfirmed_not_missing_or_auto_switched",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_harness_alternatives::test_stale_tty_request_never_switches_harness_without_explicit_answer",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_harness_alternatives::test_denied_requested_candidate_cannot_bypass_policy_noninteractive",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_harness_alternatives::test_denied_candidate_can_explicitly_choose_different_fresh_authorized_family",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_harness_alternatives::test_explicitly_selected_denied_alternative_is_still_refused",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_harness_alternatives::test_explicitly_selected_stale_alternative_is_not_usable",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[1-NEW-id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[2-New project]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[3-CLAUDE]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_each_change_is_a_fresh_unapproved_profile_and_preserves_review[4-None]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_repeated_customization_does_not_reuse_generated_profile",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_explicit_name_is_retained_instead_of_git_rediscovery",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_id_or_harness_change_preserves_previously_chosen_root_and_prepare_provenance[1-replacement]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_id_or_harness_change_preserves_previously_chosen_root_and_prepare_provenance[3-claude]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_exact_tuple_cannot_be_silently_retargeted[2---workspace-id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_exact_tuple_cannot_be_silently_retargeted[2---binding-id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_exact_tuple_cannot_be_silently_retargeted[2---agent]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_exact_tuple_cannot_be_silently_retargeted[4---workspace-id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_exact_tuple_cannot_be_silently_retargeted[4---binding-id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_exact_tuple_cannot_be_silently_retargeted[4---agent]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_existing_identity_cannot_change_harness[--binding-id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_existing_identity_cannot_change_harness[--agent]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_association_changes_only_public_id_and_retains_exact_identity",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_cancel_does_not_create_profile_or_mutate_review[]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_cancel_does_not_create_profile_or_mutate_review[c]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_cancel_does_not_create_profile_or_mutate_review[C]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_eof_before_or_after_field_selection_cancels",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_invalid_values_do_not_mutate_review[1-../invalid]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_invalid_values_do_not_mutate_review[2-]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_invalid_values_do_not_mutate_review[2-bad\\nname]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_restart_trampoline_reenters_only_after_previous_invocation_unwinds",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_json_allowlist_does_not_expose_or_mutate_unknown_private_members",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_legacy_document_wire_is_unchanged",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_customize::test_association_commit_retains_private_future_selection_without_echoing_it",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unused_default_and_explicit_id_are_proposals_only[codex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unused_default_and_explicit_id_are_proposals_only[claude]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unused_default_and_explicit_id_are_proposals_only[pi]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_suffix_uses_requested_family_and_all_occupied_states_without_mutation",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_no_suffix_can_be_implicitly_applied_to_explicit_occupied_id",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_pending_and_retired_never_resume_or_release[reserved-HARNESS_ID_PENDING]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_pending_and_retired_never_resume_or_release[retired-HARNESS_ID_ALREADY_EXISTS]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_noninteractive_agreeing_exact_reference_resumes_without_new_setup",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_noninteractive_cross_family_returns_conflict_not_another_harness",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_tty_resume_requires_explicit_choice_and_returns_actual_family[codex-codex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_tty_resume_requires_explicit_choice_and_returns_actual_family[claude-codex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_tty_cross_family_can_propose_separate_requested_harness_id[answers0-reviewer]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_tty_cross_family_can_propose_separate_requested_harness_id[answers1-claude]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_tty_nonresumable_has_no_resume_option[bound-True]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_tty_nonresumable_has_no_resume_option[reserved-False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_tty_nonresumable_has_no_resume_option[retired-False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_exact_selector_conflicts_never_offer_override_menu[server_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_exact_selector_conflicts_never_offer_override_menu[executor_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_exact_selector_conflicts_never_offer_override_menu[binding_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_exact_selector_conflicts_never_offer_override_menu[endpoint_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_exact_selector_conflicts_never_offer_override_menu[agent_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_exact_selector_conflicts_never_offer_override_menu[workspace_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_exact_selector_conflicts_never_offer_override_menu[workspace_binding_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_multiple_same_family_connections_require_selection_without_tty",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_tty_multiple_can_select_exact_connection_or_explicitly_add[2-second]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_tty_multiple_can_select_exact_connection_or_explicitly_add[a-codex]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_exact_selector_filters_multiple_actors_and_hosts_without_latest_heuristic",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_generic_pending_collision_does_not_disclose_unrelated_metadata",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_binding_reference_contains_only_exact_canonical_identity_and_is_copied",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_complete_paging_preserves_exact_server_workspace_actor_host",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed3]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed4]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed5]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed6]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed7]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed8]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed9]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed10]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed11]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unconfirmed_page_never_becomes_empty_namespace[changed12]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_page_revision_and_total_drift_fail_closed[revision-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_page_revision_and_total_drift_fail_closed[total-3]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_nonadjacent_cursor_cycle_is_rejected_without_exhausting_page_budget",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_duplicate_public_ids_across_actors_hosts_are_not_silently_deduplicated",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_bound_reference_scope_cannot_cross_server_or_project[scope0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_bound_reference_scope_cannot_cross_server_or_project[scope1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[Reviewer]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[../secret]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[bad\\x1bname]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_invalid_wire_id_is_catalog_error_not_unhandled_validator_exception[None]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_malformed_nested_catalog_shape_has_structured_failure[patch0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_malformed_nested_catalog_shape_has_structured_failure[patch1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_old_server_capability_errors_request_upgrade_without_writes[NOT_FOUND]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_old_server_capability_errors_request_upgrade_without_writes[HTTP_ERROR]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_old_server_capability_errors_request_upgrade_without_writes[VALIDATION_ERROR]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_capability_probe_is_server_exact_and_no_scope_cache_is_created",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_unauthorized_capability_failure_is_not_reclassified_as_old_server",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_eof_cancels_without_new_name_or_resume",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_maximum_public_id_is_never_truncated_into_filename_or_another_id",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_id_choices::test_same_label_in_distinct_projects_is_resolved_only_in_explicit_scope",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_legacy_value_is_unchanged_and_output_helper_defers_to_legacy_display",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_created_connection_reports_bound_full_reference_without_claiming_work_or_mutating_inputs",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_reuse_preserves_the_same_public_id_and_reference_and_names_the_reuse",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_partial_server_commit_keeps_bound_identity_and_shortcut_repair_explicit",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_plan_never_promotes_proposal_or_existing_observation_to_connected",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_known_non_success_states_are_not_relabelled_as_pending[cancelled-cancelled]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_known_non_success_states_are_not_relabelled_as_pending[conflict-conflict]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_known_non_success_states_are_not_relabelled_as_pending[test_failed-failed]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_known_non_success_states_are_not_relabelled_as_pending[outcome_unknown-unknown]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[server_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[executor_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[workspace_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[binding_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[workspace_binding_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[agent_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[endpoint_id]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_public_reference_must_match_the_observed_connection_and_reviewed_id",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_resume_argv_uses_public_id_and_preserves_metacharacters_as_unexecuted_arguments",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_positive_basic_output_identifies_project_origin_and_approved_root_before_chat",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_outcome::test_unsafe_discovery_provenance_is_rejected_without_leaking_origin_or_credentials",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_unique_exact_mapping_reuses_project_without_git_or_picker",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_explicit_label_selects_project_without_binding",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_new_explicit_label_is_proposal_not_path_or_workspace_creation",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_exact_workspace_and_conflicting_label_never_override_each_other[False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_exact_workspace_and_conflicting_label_never_override_each_other[True]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_exact_workspace_and_agreeing_name_preserve_selector",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_duplicate_names_require_choice_noninteractive",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_duplicate_names_tty_choice_is_exact",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_different_approved_root_requires_explicit_resolution[True-True]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_different_approved_root_requires_explicit_resolution[True-False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_different_approved_root_requires_explicit_resolution[False-False]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_tty_switch_root_records_provenance_without_chdir",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_explicit_root_preserves_original_invocation_cwd",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_hint_does_not_inherit_parent_mapping_or_merge_equal_names",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_catalog_choice_after_hint_keeps_existing_nexus_source",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_plan_passes_no_process_flag_and_only_proposes_directory_name",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_explicit_or_existing_name_precedes_changed_git_hint",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_unknown_mapping_is_not_an_empty_catalog",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_catalog_rename_between_selection_and_return_requires_new_review",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_directory_envelope_cannot_authorize_new_project[patch0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_directory_envelope_cannot_authorize_new_project[patch1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_directory_envelope_cannot_authorize_new_project[patch2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_directory_envelope_cannot_authorize_new_project[patch3]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_directory_envelope_cannot_authorize_new_project[patch4]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_directory_envelope_cannot_authorize_new_project[patch5]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_directory_envelope_cannot_authorize_new_project[patch6]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_directory_envelope_cannot_authorize_new_project[patch7]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_directory_envelope_cannot_authorize_new_project[patch8]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_directory_envelope_cannot_authorize_new_project[patch9]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_directory_envelope_cannot_authorize_new_project[patch10]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_or_duplicate_directory_metadata_fails_closed[items0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_or_duplicate_directory_metadata_fails_closed[items1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_or_duplicate_directory_metadata_fails_closed[items2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_invalid_or_duplicate_directory_metadata_fails_closed[items3]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_pagination_complete_and_revision_drift",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_nonadjacent_cursor_cycle_is_bounded",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_project_context_checks_full_echo_and_revision[patch0]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_project_context_checks_full_echo_and_revision[patch1]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_project_context_checks_full_echo_and_revision[patch2]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_project_context_checks_full_echo_and_revision[patch3]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_project_context_checks_full_echo_and_revision[patch4]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_project_context_checks_full_echo_and_revision[patch5]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_project_context_checks_full_echo_and_revision[patch6]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_null_wire_envelope_is_structured_unconfirmed[directory]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_null_wire_envelope_is_structured_unconfirmed[context]",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_paging_transport_failure_propagates_without_discovery_or_new_project",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_quick_connect_project::test_local_executor_pages_exactly_and_rejects_multiple_or_stale_hosts",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_terminal_public_connection::test_new_public_review_reserve_precedes_single_test_and_resume_is_read_only",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_terminal_public_connection::test_public_collision_refuses_before_another_model_test_or_identity",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_terminal_public_connection::test_lost_reservation_reply_recovers_same_intent_without_another_id",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_terminal_public_connection::test_bound_reservation_recovers_existing_commit_before_any_repeated_test",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_terminal_public_connection::test_lost_finish_recovers_same_public_receipt_without_native_replay",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_terminal_public_connection::test_local_disk_failure_after_commit_preserves_partial_metadata_and_repairs_only_shortcut",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_terminal_public_connection::test_legacy_association_requires_exact_review_and_changes_only_public_metadata",
+          "outcome": "PASS"
+        },
+        {
+          "xml_node": "tests.quick_connect.test_terminal_public_connection::test_remote_adoption_and_observation_preserve_exact_scope_without_operator_root_authority[human-operator]",
+          "outcome": "PASS"
+        }
+      ],
+      "runner_environment": "Corrected sibling cwd/TMP equivalent to CI helper"
+    }
+  ],
+  "total_counts": {
+    "PASS": 520,
+    "FAIL": 2,
+    "SKIP": 5,
+    "total": 527
+  },
+  "failures": [
+    {
+      "node": "tests.quick_connect.test_git_project_hint::test_path_search_has_entry_and_time_budgets",
+      "classification": "Runner environment/fixture isolation mismatch",
+      "expected": "Fake install/git.exe outside invocation directory accepted as PATH installation",
+      "actual": "Fake install under runner cwd own/run/tmp was correctly refused by trusted Git cwd exclusion",
+      "counterpart": "git-cwd-counterpart.json + git-cwd-counterpart/tests.xml: same installed product/test passes with cwd own/run/cwd, TMP own/run/tmp",
+      "outcome": "Original FAIL retained; counterpart PASS is a distinct one-node run, not relabeled original suite"
+    },
+    {
+      "node": "tests.execution_r4.test_connection_catalog::test_cli_existing_canonical_without_profile_creates_only_shortcut",
+      "classification": "Compatibility/oracle interpretation requires Root decision; not automatically dismissed",
+      "expected": "--project ROOT --plan --no-chat chooses canonical existing connection and saves local shortcut state done without request",
+      "actual": "New no-profile Quick Connect flow saves state review",
+      "limit": "Test stops at first state assertion; downstream same-identity/no-effects/reuse assertions were not executed, so not claimed"
+    }
+  ],
+  "origin_evidence": [
+    "shard0/origins-start.json",
+    "shard0/origins-finish.json",
+    "shard1/origins-start.json",
+    "shard1/origins-finish.json"
+  ],
+  "child_audit": {
+    "recorded_launches": 168,
+    "app_children": 0,
+    "checkout_source_attempts": 0,
+    "scope": "subprocess.Popen audit, including asyncio implementation; own Git repositories and synthetic pure Python peers only",
+    "limitation": "Synthetic in-process version/Test/native factories are not real provider qualification"
+  },
+  "payload_after": "payload-after-qc.json (1027/1027 identical, 0 drift; transient pycache separately counted)",
+  "explicit_exclusions": [
+    "No real PTY;5items SKIP due stdin.isatty guard",
+    "browser_public_ids_fixture.py is not collected; no browser/session/human study",
+    "No real Codex/Claude/Pi/provider auth or inference, Windows session change, native readiness, real external Connector host or installed service lifecycle",
+    "527 test nodes do not independently qualify147 plan scenarios; coverage-review proposal remains separately curated",
+    "Actual old Server404 capability path known outside these helper tests remains unresolved evidence; no global Quick Connect PASS inferred"
+  ],
+  "golden_counterpart": "test_legacy_request_hash_matches_frozen_installed_pr27 uses explicit captured golden hash plus current installed normalization; no source app subprocess or old provider calls",
+  "cleanup": "Both QC pytest trees exited with code1; TestClient contexts completed; physical PID generations recorded per result; no prefix installation/product/test/Git/ledger changes",
+  "antecedent": {
+    "tool": "ee1300",
+    "kind": "Own runner AttributeError WHEEL before pytest launch; corrected import in evidence only, not a test failure"
+  }
+}

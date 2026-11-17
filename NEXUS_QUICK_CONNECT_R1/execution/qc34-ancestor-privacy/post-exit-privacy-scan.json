@@ -1,0 +1,790 @@
+{
+  "at": "2026-11-17T10:12:08.093297+00:00",
+  "scope": "READ_ONLY_POST_EXIT_SCAN_OF_SAME_PRESERVED_CASE",
+  "original_runtime_node_status": "FAILED_PERMISSION_ERROR_DURING_LIVE_FILE_SCAN",
+  "original_global_status": "NOT_GREEN",
+  "case_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-routed-focals-_f1l4j9w\\privacy-observed-focal\\tmp\\pytest-of-unknown\\pytest-0\\test_d25_private_origin_does_n0",
+  "input_config_confirmed_contains_synthetic_origin": true,
+  "sink": {
+    "kind": "real UTF-8 logging.FileHandler",
+    "namespaces": [
+      "root",
+      "okto_nexus",
+      "httpx"
+    ],
+    "level": "DEBUG",
+    "before_marker": true,
+    "after_marker": true,
+    "httpx_request_events": 75,
+    "bytes": 11584,
+    "sha256": "bf6f26bbc61e6eeb3b05aa29d1f637d40171a427ed34757acf6ed508cb92ad7f",
+    "filters_or_redaction_added": false,
+    "outbound_product_telemetry_enabled": false
+  },
+  "runtime_prefix_assertions": "Source and failure location prove stdout, four JSON outputs, plain resume, active-sink/no-secret/traces assertions completed before the later file-read error; this is not a pytest PASS.",
+  "sqlite": {
+    "table_count": 163,
+    "tables": [
+      {
+        "table": "agent_comm_binding",
+        "rows": 0
+      },
+      {
+        "table": "agent_connection_keys",
+        "rows": 0
+      },
+      {
+        "table": "agent_connection_methods",
+        "rows": 0
+      },
+      {
+        "table": "agent_connection_policies",
+        "rows": 0
+      },
+      {
+        "table": "agent_endpoints",
+        "rows": 1
+      },
+      {
+        "table": "agent_execution_policies",
+        "rows": 1
+      },
+      {
+        "table": "agent_group_members",
+        "rows": 0
+      },
+      {
+        "table": "agent_groups",
+        "rows": 0
+      },
+      {
+        "table": "agent_policy_bindings",
+        "rows": 0
+      },
+      {
+        "table": "agent_runtime_overrides",
+        "rows": 1
+      },
+      {
+        "table": "agent_runtime_policy_epochs",
+        "rows": 1
+      },
+      {
+        "table": "agents",
+        "rows": 3
+      },
+      {
+        "table": "approvals",
+        "rows": 0
+      },
+      {
+        "table": "artifacts",
+        "rows": 0
+      },
+      {
+        "table": "attention_operation_epochs",
+        "rows": 20
+      },
+      {
+        "table": "attention_preferences",
+        "rows": 0
+      },
+      {
+        "table": "capability_names",
+        "rows": 0
+      },
+      {
+        "table": "channels",
+        "rows": 0
+      },
+      {
+        "table": "comm_preset_versions",
+        "rows": 4
+      },
+      {
+        "table": "comm_presets",
+        "rows": 4
+      },
+      {
+        "table": "connection_authorization_receipts",
+        "rows": 0
+      },
+      {
+        "table": "connection_project_drafts",
+        "rows": 1
+      },
+      {
+        "table": "connection_public_ids",
+        "rows": 1
+      },
+      {
+        "table": "connection_setup_commits",
+        "rows": 1
+      },
+      {
+        "table": "coordination_requests",
+        "rows": 0
+      },
+      {
+        "table": "delivery_outbox",
+        "rows": 0
+      },
+      {
+        "table": "ephemeral_poll_tokens",
+        "rows": 0
+      },
+      {
+        "table": "events",
+        "rows": 0
+      },
+      {
+        "table": "execution_agent_recovery",
+        "rows": 0
+      },
+      {
+        "table": "execution_agent_revisions",
+        "rows": 2
+      },
+      {
+        "table": "execution_bindings",
+        "rows": 1
+      },
+      {
+        "table": "execution_capacity_admissions",
+        "rows": 0
+      },
+      {
+        "table": "execution_capacity_compensations",
+        "rows": 0
+      },
+      {
+        "table": "execution_capacity_waits",
+        "rows": 0
+      },
+      {
+        "table": "execution_client_intents",
+        "rows": 0
+      },
+      {
+        "table": "execution_connection_resumes",
+        "rows": 0
+      },
+      {
+        "table": "execution_context_observers",
+        "rows": 0
+      },
+      {
+        "table": "execution_control_lanes",
+        "rows": 0
+      },
+      {
+        "table": "execution_decisions",
+        "rows": 0
+      },
+      {
+        "table": "execution_delivery_attempt_history",
+        "rows": 0
+      },
+      {
+        "table": "execution_delivery_releases",
+        "rows": 0
+      },
+      {
+        "table": "execution_dispatch_outbox",
+        "rows": 0
+      },
+      {
+        "table": "execution_domain_deliveries",
+        "rows": 0
+      },
+      {
+        "table": "execution_embedded_store_bindings",
+        "rows": 1
+      },
+      {
+        "table": "execution_event_artifact_chunks",
+        "rows": 0
+      },
+      {
+        "table": "execution_event_artifacts",
+        "rows": 0
+      },
+      {
+        "table": "execution_event_ingress",
+        "rows": 0
+      },
+      {
+        "table": "execution_event_watermarks",
+        "rows": 0
+      },
+      {
+        "table": "execution_executors",
+        "rows": 1
+      },
+      {
+        "table": "execution_handoff_origins",
+        "rows": 0
+      },
+      {
+        "table": "execution_installation",
+        "rows": 1
+      },
+      {
+        "table": "execution_installation_succession",
+        "rows": 0
+      },
+      {
+        "table": "execution_inventory_current",
+        "rows": 1
+      },
+      {
+        "table": "execution_inventory_refresh",
+        "rows": 0
+      },
+      {
+        "table": "execution_inventory_refresh_deliveries",
+        "rows": 0
+      },
+      {
+        "table": "execution_inventory_revalidation",
+        "rows": 0
+      },
+      {
+        "table": "execution_inventory_snapshots",
+        "rows": 2
+      },
+      {
+        "table": "execution_leases",
+        "rows": 0
+      },
+      {
+        "table": "execution_link_tickets",
+        "rows": 0
+      },
+      {
+        "table": "execution_local_observations",
+        "rows": 1
+      },
+      {
+        "table": "execution_local_preopen_fences",
+        "rows": 0
+      },
+      {
+        "table": "execution_local_publications",
+        "rows": 0
+      },
+      {
+        "table": "execution_local_realizations",
+        "rows": 1
+      },
+      {
+        "table": "execution_local_startup_refusals",
+        "rows": 0
+      },
+      {
+        "table": "execution_local_streams",
+        "rows": 0
+      },
+      {
+        "table": "execution_local_tool_credentials",
+        "rows": 0
+      },
+      {
+        "table": "execution_message_origins",
+        "rows": 0
+      },
+      {
+        "table": "execution_migration_map",
+        "rows": 0
+      },
+      {
+        "table": "execution_native_actions",
+        "rows": 0
+      },
+      {
+        "table": "execution_native_messages",
+        "rows": 0
+      },
+      {
+        "table": "execution_native_requests",
+        "rows": 0
+      },
+      {
+        "table": "execution_operations",
+        "rows": 0
+      },
+      {
+        "table": "execution_preopen_refusals",
+        "rows": 0
+      },
+      {
+        "table": "execution_proposals",
+        "rows": 1
+      },
+      {
+        "table": "execution_realizations",
+        "rows": 1
+      },
+      {
+        "table": "execution_receipts",
+        "rows": 0
+      },
+      {
+        "table": "execution_release_notifications",
+        "rows": 0
+      },
+      {
+        "table": "execution_results",
+        "rows": 0
+      },
+      {
+        "table": "execution_sender_sessions",
+        "rows": 0
+      },
+      {
+        "table": "execution_session_capabilities",
+        "rows": 0
+      },
+      {
+        "table": "execution_session_containment",
+        "rows": 0
+      },
+      {
+        "table": "execution_sessions",
+        "rows": 0
+      },
+      {
+        "table": "execution_tool_claims",
+        "rows": 0
+      },
+      {
+        "table": "execution_unsent_delivery_history",
+        "rows": 0
+      },
+      {
+        "table": "execution_unsent_dispatch_proofs",
+        "rows": 0
+      },
+      {
+        "table": "execution_workspace_bindings",
+        "rows": 1
+      },
+      {
+        "table": "governance_policies",
+        "rows": 0
+      },
+      {
+        "table": "guardrail_assignments",
+        "rows": 0
+      },
+      {
+        "table": "guardrail_versions",
+        "rows": 0
+      },
+      {
+        "table": "guardrails",
+        "rows": 0
+      },
+      {
+        "table": "handoff_authorization_receipts",
+        "rows": 0
+      },
+      {
+        "table": "handoff_dependencies",
+        "rows": 0
+      },
+      {
+        "table": "handoff_runtime_attempts",
+        "rows": 0
+      },
+      {
+        "table": "handoff_runtime_no_effect_retries",
+        "rows": 0
+      },
+      {
+        "table": "handoff_runtime_schedule",
+        "rows": 0
+      },
+      {
+        "table": "handoff_runtime_schedule_scan",
+        "rows": 1
+      },
+      {
+        "table": "handoff_silence_notices",
+        "rows": 0
+      },
+      {
+        "table": "handoffs",
+        "rows": 0
+      },
+      {
+        "table": "harness_events",
+        "rows": 0
+      },
+      {
+        "table": "harness_sessions",
+        "rows": 0
+      },
+      {
+        "table": "memories",
+        "rows": 0
+      },
+      {
+        "table": "memory_embeddings",
+        "rows": 0
+      },
+      {
+        "table": "message_deliveries",
+        "rows": 0
+      },
+      {
+        "table": "message_embeddings",
+        "rows": 0
+      },
+      {
+        "table": "messages",
+        "rows": 0
+      },
+      {
+        "table": "observation_attention_anchors",
+        "rows": 0
+      },
+      {
+        "table": "observation_correlations",
+        "rows": 0
+      },
+      {
+        "table": "observation_heads",
+        "rows": 0
+      },
+      {
+        "table": "observation_installation",
+        "rows": 1
+      },
+      {
+        "table": "observation_instances",
+        "rows": 0
+      },
+      {
+        "table": "observation_rate_buckets",
+        "rows": 0
+      },
+      {
+        "table": "observation_source_workspaces",
+        "rows": 0
+      },
+      {
+        "table": "observation_sources",
+        "rows": 0
+      },
+      {
+        "table": "observation_token_instances",
+        "rows": 0
+      },
+      {
+        "table": "observation_tokens",
+        "rows": 0
+      },
+      {
+        "table": "one_shot_calls",
+        "rows": 0
+      },
+      {
+        "table": "one_shot_host_limits",
+        "rows": 0
+      },
+      {
+        "table": "one_shot_policy_settings",
+        "rows": 1
+      },
+      {
+        "table": "one_shot_slots",
+        "rows": 0
+      },
+      {
+        "table": "one_shot_warm_backoff",
+        "rows": 0
+      },
+      {
+        "table": "permission_presets",
+        "rows": 0
+      },
+      {
+        "table": "policies",
+        "rows": 0
+      },
+      {
+        "table": "policy_versions",
+        "rows": 0
+      },
+      {
+        "table": "remote_setup_reviews",
+        "rows": 0
+      },
+      {
+        "table": "remote_setup_runs",
+        "rows": 0
+      },
+      {
+        "table": "runtime_access_audit",
+        "rows": 16
+      },
+      {
+        "table": "runtime_artifact_settings",
+        "rows": 1
+      },
+      {
+        "table": "runtime_boot_bindings",
+        "rows": 0
+      },
+      {
+        "table": "runtime_causal_roots",
+        "rows": 0
+      },
+      {
+        "table": "runtime_commands",
+        "rows": 0
+      },
+      {
+        "table": "runtime_context_observations",
+        "rows": 0
+      },
+      {
+        "table": "runtime_delivery_attempt_events",
+        "rows": 0
+      },
+      {
+        "table": "runtime_dispatcher_owner",
+        "rows": 1
+      },
+      {
+        "table": "runtime_endpoint_reconciliations",
+        "rows": 0
+      },
+      {
+        "table": "runtime_execution_grants",
+        "rows": 1
+      },
+      {
+        "table": "runtime_handoff_bindings",
+        "rows": 0
+      },
+      {
+        "table": "runtime_handoff_notice_retirements",
+        "rows": 0
+      },
+      {
+        "table": "runtime_handoff_notifications",
+        "rows": 0
+      },
+      {
+        "table": "runtime_journal_checkpoint",
+        "rows": 0
+      },
+      {
+        "table": "runtime_mcp_presets",
+        "rows": 0
+      },
+      {
+        "table": "runtime_message_causality",
+        "rows": 0
+      },
+      {
+        "table": "runtime_native_approvals",
+        "rows": 0
+      },
+      {
+        "table": "runtime_open_requests",
+        "rows": 0
+      },
+      {
+        "table": "runtime_operation_reconciliations",
+        "rows": 0
+      },
+      {
+        "table": "runtime_pending_deliveries",
+        "rows": 0
+      },
+      {
+        "table": "runtime_policy_defaults",
+        "rows": 1
+      },
+      {
+        "table": "runtime_profiles",
+        "rows": 1
+      },
+      {
+        "table": "runtime_recovery_events",
+        "rows": 1
+      },
+      {
+        "table": "runtime_relay_decisions",
+        "rows": 0
+      },
+      {
+        "table": "runtime_reset_generation",
+        "rows": 1
+      },
+      {
+        "table": "runtime_result_maintenance",
+        "rows": 0
+      },
+      {
+        "table": "runtime_results",
+        "rows": 0
+      },
+      {
+        "table": "runtime_work_outcomes",
+        "rows": 0
+      },
+      {
+        "table": "runtime_writer_contract",
+        "rows": 1
+      },
+      {
+        "table": "schema_migrations",
+        "rows": 168
+      },
+      {
+        "table": "server_effective_policy",
+        "rows": 0
+      },
+      {
+        "table": "sessions",
+        "rows": 0
+      },
+      {
+        "table": "settings",
+        "rows": 1
+      },
+      {
+        "table": "sqlite_sequence",
+        "rows": 2
+      },
+      {
+        "table": "tag_keys",
+        "rows": 0
+      },
+      {
+        "table": "tag_values",
+        "rows": 0
+      },
+      {
+        "table": "tasks",
+        "rows": 0
+      },
+      {
+        "table": "workspaces",
+        "rows": 1
+      }
+    ],
+    "total_rows": 251,
+    "text_or_blob_cells": 601,
+    "connection_mode": "mode=ro;query_only=ON",
+    "main_database_sha256_unchanged": true
+  },
+  "files": {
+    "count": 17,
+    "bytes": 2747093,
+    "manifest": [
+      {
+        "path": "codex.exe",
+        "bytes": 37,
+        "sha256": "f42ab7589bd8fe6ec05747f595d436a7cd9d5d29d281aaecac37c0840c8bf75f"
+      },
+      {
+        "path": "home\\core-runtime\\owned-slots.db",
+        "bytes": 131072,
+        "sha256": "115ef53f1add78430f2f99bd6dd18f9e45aafe55da846fc6df6725a6e47df65f"
+      },
+      {
+        "path": "home\\nexus.db",
+        "bytes": 2535424,
+        "sha256": "11911ea9093bf78357d25363c61d5c07f159f652cf72ea05b961abbc2aed28a7"
+      },
+      {
+        "path": "home\\nexus.db-shm",
+        "bytes": 32768,
+        "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb"
+      },
+      {
+        "path": "home\\nexus.db-wal",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "home\\operator-auth.db",
+        "bytes": 20480,
+        "sha256": "3acfab97248ff0262fbc7f478a7513ba50bbe7bee665af20987c1cc18d65e3b0"
+      },
+      {
+        "path": "home\\runtime-journal-v1\\store-id",
+        "bytes": 36,
+        "sha256": "889987f9a04778b77558e21e92cf3c0ab4f489c788c6c6afb3543c68cc9cb6f9"
+      },
+      {
+        "path": "home\\runtime-journal-v1\\writer.lock",
+        "bytes": 1,
+        "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+      },
+      {
+        "path": "home\\runtime-wake.json",
+        "bytes": 104,
+        "sha256": "158e2c7d34a4b550ef57990a88e20e9ea30d01c205abf630e65155e95979cb88"
+      },
+      {
+        "path": "quick-cli-home\\logs\\observed-local.log",
+        "bytes": 11584,
+        "sha256": "bf6f26bbc61e6eeb3b05aa29d1f637d40171a427ed34757acf6ed508cb92ad7f"
+      },
+      {
+        "path": "quick-cli-home\\terminal\\connection-intents\\catalog.guard",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "quick-cli-home\\terminal\\connection-intents\\privacy.json",
+        "bytes": 1970,
+        "sha256": "8318d7fc42261b4a149b36e604bbf080a80e1f90e24bd89607b99a7c0af5f87e"
+      },
+      {
+        "path": "quick-cli-home\\terminal\\profiles\\canonical-0a2f1b68e6a65fcd8bd16015.guard",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "quick-cli-home\\terminal\\profiles\\canonical-0a2f1b68e6a65fcd8bd16015.json",
+        "bytes": 1832,
+        "sha256": "d548ddd145a02af645b6384b6f1e356be08bbb79974b821677c2fa3a1c8e240a"
+      },
+      {
+        "path": "quick-cli-home\\terminal\\profiles\\privacy.guard",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "quick-cli-home\\terminal\\profiles\\privacy.json",
+        "bytes": 11762,
+        "sha256": "f9f42d0231b38ca8595c8ad584248656ddf0037ff28aa1e06bfc229063a43145"
+      },
+      {
+        "path": "workspace\\.git\\HEAD",
+        "bytes": 23,
+        "sha256": "f6f2b945f6c411b02ba3da9c7ace88dcf71b6af65ba2e0d89aa82900042b5a10"
+      }
+    ],
+    "read_errors": [],
+    "only_exclusions": [
+      "workspace\\.git\\config"
+    ]
+  },
+  "violations": [],
+  "trace_files_absent": true,
+  "raw_credentials_or_rows_or_sink_messages_exported": false,
+  "limitations": [
+    "Post-exit persistence scan, not proof of all transient live database states.",
+    "The enabled local logging channels were observed; outbound analytics/other external sinks were not enabled or qualified.",
+    "The prior access violation is inconclusive and not attributed to timed traceback instrumentation.",
+    "No application, provider, session, grant or new setup was run during this scan."
+  ]
+}

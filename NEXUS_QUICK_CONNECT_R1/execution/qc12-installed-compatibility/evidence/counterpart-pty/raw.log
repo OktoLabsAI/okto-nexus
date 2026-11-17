@@ -1,0 +1,33 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 5 items
+
+..\after\tests\quick_connect\test_quick_connect_pty.py::test_real_terminal_measurement IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_real_terminal_measurement", "when": "setup", "outcome": "skipped", "duration": 0.008359499974176288}
+SKIPPEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_real_terminal_measurement", "when": "teardown", "outcome": "passed", "duration": 0.00017919996753335}
+
+..\after\tests\quick_connect\test_quick_connect_pty.py::test_json_with_real_tty_never_requests_input IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_json_with_real_tty_never_requests_input", "when": "setup", "outcome": "skipped", "duration": 0.0017401999793946743}
+SKIPPEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_json_with_real_tty_never_requests_input", "when": "teardown", "outcome": "passed", "duration": 0.00014180003199726343}
+
+..\after\tests\quick_connect\test_quick_connect_pty.py::test_cancel_from_actual_terminal_does_not_check_or_test IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_cancel_from_actual_terminal_does_not_check_or_test", "when": "setup", "outcome": "skipped", "duration": 0.0019440000178292394}
+SKIPPEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_cancel_from_actual_terminal_does_not_check_or_test", "when": "teardown", "outcome": "passed", "duration": 0.00013019994366914034}
+
+..\after\tests\quick_connect\test_quick_connect_pty.py::test_confirm_and_resume_use_actual_terminal_without_replaying_test IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_confirm_and_resume_use_actual_terminal_without_replaying_test", "when": "setup", "outcome": "skipped", "duration": 0.0016802999889478087}
+SKIPPEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_confirm_and_resume_use_actual_terminal_without_replaying_test", "when": "teardown", "outcome": "passed", "duration": 0.00011709996033459902}
+
+..\after\tests\quick_connect\test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation", "when": "setup", "outcome": "skipped", "duration": 0.0016757999546825886}
+SKIPPEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation", "when": "teardown", "outcome": "passed", "duration": 0.00015390000771731138}
+
+
+============================== warnings summary ===============================
+..\..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\counterpart-pty\junit.xml -
+======================== 5 skipped, 1 warning in 2.10s ========================

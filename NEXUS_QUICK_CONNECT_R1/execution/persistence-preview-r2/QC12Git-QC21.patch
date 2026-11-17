@@ -1,0 +1,22 @@
+--- D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc21-review-privacy\final\executed-test.py
++++ tests/quick_connect/test_git_cli_integration.py
+@@ -170,7 +170,8 @@
+             compared_tables=list(before),resume_json_count=2,pytest_log_messages=len(caplog.records),
+             private_origin_absent=True,git_config_is_excluded_input=True,
+             telemetry_scope='Only owned Nexus JSON checkpoints, compared SQLite tables, two resume JSONs and pytest-captured log messages')
+-        (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'privacy-proof.json').write_text(json.dumps(proof,indent=2))
++        if os.environ.get('QC_DERIVATIVE_OUTPUT'):
++            (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'privacy-proof.json').write_text(json.dumps(proof,indent=2))
+ 
+ 
+ 
+@@ -251,7 +252,8 @@
+         proof=dict(before_confirmation=True,checkpoint_state='review',
+             displayed_fields=list(required),effect_count=len(effects),all_effects_printed=True,
+             tests=0,probes=0,checkpoint_sha256=hashlib.sha256(checkpoint.read_bytes()).hexdigest())
+-        (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'review-proof.json').write_text(json.dumps(proof,indent=2))
++        if os.environ.get('QC_DERIVATIVE_OUTPUT'):
++            (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'review-proof.json').write_text(json.dumps(proof,indent=2))
+         # Recompose captured output so original downstream output assertions keep
+         # the same entire transcript; no production display behavior is changed.
+         print(captured.out,end='')

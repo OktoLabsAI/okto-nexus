@@ -1,0 +1,25 @@
+{
+  "scenario": "QC-T-E08",
+  "proposed_status": "PASS",
+  "newly_executed": false,
+  "layer": "Previously executed installed application + two real owned SQLite databases",
+  "exact_node": "tests.execution_r4.test_public_connection_ids::test_two_servers_same_workspace_ids_do_not_share_namespace",
+  "xml": "NEXUS_QUICK_CONNECT_R1\\execution\\qc09-qc-installed\\shard1\\tests.xml",
+  "xml_sha256": "1e29bae17c1540c50d4d5a606409823cd0e8ef65045a1877bdaba26a711850c4",
+  "original_wheel_sha256": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+  "source_file_pins": {
+    "tests/execution_r4/test_public_connection_ids.py": "0c804b556c2a413b3162d0260a49f81c7ebb541ebb5139783c91247848a34023",
+    "tests/execution_r4/test_embedded_inventory.py": "bcf26f49915be258a705ff969b0c49ca332446fafbd61dda400a2aabfd356ef4"
+  },
+  "source_files_match_executed_pins": true,
+  "reasoning": [
+    "local_setup constructs first application/factory at its owned home; app_for(tmp_path/second-server) bootstraps a second independent factory/home.",
+    "bootstrap passes distinct --home values; config.db_path defaults to home_dir/nexus.db and ConnectionFactory opens config.db_path. These are distinct physical database paths, not two mocked DTOs.",
+    "ensure_execution_installation persists the second Server installation; both databases receive the same literal workspace ID, same display label and same public Harness ID.",
+    "reserve/list execute against each distinct connection factory; test asserts one occupant in each and different ServerIDs.",
+    "No daemon or native harness is required to demonstrate Server/workspace namespace isolation at this unit+SQLite level."
+  ],
+  "limits": [
+    "Covers reserved registry occupants and namespace isolation, not two bound native runtime sessions or real hosts. No new E08 execution on a36 is claimed."
+  ]
+}

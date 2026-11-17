@@ -1,0 +1,9 @@
+--- persistence-applied-final/tests/quick_connect/test_qc33_shared_service.py
++++ tests/quick_connect/test_qc33_shared_service.py
+@@ -1,6 +1,4 @@
+ """One real foreground HTTP owner, two canonical CLI connections, no daemon fake."""
+-import asyncio
+-from copy import deepcopy
+ import json
+ import os
+ from pathlib import Path

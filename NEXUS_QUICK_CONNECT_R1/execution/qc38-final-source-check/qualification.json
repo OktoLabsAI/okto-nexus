@@ -1,0 +1,375 @@
+{
+  "status": "PASS",
+  "mode": "SOURCE_ONLY_NOT_NEW_INSTALLED_PACKAGE",
+  "nodes": [
+    {
+      "cut": "qc35-variants",
+      "name": "test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state[quick]",
+      "classname": "tests.quick_connect.test_qc35_review_cancel",
+      "seconds": "7.935",
+      "status": "PASS"
+    },
+    {
+      "cut": "qc35-variants",
+      "name": "test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state[legacy]",
+      "classname": "tests.quick_connect.test_qc35_review_cancel",
+      "seconds": "5.976",
+      "status": "PASS"
+    },
+    {
+      "cut": "id-cancel-resume-json",
+      "name": "test_explicit_resume_uses_actual_binding_family[F03-same-family]",
+      "classname": "tests.quick_connect.test_id_choice_scenarios",
+      "seconds": "8.178",
+      "status": "PASS"
+    },
+    {
+      "cut": "id-cancel-resume-json",
+      "name": "test_explicit_resume_uses_actual_binding_family[F04-cross-family-explicit-resume]",
+      "classname": "tests.quick_connect.test_id_choice_scenarios",
+      "seconds": "7.891",
+      "status": "PASS"
+    },
+    {
+      "cut": "id-cancel-resume-json",
+      "name": "test_cancel_reports_lifecycle_and_metadata_without_false_no_effect_claim",
+      "classname": "tests.quick_connect.test_id_choice_scenarios",
+      "seconds": "7.068",
+      "status": "PASS"
+    },
+    {
+      "cut": "id-cancel-resume-json",
+      "name": "test_json_cross_family_conflict_never_reads_stdin",
+      "classname": "tests.quick_connect.test_id_choice_scenarios",
+      "seconds": "6.085",
+      "status": "PASS"
+    },
+    {
+      "cut": "legacy-canonical-shortcut",
+      "name": "test_cli_existing_canonical_without_profile_creates_only_shortcut",
+      "classname": "tests.execution_r4.test_connection_catalog",
+      "seconds": "9.596",
+      "status": "PASS"
+    },
+    {
+      "cut": "legacy-single-harness",
+      "name": "test_single_observed_harness_needs_no_profile_and_existing_connection_offers_all_intents",
+      "classname": "tests.execution_r4.test_terminal_multi_harness",
+      "seconds": "8.721",
+      "status": "PASS"
+    },
+    {
+      "cut": "legacy-two-harnesses",
+      "name": "test_two_distinct_harnesses_share_project_keep_custom_a_and_recover_b_finish",
+      "classname": "tests.execution_r4.test_terminal_multi_harness",
+      "seconds": "11.803",
+      "status": "PASS"
+    }
+  ],
+  "passed": 9,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "label": "qc35-variants",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\bootstrap.py",
+        "-p",
+        "qc38_plugin",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\pytest.ini",
+        "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_qc35_review_cancel.py",
+        "-v",
+        "-s",
+        "--tb=short",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\qc35-variants\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\qc35-variants\\cwd",
+      "deadline_seconds": 180,
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 57120,
+          "parent_pid": null,
+          "birth_filetime": 134393855530797677,
+          "alive": false
+        },
+        {
+          "pid": 27408,
+          "parent_pid": 57120,
+          "birth_filetime": 134393855531153148,
+          "alive": false
+        }
+      ],
+      "signals": [],
+      "rejected_nonowned_births": []
+    },
+    {
+      "label": "id-cancel-resume-json",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\bootstrap.py",
+        "-p",
+        "qc38_plugin",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\pytest.ini",
+        "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_id_choice_scenarios.py",
+        "-v",
+        "-s",
+        "--tb=short",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\id-cancel-resume-json\\junit.xml",
+        "-k",
+        "test_cancel_reports_lifecycle_and_metadata_without_false_no_effect_claim or test_explicit_resume_uses_actual_binding_family or test_json_cross_family_conflict_never_reads_stdin"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\id-cancel-resume-json\\cwd",
+      "deadline_seconds": 180,
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 37972,
+          "parent_pid": null,
+          "birth_filetime": 134393855715614237,
+          "alive": false
+        },
+        {
+          "pid": 61244,
+          "parent_pid": 37972,
+          "birth_filetime": 134393855715741577,
+          "alive": false
+        }
+      ],
+      "signals": [],
+      "rejected_nonowned_births": []
+    },
+    {
+      "label": "legacy-canonical-shortcut",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\bootstrap.py",
+        "-p",
+        "qc38_plugin",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\pytest.ini",
+        "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut",
+        "-v",
+        "-s",
+        "--tb=short",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-canonical-shortcut\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-canonical-shortcut\\cwd",
+      "deadline_seconds": 180,
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 59964,
+          "parent_pid": null,
+          "birth_filetime": 134393856055612469,
+          "alive": false
+        },
+        {
+          "pid": 58076,
+          "parent_pid": 59964,
+          "birth_filetime": 134393856055742541,
+          "alive": false
+        }
+      ],
+      "signals": [],
+      "rejected_nonowned_births": []
+    },
+    {
+      "label": "legacy-single-harness",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\bootstrap.py",
+        "-p",
+        "qc38_plugin",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\pytest.ini",
+        "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_terminal_multi_harness.py::test_single_observed_harness_needs_no_profile_and_existing_connection_offers_all_intents",
+        "-v",
+        "-s",
+        "--tb=short",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-single-harness\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-single-harness\\cwd",
+      "deadline_seconds": 180,
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 57108,
+          "parent_pid": null,
+          "birth_filetime": 134393856192477518,
+          "alive": false
+        },
+        {
+          "pid": 16176,
+          "parent_pid": 57108,
+          "birth_filetime": 134393856192586500,
+          "alive": false
+        }
+      ],
+      "signals": [],
+      "rejected_nonowned_births": []
+    },
+    {
+      "label": "legacy-two-harnesses",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\bootstrap.py",
+        "-p",
+        "qc38_plugin",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\pytest.ini",
+        "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_terminal_multi_harness.py::test_two_distinct_harnesses_share_project_keep_custom_a_and_recover_b_finish",
+        "-v",
+        "-s",
+        "--tb=short",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-two-harnesses\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-two-harnesses\\cwd",
+      "deadline_seconds": 180,
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 39824,
+          "parent_pid": null,
+          "birth_filetime": 134393856330262695,
+          "alive": false
+        },
+        {
+          "pid": 23784,
+          "parent_pid": 39824,
+          "birth_filetime": 134393856330373752,
+          "alive": false
+        }
+      ],
+      "signals": [],
+      "rejected_nonowned_births": [
+        {
+          "pid": 10000,
+          "birth": 134390257397702099,
+          "parent_birth": 134393856330262695
+        },
+        {
+          "pid": 10000,
+          "birth": 134390257397702099,
+          "parent_birth": 134393856330262695
+        },
+        {
+          "pid": 10000,
+          "birth": 134390257397702099,
+          "parent_birth": 134393856330262695
+        },
+        {
+          "pid": 10000,
+          "birth": 134390257397702099,
+          "parent_birth": 134393856330262695
+        },
+        {
+          "pid": 10000,
+          "birth": 134390257397702099,
+          "parent_birth": 134393856330262695
+        },
+        {
+          "pid": 10000,
+          "birth": 134390257397702099,
+          "parent_birth": 134393856330262695
+        },
+        {
+          "pid": 10000,
+          "birth": 134390257397702099,
+          "parent_birth": 134393856330262695
+        }
+      ]
+    }
+  ],
+  "payload_files": 1013,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "raw_refs": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\qc35-variants\\junit.xml",
+      "sha256": "1d3844d87b953da585e46456e3c02fa26d5e85bdffaa6913cb87162ff4efa2f5",
+      "exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\qc35-variants\\raw.log",
+      "sha256": "1926fae340daf7eefa21847ec5b559c3107ee1c794357103be2ef0d6ca50433c",
+      "exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\id-cancel-resume-json\\junit.xml",
+      "sha256": "c1ec2c77f12f9c3ac0778b25145ec400228604fadc03820e72b15d8ff17fb61a",
+      "exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\id-cancel-resume-json\\raw.log",
+      "sha256": "fa6ab57091ec4776bc43f495df7fc41d7bafe4e6e8f2531c02ef53d2c195c285",
+      "exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-canonical-shortcut\\junit.xml",
+      "sha256": "aec9252d663481227478481025f5763aab5a1fb94ddb9738a22ad020af199261",
+      "exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-canonical-shortcut\\raw.log",
+      "sha256": "04ba653fb4e5ac264e05ef6f6df0045f435813efc5c5d93ad019f2ebee9f143f",
+      "exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-single-harness\\junit.xml",
+      "sha256": "bdeb06f1f02fe945f2518fcfaf33273ee7951900ad620849bdba69d3f620ef4b",
+      "exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-single-harness\\raw.log",
+      "sha256": "e8fc417caed065aad96cbbec736c06e8a56f4619e7f034dffa1b618b26e79ff4",
+      "exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-two-harnesses\\junit.xml",
+      "sha256": "c719a2b72db2bc0d710dcb9826e225df8ef82edb3e32ade4fc6a9e875b4710e9",
+      "exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-two-harnesses\\raw.log",
+      "sha256": "d3bfc99750b08392e35b11675d96850bc3a0a88b45c4b821cbf33a9c2e4bad62",
+      "exported": false
+    }
+  ],
+  "cleanup": {
+    "all_owned_processes_exited": true,
+    "signals": [],
+    "data_preserved_in_owned_temp": true
+  },
+  "limits": [
+    "Nexus imports are repository src, not the PR27 installed Nexus or a new candidate wheel.",
+    "Core/Connector and Python dependencies come from the qualified PR27 prefix. Payload files matched exact three wheels before and after.",
+    "Setup/Test/version/lifecycle fixture peers are synthetic, no native/provider account or real credential backend.",
+    "ID-choice file is filtered to cancel/resume/JSON; the other functions were not repeated.",
+    "Initial preflight selected an antecedent PR27 wheel; it stopped before pytest and changed no prefix. Final-wheel comparison has zero drift.",
+    "Raw fixture logs, SQLite, homes and vault contents stay in owned Temp. Sanitized XML omits stdout/stderr."
+  ]
+}

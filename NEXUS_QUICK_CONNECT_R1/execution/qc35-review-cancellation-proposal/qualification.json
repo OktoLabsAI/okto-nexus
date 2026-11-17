@@ -1,0 +1,111 @@
+{
+  "status": "INSTALLED_RED_EXTERNAL_DERIVED_PROPOSAL_GREEN_NOT_NEW_WHEEL",
+  "installed_wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "cuts": [
+    {
+      "label": "installed-red",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-red-oiqzl4wy",
+      "cases": [
+        {
+          "node": "tests.quick_connect.test_qc35_review_cancel::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state",
+          "status": "FAIL",
+          "evidence": "installed-red/cancel/junit.xml"
+        }
+      ],
+      "exit_codes": [
+        1
+      ],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "repository_input_drift": [],
+      "signals": [],
+      "owned_processes_absent": true
+    },
+    {
+      "label": "derived-green",
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic",
+      "cases": [
+        {
+          "node": "tests.quick_connect.test_qc35_review_cancel::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state",
+          "status": "PASS",
+          "evidence": "derived-green/cancel/junit.xml"
+        },
+        {
+          "node": "tests.quick_connect.test_qc35_id_choice_antecedents::test_explicit_resume_uses_actual_binding_family[F03-same-family]",
+          "status": "PASS",
+          "evidence": "derived-green/choices/junit.xml"
+        },
+        {
+          "node": "tests.quick_connect.test_qc35_id_choice_antecedents::test_explicit_resume_uses_actual_binding_family[F04-cross-family-explicit-resume]",
+          "status": "PASS",
+          "evidence": "derived-green/choices/junit.xml"
+        },
+        {
+          "node": "tests.quick_connect.test_qc35_id_choice_antecedents::test_cancel_reports_lifecycle_and_metadata_without_false_no_effect_claim",
+          "status": "PASS",
+          "evidence": "derived-green/choices/junit.xml"
+        },
+        {
+          "node": "tests.quick_connect.test_qc35_id_choice_antecedents::test_json_cross_family_conflict_never_reads_stdin",
+          "status": "PASS",
+          "evidence": "derived-green/choices/junit.xml"
+        },
+        {
+          "node": "tests.quick_connect.test_quick_connect_cli::test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay",
+          "status": "PASS",
+          "evidence": "derived-green/json-plan/junit.xml"
+        }
+      ],
+      "exit_codes": [
+        0,
+        0,
+        0
+      ],
+      "payload_files": 1027,
+      "payload_drift": [],
+      "repository_input_drift": [],
+      "signals": [],
+      "owned_processes_absent": true
+    }
+  ],
+  "patch": "connect-cancellation.patch",
+  "patch_sha256": "5b7772d9e836839dd2294511d5dd61ac2f3bb8d75759f8be33aff1a492adf0ff",
+  "test": "test_review_cancel.py",
+  "test_sha256": "1a7388b1e05a7b8df144e5147b23f3dd58a2a61f0d7520591ba7fd56735e08f0",
+  "overlay": {
+    "module": "okto_nexus.adapters.inbound.cli.connect",
+    "installed_source_sha256": "710a68852ea12b34a56da9967ac6f0bb993226fbf209d7aa49f6f263e2f6d207",
+    "overlay_sha256": "2797d17a59a11485445c89047f3ee7756af775f064c2ec1180dd87c2839f5da9",
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-derived-c_7iftic\\overlay\\connect.py",
+    "not_a_new_wheel": true
+  },
+  "installed_current_product": {
+    "G08": "FAIL_REPRODUCED_LAST_DISPLAY_REVIEW",
+    "C02": "All listed subassertions passed before G08 failure; do not promote a coupled failing run to full acceptance"
+  },
+  "proposal": {
+    "C02": "PASS_DERIVED",
+    "G08": "PASS_DERIVED",
+    "relevant_regressions": 5,
+    "total_passed": 6,
+    "requires_product_apply_and_new_installed_artifact": true
+  },
+  "change": "Only two added lines in existing new-review answer != y branch: print canceled using existing lifecycle/metadata/effects fields before return0. No input/EOF/approval/checkpoint logic change.",
+  "safety": {
+    "repo_product_tests_docs_unchanged": true,
+    "installed_prefix_unchanged": true,
+    "provider_calls": 0,
+    "own_processes_exited": true,
+    "signals": [],
+    "only_overlay_module": "okto_nexus.adapters.inbound.cli.connect"
+  },
+  "limits": [
+    "This qualifies a reviewable external source overlay, not a new wheel, final installed candidate, release or product ledger promotion.",
+    "Baseline RED uses all application modules installed. GREEN explicitly substitutes only connect.py through importlib; all other Nexus/Core/Connector origins remain installed site-packages. Exact overlay path/hash and bounded whitelist are recorded per cut.",
+    "Underlying1027 installed payload files and src/tests/docs input pins remain unchanged before/after; overlay bytes are a distinct input, not misreported as installed payload.",
+    "C02 proves no usable Git association, basename labeled directory suggestion, create-workspace offer, physical root, zero workspace/ID/grant/binding/receipt/op/session/Test before consent and after cancel, retained review bytes.",
+    "Lifecycle is the existing inert ready fixture: ensure was requested once. New canceled document truthfully reports lifecycle_requested=true, canonical_metadata_revalidation_requested=true and effects_started=null; it does not claim zero prior lifecycle effects.",
+    "Relevant GREEN regressions are original byte-identical scripted cancel, same/cross-family resume and JSON collision plus installed JSON plan/apply/recovery. No real PTY/human/provider/daemon claim.",
+    "No product/normative tests/docs/ledger/Git/installed prefix was edited. Root applies the patch only after frozen readers release and qualifies a newly packaged artifact separately."
+  ]
+}

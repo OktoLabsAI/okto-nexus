@@ -1,0 +1,48 @@
+--- inconclusive-original/test_ancestor_privacy.py
++++ prompt-routed/test_ancestor_privacy.py
+@@ -27,12 +27,15 @@
+             for row in uow.connection.execute('SELECT * FROM ' + table + ' ORDER BY rowid')] for table in tables}
+ 
+ 
+-def scripted(c, monkeypatch, answers):
+-    values, prompts = iter(answers), []
++def scripted(c, monkeypatch, expected):
++    values, prompts = list(expected), []
+     monkeypatch.setattr(connect.sys, 'stdin', SimpleNamespace(isatty=lambda: True))
+     def read(prompt):
++        assert len(prompts) < len(values), 'Prompt budget exhausted; refusing another action'
++        expected_prompt, response = values[len(prompts)]
++        assert prompt == expected_prompt, ('Unexpected prompt', prompt, expected_prompt)
+         prompts.append(prompt)
+-        return next(values)
++        return response
+     monkeypatch.setattr('builtins.input', read)
+     return prompts
+ 
+@@ -42,7 +45,7 @@
+     git = local_git(c, tmp_path)
+     git('config', '--local', 'remote.origin.url', 'https://fixture.invalid/registered-ancestor.git')
+     monkeypatch.setattr(hints, '_trusted_git', c.trusted_git)
+-    prompts = scripted(c, monkeypatch, ['y'])
++    prompts = scripted(c, monkeypatch, [('Confirm this review, including the model connection test? [y/customize/cancel] ', 'y')])
+     assert c.run(['connect', 'codex', '--profile', 'ancestor', '--no-chat']) == 0
+     capsys.readouterr()
+     parent_path = c.home / 'terminal/profiles/ancestor.json'
+@@ -60,7 +63,7 @@
+     subdir.mkdir()
+     assert subdir.resolve().is_relative_to(c.project.resolve()) and not (subdir / '.git').exists()
+     monkeypatch.chdir(subdir)
+-    prompts = scripted(c, monkeypatch, ['n', 'n'])
++    prompts = scripted(c, monkeypatch, [('Project: ', 'n'), ('Confirm this review, including the model connection test? [y/customize/cancel] ', 'n')])
+     assert c.run(['connect', 'codex', '--profile', 'nested', '--no-chat']) == 0
+     output = capsys.readouterr().out
+     nested_path = c.home / 'terminal/profiles/nested.json'
+@@ -139,7 +142,7 @@
+             resumed = run_json(tokens, 0)
+             assert resumed['quick_connect']['canonical_reference'] == reference
+             assert resumed['quick_connect']['status'] == 'connected'
+-        scripted(c, monkeypatch, ['y'])
++        scripted(c, monkeypatch, [('Confirm resume? [y/N] ', 'y')])
+         assert c.run(['connect', '--profile', 'privacy', '--no-chat']) == 0
+         plain = capsys.readouterr()
+         no_secret(plain.out)

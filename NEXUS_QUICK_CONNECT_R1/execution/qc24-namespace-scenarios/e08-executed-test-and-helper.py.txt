@@ -1,0 +1,31 @@
+def test_two_servers_same_workspace_ids_do_not_share_namespace(local_setup, tmp_path):
+    from test_embedded_inventory import app_for
+    from okto_nexus.adapters.outbound.sqlite.execution_identity import ensure_execution_installation
+    deps_a = local_setup[0]
+    deps_b, _ = app_for(tmp_path / 'second-server')
+    installation = ensure_execution_installation(deps_b.connection_factory)
+    context, first = request_for(local_setup)
+    for deps in (deps_a, deps_b):
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute('INSERT INTO workspaces(workspace_id,display_name,created_at) VALUES(?,?,?)',
+                                   ('same-workspace-id', 'Same name', deps.clock.now_iso()))
+    context, request = public_request(local_setup, workspace_id='same-workspace-id')
+    reserve_public_id(deps_a, context, request, approved=True)
+    foreign = deepcopy(request)
+    foreign['executor_id'] = installation.embedded_executor_id
+    foreign['public_connection']['project_revision'] = read_project_context(deps_b, context,
+        executor_id=foreign['executor_id'], project_root=first['configuration']['workspace_root'],
+        workspace_id='same-workspace-id')['project_revision']
+    reserve_public_id(deps_b, context, foreign, approved=True)
+    a = list_public_ids(deps_a, context, workspace_id='same-workspace-id')
+    b = list_public_ids(deps_b, context, workspace_id='same-workspace-id')
+    assert a['total'] == b['total'] == 1 and a['server_id'] != b['server_id']
+    assert a['items'][0]['connect_id'] == b['items'][0]['connect_id']
+
+def app_for(home):
+    # Most fixtures drive claim/admission boundaries explicitly. Do not let a
+    # background scheduler race those injected cuts. Lifecycle/default tests
+    # opt in separately and exercise the real automatic acquisition service.
+    deps = bootstrap({}, ["--home", str(home), "--feature-harness-integrations", "true",
+                          "--runtime-handoff-auto-claim-enabled", "false"])
+    return deps, build_app(deps)

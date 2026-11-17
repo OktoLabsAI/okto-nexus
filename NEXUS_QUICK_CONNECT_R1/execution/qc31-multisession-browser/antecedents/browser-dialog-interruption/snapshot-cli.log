@@ -1,0 +1,192 @@
+### Page
+- Page URL: http://127.0.0.1:54191/
+- Page Title: Okto Nexus
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse navigation" [expanded] [ref=e5] [cursor=pointer]
+    - img "Okto Nexus" [ref=e9]
+    - navigation "Breadcrumb" [ref=e10]:
+      - generic [ref=e11]: / Home
+    - generic [ref=e12]:
+      - button "Needs attention. All projects and Server. 0 need action, 2 to watch." [ref=e13] [cursor=pointer]:
+        - generic [ref=e17]: Needs attention
+        - generic [ref=e18]: "2"
+      - generic [ref=e19]: ● Live
+      - button "Refresh Home" [ref=e20] [cursor=pointer]
+      - button [ref=e25] [cursor=pointer]
+  - generic [ref=e30]:
+    - generic [ref=e31]:
+      - generic [ref=e32]:
+        - heading "Metrics opt-in" [level=2] [ref=e33]
+        - paragraph [ref=e37]: "Current setting: Off"
+      - button "Close metrics settings" [ref=e38] [cursor=pointer]
+    - generic [ref=e42]:
+      - generic [ref=e43]: Okto Nexus starts with metrics disabled. Anonymous aggregate publishing is optional and can be changed later.
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - generic [ref=e46]: "0"
+          - generic [ref=e47]: events
+        - generic [ref=e48]:
+          - generic [ref=e49]: "0"
+          - generic [ref=e50]: pending
+        - generic [ref=e51]:
+          - generic [ref=e52]: "0"
+          - generic [ref=e53]: sent
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - generic [ref=e56]:
+            - generic [ref=e57]: Send metrics
+            - generic [ref=e58]: "Off"
+          - switch [disabled] [ref=e59]
+        - paragraph [ref=e61]: Metrics mode is pinned by CLI or environment for this run.
+      - generic [ref=e62]:
+        - generic [ref=e63]: Metrics scope
+        - generic [ref=e64]: All eligible anonymous aggregate metrics are included when sending is on.
+      - generic [ref=e65]:
+        - heading "Anonymous metrics included" [level=3] [ref=e66]
+        - generic [ref=e69]:
+          - generic [ref=e74]:
+            - generic [ref=e75]: Telemetry schema reviewed
+            - generic [ref=e76]: Only documented anonymous aggregate fields are eligible.
+          - generic [ref=e81]:
+            - generic [ref=e82]: Privacy terms reviewed
+            - generic [ref=e83]: Metrics sharing is optional and can be turned off here.
+          - generic [ref=e88]:
+            - generic [ref=e89]: Hourly aggregates only
+            - generic [ref=e90]: Events are summarized before upload.
+          - generic [ref=e95]:
+            - generic [ref=e96]: No PII or project content
+            - generic [ref=e97]: Messages, paths, titles and payload bodies are not sent.
+      - generic [ref=e98]:
+        - generic [ref=e99]:
+          - generic [ref=e100]: Schema
+          - generic [ref=e101]: 1.0.0
+        - generic [ref=e102]:
+          - generic [ref=e103]: Publish health
+          - generic [ref=e104]: disabled
+        - generic [ref=e105]:
+          - generic [ref=e106]: Last success
+          - generic [ref=e107]: —
+        - generic [ref=e108]:
+          - generic [ref=e109]: Last failure
+          - generic [ref=e110]: —
+      - generic [ref=e111]: C:\Users\jpamb\AppData\Local\Temp\nexus-qc31-multisession-3rnze1lj\metrics
+      - generic [ref=e112]:
+        - button "Refresh" [ref=e113] [cursor=pointer]
+        - button "Save" [disabled] [ref=e117]
+        - button "Not now" [ref=e122] [cursor=pointer]
+  - generic [ref=e123]:
+    - complementary [ref=e124]:
+      - navigation "Main navigation" [ref=e126]:
+        - list "Main destinations" [ref=e127]:
+          - listitem [ref=e128]:
+            - button "Home" [ref=e129] [cursor=pointer]
+          - listitem [ref=e134]:
+            - button "Conversations" [ref=e135] [cursor=pointer]
+          - listitem [ref=e140]:
+            - button "Graph" [ref=e141] [cursor=pointer]
+          - listitem [ref=e150]:
+            - button "Artifacts" [ref=e151] [cursor=pointer]
+        - list "More destinations" [ref=e157]:
+          - listitem [ref=e158]:
+            - button "Advanced" [ref=e159] [cursor=pointer]
+    - main [ref=e164]:
+      - generic [ref=e168]:
+        - generic [ref=e169]:
+          - generic [ref=e170]:
+            - heading "Home" [level=1] [ref=e171]
+            - paragraph [ref=e172]: Follow work, questions and deliveries.
+            - paragraph [ref=e173]: Follow each harness below. Open an activity to see its exact context, or add a harness to this project.
+          - generic [ref=e174]:
+            - button "New request" [ref=e175] [cursor=pointer]
+            - button "Refresh" [ref=e177] [cursor=pointer]
+            - button "Pause display" [ref=e183] [cursor=pointer]
+        - region "Project" [ref=e187]:
+          - generic [ref=e188]:
+            - generic [ref=e189]:
+              - heading "Project" [level=2] [ref=e190]
+              - paragraph [ref=e193]: All projects
+              - paragraph [ref=e194]: Choose a project and follow its registered harnesses below.
+            - button "Add harness" [ref=e195] [cursor=pointer]
+          - generic [ref=e196]:
+            - text: Choose a project
+            - combobox "Project" [ref=e197]:
+              - option "All projects" [selected]
+              - option "QC31 Multi-session Project"
+        - region "Project overview" [ref=e198]:
+          - generic [ref=e199]:
+            - heading "Work" [level=2] [ref=e204]
+            - paragraph [ref=e205]: Not available
+            - paragraph [ref=e206]: Activities in this view
+          - generic [ref=e207]:
+            - heading "Sessions" [level=2] [ref=e213]
+            - paragraph [ref=e214]: Not available
+            - paragraph [ref=e215]: Session contexts
+          - generic [ref=e216]:
+            - heading "Questions and updates" [level=2] [ref=e220]
+            - paragraph [ref=e221]: Not available
+            - paragraph [ref=e222]: Items to review in this view
+          - generic [ref=e223]:
+            - heading "Results" [level=2] [ref=e229]
+            - paragraph [ref=e230]: Not available
+            - paragraph [ref=e231]: Deliveries in this view
+        - status [ref=e232]
+        - paragraph [ref=e233]: Active work, items needing you and retained results stay visible together. Each card keeps its linked sessions, questions and deliveries.
+        - status [ref=e234]: Some information is incomplete or unavailable. Totals may be unknown; refresh before acting.
+        - region "Follow-up" [ref=e235]:
+          - heading "Follow-up" [level=2] [ref=e236]
+          - generic [ref=e237]:
+            - region "Active" [ref=e238]:
+              - generic [ref=e239]:
+                - heading "Active" [level=3] [ref=e240]
+                - generic [ref=e241]: Total unknown
+              - list [ref=e242]:
+                - listitem [ref=e243]:
+                  - generic [ref=e244]:
+                    - 'heading "Harness ID: session-reviewer" [level=4] [ref=e245]'
+                    - paragraph [ref=e246]: "Collaborator: QC31 collaborator"
+                    - paragraph [ref=e247]: Codex · Host not reported
+                    - paragraph [ref=e248]: Registered harness
+                  - list "Activity preview" [ref=e249]:
+                    - listitem [ref=e250]:
+                      - paragraph [ref=e251]: Work request
+                      - paragraph [ref=e252]: Turn completed
+                      - button "View delivery" [ref=e253] [cursor=pointer]
+                    - listitem [ref=e254]:
+                      - paragraph [ref=e255]: Work request
+                      - paragraph [ref=e256]: Turn completed
+                      - button "View delivery" [ref=e257] [cursor=pointer]
+                  - paragraph [ref=e258]: Unknown questions and updates · Unknown results · Unknown work · Unknown sessions · Unknown external
+                  - button "Inspect execution" [ref=e259] [cursor=pointer]
+                  - generic [ref=e260]:
+                    - button "Reconnect" [disabled] [ref=e261]
+                    - paragraph [ref=e262]: Individual reconnection is not available for this host.
+            - region "Needs you" [ref=e263]:
+              - generic [ref=e264]:
+                - heading "Needs you" [level=3] [ref=e265]
+                - generic [ref=e266]: Total unknown
+              - list
+              - status [ref=e267]: Tracking is incomplete or unavailable. Refresh to read this column.
+            - region "Results" [ref=e268]:
+              - generic [ref=e269]:
+                - heading "Results" [level=3] [ref=e270]
+                - generic [ref=e271]: Total unknown
+              - list [ref=e272]:
+                - listitem [ref=e273]:
+                  - generic [ref=e274]:
+                    - paragraph [ref=e275]: "Harness ID: session-reviewer · Codex · Host not reported"
+                    - heading "Work result" [level=4] [ref=e276]
+                  - paragraph [ref=e277]: "Completion recorded · Outcome: SUCCEEDED. Review the delivery and its verification state."
+                  - button "View delivery" [ref=e278] [cursor=pointer]
+                - listitem [ref=e279]:
+                  - generic [ref=e280]:
+                    - paragraph [ref=e281]: "Harness ID: session-reviewer · Codex · Host not reported"
+                    - heading "Work result" [level=4] [ref=e282]
+                  - paragraph [ref=e283]: "Completion recorded · Outcome: SUCCEEDED. Review the delivery and its verification state."
+                  - button "View delivery" [ref=e284] [cursor=pointer]
+          - generic [ref=e285]:
+            - paragraph [ref=e286]: Some activity has incomplete connection tracking. These are separate from harness cards.
+            - button "View other activity" [ref=e287] [cursor=pointer]
+```

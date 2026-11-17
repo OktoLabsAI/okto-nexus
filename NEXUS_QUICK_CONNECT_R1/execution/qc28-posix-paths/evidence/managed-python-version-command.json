@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "/tmp/nexus-qc28-xmlie7rv/python/cpython-3.13.1-linux-x86_64-gnu/bin/python3.13",
+    "-I",
+    "-B",
+    "-c",
+    "import sys;assert sys.version_info[:3]==(3,13,1);print(sys.version)"
+  ],
+  "exit_code": 0,
+  "timeout": 180
+}

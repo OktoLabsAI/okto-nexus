@@ -1,0 +1,23 @@
+--- persistence-applied-final/tests/quick_connect/test_posix_physical_paths.py
++++ tests/quick_connect/test_posix_physical_paths.py
+@@ -1,7 +1,6 @@
+ """Actual Linux FS identity; no canonical-authority DTOs or runtime execution."""
+ import os
+ import pytest
+-from pathlib import Path
+ 
+ from okto_nexus.adapters.inbound.cli.connect import project_profile
+ from okto_nexus.adapters.outbound.git_project_hint import discover_project_name
+@@ -47,9 +46,9 @@
+     upper.mkdir()
+     lower.mkdir()
+     assert not upper.samefile(lower)
+-    u, l = directory_identity(str(upper)), directory_identity(str(lower))
+-    assert u['path'] == str(upper) and l['path'] == str(lower)
+-    assert (u['device'], u['inode']) != (l['device'], l['inode'])
++    u, lower_identity = directory_identity(str(upper)), directory_identity(str(lower))
++    assert u['path'] == str(upper) and lower_identity['path'] == str(lower)
++    assert (u['device'], u['inode']) != (lower_identity['device'], lower_identity['inode'])
+     up, uid = project_profile(upper, None)
+     lo, lid = project_profile(lower, None)
+     assert up == str(upper) and lo == str(lower) and uid != lid

@@ -1,0 +1,43 @@
+{
+  "label": "id-cancel-resume-json",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\bootstrap.py",
+    "-p",
+    "qc38_plugin",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect\\test_id_choice_scenarios.py",
+    "-v",
+    "-s",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\id-cancel-resume-json\\junit.xml",
+    "-k",
+    "test_cancel_reports_lifecycle_and_metadata_without_false_no_effect_claim or test_explicit_resume_uses_actual_binding_family or test_json_cross_family_conflict_never_reads_stdin"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\id-cancel-resume-json\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T10:39:31.556950+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 37972,
+      "parent_pid": null,
+      "birth_filetime": 134393855715614237,
+      "alive": false
+    },
+    {
+      "pid": 61244,
+      "parent_pid": 37972,
+      "birth_filetime": 134393855715741577,
+      "alive": false
+    }
+  ],
+  "rejected_nonowned_births": [],
+  "ended_at": "2026-11-17T10:40:05.554917+00:00"
+}

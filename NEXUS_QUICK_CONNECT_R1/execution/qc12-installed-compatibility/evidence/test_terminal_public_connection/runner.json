@@ -1,0 +1,49 @@
+{
+  "label": "test_terminal_public_connection",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after\\tests\\quick_connect\\test_terminal_public_connection.py",
+    "-v",
+    "-s",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\test_terminal_public_connection\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T07:50:33.135720+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 40560,
+      "parent_pid": null,
+      "birth_filetime": 134393754331374529,
+      "alive": false
+    },
+    {
+      "pid": 9984,
+      "parent_pid": 40560,
+      "birth_filetime": 134393754331585409,
+      "alive": false
+    },
+    {
+      "pid": 42772,
+      "parent_pid": 9984,
+      "birth_filetime": 134393754331694841,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T07:51:33.377711+00:00"
+}

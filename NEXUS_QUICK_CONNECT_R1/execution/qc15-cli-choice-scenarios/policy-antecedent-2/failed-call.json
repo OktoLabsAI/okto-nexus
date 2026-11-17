@@ -1,0 +1,7 @@
+{
+  "nodeid": "tests/execution_r4/test_qc15_policy_denial.py::test_existing_method_denial_is_projected_and_cli_refuses_before_effects",
+  "when": "call",
+  "outcome": "failed",
+  "duration": 0.23380799998994917,
+  "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-policy-1h57xg1t\\after\\tests\\execution_r4\\test_qc15_policy_denial.py:70: in test_existing_method_denial_is_projected_and_cli_refuses_before_effects\n    assert changed == [], changed\nE   AssertionError: ['attention_operation_epochs', 'execution_agent_revisions']\nE   assert ['attention_o...nt_revisions'] == []\nE     \nE     Left contains 2 more items, first extra item: 'attention_operation_epochs'\nE     \nE     Full diff: (-: missing in left side, +: extra in left side)\nE     - []\nE     + [\nE     +     'attention_operation_epochs',\nE     +     'execution_agent_revisions',\nE     + ]"
+}

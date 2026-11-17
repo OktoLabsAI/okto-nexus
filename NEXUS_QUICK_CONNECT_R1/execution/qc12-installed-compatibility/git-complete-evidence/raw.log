@@ -1,0 +1,58 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc-git-cli-complete-3hnalsq1\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 10 items
+
+..\after\tests\quick_connect\test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://example.invalid/team/logical-origin.git] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://example.invalid/team/logical-origin.git]", "when": "setup", "outcome": "passed", "duration": 6.121250199968927}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://example.invalid/team/logical-origin.git]", "when": "call", "outcome": "passed", "duration": 2.532297799945809}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://example.invalid/team/logical-origin.git]", "when": "teardown", "outcome": "passed", "duration": 0.4214933000039309}
+
+..\after\tests\quick_connect\test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[git@example.invalid:team/logical-origin.git] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[git@example.invalid:team/logical-origin.git]", "when": "setup", "outcome": "passed", "duration": 5.588739800034091}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[git@example.invalid:team/logical-origin.git]", "when": "call", "outcome": "passed", "duration": 2.1312431999249384}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[git@example.invalid:team/logical-origin.git]", "when": "teardown", "outcome": "passed", "duration": 0.7040136000141501}
+
+..\after\tests\quick_connect\test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[ssh://git@example.invalid:2222/team/logical-origin.git] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[ssh://git@example.invalid:2222/team/logical-origin.git]", "when": "setup", "outcome": "passed", "duration": 4.383722600061446}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[ssh://git@example.invalid:2222/team/logical-origin.git]", "when": "call", "outcome": "passed", "duration": 2.1649225000292063}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[ssh://git@example.invalid:2222/team/logical-origin.git]", "when": "teardown", "outcome": "passed", "duration": 0.6531986000481993}
+
+..\after\tests\quick_connect\test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[file:///srv/git/logical-origin.git] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[file:///srv/git/logical-origin.git]", "when": "setup", "outcome": "passed", "duration": 5.102534199948423}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[file:///srv/git/logical-origin.git]", "when": "call", "outcome": "passed", "duration": 2.0221509999828413}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[file:///srv/git/logical-origin.git]", "when": "teardown", "outcome": "passed", "duration": 0.8073309999890625}
+
+..\after\tests\quick_connect\test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[/srv/git/logical-origin.git] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[/srv/git/logical-origin.git]", "when": "setup", "outcome": "passed", "duration": 5.20489599998109}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[/srv/git/logical-origin.git]", "when": "call", "outcome": "passed", "duration": 1.9591421000659466}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[/srv/git/logical-origin.git]", "when": "teardown", "outcome": "passed", "duration": 0.6989482999779284}
+
+..\after\tests\quick_connect\test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[C:\\fixture\\logical-origin.git] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[C:\\\\fixture\\\\logical-origin.git]", "when": "setup", "outcome": "passed", "duration": 5.075229000067338}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[C:\\\\fixture\\\\logical-origin.git]", "when": "call", "outcome": "passed", "duration": 2.043779099942185}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[C:\\\\fixture\\\\logical-origin.git]", "when": "teardown", "outcome": "passed", "duration": 0.8078596000559628}
+
+..\after\tests\quick_connect\test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://fake-user:PRIVATE@example.invalid/team/logical-origin.git?token=PRIVATE#PRIVATE] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://fake-user:PRIVATE@example.invalid/team/logical-origin.git?token=PRIVATE#PRIVATE]", "when": "setup", "outcome": "passed", "duration": 3.973222800064832}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://fake-user:PRIVATE@example.invalid/team/logical-origin.git?token=PRIVATE#PRIVATE]", "when": "call", "outcome": "passed", "duration": 2.1319891000166535}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[https://fake-user:PRIVATE@example.invalid/team/logical-origin.git?token=PRIVATE#PRIVATE]", "when": "teardown", "outcome": "passed", "duration": 0.6941187999909744}
+
+..\after\tests\quick_connect\test_git_cli_integration.py::test_local_git_fallback_enters_canonical_review_without_implicit_test[no-origin-origin_missing] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_local_git_fallback_enters_canonical_review_without_implicit_test[no-origin-origin_missing]", "when": "setup", "outcome": "passed", "duration": 5.4913862000685185}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_local_git_fallback_enters_canonical_review_without_implicit_test[no-origin-origin_missing]", "when": "call", "outcome": "passed", "duration": 0.4804761999985203}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_local_git_fallback_enters_canonical_review_without_implicit_test[no-origin-origin_missing]", "when": "teardown", "outcome": "passed", "duration": 0.24552920006681234}
+
+..\after\tests\quick_connect\test_git_cli_integration.py::test_local_git_fallback_enters_canonical_review_without_implicit_test[conflicting-origins-origin_ambiguous] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_local_git_fallback_enters_canonical_review_without_implicit_test[conflicting-origins-origin_ambiguous]", "when": "setup", "outcome": "passed", "duration": 5.381695499992929}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_local_git_fallback_enters_canonical_review_without_implicit_test[conflicting-origins-origin_ambiguous]", "when": "call", "outcome": "passed", "duration": 0.5016479999758303}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_local_git_fallback_enters_canonical_review_without_implicit_test[conflicting-origins-origin_ambiguous]", "when": "teardown", "outcome": "passed", "duration": 0.3028596999356523}
+
+..\after\tests\quick_connect\test_git_cli_integration.py::test_monorepo_ancestor_origin_does_not_expand_execution_root IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_monorepo_ancestor_origin_does_not_expand_execution_root", "when": "setup", "outcome": "passed", "duration": 5.130578499985859}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_monorepo_ancestor_origin_does_not_expand_execution_root", "when": "call", "outcome": "passed", "duration": 1.9370437000179663}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_git_cli_integration.py::test_monorepo_ancestor_origin_does_not_expand_execution_root", "when": "teardown", "outcome": "passed", "duration": 0.8842274999478832}
+
+
+============================== warnings summary ===============================
+..\..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc-git-cli-complete-3hnalsq1\git-cli-composed\junit.xml -
+================== 10 passed, 1 warning in 78.12s (0:01:18) ===================

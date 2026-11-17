@@ -1,0 +1,58 @@
+{
+  "cases": [
+    {
+      "label": "pending-selector-fences",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc19-pending-fences-hm0o1ead\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc19-pending-fences-hm0o1ead\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc19-pending-fences-hm0o1ead\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc19-pending-fences-hm0o1ead\\after\\tests\\quick_connect\\test_pending_selector_fences.py",
+        "-v",
+        "-s",
+        "-x",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc19-pending-fences-hm0o1ead\\pending-selector-fences\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc19-pending-fences-hm0o1ead\\cwd",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T08:31:08.580090+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 61160,
+          "parent_pid": null,
+          "birth_filetime": 134393778685822469,
+          "alive": false
+        },
+        {
+          "pid": 42616,
+          "parent_pid": 61160,
+          "birth_filetime": 134393778686090685,
+          "alive": false
+        },
+        {
+          "pid": 28948,
+          "parent_pid": 42616,
+          "birth_filetime": 134393778686490262,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T08:31:45.992423+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

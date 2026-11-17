@@ -1,0 +1,50 @@
+{
+  "observed_python_clients": [
+    {
+      "pid": 49620,
+      "parent_pid": null,
+      "birth_filetime": 134393788985481317,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 49916,
+      "parent_pid": 49620,
+      "birth_filetime": 134393788986423756,
+      "image": "C:\\Python313\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 28032,
+      "parent_pid": null,
+      "birth_filetime": 134393789033799172,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 56800,
+      "parent_pid": 28032,
+      "birth_filetime": 134393789034350012,
+      "image": "C:\\Python313\\python.exe",
+      "alive": false
+    }
+  ],
+  "observed_console_host_pids": [
+    58292,
+    59232
+  ],
+  "console_hosts_absent": true,
+  "console_host_check_command": [
+    "rtk",
+    "proxy",
+    "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-Command",
+    "Get-CimInstance Win32_Process -Filter \"ProcessId=58292 OR ProcessId=59232\" | Select-Object ProcessId,ParentProcessId,ExecutablePath | ConvertTo-Json"
+  ],
+  "console_host_check_exit": 0,
+  "original_console_window_destroyed": true,
+  "containment": [],
+  "source_drift": [],
+  "payload_drift": []
+}

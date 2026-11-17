@@ -1,0 +1,98 @@
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+[11/17/26 06:44:56] INFO     Runtime recovery:         embedded_dispatch.py:241
+                             RECOVERY_READY Local host                         
+                             ready. Agents with                                
+                             retained history recover                          
+                             independently; previous                           
+                             work was not replayed.                            
+                    INFO     StreamableHTTP      streamable_http_manager.py:164
+                             session manager                                   
+                             started                                           
+[11/17/26 06:44:57] INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/me "HTTP/1.1                
+                             200 OK"                                           
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/setup/qc31-c                
+                             ollaborator "HTTP/1.1 200 OK"                     
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/agents/qc31-collaborator                
+                             /executors?limit=100 "HTTP/1.1 200                
+                             OK"                                               
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/agents/qc31-collaborator                
+                             /runtime-options?executor_id=exe_f                
+                             6fb82997979f0708a5a5bbe6da4cb89                   
+                             "HTTP/1.1 200 OK"                                 
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/me "HTTP/1.1                
+                             200 OK"                                           
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/runtime/executors/exe_f6                
+                             fb82997979f0708a5a5bbe6da4cb89/ins                
+                             tallations:check "HTTP/1.1 200 OK"                
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/me "HTTP/1.1                
+                             200 OK"                                           
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/agents/qc31-collaborator                
+                             /runtime-options?executor_id=exe_f                
+                             6fb82997979f0708a5a5bbe6da4cb89                   
+                             "HTTP/1.1 200 OK"                                 
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/setup:test                  
+                             "HTTP/1.1 200 OK"                                 
+[11/17/26 06:44:58] INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/setup-tests/                
+                             connect_abfdb6e9e85c48b89d1eff6940                
+                             df9b70 "HTTP/1.1 200 OK"                          
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/setup:finish                
+                              "HTTP/1.1 200 OK"                                
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/me "HTTP/1.1                
+                             200 OK"                                           
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/setup/qc31-c                
+                             ollaborator?binding_id=bind_5bf828                
+                             3598e94fa839ef14a4d7c54486                        
+                             "HTTP/1.1 200 OK"                                 
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/bindings/bin                
+                             d_5bf8283598e94fa839ef14a4d7c54486                
+                              "HTTP/1.1 200 OK"                                
+                    INFO     HTTP Request: POST                 _client.py:1025
+                             http://testserver/api/v1/runtime-m                
+                             anagement/connections/public-ids/a                
+                             ssociate-existing "HTTP/1.1 200                   
+                             OK"                                               
+                    INFO     HTTP Request: GET                  _client.py:1025
+                             http://testserver/v1/runtime/execu                
+                             tors/exe_f6fb82997979f0708a5a5bbe6                
+                             da4cb89/inventory "HTTP/1.1 401                   
+                             Unauthorized"                                     
+                    INFO     StreamableHTTP      streamable_http_manager.py:168
+                             session manager                                   
+                             shutting down                                     
+Traceback (most recent call last):
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc31-multisession-browser\fixture.py", line 238, in <module>
+    main()
+    ~~~~^^
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc31-multisession-browser\fixture.py", line 113, in main
+    inventory = client.get(f'/v1/runtime/executors/{owner.key.executor_id}/inventory', headers=headers['operator']).json()['snapshot']
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'snapshot'

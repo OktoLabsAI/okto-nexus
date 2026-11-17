@@ -1,0 +1,44 @@
+{
+  "label": "launch",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\after\\tests\\execution_r4\\test_participant_launch.py",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\launch\\junit.xml",
+    "-k",
+    "test_client_configuration_selection_preserves_daemon_and_file_boundary or test_cli_saved_plan_is_passive_and_replay_does_not_launch"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\launch\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T09:15:41.007509+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 27776,
+      "parent_pid": null,
+      "birth_filetime": 134393805410105999,
+      "alive": false
+    },
+    {
+      "pid": 49264,
+      "parent_pid": 27776,
+      "birth_filetime": 134393805410354523,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T09:16:13.055512+00:00"
+}

@@ -1,0 +1,25 @@
+import importlib,importlib.metadata,json,os,pathlib,sys
+import pytest
+PREFIX=pathlib.Path('/tmp/nexus-qc28-xmlie7rv/venv').resolve()
+OUT=pathlib.Path(os.environ['QC28_OUTPUT'])
+NAMES=('okto_nexus','nexus_connector_core','okto_nexus_connector')
+def origins():
+    return {name:str(pathlib.Path(importlib.import_module(name).__file__).resolve()) for name in NAMES}
+def pytest_sessionstart(session):
+    value=origins()
+    assert pathlib.Path(sys.prefix).resolve()==PREFIX
+    assert sys.flags.isolated and sys.dont_write_bytecode
+    assert all(pathlib.Path(p).is_relative_to(PREFIX) for p in value.values())
+    (OUT/'origins-start.json').write_text(json.dumps(dict(origins=value,sys_path=sys.path,prefix=sys.prefix,python=sys.version),indent=2))
+def pytest_sessionfinish(session,exitstatus):
+    bad={n:getattr(m,'__file__',None) for n,m in sys.modules.items() if n.split('.')[0] in NAMES and getattr(m,'__file__',None) and not pathlib.Path(m.__file__).resolve().is_relative_to(PREFIX)}
+    (OUT/'origins-finish.json').write_text(json.dumps(dict(origins=origins(),bad=bad,exitstatus=exitstatus),indent=2))
+    assert not bad
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item,call):
+    result=yield
+    report=result.get_result()
+    value=dict(nodeid=report.nodeid,when=report.when,outcome=report.outcome,duration=report.duration)
+    if report.failed:value['failure']=report.longreprtext
+    with (OUT/'reports.jsonl').open('a') as f:f.write(json.dumps(value)+'\n')
+    print('IMMEDIATE_REPORT '+json.dumps(value),flush=True)

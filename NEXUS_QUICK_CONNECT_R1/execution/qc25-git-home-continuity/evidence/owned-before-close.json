@@ -1,0 +1,37 @@
+[
+  {
+    "pid": 60424,
+    "ppid": 55548,
+    "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "created": 1794905360.3774128,
+    "argv_sha256": "9821dd4b3304af8ee1bc967d659c2d65acfb5a8050646b36d387c94ff465df72"
+  },
+  {
+    "pid": 59064,
+    "ppid": 60424,
+    "exe": "C:\\Python313\\python.exe",
+    "created": 1794905360.3950517,
+    "argv_sha256": "9821dd4b3304af8ee1bc967d659c2d65acfb5a8050646b36d387c94ff465df72"
+  },
+  {
+    "pid": 60836,
+    "ppid": 59064,
+    "exe": "C:\\Windows\\System32\\conhost.exe",
+    "created": 1794905360.4086068,
+    "argv_sha256": "417222c4a0ecb4d60a457ebe8e26fddf3d5406bffb16a5c59af8eeb241beca51"
+  },
+  {
+    "pid": 41884,
+    "ppid": 8304,
+    "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "created": 1794905447.62422,
+    "argv_sha256": "3867adedada1a2b5548374717bd90405559a469da68ceaa498e6da7257a311d8"
+  },
+  {
+    "pid": 8304,
+    "ppid": 48864,
+    "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "created": 1794905447.2314332,
+    "argv_sha256": "aee2440d4be94704e4e1fb5bbe921cec1cf49beb518017e6d68fd715c591ca29"
+  }
+]

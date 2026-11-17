@@ -1,0 +1,8 @@
+--- C:\Users\jpamb\AppData\Local\Temp\nexus-qc14-f17-proof-_nfe3zme\after\tests\quick_connect\test_quick_connect_extra_scenarios.py
++++ tests/quick_connect/test_quick_connect_extra_scenarios.py
+@@ -1,4 +1,4 @@
+-"""QC14 draft, NOT EXECUTED. Copy beside test_quick_connect_cli after review.
++"""QC14 canonical regression scenarios; historical external cuts are recorded in execution.
+ 
+ Canonical SQLite/HTTP authorities with synthetic Test/version peers only.
+ No provider, personal installation or native harness execution.

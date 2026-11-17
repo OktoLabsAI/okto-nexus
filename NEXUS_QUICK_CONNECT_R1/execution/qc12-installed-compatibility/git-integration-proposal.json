@@ -1,0 +1,22 @@
+{
+  "test_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-proposal-ww961f7d\\test_git_cli_integration.py",
+  "sha256": "373489e466af26c93274e60af5ae628b530ca1cc4967d99c2b601f94a97499fa",
+  "executed": false,
+  "scenarios": 9,
+  "scope": "Composed real local Git plus canonical HTTP/SQLite and explicit synthetic setup boundaries.",
+  "proposed_requirements": [
+    "D01-D07",
+    "D15",
+    "D17-D19",
+    "D25-D26",
+    "F19",
+    "F20",
+    "F24"
+  ],
+  "limitations": [
+    "Proposed requirement mapping requires assertion review; not marked verified merely by this draft.",
+    "Interactive branch uses controlled input/isatty; not a real terminal or human acceptance.",
+    "Nested-subdirectory and explicit-skip-Git remain in existing focused readers; not added to this draft.",
+    "No test has run; expected checkpoint/output assertions must be validated against the final installed wheel."
+  ]
+}

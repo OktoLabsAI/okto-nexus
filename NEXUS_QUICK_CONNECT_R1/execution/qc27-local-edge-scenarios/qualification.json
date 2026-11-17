@@ -1,0 +1,77 @@
+{
+  "at": "2026-11-17T09:13:16.702705+00:00",
+  "status": "PASS_STRICT_INSTALLED_FOUR_LOCAL_EDGES",
+  "cuts": [
+    {
+      "label": "original-fixture-mechanics",
+      "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-local-edges-yvyu10qx",
+      "counts": {
+        "tests": 4,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 1,
+        "passed": 2
+      },
+      "exit_code": 1,
+      "signals": [],
+      "all_observed_owned_processes_exited": true,
+      "payload_files": 1027,
+      "payload_drift": [],
+      "source_drift": []
+    },
+    {
+      "label": "final-four",
+      "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-local-edges-final-a6k8pm7g",
+      "counts": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 4
+      },
+      "exit_code": 0,
+      "signals": [],
+      "all_observed_owned_processes_exited": true,
+      "payload_files": 1027,
+      "payload_drift": [],
+      "source_drift": []
+    }
+  ],
+  "source_commit": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "test_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-local-edges-final-a6k8pm7g\\after\\tests\\quick_connect\\test_local_edge_scenarios.py",
+  "test_sha256": "532fd982a570d337860b7f269c6a48d3a653c3a69265621eb2fc6b9bc32539c7",
+  "provider_calls": 0,
+  "c12": {
+    "diagnostic": {
+      "code": "CONFIG_ERROR",
+      "message": "Inspect the selected service and saved profile before continuing."
+    },
+    "diagnostic_specificity": "generic",
+    "structured_refusal": true,
+    "resolver_or_daemon_called": false,
+    "home_fallback": false,
+    "scope": "Controlled Path.cwd port returns an owned directory removed before validation. The active Windows CWD was never removed."
+  },
+  "c14": "A real Windows junction changed from owned A to owned B after review; old approval with --project link was refused before reserve/Test/Finish, pending review bytes stayed exact and both target markers remain intact.",
+  "f13": "Canonical CAS disabled the endpoint and revoked its existing grants. Explicit addition with its occupied ID was refused; exact-profile resume did not report connected, and ID/full reference/disabled state/grants stayed unchanged.",
+  "h09": "An actual installed Python -I -B echo child returned the product resume_argv JSON byte-for-byte, including spaces/Unicode/metacharacters, with shell=False. The injected-looking marker was absent and no application/harness executable was called.",
+  "antecedents": [
+    "Original cut: C12 and F13 PASS; C14 SKIP was caused by a fixture cmd.exe forward-slash argv0 spelling, not host incapability.",
+    "Separate owned junction probes preserve syntax failure and normalized-native-path success, without deleting target data.",
+    "Original H09 failed before echo process creation because subprocess.run was incorrectly given both stdin and input; derivative uses input=b'' (implicit closed PIPE).",
+    "Only those fixture mechanics and hidden-window creation flags changed; product/source/test expectations did not weaken."
+  ],
+  "ruff": "PASS default repository configuration",
+  "all_observed_owned_processes_exited": true,
+  "signals": [],
+  "installed_payload_files": 1027,
+  "installed_payload_drift": [],
+  "source_drift": [],
+  "limitations": [
+    "C12 is a controlled captured-path race, not removal of a live Windows process CWD. Its generic message is recorded without inventing a runtime bug.",
+    "Fixture setup/version/Test/lifecycle are synthetic; canonical HTTP/SQLite and installed application code are real.",
+    "The junction command uses only structural own paths; metacharacter data is passed exclusively to Python as argv with shell=False, never to a renderer or shell.",
+    "No repository source/tests/docs, installed prefix, Core/protocol, personal account/provider, Git/ledger, Windows session or earlier evidence changed."
+  ]
+}

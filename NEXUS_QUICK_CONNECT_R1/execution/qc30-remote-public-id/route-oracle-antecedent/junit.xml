@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="13.421" timestamp="2026-11-17T06:21:04.943260-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_qc30_remote_public_id" name="test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects" time="8.595"><failure message="okto_nexus.application.terminal_connection.ConnectionError: The Server refused this request.">..\..\after\tests\execution_r4\test_qc30_remote_public_id.py:44: in test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects
+    canonical=call('GET',BASE+'/setup?agent_id='+reference['agent_id']+'&amp;binding_id='+reference['binding_id'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\outbound\operator_client.py:138: in __call__
+    return super().__call__(method, path, body)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\outbound\terminal_http.py:68: in __call__
+    raise ConnectionError(error.get('code', 'REQUEST_REFUSED'), error.get('message', 'The Server refused this request.'),
+E   okto_nexus.application.terminal_connection.ConnectionError: The Server refused this request.</failure></testcase></testsuite></testsuites>

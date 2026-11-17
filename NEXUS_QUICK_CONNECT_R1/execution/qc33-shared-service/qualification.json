@@ -1,0 +1,129 @@
+{
+  "status": "PASS_GENUINE_FOREGROUND_SHARED_SERVICE",
+  "scenario": "QC-T-G14",
+  "proposed_status": "PASS",
+  "passed": 1,
+  "seconds": 22.8,
+  "exact_node": "tests.execution_r4.test_qc33_shared_service::test_g14_two_confirmations_reuse_one_genuine_ready_http_owner_without_changing_first",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "approach_recorded_before_execution": "approach.json",
+  "command": "final/runner.json",
+  "proof": "final/shared-service-proof.json",
+  "observed": {
+    "pid": 56916,
+    "instance_id": "svc_003221ec83b2fb2af6eaecfb986440733bb7464da3b0a9cc373201368ad26700",
+    "generation": "b4579161df2da1dfc782290a1ccc4c4e",
+    "server_kind": "genuine foreground app/portal, not detached daemon",
+    "http_port": 62667,
+    "readiness": "Unmodified inspect_local_server + real held ServeLock + real HTTP /api/v1/service",
+    "local_operator_http": "real loopback socket, no transport stub",
+    "resolver": "unmodified production resolver",
+    "statuses": [
+      {
+        "pid": 56916,
+        "instance_id": "svc_003221ec83b2fb2af6eaecfb986440733bb7464da3b0a9cc373201368ad26700",
+        "generation": "b4579161df2da1dfc782290a1ccc4c4e",
+        "state": "ready",
+        "ready_for_queries": true
+      },
+      {
+        "pid": 56916,
+        "instance_id": "svc_003221ec83b2fb2af6eaecfb986440733bb7464da3b0a9cc373201368ad26700",
+        "generation": "b4579161df2da1dfc782290a1ccc4c4e",
+        "state": "ready",
+        "ready_for_queries": true
+      },
+      {
+        "pid": 56916,
+        "instance_id": "svc_003221ec83b2fb2af6eaecfb986440733bb7464da3b0a9cc373201368ad26700",
+        "generation": "b4579161df2da1dfc782290a1ccc4c4e",
+        "state": "ready",
+        "ready_for_queries": true
+      },
+      {
+        "pid": 56916,
+        "instance_id": "svc_003221ec83b2fb2af6eaecfb986440733bb7464da3b0a9cc373201368ad26700",
+        "generation": "b4579161df2da1dfc782290a1ccc4c4e",
+        "state": "ready",
+        "ready_for_queries": true
+      },
+      {
+        "pid": 56916,
+        "instance_id": "svc_003221ec83b2fb2af6eaecfb986440733bb7464da3b0a9cc373201368ad26700",
+        "generation": "b4579161df2da1dfc782290a1ccc4c4e",
+        "state": "ready",
+        "ready_for_queries": true
+      }
+    ],
+    "canonical_refs": [
+      {
+        "server_id": "srv_3e2e07cfb25c06eea833695c447c30e4",
+        "executor_id": "exe_41a8fda4a908d808835dacbe69ec15f1",
+        "binding_id": "bind_df36cf5ec4ff09925061e8ae08c0f10c",
+        "endpoint_id": "ep_0abee11920f38dbeec922dfc8a38d287",
+        "agent_id": "app-d06bbb67ba4f",
+        "workspace_id": "wsr_2cc0409a0dd4a74c95265ee4e1258378",
+        "workspace_binding_id": "wxb_2cd7290780cb6430ea8c94f27367b034"
+      },
+      {
+        "server_id": "srv_3e2e07cfb25c06eea833695c447c30e4",
+        "executor_id": "exe_41a8fda4a908d808835dacbe69ec15f1",
+        "binding_id": "bind_cda60a120ba1fb50ea2cc77d776901d9",
+        "endpoint_id": "ep_e4027fb9e825a0d67a9e10e4ad961a98",
+        "agent_id": "app-9961bc6598b1",
+        "workspace_id": "wsr_2cc0409a0dd4a74c95265ee4e1258378",
+        "workspace_binding_id": "wxb_aaf0c7c5c10fafb215786983c7741241"
+      }
+    ],
+    "counts": {
+      "workspaces": 1,
+      "connection_public_ids": 2,
+      "execution_bindings": 2,
+      "runtime_execution_grants": 2,
+      "connection_setup_commits": 2,
+      "execution_operations": 0,
+      "execution_sessions": 0
+    },
+    "synthetic_tests": 2,
+    "version_probes": 1,
+    "process_launch_attempts": 0,
+    "first_connection_rows_unchanged": true,
+    "first_profile_bytes_unchanged": true,
+    "user_service_installed": false
+  },
+  "topology": {
+    "server": "Single genuine foreground installed app/portal process",
+    "http": "Actual uvicorn loopback socket",
+    "lifetime": "Exactly one application lifespan; uvicorn lifespan off reuses the existing portal",
+    "owner": "Actual production ServeLock held by os.getpid; generation produced by ServeLock.acquire",
+    "readiness": "Unmodified inspect_local_server correlates actual OS guards/metadata with actual HTTP /api/v1/service",
+    "client": "Unmodified connect.resolve_local_service/ServiceLifecycle/LocalServerLifecycle and LocalOperatorHTTP",
+    "synthetic": "Existing installation discovery, version probe, setup Test peers only"
+  },
+  "payload_files": 1027,
+  "payload_drift": [],
+  "source_input_pins": 1751,
+  "repository_input_drift": [],
+  "origins": [
+    "final/origins.json",
+    "final/origins-finish.json"
+  ],
+  "cleanup": {
+    "http": "final/http-cleanup.json",
+    "owner": "final/owner-cleanup.json",
+    "owned_pid_creation_handles": "final/runner.json",
+    "service_pid_found_in_retained_tree": true,
+    "all_owned_processes_exited": true,
+    "signals": [],
+    "windows_service_installed": false
+  },
+  "limitations": [
+    "Qualifies genuine foreground HTTP/service reuse with actual PID/OS lock/production readiness, not a detached daemon or Scheduler/login/logout/reboot lifecycle.",
+    "Fixture wrapper changes only owned app construction to supply the real acquired ServeLock. No production resolver/readiness/transport method is stubbed, and no synthetic PID/instance/generation/ready object is provided.",
+    "Canonical setup/version/Test endpoints and both Finish commits are reached through real LocalOperatorHTTP sockets. Discovery/version/model peers remain inert and no real provider/native CLI/account is used.",
+    "No new authority SQL is added by this focal. Existing canonical test fixture identity initialization is reused; new connection identities, scopes, bindings, grants and public IDs are committed through actual CLI/HTTP setup.",
+    "First agent identity comparison excludes only last_seen_at presence; all other identity fields and all first endpoint/binding/grant/policy/override rows and profile bytes remain exactly unchanged.",
+    "Raw owned home, credentials, keys, Server database and private profile material remain Temp only. Public refs/process facts/logs/XML/hash pins are curated.",
+    "No product/normative tests/docs/ledger/Git/build/installed prefix mutation. Transient Python cache files are outside payload scope; all1027 covered package files match the exact wheels."
+  ]
+}

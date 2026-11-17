@@ -1,0 +1,81 @@
+{
+  "status": "NOT_GREEN",
+  "candidate_source": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "original": {
+    "status": "INCONCLUSIVE_ACCESS_VIOLATION",
+    "exit_code": 3221225477,
+    "causality": "Not attributed to faulthandler; no counterproof establishes cause.",
+    "privacy_node_started": false
+  },
+  "routed": {
+    "nodes": [
+      {
+        "case": "registered-ancestor-focal",
+        "name": "test_c13_registered_ancestor_does_not_expand_nested_cwd",
+        "seconds": "12.677",
+        "status": "PASS"
+      },
+      {
+        "case": "privacy-observed-focal",
+        "name": "test_d25_private_origin_does_not_enter_observed_logs_json_homes_or_sqlite",
+        "seconds": "11.121",
+        "status": "FAIL"
+      }
+    ],
+    "faulthandler_timeout": 0,
+    "external_deadline_seconds_per_node": 180,
+    "input": "Finite exact-prompt routing, rejects unexpected prompts; scripted TTY, not real PTY."
+  },
+  "C13": {
+    "status": "PASS",
+    "scope": "Ancestor first registered through canonical setup; nested CWD retains its exact child root through review and Finish, with a distinct workspace/binding and original profile/authority preserved."
+  },
+  "D25": {
+    "runtime_node": "FAIL_PERMISSION_ERROR_DURING_LIVE_FILE_READ",
+    "scope": "Active real local FileHandler with before/after markers and 75 HTTPX events; stdout/JSON/resume assertions completed before file-read failure. Same retained files/database scanned read-only after process exit.",
+    "post_exit_scan": "post-exit-privacy-scan.json",
+    "application_tables": 162,
+    "internal_tables": 1,
+    "rows": 251,
+    "text_or_blob_cells": 601,
+    "files": 17,
+    "sensitive_hits": 0,
+    "read_errors": 0,
+    "only_exclusion": "Synthetic input workspace/.git/config, positively verified to contain the private origin."
+  },
+  "payload_files": 1027,
+  "payload_drift": [],
+  "source_drift": [],
+  "cleanup": {
+    "all_owned_processes_exited": true,
+    "signals": [],
+    "force": false,
+    "data_preserved": true
+  },
+  "raw_logs": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-routed-focals-_f1l4j9w\\registered-ancestor-focal\\raw.log",
+      "sha256": "2fba9e3120666e90d4ee3c08f8e21f4b698e01a5edb47c52560069281d955a5b",
+      "exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-routed-focals-_f1l4j9w\\privacy-observed-focal\\raw.log",
+      "sha256": "0249068fc26728f361be34b5983e2272a730ac611c631e865787f74d402ab63a",
+      "exported": false
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-ancestor-privacy-3d5bynj3\\ancestor-privacy\\raw.log",
+      "sha256": "e315d3b7b4c270e63241d76ec9cd58fccd1fc8648f361d3e484710e93223fb8b",
+      "bytes": 18359,
+      "exported": false
+    }
+  ],
+  "limits": [
+    "No claim of a single green two-case round.",
+    "Post-exit persistence is not a proof of all transient live database states. Lock or transient files can disappear on close; the post-exit scan does not convert the failed live scan into a passing runner.",
+    "Only the explicitly enabled local logging channels were observed; no outbound product analytics qualification.",
+    "Synthetic canonical Setup/Test boundaries; zero real provider/native CLI calls.",
+    "Raw logs, checkpoints, databases and credential-bearing fixture material remain in owned Temp and are not exported."
+  ]
+}

@@ -1,0 +1,1 @@
+Get-CimInstance Win32_Process -Filter "(ProcessId=17524 OR ProcessId=18696 OR ProcessId=26208 OR ProcessId=37516 OR ProcessId=44180 OR ProcessId=49976 OR ProcessId=59064 OR ProcessId=59384) AND CommandLine LIKE '%nexus-qc25-concurrency-%'" | Select-Object ProcessId,ParentProcessId,CreationDate,ExecutablePath | ConvertTo-Json -Depth 3

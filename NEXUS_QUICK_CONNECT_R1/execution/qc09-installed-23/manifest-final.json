@@ -1,0 +1,136 @@
+{
+  "files": [
+    {
+      "path": "finalize_interrupted.py",
+      "bytes": 3557,
+      "sha256": "e6743ed042a0e8f731e235fd40adbbf9639831e5f57c78a6ca3f5edd7a0636dc"
+    },
+    {
+      "path": "finalize_report.py",
+      "bytes": 5479,
+      "sha256": "439c24554124281cf5c8fa89573bfa31082691065db83301868a28d4edf03f31"
+    },
+    {
+      "path": "original2-interruption.json",
+      "bytes": 2257,
+      "sha256": "4bc340570e36161935a585af1687463f46b70bce946af15b313af69f514de2a8"
+    },
+    {
+      "path": "provenance-boundaries.json",
+      "bytes": 4480,
+      "sha256": "f1ae338683eae240c053f260d779efd6e4bf06d5021cbbf248571b3d4f93e5d1"
+    },
+    {
+      "path": "qualification.json",
+      "bytes": 1489,
+      "sha256": "e9caf477946b8ee91b1ad7656ce653f8fbbaec5ccf345d9a732bf0cc914d4cff"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4575,
+      "sha256": "bf31bc74d71ce9903b21f011971e220969323e72003f1c7ad0368f03a87cfa13"
+    },
+    {
+      "path": "remainder.py",
+      "bytes": 12263,
+      "sha256": "243c6f5c18f6bc8617ec86705ca18464cc2302ff80673d989f4ab6b0e257fde1"
+    },
+    {
+      "path": "remainder2-boundary-stop.json",
+      "bytes": 371,
+      "sha256": "e43adc77e0d9805aad35135b5c5e77a99558bb71989f031899a6281c4d3aa99d"
+    },
+    {
+      "path": "remainder2-plan.json",
+      "bytes": 284565,
+      "sha256": "0e5b668ab7e5e6864420aa2f92f19e7969c8207a8be90de488c5522e21e13c20"
+    },
+    {
+      "path": "remainder2-result.json",
+      "bytes": 276601,
+      "sha256": "6e4a388200525a56b256b6f153bae526a74780d76e13393e5bf86816e0348fe5"
+    },
+    {
+      "path": "remainder2-stopped-summary.json",
+      "bytes": 265024,
+      "sha256": "326223e84cd6637598a2da1eee1e387ca4a4ccbb1e5feaf860cc60682364be9e"
+    },
+    {
+      "path": "run_shard.py",
+      "bytes": 6371,
+      "sha256": "040b821895a42071e545b7013703b593a179b065aad8cc28f78525eeaa9c9bd1"
+    },
+    {
+      "path": "shard2-ready.json",
+      "bytes": 1768,
+      "sha256": "a29de703b506db0a7ab5da97ff1853d912e17eeef3a56e5b9b7318fc18b1d5b9"
+    },
+    {
+      "path": "shard3-campaign.json",
+      "bytes": 345592,
+      "sha256": "016d0c006fa668928c3d0ca8f7de149dc80fb52b4dd5fce82ab9dcdd035257b5"
+    },
+    {
+      "path": "shard3-effective-pytest-command.json",
+      "bytes": 40739,
+      "sha256": "baf19b1c3580e38319c668fc2b5ea82da0563420071ef38ee60ad3981b6517ec"
+    },
+    {
+      "path": "shard3-failures.json",
+      "bytes": 72023,
+      "sha256": "a485fe4fb9d062c919a2bdac2862512d248e14da9ab9d2881536a2ec50230db3"
+    },
+    {
+      "path": "shard3-installed.json",
+      "bytes": 753,
+      "sha256": "f5ac2bc2d1962a7f610a75a5c6b45143a3c9f30ee84b85170c23a594ac2aabab"
+    },
+    {
+      "path": "shard3-launcher-result.json",
+      "bytes": 1861,
+      "sha256": "1cf654fa81e99341b25d782e5e78f57d719bf48eab593131e7038bdeaddf0118"
+    },
+    {
+      "path": "shard3-origins-finish.json",
+      "bytes": 528,
+      "sha256": "56d10fe7852e06724cb9d6d9d8e60c09a8fc09e9fdf1b6abaa74763b9f5e9679"
+    },
+    {
+      "path": "shard3-origins-start.json",
+      "bytes": 527,
+      "sha256": "03c4fc343806b967cb518980c7cbf39991b111aa589e26f6182a76da53a82d84"
+    },
+    {
+      "path": "shard3-process-absence.json",
+      "bytes": 387,
+      "sha256": "b5cd5af868fa0572352bbb72a0090f8a49db603a3abc4d99b07a818028b71993"
+    },
+    {
+      "path": "shard3-ready.json",
+      "bytes": 1768,
+      "sha256": "0187b2f714183ee654c14947e7ddb053e1d677506318734aca8821859a340d80"
+    },
+    {
+      "path": "shard3-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "shard3-tests.xml",
+      "bytes": 369668,
+      "sha256": "545cdb103f6bb9aa55fa892a2a94649246077b11db0e5143bbd93b0cb5a702a0"
+    },
+    {
+      "path": "stop_at_boundary.py",
+      "bytes": 2283,
+      "sha256": "7fedb0a7d93edc934ca424bff522ec42870ca1b41a1ae435136a5acea13b7035"
+    }
+  ],
+  "external_preserved_raw": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-installed-shard3-_0m7o01m\\qc09-installed-shard3\\stdout.txt",
+      "bytes": 389439,
+      "sha256": "35bb829acb67e7d265ed0901bc897432b2e020a81f229cd943b4349a304617f3"
+    }
+  ]
+}

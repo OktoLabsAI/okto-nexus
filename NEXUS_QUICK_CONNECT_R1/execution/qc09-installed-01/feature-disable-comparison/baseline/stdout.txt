@@ -1,0 +1,61 @@
+NEXUS_VERSION 0.3.5
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r3-harness-pr27-gsg_twh1\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Projetos\Techridy\okto_labs_okto_nexus
+configfile: C:\Users\jpamb\AppData\Local\Temp\nexus-qc09-focal-baseline-2qgv4g9h\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_admission_shutdown.py::test_feature_disable_preserves_unprojected_terminal_and_exclusive_claim FAILED [100%]
+
+================================== FAILURES ===================================
+___ test_feature_disable_preserves_unprojected_terminal_and_exclusive_claim ___
+
+connected_local = ((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/nexus-qc09-focal-baseline-2qgv4g9h/t...agent_id': 'subject', ...}, <test_embedded_dispatch.connect_local.<locals>.NativeFactory object at 0x00000231975ABB60>)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002319671C9D0>
+
+    def test_feature_disable_preserves_unprojected_terminal_and_exclusive_claim(connected_local, monkeypatch):
+        from okto_nexus.bootstrap import embedded_events
+        from test_canonical_consumption import pull
+        setup, binding, native = connected_local
+        enable(setup, binding)
+        sent = send(setup, monkeypatch)
+        assert sent['ok'], sent
+        turn = current_turn(setup)
+        wait_receipt(setup, turn)
+        captured = threading.Event()
+        release = threading.Event()
+        original = embedded_events.commit_execution_events
+        def deferred(*args, **kwargs):
+            if not release.is_set():
+                captured.set()
+                raise OSError('Server projection unavailable after Core durable capture')
+            return original(*args, **kwargs)
+        monkeypatch.setattr(embedded_events, 'commit_execution_events', deferred)
+        try:
+            emit(setup, native, turn, 'Captured before disabling admission', wait_for_terminal=False)
+            assert captured.wait(10)
+            changed = setup[2].patch('/api/v1/settings', headers=setup[3]['operator'],
+                                    json={'feature_harness_integrations': False})
+>           assert changed.status_code == 200, changed.text
+E           AssertionError: {"ok":false,"error":{"code":"INVALID_SETTING","message":"Setting 'feature_harness_integrations' is pinned by a CLI flag or environment variable for this run; remove the flag to manage it here."}}
+E           assert 422 == 200
+E            +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_admission_shutdown.py:84: AssertionError
+------------------------------ Captured log call ------------------------------
+WARNING  okto_nexus.bootstrap.embedded_dispatch:embedded_dispatch.py:241 Runtime recovery: RECOVERY_PUBLICATION_DELAYED Server persistence is delayed; native execution and lease renewal remain active.
+============================== warnings summary ===============================
+..\nexus-ui-r3-harness-pr27-gsg_twh1\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-ui-r3-harness-pr27-gsg_twh1\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc09-focal-baseline-2qgv4g9h\output\tests.xml -
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_canonical_admission_shutdown.py::test_feature_disable_preserves_unprojected_terminal_and_exclusive_claim - AssertionError: {"ok":false,"error":{"code":"INVALID_SETTING","message":"Setting 'feature_harness_integrations' is pinned by a CLI flag or environment variable for this run; remove the flag to manage it here."}}
+assert 422 == 200
+ +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+======================== 1 failed, 1 warning in 12.72s ========================

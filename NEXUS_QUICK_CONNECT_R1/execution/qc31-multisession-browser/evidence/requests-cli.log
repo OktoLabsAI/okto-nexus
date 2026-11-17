@@ -1,0 +1,28 @@
+### Result
+4. [GET] http://127.0.0.1:57357/api/v1/operator-auth/status => [200] OK
+7. [GET] http://127.0.0.1:57357/api/v1/agents => [200] OK
+8. [GET] http://127.0.0.1:57357/api/v1/info => [200] OK
+9. [GET] http://127.0.0.1:57357/api/v1/graph?workspace=all&window_hours=24 => [200] OK
+10. [GET] http://127.0.0.1:57357/api/v1/workspaces => [200] OK
+11. [GET] http://127.0.0.1:57357/api/v1/info => [200] OK
+12. [GET] http://127.0.0.1:57357/api/v1/sessions => [200] OK
+13. [GET] http://127.0.0.1:57357/api/v1/attention/summary => [200] OK
+14. [GET] http://127.0.0.1:57357/api/v1/attention/summary?state=active&seen=all => [200] OK
+15. [GET] http://127.0.0.1:57357/api/v1/home/harness-board?limit=10&preview=3 => [200] OK
+18. [GET] http://127.0.0.1:57357/api/v1/operator/unread-count => [200] OK
+19. [GET] http://127.0.0.1:57357/api/v1/attention/summary => [200] OK
+20. [GET] http://127.0.0.1:57357/api/v1/attention/summary?state=active&seen=all => [200] OK
+21. [GET] http://127.0.0.1:57357/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_296d2a3065262178625196a0f342e3cb%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_269d2c9d741d98a06c07785dbac027f6%22%2C%22session_id%22%3A%22ses_b2cee5c26f2666b0d9064363b290dcb1%22%2C%22workspace_id%22%3A%22wsr_ae4eded1d27ae3a1d28a36df18d38e38%22%7D => [200] OK
+22. [GET] http://127.0.0.1:57357/api/v1/runtime-management/runtime/sessions/ses_b2cee5c26f2666b0d9064363b290dcb1?executor_id=exe_296d2a3065262178625196a0f342e3cb => [200] OK
+23. [GET] http://127.0.0.1:57357/api/v1/runtime-management/connections/me => [200] OK
+24. [GET] http://127.0.0.1:57357/api/v1/runtime-management/runtime/sessions/ses_b2cee5c26f2666b0d9064363b290dcb1?executor_id=exe_296d2a3065262178625196a0f342e3cb => [200] OK
+25. [GET] http://127.0.0.1:57357/api/v1/runtime-management/runtime/sessions/ses_b2cee5c26f2666b0d9064363b290dcb1/events?executor_id=exe_296d2a3065262178625196a0f342e3cb&after_sequence=0&limit=100 => [200] OK
+26. [GET] http://127.0.0.1:57357/api/v1/runtime-management/runtime/sessions/ses_b2cee5c26f2666b0d9064363b290dcb1?executor_id=exe_296d2a3065262178625196a0f342e3cb => [200] OK
+27. [GET] http://127.0.0.1:57357/api/v1/runtime-management/connections/bindings/bind_2031131ed8e50a9b2d9d0eedf0d10f56 => [200] OK
+28. [GET] http://127.0.0.1:57357/api/v1/attention/summary?state=active&seen=all => [200] OK
+29. [GET] http://127.0.0.1:57357/api/v1/home/harness-board?limit=10&preview=3 => [200] OK
+30. [GET] http://127.0.0.1:57357/api/v1/runtime-management/connections/me => [200] OK
+31. [GET] http://127.0.0.1:57357/api/v1/runtime-management/runtime/sessions/ses_b2cee5c26f2666b0d9064363b290dcb1/events?executor_id=exe_296d2a3065262178625196a0f342e3cb&after_sequence=7&limit=100&stream_epoch=stream_1905b00573694a1b8a2ccc1a9198ee91 => [200] OK
+32. [GET] http://127.0.0.1:57357/api/v1/runtime-management/runtime/sessions/ses_b2cee5c26f2666b0d9064363b290dcb1?executor_id=exe_296d2a3065262178625196a0f342e3cb => [200] OK
+
+Note: 7 static requests not shown, run with --static option to see them.

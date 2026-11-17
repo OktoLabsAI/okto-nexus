@@ -1,0 +1,12 @@
+{
+  "scenario": "QC-T-G14",
+  "status": "PREPARED_BEFORE_EXECUTION",
+  "server": "The real installed build_app is constructed with a genuine acquired ServeLock in the owned Server home, with its actual os.getpid and production-generated generation.",
+  "http": "The existing TestClient portal owns exactly one application lifespan. Uvicorn exposes that same app on a real ephemeral127.0.0.1 socket in the same portal with lifespan off, so no second owner is created.",
+  "readiness": "Use production inspect_local_server and actual connect.resolve_local_service, ServiceLifecycle and LocalServerLifecycle unchanged. They correlate OS-held guards, the real ServeLock metadata, and actual HTTP /api/v1/service PID/instance/generation/readiness. No synthetic ready object or PID is supplied.",
+  "client": "Keep the actual installed LocalOperatorHTTP. Prohibit subprocess.Popen after the one HTTP listener is ready; the two CLI public-ID review/confirm sequences must only observe/reuse the same foreground owner.",
+  "synthetic_boundaries": "Existing owned installation discovery, version probe and setup Test peers from terminal fixture only. No native executable/provider/account or Windows service installation.",
+  "assertions": "Two public IDs/profiles in same home and canonical workspace, same process/instance/generation throughout; distinct canonical binding/grant refs. Second confirmation preserves all first-binding/grant/agent/config rows and first profile bytes. No service context/launch/install artifact is created per ID.",
+  "cleanup": "Bounded listener shutdown in finally, same application lifespan cleanup, real ServeLock release, owned PID tree exit via external180s runner. Raw home/DB/keys stay Temp.",
+  "limits": "This qualifies a genuine foreground app/portal PID and HTTP lifecycle reuse, not a detached daemon, Scheduler install, login/logout/reboot, real harness or two physical hosts. If production inspection cannot prove ready, stop and retain partial status."
+}

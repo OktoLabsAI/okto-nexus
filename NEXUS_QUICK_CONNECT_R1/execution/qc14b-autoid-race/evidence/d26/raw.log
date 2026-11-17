@@ -1,0 +1,22 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc14b-d26-u52jkdyq\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+after\tests\quick_connect\test_quick_connect_git_recovery.py::test_d26_explicit_name_finish_recovery_ignores_changed_local_git IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_git_recovery.py::test_d26_explicit_name_finish_recovery_ignores_changed_local_git", "when": "setup", "outcome": "passed", "duration": 6.969379900023341}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_git_recovery.py::test_d26_explicit_name_finish_recovery_ignores_changed_local_git", "when": "call", "outcome": "passed", "duration": 1.9223977000219747}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_git_recovery.py::test_d26_explicit_name_finish_recovery_ignores_changed_local_git", "when": "teardown", "outcome": "passed", "duration": 0.9316526999464259}
+
+
+============================== warnings summary ===============================
+..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc14b-d26-u52jkdyq\d26\junit.xml -
+======================== 1 passed, 1 warning in 12.17s ========================

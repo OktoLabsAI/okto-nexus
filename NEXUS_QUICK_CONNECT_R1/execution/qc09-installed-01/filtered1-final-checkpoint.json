@@ -1,0 +1,29 @@
+{
+  "at": 1794900759.4924958,
+  "progress": {
+    "nodeid": "tests/test_coordination_creation.py::test_real_process_exit_during_approval_resumes_original_request[before_execution-handoff_create-False]",
+    "phase": "start",
+    "at": 1794900759.2087214
+  },
+  "idle_seconds": 0.28398656845092773,
+  "tree": [
+    {
+      "pid": 45140,
+      "ppid": 41220,
+      "create_time": 1794896780.6569908,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 48144,
+      "ppid": 45140,
+      "create_time": 1794897196.823898,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 40944,
+      "ppid": 48144,
+      "create_time": 1794897196.8627276,
+      "exe": "C:\\Python313\\python.exe"
+    }
+  ]
+}

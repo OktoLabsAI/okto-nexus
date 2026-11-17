@@ -1,0 +1,19 @@
+--- persistence-applied-final/tests/quick_connect/test_quick_connect_project_directory_scenarios.py
++++ tests/quick_connect/test_quick_connect_project_directory_scenarios.py
+@@ -5,7 +5,7 @@
+ 
+ import pytest
+ from test_quick_connect_cli import (  # noqa: F401
+-    checking, invoke, isolated_provider_environment, local_setup, quick_cli, terminal,
++    checking as checking, invoke, isolated_provider_environment as isolated_provider_environment, local_setup as local_setup, quick_cli as quick_cli, terminal as terminal,
+ )
+ from test_quick_connect_extra_scenarios import canonical_snapshot
+ 
+@@ -146,3 +146,7 @@
+         assert first['total'] == second['total'] == len(before['workspaces']) > 100
+         assert first['total_is_exact'] is second['total_is_exact'] is True
+     assert canonical_snapshot(c) == before and c.t.turns == c.t.probes == []
++
++
++# Explicit public exports include pytest fixtures used through injection.
++__all__ = ['Path', 'SimpleNamespace', 'canonical_snapshot', 'checking', 'duplicates', 'forbid_input', 'invoke', 'isolated_provider_environment', 'local_setup', 'parse_qs', 'pytest', 'quick_cli', 'seed_workspace', 'terminal', 'test_c05_duplicate_names_require_explicit_selection_not_first', 'test_c06_exact_workspace_disambiguates_duplicate_names', 'test_c07_disagreeing_explicit_name_and_workspace_refuse_without_prompt', 'test_c08_explicit_project_b_is_used_by_finish_while_cwd_remains_a', 'test_c16_second_page_workspace_selected_from_complete_canonical_directory', 'urlsplit']

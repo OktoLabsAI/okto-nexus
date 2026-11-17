@@ -1,0 +1,49 @@
+{
+  "label": "g02",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-autoid-fk6jyvc2\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-autoid-fk6jyvc2\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-autoid-fk6jyvc2\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-autoid-fk6jyvc2\\after\\tests\\quick_connect\\test_quick_connect_autoid_race.py::test_g02_explicit_new_intent_replans_auto_id_and_requires_its_own_review",
+    "-v",
+    "-s",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-autoid-fk6jyvc2\\g02\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-autoid-fk6jyvc2",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T08:08:50.393601+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 45340,
+      "parent_pid": null,
+      "birth_filetime": 134393765303957789,
+      "alive": false
+    },
+    {
+      "pid": 44048,
+      "parent_pid": 45340,
+      "birth_filetime": 134393765304259487,
+      "alive": false
+    },
+    {
+      "pid": 43836,
+      "parent_pid": 44048,
+      "birth_filetime": 134393765304429931,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T08:09:09.302550+00:00"
+}

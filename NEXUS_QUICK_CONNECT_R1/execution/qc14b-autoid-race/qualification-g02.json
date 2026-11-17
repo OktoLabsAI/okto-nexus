@@ -1,0 +1,30 @@
+{
+  "status": "PASS_ONE_INSTALLED_G02_SCENARIO",
+  "passed": 1,
+  "failed": 0,
+  "source_candidate": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "external_test": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-autoid-fk6jyvc2\\after\\tests\\quick_connect\\test_quick_connect_autoid_race.py",
+  "sha256": "30645881505147693829592cd7d9520a2900af0bf23febffa537462bb63a97a3",
+  "helper_sha256": "9f64bc7f227f84b237e6a1ed8c376a0ab4463a01934dccfdf65032f39a7fc7f3",
+  "proof": [
+    "Two distinct explicit auto-add reviews propose codex-2.",
+    "Winner binds codex-2; old loser review rejects exact project-CAS before any new Test/Finish/identity/grant.",
+    "Explicit NEW profile/intent replans codex-3; old loser hash receives REVIEW_REQUIRED with no canonical mutation/Test.",
+    "Only new review hash binds codex-3; first/winner exact public references/profiles and old losing checkpoint remain unchanged."
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "source_drift": [],
+  "installed_origins_three_families": true,
+  "all_owned_process_handles_exited": true,
+  "signals_used": [],
+  "stdin_pipe_closed": true,
+  "limits": [
+    "Synthetic inert version/Test peers only; no provider/native harness execution.",
+    "Project-CAS rejection occurs before isolated namespace uniqueness; not a standalone database race proof.",
+    "New intent is explicitly requested; uncertain old intent is not silently retried or superseded.",
+    "Only agents.last_seen_at telemetry excluded; all other compared canonical columns retained.",
+    "Five prior QC14 cases were not repeated; their artifacts remain unchanged."
+  ]
+}

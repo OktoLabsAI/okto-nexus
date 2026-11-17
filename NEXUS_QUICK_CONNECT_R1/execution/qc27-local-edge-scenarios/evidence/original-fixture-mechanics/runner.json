@@ -1,0 +1,50 @@
+{
+  "label": "local-edge-scenarios",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-local-edges-yvyu10qx\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-local-edges-yvyu10qx\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-local-edges-yvyu10qx\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-local-edges-yvyu10qx\\after\\tests\\quick_connect\\test_local_edge_scenarios.py",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-local-edges-yvyu10qx\\local-edge-scenarios\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-local-edges-yvyu10qx\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T09:03:58.704299+00:00",
+  "signals": [],
+  "exit_code": 1,
+  "processes_after": [
+    {
+      "pid": 51892,
+      "parent_pid": null,
+      "birth_filetime": 134393798387071152,
+      "alive": false
+    },
+    {
+      "pid": 46160,
+      "parent_pid": 51892,
+      "birth_filetime": 134393798387508573,
+      "alive": false
+    },
+    {
+      "pid": 55416,
+      "parent_pid": 46160,
+      "birth_filetime": 134393798387733591,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T09:04:45.490617+00:00"
+}

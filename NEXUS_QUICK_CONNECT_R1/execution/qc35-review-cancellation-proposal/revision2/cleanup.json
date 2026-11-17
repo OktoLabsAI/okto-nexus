@@ -1,0 +1,27 @@
+{
+  "actual_owned_process_handles": [
+    {
+      "pid": 57816,
+      "birth_filetime": 134393833656959569,
+      "exited": true
+    },
+    {
+      "pid": 43572,
+      "birth_filetime": 134393833657289347,
+      "exited": true
+    },
+    {
+      "pid": 17236,
+      "birth_filetime": 134393834000150711,
+      "exited": true
+    },
+    {
+      "pid": 54616,
+      "birth_filetime": 134393834000424583,
+      "exited": true
+    }
+  ],
+  "owned_namespace_readers": [],
+  "nonowned_process_proof": "nonowned-pid-minimum-proof.json",
+  "no_signal_or_stop_issued": true
+}

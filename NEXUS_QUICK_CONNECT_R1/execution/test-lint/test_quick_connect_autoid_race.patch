@@ -1,0 +1,20 @@
+--- persistence-applied-final/tests/quick_connect/test_quick_connect_autoid_race.py
++++ tests/quick_connect/test_quick_connect_autoid_race.py
+@@ -1,7 +1,7 @@
+ """Explicit new-intent replan after an auto-ID race; fake Test peers only."""
+ from test_quick_connect_cli import (  # noqa: F401
+-    checking, first_connection, invoke, isolated_provider_environment, local_setup,
+-    quick_cli, terminal,
++    checking as checking, first_connection, invoke, isolated_provider_environment as isolated_provider_environment, local_setup as local_setup,
++    quick_cli as quick_cli, terminal as terminal,
+ )
+ from test_quick_connect_extra_scenarios import canonical_snapshot, public_row
+ 
+@@ -54,3 +54,7 @@
+     after = canonical_snapshot(c)
+     for table in ('execution_bindings', 'agent_endpoints', 'runtime_execution_grants'):
+         assert all(row in after[table] for row in before[table]), table
++
++
++# Explicit public exports include pytest fixtures used through injection.
++__all__ = ['canonical_snapshot', 'checking', 'first_connection', 'invoke', 'isolated_provider_environment', 'local_setup', 'public_row', 'quick_cli', 'terminal', 'test_g02_explicit_new_intent_replans_auto_id_and_requires_its_own_review']

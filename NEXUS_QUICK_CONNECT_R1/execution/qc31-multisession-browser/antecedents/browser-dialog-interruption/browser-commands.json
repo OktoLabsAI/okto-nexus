@@ -1,0 +1,104 @@
+[
+  {
+    "label": "open",
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+      "proxy",
+      "C:/Program Files/nodejs/npx.cmd",
+      "--yes",
+      "--package",
+      "@playwright/cli",
+      "playwright-cli",
+      "--session=qc31-multisession",
+      "open",
+      "about:blank",
+      "--browser",
+      "chrome",
+      "--profile",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc31-multisession-3rnze1lj\\browser-profile",
+      "--persistent",
+      "--idle-timeout",
+      "180000"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "initialize",
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+      "proxy",
+      "C:/Program Files/nodejs/npx.cmd",
+      "--yes",
+      "--package",
+      "@playwright/cli",
+      "playwright-cli",
+      "--session=qc31-multisession",
+      "run-code",
+      "--filename",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc31-multisession-browser\\initialize.js"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "snapshot",
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+      "proxy",
+      "C:/Program Files/nodejs/npx.cmd",
+      "--yes",
+      "--package",
+      "@playwright/cli",
+      "playwright-cli",
+      "--session=qc31-multisession",
+      "snapshot"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "checks",
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+      "proxy",
+      "C:/Program Files/nodejs/npx.cmd",
+      "--yes",
+      "--package",
+      "@playwright/cli",
+      "playwright-cli",
+      "--session=qc31-multisession",
+      "run-code",
+      "--filename",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc31-multisession-browser\\checks.js"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "requests",
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+      "proxy",
+      "C:/Program Files/nodejs/npx.cmd",
+      "--yes",
+      "--package",
+      "@playwright/cli",
+      "playwright-cli",
+      "--session=qc31-multisession",
+      "requests"
+    ],
+    "exit_code": 0
+  },
+  {
+    "label": "close",
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+      "proxy",
+      "C:/Program Files/nodejs/npx.cmd",
+      "--yes",
+      "--package",
+      "@playwright/cli",
+      "playwright-cli",
+      "--session=qc31-multisession",
+      "close"
+    ],
+    "exit_code": 0
+  }
+]

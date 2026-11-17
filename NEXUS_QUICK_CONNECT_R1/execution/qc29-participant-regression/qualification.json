@@ -1,0 +1,268 @@
+{
+  "status": "PASS_SCOPED_INSTALLED_PARTICIPANT_REGRESSION",
+  "scenario": "QC-T-I05",
+  "proposed_status": "PASS",
+  "passed": 25,
+  "init_passed": 21,
+  "launch_focal_passed": 4,
+  "cases": [
+    {
+      "node": "tests.execution_r4.test_participant_init::test_review_apply_reconnect_preserves_runtime_and_other_configuration",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 7.702
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_participant_context_uses_bearer_identity_without_self_elevation[subject-200]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.196
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_participant_context_uses_bearer_identity_without_self_elevation[operator-403]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.177
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_participant_context_uses_bearer_identity_without_self_elevation[None-401]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.111
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_workspace_and_identity_mismatch_refused_without_local_effect",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 4.98
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_review_drift_blocks_before_vault_or_file_effect[file]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 4.767
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_review_drift_blocks_before_vault_or_file_effect[approval]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 4.856
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_review_drift_blocks_before_vault_or_file_effect[policy]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.87
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_review_drift_blocks_before_vault_or_file_effect[review]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.157
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_lost_checkpoint_resumes_same_intent_by_observing_effect[credential_stored]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.255
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_lost_checkpoint_resumes_same_intent_by_observing_effect[done]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.162
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_vault_failure_leaves_file_and_server_intact_and_retains_intent",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.395
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_uncertain_file_with_later_edit_is_preserved_without_new_intent",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.498
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_init_and_connect_participant_share_review_and_cli_checkpoints[claude]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.203
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_init_and_connect_participant_share_review_and_cli_checkpoints[codex]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.381
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_init_and_connect_participant_share_review_and_cli_checkpoints[generic]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 4.26
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_cli_never_falls_back_to_echoing_key",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.684
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_completed_entry_drift_and_approved_refresh_are_refused",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 5.05
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_malformed_http_errors_never_echo_response_or_key[payload0]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 0.002
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_malformed_http_errors_never_echo_response_or_key[payload1]",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 0.002
+    },
+    {
+      "node": "tests.execution_r4.test_participant_init::test_actual_http_redirect_does_not_forward_bearer",
+      "status": "PASS",
+      "evidence": "init/junit.xml",
+      "seconds": 0.683
+    },
+    {
+      "node": "tests.execution_r4.test_participant_launch::test_client_configuration_selection_preserves_daemon_and_file_boundary[codex-False]",
+      "status": "PASS",
+      "evidence": "launch/junit.xml",
+      "seconds": 7.233
+    },
+    {
+      "node": "tests.execution_r4.test_participant_launch::test_client_configuration_selection_preserves_daemon_and_file_boundary[codex-True]",
+      "status": "PASS",
+      "evidence": "launch/junit.xml",
+      "seconds": 5.207
+    },
+    {
+      "node": "tests.execution_r4.test_participant_launch::test_client_configuration_selection_preserves_daemon_and_file_boundary[claude-True]",
+      "status": "PASS",
+      "evidence": "launch/junit.xml",
+      "seconds": 5.414
+    },
+    {
+      "node": "tests.execution_r4.test_participant_launch::test_cli_saved_plan_is_passive_and_replay_does_not_launch",
+      "status": "PASS",
+      "evidence": "launch/junit.xml",
+      "seconds": 5.411
+    }
+  ],
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "fixture_hashes": {
+    "test_participant_init.py": "3303131ba531cbf50d044250716df97ac023b3b6a477b3f394493e9a8058782c",
+    "test_participant_launch.py": "fc91d1c87230276495ec20449319edd800bd03f50bd479129971b3a7af0f04a3"
+  },
+  "fixtures_byte_identical_before_after": true,
+  "input_pins": "source-pins.json",
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "commands": [
+    {
+      "label": "init",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\after\\tests\\execution_r4\\test_participant_init.py",
+        "-v",
+        "-s",
+        "-x",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\init\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\init\\cwd",
+      "deadline_seconds": 180,
+      "exit_code": 0,
+      "signals": [],
+      "origins": [
+        "init/origins.json",
+        "init/origins-finish.json"
+      ],
+      "owned_processes_absent": true
+    },
+    {
+      "label": "launch",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\after\\tests\\execution_r4\\test_participant_launch.py",
+        "-v",
+        "-s",
+        "-x",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\launch\\junit.xml",
+        "-k",
+        "test_client_configuration_selection_preserves_daemon_and_file_boundary or test_cli_saved_plan_is_passive_and_replay_does_not_launch"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc29-participant-mzz0r6ew\\launch\\cwd",
+      "deadline_seconds": 180,
+      "exit_code": 0,
+      "signals": [],
+      "origins": [
+        "launch/origins.json",
+        "launch/origins-finish.json"
+      ],
+      "owned_processes_absent": true
+    }
+  ],
+  "safety_inspection": [
+    "test_participant_init.setup creates MemoryVault and replaces participant_client.open_backend before TerminalParticipant operations; successful vault write count assertions prove the synthetic vault path.",
+    "HTTPBridge replaces urllib opener and forwards only participant-context GETs to the owned real TestClient, with own synthetic agent key. It does not reach the named external origin.",
+    "The explicit redirect negative uses a real127.0.0.1 temporary HTTPServer, a hardcoded synthetic bearer, and finally shutdown/join/server_close; no provider or personal endpoint.",
+    "Selected launch configuration tests call review only; the passive replay launch fixture replaces participant_process.spawn with a pid1234/wait0 inert object. No provider executable is launched.",
+    "Client config paths, participant home, backups and protected files are all under owned temporary directories. System credential backends are never selected by these fixture paths.",
+    "Outer environment allowlist uses own HOME/USERPROFILE/APPDATA/LOCALAPPDATA/TEMP/TMP; inherited provider secrets/proxies/OKTO/NEXUS config and real CLI paths are not copied."
+  ],
+  "unsafe_exclusions": [],
+  "launch_not_requested": [
+    "test_review_launch_replay_has_scoped_environment_and_no_server_mutation",
+    "test_drift_refuses_before_process_effect",
+    "test_checkpoint_loss_preserves_uncertainty_without_respawn",
+    "test_spawn_failure_never_retries_automatically_and_new_review_is_explicit",
+    "test_wait_interruption_retains_started_checkpoint",
+    "test_missing_profile_has_no_filesystem_effect",
+    "test_cli_does_not_echo_process_errors_or_secrets",
+    "test_real_subprocess_receives_reference_without_parent_mutation"
+  ],
+  "asserted_behavior": [
+    "init and connect --mode participant share canonical review/apply/checkpoints for claude,codex,generic; synthetic keys are absent from client configuration/profile/public JSON and vault writes remain1 on replay.",
+    "Identity/workspace authentication, policy/review/file drift, lost checkpoint recovery, vault failure, uncertain later edits and redirect refusal preserve canonical server snapshots.",
+    "Codex default config selection keeps --no-daemon; a selected arbitrary Codex config is refused before launch; Claude explicit config retains exact --mcp-config path.",
+    "Saved launch plan does not reread vault; explicit apply uses synthetic spawn1 and replay does not launch again; new review requires explicit --new."
+  ],
+  "limitations": [
+    "Installed application + real ASGI HTTP/auth/SQLite, real owned files/ACL/backup behavior and loopback redirect; input, vault, service/harness verification and launch peer boundaries are synthetic.",
+    "No Windows Credential Manager, personal config, real Codex/Claude CLI, provider/model, daemon startup, native MCP readiness or human acceptance is claimed.",
+    "Full participant_launch.py was not run. Only two requested test functions, four expanded cases, executed; remaining functions are listed as not requested, not falsely unsafe or PASS.",
+    "No expectations or test fixtures were modified. No product/normative tests/docs/ledger/Git/build/prefix mutation; only reviewable scripts/hashes/XML/logs are curated.",
+    "Both finite cuts ended naturally. All retained exact own PID handles report exit, no termination signals,1027 exact wheel payload files and source pins unchanged."
+  ]
+}

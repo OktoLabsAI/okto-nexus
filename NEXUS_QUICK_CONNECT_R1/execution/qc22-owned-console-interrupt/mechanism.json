@@ -1,0 +1,24 @@
+{
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc22-hidden-console-jrfnw60t",
+  "status": "PREPARED_NO_CONSOLE_OR_PROCESS_STARTED",
+  "node": "tests/quick_connect/test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation",
+  "original_test_sha256": "de71181344a41eddbc58b08bd875de0dd561f0d1b7ecc72e62abe293e36f35c3",
+  "mechanics": [
+    "Supervisor uses a new CREATE_NEW_CONSOLE child with STARTF_USESHOWWINDOW/SW_HIDE and redirected output.",
+    "Child reopens real CONIN$, proves GetConsoleMode/isatty and hidden console window, then executes one unchanged original pytest node.",
+    "A separate CREATE_NO_WINDOW controller attaches only to that child console after supervisor records parent/birth/image/script-path ownership.",
+    "Console membership must contain only those proven Python clients plus controller; target main and controller must both be present. A fresh proof is required before input and signal.",
+    "Controller alone ignores its Ctrl-C; it sends y+Enter using four KEY_EVENT records after the exact review prompt.",
+    "Only after the exact issued-Test marker and another membership/birth/image check, controller calls GenerateConsoleCtrlEvent(CTRL_C_EVENT,0) once.",
+    "Any unknown membership, non-real input, visible window or missing marker refuses the signal. No retry or global/user-console signal exists.",
+    "An external 180s deadline permits containment only through retained handles for exact owned child/controller Python processes with proven birth/path/parent.",
+    "PASS requires original pytest exit0 and preservation marker, which follows CLI130/checkpoint test_submitted/no binding/grant/explicit fixture gate release assertions."
+  ],
+  "provider_calls": 0,
+  "copied_application_source": false,
+  "script_pins": {
+    "win.py": "ee04cf96317d90293818156a5c71c43a354bbc0a46dfd296f7a7496e69f2a45c",
+    "child.py": "c057e39ffa57288d9b7cb82487271b092603edb586576681fe9db63893b8f338",
+    "controller.py": "47a8eccc919e29652b9cc02b46512ae4382b4d3ddb9c8fa0c2f13675d4a0f4e1"
+  }
+}

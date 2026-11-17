@@ -1,0 +1,34 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc35-red-oiqzl4wy\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+..\..\after\tests\quick_connect\test_qc35_review_cancel.py::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_qc35_review_cancel.py::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state", "when": "setup", "outcome": "passed", "duration": 8.307195200002752}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_qc35_review_cancel.py::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state", "when": "call", "outcome": "failed", "duration": 0.5640937000280246, "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-red-oiqzl4wy\\after\\tests\\quick_connect\\test_qc35_review_cancel.py:72: in test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state\n    assert final['state']=='canceled',{'last_display_state':final['state']}\nE   AssertionError: {'last_display_state': 'review'}\nE   assert 'review' == 'canceled'\nE     \nE     - canceled\nE     + review"}
+FAILEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_qc35_review_cancel.py::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state", "when": "teardown", "outcome": "passed", "duration": 0.39269710006192327}
+
+
+================================== FAILURES ===================================
+_ test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state _
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc35-red-oiqzl4wy\after\tests\quick_connect\test_qc35_review_cancel.py:72: in test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state
+    assert final['state']=='canceled',{'last_display_state':final['state']}
+E   AssertionError: {'last_display_state': 'review'}
+E   assert 'review' == 'canceled'
+E     
+E     - canceled
+E     + review
+============================== warnings summary ===============================
+..\..\..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc35-red-oiqzl4wy\cancel\junit.xml -
+=========================== short test summary info ===========================
+FAILED ..\..\after\tests\quick_connect\test_qc35_review_cancel.py::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+======================== 1 failed, 1 warning in 14.46s ========================

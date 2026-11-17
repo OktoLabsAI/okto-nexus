@@ -1,0 +1,11 @@
+--- D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc34-ancestor-privacy\final-private-focal\test_ancestor_privacy.py
++++ tests/quick_connect/test_ancestor_privacy.py
+@@ -172,7 +172,7 @@
+     journal = c.t.deps.harness_supervisor.event_ingress.journal
+     expected_lock = (Path(c.t.deps.config.home_dir) / 'runtime-journal-v1/writer.lock').resolve()
+     assert expected_lock.is_relative_to(tmp_path.resolve())
+-    audit = Path(os.environ['QC_DERIVATIVE_OUTPUT']) / 'file-read-audit.jsonl'
++    audit = Path(os.environ.get('QC_DERIVATIVE_OUTPUT', str(tmp_path))) / 'file-read-audit.jsonl'
+     length_proofs = []
+     files, total_bytes, exclusions = [], 0, []
+     for path in sorted(tmp_path.rglob('*')):

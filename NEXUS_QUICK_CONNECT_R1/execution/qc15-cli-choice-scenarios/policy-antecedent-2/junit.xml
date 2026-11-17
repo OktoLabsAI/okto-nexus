@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="9.473" timestamp="2026-11-17T05:28:32.005431-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_qc15_policy_denial" name="test_existing_method_denial_is_projected_and_cli_refuses_before_effects" time="7.244"><failure message="AssertionError: ['attention_operation_epochs', 'execution_agent_revisions']&#10;assert ['attention_o...nt_revisions'] == []&#10;  &#10;  Left contains 2 more items, first extra item: 'attention_operation_epochs'&#10;  &#10;  Full diff: (-: missing in left side, +: extra in left side)&#10;  - []&#10;  + [&#10;  +     'attention_operation_epochs',&#10;  +     'execution_agent_revisions',&#10;  + ]">C:\Users\jpamb\AppData\Local\Temp\nexus-qc15-policy-1h57xg1t\after\tests\execution_r4\test_qc15_policy_denial.py:70: in test_existing_method_denial_is_projected_and_cli_refuses_before_effects
+    assert changed == [], changed
+E   AssertionError: ['attention_operation_epochs', 'execution_agent_revisions']
+E   assert ['attention_o...nt_revisions'] == []
+E     
+E     Left contains 2 more items, first extra item: 'attention_operation_epochs'
+E     
+E     Full diff: (-: missing in left side, +: extra in left side)
+E     - []
+E     + [
+E     +     'attention_operation_epochs',
+E     +     'execution_agent_revisions',
+E     + ]</failure></testcase></testsuite></testsuites>

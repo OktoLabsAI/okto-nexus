@@ -1,0 +1,7 @@
+{
+  "nodeid": "tests/quick_connect/test_local_edge_scenarios.py::test_h09_windows_json_resume_vector_roundtrip_without_a_shell",
+  "when": "call",
+  "outcome": "failed",
+  "duration": 2.172053499962203,
+  "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-local-edges-yvyu10qx\\after\\tests\\quick_connect\\test_local_edge_scenarios.py:133: in test_h09_windows_json_resume_vector_roundtrip_without_a_shell\n    result = subprocess.run([sys.executable, '-I', '-B', str(echo), *loaded], cwd=cwd, env=env,\nC:\\Python313\\Lib\\subprocess.py:544: in run\n    raise ValueError('stdin and input arguments may not both be used.')\nE   ValueError: stdin and input arguments may not both be used."
+}

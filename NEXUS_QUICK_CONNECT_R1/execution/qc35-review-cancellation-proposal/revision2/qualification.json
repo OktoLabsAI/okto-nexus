@@ -1,0 +1,71 @@
+{
+  "status": "THREE_DERIVED_FOCALS_PASS_OBSERVER_FALSE_CHILD_PRESERVED",
+  "passed": 3,
+  "cases": [
+    {
+      "node": "tests.quick_connect.test_qc35_review_cancel::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state[quick]",
+      "evidence": "final/variants/junit.xml",
+      "status": "PASS"
+    },
+    {
+      "node": "tests.quick_connect.test_qc35_review_cancel::test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state[legacy]",
+      "evidence": "final/variants/junit.xml",
+      "status": "PASS"
+    },
+    {
+      "node": "tests.quick_connect.test_quick_connect_cli::test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay",
+      "evidence": "final/json-plan/junit.xml",
+      "status": "PASS"
+    }
+  ],
+  "previous_six_passed_report": "../qualification.json",
+  "previous_report_sha256": "211852d056b1cf1cde355d227216d78507813ce0d6e4ede08c1d2b7a328e4389",
+  "previous_patch_unchanged_sha256": "5b7772d9e836839dd2294511d5dd61ac2f3bb8d75759f8be33aff1a492adf0ff",
+  "patch": "connect-cancellation-v2.patch",
+  "patch_sha256": "fe595dc7409f466d0401b64dccf6c0ec19cb8a255d01120b31e09203eb8e6c78",
+  "test": "test_review_cancel_v2.py",
+  "test_sha256": "196635cacb2749cb559414fda7414e665968a8f824d4e635154e811784b54377",
+  "overlay_sha256": "b9557fb214ed758ac80e040f23d35559605f7dd26a8e06edc74f19fd12acdc9a",
+  "overlay_module": "okto_nexus.adapters.inbound.cli.connect",
+  "not_a_new_wheel": true,
+  "quick": {
+    "state": "canceled",
+    "lifecycle_requested": true,
+    "canonical_metadata_revalidation_requested": true,
+    "effects_started": null,
+    "checkpoint_preserved": true,
+    "ensure_calls": 1,
+    "tests": 0,
+    "probes": 0
+  },
+  "legacy": {
+    "state": "canceled",
+    "lifecycle_requested": true,
+    "canonical_metadata_revalidation_requested": false,
+    "effects_started": null,
+    "checkpoint_preserved": true,
+    "ensure_calls": 1,
+    "tests": 0,
+    "probes": 0
+  },
+  "cleanup": "cleanup.json",
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "observer_outcome": {
+    "status": "WRAPPER_ASSERTION_FAILED_FALSE_DESCENDANT",
+    "detail": "Both pytest phases exit0; immediate cleanup classified an older unrelated process as child through stale parent PID. Birth ordering disproves ownership. No signal was sent. Original raw remains Temp with hashes; curated nonowned data contains only necessary PID/times.",
+    "raw_hashes": "raw-input-hashes.json",
+    "minimum_proof": "nonowned-pid-minimum-proof.json",
+    "future_runner_requirement": "Require child creation time >= actual retained parent creation time before ownership attribution or any containment."
+  },
+  "limits": [
+    "Exactly two new parameter variants plus one relevant existing JSON plan/recovery focal executed; previous six results and previous patch remain unchanged.",
+    "The revised two-line proposal uses the existing canonical_metadata variable, preserving true in Quick and false in explicit-profile legacy without catalog selection.",
+    "Quick alone qualifies basename/directory suggestion, root and create offer with zero authority/Test before consent; legacy only proves its explicit client/project/profile selection and no Git discovery.",
+    "All other application modules are installed site-packages; connect.py alone is an explicit external overlay. Package files unchanged does not mean the overlay is a released wheel.",
+    "Wrapper postchecks were interrupted by the false-descendant assertion; curation independently rechecked1027 exact wheel payload files and every source pin. Start/finish origins and overlay hashes are preserved per phase.",
+    "Actual owned processes exited; an unrelated reused-PID record is not claimed killed/owned. No unrelated image path or command line is curated.",
+    "No repo src/tests/docs, prefix, Git, ledger, provider, personal credentials or Windows service was changed. Product acceptance still needs Root apply and final artifact qualification."
+  ]
+}

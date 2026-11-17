@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="5" time="26.129" timestamp="2026-11-17T04:50:02.339467-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_quick_connect_pty" name="test_real_terminal_measurement" time="0.011" /><testcase classname="tests.quick_connect.test_quick_connect_pty" name="test_json_with_real_tty_never_requests_input" time="6.467" /><testcase classname="tests.quick_connect.test_quick_connect_pty" name="test_cancel_from_actual_terminal_does_not_check_or_test" time="5.671"><failure message="EOFError: EOF when reading a line">C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after\tests\quick_connect\test_quick_connect_pty.py:90: in test_cancel_from_actual_terminal_does_not_check_or_test
+    assert c.run(['connect', 'codex', 'PTY Demo', '--profile', 'cancelled', '--no-chat']) == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after\tests\quick_connect\test_quick_connect_pty.py:61: in run
+    return main.main([*tokens, '--home', str(home), '--provider-home', str(provider)])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\main.py:54: in main
+    return run_connect(rest)
+           ^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:150: in run_connect
+    return _run_connect_once(argv, invocation_cwd=invocation_cwd, frozen_name=frozen_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:526: in _run_connect_once
+    answer = input(prompt).strip().lower()
+             ^^^^^^^^^^^^^
+E   EOFError: EOF when reading a line</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_pty" name="test_confirm_and_resume_use_actual_terminal_without_replaying_test" time="5.968"><failure message="EOFError: EOF when reading a line">C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after\tests\quick_connect\test_quick_connect_pty.py:101: in test_confirm_and_resume_use_actual_terminal_without_replaying_test
+    assert c.run(['connect', 'codex', 'PTY Demo', '--profile', 'confirmed', '--no-chat']) == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after\tests\quick_connect\test_quick_connect_pty.py:61: in run
+    return main.main([*tokens, '--home', str(home), '--provider-home', str(provider)])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\main.py:54: in main
+    return run_connect(rest)
+           ^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:150: in run_connect
+    return _run_connect_once(argv, invocation_cwd=invocation_cwd, frozen_name=frozen_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:526: in _run_connect_once
+    answer = input(prompt).strip().lower()
+             ^^^^^^^^^^^^^
+E   EOFError: EOF when reading a line</failure></testcase><testcase classname="tests.quick_connect.test_quick_connect_pty" name="test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation" time="5.794"><failure message="EOFError: EOF when reading a line">C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after\tests\quick_connect\test_quick_connect_pty.py:126: in test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation
+    code = c.run(['connect', 'codex', 'PTY Interrupt', '--profile', 'interrupted', '--no-chat'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after\tests\quick_connect\test_quick_connect_pty.py:61: in run
+    return main.main([*tokens, '--home', str(home), '--provider-home', str(provider)])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\main.py:54: in main
+    return run_connect(rest)
+           ^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:150: in run_connect
+    return _run_connect_once(argv, invocation_cwd=invocation_cwd, frozen_name=frozen_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\connect.py:526: in _run_connect_once
+    answer = input(prompt).strip().lower()
+             ^^^^^^^^^^^^^
+E   EOFError: EOF when reading a line</failure></testcase></testsuite></testsuites>

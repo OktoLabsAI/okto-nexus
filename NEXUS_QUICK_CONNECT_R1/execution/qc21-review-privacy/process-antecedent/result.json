@@ -1,0 +1,52 @@
+{
+  "cases": [
+    {
+      "label": "review-privacy",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc21-review-privacy-2t406fkm\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc21-review-privacy-2t406fkm\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc21-review-privacy-2t406fkm\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc21-review-privacy-2t406fkm\\after\\tests\\quick_connect\\test_git_cli_integration.py",
+        "-v",
+        "-s",
+        "-x",
+        "-k",
+        "monorepo or PRIVATE",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc21-review-privacy-2t406fkm\\review-privacy\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc21-review-privacy-2t406fkm\\review-privacy\\cwd",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T08:34:18.081906+00:00",
+      "signals": [],
+      "exit_code": 3221225477,
+      "processes_after": [
+        {
+          "pid": 57508,
+          "parent_pid": null,
+          "birth_filetime": 134393780580841172,
+          "alive": false
+        },
+        {
+          "pid": 25672,
+          "parent_pid": 57508,
+          "birth_filetime": 134393780580986371,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T08:34:32.521331+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

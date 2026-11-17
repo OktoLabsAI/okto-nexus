@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:/Program Files/nodejs/npx.cmd",
+    "--yes",
+    "--package",
+    "@playwright/cli",
+    "playwright-cli",
+    "--session=qc25-git-home",
+    "run-code",
+    "--filename",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc25-git-home-continuity\\checks.js"
+  ],
+  "exit_code": 0
+}

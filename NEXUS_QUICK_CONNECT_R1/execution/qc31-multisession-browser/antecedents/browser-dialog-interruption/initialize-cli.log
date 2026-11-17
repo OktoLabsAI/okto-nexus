@@ -1,0 +1,18 @@
+### Result
+{"body":"/ Home\nNeeds attention\n…\n● CONNECTING\nHome\nConversations\nGraph\nArtifacts\nAdvanced\nHome\n\nFollow work, questions and deliveries.\n\nFollow each harness below. Open an activity to see its exact context, or add a harness to this project.\n\nNew request\nRefresh\nPause display\nProject\n\nAll projects\n\nChoose a project and follow its registered harnesses below.\n\nAdd harness\nChoose a project\nAll projects\n\nActive work, items needing you and retained results stay visible together. Each card keeps its linked sessions, questions and deliveries.\n\nLoading follow-up…\n\nFollow-up\nActive\nTotal unknown · Revalidating\n\nLoading active…\n\nNeeds you\nTotal unknown · Revalidating\n\nLoading needs you…\n\nResults\nTotal unknown · Revalidating\n\nLoading results…"}
+### Ran Playwright code
+```js
+await (async page=>{
+ const cfg={"status": "READY_CANONICAL_MULTISESSIONS", "url": "http://127.0.0.1:54191", "reference": {"server_id": "srv_69ba3c3cc6798426d816afddfeadba31", "executor_id": "exe_3487af5a637db76c6f23b75af32193d3", "binding_id": "bind_8005863328f6834371bc90e8350ece38", "endpoint_id": "ep_d32510497198aeed227a79b384e15891", "agent_id": "qc31-collaborator", "workspace_id": "wsr_25f2dc2d74ada92b5d1457da79dd848d", "workspace_binding_id": "wxb_0c0912419c0f2427ea27b204d366f0c7"}, "connect_id": "session-reviewer", "sessions": [{"label": "A", "session_id": "ses_5718867a2ac2a93c72127e49eec8707a", "text": "QC31 Alpha retained exact output", "closed": true}, {"label": "B", "session_id": "ses_91b1366e5a7abfd4622fe89616ceb7f7", "text": "QC31 Beta current exact output", "closed": false}], "provider_invocations": 0, "fake_protocol": true, "viewer_events_verified": true, "browser_readonly": true, "browser_deadline_seconds": 180, "at": "2026-11-17T10:08:44.194474+00:00"};
+ await page.route('**/*',route=>['GET','HEAD','OPTIONS'].includes(route.request().method())?route.continue():route.abort());
+ await page.addInitScript(()=>localStorage.setItem('okto-nexus-home-operational','enabled'));
+ await page.setViewportSize({width:1440,height:1100});
+ await page.goto(cfg.url,{waitUntil:'domcontentloaded'});
+ await page.getByTestId('home-project-card').waitFor({timeout:15000});
+ return {body:await page.locator('body').innerText()};
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:54191/
+- Page Title: Okto Nexus

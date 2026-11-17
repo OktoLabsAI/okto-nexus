@@ -13,7 +13,7 @@ PATTERNS = {
 
 def main():
     matches, count, size = [], 0, 0
-    for name in ('qc09-installed-01', 'qc09-installed-23', 'qc09-review', 'qc09-qc-installed'):
+    for name in sorted(path.name for path in BASE.iterdir() if path.is_dir() and path.name.startswith('qc')):
         for path in (BASE / name).rglob('*'):
             if not path.is_file() or '__pycache__' in path.parts:
                 continue

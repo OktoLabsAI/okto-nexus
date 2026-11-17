@@ -1,0 +1,49 @@
+{
+  "label": "json-plan",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35v2-derived-rk0m36g2\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35v2-derived-rk0m36g2\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35v2-derived-rk0m36g2\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35v2-derived-rk0m36g2\\after\\tests\\quick_connect\\test_quick_connect_cli.py::test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35v2-derived-rk0m36g2\\json-plan\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35v2-derived-rk0m36g2\\json-plan\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T10:03:20.012022+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 17236,
+      "parent_pid": null,
+      "birth_filetime": 134393834000150711,
+      "alive": false
+    },
+    {
+      "pid": 29004,
+      "claimed_parent_pid": 17236,
+      "birth_filetime": 134390402663962653,
+      "parent_birth_filetime": 134393834000150711,
+      "reason": "Child predates claimed parent; stale/reused parent PID, not owned",
+      "signal_sent": false
+    },
+    {
+      "pid": 54616,
+      "parent_pid": 17236,
+      "birth_filetime": 134393834000424583,
+      "alive": false
+    }
+  ]
+}

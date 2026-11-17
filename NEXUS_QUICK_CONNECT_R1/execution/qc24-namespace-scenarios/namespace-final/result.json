@@ -1,0 +1,50 @@
+{
+  "cases": [
+    {
+      "label": "namespace",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc24-namespace-h8li_lxe\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc24-namespace-h8li_lxe\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc24-namespace-h8li_lxe\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc24-namespace-h8li_lxe\\after\\tests\\execution_r4\\test_qc24_namespace_http.py",
+        "-v",
+        "-s",
+        "-x",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc24-namespace-h8li_lxe\\namespace\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc24-namespace-h8li_lxe\\namespace\\cwd",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T08:43:41.076986+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 59240,
+          "parent_pid": null,
+          "birth_filetime": 134393786211070755,
+          "alive": false
+        },
+        {
+          "pid": 17748,
+          "parent_pid": 59240,
+          "birth_filetime": 134393786211240613,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T08:43:59.018077+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

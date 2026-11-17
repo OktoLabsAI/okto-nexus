@@ -1,0 +1,21 @@
+--- persistence-applied-final/tests/quick_connect/test_quick_connect_extra_scenarios.py
++++ tests/quick_connect/test_quick_connect_extra_scenarios.py
+@@ -10,8 +10,8 @@
+ import pytest
+ 
+ from test_quick_connect_cli import (  # noqa: F401
+-    checking, first_connection, invoke, isolated_provider_environment, local_setup,
+-    quick_cli, terminal,
++    checking as checking, first_connection, invoke, isolated_provider_environment as isolated_provider_environment, local_setup as local_setup,
++    quick_cli as quick_cli, terminal as terminal,
+ )
+ 
+ 
+@@ -139,3 +139,7 @@
+     assert public_row(c, 'raced-reviewer', first['workspace_id']) == winner_public
+     saved = json.loads((c.home / 'terminal/profiles/loser.json').read_text())
+     assert saved['state'] not in ('test_submitted', 'finish', 'done')
++
++
++# Explicit public exports include pytest fixtures used through injection.
++__all__ = ['TABLES', 'canonical_snapshot', 'checking', 'datetime', 'first_connection', 'invoke', 'isolated_provider_environment', 'json', 'local_setup', 'public_row', 'pytest', 'quick_cli', 'terminal', 'test_e03_second_same_harness_add_without_id_proposes_codex_2', 'test_f17_free_id_review_loses_race_before_new_test_identity_or_grant', 'test_g13_expired_canonical_grants_are_not_renewed_by_resume', 'test_h06_explicit_add_plan_preserves_public_namespace_and_project_drafts', 'timedelta', 'timezone', 'urlencode']

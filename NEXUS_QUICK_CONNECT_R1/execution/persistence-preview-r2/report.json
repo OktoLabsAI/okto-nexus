@@ -1,0 +1,295 @@
+{
+  "mode": "PREVIEW_ONLY_NO_TEST_COPIES",
+  "inventory_sha256": "d881fcf29f44df472fd4da72d90d45eec2803629a238cf960414409427d0fb11",
+  "records": [
+    {
+      "id": "QC12Git+QC21",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc21-review-privacy\\final\\executed-test.py",
+      "original_sha256": "91addb099dfa7e91ba24962742bb20a6fb5f624397dcd34b638eab09774dcfa2",
+      "target": "tests/quick_connect/test_git_cli_integration.py",
+      "normalized_sha256": "786102fb73af7a71471d63fd2a687b44c0be1b0f04e7d416848f07039d4c1f9c",
+      "persisted_sha256": "32e3084f0a964f2f6764c367d9777cc94485cd9cc020ede12b7a0f21f08bc57b",
+      "changes": [
+        "optional_evidence_write_text:2"
+      ],
+      "copied": false,
+      "diff": "QC12Git-QC21.patch",
+      "ast": "QC12Git-QC21.ast.json"
+    },
+    {
+      "id": "QC14",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-f17-proof-_nfe3zme\\after\\tests\\quick_connect\\test_quick_connect_extra_scenarios.py",
+      "original_sha256": "9f64bc7f227f84b237e6a1ed8c376a0ab4463a01934dccfdf65032f39a7fc7f3",
+      "target": "tests/quick_connect/test_quick_connect_extra_scenarios.py",
+      "normalized_sha256": "fdbd7e34f0f773f64d8f955f1c5c4d2583cd63e7a817d047f734a74b35d294d5",
+      "persisted_sha256": "d793b1e2bdec780e666e08961fa7433191b273148e1b834c80c6c92691048ae0",
+      "changes": [
+        "remove_obsolete_preexecution_docstring"
+      ],
+      "copied": false,
+      "diff": "QC14.patch",
+      "ast": "QC14.ast.json"
+    },
+    {
+      "id": "QC14b",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-autoid-fk6jyvc2\\after\\tests\\quick_connect\\test_quick_connect_autoid_race.py",
+      "original_sha256": "30645881505147693829592cd7d9520a2900af0bf23febffa537462bb63a97a3",
+      "target": "tests/quick_connect/test_quick_connect_autoid_race.py",
+      "normalized_sha256": "acedb87ee5f891f26eb51d7b764ce54be5dadc07b3001c5666e92d7cfdce94a1",
+      "persisted_sha256": "acedb87ee5f891f26eb51d7b764ce54be5dadc07b3001c5666e92d7cfdce94a1",
+      "changes": [],
+      "copied": false,
+      "diff": "QC14b.patch",
+      "ast": "QC14b.ast.json"
+    },
+    {
+      "id": "QC15",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc15-cli-choice-scenarios\\final\\executed-test.py",
+      "original_sha256": "fdcb4ab7b7b825952fbdd1553c85df917f5155f5cfae2d596eea4932952f4ead",
+      "target": "tests/quick_connect/test_qc15_cli_choices.py",
+      "normalized_sha256": "d3a98c993e0d2ad0f48149b7b06f3065d1df2a93db8d1570f9324c03399902b4",
+      "persisted_sha256": "d3a98c993e0d2ad0f48149b7b06f3065d1df2a93db8d1570f9324c03399902b4",
+      "changes": [],
+      "copied": false,
+      "diff": "QC15.patch",
+      "ast": "QC15.ast.json"
+    },
+    {
+      "id": "QC15policy",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc15-cli-choice-scenarios\\policy-final\\executed-test.py",
+      "original_sha256": "75a9344c27c3ce05b7b48921d4e1143f7e25c4fc276636416ad828feca78983c",
+      "target": "tests/quick_connect/test_qc15_policy_denial.py",
+      "normalized_sha256": "a0eeaefa733b412ca679daa8ed4b4c31c5094ea6298778f03ad29602272b3806",
+      "persisted_sha256": "80ac2f2c230d703a8550c61b6ba2822bdeef0176f8202f55d5f3392e5a5a3e2f",
+      "changes": [
+        "optional_evidence_write_text:1"
+      ],
+      "copied": false,
+      "diff": "QC15policy.patch",
+      "ast": "QC15policy.ast.json"
+    },
+    {
+      "id": "QC16",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc16-id-choices-final-lpx96e5q\\after\\tests\\quick_connect\\test_id_choice_scenarios.py",
+      "original_sha256": "9962874236c44748fccf812ec79aad0c3e55a0310c3ed52df8c4e508c2fc7a2c",
+      "target": "tests/quick_connect/test_id_choice_scenarios.py",
+      "normalized_sha256": "9962874236c44748fccf812ec79aad0c3e55a0310c3ed52df8c4e508c2fc7a2c",
+      "persisted_sha256": "9962874236c44748fccf812ec79aad0c3e55a0310c3ed52df8c4e508c2fc7a2c",
+      "changes": [],
+      "copied": false,
+      "diff": "QC16.patch",
+      "ast": "QC16.ast.json"
+    },
+    {
+      "id": "QC17",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc17-final-z0iaeom6\\after\\tests\\quick_connect\\test_quick_connect_project_scenarios.py",
+      "original_sha256": "190f96cd7b2ddd8922523e0d880048aca0ae1703214b2a0a55d1470a14715e27",
+      "target": "tests/quick_connect/test_quick_connect_project_scenarios.py",
+      "normalized_sha256": "85d9a7cc7c67afb7683c4a7f01af3f70be0dbf2953c0c3f4c7b24ce17f11696f",
+      "persisted_sha256": "85d9a7cc7c67afb7683c4a7f01af3f70be0dbf2953c0c3f4c7b24ce17f11696f",
+      "changes": [],
+      "copied": false,
+      "diff": "QC17.patch",
+      "ast": "QC17.ast.json"
+    },
+    {
+      "id": "QC18",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc18-customize-f15275ix\\after\\tests\\quick_connect\\test_quick_connect_customization_output.py",
+      "original_sha256": "9b7c730f0f9dacca081b93644aaa691098db688043a18b652cdf3c590e18b496",
+      "target": "tests/quick_connect/test_quick_connect_customization_output.py",
+      "normalized_sha256": "5df5143f5f8ef3eec24aeacc97c9775969f8ec7e0e659e99d1272fa749763d10",
+      "persisted_sha256": "5df5143f5f8ef3eec24aeacc97c9775969f8ec7e0e659e99d1272fa749763d10",
+      "changes": [],
+      "copied": false,
+      "diff": "QC18.patch",
+      "ast": "QC18.ast.json"
+    },
+    {
+      "id": "QC19",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc19-pending-fences-hm0o1ead\\after\\tests\\quick_connect\\test_pending_selector_fences.py",
+      "original_sha256": "555290344d6342529838396604618a670fefa01f1caff04c3070cac72d94c187",
+      "target": "tests/quick_connect/test_pending_selector_fences.py",
+      "normalized_sha256": "555290344d6342529838396604618a670fefa01f1caff04c3070cac72d94c187",
+      "persisted_sha256": "555290344d6342529838396604618a670fefa01f1caff04c3070cac72d94c187",
+      "changes": [],
+      "copied": false,
+      "diff": "QC19.patch",
+      "ast": "QC19.ast.json"
+    },
+    {
+      "id": "QC20",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc20-git-vp6ute53\\after\\tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+      "original_sha256": "41138bb66954a0fbbc45f243015d5f6944306688cd88a4f5233d3ceb89572324",
+      "target": "tests/quick_connect/test_quick_connect_git_boundaries.py",
+      "normalized_sha256": "331edca1d70a3de36a3bcd5ccc4e6f7ad32168409830cd3aa5fb544b4b65cb0b",
+      "persisted_sha256": "331edca1d70a3de36a3bcd5ccc4e6f7ad32168409830cd3aa5fb544b4b65cb0b",
+      "changes": [],
+      "copied": false,
+      "diff": "QC20.patch",
+      "ast": "QC20.ast.json"
+    },
+    {
+      "id": "QC23",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc23-directory-sxjx1ycp\\after\\tests\\quick_connect\\test_quick_connect_project_directory_scenarios.py",
+      "original_sha256": "c47579b339b3b27be18d894914a2a074ea917b2fbe8048c0307058dae4574c3e",
+      "target": "tests/quick_connect/test_quick_connect_project_directory_scenarios.py",
+      "normalized_sha256": "a98da72877f7cba149afccd313906f51557f8441834eacf39e5edd5c0cb71148",
+      "persisted_sha256": "a98da72877f7cba149afccd313906f51557f8441834eacf39e5edd5c0cb71148",
+      "changes": [],
+      "copied": false,
+      "diff": "QC23.patch",
+      "ast": "QC23.ast.json"
+    },
+    {
+      "id": "QC24namespace",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc24-namespace-scenarios\\namespace-final\\executed-namespace-test.py",
+      "original_sha256": "fa479eb747f3866fe2605972a45edadc92646336216cb00913f2ea4161f79b04",
+      "target": "tests/quick_connect/test_qc24_namespace_http.py",
+      "normalized_sha256": "fa479eb747f3866fe2605972a45edadc92646336216cb00913f2ea4161f79b04",
+      "persisted_sha256": "15e528e7ed349b6d73a07c5677f3d05fea78717d98bcf239301852151b39003d",
+      "changes": [
+        "optional_evidence_write_text:1"
+      ],
+      "copied": false,
+      "diff": "QC24namespace.patch",
+      "ast": "QC24namespace.ast.json"
+    },
+    {
+      "id": "QC24executor",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc24-namespace-scenarios\\executor-final\\executed-executor-test.py",
+      "original_sha256": "29a7cbf328aaeb4d786c3c09bb896616f7158aebf5fd79d7b6ca2b36128be400",
+      "target": "tests/quick_connect/test_qc24_namespace_executor_http.py",
+      "normalized_sha256": "29a7cbf328aaeb4d786c3c09bb896616f7158aebf5fd79d7b6ca2b36128be400",
+      "persisted_sha256": "29a7cbf328aaeb4d786c3c09bb896616f7158aebf5fd79d7b6ca2b36128be400",
+      "changes": [],
+      "copied": false,
+      "diff": "QC24executor.patch",
+      "ast": "QC24executor.ast.json"
+    },
+    {
+      "id": "QC25locks",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc25-concurrency-locks\\race-final\\executed-test.py",
+      "original_sha256": "2b2b27b1fed11d32716030b791b7c5b1f3b9e4ae7aee441446f27d18ffef0a8e",
+      "target": "tests/quick_connect/test_qc25_concurrency_locks.py",
+      "normalized_sha256": "2b2b27b1fed11d32716030b791b7c5b1f3b9e4ae7aee441446f27d18ffef0a8e",
+      "persisted_sha256": "4c4a012d25df66f9e45bc9a71e7fd05696db2d3984a6e7a0075d4c7a488bcf3c",
+      "changes": [
+        "optional_evidence_write_text:1",
+        "remove_only_PROBE_installed_prefix_assertion",
+        "platform_safe_process_group_flag"
+      ],
+      "copied": false,
+      "diff": "QC25locks.patch",
+      "ast": "QC25locks.ast.json"
+    },
+    {
+      "id": "QC27",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc27-local-edges-final-a6k8pm7g\\after\\tests\\quick_connect\\test_local_edge_scenarios.py",
+      "original_sha256": "532fd982a570d337860b7f269c6a48d3a653c3a69265621eb2fc6b9bc32539c7",
+      "target": "tests/quick_connect/test_local_edge_scenarios.py",
+      "normalized_sha256": "532fd982a570d337860b7f269c6a48d3a653c3a69265621eb2fc6b9bc32539c7",
+      "persisted_sha256": "2f0ff36f129167e98500cfd2aa873cc182da6f3b28367c83809129ffc0d09a42",
+      "changes": [
+        "skip_specific_Windows_argv_case_on_other_platforms"
+      ],
+      "copied": false,
+      "diff": "QC27.patch",
+      "ast": "QC27.ast.json"
+    },
+    {
+      "id": "QC28POSIX",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc28-posix-paths\\evidence\\copied-tests\\test_posix_physical_paths.py.txt",
+      "original_sha256": "2facd13f15cdccad1bfe7421ef15b6e8d06c1c3fb83839c73e81420c4371c48a",
+      "target": "tests/quick_connect/test_posix_physical_paths.py",
+      "normalized_sha256": "2facd13f15cdccad1bfe7421ef15b6e8d06c1c3fb83839c73e81420c4371c48a",
+      "persisted_sha256": "6a34dee8bbe673e545781ab80815ef2f4a495095b940264600204c4bccc333f8",
+      "changes": [
+        "POSIX_module_skip_and_test_only_filesystem_capability_fixtures"
+      ],
+      "copied": false,
+      "diff": "QC28POSIX.patch",
+      "ast": "QC28POSIX.ast.json"
+    },
+    {
+      "id": "QC30remote",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc30-remote-public-id\\final\\executed-test.py",
+      "original_sha256": "40abc00451a42d0258cf40e6df231aeba501bb1f18672b9617288da9b121eaed",
+      "target": "tests/quick_connect/test_qc30_remote_public_id.py",
+      "normalized_sha256": "40abc00451a42d0258cf40e6df231aeba501bb1f18672b9617288da9b121eaed",
+      "persisted_sha256": "b7ceeaf7db4305cd213ba0723d13edc8bde90fc42bb04e6239a7da43ca619b4f",
+      "changes": [
+        "optional_evidence_write_text:1"
+      ],
+      "copied": false,
+      "diff": "QC30remote.patch",
+      "ast": "QC30remote.ast.json"
+    },
+    {
+      "id": "QC32Git",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-help-bare-dgty_zcj\\after\\tests\\quick_connect\\test_git_remaining.py",
+      "original_sha256": "77d0a7500ae35ad31a3a8068b430ac4a2430ff5eede66dd84c71dd54bd7a3dd8",
+      "target": "tests/quick_connect/test_git_remaining.py",
+      "normalized_sha256": "77d0a7500ae35ad31a3a8068b430ac4a2430ff5eede66dd84c71dd54bd7a3dd8",
+      "persisted_sha256": "77d0a7500ae35ad31a3a8068b430ac4a2430ff5eede66dd84c71dd54bd7a3dd8",
+      "changes": [],
+      "copied": false,
+      "diff": "QC32Git.patch",
+      "ast": "QC32Git.ast.json"
+    },
+    {
+      "id": "QC33shared",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc33-shared-service\\final\\executed-test.py",
+      "original_sha256": "7e4725badd72ad31eba978dc1ce8c1674313cb21b4d07a788884f7a169bb739a",
+      "target": "tests/quick_connect/test_qc33_shared_service.py",
+      "normalized_sha256": "7e4725badd72ad31eba978dc1ce8c1674313cb21b4d07a788884f7a169bb739a",
+      "persisted_sha256": "48791bf8a6e43482151fdd9d9ce10a098f9a42ba1d0dc47096c22a2733613ab4",
+      "changes": [
+        "optional_evidence_write_text:3"
+      ],
+      "copied": false,
+      "diff": "QC33shared.patch",
+      "ast": "QC33shared.ast.json"
+    },
+    {
+      "id": "QC35v2",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc35-review-cancellation-proposal\\revision2\\final\\executed-test.py",
+      "original_sha256": "196635cacb2749cb559414fda7414e665968a8f824d4e635154e811784b54377",
+      "target": "tests/quick_connect/test_qc35_review_cancel.py",
+      "normalized_sha256": "0f4fa9447bec910210d191106919da5160fd0e3379581b7f33edfd96edeb7fc5",
+      "persisted_sha256": "0f4fa9447bec910210d191106919da5160fd0e3379581b7f33edfd96edeb7fc5",
+      "changes": [],
+      "copied": false,
+      "diff": "QC35v2.patch",
+      "ast": "QC35v2.ast.json"
+    },
+    {
+      "id": "QC14bD26",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14b-d26-u52jkdyq\\after\\tests\\quick_connect\\test_quick_connect_git_recovery.py",
+      "original_sha256": "a654743ba6beec3638733140e3bb7f71bfcadea57b9f7fe5091aeb183b1ecb55",
+      "target": "tests/quick_connect/test_quick_connect_git_recovery.py",
+      "normalized_sha256": "7772a245c2edc54ef80bf8e140a80f959508c22a070b765dbd5af99586e6f368",
+      "persisted_sha256": "7772a245c2edc54ef80bf8e140a80f959508c22a070b765dbd5af99586e6f368",
+      "changes": [],
+      "copied": false,
+      "diff": "QC14bD26.patch",
+      "ast": "QC14bD26.ast.json"
+    },
+    {
+      "id": "QC34ancestorPrivacy",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc34-ancestor-privacy\\final-private-focal\\test_ancestor_privacy.py",
+      "original_sha256": "c37b40ba231017633be85a25fcd68606a6855c70beda5c306c774a56c0fb3ad4",
+      "target": "tests/quick_connect/test_ancestor_privacy.py",
+      "normalized_sha256": "c37b40ba231017633be85a25fcd68606a6855c70beda5c306c774a56c0fb3ad4",
+      "persisted_sha256": "f3cc897c1b4d5f3432e2dfa7b0d15919e503a69ef4a7509c2d0bc70863b56abb",
+      "changes": [
+        "audit_sink_fallback_to_owned_tmp_path_when_runner_env_absent"
+      ],
+      "copied": false,
+      "diff": "QC34ancestorPrivacy.patch",
+      "ast": "QC34ancestorPrivacy.ast.json"
+    }
+  ],
+  "tests_executed": false,
+  "historical_evidence_unchanged": true,
+  "qualification_required": "Run all persisted files on final rebuilt package; no historical PASS inherited"
+}

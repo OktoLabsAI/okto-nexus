@@ -1,0 +1,798 @@
+{
+  "sink": "logging.FileHandler UTF-8 DEBUG attached to root/okto_nexus/httpx; no redaction/filter added",
+  "before_marker": true,
+  "after_marker": true,
+  "httpx_request_events": 75,
+  "logging_bytes": 11572,
+  "logging_sha256": "97c18b9f7fc5db4d7fa4d7bca8994b3388b3a77d216856c96b1027ec59fb6dfc",
+  "json_outputs_checked": 4,
+  "plain_stdout_checked": true,
+  "length_proofs": [
+    {
+      "path": "home\\runtime-journal-v1\\writer.lock",
+      "before": {
+        "size": 1,
+        "device": 14764524303808498864,
+        "inode": 49539595904074904,
+        "mode": 33206,
+        "attributes": 32
+      },
+      "after": {
+        "size": 1,
+        "device": 14764524303808498864,
+        "inode": 49539595904074904,
+        "mode": 33206,
+        "attributes": 32
+      },
+      "outcome": "length_proof",
+      "minimum_marker_encoded_bytes": 7,
+      "producer": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\harness\\event_journal.py",
+      "producer_sha256": "9262ee2742029bf4826d022fc2bd7fec54c2ff5234f193ef3261f1a306cdf274",
+      "same_live_owner_identity": true
+    }
+  ],
+  "producer_sha256": "9262ee2742029bf4826d022fc2bd7fec54c2ff5234f193ef3261f1a306cdf274",
+  "files": [
+    {
+      "path": "codex.exe",
+      "bytes": 37,
+      "sha256": "f42ab7589bd8fe6ec05747f595d436a7cd9d5d29d281aaecac37c0840c8bf75f"
+    },
+    {
+      "path": "home\\core-runtime\\owned-slots.db",
+      "bytes": 4096,
+      "sha256": "d405fbc2df562fce249630e4ce77beebfb8bfd930b23db6660d919028115b515"
+    },
+    {
+      "path": "home\\core-runtime\\owned-slots.db-shm",
+      "bytes": 32768,
+      "sha256": "6ab9f6a846d68352a27e2e3e7c8b5b174f27555143e0c084b90dd309d72a38c7"
+    },
+    {
+      "path": "home\\core-runtime\\owned-slots.db-wal",
+      "bytes": 288432,
+      "sha256": "875652cb42aa50bb39753389eeb611d7ff22d39598f37a6f1bf053064194d2b3"
+    },
+    {
+      "path": "home\\nexus.db",
+      "bytes": 2519040,
+      "sha256": "7171e0f174569867cfc1a30dcc310e901550d26b08e564a0f24e232a6598139e"
+    },
+    {
+      "path": "home\\nexus.db-shm",
+      "bytes": 32768,
+      "sha256": "f6a50dd7e7fe25ab587bc26782b6d72522f79b1fe2ee06eae8792455e7e376cf"
+    },
+    {
+      "path": "home\\nexus.db-wal",
+      "bytes": 729272,
+      "sha256": "c9cb80a4491c052aa9612827daea9ca0dd38b8de602b21d3711f039693d6eaad"
+    },
+    {
+      "path": "home\\operator-auth.db",
+      "bytes": 20480,
+      "sha256": "10a4b0ffb8a88453b83df59dc6cda579e03d8e93e4c454998cb3e6274ffe32b1"
+    },
+    {
+      "path": "home\\runtime-journal-v1\\store-id",
+      "bytes": 36,
+      "sha256": "84de12123c061fee96b5cb25d6adc3aced10097329047526abfa6032e8869794"
+    },
+    {
+      "path": "home\\runtime-wake.json",
+      "bytes": 104,
+      "sha256": "2e315104fe15c04fa8f21879a898f331264bbee4f0d8bfc3b803a054cd05154b"
+    },
+    {
+      "path": "quick-cli-home\\logs\\observed-local.log",
+      "bytes": 11572,
+      "sha256": "97c18b9f7fc5db4d7fa4d7bca8994b3388b3a77d216856c96b1027ec59fb6dfc"
+    },
+    {
+      "path": "quick-cli-home\\terminal\\connection-intents\\catalog.guard",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "quick-cli-home\\terminal\\connection-intents\\privacy.json",
+      "bytes": 1958,
+      "sha256": "c8778b6eb47402785cf39daae4173c369459d625b35ebcd1c819e1b2f148450d"
+    },
+    {
+      "path": "quick-cli-home\\terminal\\profiles\\canonical-47eb0d962794e34c2753e4d1.guard",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "quick-cli-home\\terminal\\profiles\\canonical-47eb0d962794e34c2753e4d1.json",
+      "bytes": 1820,
+      "sha256": "0ce290f0818e8083ecdf2576161a7d3e1784b90165fe0d50fedfe0bc1de62a7c"
+    },
+    {
+      "path": "quick-cli-home\\terminal\\profiles\\privacy.guard",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "quick-cli-home\\terminal\\profiles\\privacy.json",
+      "bytes": 11738,
+      "sha256": "7428a4e32733804d4b8bc4b33e66275695d139f745fe0d4c97cbd22576c52aaf"
+    },
+    {
+      "path": "workspace\\.git\\HEAD",
+      "bytes": 23,
+      "sha256": "f6f2b945f6c411b02ba3da9c7ace88dcf71b6af65ba2e0d89aa82900042b5a10"
+    }
+  ],
+  "file_bytes_checked": 3654144,
+  "only_exclusion": [
+    "workspace\\.git\\config"
+  ],
+  "all_sqlite_tables": [
+    {
+      "table": "agent_comm_binding",
+      "rows": 0
+    },
+    {
+      "table": "agent_connection_keys",
+      "rows": 0
+    },
+    {
+      "table": "agent_connection_methods",
+      "rows": 0
+    },
+    {
+      "table": "agent_connection_policies",
+      "rows": 0
+    },
+    {
+      "table": "agent_endpoints",
+      "rows": 1
+    },
+    {
+      "table": "agent_execution_policies",
+      "rows": 1
+    },
+    {
+      "table": "agent_group_members",
+      "rows": 0
+    },
+    {
+      "table": "agent_groups",
+      "rows": 0
+    },
+    {
+      "table": "agent_policy_bindings",
+      "rows": 0
+    },
+    {
+      "table": "agent_runtime_overrides",
+      "rows": 1
+    },
+    {
+      "table": "agent_runtime_policy_epochs",
+      "rows": 1
+    },
+    {
+      "table": "agents",
+      "rows": 3
+    },
+    {
+      "table": "approvals",
+      "rows": 0
+    },
+    {
+      "table": "artifacts",
+      "rows": 0
+    },
+    {
+      "table": "attention_operation_epochs",
+      "rows": 20
+    },
+    {
+      "table": "attention_preferences",
+      "rows": 0
+    },
+    {
+      "table": "capability_names",
+      "rows": 0
+    },
+    {
+      "table": "channels",
+      "rows": 0
+    },
+    {
+      "table": "comm_preset_versions",
+      "rows": 4
+    },
+    {
+      "table": "comm_presets",
+      "rows": 4
+    },
+    {
+      "table": "connection_authorization_receipts",
+      "rows": 0
+    },
+    {
+      "table": "connection_project_drafts",
+      "rows": 1
+    },
+    {
+      "table": "connection_public_ids",
+      "rows": 1
+    },
+    {
+      "table": "connection_setup_commits",
+      "rows": 1
+    },
+    {
+      "table": "coordination_requests",
+      "rows": 0
+    },
+    {
+      "table": "delivery_outbox",
+      "rows": 0
+    },
+    {
+      "table": "ephemeral_poll_tokens",
+      "rows": 0
+    },
+    {
+      "table": "events",
+      "rows": 0
+    },
+    {
+      "table": "execution_agent_recovery",
+      "rows": 0
+    },
+    {
+      "table": "execution_agent_revisions",
+      "rows": 2
+    },
+    {
+      "table": "execution_bindings",
+      "rows": 1
+    },
+    {
+      "table": "execution_capacity_admissions",
+      "rows": 0
+    },
+    {
+      "table": "execution_capacity_compensations",
+      "rows": 0
+    },
+    {
+      "table": "execution_capacity_waits",
+      "rows": 0
+    },
+    {
+      "table": "execution_client_intents",
+      "rows": 0
+    },
+    {
+      "table": "execution_connection_resumes",
+      "rows": 0
+    },
+    {
+      "table": "execution_context_observers",
+      "rows": 0
+    },
+    {
+      "table": "execution_control_lanes",
+      "rows": 0
+    },
+    {
+      "table": "execution_decisions",
+      "rows": 0
+    },
+    {
+      "table": "execution_delivery_attempt_history",
+      "rows": 0
+    },
+    {
+      "table": "execution_delivery_releases",
+      "rows": 0
+    },
+    {
+      "table": "execution_dispatch_outbox",
+      "rows": 0
+    },
+    {
+      "table": "execution_domain_deliveries",
+      "rows": 0
+    },
+    {
+      "table": "execution_embedded_store_bindings",
+      "rows": 1
+    },
+    {
+      "table": "execution_event_artifact_chunks",
+      "rows": 0
+    },
+    {
+      "table": "execution_event_artifacts",
+      "rows": 0
+    },
+    {
+      "table": "execution_event_ingress",
+      "rows": 0
+    },
+    {
+      "table": "execution_event_watermarks",
+      "rows": 0
+    },
+    {
+      "table": "execution_executors",
+      "rows": 1
+    },
+    {
+      "table": "execution_handoff_origins",
+      "rows": 0
+    },
+    {
+      "table": "execution_installation",
+      "rows": 1
+    },
+    {
+      "table": "execution_installation_succession",
+      "rows": 0
+    },
+    {
+      "table": "execution_inventory_current",
+      "rows": 1
+    },
+    {
+      "table": "execution_inventory_refresh",
+      "rows": 0
+    },
+    {
+      "table": "execution_inventory_refresh_deliveries",
+      "rows": 0
+    },
+    {
+      "table": "execution_inventory_revalidation",
+      "rows": 0
+    },
+    {
+      "table": "execution_inventory_snapshots",
+      "rows": 2
+    },
+    {
+      "table": "execution_leases",
+      "rows": 0
+    },
+    {
+      "table": "execution_link_tickets",
+      "rows": 0
+    },
+    {
+      "table": "execution_local_observations",
+      "rows": 1
+    },
+    {
+      "table": "execution_local_preopen_fences",
+      "rows": 0
+    },
+    {
+      "table": "execution_local_publications",
+      "rows": 0
+    },
+    {
+      "table": "execution_local_realizations",
+      "rows": 1
+    },
+    {
+      "table": "execution_local_startup_refusals",
+      "rows": 0
+    },
+    {
+      "table": "execution_local_streams",
+      "rows": 0
+    },
+    {
+      "table": "execution_local_tool_credentials",
+      "rows": 0
+    },
+    {
+      "table": "execution_message_origins",
+      "rows": 0
+    },
+    {
+      "table": "execution_migration_map",
+      "rows": 0
+    },
+    {
+      "table": "execution_native_actions",
+      "rows": 0
+    },
+    {
+      "table": "execution_native_messages",
+      "rows": 0
+    },
+    {
+      "table": "execution_native_requests",
+      "rows": 0
+    },
+    {
+      "table": "execution_operations",
+      "rows": 0
+    },
+    {
+      "table": "execution_preopen_refusals",
+      "rows": 0
+    },
+    {
+      "table": "execution_proposals",
+      "rows": 1
+    },
+    {
+      "table": "execution_realizations",
+      "rows": 1
+    },
+    {
+      "table": "execution_receipts",
+      "rows": 0
+    },
+    {
+      "table": "execution_release_notifications",
+      "rows": 0
+    },
+    {
+      "table": "execution_results",
+      "rows": 0
+    },
+    {
+      "table": "execution_sender_sessions",
+      "rows": 0
+    },
+    {
+      "table": "execution_session_capabilities",
+      "rows": 0
+    },
+    {
+      "table": "execution_session_containment",
+      "rows": 0
+    },
+    {
+      "table": "execution_sessions",
+      "rows": 0
+    },
+    {
+      "table": "execution_tool_claims",
+      "rows": 0
+    },
+    {
+      "table": "execution_unsent_delivery_history",
+      "rows": 0
+    },
+    {
+      "table": "execution_unsent_dispatch_proofs",
+      "rows": 0
+    },
+    {
+      "table": "execution_workspace_bindings",
+      "rows": 1
+    },
+    {
+      "table": "governance_policies",
+      "rows": 0
+    },
+    {
+      "table": "guardrail_assignments",
+      "rows": 0
+    },
+    {
+      "table": "guardrail_versions",
+      "rows": 0
+    },
+    {
+      "table": "guardrails",
+      "rows": 0
+    },
+    {
+      "table": "handoff_authorization_receipts",
+      "rows": 0
+    },
+    {
+      "table": "handoff_dependencies",
+      "rows": 0
+    },
+    {
+      "table": "handoff_runtime_attempts",
+      "rows": 0
+    },
+    {
+      "table": "handoff_runtime_no_effect_retries",
+      "rows": 0
+    },
+    {
+      "table": "handoff_runtime_schedule",
+      "rows": 0
+    },
+    {
+      "table": "handoff_runtime_schedule_scan",
+      "rows": 1
+    },
+    {
+      "table": "handoff_silence_notices",
+      "rows": 0
+    },
+    {
+      "table": "handoffs",
+      "rows": 0
+    },
+    {
+      "table": "harness_events",
+      "rows": 0
+    },
+    {
+      "table": "harness_sessions",
+      "rows": 0
+    },
+    {
+      "table": "memories",
+      "rows": 0
+    },
+    {
+      "table": "memory_embeddings",
+      "rows": 0
+    },
+    {
+      "table": "message_deliveries",
+      "rows": 0
+    },
+    {
+      "table": "message_embeddings",
+      "rows": 0
+    },
+    {
+      "table": "messages",
+      "rows": 0
+    },
+    {
+      "table": "observation_attention_anchors",
+      "rows": 0
+    },
+    {
+      "table": "observation_correlations",
+      "rows": 0
+    },
+    {
+      "table": "observation_heads",
+      "rows": 0
+    },
+    {
+      "table": "observation_installation",
+      "rows": 1
+    },
+    {
+      "table": "observation_instances",
+      "rows": 0
+    },
+    {
+      "table": "observation_rate_buckets",
+      "rows": 0
+    },
+    {
+      "table": "observation_source_workspaces",
+      "rows": 0
+    },
+    {
+      "table": "observation_sources",
+      "rows": 0
+    },
+    {
+      "table": "observation_token_instances",
+      "rows": 0
+    },
+    {
+      "table": "observation_tokens",
+      "rows": 0
+    },
+    {
+      "table": "one_shot_calls",
+      "rows": 0
+    },
+    {
+      "table": "one_shot_host_limits",
+      "rows": 0
+    },
+    {
+      "table": "one_shot_policy_settings",
+      "rows": 1
+    },
+    {
+      "table": "one_shot_slots",
+      "rows": 0
+    },
+    {
+      "table": "one_shot_warm_backoff",
+      "rows": 0
+    },
+    {
+      "table": "permission_presets",
+      "rows": 0
+    },
+    {
+      "table": "policies",
+      "rows": 0
+    },
+    {
+      "table": "policy_versions",
+      "rows": 0
+    },
+    {
+      "table": "remote_setup_reviews",
+      "rows": 0
+    },
+    {
+      "table": "remote_setup_runs",
+      "rows": 0
+    },
+    {
+      "table": "runtime_access_audit",
+      "rows": 16
+    },
+    {
+      "table": "runtime_artifact_settings",
+      "rows": 1
+    },
+    {
+      "table": "runtime_boot_bindings",
+      "rows": 0
+    },
+    {
+      "table": "runtime_causal_roots",
+      "rows": 0
+    },
+    {
+      "table": "runtime_commands",
+      "rows": 0
+    },
+    {
+      "table": "runtime_context_observations",
+      "rows": 0
+    },
+    {
+      "table": "runtime_delivery_attempt_events",
+      "rows": 0
+    },
+    {
+      "table": "runtime_dispatcher_owner",
+      "rows": 1
+    },
+    {
+      "table": "runtime_endpoint_reconciliations",
+      "rows": 0
+    },
+    {
+      "table": "runtime_execution_grants",
+      "rows": 1
+    },
+    {
+      "table": "runtime_handoff_bindings",
+      "rows": 0
+    },
+    {
+      "table": "runtime_handoff_notice_retirements",
+      "rows": 0
+    },
+    {
+      "table": "runtime_handoff_notifications",
+      "rows": 0
+    },
+    {
+      "table": "runtime_journal_checkpoint",
+      "rows": 0
+    },
+    {
+      "table": "runtime_mcp_presets",
+      "rows": 0
+    },
+    {
+      "table": "runtime_message_causality",
+      "rows": 0
+    },
+    {
+      "table": "runtime_native_approvals",
+      "rows": 0
+    },
+    {
+      "table": "runtime_open_requests",
+      "rows": 0
+    },
+    {
+      "table": "runtime_operation_reconciliations",
+      "rows": 0
+    },
+    {
+      "table": "runtime_pending_deliveries",
+      "rows": 0
+    },
+    {
+      "table": "runtime_policy_defaults",
+      "rows": 1
+    },
+    {
+      "table": "runtime_profiles",
+      "rows": 1
+    },
+    {
+      "table": "runtime_recovery_events",
+      "rows": 1
+    },
+    {
+      "table": "runtime_relay_decisions",
+      "rows": 0
+    },
+    {
+      "table": "runtime_reset_generation",
+      "rows": 1
+    },
+    {
+      "table": "runtime_result_maintenance",
+      "rows": 0
+    },
+    {
+      "table": "runtime_results",
+      "rows": 0
+    },
+    {
+      "table": "runtime_work_outcomes",
+      "rows": 0
+    },
+    {
+      "table": "runtime_writer_contract",
+      "rows": 1
+    },
+    {
+      "table": "schema_migrations",
+      "rows": 168
+    },
+    {
+      "table": "server_effective_policy",
+      "rows": 0
+    },
+    {
+      "table": "sessions",
+      "rows": 0
+    },
+    {
+      "table": "settings",
+      "rows": 1
+    },
+    {
+      "table": "sqlite_sequence",
+      "rows": 2
+    },
+    {
+      "table": "tag_keys",
+      "rows": 0
+    },
+    {
+      "table": "tag_values",
+      "rows": 0
+    },
+    {
+      "table": "tasks",
+      "rows": 0
+    },
+    {
+      "table": "workspaces",
+      "rows": 1
+    }
+  ],
+  "sqlite_table_count": 163,
+  "sqlite_rows_checked": 251,
+  "sqlite_text_cells_checked": 602,
+  "git_trace_files_absent": true,
+  "local_cli_home_scanned": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-private-final-ttxkkkri\\final-private-focal\\tmp\\pytest-of-unknown\\pytest-0\\test_d25_private_origin_does_n0\\quick-cli-home",
+  "server_home_scanned": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-private-final-ttxkkkri\\final-private-focal\\tmp\\pytest-of-unknown\\pytest-0\\test_d25_private_origin_does_n0\\home",
+  "outbound_product_telemetry_enabled_by_test": false,
+  "raw_credentials_or_db_exported": false,
+  "post_exit_lock": {
+    "size": 1,
+    "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+    "read_complete": true
+  }
+}

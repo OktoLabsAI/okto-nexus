@@ -1,0 +1,133 @@
+{
+  "at": "2026-11-17T10:30:24.520734+00:00",
+  "status": "PASS",
+  "failure": null,
+  "commands": [
+    {
+      "kind": "single_pytest_child",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc37-used-console-petxdyzv\\child.py"
+      ],
+      "creationflags": "CREATE_NEW_CONSOLE",
+      "show_window": "SW_HIDE"
+    },
+    {
+      "kind": "isolated_controller",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc37-used-console-petxdyzv\\controller.py"
+      ],
+      "creationflags": "CREATE_NO_WINDOW"
+    }
+  ],
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc37-used-console-petxdyzv",
+  "process_proofs": [
+    {
+      "pid": 56076,
+      "parent_pid": null,
+      "birth_filetime": 134393850102005812,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 33192,
+      "parent_pid": 56076,
+      "birth_filetime": 134393850102568596,
+      "image": "C:\\Python313\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 17660,
+      "parent_pid": null,
+      "birth_filetime": 134393850136354971,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 52328,
+      "parent_pid": 17660,
+      "birth_filetime": 134393850136706191,
+      "image": "C:\\Python313\\python.exe",
+      "alive": false
+    }
+  ],
+  "observed_non_clients": [
+    {
+      "pid": 15184,
+      "parent_pid": 56076,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 15184,
+      "parent_pid": 56076,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 15184,
+      "parent_pid": 56076,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 38044,
+      "parent_pid": 17660,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 15184,
+      "parent_pid": 56076,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 38044,
+      "parent_pid": 17660,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 15184,
+      "parent_pid": 56076,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 38044,
+      "parent_pid": 17660,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 15184,
+      "parent_pid": 56076,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 38044,
+      "parent_pid": 17660,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    },
+    {
+      "pid": 15184,
+      "parent_pid": 56076,
+      "image": "C:\\WINDOWS\\system32\\conhost.exe",
+      "authorization": "not a console client; not included in signal/termination permit"
+    }
+  ],
+  "containment": [],
+  "elapsed_seconds": 14.322144099976867,
+  "payload_files": 1027,
+  "payload_drift": [],
+  "source_drift": [],
+  "provider_calls": 0
+}

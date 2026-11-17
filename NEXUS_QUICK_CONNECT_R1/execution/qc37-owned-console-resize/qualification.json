@@ -1,0 +1,72 @@
+{
+  "at": "2026-11-17T10:28:09.968383+00:00",
+  "status": "NOT_QUALIFIED",
+  "requirement": "QC030",
+  "cause": "Controller refused before input/resize because initial buffer cell count exceeded its bound or was otherwise outside 0<count<=1000000. Dimensions were not persisted before that assertion; no exact dimension claim.",
+  "not_product_failure": true,
+  "real_console": {
+    "stdin_tty": true,
+    "stdout_tty": true,
+    "stderr_tty": true,
+    "GetConsoleMode": true,
+    "hidden": true
+  },
+  "input_events_sent": 0,
+  "signals_sent": 0,
+  "resize_attempts": 0,
+  "pytest_result": "INTERRUPTED_BY_OWN_CONTAINMENT_NOT_PASS",
+  "original_test_sha256": "de71181344a41eddbc58b08bd875de0dd561f0d1b7ecc72e62abe293e36f35c3",
+  "original_test_modified": false,
+  "containment": [
+    {
+      "pid": 59552,
+      "parent_pid": 57808,
+      "birth_filetime": 134393848161487279,
+      "image": "C:\\Python313\\python.exe",
+      "alive": true
+    },
+    {
+      "pid": 57808,
+      "parent_pid": null,
+      "birth_filetime": 134393848160920558,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+      "alive": true
+    }
+  ],
+  "all_owned_python_and_conhosts_absent": true,
+  "console_window_destroyed": true,
+  "process_absence_probe": {
+    "pids": [
+      24920,
+      42648,
+      47472,
+      55932,
+      57808,
+      59552
+    ],
+    "command": "Get-CimInstance Win32_Process -Filter \"ProcessId=24920 OR ProcessId=42648 OR ProcessId=47472 OR ProcessId=55932 OR ProcessId=57808 OR ProcessId=59552\" | Select-Object ProcessId,ParentProcessId,ExecutablePath | ConvertTo-Json",
+    "exit_code": 0,
+    "stdout_empty": true
+  },
+  "canonical_counts_after": [
+    {
+      "database": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc37-console-resize-baydtkzi\\environment\\tmp\\pytest-of-unknown\\pytest-0\\test_confirm_and_resume_use_ac0\\home\\nexus.db",
+      "counts": {
+        "connection_setup_commits": 0,
+        "runtime_execution_grants": 0,
+        "execution_bindings": 0,
+        "execution_operations": 0
+      }
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "source_drift": [],
+  "provider_calls": 0,
+  "retry_started": false,
+  "limits": [
+    "No resize, readable-ID or Test/resume qualification achieved.",
+    "This attempt proves only real isolated console readiness and conservative refusal/owned cleanup.",
+    "No user console, Windows configuration or product/prefix was modified."
+  ]
+}

@@ -1,0 +1,188 @@
+[
+  [
+    0,
+    "tests/execution_r4/test_canonical_native_protocol_regressions.py",
+    42,
+    "peer = CodexAppServerConnector(command=[sys._base_executable, \"-u\", \"-c\", source, str(log)],"
+  ],
+  [
+    0,
+    "tests/execution_r4/test_canonical_native_protocol_regressions.py",
+    331,
+    "peer = connector(command=[sys._base_executable, '-u', '-c', source, str(wire)], cwd=str(root), env={})"
+  ],
+  [
+    0,
+    "tests/execution_r4/test_canonical_structured_work.py",
+    37,
+    "peer = CodexAppServerConnector(command=[sys._base_executable, \"-u\", \"-c\", source], cwd=str(setup[-1]), env={})"
+  ],
+  [
+    0,
+    "tests/execution_r4/test_coordination_cli.py",
+    173,
+    "'PYTHONPATH': str(Path(okto_nexus.__file__).resolve().parents[1])})"
+  ],
+  [
+    0,
+    "tests/execution_r4/test_service_surviving_child.py",
+    109,
+    "[getattr(sys, '_base_executable', sys.executable), '-I', '-u', '-c', CHILD,"
+  ],
+  [
+    0,
+    "tests/test_live_http_driver.py",
+    26,
+    "\"PYTHONPATH\","
+  ],
+  [
+    0,
+    "tests/test_replay_harness.py",
+    137,
+    "# Windows. PYTHONPATH points the fresh interpreter at the source tree."
+  ],
+  [
+    0,
+    "tests/test_replay_harness.py",
+    138,
+    "env = {**os.environ, \"PYTHONPATH\": str(_REPO_ROOT / \"src\")}"
+  ],
+  [
+    0,
+    "tests/test_runtime_artifact_durability.py",
+    110,
+    "command=[sys._base_executable, \"-u\", \"-c\", source], cwd=root, env=kwargs[\"backend\"][\"env\"])"
+  ],
+  [
+    0,
+    "tests/test_runtime_claude_admission.py",
+    23,
+    "peer = ClaudeCodeStreamConnector(binary=sys._base_executable,"
+  ],
+  [
+    0,
+    "tests/test_runtime_native_approvals.py",
+    43,
+    "command=[sys._base_executable, \"-u\", \"-c\", source], cwd=root, env=kwargs[\"backend\"][\"env\"])"
+  ],
+  [
+    0,
+    "tests/test_runtime_work_results.py",
+    29,
+    "command=[sys._base_executable, \"-u\", \"-c\", source], cwd=root, env=kwargs[\"backend\"][\"env\"])"
+  ],
+  [
+    1,
+    "tests/execution_r4/test_canonical_fragmented_pipes.py",
+    36,
+    "peer = ClaudeCodeStreamConnector(binary=sys._base_executable, argv=[\"-u\", \"-c\", source],"
+  ],
+  [
+    1,
+    "tests/execution_r4/test_canonical_fragmented_pipes.py",
+    40,
+    "version = {\"version_command\": [sys._base_executable, \"-c\", \"print('0.85.1')\"]} if adapter == \"pi_rpc\" else {}"
+  ],
+  [
+    1,
+    "tests/execution_r4/test_canonical_fragmented_pipes.py",
+    41,
+    "peer = cls(command=[sys._base_executable, \"-u\", \"-c\", source], cwd=str(root), env={}, **version)"
+  ],
+  [
+    1,
+    "tests/execution_r4/test_canonical_io_boundaries.py",
+    78,
+    "peer = codex.CodexAppServerConnector(command=[sys._base_executable, '-u', '-c', _FAKE_SERVER_SOURCE],"
+  ],
+  [
+    1,
+    "tests/execution_r4/test_canonical_opening_fallback.py",
+    31,
+    "peer = CodexAppServerConnector(command=[sys._base_executable, '-u', '-c', source, str(wire)], cwd=str(root), env={})"
+  ],
+  [
+    1,
+    "tests/execution_r4/test_canonical_start_timeout.py",
+    18,
+    "peer = CodexAppServerConnector(command=[sys._base_executable, '-u', '-c', source],"
+  ],
+  [
+    1,
+    "tests/execution_r4/test_cooperation_cli.py",
+    243,
+    "'PYTHONUTF8': '1', 'PYTHONPATH': str(Path(okto_nexus.__file__).resolve().parents[1])})"
+  ],
+  [
+    1,
+    "tests/execution_r4/test_handoff_executor_selection.py",
+    106,
+    "child = await asyncio.create_subprocess_exec(getattr(sys, '_base_executable', sys.executable), '-I', '-u',"
+  ],
+  [
+    1,
+    "tests/execution_r4/test_service_restart_contracts.py",
+    54,
+    "self.python = str(Path(getattr(sys, '_base_executable', sys.executable)).resolve())"
+  ],
+  [
+    1,
+    "tests/test_harness_claude_code_connector.py",
+    282,
+    "binary=getattr(sys, \"_base_executable\", sys.executable),"
+  ],
+  [
+    1,
+    "tests/test_runtime_birth_identity.py",
+    64,
+    "env = environment() | {\"PYTHONPATH\": str(repo / \"src\"), \"HOME\": str(tmp_path), \"USERPROFILE\": str(tmp_path)}"
+  ],
+  [
+    1,
+    "tests/test_runtime_birth_identity.py",
+    67,
+    "owner = subprocess.Popen([sys._base_executable, str(repo / \"tests/runtime_birth_window_fixture.py\"),"
+  ],
+  [
+    1,
+    "tests/test_runtime_birth_identity.py",
+    98,
+    "bystander = subprocess.Popen([sys._base_executable, \"-u\", \"-c\", echo_code], **pipes,"
+  ],
+  [
+    1,
+    "tests/test_runtime_birth_identity.py",
+    103,
+    "owned = spawn_owned_process([sys._base_executable, \"-u\", \"-c\", peer_code], **pipes)"
+  ],
+  [
+    1,
+    "tests/test_runtime_commands.py",
+    47,
+    "command=[sys._base_executable, \"-u\", \"-c\", source.replace('\"result\": {\"userAgent\": \"okto-nexus/0.156.1\"}',"
+  ],
+  [
+    1,
+    "tests/test_runtime_effective_capabilities.py",
+    25,
+    "command=[sys._base_executable, \"-u\", \"-c\", source, str(Path(root) / \"capability-wire.jsonl\")], cwd=root, env=options[\"backend\"][\"env\"])"
+  ],
+  [
+    1,
+    "tests/test_serve_lock.py",
+    140,
+    "env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1] / 'src'))"
+  ],
+  [
+    1,
+    "tests/test_service_start.py",
+    31,
+    "env = {**os.environ, 'OPENAI_API_KEY': 'secret-sentinel', 'PYTHONPATH': 'injected',"
+  ],
+  [
+    1,
+    "tests/test_service_start.py",
+    38,
+    "assert not {'OPENAI_API_KEY', 'PYTHONPATH', 'ARBITRARY_SETTING'} & context['environment'].keys()"
+  ]
+]

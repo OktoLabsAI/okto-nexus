@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "/tmp/nexus-qc28-xmlie7rv/uv",
+    "pip",
+    "install",
+    "--python",
+    "/tmp/nexus-qc28-xmlie7rv/venv/bin/python",
+    "--no-config",
+    "--cache-dir",
+    "/tmp/nexus-qc28-xmlie7rv/cache",
+    "--default-index",
+    "https://pypi.org/simple",
+    "/tmp/nexus-qc28-xmlie7rv/wheels/okto_nexus-0.3.6-py3-none-any.whl[serve-lite,dev]",
+    "/tmp/nexus-qc28-xmlie7rv/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+    "/tmp/nexus-qc28-xmlie7rv/wheels/okto_nexus_connector-0.0.13-py3-none-any.whl"
+  ],
+  "exit_code": 0,
+  "timeout": 180
+}

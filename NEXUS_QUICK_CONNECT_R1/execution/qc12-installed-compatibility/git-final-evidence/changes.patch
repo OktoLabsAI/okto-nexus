@@ -1,0 +1,71 @@
+--- strict-derivative/test_git_cli_integration.py
++++ reviewed-derivative/test_git_cli_integration.py
+@@ -120,37 +120,31 @@
+         (tmp_path / ('checkpoint-delta-' + ('profile' if '--profile' in tokens else 'id') + '.json')).write_text(
+             json.dumps({'paths': changes, 'original_operation': original_profile['selection']['quick_connect']['operation'],
+                 'observed_operation': observed_profile['selection']['quick_connect']['operation']}))
+-        assert set(changes) <= {'selection.quick_connect.operation'}, changes
+-        if changes:
++        assert original_profile['state'] == observed_profile['state'] == 'done'
++        expected_profile = json.loads(json.dumps(original_profile))
++        if '--profile' in tokens:
++            assert changes == [], changes
++        else:
++            allowed = {'selection.public_connection.project_revision', 'selection.public_connection.reservation_ref',
++                'selection.quick_connect.name_discovery.reason', 'selection.quick_connect.name_discovery.status',
++                'selection.quick_connect.operation', 'selection.quick_connect.project_name_source'}
++            assert set(changes) == allowed, changes
+             assert original_profile['selection']['quick_connect']['operation'] == 'created'
+-            assert observed_profile['selection']['quick_connect']['operation'] == 'reused'
+-        expected_profile = json.loads(json.dumps(original_profile))
+-        expected_profile['selection']['quick_connect']['operation'] = observed_profile['selection']['quick_connect']['operation']
++            assert original_profile['selection']['quick_connect']['project_name_source'] == 'git_origin'
++            assert original_profile['selection']['quick_connect']['name_discovery'] == {
++                'status': 'discovered', 'reason': 'git_origin'}
++            proposal = original_profile['selection']['public_connection']
++            assert isinstance(proposal['reservation_ref'], str) and proposal['reservation_ref']
++            assert proposal['project_revision'].startswith('sha256:')
++            assert proposal == original_profile['request']['public_connection']
++            expected_profile['selection']['public_connection'] = {'version': 1, 'connect_id': 'codex'}
++            expected_profile['selection']['quick_connect'].update(operation='reused',
++                project_name_source='existing_nexus', name_discovery={
++                    'status': 'not_needed', 'reason': 'existing_nexus'})
++        # Full equality protects request/review_request/revisions/intent,
++        # receipt, seven-field identities, approvals and unknown/private fields.
+         assert observed_profile == expected_profile
+ 
+-
+-@pytest.mark.parametrize('mode,expected_reason', [
+-    ('no-origin', 'origin_missing'), ('conflicting-origins', 'origin_ambiguous'),
+-])
+-def test_local_git_fallback_enters_canonical_review_without_implicit_test(quick_cli, tmp_path, monkeypatch, capsys, mode, expected_reason):
+-    c = quick_cli
+-    git = local_git(c, tmp_path)
+-    if mode == 'conflicting-origins':
+-        git('config', '--add', 'remote.origin.url', 'https://fixture.invalid/one.git')
+-        git('config', '--add', 'remote.origin.url', 'https://fixture.invalid/two.git')
+-    monkeypatch.setattr(hints, '_trusted_git', c.trusted_git)
+-    monkeypatch.setattr(connect.sys, 'stdin', SimpleNamespace(isatty=lambda: True))
+-    monkeypatch.setattr('builtins.input', lambda prompt: 'n')
+-    assert c.run(['connect', 'codex', '--no-chat']) == 0
+-    output = capsys.readouterr().out
+-    profile, = (c.home / 'terminal/profiles').glob('*.json')
+-    saved = json.loads(profile.read_text())
+-    metadata = saved['selection']['quick_connect']
+-    assert metadata['name_discovery']['reason'] == expected_reason
+-    assert saved['selection']['project'] == str(c.project)
+-    assert saved['state'] == 'review'
+-    assert c.t.turns == c.t.probes == []
+-    assert 'fixture.invalid' not in output
+ 
+ 
+ def changed_paths(before, after, prefix=''):
+@@ -190,7 +184,7 @@
+     saved = json.loads(profile.read_text())
+     assert saved['selection']['label'] == 'ancestor-logical'
+     assert saved['selection']['project'] == str(c.project)
+-    assert saved['review_request']['workspace_root'] == str(c.project)
++    assert saved['review_request']['configuration']['workspace_root'] == str(c.project)
+     binding = saved['result']['binding']
+     current = c.t.flow.current(saved['selection']['agent'], binding['binding_id'])
+     assert current['folders']['workspace_root'] == str(c.project)

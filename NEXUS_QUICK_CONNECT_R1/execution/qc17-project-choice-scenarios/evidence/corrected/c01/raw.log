@@ -1,0 +1,35 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc17-corrected-egw934lf\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+after\tests\quick_connect\test_quick_connect_project_scenarios.py::test_c01_mapped_cwd_bare_and_harness_resume_exact_reference IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_project_scenarios.py::test_c01_mapped_cwd_bare_and_harness_resume_exact_reference", "when": "setup", "outcome": "passed", "duration": 7.3522029999876395}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_project_scenarios.py::test_c01_mapped_cwd_bare_and_harness_resume_exact_reference", "when": "call", "outcome": "failed", "duration": 1.8358425000915304, "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc17-corrected-egw934lf\\after\\tests\\quick_connect\\test_quick_connect_project_scenarios.py:54: in test_c01_mapped_cwd_bare_and_harness_resume_exact_reference\n    result = invoke(c, capsys, tokens)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc17-corrected-egw934lf\\after\\tests\\quick_connect\\test_quick_connect_cli.py:85: in invoke\n    assert code == expected, captured.out + captured.err\nE   AssertionError: {\"state\": \"refused\", \"code\": \"PROFILE_CONFLICT\", \"message\": \"Explicit choices conflict with the saved profile. Use its existing choices or a new named profile.\", \"possible_effect\": false, \"effects_started\": null, \"canonical_metadata_revalidation_requested\": true, \"quick_connect\": {\"status\": \"failed\", \"version\": 1, \"proposed_connect_id\": \"codex\", \"connect_id_status\": \"proposed\", \"harness\": \"codex\", \"project_name\": \"Mapped Logical Project\", \"project_name_source\": \"existing_nexus\", \"name_discovery\": {\"status\": \"not_needed\", \"reason\": \"existing_nexus\"}, \"execution_location\": \"local\", \"project_root\": \"C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc17-corrected-egw934lf\\\\c01\\\\tmp\\\\pytest-of-unknown\\\\pytest-0\\\\test_c01_mapped_cwd_bare_and_h0\\\\workspace\", \"cwd_resolution\": {\"invocation_cwd\": \"C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc17-corrected-egw934lf\\\\c01\\\\tmp\\\\pytest-of-unknown\\\\pytest-0\\\\test_c01_mapped_cwd_bare_and_h0\\\\workspace\", \"project_root\": \"C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc17-corrected-egw934lf\\\\c01\\\\tmp\\\\pytest-of-unknown\\\\pytest-0\\\\test_c01_mapped_cwd_bare_and_h0\\\\workspace\", \"root_explicit\": false, \"source\": \"cwd\"}, \"resume_argv\": [\"okto-nexus\", \"connect\", \"codex\", \"Mapped Logical Project\", \"--id\", \"codex\", \"--home\", \"C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc17-corrected-egw934lf\\\\c01\\\\tmp\\\\pytest-of-unknown\\\\pytest-0\\\\test_c01_mapped_cwd_bare_and_h0\\\\quick-cli-home\", \"--profile\", \"canonical-0a1b2e256a47055e0e9543f9\"]}}\nE     \nE   assert 3 == 0"}
+FAILEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_project_scenarios.py::test_c01_mapped_cwd_bare_and_harness_resume_exact_reference", "when": "teardown", "outcome": "passed", "duration": 0.7762685000197962}
+
+
+================================== FAILURES ===================================
+_________ test_c01_mapped_cwd_bare_and_harness_resume_exact_reference _________
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc17-corrected-egw934lf\after\tests\quick_connect\test_quick_connect_project_scenarios.py:54: in test_c01_mapped_cwd_bare_and_harness_resume_exact_reference
+    result = invoke(c, capsys, tokens)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc17-corrected-egw934lf\after\tests\quick_connect\test_quick_connect_cli.py:85: in invoke
+    assert code == expected, captured.out + captured.err
+E   AssertionError: {"state": "refused", "code": "PROFILE_CONFLICT", "message": "Explicit choices conflict with the saved profile. Use its existing choices or a new named profile.", "possible_effect": false, "effects_started": null, "canonical_metadata_revalidation_requested": true, "quick_connect": {"status": "failed", "version": 1, "proposed_connect_id": "codex", "connect_id_status": "proposed", "harness": "codex", "project_name": "Mapped Logical Project", "project_name_source": "existing_nexus", "name_discovery": {"status": "not_needed", "reason": "existing_nexus"}, "execution_location": "local", "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc17-corrected-egw934lf\\c01\\tmp\\pytest-of-unknown\\pytest-0\\test_c01_mapped_cwd_bare_and_h0\\workspace", "cwd_resolution": {"invocation_cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc17-corrected-egw934lf\\c01\\tmp\\pytest-of-unknown\\pytest-0\\test_c01_mapped_cwd_bare_and_h0\\workspace", "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc17-corrected-egw934lf\\c01\\tmp\\pytest-of-unknown\\pytest-0\\test_c01_mapped_cwd_bare_and_h0\\workspace", "root_explicit": false, "source": "cwd"}, "resume_argv": ["okto-nexus", "connect", "codex", "Mapped Logical Project", "--id", "codex", "--home", "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc17-corrected-egw934lf\\c01\\tmp\\pytest-of-unknown\\pytest-0\\test_c01_mapped_cwd_bare_and_h0\\quick-cli-home", "--profile", "canonical-0a1b2e256a47055e0e9543f9"]}}
+E     
+E   assert 3 == 0
+============================== warnings summary ===============================
+..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc17-corrected-egw934lf\c01\junit.xml -
+=========================== short test summary info ===========================
+FAILED after\tests\quick_connect\test_quick_connect_project_scenarios.py::test_c01_mapped_cwd_bare_and_harness_resume_exact_reference
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+======================== 1 failed, 1 warning in 13.40s ========================

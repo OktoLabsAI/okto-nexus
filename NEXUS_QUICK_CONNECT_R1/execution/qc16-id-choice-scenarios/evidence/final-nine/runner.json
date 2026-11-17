@@ -1,0 +1,50 @@
+{
+  "label": "id-choice-scenarios",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc16-id-choices-final-lpx96e5q\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc16-id-choices-final-lpx96e5q\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc16-id-choices-final-lpx96e5q\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc16-id-choices-final-lpx96e5q\\after\\tests\\quick_connect\\test_id_choice_scenarios.py",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc16-id-choices-final-lpx96e5q\\id-choice-scenarios\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc16-id-choices-final-lpx96e5q\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T08:20:34.801208+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 45164,
+      "parent_pid": null,
+      "birth_filetime": 134393772348030693,
+      "alive": false
+    },
+    {
+      "pid": 27576,
+      "parent_pid": 45164,
+      "birth_filetime": 134393772348265777,
+      "alive": false
+    },
+    {
+      "pid": 34320,
+      "parent_pid": 27576,
+      "birth_filetime": 134393772348404410,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T08:21:59.182922+00:00"
+}

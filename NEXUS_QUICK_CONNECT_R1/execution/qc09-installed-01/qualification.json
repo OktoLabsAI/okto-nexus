@@ -1,0 +1,54 @@
+{
+  "status": "BROAD_NOT_GREEN",
+  "rollups": [
+    {
+      "shard": 0,
+      "total": 2132,
+      "counts": {
+        "PASS": 76,
+        "HUNG": 4,
+        "NOT_RUN": 2047,
+        "SKIP": 4,
+        "FAIL": 1
+      },
+      "report": "broad-shard0-rollup.json"
+    },
+    {
+      "shard": 1,
+      "total": 2246,
+      "counts": {
+        "PASS": 1257,
+        "HUNG": 2,
+        "FAIL": 26,
+        "SKIP": 7,
+        "INCONCLUSIVE": 1,
+        "NOT_RUN": 953
+      },
+      "report": "broad-shard1-rollup.json"
+    }
+  ],
+  "cleanup": "RELEASED; freeze-release.json authoritative, no readers left",
+  "source_changes": "None by this agent; product not weakened for outdated fixtures",
+  "diagnosed": [
+    {
+      "failure": "feature_disable",
+      "classification": "Preexisting pinned-setting fixture/oracle; candidate and installed0.3.5 fail same422",
+      "evidence": "feature-disable-comparison/qualification.json"
+    },
+    {
+      "failure": "late_structured",
+      "classification": "Preexisting runtime result capture + teardown failure in this fixture; candidate/baseline same; later corrected fixture evidence is separately owned",
+      "evidence": "late-structured-comparison/qualification.json"
+    },
+    {
+      "failure": "manualConnectorLifecycle",
+      "classification": "Manual capacity fixture bypasses _run_forever generation initialization; _shutdown accesses service_generation",
+      "proposal": "Temp/nexus-qc09-capacity-lifecycle-proposal-stloabrf, prepared only, not applied/tested"
+    },
+    {
+      "failure": "other",
+      "classification": "Exact raw per-phase failures preserved; not all assigned root cause, no invented PASS"
+    }
+  ],
+  "installed_QC_scope": "../qc09-qc-installed/qualification.json (527nodes separate, not global-suite success)"
+}

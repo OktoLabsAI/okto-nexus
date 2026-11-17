@@ -1,0 +1,16 @@
+{
+  "label": "baseline",
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-focal-baseline-2qgv4g9h",
+  "output": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-focal-baseline-2qgv4g9h\\output",
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-u",
+    "-c",
+    "import sys;sys.path.insert(0,'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc09-focal-baseline-2qgv4g9h\\\\guard');import importlib.metadata;print(\"NEXUS_VERSION\",importlib.metadata.version(\"okto-nexus\"),flush=True);import pytest;raise SystemExit(pytest.main(['-p', 'qc_installed_origin_guard', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc09-focal-baseline-2qgv4g9h\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_canonical_admission_shutdown.py::test_feature_disable_preserves_unprojected_terminal_and_exclusive_claim', '-vv', '--tb=long', '-o', 'faulthandler_timeout=120', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc09-focal-baseline-2qgv4g9h\\\\output\\\\tests.xml']))"
+  ],
+  "child_pid": 15352
+}

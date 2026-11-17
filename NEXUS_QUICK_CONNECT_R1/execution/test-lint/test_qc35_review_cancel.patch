@@ -1,0 +1,19 @@
+--- persistence-applied-final/tests/quick_connect/test_qc35_review_cancel.py
++++ tests/quick_connect/test_qc35_review_cancel.py
+@@ -6,7 +6,7 @@
+ from pathlib import Path
+ from types import SimpleNamespace
+ 
+-from test_quick_connect_cli import quick_cli,terminal,checking,local_setup,isolated_provider_environment
++from test_quick_connect_cli import quick_cli as quick_cli,terminal as terminal,checking as checking,local_setup as local_setup,isolated_provider_environment as isolated_provider_environment
+ from okto_nexus.adapters.inbound.cli import connect
+ from okto_nexus.adapters.outbound import git_project_hint
+ 
+@@ -91,3 +91,7 @@
+     (out/('g08-proof-'+mode+'.json')).write_text(json.dumps(dict(state='canceled',lifecycle_requested=True,
+         canonical_metadata_revalidation_requested=mode=='quick',effects_started=None,
+         checkpoint_preserved=True,ensure_calls=1,tests=0,probes=0),indent=2)+'\n')
++
++
++# Explicit public exports include pytest fixtures used through injection.
++__all__ = ['Path', 'SimpleNamespace', 'checking', 'connect', 'counts', 'deepcopy', 'git_project_hint', 'isolated_provider_environment', 'json', 'local_setup', 'os', 'pytest', 'quick_cli', 'terminal', 'test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state']

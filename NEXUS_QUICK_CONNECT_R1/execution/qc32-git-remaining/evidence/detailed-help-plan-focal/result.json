@@ -1,0 +1,60 @@
+{
+  "cases": [
+    {
+      "label": "git-remaining",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-help-bare-dgty_zcj\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-help-bare-dgty_zcj\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-help-bare-dgty_zcj\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-help-bare-dgty_zcj\\after\\tests\\quick_connect\\test_git_remaining.py",
+        "-v",
+        "-s",
+        "-x",
+        "-k",
+        "test_real_repository_help_and_plan_never_execute_git or test_bare_repository_uses_explicit_fallback_not_its_origin_identity",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-help-bare-dgty_zcj\\git-remaining\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-help-bare-dgty_zcj\\cwd",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T09:36:53.708870+00:00",
+      "signals": [],
+      "exit_code": 0,
+      "processes_after": [
+        {
+          "pid": 29992,
+          "parent_pid": null,
+          "birth_filetime": 134393818137439144,
+          "alive": false
+        },
+        {
+          "pid": 58076,
+          "parent_pid": 29992,
+          "birth_filetime": 134393818137822164,
+          "alive": false
+        },
+        {
+          "pid": 39632,
+          "parent_pid": 58076,
+          "birth_filetime": 134393818138030591,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T09:37:14.641464+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

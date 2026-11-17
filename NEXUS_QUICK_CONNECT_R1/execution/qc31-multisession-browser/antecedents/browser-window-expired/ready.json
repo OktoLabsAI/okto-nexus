@@ -1,0 +1,34 @@
+{
+  "status": "READY_CANONICAL_MULTISESSIONS",
+  "url": "http://127.0.0.1:49323",
+  "reference": {
+    "server_id": "srv_d96f8a9fc9790176fcd8683c7b710621",
+    "executor_id": "exe_30f0fee6d00e538852becff58a0caf56",
+    "binding_id": "bind_56f18dfb5709a9e0f11da05303948412",
+    "endpoint_id": "ep_522ca15b5ea77dfdf3225ea28b58a92e",
+    "agent_id": "qc31-collaborator",
+    "workspace_id": "wsr_b60315892326cb39d7714cc324a92d6e",
+    "workspace_binding_id": "wxb_eac4fd996f80c4e275258cf7e2c3423c"
+  },
+  "connect_id": "session-reviewer",
+  "sessions": [
+    {
+      "label": "A",
+      "session_id": "ses_adacdd79456045086b38ce4ef861424c",
+      "text": "QC31 Alpha retained exact output",
+      "closed": true
+    },
+    {
+      "label": "B",
+      "session_id": "ses_15364fd15e8eda02db676f320d1f3484",
+      "text": "QC31 Beta current exact output",
+      "closed": false
+    }
+  ],
+  "provider_invocations": 0,
+  "fake_protocol": true,
+  "viewer_events_verified": true,
+  "browser_readonly": true,
+  "browser_deadline_seconds": 180,
+  "at": "2026-11-17T09:50:18.764346+00:00"
+}

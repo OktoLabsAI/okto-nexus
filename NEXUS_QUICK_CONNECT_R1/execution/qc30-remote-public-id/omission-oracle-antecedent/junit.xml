@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="20.048" timestamp="2026-11-17T06:24:00.337743-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_qc30_remote_public_id" name="test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects" time="12.070"><failure message="KeyError: 'project_root'">C:\Users\jpamb\AppData\Local\Temp\nexus-qc30-remote-id-swftyxe_\after\tests\execution_r4\test_qc30_remote_public_id.py:73: in test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects
+    assert quick['execution_location']=='remote' and quick['project_root'] is None
+                                                     ^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'project_root'</failure></testcase></testsuite></testsuites>

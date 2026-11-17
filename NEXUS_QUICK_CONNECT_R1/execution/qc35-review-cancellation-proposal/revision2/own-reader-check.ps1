@@ -1,0 +1,1 @@
+Get-CimInstance Win32_Process -Filter "(Name='python.exe' OR Name='git.exe') AND CommandLine LIKE '%nexus-qc35v2-derived-rk0m36g2%'" | Select-Object ProcessId,ParentProcessId,CreationDate | ConvertTo-Json -Depth 3

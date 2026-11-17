@@ -1,0 +1,2799 @@
+{
+  "version": 1,
+  "created_at": "2026-11-17T08:08:55.337428+00:00",
+  "nature": "Proposal only; ledger unchanged. Judgment deltas, not a new147-run or complete re-audit.",
+  "antecedent": {
+    "file": "coverage-review.json",
+    "sha256": "e445e49a2c5f2400e6a1097bee0cc863679575488c5f1413caf280b322d8ae95"
+  },
+  "predecessor_installed": {
+    "qualification": "qc09-qc-installed/qualification.json",
+    "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+    "counts": {
+      "PASS": 520,
+      "FAIL": 2,
+      "SKIP": 5,
+      "total": 527
+    },
+    "payload": "1027/1027 bytes match,0drift",
+    "failures": [
+      "Git runner nested-cwd/TMP trust mismatch; exact sibling-cwd counterpart PASS separately",
+      "Legacy no-profile existing connection --plan writes review instead of expected done; source fix/new installed gate is separate"
+    ]
+  },
+  "newer_artifact": "QC13 actual old Server capability proof only, a36e...; QC12 still in progress when proposal prepared",
+  "judgment_deltas": [
+    {
+      "id": "QC-T-A01",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Exact two-positional normalizer plus installed source-entry canonical CLI preserves logical label separately from physical root.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_connect_arguments.py",
+          "function": "test_positionals_normalize_only_harness_and_preserve_project_label",
+          "source_sha256": "561671f010d967ec3223a4ee6430108dcb027fd546d82c70994dbdb4ffcd0af8",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert args.client == harness and args.project_name == name",
+            "assert service == []",
+            "assert args.connect_id == 'reviewer'"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv0-codex-app]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv1-codex-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv2-None-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv3-codex-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv4-codex-Minha aplica\\xe7\\xe3o]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv5-codex-My App]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv6-claude-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv7-codxe-None]",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert summary['connect_id'] == 'codex' and summary['connect_id_status'] == 'bound'",
+            "assert summary['operation'] == 'created' and summary['project_name'] == 'Logical App'",
+            "assert summary['project_name_source'] == 'explicit' and summary['project_root'] == str(c.project)",
+            "assert result['session_state'] == 'not_checked' and result['work_state'] == 'not_submitted'",
+            "assert len(c.t.turns) == len(c.t.probes) == 1",
+            "assert repeated['quick_connect']['connect_id'] == 'codex'",
+            "assert repeated['quick_connect']['operation'] == 'reused'",
+            "assert repeated['binding_id'] == result['binding_id']",
+            "assert _terminal.snapshot(c.t.deps) == before and len(c.t.turns) == len(c.t.probes) == 1",
+            "assert review['selection']['project'] == str(c.project)"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-A02",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Harness-only parse keeps name unresolved; installed CLI derives and freezes the subsequent name. Scripted TTY is explicit, not real PTY.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_connect_arguments.py",
+          "function": "test_positionals_normalize_only_harness_and_preserve_project_label",
+          "source_sha256": "561671f010d967ec3223a4ee6430108dcb027fd546d82c70994dbdb4ffcd0af8",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert args.client == harness and args.project_name == name",
+            "assert service == []",
+            "assert args.connect_id == 'reviewer'"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv0-codex-app]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv1-codex-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv2-None-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv3-codex-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv4-codex-Minha aplica\\xe7\\xe3o]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv5-codex-My App]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv6-claude-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv7-codxe-None]",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_tty_customize_id_creates_new_review_preserves_hint_and_invalidates_original_hash",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert c.run(['connect', 'codex', '--no-chat']) == 0",
+            "assert 'ID do Harness: reviewer' in output",
+            "assert len(discovery_calls) == 1 and discovery_calls[0][0] == c.project",
+            "assert len(c.t.turns) == len(c.t.probes) == 1",
+            "assert replaced['state'] == 'superseded'",
+            "assert current['state'] == 'done'",
+            "assert current['review_revision'] != old['review_revision']",
+            "assert current['request']['client_intent_id'] != old['request']['client_intent_id']",
+            "assert current['selection']['label'] == old['selection']['label']",
+            "assert current['selection']['public_connection']['connect_id'] == 'reviewer'",
+            "assert current['selection']['quick_connect']['name_discovery'] == {'status': 'saved', 'reason': 'saved_selection'}",
+            "assert refused.get('quick_connect', {}).get('status') != 'connected'",
+            "assert resumed['quick_connect']['connect_id'] == 'reviewer'",
+            "assert resumed['quick_connect']['operation'] == 'reused'",
+            "assert len(c.t.turns) == len(c.t.probes) == 1 and _terminal.snapshot(c.t.deps) == before",
+            "assert len(paths) == 1",
+            "assert c.t.turns == c.t.probes == []",
+            "assert prompt == 'Customize: '",
+            "assert prompt == 'New ID do Harness: '",
+            "assert 'Confirm this review' in prompt",
+            "assert c.t.turns == c.t.probes == []"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_tty_customize_id_creates_new_review_preserves_hint_and_invalidates_original_hash",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-A07",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "The literal operation is CLI argument normalization; concordant positional/legacy tokens normalize once. No installed subprocess or provider layer is needed to prove this parser result.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_connect_arguments.py",
+          "function": "test_positionals_normalize_only_harness_and_preserve_project_label",
+          "source_sha256": "561671f010d967ec3223a4ee6430108dcb027fd546d82c70994dbdb4ffcd0af8",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert args.client == harness and args.project_name == name",
+            "assert service == []",
+            "assert args.connect_id == 'reviewer'"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv0-codex-app]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv1-codex-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv2-None-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv3-codex-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv4-codex-Minha aplica\\xe7\\xe3o]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv5-codex-My App]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv6-claude-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv7-codxe-None]",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-A09",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Already-separated Unicode/spaced argv label is preserved by the actual installed CLI normalizer; no shell parsing is claimed.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_connect_arguments.py",
+          "function": "test_positionals_normalize_only_harness_and_preserve_project_label",
+          "source_sha256": "561671f010d967ec3223a4ee6430108dcb027fd546d82c70994dbdb4ffcd0af8",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert args.client == harness and args.project_name == name",
+            "assert service == []",
+            "assert args.connect_id == 'reviewer'"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv0-codex-app]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv1-codex-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv2-None-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv3-codex-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv4-codex-Minha aplica\\xe7\\xe3o]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv5-codex-My App]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv6-claude-None]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_positionals_normalize_only_harness_and_preserve_project_label[argv7-codxe-None]",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-A15",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Exact ambiguous --client codex app case refuses in the CLI parser; no heuristic project conversion.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_connect_arguments.py",
+          "function": "test_conflicting_or_invalid_grammar_fails_before_any_execution",
+          "source_sha256": "561671f010d967ec3223a4ee6430108dcb027fd546d82c70994dbdb4ffcd0af8",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert failure.value.code == 2",
+            "assert 'error:' in capsys.readouterr().err"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv0]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv1]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv2]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv3]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv4]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv5]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv6]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv7]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv8]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv9]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv10]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv11]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv12]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv13]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv14]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv15]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv16]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv17]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv18]",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-A16",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "New Quick Connect positionals/ID with participant mode reject before managed context; actual participant lifecycle is separate I05.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_connect_arguments.py",
+          "function": "test_managed_mode_is_consumed_but_participant_options_are_left_for_its_real_parser",
+          "source_sha256": "561671f010d967ec3223a4ee6430108dcb027fd546d82c70994dbdb4ffcd0af8",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert grammar.parse_mode(['--mode=managed', 'codex']) == ('managed', ['codex'])",
+            "assert grammar.parse_mode(['--mode', 'participant', *participant]) == ('participant', participant)",
+            "assert failure.value.code == 2"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_arguments::test_managed_mode_is_consumed_but_participant_options_are_left_for_its_real_parser",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_connect_dispatch.py",
+          "function": "test_json_grammar_errors_are_one_document_before_any_context",
+          "source_sha256": "e04863d71d981424149bbeb033a944a4d6bbe30b6950f29596135f740b05aaa6",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert connect.run_connect([*args, '--json']) == 2",
+            "assert value['code'] == 'INVALID_ARGUMENTS'",
+            "assert value['effects_started'] is False and value['lifecycle_requested'] is False"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args0]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args1]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args2]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args3]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args4]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args5]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args6]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_connect_dispatch::test_json_grammar_errors_are_one_document_before_any_context[args7]",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-B01",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Canonical HTTP/SQLite CLI with controlled valid inventory accepts explicit choice only. Version/Test peers inert; real PTY is not required for the scripted choice semantics.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_unknown_harness_tty_choice_is_explicit_and_plan_does_not_test",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert c.run(['connect', 'codxe', 'App', '--profile', 'tty', '--plan', '--no-chat']) == 0",
+            "assert prompts == ['Harness: '] and 'Choose a supported harness' in output",
+            "assert 'ID do Harness (proposed): codex' in output",
+            "assert c.t.turns == c.t.probes == []",
+            "assert prompt == 'Harness: '"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_unknown_harness_tty_choice_is_explicit_and_plan_does_not_test",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-B02",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Installed CLI JSON typo path asserts selection_required, exact three supported choices, allowlisted choice fields and zero probes/Test.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_json_unknown_exposes_authorized_alternatives_without_input",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert result['state'] == 'selection_required' and result['code'] == 'CLIENT_SELECTION_REQUIRED'",
+            "assert {choice['harness'] for choice in result['choices']} == set(CLIENTS)",
+            "assert codex['observed'] is True and codex['candidates']",
+            "assert all(set(choice) == {'harness', 'observed', 'freshness', 'candidates'} for choice in result['choices'])",
+            "assert c.t.turns == c.t.probes == []"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_json_unknown_exposes_authorized_alternatives_without_input",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-B04",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "New actual CLI B04 variants choose supported Codex when Claude absent, preserve explicit ID or derive correct requested family, display no-install guidance and assert zero public-ID/binding/grant rows before approval.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_harness_alternatives.py",
+          "function": "test_known_missing_noninteractive_exposes_three_safe_supported_alternatives",
+          "source_sha256": "83f4144136cc8212d3e61fa604e46f7883bb61b69e5da79ee5bd522d8c106e42",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert error.code == 'INSTALLATION_UNAVAILABLE'",
+            "assert isinstance(error.choices, list)",
+            "assert {choice['harness'] for choice in error.choices} == set(CLIENTS)",
+            "assert by_name['codex']['observed'] is True and by_name['codex']['freshness'] == 'FRESH'",
+            "assert by_name['claude']['observed'] is False and by_name['claude']['freshness'] == 'FRESH'",
+            "assert 'PRIVATE_NOT_PUBLIC' not in wire",
+            "assert not state['prompts'] and len(state['calls']) == 1",
+            "assert not {'authenticated', 'logged_in', 'model_ready', 'provider_ready'} & set(choice)"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard1/tests.xml",
+              "node": "tests.quick_connect.test_harness_alternatives::test_known_missing_noninteractive_exposes_three_safe_supported_alternatives",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert c.run(command) == 0",
+            "assert document['state'] == 'review' and document['selection']['client'] == 'codex'",
+            "assert document['selection']['label'] == 'B04 Project'",
+            "assert document['selection']['quick_connect']['project_name_source'] == 'explicit'",
+            "assert document['selection']['project'] == str(c.project)",
+            "assert document['request']['configuration']['adapter_id'] == 'codex_app_server'",
+            "assert document['request']['public_connection']['connect_id'] == expected_id",
+            "assert prompts == ['Harness: ']",
+            "assert 'No installation' in output or 'nothing will be installed' in output",
+            "assert c.t.turns == c.t.probes == []",
+            "assert prompt == 'Harness: '",
+            "assert uow.connection.execute('SELECT COUNT(*) FROM ' + table).fetchone()[0] == 0"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[None-codex]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[reviewer-reviewer]",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-B10",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Picker reads are GET-only; actual canonical CLI plan/picker has zero version probes/Test and no canonical setup authority before consent.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_quick_connect_selection.py",
+          "function": "test_known_harness_selects_exact_passive_candidate_without_running_it",
+          "source_sha256": "83b7878d436677f4c0ba6d11f83ae0a0b220b9e5224d4115b7c5b1ffb6c82b2a",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert result == (client, 'candidate-a')",
+            "assert len(calls) == 1",
+            "assert parse_qs(urlsplit(calls[0][1]).query) == {'executor_id': ['host-a'], 'workspace_id': ['project-a']}"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_selection::test_known_harness_selects_exact_passive_candidate_without_running_it[codex]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_selection::test_known_harness_selects_exact_passive_candidate_without_running_it[claude]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_selection::test_known_harness_selects_exact_passive_candidate_without_running_it[pi]",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert c.run(command) == 0",
+            "assert document['state'] == 'review' and document['selection']['client'] == 'codex'",
+            "assert document['selection']['label'] == 'B04 Project'",
+            "assert document['selection']['quick_connect']['project_name_source'] == 'explicit'",
+            "assert document['selection']['project'] == str(c.project)",
+            "assert document['request']['configuration']['adapter_id'] == 'codex_app_server'",
+            "assert document['request']['public_connection']['connect_id'] == expected_id",
+            "assert prompts == ['Harness: ']",
+            "assert 'No installation' in output or 'nothing will be installed' in output",
+            "assert c.t.turns == c.t.probes == []",
+            "assert prompt == 'Harness: '",
+            "assert uow.connection.execute('SELECT COUNT(*) FROM ' + table).fetchone()[0] == 0"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[None-codex]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[reviewer-reviewer]",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-F01",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Bound public display uses ID do Harness and excludes opaque profile; actual automatic Codex proposal has the same public vocabulary. This is label semantics, not human comprehension or chat-order qualification.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_quick_connect_outcome.py",
+          "function": "test_positive_basic_output_identifies_project_origin_and_approved_root_before_chat",
+          "source_sha256": "c7c211912318adc0bc796b0e77a37ae44ee3f298a2e829a0f31ae1155082280f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert display_public(outcome(value, document)) is True",
+            "assert 'ID do Harness: reviewer' in output",
+            "assert document['selection']['project'] in output",
+            "assert 'explicit' in output",
+            "assert 'opaque-technical-profile' not in output and 'Project assistant' not in output",
+            "assert 'not checked' in output and 'No project work submitted' in output"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard1/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_outcome::test_positive_basic_output_identifies_project_origin_and_approved_root_before_chat",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_unknown_harness_tty_choice_is_explicit_and_plan_does_not_test",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert c.run(['connect', 'codxe', 'App', '--profile', 'tty', '--plan', '--no-chat']) == 0",
+            "assert prompts == ['Harness: '] and 'Choose a supported harness' in output",
+            "assert 'ID do Harness (proposed): codex' in output",
+            "assert c.t.turns == c.t.probes == []",
+            "assert prompt == 'Harness: '"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_unknown_harness_tty_choice_is_explicit_and_plan_does_not_test",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-F02",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Explicit reviewer is distinct from opaque technical profile in positive display; source-entry CLI generates profile automatically without asking for a profile name.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_quick_connect_outcome.py",
+          "function": "test_positive_basic_output_identifies_project_origin_and_approved_root_before_chat",
+          "source_sha256": "c7c211912318adc0bc796b0e77a37ae44ee3f298a2e829a0f31ae1155082280f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert display_public(outcome(value, document)) is True",
+            "assert 'ID do Harness: reviewer' in output",
+            "assert document['selection']['project'] in output",
+            "assert 'explicit' in output",
+            "assert 'opaque-technical-profile' not in output and 'Project assistant' not in output",
+            "assert 'not checked' in output and 'No project work submitted' in output"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard1/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_outcome::test_positive_basic_output_identifies_project_origin_and_approved_root_before_chat",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_tty_customize_id_creates_new_review_preserves_hint_and_invalidates_original_hash",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert c.run(['connect', 'codex', '--no-chat']) == 0",
+            "assert 'ID do Harness: reviewer' in output",
+            "assert len(discovery_calls) == 1 and discovery_calls[0][0] == c.project",
+            "assert len(c.t.turns) == len(c.t.probes) == 1",
+            "assert replaced['state'] == 'superseded'",
+            "assert current['state'] == 'done'",
+            "assert current['review_revision'] != old['review_revision']",
+            "assert current['request']['client_intent_id'] != old['request']['client_intent_id']",
+            "assert current['selection']['label'] == old['selection']['label']",
+            "assert current['selection']['public_connection']['connect_id'] == 'reviewer'",
+            "assert current['selection']['quick_connect']['name_discovery'] == {'status': 'saved', 'reason': 'saved_selection'}",
+            "assert refused.get('quick_connect', {}).get('status') != 'connected'",
+            "assert resumed['quick_connect']['connect_id'] == 'reviewer'",
+            "assert resumed['quick_connect']['operation'] == 'reused'",
+            "assert len(c.t.turns) == len(c.t.probes) == 1 and _terminal.snapshot(c.t.deps) == before",
+            "assert len(paths) == 1",
+            "assert c.t.turns == c.t.probes == []",
+            "assert prompt == 'Customize: '",
+            "assert prompt == 'New ID do Harness: '",
+            "assert 'Confirm this review' in prompt",
+            "assert c.t.turns == c.t.probes == []"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_tty_customize_id_creates_new_review_preserves_hint_and_invalidates_original_hash",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-F18",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Actual JSON created/reused plus pure versioned output assert quick_connect.connect_id, no divergent public harness_id, same full canonical ref and no invented work state.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_quick_connect_outcome.py",
+          "function": "test_created_connection_reports_bound_full_reference_without_claiming_work_or_mutating_inputs",
+          "source_sha256": "c7c211912318adc0bc796b0e77a37ae44ee3f298a2e829a0f31ae1155082280f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert quick['version'] == 1 and quick['status'] == 'connected'",
+            "assert quick['connect_id_status'] == 'bound' and quick['connect_id'] == 'reviewer'",
+            "assert quick['operation'] == 'created'",
+            "assert quick['canonical_reference'] == value['public_connection']['canonical_ref']",
+            "assert result['session_state'] == 'not_checked' and result['work_state'] == 'not_submitted'",
+            "assert 'proposed_connect_id' not in quick and 'harness_id' not in quick",
+            "assert json.loads(json.dumps(result)) == result",
+            "assert (value, document) == originals and capsys.readouterr().out == ''"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard1/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_outcome::test_created_connection_reports_bound_full_reference_without_claiming_work_or_mutating_inputs",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert summary['connect_id'] == 'codex' and summary['connect_id_status'] == 'bound'",
+            "assert summary['operation'] == 'created' and summary['project_name'] == 'Logical App'",
+            "assert summary['project_name_source'] == 'explicit' and summary['project_root'] == str(c.project)",
+            "assert result['session_state'] == 'not_checked' and result['work_state'] == 'not_submitted'",
+            "assert len(c.t.turns) == len(c.t.probes) == 1",
+            "assert repeated['quick_connect']['connect_id'] == 'codex'",
+            "assert repeated['quick_connect']['operation'] == 'reused'",
+            "assert repeated['binding_id'] == result['binding_id']",
+            "assert _terminal.snapshot(c.t.deps) == before and len(c.t.turns) == len(c.t.probes) == 1",
+            "assert review['selection']['project'] == str(c.project)"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_real_http_plan_apply_and_recovery_preserve_public_id_without_test_or_grant_replay",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-H04",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Literal when=validate DTO: bound ID/full reference and observed/reviewed tuple fences are directly asserted in installed code. This is not a native readiness claim.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_quick_connect_contracts.py",
+          "function": "test_connected_requires_full_bound_reference_but_does_not_rename_canonical_ids",
+          "source_sha256": "f1c7d193ba01de680f221d99e633f1eea6db4878bcd81b9a925c9d615514f9e4",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert result.connect_id == 'reviewer'",
+            "assert result.canonical_reference.binding_id == 'Binding:D'",
+            "assert result.canonical_reference.agent_id == 'Agent:F'"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_contracts::test_connected_requires_full_bound_reference_but_does_not_rename_canonical_ids",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_quick_connect_outcome.py",
+          "function": "test_incomplete_canonical_reference_never_satisfies_connected",
+          "source_sha256": "c7c211912318adc0bc796b0e77a37ae44ee3f298a2e829a0f31ae1155082280f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert capsys.readouterr().out == ''"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard1/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[server_id]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard1/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[executor_id]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard1/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[workspace_id]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard1/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[binding_id]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard1/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[workspace_binding_id]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard1/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[agent_id]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard1/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_outcome::test_incomplete_canonical_reference_never_satisfies_connected[endpoint_id]",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_quick_connect_outcome.py",
+          "function": "test_public_reference_must_match_the_observed_connection_and_reviewed_id",
+          "source_sha256": "c7c211912318adc0bc796b0e77a37ae44ee3f298a2e829a0f31ae1155082280f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard1/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_outcome::test_public_reference_must_match_the_observed_connection_and_reviewed_id",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-H05",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Installed CLI captures error/selection/success as one parseable document; unsafe legacy private extension is absent from public output. Actual PTY JSON input behavior is separately SKIP, not needed for this stdout contract.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert result['code'] == 'INVALID_ARGUMENTS' and result['effects_started'] is False",
+            "assert c.lifecycle == [] and c.t.calls == [] and c.t.turns == c.t.probes == []",
+            "assert _terminal.snapshot(c.t.deps) == before"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens0]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens1]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_invalid_arguments_json_refuse_before_lifecycle_http_or_local_setup[tokens2]",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_json_unknown_exposes_authorized_alternatives_without_input",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert result['state'] == 'selection_required' and result['code'] == 'CLIENT_SELECTION_REQUIRED'",
+            "assert {choice['harness'] for choice in result['choices']} == set(CLIENTS)",
+            "assert codex['observed'] is True and codex['candidates']",
+            "assert all(set(choice) == {'harness', 'observed', 'freshness', 'candidates'} for choice in result['choices'])",
+            "assert c.t.turns == c.t.probes == []"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_json_unknown_exposes_authorized_alternatives_without_input",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_legacy_public_id_adoption_only_writes_metadata_preserves_unknown_fields_without_echo",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert legacy['state'] == 'configured' and 'quick_connect' not in legacy",
+            "assert proposal['kind'] == 'public_id_association'",
+            "assert 'PRIVATE_opaque_NOT_PUBLIC' not in json.dumps(proposal)",
+            "assert result['quick_connect']['operation'] == 'associated_existing'",
+            "assert result['quick_connect']['connect_id'] == 'legacy-public'",
+            "assert result['binding_id'] == legacy['binding_id']",
+            "assert 'PRIVATE_opaque_NOT_PUBLIC' not in json.dumps(result)",
+            "assert _terminal.snapshot(c.t.deps) == before",
+            "assert len(c.t.turns) == len(c.t.probes) == 1",
+            "assert sum(method == 'POST' for method, _ in c.t.calls) == posts_before + 1",
+            "assert on_disk['legacy_private'] == 'PRIVATE_opaque_NOT_PUBLIC'",
+            "assert on_disk['selection']['legacy_extension'] == {'opaque': 'PRIVATE_opaque_NOT_PUBLIC'}"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_legacy_public_id_adoption_only_writes_metadata_preserves_unknown_fields_without_echo",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-H06",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Ready canonical app plan returns proposed ID and no Test; actual B04 plan directly counts connection_public_ids/execution_bindings/grants as zero, resolving old snapshot-omits-registry caveat.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_second_codex_explicit_add_uses_reviewer_id_in_same_workspace",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert review['quick_connect']['proposed_connect_id'] == 'reviewer'",
+            "assert len(c.t.turns) == len(c.t.probes) == 1 and _terminal.snapshot(c.t.deps) == before",
+            "assert second['workspace_id'] == first['workspace_id']",
+            "assert second['binding_id'] != first['binding_id'] and second['agent_id'] != first['agent_id']",
+            "assert second['quick_connect']['connect_id'] == 'reviewer'",
+            "assert len(c.t.turns) == 2"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_second_codex_explicit_add_uses_reviewer_id_in_same_workspace",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        },
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert c.run(command) == 0",
+            "assert document['state'] == 'review' and document['selection']['client'] == 'codex'",
+            "assert document['selection']['label'] == 'B04 Project'",
+            "assert document['selection']['quick_connect']['project_name_source'] == 'explicit'",
+            "assert document['selection']['project'] == str(c.project)",
+            "assert document['request']['configuration']['adapter_id'] == 'codex_app_server'",
+            "assert document['request']['public_connection']['connect_id'] == expected_id",
+            "assert prompts == ['Harness: ']",
+            "assert 'No installation' in output or 'nothing will be installed' in output",
+            "assert c.t.turns == c.t.probes == []",
+            "assert prompt == 'Harness: '",
+            "assert uow.connection.execute('SELECT COUNT(*) FROM ' + table).fetchone()[0] == 0"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[None-codex]",
+              "outcome": "PASS"
+            },
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_b04_known_missing_family_tty_replans_actual_family_and_public_id_before_effects[reviewer-reviewer]",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-E13",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Canonical HTTP endpoint disable/CAS revokes grants, retains identical bound tuple/name and actual replacement reservation fails409 without any authority mutation. Disabled variant only, no invented retire endpoint.",
+      "evidence": [
+        {
+          "source": "tests/execution_r4/test_public_id_retirement.py",
+          "function": "test_disabled_canonical_endpoint_keeps_bound_public_id_occupied_without_reactivation",
+          "source_sha256": "d93b7d358764b5c31f041ccacd012a4e2a4ecdc2647c6a3431f557924bd3bd11",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert grants_before and any(row['revoked_at'] is None for row in grants_before)",
+            "assert disabled.status_code == 200, disabled.text",
+            "assert disabled.json()['data']['enabled'] is False",
+            "assert len(after_grants) == len(grants_before) and all(row['revoked_at'] for row in after_grants)",
+            "assert len(public) == 1 and public[0]['connect_id'] == 'reviewer'",
+            "assert public[0]['state'] == 'bound' and public[0]['canonical_ref'] == result['public_connection']['canonical_ref']",
+            "assert refused.status_code == 409, refused.text",
+            "assert refused.json()['error']['code'] == 'HARNESS_ID_ALREADY_EXISTS'",
+            "assert authority_rows(local_setup) == before_retry",
+            "assert count(local_setup, 'connection_public_ids') == count(local_setup, 'execution_bindings') == 1"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.execution_r4.test_public_id_retirement::test_disabled_canonical_endpoint_keeps_bound_public_id_occupied_without_reactivation",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-G10",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "reason": "Aged1900 reservation/draft fixture remains occupied on actual HTTP new reserve; own intent recovers same row. Current no-implicit-TTL-reuse policy, not a claimed cleanup job/wall-clock wait.",
+      "evidence": [
+        {
+          "source": "tests/execution_r4/test_public_id_retirement.py",
+          "function": "test_old_uncertain_reservation_timestamps_do_not_make_new_intent_available",
+          "source_sha256": "d93b7d358764b5c31f041ccacd012a4e2a4ecdc2647c6a3431f557924bd3bd11",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert refused.status_code == 409, refused.text",
+            "assert refused.json()['error']['code'] == 'CONNECT_ID_PENDING'",
+            "assert authority_rows(local_setup) == before",
+            "assert recovered == reserved and recovered['state'] == 'reserved'",
+            "assert count(local_setup, 'connection_public_ids') == count(local_setup, 'connection_project_drafts') == 1",
+            "assert count(local_setup, table) == 0"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.execution_r4.test_public_id_retirement::test_old_uncertain_reservation_timestamps_do_not_make_new_intent_available",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-I04",
+      "previous": "NOT_RUN",
+      "proposed": "PASS",
+      "reason": "Exact installed CLI remote path first succeeds; bridge URLError then SERVER_UNREACHABLE, forbidden local resolver is never called, no local nexus.db/service-context and native.opens0. Lifecycle is inert, not OS daemon qualification.",
+      "evidence": [
+        {
+          "source": "tests/execution_r4/test_remote_operator_terminal.py",
+          "function": "test_remote_profile_reuse_selects_remote_before_any_local_service",
+          "source_sha256": "fd5b56f9da7ea158bc291c1d444b2c233ba13c92360d8a2db16edea65121c1ac",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert connect.run_connect(args + ['--operator-profile', 'remote', '--agent', 'subject',\n                                      '--binding-id', r.t.binding['binding_id']]) == 0",
+            "assert json.loads(capsys.readouterr().out)['topology'] == 'remote_operator'",
+            "assert connect.run_connect(args) == 0",
+            "assert cli.run_work(['sessions', *args]) == 0",
+            "assert json.loads(capsys.readouterr().out)['sessions'] == []",
+            "assert not (r.profile.home / 'nexus.db').exists()",
+            "assert not (r.profile.home / 'service-context.json').exists()",
+            "assert connect.run_connect(args) == 3",
+            "assert json.loads(capsys.readouterr().out)['code'] == 'SERVER_UNREACHABLE'",
+            "assert not (r.profile.home / 'nexus.db').exists() and r.t.native.opens == 0"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.execution_r4.test_remote_operator_terminal::test_remote_profile_reuse_selects_remote_before_any_local_service",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-I10",
+      "previous": "NOT_RUN",
+      "proposed": "PASS",
+      "reason": "Flag-off reuses exact existing ID/binding with unchanged DB/Test/grants; new Quick entry refuses before context/lifecycle/HTTP. Source-entry control rollback, no real daemon continuity claim.",
+      "evidence": [
+        {
+          "source": "tests/quick_connect/test_quick_connect_cli.py",
+          "function": "test_rollback_preserves_exact_existing_profile_without_replay_and_blocks_new_entry_before_context",
+          "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+          "same_assertion_file_as_frozen_QC527": true,
+          "assertions": [
+            "assert resumed['binding_id'] == created['binding_id']",
+            "assert resumed['quick_connect']['connect_id'] == created['quick_connect']['connect_id']",
+            "assert len(c.t.turns) == len(c.t.probes) == 1 and _terminal.snapshot(c.t.deps) == before",
+            "assert disabled['code'] == 'QUICK_CONNECT_DISABLED' and disabled['effects_started'] is False",
+            "assert c.lifecycle == lifecycle_before and c.t.calls == calls_before",
+            "assert _terminal.snapshot(c.t.deps) == before"
+          ],
+          "executed": [
+            {
+              "xml": "NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/shard0/tests.xml",
+              "node": "tests.quick_connect.test_quick_connect_cli::test_rollback_preserves_exact_existing_profile_without_replay_and_blocks_new_entry_before_context",
+              "outcome": "PASS"
+            }
+          ],
+          "artifact": "01eb1ce064f62b09630c24b5ad339814b9e46c429a7c4e7ebf7561eae23cfff6",
+          "command": "rtk proxy python -X utf8 NEXUS_QUICK_CONNECT_R1/execution/qc09-qc-installed/run_qc.py [0|1], exact selected partition in shard*-ready.json"
+        }
+      ],
+      "limits": [
+        "Actual installed application, Core and Connector imports site-packages; no provider/native readiness/human acceptance inferred.",
+        "Unit/CLI/HTTP semantics only as stated; exact scenario givens retained in antecedent."
+      ]
+    },
+    {
+      "id": "QC-T-I02",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "artifact_cut": "QC11/QC13 a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+      "previous_cut": "QC527/01eb remains failing on actual old-Server404 path; helper tests alone were insufficient",
+      "evidence": [
+        {
+          "proof": "NEXUS_QUICK_CONNECT_R1/execution/qc13-entry-smoke/proof.json",
+          "qualification": "NEXUS_QUICK_CONNECT_R1/execution/qc13-entry-smoke/qualification.json",
+          "command": "Installed old0.3.5 Server real TCP plus installed new require_public_ids capability adapter (run.py lines66-96)",
+          "assertions": [
+            "actual old Server reaches readiness",
+            "require_public_ids raises CONNECT_ID_UNSUPPORTED_SERVER",
+            "unexpected support raises AssertionError",
+            "normal canonical service stop and direct handle exit0/listener absent"
+          ]
+        }
+      ],
+      "reason": "Actual old Server capability refusal now executed on later installed fixed candidate. No local public namespace substitute or provider invocation.",
+      "limits": [
+        "Exact installed capability adapter path, not the whole service upgrade command or full connect --id wizard.",
+        "Predecessor failed artifact not relabeled PASS."
+      ]
+    },
+    {
+      "id": "QC-T-I08",
+      "previous": "NOT_RUN",
+      "proposed": "PARTIAL",
+      "reason": "Installed package/provenance/payload and527nodes are executed; broad artifact gate remains failed/interrupted, not global green.",
+      "evidence": [
+        "qc09-qc-installed/qualification.json",
+        "qc09-installed-01/qualification.json",
+        "qc11-package/qualification.json"
+      ],
+      "limits": [
+        "Do not infer final release gate from wheel existence or subset success."
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "id": "QC-T-A01",
+      "title": "Dois posicionais",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Exact two-positional normalizer plus installed source-entry canonical CLI preserves logical label separately from physical root."
+    },
+    {
+      "id": "QC-T-A02",
+      "title": "Apenas harness",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Harness-only parse keeps name unresolved; installed CLI derives and freezes the subsequent name. Scripted TTY is explicit, not real PTY."
+    },
+    {
+      "id": "QC-T-A03",
+      "title": "Sem posicionais",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-A04",
+      "title": "Alias raiz",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-A05",
+      "title": "Precedência de subcomando",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-A06",
+      "title": "Comando raiz desconhecido",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-A07",
+      "title": "Duplicação concordante",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "The literal operation is CLI argument normalization; concordant positional/legacy tokens normalize once. No installed subprocess or provider layer is needed to prove this parser result."
+    },
+    {
+      "id": "QC-T-A08",
+      "title": "Duplicação conflitante",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-A09",
+      "title": "Nome com espaços",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Already-separated Unicode/spaced argv label is preserved by the actual installed CLI normalizer; no shell parsing is claimed."
+    },
+    {
+      "id": "QC-T-A10",
+      "title": "Posicional em excesso",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-A11",
+      "title": "Flag desconhecido",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-A12",
+      "title": "Sem abreviação",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-A13",
+      "title": "Help puro",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-A14",
+      "title": "Legado preservado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-A15",
+      "title": "Mistura ambígua",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Exact ambiguous --client codex app case refuses in the CLI parser; no heuristic project conversion."
+    },
+    {
+      "id": "QC-T-A16",
+      "title": "Participant incompatível",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "New Quick Connect positionals/ID with participant mode reject before managed context; actual participant lifecycle is separate I05."
+    },
+    {
+      "id": "QC-T-B01",
+      "title": "Enum inválido em TTY",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Canonical HTTP/SQLite CLI with controlled valid inventory accepts explicit choice only. Version/Test peers inert; real PTY is not required for the scripted choice semantics."
+    },
+    {
+      "id": "QC-T-B02",
+      "title": "Enum inválido em JSON",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Installed CLI JSON typo path asserts selection_required, exact three supported choices, allowlisted choice fields and zero probes/Test."
+    },
+    {
+      "id": "QC-T-B03",
+      "title": "Enum ausente",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-B04",
+      "title": "Instalação ausente",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "New actual CLI B04 variants choose supported Codex when Claude absent, preserve explicit ID or derive correct requested family, display no-install guidance and assert zero public-ID/binding/grant rows before approval."
+    },
+    {
+      "id": "QC-T-B05",
+      "title": "Inventário stale",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-B06",
+      "title": "Dois candidatos",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-B07",
+      "title": "Permissão negada",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-B08",
+      "title": "Texto malicioso",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-B09",
+      "title": "Case normalizado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-B10",
+      "title": "Listagem passiva",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Picker reads are GET-only; actual canonical CLI plan/picker has zero version probes/Test and no canonical setup authority before consent."
+    },
+    {
+      "id": "QC-T-C01",
+      "title": "CWD já associado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C02",
+      "title": "CWD novo",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C03",
+      "title": "Label explícito",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C04",
+      "title": "Label inexistente",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C05",
+      "title": "Label duplicado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C06",
+      "title": "ID exato",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C07",
+      "title": "Nome/ID discordante",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C08",
+      "title": "Override físico",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C09",
+      "title": "Raiz diferente em TTY",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C10",
+      "title": "Raiz explícita não substituída",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C11",
+      "title": "Root diferente em script",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C12",
+      "title": "CWD inexistente",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C13",
+      "title": "Subdiretório",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C14",
+      "title": "Link alterado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C15",
+      "title": "Plataforma de paths",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C16",
+      "title": "Catálogo incompleto",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C17",
+      "title": "Sem mkdir",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-C18",
+      "title": "Dois primeiros connects",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D01",
+      "title": "Nome do origin HTTPS",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D02",
+      "title": "Origin SSH formato SCP",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D03",
+      "title": "Origin ssh URL com porta",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D04",
+      "title": "Origin local",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D05",
+      "title": "Sem origin",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D06",
+      "title": "Origins conflitantes",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D07",
+      "title": "Outros remotes não substituem origin",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D08",
+      "title": "Git indisponível",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D09",
+      "title": "Diretório sem Git",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D10",
+      "title": "Git lento ou inválido",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D11",
+      "title": "Remote inválido e caracteres de controle",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D12",
+      "title": "Working tree ligado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D13",
+      "title": "Configuração específica de worktree",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D14",
+      "title": "Submodule ou repo aninhado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D15",
+      "title": "Monorepo sem expansão",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D16",
+      "title": "Clones/worktrees homônimos",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D17",
+      "title": "Nome explícito prevalece",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D18",
+      "title": "Associação existente prevalece",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D19",
+      "title": "Override físico de descoberta",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D20",
+      "title": "Dubious ownership",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D21",
+      "title": "Ambiente Git redirecionado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D22",
+      "title": "Executável falso no CWD",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D23",
+      "title": "Help e plan sem subprocessos Git",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D24",
+      "title": "Repositório bare ou raiz imprópria",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D25",
+      "title": "Privacidade do origin",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-D26",
+      "title": "Recuperação depois de alteração Git",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E01",
+      "title": "ID explícito novo",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E02",
+      "title": "ID automático inicial",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E03",
+      "title": "Segundo mesmo harness",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E04",
+      "title": "Repetição não adiciona",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E05",
+      "title": "Unicidade entre agentes",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E06",
+      "title": "Unicidade entre hosts",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E07",
+      "title": "Namespace entre projetos",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E08",
+      "title": "Namespace entre Servers",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E09",
+      "title": "Case do ID",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E10",
+      "title": "ID inválido",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E11",
+      "title": "ID existente concordante",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E12",
+      "title": "ID harness conflitante",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E13",
+      "title": "ID aposentado",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Canonical HTTP endpoint disable/CAS revokes grants, retains identical bound tuple/name and actual replacement reservation fails409 without any authority mutation. Disabled variant only, no invented retire endpoint."
+    },
+    {
+      "id": "QC-T-E14",
+      "title": "Adotar legado",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E15",
+      "title": "GET passivo",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E16",
+      "title": "Alias interno preservado",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E17",
+      "title": "Flags conflitantes",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-E18",
+      "title": "New com ID ocupado",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F01",
+      "title": "Rótulo básico do identificador",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Bound public display uses ID do Harness and excludes opaque profile; actual automatic Codex proposal has the same public vocabulary. This is label semantics, not human comprehension or chat-order qualification."
+    },
+    {
+      "id": "QC-T-F02",
+      "title": "ID explícito independente do perfil",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Explicit reviewer is distinct from opaque technical profile in positive display; source-entry CLI generates profile automatically without asking for a profile name."
+    },
+    {
+      "id": "QC-T-F03",
+      "title": "Mesmo harness existente em TTY",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F04",
+      "title": "Harness diferente e escolha do existente",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F05",
+      "title": "Colisão com ID manual alternativo",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F06",
+      "title": "Sugestão em colisão",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F07",
+      "title": "Cancelar colisão",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F08",
+      "title": "Adição explícita proíbe retomada alternativa",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F09",
+      "title": "Adição não interativa em conflito",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F10",
+      "title": "Retomada determinística não interativa",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F11",
+      "title": "Harness conflitante em script",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F12",
+      "title": "Reserva de outra intenção",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F13",
+      "title": "ID revogado/desativado/aposentado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F14",
+      "title": "Retry próprio antes de colisão",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F15",
+      "title": "Mesmo perfil com conteúdo alterado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F16",
+      "title": "Colisão não autoriza revelar dados",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F17",
+      "title": "Corrida depois da sugestão",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F18",
+      "title": "JSON com identificador único",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Actual JSON created/reused plus pure versioned output assert quick_connect.connect_id, no divergent public harness_id, same full canonical ref and no invented work state."
+    },
+    {
+      "id": "QC-T-F19",
+      "title": "Uma confirmação final",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F20",
+      "title": "Revisão inclui fontes e raiz",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F21",
+      "title": "Personalização invalida aprovação",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F22",
+      "title": "Rótulos respeitam idioma existente",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F23",
+      "title": "Seletores exatos contraditórios",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-F24",
+      "title": "ID imutável após mudar Git",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G01",
+      "title": "Reserva antes do teste",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G02",
+      "title": "Duas reservas automáticas",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G03",
+      "title": "Resposta de reserva perdida",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G04",
+      "title": "Reserva não é sucesso",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G05",
+      "title": "Rollback no Finish",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G06",
+      "title": "Resposta Finish perdida",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G07",
+      "title": "Disco local falha",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G08",
+      "title": "Cancelar revisão",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G09",
+      "title": "Ctrl+C após efeito",
+      "previous": "NOT_RUN",
+      "proposed": "NOT_RUN",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G10",
+      "title": "Reserva incerta expira",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Aged1900 reservation/draft fixture remains occupied on actual HTTP new reserve; own intent recovers same row. Current no-implicit-TTL-reuse policy, not a claimed cleanup job/wall-clock wait."
+    },
+    {
+      "id": "QC-T-G11",
+      "title": "Hash de review",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G12",
+      "title": "Locks sem deadlock",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G13",
+      "title": "Reusar não renova",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G14",
+      "title": "Serviço compartilhado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-G15",
+      "title": "Novo workspace draft",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-H01",
+      "title": "ID antes do chat",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-H02",
+      "title": "Resultado criado/reusado",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-H03",
+      "title": "Estado de sessão honesto",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-H04",
+      "title": "Invariante connected",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Literal when=validate DTO: bound ID/full reference and observed/reviewed tuple fences are directly asserted in installed code. This is not a native readiness claim."
+    },
+    {
+      "id": "QC-T-H05",
+      "title": "JSON limpo",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Installed CLI captures error/selection/success as one parseable document; unsafe legacy private extension is absent from public output. Actual PTY JSON input behavior is separately SKIP, not needed for this stdout contract."
+    },
+    {
+      "id": "QC-T-H06",
+      "title": "Plan não reserva",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Ready canonical app plan returns proposed ID and no Test; actual B04 plan directly counts connection_public_ids/execution_bindings/grants as zero, resolving old snapshot-omits-registry caveat."
+    },
+    {
+      "id": "QC-T-H07",
+      "title": "Plan com Server parado",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-H08",
+      "title": "Adição script sem profile",
+      "previous": "PASS",
+      "proposed": "PASS",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-H09",
+      "title": "Quoting de retorno",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-H10",
+      "title": "Exit 0 legado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-I01",
+      "title": "CLI antiga",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-I02",
+      "title": "Server antigo",
+      "previous": "PARTIAL",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Actual old Server capability refusal now executed on later installed fixed candidate. No local public namespace substitute or provider invocation."
+    },
+    {
+      "id": "QC-T-I03",
+      "title": "Retomar remoto",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-I04",
+      "title": "Remoto indisponível",
+      "previous": "NOT_RUN",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Exact installed CLI remote path first succeeds; bridge URLError then SERVER_UNREACHABLE, forbidden local resolver is never called, no local nexus.db/service-context and native.opens0. Lifecycle is inert, not OS daemon qualification."
+    },
+    {
+      "id": "QC-T-I05",
+      "title": "Participant legado",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-I06",
+      "title": "UI sem novo menu",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-I07",
+      "title": "Privacidade de saída",
+      "previous": "PARTIAL",
+      "proposed": "PARTIAL",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-I08",
+      "title": "Regressão pacote",
+      "previous": "NOT_RUN",
+      "proposed": "PARTIAL",
+      "changed": true,
+      "reason": "Installed package/provenance/payload and527nodes are executed; broad artifact gate remains failed/interrupted, not global green."
+    },
+    {
+      "id": "QC-T-I09",
+      "title": "Jornada real consentida",
+      "previous": "BLOCKED",
+      "proposed": "BLOCKED",
+      "changed": false,
+      "reason": "No judgment promotion; original concrete missing acceptance remains unless separately refined below."
+    },
+    {
+      "id": "QC-T-I10",
+      "title": "Rollback de apresentação",
+      "previous": "NOT_RUN",
+      "proposed": "PASS",
+      "changed": true,
+      "reason": "Flag-off reuses exact existing ID/binding with unchanged DB/Test/grants; new Quick entry refuses before context/lifecycle/HTTP. Source-entry control rollback, no real daemon continuity claim."
+    }
+  ],
+  "counts": {
+    "PASS": 49,
+    "PARTIAL": 96,
+    "NOT_RUN": 1,
+    "BLOCKED": 1
+  },
+  "notes": [
+    {
+      "id": "QC-T-A14",
+      "status": "PARTIAL",
+      "detail": "QC527 exact legacy no-profile plan gate failed state review vs done; new source50checks/legacy fix and QC12 are different cuts. Do not promote until actual new installed original3 legacy results are terminal."
+    },
+    {
+      "id": "QC-T-I08",
+      "status": "PARTIAL",
+      "gate": "BROAD_NOT_GREEN",
+      "detail": "Installed527 and1027payload proof are real; broad originals/derivatives are interrupted/failed, so full artifact release gate remains partial/FAIL, not global success."
+    },
+    {
+      "id": "QC-T-I02",
+      "detail": "Only later QC13/a36 artifact promoted; old01eb actual404failure and source-only derivative proofs remain antecedents."
+    },
+    {
+      "id": "QC-T-F22",
+      "status": "PARTIAL",
+      "detail": "CLI public labels proven; cite same-cut UI Node/browser label evidence before claiming complete cross-surface vocabulary. Do not infer browser/human success from527."
+    },
+    {
+      "id": "QC-T-F21",
+      "status": "PARTIAL",
+      "detail": "Four pure changes and ID CLI integration exist; all4 exact CLI journeys still missing, so no promotion from helper tests alone."
+    },
+    {
+      "id": "D-group",
+      "detail": "Installed adapter/local-Git tests eliminate packaging uncertainty, not automatically every composed CLI origin/fallback scenario.9 prepared compounds are not executed evidence."
+    }
+  ],
+  "safe_missing_work": [
+    {
+      "ids": [
+        "QC-T-A03",
+        "QC-T-B03",
+        "QC-T-B10"
+      ],
+      "priority": "P1",
+      "kind": "SAFE_MISSING_TEST",
+      "scenario": "Actual source-entry CLI connect with no positionals over canonical inventory containing two inert families; explicitly choose family/cancel; assert no grammar error, no default-first and no probe/Test before consent."
+    },
+    {
+      "ids": [
+        "QC-T-B05",
+        "QC-T-B06",
+        "QC-T-B07",
+        "QC-T-B08",
+        "QC-T-B09"
+      ],
+      "priority": "P1",
+      "kind": "SAFE_MISSING_TEST",
+      "scenario": "Canonical CLI/HTTP cases: stale publication via controlled clock; two exact Codex candidates pick second; denied can_configure from qualified policy port; shell-like unknown token with subprocess forbidden; CoDeX plan normalizes to codex. Each asserts unchanged identity/grants and no model. Policy false must be genuinely produced, not fake authoritative DTO."
+    },
+    {
+      "ids": [
+        "QC-T-D01",
+        "QC-T-D02",
+        "QC-T-D03",
+        "QC-T-D04",
+        "QC-T-D05",
+        "QC-T-D06",
+        "QC-T-D07",
+        "QC-T-F19",
+        "QC-T-F20",
+        "QC-T-F24",
+        "QC-T-D25",
+        "QC-T-D26"
+      ],
+      "priority": "P1",
+      "kind": "SAFE_PREPARED_NOT_RUN",
+      "proposal": "NEXUS_QUICK_CONNECT_R1/execution/qc12-installed-compatibility/git-integration-proposal.json",
+      "scenario": "Root/backend already prepared9 real local Git+canonical CLI compounds outside repository. Execute only after owner releases QC12. Must assert actual origins/name/root/privacy/review/resume before promoting; no network/provider."
+    },
+    {
+      "ids": [
+        "QC-T-D08",
+        "QC-T-D09",
+        "QC-T-D10",
+        "QC-T-D11",
+        "QC-T-D12",
+        "QC-T-D13",
+        "QC-T-D14",
+        "QC-T-D15",
+        "QC-T-D16",
+        "QC-T-D17",
+        "QC-T-D18",
+        "QC-T-D19",
+        "QC-T-D20",
+        "QC-T-D21",
+        "QC-T-D22",
+        "QC-T-D23",
+        "QC-T-D24"
+      ],
+      "priority": "P2",
+      "kind": "SAFE_MISSING_COMPOSED_CLI_TEST",
+      "scenario": "Adapter proofs are installed/local-Git-complete, but exact whole CLI givens remain absent. Compose owned repo/worktree/nested/subdir/hostile-PATH/GITenv/fallback cases through real CLI+HTTP, reusing adapter fixtures. Refused ownership can use an explicit controlled reader refusal; do not require a new OS user/account or bypass safe.directory. Bare-root/invalid-name recovery needs explicit diagnostic assertion."
+    },
+    {
+      "ids": [
+        "QC-T-E03",
+        "QC-T-E04",
+        "QC-T-E11",
+        "QC-T-E12",
+        "QC-T-F03",
+        "QC-T-F04",
+        "QC-T-F05",
+        "QC-T-F06",
+        "QC-T-F07",
+        "QC-T-F08",
+        "QC-T-F11",
+        "QC-T-F12",
+        "QC-T-F13",
+        "QC-T-F17",
+        "QC-T-F23"
+      ],
+      "priority": "P1",
+      "kind": "SAFE_MISSING_CLI_HTTP_TEST",
+      "scenario": "Actual canonical two-connection namespace: automatic codex-2 plan/approve/bind; default repeated connect never adds; scripted TTY exact same/cross-family resume, new ID/suggestion/cancel; new_connection cannot resume; pending/disabled occupant diagnostics; exact flag conflicts before menu; race after displayed proposal refuses old approval. Synthetic Test only."
+    },
+    {
+      "ids": [
+        "QC-T-F15",
+        "QC-T-F16",
+        "QC-T-F21"
+      ],
+      "priority": "P1",
+      "kind": "SAFE_MISSING_CLI_HTTP_TEST",
+      "scenario": "Lost-Finish original intent then changed harness/root/ID refuses without overwriting bytes/replay; seeded occupied namespace plus unauthorized actor denial body omits private refs (operator stays global by contract); customize all4 fields through actual CLI, fresh hashes/intent/ref and old approval refusal. Root-preserved selected rootB versus invocationA needs current installed composed case."
+    },
+    {
+      "ids": [
+        "QC-T-H01",
+        "QC-T-H09",
+        "QC-T-H10"
+      ],
+      "priority": "P2",
+      "kind": "SAFE_MISSING_OUTPUT_TEST_OR_IMPLEMENTATION_CHECK",
+      "scenario": "Spy interactive_work to prove bound ID stdout before entering chat without actual chat; shell-specific resume renderer/argv echo roundtrip in own sandbox (no app/provider execution); cancellation exit0 JSON/declared outcome, never connected from code alone. Missing renderer should be reported as implementation gap, not assumed."
+    },
+    {
+      "ids": [
+        "QC-T-C12",
+        "QC-T-C14",
+        "QC-T-C17",
+        "QC-T-C18",
+        "QC-T-G02",
+        "QC-T-G08",
+        "QC-T-G11",
+        "QC-T-G12",
+        "QC-T-G13",
+        "QC-T-G15",
+        "QC-T-I05",
+        "QC-T-I06"
+      ],
+      "priority": "P2",
+      "kind": "SAFE_MISSING_TEST",
+      "scenario": "Removed CWD, real own symlink/junction drift if supported, approved/cancelled no-mkdir, known-workspace reserve/Finish races, exact review hash mutation, concrete lock interleavings/no input under global lock, expired-grant unchanged resume, owned participant config/credential regression, same CLI-created ID on Home with distinct canonical session refs. No personal installation; unsupported junction creation is a host limitation, not fabricated PASS."
+    },
+    {
+      "ids": [
+        "QC-T-G09",
+        "QC-T-I09"
+      ],
+      "priority": "SEPARATE_GATES",
+      "kind": "DISTINGUISH_PTY_FROM_PROVIDER_GATE",
+      "scenario": "G09 already has prepared real-input-PTY synthetic Test interruption case; requires actual stdin TTY capability, no provider/human account. Five plain-pipe PTY items SKIP cannot qualify it. I09 remains fresh provider authorization/unknown-usage guard gate; no inference executed."
+    }
+  ],
+  "controls": [
+    "No provider/real harness/PTY/OS proof required for literal unit+CLI/HTTP semantic cases; I09 separate.",
+    "No promotion from installed file existence or generic green count; exact executed XML nodes and same-snapshot assertion files attached.",
+    "Unchanged rows retain old verdict; missing-layer cases receive concrete safe test proposals, not convenient permanent PARTIAL.",
+    "No tests/product/source/prefix/Git/ledger modified or new runtime started by this reconciliation."
+  ],
+  "later_executions_pending_reconciliation": [
+    {
+      "cut": "QC14",
+      "owner_note": "Root reports4PASS and F17 specific CAS counterpart; not inspected or promoted by this proposal"
+    },
+    {
+      "cut": "G02",
+      "owner_note": "New explicit-intent case pending per Root; no inferred result"
+    },
+    {
+      "cut": "Git composed10",
+      "owner_note": "Running with metadata-DONE oracle correction; no result inferred"
+    },
+    {
+      "cut": "QC12",
+      "owner_note": "New artifact compatibility run/Git cwd counterpart belongs to later cut; original527 predecessor remains unchanged"
+    }
+  ]
+}

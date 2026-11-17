@@ -1,0 +1,50 @@
+{
+  "cases": [
+    {
+      "label": "cancel",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-red-oiqzl4wy\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-red-oiqzl4wy\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-red-oiqzl4wy\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-red-oiqzl4wy\\after\\tests\\quick_connect\\test_qc35_review_cancel.py",
+        "-v",
+        "-s",
+        "-x",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-red-oiqzl4wy\\cancel\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc35-red-oiqzl4wy\\cancel\\cwd",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T09:54:15.041299+00:00",
+      "signals": [],
+      "exit_code": 1,
+      "processes_after": [
+        {
+          "pid": 45352,
+          "parent_pid": null,
+          "birth_filetime": 134393828550439980,
+          "alive": false
+        },
+        {
+          "pid": 51192,
+          "parent_pid": 45352,
+          "birth_filetime": 134393828550670898,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T09:54:34.378622+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

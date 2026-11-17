@@ -1,0 +1,41 @@
+{
+  "status": "INTERRUPTED_HUNG_TEST",
+  "verified_tree": [
+    {
+      "pid": 49180,
+      "ppid": 24116,
+      "create_time": 1794894948.5264723,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 49800,
+      "ppid": 49180,
+      "create_time": 1794894948.5401337,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 22788,
+      "ppid": 49800,
+      "create_time": 1794894958.0536115,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-0s9w2_3_\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 45392,
+      "ppid": 22788,
+      "create_time": 1794894958.067144,
+      "exe": "C:\\Python313\\python.exe"
+    }
+  ],
+  "normal_interrupt": "No dedicated process group was created by original CI helper/subprocess launcher. CTRL_C/CTRL_BREAK cannot be safely targeted at this individual shared-console process; no shared group signal sent.",
+  "action": "Terminate only verified pytestPID45392 via psutil equivalent of Windows TerminateProcess",
+  "requested_at": 1794895763.140577,
+  "scope": "Own test subprocess only, no canonical runtime/session-completion claim; all Temp DB/logs preserved",
+  "target_physically_exited": true,
+  "ended_at": 1794895763.1872563,
+  "tree_exit_observed": {
+    "49180": true,
+    "49800": true,
+    "22788": true,
+    "45392": true
+  }
+}

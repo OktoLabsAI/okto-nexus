@@ -1,0 +1,56 @@
+--- D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc28-posix-paths\evidence\copied-tests\test_posix_physical_paths.py.txt
++++ tests/quick_connect/test_posix_physical_paths.py
+@@ -1,5 +1,6 @@
+ """Actual Linux FS identity; no canonical-authority DTOs or runtime execution."""
+ import os
++import pytest
+ from pathlib import Path
+ 
+ from okto_nexus.adapters.inbound.cli.connect import project_profile
+@@ -8,6 +9,38 @@
+ from okto_nexus.application.terminal_connection import _same_local_path
+ 
+ 
++pytestmark = pytest.mark.skipif(os.name != 'posix', reason='POSIX filesystem semantics')
++
++
++@pytest.fixture
++def case_sensitive_fs(tmp_path):
++    upper, lower = tmp_path / 'qc-capability-A', tmp_path / 'qc-capability-a'
++    upper.mkdir()
++    try:
++        try:
++            lower.mkdir()
++        except FileExistsError:
++            pytest.skip('Filesystem is not case-sensitive')
++        lower.rmdir()
++    finally:
++        upper.rmdir()
++
++
++@pytest.fixture
++def directory_symlinks(tmp_path):
++    target, link = tmp_path / 'qc-capability-target', tmp_path / 'qc-capability-link'
++    target.mkdir()
++    try:
++        try:
++            link.symlink_to(target, target_is_directory=True)
++        except (OSError, NotImplementedError):
++            pytest.skip('Directory symlinks are unavailable')
++        link.unlink()
++    finally:
++        target.rmdir()
++
++
++@pytest.mark.usefixtures('case_sensitive_fs')
+ def test_c15_real_case_sensitive_repo_and_repo_are_distinct(tmp_path):
+     assert os.name == 'posix'
+     upper, lower = tmp_path / 'Repo', tmp_path / 'repo'
+@@ -25,6 +58,7 @@
+     assert discover_project_name(lower, plan=True).name == 'repo'
+ 
+ 
++@pytest.mark.usefixtures('directory_symlinks')
+ def test_posix_symlink_resolves_same_physical_identity_and_profile(tmp_path):
+     physical, link = tmp_path / 'Physical', tmp_path / 'LogicalLink'
+     physical.mkdir()

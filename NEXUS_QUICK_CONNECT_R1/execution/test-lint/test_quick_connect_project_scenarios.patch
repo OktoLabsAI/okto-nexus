@@ -1,0 +1,21 @@
+--- persistence-applied-final/tests/quick_connect/test_quick_connect_project_scenarios.py
++++ tests/quick_connect/test_quick_connect_project_scenarios.py
+@@ -5,8 +5,8 @@
+ 
+ import pytest
+ from test_quick_connect_cli import (  # noqa: F401
+-    checking, first_connection, invoke, isolated_provider_environment, local_setup,
+-    quick_cli, terminal,
++    checking as checking, first_connection, invoke, isolated_provider_environment as isolated_provider_environment, local_setup as local_setup,
++    quick_cli as quick_cli, terminal as terminal,
+ )
+ from test_quick_connect_extra_scenarios import canonical_snapshot
+ 
+@@ -182,3 +182,7 @@
+     assert len(after['workspaces']) == len(before['workspaces']) + 1
+     assert len(after['execution_bindings']) == len(before['execution_bindings']) + 1
+     assert len(c.t.turns) == len(c.t.probes) == 1
++
++
++# Explicit public exports include pytest fixtures used through injection.
++__all__ = ['Path', 'SimpleNamespace', 'canonical_snapshot', 'checking', 'create_project', 'first_connection', 'forbid_input', 'invoke', 'isolated_provider_environment', 'json', 'local_setup', 'pytest', 'quick_cli', 'terminal', 'test_c01_mapped_cwd_bare_and_harness_resume_exact_reference', 'test_c03_c04_concordant_and_new_logical_labels_never_become_paths', 'test_c09_other_mapped_project_root_requires_explicit_tty_choice', 'test_c10_explicit_project_root_is_not_replaced_by_other_label', 'test_c11_json_root_label_ambiguity_refuses_without_input_or_chdir', 'test_c17_cancel_and_approval_never_mkdir_the_logical_label', 'two_projects']

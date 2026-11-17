@@ -1,0 +1,58 @@
+{
+  "cases": [
+    {
+      "label": "ancestor-privacy",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "pytest",
+        "-c",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-ancestor-privacy-3d5bynj3\\pytest.ini",
+        "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-ancestor-privacy-3d5bynj3\\after",
+        "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-ancestor-privacy-3d5bynj3\\after",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-ancestor-privacy-3d5bynj3\\after\\tests\\quick_connect\\test_ancestor_privacy.py",
+        "-v",
+        "-s",
+        "-x",
+        "--tb=short",
+        "-o",
+        "faulthandler_timeout=10",
+        "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-ancestor-privacy-3d5bynj3\\ancestor-privacy\\junit.xml"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc34-ancestor-privacy-3d5bynj3\\cwd",
+      "deadline_seconds": 180,
+      "started_at": "2026-11-17T09:59:23.585203+00:00",
+      "signals": [],
+      "exit_code": 3221225477,
+      "processes_after": [
+        {
+          "pid": 27972,
+          "parent_pid": null,
+          "birth_filetime": 134393831635885475,
+          "alive": false
+        },
+        {
+          "pid": 59188,
+          "parent_pid": 27972,
+          "birth_filetime": 134393831636330218,
+          "alive": false
+        },
+        {
+          "pid": 58944,
+          "parent_pid": 59188,
+          "birth_filetime": 134393831636574207,
+          "alive": false
+        }
+      ],
+      "ended_at": "2026-11-17T09:59:41.248605+00:00"
+    }
+  ],
+  "payload_files": 1027,
+  "payload_drift": [],
+  "repository_input_drift": [],
+  "app_source_present": false
+}

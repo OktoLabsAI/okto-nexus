@@ -1,0 +1,19 @@
+--- persistence-applied-final/tests/quick_connect/test_qc30_remote_public_id.py
++++ tests/quick_connect/test_qc30_remote_public_id.py
+@@ -5,7 +5,7 @@
+ from urllib.parse import unquote
+ 
+ import pytest
+-from test_remote_operator_terminal import remote,work,connected_local,local_setup,qualified_contract
++from test_remote_operator_terminal import remote as remote,work as work,connected_local as connected_local,local_setup as local_setup,qualified_contract as qualified_contract
+ from okto_nexus.adapters.inbound.cli import connect,work as cli_work
+ from okto_nexus.adapters.inbound.cli.main import main
+ from okto_nexus.adapters.outbound import git_project_hint
+@@ -95,3 +95,7 @@
+         new_grants=0,new_operations=0,new_sessions=0)
+     if os.environ.get('QC_DERIVATIVE_OUTPUT'):
+         (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'remote-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
++
++
++# Explicit public exports include pytest fixtures used through injection.
++__all__ = ['BASE', 'KEYS', 'Path', 'TABLES', 'cli_work', 'connect', 'connected_local', 'git_project_hint', 'json', 'local_setup', 'main', 'os', 'pytest', 'qualified_contract', 'remote', 'rows', 'test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects', 'unquote', 'work']

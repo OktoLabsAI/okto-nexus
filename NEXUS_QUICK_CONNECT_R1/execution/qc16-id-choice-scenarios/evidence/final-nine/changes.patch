@@ -1,0 +1,13 @@
+--- original/test_id_choice_scenarios.py
++++ reviewed/test_id_choice_scenarios.py
+@@ -113,7 +113,9 @@
+     assert set(reference) == set(c.first_result['quick_connect']['canonical_reference'])
+     assert reference['workspace_id'] == c.first_result['workspace_id']
+     assert reference['binding_id'] != c.first_result['binding_id']
+-    assert len(c.t.turns) == len(c.t.probes) == 2
++    assert len(c.t.turns) == 2
++    assert pending['version_check_required'] is False
++    assert len(c.t.probes) == 1  # The same installation is already technically qualified.
+     assert c.first_path.read_bytes() == c.first_bytes
+     after = protected(c)
+     for table, rows in before.items():

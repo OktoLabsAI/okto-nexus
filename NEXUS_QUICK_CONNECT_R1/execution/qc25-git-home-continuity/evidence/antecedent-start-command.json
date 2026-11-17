@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "okto_nexus",
+    "service",
+    "start",
+    "--json",
+    "--timeout",
+    "30",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\tmp\\pytest-of-unknown\\pytest-0\\test_origin_first_connect_and_0\\home",
+    "--db-path",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-complete-3hnalsq1\\git-cli-composed\\tmp\\pytest-of-unknown\\pytest-0\\test_origin_first_connect_and_0\\home\\nexus.db",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "63600",
+    "--embedding-mode",
+    "off",
+    "--metrics-mode",
+    "disabled",
+    "--metrics-dir",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-continuity-wi9joyyc\\metrics",
+    "--feature-harness-integrations",
+    "true"
+  ],
+  "exit_code": 1
+}

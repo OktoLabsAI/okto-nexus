@@ -1,0 +1,52 @@
+{
+  "at": "2026-11-17T08:52:49.417114+00:00",
+  "status": "PASS_OWNED_HIDDEN_WINDOWS_CONSOLE_INTERRUPT",
+  "counts": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "node": "test_quick_connect_pty.py::test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation",
+  "original_test_sha256": "de71181344a41eddbc58b08bd875de0dd561f0d1b7ecc72e62abe293e36f35c3",
+  "original_test_edited": false,
+  "source_commit": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc22-hidden-console-jrfnw60t",
+  "elapsed_seconds": 18.875180599978194,
+  "installed_payload_files": 1027,
+  "installed_payload_drift": [],
+  "source_drift": [],
+  "provider_calls": 0,
+  "console": {
+    "real_CONIN": true,
+    "GetConsoleMode": true,
+    "stdin_isatty": true,
+    "visible": false,
+    "signal_members": [
+      49620,
+      49916,
+      56800
+    ],
+    "owned_client_count": 4,
+    "ctrl_c_attempts": 1,
+    "input_records": 4,
+    "user_or_supervisor_console_attached": false
+  },
+  "proofs": [
+    "A distinct hidden Windows console was created using CREATE_NEW_CONSOLE and SW_HIDE.",
+    "Real CONIN$/GetConsoleMode/isatty was checked both by wrapper and pytest session audit; no stdin/isatty/input mock was used.",
+    "Before y and Ctrl-C, the separate controller proved exact attached membership against parent/birth/image ownership of child/controller Python clients.",
+    "The controller attached only to the owned child console, ignored Ctrl-C only for itself, and sent one console-scoped CTRL_C_EVENT only after the issued synthetic-Test marker.",
+    "The unchanged original test asserts CLI130, checkpoint test_submitted, one synthetic Test/probe, no binding/grant, and explicitly releases its inert async gate before lifespan closes.",
+    "Both child and controller exited zero normally; all observed Python clients and Windows console hosts are absent, and the owned console window was destroyed."
+  ],
+  "prelaunch_antecedent": "Missing environment parent directory caused a preparation failure before any process, console, pytest, input or signal. It was corrected before this sole pytest execution.",
+  "static_checks": "Ruff F/E7/E9 PASS; E402 applies to the intentional -I own-script-directory bootstrap imports.",
+  "limitations": [
+    "This is a real isolated Windows console signal test with synthetic application setup/Test/lifecycle; not a real provider/native harness campaign.",
+    "It does not exercise Ctrl-C in the user console, RTK transport, or a Windows session restart/logout/suspend.",
+    "No generic kill/broadcast or unowned PID was used; zero fallback containment was required.",
+    "No repository test/source/docs, installed prefix, earlier evidence, personal installation or account was modified."
+  ]
+}

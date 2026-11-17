@@ -1,0 +1,34 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc15-choice-4emspy8s\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 8 items
+
+..\..\after\tests\execution_r4\test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[2-claude] IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[2-claude]", "when": "setup", "outcome": "passed", "duration": 7.193312600022182}
+IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[2-claude]", "when": "call", "outcome": "passed", "duration": 1.3971126000396907}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[2-claude]", "when": "teardown", "outcome": "passed", "duration": 0.6310110000194982}
+
+..\..\after\tests\execution_r4\test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[c-None] IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[c-None]", "when": "setup", "outcome": "passed", "duration": 5.45440259994939}
+IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[c-None]", "when": "call", "outcome": "failed", "duration": 1.1865063000004739, "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-4emspy8s\\after\\tests\\execution_r4\\test_qc15_cli_choices.py:84: in test_bare_two_families_explicit_choice_or_cancel\n    assert code == 3 and 'CONNECT_CANCELLED' in out\nE   assert (0 == 3)"}
+FAILEDIMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[c-None]", "when": "teardown", "outcome": "passed", "duration": 0.30074340000282973}
+
+
+================================== FAILURES ===================================
+__________ test_bare_two_families_explicit_choice_or_cancel[c-None] ___________
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc15-choice-4emspy8s\after\tests\execution_r4\test_qc15_cli_choices.py:84: in test_bare_two_families_explicit_choice_or_cancel
+    assert code == 3 and 'CONNECT_CANCELLED' in out
+E   assert (0 == 3)
+============================== warnings summary ===============================
+..\..\..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc15-choice-4emspy8s\choices\junit.xml -
+=========================== short test summary info ===========================
+FAILED ..\..\after\tests\execution_r4\test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[c-None]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+=================== 1 failed, 1 passed, 1 warning in 19.07s ===================

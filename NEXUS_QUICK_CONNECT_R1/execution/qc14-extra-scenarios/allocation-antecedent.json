@@ -1,0 +1,12 @@
+{
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-installed-ewrhfzrv",
+  "draft_original": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-extra-scenarios-8emg34b9\\test_quick_connect_extra_scenarios.py",
+  "original_sha256": "a28fa68e0c5691e1c7907b32f2905d850da66738e02c9d43a892d770a560e71d",
+  "derivative": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc14-installed-ewrhfzrv\\after\\tests\\quick_connect\\test_quick_connect_extra_scenarios.py",
+  "derivative_sha256": "432748dfe6bb50cf02be1f3a3dcdb33aaa94b387721100f78b64b1b460b94705",
+  "changes": [
+    "Exclude only agents.last_seen_at telemetry from identity snapshot.",
+    "Require exact HARNESS_ID_ALREADY_EXISTS for bound-winner race."
+  ],
+  "executed": false
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "intent": "runtime.start",
+    "operation_id": "op_aec666359da3d95d1db31b0816ccd12c",
+    "scope": {
+      "server_id": "srv_d36e18a89f454bf19e8b780eb2332394",
+      "executor_id": "exe_363b799ff0a665c84c8ea61251186b69",
+      "binding_id": "bind_e02045475dca15828a711749a251c328",
+      "agent_id": "qc31-collaborator",
+      "workspace_id": "wsr_1953da629dddfd5eb9440f1a3c455ffa",
+      "workspace_binding_id": "wxb_47518f504e9481add857d6befeaf0b0b",
+      "session_id": "ses_e37c73a90dbaeef7dacbb75974e2bd6e",
+      "session_owner_generation": 1,
+      "authorization_revision": 2,
+      "configuration_revision": 2,
+      "binding_revision": 1,
+      "credential_epoch": 1
+    }
+  },
+  {
+    "intent": "turn.submit",
+    "operation_id": "op_2cd56b3c16b8d72997dcf49c21ea7794",
+    "scope": {
+      "server_id": "srv_d36e18a89f454bf19e8b780eb2332394",
+      "executor_id": "exe_363b799ff0a665c84c8ea61251186b69",
+      "binding_id": "bind_e02045475dca15828a711749a251c328",
+      "agent_id": "qc31-collaborator",
+      "workspace_id": "wsr_1953da629dddfd5eb9440f1a3c455ffa",
+      "workspace_binding_id": "wxb_47518f504e9481add857d6befeaf0b0b",
+      "session_id": "ses_e37c73a90dbaeef7dacbb75974e2bd6e",
+      "session_owner_generation": 1,
+      "authorization_revision": 2,
+      "configuration_revision": 2,
+      "binding_revision": 1,
+      "credential_epoch": 1
+    }
+  },
+  {
+    "intent": "runtime.close",
+    "operation_id": "op_89e2e1c7e2c52d6177b58f5d39691315",
+    "scope": {
+      "server_id": "srv_d36e18a89f454bf19e8b780eb2332394",
+      "executor_id": "exe_363b799ff0a665c84c8ea61251186b69",
+      "binding_id": "bind_e02045475dca15828a711749a251c328",
+      "agent_id": "qc31-collaborator",
+      "workspace_id": "wsr_1953da629dddfd5eb9440f1a3c455ffa",
+      "workspace_binding_id": "wxb_47518f504e9481add857d6befeaf0b0b",
+      "session_id": "ses_e37c73a90dbaeef7dacbb75974e2bd6e",
+      "session_owner_generation": 1,
+      "authorization_revision": 2,
+      "configuration_revision": 2,
+      "binding_revision": 1,
+      "credential_epoch": 1
+    }
+  },
+  {
+    "intent": "runtime.start",
+    "operation_id": "op_9b5305cf27c2a537402f7318c47d40a9",
+    "scope": {
+      "server_id": "srv_d36e18a89f454bf19e8b780eb2332394",
+      "executor_id": "exe_363b799ff0a665c84c8ea61251186b69",
+      "binding_id": "bind_e02045475dca15828a711749a251c328",
+      "agent_id": "qc31-collaborator",
+      "workspace_id": "wsr_1953da629dddfd5eb9440f1a3c455ffa",
+      "workspace_binding_id": "wxb_47518f504e9481add857d6befeaf0b0b",
+      "session_id": "ses_5638fa61dedfc5ebcb9d177d61fc80ad",
+      "session_owner_generation": 1,
+      "authorization_revision": 2,
+      "configuration_revision": 2,
+      "binding_revision": 1,
+      "credential_epoch": 1
+    }
+  },
+  {
+    "intent": "turn.submit",
+    "operation_id": "op_dcb60242d40f83a1bebcb0bc3b146590",
+    "scope": {
+      "server_id": "srv_d36e18a89f454bf19e8b780eb2332394",
+      "executor_id": "exe_363b799ff0a665c84c8ea61251186b69",
+      "binding_id": "bind_e02045475dca15828a711749a251c328",
+      "agent_id": "qc31-collaborator",
+      "workspace_id": "wsr_1953da629dddfd5eb9440f1a3c455ffa",
+      "workspace_binding_id": "wxb_47518f504e9481add857d6befeaf0b0b",
+      "session_id": "ses_5638fa61dedfc5ebcb9d177d61fc80ad",
+      "session_owner_generation": 1,
+      "authorization_revision": 2,
+      "configuration_revision": 2,
+      "binding_revision": 1,
+      "credential_epoch": 1
+    }
+  },
+  {
+    "intent": "runtime.close",
+    "operation_id": "op_1664295df53ce57d03a55aa8d8f2ab15",
+    "scope": {
+      "server_id": "srv_d36e18a89f454bf19e8b780eb2332394",
+      "executor_id": "exe_363b799ff0a665c84c8ea61251186b69",
+      "binding_id": "bind_e02045475dca15828a711749a251c328",
+      "agent_id": "qc31-collaborator",
+      "workspace_id": "wsr_1953da629dddfd5eb9440f1a3c455ffa",
+      "workspace_binding_id": "wxb_47518f504e9481add857d6befeaf0b0b",
+      "session_id": "ses_5638fa61dedfc5ebcb9d177d61fc80ad",
+      "session_owner_generation": 1,
+      "authorization_revision": 2,
+      "configuration_revision": 2,
+      "binding_revision": 1,
+      "credential_epoch": 1
+    }
+  }
+]

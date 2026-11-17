@@ -1,0 +1,61 @@
+Using Python 3.13.1 environment at: venv
+Resolved 51 packages in 776ms
+Downloading pydantic-core (2.2MiB)
+Downloading pygments (1.2MiB)
+Downloading cryptography (4.5MiB)
+ Downloaded pydantic-core
+ Downloaded cryptography
+ Downloaded pygments
+Prepared 51 packages in 645ms
+Installed 51 packages in 55ms
+ + annotated-doc==0.0.6
+ + annotated-types==0.8.0
+ + anyio==4.16.0
+ + attrs==26.1.0
+ + certifi==2026.10.23
+ + cffi==2.1.1
+ + click==8.5.1
+ + cryptography==50.0.2
+ + fastapi==0.163.1
+ + h11==0.16.0
+ + httpcore==1.0.9
+ + httpx==0.28.1
+ + httpx-sse==0.4.3
+ + idna==3.20
+ + iniconfig==2.3.1
+ + jaraco-classes==3.4.0
+ + jaraco-context==6.1.2
+ + jaraco-functools==4.6.0
+ + jeepney==0.9.0
+ + jsonschema==4.26.0
+ + jsonschema-specifications==2025.9.1
+ + keyring==25.7.0
+ + mcp==1.30.0
+ + more-itertools==11.2.1
+ + okto-nexus==0.3.6 (from file:///tmp/nexus-qc28-xmlie7rv/wheels/okto_nexus-0.3.6-py3-none-any.whl)
+ + okto-nexus-connector==0.0.13 (from file:///tmp/nexus-qc28-xmlie7rv/wheels/okto_nexus_connector-0.0.13-py3-none-any.whl)
+ + okto-nexus-connector-core==0.0.14 (from file:///tmp/nexus-qc28-xmlie7rv/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl)
+ + opentelemetry-api==1.45.2
+ + packaging==26.3
+ + pluggy==1.7.0
+ + pycparser==3.12
+ + pydantic==2.14.3
+ + pydantic-core==2.50.4
+ + pydantic-settings==2.16.3
+ + pygments==2.21.0
+ + pyjwt==2.15.1
+ + pytest==9.2.0
+ + pytest-asyncio==1.5.0
+ + python-dotenv==1.2.4
+ + python-multipart==0.0.34
+ + referencing==0.37.0
+ + rfc8785==0.1.4
+ + rpds-py==2026.9.1
+ + secretstorage==3.5.0
+ + sse-starlette==3.7.0
+ + starlette==1.10.0
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.5
+ + uvicorn==0.54.0
+ + websockets==17.4
+ + wsproto==1.3.2

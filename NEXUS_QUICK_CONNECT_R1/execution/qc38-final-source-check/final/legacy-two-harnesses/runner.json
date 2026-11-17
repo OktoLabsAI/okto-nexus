@@ -1,0 +1,77 @@
+{
+  "label": "legacy-two-harnesses",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\bootstrap.py",
+    "-p",
+    "qc38_plugin",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_terminal_multi_harness.py::test_two_distinct_harnesses_share_project_keep_custom_a_and_recover_b_finish",
+    "-v",
+    "-s",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-two-harnesses\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc38-source-64e96tpe\\legacy-two-harnesses\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T10:40:33.024317+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 39824,
+      "parent_pid": null,
+      "birth_filetime": 134393856330262695,
+      "alive": false
+    },
+    {
+      "pid": 23784,
+      "parent_pid": 39824,
+      "birth_filetime": 134393856330373752,
+      "alive": false
+    }
+  ],
+  "rejected_nonowned_births": [
+    {
+      "pid": 10000,
+      "birth": 134390257397702099,
+      "parent_birth": 134393856330262695
+    },
+    {
+      "pid": 10000,
+      "birth": 134390257397702099,
+      "parent_birth": 134393856330262695
+    },
+    {
+      "pid": 10000,
+      "birth": 134390257397702099,
+      "parent_birth": 134393856330262695
+    },
+    {
+      "pid": 10000,
+      "birth": 134390257397702099,
+      "parent_birth": 134393856330262695
+    },
+    {
+      "pid": 10000,
+      "birth": 134390257397702099,
+      "parent_birth": 134393856330262695
+    },
+    {
+      "pid": 10000,
+      "birth": 134390257397702099,
+      "parent_birth": 134393856330262695
+    },
+    {
+      "pid": 10000,
+      "birth": 134390257397702099,
+      "parent_birth": 134393856330262695
+    }
+  ],
+  "ended_at": "2026-11-17T10:40:48.922943+00:00"
+}

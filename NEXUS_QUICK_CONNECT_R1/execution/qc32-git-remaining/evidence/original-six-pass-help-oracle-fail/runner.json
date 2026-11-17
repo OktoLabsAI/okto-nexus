@@ -1,0 +1,50 @@
+{
+  "label": "git-remaining",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-git-remaining-hi6rd6jr\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-git-remaining-hi6rd6jr\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-git-remaining-hi6rd6jr\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-git-remaining-hi6rd6jr\\after\\tests\\quick_connect\\test_git_remaining.py",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-git-remaining-hi6rd6jr\\git-remaining\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc32-git-remaining-hi6rd6jr\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T09:33:14.019126+00:00",
+  "signals": [],
+  "exit_code": 1,
+  "processes_after": [
+    {
+      "pid": 59476,
+      "parent_pid": null,
+      "birth_filetime": 134393815940225867,
+      "alive": false
+    },
+    {
+      "pid": 55836,
+      "parent_pid": 59476,
+      "birth_filetime": 134393815940633022,
+      "alive": false
+    },
+    {
+      "pid": 60900,
+      "parent_pid": 55836,
+      "birth_filetime": 134393815940845174,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T09:34:23.879404+00:00"
+}

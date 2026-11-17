@@ -1,0 +1,42 @@
+{
+  "label": "choices",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-p_i2pnii\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-p_i2pnii\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-p_i2pnii\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-p_i2pnii\\after\\tests\\execution_r4\\test_qc15_cli_choices.py",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-p_i2pnii\\choices\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc15-choice-p_i2pnii\\choices\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T08:20:54.322734+00:00",
+  "signals": [],
+  "exit_code": 1,
+  "processes_after": [
+    {
+      "pid": 49800,
+      "parent_pid": null,
+      "birth_filetime": 134393772543244933,
+      "alive": false
+    },
+    {
+      "pid": 13336,
+      "parent_pid": 49800,
+      "birth_filetime": 134393772543372037,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T08:21:32.558456+00:00"
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "label": "close",
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+      "proxy",
+      "C:/Program Files/nodejs/npx.cmd",
+      "--yes",
+      "--package",
+      "@playwright/cli",
+      "playwright-cli",
+      "--session=qc31-multisession",
+      "close"
+    ],
+    "exit_code": 0
+  }
+]

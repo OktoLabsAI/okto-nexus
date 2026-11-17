@@ -1,0 +1,196 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 46 items
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[Reviewer-reviewer] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[Reviewer-reviewer]", "when": "setup", "outcome": "passed", "duration": 0.000532599980942905}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[Reviewer-reviewer]", "when": "call", "outcome": "passed", "duration": 0.00013280007988214493}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[Reviewer-reviewer]", "when": "teardown", "outcome": "passed", "duration": 0.00013870000839233398}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[A-a] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[A-a]", "when": "setup", "outcome": "passed", "duration": 0.0003122999332845211}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[A-a]", "when": "call", "outcome": "passed", "duration": 0.00016059994231909513}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[A-a]", "when": "teardown", "outcome": "passed", "duration": 0.0001322000753134489}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[codex-2-codex-2] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[codex-2-codex-2]", "when": "setup", "outcome": "passed", "duration": 0.0002964999293908477}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[codex-2-codex-2]", "when": "call", "outcome": "passed", "duration": 0.00010990002192556858}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[codex-2-codex-2]", "when": "teardown", "outcome": "passed", "duration": 9.410001803189516e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[CodeX_3-codex_3] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[CodeX_3-codex_3]", "when": "setup", "outcome": "passed", "duration": 0.0005937999812886119}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[CodeX_3-codex_3]", "when": "call", "outcome": "passed", "duration": 0.00010220007970929146}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[CodeX_3-codex_3]", "when": "teardown", "outcome": "passed", "duration": 9.000010322779417e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[Z999999999999999999999999999999999999999999999999999999999999999-z999999999999999999999999999999999999999999999999999999999999999] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[Z999999999999999999999999999999999999999999999999999999999999999-z999999999999999999999999999999999999999999999999999999999999999]", "when": "setup", "outcome": "passed", "duration": 0.0002731999848037958}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[Z999999999999999999999999999999999999999999999999999999999999999-z999999999999999999999999999999999999999999999999999999999999999]", "when": "call", "outcome": "passed", "duration": 9.820004925131798e-05}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_public_id_normalization_has_exact_ascii_boundaries[Z999999999999999999999999999999999999999999999999999999999999999-z999999999999999999999999999999999999999999999999999999999999999]", "when": "teardown", "outcome": "passed", "duration": 8.830009028315544e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[]", "when": "setup", "outcome": "passed", "duration": 0.00021089997608214617}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[]", "when": "call", "outcome": "passed", "duration": 0.00013990001752972603}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[]", "when": "teardown", "outcome": "passed", "duration": 7.559999357908964e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]", "when": "setup", "outcome": "passed", "duration": 0.00019950000569224358}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]", "when": "call", "outcome": "passed", "duration": 0.00012580002658069134}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]", "when": "teardown", "outcome": "passed", "duration": 8.189992513507605e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[2codex] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[2codex]", "when": "setup", "outcome": "passed", "duration": 0.0002145000034943223}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[2codex]", "when": "call", "outcome": "passed", "duration": 0.00012400001287460327}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[2codex]", "when": "teardown", "outcome": "passed", "duration": 8.679996244609356e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[_codex] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[_codex]", "when": "setup", "outcome": "passed", "duration": 0.00023279991000890732}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[_codex]", "when": "call", "outcome": "passed", "duration": 0.00012119999155402184}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[_codex]", "when": "teardown", "outcome": "passed", "duration": 8.369993884116411e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[-codex] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[-codex]", "when": "setup", "outcome": "passed", "duration": 0.0002346000401303172}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[-codex]", "when": "call", "outcome": "passed", "duration": 0.00012510002125054598}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[-codex]", "when": "teardown", "outcome": "passed", "duration": 9.159999899566174e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex/a] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex/a]", "when": "setup", "outcome": "passed", "duration": 0.00020600005518645048}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex/a]", "when": "call", "outcome": "passed", "duration": 0.00012310000602155924}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex/a]", "when": "teardown", "outcome": "passed", "duration": 8.279993198812008e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\a] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\\\a]", "when": "setup", "outcome": "passed", "duration": 0.00022149994038045406}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\\\a]", "when": "call", "outcome": "passed", "duration": 0.00011810008436441422}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\\\a]", "when": "teardown", "outcome": "passed", "duration": 7.960002403706312e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex..] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex..]", "when": "setup", "outcome": "passed", "duration": 0.00021710002329200506}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex..]", "when": "call", "outcome": "passed", "duration": 0.00011309992987662554}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex..]", "when": "teardown", "outcome": "passed", "duration": 8.330005221068859e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex a] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex a]", "when": "setup", "outcome": "passed", "duration": 0.00023850006982684135}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex a]", "when": "call", "outcome": "passed", "duration": 0.00013149995356798172}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex a]", "when": "teardown", "outcome": "passed", "duration": 7.43999844416976e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[ codex] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[ codex]", "when": "setup", "outcome": "passed", "duration": 0.0002031000331044197}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[ codex]", "when": "call", "outcome": "passed", "duration": 0.00011609995272010565}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[ codex]", "when": "teardown", "outcome": "passed", "duration": 8.219992741942406e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex ] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex ]", "when": "setup", "outcome": "passed", "duration": 0.0002068999456241727}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex ]", "when": "call", "outcome": "passed", "duration": 0.00011500006075948477}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex ]", "when": "teardown", "outcome": "passed", "duration": 8.79999715834856e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\n] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\n]", "when": "setup", "outcome": "passed", "duration": 0.0001832999987527728}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\n]", "when": "call", "outcome": "passed", "duration": 0.00011100003030151129}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\n]", "when": "teardown", "outcome": "passed", "duration": 7.910002022981644e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\x1b[0m] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\x1b[0m]", "when": "setup", "outcome": "passed", "duration": 0.00019280007109045982}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\x1b[0m]", "when": "call", "outcome": "passed", "duration": 0.00010439998004585505}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\x1b[0m]", "when": "teardown", "outcome": "passed", "duration": 7.98999099060893e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[c\xf3dex] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[c\\xf3dex]", "when": "setup", "outcome": "passed", "duration": 0.00021089997608214617}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[c\\xf3dex]", "when": "call", "outcome": "passed", "duration": 0.00011170003563165665}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[c\\xf3dex]", "when": "teardown", "outcome": "passed", "duration": 7.90000194683671e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[\uff43odex] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[\\uff43odex]", "when": "setup", "outcome": "passed", "duration": 0.00020659994333982468}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[\\uff43odex]", "when": "call", "outcome": "passed", "duration": 0.0001097000204026699}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[\\uff43odex]", "when": "teardown", "outcome": "passed", "duration": 8.719996549189091e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\u200b] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\u200b]", "when": "setup", "outcome": "passed", "duration": 0.00020659994333982468}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\u200b]", "when": "call", "outcome": "passed", "duration": 0.00011760008055716753}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[codex\\u200b]", "when": "teardown", "outcome": "passed", "duration": 8.000002708286047e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[None] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[None]", "when": "setup", "outcome": "passed", "duration": 0.0002120999852195382}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[None]", "when": "call", "outcome": "passed", "duration": 0.00010539998766034842}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[None]", "when": "teardown", "outcome": "passed", "duration": 8.050003089010715e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[True] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[True]", "when": "setup", "outcome": "passed", "duration": 0.00019149994477629662}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[True]", "when": "call", "outcome": "passed", "duration": 0.00010330008808523417}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[True]", "when": "teardown", "outcome": "passed", "duration": 9.019998833537102e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[1] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[1]", "when": "setup", "outcome": "passed", "duration": 0.00021189998369663954}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[1]", "when": "call", "outcome": "passed", "duration": 0.00011360005009919405}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[1]", "when": "teardown", "outcome": "passed", "duration": 8.709996473044157e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[value19] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[value19]", "when": "setup", "outcome": "passed", "duration": 0.0001892999280244112}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[value19]", "when": "call", "outcome": "passed", "duration": 0.00010730000212788582}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_invalid_public_id_is_refused_without_echoing_input[value19]", "when": "teardown", "outcome": "passed", "duration": 8.969998452812433e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_intent_preserves_requested_harness_and_separate_physical_context IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_preserves_requested_harness_and_separate_physical_context", "when": "setup", "outcome": "passed", "duration": 9.129999671131372e-05}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_preserves_requested_harness_and_separate_physical_context", "when": "call", "outcome": "passed", "duration": 0.00014979997649788857}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_preserves_requested_harness_and_separate_physical_context", "when": "teardown", "outcome": "passed", "duration": 6.600003689527512e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch0] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch0]", "when": "setup", "outcome": "passed", "duration": 0.00022190005984157324}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch0]", "when": "call", "outcome": "passed", "duration": 0.00012400001287460327}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch0]", "when": "teardown", "outcome": "passed", "duration": 8.320005144923925e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch1] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch1]", "when": "setup", "outcome": "passed", "duration": 0.00023610005155205727}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch1]", "when": "call", "outcome": "passed", "duration": 0.00013890000991523266}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch1]", "when": "teardown", "outcome": "passed", "duration": 8.600007276982069e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch2] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch2]", "when": "setup", "outcome": "passed", "duration": 0.00020139990374445915}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch2]", "when": "call", "outcome": "passed", "duration": 0.0001210999907925725}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch2]", "when": "teardown", "outcome": "passed", "duration": 8.09000339359045e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch3] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch3]", "when": "setup", "outcome": "passed", "duration": 0.00020370003767311573}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch3]", "when": "call", "outcome": "passed", "duration": 0.00011749996338039637}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch3]", "when": "teardown", "outcome": "passed", "duration": 9.06999921426177e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch4] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch4]", "when": "setup", "outcome": "passed", "duration": 0.00021760002709925175}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch4]", "when": "call", "outcome": "passed", "duration": 0.00013500009663403034}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_intent_flags_and_required_context_are_not_coerced[patch4]", "when": "teardown", "outcome": "passed", "duration": 7.90000194683671e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_name_choice_is_only_provenance_and_uses_safe_reason_constants IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_name_choice_is_only_provenance_and_uses_safe_reason_constants", "when": "setup", "outcome": "passed", "duration": 0.00010770000517368317}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_name_choice_is_only_provenance_and_uses_safe_reason_constants", "when": "call", "outcome": "passed", "duration": 0.00016659998800605536}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_name_choice_is_only_provenance_and_uses_safe_reason_constants", "when": "teardown", "outcome": "passed", "duration": 7.639999967068434e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_connected_requires_full_bound_reference_but_does_not_rename_canonical_ids IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_connected_requires_full_bound_reference_but_does_not_rename_canonical_ids", "when": "setup", "outcome": "passed", "duration": 9.480002336204052e-05}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_connected_requires_full_bound_reference_but_does_not_rename_canonical_ids", "when": "call", "outcome": "passed", "duration": 0.0004273999948054552}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_connected_requires_full_bound_reference_but_does_not_rename_canonical_ids", "when": "teardown", "outcome": "passed", "duration": 7.129996083676815e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[planned] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[planned]", "when": "setup", "outcome": "passed", "duration": 0.00027810002211481333}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[planned]", "when": "call", "outcome": "passed", "duration": 0.00020969996694475412}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[planned]", "when": "teardown", "outcome": "passed", "duration": 9.470002260059118e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[selection_required] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[selection_required]", "when": "setup", "outcome": "passed", "duration": 0.00021789991296827793}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[selection_required]", "when": "call", "outcome": "passed", "duration": 0.00016990001313388348}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[selection_required]", "when": "teardown", "outcome": "passed", "duration": 8.060003165155649e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[conflict] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[conflict]", "when": "setup", "outcome": "passed", "duration": 0.00021039997227489948}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[conflict]", "when": "call", "outcome": "passed", "duration": 0.0001482999650761485}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[conflict]", "when": "teardown", "outcome": "passed", "duration": 8.110003545880318e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[pending] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[pending]", "when": "setup", "outcome": "passed", "duration": 0.0005332001019269228}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[pending]", "when": "call", "outcome": "passed", "duration": 0.00016950001008808613}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[pending]", "when": "teardown", "outcome": "passed", "duration": 7.990002632141113e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[cancelled] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[cancelled]", "when": "setup", "outcome": "passed", "duration": 0.00022879999596625566}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[cancelled]", "when": "call", "outcome": "passed", "duration": 0.00014939997345209122}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[cancelled]", "when": "teardown", "outcome": "passed", "duration": 7.890001870691776e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[unknown] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[unknown]", "when": "setup", "outcome": "passed", "duration": 0.00023750006221234798}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[unknown]", "when": "call", "outcome": "passed", "duration": 0.000152900000102818}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[unknown]", "when": "teardown", "outcome": "passed", "duration": 7.95999076217413e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[failed] IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[failed]", "when": "setup", "outcome": "passed", "duration": 0.0001841000048443675}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[failed]", "when": "call", "outcome": "passed", "duration": 0.00014400004874914885}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_unbound_ids_have_a_separate_proposed_field[failed]", "when": "teardown", "outcome": "passed", "duration": 8.659996092319489e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_plan_cannot_claim_bound_or_hide_proposed_id_in_final_field IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_plan_cannot_claim_bound_or_hide_proposed_id_in_final_field", "when": "setup", "outcome": "passed", "duration": 9.630003478378057e-05}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_plan_cannot_claim_bound_or_hide_proposed_id_in_final_field", "when": "call", "outcome": "passed", "duration": 0.00018360000103712082}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_plan_cannot_claim_bound_or_hide_proposed_id_in_final_field", "when": "teardown", "outcome": "passed", "duration": 6.900005973875523e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_committed_shortcut_pending_can_preserve_bound_reference_without_claiming_connected IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_committed_shortcut_pending_can_preserve_bound_reference_without_claiming_connected", "when": "setup", "outcome": "passed", "duration": 0.000103199970908463}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_committed_shortcut_pending_can_preserve_bound_reference_without_claiming_connected", "when": "call", "outcome": "passed", "duration": 0.0001449999399483204}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_committed_shortcut_pending_can_preserve_bound_reference_without_claiming_connected", "when": "teardown", "outcome": "passed", "duration": 6.579991895705462e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_wire_outcome_is_fresh_json_with_structured_cwd_and_no_parallel_public_id IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_wire_outcome_is_fresh_json_with_structured_cwd_and_no_parallel_public_id", "when": "setup", "outcome": "passed", "duration": 8.770008571445942e-05}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_wire_outcome_is_fresh_json_with_structured_cwd_and_no_parallel_public_id", "when": "call", "outcome": "passed", "duration": 0.00028300005942583084}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_wire_outcome_is_fresh_json_with_structured_cwd_and_no_parallel_public_id", "when": "teardown", "outcome": "passed", "duration": 7.43999844416976e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_versions_and_nested_objects_are_strict_and_deeply_immutable IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_versions_and_nested_objects_are_strict_and_deeply_immutable", "when": "setup", "outcome": "passed", "duration": 9.879993740469217e-05}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_versions_and_nested_objects_are_strict_and_deeply_immutable", "when": "call", "outcome": "passed", "duration": 0.00028549996204674244}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_versions_and_nested_objects_are_strict_and_deeply_immutable", "when": "teardown", "outcome": "passed", "duration": 7.019995246082544e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_remote_context_can_omit_host_path_without_fabricating_local_root IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_remote_context_can_omit_host_path_without_fabricating_local_root", "when": "setup", "outcome": "passed", "duration": 9.570003021508455e-05}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_remote_context_can_omit_host_path_without_fabricating_local_root", "when": "call", "outcome": "passed", "duration": 0.0001591000473126769}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_remote_context_can_omit_host_path_without_fabricating_local_root", "when": "teardown", "outcome": "passed", "duration": 7.019995246082544e-05}
+
+after\tests\quick_connect\test_quick_connect_contracts.py::test_construction_and_serialization_need_no_io IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_construction_and_serialization_need_no_io", "when": "setup", "outcome": "passed", "duration": 0.00015750003512948751}
+IMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_construction_and_serialization_need_no_io", "when": "call", "outcome": "passed", "duration": 0.00021730002481490374}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/quick_connect/test_quick_connect_contracts.py::test_construction_and_serialization_need_no_io", "when": "teardown", "outcome": "passed", "duration": 0.00011159991845488548}
+
+
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\test_quick_connect_contracts\junit.xml -
+============================= 46 passed in 0.37s ==============================

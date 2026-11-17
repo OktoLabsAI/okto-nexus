@@ -1,0 +1,49 @@
+{
+  "label": "legacy-canonical-shortcut",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after\\tests\\execution_r4\\test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut",
+    "-v",
+    "-s",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\legacy-canonical-shortcut\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T07:51:33.381837+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 22712,
+      "parent_pid": null,
+      "birth_filetime": 134393754933840343,
+      "alive": false
+    },
+    {
+      "pid": 55572,
+      "parent_pid": 22712,
+      "birth_filetime": 134393754934127273,
+      "alive": false
+    },
+    {
+      "pid": 59748,
+      "parent_pid": 55572,
+      "birth_filetime": 134393754934307317,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T07:51:46.279478+00:00"
+}

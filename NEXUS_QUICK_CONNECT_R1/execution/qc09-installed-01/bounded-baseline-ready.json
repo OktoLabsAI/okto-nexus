@@ -1,0 +1,18 @@
+{
+  "label": "baseline",
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-bounded-baseline-8isjqqy0",
+  "output": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc09-bounded-baseline-8isjqqy0\\output",
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-u",
+    "-c",
+    "import sys,importlib.metadata;sys.path.insert(0,'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc09-bounded-baseline-8isjqqy0\\\\guard');print(\"NEXUS_VERSION\",importlib.metadata.version(\"okto-nexus\"),flush=True);import pytest;raise SystemExit(pytest.main(['-p', 'qc_installed_origin_guard', '-p', 'qc_report_guard', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc09-bounded-baseline-8isjqqy0\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_canonical_handoff_recovery.py::test_late_structured_output_cannot_complete_reclaimed_work', '-vv', '--tb=long', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-qc09-bounded-baseline-8isjqqy0\\\\output\\\\tests.xml']))"
+  ],
+  "child_pid": 50932,
+  "created_new_process_group": true,
+  "timeout_seconds": 30
+}

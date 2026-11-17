@@ -1,0 +1,10 @@
+--- C:\Users\jpamb\AppData\Local\Temp\nexus-qc27-local-edges-final-a6k8pm7g\after\tests\quick_connect\test_local_edge_scenarios.py
++++ tests/quick_connect/test_local_edge_scenarios.py
+@@ -113,6 +113,7 @@
+     assert authority(c) == before and len(c.t.turns) == len(c.t.probes) == 1
+ 
+ 
++@pytest.mark.skipif(os.name != 'nt', reason='Windows argv scenario')
+ def test_h09_windows_json_resume_vector_roundtrip_without_a_shell(quick_cli, tmp_path, capsys):
+     c = quick_cli
+     name = 'Projeto Î© com espaÃ§os & echo INJECTED>H09_MARKER.txt & rem ^ % !'

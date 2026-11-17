@@ -1,0 +1,7 @@
+{
+  "status": "FAIL",
+  "message": "apiRequestContext.get: connect ECONNREFUSED 127.0.0.1:49323\nCall log:\n\u001b[2m  - \u2192 GET http://127.0.0.1:49323/api/v1/runtime-management/connections/bindings/bind_56f18dfb5709a9e0f11da05303948412\u001b[22m\n\u001b[2m    - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n\u001b[2m    - X-Nexus-UI: 1\u001b[22m\n",
+  "checks": [],
+  "requests": [],
+  "errors": []
+}

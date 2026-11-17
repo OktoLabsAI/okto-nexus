@@ -1,0 +1,12 @@
+--- D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc24-namespace-scenarios\namespace-final\executed-namespace-test.py
++++ tests/quick_connect/test_qc24_namespace_http.py
+@@ -31,7 +31,8 @@
+ 
+ 
+ def write_proof(name,value):
+-    (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/name).write_text(json.dumps(value,indent=2)+'\n')
++    if os.environ.get('QC_DERIVATIVE_OUTPUT'):
++        (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/name).write_text(json.dumps(value,indent=2)+'\n')
+ 
+ 
+ def test_e09_http_mixed_case_reserve_collision_and_query_share_namespace(local_setup,monkeypatch):

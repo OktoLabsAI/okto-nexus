@@ -1,0 +1,9 @@
+--- D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc30-remote-public-id\final\executed-test.py
++++ tests/quick_connect/test_qc30_remote_public_id.py
+@@ -93,4 +93,5 @@
+         http_methods=[request.method for request in wire],operator_cwd_transferred=False,
+         compared_tables=list(TABLES),tables_unchanged=True,native_opens=0,new_reservations=0,new_tests=0,
+         new_grants=0,new_operations=0,new_sessions=0)
+-    (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'remote-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
++    if os.environ.get('QC_DERIVATIVE_OUTPUT'):
++        (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/'remote-proof.json').write_text(json.dumps(proof,indent=2)+'\n')

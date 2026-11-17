@@ -1,0 +1,49 @@
+{
+  "label": "counterpart-pty",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\after\\tests\\quick_connect\\test_quick_connect_pty.py",
+    "-v",
+    "-s",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\counterpart-pty\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\pty-counterpart-cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T07:53:18.109853+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 59108,
+      "parent_pid": null,
+      "birth_filetime": 134393755981117040,
+      "alive": false
+    },
+    {
+      "pid": 38928,
+      "parent_pid": 59108,
+      "birth_filetime": 134393755981351479,
+      "alive": false
+    },
+    {
+      "pid": 52488,
+      "parent_pid": 38928,
+      "birth_filetime": 134393755981483330,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T07:53:22.632729+00:00"
+}

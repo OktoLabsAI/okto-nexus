@@ -1,0 +1,7 @@
+{
+  "nodeid": "tests/quick_connect/test_git_cli_integration.py::test_origin_first_connect_and_changed_metadata_exact_resume[ssh://git@example.invalid:2222/team/logical-origin.git]",
+  "when": "call",
+  "outcome": "failed",
+  "duration": 2.0055581999477,
+  "failure": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-git-cli-installed-aj280rc3\\after\\tests\\quick_connect\\test_git_cli_integration.py:118: in test_origin_first_connect_and_changed_metadata_exact_resume\n    assert profile.read_bytes() == original_profile\nE   assert b'{\\r\\n  \"ser...}\\r\\n  }\\r\\n}' == b'{\\r\\n  \"ser...}\\r\\n  }\\r\\n}'\nE     \nE     At index 874 diff: b'r' != b'c'\nE     \nE     Full diff: (-: missing in left side, +: extra in left side)\nE       (b'{\\r\\n  \"server_id\": \"srv_af57db2b8c3cdf16c3a8cd87b32ec41c\",\\r\\n  \"selection\"'\nE        b': {\\r\\n    \"agent\": \"logical-origin-17c4234c2752\",\\r\\n    \"client\": \"codex\",'\nE        b'\\r\\n    \"project\": \"C:\\\\\\\\Users\\\\\\\\jpamb\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\ne'...\nE     \nE     ...Full output truncated, use '-vv' to show"
+}

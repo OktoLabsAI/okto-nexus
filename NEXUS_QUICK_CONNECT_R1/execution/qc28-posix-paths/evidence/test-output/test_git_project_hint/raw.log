@@ -1,0 +1,184 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- /tmp/nexus-qc28-xmlie7rv/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /tmp/nexus-qc28-xmlie7rv/tests
+configfile: ../pytest.ini
+plugins: asyncio-1.5.0, anyio-4.16.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 43 items
+
+../tests/test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[https://example.invalid/org/project.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[https://example.invalid/org/project.git]", "when": "setup", "outcome": "passed", "duration": 0.023615728999970997}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[https://example.invalid/org/project.git]", "when": "call", "outcome": "passed", "duration": 0.022082917999910023}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[https://example.invalid/org/project.git]", "when": "teardown", "outcome": "passed", "duration": 0.0002579519999699187}
+
+../tests/test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[git@example.invalid:org/project.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[git@example.invalid:org/project.git]", "when": "setup", "outcome": "passed", "duration": 0.005953419999968901}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[git@example.invalid:org/project.git]", "when": "call", "outcome": "passed", "duration": 0.020395084000028874}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[git@example.invalid:org/project.git]", "when": "teardown", "outcome": "passed", "duration": 0.00014694700007567008}
+
+../tests/test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[ssh://git@example.invalid:2222/org/project.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[ssh://git@example.invalid:2222/org/project.git]", "when": "setup", "outcome": "passed", "duration": 0.004507265000029292}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[ssh://git@example.invalid:2222/org/project.git]", "when": "call", "outcome": "passed", "duration": 0.01966245899996011}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[ssh://git@example.invalid:2222/org/project.git]", "when": "teardown", "outcome": "passed", "duration": 0.00014008300001933094}
+
+../tests/test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[file:///srv/git/project.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[file:///srv/git/project.git]", "when": "setup", "outcome": "passed", "duration": 0.004563919999895916}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[file:///srv/git/project.git]", "when": "call", "outcome": "passed", "duration": 0.02053548099991076}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[file:///srv/git/project.git]", "when": "teardown", "outcome": "passed", "duration": 0.0002315079999561931}
+
+../tests/test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[/srv/git/project.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[/srv/git/project.git]", "when": "setup", "outcome": "passed", "duration": 0.005960492999975031}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[/srv/git/project.git]", "when": "call", "outcome": "passed", "duration": 0.02019208800004435}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[/srv/git/project.git]", "when": "teardown", "outcome": "passed", "duration": 0.0002114709999432307}
+
+../tests/test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[C:\\repos\\project.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[C:\\\\repos\\\\project.git]", "when": "setup", "outcome": "passed", "duration": 0.00592541399998936}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[C:\\\\repos\\\\project.git]", "when": "call", "outcome": "passed", "duration": 0.02035361200000807}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[C:\\\\repos\\\\project.git]", "when": "teardown", "outcome": "passed", "duration": 0.00016766499993536854}
+
+../tests/test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[relative/project.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[relative/project.git]", "when": "setup", "outcome": "passed", "duration": 0.00531957499993041}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[relative/project.git]", "when": "call", "outcome": "passed", "duration": 0.020788201999948797}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[relative/project.git]", "when": "teardown", "outcome": "passed", "duration": 0.00014697999995405553}
+
+../tests/test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[https://user:PRIVATE@example.invalid/org/project.git?token=PRIVATE#PRIVATE] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[https://user:PRIVATE@example.invalid/org/project.git?token=PRIVATE#PRIVATE]", "when": "setup", "outcome": "passed", "duration": 0.005199490999984846}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[https://user:PRIVATE@example.invalid/org/project.git?token=PRIVATE#PRIVATE]", "when": "call", "outcome": "passed", "duration": 0.021515552999971987}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[https://user:PRIVATE@example.invalid/org/project.git?token=PRIVATE#PRIVATE]", "when": "teardown", "outcome": "passed", "duration": 0.0001442239999960293}
+
+../tests/test_git_project_hint.py::test_subdirectory_keeps_physical_root_and_nearest_repository IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_subdirectory_keeps_physical_root_and_nearest_repository", "when": "setup", "outcome": "passed", "duration": 0.004926536000084525}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_subdirectory_keeps_physical_root_and_nearest_repository", "when": "call", "outcome": "passed", "duration": 0.04213786399998298}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_subdirectory_keeps_physical_root_and_nearest_repository", "when": "teardown", "outcome": "passed", "duration": 0.00013195899998663663}
+
+../tests/test_git_project_hint.py::test_no_origin_uses_worktree_not_upstream IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_no_origin_uses_worktree_not_upstream", "when": "setup", "outcome": "passed", "duration": 0.005939433999969879}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_no_origin_uses_worktree_not_upstream", "when": "call", "outcome": "passed", "duration": 0.021224080000024514}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_no_origin_uses_worktree_not_upstream", "when": "teardown", "outcome": "passed", "duration": 0.0001658020000832039}
+
+../tests/test_git_project_hint.py::test_distinct_origins_ambiguous_even_with_same_basename IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_distinct_origins_ambiguous_even_with_same_basename", "when": "setup", "outcome": "passed", "duration": 0.004931708999947659}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_distinct_origins_ambiguous_even_with_same_basename", "when": "call", "outcome": "passed", "duration": 0.022194601999899533}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_distinct_origins_ambiguous_even_with_same_basename", "when": "teardown", "outcome": "passed", "duration": 0.0001315860000659086}
+
+../tests/test_git_project_hint.py::test_exact_duplicate_origins_are_not_ambiguous IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_exact_duplicate_origins_are_not_ambiguous", "when": "setup", "outcome": "passed", "duration": 0.004901354000026004}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_exact_duplicate_origins_are_not_ambiguous", "when": "call", "outcome": "passed", "duration": 0.021504950999997163}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_exact_duplicate_origins_are_not_ambiguous", "when": "teardown", "outcome": "passed", "duration": 0.00014155700000628713}
+
+../tests/test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%2fname.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%2fname.git]", "when": "setup", "outcome": "passed", "duration": 0.004835664000097495}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%2fname.git]", "when": "call", "outcome": "passed", "duration": 0.019859168000039062}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%2fname.git]", "when": "teardown", "outcome": "passed", "duration": 0.00035914900001898786}
+
+../tests/test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%5cname.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%5cname.git]", "when": "setup", "outcome": "passed", "duration": 0.005518744000028164}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%5cname.git]", "when": "call", "outcome": "passed", "duration": 0.019776556000010714}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%5cname.git]", "when": "teardown", "outcome": "passed", "duration": 0.0001972539999997025}
+
+../tests/test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%0aname.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%0aname.git]", "when": "setup", "outcome": "passed", "duration": 0.005758159000038177}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%0aname.git]", "when": "call", "outcome": "passed", "duration": 0.019864583999947172}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%0aname.git]", "when": "teardown", "outcome": "passed", "duration": 0.00013428099998691323}
+
+../tests/test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\x1bname.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\\x1bname.git]", "when": "setup", "outcome": "passed", "duration": 0.00470643400001336}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\\x1bname.git]", "when": "call", "outcome": "passed", "duration": 0.019910454000068967}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\\x1bname.git]", "when": "teardown", "outcome": "passed", "duration": 0.00013779500000055123}
+
+../tests/test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\u200bname.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\\u200bname.git]", "when": "setup", "outcome": "passed", "duration": 0.004606527999953869}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\\u200bname.git]", "when": "call", "outcome": "passed", "duration": 0.0198778820000598}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\\u200bname.git]", "when": "teardown", "outcome": "passed", "duration": 0.00012323900000410504}
+
+../tests/test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/.git]", "when": "setup", "outcome": "passed", "duration": 0.00422581899999841}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/.git]", "when": "call", "outcome": "passed", "duration": 0.0194650549999551}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/.git]", "when": "teardown", "outcome": "passed", "duration": 0.0001458630000570338}
+
+../tests/test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\xa0name.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\\xa0name.git]", "when": "setup", "outcome": "passed", "duration": 0.004698711999935767}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\\xa0name.git]", "when": "call", "outcome": "passed", "duration": 0.020119709000027797}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\\xa0name.git]", "when": "teardown", "outcome": "passed", "duration": 0.0001727750000100059}
+
+../tests/test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://:123/project.git] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://:123/project.git]", "when": "setup", "outcome": "passed", "duration": 0.005887496000013925}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://:123/project.git]", "when": "call", "outcome": "passed", "duration": 0.02079344999992827}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://:123/project.git]", "when": "teardown", "outcome": "passed", "duration": 0.00016157100003511005}
+
+../tests/test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[ext::evil command] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[ext::evil command]", "when": "setup", "outcome": "passed", "duration": 0.006248216000017237}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[ext::evil command]", "when": "call", "outcome": "passed", "duration": 0.020398016000058306}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[ext::evil command]", "when": "teardown", "outcome": "passed", "duration": 0.0001737190000312694}
+
+../tests/test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[origin9] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[origin9]", "when": "setup", "outcome": "passed", "duration": 0.005445863999966605}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[origin9]", "when": "call", "outcome": "passed", "duration": 0.020589240000049358}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[origin9]", "when": "teardown", "outcome": "passed", "duration": 0.000173294000092028}
+
+../tests/test_git_project_hint.py::test_local_includes_and_global_config_are_not_origin_sources IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_local_includes_and_global_config_are_not_origin_sources", "when": "setup", "outcome": "passed", "duration": 0.005431715000099757}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_local_includes_and_global_config_are_not_origin_sources", "when": "call", "outcome": "passed", "duration": 0.02173657599996659}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_local_includes_and_global_config_are_not_origin_sources", "when": "teardown", "outcome": "passed", "duration": 0.00024680299998181}
+
+../tests/test_git_project_hint.py::test_gitfile_and_worktree_only_origin IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_gitfile_and_worktree_only_origin", "when": "setup", "outcome": "passed", "duration": 0.005152978000069197}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_gitfile_and_worktree_only_origin", "when": "call", "outcome": "passed", "duration": 0.08365411800002676}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_gitfile_and_worktree_only_origin", "when": "teardown", "outcome": "passed", "duration": 0.0001818999999159132}
+
+../tests/test_git_project_hint.py::test_case_insensitive_git_environment_overrides_do_not_redirect IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_case_insensitive_git_environment_overrides_do_not_redirect", "when": "setup", "outcome": "passed", "duration": 0.0052720360000648725}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_case_insensitive_git_environment_overrides_do_not_redirect", "when": "call", "outcome": "passed", "duration": 0.020652162999908796}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_case_insensitive_git_environment_overrides_do_not_redirect", "when": "teardown", "outcome": "passed", "duration": 0.00021330699996724434}
+
+../tests/test_git_project_hint.py::test_plan_and_invalid_directory_never_resolve_or_spawn_git IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_plan_and_invalid_directory_never_resolve_or_spawn_git", "when": "setup", "outcome": "passed", "duration": 0.0008970840000301905}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_plan_and_invalid_directory_never_resolve_or_spawn_git", "when": "call", "outcome": "passed", "duration": 0.000260082000067996}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_plan_and_invalid_directory_never_resolve_or_spawn_git", "when": "teardown", "outcome": "passed", "duration": 0.00010932899999716028}
+
+../tests/test_git_project_hint.py::test_no_git_and_non_repository_are_explicit IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_no_git_and_non_repository_are_explicit", "when": "setup", "outcome": "passed", "duration": 0.0007095409999919866}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_no_git_and_non_repository_are_explicit", "when": "call", "outcome": "passed", "duration": 0.006477837000034015}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_no_git_and_non_repository_are_explicit", "when": "teardown", "outcome": "passed", "duration": 0.00011143300002913747}
+
+../tests/test_git_project_hint.py::test_path_search_rejects_project_relative_and_symlink_candidates IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_path_search_rejects_project_relative_and_symlink_candidates", "when": "setup", "outcome": "passed", "duration": 0.0009544179999920743}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_path_search_rejects_project_relative_and_symlink_candidates", "when": "call", "outcome": "passed", "duration": 0.000797532999968098}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_path_search_rejects_project_relative_and_symlink_candidates", "when": "teardown", "outcome": "passed", "duration": 0.00010376299997005844}
+
+../tests/test_git_project_hint.py::test_path_search_does_not_follow_external_symlink_into_project IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_path_search_does_not_follow_external_symlink_into_project", "when": "setup", "outcome": "passed", "duration": 0.0012756120000858573}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_path_search_does_not_follow_external_symlink_into_project", "when": "call", "outcome": "passed", "duration": 0.0014840990000948295}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_path_search_does_not_follow_external_symlink_into_project", "when": "teardown", "outcome": "passed", "duration": 0.00014598799998566392}
+
+../tests/test_git_project_hint.py::test_path_search_has_entry_and_time_budgets IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_path_search_has_entry_and_time_budgets", "when": "setup", "outcome": "passed", "duration": 0.0010885899999948379}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_path_search_has_entry_and_time_budgets", "when": "call", "outcome": "passed", "duration": 0.007009531000107927}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_path_search_has_entry_and_time_budgets", "when": "teardown", "outcome": "passed", "duration": 0.00018109100005858636}
+
+../tests/test_git_project_hint.py::test_non_repository_and_malformed_config_never_leak_diagnostics IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_non_repository_and_malformed_config_never_leak_diagnostics", "when": "setup", "outcome": "passed", "duration": 0.0060275280000041676}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_non_repository_and_malformed_config_never_leak_diagnostics", "when": "call", "outcome": "passed", "duration": 0.006744805000039378}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_non_repository_and_malformed_config_never_leak_diagnostics", "when": "teardown", "outcome": "passed", "duration": 0.0001463220000914589}
+
+../tests/test_git_project_hint.py::test_directory_without_usable_name_does_not_invent_one IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_directory_without_usable_name_does_not_invent_one", "when": "setup", "outcome": "passed", "duration": 0.0003020860000333414}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_directory_without_usable_name_does_not_invent_one", "when": "call", "outcome": "passed", "duration": 0.00024867400009043195}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_directory_without_usable_name_does_not_invent_one", "when": "teardown", "outcome": "passed", "duration": 0.00011984100001427578}
+
+../tests/test_git_project_hint.py::test_safe_utf8_and_terminal_git_suffix_only_are_preserved IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_safe_utf8_and_terminal_git_suffix_only_are_preserved", "when": "setup", "outcome": "passed", "duration": 0.008731719000024896}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_safe_utf8_and_terminal_git_suffix_only_are_preserved", "when": "call", "outcome": "passed", "duration": 0.021145655999930568}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_safe_utf8_and_terminal_git_suffix_only_are_preserved", "when": "teardown", "outcome": "passed", "duration": 0.00014958300005218916}
+
+../tests/test_git_project_hint.py::test_discovery_deadline_includes_executable_resolution IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_discovery_deadline_includes_executable_resolution", "when": "setup", "outcome": "passed", "duration": 0.0010991240000066682}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_discovery_deadline_includes_executable_resolution", "when": "call", "outcome": "passed", "duration": 0.000384386999940034}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_discovery_deadline_includes_executable_resolution", "when": "teardown", "outcome": "passed", "duration": 0.0001259660000414442}
+
+../tests/test_git_project_hint.py::test_failed_ownership_is_not_overridden_or_echoed IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_failed_ownership_is_not_overridden_or_echoed", "when": "setup", "outcome": "passed", "duration": 0.0007588729999952193}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_failed_ownership_is_not_overridden_or_echoed", "when": "call", "outcome": "passed", "duration": 0.00030598999990161246}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_failed_ownership_is_not_overridden_or_echoed", "when": "teardown", "outcome": "passed", "duration": 0.00011866699992424401}
+
+../tests/test_git_project_hint.py::test_spawn_contract_is_bounded_read_only_and_cleans_environment IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_spawn_contract_is_bounded_read_only_and_cleans_environment", "when": "setup", "outcome": "passed", "duration": 0.00475366299997404}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_spawn_contract_is_bounded_read_only_and_cleans_environment", "when": "call", "outcome": "passed", "duration": 0.018927668000060294}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_spawn_contract_is_bounded_read_only_and_cleans_environment", "when": "teardown", "outcome": "passed", "duration": 0.0001695700000254874}
+
+../tests/test_git_project_hint.py::test_deadline_and_call_limit_reap_owned_children IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_deadline_and_call_limit_reap_owned_children", "when": "setup", "outcome": "passed", "duration": 0.001298388000009254}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_deadline_and_call_limit_reap_owned_children", "when": "call", "outcome": "passed", "duration": 1.8525474599999825}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_deadline_and_call_limit_reap_owned_children", "when": "teardown", "outcome": "passed", "duration": 0.00025003199993989256}
+
+../tests/test_git_project_hint.py::test_deadline_is_shared_and_does_not_restart_between_calls IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_deadline_is_shared_and_does_not_restart_between_calls", "when": "setup", "outcome": "passed", "duration": 0.0016388850000339517}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_deadline_is_shared_and_does_not_restart_between_calls", "when": "call", "outcome": "passed", "duration": 0.027582554999980857}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_deadline_is_shared_and_does_not_restart_between_calls", "when": "teardown", "outcome": "passed", "duration": 0.00019985600010841154}
+
+../tests/test_git_project_hint.py::test_parent_exit_with_inherited_pipe_does_not_block_or_kill_descendant IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_parent_exit_with_inherited_pipe_does_not_block_or_kill_descendant", "when": "setup", "outcome": "passed", "duration": 0.001492138999992676}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_parent_exit_with_inherited_pipe_does_not_block_or_kill_descendant", "when": "call", "outcome": "passed", "duration": 1.871564970999998}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_parent_exit_with_inherited_pipe_does_not_block_or_kill_descendant", "when": "teardown", "outcome": "passed", "duration": 0.00016329799996128713}
+
+../tests/test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[stdout] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[stdout]", "when": "setup", "outcome": "passed", "duration": 0.0012292600000591847}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[stdout]", "when": "call", "outcome": "passed", "duration": 0.0236319990000311}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[stdout]", "when": "teardown", "outcome": "passed", "duration": 0.00019156700000166893}
+
+../tests/test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[stderr] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[stderr]", "when": "setup", "outcome": "passed", "duration": 0.0010520740000856676}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[stderr]", "when": "call", "outcome": "passed", "duration": 0.02355883799998537}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[stderr]", "when": "teardown", "outcome": "passed", "duration": 0.00016702700008863758}
+
+../tests/test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[combined] IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[combined]", "when": "setup", "outcome": "passed", "duration": 0.0012941319999981715}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[combined]", "when": "call", "outcome": "passed", "duration": 0.017937449999976707}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[combined]", "when": "teardown", "outcome": "passed", "duration": 0.00015124499998364627}
+
+../tests/test_git_project_hint.py::test_metadata_hint_is_not_an_identity_or_root_selector IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_metadata_hint_is_not_an_identity_or_root_selector", "when": "setup", "outcome": "passed", "duration": 0.006197321000058764}
+IMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_metadata_hint_is_not_an_identity_or_root_selector", "when": "call", "outcome": "passed", "duration": 0.04017405599995527}
+PASSEDIMMEDIATE_REPORT {"nodeid": "test_git_project_hint.py::test_metadata_hint_is_not_an_identity_or_root_selector", "when": "teardown", "outcome": "passed", "duration": 0.00041576499995699123}
+
+
+- generated xml file: /tmp/nexus-qc28-xmlie7rv/test-output/test_git_project_hint/junit.xml -
+============================== 43 passed in 4.91s ==============================

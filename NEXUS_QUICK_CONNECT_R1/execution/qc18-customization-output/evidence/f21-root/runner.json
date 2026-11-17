@@ -1,0 +1,50 @@
+{
+  "label": "f21-root",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc18-customize-f15275ix\\pytest.ini",
+    "--rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc18-customize-f15275ix\\after",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc18-customize-f15275ix\\after",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc18-customize-f15275ix\\after\\tests\\quick_connect\\test_quick_connect_customization_output.py::test_f21_customize_real_review_creates_fresh_exact_intent[root]",
+    "-v",
+    "-s",
+    "-x",
+    "--tb=short",
+    "-o",
+    "faulthandler_timeout=10",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc18-customize-f15275ix\\f21-root\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc18-customize-f15275ix",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T08:25:57.918163+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 60308,
+      "parent_pid": null,
+      "birth_filetime": 134393775579206121,
+      "alive": false
+    },
+    {
+      "pid": 48744,
+      "parent_pid": 60308,
+      "birth_filetime": 134393775579537980,
+      "alive": false
+    },
+    {
+      "pid": 30204,
+      "parent_pid": 48744,
+      "birth_filetime": 134393775579730893,
+      "alive": false
+    }
+  ],
+  "ended_at": "2026-11-17T08:26:12.410706+00:00"
+}

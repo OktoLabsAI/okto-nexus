@@ -1,0 +1,32 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+after\tests\execution_r4\test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut", "when": "setup", "outcome": "passed", "duration": 8.081224299967289}
+Choose a project connection (selection does not submit work):
+1. Resume codex / subject / canonical-0df7e73e9063e5bab52ac49a [Server host; canonical_approved]
+2. Resume codex / catalog-second / canonical-0e073d830a88e9e166ea4e88 [Server host; canonical_approved]
+a. Add another connection
+c. Cancel
+Connection shortcut: canonical-0df7e73e9063e5bab52ac49a
+Canonical metadata revalidation was requested; existing revision metadata may change.
+Configuration saved: agent subject, workspace wsr_2d70bd7de9b4e5db6954fc8f9d254d81, binding bind_0c538197191b27d9a24ccda6afcbe23f.
+Session readiness has not been checked. No project task was submitted.
+{"state": "configured", "server_id": "srv_0493ceecf8715d29a44a06057f664008", "agent_id": "subject", "binding_id": "bind_0c538197191b27d9a24ccda6afcbe23f", "workspace_id": "wsr_2d70bd7de9b4e5db6954fc8f9d254d81", "configuration": {"baseline": {"execution_revision": 1, "runtime_revision": 1, "defaults_revision": 1, "binding_revision": 1, "endpoint_revision": 1}, "runtime_policy": {"agent_id": "subject", "runtime_enabled": true, "revision": 1, "inherit_global_mcps": null, "session_policy": "per_sender", "broadcast_handoff_auto_claim": null, "defaults": {"runtime_enabled": true, "session_policy": "shared", "revision": 1, "automatic_recovery": true, "inherit_global_mcps": false, "broadcast_handoff_auto_claim": false}, "effective": {"runtime_enabled": true, "session_policy": "per_sender", "inherit_global_mcps": false, "broadcast_handoff_auto_claim": false}, "handoff_auto_claim_rollout_enabled": false}, "runtime_default": true, "native_decision_policy": {"value": true, "source": "stored", "editable": true, "revision": "d293b066a78274b3e480890f5b280464306989b10ae549e674f307942c6a276b", "can_initialize": false}, "connections": [{"binding_id": "bind_0c538197191b27d9a24ccda6afcbe23f", "candidate_ref": "nexus-install-v1:b10dff3d3466cdeaedd6af39608d0434f66e754ee67863b9a1ee9afb47ae9cc0", "executor_id": "exe_0847cb56339d83460777de7a86b23c5b", "workspace_id": "wsr_2d70bd7de9b4e5db6954fc8f9d254d81", "adapter_id": "codex_app_server", "execution_location": "local"}], "project_preset": {"id": "project-generalist", "revision": 1}, "mcp_preset": {"revision": 0, "servers": [], "configuration_digest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"}, "folders": {"workspace_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc12-installed-ra66oqki\\legacy-canonical-shortcut\\tmp\\pytest-of-unknown\\pytest-0\\test_cli_existing_canonical_wi0\\workspace", "provider_home": null, "secret_bindings": {}}, "public_config": {"alias": "Project", "relay_results": true}, "automatic_reply": true, "authorization": {"minutes": 60, "actions": 20}}, "setup_run_id": null, "session_state": "not_checked", "work_state": "not_submitted"}
+IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut", "when": "call", "outcome": "passed", "duration": 0.14936489996034652}
+PASSEDIMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_connection_catalog.py::test_cli_existing_canonical_without_profile_creates_only_shortcut", "when": "teardown", "outcome": "passed", "duration": 0.6113460999913514}
+
+
+============================== warnings summary ===============================
+..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc12-installed-ra66oqki\legacy-canonical-shortcut\junit.xml -
+======================== 1 passed, 1 warning in 10.78s ========================

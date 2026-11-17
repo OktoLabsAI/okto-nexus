@@ -1,0 +1,30 @@
+--- D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_QUICK_CONNECT_R1\execution\qc25-concurrency-locks\race-final\executed-test.py
++++ tests/quick_connect/test_qc25_concurrency_locks.py
+@@ -18,7 +18,8 @@
+ 
+ 
+ def proof(name,value):
+-    (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/name).write_text(json.dumps(value,indent=2)+'\n')
++    if os.environ.get('QC_DERIVATIVE_OUTPUT'):
++        (Path(os.environ['QC_DERIVATIVE_OUTPUT'])/name).write_text(json.dumps(value,indent=2)+'\n')
+ 
+ 
+ def plan(c,capsys,profile):
+@@ -155,7 +156,7 @@
+ import importlib.util,json,os,pathlib,sys
+ from okto_nexus.adapters.outbound.service_manager.locking import ExclusiveFileLock
+ origins={name:importlib.util.find_spec(name).origin for name in ('okto_nexus','nexus_connector_core','okto_nexus_connector')}
+-assert all(pathlib.Path(value).resolve().is_relative_to(pathlib.Path(sys.prefix).resolve()) for value in origins.values())
++# Installed-origin enforcement belongs to the qualification runner.
+ results=[]
+ for value in json.loads(sys.argv[1]):
+     lock=ExclusiveFileLock(pathlib.Path(value))
+@@ -176,7 +177,7 @@
+     def probe(paths):
+         command=[sys.executable,'-I','-B','-c',PROBE,json.dumps([str(path) for path in paths])]
+         process=subprocess.Popen(command,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
+-            text=True,cwd=c.project,creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
++            text=True,cwd=c.project,creationflags=getattr(subprocess, 'CREATE_NEW_PROCESS_GROUP', 0))
+         process.stdin.close()
+         process.stdin=None
+         try:

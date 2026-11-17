@@ -1,0 +1,94 @@
+{
+  "confirmations": 2,
+  "customized_new_review": true,
+  "tests": 0,
+  "probes": 0,
+  "subprocesses": [
+    {
+      "pid": 37516,
+      "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv",
+      "origins": {
+        "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+        "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+        "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+      },
+      "locks": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\connection-intents\\catalog.guard",
+          "acquired": true
+        }
+      ],
+      "launcher_pid": 17524,
+      "exit_code": 0,
+      "timeout_seconds": 5
+    },
+    {
+      "pid": 26208,
+      "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv",
+      "origins": {
+        "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+        "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+        "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+      },
+      "locks": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\connection-intents\\catalog.guard",
+          "acquired": true
+        }
+      ],
+      "launcher_pid": 49976,
+      "exit_code": 0,
+      "timeout_seconds": 5
+    },
+    {
+      "pid": 18696,
+      "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv",
+      "origins": {
+        "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+        "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+        "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+      },
+      "locks": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\connection-intents\\catalog.guard",
+          "acquired": true
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\profiles\\old.guard",
+          "acquired": true
+        }
+      ],
+      "launcher_pid": 59064,
+      "exit_code": 0,
+      "timeout_seconds": 5
+    },
+    {
+      "pid": 59384,
+      "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv",
+      "origins": {
+        "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+        "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+        "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+      },
+      "locks": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\connection-intents\\catalog.guard",
+          "acquired": true
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\profiles\\old.guard",
+          "acquired": true
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc25-concurrency-w3zpa0tw\\input\\tmp\\pytest-of-unknown\\pytest-0\\test_g12_catalog_lock_free_dur0\\quick-cli-home\\terminal\\profiles\\connection-e6850701389340ac98261959.guard",
+          "acquired": true
+        }
+      ],
+      "launcher_pid": 44180,
+      "exit_code": 0,
+      "timeout_seconds": 5
+    }
+  ],
+  "old_profile_released_before_new_input": true,
+  "catalog_free_during_input": true
+}

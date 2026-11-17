@@ -1,0 +1,36 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc30-remote-id-lb9li7uo\after
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+..\..\after\tests\execution_r4\test_qc30_remote_public_id.py::test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_qc30_remote_public_id.py::test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects", "when": "setup", "outcome": "passed", "duration": 7.647452700068243}
+IMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_qc30_remote_public_id.py::test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects", "when": "call", "outcome": "failed", "duration": 0.14396110002417117, "failure": "..\\..\\after\\tests\\execution_r4\\test_qc30_remote_public_id.py:44: in test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects\n    canonical=call('GET',BASE+'/setup?agent_id='+reference['agent_id']+'&binding_id='+reference['binding_id'])\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n..\\..\\..\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\operator_client.py:138: in __call__\n    return super().__call__(method, path, body)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n..\\..\\..\\nexus-qc-r1-package-t24_dnfc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\terminal_http.py:68: in __call__\n    raise ConnectionError(error.get('code', 'REQUEST_REFUSED'), error.get('message', 'The Server refused this request.'),\nE   okto_nexus.application.terminal_connection.ConnectionError: The Server refused this request."}
+FAILEDIMMEDIATE_REPORT {"nodeid": "tests/execution_r4/test_qc30_remote_public_id.py::test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects", "when": "teardown", "outcome": "passed", "duration": 0.8034511000150815}
+
+
+================================== FAILURES ===================================
+_ test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects _
+..\..\after\tests\execution_r4\test_qc30_remote_public_id.py:44: in test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects
+    canonical=call('GET',BASE+'/setup?agent_id='+reference['agent_id']+'&binding_id='+reference['binding_id'])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\outbound\operator_client.py:138: in __call__
+    return super().__call__(method, path, body)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\okto_nexus\adapters\outbound\terminal_http.py:68: in __call__
+    raise ConnectionError(error.get('code', 'REQUEST_REFUSED'), error.get('message', 'The Server refused this request.'),
+E   okto_nexus.application.terminal_connection.ConnectionError: The Server refused this request.
+============================== warnings summary ===============================
+..\..\..\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-t24_dnfc\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc30-remote-id-lb9li7uo\remote\junit.xml -
+=========================== short test summary info ===========================
+FAILED ..\..\after\tests\execution_r4\test_qc30_remote_public_id.py::test_i03_public_id_remote_operator_reuses_exact_binding_without_local_root_or_effects
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+======================== 1 failed, 1 warning in 13.92s ========================
