@@ -101,6 +101,15 @@ revalidated full canonical reference. It says configured/reused, with session
 `not_checked` and work `not_submitted`. A successful exit also covers valid
 plans and cancellation; exit code alone is not connection proof. `resume_argv`
 is an unexecuted argument array that preserves spaces and metacharacters.
+It includes the approved local `--project` or remote `--operator-profile`, plus
+exact workspace/binding selectors. Human success output renders a public resume
+command for POSIX `sh` or **PowerShell 7.3+**, retaining the selected installation
+and execution context while hiding the technical profile. PowerShell uses its
+standard native argument binder in a child scope; the command refuses older
+PowerShell versions before invocation. This is not `cmd.exe` quoting. For Windows
+PowerShell 5.1 or another shell, consume the JSON array through an argument-vector
+API instead of pasting a command intended for a different shell. A pending local
+shortcut repair still requires the same technical intent/profile from JSON.
 
 `HARNESS_ID_ALREADY_EXISTS`, `CONNECT_ID_PENDING`,
 `PROJECT_CATALOG_UNCONFIRMED` and `CONNECT_ID_UNSUPPORTED_SERVER` are distinct

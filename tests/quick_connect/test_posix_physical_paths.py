@@ -1,0 +1,80 @@
+"""Actual Linux FS identity; no canonical-authority DTOs or runtime execution."""
+import os
+import pytest
+
+from okto_nexus.adapters.inbound.cli.connect import project_profile
+from okto_nexus.adapters.outbound.git_project_hint import discover_project_name
+from okto_nexus.application.execution_local_realizations import directory_identity
+from okto_nexus.application.terminal_connection import _same_local_path
+
+
+pytestmark = pytest.mark.skipif(os.name != 'posix', reason='POSIX filesystem semantics')
+
+
+@pytest.fixture
+def case_sensitive_fs(tmp_path):
+    upper, lower = tmp_path / 'qc-capability-A', tmp_path / 'qc-capability-a'
+    upper.mkdir()
+    try:
+        try:
+            lower.mkdir()
+        except FileExistsError:
+            pytest.skip('Filesystem is not case-sensitive')
+        lower.rmdir()
+    finally:
+        upper.rmdir()
+
+
+@pytest.fixture
+def directory_symlinks(tmp_path):
+    target, link = tmp_path / 'qc-capability-target', tmp_path / 'qc-capability-link'
+    target.mkdir()
+    try:
+        try:
+            link.symlink_to(target, target_is_directory=True)
+        except (OSError, NotImplementedError):
+            pytest.skip('Directory symlinks are unavailable')
+        link.unlink()
+    finally:
+        target.rmdir()
+
+
+@pytest.mark.usefixtures('case_sensitive_fs')
+def test_c15_real_case_sensitive_repo_and_repo_are_distinct(tmp_path):
+    assert os.name == 'posix'
+    upper, lower = tmp_path / 'Repo', tmp_path / 'repo'
+    upper.mkdir()
+    lower.mkdir()
+    assert not upper.samefile(lower)
+    u, lower_identity = directory_identity(str(upper)), directory_identity(str(lower))
+    assert u['path'] == str(upper) and lower_identity['path'] == str(lower)
+    assert (u['device'], u['inode']) != (lower_identity['device'], lower_identity['inode'])
+    up, uid = project_profile(upper, None)
+    lo, lid = project_profile(lower, None)
+    assert up == str(upper) and lo == str(lower) and uid != lid
+    assert not _same_local_path(up, lo)
+    assert discover_project_name(upper, plan=True).name == 'Repo'
+    assert discover_project_name(lower, plan=True).name == 'repo'
+
+
+@pytest.mark.usefixtures('directory_symlinks')
+def test_posix_symlink_resolves_same_physical_identity_and_profile(tmp_path):
+    physical, link = tmp_path / 'Physical', tmp_path / 'LogicalLink'
+    physical.mkdir()
+    link.symlink_to(physical, target_is_directory=True)
+    assert link.is_symlink() and link.samefile(physical)
+    assert directory_identity(str(link)) == directory_identity(str(physical))
+    assert project_profile(link, None) == project_profile(physical, None)
+    assert project_profile(link, None)[0] == str(physical)
+
+
+def test_posix_backslash_is_filename_not_directory_separator(tmp_path):
+    (tmp_path / 'folder').mkdir()
+    slash = tmp_path / 'folder' / 'leaf'
+    backslash = tmp_path / r'folder\leaf'
+    slash.mkdir()
+    backslash.mkdir()
+    assert slash.is_dir() and backslash.is_dir() and not slash.samefile(backslash)
+    assert project_profile(slash, None)[0] != project_profile(backslash, None)[0]
+    assert directory_identity(str(slash)) != directory_identity(str(backslash))
+    assert not _same_local_path(str(slash), str(backslash))

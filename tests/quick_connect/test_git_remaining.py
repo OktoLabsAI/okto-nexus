@@ -1,0 +1,240 @@
+"""Remaining Git naming compositions: real local Git, synthetic setup only."""
+import json
+from pathlib import Path
+from types import SimpleNamespace
+import time
+
+import pytest
+import test_quick_connect_cli as fixtures
+from test_git_cli_integration import local_git
+
+from okto_nexus.adapters.inbound.cli import connect
+from okto_nexus.adapters.outbound import git_project_hint as hints
+
+local_setup = fixtures.local_setup
+checking = fixtures.checking
+terminal = fixtures.terminal
+quick_cli = fixtures.quick_cli
+isolated_provider_environment = fixtures.isolated_provider_environment
+
+
+def protected(c):
+    tables = ('agents', 'execution_bindings', 'agent_endpoints', 'runtime_profiles',
+        'runtime_execution_grants', 'connection_setup_commits', 'execution_sessions',
+        'execution_operations', 'connection_public_ids')
+    with c.t.deps.connection_factory.unit_of_work(write=False) as uow:
+        return {table: [{key: value for key, value in dict(row).items() if key != 'last_seen_at'}
+            for row in uow.connection.execute('SELECT * FROM ' + table + ' ORDER BY rowid')] for table in tables}
+
+
+def tty(c, monkeypatch, answers):
+    values, prompts = iter(answers), []
+    monkeypatch.setattr(connect.sys, 'stdin', SimpleNamespace(isatty=lambda: True))
+    def read(prompt):
+        prompts.append(prompt)
+        return next(values)
+    monkeypatch.setattr('builtins.input', read)
+    return prompts
+
+
+def saved(c, profile):
+    return json.loads((c.home / 'terminal/profiles' / (profile + '.json')).read_text())
+
+
+def test_origin_wins_over_other_remote_names(quick_cli, tmp_path, monkeypatch, capsys):
+    c = quick_cli
+    git = local_git(c, tmp_path)
+    git('config', '--local', 'remote.origin.url', 'https://fixture.invalid/primary-origin.git')
+    git('config', '--local', 'remote.upstream.url', 'https://fixture.invalid/other-name.git')
+    git('config', '--local', 'remote.backup.url', 'https://fixture.invalid/another-name.git')
+    config = (c.project / '.git/config').read_bytes()
+    before = protected(c)
+    monkeypatch.setattr(hints, '_trusted_git', c.trusted_git)
+    prompts = tty(c, monkeypatch, ['n'])
+    assert c.run(['connect', 'codex', '--profile', 'origin-priority', '--no-chat']) == 0
+    output = capsys.readouterr().out
+    value = saved(c, 'origin-priority')
+    assert len(prompts) == 1 and value['state'] == 'review'
+    assert value['selection']['label'] == 'primary-origin'
+    assert value['selection']['quick_connect']['project_name_source'] == 'git_origin'
+    assert 'other-name' not in output and 'another-name' not in output and 'fixture.invalid' not in output
+    assert protected(c) == before and c.t.turns == c.t.probes == []
+    assert (c.project / '.git/config').read_bytes() == config
+
+
+@pytest.mark.parametrize('fault,reason', [('timeout', 'git_timeout'), ('invalid-output', 'git_config_unavailable')])
+def test_reader_fault_reaches_cli_fallback_without_implicit_test(quick_cli, tmp_path, monkeypatch, capsys, fault, reason):
+    c = quick_cli
+    git = local_git(c, tmp_path)
+    git('config', '--local', 'remote.origin.url', 'https://fixture.invalid/not-selected.git')
+    before = protected(c)
+    calls = []
+    monkeypatch.setattr(hints, '_trusted_git', c.trusted_git)
+    def run(reader, args):
+        calls.append(args)
+        if fault == 'timeout':
+            raise hints._ReadFailure('git_timeout')
+        return 0, b'\xff', b''
+    monkeypatch.setattr(hints._GitReader, 'run', run)
+    prompts = tty(c, monkeypatch, ['n'])
+    start = time.monotonic()
+    assert c.run(['connect', 'codex', '--profile', 'reader-fallback', '--no-chat']) == 0
+    elapsed = time.monotonic() - start
+    capsys.readouterr()
+    value = saved(c, 'reader-fallback')
+    assert elapsed < 10 and len(calls) == len(prompts) == 1
+    assert value['state'] == 'review' and value['selection']['label'] == c.project.name
+    assert value['selection']['project'] == str(c.project)
+    assert value['selection']['quick_connect']['project_name_source'] == 'directory'
+    assert value['selection']['quick_connect']['name_discovery'] == {'status': 'fallback', 'reason': reason}
+    assert protected(c) == before and c.t.turns == c.t.probes == []
+    print('READER_FALLBACK ' + json.dumps({'fault': fault, 'reason': reason, 'elapsed_seconds': elapsed}))
+
+
+def test_two_local_clones_same_origin_have_distinct_workspace_namespaces(quick_cli, tmp_path, monkeypatch, capsys):
+    c = quick_cli
+    source, clone_a, clone_b = c.project / 'repo-source', c.project / 'clone-a', c.project / 'clone-b'
+    source.mkdir()
+    git = local_git(c, tmp_path, init_root=source)
+    git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', '-c', 'commit.gpgsign=false',
+        'commit', '--allow-empty', '--quiet', '-m', 'owned fixture commit', cwd=source)
+    for clone in (clone_a, clone_b):
+        assert clone.parent.resolve() == c.project.resolve()
+        git('-c', 'protocol.allow=never', '-c', 'protocol.file.allow=always',
+            'clone', '--quiet', '--no-hardlinks', source.as_uri(), str(clone))
+        git('config', '--local', 'remote.origin.url', 'https://fixture.invalid/shared-clone-name.git', cwd=clone)
+        assert (clone / '.git').is_dir()
+    monkeypatch.setattr(hints, '_trusted_git', c.trusted_git)
+    monkeypatch.chdir(clone_a)
+    prompts_a = tty(c, monkeypatch, ['y'])
+    assert c.run(['connect', 'codex', '--profile', 'clone-a', '--no-chat']) == 0
+    capsys.readouterr()
+    first = saved(c, 'clone-a')
+    first_bytes = (c.home / 'terminal/profiles/clone-a.json').read_bytes()
+    first_ref = first['result']['public_connection']['canonical_ref']
+    before = protected(c)
+    monkeypatch.chdir(clone_b)
+    prompts_b = tty(c, monkeypatch, ['n', 'y'])
+    assert c.run(['connect', 'codex', '--profile', 'clone-b', '--no-chat']) == 0
+    output = capsys.readouterr().out
+    second = saved(c, 'clone-b')
+    second_ref = second['result']['public_connection']['canonical_ref']
+    assert len(prompts_a) == 1 and prompts_b[0] == 'Project: ' and len(prompts_b) == 2
+    assert 'New project suggestion: shared-clone-name' in output
+    assert first['selection']['label'] == second['selection']['label'] == 'shared-clone-name'
+    assert first['selection']['project'] == str(clone_a) and second['selection']['project'] == str(clone_b)
+    assert first['result']['public_connection']['connect_id'] == second['result']['public_connection']['connect_id'] == 'codex'
+    assert first_ref['server_id'] == second_ref['server_id'] and first_ref['executor_id'] == second_ref['executor_id']
+    assert first_ref['workspace_id'] != second_ref['workspace_id']
+    assert first_ref['binding_id'] != second_ref['binding_id']
+    assert first_ref['workspace_binding_id'] != second_ref['workspace_binding_id']
+    assert first_ref['agent_id'] != second_ref['agent_id'] and first_ref['endpoint_id'] != second_ref['endpoint_id']
+    assert (c.home / 'terminal/profiles/clone-a.json').read_bytes() == first_bytes
+    after = protected(c)
+    assert all(all(row in after[table] for row in rows) for table, rows in before.items())
+    assert len(c.t.turns) == 2 and len(c.t.probes) == 1
+    for ref in (first_ref, second_ref):
+        page = c.t.call('GET', '/api/v1/runtime-management/connections/public-ids?workspace_id=' + ref['workspace_id'] + '&connect_id=codex')
+        assert page['total'] == 1 and page['items'][0]['canonical_ref'] == ref
+
+
+def test_explicit_project_reads_its_origin_while_cwd_stays_elsewhere(quick_cli, tmp_path, monkeypatch, capsys):
+    c = quick_cli
+    git = local_git(c, tmp_path)
+    root_b = c.project / 'explicit-b'
+    root_b.mkdir()
+    git('config', '--local', 'remote.origin.url', 'https://fixture.invalid/origin-a.git')
+    git('init', '--quiet', cwd=root_b)
+    git('config', '--local', 'remote.origin.url', 'https://fixture.invalid/origin-b.git', cwd=root_b)
+    original_config = (c.project / '.git/config').read_bytes()
+    monkeypatch.setattr(hints, '_trusted_git', c.trusted_git)
+    prompts = tty(c, monkeypatch, ['y'])
+    assert Path.cwd() == c.project
+    assert c.run(['connect', 'codex', '--profile', 'explicit-b', '--project', str(root_b), '--no-chat']) == 0
+    output = capsys.readouterr().out
+    value = saved(c, 'explicit-b')
+    assert len(prompts) == 1 and 'origin-b' in output and 'origin-a' not in output
+    assert value['selection']['label'] == 'origin-b' and value['selection']['project'] == str(root_b)
+    resolution = value['selection']['quick_connect']['cwd_resolution']
+    assert resolution['invocation_cwd'] == str(c.project) and resolution['project_root'] == str(root_b)
+    assert resolution['root_explicit'] is True and resolution['source'] == 'explicit_project'
+    assert value['review_request']['configuration']['workspace_root'] == str(root_b)
+    assert Path.cwd() == c.project and (c.project / '.git/config').read_bytes() == original_config
+    assert len(c.t.turns) == len(c.t.probes) == 1
+
+
+def test_dubious_ownership_diagnostic_never_changes_safe_directory(quick_cli, tmp_path, monkeypatch, capsys):
+    c = quick_cli
+    git = local_git(c, tmp_path)
+    git('config', '--local', 'remote.origin.url', 'https://fixture.invalid/not-authorized-by-git.git')
+    config = (c.project / '.git/config').read_bytes()
+    global_file = tmp_path / 'owned-global-sentinel'
+    global_file.write_bytes(b'[safe]\n directory = own-sentinel\n')
+    global_before = global_file.read_bytes()
+    monkeypatch.setenv('GIT_CONFIG_GLOBAL', str(global_file))
+    monkeypatch.setattr(hints, '_trusted_git', c.trusted_git)
+    calls = []
+    def run(reader, args):
+        calls.append(args)
+        return 128, b'', b'fatal: detected dubious ownership PRIVATE; inspect safe.directory'
+    monkeypatch.setattr(hints._GitReader, 'run', run)
+    before = protected(c)
+    tty(c, monkeypatch, ['n'])
+    assert c.run(['connect', 'codex', '--profile', 'dubious', '--no-chat']) == 0
+    output = capsys.readouterr().out
+    value = saved(c, 'dubious')
+    assert value['state'] == 'review' and value['selection']['label'] == c.project.name
+    assert value['selection']['quick_connect']['name_discovery'] == {'status': 'fallback', 'reason': 'dubious_ownership'}
+    assert len(calls) == 1 and not any('safe.directory' in arg or '--global' in arg for arg in calls[0])
+    assert 'PRIVATE' not in output and 'safe.directory' not in output and 'fixture.invalid' not in output
+    assert (c.project / '.git/config').read_bytes() == config and global_file.read_bytes() == global_before
+    assert protected(c) == before and c.t.turns == c.t.probes == []
+
+
+def test_real_repository_help_and_plan_never_execute_git(quick_cli, tmp_path, monkeypatch, capsys):
+    c = quick_cli
+    git = local_git(c, tmp_path)
+    git('config', '--local', 'remote.origin.url', 'https://fixture.invalid/should-not-be-read.git')
+    config = (c.project / '.git/config').read_bytes()
+    before = protected(c)
+    def forbidden(*args, **kwargs):
+        pytest.fail('Help/plan attempted Git executable discovery or execution')
+    monkeypatch.setattr(hints, '_trusted_git', forbidden)
+    monkeypatch.setattr(hints._GitReader, 'run', forbidden)
+    try:
+        assert c.run(['connect', '--help']) == 0
+    except SystemExit as error:
+        assert error.code == 0
+    help_text = capsys.readouterr().out
+    assert '[harness] [project_name]' in help_text
+    assert 'logical project name; never a directory path' in help_text
+    assert c.lifecycle == []
+    review = fixtures.invoke(c, capsys, ['connect', 'codex', '--profile', 'plan', '--plan', '--json'])
+    assert review['state'] == 'review' and review['quick_connect']['status'] == 'planned'
+    assert review['selection']['quick_connect']['name_discovery'] == {'status': 'not_run_plan', 'reason': 'not_run_plan'}
+    assert review['selection']['label'] == c.project.name and c.lifecycle == ['inspect']
+    assert (c.project / '.git/config').read_bytes() == config
+    assert protected(c) == before and c.t.turns == c.t.probes == []
+
+
+def test_real_bare_repository_has_explicit_directory_fallback_not_origin_identity(quick_cli, tmp_path, monkeypatch, capsys):
+    c = quick_cli
+    git = local_git(c, tmp_path)
+    bare = c.project / 'bare-cache.git'
+    git('init', '--bare', '--quiet', str(bare))
+    git('config', '--local', 'remote.origin.url', 'https://fixture.invalid/not-a-worktree.git', cwd=bare)
+    config = (bare / 'config').read_bytes()
+    before = protected(c)
+    monkeypatch.chdir(bare)
+    monkeypatch.setattr(hints, '_trusted_git', c.trusted_git)
+    prompts = tty(c, monkeypatch, ['n'])
+    assert c.run(['connect', 'codex', '--profile', 'bare-fallback', '--no-chat']) == 0
+    output = capsys.readouterr().out
+    value = saved(c, 'bare-fallback')
+    assert len(prompts) == 1 and value['state'] == 'review'
+    assert value['selection']['project'] == str(bare) and value['selection']['label'] == bare.name
+    assert value['selection']['quick_connect']['project_name_source'] == 'directory'
+    assert value['selection']['quick_connect']['name_discovery'] == {'status': 'fallback', 'reason': 'not_a_repository'}
+    assert 'not-a-worktree' not in output and 'fixture.invalid' not in output
+    assert (bare / 'config').read_bytes() == config and Path.cwd() == bare
+    assert protected(c) == before and c.t.turns == c.t.probes == []

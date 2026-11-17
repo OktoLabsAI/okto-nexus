@@ -155,3 +155,5 @@ NEXUS_UI_R1/** -text -whitespace
 NEXUS_QUICK_CONNECT_R1/** -text -whitespace
 # These fixture sources are pinned by UI-R1 qualification evidence.
 tests/ui_simplification/** -text
+# Keep the qualified Quick Connect regression fixture bytes stable across OSes.
+tests/quick_connect/** text eol=lf

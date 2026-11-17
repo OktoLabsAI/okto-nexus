@@ -501,7 +501,11 @@ def _run_connect_once(argv, *, invocation_cwd=None, frozen_name=None):
             if public:
                 print(f"Retomar {selection['client']} — ID do Harness: {public['connect_id']} | Project: {selection['label']}")
                 print('No model test, grant renewal or new session will be submitted.')
-                if input('Confirm resume? [y/N] ').strip().lower() != 'y':
+                try:
+                    resume_answer = input('Confirm resume? [y/N] ').strip().lower()
+                except EOFError:
+                    resume_answer = ''
+                if resume_answer != 'y':
                     _display(dict(state='canceled', lifecycle_requested=not args.plan,
                         canonical_metadata_revalidation_requested=True, effects_started=None), args.json)
                     return 0
@@ -523,17 +527,24 @@ def _run_connect_once(argv, *, invocation_cwd=None, frozen_name=None):
                     else 'Confirm this review, including the model connection test? [y/N] ')
                 if quick_enabled:
                     prompt = prompt.replace('[y/N]', '[y/customize/cancel]')
-                answer = input(prompt).strip().lower()
+                try:
+                    answer = input(prompt).strip().lower()
+                except EOFError:
+                    answer = ''
                 if quick_enabled and answer in ('customize', 'p', 'personalizar'):
                     from .quick_connect_customize import customize
                     restart = customize(args, service_args, saved, invocation_cwd=invocation_cwd, read=input)
                     if restart is None:
+                        _display(dict(state='canceled', lifecycle_requested=not args.plan,
+                            canonical_metadata_revalidation_requested=canonical_metadata, effects_started=None), args.json)
                         return 0
                     saved['state'] = 'superseded'
                     saved['superseded_by_profile'] = next(restart.argv[i + 1] for i, value in enumerate(restart.argv) if value == '--profile')
                     save(saved)
                     raise restart  # finally releases the old profile lock before another is acquired.
                 if answer != 'y':
+                    _display(dict(state='canceled', lifecycle_requested=not args.plan,
+                        canonical_metadata_revalidation_requested=canonical_metadata, effects_started=None), args.json)
                     return 0
                 approval = saved['review_revision']
             result = flow.apply(saved, approval=approval, timeout=args.timeout)

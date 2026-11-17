@@ -1,4 +1,6 @@
 """Additive versioned output; exit status never substitutes for canonical proof."""
+import os
+
 from ....domain.quick_connect import (
     CanonicalConnectionReference, CwdResolution, NameDiscovery, QuickConnectOutcome,
 )
@@ -48,6 +50,14 @@ def annotate(value, document, *, profile, home, plan=False, operation=None):
         argv.extend(('--id', (public or proposal)['connect_id']))
     argv.extend(('--home', str(home), '--profile', profile))
     remote = value.get('execution_location') == 'remote' or value.get('topology') == 'remote_operator'
+    if not remote and selection.get('project'):
+        argv.extend(('--project', selection['project']))
+    if remote and selection.get('operator_profile'):
+        argv.extend(('--operator-profile', selection['operator_profile']))
+    for flag, key in (('--workspace-id', 'workspace_id'), ('--binding-id', 'binding_id')):
+        exact = (public or {}).get('canonical_ref', {}).get(key) or selection.get(key)
+        if exact:
+            argv.extend((flag, exact))
     outcome = QuickConnectOutcome(
         status='connected' if connected else 'configured_shortcut_pending' if partial else 'planned' if plan else status,
         connect_id=public['connect_id'] if connected or partial else None,
@@ -77,6 +87,16 @@ def display_public(value):
         print(f"Project: {summary.get('project_name')} | Harness: {summary.get('harness')}")
         print(f"Execution folder: {summary.get('project_root')} | Project name source: {summary.get('project_name_source')}")
         print('Session readiness: not checked. No project work submitted.')
+        from .quick_connect_render import public_resume_argv, render_resume_command
+        shell = 'powershell' if os.name == 'nt' else 'posix'
+        try:
+            argv = public_resume_argv(summary['resume_argv'], execution_location=summary['execution_location'])
+            command = render_resume_command(argv, shell=shell)
+        except ValueError:
+            print('Exact public resume command unavailable. Use the retained technical JSON resume_argv.')
+        else:
+            label = 'PowerShell 7.3+' if shell == 'powershell' else 'POSIX sh'
+            print(f'Resume command ({label}): {command}')
         return True
     if summary['status'] == 'configured_shortcut_pending':
         print(f"Conexão configurada — ID do Harness: {summary['connect_id']}")
