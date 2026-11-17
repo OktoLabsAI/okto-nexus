@@ -1,0 +1,3363 @@
+{
+  "schema_version": 1,
+  "plan_id": "HOME-STATES-R1",
+  "created_on": "2026-11-17",
+  "baseline": {
+    "repository": "OktoLabsAI/okto-nexus",
+    "branch": "feature/v0.3.6",
+    "commit": "f28a31a22436c366a4c8dbdf5e3b250d606a61be",
+    "declared_version": "0.3.6",
+    "core_dependency": "0.0.14",
+    "inspection": "static_only"
+  },
+  "plan_file": "PLANO_CODEX_NEXUS_HOME_ESTADOS_BADGES_RESULTS_R1.md",
+  "counts": {
+    "requirements": 20,
+    "tasks": 32,
+    "tests": 116,
+    "stages": 7
+  },
+  "task_statuses": [
+    "TODO",
+    "IN_PROGRESS",
+    "IMPLEMENTED",
+    "VERIFIED",
+    "BLOCKED"
+  ],
+  "test_statuses": [
+    "NOT_RUN",
+    "PASS",
+    "FAIL",
+    "BLOCKED"
+  ],
+  "requirements": [
+    {
+      "id": "HST-R01",
+      "text": "Manter somente Active, Needs You e Results na mesma Home, sem novo menu/inventário."
+    },
+    {
+      "id": "HST-R02",
+      "text": "Identificar o card por conexão canônica completa; sessões, agentes e nomes públicos não se confundem."
+    },
+    {
+      "id": "HST-R03",
+      "text": "Manter harness conectado sem trabalho em Active/Idle somente com evidência suficiente."
+    },
+    {
+      "id": "HST-R04",
+      "text": "Distinguir registro, conexão, sessão sob demanda, atividade e capacidade; não contar registro como conectado."
+    },
+    {
+      "id": "HST-R05",
+      "text": "Mover harness para Needs You apenas por bloqueio humano agregado comprovado; paralelismo mantém Active."
+    },
+    {
+      "id": "HST-R06",
+      "text": "Exibir badge do tipo de ação e apresentar cada ocorrência uma única vez como ação no quadro."
+    },
+    {
+      "id": "HST-R07",
+      "text": "Separar decisão enviada/registrada/aplicada de retomada; somente prova posterior confirma Working/Idle."
+    },
+    {
+      "id": "HST-R08",
+      "text": "Manter desconhecido, stale, falha de consulta e cobertura parcial explícitos, sem falsa ociosidade."
+    },
+    {
+      "id": "HST-R09",
+      "text": "Classificar Results por escopo de turno/tarefa/reporte, sem concluir tarefas por um turno bem-sucedido."
+    },
+    {
+      "id": "HST-R10",
+      "text": "Mostrar verificação aprovada somente com evidência específica da entrega/claim atual."
+    },
+    {
+      "id": "HST-R11",
+      "text": "Preservar falha, cancelamento, limpeza e conteúdo pendente como fatos diferentes; nenhum replay implícito."
+    },
+    {
+      "id": "HST-R12",
+      "text": "Agregar antes de paginar; deduplicar ocorrências/entregas e usar contadores de unidades definidas."
+    },
+    {
+      "id": "HST-R13",
+      "text": "Abrir sessão inequívoca diretamente; manter seletor explícito quando há múltiplas ou cobertura incompleta."
+    },
+    {
+      "id": "HST-R14",
+      "text": "Permitir acompanhamento durante refresh sem fechar/reabrir; preservar foco, rascunho e alvo exato."
+    },
+    {
+      "id": "HST-R15",
+      "text": "Usar ações/serviços canônicos, com autorização, revisão, idempotência e leitura sem efeitos."
+    },
+    {
+      "id": "HST-R16",
+      "text": "Preservar isolamento por Server/projeto/operador e não expor segredos/conteúdo privado nas prévias."
+    },
+    {
+      "id": "HST-R17",
+      "text": "Mostrar projeto em All projects, tempos honestos, badges acessíveis e cabeçalho compacto."
+    },
+    {
+      "id": "HST-R18",
+      "text": "Versionar DTOs/validadores e preservar fallback, recibos, dados e gates de rollout."
+    },
+    {
+      "id": "HST-R19",
+      "text": "Não refazer Core/Connector, Quick Connect ou navegação; preservar ciclo completo pelo terminal."
+    },
+    {
+      "id": "HST-R20",
+      "text": "Entregar evidências por teste/commit/ambiente, separando fixtures, browser e harness real."
+    }
+  ],
+  "stages": [
+    {
+      "id": "HST-00",
+      "gate": "G0",
+      "status": "IN_PROGRESS",
+      "task_ids": [
+        "HST-001",
+        "HST-002",
+        "HST-003",
+        "HST-004"
+      ]
+    },
+    {
+      "id": "HST-01",
+      "gate": "G1",
+      "status": "TODO",
+      "task_ids": [
+        "HST-005",
+        "HST-006",
+        "HST-007",
+        "HST-008",
+        "HST-009",
+        "HST-010"
+      ]
+    },
+    {
+      "id": "HST-02",
+      "gate": "G2",
+      "status": "TODO",
+      "task_ids": [
+        "HST-011",
+        "HST-012",
+        "HST-013"
+      ]
+    },
+    {
+      "id": "HST-03",
+      "gate": "G3",
+      "status": "TODO",
+      "task_ids": [
+        "HST-014",
+        "HST-015",
+        "HST-016",
+        "HST-017"
+      ]
+    },
+    {
+      "id": "HST-04",
+      "gate": "G4",
+      "status": "TODO",
+      "task_ids": [
+        "HST-018",
+        "HST-019",
+        "HST-020",
+        "HST-021",
+        "HST-022",
+        "HST-023"
+      ]
+    },
+    {
+      "id": "HST-05",
+      "gate": "G5",
+      "status": "TODO",
+      "task_ids": [
+        "HST-024",
+        "HST-025",
+        "HST-026",
+        "HST-027",
+        "HST-028"
+      ]
+    },
+    {
+      "id": "HST-06",
+      "gate": "G6",
+      "status": "TODO",
+      "task_ids": [
+        "HST-029",
+        "HST-030",
+        "HST-031",
+        "HST-032"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "HST-001",
+      "title": "Fixar baseline e conciliar trabalho em andamento",
+      "stage": "HST-00",
+      "dependencies": [],
+      "requirements": [
+        "HST-R18",
+        "HST-R19",
+        "HST-R20"
+      ],
+      "areas": [
+        "AGENTS.md/CI",
+        "branch e working tree",
+        "NEXUS_UI_R1/execution"
+      ],
+      "steps": [
+        "Registrar HEAD, versões, alterações locais e flags da Home; não fazer checkout/reset/clean destrutivo.",
+        "Comparar o SHA de referência com o checkout e marcar componentes reaproveitados; preservar ledgers e blockers anteriores.",
+        "Listar os comandos reais de teste/build, caminhos de evidências e responsáveis por arquivos em alteração concorrente."
+      ],
+      "acceptance": "Baseline e mapa de drift verificáveis, sem alegação de instalação/qualificação não realizada.",
+      "tests": [
+        "HST-T-K01",
+        "HST-T-K02",
+        "HST-T-K03",
+        "HST-T-K04",
+        "HST-T-K05",
+        "HST-T-K06"
+      ],
+      "status": "VERIFIED",
+      "evidence": [
+        {
+          "commit": "f28a31a22436c366a4c8dbdf5e3b250d606a61be",
+          "command_or_procedure": "Read instructions, git status/HEAD/main drift; fetch main all three repositories; verify_package.py; uv lock --check",
+          "environment": "Windows, source inspection only",
+          "timestamp": "2026-11-17T12:29:14.216061+00:00",
+          "result": "PASS baseline and input integrity; no product execution",
+          "artifact_path": "execution/baseline.json",
+          "limitations": "Not application, browser, harness or installation qualification"
+        }
+      ]
+    },
+    {
+      "id": "HST-002",
+      "title": "Mapear fontes de presença, bloqueio e verificação",
+      "stage": "HST-00",
+      "dependencies": [
+        "HST-001"
+      ],
+      "requirements": [
+        "HST-R03",
+        "HST-R04",
+        "HST-R05",
+        "HST-R07",
+        "HST-R10",
+        "HST-R16"
+      ],
+      "areas": [
+        "home_entries.py",
+        "execução e Attention canônicas",
+        "contratos dos adaptadores"
+      ],
+      "steps": [
+        "Rastrear os produtores de conexão, liveness, sessão, operações, native requests, decisões e verificação por claim/versão.",
+        "Documentar para cada método/adaptador a evidência de pause e resume; localizar a limitação atual de requestUserInput.",
+        "Distinguir o status de handoff da prova de verificação; registrar o que pode ser derivado e o que permanece desconhecido.",
+        "Fechar uma matriz de cobertura, validade, autoridade e sinais de invalidação por fonte."
+      ],
+      "acceptance": "Mapa fonte→escopo→prova→validade→fallback, sem extrapolar contratos entre Codex/Pi/Claude.",
+      "tests": [
+        "HST-T-B01",
+        "HST-T-B02",
+        "HST-T-B03",
+        "HST-T-B04",
+        "HST-T-B05",
+        "HST-T-B06",
+        "HST-T-B07",
+        "HST-T-B08",
+        "HST-T-B09",
+        "HST-T-B10",
+        "HST-T-B11",
+        "HST-T-B12",
+        "HST-T-C01",
+        "HST-T-C02",
+        "HST-T-C03",
+        "HST-T-C04",
+        "HST-T-C05",
+        "HST-T-C06",
+        "HST-T-C07",
+        "HST-T-C08",
+        "HST-T-C09",
+        "HST-T-C10",
+        "HST-T-C11",
+        "HST-T-C12",
+        "HST-T-D01",
+        "HST-T-D02",
+        "HST-T-D03",
+        "HST-T-D04",
+        "HST-T-D05",
+        "HST-T-D06",
+        "HST-T-D07",
+        "HST-T-D08",
+        "HST-T-D09",
+        "HST-T-D10",
+        "HST-T-D11",
+        "HST-T-D12",
+        "HST-T-D13",
+        "HST-T-D14",
+        "HST-T-E01",
+        "HST-T-E02",
+        "HST-T-E03",
+        "HST-T-E04",
+        "HST-T-E05",
+        "HST-T-E06",
+        "HST-T-E07",
+        "HST-T-E08",
+        "HST-T-E09",
+        "HST-T-E10",
+        "HST-T-E11",
+        "HST-T-E12",
+        "HST-T-E13",
+        "HST-T-E14",
+        "HST-T-E15",
+        "HST-T-E16",
+        "HST-T-H01",
+        "HST-T-H02",
+        "HST-T-H03",
+        "HST-T-H04",
+        "HST-T-H05",
+        "HST-T-H06",
+        "HST-T-H07",
+        "HST-T-H08",
+        "HST-T-H09",
+        "HST-T-H10"
+      ],
+      "status": "IN_PROGRESS",
+      "evidence": []
+    },
+    {
+      "id": "HST-003",
+      "title": "Congelar DTOs e tabelas de decisão",
+      "stage": "HST-00",
+      "dependencies": [
+        "HST-002"
+      ],
+      "requirements": [
+        "HST-R02",
+        "HST-R05",
+        "HST-R06",
+        "HST-R09",
+        "HST-R12",
+        "HST-R18"
+      ],
+      "areas": [
+        "homeTypes.ts",
+        "domínio Home",
+        "validadores/API"
+      ],
+      "steps": [
+        "Especificar OperationalStatus, DeliverySemantics e contadores em contrato compartilhado ou equivalente existente.",
+        "Fechar os casos de multiple sessions, confirmação pós-decisão, offline/unknown, sem sessão e verificação ausente.",
+        "Planejar evolução aditiva dos campos e validadores estritos; manter mapeamento legado sem mudar significado silenciosamente.",
+        "Fechar a negociação de apresentação e placement_reason pós-decisão; não forçar blocks_harness=true para manter um card aguardando confirmação em Needs You."
+      ],
+      "acceptance": "Um mesmo conjunto de fatos gera uma colocação e badges determinísticos; tipos completos sem any evasivo.",
+      "tests": [
+        "HST-T-A01",
+        "HST-T-A02",
+        "HST-T-A03",
+        "HST-T-A04",
+        "HST-T-A05",
+        "HST-T-A06",
+        "HST-T-A07",
+        "HST-T-A08",
+        "HST-T-B01",
+        "HST-T-B02",
+        "HST-T-B03",
+        "HST-T-B04",
+        "HST-T-B05",
+        "HST-T-B06",
+        "HST-T-B07",
+        "HST-T-B08",
+        "HST-T-B09",
+        "HST-T-B10",
+        "HST-T-B11",
+        "HST-T-B12",
+        "HST-T-C01",
+        "HST-T-C02",
+        "HST-T-C03",
+        "HST-T-C04",
+        "HST-T-C05",
+        "HST-T-C06",
+        "HST-T-C07",
+        "HST-T-C08",
+        "HST-T-C09",
+        "HST-T-C10",
+        "HST-T-C11",
+        "HST-T-C12",
+        "HST-T-D01",
+        "HST-T-D02",
+        "HST-T-D03",
+        "HST-T-D04",
+        "HST-T-D05",
+        "HST-T-D06",
+        "HST-T-D07",
+        "HST-T-D08",
+        "HST-T-D09",
+        "HST-T-D10",
+        "HST-T-D11",
+        "HST-T-D12",
+        "HST-T-D13",
+        "HST-T-D14",
+        "HST-T-E01",
+        "HST-T-E02",
+        "HST-T-E03",
+        "HST-T-E04",
+        "HST-T-E05",
+        "HST-T-E06",
+        "HST-T-E07",
+        "HST-T-E08",
+        "HST-T-E09",
+        "HST-T-E10",
+        "HST-T-E11",
+        "HST-T-E12",
+        "HST-T-E13",
+        "HST-T-E14",
+        "HST-T-E15",
+        "HST-T-E16",
+        "HST-T-K01",
+        "HST-T-K02",
+        "HST-T-K03",
+        "HST-T-K04",
+        "HST-T-K05",
+        "HST-T-K06"
+      ],
+      "status": "IN_PROGRESS",
+      "evidence": []
+    },
+    {
+      "id": "HST-004",
+      "title": "Criar fixtures e reproduzir o congelamento do painel",
+      "stage": "HST-00",
+      "dependencies": [
+        "HST-003"
+      ],
+      "requirements": [
+        "HST-R14",
+        "HST-R20"
+      ],
+      "areas": [
+        "tests/ui_simplification",
+        "tests/home_evolution",
+        "tests frontend/controller"
+      ],
+      "steps": [
+        "Criar fixtures pequenas das jornadas J1–J8 e casos de estado parcial/geração antiga.",
+        "Adicionar teste com relógio controlado: painel aberto e polling idêntico durante dois ciclos.",
+        "Registrar reprodução estática/browser quando disponível, sem apresentar fixture como execução de provedor."
+      ],
+      "acceptance": "Fixture reproduzível e teste que falha no caminho defeituoso ou prova a correção já existente no novo HEAD.",
+      "tests": [
+        "HST-T-F01",
+        "HST-T-F02",
+        "HST-T-F03",
+        "HST-T-F04",
+        "HST-T-F05",
+        "HST-T-F06",
+        "HST-T-F07",
+        "HST-T-F08",
+        "HST-T-F09",
+        "HST-T-F10",
+        "HST-T-F11",
+        "HST-T-F12",
+        "HST-T-F13",
+        "HST-T-F14"
+      ],
+      "status": "IN_PROGRESS",
+      "evidence": []
+    },
+    {
+      "id": "HST-005",
+      "title": "Enriquecer fatos batch por conexão e sessão",
+      "stage": "HST-01",
+      "dependencies": [
+        "HST-003",
+        "HST-004"
+      ],
+      "requirements": [
+        "HST-R02",
+        "HST-R03",
+        "HST-R04",
+        "HST-R08",
+        "HST-R16"
+      ],
+      "areas": [
+        "sqlite/home_entries.py",
+        "EntryRelations/ConnectionContext"
+      ],
+      "steps": [
+        "Acrescentar fatos mínimos de conectividade e prontidão com generation/lease/freshness corretos, sem usar agregado por agente.",
+        "Ler operações/pedidos da relação autorizada completa antes do filtro visual; distinguir fonte indisponível de vazia.",
+        "Preservar a UoW curta e limites; não chamar host/provedor ou ler transcript por card."
+      ],
+      "acceptance": "Prova de ausência e prova positiva distinguíveis; duas conexões do mesmo agente não compartilham estado indevidamente.",
+      "tests": [
+        "HST-T-A01",
+        "HST-T-A02",
+        "HST-T-A03",
+        "HST-T-A04",
+        "HST-T-A05",
+        "HST-T-A06",
+        "HST-T-A07",
+        "HST-T-A08",
+        "HST-T-B01",
+        "HST-T-B02",
+        "HST-T-B03",
+        "HST-T-B04",
+        "HST-T-B05",
+        "HST-T-B06",
+        "HST-T-B07",
+        "HST-T-B08",
+        "HST-T-B09",
+        "HST-T-B10",
+        "HST-T-B11",
+        "HST-T-B12",
+        "HST-T-J01",
+        "HST-T-J02",
+        "HST-T-J03",
+        "HST-T-J04",
+        "HST-T-J05",
+        "HST-T-J06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-006",
+      "title": "Normalizar dependência humana por operação",
+      "stage": "HST-01",
+      "dependencies": [
+        "HST-002",
+        "HST-005"
+      ],
+      "requirements": [
+        "HST-R05",
+        "HST-R06",
+        "HST-R08",
+        "HST-R15"
+      ],
+      "areas": [
+        "home_harness_blocking.py",
+        "metadados nativos e de coordenação"
+      ],
+      "steps": [
+        "Classificar pedido por tipo, destinatário e bloqueio com proveniência; método não suportado permanece unknown.",
+        "Validar sessão/epoch/operação/revisão e validade da ocorrência antes de usar prova de bloqueio.",
+        "Cobrir perguntas, permissões e handoffs quando houver contrato real; não inferir pause pelo formulário ou status OPEN."
+      ],
+      "acceptance": "blocks_session e blocks_harness não se confundem; ocorrências humanas continuam disponíveis mesmo sem prova de pause.",
+      "tests": [
+        "HST-T-C01",
+        "HST-T-C02",
+        "HST-T-C03",
+        "HST-T-C04",
+        "HST-T-C05",
+        "HST-T-C06",
+        "HST-T-C07",
+        "HST-T-C08",
+        "HST-T-C09",
+        "HST-T-C10",
+        "HST-T-C11",
+        "HST-T-C12",
+        "HST-T-D01",
+        "HST-T-D02",
+        "HST-T-D03",
+        "HST-T-D04",
+        "HST-T-D05",
+        "HST-T-D06",
+        "HST-T-D07",
+        "HST-T-D08",
+        "HST-T-D09",
+        "HST-T-D10",
+        "HST-T-D11",
+        "HST-T-D12",
+        "HST-T-D13",
+        "HST-T-D14",
+        "HST-T-H01",
+        "HST-T-H02",
+        "HST-T-H03",
+        "HST-T-H04",
+        "HST-T-H05",
+        "HST-T-H06",
+        "HST-T-H07",
+        "HST-T-H08",
+        "HST-T-H09",
+        "HST-T-H10"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-007",
+      "title": "Implementar redução operacional Working/Idle e bloqueio agregado",
+      "stage": "HST-01",
+      "dependencies": [
+        "HST-005",
+        "HST-006"
+      ],
+      "requirements": [
+        "HST-R03",
+        "HST-R04",
+        "HST-R05",
+        "HST-R08"
+      ],
+      "areas": [
+        "domínio Home",
+        "classificador puro de status"
+      ],
+      "steps": [
+        "Implementar as regras das seções 3–5 para active work, Idle confirmado, fila, sem sessão e unknown.",
+        "Agregar todas as sessões da conexão: outra execução produtiva impede bloqueio total; sessão idle não impede.",
+        "Manter prova positiva conhecida com cobertura parcial alheia; negar inferências por ausência quando a fonte está incompleta.",
+        "Tratar cadastro/desconexão como exceções explícitas sem contabilizar conectados nem abrir quarta coluna."
+      ],
+      "acceptance": "J1/J3/J7 atendidas; terminar turno não remove harness conectado nem transfere seu card para Results.",
+      "tests": [
+        "HST-T-B01",
+        "HST-T-B02",
+        "HST-T-B03",
+        "HST-T-B04",
+        "HST-T-B05",
+        "HST-T-B06",
+        "HST-T-B07",
+        "HST-T-B08",
+        "HST-T-B09",
+        "HST-T-B10",
+        "HST-T-B11",
+        "HST-T-B12",
+        "HST-T-C01",
+        "HST-T-C02",
+        "HST-T-C03",
+        "HST-T-C04",
+        "HST-T-C05",
+        "HST-T-C06",
+        "HST-T-C07",
+        "HST-T-C08",
+        "HST-T-C09",
+        "HST-T-C10",
+        "HST-T-C11",
+        "HST-T-C12",
+        "HST-T-J01",
+        "HST-T-J02",
+        "HST-T-J03",
+        "HST-T-J04",
+        "HST-T-J05",
+        "HST-T-J06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-008",
+      "title": "Modelar confirmação de aplicação e retomada",
+      "stage": "HST-01",
+      "dependencies": [
+        "HST-006",
+        "HST-007"
+      ],
+      "requirements": [
+        "HST-R07",
+        "HST-R08",
+        "HST-R15"
+      ],
+      "areas": [
+        "decisões/recibos atuais",
+        "home_harness_blocking.py"
+      ],
+      "steps": [
+        "Derivar a espera pós-decisão da mesma ocorrência/execução e seus recibos; não criar estado produtivo paralelo.",
+        "Exigir evidência causalmente posterior da mesma geração para sair de awaiting_confirmation.",
+        "Manter acompanhamento sem botão Responder duplicado; recusa/expiração/resposta perdida usa recuperação canônica.",
+        "Não permitir que RUNNING antigo entregue tarde vire prova de retomada."
+      ],
+      "acceptance": "Decisão registrada, aplicada e execução retomada são distinguíveis; contagem humana aberta não inclui decisão já enviada.",
+      "tests": [
+        "HST-T-D01",
+        "HST-T-D02",
+        "HST-T-D03",
+        "HST-T-D04",
+        "HST-T-D05",
+        "HST-T-D06",
+        "HST-T-D07",
+        "HST-T-D08",
+        "HST-T-D09",
+        "HST-T-D10",
+        "HST-T-D11",
+        "HST-T-D12",
+        "HST-T-D13",
+        "HST-T-D14"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-009",
+      "title": "Distribuir cards e ações sem duplicações",
+      "stage": "HST-01",
+      "dependencies": [
+        "HST-007",
+        "HST-008"
+      ],
+      "requirements": [
+        "HST-R01",
+        "HST-R02",
+        "HST-R05",
+        "HST-R06",
+        "HST-R12"
+      ],
+      "areas": [
+        "home_harness_board.py"
+      ],
+      "steps": [
+        "Preservar um card por conexão entre Active e Needs You, inclusive nas transições.",
+        "Incorporar ações próprias ao card bloqueado; manter somente a solicitação independente quando o harness continua.",
+        "Tratar pedidos compartilhados/sem vínculo sem any-owner incorreto; badges e sino referenciam o mesmo ID.",
+        "Manter entrega independente sem mover o harness para Results."
+      ],
+      "acceptance": "Colocação e totais determinísticos sob múltiplas sessões/conexões; nenhum pedido some por dedup incorreta.",
+      "tests": [
+        "HST-T-A01",
+        "HST-T-A02",
+        "HST-T-A03",
+        "HST-T-A04",
+        "HST-T-A05",
+        "HST-T-A06",
+        "HST-T-A07",
+        "HST-T-A08",
+        "HST-T-C01",
+        "HST-T-C02",
+        "HST-T-C03",
+        "HST-T-C04",
+        "HST-T-C05",
+        "HST-T-C06",
+        "HST-T-C07",
+        "HST-T-C08",
+        "HST-T-C09",
+        "HST-T-C10",
+        "HST-T-C11",
+        "HST-T-C12",
+        "HST-T-D01",
+        "HST-T-D02",
+        "HST-T-D03",
+        "HST-T-D04",
+        "HST-T-D05",
+        "HST-T-D06",
+        "HST-T-D07",
+        "HST-T-D08",
+        "HST-T-D09",
+        "HST-T-D10",
+        "HST-T-D11",
+        "HST-T-D12",
+        "HST-T-D13",
+        "HST-T-D14"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-010",
+      "title": "Atualizar contagens, revisões e cursores",
+      "stage": "HST-01",
+      "dependencies": [
+        "HST-009"
+      ],
+      "requirements": [
+        "HST-R08",
+        "HST-R12",
+        "HST-R18"
+      ],
+      "areas": [
+        "home_harness_board.py",
+        "home_entry_pages.py",
+        "homeTypes/API"
+      ],
+      "steps": [
+        "Definir totais de conectados/executando/Idle/ações/bloqueados/confirmando com unidades e exatidão explícitas.",
+        "Incluir mudanças semânticas nos fingerprints, excluindo mero generated_at/heartbeat sem mudança de estado.",
+        "Preservar cursores ligados a escopo/principal/revisão e invalidação por expiração; paginação não reduz totais.",
+        "Atualizar schemas e validação da resposta com os novos metadados."
+      ],
+      "acceptance": "Totais não vêm de previews; revisões são estáveis para fatos iguais e mudam para transições relevantes.",
+      "tests": [
+        "HST-T-A01",
+        "HST-T-A02",
+        "HST-T-A03",
+        "HST-T-A04",
+        "HST-T-A05",
+        "HST-T-A06",
+        "HST-T-A07",
+        "HST-T-A08",
+        "HST-T-F01",
+        "HST-T-F02",
+        "HST-T-F03",
+        "HST-T-F04",
+        "HST-T-F05",
+        "HST-T-F06",
+        "HST-T-F07",
+        "HST-T-F08",
+        "HST-T-F09",
+        "HST-T-F10",
+        "HST-T-F11",
+        "HST-T-F12",
+        "HST-T-F13",
+        "HST-T-F14",
+        "HST-T-J01",
+        "HST-T-J02",
+        "HST-T-J03",
+        "HST-T-J04",
+        "HST-T-J05",
+        "HST-T-J06",
+        "HST-T-K01",
+        "HST-T-K02",
+        "HST-T-K03",
+        "HST-T-K04",
+        "HST-T-K05",
+        "HST-T-K06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-011",
+      "title": "Projetar semântica de entregas e tarefas",
+      "stage": "HST-02",
+      "dependencies": [
+        "HST-003",
+        "HST-005"
+      ],
+      "requirements": [
+        "HST-R09",
+        "HST-R11",
+        "HST-R12"
+      ],
+      "areas": [
+        "sqlite/home.py RESULTS/result_item",
+        "domínio Results"
+      ],
+      "steps": [
+        "Acrescentar escopo turn/handoff/report e classificar outcome/tarefa/conteúdo/cleanup em eixos separados.",
+        "Preservar IDs de entrega e current claim; tratar FAILED/CANCELLED/REJECTED e conteúdo pendente sem sucesso falso.",
+        "Não gerar entrega por silêncio, Idle ou texto; não usar LLM para classificar."
+      ],
+      "acceptance": "Tabela de Results coberta por funções puras/consultas; handoff aberto não fica concluído por SUCCEEDED.",
+      "tests": [
+        "HST-T-E01",
+        "HST-T-E02",
+        "HST-T-E03",
+        "HST-T-E04",
+        "HST-T-E05",
+        "HST-T-E06",
+        "HST-T-E07",
+        "HST-T-E08",
+        "HST-T-E09",
+        "HST-T-E10",
+        "HST-T-E11",
+        "HST-T-E12",
+        "HST-T-E13",
+        "HST-T-E14",
+        "HST-T-E15",
+        "HST-T-E16"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-012",
+      "title": "Vincular verificação à evidência correta",
+      "stage": "HST-02",
+      "dependencies": [
+        "HST-002",
+        "HST-011"
+      ],
+      "requirements": [
+        "HST-R10",
+        "HST-R16"
+      ],
+      "areas": [
+        "produtores de verificação/aceite",
+        "projeção Results"
+      ],
+      "steps": [
+        "Localizar o registro canônico de verificação positiva/negativa e sua versão/claim.",
+        "Adicionar prova segura ao DTO somente se existe; sem prova, manter tarefa concluída sem selo verificado.",
+        "Tratar historical_claim, rejeição e fontes conflitantes sem alterar estado produtivo nem inventar workflow."
+      ],
+      "acceptance": "Entrega verificada só aparece com evidência da mesma entrega atual; COMPLETED isolado não basta.",
+      "tests": [
+        "HST-T-E01",
+        "HST-T-E02",
+        "HST-T-E03",
+        "HST-T-E04",
+        "HST-T-E05",
+        "HST-T-E06",
+        "HST-T-E07",
+        "HST-T-E08",
+        "HST-T-E09",
+        "HST-T-E10",
+        "HST-T-E11",
+        "HST-T-E12",
+        "HST-T-E13",
+        "HST-T-E14",
+        "HST-T-E15",
+        "HST-T-E16"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-013",
+      "title": "Preservar retenção, artefatos e visto por ocorrência",
+      "stage": "HST-02",
+      "dependencies": [
+        "HST-011",
+        "HST-012"
+      ],
+      "requirements": [
+        "HST-R11",
+        "HST-R12",
+        "HST-R15",
+        "HST-R18"
+      ],
+      "areas": [
+        "Results/Attention",
+        "artifact refs",
+        "view preferences"
+      ],
+      "steps": [
+        "Reusar agrupamento persistido de artefatos, vistos/episódios e retenção da origem.",
+        "Atualização de verificação muda a entrega correlacionada, não multiplica registros ou apaga resultado histórico.",
+        "Não adicionar Home ao watermark global de mensagens; distinguir Recentes quando novos não são rastreáveis."
+      ],
+      "acceptance": "Abrir Home/Results não resolve ação, ACK ou verificação; itens fora da página não são marcados vistos.",
+      "tests": [
+        "HST-T-E01",
+        "HST-T-E02",
+        "HST-T-E03",
+        "HST-T-E04",
+        "HST-T-E05",
+        "HST-T-E06",
+        "HST-T-E07",
+        "HST-T-E08",
+        "HST-T-E09",
+        "HST-T-E10",
+        "HST-T-E11",
+        "HST-T-E12",
+        "HST-T-E13",
+        "HST-T-E14",
+        "HST-T-E15",
+        "HST-T-E16",
+        "HST-T-H01",
+        "HST-T-H02",
+        "HST-T-H03",
+        "HST-T-H04",
+        "HST-T-H05",
+        "HST-T-H06",
+        "HST-T-H07",
+        "HST-T-H08",
+        "HST-T-H09",
+        "HST-T-H10"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-014",
+      "title": "Criar mapa de apresentação e badges reutilizáveis",
+      "stage": "HST-03",
+      "dependencies": [
+        "HST-003",
+        "HST-010",
+        "HST-013"
+      ],
+      "requirements": [
+        "HST-R06",
+        "HST-R09",
+        "HST-R17",
+        "HST-R18"
+      ],
+      "areas": [
+        "HomeHarnessCard.tsx",
+        "homePresentation/attentionPresentation",
+        "componentes badge"
+      ],
+      "steps": [
+        "Centralizar textos/ícones para atividade, tipo de ação e entregas no padrão linguístico atual.",
+        "Mostrar no máximo status e ação no caso comum; N ações abre contexto; unknown não coexiste com Idle confirmado.",
+        "Preservar dados técnicos no detalhe e nunca exibir enum SUCCEEDED como explicação única ao usuário."
+      ],
+      "acceptance": "Mapas de apresentação testados por tabela; cores não são o único sinal.",
+      "tests": [
+        "HST-T-D01",
+        "HST-T-D02",
+        "HST-T-D03",
+        "HST-T-D04",
+        "HST-T-D05",
+        "HST-T-D06",
+        "HST-T-D07",
+        "HST-T-D08",
+        "HST-T-D09",
+        "HST-T-D10",
+        "HST-T-D11",
+        "HST-T-D12",
+        "HST-T-D13",
+        "HST-T-D14",
+        "HST-T-E01",
+        "HST-T-E02",
+        "HST-T-E03",
+        "HST-T-E04",
+        "HST-T-E05",
+        "HST-T-E06",
+        "HST-T-E07",
+        "HST-T-E08",
+        "HST-T-E09",
+        "HST-T-E10",
+        "HST-T-E11",
+        "HST-T-E12",
+        "HST-T-E13",
+        "HST-T-E14",
+        "HST-T-E15",
+        "HST-T-E16",
+        "HST-T-G01",
+        "HST-T-G02",
+        "HST-T-G03",
+        "HST-T-G04",
+        "HST-T-G05",
+        "HST-T-G06",
+        "HST-T-G07",
+        "HST-T-G08",
+        "HST-T-I01",
+        "HST-T-I02",
+        "HST-T-I03",
+        "HST-T-I04",
+        "HST-T-I05",
+        "HST-T-I06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-015",
+      "title": "Evoluir cards Active e seus resumos",
+      "stage": "HST-03",
+      "dependencies": [
+        "HST-007",
+        "HST-010",
+        "HST-014"
+      ],
+      "requirements": [
+        "HST-R03",
+        "HST-R04",
+        "HST-R12",
+        "HST-R17"
+      ],
+      "areas": [
+        "HomeHarnessCard",
+        "HomeContextCards",
+        "OperationalHome"
+      ],
+      "steps": [
+        "Renderizar Working/Idle/queued/no-session/unknown com projeto em All projects e tempo semântico.",
+        "Mostrar pendência no mesmo card sem duplicar formulário; preservar conexão depois da entrega.",
+        "Exibir resumo de conectados e estados com totais do backend, sem prometer presença por registro."
+      ],
+      "acceptance": "J1 e J7 reconhecíveis sem abrir detalhes; nenhum menu ou quarta coluna.",
+      "tests": [
+        "HST-T-A01",
+        "HST-T-A02",
+        "HST-T-A03",
+        "HST-T-A04",
+        "HST-T-A05",
+        "HST-T-A06",
+        "HST-T-A07",
+        "HST-T-A08",
+        "HST-T-B01",
+        "HST-T-B02",
+        "HST-T-B03",
+        "HST-T-B04",
+        "HST-T-B05",
+        "HST-T-B06",
+        "HST-T-B07",
+        "HST-T-B08",
+        "HST-T-B09",
+        "HST-T-B10",
+        "HST-T-B11",
+        "HST-T-B12",
+        "HST-T-G01",
+        "HST-T-G02",
+        "HST-T-G03",
+        "HST-T-G04",
+        "HST-T-G05",
+        "HST-T-G06",
+        "HST-T-G07",
+        "HST-T-G08",
+        "HST-T-J01",
+        "HST-T-J02",
+        "HST-T-J03",
+        "HST-T-J04",
+        "HST-T-J05",
+        "HST-T-J06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-016",
+      "title": "Evoluir Needs You e ações no contexto",
+      "stage": "HST-03",
+      "dependencies": [
+        "HST-009",
+        "HST-014"
+      ],
+      "requirements": [
+        "HST-R05",
+        "HST-R06",
+        "HST-R07",
+        "HST-R15"
+      ],
+      "areas": [
+        "HomeHarnessSignalCard",
+        "AttentionInspection",
+        "controles nativos"
+      ],
+      "steps": [
+        "Renderizar ação independente ou harness bloqueado com o vocabulário correspondente.",
+        "Com uma ação abrir formulário exato; com várias mostrar lista paginada no mesmo painel.",
+        "Mostrar envio/confirmando/recusa e ações permitidas; não reapresentar botão decisório de ocorrência encerrada.",
+        "Revalidar por revisão atual e recuperar intenção existente em dupla submissão/resposta perdida."
+      ],
+      "acceptance": "J2/J3/J4 completas e sem duplicação entre card, badge e sino.",
+      "tests": [
+        "HST-T-C01",
+        "HST-T-C02",
+        "HST-T-C03",
+        "HST-T-C04",
+        "HST-T-C05",
+        "HST-T-C06",
+        "HST-T-C07",
+        "HST-T-C08",
+        "HST-T-C09",
+        "HST-T-C10",
+        "HST-T-C11",
+        "HST-T-C12",
+        "HST-T-D01",
+        "HST-T-D02",
+        "HST-T-D03",
+        "HST-T-D04",
+        "HST-T-D05",
+        "HST-T-D06",
+        "HST-T-D07",
+        "HST-T-D08",
+        "HST-T-D09",
+        "HST-T-D10",
+        "HST-T-D11",
+        "HST-T-D12",
+        "HST-T-D13",
+        "HST-T-D14",
+        "HST-T-H01",
+        "HST-T-H02",
+        "HST-T-H03",
+        "HST-T-H04",
+        "HST-T-H05",
+        "HST-T-H06",
+        "HST-T-H07",
+        "HST-T-H08",
+        "HST-T-H09",
+        "HST-T-H10",
+        "HST-T-I01",
+        "HST-T-I02",
+        "HST-T-I03",
+        "HST-T-I04",
+        "HST-T-I05",
+        "HST-T-I06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-017",
+      "title": "Evoluir cards Results com semântica visível",
+      "stage": "HST-03",
+      "dependencies": [
+        "HST-013",
+        "HST-014"
+      ],
+      "requirements": [
+        "HST-R09",
+        "HST-R10",
+        "HST-R11",
+        "HST-R17"
+      ],
+      "areas": [
+        "HomeHarnessSignalCard",
+        "ResultRow",
+        "result inspection"
+      ],
+      "steps": [
+        "Aplicar mensagens normativas de turno/tarefa/verificação/falha/cancelamento/cleanup/reporte externo.",
+        "Mostrar projeto/origem/tempo/preview autorizado e metadados de artefatos, sem payload completo inicial.",
+        "Permitir abrir resultado e continuar somente no contexto explicitamente associado."
+      ],
+      "acceptance": "J5/J6 compreensíveis no card; verificação e sucesso nunca inferidos de texto ou outro claim.",
+      "tests": [
+        "HST-T-E01",
+        "HST-T-E02",
+        "HST-T-E03",
+        "HST-T-E04",
+        "HST-T-E05",
+        "HST-T-E06",
+        "HST-T-E07",
+        "HST-T-E08",
+        "HST-T-E09",
+        "HST-T-E10",
+        "HST-T-E11",
+        "HST-T-E12",
+        "HST-T-E13",
+        "HST-T-E14",
+        "HST-T-E15",
+        "HST-T-E16",
+        "HST-T-G01",
+        "HST-T-G02",
+        "HST-T-G03",
+        "HST-T-G04",
+        "HST-T-G05",
+        "HST-T-G06",
+        "HST-T-G07",
+        "HST-T-G08",
+        "HST-T-H01",
+        "HST-T-H02",
+        "HST-T-H03",
+        "HST-T-H04",
+        "HST-T-H05",
+        "HST-T-H06",
+        "HST-T-H07",
+        "HST-T-H08",
+        "HST-T-H09",
+        "HST-T-H10"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-018",
+      "title": "Corrigir pausa e mudança semântica do controller",
+      "stage": "HST-04",
+      "dependencies": [
+        "HST-004",
+        "HST-010"
+      ],
+      "requirements": [
+        "HST-R14",
+        "HST-R18"
+      ],
+      "areas": [
+        "homeController.ts",
+        "useHomeOverview",
+        "OperationalHome"
+      ],
+      "steps": [
+        "Separar snapshot consultado, ordem apresentada e estado do painel; polling idêntico não marca update pendente.",
+        "Congelar movimento visual quando necessário sem proibir consulta atual do contexto.",
+        "Separar notice/warning/error; revisão normal não produz alert de falha.",
+        "Preservar invalidação de segurança e mudança real de geração independentemente da pausa."
+      ],
+      "acceptance": "Reprodução passa em unidade e navegador; consulta periódica não exige fechar e reabrir.",
+      "tests": [
+        "HST-T-F01",
+        "HST-T-F02",
+        "HST-T-F03",
+        "HST-T-F04",
+        "HST-T-F05",
+        "HST-T-F06",
+        "HST-T-F07",
+        "HST-T-F08",
+        "HST-T-F09",
+        "HST-T-F10",
+        "HST-T-F11",
+        "HST-T-F12",
+        "HST-T-F13",
+        "HST-T-F14"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-019",
+      "title": "Separar gates de leitura, paginação e ação",
+      "stage": "HST-04",
+      "dependencies": [
+        "HST-018"
+      ],
+      "requirements": [
+        "HST-R14",
+        "HST-R15",
+        "HST-R16"
+      ],
+      "areas": [
+        "OperationalHome blocked",
+        "HarnessActivityPanel",
+        "resolvers de detalhe"
+      ],
+      "steps": [
+        "Remover dependência exclusiva de um blocked global para toda interação.",
+        "Permitir leitura com revalidação de alvo exato; cursor inválido relê a relação no painel.",
+        "Manter validação fresca e autorização para comandos; falha parcial não libera nem bloqueia tudo indiscriminadamente."
+      ],
+      "acceptance": "Leituras continuam úteis durante refresh; ações sensíveis seguem fechadas sem evidência atual.",
+      "tests": [
+        "HST-T-F01",
+        "HST-T-F02",
+        "HST-T-F03",
+        "HST-T-F04",
+        "HST-T-F05",
+        "HST-T-F06",
+        "HST-T-F07",
+        "HST-T-F08",
+        "HST-T-F09",
+        "HST-T-F10",
+        "HST-T-F11",
+        "HST-T-F12",
+        "HST-T-F13",
+        "HST-T-F14",
+        "HST-T-H01",
+        "HST-T-H02",
+        "HST-T-H03",
+        "HST-T-H04",
+        "HST-T-H05",
+        "HST-T-H06",
+        "HST-T-H07",
+        "HST-T-H08",
+        "HST-T-H09",
+        "HST-T-H10"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-020",
+      "title": "Abrir sessão exata diretamente quando inequívoca",
+      "stage": "HST-04",
+      "dependencies": [
+        "HST-003",
+        "HST-019"
+      ],
+      "requirements": [
+        "HST-R02",
+        "HST-R13",
+        "HST-R15"
+      ],
+      "areas": [
+        "HomeEntryInspection",
+        "connection target resolver",
+        "HomeSessionInspection"
+      ],
+      "steps": [
+        "Determinar unicidade com conjunto completo de sessões elegíveis, não preview ou recência.",
+        "Abrir target de evento específico diretamente; para card sem sessão oferecer conexão/histórico sem iniciar runtime.",
+        "Extrair/reutilizar visualização de tail/history sem novo PTY e sem modal aninhado."
+      ],
+      "acceptance": "Um gesto para uma sessão conhecida; múltiplas continuam exigindo seleção explícita.",
+      "tests": [
+        "HST-T-A01",
+        "HST-T-A02",
+        "HST-T-A03",
+        "HST-T-A04",
+        "HST-T-A05",
+        "HST-T-A06",
+        "HST-T-A07",
+        "HST-T-A08",
+        "HST-T-G01",
+        "HST-T-G02",
+        "HST-T-G03",
+        "HST-T-G04",
+        "HST-T-G05",
+        "HST-T-G06",
+        "HST-T-G07",
+        "HST-T-G08",
+        "HST-T-H01",
+        "HST-T-H02",
+        "HST-T-H03",
+        "HST-T-H04",
+        "HST-T-H05",
+        "HST-T-H06",
+        "HST-T-H07",
+        "HST-T-H08",
+        "HST-T-H09",
+        "HST-T-H10"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-021",
+      "title": "Melhorar seletor, foco e continuidade do painel",
+      "stage": "HST-04",
+      "dependencies": [
+        "HST-020"
+      ],
+      "requirements": [
+        "HST-R13",
+        "HST-R14",
+        "HST-R17"
+      ],
+      "areas": [
+        "HomeEntryInspection",
+        "AgentActionModal",
+        "homeNavigation"
+      ],
+      "steps": [
+        "Títulos/estado/projeto/host/tempo identificam opções; IDs ficam disponíveis em detalhe.",
+        "Preservar rascunho/revisão ao atualizar ou mover card; overlay tem chave independente da coluna.",
+        "Fechar devolve foco/scroll; trocar alvo/projeto respeita descarte e não transfere a resposta."
+      ],
+      "acceptance": "Fluxo teclado/browser não perde texto ou muda destinatário por refresh ou navegação.",
+      "tests": [
+        "HST-T-F01",
+        "HST-T-F02",
+        "HST-T-F03",
+        "HST-T-F04",
+        "HST-T-F05",
+        "HST-T-F06",
+        "HST-T-F07",
+        "HST-T-F08",
+        "HST-T-F09",
+        "HST-T-F10",
+        "HST-T-F11",
+        "HST-T-F12",
+        "HST-T-F13",
+        "HST-T-F14",
+        "HST-T-G01",
+        "HST-T-G02",
+        "HST-T-G03",
+        "HST-T-G04",
+        "HST-T-G05",
+        "HST-T-G06",
+        "HST-T-G07",
+        "HST-T-G08",
+        "HST-T-I01",
+        "HST-T-I02",
+        "HST-T-I03",
+        "HST-T-I04",
+        "HST-T-I05",
+        "HST-T-I06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-022",
+      "title": "Tratar falha parcial e conectividade sem esconder pedidos",
+      "stage": "HST-04",
+      "dependencies": [
+        "HST-008",
+        "HST-019",
+        "HST-021"
+      ],
+      "requirements": [
+        "HST-R04",
+        "HST-R08",
+        "HST-R16"
+      ],
+      "areas": [
+        "Home source states",
+        "controller",
+        "cards e attention global"
+      ],
+      "steps": [
+        "Distinguir queda da leitura do Server de desconexão confirmada de uma conexão específica.",
+        "Manter pedido canônico alcançável quando liveness/telemetria fica desconhecida; não herdar bloqueio antigo como atual.",
+        "Limpar protegido em logout/401/403 e revalidar após reconexão, sem fallback para outro contexto."
+      ],
+      "acceptance": "Não há empty state falso, perda de decisão ou falso Idle sob partição de rede.",
+      "tests": [
+        "HST-T-B01",
+        "HST-T-B02",
+        "HST-T-B03",
+        "HST-T-B04",
+        "HST-T-B05",
+        "HST-T-B06",
+        "HST-T-B07",
+        "HST-T-B08",
+        "HST-T-B09",
+        "HST-T-B10",
+        "HST-T-B11",
+        "HST-T-B12",
+        "HST-T-C01",
+        "HST-T-C02",
+        "HST-T-C03",
+        "HST-T-C04",
+        "HST-T-C05",
+        "HST-T-C06",
+        "HST-T-C07",
+        "HST-T-C08",
+        "HST-T-C09",
+        "HST-T-C10",
+        "HST-T-C11",
+        "HST-T-C12",
+        "HST-T-F01",
+        "HST-T-F02",
+        "HST-T-F03",
+        "HST-T-F04",
+        "HST-T-F05",
+        "HST-T-F06",
+        "HST-T-F07",
+        "HST-T-F08",
+        "HST-T-F09",
+        "HST-T-F10",
+        "HST-T-F11",
+        "HST-T-F12",
+        "HST-T-F13",
+        "HST-T-F14",
+        "HST-T-H01",
+        "HST-T-H02",
+        "HST-T-H03",
+        "HST-T-H04",
+        "HST-T-H05",
+        "HST-T-H06",
+        "HST-T-H07",
+        "HST-T-H08",
+        "HST-T-H09",
+        "HST-T-H10"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-023",
+      "title": "Compactar cabeçalho e remover ações indisponíveis do destaque",
+      "stage": "HST-04",
+      "dependencies": [
+        "HST-015",
+        "HST-016",
+        "HST-017",
+        "HST-021"
+      ],
+      "requirements": [
+        "HST-R01",
+        "HST-R17",
+        "HST-R19"
+      ],
+      "areas": [
+        "OperationalHome",
+        "HomeContextCards",
+        "HomeHarnessCard",
+        "composer existente"
+      ],
+      "steps": [
+        "Reduzir repetição de instruções e grandes indicadores; projeto/Add harness e resumo em hierarquia curta.",
+        "Escolher um refresh principal; Reconnect indisponível passa ao detalhe, sem implementar restart individual falso.",
+        "Nomear intenção de pedido como Pedir trabalho/Conversar reaproveitando protocolos e composer atuais."
+      ],
+      "acceptance": "Home permanece com três colunas, sem outro inventário e com conteúdo útil antes de explicações repetidas.",
+      "tests": [
+        "HST-T-G01",
+        "HST-T-G02",
+        "HST-T-G03",
+        "HST-T-G04",
+        "HST-T-G05",
+        "HST-T-G06",
+        "HST-T-G07",
+        "HST-T-G08",
+        "HST-T-H01",
+        "HST-T-H02",
+        "HST-T-H03",
+        "HST-T-H04",
+        "HST-T-H05",
+        "HST-T-H06",
+        "HST-T-H07",
+        "HST-T-H08",
+        "HST-T-H09",
+        "HST-T-H10",
+        "HST-T-I01",
+        "HST-T-I02",
+        "HST-T-I03",
+        "HST-T-I04",
+        "HST-T-I05",
+        "HST-T-I06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-024",
+      "title": "Conferir atualização, cursores e corridas de fronteira",
+      "stage": "HST-05",
+      "dependencies": [
+        "HST-010",
+        "HST-018",
+        "HST-022"
+      ],
+      "requirements": [
+        "HST-R12",
+        "HST-R14",
+        "HST-R18"
+      ],
+      "areas": [
+        "SSE compartilhado",
+        "homeController",
+        "snapshots/cursores"
+      ],
+      "steps": [
+        "Validar início/reconnect/gap, eventos entre snapshot e assinatura, duplicatas e fora de ordem.",
+        "Revalidar validade por relógio/fallback; limitar bursts e não criar stream por card.",
+        "Proteger paginação e seleção em revisões novas sem restaurar conteúdo revogado."
+      ],
+      "acceptance": "Eventos finais/novas perguntas não se perdem; revisão e cache não misturam scope/epoch.",
+      "tests": [
+        "HST-T-F01",
+        "HST-T-F02",
+        "HST-T-F03",
+        "HST-T-F04",
+        "HST-T-F05",
+        "HST-T-F06",
+        "HST-T-F07",
+        "HST-T-F08",
+        "HST-T-F09",
+        "HST-T-F10",
+        "HST-T-F11",
+        "HST-T-F12",
+        "HST-T-F13",
+        "HST-T-F14",
+        "HST-T-J01",
+        "HST-T-J02",
+        "HST-T-J03",
+        "HST-T-J04",
+        "HST-T-J05",
+        "HST-T-J06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-025",
+      "title": "Executar revisão de autoridade e isolamento",
+      "stage": "HST-05",
+      "dependencies": [
+        "HST-016",
+        "HST-017",
+        "HST-019",
+        "HST-022"
+      ],
+      "requirements": [
+        "HST-R15",
+        "HST-R16",
+        "HST-R19"
+      ],
+      "areas": [
+        "API e resolvers",
+        "callbacks UI",
+        "auditoria de efeitos"
+      ],
+      "steps": [
+        "Cobrir usuários/scopes/epochs trocados, dupla submissão, receipt recovery e alvos adulterados.",
+        "Instrumentar GETs e cliques de leitura para provar ausência de efeitos produtivos.",
+        "Revisar exposição de preview/artefatos/URLs e limitar diagnósticos autorizados."
+      ],
+      "acceptance": "Matriz adversarial passa no escopo declarado; nenhum atalho de UI amplia poder do operador.",
+      "tests": [
+        "HST-T-A01",
+        "HST-T-A02",
+        "HST-T-A03",
+        "HST-T-A04",
+        "HST-T-A05",
+        "HST-T-A06",
+        "HST-T-A07",
+        "HST-T-A08",
+        "HST-T-H01",
+        "HST-T-H02",
+        "HST-T-H03",
+        "HST-T-H04",
+        "HST-T-H05",
+        "HST-T-H06",
+        "HST-T-H07",
+        "HST-T-H08",
+        "HST-T-H09",
+        "HST-T-H10",
+        "HST-T-K01",
+        "HST-T-K02",
+        "HST-T-K03",
+        "HST-T-K04",
+        "HST-T-K05",
+        "HST-T-K06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-026",
+      "title": "Qualificar acessibilidade e apresentação responsiva",
+      "stage": "HST-05",
+      "dependencies": [
+        "HST-021",
+        "HST-023"
+      ],
+      "requirements": [
+        "HST-R14",
+        "HST-R17",
+        "HST-R20"
+      ],
+      "areas": [
+        "browser real",
+        "AT quando disponível",
+        "temas"
+      ],
+      "steps": [
+        "Percorrer teclado/foco/modal e transição entre colunas; testar 360px e zoom 200%.",
+        "Validar nomes de ações, contraste/texto e anúncios agrupados; não anunciar cada timestamp/token.",
+        "Distinguir teste automatizado DOM de leitor de tela real e registrar o que não foi executado."
+      ],
+      "acceptance": "Badges e decisões utilizáveis sem mouse; ambiente de acessibilidade efetivamente comprovado.",
+      "tests": [
+        "HST-T-I01",
+        "HST-T-I02",
+        "HST-T-I03",
+        "HST-T-I04",
+        "HST-T-I05",
+        "HST-T-I06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-027",
+      "title": "Medir e ajustar custo de leitura e atualização",
+      "stage": "HST-05",
+      "dependencies": [
+        "HST-010",
+        "HST-013",
+        "HST-024"
+      ],
+      "requirements": [
+        "HST-R12",
+        "HST-R20"
+      ],
+      "areas": [
+        "SQLite EXPLAIN",
+        "medição HTTP/DOM",
+        "fixtures volume"
+      ],
+      "steps": [
+        "Medir baseline e delta em 1/10/100 conexões e fixture ampliada descartável.",
+        "Registrar p50/p95, queries, payload, requests e fontes; evitar N+1 e leitura integral de histórico.",
+        "Só adicionar índices/caches necessários com prova; não dispensar meta anterior porque uma amostra passou."
+      ],
+      "acceptance": "Relatório reproduzível com regressões explícitas; ausência de benchmark não vira PASS.",
+      "tests": [
+        "HST-T-J01",
+        "HST-T-J02",
+        "HST-T-J03",
+        "HST-T-J04",
+        "HST-T-J05",
+        "HST-T-J06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-028",
+      "title": "Executar jornadas integradas no navegador",
+      "stage": "HST-05",
+      "dependencies": [
+        "HST-023",
+        "HST-024",
+        "HST-025",
+        "HST-026",
+        "HST-027"
+      ],
+      "requirements": [
+        "HST-R01",
+        "HST-R03",
+        "HST-R05",
+        "HST-R07",
+        "HST-R09",
+        "HST-R14",
+        "HST-R20"
+      ],
+      "areas": [
+        "fixtures canônicas",
+        "navegador",
+        "J1–J8"
+      ],
+      "steps": [
+        "Executar as oito jornadas com backend real isolado e peers sintéticos onde adequado.",
+        "Capturar snapshots pareados HTTP/DOM e transições, inclusive polling aberto por mais de dois ciclos.",
+        "Registrar controles, cleanup de processos e limitações sem chamar fixture de campanha de provedor."
+      ],
+      "acceptance": "Jornadas demonstram conceitos, não apenas existência de strings no código.",
+      "tests": [
+        "HST-T-B01",
+        "HST-T-B02",
+        "HST-T-B03",
+        "HST-T-B04",
+        "HST-T-B05",
+        "HST-T-B06",
+        "HST-T-B07",
+        "HST-T-B08",
+        "HST-T-B09",
+        "HST-T-B10",
+        "HST-T-B11",
+        "HST-T-B12",
+        "HST-T-C01",
+        "HST-T-C02",
+        "HST-T-C03",
+        "HST-T-C04",
+        "HST-T-C05",
+        "HST-T-C06",
+        "HST-T-C07",
+        "HST-T-C08",
+        "HST-T-C09",
+        "HST-T-C10",
+        "HST-T-C11",
+        "HST-T-C12",
+        "HST-T-D01",
+        "HST-T-D02",
+        "HST-T-D03",
+        "HST-T-D04",
+        "HST-T-D05",
+        "HST-T-D06",
+        "HST-T-D07",
+        "HST-T-D08",
+        "HST-T-D09",
+        "HST-T-D10",
+        "HST-T-D11",
+        "HST-T-D12",
+        "HST-T-D13",
+        "HST-T-D14",
+        "HST-T-E01",
+        "HST-T-E02",
+        "HST-T-E03",
+        "HST-T-E04",
+        "HST-T-E05",
+        "HST-T-E06",
+        "HST-T-E07",
+        "HST-T-E08",
+        "HST-T-E09",
+        "HST-T-E10",
+        "HST-T-E11",
+        "HST-T-E12",
+        "HST-T-E13",
+        "HST-T-E14",
+        "HST-T-E15",
+        "HST-T-E16",
+        "HST-T-F01",
+        "HST-T-F02",
+        "HST-T-F03",
+        "HST-T-F04",
+        "HST-T-F05",
+        "HST-T-F06",
+        "HST-T-F07",
+        "HST-T-F08",
+        "HST-T-F09",
+        "HST-T-F10",
+        "HST-T-F11",
+        "HST-T-F12",
+        "HST-T-F13",
+        "HST-T-F14",
+        "HST-T-G01",
+        "HST-T-G02",
+        "HST-T-G03",
+        "HST-T-G04",
+        "HST-T-G05",
+        "HST-T-G06",
+        "HST-T-G07",
+        "HST-T-G08",
+        "HST-T-H01",
+        "HST-T-H02",
+        "HST-T-H03",
+        "HST-T-H04",
+        "HST-T-H05",
+        "HST-T-H06",
+        "HST-T-H07",
+        "HST-T-H08",
+        "HST-T-H09",
+        "HST-T-H10",
+        "HST-T-I01",
+        "HST-T-I02",
+        "HST-T-I03",
+        "HST-T-I04",
+        "HST-T-I05",
+        "HST-T-I06",
+        "HST-T-K01",
+        "HST-T-K02",
+        "HST-T-K03",
+        "HST-T-K04",
+        "HST-T-K05",
+        "HST-T-K06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-029",
+      "title": "Executar campanhas nativas consentidas ou registrar bloqueio preciso",
+      "stage": "HST-06",
+      "dependencies": [
+        "HST-028"
+      ],
+      "requirements": [
+        "HST-R03",
+        "HST-R05",
+        "HST-R07",
+        "HST-R19",
+        "HST-R20"
+      ],
+      "areas": [
+        "harnesses reais",
+        "Connector remoto conforme ambiente"
+      ],
+      "steps": [
+        "Obter consentimento, orçamento e ambientes descartáveis antes de inferência/instalação.",
+        "Executar J1/J2/J3 nos harnesses e topologias disponíveis, registrando IDs/recibos sem segredos.",
+        "Não presumir suporte dos três adaptadores ou remoto por um teste Codex local; deixar o restante NOT_RUN/BLOCKED.",
+        "Encerrar processos próprios, conferir ausência e preservar evidências sanitizadas."
+      ],
+      "acceptance": "Qualificação por adaptador/OS/topologia real e distinta da implementação; nenhum PASS inventado.",
+      "tests": [
+        "HST-T-L01",
+        "HST-T-L02",
+        "HST-T-L03",
+        "HST-T-L04"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-030",
+      "title": "Atualizar documentação e semântica pública",
+      "stage": "HST-06",
+      "dependencies": [
+        "HST-028"
+      ],
+      "requirements": [
+        "HST-R01",
+        "HST-R03",
+        "HST-R05",
+        "HST-R07",
+        "HST-R09",
+        "HST-R17"
+      ],
+      "areas": [
+        "guia Home",
+        "tooltips",
+        "docs do contrato",
+        "ledgers"
+      ],
+      "steps": [
+        "Documentar Active como harness conectado não bloqueado, Working/Idle e exceções explícitas.",
+        "Explicar dualidade Needs You e confirmação da retomada; Results distingue turno/tarefa/verificação.",
+        "Atualizar ajuda do card e fontes do read model, sem reescrever o onboarding ou documentação inteira."
+      ],
+      "acceptance": "Operador entende a diferença entre ação, execução e entrega sem ler contratos técnicos.",
+      "tests": [
+        "HST-T-G01",
+        "HST-T-G02",
+        "HST-T-G03",
+        "HST-T-G04",
+        "HST-T-G05",
+        "HST-T-G06",
+        "HST-T-G07",
+        "HST-T-G08",
+        "HST-T-K01",
+        "HST-T-K02",
+        "HST-T-K03",
+        "HST-T-K04",
+        "HST-T-K05",
+        "HST-T-K06",
+        "HST-T-L01",
+        "HST-T-L02",
+        "HST-T-L03",
+        "HST-T-L04"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-031",
+      "title": "Validar pacote e reversão não destrutiva",
+      "stage": "HST-06",
+      "dependencies": [
+        "HST-028",
+        "HST-030"
+      ],
+      "requirements": [
+        "HST-R18",
+        "HST-R19",
+        "HST-R20"
+      ],
+      "areas": [
+        "build frontend",
+        "wheel/sdist",
+        "flags rollout"
+      ],
+      "steps": [
+        "Construir/instalar pacote do corte final em ambiente descartável e conferir assets/types compatíveis.",
+        "Demonstrar fallback sem parar runtime/daemon, renomear ID, apagar dados ou repetir tarefa.",
+        "Preservar o gate atual de ativação padrão; autorização de implantação é separada da geração do pacote."
+      ],
+      "acceptance": "Pacote reproduzível, smoke correto e rollback apenas de apresentação/contrato compatível.",
+      "tests": [
+        "HST-T-K01",
+        "HST-T-K02",
+        "HST-T-K03",
+        "HST-T-K04",
+        "HST-T-K05",
+        "HST-T-K06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "HST-032",
+      "title": "Fechar evidências e gate de entrega",
+      "stage": "HST-06",
+      "dependencies": [
+        "HST-029",
+        "HST-030",
+        "HST-031"
+      ],
+      "requirements": [
+        "HST-R18",
+        "HST-R20"
+      ],
+      "areas": [
+        "execution ledger",
+        "release-report",
+        "aceite humano"
+      ],
+      "steps": [
+        "Associar todos os testes e tarefas a evidências do SHA correspondente; não zerar ledgers antigos.",
+        "Fazer aceite humano do significado dos cards e registrar entendimento real, sem aceitar em nome do usuário.",
+        "Separar Implementado, Qualificado por ambiente e Aprovado para default; relatar bloqueios remanescentes.",
+        "Não publicar release/deploy/merge protegido automaticamente."
+      ],
+      "acceptance": "G6 tem decisão explícita baseada em evidências; limitações e próximos passos são rastreáveis.",
+      "tests": [
+        "HST-T-K01",
+        "HST-T-K02",
+        "HST-T-K03",
+        "HST-T-K04",
+        "HST-T-K05",
+        "HST-T-K06",
+        "HST-T-L01",
+        "HST-T-L02",
+        "HST-T-L03",
+        "HST-T-L04"
+      ],
+      "status": "TODO",
+      "evidence": []
+    }
+  ],
+  "tests": [
+    {
+      "id": "HST-T-A01",
+      "group": "A",
+      "title": "Conexões da mesma identidade",
+      "given": "Dois bindings do mesmo agent_id e harness",
+      "when": "Projetar o quadro",
+      "then": "Dois cards distintos com alvos completos, sem fusão por nome.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-A02",
+      "group": "A",
+      "title": "ID público repetido entre projetos",
+      "given": "Dois reviewer autorizados em A e B",
+      "when": "Abrir All projects",
+      "then": "Projeto aparece em cada card e resumo; filtro A não mostra B.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-A03",
+      "group": "A",
+      "title": "Sessões múltiplas",
+      "given": "Um binding tem sessões s1 e s2 com estados diferentes",
+      "when": "Agregar e abrir",
+      "then": "Um card de conexão, duas sessões preservadas; nenhuma escolha por recência.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-A04",
+      "group": "A",
+      "title": "Owner de pergunta exato",
+      "given": "Trabalho compartilhado por bindings A e B e pergunta nativa de A",
+      "when": "Classificar ações",
+      "then": "B não recebe badge/pergunta como se fosse sua; apenas a origem comprovada é acionável.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-A05",
+      "group": "A",
+      "title": "Operação homônima entre executores",
+      "given": "Mesmo operation_id em executores distintos",
+      "when": "Gerar entrega/alvo",
+      "then": "Não há colisão de chave, recibo, revisão ou abertura.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-A06",
+      "group": "A",
+      "title": "Filtro não muda o bloqueio real",
+      "given": "Sessão bloqueada e sessão independente da mesma conexão",
+      "when": "Aplicar filtro visual de estado/agente",
+      "then": "Classificação usa o conjunto autorizado completo; filtro não cria bloqueio total falso.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-A07",
+      "group": "A",
+      "title": "Resultado tardio de escopo antigo",
+      "given": "Consulta A lenta e seleção muda para B",
+      "when": "Chega resposta de A",
+      "then": "Descartar pela geração; dados/contadores/formulários de B permanecem isolados.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-A08",
+      "group": "A",
+      "title": "Pedido sem vínculo",
+      "given": "Ocorrência humana válida sem conexão comprovada",
+      "when": "Montar Needs You",
+      "then": "Uma solicitação com origem não confirmada, sem harness fictício e com ação revalidada.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-B01",
+      "group": "B",
+      "title": "Execução confirmada",
+      "given": "Sessão e operação correntes com progresso válido",
+      "when": "Projetar harness",
+      "then": "Active/Executando; não depende de palavras na saída.",
+      "level": "unidade + contrato/SQLite",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-B02",
+      "group": "B",
+      "title": "Fim com sessão viva",
+      "given": "Último turno terminou e sessão segue pronta com fontes completas",
+      "when": "Atualizar quadro",
+      "then": "Harness permanece Active/Idle e entrega aparece separada em Results.",
+      "level": "unidade + contrato/SQLite",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-B03",
+      "group": "B",
+      "title": "Cadastro não é Idle",
+      "given": "Binding registrado sem prova atual de conexão/sessão",
+      "when": "Classificar",
+      "then": "Registered/estado não confirmado ou Sem sessão ativa; nunca Idle inferido.",
+      "level": "unidade + contrato/SQLite",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-B04",
+      "group": "B",
+      "title": "Heartbeat do host não basta",
+      "given": "Executor online mas sessão/harness sem evidência",
+      "when": "Classificar",
+      "then": "Não afirmar processo vivo ou Idle apenas pelo host.",
+      "level": "unidade + contrato/SQLite",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-B05",
+      "group": "B",
+      "title": "Fila não é ociosidade",
+      "given": "Turno admitido aguardando execução",
+      "when": "Classificar conexão",
+      "then": "Na fila/recebido conforme fonte, não Idle nem Executando sem início.",
+      "level": "unidade + contrato/SQLite",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-B06",
+      "group": "B",
+      "title": "Envio incerto",
+      "given": "Submissão com OUTCOME_UNKNOWN ou reconciliação",
+      "when": "Fim do prazo de observação",
+      "then": "Estado não confirmado/recuperação; nunca Idle e nenhum envio automático.",
+      "level": "unidade + contrato/SQLite",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-B07",
+      "group": "B",
+      "title": "Fonte parcial não prova ausência",
+      "given": "Consulta de operações/sessões incompleta",
+      "when": "Nenhum running na página visível",
+      "then": "Contagem parcial; não concluir Idle por página vazia.",
+      "level": "unidade + contrato/SQLite",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-B08",
+      "group": "B",
+      "title": "Prova positiva com fonte alheia parcial",
+      "given": "Execução corrente comprovada e falha só de observação externa",
+      "when": "Atualizar",
+      "then": "Executando continua comprovado; cobertura externa parcial não transforma tudo em Idle ou desabilita leitura.",
+      "level": "unidade + contrato/SQLite",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-B09",
+      "group": "B",
+      "title": "Prontidão expirada",
+      "given": "Sessão era Idle, validade de evidência termina sem evento",
+      "when": "Avançar relógio",
+      "then": "Badge passa a não confirmado; SSE live não mantém falsa atualidade.",
+      "level": "unidade + contrato/SQLite",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-B10",
+      "group": "B",
+      "title": "One-shot encerrado",
+      "given": "Turno termina e política fecha processo/sessão",
+      "when": "Projetar",
+      "then": "Sem sessão ativa, não Idle nem erro inventado; nenhum runtime.start para melhorar o card.",
+      "level": "unidade + contrato/SQLite",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-B11",
+      "group": "B",
+      "title": "Desconexão conhecida",
+      "given": "Harness antes conectado perde liveness comprovadamente",
+      "when": "Atualizar",
+      "then": "Card indisponível/desconectado permanece acessível, excluído do total conectado e sem quarta coluna.",
+      "level": "unidade + contrato/SQLite",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-B12",
+      "group": "B",
+      "title": "Outra conexão do agente trabalhando",
+      "given": "Binding A parado e B produtivo, ambos mesmo agent_id",
+      "when": "Agregar A",
+      "then": "B não torna A executando ou livre do seu bloqueio humano.",
+      "level": "unidade + contrato/SQLite",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-C01",
+      "group": "C",
+      "title": "Pergunta não bloqueante",
+      "given": "Uma execução corrente e pergunta is_blocking=false comprovada",
+      "when": "Projetar",
+      "then": "Card Active/Executando com Resposta pendente; solicitação independente em Needs You.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-C02",
+      "group": "C",
+      "title": "Bloqueio total",
+      "given": "Única execução suspensa por pergunta atual decidível",
+      "when": "Projetar",
+      "then": "Um card de harness em Needs You, pergunta incorporada, sem cópia em Active ou request solto.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-C03",
+      "group": "C",
+      "title": "Paralelismo real",
+      "given": "Uma sessão bloqueada e outra executando no mesmo binding",
+      "when": "Projetar",
+      "then": "Harness Active/Executando; request separado informa bloqueio parcial, não não bloqueante por natureza.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-C04",
+      "group": "C",
+      "title": "Independente termina",
+      "given": "Cenário anterior e a outra sessão encerra",
+      "when": "Ler fatos atuais",
+      "then": "Mesmo harness migra para Needs You; entrega da segunda sessão fica Results; pergunta não duplica.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-C05",
+      "group": "C",
+      "title": "Idle não invalida bloqueio",
+      "given": "Uma sessão bloqueada e outra sessão ociosa",
+      "when": "Agregar",
+      "then": "Ociosa não conta como trabalho independente; bloqueio total pode ser comprovado.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-C06",
+      "group": "C",
+      "title": "Fila com dependência desconhecida",
+      "given": "Há blocker humano e uma operação queued sem prova de independência",
+      "when": "Agregar",
+      "then": "Não inferir que fila consegue progredir; estado global desconhecido se falta prova.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-C07",
+      "group": "C",
+      "title": "Fila independente demonstrada",
+      "given": "Runtime confirma atividade independente que pode progredir enquanto outra espera",
+      "when": "Agregar",
+      "then": "Não rotular bloqueio total; mostrar estado produtivo/fila confirmado e pedido separado.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-C08",
+      "group": "C",
+      "title": "Não bloqueante vira bloqueante",
+      "given": "Mesma pergunta passa a bloquear conforme nova prova canônica",
+      "when": "Atualizar",
+      "then": "Mover card e incorporar o mesmo ID da ocorrência, sem nova pergunta.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-C09",
+      "group": "C",
+      "title": "Duas bloqueantes",
+      "given": "Todas execuções produtivas esperam duas ações atuais",
+      "when": "Projetar",
+      "then": "Card Needs You/Aguardando 2 ações; ambas alcançáveis, sem dupla contagem.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-C10",
+      "group": "C",
+      "title": "Coordenação não prova pause",
+      "given": "Handoff ou pergunta do Nexus sem metadado de suspensão",
+      "when": "Projetar",
+      "then": "Ação pode estar Needs You, mas bloqueio do harness permanece desconhecido; não mover por tipo.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-C11",
+      "group": "C",
+      "title": "Fonte do blocker fica stale",
+      "given": "Prova de bloqueio expira e pedido canônico continua aberto",
+      "when": "Atualizar",
+      "then": "Não afirmar bloqueio atual; preservar último estado rotulado e acesso ao pedido.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-C12",
+      "group": "C",
+      "title": "Ocorrência compartilhada",
+      "given": "Uma decisão canônica relacionada a mais de uma conexão sem dono único",
+      "when": "Projetar",
+      "then": "Uma ação independente com referências pertinentes; não duplicar formulários nem ocultar por any-binding bloqueado.",
+      "level": "unidade + SQLite/HTTP",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D01",
+      "group": "D",
+      "title": "Pergunta simples",
+      "given": "Um pedido humano aberto do tipo question",
+      "when": "Renderizar card",
+      "then": "Resposta pendente ou Aguardando sua resposta, botão Responder para o alvo exato.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D02",
+      "group": "D",
+      "title": "Permissão nativa",
+      "given": "Pedido de aprovação de ferramenta com prova de bloqueio do adaptador",
+      "when": "Renderizar",
+      "then": "Aprovação pendente/aguardando aprovação segundo escopo; sem aplicar regra exclusiva Codex a outro método.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D03",
+      "group": "D",
+      "title": "Verificação humana",
+      "given": "Entrega em verificação atribuída ao operador",
+      "when": "Renderizar",
+      "then": "Verificação pendente e ação canônica; não bloquear harness por essa atribuição isolada.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D04",
+      "group": "D",
+      "title": "Handoff ao agente",
+      "given": "Handoff aberto atribuído a outro agente sem ação humana",
+      "when": "Projetar",
+      "then": "Não criar pendência do usuário só por status OPEN/unread.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D05",
+      "group": "D",
+      "title": "Vários tipos",
+      "given": "Pergunta e aprovação abertas na mesma conexão",
+      "when": "Mostrar preview limitado",
+      "then": "N ações pendentes; abrir revela todos os tipos com paginação e IDs únicos.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D06",
+      "group": "D",
+      "title": "Decisão registrada não retoma",
+      "given": "Harness bloqueado e operador responde com recibo registrado sem aplicação nativa",
+      "when": "Atualizar",
+      "then": "Aguardando confirmação de retomada; zero nova resposta exigida; não Executando.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D07",
+      "group": "D",
+      "title": "Recibo antigo entregue tarde",
+      "given": "RUNNING da mesma operação, mas anterior causalmente à decisão",
+      "when": "Receber após a resposta",
+      "then": "Não considerar retomada só por horário de chegada.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D08",
+      "group": "D",
+      "title": "Retomada confirmada",
+      "given": "Prova nativa causalmente posterior e da geração correta",
+      "when": "Atualizar",
+      "then": "Mover para Active/Executando sem repetir envio; remover ação resolvida.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D09",
+      "group": "D",
+      "title": "Termina após resposta",
+      "given": "Resultado terminal e sessão viva/pronta confirmados após decisão",
+      "when": "Atualizar",
+      "then": "Active/Idle e Results apropriado, sem inventar etapa Working intermediária.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D10",
+      "group": "D",
+      "title": "Aplicação negada",
+      "given": "Resposta recebida pelo Server, entrega nativa recusada",
+      "when": "Atualizar",
+      "then": "Resposta não aplicada/inspeção; não marcar resolvida no runtime nem reenviar automaticamente.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D11",
+      "group": "D",
+      "title": "Resposta HTTP perdida",
+      "given": "Intenção de decisão existe e cliente recebe erro de rede",
+      "when": "Recuperar",
+      "then": "Consultar a mesma intenção/recibo; não criar nova decisão.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D12",
+      "group": "D",
+      "title": "Decisão em outra aba",
+      "given": "Duas telas exibem mesma revisão; uma já decide",
+      "when": "Outra tenta confirmar",
+      "then": "Revalidar, conflito claro ou recibo existente; sem ação duplicada ou mudança de destinatário.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D13",
+      "group": "D",
+      "title": "Snooze e visto",
+      "given": "Harness comprovadamente bloqueado com lembrete adiado/visto",
+      "when": "Atualizar",
+      "then": "Permanece bloqueado; preferência não resolve pergunta e não autoriza retomada.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-D14",
+      "group": "D",
+      "title": "Negação e expiração",
+      "given": "Aprovação negada ou expirada, runtime ainda sem estado posterior",
+      "when": "Projetar",
+      "then": "Não assumir cancelamento/Idle; expirado não aceita revisão antiga; ação de recuperação somente canônica.",
+      "level": "contrato + CLI/API/browser focal",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E01",
+      "group": "E",
+      "title": "Turno simples sem tarefa",
+      "given": "SUCCEEDED com saída capturada, sem handoff",
+      "when": "Classificar",
+      "then": "Resposta disponível/Turno concluído; tarefa não aplicável, não Tarefa pendente.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E02",
+      "group": "E",
+      "title": "Turno com tarefa aberta",
+      "given": "SUCCEEDED ligado a handoff CLAIMED",
+      "when": "Classificar",
+      "then": "Resultado do turno disponível e Tarefa ainda não concluída.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E03",
+      "group": "E",
+      "title": "Entrega em verificação",
+      "given": "Handoff atual VERIFYING com entrega",
+      "when": "Atualizar Results",
+      "then": "Aguardando verificação; mesma entrega correlacionada, sem falso selo aprovado.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E04",
+      "group": "E",
+      "title": "Concluído sem prova QA",
+      "given": "Handoff COMPLETED, sem evidência independente de verificação",
+      "when": "Classificar",
+      "then": "Tarefa concluída, sem Entrega verificada.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E05",
+      "group": "E",
+      "title": "Verificado explicitamente",
+      "given": "Conclusão e decisão positiva autorizada da mesma entrega/claim",
+      "when": "Classificar",
+      "then": "Tarefa concluída + Entrega verificada com referência auditável.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E06",
+      "group": "E",
+      "title": "Verificação de outro claim",
+      "given": "Decisão positiva pertence à versão anterior",
+      "when": "Classificar entrega atual",
+      "then": "Não herdar verificação; contexto histórico identificado.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E07",
+      "group": "E",
+      "title": "Verificação negativa",
+      "given": "Entrega atual rejeitada pelo verificador",
+      "when": "Classificar",
+      "then": "Entrega não aprovada e estado da tarefa real; nenhuma reexecução/reabertura pela UI.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E08",
+      "group": "E",
+      "title": "Turno falhou",
+      "given": "FAILED produtivo com ou sem saída parcial",
+      "when": "Montar Results",
+      "then": "Execução encerrada com falha; acesso à evidência, sem retry genérico.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E09",
+      "group": "E",
+      "title": "Turno cancelado",
+      "given": "CANCELLED confirmado",
+      "when": "Montar Results",
+      "then": "Execução cancelada; saída parcial preservada se existir.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E10",
+      "group": "E",
+      "title": "Handoff rejeitado",
+      "given": "REJECTED do handoff sem resultado nativo equivalente",
+      "when": "Montar Results",
+      "then": "Rejeição da tarefa/entrega, não sucesso nem cancelamento nativo por inferência.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E11",
+      "group": "E",
+      "title": "Cleanup pendente",
+      "given": "Produtivo SUCCEEDED e contenção/limpeza pendente",
+      "when": "Classificar",
+      "then": "Sucesso/resultado separado da limpeza; não executar de novo.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E12",
+      "group": "E",
+      "title": "Saída ainda não capturada",
+      "given": "Recibo terminal confiável, output ausente",
+      "when": "Montar card",
+      "then": "Execução encerrada + saída ainda não disponível; não afirmar entrega completa.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E13",
+      "group": "E",
+      "title": "Reporte externo",
+      "given": "Ocorrência explícita external_completion_unseen",
+      "when": "Montar Results",
+      "then": "Término reportado, evidência externa identificada; não sucesso nativo nem verificação.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E14",
+      "group": "E",
+      "title": "Silêncio e texto livre",
+      "given": "Harness fica silencioso/Idle ou escreve terminei sem evento canônico",
+      "when": "Projetar",
+      "then": "Nenhuma entrega inferida dessas condições.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E15",
+      "group": "E",
+      "title": "Unknown não terminal",
+      "given": "OUTCOME_UNKNOWN sem término comprovado",
+      "when": "Projetar",
+      "then": "Não gerar novo resultado concluído; manter contexto/atenção autorizada, histórico confirmado intacto.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-E16",
+      "group": "E",
+      "title": "Deduplicação e vistos",
+      "given": "Uma entrega muda verificação e tem três artefatos, alguns itens fora da página",
+      "when": "Atualizar e abrir Home",
+      "then": "Mesma entrega atualizada; artefatos por vínculo; não marcar itens invisíveis nem ACK de inbox; retenção canônica preservada.",
+      "level": "unidade + SQLite/HTTP + apresentação",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F01",
+      "group": "F",
+      "title": "Painel com polling idêntico",
+      "given": "Painel aberto e dois snapshots semanticamente idênticos",
+      "when": "Avançar dois intervalos de polling",
+      "then": "hasPendingUpdate não vira true por pausa sozinha; abrir atividade continua possível.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F02",
+      "group": "F",
+      "title": "Mudança real durante leitura",
+      "given": "Painel aberto e outro harness muda",
+      "when": "Atualizar board",
+      "then": "Aviso discreto e revalidação apropriada; painel não fecha e sessão selecionada não muda.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F03",
+      "group": "F",
+      "title": "Revisão igual com horário novo",
+      "given": "generated_at/heartbeat muda sem mudança semântica",
+      "when": "Publicar snapshot",
+      "then": "Não invalidar paginação nem anunciar novos resultados por isso apenas.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F04",
+      "group": "F",
+      "title": "Mudança relevante de validade",
+      "given": "TTL termina sem novo evento",
+      "when": "Avançar relógio",
+      "then": "Reclassificar com novo estado; não depender exclusivamente de SSE.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F05",
+      "group": "F",
+      "title": "Cursor muda",
+      "given": "Página filha lida e relação muda",
+      "when": "Pedir próxima página",
+      "then": "Conflito/releitura no mesmo painel, sem concatenar revisões nem exigir fechar/reabrir.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F06",
+      "group": "F",
+      "title": "Formulário em edição",
+      "given": "Usuário digita resposta e snapshots chegam",
+      "when": "Atualizar",
+      "then": "Rascunho/foco/target/revisão revisada preservados; revalidação antes do envio.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F07",
+      "group": "F",
+      "title": "Card muda de coluna",
+      "given": "Painel mostra ocorrência; harness deixa Active",
+      "when": "Publicar novo estado",
+      "then": "Uma identidade, painel independente da coluna, retorno de foco correto.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F08",
+      "group": "F",
+      "title": "Burst de tokens",
+      "given": "Muitos eventos de stream",
+      "when": "Invalidar",
+      "then": "Atualizações agrupadas com teto, sem refetch completo por token e sem perder evento final.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F09",
+      "group": "F",
+      "title": "Reconexão e lacuna",
+      "given": "Cliente perde eventos e retoma SSE",
+      "when": "Resincronizar",
+      "then": "Snapshot autoritativo cobre término/pendência; sem duplicar card ou decisão.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F10",
+      "group": "F",
+      "title": "Falha de fonte alheia",
+      "given": "Fonte externa indisponível, sessão nativa disponível",
+      "when": "Abrir leitura da sessão",
+      "then": "Leitura exata permitida com revalidação; não bloquear toda Home por uma fonte.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F11",
+      "group": "F",
+      "title": "401/403 com pausa",
+      "given": "Painel pausado e autorização revogada",
+      "when": "Receber falha",
+      "then": "Limpar conteúdo protegido e desabilitar comandos, sem aguardar Apply updates.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F12",
+      "group": "F",
+      "title": "Pausa manual",
+      "given": "Usuário pausa apresentação",
+      "when": "Tentar ação a partir de alvo conhecido",
+      "then": "Agentes seguem; leitura/ação revalidam, pausa não renova autoridade nem é runtime.pause.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F13",
+      "group": "F",
+      "title": "Atualização normal não é erro",
+      "given": "Revisão do board mudou sem falha",
+      "when": "Renderizar notice",
+      "then": "Mensagem normal não entra em error/role alert persistente.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-F14",
+      "group": "F",
+      "title": "Histórico do navegador",
+      "given": "Abrir detalhe e usar voltar/avançar após refresh",
+      "when": "Resolver rota",
+      "then": "Revalidar mesmo alvo; referência inválida não abre sessão mais recente.",
+      "level": "unidade com relógio/promessas + browser",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-G01",
+      "group": "G",
+      "title": "Uma sessão única",
+      "given": "Conjunto completo contém uma sessão elegível",
+      "when": "Clicar Acompanhar no harness",
+      "then": "Abrir seu acompanhamento em um gesto, sem lista intermediária vazia.",
+      "level": "componente + navegador",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-G02",
+      "group": "G",
+      "title": "Preview de um não é único",
+      "given": "Preview tem uma sessão e has_more=true ou total desconhecido",
+      "when": "Clicar",
+      "then": "Não escolher automaticamente; seletor/revalidação com cobertura explícita.",
+      "level": "componente + navegador",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-G03",
+      "group": "G",
+      "title": "Várias sessões legíveis",
+      "given": "Duas sessões conhecidas com títulos/estados",
+      "when": "Abrir seletor",
+      "then": "Opções por objetivo/projeto/tempo; IDs disponíveis em detalhes.",
+      "level": "componente + navegador",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-G04",
+      "group": "G",
+      "title": "Sem sessão ativa",
+      "given": "Binding válido com política sob demanda",
+      "when": "Abrir card",
+      "then": "Contexto e histórico, sem criar runtime/sessão ou consumir provedor.",
+      "level": "componente + navegador",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-G05",
+      "group": "G",
+      "title": "Labels por projeto",
+      "given": "All projects com IDs iguais",
+      "when": "Renderizar harness/request/delivery",
+      "then": "Projeto aparece em todos os três tipos; projeto único pode omitir redundância.",
+      "level": "componente + navegador",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-G06",
+      "group": "G",
+      "title": "Tempo honesto",
+      "given": "Só created_at ou occurred_at disponível",
+      "when": "Renderizar duração",
+      "then": "Usar recebido/atualizado há, não tempo de execução inventado.",
+      "level": "componente + navegador",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-G07",
+      "group": "G",
+      "title": "Controles compactos",
+      "given": "Home recorrente com atividade",
+      "when": "Renderizar",
+      "then": "Três colunas, cabeçalho curto, sem Reconnect indisponível destacado ou novos menus/listas administrativas.",
+      "level": "componente + navegador",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-G08",
+      "group": "G",
+      "title": "Pedido e conversa",
+      "given": "Usuário inicia interação básica",
+      "when": "Escolher Pedir trabalho ou Conversar",
+      "then": "Rótulos orientados à intenção, handoff/message canônicos preservados e identidade operator.",
+      "level": "componente + navegador",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-H01",
+      "group": "H",
+      "title": "Leitura sem efeitos",
+      "given": "Snapshot, expandir card, abrir resultado",
+      "when": "Inspecionar writes e comandos",
+      "then": "Nenhum grant, ACK, claim, turno, decisão, sessão ou teste criado; metadados de auth existentes documentados à parte.",
+      "level": "API/SQLite + browser adversarial",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-H02",
+      "group": "H",
+      "title": "Destino não é autoridade",
+      "given": "URL/ID aponta a objeto de outro escopo",
+      "when": "Resolver detalhe",
+      "then": "Negar conforme autorização; não vazar preview/contador pelo erro.",
+      "level": "API/SQLite + browser adversarial",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-H03",
+      "group": "H",
+      "title": "Campos privados",
+      "given": "Prompts/segredos em origem não pública e labels hostis",
+      "when": "Renderizar resumo/JSON",
+      "then": "Minimizar/redigir/escapar; sem executar HTML/ANSI nem expor credenciais.",
+      "level": "API/SQLite + browser adversarial",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-H04",
+      "group": "H",
+      "title": "Decisão do destinatário",
+      "given": "Pergunta dirigida ao agente B, operador vê contexto",
+      "when": "Interagir",
+      "then": "Não personificar B; somente ações permitidas ao usuário atual.",
+      "level": "API/SQLite + browser adversarial",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-H05",
+      "group": "H",
+      "title": "Uma ocorrência, dois atalhos",
+      "given": "Mesmo pedido via badge e sino",
+      "when": "Submeter concorrente",
+      "then": "Intenção/revisão canônicas impedem duplicação; badges não são filas novas.",
+      "level": "API/SQLite + browser adversarial",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-H06",
+      "group": "H",
+      "title": "Retry produtivo proibido",
+      "given": "Resultado incerto ou falha com possível efeito",
+      "when": "Abrir card",
+      "then": "Somente inspeção/recuperação existente; nenhum botão que reexecute às cegas.",
+      "level": "API/SQLite + browser adversarial",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-H07",
+      "group": "H",
+      "title": "Revogação de binding",
+      "given": "Binding/sessão mudou após snapshot",
+      "when": "Abrir/decidir",
+      "then": "Revalidar tupla/generation; não selecionar sucessor por nome.",
+      "level": "API/SQLite + browser adversarial",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-H08",
+      "group": "H",
+      "title": "Externo não altera runtime",
+      "given": "Reporte idle/done externo",
+      "when": "Projetar",
+      "then": "Não libera slot/claim, não conclui handoff nem renova grants.",
+      "level": "API/SQLite + browser adversarial",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-H09",
+      "group": "H",
+      "title": "Reconexão individual não simulada",
+      "given": "Connector só oferece restart do daemon inteiro",
+      "when": "Card de um harness",
+      "then": "Não executar restart como ação individual; limitação em detalhe.",
+      "level": "API/SQLite + browser adversarial",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-H10",
+      "group": "H",
+      "title": "Raízes e daemon preservados",
+      "given": "Atualização Home em instalação com trabalho CLI",
+      "when": "Usar UI e reverter apresentação",
+      "then": "Nenhum remapeamento de diretório/identidade/checkpoint ou interrupção de daemon.",
+      "level": "API/SQLite + browser adversarial",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-I01",
+      "group": "I",
+      "title": "Teclado completo",
+      "given": "Home com cards nas três colunas",
+      "when": "Navegar sem mouse",
+      "then": "Badges acionáveis/buttons/painel têm foco e nome; nenhuma armadilha fora do modal.",
+      "level": "navegador + AT quando disponível",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-I02",
+      "group": "I",
+      "title": "Retorno após movimento",
+      "given": "Card origem mudou de Active para Needs You",
+      "when": "Fechar painel",
+      "then": "Foco retorna ao mesmo ID canônico ou destino estável, não outro harness.",
+      "level": "navegador + AT quando disponível",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-I03",
+      "group": "I",
+      "title": "Avisos sem ruído",
+      "given": "Atualizações rápidas e relógios relativos",
+      "when": "Usar leitor de tela",
+      "then": "Anunciar mudanças relevantes agrupadas, não tokens/segundos; sem mover foco.",
+      "level": "navegador + AT quando disponível",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-I04",
+      "group": "I",
+      "title": "Estado não só por cor",
+      "given": "Tema claro/escuro e percepção sem cor",
+      "when": "Inspecionar badges",
+      "then": "Texto/ícone semântico distinguem Working/Idle/pendência/erro e estado não confirmado.",
+      "level": "navegador + AT quando disponível",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-I05",
+      "group": "I",
+      "title": "Mobile e zoom",
+      "given": "360px e zoom 200% com nomes longos",
+      "when": "Operar",
+      "then": "Colunas empilhadas, ações acessíveis sem overflow obrigatório de página; detalhe volta ao mesmo contexto.",
+      "level": "navegador + AT quando disponível",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-I06",
+      "group": "I",
+      "title": "Modal e drafts",
+      "given": "Pergunta em edição e Escape/troca de projeto",
+      "when": "Fechar/trocar",
+      "then": "Guardar confirmação de descarte adequada; não copiar rascunho para outra ocorrência; logout limpa protegido.",
+      "level": "navegador + AT quando disponível",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-J01",
+      "group": "J",
+      "title": "Unidades distintas",
+      "given": "2 harnesses, 3 ações, 2 entregas e trabalho compartilhado",
+      "when": "Contar",
+      "then": "Contagem de cada unidade deduplicada; não somar como tarefas nem usar tamanho da página.",
+      "level": "SQLite instrumentado + benchmark",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-J02",
+      "group": "J",
+      "title": "Fontes parciais",
+      "given": "Cobertura de operações incompleta",
+      "when": "Contar Idle/connected/actions",
+      "then": "Totais desconhecidos/parciais explicitados; prova positiva não transforma ausência em zero.",
+      "level": "SQLite instrumentado + benchmark",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-J03",
+      "group": "J",
+      "title": "Sem N+1",
+      "given": "Fixtures de 1,10,100 conexões",
+      "when": "Medir queries",
+      "then": "Custo de consultas não cresce uma por card/sessão; sem fan-out de hosts/provedores.",
+      "level": "SQLite instrumentado + benchmark",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-J04",
+      "group": "J",
+      "title": "Histórico limitado",
+      "given": "1000 atividades abertas e 100000 eventos em fixture",
+      "when": "Abrir overview e resultados",
+      "then": "Prévia/metadados paginados; sem carregar transcripts/payloads completos.",
+      "level": "SQLite instrumentado + benchmark",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-J05",
+      "group": "J",
+      "title": "Benchmark comparável",
+      "given": "Mesmo hardware/dataset antes e depois",
+      "when": "Executar amostras e calcular p50/p95",
+      "then": "Registrar números reais, query count, payload e comparação; amostra única não é p95.",
+      "level": "SQLite instrumentado + benchmark",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-J06",
+      "group": "J",
+      "title": "Expiração e revisão estável",
+      "given": "Heartbeats sem mudança, depois stale real",
+      "when": "Paginar e atualizar",
+      "then": "Sem churn de cursor por relógio irrelevante; expiração semântica invalida corretamente.",
+      "level": "SQLite instrumentado + benchmark",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-K01",
+      "group": "K",
+      "title": "DTO e validator alinhados",
+      "given": "Servidor adiciona novos estados/metadados",
+      "when": "Consumir no frontend empacotado",
+      "then": "Backend/types/validadores concordam; apresentação pós-decisão nova não força blocks_harness=true; cliente antigo mantém distribuição histórica e fallback explícito.",
+      "level": "contrato + instalação isolada",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-K02",
+      "group": "K",
+      "title": "Recibos históricos intactos",
+      "given": "Resultados/pedidos anteriores à feature",
+      "when": "Projetar",
+      "then": "Não reescrever receipts/hashes/grants para adequar texto de UI.",
+      "level": "contrato + instalação isolada",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-K03",
+      "group": "K",
+      "title": "Fallback preservado",
+      "given": "Flag/apresentação nova desabilitada com execução ativa",
+      "when": "Reverter",
+      "then": "Home/controles antigos e sino acessíveis; sessões/IDs/dados continuam intactos.",
+      "level": "contrato + instalação isolada",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-K04",
+      "group": "K",
+      "title": "Artefato instalado",
+      "given": "Wheel/sdist/frontend construídos do corte final",
+      "when": "Instalar em home descartável",
+      "then": "Assets/schema corretos e smoke de leitura funcionando; não só dev server.",
+      "level": "contrato + instalação isolada",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-K05",
+      "group": "K",
+      "title": "CLI independente",
+      "given": "Ciclo connect/work/answer/resultado já suportado",
+      "when": "Executar sem abrir dashboard",
+      "then": "Nenhum passo web obrigatório nem alteração do preset/grant na reconexão.",
+      "level": "contrato + instalação isolada",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-K06",
+      "group": "K",
+      "title": "Ledger honesto",
+      "given": "Fixtures/browser passam, AT/provedor não foram executados",
+      "when": "Fechar relatório",
+      "then": "NOT_RUN/BLOCKED para o não executado, sem apagar pendências dos planos anteriores ou ativar default sem gate.",
+      "level": "contrato + instalação isolada",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-L01",
+      "group": "L",
+      "title": "Trio conectado",
+      "given": "Codex, Pi e Claude suportados no ambiente, com consentimento",
+      "when": "Executar e encerrar uma tarefa por conexão",
+      "then": "Resultados explícitos e cards Idle somente onde comprovado; reportar separadamente harnesses não executados.",
+      "level": "harness real / ambientes isolados",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-L02",
+      "group": "L",
+      "title": "Ciclo humano real",
+      "given": "Harness com pergunta/aprovação nativa comprovada",
+      "when": "Responder e acompanhar",
+      "then": "Bloqueio, decisão registrada, retomada confirmada e resultado correlacionados; sem inferir prova nativa de fixture.",
+      "level": "harness real / ambientes isolados",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-L03",
+      "group": "L",
+      "title": "Execução paralela real",
+      "given": "Duas sessões compatíveis do mesmo harness",
+      "when": "Bloquear uma e concluir a independente",
+      "then": "Active com request separado, depois Needs You, sem interrupção da irmã nem duplicação.",
+      "level": "harness real / ambientes isolados",
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "HST-T-L04",
+      "group": "L",
+      "title": "Fluxo remoto real",
+      "given": "Server e Connector em hosts isolados autorizados",
+      "when": "Acompanhar tarefa e decisão pela Home",
+      "then": "Mesmos badges/contextos e reconexão/falha honestas; sem tratar localhost sintético como prova multi-host.",
+      "level": "harness real / ambientes isolados",
+      "status": "NOT_RUN",
+      "evidence": []
+    }
+  ],
+  "evidence_requirements": [
+    "commit",
+    "command_or_procedure",
+    "environment",
+    "timestamp",
+    "result",
+    "artifact_path",
+    "limitations"
+  ],
+  "product_tests_executed_during_authoring": false,
+  "notes": [
+    "Template de execução, não relatório de testes do Nexus.",
+    "Preservar ledgers de UI-R1/HOME-R1/Quick Connect; reutilizar evidências somente com justificativa."
+  ],
+  "execution": {
+    "branch": "feature/v0.3.7",
+    "version": "0.3.7",
+    "baseline": "f28a31a22436c366a4c8dbdf5e3b250d606a61be",
+    "human_evaluation": "DEFERRED_UNTIL_IMPLEMENTATION_AND_AUTOMATED_TESTS_READY",
+    "default_rollout_approved": false,
+    "real_provider_campaign": "NOT_AUTHORIZED",
+    "retained_gates": [
+      "UI-R1 human/qualification",
+      "Quick Connect UNKNOWN usage and QC031",
+      "Original broad regression NOT_GREEN"
+    ]
+  }
+}

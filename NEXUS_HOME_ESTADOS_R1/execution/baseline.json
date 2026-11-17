@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-11-17T12:26:30.146799+00:00",
+  "phase": "HST-00",
+  "scope": "PRE_EDIT_RECONCILIATION",
+  "nexus": {
+    "branch": "feature/v0.3.6",
+    "head": "f28a31a22436c366a4c8dbdf5e3b250d606a61be",
+    "main": "8d77b50c00b417c86818d027aed7497fababac34",
+    "ahead_main": 258,
+    "behind_main": 0,
+    "working_tree": "clean before execution reports",
+    "baseline_drift": false
+  },
+  "connector": {
+    "branch": "feature/v0.0.13",
+    "head": "a4d510080d7a685fa442a4c5c30419952589fe04",
+    "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+    "ahead_main": 36,
+    "behind_main": 0,
+    "working_tree": "clean"
+  },
+  "core": {
+    "branch": "feature/v0.0.14",
+    "head": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+    "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+    "ahead_main": 14,
+    "behind_main": 0,
+    "working_tree": "clean"
+  },
+  "instructions": [
+    "User-imported C:/Users/jpamb/.codex/RTK.md read; all shell commands start rtk",
+    "No repository or parent AGENTS.md found",
+    "Current CONTRIBUTING.md and .github/workflows/ci.yml read",
+    "Preserve current branch work: branch from f28, not destructive return to main"
+  ],
+  "main_fetched": true,
+  "pins": {
+    "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+    "vendor/ci/okto_nexus_connector-0.0.13-py3-none-any.whl": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90"
+  },
+  "plan_hashes": {
+    "PLANO_CODEX_NEXUS_HOME_ESTADOS_BADGES_RESULTS_R1.md": "e1944fcf94823fc9f6c32e4b7b3958bc5103311e04f0658b17a00d5e53b10247",
+    "NEXUS_HOME_ESTADOS_LEDGER_R1.json": "5c1dc8cec525643e4b27d1acb8bb3fad25b069d114b15543ae24e7bab03fe771",
+    "PROMPT_CODEX_NEXUS_HOME_ESTADOS_R1.md": "e96fd831513218efedd4b045c022ad64be19ca3aaf8d4070f8c2d8671bcdbc6f",
+    "README.md": "ccd9659fc31fb57bc7e28b2bccdd95104e9da7515b25982aa7923e5fd61e61c5",
+    "verify_package.py": "2b56b4cd9a915509d2cc8fbca9ce2780530d2554c3b2943e0d8c46d80460ff92"
+  },
+  "retained_gates": [
+    "Original UI human/qualification blockers",
+    "Quick Connect QC031/I09 UNKNOWN usage guard and real-provider block",
+    "Original broad regression NOT_GREEN, not inherited as current proof"
+  ],
+  "human_test_gate": "Only after implementation, automated tests and candidate/package ready; no participant requested now",
+  "authorization": "No paid campaign, personal install, release, deploy or default rollout authorized"
+}
