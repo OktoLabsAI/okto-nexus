@@ -55,10 +55,11 @@ export function useHomeOverview(options: HomeOverviewOptions) {
   const loadEntryAttention=useCallback((groupId:string,entryId:string)=>controller.current?.loadEntryAttention(groupId,entryId),[]);
   const loadEntryResults=useCallback((groupId:string,entryId:string)=>controller.current?.loadEntryResults(groupId,entryId),[]);
   const loadBoardColumn=useCallback((column:HomeBoardColumn)=>controller.current?.loadBoardColumn(column),[]);
+  const loadHarnessChildren=useCallback((cardId:string|null)=>controller.current?.loadHarnessChildren(cardId),[]);
   // Effects run after paint: never render a previous identity/workspace during
   // the intervening render before configure has cleared its controller cache.
   const expected = homeContextKey({ ...options, origin: typeof window === 'undefined' ? '' : window.location.origin });
   const visibleState = state.scopeKey === expected && options.enabled !== false && options.identityKey
     ? state : { ...initialHomeState(), status: options.enabled === false || !options.identityKey ? 'disabled' as const : 'loading' as const };
-  return { state: visibleState, refresh, loadMore, pause, apply, clear,holdOrder,loadEntries,loadGroupChildren,loadEntrySessions,loadEntryAttention,loadEntryResults,loadBoardColumn };
+  return { state: visibleState, refresh, loadMore, pause, apply, clear,holdOrder,loadEntries,loadGroupChildren,loadEntrySessions,loadEntryAttention,loadEntryResults,loadBoardColumn,loadHarnessChildren };
 }

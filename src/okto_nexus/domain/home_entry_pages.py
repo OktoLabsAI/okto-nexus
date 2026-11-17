@@ -151,7 +151,9 @@ def revision(relations, check_budget):
             value[name].sort(key=lambda row: (row[key], canonical(row)))
         entries.append(value)
     result = digest(dict(entries=entries, server_attention=sorted(relations.server_attention, key=lambda row: row['attention_id']),
-                         source_status=relations.source_status, connection_count=relations.connection_count))
+                         source_status=relations.source_status, connection_count=relations.connection_count,
+                         connections=None if relations.connections is None else sorted(
+                             (asdict(c) for c in relations.connections), key=canonical)))
     check_budget()
     return result
 

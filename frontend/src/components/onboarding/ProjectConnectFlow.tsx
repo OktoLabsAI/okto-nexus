@@ -53,6 +53,7 @@ export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,o
     if(!c.workspace_root.trim()){setFolderOpen(true);setInvalid('folder');setError('Enter or choose the project folder on the Nexus Server.');return;}
     act(()=>model.review());};
   const phase=state.phase;
+  const firstProject=entryMode==='add'&&!state.workspace&&state.workspaces.length===0&&state.catalogStatus==='ready';
   const step=phase==='choose'||phase==='remote'||phase==='loading'?0:phase==='configure'||phase==='checking'?1:2;
   const choice=state.options?.options.find(item=>item.candidate_ref===state.candidateRef);
   let remoteCommand='';let remoteError='';
@@ -126,7 +127,8 @@ export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,o
           <details><summary>Technical details</summary><p className="break-all">{item.binding_id}</p><p>Harness reference: {item.adapter_id}</p><p>Canonical access and state are checked when opened.</p></details>
         </div>)}</section>}
       {entryMode==='choose'&&state.catalogStatus==='ready'&&!state.catalog.length&&<p>No recorded connections match this project. You can add a collaborator.</p>}
-      <div className="flex flex-wrap gap-2"><button className="btn btn-primary" disabled={state.busy||state.catalogStatus!=='ready'||entryMode==='add'&&!state.workspace} onClick={()=>act(()=>model.add())}>{entryMode==='add'?'Add harness on this Server':'Add another harness on this Server'}</button>
+      <div className="flex flex-wrap gap-2">{!firstProject&&<button className="btn btn-primary" disabled={state.busy||state.catalogStatus!=='ready'||entryMode==='add'&&!state.workspace} onClick={()=>act(()=>model.add())}>{entryMode==='add'?'Add harness on this Server':'Add another harness on this Server'}</button>}
+        {firstProject&&<button type="button" className="btn btn-primary" disabled={state.busy} onClick={()=>act(()=>model.add())}>Create project and add harness</button>}
         <button className="btn btn-secondary" disabled={state.busy} onClick={()=>act(()=>model.remote())}>Use a Connector on another host</button></div>
     </>}
     {phase==='remote'&&<section aria-label="Connect on another host" data-modal-passive className="space-y-3">

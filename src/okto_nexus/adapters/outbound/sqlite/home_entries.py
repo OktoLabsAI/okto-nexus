@@ -73,6 +73,48 @@ LEFT JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id AND e.workspace_id=s.
 WHERE s.server_id=:server_id AND (:workspace_id IS NULL OR s.workspace_id=:workspace_id)
 '''
 
+# One metadata-only batch for conditional harness/request placement. This reads
+# no operational params except the validated boolean isBlocking and method.
+HARNESS_BLOCKING = '''
+WITH latest AS MATERIALIZED (
+ SELECT r.*,ROW_NUMBER() OVER(PARTITION BY r.server_id,r.executor_id,r.operation_id
+   ORDER BY r.receipt_revision DESC) AS position
+ FROM execution_receipts r JOIN execution_operations o USING(server_id,executor_id,operation_id)
+ WHERE o.server_id=:server_id AND (:workspace_id IS NULL OR o.workspace_id=:workspace_id)
+   AND o.action='turn.submit'
+)
+SELECT json_object('family','operation','server_id',o.server_id,'executor_id',o.executor_id,
+ 'binding_id',o.binding_id,'workspace_binding_id',o.workspace_binding_id,
+ 'workspace_id',o.workspace_id,'agent_id',o.subject_agent_id,'session_id',o.session_id,
+ 'operation_id',o.operation_id,'admission_state',o.admission_state,'stage',r.stage,
+ 'received_at',r.received_at,'dispatch_state',d.dispatch_state) AS item
+FROM execution_operations o
+LEFT JOIN latest r ON r.server_id=o.server_id AND r.executor_id=o.executor_id
+ AND r.operation_id=o.operation_id AND r.position=1
+LEFT JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id)
+WHERE o.server_id=:server_id AND (:workspace_id IS NULL OR o.workspace_id=:workspace_id)
+ AND o.action='turn.submit'
+UNION ALL
+SELECT json_object('family','request','server_id',r.server_id,'executor_id',r.executor_id,
+ 'session_id',r.session_id,'operation_id',r.source_operation_id,
+ 'binding_id',json_extract(r.operational_frame_json,'$.binding_id'),
+ 'workspace_binding_id',json_extract(r.operational_frame_json,'$.workspace_binding_id'),
+ 'workspace_id',json_extract(r.operational_frame_json,'$.workspace_id'),
+ 'agent_id',json_extract(r.operational_frame_json,'$.agent_id'),
+ 'request_id',r.canonical_request_id,'request_revision',r.request_revision,'state',r.state,
+ 'expires_at',r.expires_at,'stream_epoch',r.stream_epoch,'session_stream_epoch',s.stream_epoch,
+ 'method',json_extract(r.operational_frame_json,'$.operational_request.method'),
+ 'is_blocking',CASE WHEN json_extract(r.operational_frame_json,'$.operational_request.method')='item/tool/requestUserInput'
+   AND json_type(r.operational_frame_json,'$.operational_request.params.isBlocking') IN ('true','false')
+   THEN json_extract(r.operational_frame_json,'$.operational_request.params.isBlocking') END,
+ 'approval_status',ap.status,'decided_at',ap.decided_at) AS item
+FROM execution_native_requests r
+JOIN execution_sessions s USING(server_id,executor_id,session_id)
+LEFT JOIN approvals ap ON ap.approval_id=r.canonical_request_id
+WHERE r.server_id=:server_id AND json_valid(r.operational_frame_json)
+ AND (:workspace_id IS NULL OR json_extract(r.operational_frame_json,'$.workspace_id')=:workspace_id)
+'''
+
 
 class SqliteHomeEntryRelations:
     """Internal, unpaged projection. Does not authenticate or grant authority.
@@ -126,6 +168,12 @@ class SqliteHomeEntryRelations:
         sql, params = relation
         with self.home.bounded(uow.connection):
             return self._collect(uow.connection.execute(sql + ' SELECT item FROM filtered', params), lambda row: json.loads(row[0]), check_budget)
+
+    def blocking(self, uow, *, scope, server_id, relations, check_budget):
+        with self.home.bounded(uow.connection):
+            relations.harness_blocking = self._collect(uow.connection.execute(HARNESS_BLOCKING,
+                dict(server_id=server_id, workspace_id=scope.get('workspace_id'))),
+                lambda row: json.loads(row[0]), check_budget)
 
     def read(self, uow, *, scope, server_id, now, attention_relation, check_budget=None):
         """Return all canonical relations before UI-020 sorting/count/paging.
@@ -208,6 +256,7 @@ class SqliteHomeEntryRelations:
             check_budget()
             entry.sessions = tuple(per_entry_sessions[entry.id][key] for key in sorted(per_entry_sessions[entry.id]))
             contexts = per_entry_connections[entry.id]
+            entry.registered_connections = tuple(connections[key] for key in sorted(contexts))
             if len(contexts) == 1:
                 entry.connection = connections.get(next(iter(contexts)))
                 if entry.connection:
@@ -289,7 +338,8 @@ class SqliteHomeEntryRelations:
             entry.connection = connection
             entries.append(entry)
         return EntryRelations(entries, server_attention, status,
-            connection_count=len(connections) if status['connections'] == 'ready' else None)
+            connection_count=len(connections) if status['connections'] == 'ready' else None,
+            connections=tuple(connections[key] for key in sorted(connections)) if status['connections'] == 'ready' else None)
 
     def external(self, uow, *, scope, server_id, now, config, observations, relations, check_budget):
         """Read the canonical complete observation source in this same UoW.

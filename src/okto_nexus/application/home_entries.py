@@ -10,6 +10,7 @@ from ..domain.attention import normalize_filters
 from ..domain.home_entries import EntryRelations
 from ..domain import home_entry_pages as pages
 from ..domain import home_board
+from ..domain import home_harness_board
 from ..errors import ErrorCode, OktoNexusError
 from ..domain.home import digest
 from .home_ports import HomeEntryQueries
@@ -24,10 +25,10 @@ class HomeEntriesService:
 
     def read(self, *, context, principal=None, filters=None, partition='groups', group_id=None, entry_id=None,
              cursor=None, limit=10, preview=3):
-        if partition == 'board':
+        if partition in ('board', 'harness_board', 'harness_children', 'harness_unlinked'):
             if filters and 'quick' in filters:
                 pages.invalid('Home board does not accept a quick filter.')
-            if group_id is not None and group_id not in home_board.COLUMNS:
+            if partition in ('board', 'harness_board') and group_id is not None and group_id not in home_board.COLUMNS:
                 pages.invalid('Invalid Home board column.')
             if entry_id is not None:
                 pages.invalid('Home board does not accept an entry parent.')
@@ -69,6 +70,11 @@ class HomeEntriesService:
             value.update(event_cursor=int(bounds[0]), event_low_watermark=bounds[1])
             if partition == 'board' and 'entry_revision' not in value:
                 value = home_board.unavailable(value, group_id)
+            if partition.startswith('harness_') and 'entry_revision' not in value:
+                value = home_harness_board.unavailable(value,
+                    partition='children' if partition == 'harness_children' else 'unlinked' if partition == 'harness_unlinked' else 'column' if group_id else 'root',
+                    column=group_id if partition == 'harness_board' else None,
+                    card_id=group_id if partition == 'harness_children' else None)
             return value
 
     def _read(self, uow, *, scope, server, now, config, context, principal,
@@ -92,8 +98,17 @@ class HomeEntriesService:
                 relations=relations, check_budget=check_budget))
             if external is not None:
                 relations.source_status['external'] = external['status']
+            if partition.startswith('harness_'):
+                self.home._safe(now, lambda: self.queries.blocking(uow, scope=scope,
+                    server_id=server, relations=relations, check_budget=check_budget))
             check_budget()
-            if partition == 'board':
+            if partition.startswith('harness_'):
+                value = home_harness_board.page(relations, scope=scope, server_id=server, principal=principal,
+                    now=now, partition='children' if partition == 'harness_children' else 'unlinked' if partition == 'harness_unlinked' else 'column' if group_id else 'root',
+                    column=group_id if partition == 'harness_board' else None,
+                    card_id=group_id if partition == 'harness_children' else None,
+                    cursor=cursor, limit=limit, preview=preview, check_budget=check_budget)
+            elif partition == 'board':
                 value = home_board.page(relations, scope=scope, server_id=server, principal=principal,
                     now=now, column=group_id, cursor=cursor, limit=limit, preview=preview,
                     check_budget=check_budget)

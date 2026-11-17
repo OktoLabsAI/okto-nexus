@@ -66,6 +66,9 @@ class EntryRecord:
     results: list[HomeResult] = field(default_factory=list)
     external: list[dict[str, object]] = field(default_factory=list)
     activity: HomeActivity | None = None
+    # Complete persisted operation-to-binding proofs. The singleton legacy
+    # connection/group identity above deliberately remains unchanged.
+    registered_connections: tuple[ConnectionContext, ...] = ()
 
     def group_key(self):
         c = self.connection
@@ -86,6 +89,8 @@ class EntryRelations:
     # Authorized workspace inventory, before presentation filters and paging.
     # None is unknown, including adapters that do not supply this evidence.
     connection_count: int | None = None
+    connections: tuple[ConnectionContext, ...] | None = None
+    harness_blocking: list[dict[str, object]] | None = None
 
     @property
     def total_is_exact(self):

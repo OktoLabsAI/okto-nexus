@@ -29,9 +29,9 @@ const snapshot=(patch={})=>({version:1,partition:'groups',server_id:'server',sta
 const noop=()=>{};
 function render(page,patch={}){
   const empty={items:[],total:0,total_is_exact:true,has_more:false,next_cursor:null};
-  const board={...page,partition:'board',scope:{...page.scope,quick:'all',include_recent_results:false},entry_revision:page.revision??'entry-revision',
+  const board={...page,partition:'harness_board',scope:{...page.scope,quick:'all',include_recent_results:false},entry_revision:page.revision??'entry-revision',unlinked:{...empty},
     columns:{active:{...empty,total:page.total,total_is_exact:page.total_is_exact},needs_you:{...empty},results:{...empty}}};
-  observed={state:{entries:null,board,status:'ready',loading:false,paused:false,staleSections:[],hasPendingUpdate:false,entryLoading:null,boardLoading:null,
+  observed={state:{entries:null,board:null,harnessBoard:board,status:'ready',loading:false,paused:false,staleSections:[],hasPendingUpdate:false,entryLoading:null,boardLoading:null,harnessLoading:null,harnessChildren:{},harnessUnlinked:null,
     generation:1,entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{},...patch},
     refresh:noop,pause:noop,apply:noop,holdOrder:noop,loadEntries:noop,loadGroupChildren:noop,loadEntrySessions:noop,loadEntryAttention:noop,loadEntryResults:noop,loadBoardColumn:noop};
   return renderToStaticMarkup(React.createElement(OperationalHome,{workspace:'ws',workspaces:[],identityKey:'operator',refreshTick:0,
@@ -54,16 +54,16 @@ test('first harness requires complete authorized pre-filter inventory, never an 
   assert.equal(isFirstHarnessEmpty(snapshot(),false,true),false);
 });
 
-test('actual Home presents one Connect or resume action and gates New request only for proved empty inventory',()=>{
+test('actual operational Home presents one Add harness action and gates New request only for proved empty inventory',()=>{
   const empty=render(snapshot());
-  assert.equal((empty.match(/<button[^>]*>Connect or resume<\/button>/g)||[]).length,1);
+  assert.equal((empty.match(/<button[^>]*>Add harness<\/button>/g)||[]).length,1);
   assert.match(empty,/<button[^>]*disabled=""[^>]*>[\s\S]*?New request<\/button>/);
   assert.match(empty,/>Connect a collaborator<\/p>/);
   for(const page of [snapshot({inventory:undefined}),snapshot({inventory:{connections:{value:1,total_is_exact:true,unit:'connections'}}}),
     snapshot({status:'partial',total:null,total_is_exact:false}),snapshot({source_status:{connections:'unavailable'}})]){
     const markup=render(page);
     assert.doesNotMatch(markup,/>Connect a collaborator<\/p>/);
-    assert.equal((markup.match(/<button[^>]*>Connect or resume<\/button>/g)||[]).length,1);
+    assert.equal((markup.match(/<button[^>]*>Add harness<\/button>/g)||[]).length,1);
   }
   for(const patch of [{loading:true},{paused:true},{hasPendingUpdate:true},{staleSections:['entries']},{status:'stale'}])
     assert.doesNotMatch(render(snapshot(),patch),/>Connect a collaborator<\/p>/);

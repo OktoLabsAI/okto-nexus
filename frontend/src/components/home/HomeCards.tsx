@@ -156,15 +156,16 @@ export function AgentRow({item}: {item: HomeAgent}) {
     <p className="text-xs text-surface-500">Activity not reported{item.capabilities?.length ? ` · ${item.capabilities.join(', ')}` : ''}</p></li>;
 }
 
-export function homeEntriesAnnouncementIds(state:Pick<HomeState,'entries'|'board'|'entryChildren'>):Set<string>{
+export function homeEntriesAnnouncementIds(state:Pick<HomeState,'entries'|'board'|'entryChildren'>&Partial<Pick<HomeState,'harnessBoard'>>):Set<string>{
   const ids=new Set<string>();
-  const entries=state.board?Object.values(state.board.columns).flatMap(column=>column.items):
+  const entries=state.harnessBoard?Object.values(state.harnessBoard.columns).flatMap(column=>column.items.flatMap(card=>card.kind==='harness'?card.children:[card.entry])):
+    state.board?Object.values(state.board.columns).flatMap(column=>column.items):
     (state.entries?.items??[]).flatMap(group=>state.entryChildren[group.id]?.items??group.children);
   for(const entry of entries){
     ids.add(entry.id);for(const id of entry.attention_refs)ids.add(id);for(const id of entry.result_refs)ids.add(id);
     for(const ref of entry.sessions)ids.add(JSON.stringify([ref.server_id,ref.executor_id,ref.session_id]));
   }
-  const root=state.board??state.entries;
+  const root=state.harnessBoard??state.board??state.entries;
   if(root?.server_attention.status==='ready')for(const occurrence of root.server_attention.items)ids.add(occurrence.attention_id);
   return ids;
 }

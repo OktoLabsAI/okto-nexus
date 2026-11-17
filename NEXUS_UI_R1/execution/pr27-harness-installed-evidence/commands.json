@@ -1,0 +1,72 @@
+[
+  {
+    "name": "install",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+      "-I",
+      "-m",
+      "pip",
+      "--isolated",
+      "install",
+      "--find-links",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\final\\artifacts\\okto_nexus-0.3.5-py3-none-any.whl[serve-lite,dev]",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\ci\\okto_nexus_connector-0.0.13-py3-none-any.whl[test]"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "ci-smoke",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+      "-I",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+      "smoke",
+      "--wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\final\\artifacts\\okto_nexus-0.3.5-py3-none-any.whl",
+      "--output",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\ci-smoke"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "audit",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+      "-I",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\audit_installed.py"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "installed-focal",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+      "-I",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\run_focal.py"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "twine",
+    "argv": [
+      "rtk",
+      "proxy",
+      "uvx",
+      "twine",
+      "check",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\final\\artifacts\\okto_nexus-0.3.5-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\final\\artifacts\\okto_nexus-0.3.5.tar.gz"
+    ],
+    "exit_code": 0
+  }
+]

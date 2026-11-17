@@ -2,7 +2,8 @@ import { call } from './api';
 import { encodeHomeTarget } from './homeNavigation';
 import type { HomeActivity, HomeAgent, HomeFeedEvent, HomeFilters, HomeOverview, HomePage,
   HomePageQuery, HomeResolvedTarget, HomeResult, HomeTarget, HomeEntryFilters, HomeEntryQuery, HomeEntryPage,
-  HomeEntryGroup, HomeEntry, HomeSessionRef,HomeBoard,HomeBoardPage,HomeBoardColumn,HomeBoardQuery } from './homeTypes';
+  HomeEntryGroup, HomeEntry, HomeSessionRef,HomeBoard,HomeBoardPage,HomeBoardColumn,HomeBoardQuery,
+  HomeHarnessBoard,HomeHarnessBoardPage,HomeHarnessChildrenPage } from './homeTypes';
 import type { ExternalObservation } from './observationTypes';
 import type { AttentionOccurrence } from './attentionTypes';
 
@@ -22,6 +23,10 @@ export interface HomeApi {
   entryResults(groupId:string,entryId:string,query:HomeEntryQuery,signal?:AbortSignal):Promise<HomeEntryPage<HomeResult>>;
   board(query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeBoard>;
   boardColumn(column:HomeBoardColumn,query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeBoardPage>;
+  harnessBoard(query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeHarnessBoard>;
+  harnessBoardColumn(column:HomeBoardColumn,query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeHarnessBoardPage>;
+  harnessChildren(cardId:string,query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeHarnessChildrenPage>;
+  harnessUnlinked(query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeHarnessChildrenPage>;
   target(target: HomeTarget, workspace: string | null, signal?: AbortSignal): Promise<HomeResolvedTarget>;
   resolveTarget(target: HomeTarget, workspace: string | null, signal?: AbortSignal): Promise<HomeResolvedTarget>;
 }
@@ -54,5 +59,9 @@ export const homeApi: HomeApi = {
   entryResults:(group,entry,query,signal)=>get<HomeEntryPage<HomeResult>>(`entries/${encodeURIComponent(group)}/children/${encodeURIComponent(entry)}/results?${queryString(query)}`,signal),
   board:(query,signal)=>get<HomeBoard>(`board?${queryString(query)}`,signal),
   boardColumn:(column,query,signal)=>get<HomeBoardPage>(`board/${encodeURIComponent(column)}?${queryString(query)}`,signal),
+  harnessBoard:(query,signal)=>get<HomeHarnessBoard>(`harness-board?${queryString(query)}`,signal),
+  harnessBoardColumn:(column,query,signal)=>get<HomeHarnessBoardPage>(`harness-board/${encodeURIComponent(column)}?${queryString(query)}`,signal),
+  harnessChildren:(card,query,signal)=>get<HomeHarnessChildrenPage>(`harness-board/cards/${encodeURIComponent(card)}/children?${queryString(query)}`,signal),
+  harnessUnlinked:(query,signal)=>get<HomeHarnessChildrenPage>(`harness-board/unlinked?${queryString(query)}`,signal),
   target, resolveTarget: target,
 };

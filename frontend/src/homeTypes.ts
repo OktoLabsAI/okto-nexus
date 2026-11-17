@@ -130,6 +130,50 @@ export interface HomeBoardMetadata {
 export interface HomeBoard extends HomeBoardMetadata {partition:'board';columns:Record<HomeBoardColumn,HomeBoardSlice>}
 export interface HomeBoardPage extends HomeBoardMetadata,HomeBoardSlice {partition:'board_column';column:HomeBoardColumn}
 export type HomeBoardQuery = Omit<HomeEntryQuery,'quick'>;
+export interface HomeHarnessChild extends HomeBoardEntry {shared_reference:boolean}
+export interface HomeHarnessConnection extends HomeConnectionContext {
+  harness_id:string;agent_label:string|null;harness_label?:string|null;host_label:string|null;workspace_label?:string|null;
+}
+export interface HomeHarnessCard {
+  kind:'harness';blocks_harness:boolean|null;blocking_request_ids:string[];
+  activity_state:'waiting_for_user'|'awaiting_confirmation'|'working'|'registered'|'unknown';
+  blocking_requests:HomeHarnessRequest[];reminder_snoozed:boolean;
+  reconnect_available:false;reconnect_reason:string;
+  id:string;group_id:string;connection:HomeHarnessConnection;target:HomeTarget;
+  children:HomeHarnessChild[];children_total:number|null;has_more_children:boolean;children_cursor:string|null;
+  summary:HomeEntrySummary;
+  context_state:'registered';
+  events_preview:HomeHarnessEvent[];events_total:number|null;has_more_events:boolean;
+  events_summary:Record<'attention'|'results'|'work'|'sessions'|'external',number|null>;
+}
+export interface HomeHarnessEvent {
+  id:string;kind:'attention'|'result'|'work'|'session'|'external';entry_id:string;group_id:string;entry_revision:string;
+  target:HomeTarget|null;title:string;display_state:HomeEntryDisplayState;evidence:HomeEntry['evidence'];occurred_at:string|null;
+  attention?:AttentionOccurrence|null;result?:HomeResult|null;
+  entry:HomeHarnessChild;
+}
+export interface HomeHarnessSlice {
+  items:HomeHarnessBoardItem[];total:number|null;total_is_exact:boolean;has_more:boolean;next_cursor:string|null;
+}
+export interface HomeHarnessRef {card_id:string;connection:HomeHarnessConnection}
+export interface HomeHarnessRequest {
+  kind:'request';id:string;request:AttentionOccurrence;entry:HomeHarnessChild;
+  harness_refs:HomeHarnessRef[];blocks_harness:boolean|null;notification_visible:boolean;
+}
+export interface HomeHarnessDelivery {
+  kind:'delivery';id:string;result:HomeResult|null;report:AttentionOccurrence|null;entry:HomeHarnessChild;harness_refs:HomeHarnessRef[];
+  completion_evidence:'canonical'|'reported';
+}
+export type HomeHarnessBoardItem=HomeHarnessCard|HomeHarnessRequest|HomeHarnessDelivery;
+export interface HomeHarnessBoard extends HomeBoardMetadata {
+  partition:'harness_board';columns:Record<HomeBoardColumn,HomeHarnessSlice>;
+  unlinked:{items:HomeHarnessChild[];total:number|null;total_is_exact:boolean;has_more:boolean;next_cursor:string|null};
+}
+export interface HomeHarnessBoardPage extends HomeBoardMetadata,HomeHarnessSlice {partition:'harness_board_column';column:HomeBoardColumn}
+export interface HomeHarnessChildrenPage extends HomeBoardMetadata {
+  partition:'harness_children'|'harness_unlinked';card_id?:string|null;items:HomeHarnessChild[];
+  total:number|null;total_is_exact:boolean;has_more:boolean;next_cursor:string|null;
+}
 export interface HomeEntryPage<T> extends Omit<HomeSection<T>, 'revision'> {
   version:1; scope:HomeEntryScope; server_id:string; generated_at:string; snapshot_id:string|null;
   revision:string|null; partition:HomeEntryPartition; group_id:string|null; entry_id:string|null;

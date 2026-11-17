@@ -126,6 +126,31 @@ test('selecting a project from All restores its exact retained attempt before ex
   await assert.rejects(()=>all.add(),/retained/);assert.equal(f.storage.values.size,1);all.dispose();
 });
 
+test('empty canonical project directory offers explicit first-project Add without creating anything before Finish',async()=>{
+  const f=fixture({async connectionWorkspaces(){return {items:[],has_more:false,next_workspace_id:null};}}),model=f.model('human-1',null);
+  await model.initialize('add');assert.equal(model.getSnapshot().phase,'choose');
+  assert.equal(f.calls.some(c=>['setupDraft','testSetup','finishSetup'].includes(c.name)),false);
+  const html=renderExistingModel(model,f,{entryMode:'add',workspace:null});
+  assert.match(html,/<button type="button" class="btn btn-primary">Create project and add harness<\/button>/);
+  assert.doesNotMatch(html,/>Add harness on this Server<\/button>/);
+  await actualButtonHandler('Create project and add harness',{act:fn=>fn(),model})();
+  assert.equal(model.getSnapshot().phase,'configure');assert.equal(model.getSnapshot().workspace,null);
+  assert.equal(model.getSnapshot().request,null);assert.equal(f.calls.filter(c=>c.name==='setupDraft').length,1);
+  assert.match(renderExistingModel(model,f,{entryMode:'add',workspace:null}),/aria-label="Project name"/);
+  assert.equal(f.calls.some(c=>['binding','checkLocalInstallation','testSetup','finishSetup'].includes(c.name)),false);model.dispose();
+});
+
+test('first-project Add never replaces a retained unknown request for the null-workspace key',async()=>{
+  const f=fixture({async connectionWorkspaces(){return {items:[],has_more:false,next_workspace_id:null};},async testSetup(){throw new Error('response lost');}});
+  const initial=f.model('human-1',null);await initial.initialize('add');await initial.add();initial.selectInstallation('candidate-codex_app_server');
+  initial.customize({workspace_root:'C:/fixture/first-project',workspace_label:'First project'});initial.review();await initial.test(true);
+  const request=clone(initial.getSnapshot().request);assert.equal(request.workspace_id,null);initial.dispose();const before=f.calls.length;
+  const restored=f.model('human-1',null);await restored.initialize('add');
+  assert.equal(restored.getSnapshot().phase,'uncertain');assert.deepEqual(restored.getSnapshot().request,request);
+  assert.doesNotMatch(renderExistingModel(restored,f,{entryMode:'add',workspace:null}),/Create project and add harness/);
+  assert.deepEqual(f.calls.slice(before).map(c=>c.name),['me']);assert.equal(f.storage.values.size,1);restored.dispose();
+});
+
 test('definitive real 422 rejection survives reload and explicit edit archives rather than replaying',async()=>{
   let posts=0;
   const metadata={stage:'connection.test',possible_effect:false,retry_safe:false,operation_id:null,action:''};

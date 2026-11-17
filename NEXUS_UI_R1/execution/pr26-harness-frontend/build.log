@@ -1,0 +1,18 @@
+
+> okto-nexus-dashboard@0.3.5 build
+> tsc -b && vite build
+
+vite v6.4.3 building for production...
+transforming...
+✓ 2187 modules transformed.
+rendering chunks...
+computing gzip size...
+../src/okto_nexus/adapters/inbound/http/static/index.html                     0.47 kB │ gzip:   0.30 kB
+../src/okto_nexus/adapters/inbound/http/static/assets/index-Ds-MK2FR.css    110.50 kB │ gzip:  18.08 kB
+../src/okto_nexus/adapters/inbound/http/static/assets/index-DHzC23xm.js   1,525.79 kB │ gzip: 408.08 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 24.22s

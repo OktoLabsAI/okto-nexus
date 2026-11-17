@@ -175,9 +175,12 @@ const homeProps={workspace:'ws',workspaces:[],identityKey:'operator',refreshTick
 const renderHome = snapshot => {
   const empty={items:[],total:0,total_is_exact:true,has_more:false,next_cursor:null};
   const children=snapshot.items.flatMap(group=>group.children.map(entry=>({...entry,group_id:group.id,entry_revision:snapshot.revision})));
-  const board={...snapshot,partition:'board',entry_revision:snapshot.revision,scope:{workspace_id:'ws',quick:'all',include_recent_results:false},
-    columns:{active:{...empty,items:children,total:children.length},needs_you:{...empty},results:{...empty}}};
-  entryRows=[];renderedHomeState={entries:null,board,entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{},status:'ready',staleSections:[],paused:false,generation:1,loading:false,entryLoading:null,boardLoading:null,error:null,hasPendingUpdate:false};
+  const connection={server_id:'server',executor_id:'executor',workspace_id:'ws',binding_id:'binding',workspace_binding_id:'wxb',agent_id:'A',agent_label:'Collaborator',harness_id:'codex_app_server',host_label:'Host'};
+  const harnesses=children.length?[{kind:'harness',id:'harness',group_id:'harness',connection,context_state:'registered',activity_state:'registered',blocks_harness:null,reminder_snoozed:false,
+    blocking_request_ids:[],blocking_requests:[],children,children_total:children.length,has_more_children:false,events_preview:[],events_total:0,events_summary:{},summary:{}}]:[];
+  const board={...snapshot,partition:'harness_board',entry_revision:snapshot.revision,scope:{workspace_id:'ws',quick:'all',include_recent_results:false},unlinked:{...empty},
+    columns:{active:{...empty,items:harnesses,total:harnesses.length},needs_you:{...empty},results:{...empty}}};
+  entryRows=[];renderedHomeState={entries:null,board:null,harnessBoard:board,harnessChildren:{},harnessUnlinked:null,entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{},status:'ready',staleSections:[],paused:false,generation:1,loading:false,entryLoading:null,boardLoading:null,harnessLoading:null,error:null,hasPendingUpdate:false};
   return html(OperationalHome,homeProps);
 };
 const entriesSnapshot=(item,children=[])=>({version:1,server_id:'server',revision:'entry-revision',status:'ready',items:children.length?[{id:'group',label:'Agent context',children,children_total:children.length,has_more_children:false}]:[],
@@ -195,7 +198,7 @@ test('single follow-up keeps Server notice independent and removes the permanent
   assert.equal(isQuietHome(quietSnapshot(item)),true);assert.deepEqual([...homeAnnouncementIds(quietSnapshot(item))],[item.attention_id]);
 });
 
-test('entry viewing preferences use captured canonical ID and revisions, with stale or changed occurrences fenced', async () => {
+test('registered harness overview stays passive and reserves occurrence preferences for canonical context', async () => {
   const item={...serverOccurrence(),attention_id:'canonical-project-attention',workspace_id:'ws',agent_id:'A'};
   const e={id:'entry',kind:'work',workspace_id:'ws',agent_id:'A',title:'One task',display_state:'awaiting_operator',evidence:'confirmed',
     target:null,sessions:[],sessions_total:0,has_more_sessions:false,attention_preview:[item],attention_refs:[item.attention_id],attention_total:1,has_more_attention:false,
@@ -203,12 +206,9 @@ test('entry viewing preferences use captured canonical ID and revisions, with st
   const snapshot=entriesSnapshot(null,[e]),api=load(new URL('../src/api.ts',import.meta.url)).api;
   const previous=api.attentionSeen,calls=[];api.attentionSeen=async(...args)=>{calls.push(args);return {};};
   try{
-    renderHome(snapshot);entryRows[0].onSeen(item,true);await new Promise(setImmediate);
-    assert.deepEqual(calls,[[item.attention_id,{seen:true,source_revision:item.source_revision,preference_revision:7}]]);
-    assert.equal(cards.freshHomeEntryOccurrence(renderedHomeState,{...item,source_revision:'old-source'}),undefined);
-    assert.equal(cards.freshHomeEntryOccurrence(renderedHomeState,{...item,seen_state:{...item.seen_state,revision:6}}),undefined);
-    renderHome(snapshot);renderedHomeState.staleSections.push('server_attention');
-    entryRows[0].onSeen(item,true);await new Promise(setImmediate);assert.equal(calls.length,1);
-    renderHome(snapshot);renderedHomeState.paused=true;entryRows[0].onSeen(item,true);await new Promise(setImmediate);assert.equal(calls.length,1);
+    const markup=renderHome(snapshot);await new Promise(setImmediate);
+    assert.deepEqual(calls,[]);assert.equal(entryRows.length,0);
+    assert.match(markup,/data-home-harness="harness"/);assert.match(markup,/Inspect execution/);
+    assert.doesNotMatch(markup,/Related attention|Related results|Choose an exact context|Mark seen|Snooze|Filter details|Filter Home by agent|Home filters|<details|<input/);
   }finally{api.attentionSeen=previous;}
 });

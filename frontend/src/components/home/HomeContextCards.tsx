@@ -4,9 +4,9 @@ import type {HomeEntrySummary} from '../../homeTypes';
 import {workspaceDisplayName} from '../WorkspaceNames';
 
 /** One controlled project value; this component never reads or stores scope. */
-export function HomeProjectCard({workspace,workspaces,onChange,onConnect,connectDisabled=false}: {
+export function HomeProjectCard({workspace,workspaces,onChange,onConnect,connectDisabled=false,setupLabel='Connect or resume'}: {
   workspace:string;workspaces:WorkspaceListItem[];onChange?:(id:string)=>void;
-  onConnect:()=>void;connectDisabled?:boolean;
+  onConnect:()=>void;connectDisabled?:boolean;setupLabel?:string;
 }) {
   const selected=workspaces.find(item=>item.workspace_id===workspace);
   const name=workspace==='all'?'All projects':selected?workspaceDisplayName(selected,workspaces.indexOf(selected)):'Unavailable project';
@@ -14,8 +14,8 @@ export function HomeProjectCard({workspace,workspaces,onChange,onConnect,connect
     <div className="flex flex-wrap items-start justify-between gap-4">
       <div><h2 className="font-semibold text-base inline-flex items-center gap-2"><FolderOpen size={18}/>Project</h2>
         <p className="font-medium mt-2 break-words" data-testid="home-project-name">{name}</p>
-        <p className="text-sm text-surface-500 mt-1">Choose a project, then connect or resume a collaborator.</p></div>
-      <button type="button" className="btn btn-primary" disabled={connectDisabled} onClick={onConnect}>Connect or resume</button>
+        <p className="text-sm text-surface-500 mt-1">{setupLabel==='Add harness'?'Choose a project and follow its registered harnesses below.':'Choose a project, then connect or resume a collaborator.'}</p></div>
+      <button type="button" className="btn btn-primary" disabled={connectDisabled} onClick={onConnect}>{setupLabel}</button>
     </div>
     <label className="block text-sm space-y-1"><span>Choose a project</span>
       <select className="block w-full sm:max-w-md rounded-lg border border-surface-200 dark:border-surface-700 bg-transparent px-3 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500"

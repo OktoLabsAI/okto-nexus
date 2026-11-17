@@ -1819,7 +1819,7 @@
       "id": "UI-017",
       "pr": "PR-03",
       "title": "Projetar relações unificadas de trabalho e sessões",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-003",
         "UI-005"
@@ -1858,20 +1858,26 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
       "id": "UI-018",
       "pr": "PR-03",
       "title": "Unir atenção e resultados por correlação",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-017"
       ],
@@ -1911,20 +1917,26 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
       "id": "UI-019",
       "pr": "PR-03",
       "title": "Adicionar sessões sem operação aos alvos tipados",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-003",
         "UI-017"
@@ -1962,7 +1974,12 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
@@ -1970,14 +1987,15 @@
         "Source targets/viewer do not close unified Home or UI/Connector onboarding gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
       "id": "UI-020",
       "pr": "PR-03",
       "title": "Aplicar escopo, contagem e paginação por grupo",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-017",
         "UI-018"
@@ -2018,20 +2036,26 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
       "id": "UI-021",
       "pr": "PR-03",
       "title": "Expor contrato de entries compatível e limitado",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-019",
         "UI-020"
@@ -2071,13 +2095,19 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
@@ -2123,20 +2153,26 @@
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
-        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Measured bound O(N+relations), 55 SQL at1/10/100 agents. Large scenario misses500ms latency target; no native harness/browser performance claim.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
       "id": "UI-023",
       "pr": "PR-04",
       "title": "Substituir listas paralelas pela região única",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-010",
         "UI-021"
@@ -2175,20 +2211,26 @@
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
         "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
         "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
-        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
       "id": "UI-024",
       "pr": "PR-04",
       "title": "Implementar expansão de sessões e conexões ociosas",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-023"
       ],
@@ -2228,20 +2270,26 @@
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
         "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
         "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
-        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
       "id": "UI-025",
       "pr": "PR-04",
       "title": "Aplicar filtros, ordem e vazio proporcionais",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-023",
         "UI-024"
@@ -2285,20 +2333,26 @@
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
         "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
         "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
-        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
       "id": "UI-026",
       "pr": "PR-04",
       "title": "Ligar ações básicas e incidentes globais",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-008",
         "UI-025"
@@ -2339,20 +2393,26 @@
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
         "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
         "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
-        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
       "id": "UI-027",
       "pr": "PR-04",
       "title": "Adaptar atualização compartilhada à lista única",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-021",
         "UI-025"
@@ -2391,13 +2451,19 @@
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
         "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
         "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
-        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
@@ -2449,13 +2515,19 @@
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
         "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
         "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
-        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
@@ -2497,14 +2569,20 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
         "Existing RuntimeTerminal useLayoutEffect emits expected SSR warning; no browser speech or human comprehension result.",
         "Source targets/viewer do not close unified Home or UI/Connector onboarding gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
@@ -2544,12 +2622,18 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
@@ -2591,12 +2675,18 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
@@ -2641,12 +2731,18 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
@@ -2689,12 +2785,18 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
@@ -2741,19 +2843,25 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
       "id": "UI-035",
       "pr": "PR-06",
       "title": "Expor retomar/adicionar no onboarding da UI",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-016",
         "UI-030"
@@ -2793,14 +2901,20 @@
         "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
         "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md",
         "NEXUS_UI_R1/execution/HOME_ACTION_NOTIFICATIONS_R3.md",
-        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json"
+        "NEXUS_UI_R1/execution/pr24-add-intent-qualification.json",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Conexoes e recuperacao qualificadas com peers sinteticos; sessoes runtime/Home e provedores reais exigem evidencias separadas.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
         "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
-        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
@@ -3203,11 +3317,17 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
@@ -3252,11 +3372,17 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
@@ -3303,11 +3429,17 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     },
     {
@@ -3350,11 +3482,17 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/pr22-harness-board-backend.json",
+        "NEXUS_UI_R1/execution/pr25-home-harness-frontend.json",
+        "NEXUS_UI_R1/execution/pr26c-harness-frontend-complete/qualification.json",
+        "NEXUS_UI_R1/execution/R3_IMPLEMENTATION_REPORT.md",
+        "NEXUS_UI_R1/execution/pr27-harness-installed-qualification.json"
       ],
       "limitations": [
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 conditional columns implemented: harness/request/delivery union, blocked versus parallel/unknown scoped proofs,350Node/TSC/VitePASS; installed/browser final still separate. Individual reconnect unavailable, not a global restart. Previous source cuts are antecedents, not blanket qualification."
       ]
     }
   ],
@@ -5996,6 +6134,10 @@
     {
       "at": "2026-11-17T03:45:46.100132+00:00",
       "event": "User further defines action notifications: blocked harness waiting for user moves to Needs you; if harness keeps executing, only the action appears in Needs you and harness remains Active. Results are reported completions independent of other active work. R3 docs updated to conditional heterogeneous columns. Proof of blocking comes from safe persisted native metadata and complete scoped productive-operation coverage, not React inference or mere request existence. No individual reconnect capability exists: read-only context is not reconnect, global Connector restart is not wired per card. Add intent focal37PASS, retained checkpoint/All-project safeguards, legacy chooser preserved; global/browser/installed R3 qualification pending."
+    },
+    {
+      "at": "2026-11-17T04:17:27.312564+00:00",
+      "event": "R3 source milestone: conditional Active/Needs you/Results and notifications implemented with registered harness identities and canonical per-request blocking proof.350/350Node plus TSC/Vite onBljabqt3 pass;350cut addsfirst-projectintent and legitimate empty-origin references with exact attention fallback. Backend source scopes/metadata/order/cost/legacy tests pinned separately;1batch adds1SQL(58vs57matchedfixture) independent1/10/100, oneUoW/0writes;100single715mssample isnotSLO. Oldendpoints/targets/pump/flags preserved. No Core/protocol/Attention/setup/receipt/migration/personalinstall/provider change. Individual reconnect absent is explicit and doesnotinvoke global service restart. User unavailable for hours: no new human trial; human/global qualification remains pending. QuickConnect package queued, not inspected; current browser+installed+cleanup+commit/push must finish before next implementation."
     }
   ],
   "risk_acceptances": [],

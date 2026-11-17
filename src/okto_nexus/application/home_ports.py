@@ -21,3 +21,6 @@ class HomeEntryQueries(Protocol):
 
     def external(self, uow, *, scope, server_id: str, now: str, config, observations,
                  relations: EntryRelations, check_budget: Callable[[], None]) -> None: ...
+
+    def blocking(self, uow, *, scope, server_id: str, relations: EntryRelations,
+                 check_budget: Callable[[], None]) -> None: ...

@@ -15,7 +15,7 @@ FILTERS = frozenset({'workspace_id', 'agent_id', 'state', 'quick', 'harness', 'h
 async def call(request, *, partition, group_id=None, entry_id=None):
     try:
         allowed = FILTERS | {'cursor', 'limit', 'preview', 'api_key'}
-        if partition == 'board':
+        if partition == 'board' or partition.startswith('harness_'):
             allowed = allowed - {'quick'}
         if any(key not in allowed or len(request.query_params.getlist(key)) != 1 for key in request.query_params):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Unknown or repeated Home entries parameter.', {})
@@ -38,6 +38,22 @@ async def call(request, *, partition, group_id=None, entry_id=None):
 
 def build_router():
     router = APIRouter()
+
+    @router.get('/home/harness-board')
+    async def harness_board(request: Request):
+        return await call(request, partition='harness_board')
+
+    @router.get('/home/harness-board/unlinked')
+    async def harness_unlinked(request: Request):
+        return await call(request, partition='harness_unlinked')
+
+    @router.get('/home/harness-board/cards/{card_id}/children')
+    async def harness_children(request: Request, card_id: str):
+        return await call(request, partition='harness_children', group_id=card_id)
+
+    @router.get('/home/harness-board/{column}')
+    async def harness_column(request: Request, column: str):
+        return await call(request, partition='harness_board', group_id=column)
 
     @router.get('/home/board')
     async def board(request: Request):

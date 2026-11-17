@@ -1,0 +1,72 @@
+{
+  "qualification": "Frontend R3 focal source qualification",
+  "status": "FOCAL_PASS_BROWSER_NOT_RUN_BY_THIS_AGENT",
+  "contract": "harness-board union harness/request/delivery; classification and blocking are supplied by Server",
+  "validation": [
+    {
+      "command": "node --test tests/uiHarnessController.test.mjs tests/uiHarnessCard.test.mjs tests/homeR1Api.test.mjs tests/homeUI.test.mjs tests/uiFirstHarnessEmpty.test.mjs tests/homeContextCards.test.mjs tests/homeDisplayPreference.test.mjs tests/uiEntryInspection.test.mjs tests/uiEntryCards.test.mjs tests/uiBoardController.test.mjs tests/uiBoardCards.test.mjs",
+      "result": "64 PASS",
+      "duration_ms": 5735.8383,
+      "tool": "28e5ad",
+      "cut": "Before final JSX guard suppressing attention CTA in Active"
+    },
+    {
+      "command": "npx tsc --noEmit",
+      "result": "PASS exit0",
+      "tool": "302f42",
+      "cut": "Before final JSX guard; no type/model change in that guard"
+    },
+    {
+      "command": "node --test tests/uiHarnessCard.test.mjs",
+      "result": "6 PASS",
+      "duration_ms": 1386.6115,
+      "tool": "232e27",
+      "cut": "Final attention CTA guard source"
+    },
+    {
+      "command": "node --test tests/uiHarnessController.test.mjs tests/uiHarnessCard.test.mjs",
+      "result": "14 PASS",
+      "duration_ms": 1162.0394,
+      "tool": "89f558",
+      "cut": "Final unknown-origin validation fix; request/delivery empty refs accepted, nonempty refs still scoped; actual JSX handler verifies canonical targetless fallback"
+    }
+  ],
+  "behavior": [
+    "One existing serialized controller queue for root, columns and contextual children/unlinked; same shell SSE/TTL/abort/generation/pause/hold fences",
+    "Global revision or contextual409 invalidates all column cursors and contextual pages; old queued cursor discarded",
+    "Active harness, independent human request and reported delivery can share a proven connection without duplicate item IDs",
+    "Server ordered events_preview only; no merging source first pages in React",
+    "Original entry/group/entry_revision and target preserved; canonical inspector and explicit ambiguous session selection reused",
+    "No technical ID inputs or collapsed technical blocks in basic Home; one visible Project selector and Add harness callback zeroargs",
+    "Active attention event remains textual; actionable review lives in Needs you or inside blocked harness",
+    "Individual reconnection unavailable; disabled button with visible accessible reason, no write handler",
+    "Seen/Snooze remain in canonical detail with captured occurrence CAS, not a fresh Board lookup; no replay"
+  ],
+  "limits": [
+    "No real browser, installed-package, provider, native execution or human acceptance certified by this report",
+    "64-test result precedes last JSX guard; final guard has 6 focused tests, Root owns final global suite/build",
+    "Backend relation cost/latency is not measured here; no O(page) or performance claim",
+    "Legacy filter UI scenarios are antecedents; canonical controller/API filter support remains but technical filter inputs were removed from basic Home"
+  ],
+  "source_sha256": {
+    "frontend/src/homeTypes.ts": "31b1efd7f850495a0d5b8190fc4af773d11d01550ec232a01ad8736be3f5babc",
+    "frontend/src/homeApi.ts": "df6b19ce0d351ebb664c9ddbd8699bc5e26d5f3b98b39c2df47afa845a433634",
+    "frontend/src/homeController.ts": "775def3ee32fee0da73bed97ddd1e16e5ec723cd8e7d18a6feaa4ee1b2c42d98",
+    "frontend/src/hooks/useHomeOverview.ts": "1897a69d2d3f99dd4fe1da7662267cd644f70d05c9d4674149c05fe8c9ba83a1",
+    "frontend/src/components/home/HomeBoardCards.tsx": "553e6b18c1b9a28863011fbcab608d6b632171fa78db3fae0eff3e7570426d83",
+    "frontend/src/components/home/HomeHarnessCard.tsx": "f016498f471c2f4d2f6c9cf9f16f063fe7c6b77f2e5ef5ee2f87bcf53ea16c8c",
+    "frontend/src/components/home/HomeCards.tsx": "4a589b814554d89b02716ca211a7b17e92cc20d427d96ccd936c54a128614d6e",
+    "frontend/src/components/home/HomeContextCards.tsx": "103b982597379f2d3e417ec113aac9c714315e0660d17f3f910d8684d6f5b42b",
+    "frontend/src/components/home/OperationalHome.tsx": "4066f8a2150c5bb83b69d2abfa050a2128842855e04622574faf754d9f7383cc",
+    "frontend/tests/uiHarnessCard.test.mjs": "553907e7516ddfc72a0dbc0d9e89d2a9c70527035912bdf5caa3fd8004f29800",
+    "frontend/tests/uiHarnessController.test.mjs": "de3667cf1806ad284d06b25d1ed9f5d13b813d64ae2a9d42f70a8a07af2cbe60",
+    "frontend/tests/homeR1Api.test.mjs": "ba1f58f49566b3f2885fbd108393c7cb9e6de6c5b1d36f2a67bec6a1d32fccc4",
+    "frontend/tests/homeUI.test.mjs": "1435ca2ed7c26058b12deff02c14fa49fa378a77ac4da6a92c6aaaaaddb9f1cd",
+    "frontend/tests/uiFirstHarnessEmpty.test.mjs": "d6ba44d291e71cbd41b2ef4032623cfe2b01f62879474af0a34d2e865a87b344"
+  },
+  "correction": {
+    "problem": "Requiring at least one harness_ref incorrectly rejected legitimate unknown-origin request/delivery and invalidated whole Board",
+    "change": "Allow empty refs for request/delivery only; validate every provided reference as before",
+    "targetless_signal": "Existing onOpen canonical attention fallback retained; actual handler focal covers exact request and external report with entry.target null"
+  }
+}

@@ -4,20 +4,25 @@ import type { HomeActivity, HomeAgent, HomeFeedEvent, HomeFilters, HomeOverview,
   HomeEntry, HomeSessionRef, HomeEntryPartition,HomeBoard,HomeBoardPage,HomeBoardColumn,HomeBoardMetadata,HomeBoardSlice,HomeBoardEntry } from './homeTypes';
 import type { ExternalObservation } from './observationTypes';
 import type { AttentionOccurrence } from './attentionTypes';
+import type {HomeHarnessBoard,HomeHarnessBoardPage,HomeHarnessCard,HomeHarnessChild,HomeHarnessChildrenPage,HomeHarnessSlice,HomeHarnessConnection} from './homeTypes';
 
 export interface HomeContext {
   workspace: string | null; identityKey: string; origin?: string; enabled?: boolean; visible?: boolean;
   agent_id?: string; state?: string;
-  family?: 'legacy'|'entries'|'board'; quick?:HomeQuickFilter; harness?:string; host?:string;
+  family?: 'legacy'|'entries'|'board'|'harness'; quick?:HomeQuickFilter; harness?:string; host?:string;
   holdOrder?:boolean;
 }
 export interface HomeEntryJob {partition:HomeEntryPartition;groupId?:string;entryId?:string;boardRevision?:string|null;entryRevision?:string|null}
 interface HomeBoardJob {column:HomeBoardColumn;revision:string;entryRevision:string|null;cursor:string}
+interface HomeHarnessJob {cardId:string|null;revision:string;entryRevision:string|null;cursor:string}
 export const homeBoardColumns:readonly HomeBoardColumn[]=['active','needs_you','results'];
 export const homeEntryPageKey=(groupId:string,entryId:string)=>JSON.stringify([groupId,entryId]);
 interface HomeEntryCache {
   entries:HomeEntryPage<HomeEntryGroup>|null;
   board:HomeBoard|null;
+  harnessBoard:HomeHarnessBoard|null;
+  harnessChildren:Record<string,HomeHarnessChildrenPage>;
+  harnessUnlinked:HomeHarnessChildrenPage|null;
   entryChildren:Record<string,HomeEntryPage<HomeEntry>>;
   entrySessions:Record<string,HomeEntryPage<HomeSessionRef>>;
   entryAttention:Record<string,HomeEntryPage<AttentionOccurrence>>;
@@ -33,13 +38,14 @@ export interface HomeState extends HomeEntryCache {
   scopeKey: string | null;
   entryLoading:HomeEntryJob|null;
   boardLoading:HomeBoardColumn|null;
+  harnessLoading:string|null;
 }
 export interface HomeDependencies {
   api: HomeApi; now(): number; setTimeout(callback: () => void, milliseconds: number): unknown;
   clearTimeout(handle: unknown): void; onChange?(state: HomeState): void;
 }
-const emptyEntryCache=():HomeEntryCache=>({entries:null,board:null,entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{}});
-export const initialHomeState = (): HomeState => ({ ...emptyEntryCache(),entryLoading:null,boardLoading:null,snapshot: null, activity: null, status: 'loading',
+const emptyEntryCache=():HomeEntryCache=>({entries:null,board:null,harnessBoard:null,harnessChildren:{},harnessUnlinked:null,entryChildren:{},entrySessions:{},entryAttention:{},entryResults:{}});
+export const initialHomeState = (): HomeState => ({ ...emptyEntryCache(),entryLoading:null,boardLoading:null,harnessLoading:null,snapshot: null, activity: null, status: 'loading',
   loading: false, loadingMore: null, paused: false, hasPendingUpdate: false, error: null, staleSections: [], generation: 0, scopeKey: null });
 const sections = ['work', 'attention', 'results', 'agents', 'external_activity', 'server_attention'] as const;
 /** Hints only. The fallback/TTL still covers sources without a workspace event. */
@@ -84,6 +90,7 @@ export class HomeController {
   private morePending: HomePageSection | null = null;
   private entryPending:HomeEntryJob|null=null;
   private boardPending:HomeBoardJob|null=null;
+  private harnessPending:HomeHarnessJob|null=null;
   private entryCache=emptyEntryCache();
   private timer: unknown;
   private poll: unknown;
@@ -113,8 +120,9 @@ export class HomeController {
   }
   private entriesFamily():boolean{return this.context.family==='entries';}
   private boardFamily():boolean{return this.context.family==='board';}
-  private trackingFamily():boolean{return this.entriesFamily()||this.boardFamily();}
-  private hasSnapshot():boolean{return this.boardFamily()?!!this.state.board:this.entriesFamily()?!!this.state.entries:!!this.state.snapshot;}
+  private harnessFamily():boolean{return this.context.family==='harness';}
+  private trackingFamily():boolean{return this.entriesFamily()||this.boardFamily()||this.harnessFamily();}
+  private hasSnapshot():boolean{return this.harnessFamily()?!!this.state.harnessBoard:this.boardFamily()?!!this.state.board:this.entriesFamily()?!!this.state.entries:!!this.state.snapshot;}
   private entryFilters():HomeEntryQuery{return {...this.filters(),...(this.context.quick?{quick:this.context.quick}:{}),
     ...(this.context.harness?{harness:this.context.harness}:{}),...(this.context.host?{host:this.context.host}:{})};}
   configure(next: HomeContext): void {
@@ -128,7 +136,7 @@ export class HomeController {
       this.active?.abort.abort(); // Keep it owned until finally; no concurrent replacement.
       this.cancel('timer'); this.cancel('poll');
       this.latest = null; this.latestActivity = null; this.activityDirty = false; this.eventId = null;
-      this.entryCache=emptyEntryCache();this.entryPending=null;this.boardPending=null;
+      this.entryCache=emptyEntryCache();this.entryPending=null;this.boardPending=null;this.harnessPending=null;
       this.resetPages = false;
       this.refreshPending = false; this.morePending = null; this.dirtySince = null;
       this.blocked = false;
@@ -148,14 +156,14 @@ export class HomeController {
     this.generation++; this.blocked = true; this.active?.abort.abort();
     this.cancel('timer'); this.cancel('poll'); this.refreshPending = false; this.morePending = null;
     this.latest = null; this.latestActivity = null; this.activityDirty = false;
-    this.entryCache=emptyEntryCache();this.entryPending=null;this.boardPending=null;
+    this.entryCache=emptyEntryCache();this.entryPending=null;this.boardPending=null;this.harnessPending=null;
     this.resetPages = false;
     this.emit({ ...initialHomeState(), status: 'forbidden' });
   }
   dispose(): void { this.clear(); this.disposed = true; }
   refresh(): void {
     if (!this.allowed()) return;
-    this.refreshPending = true; this.morePending = null;this.entryPending=null;this.boardPending=null; this.dirtySince = null;
+    this.refreshPending = true; this.morePending = null;this.entryPending=null;this.boardPending=null;this.harnessPending=null; this.dirtySince = null;
     this.cancel('poll'); this.schedule(0);
   }
   pause(paused = !this.state.paused): void {
@@ -166,7 +174,7 @@ export class HomeController {
   apply(): void {
     if(!this.allowed())return;
     if(this.trackingFamily()){this.emit({...this.entryCache,hasPendingUpdate:false,
-      status:(this.boardFamily()?this.entryCache.board:this.entryCache.entries)?.status==='ready'&&!this.refreshPending?'ready':'stale',staleSections:this.refreshPending?[...sections]:[]});return;}
+      status:(this.harnessFamily()?this.entryCache.harnessBoard:this.boardFamily()?this.entryCache.board:this.entryCache.entries)?.status==='ready'&&!this.refreshPending?'ready':'stale',staleSections:this.refreshPending?[...sections]:[]});return;}
     this.emit({ snapshot: this.latest, activity: this.latestActivity, hasPendingUpdate: false });
   }
   onStreamStatus(status: HomeStreamStatus): void {
@@ -189,7 +197,7 @@ export class HomeController {
     }
     this.emit({ status: this.hasSnapshot() ? 'stale' : 'loading',
       staleSections: [...new Set([...this.state.staleSections, ...affected])] });
-    this.refreshPending = true; this.morePending = null;this.entryPending=null;this.boardPending=null;
+    this.refreshPending = true; this.morePending = null;this.entryPending=null;this.boardPending=null;this.harnessPending=null;
     if (this.context.visible === false) { this.schedulePoll(); return; }
     this.dirtySince ??= this.deps.now();
     this.schedule(Math.max(0, Math.min(350, this.dirtySince + 500 - this.deps.now())));
@@ -208,15 +216,26 @@ export class HomeController {
   loadEntryAttention(groupId:string,entryId:string):void{this.loadEntryPage({partition:'attention',groupId,entryId});}
   loadEntryResults(groupId:string,entryId:string):void{this.loadEntryPage({partition:'results',groupId,entryId});}
   loadBoardColumn(column:HomeBoardColumn):void{
-    const root=this.entryCache.board;
-    if(!this.boardFamily()||!root?.revision||!this.allowed()||this.context.visible===false||this.state.paused||
+    const root=this.harnessFamily()?this.entryCache.harnessBoard:this.entryCache.board;
+    if(!(this.boardFamily()||this.harnessFamily())||!root?.revision||!this.allowed()||this.context.visible===false||this.state.paused||
       this.state.hasPendingUpdate||this.state.staleSections.length||this.refreshPending||this.active)return;
     const page=root.columns[column];
     if(!['ready','partial'].includes(root.status)||!page.has_more||!page.next_cursor)return;
-    this.entryPending=null;this.boardPending={column,revision:root.revision,entryRevision:root.entry_revision,cursor:page.next_cursor};this.schedule(0);
+    this.entryPending=null;this.harnessPending=null;this.boardPending={column,revision:root.revision,entryRevision:root.entry_revision,cursor:page.next_cursor};this.schedule(0);
+  }
+  loadHarnessChildren(cardId:string|null):void{
+    const root=this.entryCache.harnessBoard;
+    if(!this.harnessFamily()||!root?.revision||!this.allowed()||this.context.visible===false||
+      this.state.hasPendingUpdate||this.state.staleSections.length||this.refreshPending||this.active)return;
+    const card=cardId===null?null:homeBoardColumns.flatMap(name=>root.columns[name].items).filter(item=>item.kind==='harness').find(item=>item.id===cardId);
+    const page=cardId===null?this.entryCache.harnessUnlinked??root.unlinked:this.entryCache.harnessChildren[cardId]??
+      (card?{next_cursor:card.children_cursor,has_more:card.has_more_children}:null);
+    if(!page?.has_more||!page.next_cursor)return;
+    this.entryPending=null;this.boardPending=null;
+    this.harnessPending={cardId,revision:root.revision,entryRevision:root.entry_revision,cursor:page.next_cursor};this.schedule(0);
   }
   private loadEntryPage(job:HomeEntryJob):void{
-    if(!this.trackingFamily()||!this.allowed()||this.context.visible===false||this.state.paused||this.state.hasPendingUpdate||this.refreshPending||this.active)return;
+    if(this.harnessFamily()||!this.trackingFamily()||!this.allowed()||this.context.visible===false||this.state.paused||this.state.hasPendingUpdate||this.refreshPending||this.active)return;
     if(this.boardFamily()&&(job.partition==='groups'||job.partition==='children'))return;
     const previous=this.previousEntryPage(job);
     if(!previous||!['ready','partial'].includes(previous.status)||!previous.next_cursor)return;
@@ -232,7 +251,7 @@ export class HomeController {
     this.cancel('poll');
     if (!this.allowed()) return;
     let delay = this.context.visible === false ? 60000 : 15000;
-    const entries=this.boardFamily()?this.entryCache.board:this.entryCache.entries;
+    const entries=this.harnessFamily()?this.entryCache.harnessBoard:this.boardFamily()?this.entryCache.board:this.entryCache.entries;
     if(this.trackingFamily()&&entries&&this.context.visible!==false&&entries.next_refresh_at){
       const interval=Date.parse(entries.next_refresh_at)-Date.parse(entries.generated_at);
       if(Number.isFinite(interval))delay=Math.min(delay,Math.max(1000,this.snapshotStarted+interval-this.deps.now()));
@@ -379,7 +398,7 @@ export class HomeController {
     const board=this.entryCache.board;
     this.entryCache={...emptyEntryCache(),board:board?{...board,columns:Object.fromEntries(homeBoardColumns.map(name=>
       [name,{...board.columns[name],has_more:false,next_cursor:null}])) as HomeBoard['columns']}:null};
-    this.entryPending=null;this.boardPending=null;
+    this.entryPending=null;this.boardPending=null;this.harnessPending=null;
   }
   private publishBoard(notice:string|null=null,appendOnly=false):void{
     const value=this.entryCache.board,prior=this.state.board;if(!value)return;
@@ -424,7 +443,7 @@ export class HomeController {
       return null;
     }
     const same=!this.resetPages&&before&&before.revision===next.revision&&before.entry_revision===next.entry_revision;
-    if(!same){this.entryCache=emptyEntryCache();this.entryPending=null;this.boardPending=null;}
+    if(!same){this.entryCache=emptyEntryCache();this.entryPending=null;this.boardPending=null;this.harnessPending=null;}
     this.entryCache={...this.entryCache,board:same?{...next,columns:Object.fromEntries(homeBoardColumns.map(name=>{
       const old=before.columns[name],fresh=next.columns[name];
       return [name,old.items.length>fresh.items.length?{...fresh,items:[...fresh.items,...old.items.slice(fresh.items.length)],
@@ -433,6 +452,121 @@ export class HomeController {
     this.resetPages=false;
     return before&&!same?'Updated work changed the board. All columns were revalidated.':null;
   }
+  private validHarnessScope(value:HomeBoardMetadata):boolean{
+    const f=this.entryFilters(),s=value.scope,root=this.entryCache.harnessBoard;
+    return value.version===1&&!!value.server_id&&(!root||root.server_id===value.server_id)&&
+      s.workspace_id===(f.workspace_id??null)&&(s.agent_id??'')===(f.agent_id??'')&&(s.state??'')===(f.state??'')&&
+      (s.harness??'')===(f.harness??'')&&(s.host??'')===(f.host??'')&&s.quick==='all'&&s.include_recent_results===false;
+  }
+  private validHarnessItems(items:HomeHarnessChild[],meta:HomeBoardMetadata):boolean{
+    const seen=new Set<string>();
+    return Array.isArray(items)&&items.every(item=>!!item.id&&!seen.has(item.id)&&!!seen.add(item.id)&&!!item.group_id&&
+      typeof item.shared_reference==='boolean'&&!!meta.entry_revision&&item.entry_revision===meta.entry_revision&&
+      (meta.scope.workspace_id===null||item.workspace_id===meta.scope.workspace_id)&&(!item.target||item.target.server_id===meta.server_id));
+  }
+  private validHarnessConnection(c:HomeHarnessConnection,meta:HomeBoardMetadata):boolean{
+    return !!c&&c.server_id===meta.server_id&&[c.executor_id,c.binding_id,c.workspace_binding_id,c.agent_id,c.workspace_id,c.harness_id]
+      .every(v=>typeof v==='string'&&!!v)&&(meta.scope.workspace_id===null||c.workspace_id===meta.scope.workspace_id);
+  }
+  private validHarnessSlice(page:HomeHarnessSlice,meta:HomeBoardMetadata,seen:Set<string>,column:HomeBoardColumn):boolean{
+    if(!page||!Array.isArray(page.items)||!this.validHarnessPageShape(page))return false;
+    return page.items.every(card=>{
+      if(!card.id||seen.has(card.id))return false;
+      seen.add(card.id);
+      if(card.kind==='request'||card.kind==='delivery'){
+        return column===(card.kind==='request'?'needs_you':'results')&&this.validHarnessItems([card.entry],meta)&&
+          Array.isArray(card.harness_refs)&&card.harness_refs.every(ref=>!!ref.card_id&&this.validHarnessConnection(ref.connection,meta))&&
+          (card.kind==='request'?!!card.request?.attention_id&&[true,false,null].includes(card.blocks_harness)&&typeof card.notification_visible==='boolean':
+            (!!card.result?.id||!!card.report?.attention_id)&&['canonical','reported'].includes(card.completion_evidence));
+      }
+      if(card.kind!=='harness'||column==='results'||column==='needs_you'&&card.blocks_harness!==true||column==='active'&&card.blocks_harness===true)return false;
+      const c=card.connection;
+      if(card.id!==card.group_id||!this.validHarnessConnection(c,meta)||!card.target||
+        card.target.kind!=='connection'||card.target.server_id!==c.server_id||card.target.workspace_id!==c.workspace_id||
+        card.target.executor_id!==c.executor_id||card.target.binding_id!==c.binding_id||card.target.agent_id!==c.agent_id||
+        card.context_state!=='registered'||![true,false,null].includes(card.blocks_harness)||!Array.isArray(card.blocking_request_ids)||
+        !['waiting_for_user','awaiting_confirmation','working','registered','unknown'].includes(card.activity_state)||
+        !Array.isArray(card.blocking_requests)||typeof card.reminder_snoozed!=='boolean'||card.reconnect_available!==false||typeof card.reconnect_reason!=='string'||
+        !Array.isArray(card.events_preview)||card.events_preview.length>3||card.events_preview.some(event=>
+          !event.id||!this.validHarnessItems([event.entry],meta)||event.entry_id!==event.entry.id||event.group_id!==event.entry.group_id||event.entry_revision!==meta.entry_revision||
+          event.target&&event.target.server_id!==meta.server_id)||
+        !this.validHarnessItems(card.children,meta)||
+        !this.validHarnessPageShape({items:card.children,total:card.children_total,total_is_exact:card.children_total!==null,
+          has_more:card.has_more_children,next_cursor:card.children_cursor}))return false;
+      return true;
+    });
+  }
+  private validHarnessPageShape(page:{items:unknown[];total:number|null;total_is_exact:boolean;has_more:boolean;next_cursor:string|null}):boolean{
+    return Array.isArray(page.items)&&typeof page.total_is_exact==='boolean'&&typeof page.has_more==='boolean'&&
+      (page.total===null||Number.isInteger(page.total)&&page.total>=page.items.length)&&(!page.total_is_exact||page.total!==null)&&
+      (page.has_more?typeof page.next_cursor==='string'&&!!page.next_cursor:page.next_cursor===null);
+  }
+  private resetHarnessPages():void{
+    const root=this.entryCache.harnessBoard;
+    this.entryCache={...emptyEntryCache(),harnessBoard:root?{...root,
+      columns:Object.fromEntries(homeBoardColumns.map(name=>[name,{...root.columns[name],has_more:false,next_cursor:null,
+        items:root.columns[name].items.map(card=>card.kind==='harness'?{...card,has_more_children:false,children_cursor:null}:card)}])) as HomeHarnessBoard['columns'],
+      unlinked:{...root.unlinked,has_more:false,next_cursor:null}}:null};
+    this.entryPending=null;this.boardPending=null;this.harnessPending=null;
+  }
+  private publishHarness(notice:string|null=null,appendOnly=false):void{
+    const value=this.entryCache.harnessBoard,prior=this.state.harnessBoard;if(!value)return;
+    const order=(root:HomeHarnessBoard)=>JSON.stringify(homeBoardColumns.map(name=>[name,root.columns[name].items.map(card=>
+      card.kind==='harness'?[card.id,card.events_preview.map(event=>event.id)]:[card.id,card.kind==='request'?card.request.source_revision:card.result?.id??card.report?.source_revision])]));
+    const held=!!(!appendOnly&&this.context.holdOrder&&prior&&(prior.revision!==value.revision||order(prior)!==order(value)));
+    this.emit({...(this.state.paused||held?{hasPendingUpdate:true}:{...this.entryCache,hasPendingUpdate:false}),
+      status:held||this.refreshPending||value.status!=='ready'?'stale':'ready',error:notice,staleSections:this.refreshPending?[...sections]:[]});
+  }
+  private async readHarness(boardJob:HomeBoardJob|null,childJob:HomeHarnessJob|null,signal:AbortSignal,current:()=>boolean):Promise<string|null>{
+    const before=this.entryCache.harnessBoard,job=boardJob??childJob;
+    if(job&&(!before||job.revision!==before.revision||job.entryRevision!==before.entry_revision))return null;
+    const {quick:_quick,...filters}=this.entryFilters(),query={...filters,limit:10,preview:3,...(job?{cursor:job.cursor}:{})};
+    if(childJob){
+      const card=childJob.cardId===null?null:homeBoardColumns.flatMap(name=>before!.columns[name].items).filter(item=>item.kind==='harness').find(item=>item.id===childJob.cardId);
+      const previous=childJob.cardId===null?this.entryCache.harnessUnlinked??before!.unlinked:this.entryCache.harnessChildren[childJob.cardId]??
+        (card?{items:card.children,total:card.children_total,total_is_exact:card.children_total!==null,has_more:card.has_more_children,next_cursor:card.children_cursor}:null);
+      if(!previous||previous.next_cursor!==childJob.cursor)return null;
+      const page=childJob.cardId===null?await this.deps.api.harnessUnlinked(query,signal):await this.deps.api.harnessChildren(childJob.cardId,query,signal);
+      if(!current())return null;
+      if(page.status==='forbidden')throw Object.assign(Error('Harness context forbidden'),{status:403});
+      if(!this.validHarnessScope(page)||page.partition!==(childJob.cardId===null?'harness_unlinked':'harness_children')||
+        (childJob.cardId!==null&&page.card_id!==childJob.cardId))throw Error('HOME_SCOPE_CHANGED');
+      if(page.revision!==childJob.revision||page.entry_revision!==childJob.entryRevision||
+        !['ready','partial'].includes(page.status)||!this.validHarnessPageShape(page)||!this.validHarnessItems(page.items,page)||
+        page.total!==previous.total||page.total_is_exact!==previous.total_is_exact||
+        page.items.some(item=>previous.items.some(old=>old.id===item.id)))throw Object.assign(Error('Harness activity changed'),{status:409});
+      const next={...page,items:[...previous.items,...page.items]};
+      if(childJob.cardId===null)this.entryCache={...this.entryCache,harnessUnlinked:next};
+      else this.entryCache={...this.entryCache,harnessChildren:{...this.entryCache.harnessChildren,[childJob.cardId]:next}};
+      return null;
+    }
+    if(boardJob&&boardJob.cursor!==before!.columns[boardJob.column].next_cursor)return null;
+    const value=boardJob?await this.deps.api.harnessBoardColumn(boardJob.column,query,signal):await this.deps.api.harnessBoard(query,signal);
+    if(!current())return null;
+    if(value.status==='forbidden')throw Object.assign(Error('Harness board forbidden'),{status:403});
+    if(!this.validHarnessScope(value))throw Error('HOME_SCOPE_CHANGED');
+    if(boardJob){
+      const page=value as HomeHarnessBoardPage,previous=before!.columns[boardJob.column];
+      if(page.partition!=='harness_board_column'||page.column!==boardJob.column||page.revision!==boardJob.revision||
+        page.entry_revision!==boardJob.entryRevision||!['ready','partial'].includes(page.status)||
+        !this.validHarnessSlice(page,page,new Set(homeBoardColumns.flatMap(name=>before!.columns[name].items.map(card=>card.id))),boardJob.column)||
+        page.total!==previous.total||page.total_is_exact!==previous.total_is_exact)throw Object.assign(Error('Harness board changed'),{status:409});
+      this.entryCache={...this.entryCache,harnessBoard:{...before!,columns:{...before!.columns,[boardJob.column]:{
+        items:[...previous.items,...page.items],total:page.total,total_is_exact:page.total_is_exact,has_more:page.has_more,next_cursor:page.next_cursor}}}};
+      return null;
+    }
+    const next=value as HomeHarnessBoard,seen=new Set<string>();
+    if(next.partition!=='harness_board'||!next.columns||!homeBoardColumns.every(name=>this.validHarnessSlice(next.columns[name],next,seen,name))||
+      !next.unlinked||!this.validHarnessPageShape(next.unlinked)||!this.validHarnessItems(next.unlinked.items,next))throw Error('HOME_HARNESS_BOARD_INVALID');
+    this.snapshotStarted=this.lastStarted;
+    const same=!this.resetPages&&before&&before.revision===next.revision&&before.entry_revision===next.entry_revision;
+    if(!same){this.entryCache=emptyEntryCache();this.entryPending=null;this.boardPending=null;this.harnessPending=null;}
+    this.entryCache={...this.entryCache,harnessBoard:same?{...next,columns:Object.fromEntries(homeBoardColumns.map(name=>{
+      const old=before.columns[name],fresh=next.columns[name];return [name,old.items.length>fresh.items.length?
+        {...fresh,items:[...fresh.items,...old.items.slice(fresh.items.length)],has_more:old.has_more,next_cursor:old.next_cursor}:fresh];
+    })) as HomeHarnessBoard['columns']}:next};
+    this.resetPages=false;return before&&!same?'Updated harness activity changed the board. All columns were revalidated.':null;
+  }
   private publish(notice: string | null = null): void {
     const staleSections: HomeSectionName[] = sections.filter(name => ['partial', 'unavailable', 'forbidden'].includes(this.latest?.[name].status ?? 'unavailable'));
     if (this.activityDirty) staleSections.push('activity');
@@ -440,18 +574,22 @@ export class HomeController {
       status: staleSections.length ? 'stale' : 'ready', staleSections, error: notice });
   }
   private async pump(): Promise<void> {
-    if (!this.allowed() || this.active || (!this.refreshPending && !this.morePending&&!this.entryPending&&!this.boardPending)) return;
+    if (!this.allowed() || this.active || (!this.refreshPending && !this.morePending&&!this.entryPending&&!this.boardPending&&!this.harnessPending)) return;
     const entryJob=this.trackingFamily()&&!this.refreshPending?this.entryPending:null;
-    const boardJob=this.boardFamily()&&!this.refreshPending?this.boardPending:null;
+    const boardJob=(this.boardFamily()||this.harnessFamily())&&!this.refreshPending?this.boardPending:null;
+    const harnessJob=this.harnessFamily()&&!this.refreshPending?this.harnessPending:null;
     const section = this.refreshPending ? null : this.morePending;
-    this.refreshPending = false; this.morePending = null;this.entryPending=null;this.boardPending=null; this.dirtySince = null;
+    this.refreshPending = false; this.morePending = null;this.entryPending=null;this.boardPending=null;this.harnessPending=null; this.dirtySince = null;
     const job = { generation: this.generation, abort: new AbortController() };
     this.active = job; this.lastStarted = this.deps.now();
-    this.emit({ loading: this.trackingFamily()?entryJob===null&&boardJob===null:section===null, loadingMore: section,entryLoading:entryJob,boardLoading:boardJob?.column??null });
+    this.emit({ loading: this.trackingFamily()?entryJob===null&&boardJob===null&&harnessJob===null:section===null, loadingMore: section,entryLoading:entryJob,boardLoading:boardJob?.column??null,harnessLoading:harnessJob?(harnessJob.cardId??'unlinked'):null });
     let notice: string | null = null;
     const current = () => this.allowed() && this.active === job && job.generation === this.generation;
     try {
-      if(this.boardFamily()){
+      if(this.harnessFamily()){
+        notice=await this.readHarness(boardJob,harnessJob,job.abort.signal,current);
+        if(!current())return;
+      } else if(this.boardFamily()){
         notice=entryJob?await this.readEntries(entryJob,job.abort.signal,current):await this.readBoard(boardJob,job.abort.signal,current);
         if(!current())return;
       } else if(this.entriesFamily()){
@@ -497,7 +635,10 @@ export class HomeController {
           this.activityDirty = false;
         }
       }
-      if(this.boardFamily())this.publishBoard(notice,!!boardJob);else if(this.entriesFamily())this.publishEntries(notice);else this.publish(notice);
+      if(this.harnessFamily()){
+        if(harnessJob&&this.state.paused)this.emit({harnessChildren:this.entryCache.harnessChildren,harnessUnlinked:this.entryCache.harnessUnlinked,error:notice});
+        else this.publishHarness(notice,!!boardJob||!!harnessJob);
+      }else if(this.boardFamily())this.publishBoard(notice,!!boardJob);else if(this.entriesFamily())this.publishEntries(notice);else this.publish(notice);
     } catch (error: unknown) {
       if (!current()) return;
       const failure = info(error);
@@ -505,18 +646,19 @@ export class HomeController {
       if(failure.code==='HOME_DISABLED'){
         this.entryCache=emptyEntryCache();this.boardPending=null;this.entryPending=null;this.emit({...initialHomeState(),status:'disabled'});return;
       }
-      if (failure.status === 409 && (section||entryJob||boardJob)) {
+      if (failure.status === 409 && (section||entryJob||boardJob||harnessJob)) {
         this.resetPages = true;
         this.refreshPending = true; this.activityDirty = !!this.latestActivity;
         if(this.boardFamily())this.resetBoardPages();
-        this.emit({ ...(this.boardFamily()?this.entryCache:{}),status: 'stale',staleSections:[...sections], error: 'Page changed. Refreshing the snapshot.' });
+        if(this.harnessFamily())this.resetHarnessPages();
+        this.emit({ ...((this.boardFamily()||this.harnessFamily())?this.entryCache:{}),status: 'stale',staleSections:[...sections], error: 'Page changed. Refreshing the snapshot.' });
       } else if (failure.name !== 'AbortError') this.emit({ status: this.hasSnapshot() ? 'stale' : 'error',
         error: failure.code ?? 'HOME_READ_FAILED', staleSections: [...sections, 'activity'] });
     } finally {
       if (this.active === job) this.active = null;
-      if (job.generation === this.generation) this.emit({ loading: false, loadingMore: null,entryLoading:null,boardLoading:null });
+      if (job.generation === this.generation) this.emit({ loading: false, loadingMore: null,entryLoading:null,boardLoading:null,harnessLoading:null });
       if (this.allowed()) {
-        if ((this.refreshPending || this.morePending||this.entryPending||this.boardPending) && this.context.visible !== false) this.schedule(0);
+        if ((this.refreshPending || this.morePending||this.entryPending||this.boardPending||this.harnessPending) && this.context.visible !== false) this.schedule(0);
         else this.schedulePoll();
       }
     }

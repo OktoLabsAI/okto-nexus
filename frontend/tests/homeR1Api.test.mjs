@@ -5,6 +5,21 @@ const canonical = await moduleURL('api.ts');
 const navigation = await moduleURL('homeNavigation.ts');
 const { homeApi } = await import(await moduleURL('homeApi.ts', { './api': canonical, './homeNavigation': navigation }));
 
+test('harness board and contextual paging preserve opaque scope/parents in passive canonical GETs',async()=>{
+  const original=globalThis.fetch,calls=[];globalThis.fetch=async(path,init)=>{calls.push({path,init});return Response.json({ok:true,data:{}});};
+  try{
+    const abort=new AbortController(),query={workspace_id:'project/&?',agent_id:'agent',cursor:'opaque:/&?',limit:10,preview:3};
+    await homeApi.harnessBoard({workspace_id:query.workspace_id},abort.signal);
+    await homeApi.harnessBoardColumn('needs_you',query,abort.signal);
+    await homeApi.harnessChildren('card:/&?',query,abort.signal);await homeApi.harnessUnlinked(query,abort.signal);
+    assert.deepEqual(calls.map(c=>new URL(c.path,'http://fixture').pathname),['/api/v1/home/harness-board','/api/v1/home/harness-board/needs_you',
+      `/api/v1/home/harness-board/cards/${encodeURIComponent('card:/&?')}/children`,'/api/v1/home/harness-board/unlinked']);
+    for(const c of calls){const url=new URL(c.path,'http://fixture');assert.equal(url.searchParams.get('workspace_id'),query.workspace_id);
+      assert.equal(url.searchParams.has('quick'),false);assert.equal(c.init.signal,abort.signal);assert.equal(c.init.cache,'no-store');assert.equal(c.init.method,undefined);assert.equal(c.init.body,undefined);}
+    assert.equal(new URL(calls[2].path,'http://fixture').searchParams.get('cursor'),query.cursor);
+  }finally{globalThis.fetch=original;}
+});
+
 test('board root and exact column are one passive API family with scoped opaque cursor and no quick tab',async()=>{
   const original=globalThis.fetch,calls=[];globalThis.fetch=async(path,init)=>{calls.push({path,init});return Response.json({ok:true,data:{}});};
   try{
