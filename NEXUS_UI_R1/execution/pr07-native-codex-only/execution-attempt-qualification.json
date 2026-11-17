@@ -1,0 +1,51 @@
+{
+  "status": "BLOCKED_PRE_SETUP_INVENTORY_NOT_AVAILABLE_NO_NATIVE_CALLS",
+  "toolrefs": [
+    "793ec5",
+    "cdc792",
+    "a2701b"
+  ],
+  "candidate_sha256": "e9fd2b81e0f7e9d79841a47cf3f337b1047b46d808812a963d364d9994c8d8c3",
+  "campaign_id": "a3c54686f9db4229b26fba3f9d6b468b",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-a3c54686f9db4229b26fba3f9d6b468b",
+  "exit_code": 1,
+  "reason": "First TerminalConnection.review runtime-options GET refused: No inventory is available for this executor. Server query-ready was not inventory-ready.",
+  "reserved_slots": 1,
+  "permanent_provision_tokens": 75000,
+  "native_or_model_admissions": 0,
+  "observed_provider_tokens": 0,
+  "usage_scope": "No connection-test journal, operation,session,binding,grant orsetup commit exists; no native/provider dispatch reached.",
+  "canonical_counts": {
+    "execution_operations": 0,
+    "execution_sessions": 0,
+    "connection_setup_commits": 0,
+    "runtime_execution_grants": 0,
+    "execution_bindings": 0,
+    "execution_inventory_snapshots": 0,
+    "workspaces": 0
+  },
+  "campaign_agents_created": [],
+  "cleanup": {
+    "canonical_force_used": false,
+    "canonical_shutdown_outcome": "drained",
+    "canonical_state": "stopped",
+    "data_preserved": true,
+    "dispatch_worker_exited": true,
+    "launcher_exit_code": 0,
+    "no_windows_session_event": true,
+    "physical_exit": true,
+    "settlement_confirmed": true
+  },
+  "shutdown_generation": "e5fa4aad3d87b1a90e7ec8f40ccf3dcb",
+  "matching_live_processes": 0,
+  "data_preserved": true,
+  "automatic_retry_or_new_root": false,
+  "passive_home_window": "NOT_RUN_EARLY_FAILURE",
+  "M3": "NOT_VERIFIED",
+  "files_sha256": {
+    "public\\blocked.json": "b2c81ee0dd07b661c32afbd410ef997897f2ed71107779c2b3040fe7c7f18167",
+    "public\\cleanup.json": "3b3f61a5a3f748a6f15c1f12892039b2b6e185ac38c57dffa9aa40e1f3f6be86",
+    "private\\codex_a.setup.reserved.json": "8b675200e40d3aad0fa02f18c900b481f9fde32bad99ce61ad2d7e3088ab96f9",
+    "home\\service-shutdown.json": "3d3fe03430c85789ac6464771e8fbc6eedf6eccc3515fa2816024c68f1171bf0"
+  }
+}

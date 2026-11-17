@@ -28,7 +28,7 @@ checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
 
 - O ledger é a fonte de status por cenário. Testes parcialmente cobertos mantêm
   NOT_RUN ou BLOCKED; ter arquivos de implementação não os transforma em PASS.
-- O frontend completo tem 300 testes Node aprovados no corte BGONNtiX e
+- O frontend completo tem302 testes Node aprovados no corte Zyb_20X4 e
   TypeScript/Vite aprovados. Node/SSR não são navegador nem leitor de tela.
 - A Home teve 19 checks de navegador no corte dfy1, mais oito checks humanos de
   formulário/guard/CAS no corte vmh. Duas abas enviaram decisões reais à API,
@@ -41,6 +41,15 @@ checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
 - O corte BGONN corrige o falso aviso de rascunho ao alternar Auto-scroll no
   terminal somente leitura. Quatro checks no navegador comprovam fechamento
   direto e preservação do guard para um formulário canônico realmente editado.
+- A primeira avaliação humana falhou ao retomar uma conexão. O participante
+  relatou confusão entre Home clássica/operacional, projeto e objetivo. Foram13
+  cliques no primeiro corte e20 no total, incluindo exploração posterior, sem
+  POST. A expiração técnica da fixture foi registrada separadamente. A correção
+  removeu a alternância da Home básica, destacou Project e nome do projeto e
+  mudou a entrada para Connect or resume. Mesma preferência/defaultOFF/guardas,
+  IDs e URLs; escolha de apresentação agora em Settings. Três checks técnicos
+  de navegador passaram. Isso não transforma a tentativa humana falha em PASS;
+  o segundo percurso usa participante já exposto à interface.
 - O inventário HTTP/SQLite paginado de Todos manteve dois bindings do mesmo
   agente separados, incluindo pergunta bloqueada e resultado do outro contexto.
   Um segundo projeto autorizado acrescentou um trabalho sem multiplicá-lo pelos
@@ -112,7 +121,9 @@ A proposta real foi vinculada a esse pacote, teve 21 testes offline e um smoke
 de lifecycle real com zero admissões. A revisão independente e a conferência de
 1.047 pins passaram. O candidato `3ea51229…fafb88e` foi apresentado ao usuário
 para uma autorização específica; o usuário autorizou depois somente Codex.
-O template original permanece falso, com derivado estreito em preparação.
+O template original permanece falso. Os derivados Codex tiveram24/28 testes
+offline e foram executados sob consentimentos genuínos vinculados à resposta;
+as duas tentativas e seus bloqueios estão preservados, sem campanha concluída.
 Nenhuma aprovação de release/default é inferida da autorização da campanha.
 
 ## Limites que impedem qualificação completa
@@ -125,17 +136,26 @@ trabalho admitido. Esses são trabalhos de qualificação executáveis; não sã
 classificados automaticamente como bloqueios externos. O ledger distingue cada
 cenário e mantém a entrega em andamento.
 
-1. O usuário autorizou a campanha UI-R1 somente com Codex e permitiu múltiplas
-   instâncias. O derivado em preparação usa duas conexões Codex, preserva o teto
-   de seis admissões/500mil tokens observados e exclui Claude. A proposta
-   original está preservada; nenhuma execução real ocorreu neste corte. Dois
-   Codex não qualificam um segundo tipo de harness. Claude foi adiado por falta
-   de limite disponível; não se reutiliza autorização histórica para executá-lo.
+1. O usuário autorizou a campanha UI-R1 somente com Codex. A primeira tentativa
+   parou antes do Test por inventário ainda indisponível, com zero efeitos
+   comprovados e cleanup DRAINED/saída física. O derivado conservou75mil tokens
+   provisionados e limitou a cinco novos slots, dentro do mesmo teto global.
+   Após a espera canônica de inventário, o Test real recusou gpt-5.3-codex para
+   a conta atual (modelNotFound). Não houve Finish, binding, grant, agente ou
+   trabalho útil. Não apareceu relatório de uso: consumo UNKNOWN, nunca zero;
+   as duas reservas150mil permanecem e novas admissões estão bloqueadas. Não
+   houve fallback/replay. Server e descendentes próprios encerraram: DRAINED,
+   launcher0, WindowsJob STOPPED confirmado por consulta RO. Um stop_proof
+   durável ausente não foi fabricado. Os oito modelos observados nos eventos
+   preservados não substituem nova seleção explícita nem contabilidade válida.
+   Claude permanece adiado por limite indisponível; nenhum acesso ou execução
+   de Claude ocorreu nesta campanha.
 2. Uma máquina remota real com Connector e pastas diferentes não foi qualificada
    por peers locais. Não há declaração de suporte universal de plataforma/harness.
-3. O usuário confirmou um participante disponível nesta máquina para UI-043.
-   O ambiente humano está em preparação; navegação automática não mede
-   compreensão humana nem fornece tempos ou taxas de sucesso do participante.
+3. UI-043 tem uma tentativa humana falha documentada e correções técnicas
+   posteriores. O segundo percurso foi aberto, com tarefas ainda sem conclusão
+   neste corte. Não há duração de sucesso ou compreensão humana inferida; a
+   autoridade de decisão da fixture tem prazo independente da janela de leitura.
 4. Leitor de tela real não foi comprovado. O zoom nativo de 200% foi exercitado
    depois por `chrome.tabs.setZoom/getZoom=2`, em extensão/perfil temporários
    próprios: mesma janela, innerWidth 1424→712 e DPR 1→2, sem overflow geométrico
@@ -164,9 +184,13 @@ perfis legados continuam formato 1. Novas identidades só nascem no Finish
 canônico, com revisão e permissões explícitas. Retomar não testa modelo nem
 renova grant. Leitura/abertura não autoriza executar.
 
-Os testes criaram apenas dados, pacotes e processos temporários próprios.
-Nenhuma instalação pessoal ou tarefa de login pessoal foi alterada. Credenciais
-reais não foram acessadas e não houve release, deploy ou campanha paga.
+Os testes criaram dados, pacotes e processos temporários próprios. Nenhuma
+instalação pessoal ou tarefa de login pessoal foi alterada. Na campanha
+autorizada, o Codex usou a conta autenticada por seu fluxo nativo; credenciais
+não foram lidas manualmente ou copiadas para evidência. O CLI pode manter seus
+caches normais, conforme autorizado. O Test foi recusado e seu uso não foi
+informado; não se declara consumo zero. Não houve release, deploy ou ativação
+padrão.
 
 Rollback de apresentação: voltar à Home clássica preservando sino e controles
 básicos. Rollback de código: reverter os commits da feature por commits novos e
@@ -178,8 +202,9 @@ próprio, sem confundir este procedimento com teste executado.
 
 ## Próximo gate
 
-Concluir as verificações isoladas pendentes e registrar a conclusão da CI no SHA
-correspondente. Executar o derivado Codex autorizado após seu preflight técnico,
-sem alterar o ambiente pessoal. Executar a avaliação humana preparada e
-qualificações assistivas/topológicas disponíveis. A aprovação de release/default
+Concluir as verificações isoladas pendentes, o artefato instalado posterior aos
+deltas e a avaliação humana, registrando a conclusão da CI no SHA correspondente.
+A campanha permanece bloqueada por modelo recusado e uso desconhecido; não
+executar outra admissão por inferência. Qualificar as fronteiras assistivas e
+topológicas disponíveis. A aprovação de release/default
 continua `false` até os gates serem atendidos e existir autorização específica.

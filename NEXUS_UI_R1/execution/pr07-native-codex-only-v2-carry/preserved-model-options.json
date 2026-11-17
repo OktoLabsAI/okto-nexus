@@ -1,0 +1,113 @@
+{
+  "status": "PRESERVED_MODEL_METADATA_ONLY",
+  "same_attempt": "nexus-ui042-codex-only-carry-dd47c48b74b44711bfb140b542ccbfcc",
+  "model_observations": [
+    {
+      "sequence": 2,
+      "native_type": "core/harness_configuration",
+      "location": "payload.harness_configuration.models",
+      "models": [
+        {
+          "id": "gpt-6.1-sol",
+          "efforts": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
+        },
+        {
+          "id": "gpt-6-astra",
+          "efforts": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
+        },
+        {
+          "id": "gpt-6.1-terra",
+          "efforts": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
+        },
+        {
+          "id": "gpt-6-sol",
+          "efforts": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
+        },
+        {
+          "id": "gpt-6-luna",
+          "efforts": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ]
+        },
+        {
+          "id": "gpt-5.6-sol",
+          "efforts": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
+        },
+        {
+          "id": "gpt-5.6-terra",
+          "efforts": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
+        },
+        {
+          "id": "gpt-5.6-luna",
+          "efforts": [
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max"
+          ]
+        }
+      ]
+    }
+  ],
+  "supported_model_ids": [
+    "gpt-5.6-luna",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-6-astra",
+    "gpt-6-luna",
+    "gpt-6-sol",
+    "gpt-6.1-sol",
+    "gpt-6.1-terra"
+  ],
+  "no_new_cli_or_provider_invocation": true,
+  "no_auth_or_config_file_read": true,
+  "no_raw_payload_or_account_data_copied": true,
+  "limitation": "Observed native model/list metadata from failed attempt, if present; not proof of successful paid inference or future account availability."
+}

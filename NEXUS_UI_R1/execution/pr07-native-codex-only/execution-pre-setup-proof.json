@@ -1,0 +1,33 @@
+{
+  "status": "PRE_SETUP_NO_MODEL_DISPATCH_PROOF",
+  "canonical_counts": {
+    "execution_operations": 0,
+    "execution_sessions": 0,
+    "execution_bindings": 0,
+    "runtime_execution_grants": 0,
+    "connection_setup_commits": 0
+  },
+  "matching_setup_test_grant_schema_counts": {
+    "runtime_execution_grants": 0,
+    "execution_realizations": 0,
+    "execution_local_realizations": 0,
+    "connection_setup_commits": 0,
+    "remote_setup_runs": 0,
+    "remote_setup_reviews": 0
+  },
+  "connection_test_runs_table_exists": false,
+  "connection_setup_views_table_exists": false,
+  "actual_test_registry": "ConnectionTests.tests is in-memory; no durable table with either requested name. Heap no longer accessible after DRAINED. Do not fabricate count for absent tables.",
+  "connection_test_journals": [],
+  "core_journals": [
+    {
+      "relative_path": "home\\core-runtime\\owned-slots.db",
+      "counts": {}
+    }
+  ],
+  "http_access_records": [],
+  "test_http_records": [],
+  "proof_limits": "No connection-test journal or execute/Finish operation exists; traceback ends in GET runtime-options before review completed. No claim based solely on missing in-memory registry.",
+  "DB_modified": false,
+  "root_preserved": true
+}

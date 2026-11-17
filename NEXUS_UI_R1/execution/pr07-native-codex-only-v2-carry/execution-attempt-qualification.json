@@ -1,0 +1,430 @@
+{
+  "status": "BLOCKED_SETUP_USAGE_UNCONFIRMED_NOT_M3",
+  "candidate_sha256": "cc8888f6b09376cb575a184c1e46886e6f5175176f9169f043ac36944b5fbccf",
+  "campaign_id": "dd47c48b74b44711bfb140b542ccbfcc",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-carry-dd47c48b74b44711bfb140b542ccbfcc",
+  "toolrefs": [
+    "a6e580",
+    "f8b85e",
+    "30e8f4"
+  ],
+  "exit_code": 1,
+  "reason": "USAGE_OBSERVATION_UNKNOWN_DEADLINE",
+  "historical_reserved_slots": 1,
+  "new_reserved_slots": 1,
+  "total_reserved_slots": 2,
+  "permanent_charge_tokens": 150000,
+  "new_admitted_usage": "UNKNOWN_UNTIL_JOURNAL_PROOF",
+  "canonical_counts": {
+    "execution_operations": 0,
+    "execution_sessions": 0,
+    "execution_bindings": 0,
+    "connection_setup_commits": 0,
+    "runtime_execution_grants": 0,
+    "execution_inventory_snapshots": 2,
+    "workspaces": 0
+  },
+  "campaign_agents": [],
+  "gate": {
+    "adapter_freshness": "FRESH",
+    "adapter_id": "codex_app_server",
+    "candidate_ref": "nexus-install-v1:24d6773e4cffb30762d80c87461061629bd2937636ab099786d74dc00e0bee48",
+    "executor_id": "exe_ee865248095739ff36574230a6b46283",
+    "inventory_revision": "sha256:cc70f13f0ff31effcc7b2d34aa7eb100fc2b08ec93623a9d5520bdec03c75bde",
+    "model_or_test_admissions": 0,
+    "server_id": "srv_2cd62cc014a8bff49fb33b0b901b3ed1",
+    "version": null
+  },
+  "checkpoints_metadata": [
+    {
+      "name": "00000.json",
+      "state": "review",
+      "phase": null,
+      "test_state": null,
+      "test_status": null,
+      "test_error_code": null,
+      "top_keys": [
+        "effects",
+        "format",
+        "identity_creation",
+        "request",
+        "review_request",
+        "review_revision",
+        "selection",
+        "server_id",
+        "state",
+        "version_check_required"
+      ],
+      "test_keys": []
+    },
+    {
+      "name": "00001.json",
+      "state": "approved",
+      "phase": null,
+      "test_state": null,
+      "test_status": null,
+      "test_error_code": null,
+      "top_keys": [
+        "effects",
+        "format",
+        "identity_creation",
+        "request",
+        "review_request",
+        "review_revision",
+        "selection",
+        "server_id",
+        "state",
+        "version_check_required"
+      ],
+      "test_keys": []
+    },
+    {
+      "name": "00002.json",
+      "state": "check_submitted",
+      "phase": null,
+      "test_state": null,
+      "test_status": null,
+      "test_error_code": null,
+      "top_keys": [
+        "effects",
+        "format",
+        "identity_creation",
+        "request",
+        "review_request",
+        "review_revision",
+        "selection",
+        "server_id",
+        "state",
+        "version_check_required"
+      ],
+      "test_keys": []
+    },
+    {
+      "name": "00003.json",
+      "state": "approved",
+      "phase": null,
+      "test_state": null,
+      "test_status": null,
+      "test_error_code": null,
+      "top_keys": [
+        "effects",
+        "format",
+        "identity_creation",
+        "request",
+        "review_request",
+        "review_revision",
+        "selection",
+        "server_id",
+        "state",
+        "version_check_confirmed",
+        "version_check_required"
+      ],
+      "test_keys": []
+    },
+    {
+      "name": "00004.json",
+      "state": "test_submitted",
+      "phase": null,
+      "test_state": null,
+      "test_status": null,
+      "test_error_code": null,
+      "top_keys": [
+        "effects",
+        "format",
+        "identity_creation",
+        "request",
+        "review_request",
+        "review_revision",
+        "selection",
+        "server_id",
+        "state",
+        "version_check_confirmed",
+        "version_check_required"
+      ],
+      "test_keys": []
+    }
+  ],
+  "setup_journals": [
+    {
+      "path": "home\\connection-tests\\7882bf4a2c52478e8a7306b11a00193c\\journal.db",
+      "operations": [
+        {
+          "operation_id": "open",
+          "stage": "SUBMITTED",
+          "possible_effect": 1,
+          "retry_safe": 0,
+          "error_code": null
+        },
+        {
+          "operation_id": "turn",
+          "stage": "FAILED",
+          "possible_effect": 1,
+          "retry_safe": 0,
+          "error_code": "NATIVE_OPERATION_FAILED"
+        }
+      ],
+      "events_metadata": [
+        {
+          "sequence": 1,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "core/codex_thread_configuration"
+        },
+        {
+          "sequence": 2,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "core/harness_configuration"
+        },
+        {
+          "sequence": 3,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "thread/started"
+        },
+        {
+          "sequence": 4,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 5,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 6,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 7,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 8,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 9,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 10,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 11,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 12,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 13,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "warning"
+        },
+        {
+          "sequence": 14,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 15,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 16,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "thread/status/changed"
+        },
+        {
+          "sequence": 17,
+          "kind": null,
+          "operation_id": "turn",
+          "phase": "started",
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "turn/started"
+        },
+        {
+          "sequence": 18,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 19,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "mcpServer/startupStatus/updated"
+        },
+        {
+          "sequence": 20,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "item/started"
+        },
+        {
+          "sequence": 21,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "item/completed"
+        },
+        {
+          "sequence": 22,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "thread/status/changed"
+        },
+        {
+          "sequence": 23,
+          "kind": null,
+          "operation_id": null,
+          "phase": null,
+          "outcome": null,
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "error"
+        },
+        {
+          "sequence": 24,
+          "kind": null,
+          "operation_id": "turn",
+          "phase": "terminal",
+          "outcome": "failed",
+          "error_code": null,
+          "codex_total": null,
+          "native_type": "turn/completed"
+        }
+      ],
+      "event_count": 24,
+      "process_launches_count": 1,
+      "process_births_count": 1
+    }
+  ],
+  "cleanup": {
+    "canonical_force_used": false,
+    "canonical_shutdown_outcome": "drained",
+    "canonical_state": "stopped",
+    "data_preserved": true,
+    "dispatch_worker_exited": true,
+    "launcher_exit_code": 0,
+    "no_windows_session_event": true,
+    "physical_exit": true,
+    "settlement_confirmed": true
+  },
+  "shutdown_generation": "106757e5836ec55d37f407e07798abae",
+  "matching_python_processes": 0,
+  "automatic_retry": false,
+  "observer": "NOT_RUN_EARLY_FAILURE",
+  "data_preserved": true,
+  "auth_content_or_prompt_raw_copied": false
+}

@@ -147,10 +147,11 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   return <PageContainer testId="operational-home" className="space-y-5">
     <header className="flex flex-wrap justify-between items-start gap-3">
       <div><h1 ref={heading} tabIndex={-1} className="text-2xl font-semibold">Home</h1>
-        <p className="text-sm text-surface-500 mt-1">{workspace==='all'?'All workspaces':workspaceName} · Follow work, questions and deliveries</p></div>
+        <p className="text-sm text-surface-500 mt-1">{workspace==='all'?'All projects':`Project: ${workspaceName}`} · Follow work, questions and deliveries</p>
+        <p className="text-sm text-surface-500 mt-2">Choose a project above. Use Connect or resume to find an existing connection or add a collaborator. Follow its work and questions below.</p></div>
       <div className="flex flex-wrap gap-2">
         <button type="button" className={`btn btn-primary ${homeFocus}`} onClick={()=>open({kind:'request'})} disabled={firstHarness||!snapshot||['forbidden','disabled'].includes(state.status)}><Plus size={15}/> New request</button>
-        {!firstHarness&&<button type="button" className={`btn btn-secondary ${homeFocus}`} onClick={onSetupAgent} disabled={state.status==='forbidden'}>Connect agent</button>}
+        {!firstHarness&&<button type="button" className={`btn btn-secondary ${homeFocus}`} onClick={onSetupAgent} disabled={state.status==='forbidden'}>Connect or resume</button>}
         <button type="button" className={`btn btn-secondary ${homeFocus}`} onClick={refresh} disabled={state.loading||!!state.entryLoading}><RefreshCw size={15}/> Refresh</button>
         <button type="button" className={`btn btn-secondary ${homeFocus}`} aria-pressed={manualPause} onClick={()=>setManualPause(value=>!value)}>{manualPause?<Play size={15}/>:<Pause size={15}/>} {manualPause?'Resume display':'Pause display'}</button>
       </div>
@@ -191,10 +192,10 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
         {snapshot.status!=='ready'&&<p role="status" className="text-sm text-surface-500">Some information is incomplete or unavailable. Totals may be unknown; refresh before acting.</p>}
         {snapshot.coverage.result_tracking!=='ready'&&<p className="text-xs text-surface-500">Some result viewing states are untracked. Those deliveries are labeled recent.</p>}
         {quiet&&<div className="panel p-5">{firstHarness?<>
-          <p className="font-medium">Connect your first harness</p>
+          <p className="font-medium">Connect a collaborator</p>
           <p className="text-sm text-surface-500 mt-2">Connect a collaborator to start work in this project.</p>
-          <button type="button" className={`btn btn-primary mt-3 ${homeFocus}`} onClick={onSetupAgent}>Connect your first harness</button>
-        </>:<><p className="font-medium">No matching activity{filtered?' for these filters':''}.</p><p className="text-sm text-surface-500 mt-2">Use New request to ask for work, or Connect agent to add a collaborator.</p></>}</div>}
+          <button type="button" className={`btn btn-primary mt-3 ${homeFocus}`} onClick={onSetupAgent}>Connect or resume</button>
+        </>:<><p className="font-medium">No matching activity{filtered?' for these filters':''}.</p><p className="text-sm text-surface-500 mt-2">Use New request to ask for work, or Connect or resume to find an existing connection or add a collaborator.</p></>}</div>}
         {!snapshot.items.length&&!quiet&&<p role="status" className="panel p-5">Tracking information is incomplete. Refresh to load this scope.</p>}
         <ul className="space-y-3">{snapshot.items.map(group=><HomeEntryGroupCard key={group.id} group={group} page={state.entryChildren[group.id]}
           expanded={!!expanded[group.id]} onExpand={()=>{const next={...expanded,[group.id]:!expanded[group.id]};holdOrder(listFocused||Object.values(next).some(Boolean));setExpanded(next);}}

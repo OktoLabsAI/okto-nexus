@@ -1,0 +1,55 @@
+{
+  "status": "TECHNICAL_CORRECTION_QUALIFIED_HUMAN_RETEST_NOT_RUN",
+  "node": {
+    "passed": 302,
+    "failed": 0,
+    "milliseconds": 10163.1136,
+    "handle": "5f0aa2"
+  },
+  "typescript": {
+    "exit_code": 0,
+    "handle": "c4ac44"
+  },
+  "build": {
+    "owner": "root",
+    "exit_code": 0,
+    "seconds": 14.21,
+    "handle": "061849"
+  },
+  "antecedent": {
+    "tests": 300,
+    "passed": 298,
+    "failed": 2,
+    "handles": [
+      "c7794a",
+      "706ba2"
+    ],
+    "failures": [
+      "Pure HomeOverview direct-call test could not use newly added context hook; hook moved to HomeView container",
+      "Old first-harness CTA copy assertion updated; single action and inventory gate preserved"
+    ],
+    "raw_logs_saved": false
+  },
+  "technical_browser": {
+    "owner": "browser_evidence_review",
+    "handle": "7dd373",
+    "qualification": "../technical/qualification.json",
+    "qualification_sha256": "9aa6c5986139790fcb057e272d7a4780745c736305b518f49d9e77cdb9e24152",
+    "checks_passed": 3,
+    "http_methods": [
+      "GET"
+    ],
+    "page_errors": 0
+  },
+  "preference": {
+    "key": "okto-nexus-home-operational",
+    "enabled": "enabled",
+    "disabled": "disabled",
+    "default_enabled": false,
+    "guard": "existing mayLeavePanel before local storage/state",
+    "server_api_changed": false,
+    "settings_browser_interaction": "NOT_RUN; actual callback/default verified by Node"
+  },
+  "human_result": "Original failed task remains failed; no human retest certified",
+  "sourcepins": "sourcepins.json"
+}

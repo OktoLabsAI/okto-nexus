@@ -10,6 +10,7 @@ import { PageContainer } from '../components/PageContainer';
 import { formatTime } from '../timeFormat';
 import { actionLabel } from '../graph/lastAction';
 import { getNavigationEntry } from '../navigationRegistry';
+import { useWorkspaceName } from '../components/WorkspaceNames';
 
 type Destination = 'Graph' | 'Meta-harness' | 'Messages' | 'Agents' | 'Attention';
 type Messages = { items: MessageRow[]; total: number };
@@ -21,6 +22,7 @@ const focus = 'focus-visible:outline focus-visible:outline-2 focus-visible:outli
 export function HomeView({workspace, refreshTick, attention, onRefreshAttention, onNavigate}: {
   workspace: string; refreshTick: number; attention: AttentionState; onRefreshAttention: () => void; onNavigate: (view: Destination) => void;
 }) {
+  const projectName=useWorkspaceName(workspace);
   const graph = useObservationRead(workspace, (scope, signal) => api.graph(scope, 24, signal), interval);
   const sessions = useObservationRead(workspace, (scope, signal) => api.metaHarnessSessions(scope, '', 1, signal), interval);
   const messages = useObservationRead(workspace, (scope, signal) => api.messages({
@@ -32,7 +34,7 @@ export function HomeView({workspace, refreshTick, attention, onRefreshAttention,
   useEffect(() => { if (refreshTick > 0) refresh(); }, [refreshTick]);
   return <HomeOverview workspace={workspace} graph={graph.state} sessions={sessions.state}
     messages={messages.state} observations={observations.state} attention={attention}
-    onNavigate={onNavigate} onRefresh={refresh} />;
+    onNavigate={onNavigate} onRefresh={refresh} projectName={projectName} />;
 }
 
 function ReadNotice({state}: {state: Read<unknown>}) {
@@ -56,10 +58,11 @@ function Section({title, detail, children, destination, onNavigate}: {
   </section>;
 }
 
-export function HomeOverview({workspace, graph, sessions, messages, observations, attention, onNavigate, onRefresh}: {
+export function HomeOverview({workspace, graph, sessions, messages, observations, attention, onNavigate, onRefresh, projectName}: {
   workspace: string; graph: Read<GraphSnapshot>; sessions: Read<MetaHarnessSessions>; messages: Read<Messages>;
   observations: Read<ObservationSummary>; attention: AttentionState;
   onNavigate: (view: Destination) => void; onRefresh: () => void;
+  projectName?: string;
 }) {
   const nodes = graph.value?.nodes;
   const summary = ['disabled', 'forbidden'].includes(attention.status) ||
@@ -73,10 +76,11 @@ export function HomeOverview({workspace, graph, sessions, messages, observations
   ] as const;
   return <PageContainer testId="home-overview" className="space-y-6">
     <header className="flex flex-wrap items-start justify-between gap-4">
-      <div><p className="text-xs uppercase tracking-wider text-accent-600 dark:text-accent-300">Workspace overview</p>
+      <div><p className="text-xs uppercase tracking-wider text-accent-600 dark:text-accent-300">Project overview</p>
         <h1 className="text-2xl font-semibold mt-1">Home</h1>
-        <p className="text-sm text-surface-500 mt-2">Your agents, harnesses and conversations in one place.</p>
-        <p className="text-xs text-surface-500 mt-1">{workspace === 'all' ? 'All workspaces' : `Workspace: ${workspace}`} · Updates every 15 seconds</p>
+        <p className="text-sm text-surface-500 mt-2">Choose a project above. Use Connect or resume to find an existing connection or add a collaborator.</p>
+        <p className="text-xs text-surface-500 mt-1">{workspace === 'all' ? 'All projects' : `Project: ${projectName || 'Selected project'}`} · Updates every 15 seconds</p>
+        <p className="text-sm text-surface-500 mt-2">Follow your agents, conversations and pending questions here.</p>
       </div>
       <button onClick={onRefresh} className={`btn btn-secondary ${focus}`}><RefreshCw size={15}/> Refresh overview</button>
     </header>

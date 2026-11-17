@@ -564,8 +564,8 @@ function Dashboard({
         setWorkspace("all");
       }
       setWorkspaceNotice(
-        `The saved workspace (${missing}) does not exist on this hub. ` +
-          (fallback ? "A default workspace is selected." : "All workspaces are selected."),
+        `The saved project (${missing}) does not exist on this hub. ` +
+          (fallback ? "A default project is selected." : "All projects are selected."),
       );
     };
     loadInfo()
@@ -627,22 +627,25 @@ function Dashboard({
           </span>)}
         </nav>
         <div className="ml-auto w-full sm:w-auto min-w-0 flex items-center gap-2 text-xs">
+          <label className="flex min-w-0 flex-1 sm:flex-none items-center gap-2">
+          <span className="font-medium">Project</span>
           <select
             value={workspace}
             onChange={(e) => pickWorkspace(e.target.value)}
             className="rounded-lg border border-surface-200 dark:border-surface-700
               bg-white dark:bg-surface-800 px-2 py-1.5 min-w-0 flex-1 sm:flex-none max-w-[240px] text-xs
               focus:outline-none focus:ring-2 focus:ring-accent-500/40"
-            title="Workspace scope"
+            aria-label="Project"
+            title="Choose a project"
           >
-            <option value="all">All workspaces</option>
+            <option value="all">All projects</option>
             {/* The CURRENT scope must always be a real option: a value
                 missing from the list makes the browser DISPLAY the first
                 option ("All") while the actual fetch scope is something
                 else - a lying dropdown. */}
             {workspace !== "all" &&
               !workspaces.some((item) => item.workspace_id === workspace) && (
-              <option value={workspace}>Unavailable workspace</option>
+              <option value={workspace}>Unavailable project</option>
             )}
             {workspaces.map((item, index) => (
               <option key={item.workspace_id} value={item.workspace_id}>
@@ -650,6 +653,7 @@ function Dashboard({
               </option>
             ))}
           </select>
+          </label>
           <GlobalAttentionButton state={globalAttention.state} onOpen={() => {globalAttention.refresh();setView('Attention');}}/>
           <LiveChip status={sseStatus} />
           <button
@@ -830,13 +834,9 @@ function Dashboard({
 
       <main className="flex-1 min-w-0 overflow-hidden">
           {view === 'Home' && <div className="h-full flex flex-col min-h-0">
-            <div className="shrink-0 px-4 pt-2 flex justify-end">
-              {(!homeOperational||info?.features?.feature_home===false)&&<button type="button" className="btn btn-secondary mr-3" onClick={openConnectFlow}>Connect agent</button>}
-              <button type="button" className="text-xs text-surface-500 underline" aria-pressed={homeOperational}
-                onClick={() => {if (!mayLeavePanel()) return;const next = !homeOperational;localStorage.setItem('okto-nexus-home-operational', next ? 'enabled' : 'disabled');setHomeOperational(next);}}>
-                {homeOperational ? 'Use classic Home' : 'Use operational Home'}
-              </button>
-            </div>
+            {(!homeOperational||info?.features?.feature_home===false)&&<div className="shrink-0 px-4 pt-2 flex justify-end">
+              <button type="button" className="btn btn-secondary" onClick={openConnectFlow}>Connect or resume</button>
+            </div>}
             <div className="min-h-0 flex-1">
               {homeOperational && info?.features?.feature_home !== false
                 ? <OperationalHome key={workspace} workspace={workspace} workspaces={workspaces} identityKey={identityKey}
@@ -885,7 +885,7 @@ function Dashboard({
             />
           )}
           {view === "Meta-harness" && (
-            <div className="h-full flex flex-col min-h-0"><div className="shrink-0 px-4 pt-3 flex justify-end"><button type="button" className="btn btn-secondary" onClick={openConnectFlow}>Connect agent</button></div>
+            <div className="h-full flex flex-col min-h-0"><div className="shrink-0 px-4 pt-3 flex justify-end"><button type="button" className="btn btn-secondary" onClick={openConnectFlow}>Connect or resume</button></div>
             <div className="min-h-0 flex-1"><MetaHarnessView
               workspace={workspace}
               workspaces={workspaces}
@@ -932,7 +932,11 @@ function Dashboard({
               onChanged={loadApprovalCount}
             />
           )}
-          {view === "Settings" && <SettingsView onSettingsApplied={loadInfo} onPendingChange={onSettingsPending} />}
+          {view === "Settings" && <SettingsView onSettingsApplied={loadInfo} onPendingChange={onSettingsPending}
+            homeOperational={homeOperational} onHomeOperationalChange={next=>{
+              if (!mayLeavePanel()) return;
+              localStorage.setItem('okto-nexus-home-operational', next ? 'enabled' : 'disabled');setHomeOperational(next);
+            }}/>}
       </main>
       </div>
       {attentionInspection && attention.state.status !== 'forbidden' && attention.state.status !== 'disabled' &&

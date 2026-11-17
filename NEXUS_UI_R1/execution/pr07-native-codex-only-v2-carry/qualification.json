@@ -1,0 +1,32 @@
+{
+  "status": "OFFLINE_PASS_ROOT_AUDIT_REQUIRED_NO_V2_EXECUTION",
+  "offline_tests": {
+    "passed": 28,
+    "seconds": 1.16,
+    "toolref": "5f91d0",
+    "junit": "offline.xml"
+  },
+  "ruff": {
+    "status": "PASS",
+    "toolref": "a4ad02"
+  },
+  "carry": "75k/1slot remains permanently charged; only5new slots; global6/450kcharged/500kobserved.",
+  "antecedent_lifecycle": "Codex-only v1 zero-admission lifecycle PASS70d255; campaign then failed before SetupTest but real own Server DRAINED/physicalexit normal b2e9ee. No lifecycle rerun in v2.",
+  "readiness_correction": "GET me/executors/runtime-options bounded120s polling before first reserve/review; exact candidate/adapter/executor/version metadata and FRESH/can_configure. GET may materialize revision metadata, never Setup/Test/grant/provider.",
+  "tests_added": [
+    "Query-ready/missing inventory deadline makes no reservation",
+    "GET wait exact candidate/version/executor",
+    "Historical75k remains and only5newslots reach450k",
+    "Invalid carry cannot be refunded"
+  ],
+  "original_e9_preserved": true,
+  "original_3ea_preserved": true,
+  "installed_prefix_modified": false,
+  "authorization_reference": "call_7b291505d2a349ddb591321ccaefe5f7 item0",
+  "remaining": "Root technical audit plus genuine narrowed continuation consent mapping; no new user question or execution before audit.",
+  "limitations": [
+    "Five new model admissions omit Bcontinue; M3 full journey cannot be claimed.",
+    "Inventory versionNone is exact passive unknown, not CLI/model qualification.",
+    "Observed/permanent provision is not atomic billing cap."
+  ]
+}

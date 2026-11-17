@@ -1,0 +1,33 @@
+{
+  "test_only": true,
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\ui042-lifecycle-only-jnl976xw",
+  "started_at": "2026-11-16T23:30:47.438724+00:00",
+  "native_invoked": false,
+  "provider_called": false,
+  "auth_or_provider_home_opened": false,
+  "perform_calls": 0,
+  "owner": {
+    "instance_id": "svc_3e16c894a11de7a0ec4676dbe4f351b391eaed6469b1dbb45474074b695754c4",
+    "pid": 23920,
+    "generation": "8fd3e9807fbc501824e332f18ddab1a7"
+  },
+  "canonical_counts": {
+    "execution_operations": 0,
+    "connection_setup_commits": 0,
+    "runtime_execution_grants": 0
+  },
+  "ready": true,
+  "cleanup": {
+    "physical_exit": true,
+    "launcher_exit_code": 0,
+    "canonical_force_used": false,
+    "canonical_state": "stopped",
+    "data_preserved": true,
+    "no_windows_session_event": true,
+    "dispatch_worker_exited": true,
+    "settlement_confirmed": true,
+    "canonical_shutdown_outcome": "drained"
+  },
+  "ended_at": "2026-11-16T23:30:56.319270+00:00",
+  "status": "PASS"
+}

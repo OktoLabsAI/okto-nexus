@@ -1,0 +1,12 @@
+{
+  "status": "OWN_NATIVE_CONTAINER_ALL_MEMBERS_STOPPED",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui042-codex-only-carry-dd47c48b74b44711bfb140b542ccbfcc",
+  "query": "Installed Core _recover_windows_container(container_id,stop=False,timeout_seconds=0): query handle only, no TerminateJobObject.",
+  "container_id_sha256": "049da771e9909f93e42ab2d116849838cfd48f59b16d90c6efc01a1c581e43c7",
+  "container_state": "STOPPED",
+  "covers_native_descendants": true,
+  "historical_pid_absence_also_confirmed": "PID45436, execution-terminal-ro.json",
+  "new_admission_or_native_invocation": false,
+  "DB_modified": false,
+  "limits": "Read-only container STOPPED plus canonical DRAINED/physical exit; does not fabricate missing durable process_launch.stop_proof."
+}

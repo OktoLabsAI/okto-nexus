@@ -1,0 +1,69 @@
+{
+  "status": "SAME_ATTEMPT_TERMINAL_AND_PROCESS_RO_ONLY_NO_REPLAY",
+  "campaign_id": "dd47c48b74b44711bfb140b542ccbfcc",
+  "event_count_after_cleanup": 24,
+  "usage_events_found": [],
+  "usage_known": false,
+  "observed_tokens_claim": null,
+  "late_usage_found": false,
+  "diagnostics": [
+    {
+      "sequence": 23,
+      "native_type": "error",
+      "diagnostic_flags": {
+        "model_not_supported": true,
+        "usage_or_rate_limit": false,
+        "authentication_required": false,
+        "stream_disconnected": false,
+        "chatgpt_account_mentioned": true
+      },
+      "codes": {
+        "codexErrorInfo": "modelNotFound"
+      }
+    },
+    {
+      "sequence": 24,
+      "native_type": "turn/completed",
+      "diagnostic_flags": {
+        "model_not_supported": true,
+        "usage_or_rate_limit": false,
+        "authentication_required": false,
+        "stream_disconnected": false,
+        "chatgpt_account_mentioned": true
+      },
+      "codes": {
+        "codexErrorInfo": "modelNotFound",
+        "status": "failed"
+      }
+    }
+  ],
+  "native_process_births": [
+    {
+      "pid": 45436,
+      "platform": "win32",
+      "birth_token": "filetime:01dd76250d3b586a",
+      "containment": "windows_job"
+    }
+  ],
+  "native_process_launch_settlement": [
+    {
+      "spawn_claimed": 1,
+      "producer_fenced": 0,
+      "stop_proof": null
+    }
+  ],
+  "physical_os_absence": [
+    {
+      "pid": 45436,
+      "current_os_record": null
+    }
+  ],
+  "historical_charge": 75000,
+  "new_permanent_charge": 75000,
+  "minimum_charged_total": 150000,
+  "no_new_admission": true,
+  "no_new_root_or_ID": true,
+  "raw_error_or_prompt_or_credentials_copied": false,
+  "cleanup_receipt_sha256": "3b3f61a5a3f748a6f15c1f12892039b2b6e185ac38c57dffa9aa40e1f3f6be86",
+  "interpretation": "Setup Test native turn FAILED/NATIVE_OPERATION_FAILED with possible_effect1. No usage event means unknown consumption, never zero. No successful Finish/work/continuation; no M3 claim."
+}

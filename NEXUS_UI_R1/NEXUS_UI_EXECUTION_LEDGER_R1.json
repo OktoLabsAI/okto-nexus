@@ -1380,7 +1380,8 @@
         "NEXUS_UI_R1/execution/pr01-shell-qualification.json",
         "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
         "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json"
       ],
       "limitations": [
         "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
@@ -1554,7 +1555,8 @@
         "NEXUS_UI_R1/execution/pr01-shell-qualification.json",
         "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
         "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json"
       ],
       "limitations": [
         "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
@@ -2088,7 +2090,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json",
-        "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json"
+        "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
@@ -2577,7 +2580,8 @@
         "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
         "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json",
         "NEXUS_UI_R1/execution/pr06-final-client-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md"
+        "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md",
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
@@ -2851,7 +2855,7 @@
       "id": "UI-042",
       "pr": "PR-07",
       "title": "Executar campanha produtiva real isolada",
-      "status": "IN_PROGRESS",
+      "status": "BLOCKED",
       "depends_on": [
         "UI-039",
         "UI-040"
@@ -2881,10 +2885,12 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr07-native-proposal/qualification-final.json",
-        "NEXUS_UI_R1/execution/final-review.json"
+        "NEXUS_UI_R1/execution/final-review.json",
+        "NEXUS_UI_R1/execution/pr07-native-codex-only-v2-carry/execution-terminal-ro.json",
+        "NEXUS_UI_R1/execution/pr07-native-codex-only-v2-carry/execution-owned-container-ro.json"
       ],
       "limitations": [
-        "Autorizacao especifica real recebida somente para Codex; derivado conserva teto6/500k e excluiClaude. Campanha ainda em preparacao tecnica, sem admissao real neste registro. Claude/topologiaremota continuam gates separados."
+        "Test real recusou modelo para conta atual; uso desconhecido semcontador impede novasadmissoes.150kpermanentes,semrefund. Nenhummodelofallback oucampanha adicional autorizados porinferência. OutrosgatesM3/remoto/Claude nao cumpridos."
       ]
     },
     {
@@ -2919,10 +2925,12 @@
         "T-QUAL-06"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/usability-script.md"
+        "NEXUS_UI_R1/execution/usability-script.md",
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/first-run/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json"
       ],
       "limitations": [
-        "Participante disponivel nesta maquina confirmado. Ambiente/roteiro humano em preparacao; nenhuma interacao, tempo ou compreensao humana inferida."
+        "Primeiro percurso humano falhou explicitamente. Correcoes tecnicas e segundo percurso emandamento nao substituem aceite humano; sem sucesso/tempo inventados."
       ]
     },
     {
@@ -3045,7 +3053,8 @@
         "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
         "NEXUS_UI_R1/execution/final-review.json",
-        "NEXUS_UI_R1/execution/pr08-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr08-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json"
       ],
       "limitations": []
     },
@@ -5385,20 +5394,23 @@
     },
     {
       "id": "T-QUAL-02",
-      "status": "NOT_RUN",
+      "status": "BLOCKED",
       "level": "campanha/usuário",
       "given": "Dois harnesses reais qualificados e consentimento.",
       "when": "Conectar A, adicionar B, pedir e retomar.",
       "expected": "IDs/permissões preservados; resultados e sessão na Home; nenhuma exigência de nome de profile.",
       "evidence": [
-        "NEXUS_UI_R1/execution/pr07-native-proposal/qualification-final.json"
+        "NEXUS_UI_R1/execution/pr07-native-codex-only-v2-carry/execution-terminal-ro.json",
+        "NEXUS_UI_R1/execution/pr07-native-codex-only-v2-carry/execution-owned-container-ro.json"
       ],
       "tasks": [
         "UI-039",
         "UI-042"
       ],
       "limitations": [
-        "Usuario autorizou campanha apenas Codex, podendo duasinstancias, mesmos6admissoes/500ktokensobservados/450kpreventivo. Claude adiado por limiteindisponivel. Derivado estreito em preparacao; nenhum providerexecutado ainda. DoisCodex nao qualificam segundo tipo deharness nemtopologiaremota."
+        "Usuario autorizou Codex apenas. Primeira tentativa parou antesTest porinventario; apos prova0efeitos+DRAINED, derivado carregou75k/1slot permanente e aguardou inventario exato antesreservar.",
+        "Mesmo Test real no derivado terminou FAILED/modelNotFound: gpt-5.3-codex recusado pela conta. Nao houve Finish/binding/grant/agente ou trabalho util. Sem evento deuso, consumo UNKNOWN (nunca zero); duas reservas150k permanecem, novas admissoes bloqueadas. Semfallback/replay.",
+        "Server DRAINED/launcher0 e WindowsJob dos descendentes STOPPED porconsultaRO; stop_proof durable ausente nao foi fabricado. Oito modelos listados nos eventos preservados nao sao autorizacao de escolheroutro nem contabilidade confirmada."
       ]
     },
     {
@@ -5409,13 +5421,14 @@
       "when": "Usar Connector, aprovar e observar.",
       "expected": "Publicação, sessão, perguntas e resultado comprovados na topologia; sem inferir de peers sintéticos.",
       "evidence": [
-        "NEXUS_UI_R1/execution/pr07-native-proposal/qualification-final.json"
+        "NEXUS_UI_R1/execution/pr07-native-proposal/qualification-final.json",
+        "NEXUS_UI_R1/execution/pr07-native-codex-only-v2-carry/execution-terminal-ro.json"
       ],
       "tasks": [
         "UI-042"
       ],
       "limitations": [
-        "Usuario autorizou campanha apenas Codex, podendo duasinstancias, mesmos6admissoes/500ktokensobservados/450kpreventivo. Claude adiado por limiteindisponivel. Derivado estreito em preparacao; nenhum providerexecutado ainda. DoisCodex nao qualificam segundo tipo deharness nemtopologiaremota."
+        "Topologia remota nao executada; campanha local interrompida no primeiro Test. Codex somente, Claude adiado por limite indisponivel; nao inferir remoto de peers/fixtures locais."
       ]
     },
     {
@@ -5437,17 +5450,22 @@
     },
     {
       "id": "T-QUAL-05",
-      "status": "NOT_RUN",
+      "status": "FAIL",
       "level": "campanha/usuário",
       "given": "Pessoa sem conhecer a arquitetura do Nexus.",
       "when": "Conectar/retomar, pedir, acompanhar, responder e achar entrega.",
       "expected": "Concluir sem Advanced; registrar atritos e tempo observados, sem inventar métricas.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/first-run/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json"
+      ],
       "tasks": [
         "UI-043"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Participante declarou nao conseguir retomar; relatou duvida classica/operacional, projeto e objetivo.13cliques no primeiro corte e20raw totais incluindo exploracao posterior;0POST. Nenhuma duracao de conclusao inventada.",
+        "Lease/freshness da primeira fixture expirou e limita acao de pergunta; isso e separado do feedback humano. Rotulagem/projeto/apresentacao corrigidos depois,302Node/build e3checks tecnicos browser nao apagam falha humana.",
+        "Segundo percurso aberto com participante ja exposto/orientado. Ate este registro sem resposta ou conclusao, nao estudo novo cego; autoridade de decisao tem prazo proprio."
       ]
     },
     {
@@ -5457,12 +5475,14 @@
       "given": "Conjunto conhecido com execução, bloqueio e resultado.",
       "when": "Abrir Home.",
       "expected": "Conseguir identificar os três e abrir a sessão em uma ação quando não ambígua; medir e registrar.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/first-run/qualification.json"
+      ],
       "tasks": [
         "UI-043"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Primeira tarefa da jornada falhou; identificacao completa de execucao/bloqueio/resultado por humano e contagem de abertura ainda nao certificadas."
       ]
     },
     {
@@ -5670,6 +5690,10 @@
     {
       "at": "2026-11-17T00:08:02.230838+00:00",
       "event": "Revisao independente aprovou agregacao e detectou gap preexistente handoff/op workspace. Reproducao FAIL preservada; fence de correlacao e rank porworkspace corrigidos,1focal+6relacionados PASS em fonte posterior aos37anteriores. Teste novo RuffPASS; reader legado17erros identicos aoHEAD (0novos) demonstrados porstdinmesmocaminho. Semformatacao ampla/migracao/novoindice ouCore/receipts/Attention."
+    },
+    {
+      "at": "2026-11-17T00:13:06.546089+00:00",
+      "event": "Feedback humano real falhou tarefa1 e motivou Home unica no basico, Project nome visivel e Connectorresume; mesmaflag/defaultOFF/guard/URLs preservados.302Node/TSC/buildZyb e3checks tecnicos PASS, humano nao promovido. Campanha Codex autorizada fez preflight0efeitos e depoisTestmodelo recusado/usageUNKNOWN;150kprovisoespermanentes,cleanupnormal+DRAINED+WindowsJobSTOPPED, semfallback. UI042BLOCKED/TQUAL02BLOCKED/TQUAL05FAIL; releasefalse."
     }
   ],
   "risk_acceptances": [],

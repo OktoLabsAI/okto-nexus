@@ -51,17 +51,17 @@ test('first harness requires complete authorized pre-filter inventory, never an 
   assert.equal(isFirstHarnessEmpty(snapshot(),false,true),false);
 });
 
-test('actual Home presents one first-harness CTA and disables New request only for proved empty inventory',()=>{
+test('actual Home presents one Connect or resume action and gates New request only for proved empty inventory',()=>{
   const empty=render(snapshot());
-  assert.equal((empty.match(/<button[^>]*>Connect your first harness<\/button>/g)||[]).length,1);
+  assert.equal((empty.match(/<button[^>]*>Connect or resume<\/button>/g)||[]).length,1);
   assert.match(empty,/<button[^>]*disabled=""[^>]*>[\s\S]*?New request<\/button>/);
-  assert.doesNotMatch(empty,/>Connect agent<\/button>/);
+  assert.match(empty,/>Connect a collaborator<\/p>/);
   for(const page of [snapshot({inventory:undefined}),snapshot({inventory:{connections:{value:1,total_is_exact:true,unit:'connections'}}}),
     snapshot({status:'partial',total:null,total_is_exact:false}),snapshot({source_status:{connections:'unavailable'}})]){
     const markup=render(page);
-    assert.doesNotMatch(markup,/>Connect your first harness<\/button>/);
-    assert.match(markup,/>Connect agent<\/button>/);
+    assert.doesNotMatch(markup,/>Connect a collaborator<\/p>/);
+    assert.equal((markup.match(/<button[^>]*>Connect or resume<\/button>/g)||[]).length,1);
   }
   for(const patch of [{loading:true},{paused:true},{hasPendingUpdate:true},{staleSections:['entries']},{status:'stale'}])
-    assert.doesNotMatch(render(snapshot(),patch),/>Connect your first harness<\/button>/);
+    assert.doesNotMatch(render(snapshot(),patch),/>Connect a collaborator<\/p>/);
 });
