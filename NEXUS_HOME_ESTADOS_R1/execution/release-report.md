@@ -133,11 +133,17 @@ evidence, separate from package-time backend byte equivalence.
 The seventh case stopped in its source-copy presentation oracle: its actual
 scope is turn/verifying, whose expected title is Turn result available. The
 test expected the handoff-scope title Delivery available. Its later Seen/noACK
-assertions were not reached, so E16 remains unqualified pending a scoped
-correction. Prior attempts and this6PASS/1FAIL remain preserved. Pytest retention
+assertions were not reached in that cut. The separately reviewed
+[case7-only correction](remaining-qualification-r7-next/backend-batch/attempt7-r8-case7/qualification.json)
+passed the complete E16 criterion with strict before/after enums, same delivery
+and artifacts, canonical handoff verification, Seen CAS, retention and no ACK
+of existing inbox deliveries. Handoff tool functions were called in-process;
+this is ASGI/SQLite plus source-copy TypeScript, not MCP network transport,
+browser or three real executions. The six PASS cases were not repeated.
+Prior attempts and the original6PASS/1FAIL remain preserved. Pytest retention
 left only two raw cleanup JSONs; all six passing teardown close assertions ran,
 and missing raw snapshots were not reconstructed. Current ledger counts are
-58PASS/48NOT_RUN/8BLOCKED/2FAIL. The failures are F07/I02's real focus return,
+59PASS/47NOT_RUN/8BLOCKED/2FAIL. The failures are F07/I02's real focus return,
 described below, not performance timing targets.
 
 The [focused R8 move test](remaining-qualification-r7-next/experience-batch/focus-r8-body-focus-failure/qualification.json)
@@ -152,6 +158,17 @@ commit to remove the refocused old trigger. That ordering is a diagnosis to
 test, not an invented browser trace. Two of three canonical closes confirmed;
 A2 close remains unknown despite physical absence. No decision, renewal or
 provider call was added.
+
+R9 source now calls the display controller's existing pause/apply path with
+the saved manual-pause value before removing the panel and scheduling focus.
+This places the cached board update in the same close transition, avoiding a
+later pause effect removing the old trigger after focus was restored. It
+preserves manual display pause and all existing authorization/scope clearing.
+The original checkout's404Node tests and TypeScript/Vite build pass, with
+unchanged inputs and actual new bundle `index-ZSaBIkKg.js`. This is implemented
+source, not verified focus behavior: a fresh installed R9 package and the same
+actual browser predicate are still required. No Python, Core, schema, protocol,
+personal installation or default flag changed.
 R7 prefixes and the original failing AX capture remain immutable. No Python
 behavior changed.
 

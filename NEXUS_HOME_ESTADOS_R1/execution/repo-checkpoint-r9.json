@@ -1,0 +1,142 @@
+{
+  "captured_at": "2026-11-17T23:11:46.695Z",
+  "phase": "R9 before product edit",
+  "repos": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "nexus",
+        "path": "D:/Projetos/Techridy/okto_labs_okto_nexus",
+        "states": [
+          {
+            "status": "fulfilled",
+            "value": {
+              "chunk_id": "0ea607",
+              "wall_time_seconds": 1.4963961000000001,
+              "exit_code": 0,
+              "original_token_count": 21,
+              "output": "9a508b1d4e7fd3323c514b861190e5a81af00e6f\n8d77b50c00b417c86818d027aed7497fababac34\n"
+            }
+          },
+          {
+            "status": "fulfilled",
+            "value": {
+              "chunk_id": "422c32",
+              "wall_time_seconds": 1.8655680000000001,
+              "exit_code": 0,
+              "original_token_count": 0,
+              "output": ""
+            }
+          },
+          {
+            "status": "fulfilled",
+            "value": {
+              "chunk_id": "fd7d3e",
+              "wall_time_seconds": 1.8133694999999999,
+              "exit_code": 0,
+              "original_token_count": 4,
+              "output": "feature/v0.3.7\n"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "connector",
+        "path": "D:/Projetos/Techridy/okto-nexus-connector",
+        "states": [
+          {
+            "status": "fulfilled",
+            "value": {
+              "chunk_id": "bc7fd8",
+              "wall_time_seconds": 1.7158651,
+              "exit_code": 0,
+              "original_token_count": 21,
+              "output": "a4d510080d7a685fa442a4c5c30419952589fe04\na3017d97b6a295cb2b46b9dd391b4c04ed121ee2\n"
+            }
+          },
+          {
+            "status": "fulfilled",
+            "value": {
+              "chunk_id": "eb5177",
+              "wall_time_seconds": 1.8086552999999999,
+              "exit_code": 0,
+              "original_token_count": 0,
+              "output": ""
+            }
+          },
+          {
+            "status": "fulfilled",
+            "value": {
+              "chunk_id": "ca9448",
+              "wall_time_seconds": 1.7990726000000001,
+              "exit_code": 0,
+              "original_token_count": 4,
+              "output": "feature/v0.0.13\n"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "core",
+        "path": "D:/Projetos/Techridy/okto-nexus-connector-core",
+        "states": [
+          {
+            "status": "fulfilled",
+            "value": {
+              "chunk_id": "148d77",
+              "wall_time_seconds": 1.8320102,
+              "exit_code": 0,
+              "original_token_count": 21,
+              "output": "497ee2b7a14b99c50cba97eac74f3b00d4863f26\n19c99f15b17ae994653ad9e190964229a0e296e8\n"
+            }
+          },
+          {
+            "status": "fulfilled",
+            "value": {
+              "chunk_id": "6a0c05",
+              "wall_time_seconds": 1.8502877,
+              "exit_code": 0,
+              "original_token_count": 0,
+              "output": ""
+            }
+          },
+          {
+            "status": "fulfilled",
+            "value": {
+              "chunk_id": "0bf00e",
+              "wall_time_seconds": 1.8237624000000001,
+              "exit_code": 0,
+              "original_token_count": 4,
+              "output": "feature/v0.0.14\n"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tracked_worktree_clean": true,
+  "untracked_execution_preparations": "Preserved; all current untracked preparations/evidence remain under NEXUS_HOME_ESTADOS_R1/execution",
+  "nexus_main_fetch": "Fetched immediately before this checkpoint; ref unchanged8d77b50c; no checkout/reset/merge",
+  "r8_source": {
+    "pins": 1829,
+    "drift": [],
+    "readers_released": true
+  },
+  "version": "0.3.7",
+  "pins": {
+    "core": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+    "connector": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90"
+  },
+  "instructions": {
+    "RTK": "56005802a4e3650bcf5639ddec1dae6b9838a4e8e77a4996af1dc40b67d15ce3",
+    "CONTRIBUTING": "ea980300f34e3b85d207770a7153775f9f9fda775a3212f8e4e3f95b53b9c8ae",
+    "CI": "86bd199990ed0e61e13d760b80bab40e2ac443f1f72489d64b5d68359ce206f8"
+  },
+  "scope": "Only Home focus ordering; keep Core/Connector read-only and all provider/default/human gates"
+}

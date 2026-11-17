@@ -179,6 +179,9 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   useEffect(() => {pause(manualPause || !!panel);}, [manualPause, !!panel, pause, presentationVersion]);
   const close = useCallback(() => {
     setRestoringFocus(true);
+    // Commit the cached board with the closing panel before restoring focus.
+    // Otherwise a later pause effect can remove the refocused old card.
+    pause(manualPause);
     setPanel(null);
     const url = new URL(window.location.href);url.searchParams.delete('home_target');window.history.replaceState(null, '', url);
     window.requestAnimationFrame(() => {
@@ -188,7 +191,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
       const destination=focusReturn.current?.isConnected?focusReturn.current:moved?.querySelector<HTMLElement>('[data-home-entry-open],button:not(:disabled),a[href]')??heading.current;
       try {destination?.focus({preventScroll:true});} finally {setRestoringFocus(false);}
     });
-  }, []);
+  }, [manualPause,pause]);
   const dismiss = useCallback(() => {
     const dialog = document.querySelector<HTMLDialogElement>('[data-testid="home-detail"]');
     dialog?.dispatchEvent(new Event('cancel', {cancelable:true}));

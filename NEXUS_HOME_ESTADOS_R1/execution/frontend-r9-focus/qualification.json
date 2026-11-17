@@ -1,0 +1,592 @@
+{
+  "at": "2026-11-17T23:12:22.916069+00:00",
+  "status": "PASS",
+  "original_checkout": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+  "steps": {
+    "node": {
+      "exit_code": 0,
+      "timed_out": false,
+      "force_used": false,
+      "stdin": "closed PIPE",
+      "known_processes": [
+        {
+          "pid": 29440,
+          "birth": 1794957109.4940448,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 56920,
+          "birth": 1794957109.5201504,
+          "exe": "C:\\Windows\\System32\\cmd.exe"
+        },
+        {
+          "pid": 14032,
+          "birth": 1794957109.5520751,
+          "exe": "C:\\Windows\\System32\\cmd.exe"
+        },
+        {
+          "pid": 39816,
+          "birth": 1794957109.5719073,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 55864,
+          "birth": 1794957109.7257724,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 21540,
+          "birth": 1794957110.6583557,
+          "exe": "C:\\Windows\\System32\\cmd.exe"
+        },
+        {
+          "pid": 45348,
+          "birth": 1794957110.6865487,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 50700,
+          "birth": 1794957110.7584288,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 41832,
+          "birth": 1794957110.7687628,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 62276,
+          "birth": 1794957110.7775817,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 11620,
+          "birth": 1794957110.7860723,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 60136,
+          "birth": 1794957110.7957735,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 8428,
+          "birth": 1794957110.8066409,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 16508,
+          "birth": 1794957110.8189142,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 59572,
+          "birth": 1794957110.8350885,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 5616,
+          "birth": 1794957110.851118,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 61172,
+          "birth": 1794957110.8670428,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 42608,
+          "birth": 1794957110.8831756,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 54956,
+          "birth": 1794957110.9088027,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 40896,
+          "birth": 1794957110.9313092,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 17396,
+          "birth": 1794957110.9480689,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 5392,
+          "birth": 1794957110.9641848,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 55828,
+          "birth": 1794957112.2029247,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 57828,
+          "birth": 1794957112.2462783,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 55156,
+          "birth": 1794957112.2850125,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 45252,
+          "birth": 1794957112.3095675,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 13276,
+          "birth": 1794957112.3463268,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 62052,
+          "birth": 1794957112.4131415,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 56836,
+          "birth": 1794957112.4283466,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 61812,
+          "birth": 1794957112.4436955,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 61448,
+          "birth": 1794957112.5661402,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 17884,
+          "birth": 1794957112.631604,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 28684,
+          "birth": 1794957112.735878,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 57836,
+          "birth": 1794957112.8206067,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 58468,
+          "birth": 1794957113.1860595,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 54392,
+          "birth": 1794957113.591191,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 51024,
+          "birth": 1794957113.6985636,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 48492,
+          "birth": 1794957113.7145658,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 55764,
+          "birth": 1794957113.8827891,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 40136,
+          "birth": 1794957113.9045007,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 61704,
+          "birth": 1794957113.968307,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 60220,
+          "birth": 1794957114.0012443,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 59508,
+          "birth": 1794957114.0350723,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 60304,
+          "birth": 1794957114.3091252,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 62008,
+          "birth": 1794957114.3598115,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 42272,
+          "birth": 1794957114.3904817,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 27564,
+          "birth": 1794957114.5389209,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 49444,
+          "birth": 1794957115.1220357,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 45168,
+          "birth": 1794957115.5458033,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 33620,
+          "birth": 1794957116.1240053,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 53960,
+          "birth": 1794957116.2611384,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        }
+      ],
+      "actions": [],
+      "remaining_known_processes": [],
+      "remaining_listeners": [],
+      "success": true,
+      "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+    },
+    "build": {
+      "exit_code": 0,
+      "timed_out": false,
+      "force_used": false,
+      "stdin": "closed PIPE",
+      "known_processes": [
+        {
+          "pid": 38792,
+          "birth": 1794957120.1199117,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 44144,
+          "birth": 1794957120.1435037,
+          "exe": "C:\\Windows\\System32\\cmd.exe"
+        },
+        {
+          "pid": 6396,
+          "birth": 1794957120.1729772,
+          "exe": "C:\\Windows\\System32\\cmd.exe"
+        },
+        {
+          "pid": 57152,
+          "birth": 1794957120.1946452,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 47540,
+          "birth": 1794957120.3156593,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 58552,
+          "birth": 1794957120.598808,
+          "exe": "C:\\Windows\\System32\\cmd.exe"
+        },
+        {
+          "pid": 58872,
+          "birth": 1794957120.6351557,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 54236,
+          "birth": 1794957131.84918,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 48044,
+          "birth": 1794957132.0383523,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 53380,
+          "birth": 1794957132.045009,
+          "exe": "C:\\Windows\\System32\\conhost.exe"
+        },
+        {
+          "pid": 51932,
+          "birth": 1794957132.2054691,
+          "exe": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\node_modules\\@esbuild\\win32-x64\\esbuild.exe"
+        },
+        {
+          "pid": 7304,
+          "birth": 1794957132.234822,
+          "exe": "C:\\Windows\\System32\\cmd.exe"
+        },
+        {
+          "pid": 55188,
+          "birth": 1794957132.2571907,
+          "exe": "C:\\Windows\\System32\\net.exe"
+        }
+      ],
+      "actions": [],
+      "remaining_known_processes": [],
+      "remaining_listeners": [],
+      "success": true,
+      "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+    }
+  },
+  "input_drift": [],
+  "input_pins": {
+    "frontend/src/api.ts": "5a221c22c71ad326fdd9fda5d1ae4d364376d4037357d3f70fd4cb7f3d50ae46",
+    "frontend/src/App.tsx": "bdb4eed69aecaf3d1e8e6f52f65bfe1cc5eb5d8ac3e287c71b02ce55f3f059f7",
+    "frontend/src/attentionController.ts": "6cf1c8e313e74f9b08f44102687f7b89dc2cff9bf25871a9c7e32e28638d3804",
+    "frontend/src/attentionNavigation.ts": "3872cc7130acb169653ffba98c4310d82bd68f902ee73a730f5a99c56afc6d0b",
+    "frontend/src/attentionPresentation.ts": "d3bc17e5d978b7d59621b7cdf4ae6a2205d827a7a314155f4182a315e76cbeac",
+    "frontend/src/attentionSummaryState.ts": "50e118f74b37c3184a651e64f27ba54f11ea3b87098602cb25914785ad2e1849",
+    "frontend/src/attentionTypes.ts": "0528bbc228a55b6731451ac2e5ca553f605f78afe6fe636be6eb0073a106a582",
+    "frontend/src/components/AboutModal.tsx": "f492ecdf7e52a33dc5af86f86e095cb9cc993cde8504bd3ae64b5b6aa38b73df",
+    "frontend/src/components/AgentActionModal.css": "ceb610f6ebc547e6fc97c07e60f71f7a1ff1e257931a1eee9b16650e17d81dd5",
+    "frontend/src/components/AgentActionModal.tsx": "7a7bdfa6079608dc0beb2a18120155d2ffb6041104c9bdbcde0a27571ded158b",
+    "frontend/src/components/AgentCommunicationEditor.tsx": "d9baba8d19f44979442c0956cac102e5fe3c2956af7b961f59d251dc3840d0ef",
+    "frontend/src/components/AgentConnectionsPanel.tsx": "717c9774021357b7c601dfb64e4774a5ced94df8c7bd2edf95c303348bb7adda",
+    "frontend/src/components/AgentRuntimeAdministration.css": "39763d3ad73ae0135ce366f57c8453efe4bcf3b17fc0b648a2497d5703da444a",
+    "frontend/src/components/AgentRuntimeAdministration.tsx": "359b1a4b4988cc1b75173412d07f723a380fc56b42f221198797613e6cb86289",
+    "frontend/src/components/AgentSelect.tsx": "a0642231c417b94bd9eeb71b5bae3570ec7166fef803589e2639e675dbba49c5",
+    "frontend/src/components/AgentTagsEditor.tsx": "b3d759936a7a973c29e256c40369eee1815237406029fd9878cd90c7ea7ce003",
+    "frontend/src/components/AttentionInspection.tsx": "5c0314c4c581f9015e3df3bfd715d275786d7f6f89f5aaf7a8925519c12c622d",
+    "frontend/src/components/AudienceEditor.tsx": "0158ae6f033e814a908aad71593455e87319d41b3a2360e323d4eb783c66ed45",
+    "frontend/src/components/BindingConsent.tsx": "685fde6e0b640ce8339de454924e4e91a85896021f84f56e7c321e5f59bce94c",
+    "frontend/src/components/BroadcastHandoffPolicy.tsx": "baf476a339cbafdd3524ebbb6e8e81b87b0395d9933230f99cabf9fd9e596b18",
+    "frontend/src/components/CanonicalNativeDecision.tsx": "7756a0d966fddd7f1c8c7bb976f0f3e858b1022c48d555312484528620ed0455",
+    "frontend/src/components/CanonicalObservation.tsx": "c69aa1b349d93f80146f1218b3137e98dce16d44cebb68e5fab9dfd2e9d7905f",
+    "frontend/src/components/CapabilityPicker.tsx": "99655c829abf1c97d51ac94ca0b70afe3e31441ea168e2f1dd25080f056cae3a",
+    "frontend/src/components/CatalogTransfer.tsx": "ecffb9b51546c2a6a5f7dd186af91236488835bf35de33d82c90dd7d571422eb",
+    "frontend/src/components/ColorPicker.tsx": "308406162a1934b69982fd7d6eba8683916bdf2e811b912b2e03c705b037ff22",
+    "frontend/src/components/CommContentEditor.tsx": "f8d37413ea2b8a52194c9da180407338c73f603c88757b4a52f5dea56066a7f0",
+    "frontend/src/components/ConfigurationHelp.tsx": "dadfa4dc4de01b60a119bd66310eed93c11d4952c901d40879fea5a00e8d20f6",
+    "frontend/src/components/Confirm.tsx": "f8f90e6ebb78ac0c19e8ebef7e043258bec9afb91a5f551ad47958902558ca58",
+    "frontend/src/components/ConnectionForms.css": "cbec6b1b4bd272608865783017971d5559e4f6c1e6e338a62a41f494f30b6898",
+    "frontend/src/components/ConnectionSessionConflict.tsx": "58366b155d6f6c16f90ff8982515e477c8f723b62b8bff34ad7fb2ad772b2ece",
+    "frontend/src/components/ConnectionWorkflow.tsx": "f1b656e725400a5638ecaeb3b76dde84c1a21c33d549d8a33804cd9681ef0231",
+    "frontend/src/components/CopyMessageButton.tsx": "f542108dd92f0d747bbdcfc7851143b573ae4bf296cb90237b9cf00748a23f70",
+    "frontend/src/components/EmbeddedPreparation.tsx": "a73e1e4dca2103c11f25f568e9919d3b8c9125b14b1106c4eda384ae5bb5939b",
+    "frontend/src/components/EventDetailModal.tsx": "38bd075e113ddcc5d6ccf8fba327a2542bfe73aa7f4db5f010863089570f52ce",
+    "frontend/src/components/ExternalObservations.tsx": "024d17937840ee5e66f342d44fd2d6e9fd39a8ffe11127b67b180502968af947",
+    "frontend/src/components/GlobalAttentionButton.tsx": "746e160dc7ecd2368eeed8af51637090d399d1bbd11c992146c09860c56478f3",
+    "frontend/src/components/GovernanceRulesEditor.tsx": "f8ef9356b307dca59da6c9054dfae9e02460238d672496e593579df0ee267484",
+    "frontend/src/components/HandoffRuntimeProgress.tsx": "a506a769b3db0f818a32076b62967e4c7f31072326f07cdd2d7bc9241bf279cd",
+    "frontend/src/components/HarnessConfigurationDiscovery.tsx": "34b3ae41d18a10322bcdd3614a268999b45dfb0bae9fecd78f7bf9f5247badca",
+    "frontend/src/components/HarnessPreferenceFields.tsx": "cbf45c6c619e8b746ec38913b0ac40c08caeb9532ccadc0d11180b1ebe3508e2",
+    "frontend/src/components/HeldSuccessions.tsx": "47ed5ffed0e7a983b18cf6ecdfed22c1eb38acff16c16e6186fbe209ccd77fc2",
+    "frontend/src/components/HelpModal.tsx": "ad96b5ac45e82f9be09826021e1e9b7c3ebdc831a861b5713402f04d9047eb18",
+    "frontend/src/components/home/continuation.ts": "de44cf650541e43508aa0abf626ba8fe968226a97677c66dc3e7f40e9871e952",
+    "frontend/src/components/home/exactRuntimeOperations.ts": "9fd067672d874c52c9c95fd89ca158a9758afbcb34a4746783051617cb1c526f",
+    "frontend/src/components/home/HomeBoardCards.tsx": "553e6b18c1b9a28863011fbcab608d6b632171fa78db3fae0eff3e7570426d83",
+    "frontend/src/components/home/HomeCards.tsx": "4a589b814554d89b02716ca211a7b17e92cc20d427d96ccd936c54a128614d6e",
+    "frontend/src/components/home/HomeContextCards.tsx": "f8411ccb2dd1a819e869b73ccaa31e59f1672a72c07653da35b96009f465add3",
+    "frontend/src/components/home/HomeEntryInspection.tsx": "78a5c07efee044f3b0f9b173fa034f510d5bc9ebbcb8b30ca78ed691fb4b199c",
+    "frontend/src/components/home/HomeExecutionInspection.tsx": "2da84374c6521dde86ab7a6ca7927f7efce666f9436cb506f53922f98fa368f7",
+    "frontend/src/components/home/HomeHarnessCard.tsx": "20944b2cd4fccfcf69cf493ad8bac5d9cc9598834d367fc18577fa786c54c174",
+    "frontend/src/components/home/HomeInspection.tsx": "fbe6c27987a46b0d26031929acaf0ac79dfc24e9532c7f3301d1448f6715bb3e",
+    "frontend/src/components/home/HomeSessionInspection.tsx": "c57af1af1c54731008391f43ab833207d7f6c8823642ee643b622736d67ffb31",
+    "frontend/src/components/home/OperationalHome.tsx": "7a25264b89d02e319bf29a9cb297d172060546eb07a3cbf9cf960af21aab54cc",
+    "frontend/src/components/InventoryRefresh.tsx": "9337009dc02c19057f220b5a67d0bb5450138668a084bfd866acc73f3610526e",
+    "frontend/src/components/LiveChip.tsx": "6d6adacebaa28dbbc6156c9df9c8caad77c1bb3712348c6a05535f7dbee6609e",
+    "frontend/src/components/LocalExecutionPermission.tsx": "562d89def579b9124ce497255c29db375134d160d3cc829aac2bcc951f50c8f2",
+    "frontend/src/components/LocalInstallationCheck.tsx": "d67c396079bdfdbd134dd150e3bba531d5e80f6beba3ebf4e8e545b62ddcb837",
+    "frontend/src/components/Markdown.tsx": "0e1dc7d9ac3b5106ff2ee89f13b7141c7afee065ee0cc5d2c6cbdaf8072058f0",
+    "frontend/src/components/MCPCredentialsHelp.tsx": "718cc948aeaadedc6c86dce181c42726ec9f610c62ada2e656e358e7377cc6f8",
+    "frontend/src/components/MCPPresetFields.tsx": "51b2a51c0271dbe1deb3b7586159e32796669f25328e9e7c06bd01c21817c45d",
+    "frontend/src/components/MessageDetailModal.tsx": "4663af04f07eee8ca60ab30b2f560236d745f2f2b577369bc1e4c49094573e88",
+    "frontend/src/components/MetadataEditor.tsx": "0b2b74d920da409cddda6ca993d5466c5a44128eeb87437de1888ea889a94e60",
+    "frontend/src/components/MetaHarnessComposer.tsx": "9a9305091ed077490167841b06142ad396e92c25552cdb84120e16ff2e0ff405",
+    "frontend/src/components/MetaHarnessSessions.css": "b0dae38292d86dd8428bc9871f1ab78e4879ffc8f7f007c0eae08f10c6f6dcfa",
+    "frontend/src/components/MetaHarnessSessions.tsx": "e58417856d14cea446f75a2858978048788c792923ed308c264e91ec39086f0d",
+    "frontend/src/components/metricsConsentStorage.ts": "41e07cf03d69168e44738c2d6d240b5bb8f48542289ea5a6d9fe7f3f537435a7",
+    "frontend/src/components/MetricsSettingsPanel.tsx": "bb9a2835c9285732e9b6d6f41ca2fc74c5227563da2eff21b8cd1d17de7ce543",
+    "frontend/src/components/NativeApprovalInput.tsx": "8b472dc0ff37928dce1d926496e25f27f357f5f5cc4af529261fa700b68d2bbb",
+    "frontend/src/components/NativeQuestions.tsx": "c45d716412fbb794cc5bfb30ee81746ffc80267cda2fc3bea94571307e3e2181",
+    "frontend/src/components/NavigationSidebar.tsx": "8a6139a77225698360e1701798a62f4a5b24793f24e370f3dbe675fd6618ea36",
+    "frontend/src/components/NexusLoader.tsx": "9243771eb4e89384087191e49968db646ba1887bb4532d57d05d108fe390a905",
+    "frontend/src/components/onboarding/OnboardingModal.tsx": "8fa1e493c9418204cfc2bc604537c07c97d37d3ec9608bcc3736721a13d9553d",
+    "frontend/src/components/onboarding/onboardingStorage.ts": "e0b78198d9c050ecf833501866ca4d210a26bbeab5c9d9d3f438f2c912fe2012",
+    "frontend/src/components/onboarding/ProjectConnectFlow.tsx": "01c1f5a8337506558b60824d2739ccbcc29d1cf1969dbd88dcf9cc8fd9214cc7",
+    "frontend/src/components/OneShotActivity.tsx": "d61ac621eb110c104e955ae9c5835a28b6f1ed806a532026de47300016af9521",
+    "frontend/src/components/OneShotSettings.tsx": "78155c7a8c121892e950e379f84a951db7e2ac2e829ffddb115709efb0e4cc31",
+    "frontend/src/components/OperatorAccess.tsx": "65a740807b586b33399c856d7c8016e334e54eb1ff8729e726314d936f186419",
+    "frontend/src/components/PageContainer.tsx": "7caca880fbd41cba41d3a973f86d453ccb14f305acdea609edb9451c3cb9a109",
+    "frontend/src/components/ParticipantGuide.tsx": "f112e2b663dc4204fb1d612a8526dd5bdc5dfce61f51fc6b78b046ef5971f4a1",
+    "frontend/src/components/PermissionFlagsEditor.tsx": "e6d37d49c2a04fdf30a099701c02b06893beb218591119cff35f1c73f31d7c30",
+    "frontend/src/components/PresetEditorModal.tsx": "daa53b0766f3708788bf8bdde1f37f899f17185514c4fe214d89ebfa08b997ac",
+    "frontend/src/components/RemoteConnectorCommand.tsx": "ba14560b8fe8b6057363ba5c2ec875a3c5624a3eb924d17a685a369fa1c3a0a9",
+    "frontend/src/components/ResizablePanel.tsx": "ab20aa589d640aa2a1881829ca452bdd73a8e8c2eae6ec67872d7ef88842b59a",
+    "frontend/src/components/RevalidateBindings.tsx": "a3f30c8838226d9cb17fe7a170afabaa5a4335f755523683aa2a51cdd5481cf7",
+    "frontend/src/components/RuntimeConversationPolicy.tsx": "77e8ae719ea5afe52db0d18c193e06ca63f3a77f5572af47e5fe31137374fac8",
+    "frontend/src/components/RuntimeEventStream.tsx": "7c30cf8ac64f0035ee9875207cdc2425a33e3ce31d430e0837d10eccb5be6b7d",
+    "frontend/src/components/RuntimeHarnessSettings.tsx": "bc3ab13a0cdd00d7e05c2c6a410536a37131da742b9be7acf34639f43e11b49d",
+    "frontend/src/components/RuntimeHistory.tsx": "a8c7e0874c4177f990de6ad60c71a6feaf3f503e49b46a121bc82257dd7ccf90",
+    "frontend/src/components/RuntimeMCPPreset.tsx": "2d94968a14e07e8130c2ba247a7ce21311fc0c6798f0349a367aa9f76ca59829",
+    "frontend/src/components/RuntimeOperations.tsx": "4eb63fd34f8dc277f86d0d6144e1b50a59217b26c1ce80c8807cd039501a1c8f",
+    "frontend/src/components/RuntimePolicy.tsx": "0e130a80201dd93e8470a522221eed767d17ccef0562055ae7ef5abb79af17be",
+    "frontend/src/components/RuntimeRecovery.tsx": "0140c938c57a6660e62f9759da3998924760bfa7fc0b87fafcaf543323a51d87",
+    "frontend/src/components/RuntimeSelection.tsx": "f1534e6e2a65c4b6a1cbdbb7e34c4a593f76a453ccaa7d2f837c21685ddddf46",
+    "frontend/src/components/RuntimeSessions.tsx": "e401dac72b75f76c89fd3ffa0304edd6ba4d518fcb2c6a6a52967039e83e1696",
+    "frontend/src/components/RuntimeSessionTail.tsx": "80a20c788f007113af61fd7a69f02f1ba6b3eedad77439a1da4b1da730bc93bf",
+    "frontend/src/components/RuntimeTerminal.css": "c7d2cb0859e877dec8f31361c8bec5bc693fb3baa3379aee8397d325f3609437",
+    "frontend/src/components/RuntimeTerminal.tsx": "5b7489d8a3c60e9d41f9252067bbb22beef1f9aea323faa937415fc2fee86398",
+    "frontend/src/components/RuntimeToolPermission.tsx": "eb4746d5d7f4073f0da73778f62b354bfb04f59e67667f696daed9a63b1443d1",
+    "frontend/src/components/RuntimeUpdatePolicy.tsx": "d99536d0046bff0de91f2bf01103dee1192b53de61b5d959a9761e495aa449e5",
+    "frontend/src/components/SessionExecutionPanel.tsx": "9e40b97121f2800c8df3641b4be4c86a3b9e93e29f437028e0f949a6f9d5ce81",
+    "frontend/src/components/SessionTerminalModal.tsx": "631590257ed37217f3d3343efac9fb7a0ba1b9fe8a9baaf85f995b27d7d860ba",
+    "frontend/src/components/SettingsDrafts.tsx": "d32cf6190e726dbc588c014ebb72f798d5149cfccc321218b019eb26fb585080",
+    "frontend/src/components/SteerModal.tsx": "75d4b25ae5a19964bf72ece96eb72f8f29c04544561ac2fe97240aa878e5a3bf",
+    "frontend/src/components/StructuredMessage.tsx": "69768676a151523dbebd5012460b8b548ef4220ddb0ae676aa1b413d1ffbf030",
+    "frontend/src/components/TargetDescriptor.tsx": "eff7df2f8832ab18e858dd731f4481262b1b71eb98a488f5d6b0272f7adc74f9",
+    "frontend/src/components/TraceChip.tsx": "c2b5bab0562c1608e932d6e76acf41d38e872de9e8271e8b54add2b9fcbbbac5",
+    "frontend/src/components/TypeSelect.tsx": "33eee6908292ed83a7f3f1bb39184d14618e77859bbbf4cd1a872fea1bd9f5ca",
+    "frontend/src/components/WorkspaceNames.tsx": "1c3a313e2db6b6c2bc0ca5572592f81e7fe5327326e11fb30f561bef04b43990",
+    "frontend/src/connectionConfiguration.ts": "66c079073358c093aa4bdfd1f9f6b89417761690b0290d0459436fcb8ad42b18",
+    "frontend/src/connectionSessions.ts": "ba30f9feded5cba6edfb0a85d2797a7f83a9c6d953c1f972c03baaa519e1d800",
+    "frontend/src/graph/agentActivity.ts": "210c1fa9eaca32c9cafac40d3f902aa455c43378c8c7a7c3eb8cd5aafa28b07e",
+    "frontend/src/graph/agentColor.ts": "77fad13f31407c20a009bc7cec24f67ac6bc89828e83eb4b9fc0f8d080d6df07",
+    "frontend/src/graph/cardLayout.ts": "62801382de9734a7e163ef5a329ec7137aa0e2c4f6c58c3d62c45d77afc97d38",
+    "frontend/src/graph/DashedEdgeProgram.ts": "85fbc4946892081441da8e96e7d82a24b6ca965e4cc3bd12df6a30152a01b6ad",
+    "frontend/src/graph/lastAction.ts": "87dfbd46e684ee847c9f7aef91fb876a75f50d9c1d9582855712bedecc4a4f02",
+    "frontend/src/graph/RuntimeSessionSummary.tsx": "2ff9720ba81eef25060424c7f637b8077c855dac76d4de3bfb4aa40cad6352c4",
+    "frontend/src/handoffLabel.ts": "b7498c3ece99feaf5f5663dafe3563b508f62b097a35733d63ba16c8c383ede3",
+    "frontend/src/harnessConfiguration.ts": "4b3fb246ea41e712679833115b827b4c465d5d0808d6ae799b13a05462f1ea27",
+    "frontend/src/homeApi.ts": "382256936868c95aa42044e00be621a667989f39f1f05b47d30f8e50ced4e06d",
+    "frontend/src/homeController.ts": "9bd05aa82ba7e54288a9389fd741c05c98e2cc22e2dece7878e3c720f4d70ddf",
+    "frontend/src/homeEntryInspection.ts": "2cc2cc468faa13fd0ddae217893ccbab13796076626f630dbcef3c80d57e1a26",
+    "frontend/src/homeNavigation.ts": "5974cd4bac8de418bb1584c62b31791a5ba643e73dbf09af2997fba5787d6499",
+    "frontend/src/homePresentation.ts": "44eb7c76a10c83ea66b30894ef5efc961ac01ca47556ff2956b86cb3cf7b5aa3",
+    "frontend/src/homeSessionInspection.ts": "3708da0adee2759e010a477881dd92483afd3bd47dbb2e65d5a7e54e5584d552",
+    "frontend/src/homeStateContracts.ts": "4e0b79a9aafdf985dae5a949bb9696d90270d43288f3c86c05d9e72ed7a3919e",
+    "frontend/src/homeStatePresentation.ts": "bd82708b33960d66244d4b5d223693489cc74582b7ae7d2b90896ce2d6833a18",
+    "frontend/src/homeTypes.ts": "ce3b82151d9a9444b61cd4fe84b2682db9ffbf5aefbc5806f50ea4f7cdf5b4a2",
+    "frontend/src/hooks/useAttention.ts": "a73aa5132b4b624b2844d291e74c569383dd2a1eccba858bdda9f530e9946482",
+    "frontend/src/hooks/useHomeOverview.ts": "9072c41b1348472d66807c36e06532079fb4015f7aebcccc8e6e0d9256ddd9fb",
+    "frontend/src/hooks/useObservationRead.ts": "98f08fecf917d0955465900ed2f5313f0f04b81904ca3754ce00cbc0330a88b1",
+    "frontend/src/hooks/useScopedAttentionSummary.ts": "4a21a0bf3f2779d200be475f681d119d7809df59f6bd9ca1695f6bfe292a4f31",
+    "frontend/src/hooks/useTheme.ts": "25b71376624692041644d57cda81bb0b547f4b381d14349d5f23e9815f7a6ab9",
+    "frontend/src/main.tsx": "41431cb94a112ca05f90ca6037229d09d4bb8ecc1c27ae3bb3740ace8f01d2a6",
+    "frontend/src/modalChanges.ts": "e4735e0a07a2def1a2015acf241c0c66cbc13e4b9b1947709dac22683bca1ac3",
+    "frontend/src/navigationRegistry.ts": "2b7ab80924a61a655fa0756fbc4661bc808fe37545bbdf1c094b65a761fd8495",
+    "frontend/src/observationPresentation.ts": "69ad540a11862f4bff3ce58370e2cd5c54dad13d1b9816ddec630ec5c6cc868a",
+    "frontend/src/observationReader.ts": "5d9e904bd07bc8329b47354d2dbb63eeee367efe3beaa1973639799a7a8e4fbc",
+    "frontend/src/observationTypes.ts": "fab4969444cefba722d7a20166f069ac677994cf22ddcb4c98c0540d7eefe26f",
+    "frontend/src/operatorUnread.ts": "921ddd74d887bb98822732c53fe3a5501e81abfd1b02f39d7db255df872d14dd",
+    "frontend/src/participantGuide.ts": "1dccd57fac3d5db0139569e63e3acc019dd4d2f0506c63f50205f9311c27c394",
+    "frontend/src/projectConnectFlowModel.ts": "a254b33da30cdf66e9613d773809321f007e839f54ec2dcd8a78f2a49decae51",
+    "frontend/src/projectIdentity.ts": "deb27ebce7e7173412d6f8243afb9e4d4828dacd564d4b96d74d49f2bf5c9bcc",
+    "frontend/src/runtimeApi.ts": "aa36223138ae662d079817b2de3dcf7ba4986d9958a8859c2b5bf0c9fecbc16e",
+    "frontend/src/runtimeEvents.ts": "648c72550692b6ec47f1e34a5df86bb1eacb335620cd8203b8ef49b9fe6947f1",
+    "frontend/src/runtimePresentation/claude.ts": "f7bf0a20c33deb181004e70ccc825d23a864f8600ff70b66392c1f1ba04b74c6",
+    "frontend/src/runtimePresentation/codex.ts": "37130f80e10343e409db1c15ce67539ecddae563188fb51713998c6b00a973e2",
+    "frontend/src/runtimePresentation/index.ts": "6df5cd8edb225d7bc653522cf9a8eff88eb71165a37ab222d4e23144ccaa9fb5",
+    "frontend/src/runtimePresentation/input.ts": "3c44ae987b3ff06f43a2edbbb87278492006cdda48658b657133acd75749a1e9",
+    "frontend/src/runtimePresentation/model.ts": "1ccf3356428720dc5cd46b9b01f91e41621468bfa92a26b200d19ea70faca0b2",
+    "frontend/src/runtimePresentation/pi.ts": "e4c3e02b430df6f3893afa2e57bf7349b573a71fde18406bc89b10ba2358e22e",
+    "frontend/src/sessionRestarts.ts": "5773a0f6f122514d3d58642b9322555a66dfdae39145c1508dc5b581949438f7",
+    "frontend/src/styles.css": "78dea60e7551ea4d9083beeeb64033bf372cf0f13fae2ce6edf7fe69a8fa88d7",
+    "frontend/src/tags.ts": "767bb112606c0926d02b066688acb0968eac1e4284c0564f95c2c2e705a55a3e",
+    "frontend/src/timeFormat.ts": "76680af2a6310301c45d87d1523ee779311f33edf68645e9203308a6de32696c",
+    "frontend/src/useSSE.ts": "c795a9ad00c8b0db653272a9514af866a78eb6c923952edb63329ef90e924ef8",
+    "frontend/src/views/AdvancedView.tsx": "d9d195e6087b8a9354f327b0efed2c568796927075072d45bba825f0b8eb1b0e",
+    "frontend/src/views/AgentsView.tsx": "acc3903c15f60453cd4ff707ef9e3cfc8bc16ec4cd73b244bda6e121a0f46b4a",
+    "frontend/src/views/ApprovalsView.tsx": "5f5b71f03adad489a18f35f8be0674fd59dca72519dad2e4175f9bc1b2b6712c",
+    "frontend/src/views/ArtifactsView.tsx": "368fb8565e85d830b177614a90d10947077a0be93ac920e176402f5667f20db9",
+    "frontend/src/views/AttentionView.tsx": "82b866cbffad184ee08e99f4fb5138e63e3cbdce0fa3b3a89a924f0e2ea3189a",
+    "frontend/src/views/CommunicationView.tsx": "cfcb1fbceaf9a99cff7c813fa8eeadac39f20730de28b45eaf99b5f6d45f3385",
+    "frontend/src/views/EventsView.tsx": "5d23aa1e8bf26bb278f6ed55f622fde9274c784241a5267c41c51c9ec3707f72",
+    "frontend/src/views/ExecutionLogView.tsx": "794fa8a3f0389220b67770e1a1cf5df68852b7dd215bfa9540b805bd63fe7e3b",
+    "frontend/src/views/GraphView.tsx": "e3747313fe0b062012533c1121a5d30db7e7e9ee672b76a40150eb125d33b1fa",
+    "frontend/src/views/GuardrailsView.tsx": "7522766e3ee7a9b5ea58e5f859ebf7824054381bf6f6556d2d0fead309cf498e",
+    "frontend/src/views/HandoffsView.tsx": "4a139cd07aab248f0b3e1a1a503ec670a9a13c9bdcfe9312f533345a7c60f2f2",
+    "frontend/src/views/HomeView.tsx": "cae0da51341e1c65dbf344de9e7f22a3681406c08eadbef5b009328c080128c7",
+    "frontend/src/views/MemoryView.tsx": "7fa9a488036c0f39f08f9c2d6c6d1afbe89d5e430f609b5ee9359c7e12638022",
+    "frontend/src/views/MessagesView.tsx": "ca4f1c1f20ecf44a2c0b030d470221ee194c2f70a38eea46260db4fd0abbdf34",
+    "frontend/src/views/MetaHarnessView.tsx": "2c5d577a47a54f238d268cf68058eed0fc544ec6cec75f34296549e151711d86",
+    "frontend/src/views/PoliciesView.tsx": "ec27046b77351631df8e54af9d8a251047297fa373c2176d548db455b18c3c92",
+    "frontend/src/views/RegistryView.tsx": "c6f8432dff07d3673ac7b3c89a7ee63641a393b00beb34bb6dcf47583b1e3fc0",
+    "frontend/src/views/RuntimesView.tsx": "72c00c820242436cdb5fc4dc33eaeb4352e90af59a5285f6d568b168cc27a53d",
+    "frontend/src/views/SettingsView.tsx": "2fa8a6891d2e10ceddf7c278b9dcbe55dc1d9b4fcee330063da75340324b03bc",
+    "frontend/src/views/WorkspacesView.tsx": "8db2514db0f829bb83deca4ee3facf46d6c8eb73acf70463cf00c27cf62f07b0",
+    "frontend/tests/agentColor.test.mjs": "6dfaa8c5c93cf6e3f2410138bf35216a9122fa6c30d1d531802428898da937f0",
+    "frontend/tests/attentionApi.test.mjs": "349fccc159431eee61249e04242e2c8a2e040a0400a5d6218315772ecc8d5844",
+    "frontend/tests/attentionController.test.mjs": "def84d5335dc64f501c3f69bd56726729da9ff6541811a9d3da9265c18ca69ad",
+    "frontend/tests/attentionNavigation.test.mjs": "4125b16ae3e99190abff78232da6a91fbe748742852017580d1f91c8d8b585b4",
+    "frontend/tests/attentionPresentation.test.mjs": "2a58e350219a8af9d75adc8895c2bcef61605969d1de10cbcd7786c53b126c38",
+    "frontend/tests/connectionConfiguration.test.mjs": "67c03615d47f05d116238c54b8088e4deadab4dcbde1f9b7b33866987ec64e27",
+    "frontend/tests/connectionSessions.test.mjs": "bb912db328cca910ebd23bbd3422f3118b11b3a913249dba9ad64fb3e5c778d1",
+    "frontend/tests/homeContextCards.test.mjs": "69930954b97ae5eab43a6d11849052b4fab8652237b9fda60daa91cd48c415a3",
+    "frontend/tests/homeDisplayPreference.test.mjs": "2f5459037b477755544a761ce52e6f478396db94974cecc2a0f4a78e5e7539f8",
+    "frontend/tests/homeOverview.test.mjs": "6f25b42c8aeb64d0e7ac26b3ab6362a180a63f50f2e3689991a76d4e71b0b3ab",
+    "frontend/tests/homeR1Api.test.mjs": "ba1f58f49566b3f2885fbd108393c7cb9e6de6c5b1d36f2a67bec6a1d32fccc4",
+    "frontend/tests/homeR1Controller.test.mjs": "98db76b820a7c70ad141f4bc9b561bf5b44ba77a813509f2f0ee1a90b317abd8",
+    "frontend/tests/homeR1Navigation.test.mjs": "2e1a0f59c8f05c22bd1c9fd59643c3cd6fd2a5d080884e7da9d0bc5dbd370a3f",
+    "frontend/tests/homeR1Presentation.test.mjs": "0ccd145d328bf2ebd19498b8d1e1126d22d27e49eb03fe1458005bd9fc21e73c",
+    "frontend/tests/homeR1Support.mjs": "cf77383ae5bb507e32b0ff55da09e6f6bb4aa102307dd3cd92ced41787e59589",
+    "frontend/tests/homeStatesContracts.test.mjs": "6cb80130626bf4e2ebb56e217ee6ea206232222578cfe0900181bc676d68b88c",
+    "frontend/tests/homeStatesPresentation.test.mjs": "4eaf9c79889321a64c3493848ae5e2c152a3840ae1577e9812217bde06d7c8b9",
+    "frontend/tests/homeUI.test.mjs": "1c2c68199408524af9eb8df6ebdfc5242fd5a8a20b53baae41997c3bc6f49183",
+    "frontend/tests/mcpSnippet.test.mjs": "0d6820e37c83e54797032c87cee5749598ffa92e5044791cf2615c1dad3c7b0a",
+    "frontend/tests/modalChanges.test.mjs": "fea94c6681d7f629cfe313ff79314bd1acad9f9c49550f4adbb5588e6f2b4653",
+    "frontend/tests/navigationFocus.test.mjs": "7fada334f6c469b2964e1d23b99fb63b5aac5098a9a7e6c0deb09a654e6a454c",
+    "frontend/tests/observationContract.types.ts": "ccf2c7f703d8d24aed97ce031804b97d1fe61772636ec871363995d0da31ab85",
+    "frontend/tests/observationCorrelation.test.mjs": "850df7327e0dec11d9865d6d9f596c879794492ac1af9d4321686983da701ede",
+    "frontend/tests/observationPresentation.test.mjs": "90eba8f0a9480f590101f87e1684d0e214b3954c20f631bdbabe76420fedc261",
+    "frontend/tests/observationReader.test.mjs": "f4621f78ae7de90a88671cbd4e46896df8935e33cb7e1ececd3b2221ff45e3eb",
+    "frontend/tests/operatorUnread.test.mjs": "6904bcc2c3595b38a5e9f2879f7c77b5f656b8cdbdca2a3addeaa714b9dc08ca",
+    "frontend/tests/participantGuide.test.mjs": "607cf467a358474e20bf40d736bb7556f955df184bbfeec82eb37e01ec987c27",
+    "frontend/tests/projectConnectFlow.test.mjs": "3e43fbfd54e694360acb721ea2b5c435fe7a44166537beb6a6b89f8d8354880c",
+    "frontend/tests/projectIdentity.test.mjs": "f4c9e15ce103ffdd9d684c8696b50754286e9d43f553e0abb51caea431aed8be",
+    "frontend/tests/runtimeEvents.test.mjs": "16d53ecf00f9a7642787388409149842e37ebd8afde5404ebc0d9c1e4a5caea3",
+    "frontend/tests/runtimePresentation.test.mjs": "34eed9dd68a58fc9d0e431fcbe0b95444ec1f55dae95b9b0da28633997fbb159",
+    "frontend/tests/scopedAttentionSummary.test.mjs": "011587626d0d8ac14b6b65b3adbe2f3826082663867c0777174aff24e5da08ce",
+    "frontend/tests/sessionRestarts.test.mjs": "8b398913c2f87ee3db6dada38e7cc89e0d422e1353f4e7ecbe20628604503771",
+    "frontend/tests/uiBoardCards.test.mjs": "38fa98f51cfcaee7d989d544797c249a1be79ceb71a47f4ae280c03ef9304989",
+    "frontend/tests/uiBoardController.test.mjs": "7e28490192b86d492f45880280ff952058ee09ee38c1ed7bed44015ca3ad23c8",
+    "frontend/tests/uiEntriesController.test.mjs": "d17ae88d16ee3b7ac0dbce7914a75bf49a7dbcd9a52345c4323c1de2ee34ff5d",
+    "frontend/tests/uiEntryCards.test.mjs": "101d11c4334335b441ea5b08dd218f2b74015122677e082ee55623a88031abe3",
+    "frontend/tests/uiEntryInspection.test.mjs": "915d0e47b021f6a99ae0e2d791edbc9149521f4fb72492151e8b6338005b7184",
+    "frontend/tests/uiExactExecutionInspection.test.mjs": "e3caa064bbe988ac6c2a5a213f56f2b1ba822f0bd82006ab9422aaf67f66a017",
+    "frontend/tests/uiFirstHarnessEmpty.test.mjs": "d6ba44d291e71cbd41b2ef4032623cfe2b01f62879474af0a34d2e865a87b344",
+    "frontend/tests/uiHarnessCard.test.mjs": "02f2ecb75d72652cf8272955ba83f492c8a2c911b77a29e478bf33e1c714b98b",
+    "frontend/tests/uiHarnessController.test.mjs": "4ed340a601cec69738dd0902fe190df735f3833f792e82dd8223cf0e00208c82",
+    "frontend/tests/uiNavigationComponents.test.mjs": "852340160e52e41e8151cff30fe5b5a8a154879a3b406b42f6c6a1d5aa42cba9",
+    "frontend/tests/uiNavigationRegistry.test.mjs": "f49e014de78df96f07bcc3245c2d58a6d559eaf3d71023b57fae2c89c99165ed",
+    "frontend/tests/uiSessionInspection.test.mjs": "f6566e9d80d07c27a445c075da28aad366894f2d58cee0eb633f73e306db683a",
+    "frontend/tests/uiSessionTarget.test.mjs": "935e4bc405e0e72fed56e729a05fe780ccf52f04d973a08ba61614d0173f5c30"
+  },
+  "static_assets": {
+    "assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036",
+    "assets/index-ZSaBIkKg.js": "c36b1cbff59a586b54eece11ae71c3cd0749d280fc25280803b0f8b3ccff7214",
+    "index.html": "e15defe0d4736936d0ce3621cce64566da524888f1146974bde9a48413c1fbe0",
+    "logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+    "logos/nexus-wordmark-dark.svg": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+    "logos/nexus-wordmark-light.svg": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+    "logos/oktolabs-icon.svg": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+  },
+  "scope": "Original Node regression plus TypeScript/Vite build after Home close publishes cached display before scheduling focus",
+  "limitations": [
+    "Actual focus regression requires a fresh R9 installed browser replay; Node is not a browser.",
+    "No Python behavior, provider or performance qualification.",
+    "Vite chunk warning retained; timings are diagnostic on the shared machine."
+  ]
+}

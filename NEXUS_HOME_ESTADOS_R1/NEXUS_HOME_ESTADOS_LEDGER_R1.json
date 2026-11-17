@@ -7498,7 +7498,7 @@
       "human": false
     },
     "local_usability_candidate": {
-      "state": "NOT_READY: reproduced focus-return defect awaiting R9 correction and installed browser verification",
+      "state": "NOT_READY: R9 focus source correction implemented, fresh installed/browser regression proof pending",
       "runtime_source": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
       "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
       "supported_scope": [
@@ -7639,9 +7639,27 @@
       "evidence": "execution/remaining-qualification-r7-next/experience-batch/focus-r8-body-focus-failure/qualification.json",
       "status": "FAIL_PRODUCT_BODY_FOCUS",
       "correct_scope_and_panel": true,
-      "source_fix": "PENDING_R9",
+      "source_fix": "R9 implemented; Node404/TSC/Vite pass, installed browser proof pending",
       "human": "NOT_INVITED",
       "provider_invocations": 0
+    },
+    "r9_focus_source": {
+      "status": "IMPLEMENTED_NOT_VERIFIED",
+      "source_change": "OperationalHome.close publishes the cached presentation through pause(manualPause) before removing the panel and scheduling focus; callback depends on manualPause and stable pause",
+      "manual_pause_preserved": true,
+      "backend_source_changed": false,
+      "frontend": "execution/frontend-r9-focus/qualification.json",
+      "original_checkout": true,
+      "node": "404PASS",
+      "typescript_vite": "PASS",
+      "input_drift": [],
+      "bundle": "assets/index-ZSaBIkKg.js",
+      "css": "assets/index-Bh2ghaTD.css",
+      "source_commit": "To be bound by execution/package-hst-r9/SOURCE_ASSET_READY.json after commit",
+      "installed": "PENDING_NEW_R9_PREFIX",
+      "browser": "PENDING_SAME_CANONICAL_MOVE_FOCUS_PREDICATE",
+      "human": "NOT_INVITED",
+      "default_approved": false
     }
   }
 }
