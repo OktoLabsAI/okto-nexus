@@ -1,0 +1,35 @@
+{
+  "status": "PASS_SCOPED_INSTALLED",
+  "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+  "counts": {
+    "passed": 3,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "selected_files": [
+    "tests\\execution_r4\\test_connection_catalog.py",
+    "tests\\execution_r4\\test_terminal_multi_harness.py"
+  ],
+  "collected": 3,
+  "finished": 3,
+  "not_run": [],
+  "exit_code": 0,
+  "payload_files": 1028,
+  "payload_drift": [],
+  "source_drift": [],
+  "cleanup": {
+    "at": "2026-11-17T11:11:34.873857+00:00",
+    "recorded_births_remaining": [],
+    "own_root_processes": [],
+    "owned_listeners": [],
+    "note": "Process-tree sampling every 0.25s cannot inventory every short-lived child; only recorded births and current own-root processes/listeners are claimed absent."
+  },
+  "limits": [
+    "No provider or real harness qualification.",
+    "Closed stdin PIPE; PTY tests may skip and are never promoted.",
+    "Origin guard covers parent pytest and all its loaded application/Core/Connector modules. Nested subprocess argv are unchanged; child provenance is separate, not implicitly proven by parent origins.",
+    "Test helpers copied verbatim without src; copied-tests.json pins all bytes.",
+    "Fixture data and original raw logs remain in own Temp; public text redacts ephemeral API-key token prefixes."
+  ]
+}

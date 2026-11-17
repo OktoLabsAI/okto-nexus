@@ -1,0 +1,254 @@
+{
+  "status": "PASS_TWO_SEPARATE_ORIGINAL_CONSOLE_NODES",
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "mode": "INSTALLED_NO_CHECKOUT_IMPORT",
+  "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+  "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+  "tests_unchanged": true,
+  "controllers_unchanged": true,
+  "source_cut_comparison": "source-pins.json per cut, no drift",
+  "cuts": [
+    {
+      "cut": "ctrl-c",
+      "status": "PASS",
+      "nodes": [
+        {
+          "name": "test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation",
+          "classname": "tests.quick_connect.test_quick_connect_pty",
+          "seconds": "7.915",
+          "status": "PASS"
+        }
+      ],
+      "controller": {
+        "status": "SIGNAL_AND_PRESERVATION_MARKER_CONFIRMED"
+      },
+      "elapsed_seconds": 14.855990799958818,
+      "commands": [
+        {
+          "kind": "single_pytest_child",
+          "argv": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-ctrl-c-9xij8ut2\\child.py"
+          ],
+          "creationflags": "CREATE_NEW_CONSOLE",
+          "show_window": "SW_HIDE"
+        },
+        {
+          "kind": "isolated_controller",
+          "argv": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-ctrl-c-9xij8ut2\\controller.py"
+          ],
+          "creationflags": "CREATE_NO_WINDOW"
+        }
+      ],
+      "original_test_sha256": "de71181344a41eddbc58b08bd875de0dd561f0d1b7ecc72e62abe293e36f35c3",
+      "stdin_isatty": true,
+      "stdout_isatty": null,
+      "stderr_isatty": null,
+      "console_hidden": true,
+      "console_window_destroyed": true,
+      "all_proven_python_processes_exited": true,
+      "process_proofs": [
+        {
+          "pid": 57888,
+          "parent_pid": null,
+          "birth_filetime": 134393879900974296,
+          "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+          "alive": false
+        },
+        {
+          "pid": 56512,
+          "parent_pid": 57888,
+          "birth_filetime": 134393879904382227,
+          "image": "C:\\Python313\\python.exe",
+          "alive": false
+        },
+        {
+          "pid": 6724,
+          "parent_pid": null,
+          "birth_filetime": 134393879936918112,
+          "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+          "alive": false
+        },
+        {
+          "pid": 52760,
+          "parent_pid": 6724,
+          "birth_filetime": 134393879937228549,
+          "image": "C:\\Python313\\python.exe",
+          "alive": false
+        }
+      ],
+      "non_client_readonly_absence_probe": [
+        {
+          "pid": 29520,
+          "alive": false,
+          "owned_or_signaled": false
+        },
+        {
+          "pid": 30916,
+          "alive": false,
+          "owned_or_signaled": false
+        }
+      ],
+      "containment": [],
+      "payload_files": 1028,
+      "payload_drift": [],
+      "source_drift": [],
+      "raw_refs": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-ctrl-c-9xij8ut2\\child.log",
+          "sha256": "62f406b2c6814bdce81ee9ded4791d2c73d2c94521df7186dd14036c351c11b1",
+          "exported": false
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-ctrl-c-9xij8ut2\\controller.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported": false
+        }
+      ]
+    },
+    {
+      "cut": "resize",
+      "status": "PASS",
+      "nodes": [
+        {
+          "name": "test_confirm_and_resume_use_actual_terminal_without_replaying_test",
+          "classname": "tests.quick_connect.test_quick_connect_pty",
+          "seconds": "10.377",
+          "status": "PASS"
+        }
+      ],
+      "controller": {
+        "status": "RESIZE_AND_ONE_TEST_RESUME_CONFIRMED",
+        "inputs": 2,
+        "signals": 0,
+        "narrow_columns": 50,
+        "wide_columns": 100,
+        "public_id_observed": "codex"
+      },
+      "elapsed_seconds": 18.43082000000868,
+      "commands": [
+        {
+          "kind": "single_pytest_child",
+          "argv": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-resize-a603b3rd\\child.py"
+          ],
+          "creationflags": "CREATE_NEW_CONSOLE",
+          "show_window": "SW_HIDE"
+        },
+        {
+          "kind": "isolated_controller",
+          "argv": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-resize-a603b3rd\\controller.py"
+          ],
+          "creationflags": "CREATE_NO_WINDOW"
+        }
+      ],
+      "original_test_sha256": "de71181344a41eddbc58b08bd875de0dd561f0d1b7ecc72e62abe293e36f35c3",
+      "stdin_isatty": true,
+      "stdout_isatty": true,
+      "stderr_isatty": true,
+      "console_hidden": true,
+      "console_window_destroyed": true,
+      "all_proven_python_processes_exited": true,
+      "process_proofs": [
+        {
+          "pid": 54084,
+          "parent_pid": null,
+          "birth_filetime": 134393880179396725,
+          "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+          "alive": false
+        },
+        {
+          "pid": 50680,
+          "parent_pid": 54084,
+          "birth_filetime": 134393880183116616,
+          "image": "C:\\Python313\\python.exe",
+          "alive": false
+        },
+        {
+          "pid": 29188,
+          "parent_pid": null,
+          "birth_filetime": 134393880219773990,
+          "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+          "alive": false
+        },
+        {
+          "pid": 61340,
+          "parent_pid": 29188,
+          "birth_filetime": 134393880220178476,
+          "image": "C:\\Python313\\python.exe",
+          "alive": false
+        }
+      ],
+      "non_client_readonly_absence_probe": [
+        {
+          "pid": 35736,
+          "alive": false,
+          "owned_or_signaled": false
+        },
+        {
+          "pid": 49392,
+          "alive": false,
+          "owned_or_signaled": false
+        }
+      ],
+      "containment": [],
+      "payload_files": 1028,
+      "payload_drift": [],
+      "source_drift": [],
+      "raw_refs": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-resize-a603b3rd\\child.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported": false
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-resize-a603b3rd\\controller.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "exported": false
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-resize-a603b3rd\\buffer-review.txt",
+          "sha256": "f28bc3ce3b3bb8eed05650a439198d4534ae49e777fefc8bfc5a233144b107c4",
+          "exported": false
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-resize-a603b3rd\\buffer-resume.txt",
+          "sha256": "a4c78505854d38a5bf767c7fc35bb5bfe0c2bba14badcb65a4171e32baeb59af",
+          "exported": false
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-resize-a603b3rd\\buffer-final.txt",
+          "sha256": "8882dc215033cf192c4b9daa92e77d715e2eb23cbd36213ee6790da143ddbc34",
+          "exported": false
+        }
+      ]
+    }
+  ],
+  "payload_files": 1028,
+  "payload_drift": [],
+  "source_drift": [],
+  "provider_calls": 0,
+  "limits": [
+    "Two sequential cuts, each with one unchanged original node; not a combined pytest round.",
+    "Real isolated hidden Windows console, not user/RTK console, logout/reboot/suspend or every terminal/PTY.",
+    "Model/version/Test/lifecycle peers remain synthetic; zero authenticated provider/native account calls.",
+    "Ctrl-C is only one console-scoped event after exact ownership/membership/issued-Test fences. Resize sends no signals.",
+    "Raw console buffers, logs, fixture database and vault material remain owned Temp; no secrets exported.",
+    "Supervisor derivative only changes package/root bindings, payload count and rejects a child older than its retained parent; qualified controllers/tests are byte-identical."
+  ]
+}

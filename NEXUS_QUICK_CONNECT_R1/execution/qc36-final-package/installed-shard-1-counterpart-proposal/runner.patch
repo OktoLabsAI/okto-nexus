@@ -1,0 +1,20 @@
+--- original/installed_regression.py
++++ counterpart/installed_regression.py
+@@ -119,8 +119,15 @@
+     env=builder.environment(root)
+     env.update(PATH=';'.join([str(prefix/'Scripts'),'C:/Python313','C:/Windows/System32','C:/Windows','C:/Program Files/Git/cmd']),GIT_CONFIG_GLOBAL=os.devnull,GIT_CONFIG_SYSTEM=os.devnull,GIT_CONFIG_NOSYSTEM='1')
+     env['QC_DERIVATIVE_OUTPUT']=str(root/'reports')
+-    for name in ['CODEX_HOME','CLAUDE_CONFIG_DIR']:
+-        directory=root/name.lower();directory.mkdir();env[name]=str(directory)
++    codex_home=root/'codex_home';codex_home.mkdir();env['CODEX_HOME']=str(codex_home)
++    claude_home=root/'claude_config_dir_intentionally_absent'
++    assert not claude_home.exists()
++    env['CLAUDE_CONFIG_DIR']=str(claude_home)
++    (root/'reports/runner-env-precondition.json').write_text(json.dumps(dict(
++        CODEX_HOME=dict(path=env['CODEX_HOME'],exists=codex_home.exists()),
++        CLAUDE_CONFIG_DIR=dict(path=env['CLAUDE_CONFIG_DIR'],exists=claude_home.exists()),
++        HOME=env['HOME'],USERPROFILE=env['USERPROFILE'],
++        account_or_provider_values_inherited=False),indent=2)+'\n')
+     record=dict(started_at=datetime.now(timezone.utc).isoformat(),root=str(root),selected=[str(p.relative_to(tree)) for p in selected],argv=argv,cwd=str(root/'cwd'),helper_paths=helper_paths,stdin='closed PIPE; no NUL console reopening',timeout=args.timeout,signals=[])
+     print(json.dumps(dict(status='START',root=str(root),selected=record['selected'])),flush=True)
+     known={}

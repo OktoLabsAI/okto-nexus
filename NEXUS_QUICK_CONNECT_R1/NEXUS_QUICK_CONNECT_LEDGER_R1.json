@@ -104,250 +104,345 @@
   "requirements": [
     {
       "id": "QC-R01",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Aceitar harness e nome de projeto posicionais, preservando flags legadas.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Short grammar and original legacy nodes; no implicit public-ID adoption.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Short grammar and original legacy nodes; no implicit public-ID adoption."
     },
     {
       "id": "QC-R02",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Oferecer aliases raiz explícitos `codex`, `claude`, `pi` para o mesmo fluxo.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Allowlisted aliases share dispatch without shell/subprocess redispatch.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Allowlisted aliases share dispatch without shell/subprocess redispatch."
     },
     {
       "id": "QC-R03",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Capturar e considerar CWD; `--project` continua caminho, não nome lógico.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Captured CWD, explicit root and physical identity; Windows junction and WSL filesystem cuts.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Captured CWD, explicit root and physical identity; Windows junction and WSL filesystem cuts."
     },
     {
       "id": "QC-R04",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Resolver projetos autorizados por identidade/nome e vínculo físico; criar somente após revisão explícita.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Authorized complete project directory, duplicate choices, registered ancestor and pre-consent cancellation.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Authorized complete project directory, duplicate choices, registered ancestor and pre-consent cancellation."
     },
     {
       "id": "QC-R05",
       "description": "Sugerir nome por escolha explícita → associação Nexus validada → origin Git local inequívoco → basename da raiz do working tree → basename da raiz física selecionada; nenhuma origem Git confere identidade ou autoridade.",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Bounded local Git hints, explicit/saved precedence and truthful fallbacks; injected reader faults remain labeled.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Bounded local Git hints, explicit/saved precedence and truthful fallbacks; injected reader faults remain labeled."
     },
     {
       "id": "QC-R06",
       "description": "Separar descoberta do nome de raiz de execução; preservar CWD/--project e exigir escolha explícita para qualquer ampliação, inclusive subdiretórios, monorepos e worktrees.",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Monorepo, clone and worktree name hints never expand the approved execution root.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Monorepo, clone and worktree name hints never expand the approved execution root."
     },
     {
       "id": "QC-R07",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Harness ausente/desconhecido ou indisponível gera escolha guiada em terminal interativo, sem executar texto arbitrário.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Safe explicit family/candidate/policy choices; incomplete Claude fixture reaches provider-home fence, not real onboarding.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Safe explicit family/candidate/policy choices; incomplete Claude fixture reaches provider-home fence, not real onboarding."
     },
     {
       "id": "QC-R08",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Aceitar `--id` opcional e gerar um identificador amigável quando ausente numa adição.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Manual/automatic public IDs, occupied suffixes and independently approved new intent.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Manual/automatic public IDs, occupied suffixes and independently approved new intent."
     },
     {
       "id": "QC-R09",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Garantir unicidade do ID definitivo por Server + workspace, com persistência, concorrência e recuperação.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Server/workspace uniqueness, real reserve race, two databases and registered executors; not two physical hosts.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Server/workspace uniqueness, real reserve race, two databases and registered executors; not two physical hosts."
     },
     {
       "id": "QC-R10",
       "description": "Usar ID do Harness (Harness ID na UI inglesa) em confirmação, seletores, conflito e sucesso; perfil técnico permanece interno ou em ajuda avançada/JSON.",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Public ID in CLI and existing English UI; technical profile remains advanced metadata.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Public ID in CLI and existing English UI; technical profile remains advanced metadata."
     },
     {
       "id": "QC-R11",
       "description": "ID existente nunca é sobrescrito: retomada explícita quando compatível, outro ID para nova conexão, conflito estruturado não interativo e recuperação da própria intenção antes de colisão.",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Explicit collision choices and same-intent recovery; no overwriting or uncertain replay.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Explicit collision choices and same-intent recovery; no overwriting or uncertain replay."
     },
     {
       "id": "QC-R12",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Preservar retomar/adicionar, identidade, grants, sessões e escolhas existentes.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Exact context/first connection preservation in scoped technical tests; original broad regression remains NOT_GREEN.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Exact context/first connection preservation in scoped technical tests; original broad regression remains NOT_GREEN."
     },
     {
       "id": "QC-R13",
       "description": "Reunir projeto, origem do nome, diretório, harness real, ID do Harness e efeitos novos na revisão final única; personalização invalida aprovação anterior e cancelamento não produz setup.",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: One final review, fresh customization hashes and truthful cancellation/EOF in installed candidate.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: One final review, fresh customization hashes and truthful cancellation/EOF in installed candidate."
     },
     {
       "id": "QC-R14",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Sucesso Quick Connect sempre informa o ID definitivo criado, reutilizado ou associado.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Bound full-reference success and explicit partial states; safe public resume rendering preserves authority.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Bound full-reference success and explicit partial states; safe public resume rendering preserves authority."
     },
     {
       "id": "QC-R15",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "JSON/noninteractive não abre prompts, não escolhe ambiguidades e não bloqueia stdin.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Noninteractive JSON/closed PIPE, explicit ambiguity refusal and no exit0-to-connected inference.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Noninteractive JSON/closed PIPE, explicit ambiguity refusal and no exit0-to-connected inference."
     },
     {
       "id": "QC-R16",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Reusar setup, revisão, reserva, recibos, catálogo e daemon canônicos.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Canonical reservation/Finish/receipt and one real foreground service; model/version peers are synthetic.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Canonical reservation/Finish/receipt and one real foreground service; model/version peers are synthetic."
     },
     {
       "id": "QC-R17",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Preservar topologia remota: CWD do operador não vira caminho do Connector.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Remote operator exact tuple/topology, no operator CWD transferred to Connector; loopback remote view, not two machines.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Remote operator exact tuple/topology, no operator CWD transferred to Connector; loopback remote view, not two machines."
     },
     {
       "id": "QC-R18",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Mostrar o ID na projeção UI existente, sem novos menus e sem roteamento de mensagens por alias implícito.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Existing Home/catalog projection and two exact canonical sessions in browser; no human/AT acceptance.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Existing Home/catalog projection and two exact canonical sessions in browser; no human/AT acceptance."
     },
     {
       "id": "QC-R19",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "description": "Migrar/adotar conexões antigas sem renomear identidade, binding, sessão ou perfil.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED within cited technical boundaries: Legacy omission hashes, metadata-only adoption, unknown fields and original shortcut/multi-harness nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "VERIFIED within cited technical boundaries: Legacy omission hashes, metadata-only adoption, unknown fields and original shortcut/multi-harness nodes."
     },
     {
       "id": "QC-R20",
@@ -355,12 +450,17 @@
       "description": "Comprovar parser, domínio, HTTP, concorrência, CLI e instalação; distinguir testes simulados de execução real.",
       "evidence": [
         {
-          "path": "execution/scenario-reconciliation.json",
-          "scope": "Scenario-level evidence and concrete remaining acceptance; implementation is not global qualification.",
-          "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+          "path": "execution/final-delivery.md",
+          "scope": "Technical layer/provenance proofs are complete; real-provider qualification is BLOCKED and original broad regression NOT_GREEN. No global qualification asserted.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed gate; scenario-specific historical evidence remains on each test row.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: scoped automated proofs exist; complete gate not asserted."
+      "execution_notes": "Technical layer/provenance proofs are complete; real-provider qualification is BLOCKED and original broad regression NOT_GREEN. No global qualification asserted."
     }
   ],
   "tasks": [
@@ -424,14 +524,25 @@
           "path": "execution/baseline.md",
           "scope": "instruction, source and test map; previous implementation gate before new package inspection",
           "commit": "7f114698e178c415488cd7a112d6ed0cb2ded214"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-002",
       "phase": "QC-00",
       "title": "Fixar gramática e decisões de resolução",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-001"
       ],
@@ -513,8 +624,19 @@
           "path": "execution/qc06-foundation-security/qualification.json",
           "scope": "Current pure contracts, grammar, dispatch, local Git and project decisions; 260 source-level checks. Installed and native qualification separate.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-003",
@@ -580,14 +702,25 @@
           "path": "execution/qc03-backend/qualification.json",
           "scope": "Namespace and atomicity contract reconciled; new fixtures cover Servers/workspaces/hosts, legacy and uncertain receipts; G0 contract evidence only",
           "commit": "cd88162e"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-004",
       "phase": "QC-01",
       "title": "Implementar normalização de posicionais e flags",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-002"
       ],
@@ -634,14 +767,25 @@
           "path": "execution/qc06-foundation-security/qualification.json",
           "scope": "Current pure contracts, grammar, dispatch, local Git and project decisions; 260 source-level checks. Installed and native qualification separate.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-005",
       "phase": "QC-01",
       "title": "Implementar aliases raiz e ajuda inicial",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-004"
       ],
@@ -681,14 +825,25 @@
           "path": "execution/qc06-foundation-security/qualification.json",
           "scope": "Current pure contracts, grammar, dispatch, local Git and project decisions; 260 source-level checks. Installed and native qualification separate.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-006",
       "phase": "QC-01",
       "title": "Unificar registro e picker de harness",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-004"
       ],
@@ -723,14 +878,25 @@
           "path": "execution/evidence/qc03-harness-alternatives/qualification.json",
           "scope": "Explicit supported-family alternatives and policy/freshness fences; source CLI plus inert HTTP. No real provider readiness claim.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-007",
       "phase": "QC-01",
       "title": "Fixar comportamento não interativo",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-004",
         "QC-006"
@@ -792,14 +958,25 @@
           "path": "execution/evidence/qc03-harness-alternatives/qualification.json",
           "scope": "Explicit supported-family alternatives and policy/freshness fences; source CLI plus inert HTTP. No real provider readiness claim.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-008",
       "phase": "QC-01",
       "title": "Adotar ID do Harness como vocabulário público",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-004"
       ],
@@ -850,14 +1027,25 @@
           "path": "execution/qc05-frontend/qualification.json",
           "scope": "Additive public ID vocabulary and projections; 360 Node tests and TypeScript/Vite. Browser limitations retained separately.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-009",
       "phase": "QC-02",
       "title": "Resolver CWD e raiz explícita com proveniência",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-002"
       ],
@@ -902,14 +1090,25 @@
           "path": "execution/qc06-foundation-security/qualification.json",
           "scope": "Current pure contracts, grammar, dispatch, local Git and project decisions; 260 source-level checks. Installed and native qualification separate.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-010",
       "phase": "QC-02",
       "title": "Descobrir metadados Git locais com limites e privacidade",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-002",
         "QC-009"
@@ -970,14 +1169,25 @@
           "path": "execution/qc06-foundation-security/qualification.json",
           "scope": "Current pure contracts, grammar, dispatch, local Git and project decisions; 260 source-level checks. Installed and native qualification separate.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-011",
       "phase": "QC-02",
       "title": "Estender consulta de projetos autorizados",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-009"
       ],
@@ -1023,14 +1233,25 @@
           "path": "execution/qc03-backend/qualification.json",
           "scope": "Authorized directory, canonical proof, persistent registry and atomic setup/receipt with fixed legacy digest. Faults and concurrency are synthetic HTTP/SQLite.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-012",
       "phase": "QC-02",
       "title": "Aplicar precedência do nome e conservar a raiz aprovada",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-010",
         "QC-011"
@@ -1086,14 +1307,25 @@
           "path": "execution/evidence/qc04-cli-http/qualification.json",
           "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-013",
       "phase": "QC-02",
       "title": "Implementar seletor e proposta de projeto novo",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-011",
         "QC-006",
@@ -1167,14 +1399,25 @@
           "path": "execution/evidence/qc04-cli-http/qualification.json",
           "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-014",
       "phase": "QC-02",
       "title": "Revalidar projetos em retomada e concorrência",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-013"
       ],
@@ -1236,14 +1479,25 @@
           "path": "execution/qc03-backend/qualification.json",
           "scope": "Authorized directory, canonical proof, persistent registry and atomic setup/receipt with fixed legacy digest. Faults and concurrency are synthetic HTTP/SQLite.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-015",
       "phase": "QC-03",
       "title": "Adicionar registro canônico de IDs públicos",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-003"
       ],
@@ -1291,14 +1545,25 @@
           "path": "execution/qc03-backend/qualification.json",
           "scope": "Authorized directory, canonical proof, persistent registry and atomic setup/receipt with fixed legacy digest. Faults and concurrency are synthetic HTTP/SQLite.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-016",
       "phase": "QC-03",
       "title": "Reservar proposta e preservar intenção",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-015",
         "QC-014"
@@ -1358,14 +1623,25 @@
           "path": "execution/evidence/qc04-cli-http/qualification.json",
           "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-017",
       "phase": "QC-03",
       "title": "Integrar ID ao request, Finish e recibo",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-016"
       ],
@@ -1430,14 +1706,25 @@
           "path": "execution/qc03-backend/qualification.json",
           "scope": "Authorized directory, canonical proof, persistent registry and atomic setup/receipt with fixed legacy digest. Faults and concurrency are synthetic HTTP/SQLite.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-018",
       "phase": "QC-03",
       "title": "Resolver e associar conexões antigas",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-015",
         "QC-017"
@@ -1484,14 +1771,25 @@
           "path": "execution/qc03-backend/qualification.json",
           "scope": "Authorized directory, canonical proof, persistent registry and atomic setup/receipt with fixed legacy digest. Faults and concurrency are synthetic HTTP/SQLite.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-019",
       "phase": "QC-03",
       "title": "Qualificar locks, reservas incertas e tombstones",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-017",
         "QC-018"
@@ -1551,14 +1849,25 @@
           "path": "execution/qc07-public-id-occupancy/qualification.json",
           "scope": "Canonical disable preserves occupied public ID; old-timestamp reservation remains unavailable. No automatic cleanup or native termination asserted.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-020",
       "phase": "QC-03",
       "title": "Tratar colisão de ID com decisão explícita e sem sobrescrita",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-018",
         "QC-006",
@@ -1613,14 +1922,25 @@
           "path": "execution/evidence/qc04-cli-http/qualification.json",
           "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-021",
       "phase": "QC-04",
       "title": "Consolidar a revisão final e congelar escolhas aprovadas",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-019",
         "QC-012",
@@ -1679,14 +1999,25 @@
           "path": "execution/evidence/qc04-cli-http/qualification.json",
           "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-022",
       "phase": "QC-04",
       "title": "Orquestrar Quick Connect no fluxo existente",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-007",
         "QC-014",
@@ -1730,14 +2061,25 @@
           "path": "execution/evidence/qc04-cli-http/qualification.json",
           "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-023",
       "phase": "QC-04",
       "title": "Implementar resumo positivo com ID",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-022",
         "QC-008"
@@ -1798,14 +2140,25 @@
           "path": "execution/evidence/qc04-cli-http/qualification.json",
           "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-024",
       "phase": "QC-04",
       "title": "Versionar JSON e efeitos por estágio",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-023"
       ],
@@ -1867,14 +2220,25 @@
           "path": "execution/evidence/qc04-cli-http/qualification.json",
           "scope": "Managed first/second connection, canonical resume, collision, recovery and customization implemented and tested with inert peers; later focused deltas supersede relevant source pins.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-025",
       "phase": "QC-04",
       "title": "Recuperar commit com falha de persistência local",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-024"
       ],
@@ -1916,14 +2280,25 @@
           "path": "execution/qc04-terminal/qualification.json",
           "scope": "Commit recovery, local shortcut repair, metadata adoption and remote canonical scope. Full installed regressions remain in progress.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-026",
       "phase": "QC-05",
       "title": "Projetar ID no catálogo e UI existente",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-018",
         "QC-024",
@@ -1964,14 +2339,25 @@
           "path": "execution/qc05-frontend/qualification.json",
           "scope": "Additive public ID vocabulary and projections; 360 Node tests and TypeScript/Vite. Browser limitations retained separately.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-027",
       "phase": "QC-05",
       "title": "Preservar remoto, participant e Server antigo",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-022",
         "QC-026"
@@ -2023,14 +2409,25 @@
           "path": "execution/qc13-entry-smoke/proof.json",
           "scope": "Actual installed old Server unsupported-capability refusal; exact HTTP status preserved. No local namespace substitute/provider.",
           "commit": "fa031697b37a1b879d855f7858f01320addf0df7"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-028",
       "phase": "QC-05",
       "title": "Cobrir migração de perfis e recibos legados",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-025",
         "QC-027"
@@ -2072,14 +2469,25 @@
           "path": "execution/qc12-installed-compatibility/qualification.json",
           "scope": "Original legacy CLI nodes pass in the new installed package; unknown fields and hashes retain their independent evidence.",
           "commit": "fa031697b37a1b879d855f7858f01320addf0df7"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-029",
       "phase": "QC-06",
       "title": "Executar matriz integrada e adversarial",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-026",
         "QC-027",
@@ -2165,13 +2573,25 @@
         "QC-T-I09",
         "QC-T-I10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        }
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-030",
       "phase": "QC-06",
       "title": "Validar experiência no terminal e plataformas",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-029"
       ],
@@ -2241,7 +2661,24 @@
         "QC-T-I09",
         "QC-T-I10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates. Windows owned console, PowerShell7.6.10 and WSL2 are the observed environments; no universal PTY/OS/Python or installed-Scheduler/relogin claim.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/qc36-final-package/installed-console/qualification.json",
+          "scope": "Two original real-console nodes pass on final installed wheel; declared Windows console only.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        }
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates. Windows owned console, PowerShell7.6.10 and WSL2 are the observed environments; no universal PTY/OS/Python or installed-Scheduler/relogin claim."
     },
     {
       "id": "QC-031",
@@ -2296,7 +2733,7 @@
       "id": "QC-032",
       "phase": "QC-06",
       "title": "Atualizar documentação e prompt operacional",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-029"
       ],
@@ -2416,14 +2853,30 @@
           "path": "execution/baseline.md",
           "scope": "Guide docs/quick-connect.md at 0a1cbaba documents tested syntax, authority, partial outcomes and presentation rollback.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed regression and exact affected nodes.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/documentation-review.json",
+          "scope": "Repository guide reviewed against grammar, authority, recovery, shell limits and rollback. Guide is not part of the wheel/sdist payload.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
-      ]
+      ],
+      "execution_notes": "VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, installed and platform cuts. Shared I09 membership does not qualify a real provider. Original broad regression and prior human/AT blockers remain independent gates."
     },
     {
       "id": "QC-033",
       "phase": "QC-06",
       "title": "Empacotar, revisar gates e definir rollback",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-030",
         "QC-031",
@@ -2508,7 +2961,14 @@
         "QC-T-I09",
         "QC-T-I10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/final-delivery.md",
+          "scope": "Packaging, rollback and gate decision are implemented; G6 is not approved. QC031 real campaign remains BLOCKED and the original broad regression is NOT_GREEN.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        }
+      ],
+      "execution_notes": "Packaging, rollback and gate decision are implemented; G6 is not approved. QC031 real campaign remains BLOCKED and the original broad regression is NOT_GREEN."
     }
   ],
   "tests": [
@@ -3236,15 +3696,20 @@
         "QC-014",
         "QC-022"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "path": "execution/scenario-reconciliation.json",
           "scope": "Exact per-scenario judgment, assertions, XML nodes and provenance. Full CLI over canonical HTTP/SQLite for this exact root/project given is not executed.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "PASS on the final installed wheel: unmapped-CWD basename review and honest negative/customization/EOF cancellation preserve checkpoints without Test replay. QC35 a36 failure and QC39 source red/green remain separate antecedents.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: Full CLI over canonical HTTP/SQLite for this exact root/project given is not executed."
+      "execution_notes": "PASS on the final installed wheel: unmapped-CWD basename review and honest negative/customization/EOF cancellation preserve checkpoints without Test replay. QC35 a36 failure and QC39 source red/green remain separate antecedents."
     },
     {
       "id": "QC-T-C03",
@@ -6044,7 +6509,7 @@
         "QC-019",
         "QC-025"
       ],
-      "status": "FAIL",
+      "status": "PASS",
       "evidence": [
         {
           "path": "execution/scenario-reconciliation.json",
@@ -6052,12 +6517,12 @@
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
         },
         {
-          "path": "execution/qc35-review-cancellation-proposal/revision2/qualification.json",
-          "scope": "Current installed red versus external connect-only patch; the derivative is not a fixed installed wheel.",
-          "commit": "fa031697b37a1b879d855f7858f01320addf0df7"
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "PASS on the final installed wheel: unmapped-CWD basename review and honest negative/customization/EOF cancellation preserve checkpoints without Test replay. QC35 a36 failure and QC39 source red/green remain separate antecedents.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "FAIL on the current a36 artifact: canceling a new review returns0 without a final canceled/lifecycle document. QC35 preserves the exact red case and passing external-only derivatives. Acceptance awaits source application and a new installed package."
+      "execution_notes": "PASS on the final installed wheel: unmapped-CWD basename review and honest negative/customization/EOF cancellation preserve checkpoints without Test replay. QC35 a36 failure and QC39 source red/green remain separate antecedents."
     },
     {
       "id": "QC-T-G09",
@@ -6086,6 +6551,11 @@
           "path": "execution/qc22-owned-console-interrupt/qualification.json",
           "scope": "Original unmodified test passed with real CONIN$/GetConsoleMode input in an owned hidden Windows console. One Ctrl-C only after issued marker and fresh console ownership fence: CLI130, checkpoint retained, no binding/grant, explicit fixture gate release, all owned clients/conhosts exited. No user/RTK console signal.",
           "commit": "fa031697b37a1b879d855f7858f01320addf0df7"
+        },
+        {
+          "path": "execution/qc36-final-package/installed-console/qualification.json",
+          "scope": "Final installed candidate repeats original Ctrl-C130/checkpoint/no-binding-grant and resize/confirm/resume tests in two owned hidden Windows consoles. One intended own-console CTRL_C_EVENT, zero containment; no user/RTK console signal.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
       "execution_notes": "PASS within the declared boundary: Original unmodified test passed with real CONIN$/GetConsoleMode input in an owned hidden Windows console. One Ctrl-C only after issued marker and fresh console ownership fence: CLI130, checkpoint retained, no binding/grant, explicit fixture gate release, all owned clients/conhosts exited. No user/RTK console signal."
@@ -6506,7 +6976,7 @@
         "QC-030",
         "QC-032"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "path": "execution/scenario-reconciliation.json",
@@ -6517,9 +6987,19 @@
           "path": "execution/qc27-local-edge-scenarios/qualification.json",
           "scope": "Four installed focals: removed captured-CWD fault gives generic structured CONFIG_ERROR before resolver/no HOME fallback; actual own Windows junction retarget invalidates old approval; canonical endpoint disable retains occupied ID without reactivation/connected; shell=False Python argv roundtrip preserves Unicode/spaces/metacharacters without executing them. Not removal of a live Windows CWD or a shell renderer.",
           "commit": "fa031697b37a1b879d855f7858f01320addf0df7"
+        },
+        {
+          "path": "execution/final-installed-reconciliation.json",
+          "scope": "Final installed renderer and output nodes; no source import.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
+        },
+        {
+          "path": "execution/qc36-final-package/installed-shells/qualification.json",
+          "scope": "PASS: installed renderer/outcome contracts plus direct installed-helper argv echo on PowerShell7.6.10 and WSL2 sh/dash preserve quotes/Unicode/metacharacters. PowerShell5.1 refuses before invocation; cmd rendering is unsupported. Only inert echo runs, never Nexus/provider work; public resume keeps exact root/topology.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
-      "execution_notes": "PARTIAL: QC27 proves the unexecuted argv array and shell=False roundtrip, but not the required per-shell rendering. Final audit found the missing presentation; implementation and installed shell-rendering qualification are pending."
+      "execution_notes": "PASS: installed renderer/outcome contracts plus direct installed-helper argv echo on PowerShell7.6.10 and WSL2 sh/dash preserve quotes/Unicode/metacharacters. PowerShell5.1 refuses before invocation; cmd rendering is unsupported. Only inert echo runs, never Nexus/provider work; public resume keeps exact root/topology."
     },
     {
       "id": "QC-T-H10",
@@ -6830,6 +7310,11 @@
           "path": "execution/qc09-installed-23/qualification.json",
           "scope": "Full shard3 failure and interrupted shard2 with original evidence/provenance retained.",
           "commit": "a0fa79129d8760eef945fc1445c2355430d5b54c"
+        },
+        {
+          "path": "execution/qc36-final-package/qualification.json",
+          "scope": "Final wheel/sdist build, installed entrypoints, dependency gates and exact1028 payloads. The original broad regression remains NOT_GREEN.",
+          "commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc"
         }
       ],
       "execution_notes": "PASS for the literal installed-entry/dependency/artifact scenario: QC11/12/13 establish the new isolated package, help/parser/connect and 1027 exact payloads. The broader regression remains a separate NOT_GREEN qualification gate; this row does not promote it."
@@ -6897,25 +7382,25 @@
   "evidence_policy": "VERIFIED/PASS exige comando, ambiente, commit e resultado observado. Fixture não comprova harness real. Este pacote não executou testes do Nexus.",
   "initialization_policy": "Iniciar o acompanhamento deste plano com TODO/NOT_RUN. Preservar registros de outras frentes do produto; reutilizar código existente após revalidação dos critérios pertinentes.",
   "execution": {
-    "candidate": "fa031697b37a1b879d855f7858f01320addf0df7",
+    "candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
     "branch": "feature/v0.3.6",
     "version": "0.3.6",
     "draft_pr": "https://github.com/OktoLabsAI/okto-nexus/pull/139",
-    "implementation_gate": "IN_PROGRESS: additional safe composed cases and final reconciliation",
+    "implementation_gate": "COMPLETE: scoped functional implementation and final installed regression",
     "real_qualification_gate": "BLOCKED: fresh real-provider consent and retained UNKNOWN usage guard",
     "limitations": [
-      "UI-R1 original qualification ledger and prior human failures remain unchanged.",
-      "No further human testing, Windows session events, personal install changes or paid provider runs.",
-      "Browser malformed historical viewer and unattributed sessions digest change retained as limits.",
-      "PTY Ctrl-C interrupted the tool transport; checkpoint survived, CLI return-130 not qualified."
+      "Original UI-R1 human/qualification blockers and UNKNOWN campaign usage remain unchanged.",
+      "No provider calls, authentication access, personal install changes or Windows session events.",
+      "Earlier malformed browser history and unattributed digest remain antecedents; later valid two-session proof is separate.",
+      "Owned Windows-console Ctrl-C130/resize also passed on final installed candidate; not a universal PTY claim.",
+      "PowerShell7.6.10/WSL2 sh tested; PS5.1 refuses, cmd rendering and native Linux/Python3.11/3.12 matrix unqualified."
     ],
     "scenario_status_semantics": "PARTIAL uses normative NOT_RUN plus execution_notes; PASS proves only the cited literal boundary.",
     "scenario_counts": {
-      "PASS": 143,
-      "NOT_RUN": 2,
-      "FAIL": 1,
+      "PASS": 146,
       "BLOCKED": 1
     },
-    "original_broad_gate": "NOT_GREEN: failures, hung tests, incomplete remainders and mixed child provenance retained"
+    "original_broad_gate": "NOT_GREEN: failures, hung tests, incomplete remainders and mixed child provenance retained",
+    "qualification_gate": "BLOCKED: QC031 real campaign, original broad NOT_GREEN and prior UI human gates retained"
   }
 }

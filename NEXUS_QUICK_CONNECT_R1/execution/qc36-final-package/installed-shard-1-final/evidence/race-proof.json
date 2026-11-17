@@ -1,0 +1,27 @@
+{
+  "counts": {
+    "workspaces": 1,
+    "connection_project_drafts": 1,
+    "connection_public_ids": 1,
+    "execution_bindings": 1,
+    "runtime_execution_grants": 1,
+    "connection_setup_commits": 1
+  },
+  "tests": 1,
+  "probes": 1,
+  "winner": "race-a",
+  "loser": "race-b",
+  "loser_code": "CONNECT_ID_PENDING",
+  "canonical_ref": {
+    "server_id": "srv_929a35ebb90677351305589de916e7d2",
+    "executor_id": "exe_6a15c4e10119e49c93d1df1f627861bd",
+    "binding_id": "bind_82e218534955db0ffb08d748b308a04e",
+    "endpoint_id": "ep_6d4fc52107be3dc76a75b958dabbac4a",
+    "agent_id": "app-f0c8552996a2",
+    "workspace_id": "wsr_d87063ac5703901d9290a1cddbfdc29e",
+    "workspace_binding_id": "wxb_517e094d597bfa7d81b18a4bd2902a3f"
+  },
+  "directory_recognizes_winner": true,
+  "barrier": "Before actual canonical POST public-ids/reserve",
+  "thread_cwd_env_input_mutations": false
+}

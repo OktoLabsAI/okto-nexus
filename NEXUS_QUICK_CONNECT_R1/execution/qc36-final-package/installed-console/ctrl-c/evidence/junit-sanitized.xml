@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="10.510" timestamp="2026-11-17T08:19:51.523533-03:00" hostname="Alienware_m15"><testcase classname="tests.quick_connect.test_quick_connect_pty" name="test_ctrl_c_after_issued_test_preserves_checkpoint_and_only_ends_observation" time="7.915" /></testsuite></testsuites>

@@ -1,0 +1,38 @@
+{
+  "child_main_pid": 56512,
+  "controller_main_pid": 52760,
+  "console_window": {
+    "hwnd": 35720620,
+    "visible": false
+  },
+  "owned_processes": [
+    {
+      "pid": 57888,
+      "parent_pid": null,
+      "birth_filetime": 134393879900974296,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+      "alive": true
+    },
+    {
+      "pid": 56512,
+      "parent_pid": 57888,
+      "birth_filetime": 134393879904382227,
+      "image": "C:\\Python313\\python.exe",
+      "alive": true
+    },
+    {
+      "pid": 6724,
+      "parent_pid": null,
+      "birth_filetime": 134393879936918112,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+      "alive": true
+    },
+    {
+      "pid": 52760,
+      "parent_pid": 6724,
+      "birth_filetime": 134393879937228549,
+      "image": "C:\\Python313\\python.exe",
+      "alive": true
+    }
+  ]
+}

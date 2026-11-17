@@ -1,0 +1,145 @@
+{
+  "at": "2026-11-17T11:20:04.951460+00:00",
+  "status": "PASS",
+  "failure": null,
+  "commands": [
+    {
+      "kind": "single_pytest_child",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-ctrl-c-9xij8ut2\\child.py"
+      ],
+      "creationflags": "CREATE_NEW_CONSOLE",
+      "show_window": "SW_HIDE"
+    },
+    {
+      "kind": "isolated_controller",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-ctrl-c-9xij8ut2\\controller.py"
+      ],
+      "creationflags": "CREATE_NO_WINDOW"
+    }
+  ],
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-console-ctrl-c-9xij8ut2",
+  "process_proofs": [
+    {
+      "pid": 57888,
+      "parent_pid": null,
+      "birth_filetime": 134393879900974296,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 56512,
+      "parent_pid": 57888,
+      "birth_filetime": 134393879904382227,
+      "image": "C:\\Python313\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 6724,
+      "parent_pid": null,
+      "birth_filetime": 134393879936918112,
+      "image": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+      "alive": false
+    },
+    {
+      "pid": 52760,
+      "parent_pid": 6724,
+      "birth_filetime": 134393879937228549,
+      "image": "C:\\Python313\\python.exe",
+      "alive": false
+    }
+  ],
+  "observed_non_clients": [
+    {
+      "pid": 30916,
+      "parent_pid": 57888,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    },
+    {
+      "pid": 30916,
+      "parent_pid": 57888,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    },
+    {
+      "pid": 30916,
+      "parent_pid": 57888,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    },
+    {
+      "pid": 29520,
+      "parent_pid": 6724,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    },
+    {
+      "pid": 30916,
+      "parent_pid": 57888,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    },
+    {
+      "pid": 29520,
+      "parent_pid": 6724,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    },
+    {
+      "pid": 30916,
+      "parent_pid": 57888,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    },
+    {
+      "pid": 29520,
+      "parent_pid": 6724,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    },
+    {
+      "pid": 30916,
+      "parent_pid": 57888,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    },
+    {
+      "pid": 29520,
+      "parent_pid": 6724,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    },
+    {
+      "pid": 30916,
+      "parent_pid": 57888,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    },
+    {
+      "pid": 29520,
+      "parent_pid": 6724,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    },
+    {
+      "pid": 30916,
+      "parent_pid": 57888,
+      "authorization": "not a console client; not included in signal/termination permit",
+      "details_redacted": true
+    }
+  ],
+  "containment": [],
+  "elapsed_seconds": 14.855990799958818,
+  "payload_files": 1028,
+  "payload_drift": [],
+  "source_drift": [],
+  "provider_calls": 0
+}

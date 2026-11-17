@@ -1,0 +1,79 @@
+{
+  "files": [
+    {
+      "path": "evidence/collected.json",
+      "bytes": 48393,
+      "sha256": "34414fa4faa83ec9eee43eb7af67b833b01df7dbec81352fc03330df2831ead4"
+    },
+    {
+      "path": "evidence/copied-tests.json",
+      "bytes": 104636,
+      "sha256": "71315ac17acc428832846f1170d472201910469d2f9d0450b762bc0913e9b873"
+    },
+    {
+      "path": "evidence/inventory.json",
+      "bytes": 98445,
+      "sha256": "0d23400c2706ea4d63ee37daeed2288f0e637b010be0950ddb23d694fe5b2b1c"
+    },
+    {
+      "path": "evidence/origins-end.json",
+      "bytes": 62769,
+      "sha256": "452fbcbaa565f7d82c8f42ee1baf405bebb97ccdbe672eb7e7e168491a452ad7"
+    },
+    {
+      "path": "evidence/origins-start.json",
+      "bytes": 19029,
+      "sha256": "9962f5a18451694faf22493cc9ba7d61be656acf04b0e1eea4c1a836716c4e6e"
+    },
+    {
+      "path": "evidence/payload-after.json",
+      "bytes": 125653,
+      "sha256": "a8a84fb05af71adeb7a81ab4e30103cadde6b6956ac34fff848fe1fa48fab2eb"
+    },
+    {
+      "path": "evidence/payload-before.json",
+      "bytes": 125653,
+      "sha256": "a8a84fb05af71adeb7a81ab4e30103cadde6b6956ac34fff848fe1fa48fab2eb"
+    },
+    {
+      "path": "evidence/phases.jsonl",
+      "bytes": 80704,
+      "sha256": "9f6b9b102122f72ae8aa5e15b7e10f5d8025d8d7bd577cffae2eeea31b6cfc63"
+    },
+    {
+      "path": "evidence/physical-cleanup.json",
+      "bytes": 313,
+      "sha256": "8c382eb9b74ff994fc0c7d267443931c8f4cfaa2e603764ff20416c0744850c5"
+    },
+    {
+      "path": "evidence/result.json",
+      "bytes": 14656,
+      "sha256": "cf704431e1f066f12196b80bbf52c26436c2dc1c9389d5c94c665bb861ba398e"
+    },
+    {
+      "path": "evidence/runner-env-precondition.json",
+      "bytes": 578,
+      "sha256": "bee70874b7c8548e75cdda1001ab803bcf588a16de5cffbde87f8ae0d07bb129"
+    },
+    {
+      "path": "evidence/source-before.json",
+      "bytes": 218972,
+      "sha256": "139ceea460491191a6a584b12e9f3c238cb0df7144430c2ca81fdc1c8914a868"
+    },
+    {
+      "path": "evidence/stdout.log",
+      "bytes": 19899,
+      "sha256": "ec421f693d1f878b11f72e94cfe8bf85e36aca38a31a39509f8f831f386d8f4a"
+    },
+    {
+      "path": "evidence/tests.xml",
+      "bytes": 20811,
+      "sha256": "7ceeb75c3d106c93f20fd9e66e0a3a01fa5d5c5b3c38e81457d7ffcc5db16a29"
+    },
+    {
+      "path": "qualification.json",
+      "bytes": 35700,
+      "sha256": "41dbd70fa4389acc894b6da76963421195fbfb0bf68975b23c587fa2c7cf8609"
+    }
+  ]
+}

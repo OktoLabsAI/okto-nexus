@@ -1,0 +1,82 @@
+{
+  "status": "PASS",
+  "purpose": "Real shell argv echo, no Nexus/model/provider execution",
+  "installed_helper_sha256": "22e7834b9a9018ca6bb0c48fd541963729c7fbcc1698a0334ff194eefddf6b7e",
+  "records": [
+    {
+      "shell": "PowerShell",
+      "version": "7.6.10",
+      "renderer": "powershell",
+      "arguments": [
+        "project with spaces Ω",
+        "O'Brien",
+        "\"double quoted\"",
+        "$(touch QC39_MARKER)",
+        "`touch QC39_MARKER`",
+        "; touch QC39_MARKER",
+        "& echo QC39_MARKER",
+        "pipe|redirect>less<caret^percent%bang!",
+        "back\\slash\\",
+        "",
+        "--profile",
+        "--home"
+      ],
+      "received_exactly": true,
+      "marker_absent": true,
+      "exit_code": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "shell": "Windows PowerShell",
+      "version": "5.1.26100.9818",
+      "expected": "refusal_before_invocation",
+      "exit_code": 1,
+      "stdout_empty": true,
+      "marker_absent": true
+    },
+    {
+      "shell": "POSIX sh",
+      "shell_target": "/usr/bin/dash",
+      "OS": "Linux 5.15.146.1-microsoft-standard-WSL2 x86_64",
+      "python": "Python 3.10.12",
+      "WSL": true,
+      "arguments": [
+        "project with spaces Ω",
+        "O'Brien",
+        "\"double quoted\"",
+        "$(touch QC39_MARKER)",
+        "`touch QC39_MARKER`",
+        "; touch QC39_MARKER",
+        "& echo QC39_MARKER",
+        "pipe|redirect>less<caret^percent%bang!",
+        "back\\slash\\",
+        "",
+        "--profile",
+        "--home"
+      ],
+      "received_exactly": true,
+      "marker_absent": true,
+      "exit_code": 0,
+      "stderr_bytes": 0
+    }
+  ],
+  "Windows_temp": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-shell-arilobzp",
+  "Linux_temp": "/tmp/nexus-qc39-shell-GU1x8G",
+  "Linux_temp_removed": true,
+  "per_process_timeout_seconds": 15,
+  "stdin": "closed PIPE",
+  "shell_false": true,
+  "provider_calls": 0,
+  "owned_child_processes_exited": true,
+  "limits": [
+    "POSIX proof is WSL2 /bin/sh, not every POSIX shell or native OS.",
+    "PowerShell7.3+ is the supported Windows syntax, tested on the exact available version.",
+    "Windows PowerShell5.1 deliberately refuses; cmd.exe is not supported.",
+    "Only an inert Python argv echo runs; no authenticated CLI, Nexus, profile recovery or provider call."
+  ],
+  "mode": "INSTALLED_HELPER_NO_CHECKOUT_IMPORT",
+  "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+  "payload_files": 1028,
+  "payload_drift": [],
+  "helper_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\quick_connect_render.py"
+}

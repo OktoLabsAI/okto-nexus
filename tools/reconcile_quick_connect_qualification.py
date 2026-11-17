@@ -6,8 +6,9 @@ from pathlib import Path
 BASE = Path(__file__).resolve().parents[1] / 'NEXUS_QUICK_CONNECT_R1'
 OLD = 'a0fa79129d8760eef945fc1445c2355430d5b54c'
 CURRENT = 'fa031697b37a1b879d855f7858f01320addf0df7'
-FINAL_CANCELLATION_QUALIFIED = False
-FINAL_SHELL_RENDER_QUALIFIED = False
+FINAL = '9bc4034663ca63cfee43790b4bc03c38f8bdebcc'
+FINAL_CANCELLATION_QUALIFIED = True
+FINAL_SHELL_RENDER_QUALIFIED = True
 
 # These are literal scenario decisions, not an inference from file membership.
 LATER = [
@@ -103,6 +104,121 @@ def add_evidence(row, item):
         row['evidence'].append(item)
 
 
+def finalize_technical_gate(ledger, tests, tasks):
+    """Promote only after the exact installed cuts have been reconciled."""
+    report_path = 'execution/final-installed-reconciliation.json'
+    report = json.loads((BASE / report_path).read_text('utf-8'))
+    assert report['status'] == 'PASS_SCOPED_INSTALLED'
+    assert report['source_candidate'] == FINAL
+    assert report['failures'] == report['errors'] == report['not_run'] == 0
+    assert report['required_cancel_nodes_passed'] == 8
+    assert report['required_render_nodes_passed'] >= 17
+    assert report['legacy_nodes_passed'] == 3
+    for identity in ('QC-T-C02', 'QC-T-G08'):
+        test = tests[identity]
+        test['status'] = 'PASS'
+        test['execution_notes'] = (
+            'PASS on the final installed wheel: unmapped-CWD basename review and honest '
+            'negative/customization/EOF cancellation preserve checkpoints without Test replay. '
+            'QC35 a36 failure and QC39 source red/green remain separate antecedents.')
+        test['evidence'].append(evidence(report_path, test['execution_notes'], FINAL))
+    tests['QC-T-H09']['status'] = 'PASS'
+    tests['QC-T-H09']['execution_notes'] = (
+        'PASS: installed renderer/outcome contracts plus direct installed-helper argv echo '
+        'on PowerShell7.6.10 and WSL2 sh/dash preserve quotes/Unicode/metacharacters. '
+        'PowerShell5.1 refuses before invocation; cmd rendering is unsupported. '
+        'Only inert echo runs, never Nexus/provider work; public resume keeps exact root/topology.')
+    tests['QC-T-H09']['evidence'].extend([
+        evidence(report_path, 'Final installed renderer and output nodes; no source import.', FINAL),
+        evidence('execution/qc36-final-package/installed-shells/qualification.json',
+                 tests['QC-T-H09']['execution_notes'], FINAL),
+    ])
+    console_path = 'execution/qc36-final-package/installed-console/qualification.json'
+    console = json.loads((BASE / console_path).read_text('utf-8'))
+    assert console['status'].startswith('PASS')
+    assert console['source_candidate'] == FINAL and console['passed'] == 2 and console['failed'] == 0
+    assert console['payload_files'] == 1028 and not console['payload_drift'] and not console['source_drift']
+    tests['QC-T-G09']['evidence'].append(evidence(console_path,
+        'Final installed candidate repeats original Ctrl-C130/checkpoint/no-binding-grant '
+        'and resize/confirm/resume tests in two owned hidden Windows consoles. '
+        'One intended own-console CTRL_C_EVENT, zero containment; no user/RTK console signal.', FINAL))
+    tests['QC-T-I08']['evidence'].append(evidence(
+        'execution/qc36-final-package/qualification.json',
+        'Final wheel/sdist build, installed entrypoints, dependency gates and exact1028 payloads. '
+        'The original broad regression remains NOT_GREEN.', FINAL))
+    for task in tasks.values():
+        if task['id'] in ('QC-031', 'QC-033'):
+            continue
+        task['status'] = 'VERIFIED'
+        task['execution_notes'] = (
+            'VERIFIED for the literal technical acceptance in declared fixture/HTTP/SQLite, '
+            'installed and platform cuts. Shared I09 membership does not qualify a real provider. '
+            'Original broad regression and prior human/AT blockers remain independent gates.')
+        if task['id'] == 'QC-030':
+            task['execution_notes'] += (
+                ' Windows owned console, PowerShell7.6.10 and WSL2 are the observed environments; '
+                'no universal PTY/OS/Python or installed-Scheduler/relogin claim.')
+        add_evidence(task, evidence('execution/final-delivery.md', task['execution_notes'], FINAL))
+        add_evidence(task, evidence(report_path, 'Final installed regression and exact affected nodes.', FINAL))
+    add_evidence(tasks['QC-032'], evidence('execution/documentation-review.json',
+        'Repository guide reviewed against grammar, authority, recovery, shell limits and rollback. '
+        'Guide is not part of the wheel/sdist payload.', FINAL))
+    add_evidence(tasks['QC-030'], evidence(console_path,
+        'Two original real-console nodes pass on final installed wheel; declared Windows console only.', FINAL))
+    tasks['QC-031']['status'] = 'BLOCKED'
+    tasks['QC-033']['status'] = 'IMPLEMENTED'
+    tasks['QC-033']['execution_notes'] = (
+        'Packaging, rollback and gate decision are implemented; G6 is not approved. '
+        'QC031 real campaign remains BLOCKED and the original broad regression is NOT_GREEN.')
+    add_evidence(tasks['QC-033'], evidence('execution/final-delivery.md',
+        tasks['QC-033']['execution_notes'], FINAL))
+    scopes = {
+        'QC-R01': 'Short grammar and original legacy nodes; no implicit public-ID adoption.',
+        'QC-R02': 'Allowlisted aliases share dispatch without shell/subprocess redispatch.',
+        'QC-R03': 'Captured CWD, explicit root and physical identity; Windows junction and WSL filesystem cuts.',
+        'QC-R04': 'Authorized complete project directory, duplicate choices, registered ancestor and pre-consent cancellation.',
+        'QC-R05': 'Bounded local Git hints, explicit/saved precedence and truthful fallbacks; injected reader faults remain labeled.',
+        'QC-R06': 'Monorepo, clone and worktree name hints never expand the approved execution root.',
+        'QC-R07': 'Safe explicit family/candidate/policy choices; incomplete Claude fixture reaches provider-home fence, not real onboarding.',
+        'QC-R08': 'Manual/automatic public IDs, occupied suffixes and independently approved new intent.',
+        'QC-R09': 'Server/workspace uniqueness, real reserve race, two databases and registered executors; not two physical hosts.',
+        'QC-R10': 'Public ID in CLI and existing English UI; technical profile remains advanced metadata.',
+        'QC-R11': 'Explicit collision choices and same-intent recovery; no overwriting or uncertain replay.',
+        'QC-R12': 'Exact context/first connection preservation in scoped technical tests; original broad regression remains NOT_GREEN.',
+        'QC-R13': 'One final review, fresh customization hashes and truthful cancellation/EOF in installed candidate.',
+        'QC-R14': 'Bound full-reference success and explicit partial states; safe public resume rendering preserves authority.',
+        'QC-R15': 'Noninteractive JSON/closed PIPE, explicit ambiguity refusal and no exit0-to-connected inference.',
+        'QC-R16': 'Canonical reservation/Finish/receipt and one real foreground service; model/version peers are synthetic.',
+        'QC-R17': 'Remote operator exact tuple/topology, no operator CWD transferred to Connector; loopback remote view, not two machines.',
+        'QC-R18': 'Existing Home/catalog projection and two exact canonical sessions in browser; no human/AT acceptance.',
+        'QC-R19': 'Legacy omission hashes, metadata-only adoption, unknown fields and original shortcut/multi-harness nodes.',
+    }
+    for requirement in ledger['requirements']:
+        identity = requirement['id']
+        if identity in scopes:
+            requirement['status'] = 'VERIFIED'
+            requirement['execution_notes'] = 'VERIFIED within cited technical boundaries: ' + scopes[identity]
+        else:
+            assert identity == 'QC-R20'
+            requirement['status'] = 'PARTIAL'
+            requirement['execution_notes'] = (
+                'Technical layer/provenance proofs are complete; real-provider qualification is BLOCKED '
+                'and original broad regression NOT_GREEN. No global qualification asserted.')
+        requirement['evidence'] = [evidence('execution/final-delivery.md',
+            requirement['execution_notes'], FINAL), evidence(report_path,
+            'Final installed gate; scenario-specific historical evidence remains on each test row.', FINAL)]
+    ledger['execution'].update(candidate=FINAL,
+        implementation_gate='COMPLETE: scoped functional implementation and final installed regression',
+        qualification_gate='BLOCKED: QC031 real campaign, original broad NOT_GREEN and prior UI human gates retained',
+        limitations=[
+            'Original UI-R1 human/qualification blockers and UNKNOWN campaign usage remain unchanged.',
+            'No provider calls, authentication access, personal install changes or Windows session events.',
+            'Earlier malformed browser history and unattributed digest remain antecedents; later valid two-session proof is separate.',
+            'Owned Windows-console Ctrl-C130/resize also passed on final installed candidate; not a universal PTY claim.',
+            'PowerShell7.6.10/WSL2 sh tested; PS5.1 refuses, cmd rendering and native Linux/Python3.11/3.12 matrix unqualified.',
+        ])
+
+
 def main():
     target = BASE / 'NEXUS_QUICK_CONNECT_LEDGER_R1.json'
     ledger = json.loads(target.read_text('utf-8'))
@@ -173,6 +289,10 @@ def main():
         scenario_status_semantics='PARTIAL uses normative NOT_RUN plus execution_notes; PASS proves only the cited literal boundary.',
         scenario_counts=dict(Counter(row['status'] for row in tests.values())),
         original_broad_gate='NOT_GREEN: failures, hung tests, incomplete remainders and mixed child provenance retained')
+    if FINAL_CANCELLATION_QUALIFIED or FINAL_SHELL_RENDER_QUALIFIED:
+        assert FINAL_CANCELLATION_QUALIFIED and FINAL_SHELL_RENDER_QUALIFIED
+        finalize_technical_gate(ledger, tests, tasks)
+        ledger['execution']['scenario_counts'] = dict(Counter(row['status'] for row in tests.values()))
     target.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(ledger['execution']['scenario_counts']))
 

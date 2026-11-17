@@ -1,0 +1,211 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-i4u7k1l1\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\nexus-qc36-installed-ubdefedx\tree
+configfile: ..\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.5.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 394 items
+
+..\tree\tests\quick_connect\test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv0-codex-app] PASSED [  0%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv1-codex-None] PASSED [  0%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv2-None-None] PASSED [  0%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv3-codex-None] PASSED [  1%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv4-codex-Minha aplica\xe7\xe3o] PASSED [  1%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv5-codex-My App] PASSED [  1%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv6-claude-None] PASSED [  1%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_positionals_normalize_only_harness_and_preserve_project_label[argv7-codxe-None] PASSED [  2%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_legacy_path_flags_and_defaults_keep_their_original_types PASSED [  2%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv0] PASSED [  2%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv1] PASSED [  2%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv2] PASSED [  3%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv3] PASSED [  3%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv4] PASSED [  3%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv5] PASSED [  3%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv6] PASSED [  4%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv7] PASSED [  4%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv8] PASSED [  4%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv9] PASSED [  4%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv10] PASSED [  5%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv11] PASSED [  5%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv12] PASSED [  5%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv13] PASSED [  5%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv14] PASSED [  6%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv15] PASSED [  6%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv16] PASSED [  6%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv17] PASSED [  6%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_conflicting_or_invalid_grammar_fails_before_any_execution[argv18] PASSED [  7%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_service_value_arity_is_removed_before_positional_parsing PASSED [  7%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_config_flag_set_is_derived_from_the_real_configuration_tables PASSED [  7%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_service_validation_uses_real_parsers_without_loading_configuration PASSED [  7%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_discovery_paths_are_structural_and_never_resolved_or_probed PASSED [  8%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail0] PASSED [  8%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail1] PASSED [  8%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail2] PASSED [  8%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail3] PASSED [  9%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_discovery_pair_duplicate_and_absolute_path_rules_are_preserved[tail4] PASSED [  9%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_discovery_roots_deduplicate_lexically_with_the_existing_32_root_budget PASSED [  9%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_managed_mode_is_consumed_but_participant_options_are_left_for_its_real_parser PASSED [  9%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_help_is_immediate_and_uses_the_single_harness_registry PASSED [ 10%]
+..\tree\tests\quick_connect\test_connect_arguments.py::test_parsing_never_reads_stdin_environment_files_or_runs_processes PASSED [ 10%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags0] PASSED [ 10%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags1] PASSED [ 10%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags2] PASSED [ 11%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags3] PASSED [ 11%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags4] PASSED [ 11%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags5] PASSED [ 11%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags6] PASSED [ 12%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags7] PASSED [ 12%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags8] PASSED [ 12%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags9] PASSED [ 12%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags10] PASSED [ 13%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_entry[flags11] PASSED [ 13%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags0] PASSED [ 13%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags1] PASSED [ 13%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags2] PASSED [ 14%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags3] PASSED [ 14%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags4] PASSED [ 14%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags5] PASSED [ 14%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags6] PASSED [ 15%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags7] PASSED [ 15%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags8] PASSED [ 15%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags9] PASSED [ 15%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags10] PASSED [ 16%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags11] PASSED [ 16%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags12] PASSED [ 16%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags13] PASSED [ 17%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags14] PASSED [ 17%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_legacy_selectors[flags15] PASSED [ 17%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags0-False] PASSED [ 17%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags1-False] PASSED [ 18%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags2-False] PASSED [ 18%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_quick_route_and_saved_checkpoint_reach_prepare[flags3-True] PASSED [ 18%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-False-CONNECT_ID_UNSUPPORTED_SERVER-local] PASSED [ 18%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-False-CONNECT_ID_UNSUPPORTED_SERVER-remote] PASSED [ 19%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[405-None-False-CONNECT_ID_UNSUPPORTED_SERVER-local] PASSED [ 19%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[405-None-False-CONNECT_ID_UNSUPPORTED_SERVER-remote] PASSED [ 19%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-True-CONNECT_ID_UNSUPPORTED_SERVER-local] PASSED [ 19%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[404-None-True-CONNECT_ID_UNSUPPORTED_SERVER-remote] PASSED [ 20%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[401-AUTH_FAILED-False-AUTH_FAILED-local] PASSED [ 20%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[401-AUTH_FAILED-False-AUTH_FAILED-remote] PASSED [ 20%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[403-PERMISSION_DENIED-False-PERMISSION_DENIED-local] PASSED [ 20%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[403-PERMISSION_DENIED-False-PERMISSION_DENIED-remote] PASSED [ 21%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[403-HTTP_ERROR-False-HTTP_ERROR-local] PASSED [ 21%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[403-HTTP_ERROR-False-HTTP_ERROR-remote] PASSED [ 21%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[403-None-False-REQUEST_REFUSED-local] PASSED [ 21%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[403-None-False-REQUEST_REFUSED-remote] PASSED [ 22%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[500-HTTP_ERROR-False-HTTP_ERROR-local] PASSED [ 22%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_http_status_is_precise[500-HTTP_ERROR-False-HTTP_ERROR-remote] PASSED [ 22%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_network_refusal_is_not_unsupported[local] PASSED [ 22%]
+..\tree\tests\quick_connect\test_entry_compatibility.py::test_public_id_network_refusal_is_not_unsupported[remote] PASSED [ 23%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[https://example.invalid/org/project.git] PASSED [ 23%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[git@example.invalid:org/project.git] PASSED [ 23%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[ssh://git@example.invalid:2222/org/project.git] PASSED [ 23%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[file:///srv/git/project.git] PASSED [ 24%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[/srv/git/project.git] PASSED [ 24%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[C:\\repos\\project.git] PASSED [ 24%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[relative/project.git] PASSED [ 24%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_origin_formats_are_local_text_and_never_disclose_url[https://user:PRIVATE@example.invalid/org/project.git?token=PRIVATE#PRIVATE] PASSED [ 25%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_subdirectory_keeps_physical_root_and_nearest_repository PASSED [ 25%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_no_origin_uses_worktree_not_upstream PASSED [ 25%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_distinct_origins_ambiguous_even_with_same_basename PASSED [ 25%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_exact_duplicate_origins_are_not_ambiguous PASSED [ 26%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%2fname.git] PASSED [ 26%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%5cname.git] PASSED [ 26%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad%0aname.git] PASSED [ 26%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\x1bname.git] PASSED [ 27%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\u200bname.git] PASSED [ 27%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/.git] PASSED [ 27%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://host.invalid/bad\xa0name.git] PASSED [ 27%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[https://:123/project.git] PASSED [ 28%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[ext::evil command] PASSED [ 28%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_invalid_origin_falls_back_without_echo[origin9] PASSED [ 28%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_local_includes_and_global_config_are_not_origin_sources PASSED [ 28%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_gitfile_and_worktree_only_origin PASSED [ 29%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_case_insensitive_git_environment_overrides_do_not_redirect PASSED [ 29%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_plan_and_invalid_directory_never_resolve_or_spawn_git PASSED [ 29%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_no_git_and_non_repository_are_explicit PASSED [ 29%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_path_search_rejects_project_relative_and_symlink_candidates PASSED [ 30%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_path_search_does_not_follow_external_symlink_into_project PASSED [ 30%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_path_search_has_entry_and_time_budgets PASSED [ 30%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_non_repository_and_malformed_config_never_leak_diagnostics PASSED [ 30%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_directory_without_usable_name_does_not_invent_one PASSED [ 31%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_safe_utf8_and_terminal_git_suffix_only_are_preserved PASSED [ 31%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_discovery_deadline_includes_executable_resolution PASSED [ 31%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_failed_ownership_is_not_overridden_or_echoed PASSED [ 31%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_spawn_contract_is_bounded_read_only_and_cleans_environment PASSED [ 32%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_deadline_and_call_limit_reap_owned_children PASSED [ 32%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_deadline_is_shared_and_does_not_restart_between_calls PASSED [ 32%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_parent_exit_with_inherited_pipe_does_not_block_or_kill_descendant PASSED [ 32%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[stdout] PASSED [ 33%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[stderr] PASSED [ 33%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_output_limit_is_combined_and_reaps_owned_child[combined] PASSED [ 33%]
+..\tree\tests\quick_connect\test_git_project_hint.py::test_metadata_hint_is_not_an_identity_or_root_selector PASSED [ 34%]
+..\tree\tests\quick_connect\test_git_remaining.py::test_origin_wins_over_other_remote_names PASSED [ 34%]
+..\tree\tests\quick_connect\test_git_remaining.py::test_reader_fault_reaches_cli_fallback_without_implicit_test[timeout-git_timeout] PASSED [ 34%]
+..\tree\tests\quick_connect\test_git_remaining.py::test_reader_fault_reaches_cli_fallback_without_implicit_test[invalid-output-git_config_unavailable] PASSED [ 34%]
+..\tree\tests\quick_connect\test_git_remaining.py::test_two_local_clones_same_origin_have_distinct_workspace_namespaces PASSED [ 35%]
+..\tree\tests\quick_connect\test_git_remaining.py::test_explicit_project_reads_its_origin_while_cwd_stays_elsewhere PASSED [ 35%]
+..\tree\tests\quick_connect\test_git_remaining.py::test_dubious_ownership_diagnostic_never_changes_safe_directory PASSED [ 35%]
+..\tree\tests\quick_connect\test_git_remaining.py::test_real_repository_help_and_plan_never_execute_git PASSED [ 35%]
+..\tree\tests\quick_connect\test_git_remaining.py::test_real_bare_repository_has_explicit_directory_fallback_not_origin_identity PASSED [ 36%]
+..\tree\tests\quick_connect\test_id_choice_scenarios.py::test_explicit_resume_uses_actual_binding_family[F03-same-family] PASSED [ 36%]
+..\tree\tests\quick_connect\test_id_choice_scenarios.py::test_explicit_resume_uses_actual_binding_family[F04-cross-family-explicit-resume] PASSED [ 36%]
+..\tree\tests\quick_connect\test_id_choice_scenarios.py::test_alternate_id_has_new_unapproved_review_then_exact_profile_apply[F05-manual-id] PASSED [ 36%]
+..\tree\tests\quick_connect\test_id_choice_scenarios.py::test_alternate_id_has_new_unapproved_review_then_exact_profile_apply[F06-suggested-id] PASSED [ 37%]
+..\tree\tests\quick_connect\test_id_choice_scenarios.py::test_cancel_reports_lifecycle_and_metadata_without_false_no_effect_claim PASSED [ 37%]
+..\tree\tests\quick_connect\test_id_choice_scenarios.py::test_explicit_add_never_offers_resume_or_accepts_r PASSED [ 37%]
+..\tree\tests\quick_connect\test_id_choice_scenarios.py::test_json_cross_family_conflict_never_reads_stdin PASSED [ 37%]
+..\tree\tests\quick_connect\test_id_choice_scenarios.py::test_exact_binding_contradiction_is_refused_before_collision_menu PASSED [ 38%]
+..\tree\tests\quick_connect\test_id_choice_scenarios.py::test_other_intent_reservation_remains_pending_without_another_setup PASSED [ 38%]
+..\tree\tests\quick_connect\test_pending_selector_fences.py::test_pending_finish_rejects_changed_selector_then_recovers_same_receipt[harness] PASSED [ 38%]
+..\tree\tests\quick_connect\test_pending_selector_fences.py::test_pending_finish_rejects_changed_selector_then_recovers_same_receipt[root] PASSED [ 38%]
+..\tree\tests\quick_connect\test_pending_selector_fences.py::test_pending_finish_rejects_changed_selector_then_recovers_same_receipt[id] PASSED [ 39%]
+..\tree\tests\quick_connect\test_pending_selector_fences.py::test_non_operator_http_denial_does_not_reveal_namespace_occupant PASSED [ 39%]
+..\tree\tests\quick_connect\test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[2-claude] FAILED [ 39%]
+
+================================== FAILURES ===================================
+_________ test_bare_two_families_explicit_choice_or_cancel[2-claude] __________
+C:\Users\jpamb\AppData\Local\Temp\nexus-qc36-installed-ubdefedx\tree\tests\quick_connect\test_qc15_cli_choices.py:89: in test_bare_two_families_explicit_choice_or_cancel
+    assert code == 3 and 'PROVIDER_HOME_REQUIRED' in out, out
+E   AssertionError: Choose a supported harness (listing does not test login or run a version command):
+E     1. codex — observed; FRESH
+E     2. claude — observed; FRESH
+E     3. pi — not confirmed in inventory; FRESH
+E     c. Cancel
+E     Agent: workspace-b4595756ba84 | Harness: claude_stream
+E     Create identity: Claude — workspace | Role: Project assistant
+E     Coordination: visible collaborators, direct/channel messages, workspace handoffs, artifacts and events.
+E     No broadcasts, channel creation, capability changes, experimental memory or global administration.
+E     Communication limits: 60 messages/minute; 10 recipients.
+E     Project: C:\Users\jpamb\AppData\Local\Temp\nexus-qc36-installed-ubdefedx\tmp\pytest-of-unknown\pytest-0\test_bare_two_families_explici0\workspace
+E     Workspace: create workspace
+E     ID do Harness (proposed): claude
+E     Project name source: directory
+E     Invocation directory: C:\Users\jpamb\AppData\Local\Temp\nexus-qc36-installed-ubdefedx\tmp\pytest-of-unknown\pytest-0\test_bare_two_families_explici0\workspace
+E     Execution host: exe_494ce0be2530a4f3eed2447fb240cad0
+E     Provider home: C:\Users\jpamb\AppData\Local\Temp\nexus-qc36-installed-ubdefedx\claude_config_dir
+E     The selected executable will run its version check before the connection test.
+E     - Create this project identity at Finish with the reviewed coordination permissions; no global administration is granted.
+E     - Use the selected agent and project workspace through the existing managed connection.
+E     - Allow authorized sessions and eligible Nexus messages for 60 minutes and at most 20 runtime actions.
+E     - Keep native tool decisions and existing model/project instructions; no sandbox settings are replaced.
+E     - The connection test opens the harness and requests a model response; provider usage may be charged.
+E     - Finish saves the connection and execution grant. It does not submit a project task.
+E     - Enable Server-wide human review (feature_hitl) at Finish for native decisions and matching coordination approval rules. Each decision still requires its authorized recipient; no permission is approved automatically.
+E     - Automatic handoff claiming is disabled for this new identity; work still requires canonical authorization.
+E     Startup: keep the current service mode. Optional user login startup: --start-at-login.
+E     Review revision: a16b3c83f8ddea3a7105ff27567a2091f5e46c292eb1a40f74d7d6a8b8f1e92f
+E     
+E   assert (0 == 3)
+============================== warnings summary ===============================
+..\..\nexus-qc-r1-package-i4u7k1l1\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-qc-r1-package-i4u7k1l1\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-qc36-installed-ubdefedx\reports\tests.xml -
+=========================== short test summary info ===========================
+FAILED ..\tree\tests\quick_connect\test_qc15_cli_choices.py::test_bare_two_families_explicit_choice_or_cancel[2-claude]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+============ 1 failed, 155 passed, 1 warning in 177.90s (0:02:57) =============

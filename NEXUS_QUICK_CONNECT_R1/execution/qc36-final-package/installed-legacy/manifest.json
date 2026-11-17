@@ -1,0 +1,74 @@
+{
+  "files": [
+    {
+      "path": "evidence/collected.json",
+      "bytes": 402,
+      "sha256": "276d469b3b04bad6adcd8fd4a88efd0ebe964a548c4b67a53fcfab37bc329da9"
+    },
+    {
+      "path": "evidence/copied-tests.json",
+      "bytes": 104636,
+      "sha256": "71315ac17acc428832846f1170d472201910469d2f9d0450b762bc0913e9b873"
+    },
+    {
+      "path": "evidence/inventory.json",
+      "bytes": 896,
+      "sha256": "56cd5d3f7eeb177d23dabf91d14e703e6f7c2bed4e2066d254a0122bd2f15714"
+    },
+    {
+      "path": "evidence/origins-end.json",
+      "bytes": 98443,
+      "sha256": "b693ce29ff038c4a36c345cc02df7b584c40e8d974775a61fecb92cad9244913"
+    },
+    {
+      "path": "evidence/origins-start.json",
+      "bytes": 19134,
+      "sha256": "54d219ec8d5e9fdc33b852971d11b8f05b52e779ae79cf61914625bdea9acc42"
+    },
+    {
+      "path": "evidence/payload-after.json",
+      "bytes": 125653,
+      "sha256": "a8a84fb05af71adeb7a81ab4e30103cadde6b6956ac34fff848fe1fa48fab2eb"
+    },
+    {
+      "path": "evidence/payload-before.json",
+      "bytes": 125653,
+      "sha256": "a8a84fb05af71adeb7a81ab4e30103cadde6b6956ac34fff848fe1fa48fab2eb"
+    },
+    {
+      "path": "evidence/phases.jsonl",
+      "bytes": 1918,
+      "sha256": "4dd41e76ed7d75352444f96fbc6b7db312606183b01ef3cebc04463da6cb49cf"
+    },
+    {
+      "path": "evidence/physical-cleanup.json",
+      "bytes": 313,
+      "sha256": "2277fa04fda27305f51583f8ee47c6646af7790539930ca090af65f199e742e0"
+    },
+    {
+      "path": "evidence/result.json",
+      "bytes": 3821,
+      "sha256": "0add031d3bff991b05057853bbbb28585bd58a27ff8dc85a03cd40ed17c06b57"
+    },
+    {
+      "path": "evidence/source-before.json",
+      "bytes": 218972,
+      "sha256": "139ceea460491191a6a584b12e9f3c238cb0df7144430c2ca81fdc1c8914a868"
+    },
+    {
+      "path": "evidence/stdout.log",
+      "bytes": 1738,
+      "sha256": "bd0a77fab51b80b1d7d2ac8dcb3e4400cf770f1663afee9fac5b471b3728b815"
+    },
+    {
+      "path": "evidence/tests.xml",
+      "bytes": 751,
+      "sha256": "1e7076beea56792d35749ff3e591ada3fdfcaaedf959529b68f2a8ad352c2993"
+    },
+    {
+      "path": "qualification.json",
+      "bytes": 1381,
+      "sha256": "5ffaccdae8ea6beb7ed331b5e5a8732a95cad424897450846739dafa0bbdbd01"
+    }
+  ]
+}

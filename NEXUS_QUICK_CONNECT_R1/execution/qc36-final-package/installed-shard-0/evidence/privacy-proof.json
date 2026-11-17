@@ -1,0 +1,17 @@
+{
+  "private_parameter": true,
+  "checkpoint_json_count": 2,
+  "compared_tables": [
+    "connection_setup_commits",
+    "execution_bindings",
+    "agent_endpoints",
+    "runtime_execution_grants",
+    "agent_execution_policies",
+    "agent_runtime_overrides"
+  ],
+  "resume_json_count": 2,
+  "pytest_log_messages": 0,
+  "private_origin_absent": true,
+  "git_config_is_excluded_input": true,
+  "telemetry_scope": "Only owned Nexus JSON checkpoints, compared SQLite tables, two resume JSONs and pytest-captured log messages"
+}

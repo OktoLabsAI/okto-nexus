@@ -1,0 +1,38 @@
+{
+  "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+  "scope": "Final local evidence checks; not global qualification",
+  "source_pins": {"files": 1804, "drift": [], "exit_code": 0},
+  "ruff": {
+    "exit_code": 0,
+    "rules": "E4,E7,E9,F with --isolated",
+    "scope": "connect, outcome, renderer, tests/quick_connect and both reconciliation tools"
+  },
+  "evidence_scan": {
+    "files": 2274,
+    "bytes": 45195975,
+    "matches": [],
+    "exit_code": 0,
+    "limits": "Configured credential-shaped regexes only; no universal secrecy assertion"
+  },
+  "git_diff_check": {
+    "exit_code": 0,
+    "scope": "src tests tools docs .gitattributes",
+    "historical_log_false_positive": "The immutable QC09 pytest summary with seven leading equals signs remains documented in qualification-decisions.md."
+  },
+  "installed_final_cuts": {"passed": 561, "skipped": 8, "failed": 0, "errors": 0, "not_run": 0},
+  "separate_final_console_nodes": {"passed": 2, "failed": 0, "intentional_own_console_ctrl_c_events": 1},
+  "ledger_integrity": {
+    "exit_code": 0,
+    "scenario_counts": {"PASS": 146, "BLOCKED": 1},
+    "task_counts": {"VERIFIED": 31, "IMPLEMENTED": 1, "BLOCKED": 1},
+    "requirement_counts": {"VERIFIED": 19, "PARTIAL": 1},
+    "normative_specification_drift": false
+  },
+  "remote_ci": {"run_id": 44069356661, "status": "queued", "conclusion": null},
+  "retained_gates": [
+    "Original broad regression NOT_GREEN, including original failures and incomplete remainders",
+    "QC031/I09 real-provider campaign BLOCKED and prior UNKNOWN usage guard retained",
+    "Original UI-R1 human/qualification blockers unchanged",
+    "No universal OS/Python/AT/terminal or Windows session-event qualification"
+  ]
+}

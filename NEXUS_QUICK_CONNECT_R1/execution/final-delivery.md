@@ -40,9 +40,42 @@ Build/install/entrypoint smoke/Twine/dependency checks passed. All 1,028 payload
 files (733 Nexus, 168 Core, 127 Connector) equal the exact wheels; Nexus also
 matches checkout, isolated build source and sdist. All 1,804 source pins have
 zero drift. See [QC36 package qualification](qc36-final-package/qualification.json).
-Installed regressions are in progress; their actual reports and counts will
-replace this pending annotation. Earlier artifacts and prefixes remain
-immutable and are not relabeled as this candidate.
+The three explicit final installed cuts completed **561 PASS / 8 SKIP /
+0 FAIL / 0 ERROR / 0 NOT_RUN**: shard 0 (164/8), final shard 1 (394/0), and
+three unchanged legacy nodes. Application/Core/Connector origins resolve into
+the installed prefix; copied helpers contain no application `src` tree.
+See [installed reconciliation](final-installed-reconciliation.json).
+The eight skips are three POSIX filesystem tests on Windows and five tests
+requiring a real terminal while this runner deliberately uses closed PIPE.
+They remain skips, with separately scoped WSL/console evidence.
+
+Two earlier cuts remain failed/incomplete. The original shard 1 had
+155 PASS / 1 FAIL / 238 NOT_RUN because its runner created an empty Claude home
+although the scenario requires that path absent. An unchanged-test focal
+passed 8/8 with an explicitly nonexistent owned path. The next cut had
+133 PASS / 1 FAIL / 260 NOT_RUN: a metadata test observed a directory fallback;
+its reason was not recorded and is not retrospectively attributed. The final
+full cut records its actual first/second origin results (146/176 ms) without
+changing the result, test, Git budget or application. These antecedents are
+retained alongside the full positive cut, not counted twice or relabeled.
+
+Direct [installed-helper shell proof](qc36-final-package/installed-shells/qualification.json)
+also passed; its 1,028 payload files stayed unchanged. All final cut process,
+owned-root and listener cleanup checks passed without signals. Earlier
+artifacts and prefixes remain immutable and are not relabeled as this candidate.
+
+Separately, [two real owned-console tests](qc36-final-package/installed-console/qualification.json)
+passed on this final installed wheel: Ctrl-C130 preserves checkpoint/no binding
+or grant, and resize 50→100 columns with confirm/resume performs exactly one
+synthetic Test/probe. One intentional CTRL_C_EVENT went only to the owned hidden
+console; no containment or user/RTK console signal. All own Python clients,
+windows and observed console hosts exited. These two nodes do not convert the
+five PIPE skips into passes of that separate runner.
+
+The execution ledger separates 146 scoped scenario PASS results from I09
+BLOCKED. Functional technical tasks can be verified in their cited layers;
+QC-031 remains BLOCKED and QC-033 IMPLEMENTED with G6 unapproved. R01–R19 are
+technically verified within their stated boundaries; R20 remains PARTIAL.
 
 ## Retained qualification blockers
 
@@ -58,12 +91,15 @@ immutable and are not relabeled as this candidate.
 * Original UI-R1 human and qualification blockers are preserved. No additional
   human, assistive-technology or Windows session-event test is claimed.
 * Real owned Windows-console Ctrl-C (CLI 130) and resize counterparts passed,
-  separately from the earlier tool-transport interruption. They never signaled
-  the user/RTK console. Their artifact/source versions remain explicit.
-* WSL2 Python 3.13.1 supplied 202 isolated installed path/parser/Git checks.
+  including two fresh final-wheel nodes, separately from the earlier
+  tool-transport interruption. They never signaled the user/RTK console.
+* WSL2 Python 3.13.1 supplied 202 isolated installed path/parser/Git checks on
+  the earlier a36 artifact; unchanged path/Git modules are version-scoped there.
   WSL is not native Linux CI, a general OS/Python matrix, Scheduler installation
   or relogin qualification. The same-service test uses a genuine foreground
   Server, ServeLock, listener and lifecycle resolver, with synthetic model Test.
+* The GitHub installed-regression run for source commit `9bc40346` was observed
+  queued, with no conclusion. Local proof does not assert a remote CI pass.
 
 ## Migration and rollback
 

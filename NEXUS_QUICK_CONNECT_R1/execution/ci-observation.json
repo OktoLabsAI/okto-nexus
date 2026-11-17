@@ -1,0 +1,14 @@
+{
+  "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+  "scope": "GitHub connector observation; not a CI pass",
+  "workflow": "Nexus installed regression",
+  "run_id": 44069356661,
+  "run_number": 310,
+  "status": "queued",
+  "conclusion": null,
+  "url": "https://github.com/OktoLabsAI/okto-nexus/actions/runs/44069356661",
+  "limitations": [
+    "Observation for source commit only; final evidence-only HEAD may have a separate run.",
+    "No inference about queue reason or eventual outcome."
+  ]
+}

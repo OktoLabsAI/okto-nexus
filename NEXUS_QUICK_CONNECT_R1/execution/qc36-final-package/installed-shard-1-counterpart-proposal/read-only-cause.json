@@ -1,0 +1,12 @@
+{
+  "original_runner_sha256": "16fa286b53398e292c4f6549d4cb79a8495351de9a47af474493b3309af11f4e",
+  "counterpart_runner_sha256": "04f65112cc06043778e87137f9859de96d15cd794149b73a650fd2fd2b5f71d8",
+  "original_code_lines": "    for name in ['CODEX_HOME','CLAUDE_CONFIG_DIR']:\n        directory=root/name.lower();directory.mkdir();env[name]=str(directory)\n",
+  "original_created_claude_directory": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc36-installed-ubdefedx\\claude_config_dir",
+    "exists": true,
+    "children": 0
+  },
+  "original_scope": "Installed shard1 argv/result preserved in installed-shard-1; environment was constructed by these exact runner lines, not package.environment.",
+  "counterpart": "Only Claude environment path existence changes. Own HOME/USERPROFILE, allowlist, installed artifacts, test bodies, original runner and original failed cut remain unchanged."
+}

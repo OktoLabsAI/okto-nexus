@@ -1,0 +1,7 @@
+{
+  "scope": "Only remove fail-fast -x; observe exactly one Git test through identity-returning wrapper restored in finally.",
+  "prior_runner_sha256": "04f65112cc06043778e87137f9859de96d15cd794149b73a650fd2fd2b5f71d8",
+  "final_runner_sha256": "f9a3c6edb2b146ef5509d81ef5bcd73259726ff1479a88e72e79477f59d73f15",
+  "no_test_product_budget_prefix_change": true,
+  "concurrency": "No other suite active per Root."
+}
