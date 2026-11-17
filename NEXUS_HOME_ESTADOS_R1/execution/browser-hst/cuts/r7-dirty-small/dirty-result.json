@@ -1,0 +1,40 @@
+{
+  "status": "READY_REAL_LOGOUT",
+  "checks": [
+    {
+      "id": "fresh-original-question-window",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "a-canonical-session-on-form",
+      "ok": true,
+      "detail": "ses_45484dae57343092638d834138e72c9f"
+    },
+    {
+      "id": "escape-cancel-keeps-exact-draft",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "modal-prevents-project-switch-bypass",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "b-new-occurrence-no-copied-answer",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "no-ui-post-before-auth-revocation",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "posts": [],
+  "limits": [
+    "Actual modal prevents switching directly while open. Project change follows explicit Escape discard; no forced DOM onchange.",
+    "Fresh separate B occurrence; no decision/TTL renewal"
+  ]
+}

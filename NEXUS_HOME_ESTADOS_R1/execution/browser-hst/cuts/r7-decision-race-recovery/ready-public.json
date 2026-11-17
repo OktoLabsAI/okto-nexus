@@ -1,0 +1,50 @@
+{
+  "url": "http://127.0.0.1:54776",
+  "server_id": "srv_5689ac987d5059c903e49c0d19c75975",
+  "workspace_id": "wsr_578d2d26d746811981d80be1e2c6ff77",
+  "references": [
+    {
+      "server_id": "srv_5689ac987d5059c903e49c0d19c75975",
+      "executor_id": "exe_1fc24c792ad4095ceb86db7a1434d0bd",
+      "binding_id": "bind_52d616034848d833c4aec8e4182bdac6",
+      "endpoint_id": "ep_137b4215b855e619241cfa0e3e444364",
+      "agent_id": "hst-worker",
+      "workspace_id": "wsr_578d2d26d746811981d80be1e2c6ff77",
+      "workspace_binding_id": "wxb_db418213f6dd0799dc5e424408fb0ff1"
+    }
+  ],
+  "sessions": [
+    {
+      "session_id": "ses_5f5d8ce46748aca54dec19f63f8607a7",
+      "reference": {
+        "server_id": "srv_5689ac987d5059c903e49c0d19c75975",
+        "executor_id": "exe_1fc24c792ad4095ceb86db7a1434d0bd",
+        "binding_id": "bind_52d616034848d833c4aec8e4182bdac6",
+        "endpoint_id": "ep_137b4215b855e619241cfa0e3e444364",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_578d2d26d746811981d80be1e2c6ff77",
+        "workspace_binding_id": "wxb_db418213f6dd0799dc5e424408fb0ff1"
+      },
+      "text": "HST synthetic output ses_5f5d8ce46748aca54dec19f63f8607a7",
+      "closed": false
+    },
+    {
+      "session_id": "ses_e62d4ad65ec5de70bbcc5a7766486546",
+      "reference": {
+        "server_id": "srv_5689ac987d5059c903e49c0d19c75975",
+        "executor_id": "exe_1fc24c792ad4095ceb86db7a1434d0bd",
+        "binding_id": "bind_52d616034848d833c4aec8e4182bdac6",
+        "endpoint_id": "ep_137b4215b855e619241cfa0e3e444364",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_578d2d26d746811981d80be1e2c6ff77",
+        "workspace_binding_id": "wxb_db418213f6dd0799dc5e424408fb0ff1"
+      },
+      "text": "HST synthetic output ses_e62d4ad65ec5de70bbcc5a7766486546",
+      "closed": false
+    }
+  ],
+  "card_id": "home_group_c9672e72f22118481839d0309306b754376c4c682188fd9f364d93f6c5251e2e",
+  "mode": "question",
+  "j5": null,
+  "provider_invocations": 0
+}

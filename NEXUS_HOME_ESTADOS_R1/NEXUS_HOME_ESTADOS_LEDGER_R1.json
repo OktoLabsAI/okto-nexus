@@ -807,6 +807,15 @@
           "result": "FAIL: selected option lost, old form node disconnected and focus moved when presentation1 upgraded to2; zero POST",
           "artifact_path": "execution/browser-hst/cuts/r5-info-upgrade-observables/qualification.json",
           "limitations": "R5 antecedent retained. Normal physical exit0, but runtime-close helper reached its thirty-second guard before lifespan drain; not a timeout-free cleanup claim. R6 reader/UI correction awaits its own browser proof."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:58:07.072907+00:00",
+          "result": "PASS literal F14/I06 supported-browser predicates:9history positives,8draft/auth positives plus offline actual UI401 proof",
+          "artifact_path": "execution/browser-hst/remaining-report.md",
+          "command_or_procedure": "Review real reload/Back/Forward, exact retained target/full preflight scope, invalid-reference denial, Escape/discard/project/no-copy and canonical logout",
+          "environment": "Frozen R7 installed runtime; own Windows Chrome profiles and canonical inert-peer setup; no provider/human",
+          "limitations": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
         }
       ]
     },
@@ -1242,6 +1251,15 @@
           "result": "PASS_SUBSET14, FAIL1: actual Working producer mismatch; decision registered remains awaiting confirmation",
           "artifact_path": "execution/browser-hst/cuts/r3-question-decision/qualification.json",
           "limitations": "Core keeps receipt SUBMITTED while current progress exists. R5 correction in progress; no fabricated RUNNING receipt. Post-answer terminal cut not qualified; causal APPLIED proof unavailable."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/nextcuts/r7-decision-offline-derivative/qualification.json",
+          "result": "PASS literal D11/D12/H05 predicates: lost202/stale409, repeated same receipt, exactly one durable decision/write admission",
+          "command_or_procedure": "Review completed two-context Home/bell browser capture plus independent canonical SQLite snapshots; offline derivative asserts already observed facts",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "Original browser FAIL remains: an extra oracle inspected losing Home storage. Winner storage and final application-text assertion were not captured. Two UI submissions overlap but second transport waits for first acceptance; no simultaneous DB-transaction or native application/resume claim. GET initiators are not separately attributed."
         }
       ]
     },
@@ -2057,6 +2075,15 @@
           "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
           "artifact_path": "execution/frontend-r6-original/qualification.json",
           "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/nextcuts/r7-decision-offline-derivative/qualification.json",
+          "result": "PASS literal D11/D12/H05 predicates: lost202/stale409, repeated same receipt, exactly one durable decision/write admission",
+          "command_or_procedure": "Review completed two-context Home/bell browser capture plus independent canonical SQLite snapshots; offline derivative asserts already observed facts",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "Original browser FAIL remains: an extra oracle inspected losing Home storage. Winner storage and final application-text assertion were not captured. Two UI submissions overlap but second transport waits for first acceptance; no simultaneous DB-transaction or native application/resume claim. GET initiators are not separately attributed."
         }
       ]
     },
@@ -2327,6 +2354,24 @@
           "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
           "artifact_path": "execution/frontend-r6-original/qualification.json",
           "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/cuts/r7-context-paging-history-partial/context-finish-result.json",
+          "result": "PASS literal F05: actual stale409 then current200 in same DOM panel/selection, no mixed or duplicate option IDs",
+          "command_or_procedure": "Canonical paginated sessions, new canonical admission, stale next cursor and current reread; current Node controller evidence is separate",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "The enclosing cut later stopped at an unrelated RuntimeSession field oracle. F14 was reload-only and I06 not run there; those are not promoted by this evidence. Earlier beforeunload cleanup CTRL_BREAK is preserved separately."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:58:07.072907+00:00",
+          "result": "PASS literal F14/I06 supported-browser predicates:9history positives,8draft/auth positives plus offline actual UI401 proof",
+          "artifact_path": "execution/browser-hst/remaining-report.md",
+          "command_or_procedure": "Review real reload/Back/Forward, exact retained target/full preflight scope, invalid-reference denial, Escape/discard/project/no-copy and canonical logout",
+          "environment": "Frozen R7 installed runtime; own Windows Chrome profiles and canonical inert-peer setup; no provider/human",
+          "limitations": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
         }
       ]
     },
@@ -2410,6 +2455,24 @@
           "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
           "artifact_path": "execution/frontend-r6-original/qualification.json",
           "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/cuts/r7-context-paging-history-partial/context-finish-result.json",
+          "result": "PASS literal F05: actual stale409 then current200 in same DOM panel/selection, no mixed or duplicate option IDs",
+          "command_or_procedure": "Canonical paginated sessions, new canonical admission, stale next cursor and current reread; current Node controller evidence is separate",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "The enclosing cut later stopped at an unrelated RuntimeSession field oracle. F14 was reload-only and I06 not run there; those are not promoted by this evidence. Earlier beforeunload cleanup CTRL_BREAK is preserved separately."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:58:07.072907+00:00",
+          "result": "PASS literal F14/I06 supported-browser predicates:9history positives,8draft/auth positives plus offline actual UI401 proof",
+          "artifact_path": "execution/browser-hst/remaining-report.md",
+          "command_or_procedure": "Review real reload/Back/Forward, exact retained target/full preflight scope, invalid-reference denial, Escape/discard/project/no-copy and canonical logout",
+          "environment": "Frozen R7 installed runtime; own Windows Chrome profiles and canonical inert-peer setup; no provider/human",
+          "limitations": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
         }
       ]
     },
@@ -2503,6 +2566,24 @@
           "result": "FAIL: selected option lost, old form node disconnected and focus moved when presentation1 upgraded to2; zero POST",
           "artifact_path": "execution/browser-hst/cuts/r5-info-upgrade-observables/qualification.json",
           "limitations": "R5 antecedent retained. Normal physical exit0, but runtime-close helper reached its thirty-second guard before lifespan drain; not a timeout-free cleanup claim. R6 reader/UI correction awaits its own browser proof."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/cuts/r7-context-paging-history-partial/context-finish-result.json",
+          "result": "PASS literal F05: actual stale409 then current200 in same DOM panel/selection, no mixed or duplicate option IDs",
+          "command_or_procedure": "Canonical paginated sessions, new canonical admission, stale next cursor and current reread; current Node controller evidence is separate",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "The enclosing cut later stopped at an unrelated RuntimeSession field oracle. F14 was reload-only and I06 not run there; those are not promoted by this evidence. Earlier beforeunload cleanup CTRL_BREAK is preserved separately."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:58:07.072907+00:00",
+          "result": "PASS literal F14/I06 supported-browser predicates:9history positives,8draft/auth positives plus offline actual UI401 proof",
+          "artifact_path": "execution/browser-hst/remaining-report.md",
+          "command_or_procedure": "Review real reload/Back/Forward, exact retained target/full preflight scope, invalid-reference denial, Escape/discard/project/no-copy and canonical logout",
+          "environment": "Frozen R7 installed runtime; own Windows Chrome profiles and canonical inert-peer setup; no provider/human",
+          "limitations": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
         }
       ]
     },
@@ -2618,6 +2699,15 @@
           "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
           "artifact_path": "execution/frontend-r6-original/qualification.json",
           "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:58:07.072907+00:00",
+          "result": "PASS literal F14/I06 supported-browser predicates:9history positives,8draft/auth positives plus offline actual UI401 proof",
+          "artifact_path": "execution/browser-hst/remaining-report.md",
+          "command_or_procedure": "Review real reload/Back/Forward, exact retained target/full preflight scope, invalid-reference denial, Escape/discard/project/no-copy and canonical logout",
+          "environment": "Frozen R7 installed runtime; own Windows Chrome profiles and canonical inert-peer setup; no provider/human",
+          "limitations": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
         }
       ]
     },
@@ -2816,6 +2906,15 @@
           "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
           "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
           "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/cuts/r7-context-paging-history-partial/context-finish-result.json",
+          "result": "PASS literal F05: actual stale409 then current200 in same DOM panel/selection, no mixed or duplicate option IDs",
+          "command_or_procedure": "Canonical paginated sessions, new canonical admission, stale next cursor and current reread; current Node controller evidence is separate",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "The enclosing cut later stopped at an unrelated RuntimeSession field oracle. F14 was reload-only and I06 not run there; those are not promoted by this evidence. Earlier beforeunload cleanup CTRL_BREAK is preserved separately."
         }
       ]
     },
@@ -2962,6 +3061,24 @@
           "environment": "Windows; frozen R7 prefix;1828base+1test pins;1031payload files; isolated-I-B; no provider/browser/human",
           "result": "PASS7SOURCE/PASS7INSTALLED; first source6PASS/1invalid-seedFAIL retained; no runtime/pin/helper drift",
           "limitations": "A06 query-only private sibling proof. E08/E09/E16 are historical migrated read fixtures with real HTTP/SQLite; H02/H03 API only. H07 uses SQL negative grant revocation with canonical request/denied POST, not canonical revoke lifecycle. Full browser clauses remain unverified."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/nextcuts/r7-decision-offline-derivative/qualification.json",
+          "result": "PASS literal D11/D12/H05 predicates: lost202/stale409, repeated same receipt, exactly one durable decision/write admission",
+          "command_or_procedure": "Review completed two-context Home/bell browser capture plus independent canonical SQLite snapshots; offline derivative asserts already observed facts",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "Original browser FAIL remains: an extra oracle inspected losing Home storage. Winner storage and final application-text assertion were not captured. Two UI submissions overlap but second transport waits for first acceptance; no simultaneous DB-transaction or native application/resume claim. GET initiators are not separately attributed."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:58:07.072907+00:00",
+          "result": "PASS literal F14/I06 supported-browser predicates:9history positives,8draft/auth positives plus offline actual UI401 proof",
+          "artifact_path": "execution/browser-hst/remaining-report.md",
+          "command_or_procedure": "Review real reload/Back/Forward, exact retained target/full preflight scope, invalid-reference denial, Escape/discard/project/no-copy and canonical logout",
+          "environment": "Frozen R7 installed runtime; own Windows Chrome profiles and canonical inert-peer setup; no provider/human",
+          "limitations": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
         }
       ]
     },
@@ -3016,6 +3133,15 @@
           "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
           "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
           "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:58:07.072907+00:00",
+          "result": "PASS literal F14/I06 supported-browser predicates:9history positives,8draft/auth positives plus offline actual UI401 proof",
+          "artifact_path": "execution/browser-hst/remaining-report.md",
+          "command_or_procedure": "Review real reload/Back/Forward, exact retained target/full preflight scope, invalid-reference denial, Escape/discard/project/no-copy and canonical logout",
+          "environment": "Frozen R7 installed runtime; own Windows Chrome profiles and canonical inert-peer setup; no provider/human",
+          "limitations": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
         }
       ]
     },
@@ -3051,7 +3177,7 @@
         "HST-T-J05",
         "HST-T-J06"
       ],
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "evidence": [
         {
           "commit": "b04799c6 + exact source/test payload pins in artifact",
@@ -3133,8 +3259,18 @@
           "command_or_procedure": "Ten sequential cuts; three warmups and twenty samples per route, then a separate three-GET diagnostic",
           "result": "FAIL500ms: candidate5PASS/3FAIL, baseline0PASS/2FAIL; all ten measured, physical exit0 and no drift",
           "limitations": "First HTTP proxy is not DOM. OPEN V2 narrowly met500ms; mixed V2 overview regressed versus paired baseline. Fast path925projections proven; overlapping diagnostic costs cannot be added. Correction plan remains OPEN, no waiver."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:46:53.798610+00:00",
+          "artifact_path": "execution/performance-hst/shared-machine-interpretation.md",
+          "command_or_procedure": "Apply user clarification after retaining raw matrix, three-GET profile and actual useful-DOM observation",
+          "environment": "Shared Windows machine; unrelated concurrent processes/load not controlled; only own readers sequenced",
+          "result": "DIAGNOSTIC_NON_BLOCKING_FOR_LOCAL_ACCEPTANCE per user; raw threshold misses remain unchanged",
+          "limitations": "No numerical pass, causal-regression proof, production qualification or default approval. No further performance-only tuning/measurement round. Functional omissions and previous gates remain separate."
         }
-      ]
+      ],
+      "execution_notes": "Measurements/diagnosis/report complete in this shared environment; timings diagnostic/non-blocking per user. Not controlled production-performance verification."
     },
     {
       "id": "HST-028",
@@ -3349,6 +3485,33 @@
           "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
           "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
           "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/nextcuts/r7-decision-offline-derivative/qualification.json",
+          "result": "PASS literal D11/D12/H05 predicates: lost202/stale409, repeated same receipt, exactly one durable decision/write admission",
+          "command_or_procedure": "Review completed two-context Home/bell browser capture plus independent canonical SQLite snapshots; offline derivative asserts already observed facts",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "Original browser FAIL remains: an extra oracle inspected losing Home storage. Winner storage and final application-text assertion were not captured. Two UI submissions overlap but second transport waits for first acceptance; no simultaneous DB-transaction or native application/resume claim. GET initiators are not separately attributed."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/cuts/r7-context-paging-history-partial/context-finish-result.json",
+          "result": "PASS literal F05: actual stale409 then current200 in same DOM panel/selection, no mixed or duplicate option IDs",
+          "command_or_procedure": "Canonical paginated sessions, new canonical admission, stale next cursor and current reread; current Node controller evidence is separate",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "The enclosing cut later stopped at an unrelated RuntimeSession field oracle. F14 was reload-only and I06 not run there; those are not promoted by this evidence. Earlier beforeunload cleanup CTRL_BREAK is preserved separately."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:58:07.072907+00:00",
+          "result": "PASS literal F14/I06 supported-browser predicates:9history positives,8draft/auth positives plus offline actual UI401 proof",
+          "artifact_path": "execution/browser-hst/remaining-report.md",
+          "command_or_procedure": "Review real reload/Back/Forward, exact retained target/full preflight scope, invalid-reference denial, Escape/discard/project/no-copy and canonical logout",
+          "environment": "Frozen R7 installed runtime; own Windows Chrome profiles and canonical inert-peer setup; no provider/human",
+          "limitations": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
         }
       ]
     },
@@ -3656,6 +3819,42 @@
           "environment": "Windows; frozen R7 prefix;1828base+1test pins;1031payload files; isolated-I-B; no provider/browser/human",
           "result": "PASS7SOURCE/PASS7INSTALLED; first source6PASS/1invalid-seedFAIL retained; no runtime/pin/helper drift",
           "limitations": "A06 query-only private sibling proof. E08/E09/E16 are historical migrated read fixtures with real HTTP/SQLite; H02/H03 API only. H07 uses SQL negative grant revocation with canonical request/denied POST, not canonical revoke lifecycle. Full browser clauses remain unverified."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:46:53.798610+00:00",
+          "artifact_path": "execution/performance-hst/shared-machine-interpretation.md",
+          "command_or_procedure": "Apply user clarification after retaining raw matrix, three-GET profile and actual useful-DOM observation",
+          "environment": "Shared Windows machine; unrelated concurrent processes/load not controlled; only own readers sequenced",
+          "result": "DIAGNOSTIC_NON_BLOCKING_FOR_LOCAL_ACCEPTANCE per user; raw threshold misses remain unchanged",
+          "limitations": "No numerical pass, causal-regression proof, production qualification or default approval. No further performance-only tuning/measurement round. Functional omissions and previous gates remain separate."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/nextcuts/r7-decision-offline-derivative/qualification.json",
+          "result": "PASS literal D11/D12/H05 predicates: lost202/stale409, repeated same receipt, exactly one durable decision/write admission",
+          "command_or_procedure": "Review completed two-context Home/bell browser capture plus independent canonical SQLite snapshots; offline derivative asserts already observed facts",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "Original browser FAIL remains: an extra oracle inspected losing Home storage. Winner storage and final application-text assertion were not captured. Two UI submissions overlap but second transport waits for first acceptance; no simultaneous DB-transaction or native application/resume claim. GET initiators are not separately attributed."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/cuts/r7-context-paging-history-partial/context-finish-result.json",
+          "result": "PASS literal F05: actual stale409 then current200 in same DOM panel/selection, no mixed or duplicate option IDs",
+          "command_or_procedure": "Canonical paginated sessions, new canonical admission, stale next cursor and current reread; current Node controller evidence is separate",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "The enclosing cut later stopped at an unrelated RuntimeSession field oracle. F14 was reload-only and I06 not run there; those are not promoted by this evidence. Earlier beforeunload cleanup CTRL_BREAK is preserved separately."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:58:07.072907+00:00",
+          "result": "PASS literal F14/I06 supported-browser predicates:9history positives,8draft/auth positives plus offline actual UI401 proof",
+          "artifact_path": "execution/browser-hst/remaining-report.md",
+          "command_or_procedure": "Review real reload/Back/Forward, exact retained target/full preflight scope, invalid-reference denial, Escape/discard/project/no-copy and canonical logout",
+          "environment": "Frozen R7 installed runtime; own Windows Chrome profiles and canonical inert-peer setup; no provider/human",
+          "limitations": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
         }
       ]
     }
@@ -4720,7 +4919,7 @@
       "when": "Recuperar",
       "then": "Consultar a mesma intenção/recibo; não criar nova decisão.",
       "level": "contrato + CLI/API/browser focal",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -4730,9 +4929,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "No current HomeStates browser lost-response same-intent receipt recovery test; old UI-R1 proof not inherited. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/nextcuts/r7-decision-offline-derivative/qualification.json",
+          "result": "PASS literal D11/D12/H05 predicates: lost202/stale409, repeated same receipt, exactly one durable decision/write admission",
+          "command_or_procedure": "Review completed two-context Home/bell browser capture plus independent canonical SQLite snapshots; offline derivative asserts already observed facts",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "Original browser FAIL remains: an extra oracle inspected losing Home storage. Winner storage and final application-text assertion were not captured. Two UI submissions overlap but second transport waits for first acceptance; no simultaneous DB-transaction or native application/resume claim. GET initiators are not separately attributed."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. No current HomeStates browser lost-response same-intent receipt recovery test; old UI-R1 proof not inherited."
+      "execution_notes": "Original browser FAIL remains: an extra oracle inspected losing Home storage. Winner storage and final application-text assertion were not captured. Two UI submissions overlap but second transport waits for first acceptance; no simultaneous DB-transaction or native application/resume claim. GET initiators are not separately attributed."
     },
     {
       "id": "HST-T-D12",
@@ -4742,7 +4950,7 @@
       "when": "Outra tenta confirmar",
       "then": "Revalidar, conflito claro ou recibo existente; sem ação duplicada ou mudança de destinatário.",
       "level": "contrato + CLI/API/browser focal",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -4752,9 +4960,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "No current two-tab stale revision conflict/receipt test with exact recipient invariant. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/nextcuts/r7-decision-offline-derivative/qualification.json",
+          "result": "PASS literal D11/D12/H05 predicates: lost202/stale409, repeated same receipt, exactly one durable decision/write admission",
+          "command_or_procedure": "Review completed two-context Home/bell browser capture plus independent canonical SQLite snapshots; offline derivative asserts already observed facts",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "Original browser FAIL remains: an extra oracle inspected losing Home storage. Winner storage and final application-text assertion were not captured. Two UI submissions overlap but second transport waits for first acceptance; no simultaneous DB-transaction or native application/resume claim. GET initiators are not separately attributed."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. No current two-tab stale revision conflict/receipt test with exact recipient invariant."
+      "execution_notes": "Original browser FAIL remains: an extra oracle inspected losing Home storage. Winner storage and final application-text assertion were not captured. Two UI submissions overlap but second transport waits for first acceptance; no simultaneous DB-transaction or native application/resume claim. GET initiators are not separately attributed."
     },
     {
       "id": "HST-T-D13",
@@ -5319,7 +5536,7 @@
       "when": "Pedir próxima página",
       "then": "Conflito/releitura no mesmo painel, sem concatenar revisões nem exigir fechar/reabrir.",
       "level": "unidade com relógio/promessas + browser",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5329,9 +5546,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Controller409 and real HTTP cursor conflict covered; same open browser detail reread without closing not run. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/cuts/r7-context-paging-history-partial/context-finish-result.json",
+          "result": "PASS literal F05: actual stale409 then current200 in same DOM panel/selection, no mixed or duplicate option IDs",
+          "command_or_procedure": "Canonical paginated sessions, new canonical admission, stale next cursor and current reread; current Node controller evidence is separate",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "The enclosing cut later stopped at an unrelated RuntimeSession field oracle. F14 was reload-only and I06 not run there; those are not promoted by this evidence. Earlier beforeunload cleanup CTRL_BREAK is preserved separately."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Controller409 and real HTTP cursor conflict covered; same open browser detail reread without closing not run."
+      "execution_notes": "The enclosing cut later stopped at an unrelated RuntimeSession field oracle. F14 was reload-only and I06 not run there; those are not promoted by this evidence. Earlier beforeunload cleanup CTRL_BREAK is preserved separately."
     },
     {
       "id": "HST-T-F06",
@@ -5534,7 +5760,7 @@
       "when": "Resolver rota",
       "then": "Revalidar mesmo alvo; referência inválida não abre sessão mais recente.",
       "level": "unidade com relógio/promessas + browser",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5544,9 +5770,18 @@
           "result": "Audit: NOT_RUN",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "No browser back/forward after refresh exact target/invalid reference case. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:58:07.072907+00:00",
+          "result": "PASS literal F14/I06 supported-browser predicates:9history positives,8draft/auth positives plus offline actual UI401 proof",
+          "artifact_path": "execution/browser-hst/remaining-report.md",
+          "command_or_procedure": "Review real reload/Back/Forward, exact retained target/full preflight scope, invalid-reference denial, Escape/discard/project/no-copy and canonical logout",
+          "environment": "Frozen R7 installed runtime; own Windows Chrome profiles and canonical inert-peer setup; no provider/human",
+          "limitations": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
         }
       ],
-      "execution_notes": "No browser back/forward after refresh exact target/invalid reference case."
+      "execution_notes": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
     },
     {
       "id": "HST-T-G01",
@@ -5865,7 +6100,7 @@
       "when": "Submeter concorrente",
       "then": "Intenção/revisão canônicas impedem duplicação; badges não são filas novas.",
       "level": "API/SQLite + browser adversarial",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5875,9 +6110,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "No current badge+bell concurrent same-decision submit browser qualification. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:48:28.817864+00:00",
+          "artifact_path": "execution/browser-hst/nextcuts/r7-decision-offline-derivative/qualification.json",
+          "result": "PASS literal D11/D12/H05 predicates: lost202/stale409, repeated same receipt, exactly one durable decision/write admission",
+          "command_or_procedure": "Review completed two-context Home/bell browser capture plus independent canonical SQLite snapshots; offline derivative asserts already observed facts",
+          "environment": "Windows; frozen installed R7; own canonical protocol peers/browser profiles; no provider or human",
+          "limitations": "Original browser FAIL remains: an extra oracle inspected losing Home storage. Winner storage and final application-text assertion were not captured. Two UI submissions overlap but second transport waits for first acceptance; no simultaneous DB-transaction or native application/resume claim. GET initiators are not separately attributed."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. No current badge+bell concurrent same-decision submit browser qualification."
+      "execution_notes": "Original browser FAIL remains: an extra oracle inspected losing Home storage. Winner storage and final application-text assertion were not captured. Two UI submissions overlap but second transport waits for first acceptance; no simultaneous DB-transaction or native application/resume claim. GET initiators are not separately attributed."
     },
     {
       "id": "HST-T-H06",
@@ -6116,7 +6360,7 @@
       "when": "Fechar/trocar",
       "then": "Guardar confirmação de descarte adequada; não copiar rascunho para outra ocorrência; logout limpa protegido.",
       "level": "navegador + AT quando disponível",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -6126,9 +6370,18 @@
           "result": "Audit: NOT_RUN",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Real logout cleared protected content; dirty question Escape/project-switch confirmation and no cross-occurrence draft case missing. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:58:07.072907+00:00",
+          "result": "PASS literal F14/I06 supported-browser predicates:9history positives,8draft/auth positives plus offline actual UI401 proof",
+          "artifact_path": "execution/browser-hst/remaining-report.md",
+          "command_or_procedure": "Review real reload/Back/Forward, exact retained target/full preflight scope, invalid-reference denial, Escape/discard/project/no-copy and canonical logout",
+          "environment": "Frozen R7 installed runtime; own Windows Chrome profiles and canonical inert-peer setup; no provider/human",
+          "limitations": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
         }
       ],
-      "execution_notes": "Real logout cleared protected content; dirty question Escape/project-switch confirmation and no cross-occurrence draft case missing."
+      "execution_notes": "History wrapper status-label mismatch and late auth observer FAIL remain unchanged. Offline ASGI proof supplies the already-observed native session/events401, not an invented page event. UA modal blocks direct external Project interaction; explicit discard precedes real switch. No AT, native adapter or whole-plan claim."
     },
     {
       "id": "HST-T-J01",
@@ -6203,7 +6456,7 @@
       "when": "Abrir overview e resultados",
       "then": "Prévia/metadados paginados; sem carregar transcripts/payloads completos.",
       "level": "SQLite instrumentado + benchmark",
-      "status": "FAIL",
+      "status": "NOT_RUN",
       "evidence": [
         {
           "commit": "687295b6cd6758aa36690152fdb4258e36d33c91",
@@ -6249,8 +6502,18 @@
           "command_or_procedure": "Ten sequential cuts; three warmups and twenty samples per route, then a separate three-GET diagnostic",
           "result": "FAIL500ms: candidate5PASS/3FAIL, baseline0PASS/2FAIL; all ten measured, physical exit0 and no drift",
           "limitations": "First HTTP proxy is not DOM. OPEN V2 narrowly met500ms; mixed V2 overview regressed versus paired baseline. Fast path925projections proven; overlapping diagnostic costs cannot be added. Correction plan remains OPEN, no waiver."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:46:53.798610+00:00",
+          "artifact_path": "execution/performance-hst/shared-machine-interpretation.md",
+          "command_or_procedure": "Apply user clarification after retaining raw matrix, three-GET profile and actual useful-DOM observation",
+          "environment": "Shared Windows machine; unrelated concurrent processes/load not controlled; only own readers sequenced",
+          "result": "DIAGNOSTIC_NON_BLOCKING_FOR_LOCAL_ACCEPTANCE per user; raw threshold misses remain unchanged",
+          "limitations": "No numerical pass, causal-regression proof, production qualification or default approval. No further performance-only tuning/measurement round. Functional omissions and previous gates remain separate."
         }
-      ]
+      ],
+      "execution_notes": "PARTIAL functional J04 criterion: actual1000OPEN/100000history, query counts and paginated response sizes were observed. A dedicated assertion covering transcript/native-payload materialization and adversarial large-output bounds across these endpoints is still missing. Latency is not this Then criterion and is not its failure reason; prior timing-based annotation remains historical evidence."
     },
     {
       "id": "HST-T-J05",
@@ -6306,6 +6569,15 @@
           "command_or_procedure": "Ten sequential cuts; three warmups and twenty samples per route, then a separate three-GET diagnostic",
           "result": "FAIL500ms: candidate5PASS/3FAIL, baseline0PASS/2FAIL; all ten measured, physical exit0 and no drift",
           "limitations": "First HTTP proxy is not DOM. OPEN V2 narrowly met500ms; mixed V2 overview regressed versus paired baseline. Fast path925projections proven; overlapping diagnostic costs cannot be added. Correction plan remains OPEN, no waiver."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:46:53.798610+00:00",
+          "artifact_path": "execution/performance-hst/shared-machine-interpretation.md",
+          "command_or_procedure": "Apply user clarification after retaining raw matrix, three-GET profile and actual useful-DOM observation",
+          "environment": "Shared Windows machine; unrelated concurrent processes/load not controlled; only own readers sequenced",
+          "result": "DIAGNOSTIC_NON_BLOCKING_FOR_LOCAL_ACCEPTANCE per user; raw threshold misses remain unchanged",
+          "limitations": "No numerical pass, causal-regression proof, production qualification or default approval. No further performance-only tuning/measurement round. Functional omissions and previous gates remain separate."
         }
       ]
     },
@@ -6485,7 +6757,7 @@
       "when": "Fechar relatório",
       "then": "NOT_RUN/BLOCKED para o não executado, sem apagar pendências dos planos anteriores ou ativar default sem gate.",
       "level": "contrato + instalação isolada",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -6495,9 +6767,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Prepared review preserves skipped/blocked/broad/human/default gates; final ledger/release report is still under construction. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:58:07.072907+00:00",
+          "result": "PASS scoped reporting integrity; no whole-plan/default/human acceptance inferred",
+          "artifact_path": "execution/release-report.md",
+          "command_or_procedure": "Review actual executed/nonexecuted layers, immutable failures, user shared-machine guidance and prior gates",
+          "environment": "Frozen R7 installed runtime; own Windows Chrome profiles and canonical inert-peer setup; no provider/human",
+          "limitations": "Remaining literal scenarios stay NOT_RUN/BLOCKED. Native contracts, real providers/topology, AT/native zoom and prior UI/QuickConnect/broad gates are retained. Controlled production performance is unqualified; local timings are diagnostic per user."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Prepared review preserves skipped/blocked/broad/human/default gates; final ledger/release report is still under construction."
+      "execution_notes": "Remaining literal scenarios stay NOT_RUN/BLOCKED. Native contracts, real providers/topology, AT/native zoom and prior UI/QuickConnect/broad gates are retained. Controlled production performance is unqualified; local timings are diagnostic per user."
     },
     {
       "id": "HST-T-L01",
@@ -6740,7 +7021,7 @@
       "supplemental_r6": "execution/installed-supplement-r6/qualification.json",
       "human": "DEFERRED; no participant action requested",
       "default_rollout": false,
-      "performance": "R7_MEASURED_FAIL500MS; DOM_NOT_RUN"
+      "performance": "MEASURED_DIAGNOSTIC_NON_BLOCKING_PER_USER"
     },
     "performance_r6": {
       "measured": 10,
@@ -6766,7 +7047,7 @@
       "corrected": "execution/source-tests/r7-performance-corrected/qualification.json",
       "installed": "PASS326 on fresh frozen R7 prefix",
       "browser": "PASS21 scoped functional checks; performance remains separate",
-      "performance": "FAIL_ORIGINAL500MS_TARGET; see performance_r7"
+      "performance": "DIAGNOSTIC_NON_BLOCKING_SHARED_MACHINE_PER_USER; raw target misses retained"
     },
     "r7_validation": {
       "source_commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
@@ -6778,8 +7059,8 @@
       "installed": "execution/package-hst-r7/installed-qualification.json",
       "browser": "execution/browser-hst/r7-functional-report.md",
       "package_ready": "execution/package-hst-r7/READY.json",
-      "performance": "FAIL500MS_CANDIDATE3_OF8; diagnosis and open correction recorded",
-      "first_useful_dom": "NOT_RUN",
+      "performance": "DIAGNOSTIC_NON_BLOCKING_SHARED_MACHINE_PER_USER; raw misses retained",
+      "first_useful_dom": "MEASURED_N1_2725.6MS; functional correspondence PASS, timing diagnostic",
       "literal_scenario_promotions": 0,
       "default_rollout": false,
       "human": "DEFERRED_UNTIL_AUTOMATED_READINESS_REVIEW",
@@ -6812,10 +7093,11 @@
       "matrix": "execution/performance-hst/persistent-r7-final/qualification.json",
       "diagnostic": "execution/performance-hst/profile-r7-final/qualification.json",
       "correction": "execution/performance-hst/r7-correction-plan.md",
-      "correction_status": "OPEN_NOT_IMPLEMENTED",
+      "correction_status": "DEFERRED_DIAGNOSTIC_OPTION",
       "threshold_waived": false,
-      "human_readiness": false,
-      "first_useful_dom": "NOT_RUN"
+      "first_useful_dom": "MEASURED_N1_2725.6MS; shared-machine diagnostic",
+      "current_policy": "DIAGNOSTIC_NON_BLOCKING_SHARED_MACHINE_PER_USER",
+      "human_readiness_basis": "Not inferred from diagnostic timing; see functional review and human_evaluation separately."
     },
     "supplement_r7": {
       "source": "execution/supplement-r7-prepared/source-corrected/qualification.json",
@@ -6834,6 +7116,77 @@
         "H02_H03": "HTTP denial/minimization, not DOM/ANSI execution proof",
         "H07": "Canonical native request/HTTP denial; grant revocation is SQL negative fixture, not canonical lifecycle"
       }
+    },
+    "performance_interpretation": {
+      "user_instruction": "nao leve tao a serio essas medicoes de performance pois temos outros processos rodando na mesma maquina que podem impactar essa medicao",
+      "policy": "DIAGNOSTIC_NON_BLOCKING_FOR_THIS_LOCAL_ACCEPTANCE",
+      "environment": "SHARED_MACHINE_EXTERNAL_LOAD_UNCONTROLLED",
+      "measured_targets_unchanged": true,
+      "historical_cuts_unchanged": true,
+      "numerical_pass_inferred": false,
+      "causal_regression_inferred": false,
+      "further_performance_only_work": "DEPRIORITIZED_PER_USER",
+      "interpretation": "execution/performance-hst/shared-machine-interpretation.md",
+      "timestamp": "2026-11-17T20:52:37.616007+00:00"
+    },
+    "large_dom_r7": {
+      "artifact": "execution/performance-hst/large-dom-r7-final/qualification.json",
+      "samples": 1,
+      "is_p95": false,
+      "first_useful_dom_ms": 2725.600000023842,
+      "reference_target_ms": 2000,
+      "raw_observation_status": "FAIL",
+      "functional_oracle": "PASS",
+      "policy": "DIAGNOSTIC_NON_BLOCKING_SHARED_MACHINE",
+      "provider_calls": 0,
+      "own_cleanup": "normal0/physical0; no force/timeout/drift"
+    },
+    "r7_browser_boundaries": {
+      "report": "execution/browser-hst/nextcuts-report.md",
+      "literal_observed_pass": [
+        "HST-T-D11",
+        "HST-T-D12",
+        "HST-T-H05",
+        "HST-T-F05"
+      ],
+      "unqualified_by_these_cuts": [
+        "winner sessionStorage",
+        "application/resume text after race",
+        "F14 Back/Forward/invalid reference",
+        "I06 dirty/project/logout"
+      ],
+      "historical_oracle_failures_preserved": true,
+      "cleanup": "All sampled owners/listeners absent; one antecedent CTRL_BREAK/3221225786, others normal0",
+      "default_rollout": false,
+      "real_provider": false,
+      "human": false
+    },
+    "remaining_functional_r7": {
+      "report": "execution/browser-hst/remaining-report.md",
+      "literal_observed_pass": [
+        "HST-T-F14",
+        "HST-T-I06"
+      ],
+      "wrapper_oracle_failures_preserved": true,
+      "physical_cleanup": "normal0/no signals/own processes and listeners absent",
+      "real_provider": false,
+      "AT": false,
+      "human": false
+    },
+    "local_usability_candidate": {
+      "state": "SUPPORTED_LOCAL_FLOWS_REVIEWED; participant not yet invited",
+      "runtime_source": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+      "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+      "supported_scope": [
+        "Working/Idle/unknown and partial/full blocking",
+        "Exact request/session/result context; same receipt after response loss and stale second screen",
+        "Paging409, reload/history, dirty discard/project isolation and logout"
+      ],
+      "performance": "Diagnostic/non-blocking on shared machine per user",
+      "whole_plan_complete": false,
+      "default_approved": false,
+      "remaining_qualification": "Inspect literal NOT_RUN/BLOCKED rows and remaining-qualification-review-r7.md",
+      "provisioning": "No short-lived human fixture until participant confirms availability"
     }
   }
 }

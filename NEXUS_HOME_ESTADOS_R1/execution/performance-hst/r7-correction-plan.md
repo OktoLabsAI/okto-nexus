@@ -1,5 +1,12 @@
 # R7 read-target failure and correction scope
 
+**Deferred diagnostic option.** The user's subsequent
+[shared-machine clarification](shared-machine-interpretation.md) makes these
+timings non-blocking for local acceptance. Do not start further benchmark or
+optimization rounds solely to satisfy them. The observations and original
+reference targets below remain preserved; no causal regression or production
+performance conclusion is established.
+
 The original **500 ms read p95** and **2 s first useful view** targets remain.
 The R7 matrix measured ten cuts, with twenty samples per route after three
 warmups. Five of eight candidate cuts passed the read target; three failed.

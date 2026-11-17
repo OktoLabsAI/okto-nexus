@@ -1,0 +1,62 @@
+[
+  {
+    "scope": {
+      "server_id": "srv_d4e98283718ad7b367155286e0261544",
+      "executor_id": "exe_7ab16056751715f460c9abe404ceec39",
+      "binding_id": "bind_d358ebe880a0fae3233d6413f36a89f6",
+      "agent_id": "hst-a",
+      "workspace_id": "wsr_224ac397cb6e67caa17c8c657ea2f6a7",
+      "workspace_binding_id": "wxb_66770fb0909e9dc36e2d5b7b8e1e4cbf",
+      "session_id": "ses_a8442eea1d1be2f8bbe6efa99cdb7c39",
+      "session_owner_generation": 1,
+      "authorization_revision": 2,
+      "configuration_revision": 2,
+      "binding_revision": 1,
+      "credential_epoch": 1
+    },
+    "lifecycle_state": "READY",
+    "top_level_keys": [
+      "connection_generation",
+      "contained_at",
+      "containment_reason",
+      "control_available",
+      "durable_release_pending",
+      "last_observed_at",
+      "lease_state",
+      "lifecycle_state",
+      "ownership",
+      "process_state",
+      "scope"
+    ]
+  },
+  {
+    "scope": {
+      "server_id": "srv_d4e98283718ad7b367155286e0261544",
+      "executor_id": "exe_7ab16056751715f460c9abe404ceec39",
+      "binding_id": "bind_21c72f9e20dd9dfdbd29196373b5f7d3",
+      "agent_id": "hst-b",
+      "workspace_id": "wsr_feb56794c3fd183296b79f36744b2a53",
+      "workspace_binding_id": "wxb_370b03246adbd5b8cd550c75c21ec975",
+      "session_id": "ses_7fd502ecce5f1036d591836d4a1d40fd",
+      "session_owner_generation": 1,
+      "authorization_revision": 2,
+      "configuration_revision": 2,
+      "binding_revision": 1,
+      "credential_epoch": 1
+    },
+    "lifecycle_state": "READY",
+    "top_level_keys": [
+      "connection_generation",
+      "contained_at",
+      "containment_reason",
+      "control_available",
+      "durable_release_pending",
+      "last_observed_at",
+      "lease_state",
+      "lifecycle_state",
+      "ownership",
+      "process_state",
+      "scope"
+    ]
+  }
+]

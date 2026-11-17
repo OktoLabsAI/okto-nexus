@@ -1,0 +1,64 @@
+{
+  "created": [
+    {
+      "session_id": "ses_45484dae57343092638d834138e72c9f",
+      "reference": {
+        "server_id": "srv_d4e98283718ad7b367155286e0261544",
+        "executor_id": "exe_7ab16056751715f460c9abe404ceec39",
+        "binding_id": "bind_d358ebe880a0fae3233d6413f36a89f6",
+        "endpoint_id": "ep_4a61ebd84196ef39ad44b798fa622465",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_224ac397cb6e67caa17c8c657ea2f6a7",
+        "workspace_binding_id": "wxb_66770fb0909e9dc36e2d5b7b8e1e4cbf"
+      },
+      "operation_id": "op_fdd61306a41c330068d00e265b1b52dc"
+    },
+    {
+      "session_id": "ses_6edba0b35b98c9d428ef5106515352b9",
+      "reference": {
+        "server_id": "srv_d4e98283718ad7b367155286e0261544",
+        "executor_id": "exe_7ab16056751715f460c9abe404ceec39",
+        "binding_id": "bind_21c72f9e20dd9dfdbd29196373b5f7d3",
+        "endpoint_id": "ep_5d9e25794d5bc37cb2e4c64cba892b67",
+        "agent_id": "hst-b",
+        "workspace_id": "wsr_feb56794c3fd183296b79f36744b2a53",
+        "workspace_binding_id": "wxb_370b03246adbd5b8cd550c75c21ec975"
+      },
+      "operation_id": "op_0d8af8c215616bd3acb779b841d0bbae"
+    }
+  ],
+  "requests": [
+    {
+      "request_id": "r4request_c57d7ee60945deba1fefa85b73639654f35d52197484554281c7a4fcf451e82c",
+      "approval_key": {
+        "server_id": "srv_d4e98283718ad7b367155286e0261544",
+        "executor_id": "exe_7ab16056751715f460c9abe404ceec39",
+        "binding_id": "bind_d358ebe880a0fae3233d6413f36a89f6",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_224ac397cb6e67caa17c8c657ea2f6a7",
+        "session_id": "ses_45484dae57343092638d834138e72c9f",
+        "session_owner_generation": 1,
+        "canonical_request_id": "r4request_c57d7ee60945deba1fefa85b73639654f35d52197484554281c7a4fcf451e82c",
+        "kind": "native_input"
+      },
+      "expires_at": "2026-11-17T20:53:27.209000+00:00"
+    },
+    {
+      "request_id": "r4request_1cf67d820fa5aeb4d35db28dc39768146efb069cd0d381e001a54d139e2e884c",
+      "approval_key": {
+        "server_id": "srv_d4e98283718ad7b367155286e0261544",
+        "executor_id": "exe_7ab16056751715f460c9abe404ceec39",
+        "binding_id": "bind_21c72f9e20dd9dfdbd29196373b5f7d3",
+        "agent_id": "hst-b",
+        "workspace_id": "wsr_feb56794c3fd183296b79f36744b2a53",
+        "session_id": "ses_6edba0b35b98c9d428ef5106515352b9",
+        "session_owner_generation": 1,
+        "canonical_request_id": "r4request_1cf67d820fa5aeb4d35db28dc39768146efb069cd0d381e001a54d139e2e884c",
+        "kind": "native_input"
+      },
+      "expires_at": "2026-11-17T20:53:28.019000+00:00"
+    }
+  ],
+  "published_at": "2026-11-17T20:51:28.060088Z",
+  "ttl_policy": "Original native120s; no renewal"
+}

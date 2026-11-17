@@ -1,0 +1,40 @@
+{
+  "status": "PASS_SUBSET",
+  "checks": [
+    {
+      "id": "forward-same-complete-target",
+      "ok": true,
+      "detail": {
+        "executor_id": "exe_ba2298538700bb1325bd6f3172c17b44",
+        "kind": "result",
+        "operation_id": "op_e2cca372c7df6fedca20931c10017771",
+        "server_id": "srv_8be9b531fdf8dad9bbea648b68e99e8a",
+        "session_id": "ses_dc635aa164da3d20c52455659ec4694e",
+        "workspace_id": "wsr_dda73f94f5c1e420832ed1b585f669d9"
+      }
+    },
+    {
+      "id": "forward-canonical-complete-preflight-scope",
+      "ok": true,
+      "detail": {
+        "http_status": 200,
+        "scope": {
+          "server_id": "srv_8be9b531fdf8dad9bbea648b68e99e8a",
+          "executor_id": "exe_ba2298538700bb1325bd6f3172c17b44",
+          "binding_id": "bind_839b0ab7231894ee410af30b18c71bc9",
+          "agent_id": "hst-worker",
+          "workspace_id": "wsr_dda73f94f5c1e420832ed1b585f669d9",
+          "workspace_binding_id": "wxb_5077c5ed3ca82e45af39ee4e184cec61",
+          "session_id": "ses_dc635aa164da3d20c52455659ec4694e",
+          "session_owner_generation": 1,
+          "authorization_revision": 2,
+          "configuration_revision": 2,
+          "binding_revision": 1,
+          "credential_epoch": 1
+        },
+        "lifecycle_state": "CLOSED"
+      }
+    }
+  ],
+  "phase": "forward"
+}

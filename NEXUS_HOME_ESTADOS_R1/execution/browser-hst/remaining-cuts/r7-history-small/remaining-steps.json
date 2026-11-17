@@ -1,0 +1,77 @@
+{
+  "case": "history",
+  "failure": {
+    "type": "AssertionError",
+    "message": "Browser assertion incomplete at invalid"
+  },
+  "steps": [
+    {
+      "name": "open",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "name": "state",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "name": "history-open",
+      "exit_code": 0,
+      "status": "PASS_SUBSET"
+    },
+    {
+      "name": "reload",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "name": "reload-accept",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "name": "reload-verify",
+      "exit_code": 0,
+      "status": "PASS_SUBSET"
+    },
+    {
+      "name": "back",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "name": "back-verify",
+      "exit_code": 0,
+      "status": "PASS_SUBSET"
+    },
+    {
+      "name": "forward",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "name": "forward-verify",
+      "exit_code": 0,
+      "status": "PASS_SUBSET"
+    },
+    {
+      "name": "invalid",
+      "exit_code": 0,
+      "status": "PASS_BROWSER_SUBSET"
+    },
+    {
+      "name": "close",
+      "exit_code": 0,
+      "status": null
+    }
+  ],
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  }
+}

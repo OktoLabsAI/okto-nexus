@@ -1,0 +1,74 @@
+{
+  "status": "PASS_I06_BEHAVIOR_WITH_LATE_OBSERVER_LIMIT",
+  "base_cut": "../../cuts/r7-dirty-small",
+  "base_qualification_sha256": "70e9e2fc96101f9cde8f85379cbd39ea4fe8e7851b825d170862099c3b8bca37",
+  "checks_pass": 8,
+  "checks_fail": 1,
+  "copies": [
+    {
+      "path": "remaining-builder-proof.json",
+      "source_sha256": "6399dc8a32feb1e5363be2f7e50dd8447d638ac538dce92f6ea502aed76d5720",
+      "sha256": "6399dc8a32feb1e5363be2f7e50dd8447d638ac538dce92f6ea502aed76d5720",
+      "bytes": 419,
+      "cas_redactions": 0
+    },
+    {
+      "path": "remaining-failure.json",
+      "source_sha256": "d3509bad2a6d5289ed96c63e841456ef83b96f498d27de7e2ba581389932daae",
+      "sha256": "d3509bad2a6d5289ed96c63e841456ef83b96f498d27de7e2ba581389932daae",
+      "bytes": 88,
+      "cas_redactions": 0
+    },
+    {
+      "path": "remaining-steps.json",
+      "source_sha256": "d3fe9819d4483ffc14e6c536174d10ec336d3b4f27722db064a0d2db3b92bc0e",
+      "sha256": "d3fe9819d4483ffc14e6c536174d10ec336d3b4f27722db064a0d2db3b92bc0e",
+      "bytes": 1035,
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/remaining-session-metadata.json",
+      "source_sha256": "88ceaaa8864b1b90bc21f73fda41fc3a884aa9e28ea611df1c1b8e4e89016b0b",
+      "sha256": "88ceaaa8864b1b90bc21f73fda41fc3a884aa9e28ea611df1c1b8e4e89016b0b",
+      "bytes": 1917,
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/remaining-fresh-questions.json",
+      "source_sha256": "f5f6596ff0f5730164d476fcf60a8dda8ebd4e75276048565d071f21f6e14cb0",
+      "sha256": "f5f6596ff0f5730164d476fcf60a8dda8ebd4e75276048565d071f21f6e14cb0",
+      "bytes": 2800,
+      "cas_redactions": 0
+    },
+    {
+      "path": "auth.js",
+      "source_sha256": "407bee9e5f31c2bed36d5b4a4d82f992cb3ba5d9c4e41bb3ff94bfa765a36e29",
+      "sha256": "407bee9e5f31c2bed36d5b4a4d82f992cb3ba5d9c4e41bb3ff94bfa765a36e29",
+      "bytes": 2728,
+      "cas_redactions": 0
+    },
+    {
+      "path": "dirty.js",
+      "source_sha256": "6120896883e2db507a93f883c62f8fc69ed6e425efce0ca8b628a72f22f01d31",
+      "sha256": "6120896883e2db507a93f883c62f8fc69ed6e425efce0ca8b628a72f22f01d31",
+      "bytes": 4244,
+      "cas_redactions": 0
+    },
+    {
+      "path": "initialize.js",
+      "source_sha256": "0a4774b39816a45734fb5de5405df41bbd2abc29eed2b2e4358d8c98e5eee407",
+      "sha256": "0a4774b39816a45734fb5de5405df41bbd2abc29eed2b2e4358d8c98e5eee407",
+      "bytes": 731,
+      "cas_redactions": 0
+    },
+    {
+      "path": "ready-for-questions.js",
+      "source_sha256": "101c805d2d57fa36cdde8f9b26b8f31b63f67184f6395b1beb18b29c568824ac",
+      "sha256": "101c805d2d57fa36cdde8f9b26b8f31b63f67184f6395b1beb18b29c568824ac",
+      "bytes": 912,
+      "cas_redactions": 0
+    }
+  ],
+  "active_resources": false,
+  "credentials": "Cookie/storage/wire/private question proposal never copied; exactCAS redacted"
+}

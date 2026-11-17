@@ -1,0 +1,41 @@
+{
+  "status": "OFFLINE_ASSERTIONS_FROM_COMPLETED_CAPTURE_ONLY",
+  "source_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-u6ier1na",
+  "all_browser_post_count": 2,
+  "post_statuses": [
+    202,
+    409
+  ],
+  "same_decision_get_count": 5,
+  "same_decision_get_statuses": [
+    200,
+    200,
+    200,
+    200,
+    200
+  ],
+  "decision_id": "r4decision_a41a21de3907889ad901861d29b96426",
+  "accepted_client_intent_id": "ui_e7fa5c8f2afe3d7ebbe7ca4619743aa5",
+  "native_operation_id": "r4op_77f7712ea27cd1a063543053912fc38b",
+  "decision_count": 1,
+  "native_write_count": 1,
+  "receipt_count": 1,
+  "receipt_stages": [
+    "SUBMITTED"
+  ],
+  "no_new_productive_operation": true,
+  "recovery_no_additional_post_observed": true,
+  "full_tuple_and_operator_preserved": true,
+  "original_browser_oracle": "FAIL_RETAINED_HOME_NOT_NECESSARILY_WINNER",
+  "winner_session_storage": "NOT_CAPTURED",
+  "honest_application_text_assertion": "NOT_RUN_AFTER_PRIOR_ORACLE_ABORT",
+  "get_attribution": "Script performed two explicit Check clicks, but GET capture is not context/initiator labeled; automatic polling may also contribute. No per-context GET attribution claimed.",
+  "transport": "Two browser submissions overlap; transport holds second POST until first canonical acceptance. Not a simultaneous database-transaction claim.",
+  "inputs": {
+    "control/final.json": "4adbbdbccf9c6caeb07f430d01239a4e4ae752ad774b7e0c096c7008138f5106",
+    "control/next-before.json": "dd4ac4e534e63977c70200a1b2420a4dd40f85562f3605ed0e2bf3ae6e65c4a6",
+    "control/next-after.json": "d61970c00cec78dd43a59e31731c1b443046e5a24cab6512f8d141d4deda3f7c",
+    "cli-decision.txt": "ff21d0c5af8b5939fae25a0d3319a82269629ef4c89d9772239b364d46d9bb7e",
+    "next-captured-host-invariants.json": "2cc736357262f8a6495608b48b31b1e728cccced2347c2581144346f6833f4e1"
+  }
+}

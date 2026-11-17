@@ -1,0 +1,36 @@
+{
+  "status": "PASS_SUBSET",
+  "checks": [
+    {
+      "id": "canonical-delivery-opens-known-retained-session",
+      "ok": true,
+      "detail": {
+        "target": {
+          "executor_id": "exe_ba2298538700bb1325bd6f3172c17b44",
+          "kind": "result",
+          "operation_id": "op_e2cca372c7df6fedca20931c10017771",
+          "server_id": "srv_8be9b531fdf8dad9bbea648b68e99e8a",
+          "session_id": "ses_dc635aa164da3d20c52455659ec4694e",
+          "workspace_id": "wsr_dda73f94f5c1e420832ed1b585f669d9"
+        }
+      }
+    }
+  ],
+  "reads": [
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54792/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_ba2298538700bb1325bd6f3172c17b44%22%2C%22kind%22%3A%22result%22%2C%22operation_id%22%3A%22op_e2cca372c7df6fedca20931c10017771%22%2C%22server_id%22%3A%22srv_8be9b531fdf8dad9bbea648b68e99e8a%22%2C%22session_id%22%3A%22ses_dc635aa164da3d20c52455659ec4694e%22%2C%22workspace_id%22%3A%22wsr_dda73f94f5c1e420832ed1b585f669d9%22%7D&workspace_id=wsr_dda73f94f5c1e420832ed1b585f669d9"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54792/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_ba2298538700bb1325bd6f3172c17b44%22%2C%22kind%22%3A%22result%22%2C%22operation_id%22%3A%22op_e2cca372c7df6fedca20931c10017771%22%2C%22server_id%22%3A%22srv_8be9b531fdf8dad9bbea648b68e99e8a%22%2C%22session_id%22%3A%22ses_dc635aa164da3d20c52455659ec4694e%22%2C%22workspace_id%22%3A%22wsr_dda73f94f5c1e420832ed1b585f669d9%22%7D&workspace_id=wsr_dda73f94f5c1e420832ed1b585f669d9"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:54792/api/v1/home/target?target=%7B%22executor_id%22%3A%22exe_ba2298538700bb1325bd6f3172c17b44%22%2C%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_8be9b531fdf8dad9bbea648b68e99e8a%22%2C%22session_id%22%3A%22ses_dc635aa164da3d20c52455659ec4694e%22%2C%22workspace_id%22%3A%22wsr_dda73f94f5c1e420832ed1b585f669d9%22%7D&workspace_id=wsr_dda73f94f5c1e420832ed1b585f669d9"
+    }
+  ],
+  "limits": [
+    "Two sessions; explicit older retained session through its canonical delivery, never latest"
+  ]
+}

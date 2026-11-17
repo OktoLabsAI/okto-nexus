@@ -1,0 +1,119 @@
+{
+  "status": "INCOMPLETE_WAIT_ORACLE_ZERO_POST",
+  "provider_invocations": 0,
+  "checks_pass": 1,
+  "checks_fail": 1,
+  "results": {
+    "decision": "FAIL_OR_INCOMPLETE"
+  },
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-av1w7qhu",
+  "cleanup": {
+    "supervisor": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "own_root_processes": [],
+    "listener_port": 56909,
+    "listener_pids": [],
+    "excluded": "Current curation process/ancestors, not runtime or browser",
+    "secret_cookie_scan": "NO_MATCH",
+    "private_auth_and_wire_logs": "Not copied",
+    "data_preserved": true
+  },
+  "limits": [
+    "Synthetic Codex protocol through real Core/Server; no real provider or three-adapter claim",
+    "No human/AT/native-zoom claim",
+    "Functional runs after DOM timing may share CPU with installed pytest"
+  ],
+  "copies": [
+    {
+      "path": "runtime-ready.json",
+      "source_sha256": "f903d561dd956c8bebc3f95e5b87cb374607b1b65f29cdad66a22f402b036596",
+      "curated_sha256": "f903d561dd956c8bebc3f95e5b87cb374607b1b65f29cdad66a22f402b036596",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "fixture.py",
+      "source_sha256": "1e9f843f7a37900db8d62e1c5a9492d359cf76a1dbad4b8d3325235906874264",
+      "curated_sha256": "1e9f843f7a37900db8d62e1c5a9492d359cf76a1dbad4b8d3325235906874264",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-close.txt",
+      "source_sha256": "2706edb759fff08dff7eae0d52e15608e36266e8584b63b8e32c717f627b9593",
+      "curated_sha256": "2706edb759fff08dff7eae0d52e15608e36266e8584b63b8e32c717f627b9593",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-decision.txt",
+      "source_sha256": "c7df8ab4848e7f8296433895c1c05c26ae278dec91d40f9977f68c67f199c61e",
+      "curated_sha256": "c7df8ab4848e7f8296433895c1c05c26ae278dec91d40f9977f68c67f199c61e",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-open.txt",
+      "source_sha256": "f3f0a3198945e211a86de5b372725060b2bc134c18967a408dc689333df6bbaa",
+      "curated_sha256": "f3f0a3198945e211a86de5b372725060b2bc134c18967a408dc689333df6bbaa",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-state.txt",
+      "source_sha256": "0c20f685d3cb69100d808d95bac41d8a53c47fd682209c4c7fc5a4b95bd633a1",
+      "curated_sha256": "0c20f685d3cb69100d808d95bac41d8a53c47fd682209c4c7fc5a4b95bd633a1",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/initial-board.json",
+      "source_sha256": "251946296f2f0eaace229a7e506a3a29a2702b3e4f6e0bebbdb8acea78a6f0e7",
+      "curated_sha256": "251946296f2f0eaace229a7e506a3a29a2702b3e4f6e0bebbdb8acea78a6f0e7",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/final.json",
+      "source_sha256": "056199346781b3ca3510ff746287badbad1e8bc08e0ffea31feeee1fea98acbb",
+      "curated_sha256": "056199346781b3ca3510ff746287badbad1e8bc08e0ffea31feeee1fea98acbb",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/origins.json",
+      "source_sha256": "54b85096fd66656311a95914cbf99df7f7d01fcd1c4e3329184d6d85651022f2",
+      "curated_sha256": "54b85096fd66656311a95914cbf99df7f7d01fcd1c4e3329184d6d85651022f2",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/controls.json",
+      "source_sha256": "adc7e3e0393dcb8be98675a899d4a4dcd6bfc433862cabbc31628c4eb434bc10",
+      "curated_sha256": "adc7e3e0393dcb8be98675a899d4a4dcd6bfc433862cabbc31628c4eb434bc10",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/blocked.json",
+      "source_sha256": "c78a96e2ee1ba6781c6780e9ee9dccbf9ca1abe16ec263272df5559e2b2d4c31",
+      "curated_sha256": "c78a96e2ee1ba6781c6780e9ee9dccbf9ca1abe16ec263272df5559e2b2d4c31",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/supervisor-cleanup.json",
+      "source_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "curated_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "fixture_cas_redactions": 0
+    }
+  ],
+  "privacy": {
+    "fixture_cas_values_redacted": 0,
+    "fixture_cas_fingerprints": [
+      "0c284f196f4c35678225252efc18e5a0448d348774bd70a350559ca6e2853bfe"
+    ],
+    "raw": "Retained only in explicitly owned Temp root"
+  },
+  "browser_http_counts": {
+    "GET": 59
+  },
+  "browser_status_counts": {
+    "200": 59
+  }
+}

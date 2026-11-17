@@ -1,0 +1,32 @@
+{
+  "ready": true,
+  "window": "PERF_DOM_WINDOW_OPEN",
+  "kind": "HST_LARGE_DOM_PERFORMANCE_FIXTURE",
+  "origin": "http://127.0.0.1:57947",
+  "workspace_id": "hst-perf",
+  "presentation_version": 2,
+  "seed_clock": "2026-11-16T12:00:00.000000Z",
+  "dataset_sha256": "3e561a1643359700486b49321784858fd90839b982f5c3d88c3948f3d01914db",
+  "seed_db_sha256": "5d8b5064635674c521c126a486cd598c7c6816dc9975dfa6b5e33807c78cfd7f",
+  "clone_db_sha256_before_bootstrap": "5d8b5064635674c521c126a486cd598c7c6816dc9975dfa6b5e33807c78cfd7f",
+  "schema_sha256": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+  "counts": {
+    "registered_connections": 100,
+    "open_activities": 1000,
+    "native_events": 100000
+  },
+  "lifespan": "off",
+  "payload_files": 1031,
+  "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+  "source_commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+  "http_pid": 45316,
+  "native_processes_started": 0,
+  "provider_calls": 0,
+  "clock_provenance": "Server ControlledClock from unchanged synthetic seed; browser Date-only override required; no real authority claim",
+  "server_id": "srv_daf3d195853a1ec7fd8e25a038c5cc1f",
+  "assets": {
+    "index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036",
+    "index-CefKJTtn.js": "491444f17abbebbb34fa2f133f4e34f0cbded025e401b634a35ff851fde35247"
+  },
+  "index_sha256": "4df900573a782ab17a6538a83dfc71f27f33e1257fac331b210dfce052ba7531"
+}

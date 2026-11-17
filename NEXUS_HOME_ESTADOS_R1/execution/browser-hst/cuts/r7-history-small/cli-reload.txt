@@ -1,0 +1,10 @@
+### Ran Playwright code
+```js
+await page.reload();
+```
+### Page
+- Page URL: http://127.0.0.1:54792/?home_target=%7B%22executor_id%22%3A%22exe_ba2298538700bb1325bd6f3172c17b44%22%2C%22kind%22%3A%22result%22%2C%22operation_id%22%3A%22op_e2cca372c7df6fedca20931c10017771%22%2C%22server_id%22%3A%22srv_8be9b531fdf8dad9bbea648b68e99e8a%22%2C%22session_id%22%3A%22ses_dc635aa164da3d20c52455659ec4694e%22%2C%22workspace_id%22%3A%22wsr_dda73f94f5c1e420832ed1b585f669d9%22%7D
+### Modal state
+- ["beforeunload" dialog with message ""]: can be handled by dialog-accept or dialog-dismiss
+### Snapshot
+- [Snapshot](.playwright-cli\page-2026-11-17T20-49-43-914Z.yml)

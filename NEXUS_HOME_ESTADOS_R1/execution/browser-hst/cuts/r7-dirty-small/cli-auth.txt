@@ -1,0 +1,26 @@
+### Result
+{"status":"FAIL_OR_INCOMPLETE","error":"Error: canonical-ui-denial-observed","checks":[{"id":"real-own-session-revoked","ok":true,"detail":401},{"id":"logout-clears-dirty-protected-panel","ok":true,"detail":true},{"id":"canonical-ui-denial-observed","ok":false,"detail":[]}],"denials":[]}
+### Ran Playwright code
+```js
+await (async page=>{
+ const cfg={"window": "REMAINING_FUNCTIONAL_WINDOW_OPEN", "url": "http://127.0.0.1:49961", "workspace_id": "wsr_feb56794c3fd183296b79f36744b2a53", "a": {"request_id": "r4request_c57d7ee60945deba1fefa85b73639654f35d52197484554281c7a4fcf451e82c", "approval_key": {"server_id": "srv_d4e98283718ad7b367155286e0261544", "executor_id": "exe_7ab16056751715f460c9abe404ceec39", "binding_id": "bind_d358ebe880a0fae3233d6413f36a89f6", "agent_id": "hst-a", "workspace_id": "wsr_224ac397cb6e67caa17c8c657ea2f6a7", "session_id": "ses_45484dae57343092638d834138e72c9f", "session_owner_generation": 1, "canonical_request_id": "r4request_c57d7ee60945deba1fefa85b73639654f35d52197484554281c7a4fcf451e82c", "kind": "native_input"}, "expires_at": "2026-11-17T20:53:27.209000+00:00"}, "b": {"request_id": "r4request_1cf67d820fa5aeb4d35db28dc39768146efb069cd0d381e001a54d139e2e884c", "approval_key": {"server_id": "srv_d4e98283718ad7b367155286e0261544", "executor_id": "exe_7ab16056751715f460c9abe404ceec39", "binding_id": "bind_21c72f9e20dd9dfdbd29196373b5f7d3", "agent_id": "hst-b", "workspace_id": "wsr_feb56794c3fd183296b79f36744b2a53", "session_id": "ses_6edba0b35b98c9d428ef5106515352b9", "session_owner_generation": 1, "canonical_request_id": "r4request_1cf67d820fa5aeb4d35db28dc39768146efb069cd0d381e001a54d139e2e884c", "kind": "native_input"}, "expires_at": "2026-11-17T20:53:28.019000+00:00"}},checks=[],denials=[];const check=(id,ok,detail)=>{checks.push({id,ok,detail});if(!ok)throw Error(id);};
+ if(cfg.window!=='REMAINING_FUNCTIONAL_WINDOW_OPEN')throw Error('Root review/window required');
+ page.on('response',r=>{if([401,403].includes(r.status()))denials.push({path:new URL(r.url()).pathname,status:r.status()});});
+ try{
+  const response=await page.request.get(cfg.url+'/api/v1/home/harness-board?presentation_version=2&workspace_id='+cfg.workspace_id);check('real-own-session-revoked',[401,403].includes(response.status()),response.status());
+  // Real canonical decision-detail polling is2.5s. Do not forge its response,
+  // dispatch auth events, click Apply or dismiss a dirty form to force cleanup.
+  for(let i=0;i<100;i++){if(await page.getByRole('dialog').count()===0&&await page.locator('[data-home-harness]').count()===0)break;await page.waitForTimeout(100);}
+  check('logout-clears-dirty-protected-panel',await page.getByRole('dialog').count()===0&&await page.getByLabel('Choose fixture output format',{exact:true}).count()===0&&await page.locator('[data-home-harness]').count()===0,true);
+  check('canonical-ui-denial-observed',denials.length>0,denials);
+  return {status:'PASS_SUBSET',checks,denials};
+ }catch(error){return {status:'FAIL_OR_INCOMPLETE',error:String(error),checks,denials};}
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:49961/?home_target=%7B%22executor_id%22%3A%22exe_7ab16056751715f460c9abe404ceec39%22%2C%22kind%22%3A%22execution%22%2C%22operation_id%22%3A%22op_0d8af8c215616bd3acb779b841d0bbae%22%2C%22server_id%22%3A%22srv_d4e98283718ad7b367155286e0261544%22%2C%22session_id%22%3A%22ses_6edba0b35b98c9d428ef5106515352b9%22%2C%22workspace_id%22%3A%22wsr_feb56794c3fd183296b79f36744b2a53%22%7D
+- Page Title: Okto Nexus
+- Console: 3 errors, 0 warnings
+### Events
+- New console entries: .playwright-cli\console-2026-11-17T20-51-16-587Z.log#L1-L3

@@ -1,0 +1,58 @@
+{
+  "classification": "PASS_CAPTURED_SUBSETS_WITH_WINNER_STORAGE_ORACLE_LIMIT",
+  "base_cut": "../../cuts/r7-decision-race-recovery",
+  "base_qualification_sha256": "e993960aa351417d84c0e2fd7ad7afe29d40458607aea758198281fd40ba16b2",
+  "copies": [
+    {
+      "path": "next-builder-proof.json",
+      "sha256": "8c76f9a3a1d693b2f4d8f8476ae73880841bd882df45e6c1cf27eecbf2485727",
+      "source_sha256": "8c76f9a3a1d693b2f4d8f8476ae73880841bd882df45e6c1cf27eecbf2485727",
+      "bytes": 247,
+      "cas_redactions": 0
+    },
+    {
+      "path": "next-run-failure.json",
+      "sha256": "f549a09ea1a5bfefb20a938b6646828882a547550439ab7bdecb421c5b0dc6a0",
+      "source_sha256": "f549a09ea1a5bfefb20a938b6646828882a547550439ab7bdecb421c5b0dc6a0",
+      "bytes": 138,
+      "cas_redactions": 0
+    },
+    {
+      "path": "next-captured-host-invariants.json",
+      "sha256": "2cc736357262f8a6495608b48b31b1e728cccced2347c2581144346f6833f4e1",
+      "source_sha256": "2cc736357262f8a6495608b48b31b1e728cccced2347c2581144346f6833f4e1",
+      "bytes": 1251,
+      "cas_redactions": 0
+    },
+    {
+      "path": "next-steps.json",
+      "sha256": "662a541e77ce50eb2b402d9939f4786a41ea4f7cf2a7518ef289610b4da333d3",
+      "source_sha256": "662a541e77ce50eb2b402d9939f4786a41ea4f7cf2a7518ef289610b4da333d3",
+      "bytes": 782,
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/next-before.json",
+      "sha256": "dd4ac4e534e63977c70200a1b2420a4dd40f85562f3605ed0e2bf3ae6e65c4a6",
+      "source_sha256": "dd4ac4e534e63977c70200a1b2420a4dd40f85562f3605ed0e2bf3ae6e65c4a6",
+      "bytes": 2144,
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/next-after.json",
+      "sha256": "d61970c00cec78dd43a59e31731c1b443046e5a24cab6512f8d141d4deda3f7c",
+      "source_sha256": "d61970c00cec78dd43a59e31731c1b443046e5a24cab6512f8d141d4deda3f7c",
+      "bytes": 2755,
+      "cas_redactions": 0
+    },
+    {
+      "path": "next-decision.js",
+      "sha256": "d9b8214876ec9bce76d760f8641a60aaac3f68c736e48a439dade941985d08d8",
+      "source_sha256": "d9b8214876ec9bce76d760f8641a60aaac3f68c736e48a439dade941985d08d8",
+      "bytes": 7166,
+      "cas_redactions": 0
+    }
+  ],
+  "credentials": "Private cookie/storage/wire not copied; exact fixtureCAS redacted",
+  "active_resources": false
+}

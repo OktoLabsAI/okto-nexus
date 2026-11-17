@@ -1,0 +1,37 @@
+{
+  "cut": "decision",
+  "steps": [
+    {
+      "step": "open",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "step": "state",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "step": "decision",
+      "exit_code": 0,
+      "status": "FAIL_OR_INCOMPLETE"
+    },
+    {
+      "step": "close",
+      "exit_code": 0,
+      "status": null
+    }
+  ],
+  "failure": {
+    "type": "AssertionError",
+    "message": "Browser prerequisite/assertion incomplete; inspect original result before host effects"
+  },
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  }
+}

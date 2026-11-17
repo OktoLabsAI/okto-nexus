@@ -1,0 +1,22 @@
+{
+  "status": "FAIL_OR_INCOMPLETE",
+  "error": "Error: canonical-ui-denial-observed",
+  "checks": [
+    {
+      "id": "real-own-session-revoked",
+      "ok": true,
+      "detail": 401
+    },
+    {
+      "id": "logout-clears-dirty-protected-panel",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "canonical-ui-denial-observed",
+      "ok": false,
+      "detail": []
+    }
+  ],
+  "denials": []
+}

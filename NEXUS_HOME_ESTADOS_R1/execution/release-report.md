@@ -1,9 +1,13 @@
 # Home states R1 — implementation and qualification checkpoint
 
 **Delivery is not fully qualified or approved for default. Human evaluation
-has not started.** The user asked to test only after implementation and our
-checks are ready. The outstanding read-performance target and remaining
-literal scenarios prevent that readiness claim.
+has not started.** The selected local functional/context flows have now been
+reviewed against source, installed and browser evidence. A representative local
+usability evaluation can be scheduled when the participant is available;
+the whole plan's remaining qualification is explicitly separate. Following the user's clarification about other
+processes on this shared machine, performance timings are diagnostic and
+non-blocking for this local delivery; no further tuning is required solely
+to chase these numbers.
 
 ## Candidate and preserved work
 
@@ -66,9 +70,12 @@ cache authority or freshness across reads/principals or weaken resource limits.
 | Package |fresh wheel/sdist/build/install/audit/pip-check/CLI smoke and actual HTTP/MCP54tools/two synthetic identities |[package](package-hst-r7/qualification.json), [live smoke](package-hst-r7/live-qualification.json)|
 | Fresh final browser |21PASS: Working/independent request/full block/exact request-result sessions/partial source/logout;0POST |[R7 browser](browser-hst/r7-functional-report.md)|
 | Post-build supplement |7sourcePASS and7actually installedPASS, separate cuts;1828base+1exact additional test/1031payload files unchanged |[supplement](installed-supplement-r7/qualification.json)|
+| Recovery and paging |Same accepted decision after lost response; stale second-screen409; one durable write admission; actual paging409/current200 in the same panel |[scoped captured predicates](browser-hst/nextcuts-report.md)|
+| History and drafts |9history assertions;8draft/auth positives plus captured real UI401 proof; wrapper/late-observer errors retained |[scoped follow-up](browser-hst/remaining-report.md)|
 | Earlier browser transitions |Actual canonical answer202, later exact terminal/output, draft focus, capability negotiation,360px and composer intents; individual predecessor failures/limits retained |[R5/R6 report](browser-hst/r5-r6-final-report.md)|
 | Performance |10measured cuts; candidate5PASS/3FAIL at500ms, baseline0PASS/2FAIL;20samples/route |[R7 matrix](performance-hst/persistent-r7-final/qualification.json)|
 | Diagnostic |3separate GETs; fast path925projections actually used; no p95 inference |[R7 profile](performance-hst/profile-r7-final/qualification.json)|
+| Useful DOM observation |N=1,2725.6ms; actual v2 IDs/project/columns/counters match canonical HTTP; shared-machine diagnostic/non-blocking |[DOM observation](performance-hst/large-dom-r7-final/qualification.json)|
 
 Source, Node, installed package, browser, inert protocol and actual provider
 layers are distinct. No suite count promotes an untested complete scenario.
@@ -89,23 +96,36 @@ source and the frozen installed runtime. These are historical read fixtures
 and bounded API layers, not full adversarial browser or native lifecycle
 qualification; the literal scenarios retain their missing clauses.
 
-Adversarial recovery/context browser cases are being executed separately;
-their results are not inherited by association or included in the21checks.
+The additional browser evidence is not included in the21-check regression
+count. Its original failures remain: a losing-tab storage assumption, two
+earlier context prerequisites, a RuntimeSession field assumption, a wrapper
+status-label mismatch and an observer attached after logout. Completed
+captures independently establish the literal recovery/paging/history/draft
+predicates; they do not make every enclosing runner green. One earlier
+context owner needed its own CTRL_BREAK containment after a100s drain bound
+and exited3221225786, with data preserved and physical absence confirmed.
+Later owners drained normally within180s. No cleanup authority/TTL was renewed.
 
 ## Regressions and outstanding gates
 
-The original read target is still failed. Mixed100 V2 p95 measured
+The raw observations exceed the reference targets in several cuts. Mixed100 V2 p95 measured
 876.423/927.279ms, and its overview was29.06% slower than the paired baseline
 in this window. OPEN100 V2 measured497.934/489.176ms with little margin.
 First-HTTP responses below2s are not first-useful DOM. The
-[correction plan](performance-hst/r7-correction-plan.md) is open, not
-implemented, and does not waive either target. Earlier R6 and first-R7
-failures remain available.
+[correction plan](performance-hst/r7-correction-plan.md) is retained as a
+deferred option. Earlier R6 and first-R7 observations remain available.
+The [shared-machine interpretation](performance-hst/shared-machine-interpretation.md)
+records the user's direction: these measurements do not block local acceptance
+and do not establish a causal code regression. Only our readers were sequenced;
+unrelated machine load was not controlled. Reference targets remain unchanged
+and no production-performance pass is inferred.
 
 The [116-scenario audit](remaining-qualification-review-r7.md) records the
 unexecuted clauses and partial layers rather than treating every test count
 as qualification. The [ledger](../NEXUS_HOME_ESTADOS_LEDGER_R1.json) remains
-authoritative for individual task/scenario status. It is not all green.
+authoritative for individual task/scenario status. After the subsequent literal
+reviews it has42PASS,66NOT_RUN and8BLOCKED. Partial browser/native clauses
+remain NOT_RUN. This is not a whole-plan completion or default approval.
 
 The [contract blockers](contract-blockers-r6-review.md) remain precise:
 independently admissible queued work lacks its required producer proof;
@@ -148,11 +168,11 @@ force-push, release, deployment, merge or default activation was performed.
 
 ## Next gate
 
-Finish the supplemental exact recovery/isolation/context tests, measure
-actual useful DOM in its own exclusive synthetic-fixture window, and retain
-any remaining failure. The read-model correction must receive new candidate
-equivalence/package/browser/performance evidence before the500ms gate can
-close. Only after the automated readiness review may the participant be
-invited using the neutral [human script](human-usability-preparation.md).
+The selected recovery/isolation/context follow-ups are reviewed. The useful-DOM
+observation and shared-machine limitation are already recorded above. No
+further performance-only optimization round is required for this local delivery.
+Invite the participant for the representative supported local flows using the
+neutral [human script](human-usability-preparation.md), while keeping the
+remaining technical qualification explicit.
 Provision a fresh temporary fixture after availability is confirmed; do not
 start a short-lived question or renew its authority while waiting for a user.

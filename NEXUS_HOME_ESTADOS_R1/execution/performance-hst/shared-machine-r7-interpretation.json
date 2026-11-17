@@ -1,0 +1,40 @@
+{
+  "kind": "DERIVED_INTERPRETATION_NOT_NEW_MEASUREMENT",
+  "reason": "User steering: shared machine with uncontrolled unrelated process loads. Sequence applied only to this agent team.",
+  "acceptance_use": "Diagnostic only; timings are not a local acceptance gate or causal regression proof.",
+  "further_measurement_or_timing_driven_optimization": "STOPPED",
+  "original_cut_bytes_unchanged": true,
+  "functional_priority": true,
+  "evidence": [
+    {
+      "path": "persistent-r7-final/qualification.json",
+      "sha256": "37bc6d6b9859bd2fc330e100ee8508f88665ba0448421f2bb51ceb35e1ef66aa",
+      "bytes": 41615
+    },
+    {
+      "path": "profile-r7-final/qualification.json",
+      "sha256": "00f130e526c1c4ca4e90567a0629bc5105e4527e9d82e9ce7e4c30e37c3e643b",
+      "bytes": 24328
+    },
+    {
+      "path": "large-dom-r7-final/qualification.json",
+      "sha256": "9e397cefe9fe49c367de0457693f6f809bfff906bb4eda9dd54d901923ab7f5a",
+      "bytes": 2566
+    },
+    {
+      "path": "large-dom-r7-final/manifest.json",
+      "sha256": "4efa29af7eaf0d9053f484ed429cfcec9ec95740c05e7a7e3ac6be44638e0630",
+      "bytes": 2763
+    },
+    {
+      "path": "large-dom-r7-final/large-dom.png",
+      "sha256": "4971d61d61918bf0d8ebe10143bacf7dfe261120287f7a146b7741f8655920e2",
+      "bytes": 93666
+    },
+    {
+      "path": "shared-machine-r7-interpretation.md",
+      "sha256": "599c5f3cb2effee451b4bdd975b578b3f82c3a0ccbede8df44c652b7b14408be",
+      "bytes": 1755
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "url": "http://127.0.0.1:58133",
+  "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+  "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+  "references": [
+    {
+      "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+      "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+      "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+      "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+      "agent_id": "hst-a",
+      "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+      "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+    },
+    {
+      "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+      "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+      "binding_id": "bind_3f722e52b5ad447965ae53afcff1979c",
+      "endpoint_id": "ep_74bc55c4f2bee0d1b697c4fa113fd6ca",
+      "agent_id": "hst-b",
+      "workspace_id": "wsr_161c454ae35e001b412a093518575600",
+      "workspace_binding_id": "wxb_b661feda823941f558a7600161909cd1"
+    }
+  ],
+  "sessions": [
+    {
+      "session_id": "ses_c96957f9f649175ea261c9cbcde67e10",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+        "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+        "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+      },
+      "text": "HST synthetic output ses_c96957f9f649175ea261c9cbcde67e10",
+      "closed": true,
+      "historical_fixture": true
+    },
+    {
+      "session_id": "ses_cc9cc1c3524ca36aef32b5799a7d550e",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+        "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+        "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+      },
+      "text": "HST synthetic output ses_cc9cc1c3524ca36aef32b5799a7d550e",
+      "closed": true,
+      "historical_fixture": true
+    },
+    {
+      "session_id": "ses_15bcfb578ddada06e626311c96d66444",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+        "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+        "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+      },
+      "text": "HST synthetic output ses_15bcfb578ddada06e626311c96d66444",
+      "closed": true,
+      "historical_fixture": true
+    },
+    {
+      "session_id": "ses_e7b78208eb286841c7fc40865d76bed6",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+        "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+        "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+      },
+      "text": "HST synthetic output ses_e7b78208eb286841c7fc40865d76bed6",
+      "closed": true,
+      "historical_fixture": true
+    },
+    {
+      "session_id": "ses_c0cc14713688bdf506c88852a4cb7835",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+        "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+        "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+      },
+      "text": "HST synthetic output ses_c0cc14713688bdf506c88852a4cb7835",
+      "closed": true,
+      "historical_fixture": true
+    },
+    {
+      "session_id": "ses_f7f037042e0b62e9b184e3de9ea961cc",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+        "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+        "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+      },
+      "text": "HST synthetic output ses_f7f037042e0b62e9b184e3de9ea961cc",
+      "closed": true,
+      "historical_fixture": true
+    },
+    {
+      "session_id": "ses_a6edf182ea3a29611690dd205f567d1f",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+        "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+        "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+      },
+      "text": "HST synthetic output ses_a6edf182ea3a29611690dd205f567d1f",
+      "closed": true,
+      "historical_fixture": true
+    },
+    {
+      "session_id": "ses_5bd2e32b86e64623d855ccc57aa8af63",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+        "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+        "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+      },
+      "text": "HST synthetic output ses_5bd2e32b86e64623d855ccc57aa8af63",
+      "closed": true,
+      "historical_fixture": true
+    },
+    {
+      "session_id": "ses_004d1cd823600a0dd711bb3b355e4046",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+        "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+        "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+      },
+      "text": "HST synthetic output ses_004d1cd823600a0dd711bb3b355e4046",
+      "closed": true,
+      "historical_fixture": true
+    },
+    {
+      "session_id": "ses_f83cc2f09afa2c1d2c28798f35ddf777",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+        "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+        "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+      },
+      "text": "HST synthetic output ses_f83cc2f09afa2c1d2c28798f35ddf777",
+      "closed": true,
+      "historical_fixture": true
+    },
+    {
+      "session_id": "ses_4466b29a6a854605aa7391f0db5ac126",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+        "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+        "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+      },
+      "text": "HST synthetic output ses_4466b29a6a854605aa7391f0db5ac126",
+      "closed": false
+    },
+    {
+      "session_id": "ses_34d087604ad7e5a5f7fd5ecd2aa9f9ea",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_86addfffa26a94698861876d7e9a7741",
+        "endpoint_id": "ep_ceab3f72c0bb8cc38c9790ee33e934a5",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e",
+        "workspace_binding_id": "wxb_9880639ebaa9f290478cfcde6a9bba7a"
+      },
+      "text": "HST synthetic output ses_34d087604ad7e5a5f7fd5ecd2aa9f9ea",
+      "closed": false
+    },
+    {
+      "session_id": "ses_8fac85b8822ab933c8930b9a138f0648",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_3f722e52b5ad447965ae53afcff1979c",
+        "endpoint_id": "ep_74bc55c4f2bee0d1b697c4fa113fd6ca",
+        "agent_id": "hst-b",
+        "workspace_id": "wsr_161c454ae35e001b412a093518575600",
+        "workspace_binding_id": "wxb_b661feda823941f558a7600161909cd1"
+      },
+      "text": "HST synthetic output ses_8fac85b8822ab933c8930b9a138f0648",
+      "closed": false
+    },
+    {
+      "session_id": "ses_9fb72385b9d8e851b1d3c61dfaee3ec1",
+      "reference": {
+        "server_id": "srv_0d6a09e6bbca331a1de65cba71e5876f",
+        "executor_id": "exe_f8aa87f7bd372f9fa2262bc8a2f8642d",
+        "binding_id": "bind_3f722e52b5ad447965ae53afcff1979c",
+        "endpoint_id": "ep_74bc55c4f2bee0d1b697c4fa113fd6ca",
+        "agent_id": "hst-b",
+        "workspace_id": "wsr_161c454ae35e001b412a093518575600",
+        "workspace_binding_id": "wxb_b661feda823941f558a7600161909cd1"
+      },
+      "text": "HST synthetic output ses_9fb72385b9d8e851b1d3c61dfaee3ec1",
+      "closed": false
+    }
+  ],
+  "card_id": "home_group_76d8bb69f06de0238878e6b9096babfec62b3f68097dad4d02a216ccb3ff3bb5",
+  "mode": "question",
+  "j5": null,
+  "provider_invocations": 0
+}

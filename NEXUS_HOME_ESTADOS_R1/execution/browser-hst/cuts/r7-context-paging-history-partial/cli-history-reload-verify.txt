@@ -1,0 +1,21 @@
+### Result
+{"status":"FAIL_OR_INCOMPLETE","error":"Error: reload-same-canonical-session","phase":"reload","checks":[{"id":"reload-same-full-target","ok":true,"detail":{"target":{"kind":"session","server_id":"srv_7e9944e285d6c058d1a76fade202fd2c","executor_id":"exe_1a0f64917ff5f8a2d9faa214208e6273","workspace_id":"wsr_5bfdda66177c96524163e86eba9b4f21","session_id":"ses_473151227dc421ea064ebf9f713519ea"}}},{"id":"reload-same-canonical-session","ok":false,"detail":true}]}
+### Ran Playwright code
+```js
+await (async page=>{
+ const cfg={"window": "POST_PERF_BROWSER_WINDOW_OPEN", "url": "http://127.0.0.1:53687", "workspace_id": "wsr_5bfdda66177c96524163e86eba9b4f21", "request_id": "r4request_1d8a0aa8a91f262facb5adc7522e653f4b561f153688cf19f89b1a0a4989928a", "session_id": "ses_473151227dc421ea064ebf9f713519ea", "question_expires_at": "2026-11-17T20:36:28.927000+00:00", "storage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-i1wx2xv_\\control\\browser-storage.private.json", "selected": "[\"srv_7e9944e285d6c058d1a76fade202fd2c\",\"exe_1a0f64917ff5f8a2d9faa214208e6273\",\"wsr_5bfdda66177c96524163e86eba9b4f21\",\"ses_473151227dc421ea064ebf9f713519ea\"]", "relation_path": "/api/v1/home/harness-board/cards/home_group_4c8ac5147967db10da87c9ef273b5f58af175956cf9d050814d82f09b29a1fd6/sessions", "workspace_b": "wsr_5df679001b3401e70d3adf2a056c9bc1", "phase": "reload"},checks=[];const check=(id,ok,detail)=>{checks.push({id,ok,detail});if(!ok)throw Error(id);};
+ try{
+  if(cfg.phase==='closed'){
+   await page.getByRole('dialog').waitFor({state:'hidden'});check('back-closes-only-exact-detail',!new URL(page.url()).searchParams.has('home_target'),true);
+  }else{
+   const dialog=page.getByRole('dialog',{name:'Activity detail'});await dialog.waitFor({timeout:10000});
+   const target=JSON.parse(new URL(page.url()).searchParams.get('home_target')),[server_id,executor_id,workspace_id,session_id]=JSON.parse(cfg.selected);
+   check(cfg.phase+'-same-full-target',target.kind==='session'&&target.server_id===server_id&&target.executor_id===executor_id&&target.workspace_id===workspace_id&&target.session_id===session_id,{target});
+   const response=await page.request.get(cfg.url+'/api/v1/runtime-management/runtime/sessions/'+encodeURIComponent(session_id)+'?executor_id='+encodeURIComponent(executor_id));const raw=await response.json(),data=raw.data??raw;
+   check(cfg.phase+'-same-canonical-session',response.status()===200&&data.session_id===session_id,true);
+  }
+  return {status:'PASS_BROWSER_SUBSET',phase:cfg.phase,checks};
+ }catch(error){return {status:'FAIL_OR_INCOMPLETE',error:String(error),phase:cfg.phase,checks};}
+}
+)(page);
+```

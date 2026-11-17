@@ -1,0 +1,30 @@
+{
+  "status": "PASS_CAPTURED_CANONICAL_INVARIANTS_WITH_BROWSER_ORACLE_LIMIT",
+  "posts": [
+    {
+      "client_intent_id": "ui_e7fa5c8f2afe3d7ebbe7ca4619743aa5",
+      "request_id": "r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348",
+      "status": 202
+    },
+    {
+      "client_intent_id": "ui_cf011afacdf9f2d258bda64fdbc31705",
+      "request_id": "r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348",
+      "status": 409
+    }
+  ],
+  "decision_count": 1,
+  "native_write_count": 1,
+  "decision_id": "r4decision_a41a21de3907889ad901861d29b96426",
+  "client_intent_id": "ui_e7fa5c8f2afe3d7ebbe7ca4619743aa5",
+  "native_operation_id": "r4op_77f7712ea27cd1a063543053912fc38b",
+  "receipt_count": 1,
+  "receipts": [
+    {
+      "receipt_revision": 1,
+      "stage": "SUBMITTED"
+    }
+  ],
+  "operator_and_full_tuple_preserved": true,
+  "no_new_productive_operation": true,
+  "limit": "Original-intent-preserved browser assertion inspected only Home sessionStorage although either context could win. Winner storage not captured; not inferred. Both explicit Check actions and canonical GET receipt occurred before that failed assertion. Original browser FAIL preserved."
+}

@@ -1,0 +1,52 @@
+{
+  "case": "dirty",
+  "failure": {
+    "type": "AssertionError",
+    "message": "Browser assertion incomplete at auth"
+  },
+  "steps": [
+    {
+      "name": "open",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "name": "state",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "name": "initialize",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "name": "ready-for-questions",
+      "exit_code": 0,
+      "status": "READY_FOR_FRESH_QUESTIONS"
+    },
+    {
+      "name": "dirty",
+      "exit_code": 0,
+      "status": "READY_REAL_LOGOUT"
+    },
+    {
+      "name": "auth",
+      "exit_code": 0,
+      "status": "FAIL_OR_INCOMPLETE"
+    },
+    {
+      "name": "close",
+      "exit_code": 0,
+      "status": null
+    }
+  ],
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  }
+}

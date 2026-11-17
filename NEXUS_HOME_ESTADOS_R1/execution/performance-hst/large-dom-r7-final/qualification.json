@@ -1,0 +1,53 @@
+{
+  "status": "FAIL",
+  "layer": "Single real browser navigation over own loopback HTTP, installed R7; synthetic SQL workload",
+  "samples": 1,
+  "is_p95": false,
+  "first_useful_dom_ms": 2725.600000023842,
+  "target_ms": 2000,
+  "functional_oracle": "PASS",
+  "source_commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+  "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+  "payload_files": 1031,
+  "workload": {
+    "registered_connections": 100,
+    "open_activities": 1000,
+    "native_events": 100000
+  },
+  "clock": {
+    "server": "2026-11-16T12:00:00.000000Z",
+    "browser": "PERFORMANCE_FIXTURE_DATE_ONLY",
+    "performance_now_timers_os_auth_expiry": "Real/untouched; Date/Date.now only aligned to unchanged seed."
+  },
+  "cache": "New own browser profile; browser HTTP cache disabled. Bootstrap/auth and OS caches may be warm; no board preflight.",
+  "method": "MutationObserver timestamp measured from real navigationStart, then matched against first authorized v2 cards/project/headers/summary and served asset SHA.",
+  "guard_results": {
+    "pristine_seed_schema_and_volume_verified": true,
+    "dataset_manifest_unchanged": true,
+    "schema_payload_productive_unchanged": true,
+    "source_helper_pins_unchanged": true,
+    "installed_module_origin_guard_executed": true,
+    "zero_provider_or_native_process_calls": true,
+    "observation_get_only": true,
+    "operator_setup": "Canonical own account/login before measurement; no domain/grant writes.",
+    "no_retry": true
+  },
+  "cleanup": {
+    "normal_http_exit": true,
+    "normal_cli_close": true,
+    "force": false,
+    "timeout": false,
+    "owned_remaining": [],
+    "listeners": [],
+    "physical_audit": "physical-final.json"
+  },
+  "limits": [
+    "N=1 is not a percentile or confidence interval. No SLO retry occurred.",
+    "Not proof of native/provider/current authority or real harnesses; synthetic OPEN facts correctly show unconfirmed/unknown.",
+    "Only the first matching v2 DOM timestamp/response is retained; no per-response v1/v2 timing series was exported.",
+    "Additional board GETs are normal page refreshes, not additional navigation/SLO samples.",
+    "No causal attribution of the2.726s observation to a specific request/negotiation/render phase.",
+    "The independent R7 p95 matrix remains five candidate PASS/three FAIL; this DOM observation cannot repair that gate.",
+    "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  ]
+}
