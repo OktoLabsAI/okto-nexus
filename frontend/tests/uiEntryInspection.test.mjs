@@ -15,7 +15,7 @@ function load(url){
     const path=['.ts','.tsx','/index.ts'].map(ext=>new URL(name+ext,url)).find(p=>existsSync(p));assert.ok(path,name);return load(path);};
   new Function('require','module','exports',code)(localRequire,module,module.exports);return module.exports;
 }
-const {initialEntrySession,assertEntryInspectionPage,occurrenceSession}=load(new URL('../src/homeEntryInspection.ts',import.meta.url));
+const {initialEntrySession,assertEntryInspectionPage,occurrenceSession,readEntryInspectionPage}=load(new URL('../src/homeEntryInspection.ts',import.meta.url));
 const {HomeEntryInspection}=load(new URL('../src/components/home/HomeEntryInspection.tsx',import.meta.url));
 const target={kind:'handoff',server_id:'server',workspace_id:'ws',handoff_id:'handoff'};
 const session=id=>({server_id:'server',executor_id:'executor',workspace_id:'ws',session_id:id});
@@ -29,9 +29,29 @@ const page={version:1,server_id:'server',partition:'sessions',group_id:'group',e
 test('multiple or incomplete session relations require explicit choice; a proven unique relation can open',()=>{
   assert.equal(initialEntrySession(entry,target),null);
   assert.equal(initialEntrySession({...entry,sessions:[session('one')],sessions_total:null},target),null);
+  assert.equal(initialEntrySession({...entry,sessions:[session('one')],sessions_total:1,has_more_sessions:true},target),null);
   assert.deepEqual(initialEntrySession({...entry,sessions:[session('one')],sessions_total:1},target),session('one'));
   assert.deepEqual(initialEntrySession(entry,{kind:'session',...session('two')}),session('two'));
   assert.deepEqual(initialEntrySession(entry,{kind:'execution',...session('two'),operation_id:'exact-op'}),session('two'));
+});
+
+test('relation conflict rereads first page once without changing exact selection or merging revisions',async()=>{
+  const calls=[];const original=JSON.stringify(selection);
+  const read=async cursor=>{calls.push(cursor);if(cursor)throw Object.assign(Error('changed'),{status:409});
+    return {...page,revision:'new',items:[session('two')]};};
+  const next=await readEntryInspectionPage(read,'old-cursor',selection,'server','sessions','rev');
+  assert.deepEqual(calls,['old-cursor',null]);assert.equal(next.replaced,true);assert.equal(next.page.revision,'new');
+  assert.deepEqual(next.page.items,[session('two')]);assert.equal(JSON.stringify(selection),original);
+});
+
+test('relation reads never retry forbidden/foreign scope or cross an aborted generation',async()=>{
+  for(const scenario of ['forbidden','foreign','abort']){
+    const abort=new AbortController();let calls=0;
+    const read=async()=>{calls++;if(scenario==='forbidden')throw Object.assign(Error('denied'),{status:403});
+      if(scenario==='abort')abort.abort();return {...page,server_id:scenario==='foreign'?'other':'server'};};
+    await assert.rejects(()=>readEntryInspectionPage(read,'cursor',selection,'server','sessions','rev',abort.signal));
+    assert.equal(calls,1);
+  }
 });
 
 test('panel pagination rejects foreign parent, scope, revision and hidden default changes',()=>{

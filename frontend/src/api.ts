@@ -1092,6 +1092,7 @@ export interface NexusInfo {
   service: string;
   package_version: string;
   schema_version: number;
+  home_presentation_versions?: number[];
   trust_mode?: string;
   default_workspace_id?: string | null;
   // Live effective feature flags (mirrors MCP nexus_info.features): opt-in

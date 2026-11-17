@@ -3,7 +3,7 @@ import {api} from '../../api';
 import {homeApi} from '../../homeApi';
 import {resolveHomeTarget} from '../../homeNavigation';
 import {attentionTarget} from '../../attentionNavigation';
-import {assertEntryInspectionPage,homeSessionRefKey,initialEntrySession,occurrenceSession,type HomeEntrySelection} from '../../homeEntryInspection';
+import {readEntryInspectionPage,homeSessionRefKey,initialEntrySession,occurrenceSession,type HomeEntrySelection} from '../../homeEntryInspection';
 import type {HomeEntryPage,HomeResult,HomeSessionRef,HomeTarget} from '../../homeTypes';
 import type {AttentionAction,AttentionOccurrence} from '../../attentionTypes';
 import {CanonicalInspection} from '../AttentionInspection';
@@ -23,6 +23,8 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
   const [sessions,setSessions]=useState(entry.sessions),[attention,setAttention]=useState(entry.attention_preview),[results,setResults]=useState(entry.results_preview);
   const [cursors,setCursors]=useState({sessions:entry.sessions_cursor,attention:entry.attention_cursor,results:entry.results_cursor});
   const [error,setError]=useState(''),[busy,setBusy]=useState(false),[lost,setLost]=useState(false);
+  const [notice,setNotice]=useState('');
+  const revisions=useRef({sessions:selection.revision,attention:selection.revision,results:selection.revision});
   const [pending,setPending]=useState<string[]>([]),[preferencesStale,setPreferencesStale]=useState(false);
   const lock=useRef(false),preferenceLocks=useRef(new Set<string>()),abort=useRef(new AbortController());
   const revoke=()=>{abort.current.abort();setLost(true);setSessions([]);setAttention([]);setResults([]);setActive(null);setSession(null);};
@@ -35,18 +37,22 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
     if(lock.current||abort.current.signal.aborted||!cursors[partition])return;
     lock.current=true;setBusy(true);setError('');
     try {
-      const query={...selection.filters,cursor:cursors[partition]!,limit:10,preview:3};
-      const page:HomeEntryPage<unknown>=await(partition==='sessions'?homeApi.entrySessions(selection.groupId,entry.id,query,abort.current.signal):
-        partition==='attention'?homeApi.entryAttention(selection.groupId,entry.id,query,abort.current.signal):homeApi.entryResults(selection.groupId,entry.id,query,abort.current.signal));
+      const read=(cursor:string|null)=>{
+        const query={...selection.filters,...(cursor?{cursor}:{}),limit:10,preview:3};
+        return partition==='sessions'?homeApi.entrySessions(selection.groupId,entry.id,query,abort.current.signal):
+          partition==='attention'?homeApi.entryAttention(selection.groupId,entry.id,query,abort.current.signal):homeApi.entryResults(selection.groupId,entry.id,query,abort.current.signal);
+      };
+      const {page,replaced}=await readEntryInspectionPage<unknown>(read,cursors[partition],selection,serverId,partition,revisions.current[partition],abort.current.signal);
       if(abort.current.signal.aborted)return;
-      assertEntryInspectionPage(page,selection,serverId,partition,selection.revision);
       const append=<T,>(before:T[],next:T[],key:(item:T)=>string)=>{const ids=new Set(before.map(key));return [...before,...next.filter(item=>!ids.has(key(item)))];};
-      if(partition==='sessions')setSessions(before=>append(before,page.items as HomeSessionRef[],homeSessionRefKey));
-      if(partition==='attention')setAttention(before=>append(before,page.items as AttentionOccurrence[],item=>item.attention_id));
-      if(partition==='results')setResults(before=>append(before,page.items as HomeResult[],item=>item.id));
+      if(partition==='sessions')setSessions(before=>append(replaced?[]:before,page.items as HomeSessionRef[],homeSessionRefKey));
+      if(partition==='attention')setAttention(before=>append(replaced?[]:before,page.items as AttentionOccurrence[],item=>item.attention_id));
+      if(partition==='results')setResults(before=>append(replaced?[]:before,page.items as HomeResult[],item=>item.id));
+      revisions.current[partition]=page.revision;
+      if(replaced)setNotice('Related information was refreshed. Your selected context is unchanged.');
       setCursors(before=>({...before,[partition]:page.next_cursor}));
     }catch(failure){if(!abort.current.signal.aborted){if([401,403].includes((failure as {status?:number}).status??0)){revoke();return;}
-      setError((failure as Error).message);setCursors({sessions:null,attention:null,results:null});}}
+      setError('This exact context could not be refreshed. No replacement was selected.');setCursors({sessions:null,attention:null,results:null});}}
     finally{lock.current=false;if(!abort.current.signal.aborted)setBusy(false);}
   };
   const preference=async(item:AttentionOccurrence,seen?:boolean)=>{
@@ -64,6 +70,7 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
   if(lost)return <p role="alert">Operator access is required. Protected context has been cleared.</p>;
   const sessionOptions=session&&!sessions.some(ref=>homeSessionRefKey(ref)===homeSessionRefKey(session))?[session,...sessions]:sessions;
   return <section className="space-y-4" aria-label="Activity context">
+    {notice&&<p role="status">{notice}</p>}
     <header><h3 className="font-semibold break-words">{entry.title}</h3><p className="text-xs text-surface-500">{[entry.agent_label||entry.agent_id,entry.harness_label,entry.host_label].filter(Boolean).join(' · ')}</p>
       <p className="text-xs text-surface-500">Related information as of {entry.as_of||'an unconfirmed snapshot'}. Controls revalidate their canonical records.</p></header>
     {error&&<p role="status">{error}</p>}

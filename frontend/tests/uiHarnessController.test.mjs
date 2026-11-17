@@ -16,6 +16,14 @@ const board=(query={},patch={})=>({version:1,partition:'harness_board',server_id
   source_status:{work:'ready',results:'ready',attention:'ready',connections:'ready',sessions:'ready',correlations:'ready',external:'disabled'},coverage:{result_tracking:'ready'},summary:{},
   server_attention:{status:'ready',items:[],total:0,total_is_exact:true,has_more:false},unlinked:slice([child('unlinked')],{total:2,has_more:true,next_cursor:'unlinked-cursor'}),
   columns:{active:slice([card()],{total:2,has_more:true,next_cursor:'active-cursor'}),needs_you:slice([request()]),results:slice([delivery()])},...patch});
+const count=value=>({value,total_is_exact:value!==null});
+const operational=(patch={})=>({version:1,connection:'connected',activity:'idle',blocking:'none',freshness:'current',as_of:'2026-11-17T12:00:00Z',state_since:null,reason_code:null,
+  pending_actions:count(0),pending_by_kind:Object.fromEntries(['question','approval','decision','verification'].map(k=>[k,count(0)])),
+  pending_request_ids:[],has_more_pending_requests:false,pending_requests_cursor:null,running_sessions:count(0),blocked_sessions:count(0),awaiting_native_confirmation:false,...patch});
+const operationalSummary=Object.fromEntries(['connected','working','idle','queued','unconfirmed','disconnected','blocked_harnesses','pending_actions','visible_notifications','resume_confirmations'].map(k=>[k,count(0)]));
+const semantics={version:1,scope:'turn',evidence:'canonical',execution_outcome:'succeeded',task_state:'open',verification:'not_applicable',verification_evidence_ref:null,cleanup:'complete',content_state:'available',historical:false,semantic_revision:'s1'};
+const v2card=(patch={})=>({...card(),operational_status:operational(),placement_reason:'normal_monitoring',resume_confirmation_refs:[],...patch});
+const v2board=(q,patch={})=>board(q,{presentation_version:2,operational_summary:operationalSummary,columns:{active:slice([v2card()]),needs_you:slice([{...request(),blocks_session:false,action_kind:'question'}]),results:slice([{...delivery(),completion_evidence:'canonical',delivery_semantics:semantics,result:{id:'report',delivery_semantics:semantics}}])},...patch});
 function harness(){
   const clock=new Clock(),calls=[];let active=0,peak=0;
   const behavior={harnessBoard:q=>board(q),harnessBoardColumn:(name,q)=>({...board(q),partition:'harness_board_column',column:name,...slice([card('card2')],{total:2})}),
@@ -41,6 +49,97 @@ test('explicit contextual paging uses the same queue while display is paused, wi
   assert.equal(h.controller.getState().harnessBoard.revision,'b1');assert.equal(h.controller.getState().paused,true);
   h.controller.loadHarnessChildren(null);await h.clock.advance(1000);assert.deepEqual(h.controller.getState().harnessUnlinked.items.map(item=>item.id),['unlinked','unlinked2']);
   assert.equal(h.peak(),1);h.controller.dispose();
+});
+
+test('identical paused polling and observation timestamps do not create pending changes or block detail paging',async()=>{
+  const h=harness();h.configure();await h.clock.advance();h.controller.pause(true);
+  h.behavior.harnessBoard=q=>board(q,{generated_at:'2026-11-17T12:01:00Z',event_cursor:2,
+    columns:{active:slice([{...card(),children:[{...child(),as_of:'2026-11-17T12:01:00Z'}]}],{total:2,has_more:true,next_cursor:'active-cursor'}),needs_you:slice([request()]),results:slice([delivery()])}});
+  // Start with as_of already present; only its observation value changes.
+  h.controller.pause(false);h.controller.refresh();await h.clock.advance(1000);h.controller.pause(true);
+  h.behavior.harnessBoard=q=>board(q,{generated_at:'2026-11-17T12:02:00Z',event_cursor:3,
+    columns:{active:slice([{...card(),children:[{...child(),as_of:'2026-11-17T12:02:00Z'}]}],{total:2,has_more:true,next_cursor:'active-cursor'}),needs_you:slice([request()]),results:slice([delivery()])}});
+  await h.clock.advance(30000);assert.equal(h.controller.getState().hasPendingUpdate,false);
+  h.controller.loadHarnessChildren('card');await h.clock.advance(1000);
+  assert.equal(h.calls.filter(c=>c.name==='harnessChildren').length,1);assert.equal(h.peak(),1);h.controller.dispose();
+});
+
+test('a paused real transition is retained, but normal board changes are notices rather than errors',async()=>{
+  const h=harness();h.configure();await h.clock.advance();h.controller.pause(true);
+  h.behavior.harnessBoard=q=>board(q,{revision:'b2',entry_revision:'e2',unlinked:slice(),columns:{active:slice([{...card('card','e2'),activity_state:'working'}]),needs_you:slice(),results:slice()}});
+  h.controller.refresh();await h.clock.advance(1000);
+  assert.equal(h.controller.getState().hasPendingUpdate,true);assert.equal(h.controller.getState().harnessBoard.revision,'b1');
+  assert.equal(h.controller.getState().error,null);assert.match(h.controller.getState().notice,/revalidated/);
+  h.controller.apply();assert.equal(h.controller.getState().harnessBoard.revision,'b2');h.controller.dispose();
+});
+
+test('presentation negotiation is generation-bound and v1 omits the query parameter',async()=>{
+  const h=harness();h.configure();await h.clock.advance();const first=h.controller.getState().generation;
+  assert.equal('presentation_version' in h.calls[0].args[0],false);
+  h.behavior.harnessBoard=v2board;h.configure({presentationVersion:2});assert.equal(h.controller.getState().harnessBoard,null);await h.clock.advance(1000);
+  assert.ok(h.controller.getState().generation>first);assert.equal(h.calls.at(-1).args[0].presentation_version,2);h.controller.dispose();
+});
+
+test('v2 admits awaiting confirmation without inventing blocks_harness and requires scoped semantic fields',async()=>{
+  const awaiting=v2card({blocks_harness:false,activity_state:'awaiting_confirmation',placement_reason:'awaiting_native_confirmation',
+    operational_status:operational({activity:'awaiting_confirmation',awaiting_native_confirmation:true}),
+    resume_confirmation_refs:[{request_id:'q',decision_id:'d',operation_id:'op',session_id:'session',stream_epoch:'epoch'}]});
+  const h=harness();h.behavior.harnessBoard=q=>v2board(q,{columns:{active:slice(),needs_you:slice([awaiting]),results:slice()}});
+  h.configure({presentationVersion:2});await h.clock.advance();assert.equal(h.controller.getState().status,'ready');
+  assert.equal(h.controller.getState().harnessBoard.columns.needs_you.items[0].blocks_harness,false);h.controller.dispose();
+  for(const patch of [{resume_confirmation_refs:[]},{operational_status:undefined},{placement_reason:'normal_monitoring'},
+    {operational_status:operational({awaiting_native_confirmation:false})}]){
+    const x=harness();x.behavior.harnessBoard=q=>v2board(q,{columns:{active:slice(),needs_you:slice([{...awaiting,...patch}]),results:slice()}});
+    x.configure({presentationVersion:2});await x.clock.advance();assert.equal(x.controller.getState().harnessBoard,null);x.controller.dispose();
+  }
+  for(const patch of [{presentation_version:undefined},{operational_summary:undefined},
+    {columns:{active:slice([v2card()]),needs_you:slice(),results:slice([{...delivery(),completion_evidence:'canonical',delivery_semantics:semantics,result:{id:'report',delivery_semantics:{...semantics,semantic_revision:'other'}}}])}}]){
+    const x=harness();x.behavior.harnessBoard=q=>v2board(q,patch);x.configure({presentationVersion:2});await x.clock.advance();
+    assert.equal(x.controller.getState().harnessBoard,null);x.controller.dispose();
+  }
+});
+
+test('pending board presentation does not block current contextual reads and pages',async()=>{
+  const h=harness();h.configure();await h.clock.advance();h.controller.pause(true);
+  const fresh=q=>board(q,{revision:'b2',entry_revision:'e2',unlinked:slice(),columns:{active:slice([card('card','e2')]),needs_you:slice(),results:slice()}});
+  h.behavior.harnessBoard=fresh;h.controller.refresh();await h.clock.advance(1000);
+  h.behavior.harnessChildren=(id,q)=>({...fresh(q),partition:'harness_children',card_id:id,
+    ...slice([child(q.cursor?'third':'fresh','e2')],{total:2,has_more:!q.cursor,next_cursor:q.cursor?null:'fresh-cursor'})});
+  h.controller.loadHarnessChildren('card');await h.clock.advance(1000);
+  assert.equal(h.calls.at(-1).name,'harnessChildren');assert.equal('cursor'in h.calls.at(-1).args[1],false);
+  assert.deepEqual(h.controller.getState().harnessChildren.card.items.map(x=>x.id),['fresh']);
+  h.controller.loadHarnessChildren('card');await h.clock.advance(1000);
+  assert.equal(h.calls.at(-1).args[1].cursor,'fresh-cursor');
+  assert.deepEqual(h.controller.getState().harnessChildren.card.items.map(x=>x.id),['fresh','third']);
+  assert.equal(h.controller.getState().harnessBoard.revision,'b1');assert.equal(h.controller.getState().hasPendingUpdate,true);
+  assert.equal(h.peak(),1);h.controller.dispose();
+});
+
+test('a context read queued during background polling survives and uses the current scope',async()=>{
+  const h=harness();h.configure();await h.clock.advance();const wait=deferred();
+  h.behavior.harnessBoard=()=>wait.promise;await h.clock.advance(15000);
+  h.controller.refreshHarnessChildren('card');assert.equal(h.peak(),1);
+  wait.resolve(board({workspace_id:'ws'}));await flush();await h.clock.advance(1000);
+  assert.equal(h.calls.at(-1).name,'harnessChildren');assert.equal('cursor'in h.calls.at(-1).args[1],false);
+  assert.equal(h.peak(),1);h.controller.dispose();
+});
+
+test('409 rereads the context first page in place and does not append old rows or replay forever',async()=>{
+  const h=harness();h.configure();await h.clock.advance();h.controller.pause(true);let calls=0;
+  h.behavior.harnessChildren=(id,q)=>{calls++;if(q.cursor)throw Object.assign(Error('changed'),{status:409});
+    return {...board(q),partition:'harness_children',card_id:id,...slice([child('current')])};};
+  h.controller.loadHarnessChildren('card');await h.clock.advance(3000);
+  assert.equal(calls,2);assert.deepEqual(h.controller.getState().harnessChildren.card.items.map(x=>x.id),['current']);
+  assert.equal(h.controller.getState().error,null);assert.equal(h.peak(),1);h.controller.dispose();
+});
+
+test('403 clears paused detail caches and queued reads immediately',async()=>{
+  const h=harness();h.configure();await h.clock.advance();h.controller.pause(true);
+  h.behavior.harnessChildren=()=>{throw Object.assign(Error('denied'),{status:403});};
+  h.controller.refreshHarnessChildren('card');await h.clock.advance(1000);
+  assert.equal(h.controller.getState().status,'forbidden');assert.equal(h.controller.getState().harnessBoard,null);
+  assert.deepEqual(h.controller.getState().harnessChildren,{});const count=h.calls.length;
+  h.controller.refreshHarnessChildren('card');await h.clock.advance(30000);assert.equal(h.calls.length,count);h.controller.dispose();
 });
 test('a contextual409 invalidates every root/page cursor and resnapshots all columns before any old append',async()=>{
   const h=harness();h.configure();await h.clock.advance();h.controller.loadHarnessChildren('card');await h.clock.advance(1000);

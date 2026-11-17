@@ -202,7 +202,7 @@ test('modal pause retains expanded pages only for same revision, resets changed 
   h.behavior.overview = () => overview({ work: section([{ id: 'changed' }], { revision: 'r2' }) });
   h.controller.pause(true); h.controller.refresh(); await h.clock.advance(1000); h.controller.pause(false);
   assert.deepEqual(h.controller.getState().snapshot.work.items.map(x => x.id), ['changed']);
-  assert.match(h.controller.getState().error, /pagination/);
+  assert.match(h.controller.getState().notice, /pagination/);
   h.configure({ identityKey: 'other' }); assert.equal(h.controller.getState().snapshot, null);
   await h.clock.advance(1000); assert.deepEqual(h.controller.getState().snapshot.work.items.map(x => x.id), ['changed']);
   h.controller.dispose();

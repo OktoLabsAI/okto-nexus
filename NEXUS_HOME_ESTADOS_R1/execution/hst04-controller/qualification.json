@@ -1,0 +1,115 @@
+{
+  "status": "IMPLEMENTED_NODE_SCOPED",
+  "created_at": "2026-11-17T12:46:43.390837+00:00",
+  "tasks": [
+    "HST-018",
+    "HST-019"
+  ],
+  "not_verified": [
+    "browser",
+    "F/G/J full scenarios",
+    "HST-004 J1-J8 fixtures",
+    "AT"
+  ],
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Program Files\\nodejs\\node.EXE",
+    "--test",
+    "--test-reporter=tap",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\tests\\uiHarnessController.test.mjs",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\tests\\uiEntryInspection.test.mjs",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\tests\\homeR1Controller.test.mjs",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\tests\\uiBoardController.test.mjs",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\tests\\uiEntriesController.test.mjs"
+  ],
+  "exit_code": 0,
+  "node_pass": 67,
+  "node_fail": 0,
+  "node_skip": 0,
+  "tsc": {
+    "command": "rtk proxy npx tsc --noEmit",
+    "exit_code": 0,
+    "tool_output": "ea98c2",
+    "scope": "Recorded prior TSC after final production edits; test-only additions followed. Root will run integration TSC/build."
+  },
+  "source_files": [
+    "frontend/src/homeController.ts",
+    "frontend/src/hooks/useHomeOverview.ts",
+    "frontend/src/homeEntryInspection.ts",
+    "frontend/src/components/home/OperationalHome.tsx",
+    "frontend/src/components/home/HomeEntryInspection.tsx",
+    "frontend/tests/homeR1Support.mjs",
+    "frontend/tests/uiHarnessController.test.mjs",
+    "frontend/tests/uiEntryInspection.test.mjs",
+    "frontend/tests/homeR1Controller.test.mjs"
+  ],
+  "dependencies": [
+    "frontend/src/homeStateContracts.ts",
+    "frontend/src/homeTypes.ts",
+    "frontend/src/homeApi.ts"
+  ],
+  "pins": {
+    "frontend/src/homeController.ts": {
+      "bytes": 57465,
+      "sha256": "e8cf04ce9bc536c78f7463123701cab26a595116cd00981bc408f7f5877a36e4"
+    },
+    "frontend/src/hooks/useHomeOverview.ts": {
+      "bytes": 4861,
+      "sha256": "a3cf0b66b1036f43ee4f0ac9f7f027d8f1209ab86313807080b8e6f9aca9f93b"
+    },
+    "frontend/src/homeEntryInspection.ts": {
+      "bytes": 3271,
+      "sha256": "f4065091d0da21fb211ad64aa8c7c46d09604843928638c84d7216e9a64f727c"
+    },
+    "frontend/src/components/home/OperationalHome.tsx": {
+      "bytes": 20170,
+      "sha256": "8395a8cca1dcce2e961142893d732efdc74a8b25f48bf19320228aa69a8de70b"
+    },
+    "frontend/src/components/home/HomeEntryInspection.tsx": {
+      "bytes": 11775,
+      "sha256": "cd043ad6d2f81dee787e4b48c5687c1c47e23330c895fcb5a2545f29965209c7"
+    },
+    "frontend/tests/homeR1Support.mjs": {
+      "bytes": 2481,
+      "sha256": "a272905d7f283487571079539e51ab57fd190ae9f3bb28590b72509fbebda584"
+    },
+    "frontend/tests/uiHarnessController.test.mjs": {
+      "bytes": 21595,
+      "sha256": "47c2ba5e9905a6e7427012c7456a460cb9abfd3724cffa8be80d1731d70fe47b"
+    },
+    "frontend/tests/uiEntryInspection.test.mjs": {
+      "bytes": 6086,
+      "sha256": "849319204e9426d44a92da6890992842837b7a219eedbbed6d7c1b8a2e450d37"
+    },
+    "frontend/tests/homeR1Controller.test.mjs": {
+      "bytes": 27676,
+      "sha256": "98db76b820a7c70ad141f4bc9b561bf5b44ba77a813509f2f0ee1a90b317abd8"
+    },
+    "frontend/src/homeStateContracts.ts": {
+      "bytes": 3981,
+      "sha256": "4e0b79a9aafdf985dae5a949bb9696d90270d43288f3c86c05d9e72ed7a3919e"
+    },
+    "frontend/src/homeTypes.ts": {
+      "bytes": 16382,
+      "sha256": "6f770925a6bdcb18c18cbb463932db9dbad62567d352acf9cca65617b6ee306e"
+    },
+    "frontend/src/homeApi.ts": {
+      "bytes": 6602,
+      "sha256": "382256936868c95aa42044e00be621a667989f39f1f05b47d30f8e50ced4e06d"
+    }
+  },
+  "source_drift": [],
+  "changes": [
+    "semantic snapshots ignore observation metadata without ignoring facts/validity",
+    "pause/order retention no longer disables exact reads",
+    "context reads remain serialized and 409 rereads in place without mixed pages",
+    "normal updates are notice, authentication clears all state",
+    "v1 fallback and v2 typed guards/negotiation fence"
+  ],
+  "limits": [
+    "No browser, user, provider or real runtime execution.",
+    "No build/assets/default rollout changes.",
+    "No claim HST tasks fully VERIFIED; metadata selection work remains."
+  ]
+}

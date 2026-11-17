@@ -32,6 +32,7 @@ export interface HomeActivity {
   detail_target: HomeTarget | null; running_count: number; reason?: string; parent_target?: HomeTarget | null; attempt_count?: number;
 }
 export interface HomeResult {
+  delivery_semantics?: HomeDeliverySemantics;
   id: string; source_ref: HomeSourceRef; workspace_id: string; agent_id: string | null;
   title: string; preview: string | null; truncated: boolean; outcome: string;
   verification_state: string | null; cleanup_state: string | null; created_at: string | null;
@@ -86,7 +87,10 @@ export type HomeQuickFilter = 'active' | 'needs_you' | 'results' | 'all';
 export interface HomeEntryFilters extends HomeFilters { quick?: HomeQuickFilter; harness?: string; host?: string }
 export interface HomeEntryScope extends HomeScope { quick: HomeQuickFilter; include_recent_results: boolean; harness?: string; host?: string }
 export interface HomeEntryQuery extends HomeEntryFilters { cursor?: string; limit?: number; preview?: number }
-export interface HomeSessionRef { server_id: string; executor_id: string; workspace_id: string; session_id: string }
+export interface HomeSessionRef {
+  server_id:string;executor_id:string;workspace_id:string;session_id:string;
+  lifecycle_state?:string;title?:string|null;workspace_label?:string|null;last_activity_at?:string|null;
+}
 export interface HomeConnectionRef { server_id: string; executor_id: string; workspace_id: string; binding_id: string; agent_id: string }
 export type HomeEntryKind = 'work' | 'session' | 'connection' | 'external' | 'attention';
 export type HomeEntryDisplayState = HomeDisplayState | 'configured' | 'connected' | 'idle' | 'offline' | 'stale';
@@ -120,6 +124,8 @@ export interface HomeBoardSlice {
   items:HomeBoardEntry[];total:number|null;total_is_exact:boolean;has_more:boolean;next_cursor:string|null;
 }
 export interface HomeBoardMetadata {
+  presentation_version?:1|2;presentation_versions?:number[];
+  operational_summary?:HomeOperationalSummary;
   version:1;scope:HomeEntryScope;server_id:string;generated_at:string;as_of:string|null;next_refresh_at:string|null;
   snapshot_id:string|null;revision:string|null;entry_revision:string|null;status:HomeSectionStatus;
   source_status:Record<string,HomeSectionStatus>;coverage:{result_tracking:'unknown'|'partial'|'ready'};
@@ -129,13 +135,17 @@ export interface HomeBoardMetadata {
 }
 export interface HomeBoard extends HomeBoardMetadata {partition:'board';columns:Record<HomeBoardColumn,HomeBoardSlice>}
 export interface HomeBoardPage extends HomeBoardMetadata,HomeBoardSlice {partition:'board_column';column:HomeBoardColumn}
-export type HomeBoardQuery = Omit<HomeEntryQuery,'quick'>;
+export type HomeBoardQuery = Omit<HomeEntryQuery,'quick'> & {presentation_version?:1|2};
 export interface HomeHarnessChild extends HomeBoardEntry {shared_reference:boolean}
 export interface HomeHarnessConnection extends HomeConnectionContext {
   connect_id?:string|null;
   harness_id:string;agent_label:string|null;harness_label?:string|null;host_label:string|null;workspace_label?:string|null;
 }
 export interface HomeHarnessCard {
+  sessions?:HomeSessionRef[];sessions_total?:number|null;has_more_sessions?:boolean;sessions_cursor?:string|null;
+  operational_status?:HomeOperationalStatus;
+  placement_reason?:HomePlacementReason;
+  resume_confirmation_refs?:HomeResumeConfirmationRef[];
   kind:'harness';blocks_harness:boolean|null;blocking_request_ids:string[];
   activity_state:'waiting_for_user'|'awaiting_confirmation'|'working'|'registered'|'unknown';
   blocking_requests:HomeHarnessRequest[];reminder_snoozed:boolean;
@@ -158,10 +168,12 @@ export interface HomeHarnessSlice {
 }
 export interface HomeHarnessRef {card_id:string;connection:HomeHarnessConnection}
 export interface HomeHarnessRequest {
+  blocks_session?:boolean|null;action_kind?:HomePendingKind;
   kind:'request';id:string;request:AttentionOccurrence;entry:HomeHarnessChild;
   harness_refs:HomeHarnessRef[];blocks_harness:boolean|null;notification_visible:boolean;
 }
 export interface HomeHarnessDelivery {
+  delivery_semantics?:HomeDeliverySemantics;
   kind:'delivery';id:string;result:HomeResult|null;report:AttentionOccurrence|null;entry:HomeHarnessChild;harness_refs:HomeHarnessRef[];
   completion_evidence:'canonical'|'reported';
 }
@@ -174,6 +186,44 @@ export interface HomeHarnessBoardPage extends HomeBoardMetadata,HomeHarnessSlice
 export interface HomeHarnessChildrenPage extends HomeBoardMetadata {
   partition:'harness_children'|'harness_unlinked';card_id?:string|null;items:HomeHarnessChild[];
   total:number|null;total_is_exact:boolean;has_more:boolean;next_cursor:string|null;
+}
+export interface HomeHarnessRequestsPage extends HomeBoardMetadata {
+  partition:'harness_requests';card_id:string;items:HomeHarnessRequest[];
+  total:number|null;total_is_exact:boolean;has_more:boolean;next_cursor:string|null;
+}
+export interface HomeHarnessSessionsPage extends HomeBoardMetadata {
+  partition:'harness_sessions';card_id:string;items:HomeSessionRef[];
+  total:number|null;total_is_exact:boolean;has_more:boolean;next_cursor:string|null;
+}
+export type HomePendingKind='question'|'approval'|'decision'|'verification'|'unknown';
+export type HomePlacementReason='normal_monitoring'|'human_block_confirmed'|'awaiting_native_confirmation'|'monitoring_unconfirmed';
+export interface HomeStateCount {value:number|null;total_is_exact:boolean}
+export interface HomeOperationalStatus {
+  version:1;
+  connection:'connected'|'connecting'|'reconnecting'|'disconnected'|'registered'|'unknown';
+  activity:'working'|'idle'|'queued'|'waiting_user'|'waiting_agent'|'awaiting_confirmation'|'no_active_session'|'recovering'|'unknown';
+  blocking:'full'|'partial'|'none'|'unknown';freshness:'current'|'stale'|'unavailable';
+  as_of:string|null;state_since:string|null;reason_code:string|null;
+  pending_actions:HomeStateCount;
+  pending_by_kind:Record<Exclude<HomePendingKind,'unknown'>,HomeStateCount>;
+  pending_request_ids:string[];has_more_pending_requests:boolean;pending_requests_cursor:string|null;
+  running_sessions:HomeStateCount;blocked_sessions:HomeStateCount;awaiting_native_confirmation:boolean;
+}
+export interface HomeResumeConfirmationRef {
+  request_id:string;decision_id:string|null;operation_id:string;session_id:string;stream_epoch:string;
+}
+export interface HomeOperationalSummary {
+  connected:HomeStateCount;working:HomeStateCount;idle:HomeStateCount;queued:HomeStateCount;
+  unconfirmed:HomeStateCount;disconnected:HomeStateCount;blocked_harnesses:HomeStateCount;
+  pending_actions:HomeStateCount;visible_notifications:HomeStateCount;resume_confirmations:HomeStateCount;
+}
+export interface HomeDeliverySemantics {
+  version:1;scope:'turn'|'handoff'|'external_report';evidence:'canonical'|'reported';
+  execution_outcome:'succeeded'|'failed'|'cancelled'|'rejected'|'unknown'|'not_applicable';
+  task_state:'open'|'claimed'|'verifying'|'completed'|'rejected'|'cancelled'|'unknown'|'not_applicable';
+  verification:'approved'|'rejected'|'pending'|'unknown'|'not_applicable';verification_evidence_ref:string|null;
+  cleanup:'pending'|'complete'|'unknown'|'not_applicable';
+  content_state:'available'|'pending'|'not_captured'|'unavailable';historical:boolean;semantic_revision:string;
 }
 export interface HomeEntryPage<T> extends Omit<HomeSection<T>, 'revision'> {
   version:1; scope:HomeEntryScope; server_id:string; generated_at:string; snapshot_id:string|null;

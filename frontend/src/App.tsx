@@ -857,6 +857,7 @@ function Dashboard({
             <div className="min-h-0 flex-1">
               {homeOperational && info?.features?.feature_home !== false
                 ? <OperationalHome key={workspace} workspace={workspace} workspaces={workspaces} identityKey={identityKey}
+                    presentationVersion={info?.home_presentation_versions?.includes(2)?2:1}
                     refreshTick={refreshTick} latestEvent={latestHomeEvent} streamStatus={sseStatus} onNavigate={setView}
                     onAttentionChanged={attention.refresh} onSetupAgent={openAddHarness} onWorkspaceChange={pickWorkspace} registerLeaveGuard={registerHomeLeaveGuard}/>
                 : <HomeView key={workspace} workspace={workspace} refreshTick={refreshTick} attention={attention.state}
