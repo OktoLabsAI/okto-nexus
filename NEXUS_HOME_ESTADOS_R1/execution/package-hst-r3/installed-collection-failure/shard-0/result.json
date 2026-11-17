@@ -1,0 +1,78 @@
+{
+  "started_at": "2026-11-17T16:34:01.292779+00:00",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-pj35h53y",
+  "selected": [
+    "tests\\home_evolution\\test_home_queries.py",
+    "tests\\home_states\\test_atomic_ingress_readiness.py",
+    "tests\\home_states\\test_delivery_semantics_sqlite.py",
+    "tests\\home_states\\test_operational_sqlite.py",
+    "tests\\home_states\\test_presentation_negotiation.py",
+    "tests\\home_states\\test_projection_batch.py",
+    "tests\\home_states\\test_verification_proof.py",
+    "tests\\quick_connect\\test_connect_arguments.py",
+    "tests\\quick_connect\\test_entry_compatibility.py",
+    "tests\\quick_connect\\test_git_project_hint.py",
+    "tests\\quick_connect\\test_git_remaining.py",
+    "tests\\quick_connect\\test_id_choice_scenarios.py",
+    "tests\\quick_connect\\test_pending_selector_fences.py",
+    "tests\\quick_connect\\test_qc15_cli_choices.py",
+    "tests\\quick_connect\\test_qc24_namespace_executor_http.py",
+    "tests\\quick_connect\\test_qc25_concurrency_locks.py",
+    "tests\\quick_connect\\test_qc33_shared_service.py",
+    "tests\\quick_connect\\test_quick_connect_autoid_race.py",
+    "tests\\quick_connect\\test_quick_connect_contracts.py",
+    "tests\\quick_connect\\test_quick_connect_customize.py",
+    "tests\\quick_connect\\test_quick_connect_git_boundaries.py",
+    "tests\\quick_connect\\test_quick_connect_id_choices.py",
+    "tests\\quick_connect\\test_quick_connect_project.py",
+    "tests\\quick_connect\\test_quick_connect_project_scenarios.py",
+    "tests\\quick_connect\\test_quick_connect_render.py",
+    "tests\\quick_connect\\test_terminal_public_connection.py",
+    "tests\\ui_simplification\\test_entry_pages.py"
+  ],
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-2f5l3545\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path[:0]=['C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\guard', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\execution_r4', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\home_evolution', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\home_states', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\legacy_native_fixture', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\ui_simplification'];import pytest;raise SystemExit(pytest.main(['-p', 'hst_origin_guard', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\pytest.ini', '--rootdir=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree', '--confcutdir=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\home_evolution\\\\test_home_queries.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\home_states\\\\test_atomic_ingress_readiness.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\home_states\\\\test_delivery_semantics_sqlite.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\home_states\\\\test_operational_sqlite.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\home_states\\\\test_presentation_negotiation.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\home_states\\\\test_projection_batch.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\home_states\\\\test_verification_proof.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_connect_arguments.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_entry_compatibility.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_git_project_hint.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_git_remaining.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_id_choice_scenarios.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_pending_selector_fences.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_qc15_cli_choices.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_qc24_namespace_executor_http.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_qc25_concurrency_locks.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_qc33_shared_service.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_autoid_race.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_contracts.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_customize.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_git_boundaries.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_id_choices.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_project.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_project_scenarios.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_render.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\quick_connect\\\\test_terminal_public_connection.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\tree\\\\tests\\\\ui_simplification\\\\test_entry_pages.py', '-v', '--tb=short', '-o', 'faulthandler_timeout=0', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-pj35h53y\\\\reports\\\\tests.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-pj35h53y\\cwd",
+  "helper_paths": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-pj35h53y\\tree\\tests",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-pj35h53y\\tree\\tests\\execution_r4",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-pj35h53y\\tree\\tests\\home_evolution",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-pj35h53y\\tree\\tests\\home_states",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-pj35h53y\\tree\\tests\\legacy_native_fixture",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-pj35h53y\\tree\\tests\\quick_connect",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-pj35h53y\\tree\\tests\\ui_simplification"
+  ],
+  "stdin": "closed PIPE; no NUL console reopening",
+  "timeout": 1800,
+  "signals": [],
+  "build_source_pin_count": 1821,
+  "exit_code": 2,
+  "timed_out": false,
+  "forced": false,
+  "remaining_known_processes": [],
+  "observation_limit": "250ms descendant polling does not enumerate every short-lived child; no claim that it does.",
+  "helper_drift": [],
+  "ended_at": "2026-11-17T16:34:13.813883+00:00",
+  "payload_files": 1031,
+  "payload_drift": [],
+  "source_drift": [],
+  "known_processes": [
+    {
+      "pid": 31764,
+      "birth": 1794933241.296488,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-2f5l3545\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 60500,
+      "birth": 1794933241.3160088,
+      "exe": "C:\\Python313\\python.exe"
+    }
+  ]
+}

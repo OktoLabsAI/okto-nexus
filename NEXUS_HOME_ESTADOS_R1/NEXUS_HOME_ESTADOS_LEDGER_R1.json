@@ -696,6 +696,15 @@
           "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
           "artifact_path": "execution/source-tests/r3-home/qualification.json",
           "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Canonical native question plus independent submitted/started operation; explicit browser answer202",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET14, FAIL1: actual Working producer mismatch; decision registered remains awaiting confirmation",
+          "artifact_path": "execution/browser-hst/cuts/r3-question-decision/qualification.json",
+          "limitations": "Core keeps receipt SUBMITTED while current progress exists. R5 correction in progress; no fabricated RUNNING receipt. Post-answer terminal cut not qualified; causal APPLIED proof unavailable."
         }
       ]
     },
@@ -784,6 +793,15 @@
           "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
           "artifact_path": "execution/source-tests/r3-home/qualification.json",
           "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Canonical native question plus independent submitted/started operation; explicit browser answer202",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET14, FAIL1: actual Working producer mismatch; decision registered remains awaiting confirmation",
+          "artifact_path": "execution/browser-hst/cuts/r3-question-decision/qualification.json",
+          "limitations": "Core keeps receipt SUBMITTED while current progress exists. R5 correction in progress; no fabricated RUNNING receipt. Post-answer terminal cut not qualified; causal APPLIED proof unavailable."
         }
       ]
     },
@@ -837,6 +855,15 @@
           "result": "PASS40 focused source tests after currentness fences; no provider executed",
           "artifact_path": "execution/operational-currentness/qualification.json",
           "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Canonical native question plus independent submitted/started operation; explicit browser answer202",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET14, FAIL1: actual Working producer mismatch; decision registered remains awaiting confirmation",
+          "artifact_path": "execution/browser-hst/cuts/r3-question-decision/qualification.json",
+          "limitations": "Core keeps receipt SUBMITTED while current progress exists. R5 correction in progress; no fabricated RUNNING receipt. Post-answer terminal cut not qualified; causal APPLIED proof unavailable."
         }
       ]
     },
@@ -1056,6 +1083,15 @@
           "result": "PASS58 focused source tests; expanded source regression PASS368 before operational currentness delta",
           "artifact_path": "execution/delivery-implementation/final/qualification.json",
           "limitations": "Not installed HTTP/browser/harness qualification; legacy proofs without exact reference remain unknown; full scenario acceptance pending."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Canonical authenticated claim, completion and verification with same exact delivery/op; browser at each stage",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET15: turn result/task open, awaiting verification, exact delivery verified",
+          "artifact_path": "execution/browser-hst/cuts/r3-governed-result/qualification.json",
+          "limitations": "Inert native peer, not provider inference. No assertion that every Results criterion is covered."
         }
       ]
     },
@@ -1109,6 +1145,15 @@
           "result": "PASS58 focused source tests; expanded source regression PASS368 before operational currentness delta",
           "artifact_path": "execution/delivery-implementation/final/qualification.json",
           "limitations": "Not installed HTTP/browser/harness qualification; legacy proofs without exact reference remain unknown; full scenario acceptance pending."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Canonical authenticated claim, completion and verification with same exact delivery/op; browser at each stage",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET15: turn result/task open, awaiting verification, exact delivery verified",
+          "artifact_path": "execution/browser-hst/cuts/r3-governed-result/qualification.json",
+          "limitations": "Inert native peer, not provider inference. No assertion that every Results criterion is covered."
         }
       ]
     },
@@ -1418,6 +1463,15 @@
           "result": "PASS401 Node tests; normative labels and current action links covered",
           "artifact_path": "execution/frontend-global/qualification.json",
           "limitations": "Node/SSR is not browser, assistive technology or human usability; final installed/browser scenarios pending."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Canonical native question plus independent submitted/started operation; explicit browser answer202",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET14, FAIL1: actual Working producer mismatch; decision registered remains awaiting confirmation",
+          "artifact_path": "execution/browser-hst/cuts/r3-question-decision/qualification.json",
+          "limitations": "Core keeps receipt SUBMITTED while current progress exists. R5 correction in progress; no fabricated RUNNING receipt. Post-answer terminal cut not qualified; causal APPLIED proof unavailable."
         }
       ]
     },
@@ -1492,6 +1546,15 @@
           "result": "PASS401 Node tests; normative labels and current action links covered",
           "artifact_path": "execution/frontend-global/qualification.json",
           "limitations": "Node/SSR is not browser, assistive technology or human usability; final installed/browser scenarios pending."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Canonical authenticated claim, completion and verification with same exact delivery/op; browser at each stage",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET15: turn result/task open, awaiting verification, exact delivery verified",
+          "artifact_path": "execution/browser-hst/cuts/r3-governed-result/qualification.json",
+          "limitations": "Inert native peer, not provider inference. No assertion that every Results criterion is covered."
         }
       ]
     },
@@ -1554,6 +1617,15 @@
           "result": "PASS73 interaction tests and TypeScript; exact targets and revision resync covered",
           "artifact_path": "execution/hst04-context/qualification.json",
           "limitations": "Focus, draft and two-cycle polling acceptance still requires final real browser checks."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Real Chromium against isolated installed R3; exact sessions, two unchanged polls, partial source and logout",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
+          "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
+          "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
         }
       ]
     },
@@ -1625,6 +1697,15 @@
           "result": "PASS73 interaction tests and TypeScript; exact targets and revision resync covered",
           "artifact_path": "execution/hst04-context/qualification.json",
           "limitations": "Focus, draft and two-cycle polling acceptance still requires final real browser checks."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Real Chromium against isolated installed R3; exact sessions, two unchanged polls, partial source and logout",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
+          "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
+          "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
         }
       ]
     },
@@ -1690,6 +1771,15 @@
           "result": "PASS73 interaction tests and TypeScript; exact targets and revision resync covered",
           "artifact_path": "execution/hst04-context/qualification.json",
           "limitations": "Focus, draft and two-cycle polling acceptance still requires final real browser checks."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Real Chromium against isolated installed R3; exact sessions, two unchanged polls, partial source and logout",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
+          "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
+          "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
         }
       ]
     },
@@ -1756,6 +1846,15 @@
           "result": "PASS73 interaction tests and TypeScript; exact targets and revision resync covered",
           "artifact_path": "execution/hst04-context/qualification.json",
           "limitations": "Focus, draft and two-cycle polling acceptance still requires final real browser checks."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Real Chromium against isolated installed R3; exact sessions, two unchanged polls, partial source and logout",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
+          "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
+          "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
         }
       ]
     },
@@ -1844,6 +1943,24 @@
           "result": "PASS40 focused source tests after currentness fences; no provider executed",
           "artifact_path": "execution/operational-currentness/qualification.json",
           "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        },
+        {
+          "commit": "92529cf4d4d3660ac98e1c415fb60151aefaa9a7",
+          "command_or_procedure": "Fresh R4 wheel build/install/smoke, exact four-artifact Twine and live HTTP/MCP",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS build/install/live; 54 tools, two authenticated identities; canonical stop0 and physical exit0",
+          "artifact_path": "execution/package-hst-r4/live-qualification.json",
+          "limitations": "No provider. R4 backend payload1024 files exactly equal R3 (729 Nexus/168 Core/127 Connector); R3 tests reused only in that scope. R4 UI requires its own browser checks."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Real Chromium against isolated installed R3; exact sessions, two unchanged polls, partial source and logout",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
+          "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
+          "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
         }
       ]
     },
@@ -2053,6 +2170,15 @@
           "result": "PASS215; source/test drift0; no timeout/force/remaining known processes. Focals separately PASS37.",
           "artifact_path": "execution/source-tests/r3-home/qualification.json",
           "limitations": "R3 installed/browser/performance not qualified yet. Prior R2 browser failure and capacity misses retained. Initial R3 fixture gap was unfillable and contained; final fixture uses real journal sequences and canonical recovery."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Installed-only copied-test qualification with origin, payload, source and helper guards",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS746, SKIP8; timeout/force/drift/remaining processes0",
+          "artifact_path": "execution/package-hst-r3/installed-qualification.json",
+          "limitations": "R3 only. Eight literal POSIX/non-TTY skips; collection and launcher antecedents retained. Not browser, accessibility, native console, real-provider or final R5 qualification."
         }
       ]
     },
@@ -2098,6 +2224,15 @@
           "result": "FAIL B02: canonical events materialized but Home readiness required an unwritten watermark; timing NOT_QUALIFIED",
           "artifact_path": "execution/browser-hst/antecedents/r2-unprojected-watermark/qualification.json",
           "limitations": "No journey PASS, real provider or human usability claimed; reader correction and new canonical-ingress regression in progress."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Real Chromium against isolated installed R3; exact sessions, two unchanged polls, partial source and logout",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
+          "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
+          "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
         }
       ]
     },
@@ -2305,6 +2440,33 @@
           "result": "FAIL B02: canonical events materialized but Home readiness required an unwritten watermark; timing NOT_QUALIFIED",
           "artifact_path": "execution/browser-hst/antecedents/r2-unprojected-watermark/qualification.json",
           "limitations": "No journey PASS, real provider or human usability claimed; reader correction and new canonical-ingress regression in progress."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Real Chromium against isolated installed R3; exact sessions, two unchanged polls, partial source and logout",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
+          "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
+          "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Canonical authenticated claim, completion and verification with same exact delivery/op; browser at each stage",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET15: turn result/task open, awaiting verification, exact delivery verified",
+          "artifact_path": "execution/browser-hst/cuts/r3-governed-result/qualification.json",
+          "limitations": "Inert native peer, not provider inference. No assertion that every Results criterion is covered."
+        },
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Canonical native question plus independent submitted/started operation; explicit browser answer202",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS_SUBSET14, FAIL1: actual Working producer mismatch; decision registered remains awaiting confirmation",
+          "artifact_path": "execution/browser-hst/cuts/r3-question-decision/qualification.json",
+          "limitations": "Core keeps receipt SUBMITTED while current progress exists. R5 correction in progress; no fabricated RUNNING receipt. Post-answer terminal cut not qualified; causal APPLIED proof unavailable."
         }
       ]
     },
@@ -2435,7 +2597,26 @@
         "HST-T-K06"
       ],
       "status": "IN_PROGRESS",
-      "evidence": []
+      "evidence": [
+        {
+          "commit": "042585b4c622948261a50b550fec3616e2743e45",
+          "command_or_procedure": "Installed-only copied-test qualification with origin, payload, source and helper guards",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS746, SKIP8; timeout/force/drift/remaining processes0",
+          "artifact_path": "execution/package-hst-r3/installed-qualification.json",
+          "limitations": "R3 only. Eight literal POSIX/non-TTY skips; collection and launcher antecedents retained. Not browser, accessibility, native console, real-provider or final R5 qualification."
+        },
+        {
+          "commit": "92529cf4d4d3660ac98e1c415fb60151aefaa9a7",
+          "command_or_procedure": "Fresh R4 wheel build/install/smoke, exact four-artifact Twine and live HTTP/MCP",
+          "environment": "Windows; isolated installed wheels; no provider or human participant",
+          "timestamp": "2026-11-17T17:07:37.665712+00:00",
+          "result": "PASS build/install/live; 54 tools, two authenticated identities; canonical stop0 and physical exit0",
+          "artifact_path": "execution/package-hst-r4/live-qualification.json",
+          "limitations": "No provider. R4 backend payload1024 files exactly equal R3 (729 Nexus/168 Core/127 Connector); R3 tests reused only in that scope. R4 UI requires its own browser checks."
+        }
+      ]
     },
     {
       "id": "HST-032",
@@ -3924,8 +4105,24 @@
       "schema_migration": false,
       "core_or_protocol_changes": false,
       "package_directory": "execution/package-hst-r3",
-      "installed_browser_performance": "NOT_RUN",
+      "installed_browser_performance": "Installed PASS746/SKIP8; browser scoped positives plus Working producer FAIL; final performance pending",
       "human": "DEFERRED_UNTIL_OUR_IMPLEMENTATION_AND_CHECKS_READY"
+    },
+    "package_r4": {
+      "source_commit": "92529cf4d4d3660ac98e1c415fb60151aefaa9a7",
+      "wheel_sha256": "9204183fcb00628b311f417d9cc601bbc6060f2c1347d200cf433cb8e32773a8",
+      "ready": "execution/package-hst-r4/READY.json",
+      "build_install_smoke_live": "PASS",
+      "runtime_equivalence": "execution/package-hst-r4/runtime-equivalence-vs-r3.json",
+      "pytest_r4_executed": false,
+      "ui_browser": "PENDING"
+    },
+    "r5_working_correction": {
+      "status": "IN_PROGRESS",
+      "cause": "Actual committed started/progress exists while Core receipt remains SUBMITTED.",
+      "approach": "Private full-key positive proof; preserve authority/liveness/gap/uncertainty and terminal fences.",
+      "receipt_core_schema_changes": false,
+      "final_qualification": "PENDING"
     }
   }
 }

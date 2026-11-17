@@ -1,0 +1,23 @@
+{
+  "status": "PASS_SUBSET",
+  "checks": [
+    {
+      "id": "canonical-revocation-denies-read",
+      "ok": true,
+      "detail": 401
+    },
+    {
+      "id": "protected-board-cleared",
+      "ok": true,
+      "detail": "Operator sign-in\nUsername\nPassword\nSign in"
+    },
+    {
+      "id": "fixture-data-cleared",
+      "ok": true,
+      "detail": true
+    }
+  ],
+  "body": "Operator sign-in\nUsername\nPassword\nSign in",
+  "http_status": 401,
+  "revocation": "Real own-account logout; not intercepted status"
+}

@@ -1,0 +1,21 @@
+### Result
+{"url":"http://127.0.0.1:50726/","snapshot":"- banner:\n  - button \"Collapse navigation\" [expanded]\n  - img \"Okto Nexus\"\n  - navigation \"Breadcrumb\": Home\n  - button \"Needs attention. All projects and Server. Attention counts are loading.\": Needs attention …\n  - text: ● Connecting\n  - button \"Sign out\"\n  - button\n- complementary:\n  - navigation \"Main navigation\":\n    - list \"Main destinations\":\n      - listitem:\n        - button \"Home\"\n      - listitem:\n        - button \"Conversations\"\n      - listitem:\n        - button \"Graph\"\n      - listitem:\n        - button \"Artifacts\"\n    - list \"More destinations\":\n      - listitem:\n        - button \"Advanced\"\n- main:\n  - heading \"Home\" [level=1]\n  - paragraph: Follow work, questions and deliveries.\n  - paragraph: Follow each harness below. Open an activity to see its exact context, or add a harness to this project.\n  - button \"New request\" [disabled]\n  - button \"Refresh\" [disabled]\n  - button \"Pause display\"\n  - region \"Project\":\n    - heading \"Project\" [level=2]\n    - paragraph: Unavailable project\n    - paragraph: Choose a project and follow its registered harnesses below.\n    - button \"Add harness\"\n    - text: Choose a project\n    - combobox \"Project\":\n      - option \"All projects\"\n      - option \"Unavailable project\" [selected]\n  - status\n  - paragraph: Active work, items needing you and retained results stay visible together. Each card keeps its linked sessions, questions and deliveries.\n  - status: Loading follow-up…\n  - region \"Follow-up\":\n    - heading \"Follow-up\" [level=2]\n    - region \"Active\":\n      - heading \"Active\" [level=3]\n      - text: Total unknown · Revalidating\n      - status: Loading active…\n    - region \"Needs you\":\n      - heading \"Needs you\" [level=3]\n      - text: Total unknown · Revalidating\n      - status: Loading needs you…\n    - region \"Results\":\n      - heading \"Results\" [level=3]\n      - text: Total unknown · Revalidating\n      - status: Loading results…"}
+### Ran Playwright code
+```js
+await (async page=>{
+ const cfg={"url": "http://127.0.0.1:50726", "workspace_id": "wsr_00f77ca7fea593696d4f0d81a62230cd"};
+ await page.addInitScript(({workspace})=>{
+  localStorage.setItem('okto-nexus-home-operational','enabled');
+  localStorage.setItem('okto-nexus-workspace',workspace);
+  localStorage.setItem('okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0',new Date().toISOString());
+ },{workspace:cfg.workspace_id});
+ await page.setViewportSize({width:1440,height:1100});
+ await page.goto(cfg.url,{waitUntil:'domcontentloaded'});
+ await page.getByTestId('home-board').waitFor({timeout:15000});
+ return {url:page.url(),snapshot:await page.locator('body').ariaSnapshot()};
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:50726/
+- Page Title: Okto Nexus

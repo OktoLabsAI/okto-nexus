@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="3" failures="0" skipped="0" tests="3" time="7.621" timestamp="2026-11-17T13:34:02.475016-03:00" hostname="Alienware_m15"><testcase classname="" name="tests.home_states.test_operational_sqlite" time="0.000"><error message="collection failure">ImportError while importing test module 'C:\Users\jpamb\AppData\Local\Temp\nexus-hst-installed-pj35h53y\tree\tests\home_states\test_operational_sqlite.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\tree\tests\home_states\test_operational_sqlite.py:13: in &lt;module&gt;
+    from tests.ui_simplification.test_fixtures import fixtures
+E   ModuleNotFoundError: No module named 'tests'</error></testcase><testcase classname="" name="tests.home_states.test_presentation_negotiation" time="0.000"><error message="collection failure">ImportError while importing test module 'C:\Users\jpamb\AppData\Local\Temp\nexus-hst-installed-pj35h53y\tree\tests\home_states\test_presentation_negotiation.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\tree\tests\home_states\test_presentation_negotiation.py:8: in &lt;module&gt;
+    from tests.ui_simplification.test_fixtures import fixtures
+E   ModuleNotFoundError: No module named 'tests'</error></testcase><testcase classname="" name="tests.home_states.test_projection_batch" time="0.000"><error message="collection failure">ImportError while importing test module 'C:\Users\jpamb\AppData\Local\Temp\nexus-hst-installed-pj35h53y\tree\tests\home_states\test_projection_batch.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\tree\tests\home_states\test_projection_batch.py:12: in &lt;module&gt;
+    from tests.ui_simplification.test_entry_relations import scenario
+E   ModuleNotFoundError: No module named 'tests'</error></testcase></testsuite></testsuites>

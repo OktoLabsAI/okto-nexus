@@ -1,0 +1,569 @@
+{
+  "sessions": [
+    {
+      "session_id": "ses_2cbd8dc3d55deca5c06520ab3c72fea2",
+      "reference": {
+        "server_id": "srv_c6aea69d064f5a70980da21e32a337da",
+        "executor_id": "exe_5b1de8ee8c5143ab362e6b263523d87b",
+        "binding_id": "bind_25d56bcf7826f8aac63ac50ded1a3663",
+        "endpoint_id": "ep_fb8a52e33fefae123bee63025b6a0d8e",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_00f77ca7fea593696d4f0d81a62230cd",
+        "workspace_binding_id": "wxb_04c478979d02b8c5c68564f3e5a2a050"
+      },
+      "text": "HST synthetic output ses_2cbd8dc3d55deca5c06520ab3c72fea2",
+      "closed": true
+    }
+  ],
+  "operations": [
+    {
+      "intent": "runtime.close",
+      "operation_id": "op_9f871de90757570e37ed52f2a8183e7f",
+      "scope": {
+        "server_id": "srv_c6aea69d064f5a70980da21e32a337da",
+        "executor_id": "exe_5b1de8ee8c5143ab362e6b263523d87b",
+        "binding_id": "bind_25d56bcf7826f8aac63ac50ded1a3663",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_00f77ca7fea593696d4f0d81a62230cd",
+        "workspace_binding_id": "wxb_04c478979d02b8c5c68564f3e5a2a050",
+        "session_id": "ses_2cbd8dc3d55deca5c06520ab3c72fea2",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Cfr5cFOY.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Bh2ghaTD.css",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-icon.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "controlled_delay_seconds": 0,
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    }
+  ],
+  "controls": [
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/setup/hst-worker",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/agents/hst-worker/executors",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/agents/hst-worker/runtime-options",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime-management/runtime/executors/exe_5b1de8ee8c5143ab362e6b263523d87b/installations:check",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/agents/hst-worker/runtime-options",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime-management/connections/setup:test",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/setup-tests/connect_f228e6ca06ce412db7c53786d48c0791",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime-management/connections/setup:finish",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/setup/hst-worker",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/bindings/bind_25d56bcf7826f8aac63ac50ded1a3663",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime-management/connections/public-ids/associate-existing",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/mcp/",
+      "tool": "handoff_create",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/harness/grants",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/harness/endpoints",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/mcp/",
+      "tool": "handoff_claim",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_490be3fcacd11aa73c8f88c69c626947",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_490be3fcacd11aa73c8f88c69c626947",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_490be3fcacd11aa73c8f88c69c626947",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_490be3fcacd11aa73c8f88c69c626947",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_490be3fcacd11aa73c8f88c69c626947",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_490be3fcacd11aa73c8f88c69c626947",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_490be3fcacd11aa73c8f88c69c626947",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_490be3fcacd11aa73c8f88c69c626947",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_490be3fcacd11aa73c8f88c69c626947",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/mcp/",
+      "tool": "handoff_get",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/operator-auth/account",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/operator-auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/mcp/",
+      "tool": "handoff_complete",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workspaces/wsr_00f77ca7fea593696d4f0d81a62230cd/handoffs/hof_aa3ebbc488484825977c33de412c9abc/verify",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/intents:resolve",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/operations",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_9f871de90757570e37ed52f2a8183e7f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_9f871de90757570e37ed52f2a8183e7f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_9f871de90757570e37ed52f2a8183e7f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_9f871de90757570e37ed52f2a8183e7f",
+      "status": 200
+    }
+  ],
+  "unknown": false,
+  "provider_invocations": 0
+}

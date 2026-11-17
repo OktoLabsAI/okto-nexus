@@ -73,7 +73,7 @@ def main():
     assert ready['source_commit']==frozen['source_commit']
     # Evidence/documentation commits may advance HEAD; product/test inputs may not.
     ancestor=subprocess.run(['rtk','proxy','git','merge-base','--is-ancestor',
-        frozen['source_commit'],'HEAD'],cwd=REPO,stdin=subprocess.PIPE,
+        frozen['source_commit'],'HEAD'],cwd=REPO,
         input=b'',stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15)
     assert ancestor.returncode==0, 'Frozen candidate must remain an ancestor of current HEAD'
     build=json.loads((package/'build-manifest.json').read_text())
@@ -113,7 +113,7 @@ def main():
         source=REPO/name
         assert not source.is_symlink() and source.resolve().is_relative_to(REPO.resolve()), name
         blob=subprocess.run(['rtk','proxy','git','cat-file','blob',frozen['source_commit']+':'+name],
-            cwd=REPO,stdin=subprocess.PIPE,input=b'',stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15)
+            cwd=REPO,input=b'',stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15)
         assert blob.returncode==0, (name,blob.returncode)
         data=source.read_bytes()
         assert data==blob.stdout, ('Helper differs from frozen candidate blob',name)
@@ -171,7 +171,7 @@ def main():
     ini.write_text('[pytest]\nasyncio_mode=auto\nasyncio_default_fixture_loop_scope=function\nmarkers=\n'+''.join('    '+m+'\n' for m in markers))
     selected_arguments=[str(p)+suffix for p in selected for suffix in sorted(selectors[p])]
     pytest_args=['-p','hst_origin_guard','-c',str(ini),'--rootdir='+str(tree),'--confcutdir='+str(tree),*selected_arguments,'-v','--tb=short','-o','faulthandler_timeout=0','--junitxml='+str(root/'reports/tests.xml')]
-    helper_paths=[str(root/'tree/tests'),*[str(p) for p in sorted((root/'tree/tests').rglob('*')) if p.is_dir() and any(p.glob('*.py'))]]
+    helper_paths=[str(tree),str(root/'tree/tests'),*[str(p) for p in sorted((root/'tree/tests').rglob('*')) if p.is_dir() and any(p.glob('*.py'))]]
     code='import sys;sys.path[:0]='+repr([str(root/'guard'),*helper_paths])+';import pytest;raise SystemExit(pytest.main('+repr(pytest_args)+'))'
     argv=[str(prefix/'Scripts/python.exe'),'-I','-B','-X','utf8','-c',code]
     env=builder.environment(root)
@@ -239,6 +239,8 @@ def main():
     record['helper_drift']=helper_drift
     after=payload()
     source_after=builder.pins()
+    assert not (tree/'src').exists(), 'Owned test namespace must not contain application src'
+    (root/'source-after.json').write_text(json.dumps(source_after,indent=2)+'\n',encoding='utf-8')
     record.update(ended_at=datetime.now(timezone.utc).isoformat(),payload_files=len(after),payload_drift=[p for p in before if before[p]!=after[p]],source_drift=[p for p in sources.keys()|source_after.keys() if sources.get(p)!=source_after.get(p)],known_processes=list(known.values()))
     (root/'payload-after.json').write_text(json.dumps(after,indent=2)+'\n')
     (root/'result.json').write_text(json.dumps(record,indent=2)+'\n')

@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-w0nhy3vj",
+  "shard": 0,
+  "counts": {
+    "PASS": 469,
+    "SKIP": 0,
+    "FAIL": 0,
+    "NOT_RUN": 0
+  },
+  "collected": 469,
+  "junit_errors": 0,
+  "junit_seconds": 710.769,
+  "pytest_exit_code": 0,
+  "source_pins": 1821,
+  "payload_files": 1031,
+  "full_source_equal": true,
+  "full_payload_equal": true,
+  "copied_test_files": 886,
+  "copied_test_drift": [],
+  "copied_source_mismatch": [],
+  "helper_drift": [],
+  "signals": [],
+  "timed_out": false,
+  "forced": false,
+  "known_processes_still_alive": [],
+  "origins": "Every loaded Nexus/Core/Connector module must resolve inside the frozen installed prefix; see origins start/end.",
+  "raw_logs": {
+    "stdout_sha256": "d382843386ac8e06b8b711a9d8d7c5b2a4ec5ce59541509f7016f8e82a2bc0d7",
+    "junit_sha256": "fe06a4b41f798eb59a553eba97e7ddf4b702acf32f1d6a9c29f03937fd9f0887",
+    "copied": false
+  },
+  "limits": [
+    "Browser functional journeys ran concurrently; no benchmark claim.",
+    "SKIP is non-execution; no PTY/POSIX/human/real harness qualification inferred.",
+    "Installed pytest counts alone do not verify every complete HST acceptance scenario.",
+    "250ms descendant sampling does not enumerate every short-lived child; nested-child provenance is separate."
+  ]
+}

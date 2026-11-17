@@ -1,0 +1,9 @@
+### Ran Playwright code
+```js
+await page.getByRole('button', { name: 'Pause display' }).click();
+```
+### Page
+- Page URL: http://127.0.0.1:62116/
+- Page Title: Okto Nexus
+### Snapshot
+- [Snapshot](.playwright-cli\page-2026-11-17T16-35-13-715Z.yml)
