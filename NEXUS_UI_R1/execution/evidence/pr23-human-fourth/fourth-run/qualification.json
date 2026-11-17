@@ -1,0 +1,169 @@
+{
+  "status": "INCOMPLETE_CONCEPT_MISMATCH_NO_PASS",
+  "participant": "Same participant with prior exposure and feedback; fourth iterative simulation, not a new blind novice.",
+  "feedback_literal": "Nao entendi o conceito de abra uma conexao ja registrada no projeto sample project para voltar a acompanha-la. O que seria isso? Do ponto de vista de usuário, eu deveria ver APENAS harnesses registrados com os status active, Needs you, results. DENTRO do card de cada harness deveriam ter os eventos. Nao entendi a variedade de cards em active.",
+  "feedback_source": "Anonymous literal supplied in parent /root message; exact chat send/response timestamps unavailable.",
+  "reason": "Participant corrected the intended organizing concept: registered harness cards with events inside, arranged by Active/Needs you/Results; the existing variety of activity cards did not match that model. Round stopped for concept correction, not treated as successful usability acceptance.",
+  "observations": {
+    "trusted_click_count": 8,
+    "trusted_clicks": [
+      {
+        "at": "2026-11-17T03:16:19.163167+00:00",
+        "type": "ui_action",
+        "label": "Connect or resume"
+      },
+      {
+        "at": "2026-11-17T03:16:22.917961+00:00",
+        "type": "ui_action",
+        "label": "Close modal"
+      },
+      {
+        "at": "2026-11-17T03:18:02.809194+00:00",
+        "type": "ui_action",
+        "label": "View session ui-session-2 · ws · exe_9dac6b17a961522019068eb8ed897840"
+      },
+      {
+        "at": "2026-11-17T03:18:22.415577+00:00",
+        "type": "ui_action",
+        "label": "Continue this exact session"
+      },
+      {
+        "at": "2026-11-17T03:18:29.458847+00:00",
+        "type": "ui_action",
+        "label": "Continue this exact session"
+      },
+      {
+        "at": "2026-11-17T03:18:31.045855+00:00",
+        "type": "ui_action",
+        "label": "Refresh history"
+      },
+      {
+        "at": "2026-11-17T03:18:32.573540+00:00",
+        "type": "ui_action",
+        "label": "History"
+      },
+      {
+        "at": "2026-11-17T03:18:35.021821+00:00",
+        "type": "ui_action",
+        "label": "Close modal"
+      }
+    ],
+    "writes": [],
+    "binding_reads": [
+      {
+        "at": "2026-11-17T03:18:02.912634+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/runtime-management/connections/bindings/ui-binding-2",
+        "status": 200
+      }
+    ],
+    "home_target_reads": [
+      {
+        "at": "2026-11-17T03:18:02.813515+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T03:18:02.849942+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T03:18:02.855083+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T03:18:22.418402+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      }
+    ],
+    "http_status_counts": {
+      "200": 157,
+      "404": 2
+    }
+  },
+  "facts": {
+    "setup_commits": 0,
+    "bindings": [
+      {
+        "binding_id": "binding",
+        "binding_revision": 1
+      },
+      {
+        "binding_id": "ui-binding-2",
+        "binding_revision": 1
+      }
+    ],
+    "sessions": [
+      {
+        "session_id": "ses_a7f4c17aaf32ab1789e0f1c0f288dfd7",
+        "lifecycle_state": "READY"
+      },
+      {
+        "session_id": "ui-session-2",
+        "lifecycle_state": "CLOSED"
+      }
+    ],
+    "operation_action_counts": [
+      {
+        "action": "runtime.open",
+        "count": 2
+      },
+      {
+        "action": "turn.submit",
+        "count": 3
+      }
+    ],
+    "original_grants_preserved": true
+  },
+  "preparation_manifest_entries": 14,
+  "preparation_manifest_sha256": "b254835b958d1749cc182f65c8edbca55b69bcb5073de8339080b1eae252c60d",
+  "preparation_pin_drift": [],
+  "limits": [
+    "Eight trusted clicks are observed, not eight completed tasks. Session/context GET200 and Continue button clicks do not establish participant understanding or an executed continuation; no POST occurred.",
+    "Initial preparation HTTP reads and initial screenshot precede handoff and are not human actions. No draft/input, personal data, auth header, cookie, credential, response body or query was captured by the observer.",
+    "Exact task-send/feedback timestamps and completion duration are unavailable. Do not derive completion time from first/last click.",
+    "Base has two distinct canonical bindings/sessions with repeated subject/Codex/unnamed-host display labels. This limitation was disclosed before handoff; no agent/host/authority was invented or changed.",
+    "The original120second native request expired before task1 and was retained only as antecedent. No new question, authority renewal, observation extension or provider call was issued. Decision expiry is separate from this concept feedback.",
+    "Initial result is correlated to nonterminal work, so Results0 does not establish missing result data. No extra result card was fabricated.",
+    "Only initial owned browser screenshot is retained. No screenshot or DOM inspection was taken under the participant after handoff."
+  ],
+  "cleanup": {
+    "browser_session": "ui043-fourth-human",
+    "browser_cli_close_exit_code": 0,
+    "browser_daemon_pid": 52712,
+    "fixture_exec_session": 56736,
+    "fixture_pid": 36324,
+    "fixture_exit_code": 0,
+    "physical_check_at": "2026-11-17T03:19:44.3826321Z",
+    "browser_daemon_absent": true,
+    "fixture_absent": true,
+    "listener49774_absent": true,
+    "peer_wss_factory": {
+      "peer_thread_stopped": true,
+      "wss_lifespan_factory_closed": true
+    },
+    "evidence_tools": {
+      "browser_close": "5f6fcd",
+      "fixture_exit": "fc5888",
+      "physical_check": "f534b8"
+    },
+    "data_preserved": true,
+    "chrome_children": "Not separately inventoried; named owned browser close0 observed. No claim about unrelated Chrome processes."
+  },
+  "provider_calls": 0,
+  "native_binary_calls": 0,
+  "new_human_prompt": false,
+  "product_or_ledger_changes": false
+}

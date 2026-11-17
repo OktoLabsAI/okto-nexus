@@ -1819,7 +1819,7 @@
       "id": "UI-017",
       "pr": "PR-03",
       "title": "Projetar relações unificadas de trabalho e sessões",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-003",
         "UI-005"
@@ -1857,19 +1857,21 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
       "id": "UI-018",
       "pr": "PR-03",
       "title": "Unir atenção e resultados por correlação",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-017"
       ],
@@ -1908,19 +1910,21 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
       "id": "UI-019",
       "pr": "PR-03",
       "title": "Adicionar sessões sem operação aos alvos tipados",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-003",
         "UI-017"
@@ -1957,21 +1961,23 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
         "Existing RuntimeTerminal useLayoutEffect emits expected SSR warning; no browser speech or human comprehension result.",
         "Source targets/viewer do not close unified Home or UI/Connector onboarding gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
       "id": "UI-020",
       "pr": "PR-03",
       "title": "Aplicar escopo, contagem e paginação por grupo",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-017",
         "UI-018"
@@ -2011,19 +2017,21 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
       "id": "UI-021",
       "pr": "PR-03",
       "title": "Expor contrato de entries compatível e limitado",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-019",
         "UI-020"
@@ -2062,12 +2070,14 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
@@ -2112,19 +2122,21 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "Measured bound O(N+relations), 55 SQL at1/10/100 agents. Large scenario misses500ms latency target; no native harness/browser performance claim.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
       "id": "UI-023",
       "pr": "PR-04",
       "title": "Substituir listas paralelas pela região única",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-010",
         "UI-021"
@@ -2160,19 +2172,21 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
       "id": "UI-024",
       "pr": "PR-04",
       "title": "Implementar expansão de sessões e conexões ociosas",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-023"
       ],
@@ -2209,19 +2223,21 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
       "id": "UI-025",
       "pr": "PR-04",
       "title": "Aplicar filtros, ordem e vazio proporcionais",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-023",
         "UI-024"
@@ -2262,19 +2278,21 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
       "id": "UI-026",
       "pr": "PR-04",
       "title": "Ligar ações básicas e incidentes globais",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-008",
         "UI-025"
@@ -2312,19 +2330,21 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
       "id": "UI-027",
       "pr": "PR-04",
       "title": "Adaptar atualização compartilhada à lista única",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-021",
         "UI-025"
@@ -2360,12 +2380,14 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
@@ -2414,12 +2436,14 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
@@ -2717,7 +2741,7 @@
       "id": "UI-035",
       "pr": "PR-06",
       "title": "Expor retomar/adicionar no onboarding da UI",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-016",
         "UI-030"
@@ -2754,13 +2778,15 @@
         "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
         "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr20-board-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md"
+        "NEXUS_UI_R1/execution/pr20-home-board-panel-review.md",
+        "NEXUS_UI_R1/execution/HARNESS_CARD_R3_AMENDMENT.md"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
         "Conexoes e recuperacao qualificadas com peers sinteticos; sessoes runtime/Home e provedores reais exigem evidencias separadas.",
         "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications.",
-        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain."
+        "Board browser PR20:24 scoped checks PASS,1NOT_RUN(Needs you pagination has no extra page in fixture); inert Test/Finish, not human or native qualification. Existing broad task/scenario limits remain.",
+        "R3 user correction in progress: one card per fully identified registered harness instance, events inside; R2 entry-card browser/package cuts remain antecedents, not R3 qualification."
       ]
     },
     {
@@ -3111,7 +3137,8 @@
         "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/readiness.json",
         "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/runtime-state.json",
         "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/task1-notification.json",
-        "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/README.md"
+        "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/README.md",
+        "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/fourth-run/qualification.json"
       ],
       "limitations": [
         "Primeiro percurso humano falhou explicitamente. Correcoes tecnicas e segundo percurso emandamento nao substituem aceite humano; sem sucesso/tempo inventados.",
@@ -5688,7 +5715,8 @@
         "NEXUS_UI_R1/execution/evidence/pr14-human-session/first-run/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr14-human-session/second-run/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr15-human-third-prepare/third-run/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr15-human-third-prepare/third-run/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr23-human-fourth/fourth-run/qualification.json"
       ],
       "tasks": [
         "UI-043"
@@ -5946,6 +5974,10 @@
     {
       "at": "2026-11-17T03:16:09.704292+00:00",
       "event": "User requested fourth iterative human simulation. Fresh own app/DB and visible browser at49774 on unchanged7491b691/DXslPEEE; readiness is read-only,14 preparation pins verified,0 baseline human clicks/POST. Task1 invited through async question: open any existing project connection, no Add/work. Test peers inert, no provider/native/personal authentication. Original lane/grant/request expiries preserved; observation60min has independent bounded extension. Duplicate catalog display labels and expired initial native request are fixture limitations, not participant failures. Keep browser/fixture open for handoff; no human acceptance inferred. TQUAL05 remains previousFAIL and TQUAL02BLOCKED."
+    },
+    {
+      "at": "2026-11-17T03:27:14.260911+00:00",
+      "event": "Fourth human journey incomplete: user did not understand opening a registered connection and explicitly expects ONLY registered harness cards with events inside, rather than varied work/session/attention cards.8 trusted clicks/0POST;0setupcommits, original2bindings/grants unchanged. Own browser/fixture exited0 and physical absence verified. Exact feedback preserved inPR23/fourth-run; no duration or humanPASS inferred. R3 amendment replaces visual card unit with a registered harness instance, preserves three columns and backend aggregation/pagination, full identities, unlinked basic fallback and canonical controls. Reuse services/controllers/targets; no Core/protocol/Attention/setup rewrite, paid call, personal install or release. Original input IDs/specs/SHAs and prior qualification blockers remain."
     }
   ],
   "risk_acceptances": [],
