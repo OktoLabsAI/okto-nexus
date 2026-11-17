@@ -1,0 +1,152 @@
+{
+  "state": "PREPARED_NOT_EXECUTED",
+  "execution_authorized_by_this_file": false,
+  "base_source_commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+  "base_source_pin_count": 1828,
+  "base_wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+  "base_payload_files": 1031,
+  "future_test_file": "test_home_read_boundary_supplement.py",
+  "planned_cases": 7,
+  "execution_gates": [
+    "Root closes performance/diagnostic window and authorizes a finite supplementary cut explicitly.",
+    "Write/review the new test in an owned copied-tests tree; preserve all existing source, test, helper and prefix bytes.",
+    "Pin the new external test and any new helper separately; retain all 1828 base input pins, copied helper git-blob guards and 1031 installed payload hashes.",
+    "Installed prefix only, -I -B, no tree/src, all loaded Nexus/Core/Connector modules inside that prefix; closed PIPE and sibling CWD/TMP.",
+    "Exact planned selection, no fail-fast, finite 300-second parent deadline with owned birth/exe containment; no automatic rerun.",
+    "No provider, authenticated native CLI, personal home, grant renewal or OS-session event. Browser assertions require their own later window."
+  ],
+  "cases": [
+    {
+      "node": "test_visual_agent_filter_preserves_hidden_productive_sibling",
+      "ids": ["HST-T-A06"],
+      "count": 1,
+      "layer": "API/SQLite with canonical inert-runtime currentness; native provider zero",
+      "reuse": [
+        "tests/home_states/test_atomic_working.py::test_submitted_core_started_event_proves_working_and_terminal_returns_idle",
+        "tests/home_states/test_operational_status.py::test_blocked_a_and_submitted_progress_b_then_terminal_b_keep_distinct_dimensions",
+        "tests/home_states/test_projection_batch.py::authorized",
+        "tests/home_states/test_productive_progress_propagation.py::read_relations"
+      ],
+      "given": "One registered binding, exact session A with a canonical blocking request addressed to the operator, exact distinct session B with canonical SUBMITTED plus committed current started proof. Choose a visual agent filter that retains A's work but hides B's work item.",
+      "assertions": [
+        "Prove the filter really hides B in the visible Work selection; do not assume it from labels.",
+        "Compare complete private operation/progress keys before and after the visual filter; exact B remains present.",
+        "GET harness-board presentation_version=2 with that same filter: original full binding tuple unchanged, activity working, running_sessions value 1, blocks_harness false, blocking partial, request A still correctly scoped.",
+        "After canonical terminal B, a fresh filtered GET may move A to waiting_user/full block; no new turn is admitted by a read.",
+        "Read-only canonical-table snapshots remain equal around GETs; first setup/binding/grant and session IDs stay exact."
+      ],
+      "readiness": "Requires reviewed composition of the two existing canonical inert-runtime helpers. copy_session/add_parallel_running_read_fact do not copy a valid lease and must NOT manufacture live authority. If the complete fixture cannot be built with existing owners, qualify only the private-query filter invariant and leave A06 API/presentation partial explicitly.",
+      "browser_remaining": "Apply the actual visual filter in the browser and inspect unchanged binding, Working status and independently reachable request without selecting latest."
+    },
+    {
+      "node": "test_failed_or_cancelled_capture_retains_exact_partial_output",
+      "ids": ["HST-T-E08", "HST-T-E09"],
+      "count": 2,
+      "parameters": ["FAILED", "CANCELLED"],
+      "layer": "Historical synthetic migrated SQLite facts + actual ASGI HTTP; not native execution proof",
+      "reuse": [
+        "tests/home_evolution/fixtures.py::home_scenario",
+        "tests/home_evolution/test_home_queries.py::service",
+        "tests/home_evolution/test_home_http.py::http",
+        "tests/home_evolution/test_home_queries.py::test_result_preview_seen_and_bounded_artifact_metadata",
+        "tests/home_states/test_results_boundary_completion.py::_productive_rows"
+      ],
+      "given": "The existing exact fixture-success operation has the parameterized terminal receipt and a schema-valid historical execution_results capture anchored to its own session/epoch/sequence event. The captured text contains a short, unique partial-output marker.",
+      "assertions": [
+        "GET /home/results returns the same source operation ID and exact server/executor/workspace/session/operation target, not a newly generated result or successor.",
+        "Outcome and delivery_semantics.execution_outcome are exactly failed/cancelled; task_state and verification remain not_applicable; no approval evidence is invented.",
+        "Preview equals the complete short partial-output marker, truncated false, content_state available, regardless of unsuccessful productive outcome.",
+        "GET exact target remains available and still points to that same operation; repeated GETs preserve all productive rows, receipts, capture and message delivery/ACK state."
+      ],
+      "readiness": "Straight extension of existing schema-valid capture fixture; insert the referenced historical event before execution_results. No canonical_frame, watermark, native prompt or real failure/cancel claim is fabricated.",
+      "browser_remaining": "Open the exact failed/cancelled delivery, read the partial output, and assert no generic productive replay CTA. Prior R5 browser outcome checks do not replace these literal partial-output assertions."
+    },
+    {
+      "node": "test_offpage_seen_three_artifacts_retention_and_no_inbox_ack",
+      "ids": ["HST-T-E16"],
+      "count": 1,
+      "layer": "SQLite/HTTP Results and auxiliary preference transition",
+      "reuse": [
+        "tests/home_evolution/test_home_boundaries.py::completed_handoffs",
+        "tests/home_evolution/test_home_boundaries.py::canonical_rows",
+        "tests/home_evolution/test_home_result_artifact_grouping.py::test_http_result_collects_same_claim_files_once_and_excludes_foreign_claim_and_workspace",
+        "src/okto_nexus/adapters/inbound/http/attention.py::SeenBody"
+      ],
+      "given": "At least three result identities in project A and a result in B; limit=1 guarantees selected result is off the first page. The selected result carries exactly three linked artifact references. It is older than 24 hours and initially unseen.",
+      "assertions": [
+        "Traverse real cursors to locate selected ID; prove it is absent from page one and reachable, not inferred from an initial preview.",
+        "Before seen, old selected result is retained by unseen preference; its three exact artifact IDs appear once each, same claim/workspace, with no private paths.",
+        "Use the exact occurrence attention_id, source_revision and preference_revision through canonical /attention/{id}/seen; wire the fixture Home and Attention services to the same migrated store, not different DBs.",
+        "Only that preference changes. Other off-page and project-B occurrences retain their individual seen state; no message_deliveries row/ACK, claim, grant, receipt, decision, operation or capture changes.",
+        "Fresh retained feed applies the 24-hour rule to the now-seen selected result; old cursors conflict if the global revision changes, and reread starts from a new snapshot without merging revisions.",
+        "Exact legacy historical result/target remains reachable according to existing detail contract even if the retained board feed no longer includes it."
+      ],
+      "readiness": "Three linked metadata references can reuse the grouping fixture. This does not assert managed artifact content retrieval; actual artifact API/store proof is a separate existing layer. Verify preference events separately from productive tables rather than claiming the entire DB is immutable.",
+      "browser_remaining": "Open the off-page delivery and all three artifact affordances, mark seen and observe retained-feed refresh while keeping exact historical context; no inbox ACK request."
+    },
+    {
+      "node": "test_forged_exact_result_targets_disclose_no_preview_or_counter",
+      "ids": ["HST-T-H02"],
+      "count": 1,
+      "layer": "Actual ASGI denial responses over the migrated Results fixture",
+      "reuse": [
+        "tests/home_evolution/test_home_final_scope.py::read_http",
+        "tests/home_evolution/test_home_queries.py::test_exact_target_server_workspace_and_session",
+        "tests/home_evolution/test_home_boundaries.py::test_artifact_reference_never_grants_agent_read_or_cross_workspace_access"
+      ],
+      "given": "Read an own result containing a unique synthetic protected-output marker, then alter only server, explicit workspace fence, session or operation in its exact target.",
+      "assertions": [
+        "Wrong server or mismatched explicit workspace fence returns CONFLICT/409; nonexistent exact session or operation returns NOT_FOUND/404, according to current service branches.",
+        "Denied JSON has no data payload, protected marker, preview, artifact path or summary/count fields; no success-shaped empty inventory is returned.",
+        "Canonical productive-row snapshots remain identical across the forged GETs.",
+        "Do not invent per-workspace ACL for the global operator; the negative is exact scope/reference mismatch or a genuine unauthorized agent transport."
+      ],
+      "browser_remaining": "Forged direct URL/panel navigation must render denial with no protected preview/counter and no fallback to another item."
+    },
+    {
+      "node": "test_http_hostile_public_label_and_private_marker_are_data_only",
+      "ids": ["HST-T-H03"],
+      "count": 1,
+      "layer": "SQLite projection + actual application/json response; no browser execution claim",
+      "reuse": [
+        "tests/ui_simplification/test_fixtures.py::fixtures",
+        "tests/home_states/test_operational_sqlite.py::test_session_selector_labels_share_connection_redaction_and_bounds",
+        "tests/home_evolution/test_home_boundaries.py::test_html_artifact_cannot_execute_with_operator_origin_privileges"
+      ],
+      "given": "An own public workspace/agent label has a bounded synthetic hostile HTML/ANSI marker; a separate private Bearer-style token appears only in the designated private input/metadata.",
+      "assertions": [
+        "Actual HTTP response is application/json and parses normally; public label remains a bounded string according to the existing projection contract.",
+        "Private marker, request auth payload and provider/filesystem paths do not occur in serialized public Home/selector data.",
+        "No productive operation or process is started by these GETs; compare canonical tables and the inert fixture's native-open count.",
+        "Do not demand HTML encoding in the JSON API or assume a raw public string executed. HTML/ANSI rendering safety is tested separately in a real browser."
+      ],
+      "browser_remaining": "Use real DOM textContent and script/global marker checks plus console/network observations; ensure no HTML handler/ANSI execution or protected token disclosure. HTTP JSON/header checks alone do not qualify this."
+    },
+    {
+      "node": "test_revoked_request_scope_preserves_old_target_and_refuses_stale_action",
+      "ids": ["HST-T-H07"],
+      "count": 1,
+      "layer": "Canonical native-request fixture + Home exact read + actual decision rejection",
+      "reuse": [
+        "tests/execution_r4/test_native_decisions.py::decision_state[input]",
+        "tests/execution_r4/test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation",
+        "tests/home_states/test_operational_sqlite.py::test_current_agent_and_realization_fences_in_real_sqlite_projection"
+      ],
+      "given": "Obtain one actual canonical input request, its original Home exact target and decision CAS/revision. Revoke its own grant or make the admitted authorization revision stale using the established negative-fixture contract; do not create or widen authority.",
+      "assertions": [
+        "Repeat the original stale decision body, not a new intent: current HTTP authority denies 403/409 and creates no new operation/decision/outbox row.",
+        "Re-read the same exact Home target: historical context, when authorized, must preserve its old IDs; do not require history to disappear merely because live action authority expired.",
+        "Fresh operational state/allowed actions no longer claim current execution/response authority from the revoked scope.",
+        "Full canonical table snapshot after the explicit revocation remains unchanged by stale POST and passive GETs; old request, result and references remain auditable."
+      ],
+      "readiness": "This closes the revoked-authority combination, not the literal successor-with-same-name browser case. The latter needs a genuinely created second session and explicit old-target action/selection checks; never invent it by renaming an ID.",
+      "browser_remaining": "Keep the old panel open through genuine revocation/successor creation; reject stale action and never select the successor by name/latest."
+    }
+  ],
+  "not_in_this_batch": [
+    "D11/D12/H05 concurrent Home/bell decision and lost-response recovery belong to the separate higher-priority canonical browser fixture.",
+    "No full-scenario PASS from this plan or from seven future pytest passes alone.",
+    "No real harness/provider, screen reader, native zoom, remote topology, human usability/default approval or performance-SLO claim.",
+    "No product, schema, Core, Connector, Attention-engine, receipt, parser or authority changes proposed."
+  ]
+}

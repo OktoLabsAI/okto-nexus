@@ -3088,6 +3088,15 @@
           "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
           "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
           "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:16:39.994430+00:00",
+          "artifact_path": "execution/performance-hst/persistent-r7-final/qualification.json",
+          "environment": "Windows; same immutable mixed/OPEN seeds; installed baseline/R7 prefixes; exclusive persistent-ASGI window",
+          "command_or_procedure": "Ten sequential cuts; three warmups and twenty samples per route, then a separate three-GET diagnostic",
+          "result": "FAIL500ms: candidate5PASS/3FAIL, baseline0PASS/2FAIL; all ten measured, physical exit0 and no drift",
+          "limitations": "First HTTP proxy is not DOM. OPEN V2 narrowly met500ms; mixed V2 overview regressed versus paired baseline. Fast path925projections proven; overlapping diagnostic costs cannot be added. Correction plan remains OPEN, no waiver."
         }
       ]
     },
@@ -3584,6 +3593,15 @@
           "command_or_procedure": "Fresh installed Working/request/parallel-terminal/blocking/exact-context/partial-source/logout sequence",
           "environment": "Windows; isolated R7 source or frozen installed wheel; synthetic peers; no provider or human",
           "limitations": "Seen mutation not run. Unanswered request per-session close unconfirmed; application owner physical drain confirmed. No timing, native campaign, human, zoom or AT claim."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:16:39.994430+00:00",
+          "artifact_path": "execution/performance-hst/persistent-r7-final/qualification.json",
+          "environment": "Windows; same immutable mixed/OPEN seeds; installed baseline/R7 prefixes; exclusive persistent-ASGI window",
+          "command_or_procedure": "Ten sequential cuts; three warmups and twenty samples per route, then a separate three-GET diagnostic",
+          "result": "FAIL500ms: candidate5PASS/3FAIL, baseline0PASS/2FAIL; all ten measured, physical exit0 and no drift",
+          "limitations": "First HTTP proxy is not DOM. OPEN V2 narrowly met500ms; mixed V2 overview regressed versus paired baseline. Fast path925projections proven; overlapping diagnostic costs cannot be added. Correction plan remains OPEN, no waiver."
         }
       ]
     }
@@ -6105,6 +6123,15 @@
           "result": "FAIL500ms: six large cases; four small cases PASS. All ten measured/ready with no drift, retry or timeout.",
           "artifact_path": "execution/performance-hst/persistent-r6-final/qualification.json",
           "limitations": "First HTTP proxy is not DOM. Mixed V2 regressed in this series; no optimization win or target waiver. Profile R6 is diagnostic only."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:16:39.994430+00:00",
+          "artifact_path": "execution/performance-hst/persistent-r7-final/qualification.json",
+          "environment": "Windows; same immutable mixed/OPEN seeds; installed baseline/R7 prefixes; exclusive persistent-ASGI window",
+          "command_or_procedure": "Ten sequential cuts; three warmups and twenty samples per route, then a separate three-GET diagnostic",
+          "result": "FAIL500ms: candidate5PASS/3FAIL, baseline0PASS/2FAIL; all ten measured, physical exit0 and no drift",
+          "limitations": "First HTTP proxy is not DOM. OPEN V2 narrowly met500ms; mixed V2 overview regressed versus paired baseline. Fast path925projections proven; overlapping diagnostic costs cannot be added. Correction plan remains OPEN, no waiver."
         }
       ]
     },
@@ -6153,6 +6180,15 @@
           "result": "FAIL500ms: six large cases; four small cases PASS. All ten measured/ready with no drift, retry or timeout.",
           "artifact_path": "execution/performance-hst/persistent-r6-final/qualification.json",
           "limitations": "First HTTP proxy is not DOM. Mixed V2 regressed in this series; no optimization win or target waiver. Profile R6 is diagnostic only."
+        },
+        {
+          "commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+          "timestamp": "2026-11-17T20:16:39.994430+00:00",
+          "artifact_path": "execution/performance-hst/persistent-r7-final/qualification.json",
+          "environment": "Windows; same immutable mixed/OPEN seeds; installed baseline/R7 prefixes; exclusive persistent-ASGI window",
+          "command_or_procedure": "Ten sequential cuts; three warmups and twenty samples per route, then a separate three-GET diagnostic",
+          "result": "FAIL500ms: candidate5PASS/3FAIL, baseline0PASS/2FAIL; all ten measured, physical exit0 and no drift",
+          "limitations": "First HTTP proxy is not DOM. OPEN V2 narrowly met500ms; mixed V2 overview regressed versus paired baseline. Fast path925projections proven; overlapping diagnostic costs cannot be added. Correction plan remains OPEN, no waiver."
         }
       ]
     },
@@ -6587,7 +6623,7 @@
       "supplemental_r6": "execution/installed-supplement-r6/qualification.json",
       "human": "DEFERRED; no participant action requested",
       "default_rollout": false,
-      "performance": "PENDING_FINAL_EXCLUSIVE_WINDOW"
+      "performance": "R7_MEASURED_FAIL500MS; DOM_NOT_RUN"
     },
     "performance_r6": {
       "measured": 10,
@@ -6613,7 +6649,7 @@
       "corrected": "execution/source-tests/r7-performance-corrected/qualification.json",
       "installed": "PASS326 on fresh frozen R7 prefix",
       "browser": "PASS21 scoped functional checks; performance remains separate",
-      "performance": "PENDING_ORIGINAL_THRESHOLDS"
+      "performance": "FAIL_ORIGINAL500MS_TARGET; see performance_r7"
     },
     "r7_validation": {
       "source_commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
@@ -6625,13 +6661,44 @@
       "installed": "execution/package-hst-r7/installed-qualification.json",
       "browser": "execution/browser-hst/r7-functional-report.md",
       "package_ready": "execution/package-hst-r7/READY.json",
-      "performance": "PENDING_EXCLUSIVE_R7_WINDOW",
+      "performance": "FAIL500MS_CANDIDATE3_OF8; diagnosis and open correction recorded",
       "first_useful_dom": "NOT_RUN",
       "literal_scenario_promotions": 0,
       "default_rollout": false,
       "human": "DEFERRED_UNTIL_AUTOMATED_READINESS_REVIEW",
       "schema_migration": false,
       "core_connector_changes": false
+    },
+    "performance_r7": {
+      "status": "FAIL_ORIGINAL_READ_TARGET",
+      "candidate_counts": {
+        "measured": 8,
+        "read_target_pass": 5,
+        "read_target_fail": 3,
+        "first_http_proxy_pass": 8,
+        "first_http_proxy_fail": 0,
+        "not_run": 0
+      },
+      "baseline_counts": {
+        "measured": 2,
+        "read_target_pass": 0,
+        "read_target_fail": 2,
+        "first_http_proxy_pass": 2,
+        "first_http_proxy_fail": 0,
+        "not_run": 0
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "first_http_proxy_ms": 2000,
+        "first_useful_dom": "NOT_RUN"
+      },
+      "matrix": "execution/performance-hst/persistent-r7-final/qualification.json",
+      "diagnostic": "execution/performance-hst/profile-r7-final/qualification.json",
+      "correction": "execution/performance-hst/r7-correction-plan.md",
+      "correction_status": "OPEN_NOT_IMPLEMENTED",
+      "threshold_waived": false,
+      "human_readiness": false,
+      "first_useful_dom": "NOT_RUN"
     }
   }
 }

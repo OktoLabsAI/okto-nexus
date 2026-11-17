@@ -35,9 +35,18 @@ without timeout, force, signals or remaining observed processes. See
 additional cases cover original-recipient authorization and private operator
 message/handoff sessions; this is not a claim that all ledger criteria pass.
 
-At this checkpoint the final exclusive performance matrix is pending. No 500 ms target waiver, useful-DOM
-claim, native adapter campaign, screen-reader qualification or human acceptance
-is implied. The previous R6 performance failures and the first R7 source/test
+The exclusive ten-cut performance matrix subsequently completed normally:
+five of eight candidate cuts passed and three failed the original 500 ms p95
+target; both baseline cuts failed separately. OPEN100 V2 narrowly met the
+target, but mixed100 V2 remained above it. The separate three-GET diagnostic
+confirmed the result-attention fast path was active. See
+`performance-hst/persistent-r7-final/qualification.json`,
+`performance-hst/profile-r7-final/qualification.json` and the open
+`performance-hst/r7-correction-plan.md`. Useful DOM remains unmeasured at
+this checkpoint. No target waiver, native adapter campaign, screen-reader
+qualification or human acceptance is implied.
+
+The previous R6 performance failures and the first R7 source/test
 failures remain in their original evidence cuts. The default rollout flag
 remains off. No schema migration or Core/Connector change is introduced;
 rollback remains presentation-only through the existing flag, preserving

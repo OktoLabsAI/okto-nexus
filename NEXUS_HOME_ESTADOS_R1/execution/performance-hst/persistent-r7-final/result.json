@@ -1,0 +1,226 @@
+{
+  "status": "MEASURED",
+  "completed": [
+    {
+      "case": "mixed-100-baseline-v1",
+      "exit_code": 0,
+      "seconds": 55.24215579999145,
+      "launch": "persistent-r7-final-mixed-100-baseline-v1-launch.json",
+      "status": "MEASURED",
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "p95_ms": {
+        "overview_refresh": 679.0932000149041,
+        "activity_page": 965.9716999158263
+      }
+    },
+    {
+      "case": "mixed-100-candidate-v1",
+      "exit_code": 0,
+      "seconds": 51.336437500081956,
+      "launch": "persistent-r7-final-mixed-100-candidate-v1-launch.json",
+      "status": "MEASURED",
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "p95_ms": {
+        "overview_refresh": 1048.0923000723124,
+        "activity_page": 946.5101000387222
+      }
+    },
+    {
+      "case": "mixed-100-candidate-v2",
+      "exit_code": 0,
+      "seconds": 46.562483499990776,
+      "launch": "persistent-r7-final-mixed-100-candidate-v2-launch.json",
+      "status": "MEASURED",
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "p95_ms": {
+        "overview_refresh": 876.423200010322,
+        "activity_page": 927.2785000503063
+      }
+    },
+    {
+      "case": "open-100-baseline-v1",
+      "exit_code": 0,
+      "seconds": 46.29009930009488,
+      "launch": "persistent-r7-final-open-100-baseline-v1-launch.json",
+      "status": "MEASURED",
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "p95_ms": {
+        "overview_refresh": 878.0342000536621,
+        "activity_page": 849.2711000144482
+      }
+    },
+    {
+      "case": "open-100-candidate-v1",
+      "exit_code": 0,
+      "seconds": 40.45691390009597,
+      "launch": "persistent-r7-final-open-100-candidate-v1-launch.json",
+      "status": "MEASURED",
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "p95_ms": {
+        "overview_refresh": 752.1538999862969,
+        "activity_page": 651.2479000957683
+      }
+    },
+    {
+      "case": "open-100-candidate-v2",
+      "exit_code": 0,
+      "seconds": 27.500891399919055,
+      "launch": "persistent-r7-final-open-100-candidate-v2-launch.json",
+      "status": "MEASURED",
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "p95_ms": {
+        "overview_refresh": 497.9342999868095,
+        "activity_page": 489.1763998894021
+      }
+    },
+    {
+      "case": "mixed-1-candidate-v1",
+      "exit_code": 0,
+      "seconds": 12.110780799994245,
+      "launch": "persistent-r7-final-mixed-1-candidate-v1-launch.json",
+      "status": "MEASURED",
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "p95_ms": {
+        "overview_refresh": 150.20120004191995,
+        "activity_page": 105.60469992924482
+      }
+    },
+    {
+      "case": "mixed-1-candidate-v2",
+      "exit_code": 0,
+      "seconds": 11.994549299939536,
+      "launch": "persistent-r7-final-mixed-1-candidate-v2-launch.json",
+      "status": "MEASURED",
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "p95_ms": {
+        "overview_refresh": 133.48810002207756,
+        "activity_page": 138.14269995782524
+      }
+    },
+    {
+      "case": "mixed-10-candidate-v1",
+      "exit_code": 0,
+      "seconds": 17.383340100059286,
+      "launch": "persistent-r7-final-mixed-10-candidate-v1-launch.json",
+      "status": "MEASURED",
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "p95_ms": {
+        "overview_refresh": 250.90550002641976,
+        "activity_page": 228.51849999278784
+      }
+    },
+    {
+      "case": "mixed-10-candidate-v2",
+      "exit_code": 0,
+      "seconds": 16.058622600045055,
+      "launch": "persistent-r7-final-mixed-10-candidate-v2-launch.json",
+      "status": "MEASURED",
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "p95_ms": {
+        "overview_refresh": 259.1979999560863,
+        "activity_page": 173.07000001892447
+      }
+    }
+  ],
+  "not_run": []
+}

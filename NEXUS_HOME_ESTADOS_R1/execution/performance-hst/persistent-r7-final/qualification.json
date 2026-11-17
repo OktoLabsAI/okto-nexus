@@ -1,0 +1,1250 @@
+{
+  "version": 1,
+  "status": "FAIL",
+  "status_scope": "Candidate eight-cut HTTP read/proxy targets only; DOM remains NOT_RUN.",
+  "cut": "Final R7 persistent ASGI; all original/R2/R6 antecedents remain immutable.",
+  "counts": {
+    "measured": 10,
+    "read_target_pass": 5,
+    "read_target_fail": 5,
+    "first_http_proxy_pass": 10,
+    "first_http_proxy_fail": 0,
+    "not_run": 0
+  },
+  "candidate_counts": {
+    "measured": 8,
+    "read_target_pass": 5,
+    "read_target_fail": 3,
+    "first_http_proxy_pass": 8,
+    "first_http_proxy_fail": 0,
+    "not_run": 0
+  },
+  "baseline_counts": {
+    "measured": 2,
+    "read_target_pass": 0,
+    "read_target_fail": 2,
+    "first_http_proxy_pass": 2,
+    "first_http_proxy_fail": 0,
+    "not_run": 0
+  },
+  "candidate_source": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+  "candidate_wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+  "samples_per_series": 20,
+  "warmup_per_series": 3,
+  "targets": {
+    "read_p95_ms": 500,
+    "first_http_proxy_ms": 2000,
+    "first_useful_dom": "NOT_RUN"
+  },
+  "cases": [
+    {
+      "case": "mixed-100-baseline-v1",
+      "variant": "baseline-v1",
+      "connections": 100,
+      "volume": {
+        "connections": 100,
+        "activities": 1000,
+        "added_native_events": 100000,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification"
+      },
+      "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+      "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+      "payload_files": 1028,
+      "package_modules": {
+        "okto_nexus": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "count": 733
+        },
+        "nexus_connector_core": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "count": 168
+        },
+        "okto_nexus_connector": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+          "count": 127
+        }
+      },
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 620.2575999777764,
+          "nearest_rank_p95_ms": 679.0932000149041,
+          "max_payload_bytes": 252835
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 706.2290500034578,
+          "nearest_rank_p95_ms": 965.9716999158263,
+          "max_payload_bytes": 27965
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "first_http_response": {
+        "elapsed_ms": 767.2184000257403,
+        "http_status": 200,
+        "status": "ready",
+        "source_status": {
+          "attention": "ready",
+          "work": "ready",
+          "results": "ready",
+          "connections": "ready",
+          "sessions": "ready",
+          "correlations": "ready",
+          "external": "ready"
+        },
+        "payload_bytes": 252835,
+        "revision": "53207556b00d15edfbe2adb4f67d5c977cf434bd526f3d747a50d92e947257e2",
+        "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "schema_after": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "pid": 57084,
+      "physical_exit": true,
+      "launch": "../persistent-r7-final-mixed-100-baseline-v1-launch.json",
+      "report": "mixed-100-baseline-v1-report.json"
+    },
+    {
+      "case": "mixed-100-candidate-v1",
+      "variant": "candidate-v1",
+      "connections": 100,
+      "volume": {
+        "connections": 100,
+        "activities": 1000,
+        "added_native_events": 100000,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification"
+      },
+      "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+      "source_candidate": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+      "payload_files": 1031,
+      "package_modules": {
+        "okto_nexus": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "count": 736
+        },
+        "nexus_connector_core": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "count": 168
+        },
+        "okto_nexus_connector": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+          "count": 127
+        }
+      },
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 898.0034000705928,
+          "nearest_rank_p95_ms": 1048.0923000723124,
+          "max_payload_bytes": 281050
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 819.3940499331802,
+          "nearest_rank_p95_ms": 946.5101000387222,
+          "max_payload_bytes": 31188
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "first_http_response": {
+        "elapsed_ms": 976.1603000806645,
+        "http_status": 200,
+        "status": "ready",
+        "source_status": {
+          "attention": "ready",
+          "work": "ready",
+          "results": "ready",
+          "connections": "ready",
+          "sessions": "ready",
+          "correlations": "ready",
+          "external": "ready"
+        },
+        "payload_bytes": 281050,
+        "revision": "8d0fdd4371736f54957a9377825eac4c374537179e1de4c69e840c523791e8d3",
+        "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 5
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 51,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 5
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 51,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "schema_after": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "pid": 58276,
+      "physical_exit": true,
+      "launch": "../persistent-r7-final-mixed-100-candidate-v1-launch.json",
+      "report": "mixed-100-candidate-v1-report.json"
+    },
+    {
+      "case": "mixed-100-candidate-v2",
+      "variant": "candidate-v2",
+      "connections": 100,
+      "volume": {
+        "connections": 100,
+        "activities": 1000,
+        "added_native_events": 100000,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification"
+      },
+      "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+      "source_candidate": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+      "payload_files": 1031,
+      "package_modules": {
+        "okto_nexus": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "count": 736
+        },
+        "nexus_connector_core": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "count": 168
+        },
+        "okto_nexus_connector": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+          "count": 127
+        }
+      },
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 780.4055999731645,
+          "nearest_rank_p95_ms": 876.423200010322,
+          "max_payload_bytes": 297313
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 797.4061499699019,
+          "nearest_rank_p95_ms": 927.2785000503063,
+          "max_payload_bytes": 31730
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "first_http_response": {
+        "elapsed_ms": 1090.4445999767631,
+        "http_status": 200,
+        "status": "ready",
+        "source_status": {
+          "attention": "ready",
+          "work": "ready",
+          "results": "ready",
+          "connections": "ready",
+          "sessions": "ready",
+          "correlations": "ready",
+          "external": "ready"
+        },
+        "payload_bytes": 297313,
+        "revision": "6cb4da9da6ec4a660661557e443498ced88188b99adc3b846d7ea7b3b07c5eb1",
+        "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 7
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 53,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 7
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 53,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "schema_after": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "pid": 44504,
+      "physical_exit": true,
+      "launch": "../persistent-r7-final-mixed-100-candidate-v2-launch.json",
+      "report": "mixed-100-candidate-v2-report.json"
+    },
+    {
+      "case": "open-100-baseline-v1",
+      "variant": "baseline-v1",
+      "connections": 100,
+      "volume": {
+        "connections": 100,
+        "activities": 1000,
+        "added_native_events": 100000,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification",
+        "workload": "J04-open-complement",
+        "expected_open": 1000,
+        "actual_open": 1000,
+        "terminal_activities": 0,
+        "expected_native_history": 100000,
+        "actual_native_history": 100000,
+        "algorithm": "Original synthetic generator, then all own benchmark turn activities set ACCEPTED/SUBMITTED before cloning; no native effects/authority qualification."
+      },
+      "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+      "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+      "payload_files": 1028,
+      "package_modules": {
+        "okto_nexus": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "count": 733
+        },
+        "nexus_connector_core": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "count": 168
+        },
+        "okto_nexus_connector": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+          "count": 127
+        }
+      },
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 730.4745499859564,
+          "nearest_rank_p95_ms": 878.0342000536621,
+          "max_payload_bytes": 162252
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 737.7769000595436,
+          "nearest_rank_p95_ms": 849.2711000144482,
+          "max_payload_bytes": 20520
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "first_http_response": {
+        "elapsed_ms": 1162.2644000453874,
+        "http_status": 200,
+        "status": "ready",
+        "source_status": {
+          "attention": "ready",
+          "work": "ready",
+          "results": "ready",
+          "connections": "ready",
+          "sessions": "ready",
+          "correlations": "ready",
+          "external": "ready"
+        },
+        "payload_bytes": 162252,
+        "revision": "8ecd9ae98ef612240afc3de5fd948431303aa11970ee4af7c84c4408c9c05fbf",
+        "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 6
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 52,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "schema_after": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "pid": 62132,
+      "physical_exit": true,
+      "launch": "../persistent-r7-final-open-100-baseline-v1-launch.json",
+      "report": "open-100-baseline-v1-report.json"
+    },
+    {
+      "case": "open-100-candidate-v1",
+      "variant": "candidate-v1",
+      "connections": 100,
+      "volume": {
+        "connections": 100,
+        "activities": 1000,
+        "added_native_events": 100000,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification",
+        "workload": "J04-open-complement",
+        "expected_open": 1000,
+        "actual_open": 1000,
+        "terminal_activities": 0,
+        "expected_native_history": 100000,
+        "actual_native_history": 100000,
+        "algorithm": "Original synthetic generator, then all own benchmark turn activities set ACCEPTED/SUBMITTED before cloning; no native effects/authority qualification."
+      },
+      "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+      "source_candidate": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+      "payload_files": 1031,
+      "package_modules": {
+        "okto_nexus": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "count": 736
+        },
+        "nexus_connector_core": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "count": 168
+        },
+        "okto_nexus_connector": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+          "count": 127
+        }
+      },
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 681.2237499980256,
+          "nearest_rank_p95_ms": 752.1538999862969,
+          "max_payload_bytes": 162307
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 595.5064000445418,
+          "nearest_rank_p95_ms": 651.2479000957683,
+          "max_payload_bytes": 20575
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": false,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "first_http_response": {
+        "elapsed_ms": 1131.8189000012353,
+        "http_status": 200,
+        "status": "ready",
+        "source_status": {
+          "attention": "ready",
+          "work": "ready",
+          "results": "ready",
+          "connections": "ready",
+          "sessions": "ready",
+          "correlations": "ready",
+          "external": "ready"
+        },
+        "payload_bytes": 162307,
+        "revision": "8ecd9ae98ef612240afc3de5fd948431303aa11970ee4af7c84c4408c9c05fbf",
+        "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 5
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 51,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 5
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 51,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "schema_after": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "pid": 58820,
+      "physical_exit": true,
+      "launch": "../persistent-r7-final-open-100-candidate-v1-launch.json",
+      "report": "open-100-candidate-v1-report.json"
+    },
+    {
+      "case": "open-100-candidate-v2",
+      "variant": "candidate-v2",
+      "connections": 100,
+      "volume": {
+        "connections": 100,
+        "activities": 1000,
+        "added_native_events": 100000,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification",
+        "workload": "J04-open-complement",
+        "expected_open": 1000,
+        "actual_open": 1000,
+        "terminal_activities": 0,
+        "expected_native_history": 100000,
+        "actual_native_history": 100000,
+        "algorithm": "Original synthetic generator, then all own benchmark turn activities set ACCEPTED/SUBMITTED before cloning; no native effects/authority qualification."
+      },
+      "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+      "source_candidate": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+      "payload_files": 1031,
+      "package_modules": {
+        "okto_nexus": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "count": 736
+        },
+        "nexus_connector_core": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "count": 168
+        },
+        "okto_nexus_connector": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+          "count": 127
+        }
+      },
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 407.25149994250387,
+          "nearest_rank_p95_ms": 497.9342999868095,
+          "max_payload_bytes": 174986
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 411.42994997790083,
+          "nearest_rank_p95_ms": 489.1763998894021,
+          "max_payload_bytes": 21117
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "first_http_response": {
+        "elapsed_ms": 650.9041999233887,
+        "http_status": 200,
+        "status": "ready",
+        "source_status": {
+          "attention": "ready",
+          "work": "ready",
+          "results": "ready",
+          "connections": "ready",
+          "sessions": "ready",
+          "correlations": "ready",
+          "external": "ready"
+        },
+        "payload_bytes": 174986,
+        "revision": "bbc4baeae5a75f5d9383fde0ef56e14ec89ad6ea5323f402d49f0a52d183f7c5",
+        "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 7
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 53,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 7
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 53,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "schema_after": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "pid": 61596,
+      "physical_exit": true,
+      "launch": "../persistent-r7-final-open-100-candidate-v2-launch.json",
+      "report": "open-100-candidate-v2-report.json"
+    },
+    {
+      "case": "mixed-1-candidate-v1",
+      "variant": "candidate-v1",
+      "connections": 1,
+      "volume": {
+        "connections": 1,
+        "activities": 10,
+        "added_native_events": 0,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification"
+      },
+      "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+      "source_candidate": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+      "payload_files": 1031,
+      "package_modules": {
+        "okto_nexus": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "count": 736
+        },
+        "nexus_connector_core": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "count": 168
+        },
+        "okto_nexus_connector": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+          "count": 127
+        }
+      },
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 130.50359999760985,
+          "nearest_rank_p95_ms": 150.20120004191995,
+          "max_payload_bytes": 77257
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 92.03074994729832,
+          "nearest_rank_p95_ms": 105.60469992924482,
+          "max_payload_bytes": 32375
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "first_http_response": {
+        "elapsed_ms": 417.97589999623597,
+        "http_status": 200,
+        "status": "ready",
+        "source_status": {
+          "attention": "ready",
+          "work": "ready",
+          "results": "ready",
+          "connections": "ready",
+          "sessions": "ready",
+          "correlations": "ready",
+          "external": "ready"
+        },
+        "payload_bytes": 77257,
+        "revision": "20eacf9a55d340cbcdce4fc939d7bcb20e06123bdd5ea9a71f95b997b2ddbdf5",
+        "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 5
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 51,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 5
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 51,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "schema_after": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "pid": 49428,
+      "physical_exit": true,
+      "launch": "../persistent-r7-final-mixed-1-candidate-v1-launch.json",
+      "report": "mixed-1-candidate-v1-report.json"
+    },
+    {
+      "case": "mixed-1-candidate-v2",
+      "variant": "candidate-v2",
+      "connections": 1,
+      "volume": {
+        "connections": 1,
+        "activities": 10,
+        "added_native_events": 0,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification"
+      },
+      "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+      "source_candidate": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+      "payload_files": 1031,
+      "package_modules": {
+        "okto_nexus": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "count": 736
+        },
+        "nexus_connector_core": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "count": 168
+        },
+        "okto_nexus_connector": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+          "count": 127
+        }
+      },
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 87.91220001876354,
+          "nearest_rank_p95_ms": 133.48810002207756,
+          "max_payload_bytes": 82523
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 112.50374995870516,
+          "nearest_rank_p95_ms": 138.14269995782524,
+          "max_payload_bytes": 32915
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "first_http_response": {
+        "elapsed_ms": 385.41639992035925,
+        "http_status": 200,
+        "status": "ready",
+        "source_status": {
+          "attention": "ready",
+          "work": "ready",
+          "results": "ready",
+          "connections": "ready",
+          "sessions": "ready",
+          "correlations": "ready",
+          "external": "ready"
+        },
+        "payload_bytes": 82523,
+        "revision": "aabc00da97597ce667b3268b513fa1e28194b9b1e556aca98ea02da90e81eb17",
+        "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 7
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 53,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 7
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 53,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "schema_after": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "pid": 7988,
+      "physical_exit": true,
+      "launch": "../persistent-r7-final-mixed-1-candidate-v2-launch.json",
+      "report": "mixed-1-candidate-v2-report.json"
+    },
+    {
+      "case": "mixed-10-candidate-v1",
+      "variant": "candidate-v1",
+      "connections": 10,
+      "volume": {
+        "connections": 10,
+        "activities": 100,
+        "added_native_events": 0,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification"
+      },
+      "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+      "source_candidate": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+      "payload_files": 1031,
+      "package_modules": {
+        "okto_nexus": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "count": 736
+        },
+        "nexus_connector_core": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "count": 168
+        },
+        "okto_nexus_connector": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+          "count": 127
+        }
+      },
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 200.1587999984622,
+          "nearest_rank_p95_ms": 250.90550002641976,
+          "max_payload_bytes": 291015
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 174.3606999516487,
+          "nearest_rank_p95_ms": 228.51849999278784,
+          "max_payload_bytes": 31172
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "first_http_response": {
+        "elapsed_ms": 476.87460004817694,
+        "http_status": 200,
+        "status": "ready",
+        "source_status": {
+          "attention": "ready",
+          "work": "ready",
+          "results": "ready",
+          "connections": "ready",
+          "sessions": "ready",
+          "correlations": "ready",
+          "external": "ready"
+        },
+        "payload_bytes": 291015,
+        "revision": "7d56d4121396403d769814e1e7f50d64c332b83e8d870f43742af7678f07e070",
+        "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 5
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 51,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 5
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 51,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "schema_after": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "pid": 48184,
+      "physical_exit": true,
+      "launch": "../persistent-r7-final-mixed-10-candidate-v1-launch.json",
+      "report": "mixed-10-candidate-v1-report.json"
+    },
+    {
+      "case": "mixed-10-candidate-v2",
+      "variant": "candidate-v2",
+      "connections": 10,
+      "volume": {
+        "connections": 10,
+        "activities": 100,
+        "added_native_events": 0,
+        "workspace_id": "hst-perf",
+        "foreign_key_violations": 0,
+        "provenance": "SQL synthetic read facts; no native or admission/authority qualification"
+      },
+      "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+      "source_candidate": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+      "payload_files": 1031,
+      "package_modules": {
+        "okto_nexus": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+          "count": 736
+        },
+        "nexus_connector_core": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+          "count": 168
+        },
+        "okto_nexus_connector": {
+          "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+          "count": 127
+        }
+      },
+      "series": {
+        "overview_refresh": {
+          "count": 20,
+          "p50_ms": 174.98755000997335,
+          "nearest_rank_p95_ms": 259.1979999560863,
+          "max_payload_bytes": 307214
+        },
+        "activity_page": {
+          "count": 20,
+          "p50_ms": 149.71559995319694,
+          "nearest_rank_p95_ms": 173.07000001892447,
+          "max_payload_bytes": 31713
+        }
+      },
+      "targets": {
+        "read_p95_ms": 500,
+        "http_first_response_proxy_ms": 2000,
+        "read_target_met": true,
+        "first_http_proxy_met": true,
+        "first_useful_dom": {
+          "status": "NOT_RUN",
+          "target_ms": 2000,
+          "reason": "Not measured by an ASGI HTTP runner."
+        }
+      },
+      "first_http_response": {
+        "elapsed_ms": 433.91150003299117,
+        "http_status": 200,
+        "status": "ready",
+        "source_status": {
+          "attention": "ready",
+          "work": "ready",
+          "results": "ready",
+          "connections": "ready",
+          "sessions": "ready",
+          "correlations": "ready",
+          "external": "ready"
+        },
+        "payload_bytes": 307214,
+        "revision": "7cf6466af1ca7108f211aef8e42f2345eeccb46aedeab4541edb684e88adafc4",
+        "next_refresh_at": "2026-11-16T12:00:15.000000Z"
+      },
+      "instrumentation": {
+        "overview_refresh": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 7
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 53,
+          "stored_sql": false,
+          "stored_parameters": false
+        },
+        "activity_page": {
+          "opcodes": {
+            "SELECT": 46,
+            "WITH": 7
+          },
+          "uows": [
+            {
+              "write": false
+            }
+          ],
+          "changes": [
+            0
+          ],
+          "statement_count": 53,
+          "stored_sql": false,
+          "stored_parameters": false
+        }
+      },
+      "schema_after": "906c69a383576f85a94a24095f90d77bd53449825c5b6bd62e78b7564dc3c8ba",
+      "pid": 55044,
+      "physical_exit": true,
+      "launch": "../persistent-r7-final-mixed-10-candidate-v2-launch.json",
+      "report": "mixed-10-candidate-v2-report.json"
+    }
+  ],
+  "paired_large_comparisons": [
+    {
+      "workload": "mixed",
+      "variant": "candidate-v1",
+      "p95_delta_percent": {
+        "overview_refresh": 54.3370335690756,
+        "activity_page": -2.0147173958408926
+      }
+    },
+    {
+      "workload": "mixed",
+      "variant": "candidate-v2",
+      "p95_delta_percent": {
+        "overview_refresh": 29.057867166257445,
+        "activity_page": -4.0056245818476555
+      }
+    },
+    {
+      "workload": "open",
+      "variant": "candidate-v1",
+      "p95_delta_percent": {
+        "overview_refresh": -14.336605574096295,
+        "activity_page": -23.31684192660165
+      }
+    },
+    {
+      "workload": "open",
+      "variant": "candidate-v2",
+      "p95_delta_percent": {
+        "overview_refresh": -43.28987413515583,
+        "activity_page": -42.40044199301259
+      }
+    }
+  ],
+  "read_target_failed_cases": [
+    "mixed-100-baseline-v1",
+    "mixed-100-candidate-v1",
+    "mixed-100-candidate-v2",
+    "open-100-baseline-v1",
+    "open-100-candidate-v1"
+  ],
+  "cleanup": {
+    "all10workers_physically_exited": true,
+    "orchestrator_exit_code": 0,
+    "timeout": false,
+    "retry": false,
+    "app_readers_active_after_window": false
+  },
+  "seed_dataset_schema_payload_productive_drift": false,
+  "limits": [
+    "Persistent httpx ASGI, one loop per worker; no TCP/browser/lifespan/background runtime.",
+    "First HTTP proxy is not first-useful DOM. No DOM execution or DOM gate approval in this cut.",
+    "Own SQL synthetic facts do not qualify providers/native authority/liveness/grants or application of decisions.",
+    "No threshold waiver, retry, source/schema modification, or statistical confidence claim.",
+    "Query counts do not qualify internal SQL row-scan complexity.",
+    "Mixed100 contains925terminal/75open; OPEN100 contains1000open/100000history. Separate workloads.",
+    "Baseline failures are reported separately and do not determine candidate status."
+  ]
+}
