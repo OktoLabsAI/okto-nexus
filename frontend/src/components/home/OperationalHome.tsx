@@ -126,7 +126,7 @@ export function isFirstHarnessBoardEmpty(page:HomeBoard|HomeHarnessBoard|null,st
     count?.unit==='connections'&&count.total_is_exact===true&&count.value===0;
 }
 export function OperationalHome({workspace, workspaces, identityKey, refreshTick, latestEvent, streamStatus, onNavigate,
-  onAttentionChanged, onSetupAgent, onWorkspaceChange, registerLeaveGuard,presentationVersion=1}: {
+  onAttentionChanged, onSetupAgent, onWorkspaceChange, registerLeaveGuard,presentationVersion:offeredPresentationVersion=1}: {
   workspace: string; workspaces: WorkspaceListItem[]; identityKey: string; refreshTick: number;
   latestEvent: HomeInvalidation | null; streamStatus: HomeStreamStatus;
   onNavigate: (view: 'Agents' | 'Attention' | 'Graph' | 'Meta-harness') => void; onAttentionChanged: () => void; onSetupAgent: () => void;
@@ -135,11 +135,19 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   presentationVersion?:1|2;
 }) {
   const [listFocused,setListFocused]=useState(false);
+  const [panel, setPanel] = useState<Panel | null>(null);
+  const [manualPause, setManualPause] = useState(false);
+  const [restoringFocus,setRestoringFocus]=useState(false);
+  const [presentationVersion,setPresentationVersion]=useState(offeredPresentationVersion);
+  // A late capability reply must not unmount a canonical form or replace a
+  // board being read. Adopt it after the context, manual pause and focus release.
+  // Identity, workspace and authority changes still clear the controller normally.
+  useEffect(()=>{if(!panel&&!manualPause&&!listFocused&&!restoringFocus)setPresentationVersion(offeredPresentationVersion);},
+    [panel,manualPause,listFocused,restoringFocus,offeredPresentationVersion]);
   const home = useHomeOverview({family:'harness',workspace: workspace === 'all' ? null : workspace, identityKey,
     holdOrder:listFocused,latestEvent,streamStatus,presentationVersion});
   const {state,refresh,pause,apply,holdOrder,loadBoardColumn,loadHarnessChildren,refreshHarnessChildren,loadHarnessRequests,loadHarnessSessions,refreshHarnessSessions,refreshHarnessRequests}=home;
   const snapshot = state.harnessBoard;
-  const [panel, setPanel] = useState<Panel | null>(null), [manualPause, setManualPause] = useState(false);
   const [notice, setNotice] = useState('');
   const heading = useRef<HTMLHeadingElement>(null), focusReturn = useRef<HTMLElement | null>(null);
   const focusEntry=useRef<{attribute:string;id:string}|null>(null);
@@ -168,8 +176,9 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   useEffect(() => () => {if (announceTimer.current) clearTimeout(announceTimer.current);}, []);
   useEffect(()=>{setListFocused(false);},[state.generation]);
   useEffect(() => {if (refreshTick) refresh();}, [refreshTick, refresh]);
-  useEffect(() => {pause(manualPause || !!panel);}, [manualPause, !!panel, pause]);
+  useEffect(() => {pause(manualPause || !!panel);}, [manualPause, !!panel, pause, presentationVersion]);
   const close = useCallback(() => {
+    setRestoringFocus(true);
     setPanel(null);
     const url = new URL(window.location.href);url.searchParams.delete('home_target');window.history.replaceState(null, '', url);
     window.requestAnimationFrame(() => {
@@ -177,7 +186,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
       const identity=focusEntry.current;
       const moved=identity?Array.from(document.querySelectorAll<HTMLElement>(`[${identity.attribute}]`)).find(el=>el.getAttribute(identity.attribute)===identity.id):null;
       const destination=focusReturn.current?.isConnected?focusReturn.current:moved?.querySelector<HTMLElement>('[data-home-entry-open],button:not(:disabled),a[href]')??heading.current;
-      destination?.focus({preventScroll:true});
+      try {destination?.focus({preventScroll:true});} finally {setRestoringFocus(false);}
     });
   }, []);
   const dismiss = useCallback(() => {
