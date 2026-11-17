@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="5.715" timestamp="2026-11-16T20:24:33.671710-03:00" hostname="Alienware_m15"><testcase classname="tests.home_evolution.test_home_result_artifact_grouping" name="test_http_result_collects_same_claim_files_once_and_excludes_foreign_claim_and_workspace" time="3.946"><failure message="AssertionError: assert 'unseen' == 'not_tracked'&#10;  &#10;  - not_tracked&#10;  + unseen">tests\home_evolution\test_home_result_artifact_grouping.py:52: in test_http_result_collects_same_claim_files_once_and_excludes_foreign_claim_and_workspace
+    assert current['view_state']==baseline['view_state']
+E   AssertionError: assert 'unseen' == 'not_tracked'
+E     
+E     - not_tracked
+E     + unseen</failure></testcase></testsuite></testsuites>

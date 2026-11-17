@@ -1,0 +1,19 @@
+{
+  "command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/ui_simplification/test_entry_relations.py tests/ui_simplification/test_entry_pages.py tests/ui_simplification/test_entry_related.py tests/ui_simplification/test_entry_app_integration.py tests/ui_simplification/test_workspace_scope.py tests/ui_simplification/test_multi_connection_inventory.py tests/home_evolution/test_home_result_artifact_grouping.py -q --junitxml=NEXUS_UI_R1/execution/pr15-result-reader-regression.xml",
+  "exit_code": 0,
+  "pass": 37,
+  "fail": 0,
+  "seconds": 134.73,
+  "tool": "64b0ae",
+  "scope": "Source product, actual HTTP/SQLite and deterministic inert/historical fixtures. No browser/native/installed package promotion.",
+  "reader_sha256": "e1038145179252498184f1e22d8a2459048b5d6c6e0c567be88582660cbf3aaf",
+  "xml_sha256": "27ed31f3c0b75f671979e6da592c5cf5238ae127cc9ab5fcce79c6daa2b02214",
+  "limits": [
+    "Existing Starlette/httpx deprecation warning retained.",
+    "No additional artifact memory cap/cursor or latency guarantee; query budget applies.",
+    "Frozen BXP campaign artifact does not contain this later reader delta."
+  ],
+  "migration": "None",
+  "rollback": "Revert this Home reader/test commit with a new commit; preserve all canonical receipts, artifacts, bindings and views.",
+  "next": "Finish human retest and separate installed artifact delta; provider campaign remains constrained by actual qualification."
+}

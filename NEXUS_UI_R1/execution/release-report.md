@@ -45,6 +45,13 @@ checkouts. Os detalhes de main, working tree e pins iniciais estão no baseline.
   agente separados, incluindo pergunta bloqueada e resultado do outro contexto.
   Um segundo projeto autorizado acrescentou um trabalho sem multiplicá-lo pelos
   bindings; a filtragem de projeto preservou os totais anteriores.
+- A projeção de resultado passou a reunir arquivos distintos de todas as
+  operações terminais autorizadas do mesmo handoff/claim/workspace, incluindo
+  links históricos e outros executores. Um resultado VERIFYING não é aceito ao
+  abrir; leitura não marca visto, não cria ACK nem watermark. O corte anterior
+  passou37 regressões; um fence posterior de workspace passou um focal e seis
+  relacionados. São cortes separados. O teste novo passou Ruff; o leitor legado
+  conserva17 achados idênticos ao HEAD, sem achados novos ou formatação ampla.
 - A instrumentação instalada adicional de 1/10/100 agentes manteve55SQL em
   entries/children/sessions, uma UoW somente leitura e zero writes/transcripts.
   Esse corte tem três amostras quentes e apenas dois eventos; não substitui o

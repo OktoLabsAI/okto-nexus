@@ -1,0 +1,14 @@
+{
+  "handle": "9e0cf8",
+  "http_status": 500,
+  "error": {
+    "code": "DB_ERROR",
+    "stage": "operation.read",
+    "message": "Stored operation receipt history is invalid.",
+    "possible_effect": false,
+    "retry_safe": false,
+    "operation_id": null,
+    "action": ""
+  },
+  "boundary": "Synthetic historical fixture; not provider execution proof"
+}

@@ -1507,7 +1507,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr01-shell-qualification.json",
-        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json"
+        "NEXUS_UI_R1\\execution\\evidence\\pr01-browser\\qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json"
       ],
       "limitations": [
         "Not unified Home, session viewer, onboarding UI/Connector or real provider/harness qualification.",
@@ -1845,7 +1846,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
-        "NEXUS_UI_R1/execution/pr12-multi-connection-inventory-qualification.json"
+        "NEXUS_UI_R1/execution/pr12-multi-connection-inventory-qualification.json",
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates."
@@ -1883,7 +1885,9 @@
         "T-RESULT-01"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr03-entries-qualification.json"
+        "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json",
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates."
@@ -1965,7 +1969,8 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
         "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json",
-        "NEXUS_UI_R1/execution/pr12-multi-connection-inventory-qualification.json"
+        "NEXUS_UI_R1/execution/pr12-multi-connection-inventory-qualification.json",
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates."
@@ -2045,7 +2050,8 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr03-performance/qualification.json",
-        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json"
+        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json",
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
       ],
       "limitations": [
         "Measured bound O(N+relations), 55 SQL at1/10/100 agents. Large scenario misses500ms latency target; no native harness/browser performance claim."
@@ -2163,7 +2169,8 @@
         "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr13-live-fences/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr13-live-fences/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
@@ -2485,7 +2492,8 @@
         "T-RESULT-06"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
@@ -2787,7 +2795,8 @@
         "NEXUS_UI_R1/execution/evidence/pr07-service/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
         "NEXUS_UI_R1/execution/pr07-login-fixture-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json",
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
       ],
       "limitations": []
     },
@@ -3599,7 +3608,8 @@
       "when": "Filtrar A antes de total/paginação.",
       "expected": "Nenhum dado/contador de B; agentes globais não viram participantes de A sem vínculo.",
       "evidence": [
-        "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json"
+        "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json",
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
       ],
       "tasks": [
         "UI-002",
@@ -3619,7 +3629,8 @@
       "expected": "Recusar sob contrato atual; não vazar existência/conteúdo nem selecionar latest.",
       "evidence": [
         "NEXUS_UI_R1/execution/pr03-session-viewer-qualification.json",
-        "tests/ui_simplification/test_home_session_targets.py"
+        "tests/ui_simplification/test_home_session_targets.py",
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
       ],
       "tasks": [
         "UI-019",
@@ -3637,7 +3648,8 @@
       "when": "Ler/paginar.",
       "expected": "União autorizada sem duplicar trabalho por vínculo.",
       "evidence": [
-        "NEXUS_UI_R1/execution/pr12-multi-connection-inventory-qualification.json"
+        "NEXUS_UI_R1/execution/pr12-multi-connection-inventory-qualification.json",
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
       ],
       "tasks": [
         "UI-020"
@@ -3847,17 +3859,23 @@
     },
     {
       "id": "T-HOME-09",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "browser",
       "given": "Filtro Resultados e resultado unseen antigo dentro da retenção.",
       "when": "Aplicar janela padrão.",
       "expected": "Unseen continua alcançável; janela de recentes não apaga novidade.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json"
+      ],
       "tasks": [
         "UI-025"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Synthetic historical terminal facts do not form complete runtime receipt chains; operation.read500 retained",
+        "No provider/native execution or application",
+        "No new result revision publication for RESULT03",
+        "No artifact page/memory/latency guarantee; existing query budget applies",
+        "Final workspace fence has HTTP tests, not a newly repeated browser run"
       ]
     },
     {
@@ -4178,33 +4196,46 @@
     },
     {
       "id": "T-RESULT-01",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/browser",
       "given": "Entrega correlacionada com três arquivos.",
       "when": "Renderizar Resultados.",
       "expected": "Um item com arquivos, não quatro tarefas.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json",
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
+      ],
       "tasks": [
         "UI-018",
         "UI-033"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Synthetic historical terminal facts do not form complete runtime receipt chains; operation.read500 retained",
+        "No provider/native execution or application",
+        "No new result revision publication for RESULT03",
+        "No artifact page/memory/latency guarantee; existing query budget applies",
+        "Final workspace fence has HTTP tests, not a newly repeated browser run"
       ]
     },
     {
       "id": "T-RESULT-02",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/browser",
       "given": "Resultado em VERIFYING.",
       "when": "Abrir.",
       "expected": "Aguardando verificação; não concluir/aceitar ao visualizar.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json"
+      ],
       "tasks": [
         "UI-033"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Synthetic historical terminal facts do not form complete runtime receipt chains; operation.read500 retained",
+        "No provider/native execution or application",
+        "No new result revision publication for RESULT03",
+        "No artifact page/memory/latency guarantee; existing query budget applies",
+        "Final workspace fence has HTTP tests, not a newly repeated browser run"
       ]
     },
     {
@@ -4214,43 +4245,57 @@
       "given": "Preferência result_unseen revisionada.",
       "when": "Marcar visto e publicar revisão nova.",
       "expected": "A primeira preferência não oculta o novo episódio e não gera ACK.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json"
+      ],
       "tasks": [
         "UI-033"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Browser/HTTP comprovou Mark seen CAS e somente attention_preferences0→1 semACK ou watermark. Nova publicacao de episodio revisionado nao foi executada; cenario completo continua NOT_RUN."
       ]
     },
     {
       "id": "T-RESULT-04",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/browser",
       "given": "Resultados fora da página/projeto.",
       "when": "Abrir Home ou prévia.",
       "expected": "Nenhum watermark em massa nem marcação invisível.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json"
+      ],
       "tasks": [
         "UI-009",
         "UI-033"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Synthetic historical terminal facts do not form complete runtime receipt chains; operation.read500 retained",
+        "No provider/native execution or application",
+        "No new result revision publication for RESULT03",
+        "No artifact page/memory/latency guarantee; existing query budget applies",
+        "Final workspace fence has HTTP tests, not a newly repeated browser run"
       ]
     },
     {
       "id": "T-RESULT-05",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/browser",
       "given": "Fonte sem contrato de visto.",
       "when": "Mostrar resumo.",
       "expected": "Usar Recentes/not_tracked, sem número inventado de novos.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json"
+      ],
       "tasks": [
         "UI-025"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Synthetic historical terminal facts do not form complete runtime receipt chains; operation.read500 retained",
+        "No provider/native execution or application",
+        "No new result revision publication for RESULT03",
+        "No artifact page/memory/latency guarantee; existing query budget applies",
+        "Final workspace fence has HTTP tests, not a newly repeated browser run"
       ]
     },
     {
@@ -5617,6 +5662,14 @@
     {
       "at": "2026-11-16T23:31:40.016765+00:00",
       "event": "Mais5cenarios completos browser PASS: NAV08/HOME05/06/07/10; LIVE05/06 apenas subsets. Interrupcao exata naoqualificada aposopenincerto+cleanupforcadoownpytest;Coreigual. Usuario autorizou derivado somenteCodex,Claudeadiado, e participante humano local disponivel. BGONN pacoteisolado/Twine/smokePASS;708payloadsnaoestaticos incluem538.py+167.sql+3outros, corrigindo prosa anterior. Semrelease/default."
+    },
+    {
+      "at": "2026-11-16T23:59:27.862517+00:00",
+      "event": "Corrigida perda de arquivos ao escolher unica operacao vencedora do resultado: agrega refs DISTINCT na relacao terminal/autorizada por result_group+workspace, incluindo history/cross-executor do mesmohandoff/claim. Seis focais e37regressoes leitores passaram. RESULT01/02/04/05/HOME09 PASS nos cortes documentados; RESULT03 parcial. Semmigracao/novoindice/receipt/Attention/Core ouconteudodearquivo; sem nova garantia de memoria/paginacao/SLO."
+    },
+    {
+      "at": "2026-11-17T00:08:02.230838+00:00",
+      "event": "Revisao independente aprovou agregacao e detectou gap preexistente handoff/op workspace. Reproducao FAIL preservada; fence de correlacao e rank porworkspace corrigidos,1focal+6relacionados PASS em fonte posterior aos37anteriores. Teste novo RuffPASS; reader legado17erros identicos aoHEAD (0novos) demonstrados porstdinmesmocaminho. Semformatacao ampla/migracao/novoindice ouCore/receipts/Attention."
     }
   ],
   "risk_acceptances": [],

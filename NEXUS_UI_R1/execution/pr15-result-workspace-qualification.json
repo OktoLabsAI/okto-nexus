@@ -1,0 +1,87 @@
+{
+  "status": "FIXED_FOCAL_AND_SIX_RELATED_PASS",
+  "reproduction": "New foreign-workspace operation received_at ten seconds newer, matching own binding/session/workspace, with a retained link to another project handoff. Before fix it incorrectly became handoff_result. After fix it stays authorized execution_result; legitimate original remains in All and own workspace with distinct artifacts/IDs.",
+  "change": "RESULTS correlates handoff only when h.workspace_id=o.workspace_id; selects validated h.handoff_id/claim, and ranks by result_group+workspace_id. No write, Core, Attention or receipt semantics changed.",
+  "toolrefs": {
+    "before": "b67496",
+    "after": "a68083",
+    "related": [
+      "c08a9d",
+      "ff7279"
+    ],
+    "test_lint": "f285f2",
+    "source_origins": "30d3d5"
+  },
+  "xml": {
+    "before": {
+      "file": "pr15-result-workspace-before.xml",
+      "sha256": "ce380f6bb2677c16697952b22929ad704b543c7972912b2032c907d0144923c8",
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "time": "6.168",
+      "nodes": [
+        "tests.home_evolution.test_home_result_artifact_grouping::test_newest_foreign_workspace_operation_stays_direct_and_cannot_hide_legitimate_handoff"
+      ]
+    },
+    "after": {
+      "file": "pr15-result-workspace-after.xml",
+      "sha256": "70e9ef6bf833e30f49207dd04fa64dc33bfb4d1ef12cd98bff4dd82ea33bd1a4",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "time": "6.437",
+      "nodes": [
+        "tests.home_evolution.test_home_result_artifact_grouping::test_newest_foreign_workspace_operation_stays_direct_and_cannot_hide_legitimate_handoff"
+      ]
+    },
+    "related": {
+      "file": "pr15-result-workspace-related.xml",
+      "sha256": "7c85410e357a41829a89278692409987fcfe131c612fbb33bdcafbe960768954",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "time": "17.438",
+      "nodes": [
+        "tests.home_evolution.test_home_result_artifact_grouping::test_http_result_collects_same_claim_files_once_and_excludes_foreign_claim_and_workspace",
+        "tests.home_evolution.test_home_result_artifact_grouping::test_http_artifact_group_uses_authorized_terminal_relation_with_history_and_other_executor",
+        "tests.home_evolution.test_home_queries::test_result_preview_seen_and_bounded_artifact_metadata",
+        "tests.home_evolution.test_home_queries::test_result_artifact_reference_uses_exact_durable_operation_without_paths",
+        "tests.home_evolution.test_home_queries::test_native_delivery_and_handoff_are_one_activity_then_claim_change_separates_history",
+        "tests.home_evolution.test_home_final_scope::test_project_a_unchanged_when_same_agent_adds_b_work_attention_and_results"
+      ]
+    }
+  },
+  "source_pins": {
+    "at": "2026-11-17T00:04:39.893481+00:00",
+    "source_sha256": {
+      "src/okto_nexus/adapters/outbound/sqlite/home.py": "e457a441560631b81f6a3cc78b299f04ead79265594d5b5b6e959577c57759c5",
+      "tests/home_evolution/test_home_result_artifact_grouping.py": "d329ad50e8328434ab0cbd9ecc3e56ed14ec4f93b04d631476352f3c6d16ac46",
+      "tests/home_evolution/test_home_queries.py": "48ea97f6f704428886c92dadb0f9edf2a1eab502bb7ab7f13a3596f9aff18349",
+      "tests/home_evolution/test_home_final_scope.py": "2e9caeee9393cdc891ebae37c87da6acc76350dc013fd57e6fff3c6c7f91b9ce"
+    },
+    "origins": {
+      "Home": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\home.py",
+      "Core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "pytest": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Lib\\site-packages\\pytest\\__init__.py"
+    },
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-packages-wry3ter9\\venv\\Scripts\\python.exe",
+    "scope": "Checkout Nexus source-first with installed own BXP dependencies, not an installed modified Home payload test. Pin capture during six related tests; focal before/after XML retained separately."
+  },
+  "source_drift_after_capture": [],
+  "installed_payloads_unchanged": 1035,
+  "limits": [
+    "Checkout source-first Nexus with own installed dependencies, not installed-wheel verification of new SQL.",
+    "Historical synthetic SQLite facts and real ASGI routes; not native/provider/browser qualification.",
+    "The earlier37PASS belongs to its earlier SQL cut; this cut claims1focal+6related only.",
+    "No new performance benchmark; materialized relations and indexed joins retained, not a production latency/SLO claim.",
+    "Legacy home.py was not formatted; root owns comparison of its pre-existing lint errors."
+  ],
+  "files_edited": [
+    "src/okto_nexus/adapters/outbound/sqlite/home.py",
+    "tests/home_evolution/test_home_result_artifact_grouping.py"
+  ],
+  "ledger_or_Git_or_prefix_or_campaign_files_edited": false,
+  "provider_model_browser_invoked": false,
+  "cleanup": "All pytest processes exited; fixture contexts closed, no external runtime/native/browser process created."
+}

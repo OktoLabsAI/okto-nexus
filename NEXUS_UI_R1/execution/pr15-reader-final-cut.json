@@ -1,0 +1,23 @@
+{
+  "status": "FINAL_SOURCE_READER_QUALIFIED_BY_SEPARATE_CUTS",
+  "reader_sha256": "e457a441560631b81f6a3cc78b299f04ead79265594d5b5b6e959577c57759c5",
+  "antecedent_regression": {
+    "report": "pr15-result-reader-regression.json",
+    "pass": 37,
+    "source_sha256": "e1038145179252498184f1e22d8a2459048b5d6c6e0c567be88582660cbf3aaf"
+  },
+  "final_delta": {
+    "report": "pr15-result-workspace-qualification.json",
+    "focal_pass": 1,
+    "related_pass": 6,
+    "prior_reproduction_fail_retained": true
+  },
+  "lint": "pr15-reader-lint-comparison.json",
+  "limits": [
+    "Not one combined44-case green run.",
+    "Browser artifacts/results cut precedes the final workspace fence; final fence has actual HTTP/SQLite tests.",
+    "No new artifact memory/page or latency guarantee. Frozen BXP native artifact remains unchanged."
+  ],
+  "effects": "Read-only query changes; no schema/index migration or canonical authority/budget/receipt changes.",
+  "rollback": "Revert this reader/test commit via new commit; preserve canonical artifacts/results and uncertain intents."
+}

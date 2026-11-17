@@ -1,0 +1,45 @@
+{
+  "url": "http://127.0.0.1:50442",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-results-browser-1pcwglv6",
+  "identities": {
+    "artifacts": [
+      "art_695ddf6cc5b946a1866f8cb563fb7dad",
+      "art_243f3484869b47b1a61e74fb5b88289f",
+      "art_5ea6ac1a65c941cc860c6b9ec4d7aeb8"
+    ],
+    "verifying_handoff": "ui-handoff-0",
+    "old_operation": "ui-old-unseen",
+    "outside_handoff": "ui-outside-result"
+  },
+  "snapshot": {
+    "handoffs": {
+      "count": 4,
+      "sha256": "c90d7db69954fb9b14754918bfabe3660228a948812e8837a2e8f4abdd529bba"
+    },
+    "message_deliveries": {
+      "count": 2,
+      "sha256": "efcc4ec3968202e367eb6b59d1ed3620f82eb8207e8a07e540b379d07cce0db5"
+    },
+    "execution_operations": {
+      "count": 12,
+      "sha256": "0e0cff05c90477be85106c855bc7df963aaf914326c77f3a797372a3219818b0"
+    },
+    "execution_receipts": {
+      "count": 9,
+      "sha256": "6731907253c7a33eb657ced70be3a09f5456b56d8ff92d72a78094e7d32d92c8"
+    },
+    "execution_event_watermarks": {
+      "count": 1,
+      "sha256": "99ef27d40f1a983f2382b0a0e237dbfbc97ef9a5e5b212350b64477c86be7785"
+    },
+    "attention_preferences": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "source_sha256": {
+    "tests\\ui_simplification\\browser_result_fixture.py": "6f6a8992d124bfd77e175db797043ba5dd67a82071e08576f977f2086e1a827f",
+    "src\\okto_nexus\\adapters\\inbound\\http\\static\\index.html": "9890caef5b5c1aed92989b4400e7a8468b11d1104b99e7be8d8fab432a74bc78",
+    "src\\okto_nexus\\adapters\\inbound\\http\\static\\assets\\index-BGONNtiX.js": "dfef7675dea3918117e0df676e3e6d1ef72dd03dec61086e0d24a1b91f6430c9"
+  }
+}

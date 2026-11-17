@@ -116,17 +116,14 @@ RESULTS = """
 WITH links AS MATERIALIZED (
  SELECT server_id,executor_id,operation_id,domain_operation_id FROM execution_domain_deliveries
  UNION SELECT server_id,executor_id,operation_id,domain_operation_id FROM execution_delivery_attempt_history
-), native AS MATERIALIZED (
+), native_facts AS MATERIALIZED (
  SELECT o.server_id,o.executor_id,o.operation_id,o.session_id,o.workspace_id,o.subject_agent_id,
   r.stage,r.received_at,r.receipt_revision,x.stream_epoch,x.terminal_sequence,x.captured_at,
   CASE WHEN x.terminal_sequence IS NOT NULL THEN substr(x.output_text,1,401) END AS preview,
   x.output_truncated,
-  (SELECT json_group_array(json_object('artifact_id',a.artifact_id,'filename',substr(a.name,1,160),'media_type',a.content_type))
-   FROM runtime_results rr JOIN artifacts a ON a.artifact_id=rr.output_artifact_id
-   WHERE rr.canonical_server_id=o.server_id AND rr.canonical_executor_id=o.executor_id
-    AND rr.canonical_operation_id=o.operation_id AND a.workspace_id=o.workspace_id) AS artifacts,
   CASE WHEN k.state='REQUESTED' THEN 'pending' END AS cleanup,
-  b.handoff_id,b.claim_epoch, h.claim_epoch AS current_epoch,h.status AS handoff_status,
+  h.handoff_id,CASE WHEN h.handoff_id IS NOT NULL THEN b.claim_epoch END AS claim_epoch,
+  h.claim_epoch AS current_epoch,h.status AS handoff_status,
   substr(t.title,1,160) AS title
  FROM execution_operations o JOIN execution_receipts r USING(server_id,executor_id,operation_id)
  LEFT JOIN execution_results x USING(server_id,executor_id,operation_id)
@@ -135,26 +132,37 @@ WITH links AS MATERIALIZED (
   AND k.session_id=s.session_id AND k.owner_generation=s.owner_generation
  LEFT JOIN links l ON l.server_id=o.server_id AND l.executor_id=o.executor_id AND l.operation_id=o.operation_id
  LEFT JOIN runtime_handoff_bindings b ON b.operation_id=l.domain_operation_id
- LEFT JOIN handoffs h ON h.handoff_id=b.handoff_id
+ LEFT JOIN handoffs h ON h.handoff_id=b.handoff_id AND h.workspace_id=o.workspace_id
  LEFT JOIN tasks t ON t.task_id=h.task_id AND t.workspace_id=h.workspace_id
  WHERE o.server_id=:server_id AND o.action='turn.submit' AND r.stage IN ('SUCCEEDED','FAILED','CANCELLED')
   AND r.receipt_revision=(SELECT MAX(rr.receipt_revision) FROM execution_receipts rr
    WHERE rr.server_id=o.server_id AND rr.executor_id=o.executor_id AND rr.operation_id=o.operation_id)
   AND (:workspace_id IS NULL OR o.workspace_id=:workspace_id)
   AND (:agent_id IS NULL OR o.subject_agent_id=:agent_id)
-), ranked AS MATERIALIZED (
- SELECT *,ROW_NUMBER() OVER(PARTITION BY
+), native AS MATERIALIZED (
+ SELECT *,
   CASE WHEN handoff_id IS NOT NULL THEN json_array('handoff',handoff_id,claim_epoch)
-       ELSE json_array('execution',server_id,executor_id,operation_id) END
+       ELSE json_array('execution',server_id,executor_id,operation_id) END AS result_group
+ FROM native_facts
+), artifact_refs AS MATERIALIZED (
+ SELECT DISTINCT n.result_group,n.workspace_id,a.artifact_id,substr(a.name,1,160) AS filename,a.content_type AS media_type
+ FROM native n JOIN runtime_results rr ON rr.canonical_server_id=n.server_id
+  AND rr.canonical_executor_id=n.executor_id AND rr.canonical_operation_id=n.operation_id
+ JOIN artifacts a ON a.artifact_id=rr.output_artifact_id AND a.workspace_id=n.workspace_id
+), artifact_arrays AS MATERIALIZED (
+ SELECT result_group,workspace_id,json_group_array(json_object('artifact_id',artifact_id,'filename',filename,'media_type',media_type)) AS artifacts
+ FROM (SELECT * FROM artifact_refs ORDER BY result_group,workspace_id,artifact_id) GROUP BY result_group,workspace_id
+), ranked AS MATERIALIZED (
+ SELECT *,ROW_NUMBER() OVER(PARTITION BY result_group,workspace_id
   ORDER BY received_at DESC,operation_id DESC) AS position FROM native
 ), facts AS MATERIALIZED (
  SELECT json_object('server_id',server_id,'executor_id',executor_id,'session_id',session_id,'operation_id',operation_id,
   'workspace_id',workspace_id,'agent_id',subject_agent_id,'stage',stage,'received_at',received_at,'title',title,
   'revision',receipt_revision,'cleanup',cleanup,'handoff_id',handoff_id,'claim_epoch',claim_epoch,
   'stream_epoch',stream_epoch,'terminal_sequence',terminal_sequence,'preview',preview,
-  'truncated',output_truncated,'artifacts',json(artifacts),
+  'truncated',output_truncated,'artifacts',json(COALESCE(artifacts,'[]')),
   'verification',CASE WHEN claim_epoch=current_epoch THEN handoff_status ELSE 'historical_claim' END) AS fact
- FROM ranked WHERE position=1
+ FROM ranked LEFT JOIN artifact_arrays USING(result_group,workspace_id) WHERE position=1
  UNION ALL
  SELECT json_object('server_id',:server_id,'workspace_id',h.workspace_id,'agent_id',COALESCE(h.claimed_by,h.from_agent_id),
   'handoff_id',h.handoff_id,'claim_epoch',h.claim_epoch,'stage',h.status,'verification',h.status,
