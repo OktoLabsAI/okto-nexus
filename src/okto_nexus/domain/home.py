@@ -4,10 +4,10 @@ from __future__ import annotations
 import base64
 import json
 from typing import Generic, Literal, NotRequired, TypedDict, TypeVar
-from .home_delivery_semantics import DeliverySemantics
 
 from ..errors import ErrorCode, OktoNexusError
 from .attention import canonical, digest
+from .home_delivery_semantics import DeliverySemantics
 
 
 class SourceRef(TypedDict):

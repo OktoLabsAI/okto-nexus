@@ -686,6 +686,7 @@ def build_router() -> APIRouter:
                 "service": "okto-nexus",
                 "package_version": package_version,
                 "schema_version": schema_version,
+                "home_presentation_versions": [1, 2],
                 "trust_mode": deps.config.trust_mode,
                 # Set by `serve --project-root`; the dashboard opens scoped
                 # to this workspace by default (spec S2 AC1).

@@ -4,13 +4,13 @@ The interpreter supplies existing pinned dependencies. This does not claim an
 installed Nexus candidate: the bootstrap explicitly imports checkout src.
 """
 import argparse
-from datetime import datetime, timezone
 import hashlib
 import json
 import os
-from pathlib import Path
 import subprocess
 import tempfile
+from datetime import UTC, datetime
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -24,6 +24,14 @@ def main():
     assert args.label.replace('-', '').isalnum()
     tests = [(ROOT / name).resolve() for name in args.tests]
     assert all(path.is_relative_to(ROOT / 'tests') and path.exists() for path in tests)
+    pinned = set(ROOT.joinpath('src').rglob('*.py'))
+    for path in tests:
+        pinned.update(path.rglob('*.py') if path.is_dir() else [path])
+    pinned.update((ROOT / 'tests').glob('conftest.py'))
+    def pins():
+        return {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
+                for path in sorted(pinned)}
+    before_pins = pins()
     owned = Path(tempfile.mkdtemp(prefix='nexus-hst-source-'))
     for name in ('cwd', 'tmp', 'user', 'appdata', 'localappdata'):
         (owned / name).mkdir()
@@ -41,7 +49,7 @@ def main():
     bootstrap = ('import sys;sys.path.insert(0,' + repr(str(ROOT)) + ');sys.path.insert(0,' + repr(str(ROOT / 'src')) +
                  ');import pytest;raise SystemExit(pytest.main(' + repr(pytest_args) + '))')
     command = [str(args.python), '-I', '-B', '-X', 'utf8', '-c', bootstrap]
-    started = datetime.now(timezone.utc).isoformat()
+    started = datetime.now(UTC).isoformat()
     with (owned / 'pytest.log').open('w', encoding='utf-8') as log:
         child = subprocess.Popen(command, cwd=owned / 'cwd', env=env, stdin=subprocess.PIPE,
                                  stdout=log, stderr=subprocess.STDOUT)
@@ -52,15 +60,20 @@ def main():
     for name in ('pytest.log', 'tests.xml'):
         if (owned / name).is_file():
             (report_dir / name).write_bytes((owned / name).read_bytes())
-    report = dict(mode='SOURCE_ONLY_NOT_INSTALLED_NEXUS', started_at=started,
-                  ended_at=datetime.now(timezone.utc).isoformat(), command=command, cwd=str(owned / 'cwd'),
-                  own_root=str(owned), exit_code=code, original_pid=child.pid, process_exited=child.poll() is not None,
-                  stdin='closed PIPE', provider_auth_environment_copied=False,
-                  test_files={str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in tests if path.is_file()},
-                  limitations=['No installed app/browser/real harness/human qualification.',
-                               'No automatic process containment; only this test process exit is claimed.'])
+    report = {'mode': 'SOURCE_ONLY_NOT_INSTALLED_NEXUS', 'started_at': started,
+                  'ended_at': datetime.now(UTC).isoformat(), 'command': command, 'cwd': str(owned / 'cwd'),
+                  'own_root': str(owned), 'exit_code': code, 'original_pid': child.pid, 'process_exited': child.poll() is not None,
+                  'stdin': 'closed PIPE', 'provider_auth_environment_copied': False,
+                  'test_files': {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in tests if path.is_file()},
+                  'limitations': ['No installed app/browser/real harness/human qualification.',
+                               'No automatic process containment; only this test process exit is claimed.']}
+    after_pins = pins()
+    report['source_and_test_drift'] = [name for name in sorted(before_pins)
+                                    if before_pins[name] != after_pins[name]]
+    for name, value in [('source-pins-before.json', before_pins), ('source-pins-after.json', after_pins)]:
+        (report_dir / name).write_text(json.dumps(value, indent=2) + '\n', encoding='utf-8')
     (report_dir / 'qualification.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
-    print(json.dumps(dict(exit_code=code, report=str(report_dir), own_root=str(owned))))
+    print(json.dumps({'exit_code': code, 'report': str(report_dir), 'own_root': str(owned)}))
     print((owned / 'pytest.log').read_text('utf-8')[-4500:])
     raise SystemExit(code)
 

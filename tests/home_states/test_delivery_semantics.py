@@ -3,12 +3,16 @@ from copy import deepcopy
 
 import pytest
 
-from okto_nexus.domain.home_delivery_semantics import delivery_reference, project, reported_semantics
+from okto_nexus.domain.home_delivery_semantics import (
+    delivery_reference,
+    project,
+    reported_semantics,
+)
 
 
 def facts(**changes):
-    value = dict(server_id='server', executor_id='executor', operation_id='operation',
-        workspace_id='workspace', stage='SUCCEEDED', terminal_sequence=7)
+    value = {'server_id': 'server', 'executor_id': 'executor', 'operation_id': 'operation',
+        'workspace_id': 'workspace', 'stage': 'SUCCEEDED', 'terminal_sequence': 7}
     value.update(changes)
     return value
 
@@ -32,10 +36,10 @@ def test_task_status_is_independent_and_completed_never_proves_approved(status, 
 
 def verified_facts(verdict='pass'):
     ref = delivery_reference('workspace', 'handoff', 1, 'persisted delivery')
-    proof = dict(version=1, kind='handoff_delivery', workspace_id='workspace', handoff_id='handoff', claim_epoch=1,
-        delivery_revision=ref['delivery_revision'], event_id=19, verified_by='reviewer', actor_agent_id='reviewer',
-        event_claim_epoch=1, event_delivery_revision=ref['delivery_revision'], submission_event_id=18,
-        verdict=verdict, event_type='handoff.completed' if verdict == 'pass' else 'handoff.verification_failed')
+    proof = {'version': 1, 'kind': 'handoff_delivery', 'workspace_id': 'workspace', 'handoff_id': 'handoff', 'claim_epoch': 1,
+        'delivery_revision': ref['delivery_revision'], 'event_id': 19, 'verified_by': 'reviewer', 'actor_agent_id': 'reviewer',
+        'event_claim_epoch': 1, 'event_delivery_revision': ref['delivery_revision'], 'submission_event_id': 18,
+        'verdict': verdict, 'event_type': 'handoff.completed' if verdict == 'pass' else 'handoff.verification_failed'}
     return facts(handoff_id='handoff', claim_epoch=1, current_epoch=1,
         handoff_status='COMPLETED', delivery_revision=ref['delivery_revision'], verification_proof=proof)
 

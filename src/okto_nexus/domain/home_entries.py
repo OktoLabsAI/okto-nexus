@@ -7,8 +7,15 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 from .attention import digest
-from .home import ConnectionTarget, HomeActivity, HomeResult, HomeTarget, RuntimeRef, SessionTarget, SourceRef
-
+from .home import (
+    ConnectionTarget,
+    HomeActivity,
+    HomeResult,
+    HomeTarget,
+    RuntimeRef,
+    SessionTarget,
+    SourceRef,
+)
 
 EntryKind = Literal['work', 'session', 'connection', 'external', 'attention']
 EntryState = Literal[
@@ -92,6 +99,11 @@ class EntryRelations:
     connection_count: int | None = None
     connections: tuple[ConnectionContext, ...] | None = None
     harness_blocking: list[dict[str, object]] | None = None
+    # Only the negotiated operational projection reads these optional facts.
+    # None is unavailable, not an empty authoritative session inventory.
+    operational_sessions: tuple['SessionRuntimeFact', ...] | None = None
+    presentation_version: int = 1
+    operational_source_status: dict[str, SourceState] | None = None
 
     @property
     def total_is_exact(self):
@@ -100,6 +112,29 @@ class EntryRelations:
     @property
     def total(self):
         return len(self.entries) if self.total_is_exact else None
+
+
+@dataclass(frozen=True)
+class SessionRuntimeFact:
+    server_id: str
+    executor_id: str
+    binding_id: str
+    workspace_id: str
+    workspace_binding_id: str
+    agent_id: str
+    session_id: str
+    stream_epoch: str | None
+    owner_generation: int
+    lifecycle_state: str
+    control_current: bool
+    valid_until: str | None
+    observed_at: str | None = None
+    title: str | None = None
+    workspace_label: str | None = None
+    revoked: bool = False
+    runtime_ready: bool = False
+    persistent_runtime: bool = False
+    authority_current: bool = False
 
 
 def activity_record(item: HomeActivity, *, agent_id: str | None = None):

@@ -1,0 +1,2257 @@
+{
+  "at": "2026-11-17T13:23:57.894494+00:00",
+  "scope": "READ_ONLY_RECONCILIATION_NOT_LEDGER_UPDATE",
+  "ledger_template_sha256": "5c1dc8cec525643e4b27d1acb8bb3fad25b069d114b15543ae24e7bab03fe771",
+  "scenario_count": 116,
+  "evidence_path": "NEXUS_HOME_ESTADOS_R1\\execution\\delivery-implementation\\final\\qualification.json",
+  "evidence_sha256": "d5a227066525d22f740940b5b03904691d242da06b9d4dc455bd993282f64ff1",
+  "final_tests": 58,
+  "status_counts": {
+    "NOT_RUN_IN_THIS_REVIEW": 86,
+    "PARTIAL_ASSERTIONS_EXECUTED": 26,
+    "BLOCKED_NO_NEW_PROVIDER_AUTHORIZATION": 4
+  },
+  "tasks": [
+    {
+      "task_id": "HST-011",
+      "title": "Projetar semântica de entregas e tarefas",
+      "implementation": "SOURCE_SCOPED_IMPLEMENTED",
+      "qualification": "PARTIAL_NOT_FULL_TASK_VERIFIED",
+      "final_source_tests": 58,
+      "scenario_review": [
+        "HST-T-E01",
+        "HST-T-E02",
+        "HST-T-E03",
+        "HST-T-E04",
+        "HST-T-E05",
+        "HST-T-E06",
+        "HST-T-E07",
+        "HST-T-E08",
+        "HST-T-E09",
+        "HST-T-E10",
+        "HST-T-E11",
+        "HST-T-E12",
+        "HST-T-E13",
+        "HST-T-E16"
+      ],
+      "remaining": [
+        "HST-T-E14",
+        "HST-T-E15"
+      ],
+      "note": "Even listed assertion coverage is partial until required layers are demonstrated."
+    },
+    {
+      "task_id": "HST-012",
+      "title": "Vincular verificação à evidência correta",
+      "implementation": "SOURCE_SCOPED_IMPLEMENTED",
+      "qualification": "PARTIAL_NOT_FULL_TASK_VERIFIED",
+      "final_source_tests": 58,
+      "scenario_review": [
+        "HST-T-E01",
+        "HST-T-E02",
+        "HST-T-E03",
+        "HST-T-E04",
+        "HST-T-E05",
+        "HST-T-E06",
+        "HST-T-E07",
+        "HST-T-E08",
+        "HST-T-E09",
+        "HST-T-E10",
+        "HST-T-E11",
+        "HST-T-E12",
+        "HST-T-E13",
+        "HST-T-E16"
+      ],
+      "remaining": [
+        "HST-T-E14",
+        "HST-T-E15"
+      ],
+      "note": "Even listed assertion coverage is partial until required layers are demonstrated."
+    },
+    {
+      "task_id": "HST-013",
+      "title": "Preservar retenção, artefatos e visto por ocorrência",
+      "implementation": "SOURCE_SCOPED_IMPLEMENTED",
+      "qualification": "PARTIAL_NOT_FULL_TASK_VERIFIED",
+      "final_source_tests": 58,
+      "scenario_review": [
+        "HST-T-E01",
+        "HST-T-E02",
+        "HST-T-E03",
+        "HST-T-E04",
+        "HST-T-E05",
+        "HST-T-E06",
+        "HST-T-E07",
+        "HST-T-E08",
+        "HST-T-E09",
+        "HST-T-E10",
+        "HST-T-E11",
+        "HST-T-E12",
+        "HST-T-E13",
+        "HST-T-E16",
+        "HST-T-H01",
+        "HST-T-H02",
+        "HST-T-H03",
+        "HST-T-H04",
+        "HST-T-H06",
+        "HST-T-H08"
+      ],
+      "remaining": [
+        "HST-T-E14",
+        "HST-T-E15",
+        "HST-T-H05",
+        "HST-T-H07",
+        "HST-T-H09",
+        "HST-T-H10"
+      ],
+      "note": "Even listed assertion coverage is partial until required layers are demonstrated."
+    }
+  ],
+  "scenarios": [
+    {
+      "scenario_id": "HST-T-A01",
+      "title": "Conexões da mesma identidade",
+      "group": "A",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Integração de identidade/escopo no novo quadro e HTTP; esta revisão Results não a executou por completo."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-A02",
+      "title": "ID público repetido entre projetos",
+      "group": "A",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Integração de identidade/escopo no novo quadro e HTTP; esta revisão Results não a executou por completo."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-A03",
+      "title": "Sessões múltiplas",
+      "group": "A",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Integração de identidade/escopo no novo quadro e HTTP; esta revisão Results não a executou por completo."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-A04",
+      "title": "Owner de pergunta exato",
+      "group": "A",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Integração de identidade/escopo no novo quadro e HTTP; esta revisão Results não a executou por completo."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-A05",
+      "title": "Operação homônima entre executores",
+      "group": "A",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Associação de artefatos/resultados preserva executor e histórico autorizado; não agrupa por operation_id isolado."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_http_artifact_group_uses_authorized_terminal_relation_with_history_and_other_executor",
+          "case": "legacy-result-artifacts",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "sqlite_http_read_fixture"
+      ],
+      "missing": [
+        "Quadro v2/cards e abertura contextual de operações homônimas completos."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-A06",
+      "title": "Filtro não muda o bloqueio real",
+      "group": "A",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Integração de identidade/escopo no novo quadro e HTTP; esta revisão Results não a executou por completo."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-A07",
+      "title": "Resultado tardio de escopo antigo",
+      "group": "A",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Operação mais recente de workspace estrangeiro não substitui o resultado/handoff legítimo."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_newest_foreign_workspace_operation_stays_direct_and_cannot_hide_legitimate_handoff",
+          "case": "legacy-result-artifacts",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "sqlite_http_read_fixture"
+      ],
+      "missing": [
+        "Resposta atrasada de UI após troca de escopo, no browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-A08",
+      "title": "Pedido sem vínculo",
+      "group": "A",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Integração de identidade/escopo no novo quadro e HTTP; esta revisão Results não a executou por completo."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-B01",
+      "title": "Execução confirmada",
+      "group": "B",
+      "required_level": "unidade + contrato/SQLite",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Estado operacional/conectividade requer prova própria do runtime e cobertura; não inferir de Results."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-B02",
+      "title": "Fim com sessão viva",
+      "group": "B",
+      "required_level": "unidade + contrato/SQLite",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Estado operacional/conectividade requer prova própria do runtime e cobertura; não inferir de Results."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-B03",
+      "title": "Cadastro não é Idle",
+      "group": "B",
+      "required_level": "unidade + contrato/SQLite",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Estado operacional/conectividade requer prova própria do runtime e cobertura; não inferir de Results."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-B04",
+      "title": "Heartbeat do host não basta",
+      "group": "B",
+      "required_level": "unidade + contrato/SQLite",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Estado operacional/conectividade requer prova própria do runtime e cobertura; não inferir de Results."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-B05",
+      "title": "Fila não é ociosidade",
+      "group": "B",
+      "required_level": "unidade + contrato/SQLite",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Estado operacional/conectividade requer prova própria do runtime e cobertura; não inferir de Results."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-B06",
+      "title": "Envio incerto",
+      "group": "B",
+      "required_level": "unidade + contrato/SQLite",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Estado operacional/conectividade requer prova própria do runtime e cobertura; não inferir de Results."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-B07",
+      "title": "Fonte parcial não prova ausência",
+      "group": "B",
+      "required_level": "unidade + contrato/SQLite",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Estado operacional/conectividade requer prova própria do runtime e cobertura; não inferir de Results."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-B08",
+      "title": "Prova positiva com fonte alheia parcial",
+      "group": "B",
+      "required_level": "unidade + contrato/SQLite",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Estado operacional/conectividade requer prova própria do runtime e cobertura; não inferir de Results."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-B09",
+      "title": "Prontidão expirada",
+      "group": "B",
+      "required_level": "unidade + contrato/SQLite",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Estado operacional/conectividade requer prova própria do runtime e cobertura; não inferir de Results."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-B10",
+      "title": "One-shot encerrado",
+      "group": "B",
+      "required_level": "unidade + contrato/SQLite",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Estado operacional/conectividade requer prova própria do runtime e cobertura; não inferir de Results."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-B11",
+      "title": "Desconexão conhecida",
+      "group": "B",
+      "required_level": "unidade + contrato/SQLite",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Estado operacional/conectividade requer prova própria do runtime e cobertura; não inferir de Results."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-B12",
+      "title": "Outra conexão do agente trabalhando",
+      "group": "B",
+      "required_level": "unidade + contrato/SQLite",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Estado operacional/conectividade requer prova própria do runtime e cobertura; não inferir de Results."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-C01",
+      "title": "Pergunta não bloqueante",
+      "group": "C",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Agregação de bloqueio/paralelismo pertence ao backend operacional e precisa integração própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-C02",
+      "title": "Bloqueio total",
+      "group": "C",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Agregação de bloqueio/paralelismo pertence ao backend operacional e precisa integração própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-C03",
+      "title": "Paralelismo real",
+      "group": "C",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Agregação de bloqueio/paralelismo pertence ao backend operacional e precisa integração própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-C04",
+      "title": "Independente termina",
+      "group": "C",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Agregação de bloqueio/paralelismo pertence ao backend operacional e precisa integração própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-C05",
+      "title": "Idle não invalida bloqueio",
+      "group": "C",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Agregação de bloqueio/paralelismo pertence ao backend operacional e precisa integração própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-C06",
+      "title": "Fila com dependência desconhecida",
+      "group": "C",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Agregação de bloqueio/paralelismo pertence ao backend operacional e precisa integração própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-C07",
+      "title": "Fila independente demonstrada",
+      "group": "C",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Agregação de bloqueio/paralelismo pertence ao backend operacional e precisa integração própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-C08",
+      "title": "Não bloqueante vira bloqueante",
+      "group": "C",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Agregação de bloqueio/paralelismo pertence ao backend operacional e precisa integração própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-C09",
+      "title": "Duas bloqueantes",
+      "group": "C",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Agregação de bloqueio/paralelismo pertence ao backend operacional e precisa integração própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-C10",
+      "title": "Coordenação não prova pause",
+      "group": "C",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Agregação de bloqueio/paralelismo pertence ao backend operacional e precisa integração própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-C11",
+      "title": "Fonte do blocker fica stale",
+      "group": "C",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Agregação de bloqueio/paralelismo pertence ao backend operacional e precisa integração própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-C12",
+      "title": "Ocorrência compartilhada",
+      "group": "C",
+      "required_level": "unidade + SQLite/HTTP",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Agregação de bloqueio/paralelismo pertence ao backend operacional e precisa integração própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D01",
+      "title": "Pergunta simples",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D02",
+      "title": "Permissão nativa",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D03",
+      "title": "Verificação humana",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Verificação canônica existente mantém autoridade/claim; self-verifier/ator inelegível/claim antigo não escrevem proof."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_verification_authority_and_old_claim_cannot_emit_a_delivery_proof",
+          "case": "verification",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "canonical_application_sqlite"
+      ],
+      "missing": [
+        "Ocorrência verification_pending destinada ao operador, badge/ação e ausência de bloqueio inferido.",
+        "HTTP/browser com principal humano autenticado."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D04",
+      "title": "Handoff ao agente",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D05",
+      "title": "Vários tipos",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D06",
+      "title": "Decisão registrada não retoma",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D07",
+      "title": "Recibo antigo entregue tarde",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D08",
+      "title": "Retomada confirmada",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D09",
+      "title": "Termina após resposta",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D10",
+      "title": "Aplicação negada",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D11",
+      "title": "Resposta HTTP perdida",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D12",
+      "title": "Decisão em outra aba",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D13",
+      "title": "Snooze e visto",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-D14",
+      "title": "Negação e expiração",
+      "group": "D",
+      "required_level": "contrato + CLI/API/browser focal",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Badge, ação e aplicação/retomada causal exigem testes próprios; decisão registrada não é aplicação nativa."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E01",
+      "title": "Turno simples sem tarefa",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "SUCCEEDED sem handoff é turno; tarefa/verificação não aplicáveis e historical=false; campo legado preservado."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[SUCCEEDED-succeeded]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[FAILED-failed]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[CANCELLED-cancelled]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_standalone_sql_null_comparison_never_implies_historical_task",
+          "case": "standalone-sqlite",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit",
+        "sqlite_read_fixture"
+      ],
+      "missing": [
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E02",
+      "title": "Turno com tarefa aberta",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Resultado produtivo succeeded não muda task_state claimed nem cria approved."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[CLAIMED-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit"
+      ],
+      "missing": [
+        "Caso correspondente no SQLite/HTTP do novo contrato, além da função pura.",
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E03",
+      "title": "Entrega em verificação",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Entrega não nativa VERIFYING aparece somente na apresentação2; verification pending, ID preservado ao concluir."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership",
+          "case": "verification",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "canonical_application_sqlite"
+      ],
+      "missing": [
+        "Ocorrência/badge de verificação e colocação do harness exigem integração separada.",
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E04",
+      "title": "Concluído sem prova QA",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "COMPLETED sem proof e com critérios conhecidos não é approved; sem contrato de verificação é not_applicable e sem evidence_ref."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[COMPLETED-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_completed_without_verification_contract_has_no_approved_badge",
+          "case": "verification",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit",
+        "canonical_application_sqlite"
+      ],
+      "missing": [
+        "Artefato histórico real/recibo antigo em instalação isolada, além da função pura e serviço atual.",
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E05",
+      "title": "Verificado explicitamente",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Pass autorizado do claim/revisão exatos produz approved e evidence_ref do evento; uma entrega lógica, GET sem writes."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_exact_verification_proof_has_opaque_reference[pass-approved]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership",
+          "case": "verification",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit",
+        "canonical_application_sqlite"
+      ],
+      "missing": [
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser.",
+        "Caminho HTTP autenticado versão2 em pacote instalado."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E06",
+      "title": "Verificação de outro claim",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Outro claim/workspace/handoff/revisão/ator/ordem causal não é herdado; retrabalho cria entrega atual distinta, histórico preservado."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[claim_epoch-2]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[workspace_id-foreign]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[handoff_id-other]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[delivery_revision-sha256:0000000000000000000000000000000000000000000000000000000000000000]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[event_type-handoff.created]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[actor_agent_id-executor]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[event_id-0]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[version-2]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[version-True]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[event_claim_epoch-2]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[kind-external_report]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[submission_event_id-19]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_proof_of_another_claim_revision_workspace_or_actor_is_not_inherited[submission_event_id-0]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_historical_claim_is_explicit_and_never_inherits_current_verifying",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_rejected_delivery_uses_old_epoch_and_never_verifies_next_delivery",
+          "case": "verification",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit",
+        "canonical_application_sqlite"
+      ],
+      "missing": [
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E07",
+      "title": "Verificação negativa",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Fail referencia epoch anterior ao incremento; delivery rejected, tarefa claimed; não vira cancelamento ou approved na versão nova."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_exact_verification_proof_has_opaque_reference[fail-rejected]",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_rejected_delivery_uses_old_epoch_and_never_verifies_next_delivery",
+          "case": "verification",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit",
+        "canonical_application_sqlite"
+      ],
+      "missing": [
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E08",
+      "title": "Turno falhou",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "FAILED gera execution_outcome failed independente de tarefa/verificação."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[FAILED-failed]",
+          "case": "domain",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit"
+      ],
+      "missing": [
+        "Caso correspondente no SQLite/HTTP do novo contrato, além da função pura.",
+        "Saída parcial/artefatos e ausência de retry na UI.",
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E09",
+      "title": "Turno cancelado",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "CANCELLED gera execution_outcome cancelled, sem reinterpretar tarefa."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_turn_outcome_does_not_invent_task_or_verification[CANCELLED-cancelled]",
+          "case": "domain",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit"
+      ],
+      "missing": [
+        "Caso correspondente no SQLite/HTTP do novo contrato, além da função pura.",
+        "Saída parcial/artefatos preservados na UI.",
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E10",
+      "title": "Handoff rejeitado",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Task_state rejected permanece separado de execution_outcome."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_task_status_is_independent_and_completed_never_proves_approved[REJECTED-unknown]",
+          "case": "domain",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit"
+      ],
+      "missing": [
+        "Handoff REJECTED sem resultado nativo no SQLite/HTTP e mensagem da apresentação.",
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E11",
+      "title": "Cleanup pendente",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "SUCCEEDED continua succeeded com cleanup pending; RELEASED/REQUESTED/ausência separados; SQL fixture conserva cleanup pendente."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_cleanup_and_content_do_not_overwrite_productive_outcome",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_standalone_sql_null_comparison_never_implies_historical_task",
+          "case": "standalone-sqlite",
+          "status": "PASS"
+        },
+        {
+          "name": "test_overview_real_fixture_is_read_only_and_scoped",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit",
+        "sqlite_read_fixture"
+      ],
+      "missing": [
+        "Não é prova de cleanup real de processo ou contenção nativa.",
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E12",
+      "title": "Saída ainda não capturada",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Terminal sem captura é pending; captura terminal com texto vazio não é falsamente ausente."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_cleanup_and_content_do_not_overwrite_productive_outcome",
+          "case": "domain",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit"
+      ],
+      "missing": [
+        "Caso correspondente no SQLite/HTTP do novo contrato, além da função pura.",
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E13",
+      "title": "Reporte externo",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Reporte externo é evidence reported, execution/verification unknown e sem mutação do objeto de origem."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_external_report_has_no_native_success_and_revision_changes_without_mutation",
+          "case": "domain",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit"
+      ],
+      "missing": [
+        "Produtor OBS/Attention real e DeliveryDTO do quadro em SQLite/HTTP.",
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E14",
+      "title": "Silêncio e texto livre",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Negativo específico ainda não executado neste corte; ausência no predicado SQL foi apenas inspecionada."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E15",
+      "title": "Unknown não terminal",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Negativo específico ainda não executado neste corte; ausência no predicado SQL foi apenas inspecionada."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-E16",
+      "title": "Deduplicação e vistos",
+      "group": "E",
+      "required_level": "unidade + SQLite/HTTP + apresentação",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Artefatos por vínculos/claim/workspace antes de rank; metadata sem paths; visto canônico e ID estável na mudança de verificação."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_http_result_collects_same_claim_files_once_and_excludes_foreign_claim_and_workspace",
+          "case": "legacy-result-artifacts",
+          "status": "PASS"
+        },
+        {
+          "name": "test_http_artifact_group_uses_authorized_terminal_relation_with_history_and_other_executor",
+          "case": "legacy-result-artifacts",
+          "status": "PASS"
+        },
+        {
+          "name": "test_result_preview_seen_and_bounded_artifact_metadata",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_result_artifact_reference_uses_exact_durable_operation_without_paths",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "canonical_application_sqlite",
+        "sqlite_http_read_fixture"
+      ],
+      "missing": [
+        "Itens invisíveis e inbox watermark em browser adversarial completo.",
+        "Apresentação integrada/validador e navegador no corte final; fixtures/Node não equivalem a browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F01",
+      "title": "Painel com polling idêntico",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F02",
+      "title": "Mudança real durante leitura",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F03",
+      "title": "Revisão igual com horário novo",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F04",
+      "title": "Mudança relevante de validade",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F05",
+      "title": "Cursor muda",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F06",
+      "title": "Formulário em edição",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F07",
+      "title": "Card muda de coluna",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F08",
+      "title": "Burst de tokens",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F09",
+      "title": "Reconexão e lacuna",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F10",
+      "title": "Falha de fonte alheia",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F11",
+      "title": "401/403 com pausa",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F12",
+      "title": "Pausa manual",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F13",
+      "title": "Atualização normal não é erro",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-F14",
+      "title": "Histórico do navegador",
+      "group": "F",
+      "required_level": "unidade com relógio/promessas + browser",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há relatórios Node candidatos; precisam integração pelo Root e browser real no corte final."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-G01",
+      "title": "Uma sessão única",
+      "group": "G",
+      "required_level": "componente + navegador",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há componentes/controller Node candidatos; falta integração e browser real, sem escolha latest."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-G02",
+      "title": "Preview de um não é único",
+      "group": "G",
+      "required_level": "componente + navegador",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há componentes/controller Node candidatos; falta integração e browser real, sem escolha latest."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-G03",
+      "title": "Várias sessões legíveis",
+      "group": "G",
+      "required_level": "componente + navegador",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há componentes/controller Node candidatos; falta integração e browser real, sem escolha latest."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-G04",
+      "title": "Sem sessão ativa",
+      "group": "G",
+      "required_level": "componente + navegador",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há componentes/controller Node candidatos; falta integração e browser real, sem escolha latest."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-G05",
+      "title": "Labels por projeto",
+      "group": "G",
+      "required_level": "componente + navegador",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há componentes/controller Node candidatos; falta integração e browser real, sem escolha latest."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-G06",
+      "title": "Tempo honesto",
+      "group": "G",
+      "required_level": "componente + navegador",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há componentes/controller Node candidatos; falta integração e browser real, sem escolha latest."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-G07",
+      "title": "Controles compactos",
+      "group": "G",
+      "required_level": "componente + navegador",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há componentes/controller Node candidatos; falta integração e browser real, sem escolha latest."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-G08",
+      "title": "Pedido e conversa",
+      "group": "G",
+      "required_level": "componente + navegador",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Há componentes/controller Node candidatos; falta integração e browser real, sem escolha latest."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-H01",
+      "title": "Leitura sem efeitos",
+      "group": "H",
+      "required_level": "API/SQLite + browser adversarial",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "GET de Results não altera total_changes; uma instrução SQL por leitura e UoW existente; overview preserva contagens."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_overview_real_fixture_is_read_only_and_scoped",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_each_page_uses_one_read_uow",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "canonical_application_sqlite",
+        "sqlite_read_fixture"
+      ],
+      "missing": [
+        "Todas as rotas v2/expansões e controles de browser adversarial; auth telemetry separada."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-H02",
+      "title": "Destino não é autoridade",
+      "group": "H",
+      "required_level": "API/SQLite + browser adversarial",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Referências exatas de alvo e fronteira Server/workspace/sessão; nome de agente não concede autoridade."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_newest_foreign_workspace_operation_stays_direct_and_cannot_hide_legitimate_handoff",
+          "case": "legacy-result-artifacts",
+          "status": "PASS"
+        },
+        {
+          "name": "test_operator_authority_not_an_agent_name",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_exact_target_server_workspace_and_session",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "sqlite_read_fixture",
+        "sqlite_http_read_fixture"
+      ],
+      "missing": [
+        "Nova apresentação e erros de principal autenticado em browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-H03",
+      "title": "Campos privados",
+      "group": "H",
+      "required_level": "API/SQLite + browser adversarial",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Metadata não publica path de artefato/conteúdo privado do feed; helper não projeta campo private."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_external_report_has_no_native_success_and_revision_changes_without_mutation",
+          "case": "domain",
+          "status": "PASS"
+        },
+        {
+          "name": "test_business_feed_uses_real_events_not_unread_or_private_payload",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        },
+        {
+          "name": "test_result_artifact_reference_uses_exact_durable_operation_without_paths",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit",
+        "sqlite_read_fixture"
+      ],
+      "missing": [
+        "Labels hostis/HTML/ANSI/credenciais em todos novos badges, HTTP DTO e browser adversarial."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-H04",
+      "title": "Decisão do destinatário",
+      "group": "H",
+      "required_level": "API/SQLite + browser adversarial",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Executor não verifica própria entrega; outro ator sem elegibilidade e claim obsoleto não emitem prova nem mudam linha."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_verification_authority_and_old_claim_cannot_emit_a_delivery_proof",
+          "case": "verification",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "canonical_application_sqlite"
+      ],
+      "missing": [
+        "Isso não é prova de autenticação HTTP nem de destinatário de pergunta nativa; falta o fluxo humano/browser."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-H05",
+      "title": "Uma ocorrência, dois atalhos",
+      "group": "H",
+      "required_level": "API/SQLite + browser adversarial",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Segurança integral do novo fluxo precisa HTTP/SQLite e browser adversarial próprios."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-H06",
+      "title": "Retry produtivo proibido",
+      "group": "H",
+      "required_level": "API/SQLite + browser adversarial",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Leitura não executa; novo complete no mesmo claim VERIFYING é recusado; no hash de conteúdo em GET."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_same_claim_is_immutable_and_none_rework_references_the_persisted_delivery",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_overview_real_fixture_is_read_only_and_scoped",
+          "case": "legacy-home-queries",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "canonical_application_sqlite",
+        "sqlite_read_fixture"
+      ],
+      "missing": [
+        "Unknown/possible_effect e CTA de recuperação no browser, sem replay."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-H07",
+      "title": "Revogação de binding",
+      "group": "H",
+      "required_level": "API/SQLite + browser adversarial",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Segurança integral do novo fluxo precisa HTTP/SQLite e browser adversarial próprios."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-H08",
+      "title": "Externo não altera runtime",
+      "group": "H",
+      "required_level": "API/SQLite + browser adversarial",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Helper de reporte não transforma seu outcome em sucesso nativo nem altera a entrada."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_external_report_has_no_native_success_and_revision_changes_without_mutation",
+          "case": "domain",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "unit"
+      ],
+      "missing": [
+        "Snapshot stateful de slot/claim/grant antes/depois do produtor OBS real e quadro."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-H09",
+      "title": "Reconexão individual não simulada",
+      "group": "H",
+      "required_level": "API/SQLite + browser adversarial",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Segurança integral do novo fluxo precisa HTTP/SQLite e browser adversarial próprios."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-H10",
+      "title": "Raízes e daemon preservados",
+      "group": "H",
+      "required_level": "API/SQLite + browser adversarial",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Segurança integral do novo fluxo precisa HTTP/SQLite e browser adversarial próprios."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-I01",
+      "title": "Teclado completo",
+      "group": "I",
+      "required_level": "navegador + AT quando disponível",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Browser/AT não executados nesta frente; SSR/Node não comprovam foco, anúncio, zoom ou leitor real."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-I02",
+      "title": "Retorno após movimento",
+      "group": "I",
+      "required_level": "navegador + AT quando disponível",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Browser/AT não executados nesta frente; SSR/Node não comprovam foco, anúncio, zoom ou leitor real."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-I03",
+      "title": "Avisos sem ruído",
+      "group": "I",
+      "required_level": "navegador + AT quando disponível",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Browser/AT não executados nesta frente; SSR/Node não comprovam foco, anúncio, zoom ou leitor real."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-I04",
+      "title": "Estado não só por cor",
+      "group": "I",
+      "required_level": "navegador + AT quando disponível",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Browser/AT não executados nesta frente; SSR/Node não comprovam foco, anúncio, zoom ou leitor real."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-I05",
+      "title": "Mobile e zoom",
+      "group": "I",
+      "required_level": "navegador + AT quando disponível",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Browser/AT não executados nesta frente; SSR/Node não comprovam foco, anúncio, zoom ou leitor real."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-I06",
+      "title": "Modal e drafts",
+      "group": "I",
+      "required_level": "navegador + AT quando disponível",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Browser/AT não executados nesta frente; SSR/Node não comprovam foco, anúncio, zoom ou leitor real."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-J01",
+      "title": "Unidades distintas",
+      "group": "J",
+      "required_level": "SQLite instrumentado + benchmark",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Uma entrega lógica com vários artefatos e mudança de verificação mantém ID e não duplica a linha."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_http_result_collects_same_claim_files_once_and_excludes_foreign_claim_and_workspace",
+          "case": "legacy-result-artifacts",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "canonical_application_sqlite",
+        "sqlite_http_read_fixture"
+      ],
+      "missing": [
+        "Resumo integrado com 2 harnesses/3 ações/entregas compartilhadas e benchmark."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-J02",
+      "title": "Fontes parciais",
+      "group": "J",
+      "required_level": "SQLite instrumentado + benchmark",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Benchmark/contagens/expiração no dataset final ainda pendentes; testes focais não são p95/SLO."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-J03",
+      "title": "Sem N+1",
+      "group": "J",
+      "required_level": "SQLite instrumentado + benchmark",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Cada leitura de Results instrumentada executa uma única instrução SQL, sem consulta Python por resultado."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_rejected_delivery_uses_old_epoch_and_never_verifies_next_delivery",
+          "case": "verification",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "canonical_application_sqlite"
+      ],
+      "missing": [
+        "Medição escalonada 1/10/100, tempo/plano SQL, payload e baseline comparável; uma query não prova ausência de custo quadrático interno."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-J04",
+      "title": "Histórico limitado",
+      "group": "J",
+      "required_level": "SQLite instrumentado + benchmark",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Benchmark/contagens/expiração no dataset final ainda pendentes; testes focais não são p95/SLO."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-J05",
+      "title": "Benchmark comparável",
+      "group": "J",
+      "required_level": "SQLite instrumentado + benchmark",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Benchmark/contagens/expiração no dataset final ainda pendentes; testes focais não são p95/SLO."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-J06",
+      "title": "Expiração e revisão estável",
+      "group": "J",
+      "required_level": "SQLite instrumentado + benchmark",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Benchmark/contagens/expiração no dataset final ainda pendentes; testes focais não são p95/SLO."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-K01",
+      "title": "DTO e validator alinhados",
+      "group": "K",
+      "required_level": "contrato + instalação isolada",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Pacote instalado, compatibilidade e rollback futuros dependem de SOURCE_READY e qualificação própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-K02",
+      "title": "Recibos históricos intactos",
+      "group": "K",
+      "required_level": "contrato + instalação isolada",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "PARTIAL_ASSERTIONS_EXECUTED",
+      "executed_assertions": [
+        "Campos legados de outcome/verification e ID são preservados; v1 não recebe membership VERIFYING; old contract sem proof não vira approved."
+      ],
+      "executed_tests": [
+        {
+          "name": "test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_completed_without_verification_contract_has_no_approved_badge",
+          "case": "verification",
+          "status": "PASS"
+        },
+        {
+          "name": "test_standalone_sql_null_comparison_never_implies_historical_task",
+          "case": "standalone-sqlite",
+          "status": "PASS"
+        }
+      ],
+      "executed_layers": [
+        "canonical_application_sqlite",
+        "sqlite_read_fixture"
+      ],
+      "missing": [
+        "Wheels antigo/novo e snapshot de receipts/hashes/grants em instalação isolada."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-K03",
+      "title": "Fallback preservado",
+      "group": "K",
+      "required_level": "contrato + instalação isolada",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Pacote instalado, compatibilidade e rollback futuros dependem de SOURCE_READY e qualificação própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-K04",
+      "title": "Artefato instalado",
+      "group": "K",
+      "required_level": "contrato + instalação isolada",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Pacote instalado, compatibilidade e rollback futuros dependem de SOURCE_READY e qualificação própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-K05",
+      "title": "CLI independente",
+      "group": "K",
+      "required_level": "contrato + instalação isolada",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Pacote instalado, compatibilidade e rollback futuros dependem de SOURCE_READY e qualificação própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-K06",
+      "title": "Ledger honesto",
+      "group": "K",
+      "required_level": "contrato + instalação isolada",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "NOT_RUN_IN_THIS_REVIEW",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Pacote instalado, compatibilidade e rollback futuros dependem de SOURCE_READY e qualificação própria."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-L01",
+      "title": "Trio conectado",
+      "group": "L",
+      "required_level": "harness real / ambientes isolados",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "BLOCKED_NO_NEW_PROVIDER_AUTHORIZATION",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Bloqueado: nenhuma nova autorização de provedor/harness real para Home States; não reutilizar consentimentos antigos.",
+        "Humano somente após implementação, automação e nova decisão específica; campanhas anteriores UNKNOWN permanecem bloqueios separados."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-L02",
+      "title": "Ciclo humano real",
+      "group": "L",
+      "required_level": "harness real / ambientes isolados",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "BLOCKED_NO_NEW_PROVIDER_AUTHORIZATION",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Bloqueado: nenhuma nova autorização de provedor/harness real para Home States; não reutilizar consentimentos antigos.",
+        "Humano somente após implementação, automação e nova decisão específica; campanhas anteriores UNKNOWN permanecem bloqueios separados."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-L03",
+      "title": "Execução paralela real",
+      "group": "L",
+      "required_level": "harness real / ambientes isolados",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "BLOCKED_NO_NEW_PROVIDER_AUTHORIZATION",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Bloqueado: nenhuma nova autorização de provedor/harness real para Home States; não reutilizar consentimentos antigos.",
+        "Humano somente após implementação, automação e nova decisão específica; campanhas anteriores UNKNOWN permanecem bloqueios separados."
+      ]
+    },
+    {
+      "scenario_id": "HST-T-L04",
+      "title": "Fluxo remoto real",
+      "group": "L",
+      "required_level": "harness real / ambientes isolados",
+      "ledger_template_status": "NOT_RUN",
+      "review_status": "BLOCKED_NO_NEW_PROVIDER_AUTHORIZATION",
+      "executed_assertions": [],
+      "executed_tests": [],
+      "executed_layers": [],
+      "missing": [
+        "Bloqueado: nenhuma nova autorização de provedor/harness real para Home States; não reutilizar consentimentos antigos.",
+        "Humano somente após implementação, automação e nova decisão específica; campanhas anteriores UNKNOWN permanecem bloqueios separados."
+      ]
+    }
+  ],
+  "external_candidates": [
+    {
+      "path": "NEXUS_HOME_ESTADOS_R1\\execution\\hst00-contracts\\qualification.json",
+      "sha256": "332b0f89ebd2d2125c0133e0df837aab7771f64c4d7212a552631f9d69d57e40",
+      "status": "PASS_SOURCE_CONTRACTS_ONLY",
+      "declared_node_pass": null,
+      "integration_status": "CANDIDATE_FOR_ROOT_RECONCILIATION_NOT_PROMOTED_BY_THIS_REVIEW",
+      "note": "Counts overlap between reports; do not sum 67+73 or promote Node to browser. The reproduction report is expected red."
+    },
+    {
+      "path": "NEXUS_HOME_ESTADOS_R1\\execution\\hst04-context\\qualification.json",
+      "sha256": "65448e431c7e271bdc8edcd1251e72410c26be15361369577802ae459bd3408a",
+      "status": "IMPLEMENTED_NODE_SCOPED",
+      "declared_node_pass": 73,
+      "integration_status": "CANDIDATE_FOR_ROOT_RECONCILIATION_NOT_PROMOTED_BY_THIS_REVIEW",
+      "note": "Counts overlap between reports; do not sum 67+73 or promote Node to browser. The reproduction report is expected red."
+    },
+    {
+      "path": "NEXUS_HOME_ESTADOS_R1\\execution\\hst04-controller\\qualification.json",
+      "sha256": "92fe4f5249cb6e8ff7887d18125a7bf5731a55cf4a976605075464e7c40cd126",
+      "status": "IMPLEMENTED_NODE_SCOPED",
+      "declared_node_pass": 67,
+      "integration_status": "CANDIDATE_FOR_ROOT_RECONCILIATION_NOT_PROMOTED_BY_THIS_REVIEW",
+      "note": "Counts overlap between reports; do not sum 67+73 or promote Node to browser. The reproduction report is expected red."
+    },
+    {
+      "path": "NEXUS_HOME_ESTADOS_R1\\execution\\frontend-reproduction\\qualification.json",
+      "sha256": "c650dc12db2f1c5a71f8ff36f16850ee29ca0aeaf0848ab8319b3b871e31da10",
+      "status": "REPRODUCED_EXPECTED_RED",
+      "declared_node_pass": null,
+      "integration_status": "CANDIDATE_FOR_ROOT_RECONCILIATION_NOT_PROMOTED_BY_THIS_REVIEW",
+      "note": "Counts overlap between reports; do not sum 67+73 or promote Node to browser. The reproduction report is expected red."
+    }
+  ],
+  "critical_gaps": [
+    "Causal application/resume: HTTP decision recorded, stale RUNNING or task verification cannot establish native application. D06-D12 need exact epoch/operation and causal watermark/receipt proof.",
+    "L01-L04 require new explicit authorization and per-adapter evidence. Paid UNKNOWN predecessors do not authorize replay or fallback.",
+    "Human acceptance comes after implementation and automated browser/installed checks; no AT or user result is inferred.",
+    "No HST scenario is promoted to full PASS by this review; missing required layers remain visible."
+  ]
+}

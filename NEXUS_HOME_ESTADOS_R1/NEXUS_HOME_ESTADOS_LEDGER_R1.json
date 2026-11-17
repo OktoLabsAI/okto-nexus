@@ -174,7 +174,7 @@
     {
       "id": "HST-05",
       "gate": "G5",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "task_ids": [
         "HST-024",
         "HST-025",
@@ -186,7 +186,7 @@
     {
       "id": "HST-06",
       "gate": "G6",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "task_ids": [
         "HST-029",
         "HST-030",
@@ -566,8 +566,18 @@
         "HST-T-J05",
         "HST-T-J06"
       ],
-      "status": "IN_PROGRESS",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Operational domain/board, canonical SQLite/ASGI HTTP, currentness negative cases",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "PASS40 focused source tests after currentness fences; no provider executed",
+          "artifact_path": "execution/operational-currentness/qualification.json",
+          "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        }
+      ]
     },
     {
       "id": "HST-006",
@@ -631,8 +641,18 @@
         "HST-T-H09",
         "HST-T-H10"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Operational domain/board, canonical SQLite/ASGI HTTP, currentness negative cases",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "PASS40 focused source tests after currentness fences; no provider executed",
+          "artifact_path": "execution/operational-currentness/qualification.json",
+          "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        }
+      ]
     },
     {
       "id": "HST-007",
@@ -691,8 +711,18 @@
         "HST-T-J05",
         "HST-T-J06"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Operational domain/board, canonical SQLite/ASGI HTTP, currentness negative cases",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "PASS40 focused source tests after currentness fences; no provider executed",
+          "artifact_path": "execution/operational-currentness/qualification.json",
+          "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        }
+      ]
     },
     {
       "id": "HST-008",
@@ -734,8 +764,18 @@
         "HST-T-D13",
         "HST-T-D14"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "BLOCKED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Operational domain/board, canonical SQLite/ASGI HTTP, currentness negative cases",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "PASS40 focused source tests after currentness fences; no provider executed",
+          "artifact_path": "execution/operational-currentness/qualification.json",
+          "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        }
+      ]
     },
     {
       "id": "HST-009",
@@ -798,8 +838,18 @@
         "HST-T-D13",
         "HST-T-D14"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Operational domain/board, canonical SQLite/ASGI HTTP, currentness negative cases",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "PASS40 focused source tests after currentness fences; no provider executed",
+          "artifact_path": "execution/operational-currentness/qualification.json",
+          "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        }
+      ]
     },
     {
       "id": "HST-010",
@@ -861,8 +911,18 @@
         "HST-T-K05",
         "HST-T-K06"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Operational domain/board, canonical SQLite/ASGI HTTP, currentness negative cases",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "PASS40 focused source tests after currentness fences; no provider executed",
+          "artifact_path": "execution/operational-currentness/qualification.json",
+          "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        }
+      ]
     },
     {
       "id": "HST-011",
@@ -1693,8 +1753,18 @@
         "HST-T-H09",
         "HST-T-H10"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
+          "command_or_procedure": "Operational domain/board, canonical SQLite/ASGI HTTP, currentness negative cases",
+          "environment": "Windows; isolated source-only Python/Node, no provider or personal installation",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "PASS40 focused source tests after currentness fences; no provider executed",
+          "artifact_path": "execution/operational-currentness/qualification.json",
+          "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        }
+      ]
     },
     {
       "id": "HST-023",
@@ -1809,7 +1879,7 @@
         "HST-T-J05",
         "HST-T-J06"
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "evidence": []
     },
     {
@@ -1864,7 +1934,7 @@
         "HST-T-K05",
         "HST-T-K06"
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "evidence": []
     },
     {
@@ -2102,8 +2172,18 @@
         "HST-T-L03",
         "HST-T-L04"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "BLOCKED",
+      "evidence": [
+        {
+          "commit": "5f7b7059 + scoped candidate awaiting package",
+          "command_or_procedure": "Inspect campaign consent, provider contracts and retained Quick Connect usage gate",
+          "environment": "Static review; no provider or credentials accessed",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "BLOCKED: no HOME-STATES-R1 real campaign proposal/budget approved; prior authorizations are not reused",
+          "artifact_path": "execution/source-proof-map.md",
+          "limitations": "Codex/Pi/Claude and multi-host real qualification not performed; prior UNKNOWN usage blockers retained."
+        }
+      ]
     },
     {
       "id": "HST-030",
@@ -2187,7 +2267,7 @@
         "HST-T-K05",
         "HST-T-K06"
       ],
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "evidence": []
     },
     {
@@ -2669,8 +2749,18 @@
       "when": "Atualizar",
       "then": "Mover para Active/Executando sem repetir envio; remover ação resolvida.",
       "level": "contrato + CLI/API/browser focal",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "BLOCKED",
+      "evidence": [
+        {
+          "commit": "5f7b7059 + currentness working tree pins",
+          "command_or_procedure": "Producer contract review and negative late-RUNNING/decision tests",
+          "environment": "Source-only; no real provider",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "BLOCKED positive causal application/resume: producer provides write receipt, not an application acknowledgment",
+          "artifact_path": "execution/operational-currentness/qualification.json",
+          "limitations": "Conservative awaiting/unknown implemented; late event arrival is deliberately not treated as proof."
+        }
+      ]
     },
     {
       "id": "HST-T-D09",
@@ -3472,8 +3562,18 @@
       "when": "Executar e encerrar uma tarefa por conexão",
       "then": "Resultados explícitos e cards Idle somente onde comprovado; reportar separadamente harnesses não executados.",
       "level": "harness real / ambientes isolados",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "BLOCKED",
+      "evidence": [
+        {
+          "commit": "5f7b7059 + scoped candidate awaiting package",
+          "command_or_procedure": "Inspect campaign consent, provider contracts and retained Quick Connect usage gate",
+          "environment": "Static review; no provider or credentials accessed",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "BLOCKED: no HOME-STATES-R1 real campaign proposal/budget approved; prior authorizations are not reused",
+          "artifact_path": "execution/source-proof-map.md",
+          "limitations": "Codex/Pi/Claude and multi-host real qualification not performed; prior UNKNOWN usage blockers retained."
+        }
+      ]
     },
     {
       "id": "HST-T-L02",
@@ -3483,8 +3583,18 @@
       "when": "Responder e acompanhar",
       "then": "Bloqueio, decisão registrada, retomada confirmada e resultado correlacionados; sem inferir prova nativa de fixture.",
       "level": "harness real / ambientes isolados",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "BLOCKED",
+      "evidence": [
+        {
+          "commit": "5f7b7059 + scoped candidate awaiting package",
+          "command_or_procedure": "Inspect campaign consent, provider contracts and retained Quick Connect usage gate",
+          "environment": "Static review; no provider or credentials accessed",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "BLOCKED: no HOME-STATES-R1 real campaign proposal/budget approved; prior authorizations are not reused",
+          "artifact_path": "execution/source-proof-map.md",
+          "limitations": "Codex/Pi/Claude and multi-host real qualification not performed; prior UNKNOWN usage blockers retained."
+        }
+      ]
     },
     {
       "id": "HST-T-L03",
@@ -3494,8 +3604,18 @@
       "when": "Bloquear uma e concluir a independente",
       "then": "Active com request separado, depois Needs You, sem interrupção da irmã nem duplicação.",
       "level": "harness real / ambientes isolados",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "BLOCKED",
+      "evidence": [
+        {
+          "commit": "5f7b7059 + scoped candidate awaiting package",
+          "command_or_procedure": "Inspect campaign consent, provider contracts and retained Quick Connect usage gate",
+          "environment": "Static review; no provider or credentials accessed",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "BLOCKED: no HOME-STATES-R1 real campaign proposal/budget approved; prior authorizations are not reused",
+          "artifact_path": "execution/source-proof-map.md",
+          "limitations": "Codex/Pi/Claude and multi-host real qualification not performed; prior UNKNOWN usage blockers retained."
+        }
+      ]
     },
     {
       "id": "HST-T-L04",
@@ -3505,8 +3625,18 @@
       "when": "Acompanhar tarefa e decisão pela Home",
       "then": "Mesmos badges/contextos e reconexão/falha honestas; sem tratar localhost sintético como prova multi-host.",
       "level": "harness real / ambientes isolados",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "BLOCKED",
+      "evidence": [
+        {
+          "commit": "5f7b7059 + scoped candidate awaiting package",
+          "command_or_procedure": "Inspect campaign consent, provider contracts and retained Quick Connect usage gate",
+          "environment": "Static review; no provider or credentials accessed",
+          "timestamp": "2026-11-17T14:04:07.863590+00:00",
+          "result": "BLOCKED: no HOME-STATES-R1 real campaign proposal/budget approved; prior authorizations are not reused",
+          "artifact_path": "execution/source-proof-map.md",
+          "limitations": "Codex/Pi/Claude and multi-host real qualification not performed; prior UNKNOWN usage blockers retained."
+        }
+      ]
     }
   ],
   "evidence_requirements": [

@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-17T14:02:26.299315+00:00",
+  "version": "0.3.7",
+  "assets": {
+    "index.html": "ebf23f83113272f9b21f3d9cbb27f8f5a46be6a49a668059ee535112b3edc29d",
+    "assets/index-Cfr5cFOY.js": "f1d85dde4ec7280d83837ff29fdff56f1eae68c3d40e129144c9991ae0390e44",
+    "assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036"
+  },
+  "command": "rtk proxy npm run build",
+  "result": "PASS TypeScript and Vite production build",
+  "warnings": [
+    "Vite chunk larger than 500kB; build success is not a performance qualification."
+  ],
+  "limitations": [
+    "Not installed/browser/provider/human qualification."
+  ]
+}

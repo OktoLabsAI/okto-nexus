@@ -1,7 +1,7 @@
 """Real canonical handoff transitions and migrated SQLite Home projection."""
 import json
 
-from test_verification import make_env, _ok, _park, _err
+from test_verification import _err, _ok, _park, make_env
 
 from okto_nexus.adapters.outbound.sqlite.home import SqliteHomeQueries
 from okto_nexus.domain.home_delivery_semantics import delivery_reference

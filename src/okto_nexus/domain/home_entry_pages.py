@@ -4,14 +4,15 @@ Cursors are base64 JSON with validated bindings, NOT cryptographic signatures.
 Every continuation reauthorizes and recomputes the material revision.
 """
 import base64
+import json
 from dataclasses import asdict
 from datetime import timedelta
-import json
 
 from ..errors import ErrorCode, OktoNexusError
 from .attention import canonical, digest, instant
-from .home import filters as home_filters, identity, invalid, limit as page_limit
-
+from .home import filters as home_filters
+from .home import identity, invalid
+from .home import limit as page_limit
 
 QUICK = frozenset({'active', 'needs_you', 'results', 'all'})
 PASSIVE = frozenset({'configured', 'connected', 'idle', 'offline', 'stale'})
@@ -50,7 +51,10 @@ def cursor_encode(binding, revision, key):
 
 
 def _cursor_binding(value):
-    if set(value) != {'server_id', 'principal', 'scope', 'partition', 'group_id', 'entry_id'}:
+    required = {'server_id', 'principal', 'scope', 'partition', 'group_id', 'entry_id'}
+    if set(value) not in (required, required | {'presentation_version'}):
+        raise ValueError
+    if 'presentation_version' in value and (type(value['presentation_version']) is not int or value['presentation_version'] != 2):
         raise ValueError
     for key in ('server_id', 'principal', 'partition'):
         if type(value[key]) is not str:
@@ -159,7 +163,12 @@ def revision(relations, check_budget):
 
 
 def session_ref(session):
-    return {key: getattr(session, key) for key in ('server_id', 'executor_id', 'workspace_id', 'session_id')}
+    value = {key: getattr(session, key) for key in ('server_id', 'executor_id', 'workspace_id', 'session_id')}
+    from .home_entries import SessionRuntimeFact
+    if isinstance(session, SessionRuntimeFact):
+        value.update(lifecycle_state=session.lifecycle_state, title=session.title or 'Session',
+            workspace_label=session.workspace_label, last_activity_at=session.observed_at)
+    return value
 
 
 def entry_dto(entry, *, binding, revision, group_id, now, refresh_at, preview=3, sessions_exact=True, attention_exact=True, results_exact=True):
@@ -199,7 +208,9 @@ def entry_dto(entry, *, binding, revision, group_id, now, refresh_at, preview=3,
 
 
 def page(relations, *, scope, server_id, principal, now, partition='groups', group_id=None,
-         entry_id=None, cursor=None, limit=10, preview=3, check_budget=lambda: None):
+         entry_id=None, cursor=None, limit=10, preview=3, check_budget=lambda: None, presentation_version=1):
+    if type(presentation_version) is not int or presentation_version not in (1, 2):
+        invalid('Invalid Home presentation version.')
     page_limit(limit)
     page_limit(preview)
     if partition not in {'groups', 'children', 'sessions', 'attention', 'results'}:
@@ -210,6 +221,8 @@ def page(relations, *, scope, server_id, principal, now, partition='groups', gro
         if value is not None:
             identity(value)
     material_revision = revision(relations, check_budget)
+    if presentation_version == 2:
+        material_revision = digest([2, material_revision])
     tracking_unknown, old_tracking_unknown, unseen_results = False, False, set()
     refresh = instant(now) + timedelta(seconds=15)
     for entry in relations.entries:
@@ -241,11 +254,16 @@ def page(relations, *, scope, server_id, principal, now, partition='groups', gro
     refresh_at = refresh.isoformat(timespec='microseconds').replace('+00:00', 'Z')
     binding = dict(server_id=server_id, principal=principal, scope=scope,
                    partition=partition, group_id=group_id, entry_id=entry_id)
+    if presentation_version == 2:
+        binding['presentation_version'] = 2
     after = cursor_decode(cursor, binding, material_revision)
     groups = {}
     for entry in relations.entries:
         check_budget()
-        if selected(entry, scope, now):
+        matches_agent = (scope.get('agent_id') is None or entry.agent_id == scope['agent_id']
+            or entry.activity is not None and scope['agent_id'] in entry.activity['agent_ids']
+            or any(s.agent_id == scope['agent_id'] for s in entry.sessions))
+        if selected(entry, scope, now) and (presentation_version == 1 or matches_agent):
             groups.setdefault(entry.group_id, []).append(entry)
     for children in groups.values():
         check_budget()
@@ -310,22 +328,25 @@ def page(relations, *, scope, server_id, principal, now, partition='groups', gro
             results.update(r['id'] for r in entry.results)
     counts.update(sessions=len(sessions), results=len(results))
     check_budget()
-    return dict(version=1, scope=scope, server_id=server_id, generated_at=now,
-        snapshot_id=material_revision, revision=material_revision, partition=partition,
-        group_id=group_id, entry_id=entry_id, status='ready' if exact else 'partial',
-        source_status=relations.source_status, items=items, total=len(keyed) if exact else None,
-        total_is_exact=exact, has_more=more,
-        inventory=dict(connections=dict(value=relations.connection_count,
+    value = {'version': 1, 'scope': scope, 'server_id': server_id, 'generated_at': now,
+        'snapshot_id': material_revision, 'revision': material_revision, 'partition': partition,
+        'group_id': group_id, 'entry_id': entry_id, 'status': 'ready' if exact else 'partial',
+        'source_status': relations.source_status, 'items': items, 'total': len(keyed) if exact else None,
+        'total_is_exact': exact, 'has_more': more,
+        'inventory': dict(connections=dict(value=relations.connection_count,
             total_is_exact=relations.connection_count is not None,
             unit='connections')),
-        coverage=dict(result_tracking='unknown' if relations.source_status.get('attention') != 'ready' else 'partial' if tracking_unknown else 'ready'),
-        next_cursor=cursor_encode(binding, material_revision, list(chosen[-1][0])) if more else None,
-        as_of=now, next_refresh_at=refresh_at,
-        server_attention=dict(status='ready' if relations.source_status.get('attention') == 'ready' else 'unavailable',
+        'coverage': dict(result_tracking='unknown' if relations.source_status.get('attention') != 'ready' else 'partial' if tracking_unknown else 'ready'),
+        'next_cursor': cursor_encode(binding, material_revision, list(chosen[-1][0])) if more else None,
+        'as_of': now, 'next_refresh_at': refresh_at,
+        'server_attention': dict(status='ready' if relations.source_status.get('attention') == 'ready' else 'unavailable',
             items=[o for o in relations.server_attention if o['active']][:3] if partition == 'groups' else [],
             total=sum(o['active'] for o in relations.server_attention) if relations.source_status.get('attention') == 'ready' else None,
             total_is_exact=relations.source_status.get('attention') == 'ready', has_more=sum(o['active'] for o in relations.server_attention)>3),
-        summary=dict({key: dict(value=count if exact else None,
+        'summary': dict({key: dict(value=count if exact else None,
             total_is_exact=exact, unit=key) for key, count in counts.items()},
             unseen_results=dict(value=None if tracking_unknown or relations.source_status.get('attention') != 'ready' else len(unseen_results),
-                total_is_exact=not tracking_unknown and relations.source_status.get('attention') == 'ready', unit='results')))
+                total_is_exact=not tracking_unknown and relations.source_status.get('attention') == 'ready', unit='results'))}
+    if presentation_version == 2:
+        value.update(presentation_version=2, presentation_versions=[1, 2])
+    return value

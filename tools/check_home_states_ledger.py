@@ -1,7 +1,7 @@
 """Check HOME-STATES execution annotations without changing its specification."""
+import json
 from collections import Counter
 from copy import deepcopy
-import json
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parents[1] / 'NEXUS_HOME_ESTADOS_R1'
@@ -34,9 +34,9 @@ def main():
                 else:
                     row.pop(name, None)
     assert stripped == original, 'Normative specification drift'
-    print(json.dumps(dict(status='PASS', scope='ledger_integrity_only', counts={
+    print(json.dumps({'status': 'PASS', 'scope': 'ledger_integrity_only', 'counts': {
         group: dict(Counter(row.get('status', 'NOT_VERIFIED') for row in current[group]))
-        for group in ('tasks', 'tests', 'stages', 'requirements')})))
+        for group in ('tasks', 'tests', 'stages', 'requirements')}}))
 
 
 if __name__ == '__main__':

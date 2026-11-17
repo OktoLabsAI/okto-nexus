@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "layer": "source-first domain + real SQLite/ASGI HTTP + inert Core native peer",
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "tests/home_states/test_operational_status.py",
+    "tests/home_states/test_operational_board.py",
+    "tests/home_states/test_operational_sqlite.py",
+    "tests/ui_simplification/test_harness_blocking.py",
+    "tests/ui_simplification/test_entry_relations.py::test_sender_filter_keeps_receiver_question_and_results",
+    "tests/ui_simplification/test_entry_relations.py::test_historical_session_never_uses_new_binding_context",
+    "tests/ui_simplification/test_harness_board.py::test_real_native_input_metadata_and_snooze_preserve_waiting_harness",
+    "-q",
+    "--tb=short",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\operational-focals\\junit.xml"
+  ],
+  "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+  "start": "2026-11-17T13:20:00.892846+00:00",
+  "end": "2026-11-17T13:20:32.215126+00:00",
+  "exit_code": 0,
+  "imports": {
+    "nexus": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\__init__.py",
+    "core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py"
+  },
+  "input_before": {
+    "src/okto_nexus/domain/home_entries.py": "ff2b73d17cf1b85e632b62a99e71aa9f9025e15ace6707ff61921812da6bdbe8",
+    "src/okto_nexus/domain/home_entry_pages.py": "dae997c1b388a2e457eb0edd987c893fe7e67aa52a182aae671587fcc1012e21",
+    "src/okto_nexus/domain/home_harness_blocking.py": "ee90149ef3f5348298d6be07375057318035491c15b09df7adc0936ca2ead71b",
+    "src/okto_nexus/domain/home_harness_board.py": "35b83261f6d05cfc6e3eedbc76da95991305d3ecfd4ec800503d17c1c3234216",
+    "src/okto_nexus/domain/home_operational_status.py": "ef3c1d7402a517d03a92028835fa3b6e3fe0746ec8b12207e9e227c22ea7bf54",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "9e21f169325ccb0d636ca62416cc48fe46af706976b6d422fa525f40d29d866e",
+    "src/okto_nexus/adapters/outbound/sqlite/home_operational_facts.py": "dbdd500b995c4281b14629d7f3a9025a8645cf5038ce7b4ac9ad09db53ec97f9",
+    "tests/home_states/test_operational_status.py": "a4a4f6d4c0647feb57ae3a37ffbb8b10d6f2ff1c4451996abf5d598e03127d91",
+    "tests/home_states/test_operational_board.py": "f6a11105b6cf1d7ff45fdb180594a6e6b5bc6dac686ea1283346b9f1620780be",
+    "tests/home_states/test_operational_sqlite.py": "079ff5426ef4c4da88bd9f4ba81f55f9b604b8d9b35020b6f0eab79f0805aba6"
+  },
+  "input_after": {
+    "src/okto_nexus/domain/home_entries.py": "ff2b73d17cf1b85e632b62a99e71aa9f9025e15ace6707ff61921812da6bdbe8",
+    "src/okto_nexus/domain/home_entry_pages.py": "dae997c1b388a2e457eb0edd987c893fe7e67aa52a182aae671587fcc1012e21",
+    "src/okto_nexus/domain/home_harness_blocking.py": "ee90149ef3f5348298d6be07375057318035491c15b09df7adc0936ca2ead71b",
+    "src/okto_nexus/domain/home_harness_board.py": "35b83261f6d05cfc6e3eedbc76da95991305d3ecfd4ec800503d17c1c3234216",
+    "src/okto_nexus/domain/home_operational_status.py": "ef3c1d7402a517d03a92028835fa3b6e3fe0746ec8b12207e9e227c22ea7bf54",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "9e21f169325ccb0d636ca62416cc48fe46af706976b6d422fa525f40d29d866e",
+    "src/okto_nexus/adapters/outbound/sqlite/home_operational_facts.py": "dbdd500b995c4281b14629d7f3a9025a8645cf5038ce7b4ac9ad09db53ec97f9",
+    "tests/home_states/test_operational_status.py": "a4a4f6d4c0647feb57ae3a37ffbb8b10d6f2ff1c4451996abf5d598e03127d91",
+    "tests/home_states/test_operational_board.py": "f6a11105b6cf1d7ff45fdb180594a6e6b5bc6dac686ea1283346b9f1620780be",
+    "tests/home_states/test_operational_sqlite.py": "079ff5426ef4c4da88bd9f4ba81f55f9b604b8d9b35020b6f0eab79f0805aba6"
+  },
+  "drift": [],
+  "artifacts": {
+    "junit.xml": "62a29f7ba3d0af67301db579b3d182fd0e525fa79a06666c953cd861c9fa7ae6",
+    "pytest.txt": "76b65dc2967c52888789931fcb13bcfea5907be3ab32daf0d4ac3cc5cc2a4796"
+  },
+  "limits": [
+    "No real native binary/provider/account exercised.",
+    "No installed-package qualification.",
+    "No browser, speech/AT, latency p95, multi-host or paid campaign proof.",
+    "Native same-execution causal application/resumption remains unqualified without a producer guarantee.",
+    "Confirmed current terminal/independent work is not labelled application of a response."
+  ],
+  "antecedents": [
+    {
+      "tool": "27b3a1",
+      "result": "1 FAIL",
+      "cause": "Incorrect oracle: synthetic applied lease can establish control metadata; it cannot establish process presence."
+    },
+    {
+      "tool": "0f10be",
+      "result": "1 FAIL / 6 PASS",
+      "cause": "TestClient context tried to start an already-running fixture lifespan on another loop; changed test to existing non-context TestClient pattern."
+    },
+    {
+      "tool": "ddf4c1",
+      "result": "1 FAIL / 25 PASS",
+      "cause": "Oracle required runtime-ready from a decision fixture that has no opening receipt; retained as negative case."
+    },
+    {
+      "tool": "b680f4",
+      "result": "1 FAIL",
+      "cause": "Same unsupported positive opening oracle; producer source inspection confirmed no wire stream_epoch in open receipt."
+    },
+    {
+      "tool": "8597ff",
+      "result": "1 FAIL",
+      "cause": "Diagnostic confirmed opening_stage/native_id absent in that fixture; separate real canonical open with inert peer supplies the positive case."
+    }
+  ]
+}

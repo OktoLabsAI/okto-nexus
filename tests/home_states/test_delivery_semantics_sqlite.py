@@ -1,6 +1,6 @@
 """Synthetic terminal SQL facts reuse the existing Home fixture, not a harness."""
-from home_evolution.fixtures import home_scenario as home_scenario, OPERATOR, WORKSPACES
-from home_evolution.test_home_queries import service as service
+from home_evolution.fixtures import OPERATOR, WORKSPACES, home_scenario
+from home_evolution.test_home_queries import service
 
 
 def test_standalone_sql_null_comparison_never_implies_historical_task(service, home_scenario):

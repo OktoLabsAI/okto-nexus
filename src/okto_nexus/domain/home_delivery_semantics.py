@@ -1,6 +1,6 @@
 """Read-only delivery meaning; never execution or verification authority."""
-from typing import Literal, TypedDict
 import re
+from typing import Literal, TypedDict
 
 from .attention import digest
 
@@ -24,8 +24,8 @@ def delivery_reference(workspace_id, handoff_id, claim_epoch, persisted_result):
     if type(claim_epoch) is not int or claim_epoch < 0:
         raise ValueError('A delivery reference requires its canonical claim epoch.')
     revision = 'sha256:' + digest([1, workspace_id, handoff_id, claim_epoch, persisted_result])
-    return dict(version=1, kind='handoff_delivery', workspace_id=workspace_id,
-        handoff_id=handoff_id, claim_epoch=claim_epoch, delivery_revision=revision)
+    return {'version': 1, 'kind': 'handoff_delivery', 'workspace_id': workspace_id,
+        'handoff_id': handoff_id, 'claim_epoch': claim_epoch, 'delivery_revision': revision}
 
 
 def _seal(value, revision_source=None):
@@ -75,15 +75,15 @@ def project(facts) -> DeliverySemantics:
     else:
         content = 'available' if facts.get('handoff_content_available') else 'unavailable' if historical else 'not_captured'
         cleanup = 'not_applicable'
-    return _seal(dict(version=1, scope='turn' if native else 'handoff', evidence='canonical',
-        execution_outcome=outcome, task_state=task, verification=verification,
-        verification_evidence_ref=evidence_ref, cleanup=cleanup, content_state=content,
-        historical=historical))
+    return _seal({'version': 1, 'scope': 'turn' if native else 'handoff', 'evidence': 'canonical',
+        'execution_outcome': outcome, 'task_state': task, 'verification': verification,
+        'verification_evidence_ref': evidence_ref, 'cleanup': cleanup, 'content_state': content,
+        'historical': historical})
 
 
 def reported_semantics(report) -> DeliverySemantics:
     """An explicit external completion reports a fact; it cannot verify runtime."""
-    return _seal(dict(version=1, scope='external_report', evidence='reported',
-        execution_outcome='unknown', task_state='not_applicable', verification='unknown',
-        verification_evidence_ref=None, cleanup='not_applicable', content_state='not_captured',
-        historical=False), report.get('source_revision'))
+    return _seal({'version': 1, 'scope': 'external_report', 'evidence': 'reported',
+        'execution_outcome': 'unknown', 'task_state': 'not_applicable', 'verification': 'unknown',
+        'verification_evidence_ref': None, 'cleanup': 'not_applicable', 'content_state': 'not_captured',
+        'historical': False}, report.get('source_revision'))

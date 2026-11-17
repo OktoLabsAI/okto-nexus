@@ -8,12 +8,16 @@ import sqlite3
 
 from ....domain.attention import digest
 from ....domain.home_entries import (
-    ConnectionContext, EntryRecord, EntryRelations, SessionContext,
-    activity_record, passive_record,
+    ConnectionContext,
+    EntryRecord,
+    EntryRelations,
+    SessionContext,
+    activity_record,
+    passive_record,
 )
-from .home import FACTS, RESULTS, SqliteHomeQueries
 from ..harness.event_journal import redact
-
+from . import home_operational_facts
+from .home import FACTS, RESULTS, SqliteHomeQueries
 
 # This relation is independent of the old runtime_refs preview (20). The
 # persisted delivery/claim is resolved before sender filtering or pagination.
@@ -127,6 +131,55 @@ WHERE r.server_id=:server_id AND json_valid(r.operational_frame_json)
  AND (:workspace_id IS NULL OR json_extract(r.operational_frame_json,'$.workspace_id')=:workspace_id)
 '''
 
+# Separate from the legacy SQL: no new facts or decision placement are sent to
+# old consumers. Adapter is the exact bound endpoint, not a family guess.
+HARNESS_BLOCKING_V2 = HARNESS_BLOCKING.replace(
+    'WITH latest AS MATERIALIZED (',
+    '''WITH native_write_receipts AS MATERIALIZED (
+ SELECT r.*,ROW_NUMBER() OVER(PARTITION BY r.server_id,r.executor_id,r.operation_id
+ ORDER BY r.receipt_revision DESC) AS position
+ FROM execution_receipts r JOIN execution_operations o USING(server_id,executor_id,operation_id)
+ WHERE o.server_id=:server_id AND (:workspace_id IS NULL OR o.workspace_id=:workspace_id)
+ AND o.action IN ('input.provide','approval.decide')
+), latest AS MATERIALIZED ('''
+).replace(
+    "'received_at',r.received_at,'dispatch_state',d.dispatch_state)",
+    "'received_at',r.received_at,'dispatch_state',d.dispatch_state,"
+    "'owner_generation',json_extract(o.expected_revisions_json,'$.session_owner_generation'),"
+    "'stream_epoch',s.stream_epoch)").replace(
+    'LEFT JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id)',
+    'LEFT JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id) '
+    'LEFT JOIN execution_sessions s ON s.server_id=o.server_id AND s.executor_id=o.executor_id AND s.session_id=o.session_id'
+).replace(
+    "'approval_status',ap.status,'decided_at',ap.decided_at)",
+    "'approval_status',ap.status,'decided_at',ap.decided_at,"
+    "'owner_generation',r.session_owner_generation,'source_sequence',r.source_sequence,"
+    "'adapter_id',ep.adapter_id,'decision_id',decision.decision_id,'native_operation_id',decision.native_operation_id,"
+    "'decision_scope_matches',CASE WHEN reply.operation_id IS NOT NULL THEN 1 ELSE 0 END,"
+    "'native_write_stage',write_receipt.stage,'native_write_possible_effect',write_receipt.possible_effect,"
+    "'native_write_dispatch',write_dispatch.dispatch_state)"
+).replace(
+    'LEFT JOIN approvals ap ON ap.approval_id=r.canonical_request_id',
+    'LEFT JOIN approvals ap ON ap.approval_id=r.canonical_request_id '
+    'LEFT JOIN execution_bindings rb ON rb.server_id=r.server_id AND rb.executor_id=r.executor_id '
+    "AND rb.binding_id=json_extract(r.operational_frame_json,'$.binding_id') "
+    'LEFT JOIN agent_endpoints ep ON ep.endpoint_id=rb.endpoint_id '
+    'LEFT JOIN execution_decisions decision ON decision.canonical_request_id=r.canonical_request_id '
+    'AND decision.server_id=r.server_id AND decision.executor_id=r.executor_id '
+    'LEFT JOIN execution_operations reply ON reply.server_id=r.server_id AND reply.executor_id=r.executor_id '
+    'AND reply.operation_id=decision.native_operation_id AND reply.decision_id=decision.decision_id '
+    "AND reply.action IN ('input.provide','approval.decide') AND reply.session_id=r.session_id "
+    "AND reply.binding_id=json_extract(r.operational_frame_json,'$.binding_id') "
+    "AND reply.workspace_binding_id=json_extract(r.operational_frame_json,'$.workspace_binding_id') "
+    "AND reply.workspace_id=json_extract(r.operational_frame_json,'$.workspace_id') "
+    "AND reply.subject_agent_id=json_extract(r.operational_frame_json,'$.agent_id') "
+    "AND json_extract(reply.expected_revisions_json,'$.session_owner_generation')=r.session_owner_generation "
+    'LEFT JOIN native_write_receipts write_receipt ON write_receipt.server_id=reply.server_id '
+    'AND write_receipt.executor_id=reply.executor_id AND write_receipt.operation_id=reply.operation_id AND write_receipt.position=1 '
+    'LEFT JOIN execution_dispatch_outbox write_dispatch ON write_dispatch.server_id=reply.server_id '
+    'AND write_dispatch.executor_id=reply.executor_id AND write_dispatch.operation_id=reply.operation_id'
+)
+
 
 class SqliteHomeEntryRelations:
     """Internal, unpaged projection. Does not authenticate or grant authority.
@@ -182,20 +235,29 @@ class SqliteHomeEntryRelations:
             return self._collect(uow.connection.execute(sql + ' SELECT item FROM filtered', params), lambda row: json.loads(row[0]), check_budget)
 
     def blocking(self, uow, *, scope, server_id, relations, check_budget):
+        if relations.presentation_version == 2:
+            # read() already assembled the same v2 batch in this UoW.
+            return
         with self.home.bounded(uow.connection):
             relations.harness_blocking = self._collect(uow.connection.execute(HARNESS_BLOCKING,
                 dict(server_id=server_id, workspace_id=scope.get('workspace_id'))),
                 lambda row: json.loads(row[0]), check_budget)
 
-    def read(self, uow, *, scope, server_id, now, attention_relation, check_budget=None):
+    def read(self, uow, *, scope, server_id, now, attention_relation, check_budget=None, presentation_version=1):
         """Return all canonical relations before UI-020 sorting/count/paging.
 
         ``scope`` is the already normalized/authorized Home workspace/agent
         scope. State/quick filters belong after enrichment, not at source read.
         No authority is inferred from the caller's possession of these IDs.
         """
-        params = dict(server_id=server_id, workspace_id=scope.get('workspace_id'),
-                      agent_id=scope.get('agent_id'), home_now=now, state='all')
+        if presentation_version == 2:
+            # Workspace authorization has already run. Agent is a visual
+            # selection, never permission to hide a productive sibling before
+            # calculating a connection's operational state.
+            scope = dict(scope, agent_id=None)
+        params = {'server_id': server_id, 'workspace_id': scope.get('workspace_id'),
+                      'agent_id': scope.get('agent_id'), 'home_now': now, 'state': 'all',
+                      'delivery_presentation_version': presentation_version}
         status = {}
         check_budget = check_budget or (lambda: None)
 
@@ -349,9 +411,21 @@ class SqliteHomeEntryRelations:
             entry = passive_record(connection)
             entry.connection = connection
             entries.append(entry)
-        return EntryRelations(entries, server_attention, status,
+        relations = EntryRelations(entries, server_attention, status,
             connection_count=len(connections) if status['connections'] == 'ready' else None,
             connections=tuple(connections[key] for key in sorted(connections)) if status['connections'] == 'ready' else None)
+        if presentation_version == 2:
+            relations.presentation_version = 2
+            operational_rows = source('operational_sessions', lambda: self._rows(uow, home_operational_facts.SESSIONS, params, check_budget))
+            leases = source('operational_leases', lambda: self._rows(uow, home_operational_facts.LEASES, params, check_budget))
+            if status['operational_sessions'] == status['operational_leases'] == 'ready':
+                relations.operational_sessions = home_operational_facts.normalize(operational_rows, leases, check_budget)
+            rows = source('operational_dependencies', lambda: self._rows(uow, HARNESS_BLOCKING_V2, params, check_budget))
+            if status['operational_dependencies'] == 'ready':
+                relations.harness_blocking = [json.loads(row['item']) for row in rows]
+            relations.operational_source_status = {name: status.pop(name) for name in
+                ('operational_sessions', 'operational_leases', 'operational_dependencies')}
+        return relations
 
     def external(self, uow, *, scope, server_id, now, config, observations, relations, check_budget):
         """Read the canonical complete observation source in this same UoW.
