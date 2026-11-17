@@ -9,6 +9,7 @@ class BrowserSurface:
         self.delay=delay_info_seconds
         self.first_info=True
         self.allow_native_decision=allow_native_decision
+        self.decision_posts=0
 
     async def __call__(self,scope,receive,send):
         if scope['type']!='http':return await self.app(scope,receive,send)
@@ -21,7 +22,9 @@ class BrowserSurface:
         async def logged(message):
             if message['type']=='http.response.start':item['status']=message['status']
             await send(message)
-        allowed=method in ('GET','HEAD','OPTIONS') or self.allow_native_decision and method=='POST' and path=='/api/v1/runtime-management/runtime/approval-decisions'
+        decision=self.allow_native_decision and method=='POST' and path=='/api/v1/runtime-management/runtime/approval-decisions' and self.decision_posts<2
+        if decision:self.decision_posts+=1
+        allowed=method in ('GET','HEAD','OPTIONS') or decision
         if not allowed:
             from starlette.responses import JSONResponse
             return await JSONResponse({'fixture':'Write not allowed'},status_code=405)(scope,receive,logged)

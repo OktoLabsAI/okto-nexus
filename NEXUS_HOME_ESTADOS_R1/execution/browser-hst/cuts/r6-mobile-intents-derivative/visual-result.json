@@ -1,0 +1,107 @@
+{
+  "status": "FAIL",
+  "error": "Error: stacked-mobile-columns",
+  "checks": [
+    {
+      "id": "ask-pressed-and-canonical-id",
+      "ok": true,
+      "detail": {
+        "handoff": "true",
+        "message": "false"
+      }
+    },
+    {
+      "id": "ask-submit-label",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "chat-pressed-and-canonical-id",
+      "ok": true,
+      "detail": {
+        "handoff": "false",
+        "message": "true"
+      }
+    },
+    {
+      "id": "chat-submit-and-project-label",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "mobile-navigation-closed",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "three-columns-no-horizontal-overflow",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "visible-uncovered-active",
+      "ok": true,
+      "detail": {
+        "x": 16,
+        "y": 366,
+        "width": 328,
+        "height": 434
+      }
+    },
+    {
+      "id": "visible-uncovered-needs_you",
+      "ok": true,
+      "detail": {
+        "x": 16,
+        "y": 394,
+        "width": 328,
+        "height": 100
+      }
+    },
+    {
+      "id": "visible-uncovered-results",
+      "ok": true,
+      "detail": {
+        "x": 16,
+        "y": 328,
+        "width": 328,
+        "height": 472
+      }
+    },
+    {
+      "id": "stacked-mobile-columns",
+      "ok": false,
+      "detail": [
+        {
+          "column": "active",
+          "x": 16,
+          "y": 366,
+          "width": 328,
+          "height": 434
+        },
+        {
+          "column": "needs_you",
+          "x": 16,
+          "y": 394,
+          "width": 328,
+          "height": 100
+        },
+        {
+          "column": "results",
+          "x": 16,
+          "y": 328,
+          "width": 328,
+          "height": 472
+        }
+      ]
+    }
+  ],
+  "posts": [],
+  "snapshots": [
+    "- main:\n  - heading \"Home\" [level=1]\n  - paragraph: Follow each harness below. Open an activity to see its exact context, or add a harness to this project.\n  - button \"Ask for work or chat\"\n  - button \"Refresh\"\n  - button \"Pause display\"\n  - region \"Project\":\n    - text: Project\n    - combobox \"Project\":\n      - option \"All projects\"\n      - option \"HST Demo Project\" [selected]\n    - text: HST Demo Project\n    - button \"Add harness\"\n  - region \"Project overview\":\n    - paragraph: 1 connected \u00b7 0 working \u00b7 1 Idle\n    - paragraph: 0 actions \u00b7 0 harnesses paused\n  - status\n  - status: Some information is incomplete or unavailable. Totals may be unknown; refresh before acting.\n  - region \"Follow-up\":\n    - heading \"Follow-up\" [level=2]\n    - region \"Active\":\n      - heading \"Active\" [level=3]\n      - text: Total unknown\n      - list:\n        - listitem:\n          - 'heading \"Harness ID: reviewer-1\" [level=4]'\n          - paragraph: \"Collaborator: Hst Worker\"\n          - paragraph: Codex \u00b7 Host not reported\n          - text: Idle\n          - list \"Activity preview\":\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Turn completed\n              - button \"View delivery\"\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Turn completed\n              - button \"View delivery\"\n          - paragraph: Activity coverage incomplete.\n          - button \"Follow activity\"\n          - group: Connection details\n    - region \"Needs you\":\n      - heading \"Needs you\" [level=3]\n      - text: Total unknown\n      - list\n      - status: Tracking is incomplete or unavailable. Refresh to read this column.\n    - region \"Results\":\n      - heading \"Results\" [level=3]\n      - text: Total unknown\n      - list:\n        - listitem:\n          - paragraph: \"Harness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T18:38:04.889Z\n          - button \"View result\"\n        - listitem:\n          - paragraph: \"Harness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T18:38:03.494Z\n          - button \"View result\"\n    - paragraph: Some activity has incomplete connection tracking. These are separate from harness cards.\n    - button \"View other activity\"",
+    "- dialog \"New request\":\n  - banner:\n    - heading \"New request\" [level=2]\n    - button \"Expand modal\"\n    - button \"Close modal\"\n  - paragraph: Choose Handoff for tracked work or Message for a conversation. You send as the operator; permissions are checked again on submission.\n  - group:\n    - text: Subject\n    - textbox \"Subject\":\n      - /placeholder: Add a subject (optional)\n    - textbox \"Message\":\n      - /placeholder: Message an agent\u2026\n    - button \"Attach documents\"\n    - group \"Interaction\":\n      - button \"Chat\" [pressed]\n      - button \"Ask for work\"\n    - button \"Private\" [pressed]\n    - button \"Broadcast\"\n    - 'button \"To: choose agent\"'\n    - combobox \"Project for this interaction\" [disabled]:\n      - option \"Loading projects\u2026\" [selected]\n    - text: A direct private message to the selected agent.\n    - button \"Send chat message\" [disabled]: Send\n    - text: Enter to send \u00b7 Shift+Enter for a new line",
+    "- banner:\n  - button \"Expand navigation\"\n  - img \"Okto Nexus\"\n  - navigation \"Breadcrumb\": Home\n  - button \"Needs attention. All projects and Server. 0 need action, 2 to watch.\": \"2\"\n  - text: \u25cf Live\n  - button \"Sign out\"\n  - button\n- main:\n  - heading \"Home\" [level=1]\n  - paragraph: Follow each harness below. Open an activity to see its exact context, or add a harness to this project.\n  - button \"Ask for work or chat\"\n  - button \"Refresh\"\n  - button \"Pause display\"\n  - region \"Project\":\n    - text: Project\n    - combobox \"Project\":\n      - option \"All projects\"\n      - option \"HST Demo Project\" [selected]\n    - text: HST Demo Project\n    - button \"Add harness\"\n  - region \"Project overview\":\n    - paragraph: 1 connected \u00b7 0 working \u00b7 1 Idle\n    - paragraph: 0 actions \u00b7 0 harnesses paused\n  - status\n  - status: Some information is incomplete or unavailable. Totals may be unknown; refresh before acting.\n  - region \"Follow-up\":\n    - heading \"Follow-up\" [level=2]\n    - region \"Active\":\n      - heading \"Active\" [level=3]\n      - text: Total unknown\n      - list:\n        - listitem:\n          - 'heading \"Harness ID: reviewer-1\" [level=4]'\n          - paragraph: \"Collaborator: Hst Worker\"\n          - paragraph: Codex \u00b7 Host not reported\n          - text: Idle\n          - list \"Activity preview\":\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Turn completed\n              - button \"View delivery\"\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Turn completed\n              - button \"View delivery\"\n          - paragraph: Activity coverage incomplete.\n          - button \"Follow activity\"\n          - group: Connection details\n    - region \"Needs you\":\n      - heading \"Needs you\" [level=3]\n      - text: Total unknown\n      - list\n      - status: Tracking is incomplete or unavailable. Refresh to read this column.\n    - region \"Results\":\n      - heading \"Results\" [level=3]\n      - text: Total unknown\n      - list:\n        - listitem:\n          - paragraph: \"Harness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T18:38:04.889Z\n          - button \"View result\"\n        - listitem:\n          - paragraph: \"Harness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T18:38:03.494Z\n          - button \"View result\"\n    - paragraph: Some activity has incomplete connection tracking. These are separate from harness cards.\n    - button \"View other activity\"",
+    "- main:\n  - heading \"Home\" [level=1]\n  - paragraph: Follow each harness below. Open an activity to see its exact context, or add a harness to this project.\n  - button \"Ask for work or chat\"\n  - button \"Refresh\"\n  - button \"Pause display\"\n  - region \"Project\":\n    - text: Project\n    - combobox \"Project\":\n      - option \"All projects\"\n      - option \"HST Demo Project\" [selected]\n    - text: HST Demo Project\n    - button \"Add harness\"\n  - region \"Project overview\":\n    - paragraph: 1 connected \u00b7 0 working \u00b7 1 Idle\n    - paragraph: 0 actions \u00b7 0 harnesses paused\n  - status\n  - status: Some information is incomplete or unavailable. Totals may be unknown; refresh before acting.\n  - region \"Follow-up\":\n    - heading \"Follow-up\" [level=2]\n    - region \"Active\":\n      - heading \"Active\" [level=3]\n      - text: Total unknown\n      - list:\n        - listitem:\n          - 'heading \"Harness ID: reviewer-1\" [level=4]'\n          - paragraph: \"Collaborator: Hst Worker\"\n          - paragraph: Codex \u00b7 Host not reported\n          - text: Idle\n          - list \"Activity preview\":\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Turn completed\n              - button \"View delivery\"\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Turn completed\n              - button \"View delivery\"\n          - paragraph: Activity coverage incomplete.\n          - button \"Follow activity\"\n          - group: Connection details\n    - region \"Needs you\":\n      - heading \"Needs you\" [level=3]\n      - text: Total unknown\n      - list\n      - status: Tracking is incomplete or unavailable. Refresh to read this column.\n    - region \"Results\":\n      - heading \"Results\" [level=3]\n      - text: Total unknown\n      - list:\n        - listitem:\n          - paragraph: \"Harness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T18:38:04.889Z\n          - button \"View result\"\n        - listitem:\n          - paragraph: \"Harness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T18:38:03.494Z\n          - button \"View result\"\n    - paragraph: Some activity has incomplete connection tracking. These are separate from harness cards.\n    - button \"View other activity\""
+  ],
+  "body": "/ Home\n2\n\u25cf LIVE\nHome\n\nFollow each harness below. Open an activity to see its exact context, or add a harness to this project.\n\nAsk for work or chat\nRefresh\nPause display\nProject\nAll projects\nHST Demo Project\nHST Demo Project\nAdd harness\n\n1 connected \u00b7 0 working \u00b7 1 Idle\n\n0 actions \u00b7 0 harnesses paused\n\nSome information is incomplete or unavailable. Totals may be unknown; refresh before acting.\n\nFollow-up\nActive\nTotal unknown\nHarness ID: reviewer-1\n\nCollaborator: Hst Worker\n\nCodex \u00b7 Host not reported\n\nIdle\n\nWork request\n\nTurn completed\n\nView delivery\n\nWork request\n\nTurn completed\n\nView delivery\n\nActivity coverage incomplete.\n\nFollow activity\nConnection details\nNeeds you\nTotal unknown\n\nTracking is incomplete or unavailable. Refresh to read this column.\n\nResults\nTotal unknown\n\nHarness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\n\nWork result\n\nResponse available\n\nReceived 2026-11-17T18:38:04.889Z\n\nView result\n\nHarness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\n\nWork result\n\nResponse available\n\nReceived 2026-11-17T18:38:03.494Z\n\nView result\n\nSome activity has incomplete connection tracking. These are separate from harness cards.\n\nView other activity"
+}

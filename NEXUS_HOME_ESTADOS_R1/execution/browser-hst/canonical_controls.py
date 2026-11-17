@@ -40,7 +40,11 @@ class Controls:
         value=json.loads(next(line[6:] for line in response.text.splitlines() if line.startswith('data: '))) if 'text/event-stream'in response.headers.get('content-type','') else response.json()
         assert 'result'in value,'MCP result absent'
         result=value['result'].get('structuredContent') or json.loads(value['result']['content'][0]['text'])
-        assert result.get('ok') is True,'MCP use case refused: '+str(result.get('error',{}).get('code'))
+        if result.get('ok') is not True:
+            error=result.get('error',{})
+            diagnostic=dict(tool=name,code=error.get('code'),message=error.get('message'),reason=(error.get('details') or {}).get('reason'))
+            self.record(dict(mcp_refusal=diagnostic))
+            raise RuntimeError('MCP use case refused: '+json.dumps(diagnostic))
         return result['data']
 
     def prepare_handoff(self,creator_key,creator_id,worker_id):

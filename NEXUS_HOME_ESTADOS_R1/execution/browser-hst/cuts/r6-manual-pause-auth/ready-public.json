@@ -1,0 +1,50 @@
+{
+  "url": "http://127.0.0.1:54940",
+  "server_id": "srv_39a3f8d880ce94a1e46f169541e5be37",
+  "workspace_id": "wsr_2b7ed01054e310acd6663d074217840c",
+  "references": [
+    {
+      "server_id": "srv_39a3f8d880ce94a1e46f169541e5be37",
+      "executor_id": "exe_718cac16ac522d86645c62970e0a43d5",
+      "binding_id": "bind_ba1f1319b9008976f2cde9424105ad43",
+      "endpoint_id": "ep_f571037d409bb8300ee0121db79ef00a",
+      "agent_id": "hst-worker",
+      "workspace_id": "wsr_2b7ed01054e310acd6663d074217840c",
+      "workspace_binding_id": "wxb_ca8abc87074516e545e3becb8a7cd961"
+    }
+  ],
+  "sessions": [
+    {
+      "session_id": "ses_8791e1db36f33eda9560554f28122c93",
+      "reference": {
+        "server_id": "srv_39a3f8d880ce94a1e46f169541e5be37",
+        "executor_id": "exe_718cac16ac522d86645c62970e0a43d5",
+        "binding_id": "bind_ba1f1319b9008976f2cde9424105ad43",
+        "endpoint_id": "ep_f571037d409bb8300ee0121db79ef00a",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_2b7ed01054e310acd6663d074217840c",
+        "workspace_binding_id": "wxb_ca8abc87074516e545e3becb8a7cd961"
+      },
+      "text": "HST synthetic output ses_8791e1db36f33eda9560554f28122c93",
+      "closed": false
+    },
+    {
+      "session_id": "ses_ab30ac4f0bf5c3e6fd0deca1c9a79976",
+      "reference": {
+        "server_id": "srv_39a3f8d880ce94a1e46f169541e5be37",
+        "executor_id": "exe_718cac16ac522d86645c62970e0a43d5",
+        "binding_id": "bind_ba1f1319b9008976f2cde9424105ad43",
+        "endpoint_id": "ep_f571037d409bb8300ee0121db79ef00a",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_2b7ed01054e310acd6663d074217840c",
+        "workspace_binding_id": "wxb_ca8abc87074516e545e3becb8a7cd961"
+      },
+      "text": "HST synthetic output ses_ab30ac4f0bf5c3e6fd0deca1c9a79976",
+      "closed": false
+    }
+  ],
+  "card_id": "home_group_1d2b8f50d343b3262a862a73c34252116d0727e497ca4ff6a3d60cc4ffad3172",
+  "mode": "delayed_info",
+  "j5": null,
+  "provider_invocations": 0
+}

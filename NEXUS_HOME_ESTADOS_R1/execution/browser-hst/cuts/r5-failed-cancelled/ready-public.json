@@ -1,0 +1,50 @@
+{
+  "url": "http://127.0.0.1:53720",
+  "server_id": "srv_f5387dcb64f5d5083a6d7b6c2b4c6939",
+  "workspace_id": "wsr_d6ab987ce5a5ca58abb6386580ec8b8b",
+  "references": [
+    {
+      "server_id": "srv_f5387dcb64f5d5083a6d7b6c2b4c6939",
+      "executor_id": "exe_1720dbbcb4f84368e42524d8b800507f",
+      "binding_id": "bind_2162a1a9d8f0d05c91b6c8357cc724de",
+      "endpoint_id": "ep_a2225730aa59d288ebc0cbcf48595d42",
+      "agent_id": "hst-worker",
+      "workspace_id": "wsr_d6ab987ce5a5ca58abb6386580ec8b8b",
+      "workspace_binding_id": "wxb_f8697bd32e5c05e685e31da017af06ea"
+    }
+  ],
+  "sessions": [
+    {
+      "session_id": "ses_745c58796e9adbdbf3c846623245304b",
+      "reference": {
+        "server_id": "srv_f5387dcb64f5d5083a6d7b6c2b4c6939",
+        "executor_id": "exe_1720dbbcb4f84368e42524d8b800507f",
+        "binding_id": "bind_2162a1a9d8f0d05c91b6c8357cc724de",
+        "endpoint_id": "ep_a2225730aa59d288ebc0cbcf48595d42",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_d6ab987ce5a5ca58abb6386580ec8b8b",
+        "workspace_binding_id": "wxb_f8697bd32e5c05e685e31da017af06ea"
+      },
+      "text": "HST synthetic output ses_745c58796e9adbdbf3c846623245304b",
+      "closed": true
+    },
+    {
+      "session_id": "ses_42050b2a925aae9475b6ecd3d2960586",
+      "reference": {
+        "server_id": "srv_f5387dcb64f5d5083a6d7b6c2b4c6939",
+        "executor_id": "exe_1720dbbcb4f84368e42524d8b800507f",
+        "binding_id": "bind_2162a1a9d8f0d05c91b6c8357cc724de",
+        "endpoint_id": "ep_a2225730aa59d288ebc0cbcf48595d42",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_d6ab987ce5a5ca58abb6386580ec8b8b",
+        "workspace_binding_id": "wxb_f8697bd32e5c05e685e31da017af06ea"
+      },
+      "text": "HST synthetic output ses_42050b2a925aae9475b6ecd3d2960586",
+      "closed": true
+    }
+  ],
+  "card_id": "home_group_8484fd970fa6d9b5cc102e98d465217e9c3f0d9a86e1d06cd13ef319a797b161",
+  "mode": "failed_cancelled",
+  "j5": null,
+  "provider_invocations": 0
+}

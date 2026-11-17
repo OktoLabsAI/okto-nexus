@@ -1,0 +1,170 @@
+{
+  "status": "PASS_CANONICAL_MAIN_SUBSET",
+  "provider_invocations": 0,
+  "checks_pass": 28,
+  "checks_fail": 0,
+  "results": {
+    "after-terminal": "PASS_SUBSET",
+    "alerts-post-terminal": null,
+    "blocked": "PASS_SUBSET",
+    "confirmation": "PASS_SUBSET",
+    "form": "PASS_SUBSET",
+    "initialize": null,
+    "parallel": "PASS_SUBSET"
+  },
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-zylyhc3_",
+  "cleanup": {
+    "supervisor": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "own_root_processes": [],
+    "listener_port": 58457,
+    "listener_pids": [],
+    "excluded": "Current curation process/ancestors, not runtime or browser",
+    "secret_cookie_scan": "NO_MATCH",
+    "private_auth_and_wire_logs": "Not copied",
+    "data_preserved": true
+  },
+  "limits": [
+    "Synthetic Codex protocol through real Core/Server; no real provider or three-adapter claim",
+    "No human/AT/native-zoom claim",
+    "Functional runs after DOM timing may share CPU with installed pytest"
+  ],
+  "copies": [
+    {
+      "path": "runtime-ready.json",
+      "source_sha256": "a12f506fab6a42b713101b2b55bc99c07166c259429020e298e492c3f038a790",
+      "curated_sha256": "a12f506fab6a42b713101b2b55bc99c07166c259429020e298e492c3f038a790"
+    },
+    {
+      "path": "fixture.py",
+      "source_sha256": "0a009a334ec53e9036f9bc61b3f85d0d4df4a5abd5a44f30e1d1fbd37a87321e",
+      "curated_sha256": "0a009a334ec53e9036f9bc61b3f85d0d4df4a5abd5a44f30e1d1fbd37a87321e"
+    },
+    {
+      "path": "initialize.js",
+      "source_sha256": "ebcf3c27e3e806cccd8bc8f818d7cd14871f3774b2bc2ef931940518ad810131",
+      "curated_sha256": "ebcf3c27e3e806cccd8bc8f818d7cd14871f3774b2bc2ef931940518ad810131"
+    },
+    {
+      "path": "question-parallel.js",
+      "source_sha256": "70fb12abfded82de17332e62548d1d30664eae464eb2683a56cea86acd451171",
+      "curated_sha256": "70fb12abfded82de17332e62548d1d30664eae464eb2683a56cea86acd451171"
+    },
+    {
+      "path": "question-blocked.js",
+      "source_sha256": "a281d1ff92cf4b6fc7478e93ec29a10f5b71f93abc1e8503ad42b8da53c0c458",
+      "curated_sha256": "a281d1ff92cf4b6fc7478e93ec29a10f5b71f93abc1e8503ad42b8da53c0c458"
+    },
+    {
+      "path": "question-confirmation.js",
+      "source_sha256": "e6f197e2074e5f069596b427dd505395e9260266efea46a23d4610387b54b0db",
+      "curated_sha256": "e6f197e2074e5f069596b427dd505395e9260266efea46a23d4610387b54b0db"
+    },
+    {
+      "path": "question-form.js",
+      "source_sha256": "0f1c4c4e74b842268b7661453eb04b8f4021952d4a398b207d62de28f53f3654",
+      "curated_sha256": "0f1c4c4e74b842268b7661453eb04b8f4021952d4a398b207d62de28f53f3654"
+    },
+    {
+      "path": "after-terminal.js",
+      "source_sha256": "1c13e8eeabab79ec8b5f4bb691e824d18d6158ccbcd552794ab6551bb11a6e74",
+      "curated_sha256": "1c13e8eeabab79ec8b5f4bb691e824d18d6158ccbcd552794ab6551bb11a6e74"
+    },
+    {
+      "path": "alerts.js",
+      "source_sha256": "ecf13c97df077809fe1ad06f7a4fe111aea93d475fe4fa4c9ca68e332efb1406",
+      "curated_sha256": "ecf13c97df077809fe1ad06f7a4fe111aea93d475fe4fa4c9ca68e332efb1406"
+    },
+    {
+      "path": "cli-after-terminal.txt",
+      "source_sha256": "e1f391a2cb5c4b43ff19ba40dd8c9473268c5ad139089ced7c45c04d1228d814",
+      "curated_sha256": "7dde8e506732605af8e97f2f84d08bc5fffdae06e1d7007bb9d6473637011613"
+    },
+    {
+      "path": "cli-alerts-post-terminal.txt",
+      "source_sha256": "d6d0bb2750ddc29c22604222eb5ca0359bb9c3e2384bba05f1934e141468c001",
+      "curated_sha256": "d6d0bb2750ddc29c22604222eb5ca0359bb9c3e2384bba05f1934e141468c001"
+    },
+    {
+      "path": "cli-blocked.txt",
+      "source_sha256": "f20288becd39b3b35a872d0e237acc1405db51762dc9f898e8cc53222a532205",
+      "curated_sha256": "f20288becd39b3b35a872d0e237acc1405db51762dc9f898e8cc53222a532205"
+    },
+    {
+      "path": "cli-close.txt",
+      "source_sha256": "db0bc4449bfcb8a159bbabe00ff26e50b97f6173340da9c5155870de3f684fac",
+      "curated_sha256": "db0bc4449bfcb8a159bbabe00ff26e50b97f6173340da9c5155870de3f684fac"
+    },
+    {
+      "path": "cli-confirmation.txt",
+      "source_sha256": "cbc32abda441855134e2dc5f63dc6ee0cdb25bd74f643405f63cd4af2f0de049",
+      "curated_sha256": "cbc32abda441855134e2dc5f63dc6ee0cdb25bd74f643405f63cd4af2f0de049"
+    },
+    {
+      "path": "cli-form.txt",
+      "source_sha256": "0f18184ec28ce224f54a208f99a06ae96373f6467368f1e440404c79d4cb08c0",
+      "curated_sha256": "4a17b2a4cef0f258e812fd222baf50dad2938ee0a063e911e9456108d1d1efb1"
+    },
+    {
+      "path": "cli-initialize.txt",
+      "source_sha256": "37bf1e2ee6c9efab3e7b970d5f27bbdb8aac5a8a1c5a144adcbe6cb602fd9531",
+      "curated_sha256": "37bf1e2ee6c9efab3e7b970d5f27bbdb8aac5a8a1c5a144adcbe6cb602fd9531"
+    },
+    {
+      "path": "cli-open.txt",
+      "source_sha256": "f0548260a5154550f581305b3e6f3a5bb80a7d38762dd66f65523f94e50545eb",
+      "curated_sha256": "f0548260a5154550f581305b3e6f3a5bb80a7d38762dd66f65523f94e50545eb"
+    },
+    {
+      "path": "cli-parallel.txt",
+      "source_sha256": "8479a29c33a81983db91629523b6d999ed45bf08d1d5d3ec9e6bb5f48c838713",
+      "curated_sha256": "8479a29c33a81983db91629523b6d999ed45bf08d1d5d3ec9e6bb5f48c838713"
+    },
+    {
+      "path": "cli-state.txt",
+      "source_sha256": "d21bdc6c86ab0f843e80e4ada07ce25d6617d8fe749c7ba66e0f51c3c833f9d6",
+      "curated_sha256": "d21bdc6c86ab0f843e80e4ada07ce25d6617d8fe749c7ba66e0f51c3c833f9d6"
+    },
+    {
+      "path": "control/initial-board.json",
+      "source_sha256": "e8c261eff814a93dd33a07eb84a02ac6521aa2d0575c5bdc935634dd42eec25e",
+      "curated_sha256": "e8c261eff814a93dd33a07eb84a02ac6521aa2d0575c5bdc935634dd42eec25e"
+    },
+    {
+      "path": "control/final.json",
+      "source_sha256": "893710e75e6f98bb490e59961959cf69b9abc32117797fc2df57c50643c13d15",
+      "curated_sha256": "893710e75e6f98bb490e59961959cf69b9abc32117797fc2df57c50643c13d15"
+    },
+    {
+      "path": "control/origins.json",
+      "source_sha256": "cb3a1309b78c8e99a4f5516ef1966ffcbe2ff3019a728db6a6812b83a6be4606",
+      "curated_sha256": "cb3a1309b78c8e99a4f5516ef1966ffcbe2ff3019a728db6a6812b83a6be4606"
+    },
+    {
+      "path": "control/supervisor-cleanup.json",
+      "source_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "curated_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e"
+    }
+  ],
+  "browser_http_counts": {
+    "GET": 420,
+    "POST": 1
+  },
+  "browser_status_counts": {
+    "200": 420,
+    "202": 1
+  },
+  "privacy": {
+    "fixture_cas_values_redacted": 4,
+    "fixture_cas_fingerprints": [
+      "87b66805702d3e0bd35c04fefa879b1c6878358cebe29737f238cfdf9f6035d3"
+    ],
+    "raw": "Original CLI logs retained only in owned Temp root; no historical R3 cut changed"
+  }
+}

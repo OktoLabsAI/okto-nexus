@@ -1,0 +1,59 @@
+{
+  "url": "http://127.0.0.1:62089",
+  "server_id": "srv_583595d35ae584b95b7aea1c6c8c41f8",
+  "workspace_id": "wsr_1222780cfdcf52374a7f025ba7d4493c",
+  "references": [
+    {
+      "server_id": "srv_583595d35ae584b95b7aea1c6c8c41f8",
+      "executor_id": "exe_d3b0724d915a60566951d113bac21354",
+      "binding_id": "bind_7eaf500d3bf9cfda9edcedf20afc56af",
+      "endpoint_id": "ep_502dfdea3e5eefefcbd7335adb4d2a7d",
+      "agent_id": "hst-a",
+      "workspace_id": "wsr_1222780cfdcf52374a7f025ba7d4493c",
+      "workspace_binding_id": "wxb_31def0245c63b7aea8f485debc7572dc"
+    },
+    {
+      "server_id": "srv_583595d35ae584b95b7aea1c6c8c41f8",
+      "executor_id": "exe_d3b0724d915a60566951d113bac21354",
+      "binding_id": "bind_ec64bd1716a7c413bad348f5f1be03fe",
+      "endpoint_id": "ep_20199c76787f84e1faaf978df1e3acae",
+      "agent_id": "hst-b",
+      "workspace_id": "wsr_4122abf7fbef65e701460863264ee4d4",
+      "workspace_binding_id": "wxb_d78d91bc78f95efa151939de97044d2b"
+    }
+  ],
+  "sessions": [
+    {
+      "session_id": "ses_f64bfa0d524c4e56a730fc45799a4c5f",
+      "reference": {
+        "server_id": "srv_583595d35ae584b95b7aea1c6c8c41f8",
+        "executor_id": "exe_d3b0724d915a60566951d113bac21354",
+        "binding_id": "bind_7eaf500d3bf9cfda9edcedf20afc56af",
+        "endpoint_id": "ep_502dfdea3e5eefefcbd7335adb4d2a7d",
+        "agent_id": "hst-a",
+        "workspace_id": "wsr_1222780cfdcf52374a7f025ba7d4493c",
+        "workspace_binding_id": "wxb_31def0245c63b7aea8f485debc7572dc"
+      },
+      "text": "HST synthetic output ses_f64bfa0d524c4e56a730fc45799a4c5f",
+      "closed": false
+    },
+    {
+      "session_id": "ses_f343cd2a100ef0796520e9aad2681206",
+      "reference": {
+        "server_id": "srv_583595d35ae584b95b7aea1c6c8c41f8",
+        "executor_id": "exe_d3b0724d915a60566951d113bac21354",
+        "binding_id": "bind_ec64bd1716a7c413bad348f5f1be03fe",
+        "endpoint_id": "ep_20199c76787f84e1faaf978df1e3acae",
+        "agent_id": "hst-b",
+        "workspace_id": "wsr_4122abf7fbef65e701460863264ee4d4",
+        "workspace_binding_id": "wxb_d78d91bc78f95efa151939de97044d2b"
+      },
+      "text": "HST synthetic output ses_f343cd2a100ef0796520e9aad2681206",
+      "closed": false
+    }
+  ],
+  "card_id": "home_group_dcc66f3ce6b9e82e96e41c73bf4f3ffe18054ee63cb3ad288c16570ef6a7359f",
+  "mode": "scope_two",
+  "j5": null,
+  "provider_invocations": 0
+}

@@ -1,0 +1,99 @@
+{
+  "files": [
+    {
+      "path": "cli-close.txt",
+      "bytes": 31,
+      "sha256": "0cec16230482ff3a7400d080e83cbf4bd5e07b6bd4e95a9baa2e91c1bc0d712d"
+    },
+    {
+      "path": "cli-initialize.txt",
+      "bytes": 2828,
+      "sha256": "788cd1fb894e9c45b91baa1468ac9545b360882c6c01567ccbf8acd10fae14d5"
+    },
+    {
+      "path": "cli-open.txt",
+      "bytes": 226,
+      "sha256": "5e3af3c87e0864810103b00882e244786ded2fc70cb7bf73ff82ee3fde05ec03"
+    },
+    {
+      "path": "cli-scope-race.txt",
+      "bytes": 11052,
+      "sha256": "df2a640bf108c79f6a6dd3de3aed39f2de039fa44c49a0372301b05602dfa801"
+    },
+    {
+      "path": "cli-state.txt",
+      "bytes": 318,
+      "sha256": "9681b6978179e37af0efe9d5aab3bdf344fae5c4185680eb87a3fa3455e3acb4"
+    },
+    {
+      "path": "control/final.json",
+      "bytes": 51435,
+      "sha256": "b9a1e477d514e0dbf246b8278d99053f96e6752058c287d295bb03fb30f58ed5"
+    },
+    {
+      "path": "control/initial-board.json",
+      "bytes": 46909,
+      "sha256": "dc3c92e70f5168965bd553c7995f0b8412933e82e8f5c9379a9bee2214c42891"
+    },
+    {
+      "path": "control/origins.json",
+      "bytes": 608,
+      "sha256": "cb3a1309b78c8e99a4f5516ef1966ffcbe2ff3019a728db6a6812b83a6be4606"
+    },
+    {
+      "path": "control/supervisor-cleanup.json",
+      "bytes": 196,
+      "sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e"
+    },
+    {
+      "path": "fixture.py",
+      "bytes": 19532,
+      "sha256": "0a009a334ec53e9036f9bc61b3f85d0d4df4a5abd5a44f30e1d1fbd37a87321e"
+    },
+    {
+      "path": "initialize-result.json",
+      "bytes": 2088,
+      "sha256": "c3f7e7f6bafedc3090f7822d771a39bd50c90b8ca46c364d2075fabd58cfbd43"
+    },
+    {
+      "path": "initialize.js",
+      "bytes": 652,
+      "sha256": "3cecf5b47c3adb04a033a2acc9e6378d144d62a80507350bccc56bef6bff2d06"
+    },
+    {
+      "path": "physical-cleanup.json",
+      "bytes": 500,
+      "sha256": "08e2ea5ef5aab0d40d8aae51416ff205adf43bcb371f29a9b63a6a2a1f92b851"
+    },
+    {
+      "path": "qualification.json",
+      "bytes": 4869,
+      "sha256": "b8b8b0b843fa5f8b45849d70c87b36764e507723ddb27857c15729337981520a"
+    },
+    {
+      "path": "ready-public.json",
+      "bytes": 2460,
+      "sha256": "84f4dcd81f66395830189195f9f5e939332c634310d6038ff8e1f6a12833c1db"
+    },
+    {
+      "path": "runtime-facts-public.json",
+      "bytes": 948,
+      "sha256": "451d6cc1859d3232f08ee524415d8c1225ab0cb0321ae4f21b14032ea7bdf8c5"
+    },
+    {
+      "path": "runtime-ready.json",
+      "bytes": 1699,
+      "sha256": "ab63c80b96d2d28ef084a42cefe05b2527b44997d4fd719e00bb41485d8a0cca"
+    },
+    {
+      "path": "scope-race-result.json",
+      "bytes": 4762,
+      "sha256": "decd8ed130daaaf0ec89f2215d03626e230eb8515cd4752bfa8b90253aa571f4"
+    },
+    {
+      "path": "scope-race.js",
+      "bytes": 6726,
+      "sha256": "c3f0ffd08baf011fff83c208a69dff1ec9ee2664bb220ce045883290d059f14c"
+    }
+  ]
+}

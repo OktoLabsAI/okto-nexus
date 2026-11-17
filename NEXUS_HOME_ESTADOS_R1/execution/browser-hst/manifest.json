@@ -1,6 +1,91 @@
 {
-  "status": "PREPARED_NOT_EXECUTED",
+  "status": "R3_PREPARED_AFTER_R2_BLOCKED",
   "files": [
+    {
+      "path": "antecedents/r2-unprojected-watermark/cli-close.txt",
+      "bytes": 31,
+      "sha256": "d59654cfd9d254cfcb694cd3183aaa5b3d0bf9f81f8361e673b62f9a5ee9df7f"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/cli-open.txt",
+      "bytes": 226,
+      "sha256": "c6bed04d58a35179aeabe33521ff5b31c94ea420f608a9c621afbe0ded72b773"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/cli-state-load.txt",
+      "bytes": 318,
+      "sha256": "fbb7822f2702e5de3f53cd0f219bb85cb0ddb36ae689033ac6c769e29b9cfd75"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/cli-timing-file.txt",
+      "bytes": 58,
+      "sha256": "b4989eef932ccce807660d4c78e2e28f2eda228ad16c65439a032f908bdcec75"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/cli-timing.txt",
+      "bytes": 47,
+      "sha256": "c2ef5214fbffacebb03645ab220ab0f575cb2b92862c2ba76fe8e350e7b07cdf"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/control/currentness-diagnostic.json",
+      "bytes": 2437,
+      "sha256": "4a643e0d8b0a8fcdbe2875539991009ea19eaf07d3cee313c5c2b6b906ff7c73"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/control/final.json",
+      "bytes": 19754,
+      "sha256": "d7a68a45325aadef22792c59f7b9196f1e67e4bd27acd79ce87c1f572ddd8705"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/control/initial-board.json",
+      "bytes": 85512,
+      "sha256": "721c5a3bef6eb75e992d506d38e7f61c362081ffddf9d55e3fad48572e55c7f8"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/control/supervisor-cleanup.json",
+      "bytes": 196,
+      "sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/control/supervisor.json",
+      "bytes": 196,
+      "sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/fixture.py",
+      "bytes": 14238,
+      "sha256": "de8914406eb3f5531ef4d5bf25cd1414e28cbe7be29cdae29052735de4ac4ba1"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/manifest.json",
+      "bytes": 2558,
+      "sha256": "ce2a39ac71d019cc19b6370243b5809f467e46fc4802df696705ad47d37ed7ee"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/physical-cleanup.json",
+      "bytes": 101,
+      "sha256": "142bd5b8e8478d97e92383c33993a4d83fd394aebb33f9531126ee5733144336"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/qualification.json",
+      "bytes": 2288,
+      "sha256": "e74d85e30bbc6d4425f878066ad6b7c7d47e41782ebda969261b9aa742dd7557"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/ready-public.json",
+      "bytes": 2050,
+      "sha256": "4434163e2d4e1f2eaee8d1899641b11d9b2be4d2211a5d30eab5997b0b73cbcc"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/runtime-ready.json",
+      "bytes": 1609,
+      "sha256": "33c41d22d0cd74bc58c0ddc27d8d57f33df9a93dac5e79b4cadfbac3a99af2e4"
+    },
+    {
+      "path": "antecedents/r2-unprojected-watermark/timing.js",
+      "bytes": 4082,
+      "sha256": "4f8aa27455f9dec6e6638d42c3bcf87e8fff8c6a139f7c27f6ede40bc784a5c4"
+    },
     {
       "path": "browser_surface.py",
       "bytes": 1671,
@@ -28,8 +113,8 @@
     },
     {
       "path": "fixture.py",
-      "bytes": 14238,
-      "sha256": "de8914406eb3f5531ef4d5bf25cd1414e28cbe7be29cdae29052735de4ac4ba1"
+      "bytes": 15239,
+      "sha256": "609e7de032dd1a4f98001a41528149b5e466467da5a0007da2c3806f4ea94ab1"
     },
     {
       "path": "generated-peer.py.txt",
@@ -58,8 +143,8 @@
     },
     {
       "path": "prepare_runtime.py",
-      "bytes": 3061,
-      "sha256": "e70e28a603ca936db3d7053392b08b478179e0a9940639c7d3f72832c1106f7a"
+      "bytes": 3420,
+      "sha256": "191eb2bfe7e3810332adeeab64a28887ce7243ef529e17fdc9f1e411d66de184"
     },
     {
       "path": "prepare_sources.py",
@@ -73,8 +158,8 @@
     },
     {
       "path": "qualification.json",
-      "bytes": 838,
-      "sha256": "33353c7d6b4e2903518988dbd35c8e3ae274bfe11470ff963ba0ac630d9c1d4b"
+      "bytes": 1029,
+      "sha256": "8477fbd3dcc9683e3f8e650fdaa4435abb54ebc0cd77dfb7b44a7bcbe95643d7"
     },
     {
       "path": "README.md",
@@ -93,8 +178,8 @@
     },
     {
       "path": "timing-template.js",
-      "bytes": 3532,
-      "sha256": "017b7b1dff4dcecd782b3cdf7d289e23acc2ee51b4484c418c805dcb287536d5"
+      "bytes": 3980,
+      "sha256": "38bd39b107f800a45a32bf176da38be1df7726b37b13e90b43c5fa32aa69101b"
     }
   ]
 }

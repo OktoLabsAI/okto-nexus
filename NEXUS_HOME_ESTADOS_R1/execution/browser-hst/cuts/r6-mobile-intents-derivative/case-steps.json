@@ -1,0 +1,45 @@
+{
+  "case": "visual",
+  "steps": [
+    {
+      "step": "open",
+      "exit_code": 0,
+      "status": null,
+      "failed_checks": []
+    },
+    {
+      "step": "state",
+      "exit_code": 0,
+      "status": null,
+      "failed_checks": []
+    },
+    {
+      "step": "initialize",
+      "exit_code": 0,
+      "status": null,
+      "failed_checks": []
+    },
+    {
+      "step": "visual",
+      "exit_code": 0,
+      "status": "FAIL",
+      "failed_checks": [
+        "stacked-mobile-columns"
+      ]
+    },
+    {
+      "step": "close",
+      "exit_code": 0,
+      "status": null,
+      "failed_checks": []
+    }
+  ],
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  }
+}

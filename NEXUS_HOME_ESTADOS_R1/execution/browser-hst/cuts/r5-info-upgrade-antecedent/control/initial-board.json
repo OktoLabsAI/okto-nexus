@@ -1,0 +1,1462 @@
+{
+  "version": 1,
+  "scope": {
+    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+    "quick": "all",
+    "include_recent_results": false
+  },
+  "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+  "generated_at": "2026-11-17T17:39:44.312622Z",
+  "snapshot_id": "7286215cc39b537d5b4c39660f9aecac2be886ee42c90e599f66cb85ed13ed1d",
+  "revision": "7286215cc39b537d5b4c39660f9aecac2be886ee42c90e599f66cb85ed13ed1d",
+  "partition": "harness_board",
+  "status": "partial",
+  "source_status": {
+    "attention": "ready",
+    "work": "ready",
+    "results": "ready",
+    "connections": "ready",
+    "sessions": "ready",
+    "correlations": "ready",
+    "external": "disabled"
+  },
+  "inventory": {
+    "connections": {
+      "value": 1,
+      "total_is_exact": true,
+      "unit": "connections"
+    },
+    "registered_harnesses": {
+      "value": null,
+      "total_is_exact": false,
+      "unit": "harnesses"
+    }
+  },
+  "coverage": {
+    "result_tracking": "ready",
+    "harness_linkage": "ready",
+    "blocking": "ready"
+  },
+  "as_of": "2026-11-17T17:39:44.312622Z",
+  "next_refresh_at": "2026-11-17T17:39:59.312622Z",
+  "server_attention": {
+    "status": "ready",
+    "items": [],
+    "total": 0,
+    "total_is_exact": true,
+    "has_more": false
+  },
+  "summary": {
+    "activities": {
+      "value": null,
+      "total_is_exact": false,
+      "unit": "activities"
+    },
+    "external_instances": {
+      "value": null,
+      "total_is_exact": false,
+      "unit": "external_instances"
+    },
+    "sessions": {
+      "value": null,
+      "total_is_exact": false,
+      "unit": "sessions"
+    },
+    "results": {
+      "value": null,
+      "total_is_exact": false,
+      "unit": "results"
+    },
+    "occurrences": {
+      "value": null,
+      "total_is_exact": false,
+      "unit": "occurrences"
+    },
+    "unseen_results": {
+      "value": null,
+      "total_is_exact": false,
+      "unit": "results"
+    }
+  },
+  "presentation_version": 2,
+  "presentation_versions": [
+    1,
+    2
+  ],
+  "entry_revision": "7be83cad5c11c05efaf5fa78af680c9438ea770b9c7347fc978d2334b64c9a6b",
+  "delivery_counts": {
+    "canonical": null,
+    "reported": null,
+    "total_is_exact": false
+  },
+  "operational_summary": {
+    "connected": {
+      "value": 1,
+      "total_is_exact": true
+    },
+    "working": {
+      "value": 1,
+      "total_is_exact": true
+    },
+    "idle": {
+      "value": 0,
+      "total_is_exact": true
+    },
+    "queued": {
+      "value": 0,
+      "total_is_exact": true
+    },
+    "unconfirmed": {
+      "value": 0,
+      "total_is_exact": true
+    },
+    "disconnected": {
+      "value": 0,
+      "total_is_exact": true
+    },
+    "blocked_harnesses": {
+      "value": 0,
+      "total_is_exact": true
+    },
+    "pending_actions": {
+      "value": 1,
+      "total_is_exact": true
+    },
+    "visible_notifications": {
+      "value": 1,
+      "total_is_exact": true
+    },
+    "resume_confirmations": {
+      "value": 0,
+      "total_is_exact": true
+    }
+  },
+  "columns": {
+    "active": {
+      "items": [
+        {
+          "id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+          "kind": "harness",
+          "group_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+          "connection": {
+            "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+            "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+            "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+            "binding_id": "bind_bae7a0aafd9cb8abb833846d552119a7",
+            "workspace_binding_id": "wxb_48f65f202285ba0babc53693a5f99018",
+            "agent_id": "hst-worker",
+            "harness_id": "codex_app_server",
+            "workspace_label": "HST Demo Project",
+            "host_label": null,
+            "agent_label": "Hst Worker",
+            "connect_id": "reviewer-1"
+          },
+          "target": {
+            "kind": "connection",
+            "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+            "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+            "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+            "binding_id": "bind_bae7a0aafd9cb8abb833846d552119a7",
+            "agent_id": "hst-worker"
+          },
+          "context_state": "registered",
+          "reconnect_available": false,
+          "reconnect_reason": "Individual reconnection is not supported by the current canonical API.",
+          "children": [
+            {
+              "id": "home_05db9ff1727b3d3bced32cfaab2f6b295eee8078ad344bd5d320138311b4d4c0",
+              "kind": "work",
+              "source_ref": {
+                "id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                "revision": "93e624baf2cace56f6069cd5a3b43eaf5136cd0f709e415f8811fcb9e0e11932",
+                "type": "direct_operation"
+              },
+              "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+              "agent_id": "hst-worker",
+              "title": "Work request",
+              "agent_label": "Hst Worker",
+              "harness_label": "codex_app_server",
+              "host_label": null,
+              "display_state": "awaiting_operator",
+              "evidence": "confirmed",
+              "state_since": null,
+              "sessions": [
+                {
+                  "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                  "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                  "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                  "session_id": "ses_2775c76972a1eb519a955d2379d5d489"
+                }
+              ],
+              "sessions_total": 1,
+              "has_more_sessions": false,
+              "sessions_cursor": null,
+              "attention_preview": [
+                {
+                  "active": true,
+                  "agent_id": "hst-worker",
+                  "allowed_actions": [
+                    "inspect_approval",
+                    "respond_native"
+                  ],
+                  "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                  "category": "action_required",
+                  "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                  "first_detected_at": "2026-11-17T17:39:43.100000+00:00",
+                  "freshness": "current",
+                  "kind": "native_question_pending",
+                  "last_changed_at": "2026-11-17T17:39:43.100000+00:00",
+                  "message_id": null,
+                  "next_change_at": "2026-11-17T17:41:42.481686+00:00",
+                  "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                  "priority": 20,
+                  "resolution": "open",
+                  "result_id": null,
+                  "seen_state": {
+                    "revision": 0,
+                    "seen": false,
+                    "seen_at": null,
+                    "snoozed": false,
+                    "snoozed_until": null
+                  },
+                  "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                  "severity": "warning",
+                  "source_id": "r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+                  "source_revision": "6046c9df97c55aebabebceed0b79d29314db4342371c03f1541ad0d2aad08b5c",
+                  "source_type": "execution_native_request",
+                  "summary_code": "native_question_pending",
+                  "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                }
+              ],
+              "attention_total": 1,
+              "has_more_attention": false,
+              "attention_cursor": null,
+              "results_preview": [],
+              "results_total": 0,
+              "has_more_results": false,
+              "results_cursor": null,
+              "related_coverage": {
+                "attention": "ready",
+                "results": "ready"
+              },
+              "attention_refs": [
+                "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a"
+              ],
+              "result_refs": [],
+              "target": {
+                "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                "kind": "execution",
+                "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+              },
+              "result_tracking": "not_applicable",
+              "actions": [
+                {
+                  "kind": "inspect",
+                  "target": {
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "kind": "execution",
+                    "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                    "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                    "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                  }
+                },
+                {
+                  "kind": "attention",
+                  "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                  "action": "inspect_approval"
+                },
+                {
+                  "kind": "attention",
+                  "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                  "action": "respond_native"
+                }
+              ],
+              "external": [],
+              "as_of": "2026-11-17T17:39:44.312622Z",
+              "next_refresh_at": "2026-11-17T17:39:59.312622Z",
+              "group_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+              "entry_revision": "7be83cad5c11c05efaf5fa78af680c9438ea770b9c7347fc978d2334b64c9a6b",
+              "shared_reference": false
+            },
+            {
+              "id": "home_e3e5f18d29b6dc1512d2c1d7968fb51ed596bcb146eb466bac517538664be689",
+              "kind": "work",
+              "source_ref": {
+                "id": "op_7f5b2e277c177b42215c9850742e214f",
+                "revision": "6b71872421c4093f4408cfc9eb45e7ae11ab6dbca2b7c13dfef4fac7ed4b7f30",
+                "type": "direct_operation"
+              },
+              "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+              "agent_id": "hst-worker",
+              "title": "Work request",
+              "agent_label": "Hst Worker",
+              "harness_label": "codex_app_server",
+              "host_label": null,
+              "display_state": "running",
+              "evidence": "confirmed",
+              "state_since": null,
+              "sessions": [
+                {
+                  "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                  "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                  "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                  "session_id": "ses_c3ea4f30e9379519ebe75560fc817ce2"
+                }
+              ],
+              "sessions_total": 1,
+              "has_more_sessions": false,
+              "sessions_cursor": null,
+              "attention_preview": [],
+              "attention_total": 0,
+              "has_more_attention": false,
+              "attention_cursor": null,
+              "results_preview": [],
+              "results_total": 0,
+              "has_more_results": false,
+              "results_cursor": null,
+              "related_coverage": {
+                "attention": "ready",
+                "results": "ready"
+              },
+              "attention_refs": [],
+              "result_refs": [],
+              "target": {
+                "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                "kind": "execution",
+                "operation_id": "op_7f5b2e277c177b42215c9850742e214f",
+                "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                "session_id": "ses_c3ea4f30e9379519ebe75560fc817ce2",
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+              },
+              "result_tracking": "not_applicable",
+              "actions": [
+                {
+                  "kind": "inspect",
+                  "target": {
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "kind": "execution",
+                    "operation_id": "op_7f5b2e277c177b42215c9850742e214f",
+                    "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                    "session_id": "ses_c3ea4f30e9379519ebe75560fc817ce2",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                  }
+                }
+              ],
+              "external": [],
+              "as_of": "2026-11-17T17:39:44.312622Z",
+              "next_refresh_at": "2026-11-17T17:39:59.312622Z",
+              "group_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+              "entry_revision": "7be83cad5c11c05efaf5fa78af680c9438ea770b9c7347fc978d2334b64c9a6b",
+              "shared_reference": false
+            }
+          ],
+          "children_total": null,
+          "has_more_children": false,
+          "children_cursor": null,
+          "summary": {
+            "activities": {
+              "value": null,
+              "total_is_exact": false,
+              "unit": "activities"
+            },
+            "external_instances": {
+              "value": null,
+              "total_is_exact": false,
+              "unit": "external_instances"
+            },
+            "sessions": {
+              "value": null,
+              "total_is_exact": false,
+              "unit": "sessions"
+            },
+            "results": {
+              "value": null,
+              "total_is_exact": false,
+              "unit": "results"
+            },
+            "occurrences": {
+              "value": null,
+              "total_is_exact": false,
+              "unit": "occurrences"
+            },
+            "unseen_results": {
+              "value": null,
+              "total_is_exact": false,
+              "unit": "results"
+            }
+          },
+          "events_preview": [
+            {
+              "entry_id": "home_05db9ff1727b3d3bced32cfaab2f6b295eee8078ad344bd5d320138311b4d4c0",
+              "group_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+              "entry_revision": "7be83cad5c11c05efaf5fa78af680c9438ea770b9c7347fc978d2334b64c9a6b",
+              "target": {
+                "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                "kind": "execution",
+                "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+              },
+              "title": "Work request",
+              "display_state": "awaiting_operator",
+              "evidence": "confirmed",
+              "shared_reference": false,
+              "id": "attention:att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+              "kind": "attention",
+              "occurred_at": "2026-11-17T17:39:43.100000+00:00",
+              "attention": {
+                "active": true,
+                "agent_id": "hst-worker",
+                "allowed_actions": [
+                  "inspect_approval",
+                  "respond_native"
+                ],
+                "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                "category": "action_required",
+                "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                "first_detected_at": "2026-11-17T17:39:43.100000+00:00",
+                "freshness": "current",
+                "kind": "native_question_pending",
+                "last_changed_at": "2026-11-17T17:39:43.100000+00:00",
+                "message_id": null,
+                "next_change_at": "2026-11-17T17:41:42.481686+00:00",
+                "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                "priority": 20,
+                "resolution": "open",
+                "result_id": null,
+                "seen_state": {
+                  "revision": 0,
+                  "seen": false,
+                  "seen_at": null,
+                  "snoozed": false,
+                  "snoozed_until": null
+                },
+                "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                "severity": "warning",
+                "source_id": "r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+                "source_revision": "6046c9df97c55aebabebceed0b79d29314db4342371c03f1541ad0d2aad08b5c",
+                "source_type": "execution_native_request",
+                "summary_code": "native_question_pending",
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+              },
+              "entry": {
+                "id": "home_05db9ff1727b3d3bced32cfaab2f6b295eee8078ad344bd5d320138311b4d4c0",
+                "kind": "work",
+                "source_ref": {
+                  "id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                  "revision": "93e624baf2cace56f6069cd5a3b43eaf5136cd0f709e415f8811fcb9e0e11932",
+                  "type": "direct_operation"
+                },
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                "agent_id": "hst-worker",
+                "title": "Work request",
+                "agent_label": "Hst Worker",
+                "harness_label": "codex_app_server",
+                "host_label": null,
+                "display_state": "awaiting_operator",
+                "evidence": "confirmed",
+                "state_since": null,
+                "sessions": [
+                  {
+                    "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                    "session_id": "ses_2775c76972a1eb519a955d2379d5d489"
+                  }
+                ],
+                "sessions_total": 1,
+                "has_more_sessions": false,
+                "sessions_cursor": null,
+                "attention_preview": [
+                  {
+                    "active": true,
+                    "agent_id": "hst-worker",
+                    "allowed_actions": [
+                      "inspect_approval",
+                      "respond_native"
+                    ],
+                    "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                    "category": "action_required",
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "first_detected_at": "2026-11-17T17:39:43.100000+00:00",
+                    "freshness": "current",
+                    "kind": "native_question_pending",
+                    "last_changed_at": "2026-11-17T17:39:43.100000+00:00",
+                    "message_id": null,
+                    "next_change_at": "2026-11-17T17:41:42.481686+00:00",
+                    "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                    "priority": 20,
+                    "resolution": "open",
+                    "result_id": null,
+                    "seen_state": {
+                      "revision": 0,
+                      "seen": false,
+                      "seen_at": null,
+                      "snoozed": false,
+                      "snoozed_until": null
+                    },
+                    "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                    "severity": "warning",
+                    "source_id": "r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+                    "source_revision": "6046c9df97c55aebabebceed0b79d29314db4342371c03f1541ad0d2aad08b5c",
+                    "source_type": "execution_native_request",
+                    "summary_code": "native_question_pending",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                  }
+                ],
+                "attention_total": 1,
+                "has_more_attention": false,
+                "attention_cursor": null,
+                "results_preview": [],
+                "results_total": 0,
+                "has_more_results": false,
+                "results_cursor": null,
+                "related_coverage": {
+                  "attention": "ready",
+                  "results": "ready"
+                },
+                "attention_refs": [
+                  "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a"
+                ],
+                "result_refs": [],
+                "target": {
+                  "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                  "kind": "execution",
+                  "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                  "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                  "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                  "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                },
+                "result_tracking": "not_applicable",
+                "actions": [
+                  {
+                    "kind": "inspect",
+                    "target": {
+                      "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                      "kind": "execution",
+                      "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                      "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                      "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                      "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                    }
+                  },
+                  {
+                    "kind": "attention",
+                    "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                    "action": "inspect_approval"
+                  },
+                  {
+                    "kind": "attention",
+                    "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                    "action": "respond_native"
+                  }
+                ],
+                "external": [],
+                "as_of": "2026-11-17T17:39:44.312622Z",
+                "next_refresh_at": "2026-11-17T17:39:59.312622Z",
+                "group_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+                "entry_revision": "7be83cad5c11c05efaf5fa78af680c9438ea770b9c7347fc978d2334b64c9a6b",
+                "shared_reference": false
+              }
+            },
+            {
+              "entry_id": "home_e3e5f18d29b6dc1512d2c1d7968fb51ed596bcb146eb466bac517538664be689",
+              "group_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+              "entry_revision": "7be83cad5c11c05efaf5fa78af680c9438ea770b9c7347fc978d2334b64c9a6b",
+              "target": {
+                "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                "kind": "execution",
+                "operation_id": "op_7f5b2e277c177b42215c9850742e214f",
+                "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                "session_id": "ses_c3ea4f30e9379519ebe75560fc817ce2",
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+              },
+              "title": "Work request",
+              "display_state": "running",
+              "evidence": "confirmed",
+              "shared_reference": false,
+              "id": "work:home_e3e5f18d29b6dc1512d2c1d7968fb51ed596bcb146eb466bac517538664be689",
+              "kind": "work",
+              "occurred_at": "2026-11-17T17:39:43.997Z",
+              "entry": {
+                "id": "home_e3e5f18d29b6dc1512d2c1d7968fb51ed596bcb146eb466bac517538664be689",
+                "kind": "work",
+                "source_ref": {
+                  "id": "op_7f5b2e277c177b42215c9850742e214f",
+                  "revision": "6b71872421c4093f4408cfc9eb45e7ae11ab6dbca2b7c13dfef4fac7ed4b7f30",
+                  "type": "direct_operation"
+                },
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                "agent_id": "hst-worker",
+                "title": "Work request",
+                "agent_label": "Hst Worker",
+                "harness_label": "codex_app_server",
+                "host_label": null,
+                "display_state": "running",
+                "evidence": "confirmed",
+                "state_since": null,
+                "sessions": [
+                  {
+                    "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                    "session_id": "ses_c3ea4f30e9379519ebe75560fc817ce2"
+                  }
+                ],
+                "sessions_total": 1,
+                "has_more_sessions": false,
+                "sessions_cursor": null,
+                "attention_preview": [],
+                "attention_total": 0,
+                "has_more_attention": false,
+                "attention_cursor": null,
+                "results_preview": [],
+                "results_total": 0,
+                "has_more_results": false,
+                "results_cursor": null,
+                "related_coverage": {
+                  "attention": "ready",
+                  "results": "ready"
+                },
+                "attention_refs": [],
+                "result_refs": [],
+                "target": {
+                  "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                  "kind": "execution",
+                  "operation_id": "op_7f5b2e277c177b42215c9850742e214f",
+                  "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                  "session_id": "ses_c3ea4f30e9379519ebe75560fc817ce2",
+                  "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                },
+                "result_tracking": "not_applicable",
+                "actions": [
+                  {
+                    "kind": "inspect",
+                    "target": {
+                      "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                      "kind": "execution",
+                      "operation_id": "op_7f5b2e277c177b42215c9850742e214f",
+                      "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                      "session_id": "ses_c3ea4f30e9379519ebe75560fc817ce2",
+                      "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                    }
+                  }
+                ],
+                "external": [],
+                "as_of": "2026-11-17T17:39:44.312622Z",
+                "next_refresh_at": "2026-11-17T17:39:59.312622Z",
+                "group_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+                "entry_revision": "7be83cad5c11c05efaf5fa78af680c9438ea770b9c7347fc978d2334b64c9a6b",
+                "shared_reference": false
+              }
+            },
+            {
+              "entry_id": "home_05db9ff1727b3d3bced32cfaab2f6b295eee8078ad344bd5d320138311b4d4c0",
+              "group_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+              "entry_revision": "7be83cad5c11c05efaf5fa78af680c9438ea770b9c7347fc978d2334b64c9a6b",
+              "target": {
+                "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                "kind": "execution",
+                "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+              },
+              "title": "Work request",
+              "display_state": "awaiting_operator",
+              "evidence": "confirmed",
+              "shared_reference": false,
+              "id": "work:home_05db9ff1727b3d3bced32cfaab2f6b295eee8078ad344bd5d320138311b4d4c0",
+              "kind": "work",
+              "occurred_at": "2026-11-17T17:39:42.990Z",
+              "entry": {
+                "id": "home_05db9ff1727b3d3bced32cfaab2f6b295eee8078ad344bd5d320138311b4d4c0",
+                "kind": "work",
+                "source_ref": {
+                  "id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                  "revision": "93e624baf2cace56f6069cd5a3b43eaf5136cd0f709e415f8811fcb9e0e11932",
+                  "type": "direct_operation"
+                },
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                "agent_id": "hst-worker",
+                "title": "Work request",
+                "agent_label": "Hst Worker",
+                "harness_label": "codex_app_server",
+                "host_label": null,
+                "display_state": "awaiting_operator",
+                "evidence": "confirmed",
+                "state_since": null,
+                "sessions": [
+                  {
+                    "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                    "session_id": "ses_2775c76972a1eb519a955d2379d5d489"
+                  }
+                ],
+                "sessions_total": 1,
+                "has_more_sessions": false,
+                "sessions_cursor": null,
+                "attention_preview": [
+                  {
+                    "active": true,
+                    "agent_id": "hst-worker",
+                    "allowed_actions": [
+                      "inspect_approval",
+                      "respond_native"
+                    ],
+                    "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                    "category": "action_required",
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "first_detected_at": "2026-11-17T17:39:43.100000+00:00",
+                    "freshness": "current",
+                    "kind": "native_question_pending",
+                    "last_changed_at": "2026-11-17T17:39:43.100000+00:00",
+                    "message_id": null,
+                    "next_change_at": "2026-11-17T17:41:42.481686+00:00",
+                    "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                    "priority": 20,
+                    "resolution": "open",
+                    "result_id": null,
+                    "seen_state": {
+                      "revision": 0,
+                      "seen": false,
+                      "seen_at": null,
+                      "snoozed": false,
+                      "snoozed_until": null
+                    },
+                    "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                    "severity": "warning",
+                    "source_id": "r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+                    "source_revision": "6046c9df97c55aebabebceed0b79d29314db4342371c03f1541ad0d2aad08b5c",
+                    "source_type": "execution_native_request",
+                    "summary_code": "native_question_pending",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                  }
+                ],
+                "attention_total": 1,
+                "has_more_attention": false,
+                "attention_cursor": null,
+                "results_preview": [],
+                "results_total": 0,
+                "has_more_results": false,
+                "results_cursor": null,
+                "related_coverage": {
+                  "attention": "ready",
+                  "results": "ready"
+                },
+                "attention_refs": [
+                  "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a"
+                ],
+                "result_refs": [],
+                "target": {
+                  "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                  "kind": "execution",
+                  "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                  "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                  "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                  "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                },
+                "result_tracking": "not_applicable",
+                "actions": [
+                  {
+                    "kind": "inspect",
+                    "target": {
+                      "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                      "kind": "execution",
+                      "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                      "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                      "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                      "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                    }
+                  },
+                  {
+                    "kind": "attention",
+                    "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                    "action": "inspect_approval"
+                  },
+                  {
+                    "kind": "attention",
+                    "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                    "action": "respond_native"
+                  }
+                ],
+                "external": [],
+                "as_of": "2026-11-17T17:39:44.312622Z",
+                "next_refresh_at": "2026-11-17T17:39:59.312622Z",
+                "group_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+                "entry_revision": "7be83cad5c11c05efaf5fa78af680c9438ea770b9c7347fc978d2334b64c9a6b",
+                "shared_reference": false
+              }
+            }
+          ],
+          "events_total": null,
+          "has_more_events": false,
+          "events_summary": {
+            "attention": null,
+            "results": null,
+            "work": null,
+            "sessions": null,
+            "external": null
+          },
+          "blocks_harness": false,
+          "activity_state": "working",
+          "blocking_request_ids": [
+            "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a"
+          ],
+          "reminder_snoozed": false,
+          "operational_status": {
+            "version": 1,
+            "connection": "connected",
+            "activity": "working",
+            "blocking": "partial",
+            "freshness": "current",
+            "as_of": "2026-11-17T17:39:43.997Z",
+            "state_since": null,
+            "reason_code": "CURRENT_PRODUCTIVE_OPERATION",
+            "pending_actions": {
+              "value": 1,
+              "total_is_exact": true
+            },
+            "pending_by_kind": {
+              "question": {
+                "value": 1,
+                "total_is_exact": true
+              },
+              "approval": {
+                "value": 0,
+                "total_is_exact": true
+              },
+              "decision": {
+                "value": 0,
+                "total_is_exact": true
+              },
+              "verification": {
+                "value": 0,
+                "total_is_exact": true
+              }
+            },
+            "pending_request_ids": [
+              "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a"
+            ],
+            "has_more_pending_requests": false,
+            "pending_requests_cursor": null,
+            "running_sessions": {
+              "value": 1,
+              "total_is_exact": true
+            },
+            "blocked_sessions": {
+              "value": 1,
+              "total_is_exact": true
+            },
+            "awaiting_native_confirmation": false
+          },
+          "placement_reason": "normal_monitoring",
+          "resume_confirmation_refs": [],
+          "blocking_requests": [
+            {
+              "kind": "request",
+              "id": "home_request_att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+              "request": {
+                "active": true,
+                "agent_id": "hst-worker",
+                "allowed_actions": [
+                  "inspect_approval",
+                  "respond_native"
+                ],
+                "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                "category": "action_required",
+                "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                "first_detected_at": "2026-11-17T17:39:43.100000+00:00",
+                "freshness": "current",
+                "kind": "native_question_pending",
+                "last_changed_at": "2026-11-17T17:39:43.100000+00:00",
+                "message_id": null,
+                "next_change_at": "2026-11-17T17:41:42.481686+00:00",
+                "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                "priority": 20,
+                "resolution": "open",
+                "result_id": null,
+                "seen_state": {
+                  "revision": 0,
+                  "seen": false,
+                  "seen_at": null,
+                  "snoozed": false,
+                  "snoozed_until": null
+                },
+                "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                "severity": "warning",
+                "source_id": "r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+                "source_revision": "6046c9df97c55aebabebceed0b79d29314db4342371c03f1541ad0d2aad08b5c",
+                "source_type": "execution_native_request",
+                "summary_code": "native_question_pending",
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+              },
+              "entry": {
+                "id": "home_05db9ff1727b3d3bced32cfaab2f6b295eee8078ad344bd5d320138311b4d4c0",
+                "kind": "work",
+                "source_ref": {
+                  "id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                  "revision": "93e624baf2cace56f6069cd5a3b43eaf5136cd0f709e415f8811fcb9e0e11932",
+                  "type": "direct_operation"
+                },
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                "agent_id": "hst-worker",
+                "title": "Work request",
+                "agent_label": "Hst Worker",
+                "harness_label": "codex_app_server",
+                "host_label": null,
+                "display_state": "awaiting_operator",
+                "evidence": "confirmed",
+                "state_since": null,
+                "sessions": [
+                  {
+                    "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                    "session_id": "ses_2775c76972a1eb519a955d2379d5d489"
+                  }
+                ],
+                "sessions_total": 1,
+                "has_more_sessions": false,
+                "sessions_cursor": null,
+                "attention_preview": [
+                  {
+                    "active": true,
+                    "agent_id": "hst-worker",
+                    "allowed_actions": [
+                      "inspect_approval",
+                      "respond_native"
+                    ],
+                    "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                    "category": "action_required",
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "first_detected_at": "2026-11-17T17:39:43.100000+00:00",
+                    "freshness": "current",
+                    "kind": "native_question_pending",
+                    "last_changed_at": "2026-11-17T17:39:43.100000+00:00",
+                    "message_id": null,
+                    "next_change_at": "2026-11-17T17:41:42.481686+00:00",
+                    "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                    "priority": 20,
+                    "resolution": "open",
+                    "result_id": null,
+                    "seen_state": {
+                      "revision": 0,
+                      "seen": false,
+                      "seen_at": null,
+                      "snoozed": false,
+                      "snoozed_until": null
+                    },
+                    "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                    "severity": "warning",
+                    "source_id": "r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+                    "source_revision": "6046c9df97c55aebabebceed0b79d29314db4342371c03f1541ad0d2aad08b5c",
+                    "source_type": "execution_native_request",
+                    "summary_code": "native_question_pending",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                  }
+                ],
+                "attention_total": 1,
+                "has_more_attention": false,
+                "attention_cursor": null,
+                "results_preview": [],
+                "results_total": 0,
+                "has_more_results": false,
+                "results_cursor": null,
+                "related_coverage": {
+                  "attention": "ready",
+                  "results": "ready"
+                },
+                "attention_refs": [
+                  "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a"
+                ],
+                "result_refs": [],
+                "target": {
+                  "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                  "kind": "execution",
+                  "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                  "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                  "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                  "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                },
+                "result_tracking": "not_applicable",
+                "actions": [
+                  {
+                    "kind": "inspect",
+                    "target": {
+                      "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                      "kind": "execution",
+                      "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                      "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                      "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                      "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                    }
+                  },
+                  {
+                    "kind": "attention",
+                    "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                    "action": "inspect_approval"
+                  },
+                  {
+                    "kind": "attention",
+                    "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                    "action": "respond_native"
+                  }
+                ],
+                "external": [],
+                "as_of": "2026-11-17T17:39:44.312622Z",
+                "next_refresh_at": "2026-11-17T17:39:59.312622Z",
+                "group_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+                "entry_revision": "7be83cad5c11c05efaf5fa78af680c9438ea770b9c7347fc978d2334b64c9a6b",
+                "shared_reference": false
+              },
+              "harness_refs": [
+                {
+                  "card_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+                  "connection": {
+                    "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                    "binding_id": "bind_bae7a0aafd9cb8abb833846d552119a7",
+                    "workspace_binding_id": "wxb_48f65f202285ba0babc53693a5f99018",
+                    "agent_id": "hst-worker",
+                    "harness_id": "codex_app_server",
+                    "workspace_label": "HST Demo Project",
+                    "host_label": null,
+                    "agent_label": "Hst Worker",
+                    "connect_id": "reviewer-1"
+                  }
+                }
+              ],
+              "blocks_harness": false,
+              "notification_visible": true,
+              "blocks_session": true,
+              "action_kind": "question"
+            }
+          ],
+          "requests_preview": [
+            {
+              "kind": "request",
+              "id": "home_request_att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+              "request": {
+                "active": true,
+                "agent_id": "hst-worker",
+                "allowed_actions": [
+                  "inspect_approval",
+                  "respond_native"
+                ],
+                "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                "category": "action_required",
+                "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                "first_detected_at": "2026-11-17T17:39:43.100000+00:00",
+                "freshness": "current",
+                "kind": "native_question_pending",
+                "last_changed_at": "2026-11-17T17:39:43.100000+00:00",
+                "message_id": null,
+                "next_change_at": "2026-11-17T17:41:42.481686+00:00",
+                "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                "priority": 20,
+                "resolution": "open",
+                "result_id": null,
+                "seen_state": {
+                  "revision": 0,
+                  "seen": false,
+                  "seen_at": null,
+                  "snoozed": false,
+                  "snoozed_until": null
+                },
+                "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                "severity": "warning",
+                "source_id": "r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+                "source_revision": "6046c9df97c55aebabebceed0b79d29314db4342371c03f1541ad0d2aad08b5c",
+                "source_type": "execution_native_request",
+                "summary_code": "native_question_pending",
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+              },
+              "entry": {
+                "id": "home_05db9ff1727b3d3bced32cfaab2f6b295eee8078ad344bd5d320138311b4d4c0",
+                "kind": "work",
+                "source_ref": {
+                  "id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                  "revision": "93e624baf2cace56f6069cd5a3b43eaf5136cd0f709e415f8811fcb9e0e11932",
+                  "type": "direct_operation"
+                },
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                "agent_id": "hst-worker",
+                "title": "Work request",
+                "agent_label": "Hst Worker",
+                "harness_label": "codex_app_server",
+                "host_label": null,
+                "display_state": "awaiting_operator",
+                "evidence": "confirmed",
+                "state_since": null,
+                "sessions": [
+                  {
+                    "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                    "session_id": "ses_2775c76972a1eb519a955d2379d5d489"
+                  }
+                ],
+                "sessions_total": 1,
+                "has_more_sessions": false,
+                "sessions_cursor": null,
+                "attention_preview": [
+                  {
+                    "active": true,
+                    "agent_id": "hst-worker",
+                    "allowed_actions": [
+                      "inspect_approval",
+                      "respond_native"
+                    ],
+                    "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                    "category": "action_required",
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "first_detected_at": "2026-11-17T17:39:43.100000+00:00",
+                    "freshness": "current",
+                    "kind": "native_question_pending",
+                    "last_changed_at": "2026-11-17T17:39:43.100000+00:00",
+                    "message_id": null,
+                    "next_change_at": "2026-11-17T17:41:42.481686+00:00",
+                    "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                    "priority": 20,
+                    "resolution": "open",
+                    "result_id": null,
+                    "seen_state": {
+                      "revision": 0,
+                      "seen": false,
+                      "seen_at": null,
+                      "snoozed": false,
+                      "snoozed_until": null
+                    },
+                    "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                    "severity": "warning",
+                    "source_id": "r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+                    "source_revision": "6046c9df97c55aebabebceed0b79d29314db4342371c03f1541ad0d2aad08b5c",
+                    "source_type": "execution_native_request",
+                    "summary_code": "native_question_pending",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                  }
+                ],
+                "attention_total": 1,
+                "has_more_attention": false,
+                "attention_cursor": null,
+                "results_preview": [],
+                "results_total": 0,
+                "has_more_results": false,
+                "results_cursor": null,
+                "related_coverage": {
+                  "attention": "ready",
+                  "results": "ready"
+                },
+                "attention_refs": [
+                  "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a"
+                ],
+                "result_refs": [],
+                "target": {
+                  "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                  "kind": "execution",
+                  "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                  "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                  "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                  "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                },
+                "result_tracking": "not_applicable",
+                "actions": [
+                  {
+                    "kind": "inspect",
+                    "target": {
+                      "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                      "kind": "execution",
+                      "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                      "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                      "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                      "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                    }
+                  },
+                  {
+                    "kind": "attention",
+                    "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                    "action": "inspect_approval"
+                  },
+                  {
+                    "kind": "attention",
+                    "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                    "action": "respond_native"
+                  }
+                ],
+                "external": [],
+                "as_of": "2026-11-17T17:39:44.312622Z",
+                "next_refresh_at": "2026-11-17T17:39:59.312622Z",
+                "group_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+                "entry_revision": "7be83cad5c11c05efaf5fa78af680c9438ea770b9c7347fc978d2334b64c9a6b",
+                "shared_reference": false
+              },
+              "harness_refs": [
+                {
+                  "card_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+                  "connection": {
+                    "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                    "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                    "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                    "binding_id": "bind_bae7a0aafd9cb8abb833846d552119a7",
+                    "workspace_binding_id": "wxb_48f65f202285ba0babc53693a5f99018",
+                    "agent_id": "hst-worker",
+                    "harness_id": "codex_app_server",
+                    "workspace_label": "HST Demo Project",
+                    "host_label": null,
+                    "agent_label": "Hst Worker",
+                    "connect_id": "reviewer-1"
+                  }
+                }
+              ],
+              "blocks_harness": false,
+              "notification_visible": true,
+              "blocks_session": true,
+              "action_kind": "question"
+            }
+          ],
+          "sessions": [
+            {
+              "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+              "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+              "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+              "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+              "lifecycle_state": "READY",
+              "title": "Session",
+              "workspace_label": "HST Demo Project",
+              "last_activity_at": "2026-11-17T17:39:42.990Z"
+            },
+            {
+              "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+              "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+              "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+              "session_id": "ses_c3ea4f30e9379519ebe75560fc817ce2",
+              "lifecycle_state": "READY",
+              "title": "Session",
+              "workspace_label": "HST Demo Project",
+              "last_activity_at": "2026-11-17T17:39:43.997Z"
+            }
+          ],
+          "sessions_total": 2,
+          "has_more_sessions": false,
+          "sessions_cursor": null
+        }
+      ],
+      "total": null,
+      "total_is_exact": false,
+      "has_more": false,
+      "next_cursor": null
+    },
+    "needs_you": {
+      "items": [
+        {
+          "kind": "request",
+          "id": "home_request_att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+          "request": {
+            "active": true,
+            "agent_id": "hst-worker",
+            "allowed_actions": [
+              "inspect_approval",
+              "respond_native"
+            ],
+            "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+            "category": "action_required",
+            "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+            "first_detected_at": "2026-11-17T17:39:43.100000+00:00",
+            "freshness": "current",
+            "kind": "native_question_pending",
+            "last_changed_at": "2026-11-17T17:39:43.100000+00:00",
+            "message_id": null,
+            "next_change_at": "2026-11-17T17:41:42.481686+00:00",
+            "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+            "priority": 20,
+            "resolution": "open",
+            "result_id": null,
+            "seen_state": {
+              "revision": 0,
+              "seen": false,
+              "seen_at": null,
+              "snoozed": false,
+              "snoozed_until": null
+            },
+            "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+            "severity": "warning",
+            "source_id": "r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+            "source_revision": "6046c9df97c55aebabebceed0b79d29314db4342371c03f1541ad0d2aad08b5c",
+            "source_type": "execution_native_request",
+            "summary_code": "native_question_pending",
+            "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+          },
+          "entry": {
+            "id": "home_05db9ff1727b3d3bced32cfaab2f6b295eee8078ad344bd5d320138311b4d4c0",
+            "kind": "work",
+            "source_ref": {
+              "id": "op_1d4fc9186daa9f059ea202a24b92f444",
+              "revision": "93e624baf2cace56f6069cd5a3b43eaf5136cd0f709e415f8811fcb9e0e11932",
+              "type": "direct_operation"
+            },
+            "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+            "agent_id": "hst-worker",
+            "title": "Work request",
+            "agent_label": "Hst Worker",
+            "harness_label": "codex_app_server",
+            "host_label": null,
+            "display_state": "awaiting_operator",
+            "evidence": "confirmed",
+            "state_since": null,
+            "sessions": [
+              {
+                "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                "session_id": "ses_2775c76972a1eb519a955d2379d5d489"
+              }
+            ],
+            "sessions_total": 1,
+            "has_more_sessions": false,
+            "sessions_cursor": null,
+            "attention_preview": [
+              {
+                "active": true,
+                "agent_id": "hst-worker",
+                "allowed_actions": [
+                  "inspect_approval",
+                  "respond_native"
+                ],
+                "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                "category": "action_required",
+                "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                "first_detected_at": "2026-11-17T17:39:43.100000+00:00",
+                "freshness": "current",
+                "kind": "native_question_pending",
+                "last_changed_at": "2026-11-17T17:39:43.100000+00:00",
+                "message_id": null,
+                "next_change_at": "2026-11-17T17:41:42.481686+00:00",
+                "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                "priority": 20,
+                "resolution": "open",
+                "result_id": null,
+                "seen_state": {
+                  "revision": 0,
+                  "seen": false,
+                  "seen_at": null,
+                  "snoozed": false,
+                  "snoozed_until": null
+                },
+                "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                "severity": "warning",
+                "source_id": "r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+                "source_revision": "6046c9df97c55aebabebceed0b79d29314db4342371c03f1541ad0d2aad08b5c",
+                "source_type": "execution_native_request",
+                "summary_code": "native_question_pending",
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+              }
+            ],
+            "attention_total": 1,
+            "has_more_attention": false,
+            "attention_cursor": null,
+            "results_preview": [],
+            "results_total": 0,
+            "has_more_results": false,
+            "results_cursor": null,
+            "related_coverage": {
+              "attention": "ready",
+              "results": "ready"
+            },
+            "attention_refs": [
+              "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a"
+            ],
+            "result_refs": [],
+            "target": {
+              "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+              "kind": "execution",
+              "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+              "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+              "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+              "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+            },
+            "result_tracking": "not_applicable",
+            "actions": [
+              {
+                "kind": "inspect",
+                "target": {
+                  "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                  "kind": "execution",
+                  "operation_id": "op_1d4fc9186daa9f059ea202a24b92f444",
+                  "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                  "session_id": "ses_2775c76972a1eb519a955d2379d5d489",
+                  "workspace_id": "wsr_21e190ad208514e170c638c327084cf9"
+                }
+              },
+              {
+                "kind": "attention",
+                "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                "action": "inspect_approval"
+              },
+              {
+                "kind": "attention",
+                "attention_id": "att_904c1399058f4636516175402104d3e1d6bbf47b0872932e152244da8142e51a",
+                "action": "respond_native"
+              }
+            ],
+            "external": [],
+            "as_of": "2026-11-17T17:39:44.312622Z",
+            "next_refresh_at": "2026-11-17T17:39:59.312622Z",
+            "group_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+            "entry_revision": "7be83cad5c11c05efaf5fa78af680c9438ea770b9c7347fc978d2334b64c9a6b",
+            "shared_reference": false
+          },
+          "harness_refs": [
+            {
+              "card_id": "home_group_55790f7846501c23d63956dd4502d5a165fba968073478e108c550f4f8bd9a73",
+              "connection": {
+                "server_id": "srv_4fbe7a06c94dc0a30ca65da1790ab6f8",
+                "executor_id": "exe_1d3c8cbaefd9bbb92d9f0240f00018c3",
+                "workspace_id": "wsr_21e190ad208514e170c638c327084cf9",
+                "binding_id": "bind_bae7a0aafd9cb8abb833846d552119a7",
+                "workspace_binding_id": "wxb_48f65f202285ba0babc53693a5f99018",
+                "agent_id": "hst-worker",
+                "harness_id": "codex_app_server",
+                "workspace_label": "HST Demo Project",
+                "host_label": null,
+                "agent_label": "Hst Worker",
+                "connect_id": "reviewer-1"
+              }
+            }
+          ],
+          "blocks_harness": false,
+          "notification_visible": true,
+          "blocks_session": true,
+          "action_kind": "question"
+        }
+      ],
+      "total": null,
+      "total_is_exact": false,
+      "has_more": false,
+      "next_cursor": null
+    },
+    "results": {
+      "items": [],
+      "total": null,
+      "total_is_exact": false,
+      "has_more": false,
+      "next_cursor": null
+    }
+  },
+  "unlinked": {
+    "items": [],
+    "total": null,
+    "total_is_exact": false,
+    "has_more": false,
+    "next_cursor": null
+  },
+  "event_cursor": 1,
+  "event_low_watermark": 1
+}

@@ -55,6 +55,7 @@ def main():
     patch.setattr(observations,'probe_version',probe)
     deps=bootstrap({},['--home',str(ROOT/'home'),'--embedding-mode','off','--metrics-mode','disabled',
         '--metrics-dir',str(ROOT/'metrics'),'--feature-harness-integrations','true','--feature-verification','true',
+        '--feature-hitl','true',
         '--runtime-handoff-auto-claim-enabled','false'])
     app=build_app(deps);identity=build_service(deps);auth=AgentKeyAuthService(deps.repos.agents,deps.clock)
     keys={};refs=[];sessions=[];peers=[];records=[];requests=[];operations=[];unknown=False
@@ -62,7 +63,7 @@ def main():
         identity.agent_register(agent_id=name,role='builder',metadata={'display_name':name.replace('-',' ').title()})
         with deps.connection_factory.unit_of_work() as uow:keys[name]=auth.issue_key(uow,agent_id=name)
     try:
-      with TestClient(app,raise_server_exceptions=False,client=('127.0.0.1',50000)) as client:
+      with TestClient(app,base_url='http://127.0.0.1',raise_server_exceptions=False,client=('127.0.0.1',50000)) as client:
         async def inventory():
             owner=app.state.embedded_inventory_owner
             async with asyncio.timeout(15):
@@ -77,25 +78,27 @@ def main():
             records.append(dict(method=method,path=path.split('?')[0],status=response.status_code))
             assert response.status_code<400,('Canonical request refused',response.status_code,response.json().get('error',{}).get('code'))
             value=response.json();return value.get('data',value)
-        workers=['hst-worker'] if mode!='idle_three' else ['hst-one','hst-two','hst-three']
+        workers=['hst-a','hst-b'] if mode=='scope_two' else ['hst-worker'] if mode!='idle_three' else ['hst-one','hst-two','hst-three']
         for index,name in enumerate(workers):
             agent(name);home=ROOT/('provider-'+str(index));home.mkdir()
             flow=TerminalConnection(call,lambda value:None)
-            review=flow.review(dict(agent=name,client='codex',project=str(ROOT/'project'),label='HST Demo Project',
-                workspace_id=refs[0]['workspace_id'] if refs else None,binding_id=None,candidate_ref=None,provider_home=str(home)))
+            project=ROOT/('project-b' if mode=='scope_two' and index else 'project');project.mkdir(exist_ok=True)
+            review=flow.review(dict(agent=name,client='codex',project=str(project),label='HST Second Project' if mode=='scope_two' and index else 'HST Demo Project',
+                workspace_id=refs[0]['workspace_id'] if refs and mode!='scope_two' else None,binding_id=None,candidate_ref=None,provider_home=str(home)))
             configured=flow.apply(review,approval=review['review_revision']);assert configured['state']=='configured'
             binding=call('GET','/api/v1/runtime-management/connections/bindings/'+configured['binding_id'])
             ref={k:binding[k] for k in ['server_id','executor_id','binding_id','endpoint_id','agent_id','workspace_id','workspace_binding_id']};refs.append(ref)
             call('POST','/api/v1/runtime-management/connections/public-ids/associate-existing',dict(approved=True,
-                client_intent_id='hst-id-'+str(index),connect_id='reviewer-'+str(index+1),expected_binding_ref=ref,expected_binding_revision=binding['binding_revision']))
+                client_intent_id='hst-id-'+str(index),connect_id='reviewer' if mode=='scope_two' else 'reviewer-'+str(index+1),expected_binding_ref=ref,expected_binding_revision=binding['binding_revision']))
+        if mode=='scope_two':assert len({ref['workspace_id'] for ref in refs})==2,'Canonical projects must remain distinct'
         setup=(deps,app,client,{},None,candidate,ROOT/'project')
         peer_env={k:v for k,v in os.environ.items() if k.upper() in ['SYSTEMROOT','WINDIR','COMSPEC','PATHEXT']}
         peer_env.update(PATH='',HOME=str(ROOT/'os-home'),USERPROFILE=str(ROOT/'os-home'),PYTHONDONTWRITEBYTECODE='1')
         peers,_=install_native((setup,refs[0],None),peer_source(BASE_SOURCE,ROOT/'control'),environment=peer_env)
-        def admit(ref,intent,*,operator=False,wait=True,**extra):
+        def admit(ref,intent,*,operator=False,wait=True,expected='SUCCEEDED',**extra):
             nonlocal unknown
             path='/api/v1/runtime-management/runtime' if operator else '/v1/runtime'
-            headers={'X-Nexus-UI':'1'} if operator else {'Authorization':'Bearer '+keys[ref['agent_id']],'Cookie':''}
+            headers=controls.operator_headers() if operator else {'Authorization':'Bearer '+keys[ref['agent_id']],'Cookie':''}
             body=dict(client_intent_id='hst-'+str(len(operations)),intent=intent,binding_id=ref['binding_id'],workspace_binding_id=ref['workspace_binding_id'],**extra)
             if operator:body['agent_id']=ref['agent_id']
             resolution=call('POST',path+'/intents:resolve',body,headers);assert resolution['can_submit']
@@ -105,7 +108,7 @@ def main():
             while True:
                 state=call('GET',path+'/operations/'+resolution['operation_id'],headers=headers)
                 stage=state.get('executor_stage')
-                if stage=='SUCCEEDED':return resolution
+                if stage==expected:return resolution
                 if stage=='SUBMITTED' and (not wait or intent=='runtime.start'):
                     if intent!='runtime.start':return resolution
                     row=call('GET','/api/v1/runtime-management/runtime/sessions/'+resolution['scope']['session_id']+'?executor_id='+ref['executor_id'])
@@ -116,9 +119,12 @@ def main():
                     raise RuntimeError('Native fixture did not reach expected state')
                 time.sleep(.03)
         controls=Controls(deps,app,client,ROOT,refs[0],record=records.append)
+        browser_ready=False
         try:
+          if mode in ['question','delayed_info']:
+            controls.configure_browser_session();browser_ready=True
           for ref in refs:
-            total=1 if mode=='idle_three' else 2
+            total=0 if mode in ['verification','failed_cancelled'] else 1 if mode in ['idle_three','scope_two'] else 2
             for index in range(total):
                 opened=admit(ref,'runtime.start',new_session=True);sid=opened['scope']['session_id']
                 sessions.append(dict(session_id=sid,reference=ref,text='HST synthetic output '+sid,closed=False))
@@ -127,6 +133,49 @@ def main():
                 admit(ref,'turn.submit',session_id=sid,text=text,operator=gated,wait=not gated)
                 if not gated and index==0 and total==2:
                     admit(ref,'runtime.close',session_id=sid);sessions[-1]['closed']=True
+          if mode=='failed_cancelled':
+            ref=refs[0];negative=[]
+            for outcome in ['failed','cancelled']:
+                opened=admit(ref,'runtime.start',new_session=True);sid=opened['scope']['session_id']
+                item=dict(session_id=sid,reference=ref,text='HST synthetic output '+sid,closed=False);sessions.append(item)
+                gate='negative-'+outcome
+                if outcome=='failed':(ROOT/'control'/gate).touch()
+                turn=admit(ref,'turn.submit',session_id=sid,text='HST:'+json.dumps(dict(gate=gate,question=False,terminal_status='failed' if outcome=='failed' else 'completed')),
+                    expected='FAILED' if outcome=='failed' else 'SUCCEEDED',wait=outcome=='failed')
+                if outcome=='cancelled':
+                    end=time.monotonic()+10;native_ids=[]
+                    while not native_ids:
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            events=[json.loads(row[0]) for row in uow.connection.execute('SELECT payload_json FROM execution_event_ingress WHERE server_id=? AND executor_id=? AND session_id=?',(ref['server_id'],ref['executor_id'],sid))]
+                        native_ids=[e['payload']['turn_id'] for e in events if e.get('operation_id')==turn['operation_id'] and e.get('payload',{}).get('delivery_phase')=='started']
+                        assert time.monotonic()<end,'Exact native turn evidence absent'
+                        if not native_ids:time.sleep(.03)
+                    assert len(native_ids)==1
+                    admit(ref,'turn.interrupt',session_id=sid,target=dict(kind='native_turn_id',expected_turn_id=native_ids[0]),wait=False)
+                    end=time.monotonic()+20
+                    while True:
+                        value=call('GET','/v1/runtime/operations/'+turn['operation_id'],headers={'Authorization':'Bearer '+keys[ref['agent_id']],'Cookie':''})
+                        if value.get('executor_stage')=='CANCELLED':break
+                        assert time.monotonic()<end,'Canonical cancellation absent';time.sleep(.03)
+                negative.append(dict(operation_id=turn['operation_id'],session_id=sid,outcome=outcome))
+                admit(ref,'runtime.close',session_id=sid);item['closed']=True
+            write('negative-preflight.json',negative)
+          if mode in ['question','delayed_info']:
+            # Wait for real committed input and productive receipt before
+            # exposing a browser. Never turn a submitted intention into RUNNING
+            # or a question merely by assigning a fixture flag.
+            end=time.monotonic()+20
+            while True:
+                inputs=call('GET','/api/v1/runtime-management/runtime/input-requests')
+                input_rows=inputs if isinstance(inputs,list) else inputs.get('items',[])
+                turn=operations[-1]
+                state=call('GET','/api/v1/runtime-management/runtime/operations/'+turn['operation_id'])
+                if input_rows and state.get('executor_stage') in ['SUBMITTED','RUNNING']:
+                    write('question-preflight.json',dict(requests=input_rows,parallel_operation_id=turn['operation_id'],stage=state.get('executor_stage'),
+                        limits='SUBMITTED is not proof of Working; browser expected Working assertion remains independent.'))
+                    break
+                assert time.monotonic()<end,'Canonical question/productive receipt not ready'
+                time.sleep(.05)
           j5=None
           if mode=='verification':
             creator='hst-creator';agent(creator)
@@ -144,7 +193,7 @@ def main():
                 assert time.monotonic()<end,'Managed work terminal absent';time.sleep(.05)
             assert controls.handoff_state(keys[refs[0]['agent_id']],refs[0]['agent_id'],j5['handoff_id'])['status']=='CLAIMED'
             j5['turn']=rows[-1];sessions.append(dict(session_id=rows[-1]['session_id'],reference=refs[0],text='HST synthetic output '+rows[-1]['session_id'],closed=False));write('j5-preflight.json',j5)
-          controls.configure_browser_session()
+          if not browser_ready:controls.configure_browser_session()
           from dataclasses import asdict
           from okto_nexus.adapters.outbound.sqlite.home_operational_facts import SESSIONS, LEASES, normalize
           with deps.connection_factory.unit_of_work(write=False) as uow:
@@ -168,7 +217,7 @@ def main():
             write('ready.json',dict(url='http://127.0.0.1:'+str(port),server_id=refs[0]['server_id'],workspace_id=refs[0]['workspace_id'],
                 references=refs,sessions=sessions,card_id=cards[0]['id'] if cards else None,storage=str(storage),mode=mode,j5=j5,provider_invocations=0))
             await server.serve(sockets=[sock])
-          future=client.portal.start_task_soon(expose);end=time.monotonic()+180;done=set();fault=None
+          future=client.portal.start_task_soon(expose);end=time.monotonic()+300;done=set();fault=None
           try:
             while not (ROOT/'control/stop').exists() and time.monotonic()<end:
                 for name in ['complete','verify','revoke-reader','partial-results','restore-results']:

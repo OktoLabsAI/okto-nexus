@@ -1,0 +1,698 @@
+{
+  "review_version": 1,
+  "scope": "READ_ONLY_ASSERTION_AUDIT_NOT_LEDGER_UPDATE",
+  "scenario_count": 16,
+  "method": "Read executed test bodies; match node IDs to phase inventories and source bytes to captured pins. No test, app import, browser, provider or runtime execution in this review.",
+  "cuts": {
+    "R5": {
+      "qualification": "package-hst-r5/installed-qualification.json",
+      "passed": 251,
+      "skipped": 0,
+      "qualification_sha256": "c7afc804934bf3d511385f8d5b5a079961296886cdb71ac6fdf6c3068d025e36"
+    },
+    "R3": {
+      "qualification": "package-hst-r3/installed-qualification.json",
+      "passed": 746,
+      "skipped": 8,
+      "qualification_sha256": "2009366d8a9c182563c3e10500fba8db970e82f299236bd368f0f41220397e85"
+    },
+    "R6_equivalence": {
+      "qualification": "package-hst-r6/runtime-equivalence-vs-r5.json",
+      "runtime_files_equal": 1024,
+      "pytest_executed_on_R6": false,
+      "qualification_sha256": "624e3bd9b68140dc97f66a3ab794ceb75d1a0620edd8553ee618cba82564601f"
+    }
+  },
+  "limitations": [
+    "All listed scenarios require presentation or adversarial browser evidence beyond the inspected installed pytest cuts. No complete scenario is promoted to PASS here.",
+    "R3 skipped POSIX/PTY bodies are not executed evidence. R3 QuickConnect assertions do not establish Home rollback or Home action behavior.",
+    "R6 byte equivalence supports scoped reuse of R5 backend assertions; it is not an R6 pytest run and does not qualify frontend behavior.",
+    "Other owner's current R6 browser evidence is outside this review. Missing assertions are coverage gaps, not proof of product defects.",
+    "The earlier 116-scenario prepared map is preserved; this report refines only the sixteen requested scenarios."
+  ],
+  "scenarios": [
+    {
+      "id": "HST-T-E08",
+      "status": "PARTIAL_DOMAIN_ONLY_FOR_LITERAL_OUTCOME",
+      "required_layers": "unit + SQLite/HTTP + presentation",
+      "evidence": [
+        "tests/home_states/test_delivery_semantics.py::test_turn_outcome_does_not_invent_task_or_verification",
+        "tests/home_evolution/test_home_queries.py::test_disabled_external_and_failed_work_are_not_empty_success",
+        "tests/ui_simplification/test_harness_blocking.py::test_shared_work_does_not_share_request_scope_and_delivery_remains_independent"
+      ],
+      "asserted": "Pure FAILED facts project failed without inventing verification/task completion. Shared-work pure DTO keeps outcome FAILED. SQL-source failure projects unavailable rather than empty success.",
+      "not_asserted": "A real SQLite productive FAILED receipt, with and without partial output, through Results HTTP and presentation. The unavailable-work test raises OperationalError; it does not seed productive failure.",
+      "small_next_case": "Seed valid FAILED terminal receipts with absent and captured partial output/artifacts, assert SQL/HTTP delivery identity, failed semantics and retained content; separately verify presentation has no generic productive retry."
+    },
+    {
+      "id": "HST-T-E09",
+      "status": "PARTIAL_DOMAIN_ONLY_FOR_LITERAL_OUTCOME",
+      "required_layers": "unit + SQLite/HTTP + presentation",
+      "evidence": [
+        "tests/home_states/test_delivery_semantics.py::test_turn_outcome_does_not_invent_task_or_verification"
+      ],
+      "asserted": "Pure CANCELLED facts yield cancelled, not task completion or verification.",
+      "not_asserted": "Cancelled terminal receipt in SQLite/HTTP, retained partial output, and cancellation presentation.",
+      "small_next_case": "Use the same valid receipt/capture matrix as E08 with CANCELLED, including exact output and no replacement operation."
+    },
+    {
+      "id": "HST-T-E10",
+      "status": "NO_LITERAL_EXECUTED_CASE",
+      "required_layers": "unit + SQLite/HTTP + presentation",
+      "evidence": [
+        "tests/home_states/test_delivery_semantics.py::test_task_status_is_independent_and_completed_never_proves_approved",
+        "tests/home_states/test_verification_proof.py::test_rejected_delivery_uses_old_epoch_and_never_verifies_next_delivery"
+      ],
+      "asserted": "Pure task REJECTED retains unknown verification but uses SUCCEEDED native facts. Canonical verification failure rejects the old delivery, increments claim epoch and leaves current handoff CLAIMED; later approval belongs only to the new delivery.",
+      "not_asserted": "A REJECTED handoff with no equivalent native result. Neither adjacent case establishes this literal combination.",
+      "small_next_case": "Create the valid no-native rejected-handoff state, then assert task rejected and no invented native success/cancellation in SQL/HTTP and presentation."
+    },
+    {
+      "id": "HST-T-E12",
+      "status": "PARTIAL_DOMAIN_ONLY_FOR_MISSING_CONTENT",
+      "required_layers": "unit + SQLite/HTTP + presentation",
+      "evidence": [
+        "tests/home_states/test_delivery_semantics.py::test_cleanup_and_content_do_not_overwrite_productive_outcome",
+        "tests/home_states/test_delivery_semantics_sqlite.py::test_standalone_sql_null_comparison_never_implies_historical_task"
+      ],
+      "asserted": "Pure succeeded facts preserve productive outcome independently of cleanup/content state; absent terminal capture metadata produces pending content. SQLite standalone success has turn semantics and pending cleanup with unchanged row counts.",
+      "not_asserted": "The standalone SQL test does not assert missing output/content_state. There is no literal SQL/HTTP terminal-receipt-without-output assertion or visible unavailable-output presentation here.",
+      "small_next_case": "Use a reliable terminal receipt without captured result content and assert ended outcome, unavailable/pending content according to contract, exact result identity and honest presentation."
+    },
+    {
+      "id": "HST-T-E14",
+      "status": "NO_LITERAL_EXECUTED_CASE",
+      "required_layers": "unit + SQLite/HTTP + presentation",
+      "evidence": [
+        "tests/home_states/test_operational_sqlite.py::test_canonical_embedded_open_receipt_proves_ready_idle_without_claiming_process_alive"
+      ],
+      "asserted": "Canonical open can prove ready/idle without claiming a live process.",
+      "not_asserted": "No Results membership assertion for silence, Idle or free text 'terminei' without a canonical completion event.",
+      "small_next_case": "Assert zero new Results across idle/silence/free-text-only inputs while existing confirmed history remains reachable; render the idle context without a delivery badge."
+    },
+    {
+      "id": "HST-T-E15",
+      "status": "PARTIAL_OPERATIONAL_NOT_RESULTS_MEMBERSHIP",
+      "required_layers": "unit + SQLite/HTTP + presentation",
+      "evidence": [
+        "tests/home_states/test_operational_status.py::test_outcome_unknown_cannot_prove_global_pause_despite_old_question",
+        "tests/home_states/test_operational_status.py::test_native_write_refusal_unknown_and_success_are_not_application"
+      ],
+      "asserted": "Pure OUTCOME_UNKNOWN/reconciling does not prove global pause; unknown native response does not prove native application and retains confirmation references.",
+      "not_asserted": "No actual Results query asserts that an unknown productive attempt creates no completed result while preserving older confirmed deliveries.",
+      "small_next_case": "Seed unknown current operation plus an older confirmed result, assert zero new completion IDs and retained history/authorized context in SQL/HTTP, then inspect honest unknown presentation."
+    },
+    {
+      "id": "HST-T-H01",
+      "status": "PARTIAL_API_SQLITE_NO_BROWSER_AUDIT",
+      "required_layers": "API/SQLite + adversarial browser",
+      "evidence": [
+        "tests/home_states/test_operational_sqlite.py::test_http_negotiation_sessions_and_requests_are_canonical_read_only",
+        "tests/ui_simplification/test_harness_board.py::test_one_uow_no_new_source_query_or_productive_changes",
+        "tests/home_evolution/test_home_boundaries.py::test_home_reads_and_exact_seen_preserve_unread_other_page_other_workspace_and_canonical_facts"
+      ],
+      "asserted": "V2 HTTP snapshot plus sessions/requests expansion preserves exact rows of 18 canonical tables. Service board reads preserve the same tables, total_changes and empty connection-test cache. Legacy direct reads preserve seven canonical tables; seen changes only the exact preference.",
+      "not_asserted": "This cut does not execute test_passive_effects.py's own repeated entries/detail test; importing its TABLES is not execution. No full snapshot-expand-result-open browser action audit is established.",
+      "small_next_case": "Add exact result/detail HTTP reads to the v2 before/after table audit and separately audit browser requests for absence of productive POSTs; classify permitted auth telemetry explicitly."
+    },
+    {
+      "id": "HST-T-H02",
+      "status": "PARTIAL_REAL_HTTP_ARTIFACT_AND_SCOPE_FENCES",
+      "required_layers": "API/SQLite + adversarial browser",
+      "evidence": [
+        "tests/home_evolution/test_home_boundaries.py::test_artifact_reference_never_grants_agent_read_or_cross_workspace_access",
+        "tests/home_evolution/test_home_queries.py::test_exact_target_server_workspace_and_session",
+        "tests/ui_simplification/test_harness_board.py::test_unknown_registry_budget_principal_and_auth_are_fail_closed"
+      ],
+      "asserted": "Real artifact HTTP returns 403 to an agent and 404 to another workspace; denied bodies omit the artifact HTML. Exact target service rejects wrong server/workspace/session. Cross-principal cursor conflicts and unauthorized board HTTP is denied before query execution.",
+      "not_asserted": "No comprehensive request/result URL error-body preview/counter leak audit or adversarial browser navigation assertion.",
+      "small_next_case": "Check v2 exact request/result/card expansion denial responses and counters under wrong scope/principal, followed by browser direct-URL denial without protected previews."
+    },
+    {
+      "id": "HST-T-H03",
+      "status": "PARTIAL_REDACTION_AND_HTTP_HEADERS_NOT_BROWSER_EXECUTION",
+      "required_layers": "API/SQLite + adversarial browser",
+      "evidence": [
+        "tests/home_states/test_operational_sqlite.py::test_session_selector_labels_share_connection_redaction_and_bounds",
+        "tests/home_evolution/test_home_queries.py::test_business_feed_uses_real_events_not_unread_or_private_payload",
+        "tests/home_evolution/test_home_queries.py::test_result_artifact_reference_uses_exact_durable_operation_without_paths",
+        "tests/home_evolution/test_home_boundaries.py::test_html_artifact_cannot_execute_with_operator_origin_privileges"
+      ],
+      "asserted": "SQLite labels redact a Bearer marker, newline and overlength values. Business feed omits private payload; result artifact references omit private paths. Real artifact HTTP uses attachment or sandbox CSP without allow-same-origin and nosniff.",
+      "not_asserted": "The artifact test verifies headers, not browser execution. No actual hostile HTML/ANSI badge rendering and prompt/secret minimization audit across all new presentation fields.",
+      "small_next_case": "Use synthetic hostile labels/content in actual API and browser, asserting text escaping, no script/ANSI effect and no private fields, retaining current artifact-header tests."
+    },
+    {
+      "id": "HST-T-H04",
+      "status": "PARTIAL_DOMAIN_RECIPIENT_AND_AUTHORIZED_POSITIVE",
+      "required_layers": "API/SQLite + adversarial browser",
+      "evidence": [
+        "tests/home_states/test_operational_status.py::test_agent_recipient_does_not_become_operator_blocking_card",
+        "tests/home_states/test_operational_sqlite.py::test_canonical_decision_projects_exact_native_write_reference_without_application_claim"
+      ],
+      "asserted": "Pure agent-recipient question remains waiting_agent with zero operator pending actions. An authorized canonical decision returns 202 and projects exact decision/native-operation references without claiming application.",
+      "not_asserted": "No actual wrong-recipient native decision denial and DB invariant proof; authorized positive 202 is not impersonation coverage. Handoff verification-authority negatives exercise a different authority.",
+      "small_next_case": "Use a canonical agent-B request, attempt the inappropriate operator action through HTTP, verify denial and unchanged request/decision rows, then inspect only allowed browser actions."
+    },
+    {
+      "id": "HST-T-H05",
+      "status": "NO_LITERAL_EXECUTED_CASE",
+      "required_layers": "API/SQLite + adversarial browser",
+      "evidence": [],
+      "asserted": "No inspected executed body submits the same request concurrently from Home badge and bell with one canonical intent/revision.",
+      "not_asserted": "Exactly one effect across those two presentation entry points; sequential rightful 202 and QuickConnect namespace races are different cases.",
+      "small_next_case": "First prove duplicate/concurrent decision submissions against one exact request/revision yield one canonical effect, then exercise badge plus bell using that same identity in browser."
+    },
+    {
+      "id": "HST-T-H06",
+      "status": "PARTIAL_UNKNOWN_REDUCTION_NOT_HOME_REPLAY_GUARD",
+      "required_layers": "API/SQLite + adversarial browser",
+      "evidence": [
+        "tests/home_states/test_operational_status.py::test_native_write_refusal_unknown_and_success_are_not_application",
+        "tests/quick_connect/test_quick_connect_cli.py::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay"
+      ],
+      "asserted": "Pure response unknown retains awaiting-confirmation rather than applied success. R3 QuickConnect pending recovery retains the same setup intent without another test/probe.",
+      "not_asserted": "QuickConnect recovery is not Home execution-card behavior. No executed browser action/HTTP inventory here proves an unknown/possible-effect Home card offers only inspect/recover with no productive replay.",
+      "small_next_case": "Expose a real unknown/possible-effect Home execution, inspect/recover the same operation and audit no new productive operation/intent; verify disabled replay affordance in browser."
+    },
+    {
+      "id": "HST-T-H07",
+      "status": "PARTIAL_REAL_SQLITE_CURRENTNESS_FENCE",
+      "required_layers": "API/SQLite + adversarial browser",
+      "evidence": [
+        "tests/home_states/test_operational_sqlite.py::test_current_agent_and_realization_fences_in_real_sqlite_projection",
+        "tests/home_evolution/test_home_queries.py::test_exact_target_server_workspace_and_session"
+      ],
+      "asserted": "After real canonical open, stale agent credential/authorization/configuration or realization association makes a fresh HTTP projection unknown, clears confirmation evidence and does not open native again. Service exact targets reject altered scope.",
+      "not_asserted": "A stale browser snapshot invoking an action after binding/session successor change, with exact generation revalidation and no name-based successor selection.",
+      "small_next_case": "Retain old target, change valid binding/session currentness, then exercise exact read/action denial and ensure no successor or new operation; repeat through browser."
+    },
+    {
+      "id": "HST-T-H08",
+      "status": "PARTIAL_REPORTED_PROJECTION_NOT_CANONICAL_STATE_INVARIANTS",
+      "required_layers": "API/SQLite + adversarial browser",
+      "evidence": [
+        "tests/home_states/test_delivery_semantics.py::test_external_report_has_no_native_success_and_revision_changes_without_mutation",
+        "tests/ui_simplification/test_harness_blocking.py::test_reported_finish_is_a_delivery_without_invented_harness_or_success",
+        "tests/ui_simplification/test_entry_pages.py::test_external_source_is_complete_reported_and_not_matched_by_agent"
+      ],
+      "asserted": "Pure reported semantics are unknown for native execution/verification and do not mutate input. Pure reported finish has no native result or fabricated harness. Existing observational working feed has no canonical session reference.",
+      "not_asserted": "Actual external idle/done publication with before/after slot, claim, handoff and grant invariants. A pure reported DTO cannot prove those storage effects absent.",
+      "small_next_case": "Publish idle and done via the canonical observation fixture, compare relevant canonical tables before/after and after Home reads, and verify reported-only browser labels."
+    },
+    {
+      "id": "HST-T-H09",
+      "status": "NO_LITERAL_EXECUTED_CASE_IN_SELECTED_CUTS",
+      "required_layers": "API/SQLite + adversarial browser",
+      "evidence": [],
+      "asserted": "The selected executed bodies inspected here contain no reconnect-availability assertion. Existing design limitation is not converted into test coverage.",
+      "not_asserted": "No individual reconnect CTA/command is fabricated when only global Connector restart exists; no restart is invoked by a per-card action; visible explanation.",
+      "small_next_case": "Assert actual capability unavailable with explicit reason in API/presentation and audit a browser card offers no individual reconnect effect or global restart fallback. No new control protocol is needed."
+    },
+    {
+      "id": "HST-T-H10",
+      "status": "ADJACENT_QUICKCONNECT_ROLLBACK_ONLY",
+      "required_layers": "API/SQLite + adversarial browser",
+      "evidence": [
+        "tests/quick_connect/test_quick_connect_cli.py::test_rollback_preserves_exact_existing_profile_without_replay_and_blocks_new_entry_before_context"
+      ],
+      "asserted": "R3 disables QuickConnect, resumes the exact existing profile with stable binding/public ID, one test/probe and canonical snapshot, and refuses a new disabled entry before lifecycle.",
+      "not_asserted": "This is a QuickConnect feature rollback, not a Home presentation update/rollback while CLI work is active. It does not prove live daemon continuity or no Home-induced checkpoint/root remap.",
+      "small_next_case": "With an inert canonical active CLI session, toggle/read Home v1/v2, compare exact root/public ID/profile/checkpoint/full references and canonical rows, verify same daemon handle and no new test/turn, then perform browser navigation."
+    }
+  ],
+  "evidence_catalog": {
+    "tests/home_evolution/test_home_boundaries.py::test_artifact_reference_never_grants_agent_read_or_cross_workspace_access": {
+      "line": 83,
+      "source_sha256": "9b375d71902a83ed05476efee88d3540339309b49563cde2d85ce5282e6f3e0f",
+      "function_sha256": "eccb181e3c1406d647be3fd55e4d8c880c70a65b30c01e011b7e1bf692ff08d1",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_evolution/test_home_boundaries.py::test_artifact_reference_never_grants_agent_read_or_cross_workspace_access"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true
+      }
+    },
+    "tests/home_evolution/test_home_boundaries.py::test_home_reads_and_exact_seen_preserve_unread_other_page_other_workspace_and_canonical_facts": {
+      "line": 41,
+      "source_sha256": "9b375d71902a83ed05476efee88d3540339309b49563cde2d85ce5282e6f3e0f",
+      "function_sha256": "913eabf2866a84c62bdd884e7ef213e14c6ac5930724e043d92d7527135e0f5e",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_evolution/test_home_boundaries.py::test_home_reads_and_exact_seen_preserve_unread_other_page_other_workspace_and_canonical_facts"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true
+      }
+    },
+    "tests/home_evolution/test_home_boundaries.py::test_html_artifact_cannot_execute_with_operator_origin_privileges": {
+      "line": 103,
+      "source_sha256": "9b375d71902a83ed05476efee88d3540339309b49563cde2d85ce5282e6f3e0f",
+      "function_sha256": "f7830aea54c4451216ff792584c0f850259f1df0df9e8d90644450012573ff12",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_evolution/test_home_boundaries.py::test_html_artifact_cannot_execute_with_operator_origin_privileges[untrusted.html-text/html-<!doctype html><script>window.fixturePrivilegeMarker=true</script>]",
+          "tests/home_evolution/test_home_boundaries.py::test_html_artifact_cannot_execute_with_operator_origin_privileges[untrusted.svg-image/svg+xml-<svg xmlns=\"http://www.w3.org/2000/svg\"><script>window.fixturePrivilegeMarker=true</script></svg>]",
+          "tests/home_evolution/test_home_boundaries.py::test_html_artifact_cannot_execute_with_operator_origin_privileges[untrusted.xhtml-application/xhtml+xml-payload2]"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true
+      }
+    },
+    "tests/home_evolution/test_home_queries.py::test_business_feed_uses_real_events_not_unread_or_private_payload": {
+      "line": 185,
+      "source_sha256": "48ea97f6f704428886c92dadb0f9edf2a1eab502bb7ab7f13a3596f9aff18349",
+      "function_sha256": "4f2dc01064d0e0efc7c91958a57008ef049ba02110f7eb62c74a3e4fa24d9e1b",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_evolution/test_home_queries.py::test_business_feed_uses_real_events_not_unread_or_private_payload"
+        ],
+        "R3": [
+          "tests/home_evolution/test_home_queries.py::test_business_feed_uses_real_events_not_unread_or_private_payload"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_evolution/test_home_queries.py::test_disabled_external_and_failed_work_are_not_empty_success": {
+      "line": 69,
+      "source_sha256": "48ea97f6f704428886c92dadb0f9edf2a1eab502bb7ab7f13a3596f9aff18349",
+      "function_sha256": "b315bb54854df88462535445cae31410c02cfdef180b6b187e658827efe92319",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_evolution/test_home_queries.py::test_disabled_external_and_failed_work_are_not_empty_success"
+        ],
+        "R3": [
+          "tests/home_evolution/test_home_queries.py::test_disabled_external_and_failed_work_are_not_empty_success"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_evolution/test_home_queries.py::test_exact_target_server_workspace_and_session": {
+      "line": 85,
+      "source_sha256": "48ea97f6f704428886c92dadb0f9edf2a1eab502bb7ab7f13a3596f9aff18349",
+      "function_sha256": "c9b15b6b6eeafa3d6c74d7b9a687748575dcca11567baef27f65692f9431b965",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_evolution/test_home_queries.py::test_exact_target_server_workspace_and_session"
+        ],
+        "R3": [
+          "tests/home_evolution/test_home_queries.py::test_exact_target_server_workspace_and_session"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_evolution/test_home_queries.py::test_result_artifact_reference_uses_exact_durable_operation_without_paths": {
+      "line": 236,
+      "source_sha256": "48ea97f6f704428886c92dadb0f9edf2a1eab502bb7ab7f13a3596f9aff18349",
+      "function_sha256": "6fa3644416fb75ac315bfc946d1ce2bd82132e0d0cb86e5e7614df224419ab9b",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_evolution/test_home_queries.py::test_result_artifact_reference_uses_exact_durable_operation_without_paths"
+        ],
+        "R3": [
+          "tests/home_evolution/test_home_queries.py::test_result_artifact_reference_uses_exact_durable_operation_without_paths"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_delivery_semantics.py::test_cleanup_and_content_do_not_overwrite_productive_outcome": {
+      "line": 66,
+      "source_sha256": "27195a2dc889c8205963cb25beaec6f9586c21860eb283cfae639a793166bbb6",
+      "function_sha256": "9691045184431e748203cf8529c9d5629b40b9cffad519b231a571ab2f041b27",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_delivery_semantics.py::test_cleanup_and_content_do_not_overwrite_productive_outcome"
+        ],
+        "R3": [
+          "tests/home_states/test_delivery_semantics.py::test_cleanup_and_content_do_not_overwrite_productive_outcome"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_delivery_semantics.py::test_external_report_has_no_native_success_and_revision_changes_without_mutation": {
+      "line": 81,
+      "source_sha256": "27195a2dc889c8205963cb25beaec6f9586c21860eb283cfae639a793166bbb6",
+      "function_sha256": "c7f4225f1cd68cee6ff9e54209d7f7eec0d78407b9a36a04744f1d1cebbf23b8",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_delivery_semantics.py::test_external_report_has_no_native_success_and_revision_changes_without_mutation"
+        ],
+        "R3": [
+          "tests/home_states/test_delivery_semantics.py::test_external_report_has_no_native_success_and_revision_changes_without_mutation"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_delivery_semantics.py::test_task_status_is_independent_and_completed_never_proves_approved": {
+      "line": 29,
+      "source_sha256": "27195a2dc889c8205963cb25beaec6f9586c21860eb283cfae639a793166bbb6",
+      "function_sha256": "048a8f402be570d2beb4111371bfaca0d290a05ee075f89b773de2f4b1f1d48c",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_delivery_semantics.py::test_task_status_is_independent_and_completed_never_proves_approved[OPEN-unknown]",
+          "tests/home_states/test_delivery_semantics.py::test_task_status_is_independent_and_completed_never_proves_approved[CLAIMED-unknown]",
+          "tests/home_states/test_delivery_semantics.py::test_task_status_is_independent_and_completed_never_proves_approved[VERIFYING-pending]",
+          "tests/home_states/test_delivery_semantics.py::test_task_status_is_independent_and_completed_never_proves_approved[COMPLETED-unknown]",
+          "tests/home_states/test_delivery_semantics.py::test_task_status_is_independent_and_completed_never_proves_approved[REJECTED-unknown]"
+        ],
+        "R3": [
+          "tests/home_states/test_delivery_semantics.py::test_task_status_is_independent_and_completed_never_proves_approved[OPEN-unknown]",
+          "tests/home_states/test_delivery_semantics.py::test_task_status_is_independent_and_completed_never_proves_approved[CLAIMED-unknown]",
+          "tests/home_states/test_delivery_semantics.py::test_task_status_is_independent_and_completed_never_proves_approved[VERIFYING-pending]",
+          "tests/home_states/test_delivery_semantics.py::test_task_status_is_independent_and_completed_never_proves_approved[COMPLETED-unknown]",
+          "tests/home_states/test_delivery_semantics.py::test_task_status_is_independent_and_completed_never_proves_approved[REJECTED-unknown]"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_delivery_semantics.py::test_turn_outcome_does_not_invent_task_or_verification": {
+      "line": 21,
+      "source_sha256": "27195a2dc889c8205963cb25beaec6f9586c21860eb283cfae639a793166bbb6",
+      "function_sha256": "2ed3a4679d4dcc5e247faf17fe62947914c505b48fabe064c248dedb2ae4f324",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_delivery_semantics.py::test_turn_outcome_does_not_invent_task_or_verification[SUCCEEDED-succeeded]",
+          "tests/home_states/test_delivery_semantics.py::test_turn_outcome_does_not_invent_task_or_verification[FAILED-failed]",
+          "tests/home_states/test_delivery_semantics.py::test_turn_outcome_does_not_invent_task_or_verification[CANCELLED-cancelled]"
+        ],
+        "R3": [
+          "tests/home_states/test_delivery_semantics.py::test_turn_outcome_does_not_invent_task_or_verification[SUCCEEDED-succeeded]",
+          "tests/home_states/test_delivery_semantics.py::test_turn_outcome_does_not_invent_task_or_verification[FAILED-failed]",
+          "tests/home_states/test_delivery_semantics.py::test_turn_outcome_does_not_invent_task_or_verification[CANCELLED-cancelled]"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_delivery_semantics_sqlite.py::test_standalone_sql_null_comparison_never_implies_historical_task": {
+      "line": 6,
+      "source_sha256": "b554d90380dc67968f9dec30e155545ad6af618998b477e064ca4fe75b914a72",
+      "function_sha256": "62de74f2112d411ef6f3473f6cc12d408fa5ce5fae962082aad747e37e14cbc9",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_delivery_semantics_sqlite.py::test_standalone_sql_null_comparison_never_implies_historical_task"
+        ],
+        "R3": [
+          "tests/home_states/test_delivery_semantics_sqlite.py::test_standalone_sql_null_comparison_never_implies_historical_task"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_operational_sqlite.py::test_canonical_decision_projects_exact_native_write_reference_without_application_claim": {
+      "line": 122,
+      "source_sha256": "9e225a7917c09a99e941ef813b9d54d7aa763ed510cdd021f8abab9cfdefa6e1",
+      "function_sha256": "7815ce910749ffddac701d282bffeaeb0653bc01d08f554e265059e473c5a898",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_operational_sqlite.py::test_canonical_decision_projects_exact_native_write_reference_without_application_claim"
+        ],
+        "R3": [
+          "tests/home_states/test_operational_sqlite.py::test_canonical_decision_projects_exact_native_write_reference_without_application_claim"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_operational_sqlite.py::test_canonical_embedded_open_receipt_proves_ready_idle_without_claiming_process_alive": {
+      "line": 95,
+      "source_sha256": "9e225a7917c09a99e941ef813b9d54d7aa763ed510cdd021f8abab9cfdefa6e1",
+      "function_sha256": "eb57f2ab693e69fdebcc56b3cd66bc454d4d5aef03d51867407365c0542267c2",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_operational_sqlite.py::test_canonical_embedded_open_receipt_proves_ready_idle_without_claiming_process_alive"
+        ],
+        "R3": [
+          "tests/home_states/test_operational_sqlite.py::test_canonical_embedded_open_receipt_proves_ready_idle_without_claiming_process_alive"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_operational_sqlite.py::test_current_agent_and_realization_fences_in_real_sqlite_projection": {
+      "line": 151,
+      "source_sha256": "9e225a7917c09a99e941ef813b9d54d7aa763ed510cdd021f8abab9cfdefa6e1",
+      "function_sha256": "41d7ce976f55398ed9d376e67a5afd14ee500f1195acc23b6b372ecae6665085",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_operational_sqlite.py::test_current_agent_and_realization_fences_in_real_sqlite_projection[authorization_revision]",
+          "tests/home_states/test_operational_sqlite.py::test_current_agent_and_realization_fences_in_real_sqlite_projection[configuration_revision]",
+          "tests/home_states/test_operational_sqlite.py::test_current_agent_and_realization_fences_in_real_sqlite_projection[credential_epoch]",
+          "tests/home_states/test_operational_sqlite.py::test_current_agent_and_realization_fences_in_real_sqlite_projection[realization_workspace_binding_id]"
+        ],
+        "R3": [
+          "tests/home_states/test_operational_sqlite.py::test_current_agent_and_realization_fences_in_real_sqlite_projection[authorization_revision]",
+          "tests/home_states/test_operational_sqlite.py::test_current_agent_and_realization_fences_in_real_sqlite_projection[configuration_revision]",
+          "tests/home_states/test_operational_sqlite.py::test_current_agent_and_realization_fences_in_real_sqlite_projection[credential_epoch]",
+          "tests/home_states/test_operational_sqlite.py::test_current_agent_and_realization_fences_in_real_sqlite_projection[realization_workspace_binding_id]"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_operational_sqlite.py::test_http_negotiation_sessions_and_requests_are_canonical_read_only": {
+      "line": 63,
+      "source_sha256": "9e225a7917c09a99e941ef813b9d54d7aa763ed510cdd021f8abab9cfdefa6e1",
+      "function_sha256": "275918e8db5e6bd7ab473759e213d9672bacda339533dde5a7885ed4827be27c",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_operational_sqlite.py::test_http_negotiation_sessions_and_requests_are_canonical_read_only"
+        ],
+        "R3": [
+          "tests/home_states/test_operational_sqlite.py::test_http_negotiation_sessions_and_requests_are_canonical_read_only"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_operational_sqlite.py::test_session_selector_labels_share_connection_redaction_and_bounds": {
+      "line": 139,
+      "source_sha256": "9e225a7917c09a99e941ef813b9d54d7aa763ed510cdd021f8abab9cfdefa6e1",
+      "function_sha256": "7e6b4244692305b547a6d114d4884f45d47f5c1e1e36e23e3bb60bd219fee4ce",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_operational_sqlite.py::test_session_selector_labels_share_connection_redaction_and_bounds"
+        ],
+        "R3": [
+          "tests/home_states/test_operational_sqlite.py::test_session_selector_labels_share_connection_redaction_and_bounds"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_operational_status.py::test_agent_recipient_does_not_become_operator_blocking_card": {
+      "line": 155,
+      "source_sha256": "ce81b4d47cb0ab3b1c1788c6ae75816196e90857873398bee06cc8ea42204e43",
+      "function_sha256": "53841ae6d7ab0b26365e1281b3a6de4fd0dbf39bc1da3a6870240f41de2c95e9",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_operational_status.py::test_agent_recipient_does_not_become_operator_blocking_card"
+        ],
+        "R3": [
+          "tests/home_states/test_operational_status.py::test_agent_recipient_does_not_become_operator_blocking_card"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_operational_status.py::test_native_write_refusal_unknown_and_success_are_not_application": {
+      "line": 178,
+      "source_sha256": "ce81b4d47cb0ab3b1c1788c6ae75816196e90857873398bee06cc8ea42204e43",
+      "function_sha256": "3db518d76789eb10f9fefa5424372e0830cd3275431d280ef5897ee51aa20877",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_operational_status.py::test_native_write_refusal_unknown_and_success_are_not_application[FAILED-0-NATIVE_RESPONSE_NOT_APPLIED-False]",
+          "tests/home_states/test_operational_status.py::test_native_write_refusal_unknown_and_success_are_not_application[OUTCOME_UNKNOWN-1-NATIVE_RESPONSE_OUTCOME_UNKNOWN-True]",
+          "tests/home_states/test_operational_status.py::test_native_write_refusal_unknown_and_success_are_not_application[SUCCEEDED-1-NATIVE_APPLICATION_UNCONFIRMED-True]"
+        ],
+        "R3": [
+          "tests/home_states/test_operational_status.py::test_native_write_refusal_unknown_and_success_are_not_application[FAILED-0-NATIVE_RESPONSE_NOT_APPLIED-False]",
+          "tests/home_states/test_operational_status.py::test_native_write_refusal_unknown_and_success_are_not_application[OUTCOME_UNKNOWN-1-NATIVE_RESPONSE_OUTCOME_UNKNOWN-True]",
+          "tests/home_states/test_operational_status.py::test_native_write_refusal_unknown_and_success_are_not_application[SUCCEEDED-1-NATIVE_APPLICATION_UNCONFIRMED-True]"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_operational_status.py::test_outcome_unknown_cannot_prove_global_pause_despite_old_question": {
+      "line": 166,
+      "source_sha256": "ce81b4d47cb0ab3b1c1788c6ae75816196e90857873398bee06cc8ea42204e43",
+      "function_sha256": "af04377895741faaee07cab4411a5e21d6932e96830d6aa1e3818997d2d58496",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_operational_status.py::test_outcome_unknown_cannot_prove_global_pause_despite_old_question"
+        ],
+        "R3": [
+          "tests/home_states/test_operational_status.py::test_outcome_unknown_cannot_prove_global_pause_despite_old_question"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/home_states/test_verification_proof.py::test_rejected_delivery_uses_old_epoch_and_never_verifies_next_delivery": {
+      "line": 72,
+      "source_sha256": "0f31decf7ba69be6b319f176389306bd72dbf4aed898284d41182578715841e7",
+      "function_sha256": "d89b7bdd7b67257f5f37558d1ab8696f14462af968c17223cf1662c0e4d9a3ff",
+      "executed_nodes": {
+        "R5": [
+          "tests/home_states/test_verification_proof.py::test_rejected_delivery_uses_old_epoch_and_never_verifies_next_delivery"
+        ],
+        "R3": [
+          "tests/home_states/test_verification_proof.py::test_rejected_delivery_uses_old_epoch_and_never_verifies_next_delivery"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/quick_connect/test_quick_connect_cli.py::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay": {
+      "line": 230,
+      "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+      "function_sha256": "39e7e2b5551ffd8e56a5b6b078f2ad06d65e178f6d40a176fd2953d7b17447b8",
+      "executed_nodes": {
+        "R3": [
+          "tests/quick_connect/test_quick_connect_cli.py::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:test]",
+          "tests/quick_connect/test_quick_connect_cli.py::test_pending_addition_recovers_same_intent_before_collision_without_git_or_replay[setup:finish]"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R3": true
+      }
+    },
+    "tests/quick_connect/test_quick_connect_cli.py::test_rollback_preserves_exact_existing_profile_without_replay_and_blocks_new_entry_before_context": {
+      "line": 356,
+      "source_sha256": "a26ef75ae736cc8dfab5415b64609a37baa5c7f9a91f718e7fbf4b5bfa0c0c4f",
+      "function_sha256": "aac1afa8e75ca737ac75b4e3f566cf838f79697fee31212962e7d88350371406",
+      "executed_nodes": {
+        "R3": [
+          "tests/quick_connect/test_quick_connect_cli.py::test_rollback_preserves_exact_existing_profile_without_replay_and_blocks_new_entry_before_context"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R3": true
+      }
+    },
+    "tests/ui_simplification/test_entry_pages.py::test_external_source_is_complete_reported_and_not_matched_by_agent": {
+      "line": 108,
+      "source_sha256": "9ecaf62906116bdd1e5d56ca7430afa1f056b03cbc4ae89a7c190b6841b22365",
+      "function_sha256": "dec8eb7ec2ab8071dd8cf7bddc138734552c837cb2b4b8dc9e6da8b207ed1d47",
+      "executed_nodes": {
+        "R5": [
+          "tests/ui_simplification/test_entry_pages.py::test_external_source_is_complete_reported_and_not_matched_by_agent"
+        ],
+        "R3": [
+          "tests/ui_simplification/test_entry_pages.py::test_external_source_is_complete_reported_and_not_matched_by_agent"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true,
+        "R3": true
+      }
+    },
+    "tests/ui_simplification/test_harness_blocking.py::test_reported_finish_is_a_delivery_without_invented_harness_or_success": {
+      "line": 80,
+      "source_sha256": "26e251db6d866c31e462a338996d77a033dfefbe69aefe3537ee6aa99ac1a409",
+      "function_sha256": "4529fd863cbdcc981ea60f460b0f7a4a772b27bf06ad849631c6c3dde13bb267",
+      "executed_nodes": {
+        "R5": [
+          "tests/ui_simplification/test_harness_blocking.py::test_reported_finish_is_a_delivery_without_invented_harness_or_success"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true
+      }
+    },
+    "tests/ui_simplification/test_harness_blocking.py::test_shared_work_does_not_share_request_scope_and_delivery_remains_independent": {
+      "line": 137,
+      "source_sha256": "26e251db6d866c31e462a338996d77a033dfefbe69aefe3537ee6aa99ac1a409",
+      "function_sha256": "af2fce7cbe4ec26945e24af3d215a138596b725af661c331fc56c1b76a93a3a4",
+      "executed_nodes": {
+        "R5": [
+          "tests/ui_simplification/test_harness_blocking.py::test_shared_work_does_not_share_request_scope_and_delivery_remains_independent"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true
+      }
+    },
+    "tests/ui_simplification/test_harness_board.py::test_one_uow_no_new_source_query_or_productive_changes": {
+      "line": 146,
+      "source_sha256": "44bde6c7ef6fbeb598b36d7d2da4b9c8c73139c5592129e32550749d2a276c4b",
+      "function_sha256": "33dec1d2d97aad5bcc089b785495862f7f46175365dd7652805b65d7fe8672e0",
+      "executed_nodes": {
+        "R5": [
+          "tests/ui_simplification/test_harness_board.py::test_one_uow_no_new_source_query_or_productive_changes"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true
+      }
+    },
+    "tests/ui_simplification/test_harness_board.py::test_unknown_registry_budget_principal_and_auth_are_fail_closed": {
+      "line": 184,
+      "source_sha256": "44bde6c7ef6fbeb598b36d7d2da4b9c8c73139c5592129e32550749d2a276c4b",
+      "function_sha256": "08eb1843808e976abeac5f0749495ac35a4ea0f7330f565d9cad2393f2a2c450",
+      "executed_nodes": {
+        "R5": [
+          "tests/ui_simplification/test_harness_board.py::test_unknown_registry_budget_principal_and_auth_are_fail_closed"
+        ]
+      },
+      "source_matches_captured_pins": {
+        "R5": true
+      }
+    }
+  },
+  "reviewed_at_utc": "2026-11-17T18:15:51.191689+00:00",
+  "inventory_manifests": {
+    "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/phase-inventory.json": "57d3a09914c696fd5747276d94f9417c2fe27c987398dd20798e3ea3fdc6d391",
+    "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r3/installed-shard-0/phase-inventory.json": "25a5190e73c7fe51b96ca3016bae34698b28ac43fec3173a269ecb921915bdfb",
+    "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r3/installed-shard-1/phase-inventory.json": "d3afa2328b3ade6b6b8a76b72f69fd4f5eab28c68293cc2cb804c15bfc635f36"
+  },
+  "prepared_map_sha256": "61cc22f82468d7c6eb62c2a585efe46b522d78d5dc1d757ffbc35395aa3b0f88"
+}

@@ -1,0 +1,106 @@
+{
+  "status": "PASS_UI_FRESHNESS_SUBSET",
+  "provider_invocations": 0,
+  "checks_pass": 9,
+  "checks_fail": 0,
+  "results": {
+    "freshness": "PASS_SUBSET",
+    "initialize": null
+  },
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-zi934x1j",
+  "cleanup": {
+    "supervisor": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "own_root_processes": [],
+    "listener_port": 52749,
+    "listener_pids": [],
+    "excluded": "Current curation process/ancestors, not runtime or browser",
+    "secret_cookie_scan": "NO_MATCH",
+    "private_auth_and_wire_logs": "Not copied",
+    "data_preserved": true
+  },
+  "limits": [
+    "Synthetic Codex protocol through real Core/Server; no real provider or three-adapter claim",
+    "No human/AT/native-zoom claim",
+    "Functional runs after DOM timing may share CPU with installed pytest"
+  ],
+  "copies": [
+    {
+      "path": "runtime-ready.json",
+      "source_sha256": "848a73df2921effec076db970fcc5929ac4c40d34e78471cce110c62aa06bf94",
+      "curated_sha256": "848a73df2921effec076db970fcc5929ac4c40d34e78471cce110c62aa06bf94"
+    },
+    {
+      "path": "fixture.py",
+      "source_sha256": "58079ce642e09df136b67f3574152377f95b5ce0f2b5b6a68f98d641799e9788",
+      "curated_sha256": "58079ce642e09df136b67f3574152377f95b5ce0f2b5b6a68f98d641799e9788"
+    },
+    {
+      "path": "initialize.js",
+      "source_sha256": "29a39370fa132488357b368baa67cdac360342df3160ce53cbe542c4227625eb",
+      "curated_sha256": "29a39370fa132488357b368baa67cdac360342df3160ce53cbe542c4227625eb"
+    },
+    {
+      "path": "r4-freshness.js",
+      "source_sha256": "2eb39fa237ba9e45e5e791245d1fb441f4035fa9c3593ef69fdf9a4386a1d14f",
+      "curated_sha256": "2eb39fa237ba9e45e5e791245d1fb441f4035fa9c3593ef69fdf9a4386a1d14f"
+    },
+    {
+      "path": "cli-close.txt",
+      "source_sha256": "c6ed3d3200c5b7fa0070ce2dcadc140c83aefd97fee6fcaf36f8af08cc847b8d",
+      "curated_sha256": "c6ed3d3200c5b7fa0070ce2dcadc140c83aefd97fee6fcaf36f8af08cc847b8d"
+    },
+    {
+      "path": "cli-freshness.txt",
+      "source_sha256": "4cb6bf72da4437b793a683b03385ab38a46083e704837950abf04169df733081",
+      "curated_sha256": "4cb6bf72da4437b793a683b03385ab38a46083e704837950abf04169df733081"
+    },
+    {
+      "path": "cli-initialize.txt",
+      "source_sha256": "1bdaecd506e791bf2e8a3e83714393111fd8bc2e8a89ee2f0f91f9cd720650bc",
+      "curated_sha256": "1bdaecd506e791bf2e8a3e83714393111fd8bc2e8a89ee2f0f91f9cd720650bc"
+    },
+    {
+      "path": "cli-open.txt",
+      "source_sha256": "fb040510f0e3eadfa98be884b817ef6e0d7d4d433c846898d55ca5b027966800",
+      "curated_sha256": "fb040510f0e3eadfa98be884b817ef6e0d7d4d433c846898d55ca5b027966800"
+    },
+    {
+      "path": "cli-state.txt",
+      "source_sha256": "0d2c0a362f576b9e05d03c573a4804e5467c4d5d66781f1411d88d25d78eadcb",
+      "curated_sha256": "0d2c0a362f576b9e05d03c573a4804e5467c4d5d66781f1411d88d25d78eadcb"
+    },
+    {
+      "path": "control/initial-board.json",
+      "source_sha256": "79c5ba0672a94a8290669cf7fdef727cba31dc6137c0096e57df68f7a9680b58",
+      "curated_sha256": "79c5ba0672a94a8290669cf7fdef727cba31dc6137c0096e57df68f7a9680b58"
+    },
+    {
+      "path": "control/final.json",
+      "source_sha256": "7264b0e2043885ac093a1fb528fcf80484d639fde5681580b3bfa4ac64af5e0e",
+      "curated_sha256": "7264b0e2043885ac093a1fb528fcf80484d639fde5681580b3bfa4ac64af5e0e"
+    },
+    {
+      "path": "control/origins.json",
+      "source_sha256": "98c1f04bd916a422d6f7d30c6e4a20b9a06585638e9bd9c931e71d4b32f9228d",
+      "curated_sha256": "98c1f04bd916a422d6f7d30c6e4a20b9a06585638e9bd9c931e71d4b32f9228d"
+    },
+    {
+      "path": "control/supervisor-cleanup.json",
+      "source_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "curated_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e"
+    }
+  ],
+  "browser_http_counts": {
+    "GET": 43
+  },
+  "browser_status_counts": {
+    "200": 43
+  }
+}

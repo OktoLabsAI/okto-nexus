@@ -1,0 +1,26 @@
+{
+  "at": "2026-11-17T18:16:31.685538Z",
+  "facts": [
+    {
+      "server_id": "srv_0ad67e50c04b499931e77895d6b270db",
+      "executor_id": "exe_2ed60806d2bd0cca7b01dcec3f365501",
+      "binding_id": "bind_9d1ae4806cb1d4cb4a9e646e9cb1c32b",
+      "workspace_id": "wsr_6780a3dfd87b4f46e1d668eab94c871e",
+      "workspace_binding_id": "wxb_b7db2ab12e1fc4fed1ce1272fad58293",
+      "agent_id": "hst-a",
+      "session_id": "ses_59990f08c049d2eca6f5dd438eecbaa3",
+      "stream_epoch": "stream_d8a5bc160bfce876f6bb82f23a809b12",
+      "owner_generation": 1,
+      "lifecycle_state": "READY",
+      "control_current": true,
+      "valid_until": "2026-11-17T18:18:28.381922+00:00",
+      "observed_at": "2026-11-17T18:16:29.112Z",
+      "title": null,
+      "workspace_label": "HST Demo Project",
+      "revoked": false,
+      "runtime_ready": true,
+      "persistent_runtime": true,
+      "authority_current": true
+    }
+  ]
+}

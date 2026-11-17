@@ -1,0 +1,88 @@
+{
+  "status": "PASS_SUBSET",
+  "checks": [
+    {
+      "id": "optional-source-disabled-current-proof",
+      "ok": true,
+      "detail": {
+        "attention": "ready",
+        "work": "ready",
+        "results": "ready",
+        "connections": "ready",
+        "sessions": "ready",
+        "correlations": "ready",
+        "external": "disabled"
+      }
+    },
+    {
+      "id": "current-partial-idle-not-last-known",
+      "ok": true,
+      "detail": "Idle"
+    },
+    {
+      "id": "current-summary-not-previous",
+      "ok": true,
+      "detail": "1 connected \u00b7 0 working \u00b7 1 Idle\n\n0 actions \u00b7 0 harnesses paused"
+    },
+    {
+      "id": "paused-two-successful-identical-polls",
+      "ok": true,
+      "detail": [
+        {
+          "at": 1794935402747,
+          "revision": "e0988530885d49c3fc65888d6a7f48350d799b4daec97664c12326a94e0330b8"
+        },
+        {
+          "at": 1794935417765,
+          "revision": "e0988530885d49c3fc65888d6a7f48350d799b4daec97664c12326a94e0330b8"
+        }
+      ]
+    },
+    {
+      "id": "paused-current-still-fresh",
+      "ok": true,
+      "detail": "Idle"
+    },
+    {
+      "id": "paused-no-false-update",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "failed-read-stale-not-fresh",
+      "ok": true,
+      "detail": "Last known: Idle"
+    },
+    {
+      "id": "failed-read-alert",
+      "ok": true,
+      "detail": [
+        "Tracking information could not be refreshed. Try Refresh or narrow the filters."
+      ]
+    },
+    {
+      "id": "successful-read-recovers-current-while-paused",
+      "ok": true,
+      "detail": "Idle"
+    }
+  ],
+  "reads": [
+    {
+      "at": 1794935402747,
+      "revision": "e0988530885d49c3fc65888d6a7f48350d799b4daec97664c12326a94e0330b8"
+    },
+    {
+      "at": 1794935417765,
+      "revision": "e0988530885d49c3fc65888d6a7f48350d799b4daec97664c12326a94e0330b8"
+    },
+    {
+      "at": 1794935423204,
+      "revision": "e0988530885d49c3fc65888d6a7f48350d799b4daec97664c12326a94e0330b8"
+    }
+  ],
+  "limits": [
+    "One controlled browser transport abort; not real server or authority failure",
+    "No Working qualification on R4",
+    "Functional host load may include installed tests"
+  ]
+}

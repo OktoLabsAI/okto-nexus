@@ -1,24 +1,165 @@
 {
-  "status": "PREPARED_NOT_EXECUTED",
-  "browser_started": false,
-  "server_started": false,
-  "peer_started": false,
+  "status": "R6_FUNCTIONAL_SUBSETS_COMPLETE_WITH_EXPLICIT_GAPS",
+  "active_resources": false,
   "provider_invocations": 0,
-  "package_ready": true,
-  "browser_window_open": false,
-  "static_ast": "PASS only",
-  "fixture_scope": "Installed-only canonical bootstrap and J5/J7 controls prepared; not preflighted; no J1-J8 PASS",
-  "gaps": [
-    "Root explicit BROWSER_WINDOW_OPEN pending",
-    "No canonical admissions/preflight yet",
-    "J5 positive linkage and verification execution",
-    "J7 actual session revoke/browser clear execution",
-    "Real keyboard/mobile/zoom/AT separate"
-  ],
-  "history": [
+  "human_trial_run": false,
+  "package_ready": {
+    "r3": true,
+    "r4": true,
+    "r5": true,
+    "r6": true
+  },
+  "scopes": [
     {
-      "antecedent": "preparation-v1",
-      "note": "Earlier preparation manifests retained; entries describe earlier bytes and are not a current-files validation."
+      "cut": "cuts/r3-timing-and-180s-antecedent",
+      "status": "TIMING_SUBSET_FUNCTIONAL_INCOMPLETE",
+      "first_useful_dom_ms": 1454.9,
+      "samples": 1,
+      "is_p95": false,
+      "limits": [
+        "Optional external source disabled; native-scope subset only",
+        "R3Lastknown presentation laterfixedR4",
+        "Functional180s autostop tail incomplete"
+      ]
+    },
+    {
+      "cut": "cuts/r3-reading-partial-logout",
+      "status": "PASS_SUBSET",
+      "checks_pass": 21,
+      "limits": [
+        "Codex synthetic protocol; two sessions exact",
+        "Partial source and real own-account logout401; not fullJ7two-project journey"
+      ]
+    },
+    {
+      "cut": "cuts/r3-governed-result",
+      "status": "PASS_J5_SYNTHETIC_CANONICAL",
+      "checks_pass": 15,
+      "limits": [
+        "Real Core turn +claim/complete/operatorverify APIs; no provider"
+      ]
+    },
+    {
+      "cut": "cuts/r3-question-decision",
+      "status": "SUBSET_PASS_PARALLEL_WORKING_FAIL",
+      "checks_pass": 14,
+      "checks_fail": 1,
+      "limits": [
+        "Working unknown despite canonical productive event; retained FAIL",
+        "Dirtyguard/one202decision/confirmationpositive; no denial/lostresponse/CAS2tabs",
+        "SubsequentAterminal notqualified: inertpeer100sdeadline elapsed"
+      ]
+    },
+    {
+      "cut": "cuts/r4-current-partial-ui",
+      "status": "PASS_UI_FRESHNESS_SUBSET",
+      "checks_pass": 9,
+      "limits": [
+        "Installedprefix92529source only; concurrentR5checkoutnot audited",
+        "ActualoptionaldisabledcurrentIdle; two identicalpolls; onecontrolledtransportabort",
+        "No R4performance/Working qualification"
+      ]
+    },
+    {
+      "cut": "cuts/r5-working-draft-terminal",
+      "status": "PASS_CANONICAL_MAIN_SUBSET",
+      "checks_pass": 28,
+      "checks_fail": 0,
+      "limits": [
+        "28 positive checks: actual Working, independently blocked request, dirty two polls, one canonical answer, confirmation and later exact terminal/output/delivery in same panel",
+        "No denial/lost-response/two-tab decision claim"
+      ]
+    },
+    {
+      "cut": "cuts/r5-info-upgrade-antecedent",
+      "status": "FAIL_NEGOTIATION_DRAFT_OR_FOCUS",
+      "checks_pass": 4,
+      "checks_fail": 1,
+      "limits": [
+        "Retained failing predecessor; info negotiation remounts dirty form"
+      ]
+    },
+    {
+      "cut": "cuts/r5-info-upgrade-observables",
+      "status": "FAIL_NEGOTIATION_REMOUNTS_DRAFT_AND_FOCUS",
+      "checks_pass": 4,
+      "checks_fail": 1,
+      "limits": [
+        "Exact old-node disconnect/value/focus loss established; fixed and qualified separately on R6"
+      ]
+    },
+    {
+      "cut": "cuts/r5-scope-observer-antecedent",
+      "status": "INCOMPLETE_OBSERVER_BODY_ABANDONED",
+      "checks_pass": 5,
+      "checks_fail": 1,
+      "limits": [
+        "First transport observer insufficient; B correct before A release; not a product failure"
+      ]
+    },
+    {
+      "cut": "cuts/r5-scope-response-abandoned",
+      "status": "INCOMPLETE_RESPONSE_ABANDONED_AFTER_HEADERS",
+      "checks_pass": 5,
+      "checks_fail": 1,
+      "limits": [
+        "A headers200 delivered after B200; unchanged forwarded bytes SHA matched; requestfinished/body completion not observed because abandoned fetch",
+        "Five positive checks; late-response whole journey remains incomplete, not a forced PASS"
+      ]
+    },
+    {
+      "cut": "cuts/r5-failed-cancelled",
+      "status": "PASS_SUBSET",
+      "checks_pass": 7,
+      "checks_fail": 0,
+      "limits": [
+        "Actual inert protocol failed/cancelled canonical terminals and semantics; cleanup-pending-success branch not run"
+      ]
+    },
+    {
+      "cut": "cuts/r6-info-draft-focus",
+      "status": "PASS_SUBSET",
+      "checks_pass": 9,
+      "checks_fail": 0,
+      "limits": [
+        "Same DOM node/value/focus retained across delayed real info; version1 until context closed and board focus blurred; then2; zero POST"
+      ]
+    },
+    {
+      "cut": "cuts/r6-manual-pause-auth",
+      "status": "PASS_SUBSETS_WITH_V1_SELECTOR_ORACLE_LIMIT",
+      "checks_pass": 5,
+      "checks_fail": 1,
+      "limits": [
+        "Manual pause retains1 after info; real own-session logout401 clears Home",
+        "V1 protected-card precondition selector used v2 attribute and failed; preserved oracle limitation, not whole journey PASS"
+      ]
+    },
+    {
+      "cut": "cuts/r6-final-working-intents",
+      "status": "PASS_SUBSET",
+      "checks_pass": 10,
+      "checks_fail": 0,
+      "limits": [
+        "Final R6 canonical current Working plus independent operator question; labels Chat/Ask for work, keyboard open/close/focus and mobile360 subset",
+        "No actual composer send/payload integration claim; no full keyboard/AT claim"
+      ]
     }
-  ]
+  ],
+  "current_blockers": [
+    "Large-dataset500ms performance target remains separately unqualified; no waiver",
+    "Whole J1-J8 matrix is not qualified from these subsets; human and AT not run"
+  ],
+  "remaining_browser_scope": [
+    "J1three native families NOT_RUN; synthetic Codex protocol only",
+    "J4 denial/lost-response/two-tab CAS NOT_RUN",
+    "J6 cleanup-pending terminal variant NOT_RUN; failed/cancelled subset PASS",
+    "J7 A\u2192B late-response transport completion incomplete, despite A headers after B and intact forwarded hash; real logout/source partial subsets PASS",
+    "Full browser history/back-forward, complete keyboard traversal and project-switch dirty guard not qualified",
+    "G08 labels/selection and stable canonical test IDs qualified; actual composer send not run",
+    "Native200percentzoom and actual screen-reader AT NOT_RUN"
+  ],
+  "no_global_slo_claim": true,
+  "preserved_historical_cuts": true,
+  "final_source_commit": "90b94ca9673c087554b7dc4a226490ef5417bd32"
 }

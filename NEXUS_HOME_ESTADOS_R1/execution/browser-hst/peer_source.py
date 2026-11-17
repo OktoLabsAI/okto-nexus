@@ -15,15 +15,18 @@ def source(base:str,control:Path)->str:
     marker='    if "TRIGGER_HOLD" in text:'
     block='''    if text.startswith("HST:"):
         cfg = json.loads(text[4:])
+        terminal_status = cfg.get("terminal_status", "completed")
+        if terminal_status not in ("completed", "failed"):
+            raise ValueError("Unsupported fixture terminal status")
         if not isinstance(cfg.get("gate"), str) or cfg["gate"] in ("", ".", "..") or any(c in cfg["gate"] for c in ("/", "\\\\", ":")):
             raise ValueError("Fixture gate must be a basename")
         gate = os.path.join(CONTROL_ROOT, cfg["gate"])
-        deadline = time.monotonic() + 100
+        deadline = time.monotonic() + 150
         if cfg.get("question"):
             key = 10000 + int(turn_id.rsplit("_", 1)[1])
             _hst_waits[key] = threading.Event()
             write_msg({"jsonrpc":"2.0","id":key,"method":"item/tool/requestUserInput","params":{
-                "threadId":thread_id,"turnId":turn_id,"isBlocking":cfg["blocking"],
+                "threadId":thread_id,"turnId":turn_id,"itemId":"hst-question-"+turn_id,"isBlocking":cfg["blocking"],
                 "questions":[{"id":"format","header":"Format","question":"Choose fixture output format",
                     "isOther":False,"isSecret":False,"options":[{"label":"text","description":"Fixture only"}]}]}})
             while not _hst_waits[key].wait(.05):
@@ -36,6 +39,11 @@ def source(base:str,control:Path)->str:
 '''
     assert result.count(marker)==1
     result=result.replace(marker,block+marker)
+    signature='def handle_turn(thread_id, turn_id, text, req_id):\n'
+    assert result.count(signature)==1
+    result=result.replace(signature,signature+'    terminal_status = "completed"\n')
+    assert result.count('"status": "completed"')==1
+    result=result.replace('"status": "completed"','"status": terminal_status')
     response='            log({"response_to_server_request": msg})'
     assert result.count(response)==1
     result=result.replace(response,response+'\n            key = msg.get("id")\n            if key in _hst_waits:\n                _hst_replies[key] = msg\n                _hst_waits[key].set()')

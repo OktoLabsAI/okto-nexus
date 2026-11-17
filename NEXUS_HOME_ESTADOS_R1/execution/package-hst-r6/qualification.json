@@ -1,0 +1,833 @@
+{
+  "version": 1,
+  "created_at": "2026-11-17T18:03:54.919813+00:00",
+  "status": "PASS_BUILD_INSTALL_SMOKE",
+  "source_candidate_commit": "90b94ca9673c087554b7dc4a226490ef5417bd32",
+  "commit_origin": "Parent SOURCE_READY; file hashes are authoritative",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe",
+  "environment_frozen": true,
+  "python_version": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "OS": "Windows-11-10.0.26300-SP0",
+  "package_versions": {
+    "okto-nexus": "0.3.7",
+    "okto-nexus-connector-core": "0.0.14",
+    "okto-nexus-connector": "0.0.13"
+  },
+  "dependencies": {
+    "PyJWT": "2.15.1",
+    "Pygments": "2.21.0",
+    "annotated-doc": "0.0.6",
+    "annotated-types": "0.8.0",
+    "anyio": "4.16.0",
+    "attrs": "26.1.0",
+    "build": "1.6.1",
+    "certifi": "2026.10.23",
+    "cffi": "2.1.1",
+    "charset-normalizer": "3.5.2",
+    "click": "8.5.1",
+    "colorama": "0.4.6",
+    "cryptography": "50.0.2",
+    "docutils": "0.23",
+    "fastapi": "0.163.1",
+    "h11": "0.16.0",
+    "httpcore": "1.0.9",
+    "httpx": "0.28.1",
+    "httpx-sse": "0.4.3",
+    "id": "1.6.1",
+    "idna": "3.20",
+    "iniconfig": "2.3.1",
+    "jaraco.classes": "3.4.0",
+    "jaraco.context": "6.1.2",
+    "jaraco.functools": "4.6.0",
+    "jsonschema": "4.26.0",
+    "jsonschema-specifications": "2025.9.1",
+    "keyring": "25.7.0",
+    "markdown-it-py": "4.3.0",
+    "mcp": "1.30.0",
+    "mdurl": "0.1.2",
+    "more-itertools": "11.2.1",
+    "nh3": "0.3.8",
+    "okto-nexus": "0.3.7",
+    "okto-nexus-connector": "0.0.13",
+    "okto-nexus-connector-core": "0.0.14",
+    "opentelemetry-api": "1.45.2",
+    "packaging": "26.3",
+    "pip": "26.3",
+    "pluggy": "1.7.0",
+    "pycparser": "3.12",
+    "pydantic": "2.14.3",
+    "pydantic-settings": "2.16.3",
+    "pydantic_core": "2.50.4",
+    "pyproject_hooks": "1.3.3",
+    "pytest": "9.2.0",
+    "pytest-asyncio": "1.5.0",
+    "python-dotenv": "1.2.4",
+    "python-multipart": "0.0.34",
+    "pywin32": "312",
+    "pywin32-ctypes": "0.2.3",
+    "readme_renderer": "46.0",
+    "referencing": "0.37.0",
+    "requests": "2.34.2",
+    "requests-toolbelt": "1.0.0",
+    "rfc3986": "2.0.0",
+    "rfc8785": "0.1.4",
+    "rich": "15.0.0",
+    "rpds-py": "2026.9.1",
+    "sse-starlette": "3.7.0",
+    "starlette": "1.10.0",
+    "twine": "7.0.0",
+    "typing-inspection": "0.4.5",
+    "typing_extensions": "4.16.0",
+    "urllib3": "2.8.0",
+    "uvicorn": "0.54.0",
+    "websockets": "17.4",
+    "wsproto": "1.3.2"
+  },
+  "artifacts": {
+    "okto_nexus-0.3.7-py3-none-any.whl": "8ab8f08e8f5e06b428ed4642045ad5e4069d93891a869d4dc61fcaa5bb3ffa19",
+    "okto_nexus-0.3.7.tar.gz": "9c7f4009b5c6763e0a9281049853659a61325d103c7c933b02259b76ee033e9e"
+  },
+  "dependency_artifacts": {
+    "nexus_connector_core": {
+      "sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+      "rebuilt": false
+    },
+    "okto_nexus_connector": {
+      "sha256": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+      "rebuilt": false
+    }
+  },
+  "gates": {
+    "base_core_without_connector_or_torch": "PASS; ci/base-with-core.log",
+    "serve_lite_dev_without_connector_or_torch": "PASS; ci/local-without-connector.log",
+    "connector_added_after_local_gate": "PASS; exact pinned wheel",
+    "ci_installed_smoke": "PASS",
+    "pip_check": "PASS",
+    "twine": "PASS four exact artifacts; Nexus wheel/sdist + unchanged Core/Connector wheels"
+  },
+  "modules": {
+    "okto_nexus": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "wheel_sha256": "8ab8f08e8f5e06b428ed4642045ad5e4069d93891a869d4dc61fcaa5bb3ffa19",
+      "payload_files": 736,
+      "equal_installed_wheel": true,
+      "equal_checkout_source": true
+    },
+    "nexus_connector_core": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+      "payload_files": 168,
+      "equal_installed_wheel": true,
+      "equal_checkout_source": false
+    },
+    "okto_nexus_connector": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+      "wheel_sha256": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+      "payload_files": 127,
+      "equal_installed_wheel": true,
+      "equal_checkout_source": false
+    }
+  },
+  "source_comparison_scope": "All Nexus module payload bytes equal installed/wheel/checkout/isolated source/sdist. Core and Connector compare installed against immutable pinned vendor wheels; sibling checkouts are not re-qualified.",
+  "payload_counts": {
+    "okto_nexus": {
+      "files": 736,
+      "suffixes": {
+        ".py": 558,
+        ".txt": 2,
+        ".html": 1,
+        ".css": 1,
+        ".js": 1,
+        ".svg": 4,
+        "": 1,
+        ".sql": 168
+      }
+    },
+    "nexus_connector_core": {
+      "files": 168,
+      "suffixes": {
+        ".py": 134,
+        ".typed": 1,
+        ".json": 31,
+        ".js": 2
+      }
+    },
+    "okto_nexus_connector": {
+      "files": 127,
+      "suffixes": {
+        ".py": 126,
+        ".typed": 1
+      }
+    }
+  },
+  "assets": {
+    "okto_nexus/adapters/inbound/http/static/index.html": "4df900573a782ab17a6538a83dfc71f27f33e1257fac331b210dfce052ba7531",
+    "okto_nexus/adapters/inbound/http/static/assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036",
+    "okto_nexus/adapters/inbound/http/static/assets/index-CefKJTtn.js": "491444f17abbebbb34fa2f133f4e34f0cbded025e401b634a35ff851fde35247",
+    "okto_nexus/adapters/inbound/http/static/logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+    "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-dark.svg": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+    "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-light.svg": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+    "okto_nexus/adapters/inbound/http/static/logos/oktolabs-icon.svg": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+  },
+  "entrypoints": [
+    {
+      "label": "nexus-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\okto-nexus.exe",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "connector-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\okto-nexus-connector.exe",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "codex-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\okto-nexus.exe",
+        "codex",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "claude-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\okto-nexus.exe",
+        "claude",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "pi-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\okto-nexus.exe",
+        "pi",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "badflag-json",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\okto-nexus.exe",
+        "connect",
+        "codex",
+        "--qc08-unknown-flag",
+        "--json"
+      ],
+      "exit_code": 2,
+      "expected": 2
+    }
+  ],
+  "invalid_argv": {
+    "state": "refused",
+    "code": "INVALID_ARGUMENTS",
+    "message": "Invalid connect arguments. Use connect --help.",
+    "effects_started": false,
+    "lifecycle_requested": false
+  },
+  "isolation": {
+    "isolated": true,
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt",
+    "sys_path": [
+      "C:\\Python313\\python313.zip",
+      "C:\\Python313\\DLLs",
+      "C:\\Python313\\Lib",
+      "C:\\Python313",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\win32",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\win32\\lib",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\pythonwin"
+    ],
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv",
+    "origin_guard": "Every application/Core/Connector import inside this own site-packages",
+    "help_subprocess_path_empty": true,
+    "child_environment": "System executable allowlist; own TEMP/HOME/APPDATA/LOCALAPPDATA; no provider/CLI auth env copied; pip config NUL"
+  },
+  "source_snapshot": {
+    "files": 1824,
+    "before": "source-pins-before.json",
+    "after": "source-pins-after.json",
+    "drift": [],
+    "scope": "src all payload, frontend sources/public/build inputs, tests, packaging metadata, lock, CI helpers/vendor manifest",
+    "not_copied_into_sdist": "docs, tests, plans and repository tooling. Build source is src plus packaging metadata; no full-documentation sdist claim."
+  },
+  "cleanup": {
+    "all_owned_build_install_smoke_probe_commands_terminal": true,
+    "force_used": false,
+    "standalone_service_or_model_started": false,
+    "prefix_retained_for_separate_installed_test_owner": true
+  },
+  "limits": [
+    "No full installed pytest campaign in this report; delegated separately after READY.",
+    "No provider/native harness execution, authentication access, personal install, release or upload.",
+    "No Linux or Python3.11/3.12 matrix claim.",
+    "No Vite rebuild; Root frozen assets discovered from current index.html, reused and byte verified.",
+    "Previous BXP/BGONN/PR16/PR18/PR21/PR27 prefixes/artifacts not reinstalled or replaced."
+  ],
+  "commands": [
+    {
+      "at": "2026-11-17T17:59:26.608184+00:00",
+      "label": "venv",
+      "argv": [
+        "rtk",
+        "proxy",
+        "uv",
+        "venv",
+        "--python",
+        "C:/Python313/python.exe",
+        "--seed",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt",
+      "exit_code": 0,
+      "timed_out": false,
+      "force_used": false,
+      "stdin": "closed PIPE",
+      "known_processes": [
+        {
+          "pid": 19880,
+          "birth": 1794938366.6144547,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 47916,
+          "birth": 1794938366.657523,
+          "exe": "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\Scripts\\uv.exe"
+        },
+        {
+          "pid": 55436,
+          "birth": 1794938366.7545972,
+          "exe": "C:\\Python313\\python.exe"
+        }
+      ],
+      "actions": [],
+      "remaining_known_processes": [],
+      "remaining_listeners": [],
+      "success": true,
+      "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+    },
+    {
+      "at": "2026-11-17T17:59:38.059324+00:00",
+      "label": "build",
+      "argv": [
+        "rtk",
+        "proxy",
+        "uv",
+        "build",
+        "--out-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\artifacts",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\source"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt",
+      "exit_code": 0,
+      "timed_out": false,
+      "force_used": false,
+      "stdin": "closed PIPE",
+      "known_processes": [
+        {
+          "pid": 38548,
+          "birth": 1794938378.0787463,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 42208,
+          "birth": 1794938378.1561432,
+          "exe": "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\Scripts\\uv.exe"
+        },
+        {
+          "pid": 50436,
+          "birth": 1794938379.4163735,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\uv-cache\\builds-v0\\.tmp9cVspe\\Scripts\\python.exe"
+        },
+        {
+          "pid": 47284,
+          "birth": 1794938379.45038,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 12004,
+          "birth": 1794938381.2696695,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\uv-cache\\builds-v0\\.tmp9cVspe\\Scripts\\python.exe"
+        },
+        {
+          "pid": 44736,
+          "birth": 1794938381.2841074,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 46168,
+          "birth": 1794938400.3974023,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\uv-cache\\builds-v0\\.tmp3XPhTP\\Scripts\\python.exe"
+        },
+        {
+          "pid": 51720,
+          "birth": 1794938400.422593,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 43344,
+          "birth": 1794938401.9923437,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\uv-cache\\builds-v0\\.tmp3XPhTP\\Scripts\\python.exe"
+        },
+        {
+          "pid": 17248,
+          "birth": 1794938402.0059185,
+          "exe": "C:\\Python313\\python.exe"
+        }
+      ],
+      "actions": [],
+      "remaining_known_processes": [],
+      "remaining_listeners": [],
+      "success": true,
+      "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+    },
+    {
+      "at": "2026-11-17T18:00:53.039510+00:00",
+      "label": "ci-install",
+      "argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+        "install",
+        "--wheel",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\artifacts\\okto_nexus-0.3.7-py3-none-any.whl",
+        "--output",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\ci"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt",
+      "exit_code": 0,
+      "timed_out": false,
+      "force_used": false,
+      "stdin": "closed PIPE",
+      "known_processes": [
+        {
+          "pid": 60084,
+          "birth": 1794938453.0553756,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 43072,
+          "birth": 1794938453.1264403,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 44508,
+          "birth": 1794938453.1522405,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 55200,
+          "birth": 1794938453.3315957,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 59152,
+          "birth": 1794938453.3472767,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 39068,
+          "birth": 1794938491.683236,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 35868,
+          "birth": 1794938491.6972525,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 42580,
+          "birth": 1794938494.567823,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 29856,
+          "birth": 1794938494.5798664,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 58948,
+          "birth": 1794938512.1746583,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 36688,
+          "birth": 1794938512.189983,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 55256,
+          "birth": 1794938518.3004215,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 57872,
+          "birth": 1794938518.3186092,
+          "exe": "C:\\Python313\\python.exe"
+        }
+      ],
+      "actions": [],
+      "remaining_known_processes": [],
+      "remaining_listeners": [],
+      "success": true,
+      "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+    },
+    {
+      "at": "2026-11-17T18:02:25.017483+00:00",
+      "label": "ci-smoke",
+      "argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+        "smoke",
+        "--wheel",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\artifacts\\okto_nexus-0.3.7-py3-none-any.whl",
+        "--output",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\ci"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt",
+      "exit_code": 0,
+      "timed_out": false,
+      "force_used": false,
+      "stdin": "closed PIPE",
+      "known_processes": [
+        {
+          "pid": 60636,
+          "birth": 1794938545.0368621,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 59044,
+          "birth": 1794938545.0657406,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 39256,
+          "birth": 1794938545.0837767,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 38880,
+          "birth": 1794938545.2706983,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 37992,
+          "birth": 1794938545.2848487,
+          "exe": "C:\\Python313\\python.exe"
+        }
+      ],
+      "actions": [],
+      "remaining_known_processes": [],
+      "remaining_listeners": [],
+      "success": true,
+      "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+    },
+    {
+      "at": "2026-11-17T18:02:34.632750+00:00",
+      "label": "twine-install",
+      "argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe",
+        "-m",
+        "pip",
+        "install",
+        "twine"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt",
+      "exit_code": 0,
+      "timed_out": false,
+      "force_used": false,
+      "stdin": "closed PIPE",
+      "known_processes": [
+        {
+          "pid": 38368,
+          "birth": 1794938554.649721,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 46844,
+          "birth": 1794938554.673251,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 58804,
+          "birth": 1794938554.686001,
+          "exe": "C:\\Python313\\python.exe"
+        }
+      ],
+      "actions": [],
+      "remaining_known_processes": [],
+      "remaining_listeners": [],
+      "success": true,
+      "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+    },
+    {
+      "at": "2026-11-17T18:02:51.478392+00:00",
+      "label": "twine",
+      "argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe",
+        "-m",
+        "twine",
+        "check",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\artifacts\\okto_nexus-0.3.7-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\artifacts\\okto_nexus-0.3.7.tar.gz",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\ci\\okto_nexus_connector-0.0.13-py3-none-any.whl"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt",
+      "exit_code": 0,
+      "timed_out": false,
+      "force_used": false,
+      "stdin": "closed PIPE",
+      "known_processes": [
+        {
+          "pid": 15192,
+          "birth": 1794938571.5018513,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 57444,
+          "birth": 1794938571.5371692,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 60900,
+          "birth": 1794938571.551819,
+          "exe": "C:\\Python313\\python.exe"
+        }
+      ],
+      "actions": [],
+      "remaining_known_processes": [],
+      "remaining_listeners": [],
+      "success": true,
+      "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+    },
+    {
+      "at": "2026-11-17T18:02:53.046176+00:00",
+      "label": "pip-check",
+      "argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt",
+      "exit_code": 0,
+      "timed_out": false,
+      "force_used": false,
+      "stdin": "closed PIPE",
+      "known_processes": [
+        {
+          "pid": 44112,
+          "birth": 1794938573.0667183,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 57352,
+          "birth": 1794938573.0920055,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 56104,
+          "birth": 1794938573.1045513,
+          "exe": "C:\\Python313\\python.exe"
+        }
+      ],
+      "actions": [],
+      "remaining_known_processes": [],
+      "remaining_listeners": [],
+      "success": true,
+      "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+    },
+    {
+      "at": "2026-11-17T18:03:38.669130+00:00",
+      "label": "installed-audit",
+      "argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r6\\audit.py"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt",
+      "exit_code": 0,
+      "timed_out": false,
+      "force_used": false,
+      "stdin": "closed PIPE",
+      "known_processes": [
+        {
+          "pid": 61376,
+          "birth": 1794938618.68835,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 39104,
+          "birth": 1794938618.7179768,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 55256,
+          "birth": 1794938618.7355635,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 40528,
+          "birth": 1794938621.7055378,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 11628,
+          "birth": 1794938621.8212569,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\okto-nexus.exe"
+        },
+        {
+          "pid": 5832,
+          "birth": 1794938621.8836837,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 56172,
+          "birth": 1794938621.9930708,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 58528,
+          "birth": 1794938622.1028008,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\okto-nexus-connector.exe"
+        },
+        {
+          "pid": 55896,
+          "birth": 1794938622.1261885,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 53612,
+          "birth": 1794938622.1408515,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 59568,
+          "birth": 1794938622.4843864,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 60308,
+          "birth": 1794938622.5216458,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\okto-nexus.exe"
+        },
+        {
+          "pid": 54380,
+          "birth": 1794938622.541622,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 25860,
+          "birth": 1794938622.5614176,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 57136,
+          "birth": 1794938623.6097956,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 51324,
+          "birth": 1794938623.6424165,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\okto-nexus.exe"
+        },
+        {
+          "pid": 29460,
+          "birth": 1794938623.6591427,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 2936,
+          "birth": 1794938623.7122293,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 14920,
+          "birth": 1794938624.6557555,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 27416,
+          "birth": 1794938624.687431,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\okto-nexus.exe"
+        },
+        {
+          "pid": 58192,
+          "birth": 1794938624.7008796,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 56812,
+          "birth": 1794938624.7163184,
+          "exe": "C:\\Python313\\python.exe"
+        },
+        {
+          "pid": 26692,
+          "birth": 1794938625.680698,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 15764,
+          "birth": 1794938625.7149177,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\okto-nexus.exe"
+        },
+        {
+          "pid": 40688,
+          "birth": 1794938625.7293112,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 39464,
+          "birth": 1794938625.7441342,
+          "exe": "C:\\Python313\\python.exe"
+        }
+      ],
+      "actions": [],
+      "remaining_known_processes": [],
+      "remaining_listeners": [],
+      "success": true,
+      "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+    }
+  ]
+}

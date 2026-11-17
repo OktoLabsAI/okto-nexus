@@ -11,6 +11,9 @@ async (page) => {
   await page.addInitScript(({workspace})=>{
     localStorage.setItem('okto-nexus-home-operational','enabled');
     localStorage.setItem('okto-nexus-workspace',workspace);
+    // Scope is Home rendering, with the optional metrics prompt acknowledged
+    // in this isolated profile; it is not a first-ever onboarding measurement.
+    localStorage.setItem('okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0',new Date().toISOString());
     window.__hstUseful=null;
     const observer=new MutationObserver(()=>{
       if(window.__hstUseful!==null)return;
@@ -55,6 +58,7 @@ async (page) => {
   await page.screenshot({path:cfg.screenshot,fullPage:false});
   return {status:'SINGLE_LOAD_MEASUREMENT',anchor,useful,network,
     viewport:{width:1440,height:1100},samples:1,isP95:false,
+    profilePreferences:{operationalHome:'enabled',workspace:cfg.workspace_id,metricsPrompt:'dismissed before navigation'},
     targetMs:2000,withinTarget:useful.at<=2000,
     caveat:'Own synthetic fixture, one cold-profile load; no production percentile claim.'};
 }

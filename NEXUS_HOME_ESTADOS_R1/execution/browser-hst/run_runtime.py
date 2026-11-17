@@ -20,7 +20,7 @@ def main():
     child = owner.start(args.ready, root / 'fixture.py')
     print(json.dumps(dict(event='STARTED',pid=child,root=str(root))),flush=True)
     announced = False
-    end = time.monotonic() + 300
+    end = time.monotonic() + 420
     try:
         while owner.process.poll() is None and time.monotonic() < end:
             owner.sample()

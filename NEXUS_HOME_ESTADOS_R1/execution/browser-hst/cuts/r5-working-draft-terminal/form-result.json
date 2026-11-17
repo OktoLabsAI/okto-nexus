@@ -1,0 +1,142 @@
+{
+  "status": "PASS_SUBSET",
+  "checks": [
+    {
+      "id": "single-exact-question-form",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "id": "dirty-two-real-identical-polls",
+      "ok": true,
+      "detail": [
+        {
+          "at": 1794936811574,
+          "revision": "e8f6d56aec65c67fa65ba927f1aa4303cba980096ac5808aae5ff343cc7c6450"
+        },
+        {
+          "at": 1794936826625,
+          "revision": "e8f6d56aec65c67fa65ba927f1aa4303cba980096ac5808aae5ff343cc7c6450"
+        }
+      ]
+    },
+    {
+      "id": "dirty-focus-and-value-retained",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "dirty-identical-no-update-notice",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "dirty-close-guard",
+      "ok": true,
+      "detail": "Discard unsaved changes?"
+    },
+    {
+      "id": "draft-preserved",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "zero-post-before-explicit-answer",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "id": "recorded-not-provider-applied",
+      "ok": true,
+      "detail": "Decision: CONFIRMED. Native delivery: DISPATCH_PENDING.\n\nA recorded decision does not prove application by the provider."
+    },
+    {
+      "id": "one-canonical-decision",
+      "ok": true,
+      "detail": [
+        {
+          "path": "/api/v1/runtime-management/runtime/approval-decisions",
+          "status": 202,
+          "body": {
+            "decision_id": "r4decision_5a4ec1e6b54b2d31534d8123ffe1ad1a",
+            "client_intent_id": "ui_89a6e41ca4069cda588bd721d2148c6b",
+            "approval_key": {
+              "server_id": "srv_d0ed97adf209d25e92086133b1c7c13c",
+              "executor_id": "exe_793180c70d4210fe0590f48d8ecb6771",
+              "binding_id": "bind_f23b688526f0236a417cb3784f3bfaaa",
+              "agent_id": "hst-worker",
+              "workspace_id": "wsr_bdc2ab06f2e64c49dd8c3d38f03ef3e9",
+              "session_id": "ses_65613d37fd81cd60b15827b3913d6487",
+              "session_owner_generation": 1,
+              "canonical_request_id": "r4request_6a0a56c8536ba7b7f42f7f9d1c1b64719250279c0738f809cde4c1a1849c00f8",
+              "kind": "native_input"
+            },
+            "request_hash": "sha256:e032be8e539999664bb87b5a9cdac7423119d641c2c3a507b68494b9d0c2b22d",
+            "request_revision": 1,
+            "proposal_decision": "approve",
+            "native_decision": "accept",
+            "actor_agent_id": "operator",
+            "subject_agent_id": "hst-worker",
+            "canonical_state": "CONFIRMED",
+            "native_operation_id": "r4op_bb0a4c6a211f35b8379cabbdf283bc89",
+            "native_stage": "DISPATCH_PENDING",
+            "possible_effect": false,
+            "retry_safe": true,
+            "response_digest": "sha256:b28e162b41a9ebbd565bdb79090acbb4e8538a403d1e24ace84d6f34b47c39d3",
+            "expires_at": "2026-11-17T17:34:10.075000+00:00"
+          }
+        }
+      ]
+    }
+  ],
+  "posts": [
+    {
+      "path": "/api/v1/runtime-management/runtime/approval-decisions",
+      "status": 202,
+      "body": {
+        "decision_id": "r4decision_5a4ec1e6b54b2d31534d8123ffe1ad1a",
+        "client_intent_id": "ui_89a6e41ca4069cda588bd721d2148c6b",
+        "approval_key": {
+          "server_id": "srv_d0ed97adf209d25e92086133b1c7c13c",
+          "executor_id": "exe_793180c70d4210fe0590f48d8ecb6771",
+          "binding_id": "bind_f23b688526f0236a417cb3784f3bfaaa",
+          "agent_id": "hst-worker",
+          "workspace_id": "wsr_bdc2ab06f2e64c49dd8c3d38f03ef3e9",
+          "session_id": "ses_65613d37fd81cd60b15827b3913d6487",
+          "session_owner_generation": 1,
+          "canonical_request_id": "r4request_6a0a56c8536ba7b7f42f7f9d1c1b64719250279c0738f809cde4c1a1849c00f8",
+          "kind": "native_input"
+        },
+        "request_hash": "sha256:e032be8e539999664bb87b5a9cdac7423119d641c2c3a507b68494b9d0c2b22d",
+        "request_revision": 1,
+        "proposal_decision": "approve",
+        "native_decision": "accept",
+        "actor_agent_id": "operator",
+        "subject_agent_id": "hst-worker",
+        "canonical_state": "CONFIRMED",
+        "native_operation_id": "r4op_bb0a4c6a211f35b8379cabbdf283bc89",
+        "native_stage": "DISPATCH_PENDING",
+        "possible_effect": false,
+        "retry_safe": true,
+        "response_digest": "sha256:b28e162b41a9ebbd565bdb79090acbb4e8538a403d1e24ace84d6f34b47c39d3",
+        "expires_at": "2026-11-17T17:34:10.075000+00:00"
+      }
+    }
+  ],
+  "polls": [
+    {
+      "at": 1794936811574,
+      "revision": "e8f6d56aec65c67fa65ba927f1aa4303cba980096ac5808aae5ff343cc7c6450"
+    },
+    {
+      "at": 1794936826625,
+      "revision": "e8f6d56aec65c67fa65ba927f1aa4303cba980096ac5808aae5ff343cc7c6450"
+    },
+    {
+      "at": 1794936835544,
+      "revision": "d71316c50248b355682bc10648917f1c879afff8f8d40d3d1ada6972d726586e"
+    }
+  ],
+  "kept_open": true,
+  "snapshot": "- dialog \"Activity detail\":\n  - banner:\n    - heading \"Activity detail\" [level=2]\n    - button \"Expand modal\"\n    - button \"Close modal\"\n  - region \"Activity context\":\n    - heading \"Work request\" [level=3]\n    - paragraph: Hst Worker \u00b7 codex_app_server\n    - paragraph: Related information as of 2026-11-17T17:33:16.350843Z. Controls revalidate their canonical records.\n    - region \"Session in this activity\":\n      - heading \"Session\" [level=4]\n      - region \"Session execution output\":\n        - paragraph: READY \u00b7 Read only\n        - paragraph: ses_65613d37fd81cd60b15827b3913d6487\n        - group \"Terminal mode\":\n          - button \"Live tail\" [pressed]\n          - button \"History\"\n        - region \"Session live tail\":\n          - status: Following live events\n          - button \"Pause tail\"\n          - checkbox \"Auto-scroll\" [checked]\n          - text: Auto-scroll\n          - button \"Latest events\"\n          - paragraph: Showing 1\u20135 of 5 committed events. Scroll up to load earlier events.\n          - text: Session \u00b7 terminal Read only\n          - group \"Terminal font size\":\n            - button \"Decrease terminal font size\"\n            - button \"Reset terminal font size\": 12px\n            - button \"Increase terminal font size\"\n          - list \"Live runtime events\":\n            - listitem:\n              - strong: Core codex thread configuration\n              - time: 14:32:09\n              - term: Adapter id\n              - definition: codex_app_server\n              - term: Fields \u00b7 Approval Policy \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Approvals Reviewer \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Cwd \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Instruction Sources \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Model \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Model Provider \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Reasoning Effort \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Sandbox \u00b7 Status\n              - definition: missing\n              - term: Schema version\n              - definition: \"1\"\n              - term: Source\n              - definition: thread/start/response\n            - listitem:\n              - strong: Harness ready\n              - time: 14:32:09\n            - listitem:\n              - strong: Turn started\n              - time: 14:32:10\n            - listitem:\n              - strong: Input requested\n              - time: 14:32:10\n              - term: Is Blocking\n              - definition: \"true\"\n              - term: Item Id\n              - definition: hst-question-turn_1\n              - term: Questions 1 \u00b7 Header\n              - definition: Format\n              - term: Questions 1 \u00b7 Id\n              - definition: format\n              - term: Questions 1 \u00b7 Is Other\n              - definition: \"false\"\n              - term: Questions 1 \u00b7 Is Secret\n              - definition: \"[REDACTED]\"\n              - term: Questions 1 \u00b7 Options 1 \u00b7 Description\n              - definition: Fixture only\n              - term: Questions 1 \u00b7 Options 1 \u00b7 Label\n              - definition: text\n              - term: Questions 1 \u00b7 Question\n              - definition: Choose fixture output format\n              - term: Thread Id\n              - definition: th_1\n              - term: Turn Id\n              - definition: turn_1\n      - group: Session details\n      - button \"Continue this exact session\"\n    - region \"Questions and decisions in this activity\":\n      - heading \"Questions and decisions\" [level=4]\n      - list:\n        - listitem:\n          - heading \"Runtime question for the operator\" [level=5]\n          - paragraph: The runtime has a question for its authorized operator.\n          - paragraph: hst-worker \u00b7 HST Demo Project\n          - button \"Review question\"\n          - button \"Mark seen\"\n          - button \"Snooze 1 hour\"\n      - paragraph: execution_native_request \u00b7 r4request_6a0a56c8536ba7b7f42f7f9d1c1b64719250279c0738f809cde4c1a1849c00f8\n      - region \"Canonical approval\":\n        - paragraph: r4request_6a0a56c8536ba7b7f42f7f9d1c1b64719250279c0738f809cde4c1a1849c00f8\n        - button \"Refresh record\"\n        - status: The canonical approval changed. Review the updated record before making a new decision.\n        - paragraph: approved \u00b7 execution.native.respond \u00b7 Requested by hst-worker\n        - group:\n          - text: workspace HST Demo Project policy native-runtime-permission\n          - region \"Native runtime decision\":\n            - paragraph: Agent hst-worker \u00b7 Host exe_793180c70d4210fe0590f48d8ecb6771 \u00b7 Session ses_65613d37fd81cd60b15827b3913d6487\n            - status:\n              - paragraph: \"Decision: CONFIRMED. Native delivery: DISPATCH_PENDING.\"\n              - paragraph: A recorded decision does not prove application by the provider.\n            - button \"Check native decision\"\n          - text: \"Runtime request details { \\\"kind\\\": \\\"execution.native.respond\\\", \\\"kwargs\\\": { \\\"approval_key\\\": { \\\"server_id\\\": \\\"srv_d0ed97adf209d25e92086133b1c7c13c\\\", \\\"executor_id\\\": \\\"exe_793180c70d4210fe0590f48d8ecb6771\\\", \\\"binding_id\\\": \\\"bind_f23b688526f0236a417cb3784f3bfaaa\\\", \\\"agent_id\\\": \\\"hst-worker\\\", \\\"workspace_id\\\": \\\"wsr_bdc2ab06f2e64c49dd8c3d38f03ef3e9\\\", \\\"session_id\\\": \\\"ses_65613d37fd81cd60b15827b3913d6487\\\", \\\"session_owner_generation\\\": 1, \\\"canonical_request_id\\\": \\\"r4request_6a0a56c8536ba7b7f42f7f9d1c1b64719250279c0738f809cde4c1a1849c00f8\\\", \\\"kind\\\": \\\"native_input\\\" }, \\\"request_hash\\\": \\\"sha256:e032be8e539999664bb87b5a9cdac7423119d641c2c3a507b68494b9d0c2b22d\\\", \\\"expected_revision\\\": 1, \\\"cas_token\\\": \\\"<redacted-fixture-cas>\\\", \\\"expires_at\\\": \\\"2026-11-17T17:34:10.075000+00:00\\\", \\\"recipient_agent_id\\\": \\\"operator\\\", \\\"display\\\": { \\\"method\\\": \\\"item/tool/requestUserInput\\\", \\\"params\\\": { \\\"isBlocking\\\": true, \\\"itemId\\\": \\\"hst-question-turn_1\\\", \\\"questions\\\": [ { \\\"header\\\": \\\"Format\\\", \\\"id\\\": \\\"format\\\", \\\"isOther\\\": false, \\\"isSecret\\\": \\\"[REDACTED]\\\", \\\"options\\\": [ { \\\"description\\\": \\\"Fixture only\\\", \\\"label\\\": \\\"text\\\" } ], \\\"question\\\": \\\"Choose fixture output format\\\" } ], \\\"threadId\\\": \\\"th_1\\\", \\\"turnId\\\": \\\"turn_1\\\" }, \\\"request_hash\\\": \\\"3a0270e6bef322bee31a69920f3196db588c45a54bc0cc5f5419d66805f6f03c\\\", \\\"request_id\\\": 10001, \\\"schema_version\\\": 1 } } } Executed result { \\\"decision_id\\\": \\\"r4decision_5a4ec1e6b54b2d31534d8123ffe1ad1a\\\", \\\"client_intent_id\\\": \\\"ui_89a6e41ca4069cda588bd721d2148c6b\\\", \\\"approval_key\\\": { \\\"server_id\\\": \\\"srv_d0ed97adf209d25e92086133b1c7c13c\\\", \\\"executor_id\\\": \\\"exe_793180c70d4210fe0590f48d8ecb6771\\\", \\\"binding_id\\\": \\\"bind_f23b688526f0236a417cb3784f3bfaaa\\\", \\\"agent_id\\\": \\\"hst-worker\\\", \\\"workspace_id\\\": \\\"wsr_bdc2ab06f2e64c49dd8c3d38f03ef3e9\\\", \\\"session_id\\\": \\\"ses_65613d37fd81cd60b15827b3913d6487\\\", \\\"session_owner_generation\\\": 1, \\\"canonical_request_id\\\": \\\"r4request_6a0a56c8536ba7b7f42f7f9d1c1b64719250279c0738f809cde4c1a1849c00f8\\\", \\\"kind\\\": \\\"native_input\\\" }, \\\"request_hash\\\": \\\"sha256:e032be8e539999664bb87b5a9cdac7423119d641c2c3a507b68494b9d0c2b22d\\\", \\\"request_revision\\\": 1, \\\"proposal_decision\\\": \\\"approve\\\", \\\"native_decision\\\": \\\"accept\\\", \\\"actor_agent_id\\\": \\\"operator\\\", \\\"subject_agent_id\\\": \\\"hst-worker\\\", \\\"canonical_state\\\": \\\"CONFIRMED\\\", \\\"native_operation_id\\\": \\\"r4op_bb0a4c6a211f35b8379cabbdf283bc89\\\", \\\"native_stage\\\": \\\"DISPATCH_PENDING\\\", \\\"possible_effect\\\": false, \\\"retry_safe\\\": true, \\\"response_digest\\\": \\\"sha256:b28e162b41a9ebbd565bdb79090acbb4e8538a403d1e24ace84d6f34b47c39d3\\\", \\\"expires_at\\\": \\\"2026-11-17T17:34:10.075000+00:00\\\" }\"\n    - button \"Show work details\""
+}

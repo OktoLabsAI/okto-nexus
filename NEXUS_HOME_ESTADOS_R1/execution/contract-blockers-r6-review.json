@@ -1,0 +1,303 @@
+{
+  "scope": "READ_ONLY_CONTRACT_REVIEW_NOT_LEDGER_CHANGE",
+  "scenarios": [
+    {
+      "scenario": "HST-T-C07",
+      "contract_status": "NO_QUALIFIED_CURRENT_INDEPENDENT_QUEUE_PRODUCER",
+      "proposed_assessment": "NOT_RUN_WITH_CONTRACT_GAP",
+      "literal_missing": "Runtime proof that a queued activity can progress independently while another operation waits; not merely queue presence or capacity WAITING/RUNNING.",
+      "references": [
+        {
+          "source": "Nexus:src/okto_nexus/domain/home_operational_status.py",
+          "first_line": 65,
+          "last_line": 114,
+          "finding": "Pending work, exact live session/current scope and uncertain/blocker exclusions; SUBMITTED needs strict positive productive_progress_current."
+        },
+        {
+          "source": "Nexus:src/okto_nexus/domain/home_operational_status.py",
+          "first_line": 117,
+          "last_line": 150,
+          "finding": "Global full block requires all pending ops accounted for; queued branch only when all pending are unstarted. No independent-admissible-queue fact consumed."
+        },
+        {
+          "source": "Core:src/nexus_connector_core/capacity_codec.py",
+          "first_line": 122,
+          "last_line": 131,
+          "finding": "capacity_dispatch_state explicitly states non-receipt flow control and says nothing about native/terminal effects."
+        }
+      ],
+      "reader_fallback": "Do not count a queued sibling as Working or use it to prove full pause is impossible. Preserve exact pending action and show unknown aggregate when independence is absent. A genuinely started productive sibling is covered by C03, not a substitute for C07.",
+      "next_safe_work": "A pure reducer test can qualify conservative fallback now. Full literal positive needs an explicit producer/port fact with scope, freshness and admissibility semantics; define it before changing reduction. No protocol/Core change is authorized by this report."
+    },
+    {
+      "scenario": "HST-T-C08",
+      "contract_status": "SAME_NATIVE_REQUEST_CONTENT_CURRENTLY_IMMUTABLE_END_TO_END",
+      "proposed_assessment": "NOT_RUN_WITH_CONTRACT_GAP",
+      "literal_missing": "Same canonical occurrence changes from nonblocking to blocking under a new authoritative proof without becoming a new question.",
+      "references": [
+        {
+          "source": "Nexus:src/okto_nexus/application/execution_native_requests.py",
+          "first_line": 79,
+          "last_line": 101,
+          "finding": "Canonical ID is scoped to session epoch/owner/native ID; producer emits revision1 and rejects changed hash/content for that ID; replay never rewrites/renews/reopens."
+        },
+        {
+          "source": "Core:src/nexus_connector_core/native/adapters/codex.py",
+          "first_line": 1193,
+          "last_line": 1209,
+          "finding": "Adapter hashes native ID/method/params and accepts a repeated ID only with identical request hash."
+        },
+        {
+          "source": "Core:src/nexus_connector_core/approval_reducer_r4.py",
+          "first_line": 62,
+          "last_line": 77,
+          "finding": "Core reducer can represent a higher request revision before decision; this codec capability is not evidence that the current adapter/Nexus producer emits mutable request revisions."
+        },
+        {
+          "source": "Core:src/nexus_connector_core/native/native_inputs.py",
+          "first_line": 57,
+          "last_line": 69,
+          "finding": "Codex isBlocking is an actual boolean inside immutable request params."
+        }
+      ],
+      "reader_fallback": "Retain the exact occurrence/action and known blocking fact; do not flip isBlocking from receipt arrival/time/UI status. A new native ID is a new occurrence and does not satisfy the same-ID Then.",
+      "next_safe_work": "Add an exact changed-isBlocking replay refusal test through current ingress to qualify the existing invariant. A positive transition needs a defined separate current blocking observation or a deliberately supported revisioned update across adapter/Server, preserving CAS/expiry/decision immutability; do not edit stored JSON."
+    },
+    {
+      "scenario": "HST-T-D02",
+      "contract_status": "PERMISSION_ACTION_SUPPORTED_BUT_CURRENT_FULL_BLOCKING_PROOF_NOT_GENERALIZED",
+      "proposed_assessment": "PARTIAL_NOT_FULL_BLOCKING_SCENARIO",
+      "literal_missing": "A tool-approval request whose own adapter contract proves current suspension. Presence of a permission request does not by itself prove full harness suspension.",
+      "references": [
+        {
+          "source": "Core:src/nexus_connector_core/native/adapters/codex.py",
+          "first_line": 1174,
+          "last_line": 1212,
+          "finding": "Codex approval and input methods have exact thread/turn/item correlation and pending proposals, but this branch does not publish a universal isBlocking proof for approvals."
+        },
+        {
+          "source": "Nexus:src/okto_nexus/adapters/outbound/sqlite/home_entries.py",
+          "first_line": 123,
+          "last_line": 126,
+          "finding": "is_blocking is projected only for item/tool/requestUserInput with actual JSON true/false."
+        },
+        {
+          "source": "Nexus:src/okto_nexus/domain/home_operational_status.py",
+          "first_line": 84,
+          "last_line": 97,
+          "finding": "Positive block proof is adapter codex_app_server plus requestUserInput. Other methods remain uncertain, with permitted actions accessible."
+        },
+        {
+          "source": "Core:src/nexus_connector_core/native/native_inputs.py",
+          "first_line": 26,
+          "last_line": 71,
+          "finding": "Pi and Claude input validation has its own schemas; the Codex isBlocking field is not extrapolated to them."
+        }
+      ],
+      "reader_fallback": "Show canonical Approval pending and its exact allowed action. Without proven suspension, keep blocking unknown/independent request rather than moving a harness merely because the kind is approval. No auto-approval/reply or native capability is added.",
+      "next_safe_work": "Canonical permission pending/badge/form can be tested separately without inventing pause. Full D02 blocking needs adapter-specific producer proof and integration; no reason to block unrelated approval-action functionality."
+    },
+    {
+      "scenario": "HST-T-D08",
+      "contract_status": "NATIVE_CAUSAL_APPLICATION_RESUMPTION_ACKNOWLEDGEMENT_ABSENT",
+      "proposed_assessment": "BLOCKED",
+      "literal_missing": "A same-generation native acknowledgement causally tied to the exact decision/request that proves application and resumed execution; neither pipe write success nor later receipt timestamp supplies it.",
+      "references": [
+        {
+          "source": "Core:src/nexus_connector_core/native/adapters/codex.py",
+          "first_line": 1226,
+          "last_line": 1268,
+          "finding": "Exact pending request is reserved/consumed and native RPC response written; this is not a native acknowledgement of response consumption or resumed work."
+        },
+        {
+          "source": "Core:src/nexus_connector_core/receipt_bridge_r4.py",
+          "first_line": 108,
+          "last_line": 136,
+          "finding": "Bridge proves the typed native decision operation matches the receipt. It does not add causal stream/application acknowledgement."
+        },
+        {
+          "source": "Core:src/nexus_connector_core/receipt_bridge_r4.py",
+          "first_line": 228,
+          "last_line": 255,
+          "finding": "Wire receipt carries operation identity/revision/stage/effect/native_id; no decision-application sequence or native resume marker."
+        },
+        {
+          "source": "Nexus:src/okto_nexus/application/execution_native_decisions.py",
+          "first_line": 371,
+          "last_line": 407,
+          "finding": "Decision view maps SUBMITTED or SUCCEEDED native-write receipts to native_stage SUBMITTED; possible effect remains distinct from application."
+        },
+        {
+          "source": "Nexus:src/okto_nexus/domain/home_operational_status.py",
+          "first_line": 98,
+          "last_line": 109,
+          "finding": "Exact decided blocking request preserves confirmation refs and marks its operation uncertain rather than treating old progress as resumed."
+        }
+      ],
+      "reader_fallback": "Awaiting confirmation with exact refs, zero new human response where already decided, and no replay. Current independent progress or terminal result may establish Working/Idle on its own merits, never claim that the answer was applied. This permits D09/B02 without fabricating D08.",
+      "next_safe_work": "Keep old-epoch/owner/late-progress fences and exact refusal/unknown recovery tests. A full positive D08 needs a genuine native causal signal; a Server timestamp or a Core journal sequence observed after a write is not automatically causally native."
+    }
+  ],
+  "source_hashes": {
+    "Nexus:src/okto_nexus/domain/home_operational_status.py": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_operational_status.py",
+      "sha256": "6f3ab486f32e752cf05d4820ee4baedf514c310271678dd86ed0edb9bc3584b8"
+    },
+    "Core:src/nexus_connector_core/capacity_codec.py": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\capacity_codec.py",
+      "sha256": "43539a1dcb2e59ff03236c87c836620a560b3bdb24d8ad17046e3abe9209327b"
+    },
+    "Nexus:src/okto_nexus/application/execution_native_requests.py": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_native_requests.py",
+      "sha256": "8d2d030ff2ae0f8000dfce565f7c8abf7e4829231b16a468fc5fd62194040138"
+    },
+    "Core:src/nexus_connector_core/native/adapters/codex.py": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\adapters\\codex.py",
+      "sha256": "52cc2c24384843bac522f1e57a6247619f851e423600a3d89a99f568def65e12"
+    },
+    "Core:src/nexus_connector_core/approval_reducer_r4.py": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\approval_reducer_r4.py",
+      "sha256": "ac68880650ccfb2c7ca66b0dbbe47d7287297c308f425d09902cfb2a8aa42e4b"
+    },
+    "Core:src/nexus_connector_core/native/native_inputs.py": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\native_inputs.py",
+      "sha256": "4b1bfdb36954442da6a0b623e33fd5f5421b89befa78242ddbde41bbd310cf5f"
+    },
+    "Nexus:src/okto_nexus/adapters/outbound/sqlite/home_entries.py": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py",
+      "sha256": "e816ee1b5ce737e822c76eb3f421222c94109f1348e78f3799ab768309ddb643"
+    },
+    "Core:src/nexus_connector_core/receipt_bridge_r4.py": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\receipt_bridge_r4.py",
+      "sha256": "85c7e36baa48c13b1f248648bb9577e3fad7a1266a508b3c2e8a9b671b4bbae0"
+    },
+    "Nexus:src/okto_nexus/application/execution_native_decisions.py": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_native_decisions.py",
+      "sha256": "81110658b06514b867420cea7756f21e43648f5e8bcfbb6485d3b05aa35df644"
+    }
+  },
+  "executed_support": [
+    {
+      "node": "tests/home_states/test_atomic_working.py::test_submitted_core_started_event_proves_working_and_terminal_returns_idle",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_operational_status.py::test_no_cross_adapter_blocking_extrapolation[pi_rpc-extension_ui_request]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_operational_status.py::test_no_cross_adapter_blocking_extrapolation[claude_code_stream_json-claude/AskUserQuestion]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_operational_status.py::test_no_cross_adapter_blocking_extrapolation[pi_rpc-item/tool/requestUserInput]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_operational_status.py::test_decision_and_late_old_running_never_claim_resume",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_operational_status.py::test_queue_is_not_working_idle_or_evidence_of_an_independent_turn",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_productive_progress_status.py::test_productive_event_cannot_bypass_existing_fences[owner]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_productive_progress_status.py::test_productive_event_cannot_bypass_existing_fences[epoch]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_productive_progress_status.py::test_productive_event_cannot_bypass_existing_fences[lease]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_productive_progress_status.py::test_productive_event_cannot_bypass_existing_fences[authority]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_productive_progress_status.py::test_productive_event_cannot_bypass_existing_fences[runtime]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_productive_progress_status.py::test_productive_event_cannot_bypass_existing_fences[control]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_productive_progress_status.py::test_productive_event_cannot_bypass_existing_fences[outcome_unknown]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_productive_progress_status.py::test_productive_event_cannot_bypass_existing_fences[reconciling]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_productive_progress_status.py::test_productive_event_cannot_bypass_existing_fences[blocked]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_productive_progress_status.py::test_productive_event_cannot_bypass_existing_fences[confirmation]",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    },
+    {
+      "node": "tests/home_states/test_productive_progress_status.py::test_blocked_a_and_submitted_progress_b_then_terminal_b_keep_distinct_dimensions",
+      "result": "PASS",
+      "artifact": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml"
+    }
+  ],
+  "evidence_hashes": [
+    {
+      "path": "NEXUS_HOME_ESTADOS_R1/NEXUS_HOME_ESTADOS_LEDGER_R1.json",
+      "sha256": "a4a5209ab61086821ac7c414859e4587637ba3fafc6ab780c1bfb06b7e3003e1"
+    },
+    {
+      "path": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-qualification.json",
+      "sha256": "c7afc804934bf3d511385f8d5b5a079961296886cdb71ac6fdf6c3068d025e36"
+    },
+    {
+      "path": "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r5/installed-shard-0/tests-sanitized.xml",
+      "sha256": "c1762565a3a0d1b016fa5c751cdccbc720dac7bd409243e48a5cc2c50204f781"
+    },
+    {
+      "path": "NEXUS_HOME_ESTADOS_R1/execution/browser-hst/cuts/r5-working-draft-terminal/qualification.json",
+      "sha256": "cb994ec52e9d5bbe79c841e1087e62eac37b76f152fff1c4f7d007963ca29cdb"
+    },
+    {
+      "path": "NEXUS_HOME_ESTADOS_R1/execution/browser-hst/cuts/r5-working-draft-terminal/parallel-result.json",
+      "sha256": "d5f26b77fc117f5d9e01baa5306e270075895ede7b07b9c506ad593813e4af9b"
+    },
+    {
+      "path": "NEXUS_HOME_ESTADOS_R1/execution/browser-hst/cuts/r5-working-draft-terminal/confirmation-result.json",
+      "sha256": "b1f4d517cf4b0d2e8d7adc0ef7c57ce74a5c164748bdae3f73ae8c48541c6a02"
+    },
+    {
+      "path": "NEXUS_HOME_ESTADOS_R1/execution/browser-hst/cuts/r5-working-draft-terminal/after-terminal-result.json",
+      "sha256": "57327dea85f7939d263334c340815efbc95554ffee3fe4f7c24ab96458b7a731"
+    }
+  ],
+  "qualified_positive_scope": "R5 installed251 PASS and synthetic Core/Server browser28 checks support actual productive sibling Working, terminal Idle and awaiting-confirmation fallback. They do not create missing queue/update/native causal contracts.",
+  "limits": [
+    "No source/test/ledger/Git/prefix change, runtime/provider/browser/performance action was performed.",
+    "No R6 browser execution is claimed. R5 positive proofs are not three-adapter or physical remote-host evidence.",
+    "These four contract reviews do not convert the other79 PARTIAL scenario assessments into BLOCKED.",
+    "R4/R5 failures and earlier human/broad/performance/AT/provider gates remain antecedents or separate open gates."
+  ]
+}

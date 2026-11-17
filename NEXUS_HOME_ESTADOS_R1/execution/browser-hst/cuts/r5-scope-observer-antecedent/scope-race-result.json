@@ -1,0 +1,85 @@
+{
+  "status": "FAIL",
+  "error": "Error: late-a-byte-identical-after-b",
+  "checks": [
+    {
+      "id": "same-public-id-two-canonical-projects",
+      "ok": true,
+      "detail": [
+        {
+          "id": "home_group_774005798e024dc0250e11065ea290ee15cecc18d79f5b6543ae86a1b03987ae",
+          "project": "wsr_4122abf7fbef65e701460863264ee4d4",
+          "label": "HST Second Project"
+        },
+        {
+          "id": "home_group_dcc66f3ce6b9e82e96e41c73bf4f3ffe18054ee63cb3ad288c16570ef6a7359f",
+          "project": "wsr_1222780cfdcf52374a7f025ba7d4493c",
+          "label": "HST Demo Project"
+        }
+      ]
+    },
+    {
+      "id": "all-project-cards-labeled",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "compact-three-column-navigation",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "singleton-direct-exact-session",
+      "ok": true,
+      "detail": "ses_f343cd2a100ef0796520e9aad2681206"
+    },
+    {
+      "id": "b-real-response-before-a-release",
+      "ok": true,
+      "detail": {
+        "heldA": {
+          "capturedAt": 1794938774454,
+          "status": 200,
+          "sha256": "ecaf347601d3d8059b29cdc990c4f7d7a3ba5a899322c72a62c761188a7d8d5a"
+        },
+        "bDelivered": {
+          "scope": "wsr_4122abf7fbef65e701460863264ee4d4",
+          "at": 1794938774658,
+          "status": 200,
+          "sha256": "ffa1f4f7bc178a548686dec45e098b5225409f0cd342abf9fbd205fc347c5387"
+        }
+      }
+    },
+    {
+      "id": "late-a-byte-identical-after-b",
+      "ok": false,
+      "detail": {
+        "heldA": {
+          "capturedAt": 1794938774454,
+          "status": 200,
+          "sha256": "ecaf347601d3d8059b29cdc990c4f7d7a3ba5a899322c72a62c761188a7d8d5a"
+        },
+        "bDelivered": {
+          "scope": "wsr_4122abf7fbef65e701460863264ee4d4",
+          "at": 1794938774658,
+          "status": 200,
+          "sha256": "ffa1f4f7bc178a548686dec45e098b5225409f0cd342abf9fbd205fc347c5387"
+        }
+      }
+    }
+  ],
+  "deliveries": [
+    {
+      "scope": "wsr_4122abf7fbef65e701460863264ee4d4",
+      "at": 1794938774658,
+      "status": 200,
+      "sha256": "ffa1f4f7bc178a548686dec45e098b5225409f0cd342abf9fbd205fc347c5387"
+    }
+  ],
+  "heldA": {
+    "capturedAt": 1794938774454,
+    "status": 200,
+    "sha256": "ecaf347601d3d8059b29cdc990c4f7d7a3ba5a899322c72a62c761188a7d8d5a"
+  },
+  "body": "/ Home\nNeeds attention\n2\n\u25cf LIVE\nHome\nConversations\nGraph\nArtifacts\nAdvanced\nHome\n\nFollow each harness below. Open an activity to see its exact context, or add a harness to this project.\n\nAsk for work or chat\nRefresh\nPause display\nProject\nAll projects\nHST Demo Project\nHST Second Project\nHST Second Project\nAdd harness\n\n1 connected \u00b7 0 working \u00b7 1 Idle\n\n0 actions \u00b7 0 harnesses paused\n\nDisplay updates paused. Agents keep running; decisions require a fresh canonical review.\n\nSome information is incomplete or unavailable. Totals may be unknown; refresh before acting.\n\nFollow-up\nActive\nTotal unknown \u00b7 Revalidating\nHarness ID: reviewer\n\nCollaborator: Hst B\n\nCodex \u00b7 Host not reported\n\nIdle\n\nWork request\n\nTurn completed\n\nView delivery\n\nActivity coverage incomplete.\n\nFollow activity\nConnection details\nNeeds you\nTotal unknown \u00b7 Revalidating\n\nTracking is incomplete or unavailable. Refresh to read this column.\n\nResults\nTotal unknown \u00b7 Revalidating\n\nHarness ID: reviewer \u00b7 Codex \u00b7 Host not reported\n\nWork result\n\nResponse available\n\nReceived 2026-11-17T18:03:51.818Z\n\nView result\n\nSome activity has incomplete connection tracking. These are separate from harness cards.\n\nView other activity\nActivity detail\n\nREADY \u00b7 Read only\n\nses_f343cd2a100ef0796520e9aad2681206\n\nLive tail\nHistory\nFollowing live events\nPause tail\n Auto-scroll\nLatest events\n\nShowing 1\u20139 of 9 committed events. Scroll up to load earlier events.\n\nSession \u00b7 terminal\nRead only\n12px\nCore codex thread configuration\n15:03:51\nAdapter id\ncodex_app_server\nFields \u00b7 Approval Policy \u00b7 Status\nmissing\nFields \u00b7 Approvals Reviewer \u00b7 Status\nmissing\nFields \u00b7 Cwd \u00b7 Status\nmissing\nFields \u00b7 Instruction Sources \u00b7 Status\nmissing\nFields \u00b7 Model \u00b7 Status\nmissing\nFields \u00b7 Model Provider \u00b7 Status\nmissing\nFields \u00b7 Reasoning Effort \u00b7 Status\nmissing\nFields \u00b7 Sandbox \u00b7 Status\nmissing\nSchema version\n1\nSource\nthread/start/response\nHarness ready\n15:03:51\nTurn started\n15:03:51\nAssistant\n15:03:51\n\nHST synthetic output ses_f343cd2a100ef0796520e9aad2681206\n\nTurn completed\n15:03:51"
+}

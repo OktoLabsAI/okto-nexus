@@ -1,0 +1,66 @@
+{
+  "status": "PASS_RUNTIME_BYTE_EQUIVALENCE",
+  "current_ready": {
+    "ready": true,
+    "version": "0.3.7",
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Scripts\\python.exe",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\artifacts\\okto_nexus-0.3.7-py3-none-any.whl",
+    "wheel_sha256": "8ab8f08e8f5e06b428ed4642045ad5e4069d93891a869d4dc61fcaa5bb3ffa19",
+    "payload_files": 1031,
+    "source_commit": "90b94ca9673c087554b7dc4a226490ef5417bd32",
+    "prefix_frozen": true
+  },
+  "baseline_ready": {
+    "ready": true,
+    "version": "0.3.7",
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-n5k24oky",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-n5k24oky\\venv\\Scripts\\python.exe",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-n5k24oky\\artifacts\\okto_nexus-0.3.7-py3-none-any.whl",
+    "wheel_sha256": "db73f1a3fbdae390ea3b36f93076391de64538ce599a3fc178ef37678628e21d",
+    "payload_files": 1031,
+    "source_commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+    "prefix_frozen": true
+  },
+  "nonstatic_runtime_files": {
+    "nexus_connector_core": 168,
+    "okto_nexus": 729,
+    "okto_nexus_connector": 127
+  },
+  "total_nonstatic_runtime_files": 1024,
+  "static_delta": {
+    "added": [
+      "okto_nexus/adapters/inbound/http/static/assets/index-CefKJTtn.js"
+    ],
+    "removed": [
+      "okto_nexus/adapters/inbound/http/static/assets/index-DjtzLUDc.js"
+    ],
+    "changed": [
+      "okto_nexus/adapters/inbound/http/static/index.html"
+    ]
+  },
+  "packaging_and_lock_equal": [
+    "pyproject.toml",
+    "uv.lock"
+  ],
+  "python_version_equal": true,
+  "installed_dependency_versions_equal": true,
+  "dependency_comparison_limit": "Third-party version metadata compared; full byte equality applies to the three Nexus/Core/Connector module payloads.",
+  "reusable_evidence": {
+    "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r5\\installed-qualification.json",
+    "sha256": "c7afc804934bf3d511385f8d5b5a079961296886cdb71ac6fdf6c3068d025e36",
+    "executed_on": "R5 installed wheel, not R6",
+    "counts": {
+      "PASS": 251,
+      "SKIP": 0,
+      "FAIL": 0,
+      "NOT_RUN": 0
+    },
+    "scope": "Identical backend Python/SQLite/ASGI Home scopes only; all original fixture and platform limits remain."
+  },
+  "pytest_executed_on_r6": false,
+  "frontend_browser_qualification_reused": false,
+  "required_separate_evidence": "R6 compiled UI real-browser checks and current Node/build evidence.",
+  "old_prefix_reinstalled": false,
+  "provider_calls": 0
+}
