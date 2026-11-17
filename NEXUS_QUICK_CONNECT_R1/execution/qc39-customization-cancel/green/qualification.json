@@ -1,0 +1,86 @@
+{
+  "mode": "SOURCE_ONLY_PR27_DEPENDENCIES_NOT_FINAL_INSTALLED",
+  "status": "PASS",
+  "nodes": [
+    {
+      "name": "test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state[quick]",
+      "status": "PASS",
+      "seconds": "6.610"
+    },
+    {
+      "name": "test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state[legacy]",
+      "status": "PASS",
+      "seconds": "5.805"
+    },
+    {
+      "name": "test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[c]",
+      "status": "PASS",
+      "seconds": "5.782"
+    },
+    {
+      "name": "test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[empty]",
+      "status": "PASS",
+      "seconds": "5.809"
+    },
+    {
+      "name": "test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[picker_eof]",
+      "status": "PASS",
+      "seconds": "5.697"
+    },
+    {
+      "name": "test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[field_eof]",
+      "status": "PASS",
+      "seconds": "4.282"
+    },
+    {
+      "name": "test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[review_eof]",
+      "status": "PASS",
+      "seconds": "4.737"
+    },
+    {
+      "name": "test_resume_eof_cancels_honestly_without_replaying_test",
+      "status": "PASS",
+      "seconds": "7.705"
+    }
+  ],
+  "passed": 8,
+  "failed": 0,
+  "payload_files": 1013,
+  "payload_drift": [],
+  "global_source_drift": [
+    "tests/quick_connect/test_quick_connect_render.py"
+  ],
+  "scoped_source_pins_start_end_equal": {
+    "src/okto_nexus/adapters/inbound/cli/connect.py": "40e5da51fde39d6cc600154fb4de38bdff0721fa602f1a9f05311005c0651ab3",
+    "tests/quick_connect/test_qc35_review_cancel.py": "50c276431bdd7a18b0d27d58aae347d28d2db8d61aa1d15df2279edf2bd5557c"
+  },
+  "original_test_function_bodies_unchanged": true,
+  "new_cases": [
+    "Customize c",
+    "Customize empty",
+    "Customize picker EOF",
+    "Customize field EOF",
+    "Review EOF",
+    "Resume EOF"
+  ],
+  "assertions": "Honest canceled/lifecycle/metadata/effects state; exact prompt budgets; retained checkpoint bytes; no added canonical operations, grants, bindings, sessions, Test or probes. Resume uses same configured profile and no replay.",
+  "all_owned_processes_exited": true,
+  "signals": [],
+  "provider_calls": 0,
+  "ruff_argv": [
+    "rtk",
+    "proxy",
+    "ruff",
+    "check",
+    "--isolated",
+    "--select",
+    "E4,E7,E9,F",
+    "tests/quick_connect/test_qc35_review_cancel.py"
+  ],
+  "ruff_exit": 0,
+  "limits": [
+    "Source-only qualification against explicit checkout Nexus, with installed PR27 Core/Connector dependencies. Not the forthcoming final installed wheel.",
+    "Presentation modules may change independently during this cut; scoped connect/test pins must remain stable.",
+    "Original red cut remains preserved separately: two existing passes and six new failures."
+  ]
+}

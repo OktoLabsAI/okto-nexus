@@ -1,4 +1,8 @@
-# Quick Connect implementation status
+# Quick Connect implementation status (pre-final antecedent)
+
+This historical record stops at `fa031697`. The current delivery, corrections,
+artifact results and retained gates are in [final-delivery.md](final-delivery.md).
+Its pending annotations below are historical, not the final candidate's status.
 
 This is an implementation/qualification record, not a release or deployment.
 The product candidate is `fa031697b37a1b879d855f7858f01320addf0df7` on

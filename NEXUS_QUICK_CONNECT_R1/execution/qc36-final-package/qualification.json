@@ -1,0 +1,423 @@
+{
+  "version": 1,
+  "created_at": "2026-11-17T11:00:14.149777+00:00",
+  "status": "PASS_BUILD_INSTALL_SMOKE",
+  "source_candidate_commit": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+  "commit_origin": "Parent SOURCE_READY; file hashes are authoritative",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+  "environment_frozen": true,
+  "python_version": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "OS": "Windows-11-10.0.26300-SP0",
+  "package_versions": {
+    "okto-nexus": "0.3.6",
+    "okto-nexus-connector-core": "0.0.14",
+    "okto-nexus-connector": "0.0.13"
+  },
+  "dependencies": {
+    "PyJWT": "2.15.1",
+    "Pygments": "2.21.0",
+    "annotated-doc": "0.0.6",
+    "annotated-types": "0.8.0",
+    "anyio": "4.16.0",
+    "attrs": "26.1.0",
+    "build": "1.6.1",
+    "certifi": "2026.10.23",
+    "cffi": "2.1.1",
+    "charset-normalizer": "3.5.2",
+    "click": "8.5.1",
+    "colorama": "0.4.6",
+    "cryptography": "50.0.2",
+    "docutils": "0.23",
+    "fastapi": "0.163.1",
+    "h11": "0.16.0",
+    "httpcore": "1.0.9",
+    "httpx": "0.28.1",
+    "httpx-sse": "0.4.3",
+    "id": "1.6.1",
+    "idna": "3.20",
+    "iniconfig": "2.3.1",
+    "jaraco.classes": "3.4.0",
+    "jaraco.context": "6.1.2",
+    "jaraco.functools": "4.6.0",
+    "jsonschema": "4.26.0",
+    "jsonschema-specifications": "2025.9.1",
+    "keyring": "25.7.0",
+    "markdown-it-py": "4.3.0",
+    "mcp": "1.30.0",
+    "mdurl": "0.1.2",
+    "more-itertools": "11.2.1",
+    "nh3": "0.3.7",
+    "okto-nexus": "0.3.6",
+    "okto-nexus-connector": "0.0.13",
+    "okto-nexus-connector-core": "0.0.14",
+    "opentelemetry-api": "1.45.2",
+    "packaging": "26.3",
+    "pip": "26.3",
+    "pluggy": "1.7.0",
+    "pycparser": "3.12",
+    "pydantic": "2.14.3",
+    "pydantic-settings": "2.16.3",
+    "pydantic_core": "2.50.4",
+    "pyproject_hooks": "1.3.3",
+    "pytest": "9.2.0",
+    "pytest-asyncio": "1.5.0",
+    "python-dotenv": "1.2.4",
+    "python-multipart": "0.0.34",
+    "pywin32": "312",
+    "pywin32-ctypes": "0.2.3",
+    "readme_renderer": "46.0",
+    "referencing": "0.37.0",
+    "requests": "2.34.2",
+    "requests-toolbelt": "1.0.0",
+    "rfc3986": "2.0.0",
+    "rfc8785": "0.1.4",
+    "rich": "15.0.0",
+    "rpds-py": "2026.9.1",
+    "sse-starlette": "3.7.0",
+    "starlette": "1.10.0",
+    "twine": "7.0.0",
+    "typing-inspection": "0.4.5",
+    "typing_extensions": "4.16.0",
+    "urllib3": "2.8.0",
+    "uvicorn": "0.54.0",
+    "websockets": "17.4",
+    "wsproto": "1.3.2"
+  },
+  "artifacts": {
+    "okto_nexus-0.3.6-py3-none-any.whl": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+    "okto_nexus-0.3.6.tar.gz": "b3b87f1a2e9bf1c308ad1343c8d6de62f7f698b9777e06a1ff1bf94a6d24b427"
+  },
+  "dependency_artifacts": {
+    "nexus_connector_core": {
+      "sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+      "rebuilt": false
+    },
+    "okto_nexus_connector": {
+      "sha256": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+      "rebuilt": false
+    }
+  },
+  "gates": {
+    "base_core_without_connector_or_torch": "PASS; ci/base-with-core.log",
+    "serve_lite_dev_without_connector_or_torch": "PASS; ci/local-without-connector.log",
+    "connector_added_after_local_gate": "PASS; exact pinned wheel",
+    "ci_installed_smoke": "PASS",
+    "pip_check": "PASS",
+    "twine": "PASS four exact artifacts; Nexus wheel/sdist + unchanged Core/Connector wheels"
+  },
+  "modules": {
+    "okto_nexus": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+      "payload_files": 733,
+      "equal_installed_wheel": true,
+      "equal_checkout_source": true
+    },
+    "nexus_connector_core": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+      "payload_files": 168,
+      "equal_installed_wheel": true,
+      "equal_checkout_source": false
+    },
+    "okto_nexus_connector": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+      "wheel_sha256": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+      "payload_files": 127,
+      "equal_installed_wheel": true,
+      "equal_checkout_source": false
+    }
+  },
+  "source_comparison_scope": "All Nexus module payload bytes equal installed/wheel/checkout/isolated source/sdist. Core and Connector compare installed against immutable pinned vendor wheels; sibling checkouts are not re-qualified.",
+  "payload_counts": {
+    "okto_nexus": {
+      "files": 733,
+      "suffixes": {
+        ".py": 555,
+        ".txt": 2,
+        ".html": 1,
+        ".js": 1,
+        ".css": 1,
+        ".svg": 4,
+        "": 1,
+        ".sql": 168
+      }
+    },
+    "nexus_connector_core": {
+      "files": 168,
+      "suffixes": {
+        ".py": 134,
+        ".typed": 1,
+        ".json": 31,
+        ".js": 2
+      }
+    },
+    "okto_nexus_connector": {
+      "files": 127,
+      "suffixes": {
+        ".py": 126,
+        ".typed": 1
+      }
+    }
+  },
+  "assets": {
+    "okto_nexus/adapters/inbound/http/static/index.html": "cc0eb2e2efdf2be288ed5e3f1605f237d51fd1986fb5e1856c302f7ebb162775",
+    "okto_nexus/adapters/inbound/http/static/assets/index-CfDr8rCI.js": "03278c86e467207f48b1ef8ce88f3640fe04d27053c4041604e77b034914a7cc",
+    "okto_nexus/adapters/inbound/http/static/assets/index-Ds-MK2FR.css": "f761e905e0d9642c4c7d0f96d9e0f73404012f0d69d4fead8509e6fd9130b7b7",
+    "okto_nexus/adapters/inbound/http/static/logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+    "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-dark.svg": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+    "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-light.svg": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+    "okto_nexus/adapters/inbound/http/static/logos/oktolabs-icon.svg": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+  },
+  "entrypoints": [
+    {
+      "label": "nexus-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\okto-nexus.exe",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "connector-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\okto-nexus-connector.exe",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "codex-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\okto-nexus.exe",
+        "codex",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "claude-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\okto-nexus.exe",
+        "claude",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "pi-help",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\okto-nexus.exe",
+        "pi",
+        "--help"
+      ],
+      "exit_code": 0,
+      "expected": 0
+    },
+    {
+      "label": "badflag-json",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\okto-nexus.exe",
+        "connect",
+        "codex",
+        "--qc08-unknown-flag",
+        "--json"
+      ],
+      "exit_code": 2,
+      "expected": 2
+    }
+  ],
+  "invalid_argv": {
+    "state": "refused",
+    "code": "INVALID_ARGUMENTS",
+    "message": "Invalid connect arguments. Use connect --help.",
+    "effects_started": false,
+    "lifecycle_requested": false
+  },
+  "isolation": {
+    "isolated": true,
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+    "sys_path": [
+      "C:\\Python313\\python313.zip",
+      "C:\\Python313\\DLLs",
+      "C:\\Python313\\Lib",
+      "C:\\Python313",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\win32",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\win32\\lib",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Lib\\site-packages\\pythonwin"
+    ],
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv",
+    "origin_guard": "Every application/Core/Connector import inside this own site-packages",
+    "help_subprocess_path_empty": true,
+    "child_environment": "System executable allowlist; own TEMP/HOME/APPDATA/LOCALAPPDATA; no provider/CLI auth env copied; pip config NUL"
+  },
+  "source_snapshot": {
+    "files": 1804,
+    "before": "source-pins-before.json",
+    "after": "source-pins-after.json",
+    "drift": [],
+    "scope": "src all payload, frontend sources/public/build inputs, tests, packaging metadata, lock, CI helpers/vendor manifest",
+    "not_copied_into_sdist": "docs, tests, plans and repository tooling. Build source is src plus packaging metadata; no full-documentation sdist claim."
+  },
+  "cleanup": {
+    "all_owned_build_install_smoke_probe_commands_terminal": true,
+    "force_used": false,
+    "standalone_service_or_model_started": false,
+    "prefix_retained_for_separate_installed_test_owner": true
+  },
+  "limits": [
+    "No full installed pytest campaign in this report; delegated separately after READY.",
+    "No provider/native harness execution, authentication access, personal install, release or upload.",
+    "No Linux or Python3.11/3.12 matrix claim.",
+    "No Vite rebuild; Root frozen index-CfDr8rCI static payload reused and byte verified.",
+    "Previous BXP/BGONN/PR16/PR18/PR21/PR27 prefixes/artifacts not reinstalled or replaced."
+  ],
+  "commands": [
+    {
+      "at": "2026-11-17T10:00:25.423150+00:00",
+      "label": "venv",
+      "argv": [
+        "rtk",
+        "proxy",
+        "uv",
+        "venv",
+        "--python",
+        "C:/Python313/python.exe",
+        "--seed",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+      "exit_code": 0
+    },
+    {
+      "at": "2026-11-17T10:56:11.814580+00:00",
+      "label": "build",
+      "argv": [
+        "rtk",
+        "proxy",
+        "uv",
+        "build",
+        "--out-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\artifacts",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\source"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+      "exit_code": 0
+    },
+    {
+      "at": "2026-11-17T10:57:23.529699+00:00",
+      "label": "ci-install",
+      "argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+        "install",
+        "--wheel",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\artifacts\\okto_nexus-0.3.6-py3-none-any.whl",
+        "--output",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\ci"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+      "exit_code": 0
+    },
+    {
+      "at": "2026-11-17T10:59:01.830623+00:00",
+      "label": "ci-smoke",
+      "argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+        "smoke",
+        "--wheel",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\artifacts\\okto_nexus-0.3.6-py3-none-any.whl",
+        "--output",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\ci"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+      "exit_code": 0
+    },
+    {
+      "at": "2026-11-17T10:59:11.786760+00:00",
+      "label": "twine-install",
+      "argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+        "-m",
+        "pip",
+        "install",
+        "twine"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+      "exit_code": 0
+    },
+    {
+      "at": "2026-11-17T10:59:26.569514+00:00",
+      "label": "twine",
+      "argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+        "-m",
+        "twine",
+        "check",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\artifacts\\okto_nexus-0.3.6-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\artifacts\\okto_nexus-0.3.6.tar.gz",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\ci\\okto_nexus_connector-0.0.13-py3-none-any.whl"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+      "exit_code": 0
+    },
+    {
+      "at": "2026-11-17T10:59:27.795955+00:00",
+      "label": "pip-check",
+      "argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+      "exit_code": 0
+    },
+    {
+      "at": "2026-11-17T10:59:57.636254+00:00",
+      "label": "installed-audit",
+      "argv": [
+        "rtk",
+        "proxy",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1\\venv\\Scripts\\python.exe",
+        "-I",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc36-final-package\\audit.py"
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-i4u7k1l1",
+      "exit_code": 0
+    }
+  ]
+}

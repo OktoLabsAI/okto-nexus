@@ -1,0 +1,64 @@
+{
+  "mode": "SOURCE_ONLY_PR27_DEPENDENCIES_NOT_FINAL_INSTALLED",
+  "status": "EXPECTED_RED",
+  "nodes": [
+    {
+      "name": "test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state[quick]",
+      "status": "PASS",
+      "failure": null
+    },
+    {
+      "name": "test_c02_g08_new_unmapped_cwd_basename_review_cancel_emits_honest_final_state[legacy]",
+      "status": "PASS",
+      "failure": null
+    },
+    {
+      "name": "test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[c]",
+      "status": "FAIL",
+      "failure": "AssertionError: assert 'review' == 'canceled'\n  \n  - canceled\n  + review"
+    },
+    {
+      "name": "test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[empty]",
+      "status": "FAIL",
+      "failure": "AssertionError: assert 'review' == 'canceled'\n  \n  - canceled\n  + review"
+    },
+    {
+      "name": "test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[picker_eof]",
+      "status": "FAIL",
+      "failure": "AssertionError: assert 'review' == 'canceled'\n  \n  - canceled\n  + review"
+    },
+    {
+      "name": "test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[field_eof]",
+      "status": "FAIL",
+      "failure": "AssertionError: assert 'review' == 'canceled'\n  \n  - canceled\n  + review"
+    },
+    {
+      "name": "test_customize_cancel_and_review_eof_preserve_review_and_emit_honest_state[review_eof]",
+      "status": "FAIL",
+      "failure": "EOFError"
+    },
+    {
+      "name": "test_resume_eof_cancels_honestly_without_replaying_test",
+      "status": "FAIL",
+      "failure": "EOFError"
+    }
+  ],
+  "passed": 2,
+  "failed": 6,
+  "payload_files": 1013,
+  "payload_drift": [],
+  "source_drift": [
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_outcome.py",
+    "src/okto_nexus/adapters/inbound/cli/quick_connect_render.py"
+  ],
+  "connect_py_unchanged_during_red": true,
+  "connect_py_sha256": "9bedc9d1a932972200f158cd677354f1eabdf5a7025063b86e347670ff91b7f4",
+  "all_owned_processes_exited": true,
+  "signals": [],
+  "provider_calls": 0,
+  "raw_log_preserved_temp_only": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-nvqw0wok\\customization-cancel\\raw.log",
+  "limits": [
+    "Two unrelated UI output Python modules changed during red; global source drift is explicitly nonzero.",
+    "Old existing two variants pass; four customization cancellations and two EOF prompts fail before the connect.py fix."
+  ]
+}

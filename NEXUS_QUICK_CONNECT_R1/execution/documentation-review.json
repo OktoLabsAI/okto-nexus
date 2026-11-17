@@ -1,0 +1,20 @@
+{
+  "scope": "DOCUMENT_REVIEW_ONLY",
+  "candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+  "document": "docs/quick-connect.md",
+  "sha256": "4c62b09b6ff26ba5c4aeec980dcaf6e4e6b2c4c765c7a6ecb6adc535f511ed9e",
+  "reviewed": [
+    "short syntax and legacy selectors",
+    "CWD versus logical name and bounded Git precedence",
+    "public ID versus internal profile and exact canonical reference",
+    "one final review, customization, collision and partial outcomes",
+    "noninteractive stdin and no-work/uncertain-replay boundaries",
+    "remote authority, PowerShell7.3+/POSIX rendering and PS5/cmd limits",
+    "additive migration168 and presentation-only rollback"
+  ],
+  "examples": "Syntax examples cross-referenced by the parser/CLI scenario matrix; no authenticated command executed for this review. Real approval explicitly needs its own scope/budget/consent.",
+  "packaging_boundary": "Guide is repository documentation. The wheel/sdist gate contains application payload and packaging metadata, not this full documentation tree.",
+  "limitations": [
+    "Does not qualify a real harness, human usability, AT or untested platform."
+  ]
+}

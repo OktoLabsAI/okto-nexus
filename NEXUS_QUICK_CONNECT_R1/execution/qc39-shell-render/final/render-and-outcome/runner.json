@@ -1,0 +1,43 @@
+{
+  "label": "render-and-outcome",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-racvlr37\\bootstrap.py",
+    "-p",
+    "qc39_plugin",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-racvlr37\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\quick_connect",
+    "-v",
+    "-s",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-racvlr37\\render-and-outcome\\junit.xml",
+    "-k",
+    "test_quick_connect_render or test_quick_connect_outcome"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc39-source-racvlr37\\render-and-outcome\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T10:52:40.701683+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 46108,
+      "parent_pid": null,
+      "birth_filetime": 134393863607058541,
+      "alive": false
+    },
+    {
+      "pid": 43120,
+      "parent_pid": 46108,
+      "birth_filetime": 134393863607192431,
+      "alive": false
+    }
+  ],
+  "rejected_nonowned_births": [],
+  "ended_at": "2026-11-17T10:52:46.336115+00:00"
+}
