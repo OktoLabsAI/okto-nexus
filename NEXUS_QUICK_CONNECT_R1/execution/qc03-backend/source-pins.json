@@ -1,0 +1,18 @@
+{
+  "src/okto_nexus/domain/connection_public_ids.py": "e4cf0e3db027e2eb264aee564cf5798ea596618c0dc1f2f78054dc40fdb9c157",
+  "src/okto_nexus/migrations/168_connection_public_ids.sql": "be3884222e2c904a1faaad875c89bd7f14bc15c5826158deeced9ba04a9510f6",
+  "src/okto_nexus/application/connection_project_context.py": "93f7dc7abcedfc2d392c322e24c6a2a5d33aad366d18ff01d580eab38b1e7d6a",
+  "src/okto_nexus/application/connection_public_ids.py": "4a22dee1dd1fd3872d994bd8a39893e3c34980a02321b248448c34b6546c7b71",
+  "src/okto_nexus/application/connection_workspaces.py": "893177cd92f64725ad9fd5fe19b2f405abddeab1a13ad4aa7b0442fa7aca5c8f",
+  "src/okto_nexus/application/workspace_paths.py": "8dd84802eb88c8f77386afe98bd86ece95f3fc7cf2e035de65a6ea930ac88ece",
+  "src/okto_nexus/application/connection_setup.py": "dbece9d566fc3703452767f4233fc1966be10495e0e47951b6c49c9fef68a3c1",
+  "src/okto_nexus/application/connection_test.py": "ce95b4f2d10444ac14df053bac549ce0c6505a5e8d9929ec1712bb54246346ac",
+  "src/okto_nexus/domain/home_entries.py": "63b0593277226c310d6151157ec7a6ab3781668e6fe9ac8dabd91ffc3b0569f9",
+  "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "324ca1b40e22dc55e0f55f26b666a877923a90ca7fba9fc4f06c6730fc97128a",
+  "src/okto_nexus/adapters/outbound/sqlite/connection_catalog.py": "f05d2626f2644d8dcc748731f9ef85fb3b48e03aef82ef26eb6ba72435c011c5",
+  "src/okto_nexus/adapters/inbound/http/runtime_v1.py": "c347dd454e84b0c1631186d140a8bd9d6821f4b9e326ac10ce248d176d8b2284",
+  "src/okto_nexus/adapters/inbound/http/connection_public_ids.py": "360ce5d8cccf9c25dd361da7cf7552a5f51cc23e0e6ec264990a70eb9395c7be",
+  "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py": "436f9a2f813a3754b84b30d8b02880bb8a83ae002132c815708beddf8940258c",
+  "tests/execution_r4/test_public_connection_ids.py": "0c804b556c2a413b3162d0260a49f81c7ebb541ebb5139783c91247848a34023",
+  "tests/execution_r4/test_connection_workspaces.py": "daf1e704333486c45157e236f9bb23571008f2735d8a075f9ae5f4e87a1eb8bf"
+}

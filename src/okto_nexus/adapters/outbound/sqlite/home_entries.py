@@ -44,7 +44,7 @@ WHERE o.server_id=:server_id AND o.action='turn.submit'
 CONNECTIONS = '''
 SELECT b.server_id,b.executor_id,b.binding_id,b.workspace_binding_id,
  w.workspace_id,e.agent_id,e.adapter_id AS harness_id,
- p.display_name AS workspace_label,x.label AS host_label,
+ p.display_name AS workspace_label,x.label AS host_label,public.connect_id,
  CASE WHEN json_valid(a.metadata) THEN CASE WHEN json_type(a.metadata,'$.display_name')='text'
    THEN json_extract(a.metadata,'$.display_name') END END AS agent_label
 FROM execution_bindings b
@@ -54,6 +54,18 @@ JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id AND e.workspace_id=w.works
 JOIN workspaces p ON p.workspace_id=w.workspace_id
 JOIN execution_executors x ON x.server_id=b.server_id AND x.executor_id=b.executor_id
 JOIN agents a ON a.agent_id=e.agent_id
+LEFT JOIN connection_public_ids public INDEXED BY connection_public_id_binding
+ ON public.server_id=b.server_id AND public.state='bound'
+ AND public.canonical_ref_json IS NOT NULL
+ AND public.adapter_id=e.adapter_id
+ AND public.workspace_id=w.workspace_id
+ AND json_extract(public.canonical_ref_json,'$.server_id')=b.server_id
+ AND json_extract(public.canonical_ref_json,'$.executor_id')=b.executor_id
+ AND json_extract(public.canonical_ref_json,'$.binding_id')=b.binding_id
+ AND json_extract(public.canonical_ref_json,'$.endpoint_id')=b.endpoint_id
+ AND json_extract(public.canonical_ref_json,'$.workspace_binding_id')=b.workspace_binding_id
+ AND json_extract(public.canonical_ref_json,'$.agent_id')=e.agent_id
+ AND json_extract(public.canonical_ref_json,'$.workspace_id')=w.workspace_id
 WHERE b.server_id=:server_id AND (:workspace_id IS NULL OR w.workspace_id=:workspace_id)
 '''
 

@@ -78,6 +78,8 @@ class ConnectionTests:
                 raise conflict('The connection test limit was reached. Try again later.')
         c = request['configuration']
         with self.deps.connection_factory.unit_of_work(write=False) as uow:
+            from .connection_public_ids import validate_reserved
+            validate_reserved(uow, context, request)
             if baseline(uow, request['agent_id'], request.get('binding_id')) != request['baseline']:
                 raise conflict('The active configuration changed. Reopen Connections to review it.')
             validate_preset_update(self.deps, context, uow, request)

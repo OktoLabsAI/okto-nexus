@@ -2,6 +2,7 @@
 
 import json
 import os
+import hashlib
 
 from ..bootstrap.execution_authority import build_execution_access
 from ..errors import ErrorCode, OktoNexusError
@@ -30,7 +31,9 @@ def list_workspace_paths(deps, context, *, workspace_id: str, executor_id: str) 
         if executor is None:
             raise OktoNexusError(ErrorCode.NOT_FOUND, "Execution host not found.", {})
         if executor["kind"] != "embedded":
-            return {"workspace_id": workspace_id, "executor_id": executor_id, "items": []}
+            return {"workspace_id": workspace_id, "executor_id": executor_id, "items": [],
+                    "version": 1, "total": 0, "total_is_exact": True,
+                    "revision": hashlib.sha256(json.dumps([workspace_id, executor_id, []]).encode()).hexdigest()}
         rows = conn.execute(
             "SELECT l.local_record_json,l.created_at FROM execution_local_realizations l "
             "JOIN execution_realizations r ON r.server_id=l.server_id "
@@ -38,9 +41,12 @@ def list_workspace_paths(deps, context, *, workspace_id: str, executor_id: str) 
             "JOIN execution_workspace_bindings w ON w.server_id=r.server_id "
             "AND w.executor_id=r.executor_id AND w.workspace_binding_id=r.workspace_binding_id "
             "WHERE w.workspace_id=? AND l.server_id=? AND l.executor_id=? "
-            "ORDER BY l.created_at DESC",
+            "ORDER BY l.created_at DESC,l.realization_ref LIMIT 10001",
             (workspace_id, executor["server_id"], executor_id),
         ).fetchall()
+        if len(rows) > 10000:
+            raise OktoNexusError(ErrorCode.CONFLICT, 'The authorized folder inventory is incomplete.',
+                                 {'reason': 'PROJECT_INVENTORY_INCOMPLETE'})
         paths: dict[str, str] = {}
         for row in rows:
             try:
@@ -52,5 +58,9 @@ def list_workspace_paths(deps, context, *, workspace_id: str, executor_id: str) 
         return {
             "workspace_id": workspace_id,
             "executor_id": executor_id,
+            "version": 1,
+            "total": len(paths),
+            "total_is_exact": True,
+            "revision": hashlib.sha256(json.dumps([workspace_id, executor_id, sorted(paths.values())]).encode()).hexdigest(),
             "items": [{"path": path} for path in paths.values()],
         }
