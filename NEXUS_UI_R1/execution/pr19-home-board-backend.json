@@ -1,0 +1,100 @@
+{
+  "status": "PASS",
+  "created_at": "2026-11-17T01:56:20.370481+00:00",
+  "scope": "Additive Home board backend over existing authorized entry relation",
+  "sources": {
+    "src/okto_nexus/domain/home_board.py": "0cfd35d6a081d200248f12269093ed65ecf3cffe01745a21def2579a61600a9b",
+    "src/okto_nexus/application/home_entries.py": "a0bc17868a16297b1c7f997a7d9fc3d43d6d465cc9dccd93448badc5bd4add91",
+    "src/okto_nexus/adapters/inbound/http/home_entries.py": "ab0413e5b51f7bb3aea034ba9292f904ff978067b90e549276e3f6b1f21ae6d3",
+    "tests/ui_simplification/test_home_board.py": "1783b72184a6e6db912e8d83b5efefee3d6a8f7b975d750d4d6f4b5f3f31937a"
+  },
+  "routes": [
+    "GET /api/v1/home/board",
+    "GET /api/v1/home/board/{active|needs_you|results}"
+  ],
+  "contract": {
+    "root_partition": "board",
+    "column_partition": "board_column",
+    "scope": "Existing normalized entry scope with quick=all and include_recent_results=false; quick input is rejected on Board routes.",
+    "columns": [
+      "active",
+      "needs_you",
+      "results"
+    ],
+    "entry": "Existing entry_dto plus group_id and entry_revision; same targets/identities/actions/related cursors.",
+    "revision": "Board revision digests the full entry relation revision and ordered exclusive column membership. entry_revision is the original entry relation revision, for existing exact detail routes.",
+    "cursor": "Base64 JSON opaque validated binding, not a signed/MAC token. Reauthorization and recomputation precede consumption; server, hashed authenticated principal, normalized scope, exact column and board revision must match.",
+    "unknown": "All column totals null and total_is_exact=false when any source is partial/unknown or old result tracking is unknown. Budget-unavailable root preserves three empty unknown columns and null revisions. Auth/policy errors remain fatal.",
+    "precedence": "Current open action_required occurrence with canonical nonempty allowed_actions -> Needs you; nonterminal work plus passive/session/external/agent-attention context -> Active; canonical terminal outcomes -> Results with24h/unseen retention, unknown tracking retained conservatively. External reports never become canonical successes.",
+    "retention": "Seen terminal results older than24h drop; unseen or tracking-unknown retained. Canonical terminal work without a separate result retained24h from its activity timestamp.",
+    "reads": "One existing operator-authorized read-only UoW and one complete relation. No 3 API/source first-page merge, no additional database relation reads. Lazy related details use original entry_revision and existing quick=all routes."
+  },
+  "tests": {
+    "pr19-home-board-junit.xml": {
+      "sha256": "b2a7e8ccb9e9d00a2aa5b745d0b47f9106282f3ca7859343e6d6d79caa027792",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "time_seconds": 14.974,
+      "nodes": [
+        "tests.ui_simplification.test_home_board.test_exclusive_columns_precedence_retention_and_reported_context",
+        "tests.ui_simplification.test_home_board.test_sqlite_board_is_one_read_no_writes_and_entries_are_disjoint",
+        "tests.ui_simplification.test_home_board.test_http_column_pagination_details_and_all_scope_fences",
+        "tests.ui_simplification.test_home_board.test_principal_scope_and_partial_budget_are_explicit",
+        "tests.ui_simplification.test_home_board.test_unauthorized_board_never_reads_relations"
+      ]
+    },
+    "pr19-home-board-related-junit.xml": {
+      "sha256": "502364b5b0598277ab960ba87477d17e42eeb1a3a0f69b8198b3ea6530bbfd32",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "time_seconds": 68.623,
+      "nodes": [
+        "tests.ui_simplification.test_home_board.test_repeated_http_board_and_columns_preserve_canonical_tables",
+        "tests.ui_simplification.test_home_board.test_sqlite_retains_old_unseen_and_drops_old_seen_canonical_result",
+        "tests.ui_simplification.test_entry_pages.test_all_125_groups_children_and_25_sessions_are_reachable",
+        "tests.ui_simplification.test_entry_pages.test_cursor_scope_parent_principal_and_material_revision_are_bound",
+        "tests.ui_simplification.test_entry_pages.test_external_source_is_complete_reported_and_not_matched_by_agent",
+        "tests.ui_simplification.test_entry_pages.test_quick_sender_receiver_harness_and_host_filters",
+        "tests.ui_simplification.test_entry_pages.test_partial_external_and_budget_keep_unknown_totals",
+        "tests.ui_simplification.test_entry_pages.test_optional_http_router_exact_pages_and_no_store",
+        "tests.ui_simplification.test_entry_pages.test_http_global_budget_preserves_unknown_envelope_shape",
+        "tests.ui_simplification.test_entry_pages.test_malformed_cursor_and_wrong_parent_are_explicit",
+        "tests.ui_simplification.test_entry_pages.test_default_recent_window_and_retained_unseen_are_distinct_from_active",
+        "tests.ui_simplification.test_entry_pages.test_untracked_old_result_is_unknown_coverage_never_assumed_seen",
+        "tests.ui_simplification.test_entry_pages.test_context_labels_use_only_canonical_project_host_scalars",
+        "tests.ui_simplification.test_entry_pages.test_external_generation_restart_gets_new_identity_without_inheriting_preferences",
+        "tests.ui_simplification.test_entry_pages.test_boolean_version_and_deep_cursor_are_validation_errors_not_server_errors",
+        "tests.ui_simplification.test_entry_pages.test_single_read_uow_no_journal_or_transcript_and_one_size_sample",
+        "tests.ui_simplification.test_entry_app_integration.test_production_app_exposes_entries_without_manual_route_install",
+        "tests.ui_simplification.test_entry_app_integration.test_entries_cursor_is_bound_to_authenticated_human_without_exposing_identity",
+        "tests.ui_simplification.test_entry_app_integration.test_agent_is_denied_before_any_entry_source_query"
+      ]
+    }
+  },
+  "toolrefs": {
+    "five_initial_focals": "6e91a1/899e9d:5PASS15.22s",
+    "two_new_focals_and_seventeen_legacy": "21007e/6228b5:19PASS68.86s",
+    "ruff_final": "758771:PASS",
+    "module_origins": "bf400d:source-first Nexus; installed Core/pytest from own BXP prefix"
+  },
+  "proven": [
+    "Exclusive column IDs and exact totals over complete real SQLite relation.",
+    "All column pages reachable, disjoint IDs, same global revision; scope/column/human/revision mismatch conflicts.",
+    "Existing related detail revision and identities remain usable.",
+    "Operator authorization fails before source query.",
+    "One read UoW, zero SQLite total_changes, no journal/transcript source reads.",
+    "Repeated actual HTTP root/columns preserve all18 canonical execution/decision/grant/setup tables byte-for-byte and create no connection Tests.",
+    "Canonical old unseen result retained, marking seen drops old result; Board revision changes.",
+    "Partial external source and exhausted processing deadline preserve explicit unknown totals, not false zero.",
+    "Legacy entries production routes and pagination remain compatible."
+  ],
+  "limits": [
+    "Source-first new Nexus code tested with dependencies in previously qualified own Temp prefix; not an installed-package qualification of this new backend. No prefix installation/mutation.",
+    "Seven new Board scenarios passed across two finite cuts: first5, then2new+17legacy. The final additional changes are only BoardColumn/ColumnPage type declarations, verified by import and Ruff. No claim of one fresh24-case combined run.",
+    "No browser/native harness/provider/personal credentials/account/Windows lifecycle executed.",
+    "Materialization is existing O(N+relationships) plus sorting; no claim of O(page), production p95 or large100k-event benchmark.",
+    "No Core/protocol/Attention/setup/receipt/SQL/migration changes. No ledger/Git/package/proposal changes."
+  ]
+}

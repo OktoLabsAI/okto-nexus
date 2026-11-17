@@ -15,6 +15,8 @@ FILTERS = frozenset({'workspace_id', 'agent_id', 'state', 'quick', 'harness', 'h
 async def call(request, *, partition, group_id=None, entry_id=None):
     try:
         allowed = FILTERS | {'cursor', 'limit', 'preview', 'api_key'}
+        if partition == 'board':
+            allowed = allowed - {'quick'}
         if any(key not in allowed or len(request.query_params.getlist(key)) != 1 for key in request.query_params):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Unknown or repeated Home entries parameter.', {})
         try:
@@ -36,6 +38,14 @@ async def call(request, *, partition, group_id=None, entry_id=None):
 
 def build_router():
     router = APIRouter()
+
+    @router.get('/home/board')
+    async def board(request: Request):
+        return await call(request, partition='board')
+
+    @router.get('/home/board/{column}')
+    async def board_column(request: Request, column: str):
+        return await call(request, partition='board', group_id=column)
 
     @router.get('/home/entries')
     async def groups(request: Request):

@@ -9,6 +9,7 @@ import time
 from ..domain.attention import normalize_filters
 from ..domain.home_entries import EntryRelations
 from ..domain import home_entry_pages as pages
+from ..domain import home_board
 from ..errors import ErrorCode, OktoNexusError
 from ..domain.home import digest
 from .home_ports import HomeEntryQueries
@@ -23,6 +24,14 @@ class HomeEntriesService:
 
     def read(self, *, context, principal=None, filters=None, partition='groups', group_id=None, entry_id=None,
              cursor=None, limit=10, preview=3):
+        if partition == 'board':
+            if filters and 'quick' in filters:
+                pages.invalid('Home board does not accept a quick filter.')
+            if group_id is not None and group_id not in home_board.COLUMNS:
+                pages.invalid('Invalid Home board column.')
+            if entry_id is not None:
+                pages.invalid('Home board does not accept an entry parent.')
+            filters = dict(filters or {}, quick='all')
         scope = pages.filters(filters)
         started = time.monotonic()
 
@@ -58,6 +67,8 @@ class HomeEntriesService:
                 value['source_status'] = {key: 'unavailable' for key in
                     ('work', 'results', 'attention', 'connections', 'sessions', 'correlations', 'external')}
             value.update(event_cursor=int(bounds[0]), event_low_watermark=bounds[1])
+            if partition == 'board' and 'entry_revision' not in value:
+                value = home_board.unavailable(value, group_id)
             return value
 
     def _read(self, uow, *, scope, server, now, config, context, principal,
@@ -82,8 +93,13 @@ class HomeEntriesService:
             if external is not None:
                 relations.source_status['external'] = external['status']
             check_budget()
-            value = pages.page(relations, scope=scope, server_id=server, principal=principal,
-                now=now, partition=partition, group_id=group_id, entry_id=entry_id,
-                cursor=cursor, limit=limit, preview=preview, check_budget=check_budget)
+            if partition == 'board':
+                value = home_board.page(relations, scope=scope, server_id=server, principal=principal,
+                    now=now, column=group_id, cursor=cursor, limit=limit, preview=preview,
+                    check_budget=check_budget)
+            else:
+                value = pages.page(relations, scope=scope, server_id=server, principal=principal,
+                    now=now, partition=partition, group_id=group_id, entry_id=entry_id,
+                    cursor=cursor, limit=limit, preview=preview, check_budget=check_budget)
             check_budget()
             return value

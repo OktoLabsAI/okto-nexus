@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "created_at": "2026-11-17T02:03:15.299662+00:00",
+  "supersedes_backend_sources": "NEXUS_UI_R1\\execution\\pr19-home-board-backend.json",
+  "antecedent_report_preserved_sha256": "13823575f3d22a03b1ad20513c06cdf86da15b2349d01e2e9537769d20f6d4c7",
+  "sources": {
+    "src/okto_nexus/domain/home_board.py": "f93443cdd9e8100ab7541667a14a97c4512d0dee3c1799a470690eb55e0a77f8",
+    "src/okto_nexus/application/home_entries.py": "a0bc17868a16297b1c7f997a7d9fc3d43d6d465cc9dccd93448badc5bd4add91",
+    "src/okto_nexus/adapters/inbound/http/home_entries.py": "ab0413e5b51f7bb3aea034ba9292f904ff978067b90e549276e3f6b1f21ae6d3",
+    "tests/ui_simplification/test_home_board.py": "a44091f450583e78dfd986946b30d709b9f6c6d5050cc9690e62986e59701962"
+  },
+  "changes": [
+    "Board summary aggregates only entries actually retained after presentation filters and exclusive column assignment, before column pagination. Sessions use unique(server,executor,session), result/unseen counters unique result IDs, active action-required occurrence counter unique attention IDs. All counters remain unknown for incomplete sources; unseen stays unknown for untracked preferences.",
+    "Board result-tracking coverage uses those same retained/scoped entries. The legacy entries endpoint and its summary are unchanged.",
+    "An orphan attention entry is retained in Active only when at least one canonical occurrence remains active. Resolved/inactive orphan history remains accessible via existing entries URLs; active informative errors remain visible in Active with original display_state/evidence and no invented success/action."
+  ],
+  "reproductions_before_fix": {
+    "tool": "a073bd",
+    "expired_seen_result": "All three board totals=0 but summary.activities=1/results=1 exact=true.",
+    "inactive_resolved_orphan": "column_for returned active.",
+    "canonical_unknown_with_recovery": "column_for correctly returned needs_you; behavior retained."
+  },
+  "qualification": {
+    "tool": "37809a/24a6ec",
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "pytest_seconds": 22.46,
+    "junit_sha256": "5376e87e027403a65e55832dec06061d7c3570305f6819554baea2f45de814bb",
+    "junit": "NEXUS_UI_R1\\execution\\pr19-home-board-addendum-junit.xml",
+    "ruff": {
+      "tool": "13987f",
+      "status": "PASS"
+    },
+    "new_focals": [
+      "Empty retained board has zero exact summary counters.",
+      "Harness and state filters isolate unseen counters; out-of-scope unseen result cannot inflate summary.",
+      "Duplicate result references do not inflate result/unseen counts; unknown tracking never produces exact unseen zero.",
+      "Resolved/inactive orphan attention is absent, open informative attention remains Active, and a legitimate canonical recovery action is Needs you."
+    ]
+  },
+  "unchanged": [
+    "One authorized read-only UoW/complete source relation; no extra SQL or API reads.",
+    "Board JSON contract, opaque pagination bindings, global/entry revisions, identities/targets/allowed actions and lazy detail routes.",
+    "17 legacy entries pagination/application tests passed in antecedent cut and were not repeated for Board-only domain fixes.",
+    "PR19 antecedent reports/JUnits, all frozen packages/prefixes/proposals/consents."
+  ],
+  "limits": [
+    "Source-first new backend with installed Core/pytest dependencies in own Temp BXP prefix; not a new installed-package/browser qualification.",
+    "No native harness/provider/authentication/personal environment/campaign/Windows lifecycle run.",
+    "No Core/protocol/Attention/setup/receipt/SQLite migration or query changes. No Git/ledger actions."
+  ]
+}

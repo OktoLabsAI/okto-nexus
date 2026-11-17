@@ -1819,7 +1819,7 @@
       "id": "UI-017",
       "pr": "PR-03",
       "title": "Projetar relações unificadas de trabalho e sessões",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-003",
         "UI-005"
@@ -1849,17 +1849,21 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
         "NEXUS_UI_R1/execution/pr12-multi-connection-inventory-qualification.json",
-        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json",
+        "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
       ],
       "limitations": [
-        "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates."
+        "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
+        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
       ]
     },
     {
       "id": "UI-018",
       "pr": "PR-03",
       "title": "Unir atenção e resultados por correlação",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-017"
       ],
@@ -1889,17 +1893,22 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json",
-        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr15-attention-authority/qualification.json",
+        "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
       ],
       "limitations": [
-        "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates."
+        "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
+        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
       ]
     },
     {
       "id": "UI-019",
       "pr": "PR-03",
       "title": "Adicionar sessões sem operação aos alvos tipados",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-003",
         "UI-017"
@@ -1928,19 +1937,23 @@
         "T-NAV-10"
       ],
       "evidence": [
-        "NEXUS_UI_R1\\execution\\pr03-session-viewer-qualification.json"
+        "NEXUS_UI_R1\\execution\\pr03-session-viewer-qualification.json",
+        "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
       ],
       "limitations": [
         "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
         "Existing RuntimeTerminal useLayoutEffect emits expected SSR warning; no browser speech or human comprehension result.",
-        "Source targets/viewer do not close unified Home or UI/Connector onboarding gates."
+        "Source targets/viewer do not close unified Home or UI/Connector onboarding gates.",
+        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
       ]
     },
     {
       "id": "UI-020",
       "pr": "PR-03",
       "title": "Aplicar escopo, contagem e paginação por grupo",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-017",
         "UI-018"
@@ -1972,17 +1985,21 @@
         "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
         "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json",
         "NEXUS_UI_R1/execution/pr12-multi-connection-inventory-qualification.json",
-        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json",
+        "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
       ],
       "limitations": [
-        "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates."
+        "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
+        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
       ]
     },
     {
       "id": "UI-021",
       "pr": "PR-03",
       "title": "Expor contrato de entries compatível e limitado",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-019",
         "UI-020"
@@ -2013,17 +2030,21 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr03-entries-qualification.json",
         "NEXUS_UI_R1/execution/pr07-scope-passive-qualification.json",
-        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json"
+        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json",
+        "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
       ],
       "limitations": [
-        "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates."
+        "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
+        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
       ]
     },
     {
       "id": "UI-022",
       "pr": "PR-03",
       "title": "Qualificar consultas e semântica de estados",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-021"
       ],
@@ -2053,17 +2074,21 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr03-performance/qualification.json",
         "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json",
-        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json"
+        "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json",
+        "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
       ],
       "limitations": [
-        "Measured bound O(N+relations), 55 SQL at1/10/100 agents. Large scenario misses500ms latency target; no native harness/browser performance claim."
+        "Measured bound O(N+relations), 55 SQL at1/10/100 agents. Large scenario misses500ms latency target; no native harness/browser performance claim.",
+        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
       ]
     },
     {
       "id": "UI-023",
       "pr": "PR-04",
       "title": "Substituir listas paralelas pela região única",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-010",
         "UI-021"
@@ -2091,17 +2116,21 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json",
         "NEXUS_UI_R1/execution/pr04-empty-inventory-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json",
+        "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
       ],
       "limitations": [
-        "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
+        "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
+        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
       ]
     },
     {
       "id": "UI-024",
       "pr": "PR-04",
       "title": "Implementar expansão de sessões e conexões ociosas",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-023"
       ],
@@ -2130,17 +2159,21 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json",
         "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json",
+        "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
       ],
       "limitations": [
-        "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
+        "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
+        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
       ]
     },
     {
       "id": "UI-025",
       "pr": "PR-04",
       "title": "Aplicar filtros, ordem e vazio proporcionais",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-023",
         "UI-024"
@@ -2173,17 +2206,21 @@
         "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr13-live-fences/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json",
+        "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
       ],
       "limitations": [
-        "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
+        "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
+        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
       ]
     },
     {
       "id": "UI-026",
       "pr": "PR-04",
       "title": "Ligar ações básicas e incidentes globais",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-008",
         "UI-025"
@@ -2212,17 +2249,22 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr15-attention-authority/qualification.json",
+        "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
       ],
       "limitations": [
-        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
+        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
       ]
     },
     {
       "id": "UI-027",
       "pr": "PR-04",
       "title": "Adaptar atualização compartilhada à lista única",
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "UI-021",
         "UI-025"
@@ -2250,10 +2292,14 @@
         "T-LIVE-05"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json"
+        "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json",
+        "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
       ],
       "limitations": [
-        "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending."
+        "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
+        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
       ]
     },
     {
@@ -2294,10 +2340,14 @@
         "NEXUS_UI_R1/execution/evidence/pr04-browser/final-dfy1_5aT/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr04-browser/human-vmhGy86G/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr10-home-fences/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json",
+        "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
+        "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
       ],
       "limitations": [
-        "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos."
+        "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos.",
+        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
       ]
     },
     {
@@ -2412,7 +2462,9 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr07-panel09-lost-response/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr07-panel09-lost-response/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr15-attention-authority/qualification.json",
+        "NEXUS_UI_R1/execution/pr17-exact-interrupt-fixture/qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
@@ -2539,7 +2591,9 @@
         "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-panel09-lost-response/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr11-readonly-viewer-guard/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr11-readonly-viewer-guard/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr15-attention-authority/qualification.json",
+        "NEXUS_UI_R1/execution/pr17-exact-interrupt-fixture/qualification.json"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos."
@@ -2845,7 +2899,8 @@
         "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr09-native-zoom/qualification.json",
-        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json"
+        "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json",
+        "NEXUS_UI_R1/execution/pr16-final-installed-qualification.json"
       ],
       "limitations": [
         "Native200% zoom focal PASS, com limitacao de captura CLI. Sem AT/speech ou scrollbackcrescente completo; p95maioracimade500ms; cobertura parcialnaoconcluietapa."
@@ -2927,7 +2982,9 @@
       "evidence": [
         "NEXUS_UI_R1/execution/usability-script.md",
         "NEXUS_UI_R1/execution/evidence/pr14-human-session/first-run/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/second-run/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr15-human-third-prepare/third-run/qualification.json"
       ],
       "limitations": [
         "Primeiro percurso humano falhou explicitamente. Correcoes tecnicas e segundo percurso emandamento nao substituem aceite humano; sem sucesso/tempo inventados."
@@ -3012,7 +3069,8 @@
         "NEXUS_UI_R1/execution/release-report.md",
         "NEXUS_UI_R1/execution/final-review.json",
         "NEXUS_UI_R1/execution/pr08-installed-qualification.json",
-        "NEXUS_UI_R1/execution/pr14-bgon-package-qualification.json"
+        "NEXUS_UI_R1/execution/pr14-bgon-package-qualification.json",
+        "NEXUS_UI_R1/execution/pr16-final-installed-qualification.json"
       ],
       "limitations": []
     },
@@ -3054,7 +3112,8 @@
         "NEXUS_UI_R1/execution/evidence/pr07-service/scenario-audit.md",
         "NEXUS_UI_R1/execution/final-review.json",
         "NEXUS_UI_R1/execution/pr08-installed-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json",
+        "NEXUS_UI_R1/execution/pr16-final-installed-qualification.json"
       ],
       "limitations": []
     },
@@ -3091,7 +3150,9 @@
       "evidence": [
         "NEXUS_UI_R1/execution/release-report.md",
         "NEXUS_UI_R1/execution/final-review.json",
-        "NEXUS_UI_R1/execution/pr08-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr08-installed-qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/second-run/qualification.json",
+        "NEXUS_UI_R1/execution/pr16-final-installed-qualification.json"
       ],
       "limitations": []
     }
@@ -3270,13 +3331,15 @@
       "given": "Usuário sem autoridade para ação avançada.",
       "when": "Abrir índice/link direto e chamar API.",
       "expected": "API mantém autorização; o índice não concede acesso.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr15-attention-authority/qualification.json"
+      ],
       "tasks": [
         "UI-007",
         "UI-010"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Produto atual tem operador humano unico com autoridadeadmin; given de papelhumano reduzido/linkgenerico indisponivel. Agentbearer nao foi personificado como humano para produzir PASS."
       ]
     },
     {
@@ -4023,7 +4086,7 @@
     },
     {
       "id": "T-PANEL-08",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/integrado",
       "given": "Dois turnos/sessões do mesmo agente.",
       "when": "Interromper um alvo específico.",
@@ -4031,13 +4094,15 @@
       "evidence": [
         "NEXUS_UI_R1/execution/pr13-exact-interrupt-cleanup.json",
         "NEXUS_UI_R1/execution/pr13-exact-interrupt-stack.txt",
-        "NEXUS_UI_R1/execution/pr13-antecedent-core-comparison.json"
+        "NEXUS_UI_R1/execution/pr13-antecedent-core-comparison.json",
+        "NEXUS_UI_R1/execution/pr17-exact-interrupt-fixture/qualification.json"
       ],
       "tasks": [
         "UI-031"
       ],
       "limitations": [
-        "Tentativa focal falhou no primeiro runtime.open OUTCOME_UNKNOWN antes de criar nativepipe/turnos/sessaoirma. Teardown aguardou ownerincerto; cleanup forçado apenas pytest proprio, dados preservados, sem DRAINED. Core168arquivos byteigual ao wheel atual; causa original ainda nao demonstrada. Nao qualifica nem prova regressao da interrupcao."
+        "HTTP/admissao/Core reais, dois processos Python JSON-RPC fake. Alvo stale semefeito, turno exato cancelado/irmao ativo, replaymesmoID, duas sessoesCLOSED e WindowsJobsSTOPPED. Nao Codex/conta/modeloreal.",
+        "Antecedente PR13 openincerto/forcepytest preservado. Causa confirmada: peer antigo sem account/read; fixture passou handshake/hooks/proof canônicos. HipoteseTypeErrorproxy nao confirmada; nao atribuir causa inventada."
       ]
     },
     {
@@ -4125,18 +4190,20 @@
     },
     {
       "id": "T-ATTN-02",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/browser",
       "given": "Pergunta destinada a outro agente.",
       "when": "Abrir a mesma atividade como operador.",
       "expected": "Acompanhar sem personificar destinatário ou ganhar direito de resposta.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr15-attention-authority/qualification.json"
+      ],
       "tasks": [
         "UI-018",
         "UI-031"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Operador loopback humano observa destinatario subject original; API real recusa403APPROVAL_AUTHORITY_REQUIRED, possible_effectfalse,0decision/input/outbox. Peer inerte, nao transporte/provider real."
       ]
     },
     {
@@ -4189,18 +4256,20 @@
     },
     {
       "id": "T-ATTN-06",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "level": "HTTP/browser",
       "given": "Home nova OFF ou função de interceptar novas aprovações OFF.",
       "when": "Abrir pendência antiga ainda decidível.",
       "expected": "Acesso básico/canônico permanece; não esconder somente por flag.",
-      "evidence": [],
+      "evidence": [
+        "NEXUS_UI_R1/execution/evidence/pr15-attention-authority/qualification.json"
+      ],
       "tasks": [
         "UI-008",
         "UI-026"
       ],
       "limitations": [
-        "Cenario completo ainda nao demonstrado no nivel exigido; implementacao e testes de partes nao autorizam PASS."
+        "Alternativa literal Home nova OFF por preferencia localdisabled: classico e sino mantiveram pergunta antiga decidivel,202DISPATCH_PENDING e DB1/1/1. HITLnative continuou habilitado; nao comprova interceptOFFgenerico nem aplicacao nativa."
       ]
     },
     {
@@ -5457,7 +5526,9 @@
       "expected": "Concluir sem Advanced; registrar atritos e tempo observados, sem inventar métricas.",
       "evidence": [
         "NEXUS_UI_R1/execution/evidence/pr14-human-session/first-run/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/second-run/qualification.json",
+        "NEXUS_UI_R1/execution/evidence/pr15-human-third-prepare/third-run/qualification.json"
       ],
       "tasks": [
         "UI-043"
@@ -5465,7 +5536,8 @@
       "limitations": [
         "Participante declarou nao conseguir retomar; relatou duvida classica/operacional, projeto e objetivo.13cliques no primeiro corte e20raw totais incluindo exploracao posterior;0POST. Nenhuma duracao de conclusao inventada.",
         "Lease/freshness da primeira fixture expirou e limita acao de pergunta; isso e separado do feedback humano. Rotulagem/projeto/apresentacao corrigidos depois,302Node/build e3checks tecnicos browser nao apagam falha humana.",
-        "Segundo percurso aberto com participante ja exposto/orientado. Ate este registro sem resposta ou conclusao, nao estudo novo cego; autoridade de decisao tem prazo proprio."
+        "Segundo percurso aberto com participante ja exposto/orientado. Ate este registro sem resposta ou conclusao, nao estudo novo cego; autoridade de decisao tem prazo proprio.",
+        "Segundo percurso abriu2conexoes e Testsimulado+Finish200 criouterceirobinding, originais/grants preservados. Participante ainda relatou complexidade, projeto dificil e ausencia de confirmacao percebida. Nao e PASS; novas correcoes emandamento, sem estudocego adicional inventado."
       ]
     },
     {
@@ -5694,6 +5766,14 @@
     {
       "at": "2026-11-17T00:13:06.546089+00:00",
       "event": "Feedback humano real falhou tarefa1 e motivou Home unica no basico, Project nome visivel e Connectorresume; mesmaflag/defaultOFF/guard/URLs preservados.302Node/TSC/buildZyb e3checks tecnicos PASS, humano nao promovido. Campanha Codex autorizada fez preflight0efeitos e depoisTestmodelo recusado/usageUNKNOWN;150kprovisoespermanentes,cleanupnormal+DRAINED+WindowsJobSTOPPED, semfallback. UI042BLOCKED/TQUAL02BLOCKED/TQUAL05FAIL; releasefalse."
+    },
+    {
+      "at": "2026-11-17T01:06:39.424742+00:00",
+      "event": "ATTN02/06 ePANEL08 PASS nosescoposdeclarados: autoridadehumanavsagente, fallbackclassico einterrupt exato com2Pythonpeers. Peerfixture atualizado poraccount/read/hookscanônicos,nenhumCore/provedor. PR16 wheelinstalado3374+7focais/smoke/Twine/bytesPASS;1/10/100mantem55SQLmas100agentesp95quente655.84/646.50ms acima500,semSLO. Segundo humano teve Add confirmado tecnicamente masclarezaincompleta; novaUIcards/confirmacaoemimplementacao, pacotePR16antecedente nao futurocut."
+    },
+    {
+      "at": "2026-11-17T01:58:38.392484+00:00",
+      "event": "User explicitly replaces Active/Needs you/Results tabs with one board of three always-visible columns. BOARD_R2_AMENDMENT.md records additive scope; original inputs/specifications remain unchanged. Backend implements exclusive classification, same authorized relation/read-only UoW, scoped column cursors and global board revision separate from entry details. 7 new SQLite/HTTP scenarios and 17 related legacy checks PASS in two separate cuts; browser/installed/frontend qualification remains in progress. Third human journey achieved navigation/Add technically but clarity remains insufficient (22-click functional cut, 47 final raw exploration, 2 simulated POSTs); no human PASS. Graphical status and specific context labels are being implemented. No model/provider call, Core/protocol/setup/Attention migration or release approval."
     }
   ],
   "risk_acceptances": [],
