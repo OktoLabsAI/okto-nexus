@@ -67,7 +67,6 @@ def main():
         '--output',str(output),'--samples','20','--warmup','3','--max-seconds','180']
     report=dict(status='STARTING',root=str(root),command=command,source_dataset_sha256=sha(source),source_seed_db_sha256=sha(seed/case['db_relative']),
                 ready_sha256=sha(a.ready),worker_sha256=sha(HERE/'persistent-worker.py'),output=str(output))
-    (root/'cwd').mkdir()
     started=time.monotonic()
     with (root/'stdout.txt').open('w')as stdout,(root/'stderr.txt').open('w')as stderr:
         child=subprocess.Popen(command,cwd=cwd,env=env,stdin=subprocess.PIPE,stdout=stdout,stderr=stderr)

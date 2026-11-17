@@ -1,0 +1,100 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "files": [
+    {
+      "path": "browser_surface.py",
+      "bytes": 1671,
+      "sha256": "f8cc1930a5d785588d77ec23d1f7fe7bfc4987192be153ea11f39a9c8a9b3935"
+    },
+    {
+      "path": "canonical-scenarios.md",
+      "bytes": 4292,
+      "sha256": "56d68aea46884c9c892d0a754a386de172d7ddf7778d0fdbb9022209f6b2890a"
+    },
+    {
+      "path": "canonical_controls.py",
+      "bytes": 7446,
+      "sha256": "bf8a398f5c9936ceeccf1606fa434b46c5844fdc0f340e6dc4850ac7dd6d5a4e"
+    },
+    {
+      "path": "checks-template.js",
+      "bytes": 2389,
+      "sha256": "709f6fc94552ae87baa0489f5197561ccc500da2e5659be68256d7d186618af7"
+    },
+    {
+      "path": "containment.py",
+      "bytes": 4924,
+      "sha256": "c8dfda77d8a33943266fb47c6a55de9f154693a0a0ebc8d46fc70da5dd945f8e"
+    },
+    {
+      "path": "fixture.py",
+      "bytes": 14238,
+      "sha256": "de8914406eb3f5531ef4d5bf25cd1414e28cbe7be29cdae29052735de4ac4ba1"
+    },
+    {
+      "path": "generated-peer.py.txt",
+      "bytes": 8994,
+      "sha256": "7c47bfda2f7c2977cde9d247d506ca38ccdf251499e8ca3fb0a46c7445c3da56"
+    },
+    {
+      "path": "peer_source.py",
+      "bytes": 2709,
+      "sha256": "867d5be12b3a33403bd57cc73ff633add024f4b903fc0de5339c5e2f1c31b152"
+    },
+    {
+      "path": "preparation-pins.json",
+      "bytes": 1524,
+      "sha256": "d8e10b68300a9932831ece842a2fdbdadacc344c9a5f1dd7d53efdbb943fc919"
+    },
+    {
+      "path": "preparation-v1/manifest.json",
+      "bytes": 1452,
+      "sha256": "a81ceb5de19ef2a9073b8e99479ec4399b2142afa73a2836ea262b6534facc04"
+    },
+    {
+      "path": "preparation-v1/qualification.json",
+      "bytes": 576,
+      "sha256": "a322d6fe8957d0eac9433d641997a617ca86f147eec146c9ac86c684d54dbdff"
+    },
+    {
+      "path": "prepare_runtime.py",
+      "bytes": 3061,
+      "sha256": "e70e28a603ca936db3d7053392b08b478179e0a9940639c7d3f72832c1106f7a"
+    },
+    {
+      "path": "prepare_sources.py",
+      "bytes": 2327,
+      "sha256": "7c2cbd7f2e41e8486c5129ca8b6942fdfc51d4486f8b0e536ad89ed1a42ebe6b"
+    },
+    {
+      "path": "protocol_fixture.py.txt",
+      "bytes": 11901,
+      "sha256": "716d64c1768cf05babdfe7407921c182e39d516772156f2f613c3bfd03cb7acc"
+    },
+    {
+      "path": "qualification.json",
+      "bytes": 838,
+      "sha256": "33353c7d6b4e2903518988dbd35c8e3ae274bfe11470ff963ba0ac630d9c1d4b"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8460,
+      "sha256": "ea303ab3de5264352f1e4aa932fd913d1fec12e077c7486b3ed45f2e08794746"
+    },
+    {
+      "path": "run_runtime.py",
+      "bytes": 1701,
+      "sha256": "133d1d3a2ba8dc8f2741bc458378f4d13039eeecd17ece33974655846c7f5ac6"
+    },
+    {
+      "path": "runtime-ready.template.json",
+      "bytes": 461,
+      "sha256": "beefcd0a2b34bc4adf474ad40997276f237c8d8f77a986727dbec70e49f1e783"
+    },
+    {
+      "path": "timing-template.js",
+      "bytes": 3532,
+      "sha256": "017b7b1dff4dcecd782b3cdf7d289e23acc2ee51b4484c418c805dcb287536d5"
+    }
+  ]
+}

@@ -331,7 +331,7 @@
         "HST-T-H09",
         "HST-T-H10"
       ],
-      "status": "VERIFIED",
+      "status": "IN_PROGRESS",
       "evidence": [
         {
           "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb",
@@ -350,6 +350,15 @@
           "result": "PASS verification-provenance mapping",
           "artifact_path": "execution/results-proof-map.md",
           "limitations": "Historical uncorrelated proof remains unknown"
+        },
+        {
+          "commit": "4e890949c94c9d8625837d566e5182920bfb2cec",
+          "command_or_procedure": "Canonical inert Core preflight followed by real browser, 44 GETs/0 POSTs; normal cleanup",
+          "environment": "Windows; isolated installed R2, no provider",
+          "timestamp": "2026-11-17T15:41:28.059573+00:00",
+          "result": "FAIL B02: canonical events materialized but Home readiness required an unwritten watermark; timing NOT_QUALIFIED",
+          "artifact_path": "execution/browser-hst/antecedents/r2-unprojected-watermark/qualification.json",
+          "limitations": "No journey PASS, real provider or human usability claimed; reader correction and new canonical-ingress regression in progress."
         }
       ]
     },
@@ -566,7 +575,7 @@
         "HST-T-J05",
         "HST-T-J06"
       ],
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "evidence": [
         {
           "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
@@ -576,6 +585,15 @@
           "result": "PASS40 focused source tests after currentness fences; no provider executed",
           "artifact_path": "execution/operational-currentness/qualification.json",
           "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        },
+        {
+          "commit": "4e890949c94c9d8625837d566e5182920bfb2cec",
+          "command_or_procedure": "Canonical inert Core preflight followed by real browser, 44 GETs/0 POSTs; normal cleanup",
+          "environment": "Windows; isolated installed R2, no provider",
+          "timestamp": "2026-11-17T15:41:28.059573+00:00",
+          "result": "FAIL B02: canonical events materialized but Home readiness required an unwritten watermark; timing NOT_QUALIFIED",
+          "artifact_path": "execution/browser-hst/antecedents/r2-unprojected-watermark/qualification.json",
+          "limitations": "No journey PASS, real provider or human usability claimed; reader correction and new canonical-ingress regression in progress."
         }
       ]
     },
@@ -711,7 +729,7 @@
         "HST-T-J05",
         "HST-T-J06"
       ],
-      "status": "IMPLEMENTED",
+      "status": "IN_PROGRESS",
       "evidence": [
         {
           "commit": "8b4001fa1db17bf29d0c773eed3535e79fce70cb + scoped working-tree payload pinned by artifact",
@@ -721,6 +739,15 @@
           "result": "PASS40 focused source tests after currentness fences; no provider executed",
           "artifact_path": "execution/operational-currentness/qualification.json",
           "limitations": "End pins only for this cut; earlier audit retained. Positive native causal resume D08 lacks producer evidence. Installed/browser/performance acceptance pending."
+        },
+        {
+          "commit": "4e890949c94c9d8625837d566e5182920bfb2cec",
+          "command_or_procedure": "Canonical inert Core preflight followed by real browser, 44 GETs/0 POSTs; normal cleanup",
+          "environment": "Windows; isolated installed R2, no provider",
+          "timestamp": "2026-11-17T15:41:28.059573+00:00",
+          "result": "FAIL B02: canonical events materialized but Home readiness required an unwritten watermark; timing NOT_QUALIFIED",
+          "artifact_path": "execution/browser-hst/antecedents/r2-unprojected-watermark/qualification.json",
+          "limitations": "No journey PASS, real provider or human usability claimed; reader correction and new canonical-ingress regression in progress."
         }
       ]
     },
@@ -1998,8 +2025,18 @@
         "HST-T-I05",
         "HST-T-I06"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        {
+          "commit": "4e890949c94c9d8625837d566e5182920bfb2cec",
+          "command_or_procedure": "Canonical inert Core preflight followed by real browser, 44 GETs/0 POSTs; normal cleanup",
+          "environment": "Windows; isolated installed R2, no provider",
+          "timestamp": "2026-11-17T15:41:28.059573+00:00",
+          "result": "FAIL B02: canonical events materialized but Home readiness required an unwritten watermark; timing NOT_QUALIFIED",
+          "artifact_path": "execution/browser-hst/antecedents/r2-unprojected-watermark/qualification.json",
+          "limitations": "No journey PASS, real provider or human usability claimed; reader correction and new canonical-ingress regression in progress."
+        }
+      ]
     },
     {
       "id": "HST-027",
@@ -2043,6 +2080,15 @@
           "result": "PASS178; source/test drift zero; 35 batch/revision cases included",
           "artifact_path": "execution/source-tests/perf-r2-home/qualification.json",
           "limitations": "New package and performance repeat pending. Initial focal cut retained as 31PASS/2FAIL caused by unavailable fixture workspace; explicit unavailable-workspace authority negatives now pass."
+        },
+        {
+          "commit": "4e890949c94c9d8625837d566e5182920bfb2cec",
+          "command_or_procedure": "Persistent ASGI paired installed cuts, 3 warmups and 20 samples per route",
+          "environment": "Windows; isolated installed R2, no provider",
+          "timestamp": "2026-11-17T15:41:28.059573+00:00",
+          "result": "FAIL target500ms: all8 large cuts; PASS target500ms all6 small cuts; all14 complete/exited",
+          "artifact_path": "execution/performance-hst/persistent-r2-final/qualification.json",
+          "limitations": "First useful browser DOM remains NOT_RUN; improvement in paired R2v2 series does not waive capacity target or prove v1 improvement."
         }
       ]
     },
@@ -2177,8 +2223,18 @@
         "HST-T-K05",
         "HST-T-K06"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        {
+          "commit": "4e890949c94c9d8625837d566e5182920bfb2cec",
+          "command_or_procedure": "Canonical inert Core preflight followed by real browser, 44 GETs/0 POSTs; normal cleanup",
+          "environment": "Windows; isolated installed R2, no provider",
+          "timestamp": "2026-11-17T15:41:28.059573+00:00",
+          "result": "FAIL B02: canonical events materialized but Home readiness required an unwritten watermark; timing NOT_QUALIFIED",
+          "artifact_path": "execution/browser-hst/antecedents/r2-unprojected-watermark/qualification.json",
+          "limitations": "No journey PASS, real provider or human usability claimed; reader correction and new canonical-ingress regression in progress."
+        }
+      ]
     },
     {
       "id": "HST-029",
@@ -2458,8 +2514,18 @@
       "when": "Atualizar quadro",
       "then": "Harness permanece Active/Idle e entrega aparece separada em Results.",
       "level": "unidade + contrato/SQLite",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "FAIL",
+      "evidence": [
+        {
+          "commit": "4e890949c94c9d8625837d566e5182920bfb2cec",
+          "command_or_procedure": "Canonical inert Core preflight followed by real browser, 44 GETs/0 POSTs; normal cleanup",
+          "environment": "Windows; isolated installed R2, no provider",
+          "timestamp": "2026-11-17T15:41:28.059573+00:00",
+          "result": "FAIL B02: canonical events materialized but Home readiness required an unwritten watermark; timing NOT_QUALIFIED",
+          "artifact_path": "execution/browser-hst/antecedents/r2-unprojected-watermark/qualification.json",
+          "limitations": "No journey PASS, real provider or human usability claimed; reader correction and new canonical-ingress regression in progress."
+        }
+      ]
     },
     {
       "id": "HST-T-B03",
@@ -3512,6 +3578,15 @@
           "result": "Valid complete replies, 500ms p95 miss at 100 connections; FAIL retained",
           "artifact_path": "execution/performance-hst/original-qualification.json",
           "limitations": "Mixed retained and explicit 1000OPEN workloads distinguished. Fresh TestClient portal per request; persistent transport refinement and optimized candidate not measured yet. DOM first-useful NOT_RUN."
+        },
+        {
+          "commit": "4e890949c94c9d8625837d566e5182920bfb2cec",
+          "command_or_procedure": "Persistent ASGI paired installed cuts, 3 warmups and 20 samples per route",
+          "environment": "Windows; isolated installed R2, no provider",
+          "timestamp": "2026-11-17T15:41:28.059573+00:00",
+          "result": "FAIL target500ms: all8 large cuts; PASS target500ms all6 small cuts; all14 complete/exited",
+          "artifact_path": "execution/performance-hst/persistent-r2-final/qualification.json",
+          "limitations": "First useful browser DOM remains NOT_RUN; improvement in paired R2v2 series does not waive capacity target or prove v1 improvement."
         }
       ]
     },
@@ -3523,7 +3598,7 @@
       "when": "Executar amostras e calcular p50/p95",
       "then": "Registrar números reais, query count, payload e comparação; amostra única não é p95.",
       "level": "SQLite instrumentado + benchmark",
-      "status": "FAIL",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "687295b6cd6758aa36690152fdb4258e36d33c91",
@@ -3533,6 +3608,15 @@
           "result": "Valid complete replies, 500ms p95 miss at 100 connections; FAIL retained",
           "artifact_path": "execution/performance-hst/original-qualification.json",
           "limitations": "Mixed retained and explicit 1000OPEN workloads distinguished. Fresh TestClient portal per request; persistent transport refinement and optimized candidate not measured yet. DOM first-useful NOT_RUN."
+        },
+        {
+          "commit": "4e890949c94c9d8625837d566e5182920bfb2cec",
+          "command_or_procedure": "Persistent ASGI paired installed cuts, 3 warmups and 20 samples per route",
+          "environment": "Windows; isolated installed R2, no provider",
+          "timestamp": "2026-11-17T15:41:28.059573+00:00",
+          "result": "PASS comparable paired datasets, raw samples/p50/p95/query counts/bytes/origins recorded; latency target separately FAIL",
+          "artifact_path": "execution/performance-hst/persistent-r2-final/qualification.json",
+          "limitations": "First useful browser DOM remains NOT_RUN; improvement in paired R2v2 series does not waive capacity target or prove v1 improvement."
         }
       ]
     },
@@ -3746,8 +3830,18 @@
       "artifact": "execution/source-tests/perf-r2-home/qualification.json",
       "original_target_500ms": "FAIL",
       "fresh_package_directory": "execution/package-hst-r2",
-      "new_performance_qualification": "NOT_RUN",
-      "browser": "NOT_RUN"
+      "new_performance_qualification": "FAIL_TARGET500MS_LARGE_CASES",
+      "browser": "BLOCKED_PRODUCT_READINESS_PROOF_MISMATCH"
+    },
+    "package_r2": {
+      "ready": "execution/package-hst-r2/READY.json",
+      "source_commit": "4e890949c94c9d8625837d566e5182920bfb2cec",
+      "wheel_sha256": "14ca237285cd2ecee516f1b0df8cbff8277466ca6160e696f49867d077021560",
+      "payload_files": 1031,
+      "source_pins": 1818,
+      "payload_and_source_drift": [],
+      "live_mcp": "PASS canonical stop0 and physical exit0",
+      "limitation": "Package READY is not feature qualification; R2 browser proof bug remains an antecedent failure."
     }
   }
 }

@@ -1,0 +1,24 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "browser_started": false,
+  "server_started": false,
+  "peer_started": false,
+  "provider_invocations": 0,
+  "package_ready": true,
+  "browser_window_open": false,
+  "static_ast": "PASS only",
+  "fixture_scope": "Installed-only canonical bootstrap and J5/J7 controls prepared; not preflighted; no J1-J8 PASS",
+  "gaps": [
+    "Root explicit BROWSER_WINDOW_OPEN pending",
+    "No canonical admissions/preflight yet",
+    "J5 positive linkage and verification execution",
+    "J7 actual session revoke/browser clear execution",
+    "Real keyboard/mobile/zoom/AT separate"
+  ],
+  "history": [
+    {
+      "antecedent": "preparation-v1",
+      "note": "Earlier preparation manifests retained; entries describe earlier bytes and are not a current-files validation."
+    }
+  ]
+}

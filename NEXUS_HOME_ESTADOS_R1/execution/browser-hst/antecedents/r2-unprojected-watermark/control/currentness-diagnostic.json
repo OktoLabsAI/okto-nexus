@@ -1,0 +1,90 @@
+[
+  {
+    "session_id": "ses_a8d7167cee16e36dd4f84749b2542efe",
+    "checks": {
+      "server_id": true,
+      "executor_id": true,
+      "binding_id": true,
+      "workspace_id": true,
+      "workspace_binding_id": true,
+      "agent_id": true,
+      "session_id": true,
+      "binding_revision": true,
+      "authorization_revision": true,
+      "configuration_revision": true,
+      "credential_epoch": true,
+      "current_wxb": true,
+      "realization_wxb": true,
+      "realization_rev": true,
+      "opening_native": true
+    },
+    "expected_scope_keys": [
+      "agent_id",
+      "authorization_revision",
+      "binding_id",
+      "binding_revision",
+      "configuration_revision",
+      "credential_epoch",
+      "executor_id",
+      "server_id",
+      "session_id",
+      "session_owner_generation",
+      "workspace_binding_id",
+      "workspace_id"
+    ],
+    "states": {
+      "activation_state": "approved",
+      "health": "unknown",
+      "workspace_status": "READY",
+      "realization_status": "READY",
+      "opening_stage": "SUBMITTED",
+      "session_policy": "per_sender",
+      "control_state": "DISCONNECTED",
+      "gap_state": "none"
+    }
+  },
+  {
+    "session_id": "ses_1a8e6716e9dc3f61dbcac1e798313a13",
+    "checks": {
+      "server_id": true,
+      "executor_id": true,
+      "binding_id": true,
+      "workspace_id": true,
+      "workspace_binding_id": true,
+      "agent_id": true,
+      "session_id": true,
+      "binding_revision": true,
+      "authorization_revision": true,
+      "configuration_revision": true,
+      "credential_epoch": true,
+      "current_wxb": true,
+      "realization_wxb": true,
+      "realization_rev": true,
+      "opening_native": true
+    },
+    "expected_scope_keys": [
+      "agent_id",
+      "authorization_revision",
+      "binding_id",
+      "binding_revision",
+      "configuration_revision",
+      "credential_epoch",
+      "executor_id",
+      "server_id",
+      "session_id",
+      "session_owner_generation",
+      "workspace_binding_id",
+      "workspace_id"
+    ],
+    "states": {
+      "activation_state": "approved",
+      "health": "unknown",
+      "workspace_status": "READY",
+      "realization_status": "READY",
+      "opening_stage": "SUBMITTED",
+      "session_policy": "per_sender",
+      "control_state": "DISCONNECTED",
+      "gap_state": "none"
+    }
+  }
+]

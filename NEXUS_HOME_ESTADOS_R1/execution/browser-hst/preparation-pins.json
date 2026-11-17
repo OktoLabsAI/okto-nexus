@@ -1,0 +1,35 @@
+{
+  "pins": {
+    "tests\\execution_r4\\test_canonical_native_protocol_regressions.py": {
+      "bytes": 21968,
+      "sha256": "2a36c5b89e04cb121f7dc0e076965b09336de71b865964141fd2f102993f2da2"
+    },
+    "tests\\test_harness_codex_connector.py": {
+      "bytes": 64882,
+      "sha256": "ed6cb4bafaed47899f10534934c1458fcc2d07b1467803cf0c42354b51551bf3"
+    },
+    "tests\\execution_r4\\test_canonical_native_inputs.py": {
+      "bytes": 7734,
+      "sha256": "17bd14ba77cf9da7a0d54bc7ed9c8ce2b772171258af52a17711bd6e104de865"
+    },
+    "tests\\execution_r4\\test_canonical_native_approvals.py": {
+      "bytes": 17019,
+      "sha256": "3d0177b76bf0ce14996060ed51330c1112067e0ca726b8b5752cf98c06608557"
+    },
+    "tests\\execution_r4\\test_operator_runtime.py": {
+      "bytes": 11241,
+      "sha256": "6adc91c241acf99139ae637e81fabcb3bdde16f92419ded215a1a681b4ac041e"
+    },
+    "tests\\home_states\\test_operational_sqlite.py": {
+      "bytes": 11634,
+      "sha256": "9e225a7917c09a99e941ef813b9d54d7aa763ed510cdd021f8abab9cfdefa6e1"
+    },
+    "tests\\home_states\\test_operational_board.py": {
+      "bytes": 7692,
+      "sha256": "666036280f0326a8e6a9c1e04beffca78a8bcb45c942ac4847b9db9f0b7ffb47"
+    }
+  },
+  "helper_sha256": "ac6bfbaa4a1805c6124fb334f7e5f45afae28a2d5184b4d41b97f692319889be",
+  "difference": "Enable native requests on synthetic peer; add owner-provided session ID for non-secret output marker. No guard/birth/protocol handling removed.",
+  "executed": false
+}

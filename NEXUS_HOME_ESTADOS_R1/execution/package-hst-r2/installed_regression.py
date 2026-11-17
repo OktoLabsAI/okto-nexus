@@ -78,7 +78,11 @@ def main():
     assert ancestor.returncode==0, 'Frozen candidate must remain an ancestor of current HEAD'
     build=json.loads((package/'build-manifest.json').read_text())
     expected=build['source_pins']
-    assert len(expected)==1816, len(expected)
+    required_inputs={'src/okto_nexus/adapters/outbound/sqlite/home_entries.py',
+        'src/okto_nexus/adapters/outbound/sqlite/home.py',
+        'tests/home_states/test_projection_batch.py', 'pyproject.toml', 'uv.lock',
+        'vendor/ci/manifest.json'}
+    assert expected and required_inputs.issubset(expected), 'Missing required frozen source/test/lock inputs'
     actual=builder.pins()
     changed=sorted(name for name in expected.keys()|actual.keys() if expected.get(name)!=actual.get(name))
     assert not changed, ('Frozen product/test/build inputs changed',changed)
@@ -102,10 +106,32 @@ def main():
     assert audit['modules']['okto_nexus']['equal_checkout_source'] is True
     for name,pin in frozen['assets'].items():
         assert audit['assets']['okto_nexus/adapters/inbound/http/static/'+name]==pin, name
+    # Only this fixture lives outside tests/. Its imports/dynamic loads resolve
+    # to stdlib, installed packages, or the already-copied tests/execution_r4.
+    helper_inputs={}
+    for name in ('NEXUS_UI_R1/execution/fixtures.py',):
+        source=REPO/name
+        assert not source.is_symlink() and source.resolve().is_relative_to(REPO.resolve()), name
+        blob=subprocess.run(['rtk','proxy','git','cat-file','blob',frozen['source_commit']+':'+name],
+            cwd=REPO,stdin=subprocess.PIPE,input=b'',stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15)
+        assert blob.returncode==0, (name,blob.returncode)
+        data=source.read_bytes()
+        assert data==blob.stdout, ('Helper differs from frozen candidate blob',name)
+        helper_inputs[name]=dict(data=data,sha256=hashlib.sha256(data).hexdigest())
     root=Path(tempfile.mkdtemp(prefix='nexus-hst-installed-'))
     for name in ['tree','cwd','tmp','reports','guard']:(root/name).mkdir()
     tree=root/'tree'
     shutil.copytree(REPO/'tests',tree/'tests',ignore=shutil.ignore_patterns('__pycache__','*.pyc','*.pyo'))
+    helper_before={}
+    for name,value in helper_inputs.items():
+        copied_helper=tree/name
+        assert copied_helper.resolve().is_relative_to(tree.resolve()), name
+        copied_helper.parent.mkdir(parents=True,exist_ok=True)
+        copied_helper.write_bytes(value['data'])
+        assert copied_helper.read_bytes()==value['data'], name
+        helper_before[name]=dict(source_commit=frozen['source_commit'],source_sha256=value['sha256'],
+            copied_sha256=hashlib.sha256(copied_helper.read_bytes()).hexdigest())
+    (root/'copied-helpers-before.json').write_text(json.dumps(helper_before,indent=2)+'\n',encoding='utf-8')
     assert not (tree/'src').exists()
     files=[]
     selectors={}
@@ -154,7 +180,7 @@ def main():
     for name in ['CODEX_HOME','CLAUDE_CONFIG_DIR']:
         directory=root/name.lower();env[name]=str(directory)
         assert not directory.exists(), 'Provider-home precondition must remain nonexistent.'
-    record=dict(started_at=datetime.now(timezone.utc).isoformat(),root=str(root),selected=[str(p.relative_to(tree)) for p in selected],argv=argv,cwd=str(root/'cwd'),helper_paths=helper_paths,stdin='closed PIPE; no NUL console reopening',timeout=args.timeout,signals=[])
+    record=dict(started_at=datetime.now(timezone.utc).isoformat(),root=str(root),selected=[str(p.relative_to(tree)) for p in selected],argv=argv,cwd=str(root/'cwd'),helper_paths=helper_paths,stdin='closed PIPE; no NUL console reopening',timeout=args.timeout,signals=[],build_source_pin_count=len(expected))
     print(json.dumps(dict(status='START',root=str(root),selected=record['selected'])),flush=True)
     known={}
     forced=False
@@ -200,12 +226,23 @@ def main():
             pass
     record.update(timed_out=interrupted is not None,forced=forced,remaining_known_processes=remaining,
         observation_limit='250ms descendant polling does not enumerate every short-lived child; no claim that it does.')
+    helper_after={}
+    for name,value in helper_inputs.items():
+        source=REPO/name
+        copied_helper=tree/name
+        assert source.resolve().is_relative_to(REPO.resolve()) and copied_helper.resolve().is_relative_to(tree.resolve()), name
+        helper_after[name]=dict(source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
+            copied_sha256=hashlib.sha256(copied_helper.read_bytes()).hexdigest())
+    helper_drift=[name for name,value in helper_after.items()
+        if value['source_sha256']!=helper_inputs[name]['sha256'] or value['copied_sha256']!=helper_inputs[name]['sha256']]
+    (root/'copied-helpers-after.json').write_text(json.dumps(helper_after,indent=2)+'\n',encoding='utf-8')
+    record['helper_drift']=helper_drift
     after=payload()
     source_after=builder.pins()
     record.update(ended_at=datetime.now(timezone.utc).isoformat(),payload_files=len(after),payload_drift=[p for p in before if before[p]!=after[p]],source_drift=[p for p in sources.keys()|source_after.keys() if sources.get(p)!=source_after.get(p)],known_processes=list(known.values()))
     (root/'payload-after.json').write_text(json.dumps(after,indent=2)+'\n')
     (root/'result.json').write_text(json.dumps(record,indent=2)+'\n')
     print(json.dumps(record),flush=True)
-    raise SystemExit(record['exit_code'] or bool(record['payload_drift'] or record['source_drift'] or interrupted is not None or remaining))
+    raise SystemExit(record['exit_code'] or bool(record['payload_drift'] or record['source_drift'] or helper_drift or interrupted is not None or remaining))
 
 if __name__=='__main__':main()

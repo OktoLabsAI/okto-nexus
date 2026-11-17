@@ -1,0 +1,44 @@
+{
+  "status": "PASS_EXACT_EXPECTED_DELTA",
+  "baseline_report_sha256": "a7ee3cdd4f911f4d6233f5b7297c76b7e62f987727a7171b45d158a256ea8120",
+  "comparison_antecedent": "Initial helper expected only two changed files and asserted; actual third file is the other authorized domain revision owner file. No package failure/rebuild/reinstall.",
+  "candidate_report_sha256": "b2bd029b5ab1ebd849ed893e893bdca4ce7e539e96d9d363c68849cf89e20c70",
+  "payload_changes": {
+    "nexus_connector_core": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "okto_nexus": {
+      "added": [],
+      "removed": [],
+      "changed": [
+        "okto_nexus/adapters/outbound/sqlite/home_entries.py",
+        "okto_nexus/domain/home_entry_pages.py",
+        "okto_nexus/domain/home_harness_board.py"
+      ]
+    },
+    "okto_nexus_connector": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    }
+  },
+  "assets_unchanged": true,
+  "source_inputs": {
+    "before": 1816,
+    "after": 1818,
+    "added": [
+      "tests/home_states/test_projection_batch.py",
+      "tests/home_states/test_revision_equivalence.py"
+    ],
+    "removed": [],
+    "changed": [
+      "src/okto_nexus/adapters/outbound/sqlite/home_entries.py",
+      "src/okto_nexus/domain/home_entry_pages.py",
+      "src/okto_nexus/domain/home_harness_board.py"
+    ]
+  },
+  "old_prefix_reinstalled": false,
+  "scope": "Module payload bytes, not identical raw wheel ZIP metadata/timestamps"
+}

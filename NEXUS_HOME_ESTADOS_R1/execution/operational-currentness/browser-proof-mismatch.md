@@ -1,0 +1,17 @@
+# Read-only browser currentness diagnosis
+
+Owned fixture: `Temp/nexus-hst-browser-rogcjano`, already stopped normally by its owner. No product, fixture SQL state, TTL, lease, authority or watermark was modified. Final CLOSED/SUPERSEDED/DISCONNECTED fields are cleanup facts, not evidence of the initial state.
+
+The initial Board response was generated at `2026-11-17T15:22:30.218992Z` and refused an Idle claim with `INSUFFICIENT_CURRENT_PROOF`. The owned database contains seven ingress events per session received before that timestamp. Current watermarks remain `projected_through=0`, with `committed_contiguous=7` for the first session and9 for the second after later traffic. Thus nonzero committed ingress preceded the first response.
+
+Every retained lease scope exactly equals its opening operation's expected scope. Initial leases were applied at15:22:26/28 and expired at15:24:26/28, covering the initial Board timestamp. Owner-generation1, connection-generation2 and owner-instance references match. The owner's independent metadata snapshot also confirms current binding, authorization/configuration/credential revisions, realization/workspace binding, opening SUBMITTED/native-ID and gap-free stream. This does not reconstruct every transient control field after cleanup, but it rules out the proposed lease-scope mismatch from the preserved metadata.
+
+`home_operational_facts.normalize` requires `projected_through == committed_contiguous` for runtime readiness. Searching all current `src/okto_nexus` for `projected_through` finds migration066's default0 and Home read conditions only: no producer writes it. `application/execution_events.py` materializes each newly contiguous event through `project_execution_result` and `project_native_request`, then updates `committed_contiguous` and `gap_state` in the same transaction. Its comment and transaction structure state that projection failure rolls back rows, watermark and ACK together.
+
+Conclusion: the reader depends on an unmaintained field. Canonical ingress already performs the projection; this is not evidence of a missing fixture pump. A fixture must not repair the field using SQL. Root should choose a minimal reader proof aligned with the atomic commit contract, or explicitly authorize a compatible producer watermark update. The failed first preflight remains an antecedent and is not promoted to PASS.
+
+## Authorized R3 reader correction
+
+Root authorized the reader-only correction: readiness no longer compares the unmaintained `projected_through` with the committed watermark. It still requires gap-free ingress and every existing current authority/revision, applied lease, owner/generation, opening receipt/native identity, session, expiry and containment condition. No producer, Core, schema or fixture watermark is changed.
+
+`test_atomic_ingress_readiness.py` now prepares three regressions using real embedded admission/open/turn, an inert native peer terminal event through Core and the canonical publisher, and the real SQLite/HTTP Home reader. They require terminal output and nonzero committed watermark while the legacy projected field remains zero, followed by legitimate Idle and read-only snapshots. Canonical gap injection must remove current readiness; injected projection failure must roll back ingress/result/watermark and retain only the previously legitimate state. Test execution is pending the coordinated freeze; this addition is not a PASS claim.
