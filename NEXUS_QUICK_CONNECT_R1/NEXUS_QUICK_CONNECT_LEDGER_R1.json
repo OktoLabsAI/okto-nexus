@@ -254,13 +254,24 @@
         "QC-T-I09",
         "QC-T-I10"
       ],
-      "evidence": [{"path":"execution/qc00-baseline.json","scope":"read-only checkout baseline, refs, drift and input hashes; not product qualification","commit":"7f114698e178c415488cd7a112d6ed0cb2ded214"},{"path":"execution/baseline.md","scope":"instruction, source and test map; previous implementation gate before new package inspection","commit":"7f114698e178c415488cd7a112d6ed0cb2ded214"}]
+      "evidence": [
+        {
+          "path": "execution/qc00-baseline.json",
+          "scope": "read-only checkout baseline, refs, drift and input hashes; not product qualification",
+          "commit": "7f114698e178c415488cd7a112d6ed0cb2ded214"
+        },
+        {
+          "path": "execution/baseline.md",
+          "scope": "instruction, source and test map; previous implementation gate before new package inspection",
+          "commit": "7f114698e178c415488cd7a112d6ed0cb2ded214"
+        }
+      ]
     },
     {
       "id": "QC-002",
       "phase": "QC-00",
       "title": "Fixar gramática e decisões de resolução",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-001"
       ],
@@ -332,7 +343,13 @@
         "QC-T-H09",
         "QC-T-H10"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc00-contracts/qualification.json",
+          "scope": "Pure frozen DTO contracts: 46 tests; CLI, namespace and integrated matrix qualification pending",
+          "commit": "3c774f0f"
+        }
+      ]
     },
     {
       "id": "QC-003",
@@ -399,7 +416,7 @@
       "id": "QC-004",
       "phase": "QC-01",
       "title": "Implementar normalização de posicionais e flags",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "QC-002"
       ],
@@ -436,7 +453,13 @@
         "QC-T-A15",
         "QC-T-A16"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc00-contracts/parser-qualification.json",
+          "scope": "Pure parser: 41 tests; complete CLI wiring remains in progress; current bilingual help checked in foundation-final",
+          "commit": "3c774f0f"
+        }
+      ]
     },
     {
       "id": "QC-005",
@@ -680,7 +703,7 @@
       "id": "QC-010",
       "phase": "QC-02",
       "title": "Descobrir metadados Git locais com limites e privacidade",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-002",
         "QC-009"
@@ -731,7 +754,13 @@
         "QC-T-D25",
         "QC-T-D26"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/evidence/qc02-git/qualification.json",
+          "scope": "43 adapter tests including real local Git fixtures and bounded inherited pipes; integrated CLI and real providers not qualified",
+          "commit": "3c774f0f"
+        }
+      ]
     },
     {
       "id": "QC-011",
