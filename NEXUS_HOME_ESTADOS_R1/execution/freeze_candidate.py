@@ -35,7 +35,9 @@ def main():
         dirty = subprocess.check_output(command + ['status', '--porcelain', '--', *product_paths], cwd=ROOT, text=True)
         assert not dirty.strip(), dirty
         commit = subprocess.check_output(command + ['rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
-        gate = HERE / 'package-hst/SOURCE_ASSET_READY.json'
+        directory = sys.argv[2] if len(sys.argv) > 2 else 'package-hst'
+        assert re.fullmatch(r'package-hst(?:-r[2-9][0-9]*)?', directory), directory
+        gate = HERE / directory / 'SOURCE_ASSET_READY.json'
         assert not gate.exists(), 'An antecedent gate must be preserved.'
         gate.write_text(json.dumps({'source_asset_ready': True, 'version': '0.3.7',
                                    'source_commit': commit, 'assets': assets}, indent=2) + '\n', encoding='utf-8')

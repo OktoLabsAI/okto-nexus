@@ -65,15 +65,43 @@ def main():
     parser.add_argument('--timeout',type=int,default=600)
     args=parser.parse_args()
     assert 0<=args.shard_index<args.shard_count and 1<=args.timeout<=3600
-    builder.source_ready()
     package=Path(json.loads((HERE/'allocation.json').read_text())['root'])
     ready=json.loads((HERE/'READY.json').read_text())
+    frozen=json.loads((HERE/'SOURCE_ASSET_READY.json').read_text())
+    assert frozen['source_asset_ready'] is True and frozen['version']=='0.3.7'
+    assert frozen==json.loads((package/'SOURCE_ASSET_READY.json').read_text()), 'Frozen gate drift'
+    assert ready['source_commit']==frozen['source_commit']
+    # Evidence/documentation commits may advance HEAD; product/test inputs may not.
+    ancestor=subprocess.run(['rtk','proxy','git','merge-base','--is-ancestor',
+        frozen['source_commit'],'HEAD'],cwd=REPO,stdin=subprocess.PIPE,
+        input=b'',stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15)
+    assert ancestor.returncode==0, 'Frozen candidate must remain an ancestor of current HEAD'
+    build=json.loads((package/'build-manifest.json').read_text())
+    expected=build['source_pins']
+    assert len(expected)==1816, len(expected)
+    actual=builder.pins()
+    changed=sorted(name for name in expected.keys()|actual.keys() if expected.get(name)!=actual.get(name))
+    assert not changed, ('Frozen product/test/build inputs changed',changed)
+    static=REPO/'src/okto_nexus/adapters/inbound/http/static'
+    assert 'index.html' in frozen['assets']
+    for name,pin in frozen['assets'].items():
+        path=static/name
+        assert path.resolve().is_relative_to(static.resolve()), name
+        assert builder.sha(path)==pin, name
     wheel=package/'artifacts/okto_nexus-0.3.7-py3-none-any.whl'
     assert ready['ready'] is True and hashlib.sha256(wheel.read_bytes()).hexdigest()==ready['wheel_sha256']
+    assert Path(ready['wheel']).resolve()==wheel.resolve()
+    assert build['artifacts'][wheel.name]==ready['wheel_sha256']
     assert ready['version']=='0.3.7' and ready['prefix_frozen'] is True
-    assert ready['source_commit']==builder.source_ready()['source_commit']
     prefix=package/'venv'
     assert Path(ready['python']).resolve()==(prefix/'Scripts/python.exe').resolve()
+    audit=json.loads((package/'installed-audit.json').read_text())
+    assert audit['versions']=={'okto-nexus':'0.3.7','okto-nexus-connector-core':'0.0.14','okto-nexus-connector':'0.0.13'}
+    assert all(value['equal_installed_wheel'] for value in audit['modules'].values())
+    assert audit['modules']['okto_nexus']['wheel_sha256']==ready['wheel_sha256']
+    assert audit['modules']['okto_nexus']['equal_checkout_source'] is True
+    for name,pin in frozen['assets'].items():
+        assert audit['assets']['okto_nexus/adapters/inbound/http/static/'+name]==pin, name
     root=Path(tempfile.mkdtemp(prefix='nexus-hst-installed-'))
     for name in ['tree','cwd','tmp','reports','guard']:(root/name).mkdir()
     tree=root/'tree'
