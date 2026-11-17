@@ -487,6 +487,15 @@
           "result": "PASS explicit v1/v2 capability negotiation; invalid/repeated parameters rejected; protected tables unchanged",
           "artifact_path": "execution/source-tests/negotiation/qualification.json",
           "limitations": "Synthetic isolated project; not final installed or browser compatibility qualification."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Fresh R5 installed Home/SQLite/HTTP selection, one shard, with copied tests/helpers and origin/payload/source guards",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
+          "artifact_path": "execution/package-hst-r5/installed-qualification.json",
+          "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
         }
       ]
     },
@@ -529,7 +538,17 @@
         "HST-T-F14"
       ],
       "status": "IN_PROGRESS",
-      "evidence": []
+      "evidence": [
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Real Chromium with canonical native question and actual /info response delayed twelve seconds",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "FAIL: selected option lost, old form node disconnected and focus moved when presentation1 upgraded to2; zero POST",
+          "artifact_path": "execution/browser-hst/cuts/r5-info-upgrade-observables/qualification.json",
+          "limitations": "R5 antecedent retained. Normal physical exit0, but runtime-close helper reached its thirty-second guard before lifespan drain; not a timeout-free cleanup claim. R6 reader/UI correction awaits its own browser proof."
+        }
+      ]
     },
     {
       "id": "HST-005",
@@ -621,6 +640,15 @@
           "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
           "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
           "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Fresh R5 installed Home/SQLite/HTTP selection, one shard, with copied tests/helpers and origin/payload/source guards",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
+          "artifact_path": "execution/package-hst-r5/installed-qualification.json",
+          "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
         }
       ]
     },
@@ -723,6 +751,15 @@
           "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
           "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
           "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Fresh R5 installed Home/SQLite/HTTP selection, one shard, with copied tests/helpers and origin/payload/source guards",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
+          "artifact_path": "execution/package-hst-r5/installed-qualification.json",
+          "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
         }
       ]
     },
@@ -829,6 +866,15 @@
           "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
           "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
           "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Fresh R5 installed Home/SQLite/HTTP selection, one shard, with copied tests/helpers and origin/payload/source guards",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
+          "artifact_path": "execution/package-hst-r5/installed-qualification.json",
+          "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
         }
       ]
     },
@@ -974,6 +1020,15 @@
           "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
           "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
           "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Fresh R5 installed Home/SQLite/HTTP selection, one shard, with copied tests/helpers and origin/payload/source guards",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
+          "artifact_path": "execution/package-hst-r5/installed-qualification.json",
+          "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
         }
       ]
     },
@@ -1074,6 +1129,15 @@
           "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
           "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
           "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Fresh R5 installed Home/SQLite/HTTP selection, one shard, with copied tests/helpers and origin/payload/source guards",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
+          "artifact_path": "execution/package-hst-r5/installed-qualification.json",
+          "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
         }
       ]
     },
@@ -1350,6 +1414,15 @@
           "result": "PASS401 Node tests; normative labels and current action links covered",
           "artifact_path": "execution/frontend-global/qualification.json",
           "limitations": "Node/SSR is not browser, assistive technology or human usability; final installed/browser scenarios pending."
+        },
+        {
+          "commit": "2cb24076 + exact Original frontend/compiler pins in artifact",
+          "command_or_procedure": "Current Original npm test and TypeScript/Vite build after isolated UI review and cherry-pick",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
+          "artifact_path": "execution/frontend-r6-original/qualification.json",
+          "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
         }
       ]
     },
@@ -1425,6 +1498,15 @@
           "result": "PASS401 Node tests; normative labels and current action links covered",
           "artifact_path": "execution/frontend-global/qualification.json",
           "limitations": "Node/SSR is not browser, assistive technology or human usability; final installed/browser scenarios pending."
+        },
+        {
+          "commit": "2cb24076 + exact Original frontend/compiler pins in artifact",
+          "command_or_procedure": "Current Original npm test and TypeScript/Vite build after isolated UI review and cherry-pick",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
+          "artifact_path": "execution/frontend-r6-original/qualification.json",
+          "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
         }
       ]
     },
@@ -1517,6 +1599,15 @@
           "result": "PASS_SUBSET14, FAIL1: actual Working producer mismatch; decision registered remains awaiting confirmation",
           "artifact_path": "execution/browser-hst/cuts/r3-question-decision/qualification.json",
           "limitations": "Core keeps receipt SUBMITTED while current progress exists. R5 correction in progress; no fabricated RUNNING receipt. Post-answer terminal cut not qualified; causal APPLIED proof unavailable."
+        },
+        {
+          "commit": "2cb24076 + exact Original frontend/compiler pins in artifact",
+          "command_or_procedure": "Current Original npm test and TypeScript/Vite build after isolated UI review and cherry-pick",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
+          "artifact_path": "execution/frontend-r6-original/qualification.json",
+          "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
         }
       ]
     },
@@ -1600,6 +1691,15 @@
           "result": "PASS_SUBSET15: turn result/task open, awaiting verification, exact delivery verified",
           "artifact_path": "execution/browser-hst/cuts/r3-governed-result/qualification.json",
           "limitations": "Inert native peer, not provider inference. No assertion that every Results criterion is covered."
+        },
+        {
+          "commit": "2cb24076 + exact Original frontend/compiler pins in artifact",
+          "command_or_procedure": "Current Original npm test and TypeScript/Vite build after isolated UI review and cherry-pick",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
+          "artifact_path": "execution/frontend-r6-original/qualification.json",
+          "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
         }
       ]
     },
@@ -1671,6 +1771,24 @@
           "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
           "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
           "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
+        },
+        {
+          "commit": "2cb24076 + exact Original frontend/compiler pins in artifact",
+          "command_or_procedure": "Current Original npm test and TypeScript/Vite build after isolated UI review and cherry-pick",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
+          "artifact_path": "execution/frontend-r6-original/qualification.json",
+          "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Real Chromium with canonical native question and actual /info response delayed twelve seconds",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "FAIL: selected option lost, old form node disconnected and focus moved when presentation1 upgraded to2; zero POST",
+          "artifact_path": "execution/browser-hst/cuts/r5-info-upgrade-observables/qualification.json",
+          "limitations": "R5 antecedent retained. Normal physical exit0, but runtime-close helper reached its thirty-second guard before lifespan drain; not a timeout-free cleanup claim. R6 reader/UI correction awaits its own browser proof."
         }
       ]
     },
@@ -1751,6 +1869,15 @@
           "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
           "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
           "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
+        },
+        {
+          "commit": "2cb24076 + exact Original frontend/compiler pins in artifact",
+          "command_or_procedure": "Current Original npm test and TypeScript/Vite build after isolated UI review and cherry-pick",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
+          "artifact_path": "execution/frontend-r6-original/qualification.json",
+          "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
         }
       ]
     },
@@ -1825,6 +1952,15 @@
           "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
           "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
           "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
+        },
+        {
+          "commit": "2cb24076 + exact Original frontend/compiler pins in artifact",
+          "command_or_procedure": "Current Original npm test and TypeScript/Vite build after isolated UI review and cherry-pick",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
+          "artifact_path": "execution/frontend-r6-original/qualification.json",
+          "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
         }
       ]
     },
@@ -1900,6 +2036,24 @@
           "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
           "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
           "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
+        },
+        {
+          "commit": "2cb24076 + exact Original frontend/compiler pins in artifact",
+          "command_or_procedure": "Current Original npm test and TypeScript/Vite build after isolated UI review and cherry-pick",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
+          "artifact_path": "execution/frontend-r6-original/qualification.json",
+          "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Real Chromium with canonical native question and actual /info response delayed twelve seconds",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "FAIL: selected option lost, old form node disconnected and focus moved when presentation1 upgraded to2; zero POST",
+          "artifact_path": "execution/browser-hst/cuts/r5-info-upgrade-observables/qualification.json",
+          "limitations": "R5 antecedent retained. Normal physical exit0, but runtime-close helper reached its thirty-second guard before lifespan drain; not a timeout-free cleanup claim. R6 reader/UI correction awaits its own browser proof."
         }
       ]
     },
@@ -2006,6 +2160,15 @@
           "result": "PASS_SUBSET21; no productive browser POST; normal cleanup",
           "artifact_path": "execution/browser-hst/cuts/r3-reading-partial-logout/qualification.json",
           "limitations": "Fixture, not a real harness. Keyboard/mobile assertions are a subset, not a screen-reader or novice-user test. Final R4/R5 UI still requires qualification."
+        },
+        {
+          "commit": "2cb24076 + exact Original frontend/compiler pins in artifact",
+          "command_or_procedure": "Current Original npm test and TypeScript/Vite build after isolated UI review and cherry-pick",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
+          "artifact_path": "execution/frontend-r6-original/qualification.json",
+          "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
         }
       ]
     },
@@ -2072,6 +2235,15 @@
           "result": "PASS401 Node tests; normative labels and current action links covered",
           "artifact_path": "execution/frontend-global/qualification.json",
           "limitations": "Node/SSR is not browser, assistive technology or human usability; final installed/browser scenarios pending."
+        },
+        {
+          "commit": "2cb24076 + exact Original frontend/compiler pins in artifact",
+          "command_or_procedure": "Current Original npm test and TypeScript/Vite build after isolated UI review and cherry-pick",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
+          "artifact_path": "execution/frontend-r6-original/qualification.json",
+          "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
         }
       ]
     },
@@ -2150,6 +2322,15 @@
           "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
           "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
           "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Fresh R5 installed Home/SQLite/HTTP selection, one shard, with copied tests/helpers and origin/payload/source guards",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
+          "artifact_path": "execution/package-hst-r5/installed-qualification.json",
+          "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
         }
       ]
     },
@@ -2242,6 +2423,15 @@
           "result": "PASS90; source/test drift0; timeout/force/remaining process/listener0",
           "artifact_path": "execution/source-tests/r5-working-focal/qualification.json",
           "limitations": "Actual Core SUBMITTED/started proves Working without a RUNNING receipt. The 25-operation SQL transport fixture is synthetic read-layer evidence only. Final installed/browser/performance and full criterion reconciliation remain pending."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Fresh R5 installed Home/SQLite/HTTP selection, one shard, with copied tests/helpers and origin/payload/source guards",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
+          "artifact_path": "execution/package-hst-r5/installed-qualification.json",
+          "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
         }
       ]
     },
@@ -2530,6 +2720,24 @@
           "result": "PASS_SUBSET14, FAIL1: actual Working producer mismatch; decision registered remains awaiting confirmation",
           "artifact_path": "execution/browser-hst/cuts/r3-question-decision/qualification.json",
           "limitations": "Core keeps receipt SUBMITTED while current progress exists. R5 correction in progress; no fabricated RUNNING receipt. Post-answer terminal cut not qualified; causal APPLIED proof unavailable."
+        },
+        {
+          "commit": "2cb24076 + exact Original frontend/compiler pins in artifact",
+          "command_or_procedure": "Current Original npm test and TypeScript/Vite build after isolated UI review and cherry-pick",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS404 Node and production build; no input drift; generated index-CefKJTtn.js",
+          "artifact_path": "execution/frontend-r6-original/qualification.json",
+          "limitations": "G08 intention labels and delayed-info form-preservation changes are implemented, not browser verified. Worktree raw byte equivalence was not claimed: EOL drift caused a fresh Original test/build. New installed R6 and browser checks pending."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Real Chromium with canonical native question and actual /info response delayed twelve seconds",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "FAIL: selected option lost, old form node disconnected and focus moved when presentation1 upgraded to2; zero POST",
+          "artifact_path": "execution/browser-hst/cuts/r5-info-upgrade-observables/qualification.json",
+          "limitations": "R5 antecedent retained. Normal physical exit0, but runtime-close helper reached its thirty-second guard before lifespan drain; not a timeout-free cleanup claim. R6 reader/UI correction awaits its own browser proof."
         }
       ]
     },
@@ -2678,6 +2886,15 @@
           "result": "PASS build/install/live; 54 tools, two authenticated identities; canonical stop0 and physical exit0",
           "artifact_path": "execution/package-hst-r4/live-qualification.json",
           "limitations": "No provider. R4 backend payload1024 files exactly equal R3 (729 Nexus/168 Core/127 Connector); R3 tests reused only in that scope. R4 UI requires its own browser checks."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Fresh R5 installed Home/SQLite/HTTP selection, one shard, with copied tests/helpers and origin/payload/source guards",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
+          "artifact_path": "execution/package-hst-r5/installed-qualification.json",
+          "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
         }
       ]
     },
@@ -2819,8 +3036,19 @@
       "when": "Projetar harness",
       "then": "Active/Executando; não depende de palavras na saída.",
       "level": "unidade + contrato/SQLite",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Fresh R5 installed Home/SQLite/HTTP selection, one shard, with copied tests/helpers and origin/payload/source guards",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
+          "artifact_path": "execution/package-hst-r5/installed-qualification.json",
+          "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
+        }
+      ],
+      "execution_notes": "Scoped unit/canonical Core/SQLite proof, including actual SUBMITTED+started Working and terminal/live Idle with separate Results. No provider process claim; earlier failed cuts remain in evidence."
     },
     {
       "id": "HST-T-B02",
@@ -2830,7 +3058,7 @@
       "when": "Atualizar quadro",
       "then": "Harness permanece Active/Idle e entrega aparece separada em Results.",
       "level": "unidade + contrato/SQLite",
-      "status": "FAIL",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "4e890949c94c9d8625837d566e5182920bfb2cec",
@@ -2840,8 +3068,18 @@
           "result": "FAIL B02: canonical events materialized but Home readiness required an unwritten watermark; timing NOT_QUALIFIED",
           "artifact_path": "execution/browser-hst/antecedents/r2-unprojected-watermark/qualification.json",
           "limitations": "No journey PASS, real provider or human usability claimed; reader correction and new canonical-ingress regression in progress."
+        },
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Fresh R5 installed Home/SQLite/HTTP selection, one shard, with copied tests/helpers and origin/payload/source guards",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "PASS251; SKIP/FAIL/ERROR/NOT_RUN0; drift/timeout/force/remaining processes0",
+          "artifact_path": "execution/package-hst-r5/installed-qualification.json",
+          "limitations": "No real-provider/AT/human/performance acceptance. Source-first broader selection separately PASS251. R3 Quick Connect remains historical, not repeated here."
         }
-      ]
+      ],
+      "execution_notes": "Scoped unit/canonical Core/SQLite proof, including actual SUBMITTED+started Working and terminal/live Idle with separate Results. No provider process claim; earlier failed cuts remain in evidence."
     },
     {
       "id": "HST-T-B03",
@@ -3488,8 +3726,19 @@
       "when": "Atualizar",
       "then": "Rascunho/foco/target/revisão revisada preservados; revalidação antes do envio.",
       "level": "unidade com relógio/promessas + browser",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "FAIL",
+      "evidence": [
+        {
+          "commit": "8df456d1079313cc38e3cfe674ae4cc2b04fb64b",
+          "command_or_procedure": "Real Chromium with canonical native question and actual /info response delayed twelve seconds",
+          "environment": "Windows; owned temporary homes/prefixes; no provider or human participant",
+          "timestamp": "2026-11-17T17:57:32.004057+00:00",
+          "result": "FAIL: selected option lost, old form node disconnected and focus moved when presentation1 upgraded to2; zero POST",
+          "artifact_path": "execution/browser-hst/cuts/r5-info-upgrade-observables/qualification.json",
+          "limitations": "R5 antecedent retained. Normal physical exit0, but runtime-close helper reached its thirty-second guard before lifespan drain; not a timeout-free cleanup claim. R6 reader/UI correction awaits its own browser proof."
+        }
+      ],
+      "execution_notes": "Normal stable polling preserved draft in R5; the separately delayed-info capability change exposed a real remount. R6 fix awaiting browser."
     },
     {
       "id": "HST-T-F07",
@@ -4181,16 +4430,33 @@
       "ui_browser": "PENDING"
     },
     "r5_working_correction": {
-      "status": "IMPLEMENTED_SOURCE_FOCALS_PASS90",
+      "status": "IMPLEMENTED_AND_SCOPED_SOURCE_INSTALLED_VERIFIED",
       "cause": "Actual committed started/progress exists while Core receipt remains SUBMITTED.",
       "approach": "Private full-key positive proof; preserve authority/liveness/gap/uncertainty and terminal fences.",
       "receipt_core_schema_changes": false,
-      "final_qualification": "PENDING_FRESH_R5_INSTALLED_BROWSER_PERFORMANCE",
+      "final_qualification": "R6_UI_AND_PERFORMANCE_PENDING; R5 info-remount antecedent retained",
       "source_focals": "execution/source-tests/r5-working-focal/qualification.json",
       "frontend": "execution/frontend-r5/qualification.json",
       "frontend_node": "PASS404; input drift0; no browser/AT claim",
       "static": "execution/static-checks/r5-working.json; 31files, no increased Ruff rule counts",
-      "lock": "uv lock --check PASS106; no lock mutation"
+      "lock": "uv lock --check PASS106; no lock mutation",
+      "source_regression": "PASS251; execution/source-tests/r5-home/qualification.json",
+      "installed": "PASS251; execution/package-hst-r5/installed-qualification.json",
+      "live": "PASS54tools/twoidentities; canonical stop0 and physical exit0"
+    },
+    "r6_ui": {
+      "status": "IMPLEMENTED_NOT_BROWSER_VERIFIED",
+      "frontend": "execution/frontend-r6-original/qualification.json",
+      "changes": [
+        "Intention labels preserve canonical kinds/IDs/operator/permissions.",
+        "Defer presentation-only capability switches while context/pause/keyboard focus or focus restoration is active.",
+        "Identity/project/authorization clearing remains independent and immediate."
+      ],
+      "package": "execution/package-hst-r6",
+      "installed": "PENDING",
+      "browser": "PENDING",
+      "performance": "PENDING_FINAL_EXCLUSIVE_WINDOW",
+      "human": "DEFERRED"
     }
   }
 }

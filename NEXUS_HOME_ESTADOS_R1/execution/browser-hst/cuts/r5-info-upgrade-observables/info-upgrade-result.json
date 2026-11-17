@@ -1,0 +1,375 @@
+{
+  "status": "FAIL",
+  "error": "Error: draft-and-focus-retained-across-negotiation",
+  "checks": [
+    {
+      "id": "action-before-info",
+      "ok": true,
+      "detail": {
+        "elapsed": 1179
+      }
+    },
+    {
+      "id": "dirty-form-before-version-upgrade",
+      "ok": true,
+      "detail": {
+        "dialogs": 1,
+        "forms": 1,
+        "selected": [
+          "0"
+        ],
+        "sameNode": true,
+        "previousNodeConnected": true,
+        "focused": true,
+        "focus": {
+          "tag": "SELECT",
+          "id": "r4request_f69157543ce1cb5fda63646b1985cb8ddf1cac6a24177970f4fe316e2495b4be-question-0",
+          "label": null
+        },
+        "at": 1794937610210
+      }
+    },
+    {
+      "id": "real-info-upgrade-arrived",
+      "ok": true,
+      "detail": {
+        "at": 1794937621090,
+        "versions": [
+          1,
+          2
+        ],
+        "status": 200
+      }
+    },
+    {
+      "id": "same-panel-retained-across-negotiation",
+      "ok": true,
+      "detail": {
+        "dialogs": 1,
+        "forms": 1,
+        "selected": [],
+        "sameNode": false,
+        "previousNodeConnected": false,
+        "focused": false,
+        "focus": {
+          "tag": "BUTTON",
+          "id": "",
+          "label": "Expand modal"
+        },
+        "at": 1794937622206
+      }
+    },
+    {
+      "id": "draft-and-focus-retained-across-negotiation",
+      "ok": false,
+      "detail": {
+        "dialogs": 1,
+        "forms": 1,
+        "selected": [],
+        "sameNode": false,
+        "previousNodeConnected": false,
+        "focused": false,
+        "focus": {
+          "tag": "BUTTON",
+          "id": "",
+          "label": "Expand modal"
+        },
+        "at": 1794937622206
+      }
+    }
+  ],
+  "info": {
+    "at": 1794937621090,
+    "versions": [
+      1,
+      2
+    ],
+    "status": 200
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "at": 1794937608735
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-DjtzLUDc.js",
+      "at": 1794937608827
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Bh2ghaTD.css",
+      "at": 1794937608828
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "at": 1794937608987
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-icon.svg",
+      "at": 1794937608987
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg",
+      "at": 1794937609010
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg",
+      "at": 1794937609010
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents",
+      "at": 1794937609065
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "at": 1794937609066
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "at": 1794937609066
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "at": 1794937609066
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794937609066
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794937609066
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "at": 1794937609079
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "at": 1794937609079
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "at": 1794937609079
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "at": 1794937609319
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794937609572
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794937609574
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "at": 1794937609640
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794937609852
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "at": 1794937609956
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "at": 1794937609984
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_f69157543ce1cb5fda63646b1985cb8ddf1cac6a24177970f4fe316e2495b4be",
+      "at": 1794937609984
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "at": 1794937610000
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f",
+      "at": 1794937610003
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_f69157543ce1cb5fda63646b1985cb8ddf1cac6a24177970f4fe316e2495b4be",
+      "at": 1794937610038
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f/events",
+      "at": 1794937610053
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f",
+      "at": 1794937610054
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "at": 1794937610094
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f/events",
+      "at": 1794937612072
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f",
+      "at": 1794937612103
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_f69157543ce1cb5fda63646b1985cb8ddf1cac6a24177970f4fe316e2495b4be",
+      "at": 1794937612562
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f/events",
+      "at": 1794937614083
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f",
+      "at": 1794937614128
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_f69157543ce1cb5fda63646b1985cb8ddf1cac6a24177970f4fe316e2495b4be",
+      "at": 1794937615064
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f/events",
+      "at": 1794937616096
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f",
+      "at": 1794937616143
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_f69157543ce1cb5fda63646b1985cb8ddf1cac6a24177970f4fe316e2495b4be",
+      "at": 1794937617568
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f/events",
+      "at": 1794937618116
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f",
+      "at": 1794937618163
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "at": 1794937619065
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_f69157543ce1cb5fda63646b1985cb8ddf1cac6a24177970f4fe316e2495b4be",
+      "at": 1794937620063
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f/events",
+      "at": 1794937620142
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f",
+      "at": 1794937620174
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "at": 1794937621090
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "at": 1794937621236
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "at": 1794937621243
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_f69157543ce1cb5fda63646b1985cb8ddf1cac6a24177970f4fe316e2495b4be",
+      "at": 1794937621243
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f",
+      "at": 1794937621257
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f/events",
+      "at": 1794937621268
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_581467ac1b7f45c0f12189ea5b9d948f",
+      "at": 1794937621268
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "at": 1794937621280
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_f69157543ce1cb5fda63646b1985cb8ddf1cac6a24177970f4fe316e2495b4be",
+      "at": 1794937621292
+    }
+  ],
+  "observed": {
+    "dialogs": 1,
+    "forms": 1,
+    "selected": [],
+    "sameNode": false,
+    "previousNodeConnected": false,
+    "focused": false,
+    "focus": {
+      "tag": "BUTTON",
+      "id": "",
+      "label": "Expand modal"
+    },
+    "at": 1794937622244
+  }
+}

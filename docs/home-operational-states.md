@@ -41,6 +41,13 @@ A semantic change can be applied without closing the panel. Decisions still
 revalidate their current record and authority; revoked access clears protected
 context regardless of the board pause.
 
+Ask for work or chat opens the shared operator composer. Choose Chat for a
+conversation or Ask for work to delegate a task, then select the intended
+recipient and project. These labels preserve the existing canonical actions
+and permissions. A late Server capability reply does not replace a form being
+edited or a board being read; its presentation change waits until that context,
+pause and keyboard focus have been released.
+
 ## Compatibility and rollback
 
 This presentation remains behind the existing operational Home opt-in and the

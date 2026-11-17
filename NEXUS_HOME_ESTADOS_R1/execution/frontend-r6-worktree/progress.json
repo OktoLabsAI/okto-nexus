@@ -1,0 +1,338 @@
+{
+  "node": {
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 26392,
+        "birth": 1794937031.063942,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 36780,
+        "birth": 1794937031.1100929,
+        "exe": "C:\\Windows\\System32\\cmd.exe"
+      },
+      {
+        "pid": 56096,
+        "birth": 1794937031.1535027,
+        "exe": "C:\\Windows\\System32\\cmd.exe"
+      },
+      {
+        "pid": 55988,
+        "birth": 1794937031.1878836,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 57240,
+        "birth": 1794937031.4441864,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 49540,
+        "birth": 1794937032.936552,
+        "exe": "C:\\Windows\\System32\\cmd.exe"
+      },
+      {
+        "pid": 28988,
+        "birth": 1794937032.9813015,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 57556,
+        "birth": 1794937033.1387272,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 60388,
+        "birth": 1794937033.161367,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 54752,
+        "birth": 1794937033.1774666,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 36980,
+        "birth": 1794937033.1934023,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 48112,
+        "birth": 1794937033.209384,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 46228,
+        "birth": 1794937033.2260787,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 59572,
+        "birth": 1794937033.2415252,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 56664,
+        "birth": 1794937033.2615824,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 60140,
+        "birth": 1794937033.2857444,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 48444,
+        "birth": 1794937033.3067179,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 58784,
+        "birth": 1794937033.367777,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 45596,
+        "birth": 1794937033.412421,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 55000,
+        "birth": 1794937033.4677117,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 49384,
+        "birth": 1794937033.5149336,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 5108,
+        "birth": 1794937033.5332992,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 27272,
+        "birth": 1794937035.1204004,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 56000,
+        "birth": 1794937035.16106,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 49420,
+        "birth": 1794937035.1964393,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 9736,
+        "birth": 1794937035.524732,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 35408,
+        "birth": 1794937035.613063,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 7208,
+        "birth": 1794937035.7506132,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 11256,
+        "birth": 1794937035.812637,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 38208,
+        "birth": 1794937035.9305947,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 48080,
+        "birth": 1794937036.0431228,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 20592,
+        "birth": 1794937036.1302888,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 37668,
+        "birth": 1794937036.1495464,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 55320,
+        "birth": 1794937036.3086765,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 26572,
+        "birth": 1794937036.5903172,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 55656,
+        "birth": 1794937037.1210067,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 46388,
+        "birth": 1794937037.4306245,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 59016,
+        "birth": 1794937037.4782596,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 49084,
+        "birth": 1794937037.713353,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 48968,
+        "birth": 1794937037.7303834,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 3364,
+        "birth": 1794937037.7510126,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 30188,
+        "birth": 1794937037.7679646,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 45956,
+        "birth": 1794937037.7859936,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 51696,
+        "birth": 1794937037.86394,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 53128,
+        "birth": 1794937038.2457952,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 54092,
+        "birth": 1794937038.535598,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 53740,
+        "birth": 1794937038.5542145,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 39496,
+        "birth": 1794937039.0585265,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 50624,
+        "birth": 1794937039.8224452,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 4856,
+        "birth": 1794937040.054293,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 47780,
+        "birth": 1794937040.4855351,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  "build": {
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 56592,
+        "birth": 1794937045.7923636,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 58992,
+        "birth": 1794937045.8236144,
+        "exe": "C:\\Windows\\System32\\cmd.exe"
+      },
+      {
+        "pid": 32560,
+        "birth": 1794937045.8630576,
+        "exe": "C:\\Windows\\System32\\cmd.exe"
+      },
+      {
+        "pid": 57592,
+        "birth": 1794937045.9006872,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 57148,
+        "birth": 1794937046.1215856,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 16176,
+        "birth": 1794937046.5763557,
+        "exe": "C:\\Windows\\System32\\cmd.exe"
+      },
+      {
+        "pid": 53152,
+        "birth": 1794937046.6700723,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 32600,
+        "birth": 1794937063.5156453,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 36872,
+        "birth": 1794937063.7714124,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 38904,
+        "birth": 1794937063.785031,
+        "exe": "C:\\Windows\\System32\\conhost.exe"
+      },
+      {
+        "pid": 58796,
+        "birth": 1794937064.0024743,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-ui-intent-7ce9pl57\\frontend\\node_modules\\@esbuild\\win32-x64\\esbuild.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  }
+}
