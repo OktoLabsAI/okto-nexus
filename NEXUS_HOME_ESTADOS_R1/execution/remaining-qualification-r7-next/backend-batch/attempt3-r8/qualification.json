@@ -1,0 +1,129 @@
+{
+  "status": "FAIL_FIRST_CASE_REMAINING_NOT_RUN",
+  "passed": 0,
+  "failed": 1,
+  "not_run": 6,
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "payload_files": 1031,
+  "runner_sha256": "bea5487a6aaac241d28ff1fff789e4a409c138c8014fe26c0329251b4d99b160",
+  "manifest_sha256": "0d0f2196af38b6a52add21938da5695ed6f694727c21675720fe3c4b586b976b",
+  "node": "tests/execution_r4/test_backend_batch_r8.py::test_shared_owner_bindings_keep_distinct_current_state",
+  "elapsed_pytest_seconds": 11.21,
+  "phases": {
+    "setup": "PASS",
+    "call": "FAIL",
+    "teardown": "PASS"
+  },
+  "failure": "Subject-authored turn was read through operator runtime-management route; operation.read404. Exception cleanup also recorded AssertionError.",
+  "new_realization_precondition": "PASS: distinct PENDING_APPROVAL publication and first config/root/grant full selected rows unchanged",
+  "classification": "Fixture receipt actor/route mismatch; product defect not established. No scenario acceptance qualified.",
+  "canonical_cleanup": "FAIL: cleanup.json canonical_failures=[AssertionError]; physical exit is distinct from canonical close.",
+  "guards": {
+    "source_drift": [],
+    "payload_drift": [],
+    "copied_drift": [],
+    "presentation_drift": [],
+    "external_helper_tooling_drift": [],
+    "own_helper_closure_drift": [],
+    "r7_r8_nonstatic_drift": []
+  },
+  "owned_command": {
+    "exit_code": 1,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 10780,
+        "birth": 1794955168.6696627,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 60636,
+        "birth": 1794955168.68783,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 38104,
+        "birth": 1794955177.0542352,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 51952,
+        "birth": 1794955177.0762992,
+        "exe": "C:\\Windows\\System32\\conhost.exe"
+      },
+      {
+        "pid": 27512,
+        "birth": 1794955177.6162207,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 61000,
+        "birth": 1794955177.6214116,
+        "exe": "C:\\Windows\\System32\\conhost.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": false,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  "physical": [
+    {
+      "pid": 10780,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 60636,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 38104,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 51952,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 27512,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 61000,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 57788,
+      "same_birth_alive": false,
+      "present": false
+    }
+  ],
+  "physical_same_birth_remaining": 0,
+  "snapshot_scope": "Six explicitly listed tables per test; not a whole-database read-only claim. Auth telemetry/real control renewal are separate.",
+  "raw_private_home_retained": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-backend-batch-r8-1d345jow",
+  "not_run_nodes": [
+    "test_hidden_productive_sibling_same_binding_prevents_false_full_block",
+    "test_current_core_work_survives_external_unavailable_only",
+    "test_explicit_nonblocking_input_keeps_working_and_one_independent_action",
+    "test_idle_sibling_cannot_make_a_full_block_independent",
+    "test_admitted_queued_sibling_has_no_independence_proof",
+    "test_same_delivery_verification_three_files_seen_and_no_ack"
+  ],
+  "rerun": false,
+  "limits": [
+    "Installed module start/end origin guards; no checkout product imports.",
+    "No provider/browser/human/performance qualification.",
+    "Six selected tables are not a whole-DB read-only claim.",
+    "100ms ancestry polling does not enumerate every short-lived process."
+  ]
+}

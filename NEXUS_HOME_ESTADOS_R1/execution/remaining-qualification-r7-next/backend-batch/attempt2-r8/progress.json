@@ -1,0 +1,28 @@
+[
+  {
+    "case": "test_shared_owner_bindings_keep_distinct_current_state",
+    "owned_command": {
+      "exit_code": 1,
+      "timed_out": false,
+      "force_used": false,
+      "stdin": "closed PIPE",
+      "known_processes": [
+        {
+          "pid": 49060,
+          "birth": 1794954709.2048848,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+        },
+        {
+          "pid": 36860,
+          "birth": 1794954709.2188709,
+          "exe": "C:\\Python313\\python.exe"
+        }
+      ],
+      "actions": [],
+      "remaining_known_processes": [],
+      "remaining_listeners": [],
+      "success": false,
+      "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+    }
+  }
+]

@@ -115,8 +115,27 @@ so the cause remains unproven and F07/I02 are not qualified. A separate
 [cleanup record](remaining-qualification-r7-next/experience-batch/experience-r8-session-role/canonical-cleanup-detail.json)
 keeps three confirmed session closes and one unconfirmed close/unknown state.
 Normal process exit and physical absence resolve resources, not that receipt.
-The whole cut and overall delivery remain unqualified. Current ledger counts
-are51PASS/57NOT_RUN/8BLOCKED; no human invitation has been sent.
+The whole cut and overall delivery remain unqualified. No human invitation
+has been sent.
+
+The [R8 installed functional batch](remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json)
+actually passed six new canonical Core/HTTP/SQLite cases, qualifying A04, B12,
+A06, B08, C01, C05 and C06 at their declared layers. It proves exact ownership
+across two same-agent connections, the hidden productive sibling under a real
+state filter, current work despite only external-source failure, nonblocking
+input, idle-sibling full blocking and unknown-dependent queue behavior. All
+setup/call/teardown phases passed for those cases; payload/source/helper drift
+is0 and observed processes/listeners are absent. This is now actual R8 pytest
+evidence, separate from package-time backend byte equivalence.
+
+The seventh case stopped in its source-copy presentation oracle: its actual
+scope is turn/verifying, whose expected title is Turn result available. The
+test expected the handoff-scope title Delivery available. Its later Seen/noACK
+assertions were not reached, so E16 remains unqualified pending a scoped
+correction. Prior attempts and this6PASS/1FAIL remain preserved. Pytest retention
+left only two raw cleanup JSONs; all six passing teardown close assertions ran,
+and missing raw snapshots were not reconstructed. Current ledger counts are
+58PASS/50NOT_RUN/8BLOCKED.
 R7 prefixes and the original failing AX capture remain immutable. No Python
 behavior changed.
 
@@ -124,16 +143,19 @@ behavior changed.
 equality of1024 nonstatic Nexus/Core/Connector files, equal Python/dependency
 versions and unchanged packaging/lock inputs. The326+7 installed predecessor
 tests therefore support only that unchanged backend. They were actually run
-on R7; no pytest run on R8 or browser equivalence is claimed. Third-party
+on R7; the byte comparison itself neither reruns pytest on R8 nor qualifies
+its browser. Subsequent targeted R8 tests are identified separately. Third-party
 dependency versions were compared, not all dependency file bytes.
 
 | Layer | Observed scope | Evidence |
 |---|---|---|
-| Final source selection |321PASS,0failure/error/skip; source/test drift0 |[source qualification](source-tests/r7-home/qualification.json)|
-| Final installed selection |326PASS,0failure/error/skip/not-run;1828pins/1031payload files and copied helpers unchanged |[installed qualification](package-hst-r7/installed-qualification.json)|
-| Frontend |404Node cases plus TypeScript/Vite on the original checkout; actual packaged assetsCefKJTtn/Bh2ghaTD |[frontend qualification](frontend-r6-original/qualification.json)|
-| Package |fresh wheel/sdist/build/install/audit/pip-check/CLI smoke and actual HTTP/MCP54tools/two synthetic identities |[package](package-hst-r7/qualification.json), [live smoke](package-hst-r7/live-qualification.json)|
-| Fresh final browser |21PASS: Working/independent request/full block/exact request-result sessions/partial source/logout;0POST |[R7 browser](browser-hst/r7-functional-report.md)|
+| Predecessor source selection |321PASS,0failure/error/skip; source/test drift0 |[R7 source qualification](source-tests/r7-home/qualification.json)|
+| Predecessor installed selection |326PASS,0failure/error/skip/not-run;1828pins/1031payload files and copied helpers unchanged |[R7 installed qualification](package-hst-r7/installed-qualification.json)|
+| Current frontend |404Node cases plus TypeScript/Vite on the original checkout; actual packaged assetsCyg0aKfe/Bh2ghaTD |[R8 frontend qualification](frontend-r8-menu/qualification.json)|
+| Current package |fresh wheel/sdist/build/install/audit/pip-check/CLI smoke and actual HTTP/MCP54tools/two synthetic identities |[R8 package](package-hst-r8/qualification.json), [R8 live smoke](package-hst-r8/live-qualification.json)|
+| Predecessor browser |21PASS: Working/independent request/full block/exact request-result sessions/partial source/logout;0POST |[R7 browser](browser-hst/r7-functional-report.md)|
+| Current browser subset |44positive predicates; actual singleton/multi-session context, external failure, preserved panel, normal notices and scoped keyboard/mobile evidence; final move/focus incomplete and cleanup unknown retained |[R8 browser subset](remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json)|
+| Current installed functional batch |6PASS/1presentation-oracleFAIL; seven literal backend scenarios qualified; no provider/browser claim |[R8 installed batch](remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json)|
 | Post-build supplement |7sourcePASS and7actually installedPASS, separate cuts;1828base+1exact additional test/1031payload files unchanged |[supplement](installed-supplement-r7/qualification.json)|
 | Recovery and paging |Same accepted decision after lost response; stale second-screen409; one durable write admission; actual paging409/current200 in the same panel |[scoped captured predicates](browser-hst/nextcuts-report.md)|
 | History and drafts |9history assertions;8draft/auth positives plus captured real UI401 proof; wrapper/late-observer errors retained |[scoped follow-up](browser-hst/remaining-report.md)|

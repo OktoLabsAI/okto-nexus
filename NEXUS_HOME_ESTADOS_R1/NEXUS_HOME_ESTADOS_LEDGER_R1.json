@@ -4067,7 +4067,7 @@
       "when": "Classificar ações",
       "then": "B não recebe badge/pergunta como se fosse sua; apenas a origem comprovada é acionável.",
       "level": "unidade + SQLite/HTTP",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -4077,9 +4077,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Full shared-work owner tuple proved in SQLite/v1; complete v2 presentation with exact actionable ownership not independently asserted. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:59:29.639677+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json",
+          "environment": "Actual installed R8 Nexus/Core/Connector from immutable prefix; copied tests and canonical Core with inert JSON-RPC peer, no real provider",
+          "command_or_procedure": "tests.execution_r4.test_backend_batch_r8::test_shared_owner_bindings_keep_distinct_current_state",
+          "result": "PASS literal installed HTTP/SQLite criterion; actual started/progress/input and scoped admissions; setup/call/teardown all passed; source/payload/copy/helper/tooling drift0",
+          "limitations": "No browser or provider claim. A04 shared-work correlation is explicitly historical SQL metadata; live authority/progress is canonical. C06 is unknown-dependent queue, not C07 independent-queue proof. Six-table snapshots do not prove whole-DB passivity. Only two raw cleanup JSONs survived pytest retention; six teardown close assertions passed, no missing snapshots fabricated."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Full shared-work owner tuple proved in SQLite/v1; complete v2 presentation with exact actionable ownership not independently asserted."
+      "execution_notes": "Actual R8 installed qualification: tests.execution_r4.test_backend_batch_r8::test_shared_owner_bindings_keep_distinct_current_state. Per-layer/history/retention limits remain in the evidence."
     },
     {
       "id": "HST-T-A05",
@@ -4111,7 +4120,7 @@
       "when": "Aplicar filtro visual de estado/agente",
       "then": "Classificação usa o conjunto autorizado completo; filtro não cria bloqueio total falso.",
       "level": "unidade + SQLite/HTTP",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -4130,9 +4139,18 @@
           "environment": "Windows; frozen R7 prefix;1828base+1test pins;1031payload files; isolated-I-B; no provider/browser/human",
           "result": "PASS7SOURCE/PASS7INSTALLED; first source6PASS/1invalid-seedFAIL retained; no runtime/pin/helper drift",
           "limitations": "A06 query-only private sibling proof. E08/E09/E16 are historical migrated read fixtures with real HTTP/SQLite; H02/H03 API only. H07 uses SQL negative grant revocation with canonical request/denied POST, not canonical revoke lifecycle. Full browser clauses remain unverified."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:59:29.639725+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json",
+          "environment": "Actual installed R8 Nexus/Core/Connector from immutable prefix; copied tests and canonical Core with inert JSON-RPC peer, no real provider",
+          "command_or_procedure": "tests.execution_r4.test_backend_batch_r8::test_hidden_productive_sibling_same_binding_prevents_false_full_block",
+          "result": "PASS literal installed HTTP/SQLite criterion; actual started/progress/input and scoped admissions; setup/call/teardown all passed; source/payload/copy/helper/tooling drift0",
+          "limitations": "No browser or provider claim. A04 shared-work correlation is explicitly historical SQL metadata; live authority/progress is canonical. C06 is unknown-dependent queue, not C07 independent-queue proof. Six-table snapshots do not prove whole-DB passivity. Only two raw cleanup JSONs survived pytest retention; six teardown close assertions passed, no missing snapshots fabricated."
         }
       ],
-      "execution_notes": "PARTIAL literal scenario: SQLite private-proof/filter component only; no fabricated lease or runtime Working claim. Missing browser/native clauses remain NOT_RUN; no suite-count promotion."
+      "execution_notes": "Actual R8 installed qualification: tests.execution_r4.test_backend_batch_r8::test_hidden_productive_sibling_same_binding_prevents_false_full_block. Per-layer/history/retention limits remain in the evidence."
     },
     {
       "id": "HST-T-A07",
@@ -4365,7 +4383,7 @@
       "when": "Atualizar",
       "then": "Executando continua comprovado; cobertura externa parcial não transforma tudo em Idle ou desabilita leitura.",
       "level": "unidade + contrato/SQLite",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -4375,9 +4393,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Positive RUNNING fixture plus unrelated external partial tested; actual SUBMITTED+started path awaits R5. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:59:29.639746+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json",
+          "environment": "Actual installed R8 Nexus/Core/Connector from immutable prefix; copied tests and canonical Core with inert JSON-RPC peer, no real provider",
+          "command_or_procedure": "tests.execution_r4.test_backend_batch_r8::test_current_core_work_survives_external_unavailable_only",
+          "result": "PASS literal installed HTTP/SQLite criterion; actual started/progress/input and scoped admissions; setup/call/teardown all passed; source/payload/copy/helper/tooling drift0",
+          "limitations": "No browser or provider claim. A04 shared-work correlation is explicitly historical SQL metadata; live authority/progress is canonical. C06 is unknown-dependent queue, not C07 independent-queue proof. Six-table snapshots do not prove whole-DB passivity. Only two raw cleanup JSONs survived pytest retention; six teardown close assertions passed, no missing snapshots fabricated."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Positive RUNNING fixture plus unrelated external partial tested; actual SUBMITTED+started path awaits R5."
+      "execution_notes": "Actual R8 installed qualification: tests.execution_r4.test_backend_batch_r8::test_current_core_work_survives_external_unavailable_only. Per-layer/history/retention limits remain in the evidence."
     },
     {
       "id": "HST-T-B09",
@@ -4452,7 +4479,7 @@
       "when": "Agregar A",
       "then": "B não torna A executando ou livre do seu bloqueio humano.",
       "level": "unidade + contrato/SQLite",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -4462,9 +4489,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Distinct-binding metadata tests exist; true current progress vs blocked same-agent v2 path awaits R5. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:59:29.639757+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json",
+          "environment": "Actual installed R8 Nexus/Core/Connector from immutable prefix; copied tests and canonical Core with inert JSON-RPC peer, no real provider",
+          "command_or_procedure": "tests.execution_r4.test_backend_batch_r8::test_shared_owner_bindings_keep_distinct_current_state",
+          "result": "PASS literal installed HTTP/SQLite criterion; actual started/progress/input and scoped admissions; setup/call/teardown all passed; source/payload/copy/helper/tooling drift0",
+          "limitations": "No browser or provider claim. A04 shared-work correlation is explicitly historical SQL metadata; live authority/progress is canonical. C06 is unknown-dependent queue, not C07 independent-queue proof. Six-table snapshots do not prove whole-DB passivity. Only two raw cleanup JSONs survived pytest retention; six teardown close assertions passed, no missing snapshots fabricated."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Distinct-binding metadata tests exist; true current progress vs blocked same-agent v2 path awaits R5."
+      "execution_notes": "Actual R8 installed qualification: tests.execution_r4.test_backend_batch_r8::test_shared_owner_bindings_keep_distinct_current_state. Per-layer/history/retention limits remain in the evidence."
     },
     {
       "id": "HST-T-C01",
@@ -4474,7 +4510,7 @@
       "when": "Projetar",
       "then": "Card Active/Executando com Resposta pendente; solicitação independente em Needs You.",
       "level": "unidade + SQLite/HTTP",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -4484,9 +4520,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Explicit nonblocking legacy metadata exists; actual v2 productive SUBMITTED path awaits R5. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:59:29.639767+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json",
+          "environment": "Actual installed R8 Nexus/Core/Connector from immutable prefix; copied tests and canonical Core with inert JSON-RPC peer, no real provider",
+          "command_or_procedure": "tests.execution_r4.test_backend_batch_r8::test_explicit_nonblocking_input_keeps_working_and_one_independent_action",
+          "result": "PASS literal installed HTTP/SQLite criterion; actual started/progress/input and scoped admissions; setup/call/teardown all passed; source/payload/copy/helper/tooling drift0",
+          "limitations": "No browser or provider claim. A04 shared-work correlation is explicitly historical SQL metadata; live authority/progress is canonical. C06 is unknown-dependent queue, not C07 independent-queue proof. Six-table snapshots do not prove whole-DB passivity. Only two raw cleanup JSONs survived pytest retention; six teardown close assertions passed, no missing snapshots fabricated."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Explicit nonblocking legacy metadata exists; actual v2 productive SUBMITTED path awaits R5."
+      "execution_notes": "Actual R8 installed qualification: tests.execution_r4.test_backend_batch_r8::test_explicit_nonblocking_input_keeps_working_and_one_independent_action. Per-layer/history/retention limits remain in the evidence."
     },
     {
       "id": "HST-T-C02",
@@ -4597,7 +4642,7 @@
       "when": "Agregar",
       "then": "Ociosa não conta como trabalho independente; bloqueio total pode ser comprovado.",
       "level": "unidade + SQLite/HTTP",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -4607,9 +4652,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Pure Idle sibling/full-block proved; exact v2 SQLite combined fixture not executed. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:59:29.639779+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json",
+          "environment": "Actual installed R8 Nexus/Core/Connector from immutable prefix; copied tests and canonical Core with inert JSON-RPC peer, no real provider",
+          "command_or_procedure": "tests.execution_r4.test_backend_batch_r8::test_idle_sibling_cannot_make_a_full_block_independent",
+          "result": "PASS literal installed HTTP/SQLite criterion; actual started/progress/input and scoped admissions; setup/call/teardown all passed; source/payload/copy/helper/tooling drift0",
+          "limitations": "No browser or provider claim. A04 shared-work correlation is explicitly historical SQL metadata; live authority/progress is canonical. C06 is unknown-dependent queue, not C07 independent-queue proof. Six-table snapshots do not prove whole-DB passivity. Only two raw cleanup JSONs survived pytest retention; six teardown close assertions passed, no missing snapshots fabricated."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Pure Idle sibling/full-block proved; exact v2 SQLite combined fixture not executed."
+      "execution_notes": "Actual R8 installed qualification: tests.execution_r4.test_backend_batch_r8::test_idle_sibling_cannot_make_a_full_block_independent. Per-layer/history/retention limits remain in the evidence."
     },
     {
       "id": "HST-T-C06",
@@ -4619,7 +4673,7 @@
       "when": "Agregar",
       "then": "Não inferir que fila consegue progredir; estado global desconhecido se falta prova.",
       "level": "unidade + SQLite/HTTP",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -4629,9 +4683,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Queue stays nonproductive in pure reducer; blocker+unknown independent queue full SQL combination missing. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:59:29.639790+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json",
+          "environment": "Actual installed R8 Nexus/Core/Connector from immutable prefix; copied tests and canonical Core with inert JSON-RPC peer, no real provider",
+          "command_or_procedure": "tests.execution_r4.test_backend_batch_r8::test_admitted_queued_sibling_has_no_independence_proof",
+          "result": "PASS literal installed HTTP/SQLite criterion; actual started/progress/input and scoped admissions; setup/call/teardown all passed; source/payload/copy/helper/tooling drift0",
+          "limitations": "No browser or provider claim. A04 shared-work correlation is explicitly historical SQL metadata; live authority/progress is canonical. C06 is unknown-dependent queue, not C07 independent-queue proof. Six-table snapshots do not prove whole-DB passivity. Only two raw cleanup JSONs survived pytest retention; six teardown close assertions passed, no missing snapshots fabricated."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Queue stays nonproductive in pure reducer; blocker+unknown independent queue full SQL combination missing."
+      "execution_notes": "Actual R8 installed qualification: tests.execution_r4.test_backend_batch_r8::test_admitted_queued_sibling_has_no_independence_proof. Per-layer/history/retention limits remain in the evidence."
     },
     {
       "id": "HST-T-C07",
@@ -7469,7 +7532,8 @@
       "predecessor_installed_backend_tests": "326+7, actually executed on immutable R7 prefix",
       "frontend_reuse": false,
       "default_approved": false,
-      "provider_calls": 0
+      "provider_calls": 0,
+      "subsequent_installed_backend_tests": "Six targeted cases actually passed on R8; seventh presentation oracle failed. Package-time pytest=false remains historical."
     },
     "r8_context_base": {
       "evidence": "execution/remaining-qualification-r7-next/experience-batch/experience-r8-g01-variant/qualification.json",
@@ -7506,6 +7570,31 @@
       "physical_resources_absent": true,
       "provider_invocations": 0,
       "human": "NOT_INVITED"
+    },
+    "r8_backend_batch": {
+      "evidence": "execution/remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json",
+      "executed_on_r8": true,
+      "counts": {
+        "PASS": 6,
+        "FAIL": 1,
+        "NOT_RUN": 0
+      },
+      "qualified_scenarios": [
+        "HST-T-A04",
+        "HST-T-B12",
+        "HST-T-A06",
+        "HST-T-B08",
+        "HST-T-C01",
+        "HST-T-C05",
+        "HST-T-C06"
+      ],
+      "failure": "E16 source-copy Node oracle expected Delivery available, actual Turn result available with Awaiting verification badge. Final Seen/noACK assertions were not reached.",
+      "E16": "NOT_QUALIFIED; wrong source-copy presentation title stopped before Seen/noACK assertions",
+      "source_and_payload_drift": [],
+      "physical_same_birth_remaining": 0,
+      "real_provider": false,
+      "whole_batch_green": false,
+      "raw_retention_limit": "Repeated own pytest processes used default tmp retention; only two cleanup JSON files remain. All six passing owner contexts assert close() has no failures. No missing raw snapshots fabricated."
     }
   }
 }

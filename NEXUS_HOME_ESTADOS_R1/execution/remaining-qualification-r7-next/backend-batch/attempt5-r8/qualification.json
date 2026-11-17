@@ -1,0 +1,420 @@
+{
+  "status": "SIX_PASS_ONE_FAIL",
+  "passed": 6,
+  "failed": 1,
+  "not_run": 0,
+  "nodes": [
+    {
+      "node": "tests.execution_r4.test_backend_batch_r8::test_shared_owner_bindings_keep_distinct_current_state",
+      "scenario_proposal": [
+        "A04",
+        "B12"
+      ],
+      "status": "PASS",
+      "seconds": 9.166,
+      "phases": [
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_shared_owner_bindings_keep_distinct_current_state",
+          "phase": "setup",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_shared_owner_bindings_keep_distinct_current_state",
+          "phase": "call",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_shared_owner_bindings_keep_distinct_current_state",
+          "phase": "teardown",
+          "outcome": "passed"
+        }
+      ],
+      "artifact": "1/tests.xml",
+      "layer": "Installed Nexus/Core/Connector HTTP/SQLite; actual canonical Core protocol with inert peer for cases1\u20136. Historical artifact read-facts + canonical verify + source-copy TypeScript presentation for case7."
+    },
+    {
+      "node": "tests.execution_r4.test_backend_batch_r8::test_hidden_productive_sibling_same_binding_prevents_false_full_block",
+      "scenario_proposal": [
+        "A06"
+      ],
+      "status": "PASS",
+      "seconds": 9.427,
+      "phases": [
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_hidden_productive_sibling_same_binding_prevents_false_full_block",
+          "phase": "setup",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_hidden_productive_sibling_same_binding_prevents_false_full_block",
+          "phase": "call",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_hidden_productive_sibling_same_binding_prevents_false_full_block",
+          "phase": "teardown",
+          "outcome": "passed"
+        }
+      ],
+      "artifact": "2/tests.xml",
+      "layer": "Installed Nexus/Core/Connector HTTP/SQLite; actual canonical Core protocol with inert peer for cases1\u20136. Historical artifact read-facts + canonical verify + source-copy TypeScript presentation for case7."
+    },
+    {
+      "node": "tests.execution_r4.test_backend_batch_r8::test_current_core_work_survives_external_unavailable_only",
+      "scenario_proposal": [
+        "B08"
+      ],
+      "status": "PASS",
+      "seconds": 8.412,
+      "phases": [
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_current_core_work_survives_external_unavailable_only",
+          "phase": "setup",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_current_core_work_survives_external_unavailable_only",
+          "phase": "call",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_current_core_work_survives_external_unavailable_only",
+          "phase": "teardown",
+          "outcome": "passed"
+        }
+      ],
+      "artifact": "3/tests.xml",
+      "layer": "Installed Nexus/Core/Connector HTTP/SQLite; actual canonical Core protocol with inert peer for cases1\u20136. Historical artifact read-facts + canonical verify + source-copy TypeScript presentation for case7."
+    },
+    {
+      "node": "tests.execution_r4.test_backend_batch_r8::test_explicit_nonblocking_input_keeps_working_and_one_independent_action",
+      "scenario_proposal": [
+        "C01"
+      ],
+      "status": "PASS",
+      "seconds": 7.686,
+      "phases": [
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_explicit_nonblocking_input_keeps_working_and_one_independent_action",
+          "phase": "setup",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_explicit_nonblocking_input_keeps_working_and_one_independent_action",
+          "phase": "call",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_explicit_nonblocking_input_keeps_working_and_one_independent_action",
+          "phase": "teardown",
+          "outcome": "passed"
+        }
+      ],
+      "artifact": "4/tests.xml",
+      "layer": "Installed Nexus/Core/Connector HTTP/SQLite; actual canonical Core protocol with inert peer for cases1\u20136. Historical artifact read-facts + canonical verify + source-copy TypeScript presentation for case7."
+    },
+    {
+      "node": "tests.execution_r4.test_backend_batch_r8::test_idle_sibling_cannot_make_a_full_block_independent",
+      "scenario_proposal": [
+        "C05"
+      ],
+      "status": "PASS",
+      "seconds": 10.088,
+      "phases": [
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_idle_sibling_cannot_make_a_full_block_independent",
+          "phase": "setup",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_idle_sibling_cannot_make_a_full_block_independent",
+          "phase": "call",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_idle_sibling_cannot_make_a_full_block_independent",
+          "phase": "teardown",
+          "outcome": "passed"
+        }
+      ],
+      "artifact": "5/tests.xml",
+      "layer": "Installed Nexus/Core/Connector HTTP/SQLite; actual canonical Core protocol with inert peer for cases1\u20136. Historical artifact read-facts + canonical verify + source-copy TypeScript presentation for case7."
+    },
+    {
+      "node": "tests.execution_r4.test_backend_batch_r8::test_admitted_queued_sibling_has_no_independence_proof",
+      "scenario_proposal": [
+        "C06"
+      ],
+      "status": "PASS",
+      "seconds": 11.437,
+      "phases": [
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_admitted_queued_sibling_has_no_independence_proof",
+          "phase": "setup",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_admitted_queued_sibling_has_no_independence_proof",
+          "phase": "call",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_admitted_queued_sibling_has_no_independence_proof",
+          "phase": "teardown",
+          "outcome": "passed"
+        }
+      ],
+      "artifact": "6/tests.xml",
+      "layer": "Installed Nexus/Core/Connector HTTP/SQLite; actual canonical Core protocol with inert peer for cases1\u20136. Historical artifact read-facts + canonical verify + source-copy TypeScript presentation for case7."
+    },
+    {
+      "node": "tests.execution_r4.test_backend_batch_r8::test_same_delivery_verification_three_files_seen_and_no_ack",
+      "scenario_proposal": [
+        "E16"
+      ],
+      "status": "FAIL",
+      "seconds": 5.164,
+      "phases": [
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_same_delivery_verification_three_files_seen_and_no_ack",
+          "phase": "setup",
+          "outcome": "passed"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_same_delivery_verification_three_files_seen_and_no_ack",
+          "phase": "call",
+          "outcome": "failed",
+          "longrepr": "..\\tree\\tests\\execution_r4\\test_backend_batch_r8.py:231: in test_same_delivery_verification_three_files_seen_and_no_ack\n    composed_delivery_case(tmp_path)\n..\\tree\\tests\\execution_r4\\backend_batch_results.py:110: in composed_delivery_case\n    assert node.returncode == 0, node.stdout + node.stderr\n           ^^^^^^^^^^^^^^^^^^^^\nE   AssertionError: node:internal/modules/run_main:107\nE       triggerUncaughtException(\nE       ^\nE   \nE   AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\nE   + actual - expected\nE   \nE     {\nE       badges: [\nE         'Awaiting verification'\nE       ],\nE   +   title: 'Turn result available'\nE   -   title: 'Delivery available'\nE     }\nE   \nE       at file:///C:/Users/jpamb/AppData/Local/Temp/nexus-hst-backend-batch-r8-9w1sfl87/presentation-check.mjs:23:8 {\nE     generatedMessage: true,\nE     code: 'ERR_ASSERTION',\nE     actual: {\nE       title: 'Turn result available',\nE       badges: [ 'Awaiting verification' ]\nE     },\nE     expected: { title: 'Delivery available', badges: [ 'Awaiting verification' ] },\nE     operator: 'deepStrictEqual',\nE     diff: 'simple'\nE   }\nE   \nE   Node.js v24.15.0"
+        },
+        {
+          "node": "tests/execution_r4/test_backend_batch_r8.py::test_same_delivery_verification_three_files_seen_and_no_ack",
+          "phase": "teardown",
+          "outcome": "passed"
+        }
+      ],
+      "artifact": "7/tests.xml",
+      "layer": "Installed Nexus/Core/Connector HTTP/SQLite; actual canonical Core protocol with inert peer for cases1\u20136. Historical artifact read-facts + canonical verify + source-copy TypeScript presentation for case7."
+    }
+  ],
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "payload_files": 1031,
+  "runner_sha256": "bfdaa9eec56a2063531e730301221be6aa7829856f6ec81ed34ec9545e906d6d",
+  "manifest_sha256": "a9b9239dbdb6dd2af24b90791ec2f7412099e069b7d5cf223eaa7cd55a6a454f",
+  "failure": "E16 source-copy Node oracle expected Delivery available, actual Turn result available with Awaiting verification badge. Final Seen/noACK assertions were not reached.",
+  "classification": "Presentation expectation/source semantics requires Root review; no product defect established and E16 not qualified.",
+  "guards": {
+    "source_drift": [],
+    "payload_drift": [],
+    "copied_drift": [],
+    "presentation_drift": [],
+    "external_helper_tooling_drift": [],
+    "own_helper_closure_drift": [],
+    "r7_r8_nonstatic_drift": []
+  },
+  "canonical_cleanup_cases": [
+    {
+      "canonical_failures": [],
+      "limits": "No native application/resume acknowledgement inferred."
+    },
+    {
+      "canonical_failures": [],
+      "limits": "No native application/resume acknowledgement inferred."
+    }
+  ],
+  "canonical_cleanup_failures": [],
+  "physical": [
+    {
+      "pid": 50052,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 30560,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 58040,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 56792,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 16740,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 48840,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 61276,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 43032,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 62332,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 17744,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 18360,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 41444,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 59752,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 42976,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 52088,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 50880,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 26692,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 50072,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 29180,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 60168,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 59856,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 61976,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 50788,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 60844,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 43108,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 26268,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 56088,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 30496,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 56064,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 15764,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 40120,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 17128,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 20396,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 43736,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 60004,
+      "same_birth_alive": false,
+      "present": false
+    }
+  ],
+  "physical_same_birth_remaining": 0,
+  "active_matching_runner_pids": [],
+  "runner_exit_code": 1,
+  "timeout_or_force_used": false,
+  "snapshot_scope": "Six explicitly listed tables per test; not a whole-database read-only claim. Auth telemetry/real control renewal are separate.",
+  "raw_private_home_retained": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-backend-batch-r8-9w1sfl87",
+  "rerun": false,
+  "limits": [
+    "Six selected tables are not a whole-DB read-only claim.",
+    "A04/B12 shared-work correlation uses historical read-facts; live state/authority are canonical.",
+    "E16 artifacts/receipts are historical synthetic read facts, not three real managed executions.",
+    "No provider/browser/human/performance qualification.",
+    "Ancestry polling does not enumerate every short-lived process. No non-own process image/command lines copied."
+  ],
+  "retained_cleanup_json_count": 2,
+  "canonical_close_assertions_passed_via_test_outcomes": 6,
+  "raw_retention_limit": "Repeated own pytest processes used default tmp retention; only two cleanup JSON files remain. All six passing owner contexts assert close() has no failures. No missing raw snapshots fabricated."
+}

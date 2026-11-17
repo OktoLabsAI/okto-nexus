@@ -1,0 +1,20 @@
+{
+  "new_realization": "real_07c49371fe4d9aaf088fe0413f4d8f01",
+  "first_realization": "real_5f5257abeb76932f02476d199882440d",
+  "new_realization_was_pending": true,
+  "first_state_sha256_before": "be714415eb464d06b1bec98b0cb6b3a7b6a1502c8e05a747c0d699391d332b47",
+  "first_state_sha256_after": "be714415eb464d06b1bec98b0cb6b3a7b6a1502c8e05a747c0d699391d332b47",
+  "first_connection_intact": true,
+  "tables_compared": [
+    "agent_endpoints",
+    "execution_bindings",
+    "execution_local_realizations",
+    "execution_realizations",
+    "execution_workspace_bindings",
+    "runtime_execution_grants",
+    "runtime_profiles",
+    "workspaces"
+  ],
+  "sessions_before_open": 0,
+  "authority_sql_written": false
+}

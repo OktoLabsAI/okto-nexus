@@ -1,0 +1,16 @@
+{
+  "status": "RUNNER_PREFLIGHT_FAILED",
+  "command": "rtk proxy python -B -X utf8 NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/backend-batch/run_installed_r8.py --gate ROOT_APPROVED_BACKEND_BATCH_R8 --manifest-sha256 df36773e9d4b63250ece1d32d02be3876cadc14df6abdf923f5785297020d419 --case all",
+  "tool_result": "e89a2e",
+  "exit_code": 1,
+  "error": "ModuleNotFoundError: No module named 'owned_commands'",
+  "location": "run_installed_r8.py:93 load package-hst-r8/package.py; package.py:12 imports owned_commands",
+  "classification": "Runner helper import closure, before fixture allocation and before pytest dispatch; not a product or scenario failure.",
+  "cases_executed": 0,
+  "cases_not_run": 7,
+  "fixture_allocated": false,
+  "owned_test_processes_started": 0,
+  "rerun": false,
+  "runner_and_tests_modified": false,
+  "next_step": "Root review required before any import-path preparation correction or new attempt."
+}

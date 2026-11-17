@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="11.185" timestamp="2026-11-17T19:39:29.840270-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_backend_batch_r8" name="test_shared_owner_bindings_keep_distinct_current_state" time="10.056"><failure message="AssertionError: ('Canonical owner cleanup failed', ['AssertionError'])">..\tree\tests\execution_r4\test_backend_batch_r8.py:70: in test_shared_owner_bindings_keep_distinct_current_state
+    working = owner.turn(b, binding=other, actor='subject')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\tree\tests\execution_r4\backend_batch_owner.py:168: in turn
+    self.stage(turn, ('SUBMITTED',))
+..\tree\tests\execution_r4\backend_batch_owner.py:148: in stage
+    return wait(lambda: (value if (value := self.receipt(operation)).get('executor_stage') in stages else None),
+..\tree\tests\execution_r4\backend_batch_owner.py:19: in wait
+    value = predicate()
+            ^^^^^^^^^^^
+..\tree\tests\execution_r4\backend_batch_owner.py:148: in &lt;lambda&gt;
+    return wait(lambda: (value if (value := self.receipt(operation)).get('executor_stage') in stages else None),
+                                            ^^^^^^^^^^^^^^^^^^^^^^^
+..\tree\tests\execution_r4\backend_batch_owner.py:145: in receipt
+    return self.call('GET', '/api/v1/runtime-management/runtime/operations/' + operation['operation_id'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\tree\tests\execution_r4\backend_batch_owner.py:48: in call
+    assert response.status_code &lt; 400, (response.status_code, response.text)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: (404, '{"error":{"code":"NOT_FOUND","stage":"operation.read","message":"The operation was not found in this scope.","possible_effect":false,"retry_safe":false,"operation_id":null,"action":""}}')
+
+During handling of the above exception, another exception occurred:
+..\tree\tests\execution_r4\test_backend_batch_r8.py:65: in test_shared_owner_bindings_keep_distinct_current_state
+    with canonical_case(tmp_path, monkeypatch) as owner:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:162: in __exit__
+    self.gen.throw(value)
+..\tree\tests\execution_r4\backend_batch_owner.py:281: in canonical_case
+    owner.close()
+..\tree\tests\execution_r4\backend_batch_owner.py:260: in close
+    assert not failures, ('Canonical owner cleanup failed', failures)
+           ^^^^^^^^^^^^
+E   AssertionError: ('Canonical owner cleanup failed', ['AssertionError'])</failure></testcase></testsuite></testsuites>

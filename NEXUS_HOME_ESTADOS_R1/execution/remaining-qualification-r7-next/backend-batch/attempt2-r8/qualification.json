@@ -1,0 +1,88 @@
+{
+  "status": "FAIL_FIRST_CASE_REMAINING_NOT_RUN",
+  "passed": 0,
+  "failed": 1,
+  "not_run": 6,
+  "raw_root_retained": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-backend-batch-r8-22zr0bgd",
+  "runtime_source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "payload_files": 1031,
+  "manifest_sha256": "03bf24a50ba32747fc652c65a7dcaac637c3e3bf300c95a6831b502960495fb5",
+  "runner_sha256": "eb02a392d60767ae3dd2a7ba57c0bd1674c5f6e8bcd502411b55a4390af9f98f",
+  "node": "tests/execution_r4/test_backend_batch_r8.py::test_shared_owner_bindings_keep_distinct_current_state",
+  "layer": "Installed Python/Core/Connector; copied original fixtures + new tests; source-copy TypeScript presentation only; no provider/browser/latency qualification",
+  "result": "binding.prepare HTTP409 CONFLICT: The selected realization has changed; possible_effect=false, before second binding or live turns.",
+  "classification": "Fixture preparation/current realization proof failure; no product defect established. Preserve actual FAIL; scenario acceptance not qualified.",
+  "phases": {
+    "setup": "PASS",
+    "call": "FAIL",
+    "teardown": "PASS"
+  },
+  "elapsed_pytest_seconds": 6.53,
+  "runner_exit_code": 1,
+  "guards": {
+    "source_drift": [],
+    "payload_drift": [],
+    "copied_drift": [],
+    "presentation_drift": [],
+    "external_helper_tooling_drift": [],
+    "own_helper_closure_drift": [],
+    "r7_r8_nonstatic_drift": []
+  },
+  "snapshot_scope": "Six explicitly listed tables per test; not a whole-database read-only claim. Auth telemetry/real control renewal are separate.",
+  "not_run_nodes": [
+    "test_hidden_productive_sibling_same_binding_prevents_false_full_block",
+    "test_current_core_work_survives_external_unavailable_only",
+    "test_explicit_nonblocking_input_keeps_working_and_one_independent_action",
+    "test_idle_sibling_cannot_make_a_full_block_independent",
+    "test_admitted_queued_sibling_has_no_independence_proof",
+    "test_same_delivery_verification_three_files_seen_and_no_ack"
+  ],
+  "process_exit_observation": [
+    {
+      "pid": 49060,
+      "present": false,
+      "same_birth_alive": false
+    },
+    {
+      "pid": 36860,
+      "present": false,
+      "same_birth_alive": false
+    },
+    {
+      "pid": 54224,
+      "present": false,
+      "same_birth_alive": false
+    }
+  ],
+  "physical_remaining_same_birth": 0,
+  "owned_command": {
+    "exit_code": 1,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 49060,
+        "birth": 1794954709.2048848,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 36860,
+        "birth": 1794954709.2188709,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": false,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  "limits": [
+    "No rerun or oracle/fixture correction.",
+    "No provider, browser, real native success, performance or human acceptance qualified.",
+    "Cleanup ancestry polling is bounded and cannot enumerate every short-lived child.",
+    "Private own DB/home retained only in Temp; public evidence contains test logs and metadata, not credentials."
+  ]
+}
