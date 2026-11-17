@@ -355,7 +355,7 @@
       "id": "QC-003",
       "phase": "QC-00",
       "title": "Modelar namespace público e preparar fixtures",
-      "status": "TODO",
+      "status": "VERIFIED",
       "depends_on": [
         "QC-001"
       ],
@@ -410,7 +410,13 @@
         "QC-T-G14",
         "QC-T-G15"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc03-backend/qualification.json",
+          "scope": "Namespace and atomicity contract reconciled; new fixtures cover Servers/workspaces/hosts, legacy and uncertain receipts; G0 contract evidence only",
+          "commit": "cd88162e"
+        }
+      ]
     },
     {
       "id": "QC-004",
@@ -1008,7 +1014,7 @@
       "id": "QC-015",
       "phase": "QC-03",
       "title": "Adicionar registro canônico de IDs públicos",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-003"
       ],
@@ -1046,7 +1052,13 @@
         "QC-T-E17",
         "QC-T-E18"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc03-backend/qualification.json",
+          "scope": "Migration 168, Server registry, constraints and transactional tests; integrated CLI/package qualification pending",
+          "commit": "cd88162e"
+        }
+      ]
     },
     {
       "id": "QC-016",
@@ -1113,7 +1125,7 @@
       "id": "QC-017",
       "phase": "QC-03",
       "title": "Integrar ID ao request, Finish e recibo",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "QC-016"
       ],
@@ -1168,7 +1180,13 @@
         "QC-T-G14",
         "QC-T-G15"
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "path": "execution/qc03-backend/qualification.json",
+          "scope": "Optional envelope omitted from legacy digests; fixed installed-PR27 golden; atomic Finish and receipt rollback/recovery",
+          "commit": "cd88162e"
+        }
+      ]
     },
     {
       "id": "QC-018",

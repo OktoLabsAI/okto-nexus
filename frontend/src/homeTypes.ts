@@ -132,6 +132,7 @@ export interface HomeBoardPage extends HomeBoardMetadata,HomeBoardSlice {partiti
 export type HomeBoardQuery = Omit<HomeEntryQuery,'quick'>;
 export interface HomeHarnessChild extends HomeBoardEntry {shared_reference:boolean}
 export interface HomeHarnessConnection extends HomeConnectionContext {
+  connect_id?:string|null;
   harness_id:string;agent_label:string|null;harness_label?:string|null;host_label:string|null;workspace_label?:string|null;
 }
 export interface HomeHarnessCard {

@@ -1,0 +1,55 @@
+{
+  "scope": "QC-008/QC-026 additive UI projection and optional retained-envelope receiver, not complete Quick Connect qualification",
+  "status": "FOCAL_PASS_BROWSER_NOT_RUN",
+  "validation": [
+    {
+      "command": "rtk proxy node --test tests/projectConnectFlow.test.mjs tests/uiHarnessCard.test.mjs tests/uiHarnessController.test.mjs",
+      "cwd": "frontend",
+      "exit_code": 0,
+      "tests_passed": 63,
+      "duration_ms": 1420.5547,
+      "tool": "b3342d"
+    },
+    {
+      "command": "rtk proxy npx tsc --noEmit",
+      "cwd": "frontend",
+      "exit_code": 0,
+      "tool": "08af2c",
+      "note": "Same final product sources; only two tests added after this typecheck"
+    }
+  ],
+  "source_sha256": {
+    "frontend/src/connectionConfiguration.ts": "66c079073358c093aa4bdfd1f9f6b89417761690b0290d0459436fcb8ad42b18",
+    "frontend/src/runtimeApi.ts": "aa36223138ae662d079817b2de3dcf7ba4986d9958a8859c2b5bf0c9fecbc16e",
+    "frontend/src/homeTypes.ts": "b49626931f1798271e1f8e725520d3637707e41594a6b0f23ba479f0f4038254",
+    "frontend/src/homeController.ts": "390efec0d1b2af755cae5a37b0f411a75d8dea9fac1ef1f91577486c9c5cd810",
+    "frontend/src/projectConnectFlowModel.ts": "a254b33da30cdf66e9613d773809321f007e839f54ec2dcd8a78f2a49decae51",
+    "frontend/src/components/onboarding/ProjectConnectFlow.tsx": "01c1f5a8337506558b60824d2739ccbcc29d1cf1969dbd88dcf9cc8fd9214cc7",
+    "frontend/src/components/home/HomeHarnessCard.tsx": "37f9a631728ad9a3cdfe5a6e4cb03b1072ae368f10a73339a38815837c1c9d3e",
+    "frontend/tests/projectConnectFlow.test.mjs": "3e43fbfd54e694360acb721ea2b5c435fe7a44166537beb6a6b89f8d8354880c",
+    "frontend/tests/uiHarnessCard.test.mjs": "f0a889d258d5422406384883ac50bf53b4e9e637d5d539dd6295ef3e13be7a95",
+    "frontend/tests/uiHarnessController.test.mjs": "d8209d11949d3beb365bec96867ed20f3094393b4228704c3e7a0c4679547877"
+  },
+  "contracts": {
+    "catalog_home": "connect_id absent/null/normalized ASCII; canonical tuples and legacy harness_id adapter-family field unchanged",
+    "request": "Optional public_connection version1/connect_id/reservation_ref/project_revision; no synthetic null when absent",
+    "receipt": "public_connection version1/connect_id/reservation_ref/revision/state bound/canonical_ref exact seven catalog fields",
+    "legacy": "Existing onboarding remains without public metadata; UI explicitly states Harness ID not assigned",
+    "authority": "UI creates or reserves no public ID; Server must validate any retained envelope before Test/Finish"
+  },
+  "focal_proofs": [
+    "Catalog manual copy preserves nullable ID; Resume still reads exact binding without Test/Finish/grant",
+    "Home shows same public ID on harness and originating signal, separate from collaborator and adapter",
+    "Invalid metadata rejected; association revision resets cached pages without changing card/group/binding identity",
+    "Retained envelope strict, immutable and carried through recovery; missing/foreign/unbound receipt retains uncertainty",
+    "Lost Finish reply recovers same public ID and full tuple, with no extra Test/Finish in synthetic API fixture",
+    "Actual RuntimeApi wire preserves old omission and new optional member exactly"
+  ],
+  "limits": [
+    "Node tests use inert API fixtures and SSR; no actual reservation, backend Finish, provider or native execution proved here",
+    "No new menu, setup flow, ID input, daemon or per-ID execution action",
+    "No browser, installed-package or human acceptance run by this agent",
+    "No claim that old request hashes are qualified: backend golden tests remain required for QC-028",
+    "QC-008 whole-task CLI vocabulary/output and QC real journey are owned separately; these tests do not promote them to PASS"
+  ]
+}

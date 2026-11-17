@@ -1,6 +1,6 @@
 import {useEffect, useId, useMemo, useRef, useState, useSyncExternalStore} from 'react';
 import {runtimeApi, type ConnectionCatalogItem, type SetupFinishResult} from '../../runtimeApi';
-import {ProjectConnectModel, connectorDraftCommand, type ConnectWorkspace, type ProjectConnectApi, type ProjectConnectEntryMode} from '../../projectConnectFlowModel';
+import {ProjectConnectModel, connectorDraftCommand,hasConfirmedPublicConnection, type ConnectWorkspace, type ProjectConnectApi, type ProjectConnectEntryMode} from '../../projectConnectFlowModel';
 import {ConnectionOutcome, ConnectionWorkflow} from '../ConnectionWorkflow';
 import {HarnessPreferenceFields} from '../HarnessPreferenceFields';
 import {ModalCancelButton, useAgentModalGuard, useAgentModalChanges, useAgentModalTransition} from '../AgentActionModal';
@@ -69,13 +69,15 @@ export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,o
   const confirmed=phase==='complete'&&saved?.saved===true&&saved.agent_created===true&&!!request&&!!binding&&
     saved.agent_id===request.agent_id&&binding.agent_id===request.agent_id&&binding.server_id===state.serverId&&
     binding.executor_id===request.executor_id&&binding.adapter_id===request.configuration.adapter_id&&binding.candidate_ref===request.candidate_ref&&
-    !!binding.binding_id&&!!binding.workspace_id&&!!binding.workspace_binding_id&&(request.workspace_id===null||binding.workspace_id===request.workspace_id);
+    !!binding.binding_id&&!!binding.workspace_id&&!!binding.workspace_binding_id&&(request.workspace_id===null||binding.workspace_id===request.workspace_id)&&
+    hasConfirmedPublicConnection(request,saved);
   const allowed=Object.entries(identity?.permissions||{}).flatMap(([group,value])=>
     value&&typeof value==='object'&&!Array.isArray(value)?Object.entries(value).filter(([,enabled])=>enabled===true).map(([flag])=>`${group}.${flag}`):[]);
   const policyLimits=identity?.permissions.limits;
   const limits=policyLimits&&typeof policyLimits==='object'&&!Array.isArray(policyLimits)?Object.entries(policyLimits).filter(([,value])=>typeof value==='number'||value===null):[];
   const reviewDetails=request&&<div className="space-y-3">
     <dl className="grid gap-2 sm:grid-cols-2"><div><dt>Project</dt><dd>{request.configuration.workspace_label}</dd></div><div><dt>Collaborator</dt><dd>{request.agent_creation?.display_name}</dd></div>
+      {request.public_connection&&<div><dt>Harness ID (proposed)</dt><dd>{request.public_connection.connect_id}</dd></div>}
       <div><dt>Harness / execution host</dt><dd>{harnessLabel} · {state.executorLabel||'Reviewed Server host'}</dd></div>
       <div><dt>Model</dt><dd className="break-words">{modelLabel}</dd></div>
       <div><dt>Execution authorization at Finish</dt><dd>{request.configuration.authorization.minutes??'Unlimited'} minutes · {request.configuration.authorization.actions??'Unlimited'} actions</dd></div></dl>
@@ -121,7 +123,8 @@ export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,o
       {entryMode==='choose'&&state.catalog.length>0&&<section aria-label="Existing project connections" className="space-y-2"><h3 className="font-semibold">Open an existing connection</h3>
         <p>Selecting opens its context. It does not start a session, renew authorization or change its configuration.</p>
         {state.catalog.map(item=><div key={item.server_id+':'+item.executor_id+':'+item.binding_id} className="rounded border p-3">
-          <p className="font-medium">{item.agent_label||'Agent name unavailable'} · {item.adapter_id==='codex_app_server'?'Codex':item.adapter_id==='claude_stream'?'Claude':item.adapter_id==='pi_rpc'?'Pi':item.adapter_id}</p>
+          <p className="font-medium">{item.connect_id?`Harness ID: ${item.connect_id}`:item.agent_label||'Agent name unavailable'} · {item.adapter_id==='codex_app_server'?'Codex':item.adapter_id==='claude_stream'?'Claude':item.adapter_id==='pi_rpc'?'Pi':item.adapter_id}</p>
+          {!item.connect_id&&<p className="text-xs text-surface-500">Harness ID not assigned</p>}
           <p className="text-sm">{item.workspace_label||'Project'} · {item.host_label||(item.execution_location==='local'?'Nexus Server':'Connector host')}</p>
           <button className="btn btn-secondary" disabled={state.busy} onClick={()=>act(async()=>{const result=await model.resume(item);if(result)setResumeTarget(result);})}>Open connection</button>
           <details><summary>Technical details</summary><p className="break-all">{item.binding_id}</p><p>Harness reference: {item.adapter_id}</p><p>Canonical access and state are checked when opened.</p></details>
@@ -193,6 +196,7 @@ export function ProjectConnectFlow({identityKey,workspace,serverOrigin,onClose,o
     {phase==='complete'&&(confirmed?<section aria-label="Connection confirmed" data-modal-passive className="space-y-3">
       <ConnectionOutcome kind="success" title="Connected"><p>The reviewed connection is saved for this project. No project task has been started.</p></ConnectionOutcome>
       <dl className="grid gap-2 sm:grid-cols-2"><div><dt>Collaborator</dt><dd>{request!.agent_creation?.display_name}</dd></div><div><dt>Project</dt><dd>{request!.configuration.workspace_label}</dd></div>
+        <div><dt>Harness ID</dt><dd>{saved!.public_connection?.connect_id||'Not assigned (legacy connection)'}</dd></div>
         <div><dt>Harness</dt><dd>{harnessLabel}</dd></div><div><dt>Model</dt><dd className="break-words">{modelLabel}</dd></div><div><dt>Host</dt><dd>{state.executorLabel||'Reviewed Server host'}</dd></div></dl>
       <div className="flex flex-wrap gap-2"><button type="button" className="btn btn-primary" disabled={state.busy} onClick={()=>transition(()=>onComplete(state.result!,{openContext:true}))}>Open connection</button>
         <button type="button" className="btn btn-secondary" disabled={state.busy} onClick={()=>transition(()=>onComplete(state.result!,{openContext:false}))}>Back to project</button></div>

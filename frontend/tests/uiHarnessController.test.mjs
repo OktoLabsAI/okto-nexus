@@ -94,3 +94,16 @@ test('nonempty origin references remain fully scoped and complete',async()=>{
     h.configure();await h.clock.advance();assert.equal(h.controller.getState().harnessBoard,null);assert.equal(h.controller.getState().status,'error');h.controller.dispose();
   }
 });
+test('QC public metadata association changes revision and resets pages without renaming the canonical card or adapter',async()=>{
+  const h=harness();h.configure();await h.clock.advance();h.controller.loadHarnessChildren('card');await h.clock.advance(1000);
+  const before=h.controller.getState().harnessBoard.columns.active.items[0];
+  h.behavior.harnessBoard=q=>board(q,{revision:'b2',entry_revision:'e2',unlinked:slice(),columns:{active:slice([{...card('card','e2'),connection:{...connection,connect_id:'reviewer'}}]),needs_you:slice(),results:slice()}});
+  h.controller.refresh();await h.clock.advance(1000);const state=h.controller.getState(),after=state.harnessBoard.columns.active.items[0];
+  assert.equal(after.id,before.id);assert.equal(after.group_id,before.group_id);assert.equal(after.connection.connect_id,'reviewer');
+  assert.equal(after.connection.harness_id,before.connection.harness_id);assert.equal(after.connection.binding_id,before.connection.binding_id);
+  assert.deepEqual(state.harnessChildren,{});assert.equal(h.calls.every(call=>call.name.startsWith('harness')),true);h.controller.dispose();
+  for(const connect_id of ['Reviewer','../bad','a'.repeat(65),1]){
+    const invalid=harness();invalid.behavior.harnessBoard=q=>board(q,{columns:{active:slice([{...card(),connection:{...connection,connect_id}}]),needs_you:slice(),results:slice()}});
+    invalid.configure();await invalid.clock.advance();assert.equal(invalid.controller.getState().harnessBoard,null);invalid.controller.dispose();
+  }
+});

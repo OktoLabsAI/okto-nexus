@@ -23,6 +23,7 @@ function load(url) {
 const {ProjectConnectModel,connectCheckpointKey,connectorDraftCommand}=load(new URL('../src/projectConnectFlowModel.ts',import.meta.url));
 const {ProjectConnectFlow}=load(new URL('../src/components/onboarding/ProjectConnectFlow.tsx',import.meta.url));
 const {RuntimeManagementError}=load(new URL('../src/runtimeApi.ts',import.meta.url));
+const {assertSetupPublicConnection}=load(new URL('../src/connectionConfiguration.ts',import.meta.url));
 const workspace={workspace_id:'logical-project',display_name:'Fixture project'};
 const preset={format_version:1,origin:{id:'project-generalist',revision:7},identity:{role:'Project assistant',permissions:{messages:{send_direct:true},limits:{messages_per_minute:43,max_recipients:6}},defaults_hash:'sha256:'+'f'.repeat(64)},
   configuration:{runtime_enabled:true,session_policy:'per_sender',harness_settings:{},tool_access:'ask',authorization:{minutes:17,actions:9,no_expiry:false,unlimited_actions:false}},effects:['A temporary model test may incur provider usage.','Finish saves the reviewed connection.']};
@@ -64,6 +65,111 @@ function fixture(patch={}) {
 async function reviewed(f,adapter='codex_app_server') {
   const model=f.model();await model.initialize();await model.add();model.selectInstallation('candidate-'+adapter);model.review();return model;
 }
+
+const publicSelection=()=>({version:1,connect_id:'reviewer',reservation_ref:'pcr_'+'a'.repeat(32),project_revision:'sha256:'+'b'.repeat(64)});
+const publicReceipt=(body,binding)=>({version:1,connect_id:body.public_connection.connect_id,reservation_ref:body.public_connection.reservation_ref,
+  revision:1,state:'bound',canonical_ref:Object.fromEntries(['server_id','executor_id','binding_id','endpoint_id','agent_id','workspace_id','workspace_binding_id'].map(key=>[key,binding[key]]))});
+async function retainedPublicFixture(f){
+  // Synthetic retained envelope receiver test, not a reservation or paid Test.
+  const original=await reviewed(f);await original.test(true);original.dispose();
+  const key=connectCheckpointKey('human-1','server-1',workspace.workspace_id),checkpoint=JSON.parse(f.storage.getItem(key));
+  checkpoint.request.public_connection=publicSelection();f.storage.setItem(key,JSON.stringify(checkpoint));
+  const model=f.model();await model.initialize();return {model,key,checkpoint};
+}
+
+test('QC catalog preserves nullable public ID separately from exact canonical references and Resume stays passive',async()=>{
+  const f=fixture(),item={...row(),connect_id:'reviewer'};f.setCatalog([item]);const model=f.model();await model.initialize();
+  assert.equal(model.getSnapshot().catalog[0].connect_id,'reviewer');
+  const result=await model.resume(model.getSnapshot().catalog[0]);assert.equal(result.connect_id,'reviewer');
+  for(const key of ['agent_id','binding_id','executor_id','workspace_binding_id','workspace_id','adapter_id'])assert.equal(result[key],item[key]);
+  assert.equal(f.calls.some(call=>['testSetup','finishSetup','checkLocalInstallation'].includes(call.name)),false);
+  const html=renderExistingModel(model,f);assert.match(html,/Harness ID: reviewer/);assert.doesNotMatch(html,/Quick Connect<\/|<h[1-6][^>]*>IDs</);
+  model.dispose();
+  for(const value of [null,undefined]){
+    const legacy=fixture(),entry=row();if(value===null)entry.connect_id=null;legacy.setCatalog([entry]);const old=legacy.model();await old.initialize();
+    assert.equal(old.getSnapshot().catalog[0].connect_id,value);assert.match(renderExistingModel(old,legacy),/Harness ID not assigned/);old.dispose();
+  }
+});
+
+test('QC catalog refuses invalid public IDs rather than treating them as a new connection identity',async()=>{
+  for(const connect_id of ['Reviewer','../private','a'.repeat(65),'códex',12]){
+    const f=fixture();f.setCatalog([{...row(),connect_id}]);const model=f.model();await model.initialize();
+    assert.equal(model.getSnapshot().catalogStatus,'unavailable');assert.deepEqual(model.getSnapshot().catalog,[]);model.dispose();
+  }
+});
+
+test('QC legacy setup omits public metadata instead of synthesizing an ID, reservation or request member',async()=>{
+  const f=fixture(),model=await reviewed(f),request=clone(model.getSnapshot().request);
+  assert.equal(Object.hasOwn(request,'public_connection'),false);await model.test(true);await model.finish();
+  for(const call of f.calls.filter(call=>['testSetup','finishSetup'].includes(call.name)))assert.equal(Object.hasOwn(call.args[0],'public_connection'),false);
+  assert.equal(Object.hasOwn(model.getSnapshot().result,'public_connection'),false);
+  assert.match(renderExistingModel(model,f),/Harness ID[\s\S]*Not assigned \(legacy connection\)/);model.dispose();
+});
+
+test('QC retained public review survives reload and validates bound receipt before displaying its Harness ID',async()=>{
+  const f=fixture(),finish=f.api.finishSetup;
+  f.api.finishSetup=async body=>{const result=await finish(body);return {...result,public_connection:publicReceipt(body,result.binding)};};
+  const {model,checkpoint,key}=await retainedPublicFixture(f),tests=f.calls.filter(call=>call.name==='testSetup').length;
+  assert.equal(model.getSnapshot().phase,'uncertain');assert.deepEqual(model.getSnapshot().request.public_connection,checkpoint.request.public_connection);
+  assert.equal(Object.isFrozen(model.getSnapshot().request.public_connection),true);
+  await model.recover();assert.equal(model.getSnapshot().phase,'finish');assert.match(renderExistingModel(model,f),/Harness ID \(proposed\)/);
+  await model.finish();assert.equal(model.getSnapshot().phase,'complete');assert.equal(f.storage.getItem(key),null);
+  assert.equal(f.calls.filter(call=>call.name==='testSetup').length,tests);
+  assert.deepEqual(f.calls.find(call=>call.name==='finishSetup').args[0].public_connection,publicSelection());
+  assert.match(renderExistingModel(model,f),/Harness ID[\s\S]*reviewer/);model.dispose();
+});
+
+test('QC missing, mismatched or foreign public receipt keeps the exact retained Finish uncertain',async()=>{
+  const mutations=[()=>undefined,value=>({...value,connect_id:'another'}),value=>({...value,reservation_ref:'pcr_'+'c'.repeat(32)}),
+    value=>({...value,state:'reserved'}),value=>({...value,revision:0}),value=>({...value,canonical_ref:{...value.canonical_ref,binding_id:'foreign'}}),
+    value=>({...value,canonical_ref:{...value.canonical_ref,workspace_binding_id:'foreign'}})];
+  for(const mutate of mutations){
+    const f=fixture(),finish=f.api.finishSetup;f.api.finishSetup=async body=>{const result=await finish(body);return {...result,public_connection:mutate(publicReceipt(body,result.binding))};};
+    const {model,key}=await retainedPublicFixture(f);await model.recover();await model.finish();
+    assert.equal(model.getSnapshot().phase,'uncertain');assert.ok(f.storage.getItem(key));assert.deepEqual(model.getSnapshot().request.public_connection,publicSelection());
+    assert.doesNotMatch(renderExistingModel(model,f),/title="Connected"|Connection confirmed/);model.dispose();
+  }
+});
+
+test('QC retained public envelope is strict and cannot carry arbitrary material or be silently normalized',async()=>{
+  for(const value of [null,{...publicSelection(),connect_id:'Reviewer'},{...publicSelection(),reservation_ref:'URL-with-secret'},
+    {...publicSelection(),project_revision:'invalid'},{...publicSelection(),credential:'private'}]){
+    assert.throws(()=>assertSetupPublicConnection(value),/Harness ID/);
+    const f=fixture(),original=await reviewed(f);await original.test(true);original.dispose();
+    const key=connectCheckpointKey('human-1','server-1',workspace.workspace_id),saved=JSON.parse(f.storage.getItem(key));saved.request.public_connection=value;
+    const raw=JSON.stringify(saved);f.storage.setItem(key,raw);const model=f.model();await model.initialize();
+    assert.equal(model.getSnapshot().phase,'loading');assert.equal(f.storage.getItem(key),raw);
+    assert.equal(f.calls.some(call=>call.name==='finishSetup'),false);model.dispose();
+  }
+});
+test('QC lost public Finish response recovers the same bound ID and reference without a second Test or Finish',async()=>{
+  const f=fixture(),finish=f.api.finishSetup;
+  f.api.finishSetup=async body=>{
+    const result=await finish(body),bound={...result,public_connection:publicReceipt(body,result.binding)};
+    f.setReceipt({setup_run_id:body.client_intent_id,request_hash:'sha256:'+'d'.repeat(64),state:'committed',result:bound});
+    throw new Error('Synthetic response lost after commit');
+  };
+  const {model,key}=await retainedPublicFixture(f);await model.recover();await model.finish();
+  assert.equal(model.getSnapshot().phase,'uncertain');const raw=f.storage.getItem(key),request=clone(model.getSnapshot().request);
+  const before=f.calls.filter(call=>['testSetup','finishSetup'].includes(call.name)).map(call=>call.name);model.dispose();
+  const next=f.model();await next.initialize();assert.equal(f.storage.getItem(key),raw);await next.recover();
+  assert.equal(next.getSnapshot().phase,'complete');assert.equal(next.getSnapshot().result.public_connection.connect_id,'reviewer');
+  assert.deepEqual(next.getSnapshot().result.public_connection.canonical_ref,publicReceipt(request,next.getSnapshot().result.binding).canonical_ref);
+  assert.deepEqual(f.calls.filter(call=>['testSetup','finishSetup'].includes(call.name)).map(call=>call.name),before);
+  assert.deepEqual(f.calls.findLast(call=>call.name==='recoverSetup').args[0].public_connection,request.public_connection);assert.equal(f.storage.getItem(key),null);next.dispose();
+});
+
+test('QC RuntimeApi preserves exact optional product envelope and omission on the wire',async()=>{
+  const {runtimeApi}=load(new URL('../src/runtimeApi.ts',import.meta.url)),original=globalThis.fetch,calls=[];
+  globalThis.fetch=async(url,init)=>{calls.push({url,init});return Response.json({saved:true});};
+  try{
+    const old={client_intent_id:'legacy-intent',configuration:{alias:'legacy'}};
+    await runtimeApi.finishSetup(old);await runtimeApi.recoverSetup({...old,public_connection:publicSelection()});
+    assert.equal(calls[0].init.body,JSON.stringify(old));assert.equal(Object.hasOwn(JSON.parse(calls[0].init.body),'public_connection'),false);
+    assert.deepEqual(JSON.parse(calls[1].init.body).public_connection,publicSelection());
+    assert.match(calls[1].url,/connections\/setup:recover$/);
+  }finally{globalThis.fetch=original;}
+});
 
 test('Add intent enters configuration only after complete canonical reads and never resumes or submits work',async()=>{
   const f=fixture();f.setCatalog([row()]);const model=f.model();
