@@ -1,0 +1,55 @@
+{
+  "status": "PASS_OFFLINE_SCOPED",
+  "tests": [
+    "T-PERF-01",
+    "T-DATA-12",
+    "T-DATA-14"
+  ],
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "python_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-final-pr16-pxprmqxo\\venv\\Scripts\\python.exe",
+  "product_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-final-pr16-pxprmqxo\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "cpu_count": 16,
+  "sqlite": "3.45.3",
+  "source_pins": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-final-pr16-pxprmqxo\\venv\\Lib\\site-packages\\okto_nexus\\application\\home_entries.py": "2ad5704dbf61526dc6a1be8d099da017997e38c93c9ad80cea359c7597e9e005",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-final-pr16-pxprmqxo\\venv\\Lib\\site-packages\\okto_nexus\\domain\\home_entries.py": "c28203f88d69bd22b4e1dd7544ff58716fd2e96862c67433d75dd5f462c0ef1d",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-final-pr16-pxprmqxo\\venv\\Lib\\site-packages\\okto_nexus\\domain\\home_entry_pages.py": "abca8cf04b8ef225a70dbaf23dcfaa4fff6fea25af53d95c9676af8f566dc617",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-final-pr16-pxprmqxo\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py": "d34154693d527fa96df452c0b2ff4e7ee918ccef5c1dd7205742ac159e434e5e",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-final-pr16-pxprmqxo\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\home.py": "e457a441560631b81f6a3cc78b299f04ead79265594d5b5b6e959577c57759c5",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-final-pr16-pxprmqxo\\fixture-copy\\NEXUS_UI_R1\\execution\\pr09-offline-data-performance\\run.py": "e12e91338992e74ce660596fcb411a5a66be6a26ef7c1bb27e239a1822982393",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-final-pr16-pxprmqxo\\fixture-copy\\NEXUS_UI_R1\\execution\\pr03-performance\\measure.py": "0a502e5c900ac50c4e5e200a1e03495072acfb9a8e9ace109a20eb5d81c16053",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-final-pr16-pxprmqxo\\fixture-copy\\NEXUS_UI_R1\\execution\\fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20"
+  },
+  "source_drift": [],
+  "sql_counts_by_agents_1_10_100": {
+    "entries": [
+      55,
+      55,
+      55
+    ],
+    "children": [
+      55,
+      55,
+      55
+    ],
+    "sessions": [
+      55,
+      55,
+      55
+    ]
+  },
+  "latency_scope": "HomeEntriesService.read only;3warm samples+1warmup per series;not HTTP/browser/SLO",
+  "provider_or_native_invoked": false,
+  "installed_prefix_modified": false,
+  "limits": [
+    "Synthetic SQLite durable read facts; no native lifecycle/billing claim.",
+    "Warm/cleanup technical facts are not projected as activity; this does not qualify browser labels.",
+    "Three samples only diagnose query-growth, not production latency percentiles. Existing PR03 larger benchmark retained."
+  ],
+  "files_sha256": {
+    "agents-1.json": "12ee957a89658ddc5c15765a679887178854fc8255c82d3c5ad25d5295b1be13",
+    "agents-10.json": "51bf3e57d0a85670cb0104f51d3644fb1952f455117a3bddfec059aca01ae388",
+    "agents-100.json": "83909d4bafdc9492adf77ca670b40451769fe7d4ea8b2bc30dd6fbd39512e138"
+  }
+}

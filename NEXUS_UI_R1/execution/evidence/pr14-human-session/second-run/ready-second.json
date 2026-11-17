@@ -1,0 +1,39 @@
+{
+  "url": "http://127.0.0.1:56787",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-human-m06m_l1m",
+  "identities": {
+    "artifact_id": "art_bd7eb144e44a49efb4ef884347a3dbd4",
+    "workspace": "ws",
+    "project_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-human-m06m_l1m\\participant-project",
+    "question_session": "ses_5e0b397c27d8617ce70c1decdfe1ee3f",
+    "closed_session": "ui-session-2"
+  },
+  "observation_window_seconds": 1800,
+  "decision_authority_times": [
+    {
+      "binding_id": "binding",
+      "lane_ticket_expires_at": "2026-11-17T00:05:11.532858+00:00"
+    }
+  ],
+  "original_grants": [
+    {
+      "grant_id": "grant_9b14016a109541ce9fe2b69ea1a58b6d",
+      "expires_at": "2026-11-17T00:55:11.182128Z",
+      "max_executions": 10
+    }
+  ],
+  "authority_limit": "Each native request expires120s after ingress; original control-lane ticket normally10min. No hidden grant or lane-ticket renewal; UI observation can stay30min.",
+  "facilitator_trigger": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui043-human-control-cc5yi6gx\\publish-fresh-question",
+  "trigger_policy": "Only after root starts task3, never under an existing human draft. New request8/source-sequence, same admitted operator turn/grant; old request expiry remains immutable.",
+  "provider_calls": 0,
+  "native_binary_calls": 0,
+  "test_is_simulated": true,
+  "loopback_operator": true,
+  "source_sha256": {
+    "NEXUS_UI_R1/execution/evidence/pr14-human-session/fixture.py": "9bc2ed876b693d54c9ecf8a01cab8d044e811c79fd7ef699015f97d9640fe4a7",
+    "NEXUS_UI_R1/execution/fixtures.py": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "1ce087992dd442b5a66ec36afbff60135dd17fbe800c1a5042e699a367bd5098",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-Zyb_20X4.js": "8370b675268ba80f3745c0376eedf66973aeea4cf06a80393bb77a8910767474"
+  },
+  "fixture_pid": 51800
+}

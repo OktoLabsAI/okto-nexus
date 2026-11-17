@@ -1,0 +1,35 @@
+{
+  "url": "http://127.0.0.1:56914",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-attention-authority-dy6pw52i",
+  "recipient": "operator",
+  "approval_id": "r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+  "server_id": "srv_05afae7f728df3bfb2152e122037a336",
+  "home_off": true,
+  "initial_state": {
+    "decisions": 0,
+    "inputs": 0,
+    "input_outbox": 0,
+    "native_requests": [
+      {
+        "canonical_request_id": "r4request_e0e60d5d5c85da9883bc53d00d82171fbc32eed30543a2684a3cfa8b544c1c07",
+        "state": "PENDING",
+        "received_at": "2026-11-17T00:29:04.437Z",
+        "expires_at": "2026-11-17T00:31:04.437000+00:00"
+      }
+    ],
+    "grants": [
+      {
+        "grant_id": "grant_60f31cfea54742128deb04b0d96ad2c6",
+        "expires_at": "2026-11-17T01:29:03.520801Z",
+        "max_executions": 10,
+        "used_executions": 0
+      }
+    ]
+  },
+  "request_expiry_unchanged": true,
+  "source_sha256": {
+    "tests/ui_simplification/browser_attention_authority_fixture.py": "19494cc326f5f83cabab0722b6765a796927832495c2aa8d41aaaa38b52e4b69",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "1ce087992dd442b5a66ec36afbff60135dd17fbe800c1a5042e699a367bd5098",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-Zyb_20X4.js": "8370b675268ba80f3745c0376eedf66973aeea4cf06a80393bb77a8910767474"
+  }
+}

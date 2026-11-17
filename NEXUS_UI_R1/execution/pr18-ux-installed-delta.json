@@ -1,0 +1,229 @@
+{
+  "status": "PASS",
+  "created_at": "2026-11-17T01:17:51.581623+00:00",
+  "scope": "PR18 UX static-only installed package delta; no provider/native/account/browser qualification",
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d",
+  "artifacts": {
+    "okto_nexus-0.3.5-py3-none-any.whl": "bfcd3a56cd0e901ac20de78706dc391cc0db9157ebed9c26553444b62d41b116",
+    "okto_nexus-0.3.5.tar.gz": "a6e754e6b39e9495ca8118f5e227351a769f3e880a7333e8fc3fe96c64c22776"
+  },
+  "dependency_wheels": {
+    "nexus_connector_core": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "wheel": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+      "payload_files_byte_equal": 168
+    },
+    "okto_nexus_connector": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+      "wheel": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\ci\\okto_nexus_connector-0.0.13-py3-none-any.whl",
+      "wheel_sha256": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+      "payload_files_byte_equal": 127
+    }
+  },
+  "comparison_to_PR16": {
+    "nonstatic_equal": 708,
+    "counts": {
+      "python": 538,
+      "sql": 167,
+      "other": 3
+    },
+    "changed": [
+      "okto_nexus/adapters/inbound/http/static/index.html"
+    ],
+    "removed": [
+      "okto_nexus/adapters/inbound/http/static/assets/index-DLUGhrP6.css",
+      "okto_nexus/adapters/inbound/http/static/assets/index-Zyb_20X4.js"
+    ],
+    "added": [
+      "okto_nexus/adapters/inbound/http/static/assets/index-BP1to-F2.css",
+      "okto_nexus/adapters/inbound/http/static/assets/index-CKlKNFgD.js"
+    ],
+    "only_static": true,
+    "baseline_wheel_sha256": "3374b69ef0a2dc230e49a8e2e6292d3130be50d317e0121f8fe44e6182b35576",
+    "wheel_source_payload_byte_equal": 715
+  },
+  "source_drift": [],
+  "installed": {
+    "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+    "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Scripts\\python.exe",
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv",
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d",
+    "isolated": 1,
+    "OS": "Windows-11-10.0.26300-SP0",
+    "sys_path": [
+      "C:\\Python313\\python313.zip",
+      "C:\\Python313\\DLLs",
+      "C:\\Python313\\Lib",
+      "C:\\Python313",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Lib\\site-packages",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Lib\\site-packages\\win32",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Lib\\site-packages\\win32\\lib",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Lib\\site-packages\\pythonwin"
+    ],
+    "modules": {
+      "okto_nexus": {
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\artifacts\\okto_nexus-0.3.5-py3-none-any.whl",
+        "wheel_sha256": "bfcd3a56cd0e901ac20de78706dc391cc0db9157ebed9c26553444b62d41b116",
+        "payload_files_byte_equal": 715
+      },
+      "nexus_connector_core": {
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+        "wheel": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+        "payload_files_byte_equal": 168
+      },
+      "okto_nexus_connector": {
+        "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+        "wheel": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\ci\\okto_nexus_connector-0.0.13-py3-none-any.whl",
+        "wheel_sha256": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+        "payload_files_byte_equal": 127
+      }
+    },
+    "BXP_comparison": {
+      "before_sha256": "544c48099db0793c66af54a48c70585e620fb0e56e02b145ab1bb38e5e743a64",
+      "nonstatic_files": 708,
+      "counts": {
+        ".py": 538,
+        ".sql": 167,
+        "other": 3
+      },
+      "changed": [
+        "okto_nexus/adapters/outbound/sqlite/home.py"
+      ],
+      "unchanged": 707
+    },
+    "assets": {
+      "okto_nexus/adapters/inbound/http/static/index.html": "4556b35e7a0371a03b9e99d75d7ae211fec336bc7589ac09e1d6575b27ba52fe",
+      "okto_nexus/adapters/inbound/http/static/assets/index-BP1to-F2.css": "6efb2b626483e4f1b0c0c5bd986040a898c49feb4403afb28f963a4fac7a9811",
+      "okto_nexus/adapters/inbound/http/static/assets/index-CKlKNFgD.js": "b3344814b6699b7ca1dd9b9e2cd9d9415ed44e5e476da9cac7f44200666966f3",
+      "okto_nexus/adapters/inbound/http/static/logos/nexus-icon.svg": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+      "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-dark.svg": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+      "okto_nexus/adapters/inbound/http/static/logos/nexus-wordmark-light.svg": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+      "okto_nexus/adapters/inbound/http/static/logos/oktolabs-icon.svg": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+    },
+    "distribution_versions": {
+      "annotated-doc": "0.0.6",
+      "annotated-types": "0.8.0",
+      "anyio": "4.16.0",
+      "attrs": "26.1.0",
+      "certifi": "2026.10.23",
+      "cffi": "2.1.1",
+      "click": "8.5.1",
+      "cryptography": "50.0.2",
+      "fastapi": "0.163.1",
+      "h11": "0.16.0",
+      "httpcore": "1.0.9",
+      "httpx": "0.28.1",
+      "httpx-sse": "0.4.3",
+      "idna": "3.20",
+      "jsonschema": "4.26.0",
+      "jsonschema-specifications": "2025.9.1",
+      "mcp": "1.30.0",
+      "okto-nexus": "0.3.5",
+      "okto-nexus-connector": "0.0.13",
+      "okto-nexus-connector-core": "0.0.14",
+      "opentelemetry-api": "1.45.2",
+      "packaging": "26.3",
+      "pip": "24.3.1",
+      "pycparser": "3.12",
+      "pydantic": "2.14.3",
+      "pydantic_core": "2.50.4",
+      "pydantic-settings": "2.16.3",
+      "PyJWT": "2.15.1",
+      "python-dotenv": "1.2.4",
+      "python-multipart": "0.0.34",
+      "pywin32": "312",
+      "referencing": "0.37.0",
+      "rfc8785": "0.1.4",
+      "rpds-py": "2026.9.1",
+      "sse-starlette": "3.7.0",
+      "starlette": "1.10.0",
+      "typing_extensions": "4.16.0",
+      "typing-inspection": "0.4.5",
+      "uvicorn": "0.54.0",
+      "websockets": "17.4",
+      "wsproto": "1.3.2"
+    },
+    "source_home_sha256": "e457a441560631b81f6a3cc78b299f04ead79265594d5b5b6e959577c57759c5",
+    "entrypoints": {
+      "okto-nexus": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Scripts\\okto-nexus.exe",
+          "--help"
+        ],
+        "exit_code": 0
+      },
+      "okto-nexus-connector": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-ux-pr18-shdpm58d\\venv\\Scripts\\okto-nexus-connector.exe",
+          "--help"
+        ],
+        "exit_code": 0
+      }
+    }
+  },
+  "checks": {
+    "build": {
+      "exit_code": 0,
+      "tool": "2e8265; manifest1120f9"
+    },
+    "nonstatic_comparison": {
+      "exit_code": 0,
+      "tool": "fe74cd"
+    },
+    "install_and_ci_smoke": {
+      "exit_code": 0,
+      "tool": "87052a/b04986",
+      "log": "commands.json"
+    },
+    "installed_payload_source_assets_and_actual_console_help": {
+      "exit_code": 0,
+      "tool": "537ab1"
+    },
+    "twine": {
+      "exit_code": 0,
+      "tool": "f72b67",
+      "artifacts": [
+        "okto_nexus-0.3.5-py3-none-any.whl",
+        "okto_nexus-0.3.5.tar.gz"
+      ],
+      "both": "PASSED"
+    }
+  },
+  "antecedent_runner_issue": "The helper initially named nonexistent nexus.exe; RTK returned 1 without launching a product. Correct installed console names okto-nexus.exe and okto-nexus-connector.exe then both exited 0 in the isolated audit. Logs retained. No reinstall/rebuild/retest suite was needed.",
+  "preserved": [
+    "BXP prefix/artifacts/proposals/consents",
+    "BGONN prefix/artifacts",
+    "PR16 prefix/artifacts/report"
+  ],
+  "limits": [
+    "No 7/189/52 tests or benchmark repeated: all708 nonstatic payloads equal PR16. Existing PR16 backend qualifications remain antecedent evidence, not new executions.",
+    "No fresh base-without-Connector boot claim; fresh three-wheel install, isolated CI smoke, exact installed payload/source checks and actual console help are this delta qualification.",
+    "Twine checks only the two new Nexus artifacts. Core and Connector vendor wheels were not rebuilt.",
+    "No browser/Windows lifecycle/native harness/provider/authentication/campaign was executed.",
+    "No repository assets were rebuilt or written; static files copied from the Root frozen build."
+  ],
+  "cleanup": {
+    "all_owned_commands_returned": true,
+    "server_or_native_process_started": false,
+    "persistent_process_expected": false
+  },
+  "evidence_manifest": {
+    "audit_installed.py": "74fa98e7cb1c7c4d4cff8ea39b26c2558cc126477ae9bfa03a6f781af9fe362b",
+    "build-manifest.json": "a142321430ee8ef6a59c0ea003a97c6c1c657b67474bea0404642f602e9a40aa",
+    "build.log": "b97fb274e2452b9dced595907a8039adc1820693ca4c3b35a1df3e786a585f71",
+    "build.py": "d68eb80567dd76b824c1bdcea37279b72df29b456ce072df9169f4147528efd4",
+    "ci-installed.json": "992e522738f5410f2db7cf83020c55de3d328b98ccba55a2fd1fa210b8faebc1",
+    "ci-smoke.log": "3077f218331c19faf36a45a20d29459b675100e7b4e157f94a67484fb398b5e1",
+    "commands.json": "ae024ce8fdff2e3dde584d6575db282300709c55ce6d21da2bb55710094f6077",
+    "install.log": "69ec0e6de44392c02351d816a1bea6cf692e4fb3d90e401ebbd04afe1c1a80e5",
+    "installed-audit.json": "84cb442630290fcb3b87f7c1b4738363f4d47a2d4d554ee7db232b4417381a72",
+    "nexus-help.log": "61740ee94cfa72dcdfa11741c3c14e56658f5349c3a0057187afe4ab5f14a89c",
+    "okto-nexus-connector-help.log": "d35b5e8ac3a2316dcc6c5c899fe6006469c69de9c0ed976ed3b1f45bd1b4ed14",
+    "okto-nexus-help.log": "3077f218331c19faf36a45a20d29459b675100e7b4e157f94a67484fb398b5e1",
+    "qualify.py": "fe3590f8da5f5162a139115ef1870b5affbc85db18879f5601a0fd08f87778e9"
+  }
+}

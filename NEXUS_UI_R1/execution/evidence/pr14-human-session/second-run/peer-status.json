@@ -1,0 +1,50 @@
+[
+  {
+    "at": "2026-11-17T00:03:35.377482Z",
+    "kind": "lease_applied",
+    "serial": 32
+  },
+  {
+    "at": "2026-11-17T00:03:51.536915Z",
+    "kind": "canonical_inventory_published"
+  },
+  {
+    "at": "2026-11-17T00:03:51.585794Z",
+    "kind": "lease_applied",
+    "serial": 33
+  },
+  {
+    "at": "2026-11-17T00:04:07.753541Z",
+    "kind": "lease_applied",
+    "serial": 34
+  },
+  {
+    "at": "2026-11-17T00:04:21.886841Z",
+    "kind": "canonical_inventory_published"
+  },
+  {
+    "at": "2026-11-17T00:04:23.943689Z",
+    "kind": "lease_applied",
+    "serial": 35
+  },
+  {
+    "at": "2026-11-17T00:04:40.110127Z",
+    "kind": "lease_applied",
+    "serial": 36
+  },
+  {
+    "at": "2026-11-17T00:04:52.258211Z",
+    "kind": "canonical_inventory_published"
+  },
+  {
+    "at": "2026-11-17T00:04:56.333930Z",
+    "kind": "lease_applied",
+    "serial": 37
+  },
+  {
+    "at": "2026-11-17T00:05:12.473191Z",
+    "kind": "peer_failed",
+    "type": "OktoNexusError",
+    "error": "CONFLICT: The binding lane authority has expired."
+  }
+]

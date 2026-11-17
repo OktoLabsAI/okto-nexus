@@ -1,0 +1,65 @@
+{
+  "status": "EXACT_HOME_INTERRUPT_FAKE_PEER_FOCAL_PASS",
+  "scope": "Real Home HTTP target resolution, canonical grant/admission/dispatch/Core bridge with two independent Python JSON-RPC fake peers. Not a real Codex binary/account/provider campaign.",
+  "cause": {
+    "confirmed": "Legacy fake lacked account/read; read-only mandatory handshake returned-32601. Bare helper failed startup without canonical launch/birth hooks/error normalization, leaving uncertain open. Finite direct probe confirms protocol_incompatible beforethread/start.",
+    "kwargs_proxy_TypeError_hypothesis": "Not confirmed; current create_runtime passes injected factory directly and introspects only explicitly accepted hooks."
+  },
+  "fix": "Only test install_native helper models initialized/account-read synthetic handshake, opening guard and lease recheck, durable birth callback before handshake and controlled process_launch.produce; startup failure closes owned peer and only confirmed adapter failure normalizes EffectRejected. Explicit negative account source retained.",
+  "unit": {
+    "passed": 3,
+    "toolref": "39846d",
+    "seconds": 2.0
+  },
+  "e2e": {
+    "passed": 1,
+    "toolref": "7f7193",
+    "seconds_parent": 12.400280000001658,
+    "timed_out": false,
+    "physical_peer_exits": [
+      {
+        "pid": 58188,
+        "exit_code": 1
+      },
+      {
+        "pid": 52464,
+        "exit_code": 1
+      }
+    ]
+  },
+  "proof": {
+    "exact_selected_session_and_native_turn": true,
+    "same_native_thread_and_turn_ids_in_two_distinct_peer_processes": true,
+    "stale_target_has_no_effect": true,
+    "sibling_turn_and_process_intact_before_cleanup": true,
+    "same_request_replay_same_operation": true,
+    "both_sessions_closed": true,
+    "both_native_containers_STOPPED": true
+  },
+  "antecedents": [
+    "PR13 original failed firstopen/pytest forced cleanup remains intact.",
+    "New parentguard firstenvironment lacked USERPROFILE: fixture setup ERROR before native. Preserved, then parentguard provided empty owned profile and E2E passed."
+  ],
+  "helper_lint_before": {
+    "F401": 7,
+    "F811": 6
+  },
+  "helper_lint_after": {
+    "F401": 6,
+    "F811": 6
+  },
+  "new_unit_lint": "PASS ea26ed",
+  "source_pins": {
+    "tests/execution_r4/test_canonical_native_protocol_regressions.py": "2a36c5b89e04cb121f7dc0e076965b09336de71b865964141fd2f102993f2da2",
+    "tests/home_evolution/test_home_interrupt_scope.py": "d47d0712af23c776820171b8d1116001a4fb432632b59ee646c291fa2b739a3b",
+    "tests/home_evolution/test_home_interrupt_fixture_contract.py": "88fa4e7b7f0325b7daaf883df174db2b63cdbce4f3ee15020eaab35837c0bea9"
+  },
+  "product_Core_prefix_PR16_or_proposals_ledger_Git_edited": false,
+  "no_browser_or_model_or_provider_or_personal_auth": true,
+  "limits": [
+    "Fake protocol peer authentication is an explicit fixture fact, not proof of provider login.",
+    "No real-harness native/AT/browser or paid-campaign qualification.",
+    "Native adapter may terminate its owned fake pipe child as canonical close; parent watchdog itself did not time out or force.",
+    "Source-first Nexus test with installed Core0.0.14, not rerun of packaged PR16 suite."
+  ]
+}

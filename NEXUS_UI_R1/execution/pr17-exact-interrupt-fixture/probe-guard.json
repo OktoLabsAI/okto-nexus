@@ -1,0 +1,26 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-final-pr16-pxprmqxo\\venv\\Scripts\\python.exe",
+    "-I",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-final-pr16-pxprmqxo\\probe_fake_handshake.py",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-fake-interrupt-pyawd7mm\\probe"
+  ],
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-fake-interrupt-pyawd7mm\\guard-probe",
+  "pid": 36204,
+  "deadline_seconds": 20.0,
+  "owned_tree_before": {
+    "pids": [
+      36204
+    ],
+    "count": 1,
+    "overflow": false,
+    "requested_limit": 32,
+    "limit_enforced": true,
+    "supported": true
+  },
+  "timed_out": false,
+  "exit_code": 0,
+  "elapsed_seconds": 1.0676025999709964,
+  "launcher_physical_exit": true,
+  "owned_tree_cleanup": "Parent own WindowsJob closed only after child exit or deadline containment; no historical PID signaling."
+}

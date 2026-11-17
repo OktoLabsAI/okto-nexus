@@ -1,0 +1,33 @@
+{
+  "status": "BOTH_HUMAN_JOURNEYS_CLOSED_UI043_NOT_COMPLETE",
+  "url": "http://127.0.0.1:56787/",
+  "browser_session": "ui043-human-second",
+  "browser_pid": 54688,
+  "fixture_session": 55848,
+  "fixture_pid": 51800,
+  "control_directory": "C:/Users/jpamb/AppData/Local/Temp/nexus-ui043-human-control-cc5yi6gx",
+  "stop_file": "C:/Users/jpamb/AppData/Local/Temp/nexus-ui043-human-control-cc5yi6gx/stop",
+  "observation_window_seconds": 1800,
+  "original_lane_ticket_expires_at": "2026-11-17T00:05:11.532858+00:00",
+  "native_request_ttl_seconds": 120,
+  "lane_expiry_observed_at": "2026-11-17T00:05:12.473191Z",
+  "lane_expiry_observed_error": "CONFLICT: The binding lane authority has expired.",
+  "decision_task_status": "TECHNICALLY_BLOCKED_AFTER_ORIGINAL_LANE_EXPIRY_NOT_A_HUMAN_FAILURE",
+  "facilitator_trigger": "C:/Users/jpamb/AppData/Local/Temp/nexus-ui043-human-control-cc5yi6gx/publish-fresh-question",
+  "trigger_policy": "Only after root starts task3 and no current participant draft; new native request8/source-sequence in same operator turn/grant. No extension or replay of old request.",
+  "participant": "Already exposed/oriented; second journey is not a new blind novice study.",
+  "authentication": "Canonical loopback operator, no bearer impersonation",
+  "test_effect": "ConnectionTests.run and candidate version probe replaced by inert fixture peers; no native binary/provider execution",
+  "first_run_human_start_antecedent": {
+    "root_question_notification": "Root reported task1 question sent, timestamp not directly observed",
+    "first_observed_ui_action": "2026-11-16T23:40:18.393845+00:00",
+    "read_at": "2026-11-16T23:40:52.000078+00:00",
+    "clicks_observed": 4,
+    "posts_observed": 0,
+    "task_completion": "Unknown; no inference from clicks"
+  },
+  "first_run_qualification": "first-run/qualification.json",
+  "liveness_limit": "Second fixture canonically republishes inventory and renews leases with same original grant. Original lane ticket10min and each native request120s still bound actions; no hidden grant/lane-ticket renewal.",
+  "second_run_qualification": "second-run/qualification.json",
+  "cleanup": "Both own environments closed normally0. Second node54688/chrome15792/observed children/fixture51800 absent, listener56787 absent. Data preserved. No force or authority renewal."
+}

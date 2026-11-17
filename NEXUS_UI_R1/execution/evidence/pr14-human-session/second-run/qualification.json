@@ -1,0 +1,163 @@
+{
+  "status": "NOT_COMPLETE_HUMAN_CLARITY_AND_COMPLETION_NOT_VERIFIED",
+  "participant": "Same previously exposed/oriented participant; second journey, not blind independent novice",
+  "anonymous_feedback_verbatim": [
+    "Acredito que concluí, mas demorei. No final nao fiquei certo de ter concluído. A etapa de configuração de harness é complexa, tem informação demais e passos demais com muita informacao para confirmacao até o fim. No final, nao recebi nenhuma confirmacao se obtive sucesso ou nao. Tambem senti falta da interface antiga que tinha os topicos logo acima. Essa que tem a selecao de projeto em um dropdown no topo demorei até encontrar e me situar.",
+    "O modo classico (com os cards de header era mais fácil de entender. De repente incluir nessa tela a selecao de projeto fica mais interessante do que a que foi apresentada nesse teste"
+  ],
+  "feedback_source": "Parent/root relayed exact anonymous participant feedback after the observed second journey; exact chat message IDs/send/reply times not supplied",
+  "technical_behavior": {
+    "clicks": 20,
+    "http_writes": [
+      {
+        "at": "2026-11-17T00:24:43.189283+00:00",
+        "type": "http",
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:test",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T00:24:52.168174+00:00",
+        "type": "http",
+        "method": "POST",
+        "path": "/api/v1/runtime-management/connections/setup:finish",
+        "status": 200
+      }
+    ],
+    "exact_binding_gets": [
+      {
+        "at": "2026-11-17T00:22:04.428248+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/runtime-management/connections/bindings/binding",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T00:22:29.863909+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/runtime-management/connections/bindings/ui-binding-2",
+        "status": 200
+      }
+    ],
+    "home_target_gets": [
+      {
+        "at": "2026-11-17T00:22:04.444479+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T00:22:29.877346+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      },
+      {
+        "at": "2026-11-17T00:24:52.291700+00:00",
+        "type": "http",
+        "method": "GET",
+        "path": "/api/v1/home/target",
+        "status": 200
+      }
+    ],
+    "facts": {
+      "bindings": [
+        {
+          "binding_id": "binding",
+          "executor_id": "exe_8053b0814cef61f663240163faad5569",
+          "endpoint_id": "ep",
+          "workspace_binding_id": "wxb",
+          "binding_revision": 1
+        },
+        {
+          "binding_id": "ui-binding-2",
+          "executor_id": "exe_8053b0814cef61f663240163faad5569",
+          "endpoint_id": "ui-ep-2",
+          "workspace_binding_id": "wxb",
+          "binding_revision": 1
+        },
+        {
+          "binding_id": "bind_24caceaaa26a994e0eb1c3bf4a2d76e2",
+          "executor_id": "exe_7f880b37b03afebd55018981dc8eaaad",
+          "endpoint_id": "ep_5860dede6a8a226244f6ad2c9e079ed3",
+          "workspace_binding_id": "wxb_eb86333b0dce392ccf4f9e939501255a",
+          "binding_revision": 1
+        }
+      ],
+      "setup_commits": 1,
+      "original_grants_preserved": true,
+      "fresh_trigger_exists": false,
+      "native_decisions": 0
+    },
+    "limits": "Old binding IDs/executor/endpoint/workspace-binding/revision1 retained and original grant ID/expiry/max-executions equal READY. No full before/after byte hash of every configuration field was captured."
+  },
+  "timing": {
+    "first_observed_click": "2026-11-17T00:21:39.768519+00:00",
+    "last_observed_click": "2026-11-17T00:25:08.513552+00:00",
+    "first_connection_click_span_seconds": 24.658142,
+    "span_definition": "Observed Connect or resume click00:21:39.768519 to first Open connection00:22:04.426661 only; NOT task completion duration",
+    "chat_question_sent": "Unknown; notification recorded separately, not actual send timestamp",
+    "completion_duration": "Not measured, do not infer from inactivity or last click"
+  },
+  "classification": {
+    "UI043": "NOT_COMPLETE",
+    "human_clarity": "NOT_VERIFIED",
+    "human_confidence": "Participant explicitly uncertain",
+    "observed_setup": "Canonical setup:test200 with inert simulated peer +setup:finish200; not provider/harness qualification",
+    "decision_task": "NOT_RUN; original lane expired, no fresh-question trigger or native decision",
+    "no_inactivity_failure": true
+  },
+  "authority_limits": {
+    "native_request_ttl_seconds": 120,
+    "lane_ticket_expires_at": [
+      {
+        "binding_id": "binding",
+        "lane_ticket_expires_at": "2026-11-17T00:05:11.532858+00:00"
+      }
+    ],
+    "expiry_observed_at": "2026-11-17T00:05:12.473191Z",
+    "expiry_error": "CONFLICT: The binding lane authority has expired.",
+    "fresh_trigger_used": false,
+    "grant_or_lane_renewal": false,
+    "observation_auto_stop_seconds": 1800,
+    "original_grants_preserved": true
+  },
+  "safety": {
+    "provider_calls": 0,
+    "native_binary_calls": 0,
+    "canonical_loopback_operator": true,
+    "agent_key_impersonating_human": false,
+    "typed_form_content_logged": false
+  },
+  "cleanup": {
+    "fixture_session55848_exit": 0,
+    "fixture51800_absent": true,
+    "listener56787_absent": true,
+    "browser_session": "ui043-human-second",
+    "browser_close_exit": 0,
+    "browser_node54688_absent": true,
+    "browser_chrome15792_absent": true,
+    "observed_chrome_children_absent": [
+      58048,
+      46260,
+      30304,
+      52540,
+      29496,
+      35220,
+      29964
+    ],
+    "peer_wss_lifespan_factory_closed": true,
+    "forced_kill": false,
+    "data_preserved": true,
+    "tools": [
+      "f9ee0d",
+      "344fa2",
+      "ea5c89",
+      "d97af3"
+    ]
+  },
+  "source_pin_matches_ready": true
+}

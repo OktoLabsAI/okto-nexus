@@ -14,19 +14,73 @@ from test_canonical_delivery import connected_local as work_connected
 
 
 def install_native(connected, source, *, environment=None):
+    from nexus_connector_core import CoreError
+    from nexus_connector_core.models import EffectRejected
     from nexus_connector_core.native.adapters.codex import CodexAppServerConnector
+    from nexus_connector_core.native.adapter_types import NativeAdapterError
     from nexus_connector_core.native.runtime_bridge import CopiedAdapterSession
     from nexus_connector_core.native.redaction import NativeSecretRedactor, credential_values
     setup, binding, _ = connected
     _, app, _, _, *_, root = setup
     peers = []
     log = root / "native-wire.jsonl"
+    # The legacy fake predates the Core's mandatory read-only account handshake.
+    # This is an explicitly unauthenticated synthetic peer, never a real login.
+    marker = '        elif method == "thread/start":\n'
+    if marker in source and 'elif method == "account/read":' not in source:
+        added = (
+            '        elif method == "account/read":\n'
+            '            write_msg({"jsonrpc":"2.0","id":req_id,"result":{"requiresOpenaiAuth":False,"account":None}})\n'
+        )
+        if 'elif method == "initialized":' not in source:
+            added = '        elif method == "initialized":\n            continue\n' + added
+        source = source.replace(marker, added + marker, 1)
+
     class Factory:
-        async def open(self, prepared, session_id, context, *, stream_epoch):
+        async def open(self, prepared, session_id, context, *, stream_epoch,
+                       opening_guard=None, process_birth_recorder=None, process_launch=None):
             peer = CodexAppServerConnector(command=[sys._base_executable, "-u", "-c", source, str(log)],
                 cwd=str(root), env=environment or {})
             peers.append(peer)
-            native = await asyncio.to_thread(peer.start, owning_agent_id=context.agent_id)
+            def guard(stage='fixture_open'):
+                probe = getattr(opening_guard, 'context_probe', None)
+                current = probe() if probe is not None else context
+                if opening_guard is not None and opening_guard.closed:
+                    raise CoreError('RUNTIME_DRAINING', stage, retry_safe=True)
+                if time.monotonic() >= current.lease_deadline_monotonic:
+                    raise CoreError('AGENT_REVOKED', stage, retry_safe=True)
+
+            if process_launch is not None:
+                identity = process_launch.identity
+                assert (identity.key.server_id, identity.key.executor_id, identity.key.session_id) == (
+                    context.server_id, context.executor_id, session_id)
+                peer._process_container_id = identity.container_id
+            peer._launch_guard = guard
+            if process_birth_recorder is not None:
+                loop = asyncio.get_running_loop()
+                def record(evidence):
+                    pending = process_birth_recorder(evidence)
+                    recorded = asyncio.run_coroutine_threadsafe(pending, loop)
+                    recorded.result(timeout=5)
+                    guard('fixture_process_birth')
+                peer._process_birth_observer = record
+
+            def start():
+                guard()
+                return peer.start(owning_agent_id=context.agent_id)
+
+            try:
+                if process_launch is None:
+                    native = await asyncio.to_thread(start)
+                else:
+                    native = await process_launch.produce(validate_authority=guard, start=start)
+            except BaseException as error:
+                stopped = await asyncio.to_thread(peer.close)
+                if isinstance(error, NativeAdapterError) and stopped in ('graceful', 'forced', 'already_closed'):
+                    raise EffectRejected('Synthetic native startup failed and its owned process stopped.',
+                        failure_code='NATIVE_PROTOCOL_INCOMPATIBLE' if error.details.get('reason') == 'protocol_incompatible'
+                        else 'NATIVE_STARTUP_FAILED') from error
+                raise
             return CopiedAdapterSession(peer, native, session_id=session_id, stream_epoch=stream_epoch, context=context,
                 redactor=NativeSecretRedactor(credential_values(environment or {})))
     app.state.embedded_dispatch_owner.native_factory = Factory()
