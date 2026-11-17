@@ -1819,7 +1819,7 @@
       "id": "UI-017",
       "pr": "PR-03",
       "title": "Projetar relações unificadas de trabalho e sessões",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-003",
         "UI-005"
@@ -1852,18 +1852,21 @@
         "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json",
         "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
         "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
-        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
-        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
       "id": "UI-018",
       "pr": "PR-03",
       "title": "Unir atenção e resultados por correlação",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-017"
       ],
@@ -1897,18 +1900,21 @@
         "NEXUS_UI_R1/execution/evidence/pr15-attention-authority/qualification.json",
         "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
         "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
-        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
-        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
       "id": "UI-019",
       "pr": "PR-03",
       "title": "Adicionar sessões sem operação aos alvos tipados",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-003",
         "UI-017"
@@ -1940,20 +1946,23 @@
         "NEXUS_UI_R1\\execution\\pr03-session-viewer-qualification.json",
         "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
         "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
-        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
         "Existing RuntimeTerminal useLayoutEffect emits expected SSR warning; no browser speech or human comprehension result.",
         "Source targets/viewer do not close unified Home or UI/Connector onboarding gates.",
-        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
       "id": "UI-020",
       "pr": "PR-03",
       "title": "Aplicar escopo, contagem e paginação por grupo",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-017",
         "UI-018"
@@ -1988,18 +1997,21 @@
         "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json",
         "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
         "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
-        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
-        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
       "id": "UI-021",
       "pr": "PR-03",
       "title": "Expor contrato de entries compatível e limitado",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-019",
         "UI-020"
@@ -2033,11 +2045,14 @@
         "NEXUS_UI_R1/execution/pr09-offline-data-performance/qualification.json",
         "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
         "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
-        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "HTTP/SQLite fixtures qualified; browser/native harness and performance matrix remain separate gates.",
-        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
@@ -2077,18 +2092,21 @@
         "NEXUS_UI_R1/execution/pr15-result-workspace-qualification.json",
         "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
         "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
-        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "Measured bound O(N+relations), 55 SQL at1/10/100 agents. Large scenario misses500ms latency target; no native harness/browser performance claim.",
-        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
       "id": "UI-023",
       "pr": "PR-04",
       "title": "Substituir listas paralelas pela região única",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-010",
         "UI-021"
@@ -2119,18 +2137,21 @@
         "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json",
         "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
         "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
-        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
-        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
       "id": "UI-024",
       "pr": "PR-04",
       "title": "Implementar expansão de sessões e conexões ociosas",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-023"
       ],
@@ -2162,18 +2183,21 @@
         "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json",
         "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
         "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
-        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
-        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
       "id": "UI-025",
       "pr": "PR-04",
       "title": "Aplicar filtros, ordem e vazio proporcionais",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-023",
         "UI-024"
@@ -2209,18 +2233,21 @@
         "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json",
         "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
         "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
-        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
-        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
       "id": "UI-026",
       "pr": "PR-04",
       "title": "Ligar ações básicas e incidentes globais",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-008",
         "UI-025"
@@ -2253,18 +2280,21 @@
         "NEXUS_UI_R1/execution/evidence/pr15-attention-authority/qualification.json",
         "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
         "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
-        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
-        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
       "id": "UI-027",
       "pr": "PR-04",
       "title": "Adaptar atualização compartilhada à lista única",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "depends_on": [
         "UI-021",
         "UI-025"
@@ -2295,11 +2325,14 @@
         "NEXUS_UI_R1/execution/pr04-unified-home-qualification.json",
         "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
         "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
-        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "Node/SSR qualified; mounted browser and composed panel/onboarding gates remain pending.",
-        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
@@ -2343,11 +2376,14 @@
         "NEXUS_UI_R1/execution/evidence/pr12-home-complete/qualification.json",
         "NEXUS_UI_R1/execution/BOARD_R2_AMENDMENT.md",
         "NEXUS_UI_R1/execution/pr19-home-board-backend.json",
-        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json"
+        "NEXUS_UI_R1/execution/pr19-home-board-addendum.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos.",
-        "Board amendment in progress: backend focal checks do not certify mounted browser, installed package or complete task acceptance."
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
@@ -2384,12 +2420,16 @@
         "NEXUS_UI_R1\\execution\\pr03-session-viewer-qualification.json",
         "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr11-readonly-viewer-guard/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr11-readonly-viewer-guard/qualification.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "SSR/helper/HTTP assertions do not replace mounted browser focus, live-to-history transition, revocation cleanup or AT.",
         "Existing RuntimeTerminal useLayoutEffect emits expected SSR warning; no browser speech or human comprehension result.",
-        "Source targets/viewer do not close unified Home or UI/Connector onboarding gates."
+        "Source targets/viewer do not close unified Home or UI/Connector onboarding gates.",
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
@@ -2424,10 +2464,14 @@
         "T-EXT-03"
       ],
       "evidence": [
-        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json"
+        "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
-        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
@@ -2464,10 +2508,14 @@
         "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-panel09-lost-response/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr15-attention-authority/qualification.json",
-        "NEXUS_UI_R1/execution/pr17-exact-interrupt-fixture/qualification.json"
+        "NEXUS_UI_R1/execution/pr17-exact-interrupt-fixture/qualification.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
-        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
@@ -2507,10 +2555,14 @@
         "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
         "NEXUS_UI_R1/execution/pr07-final-focus-panel-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr07-navigation/qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr11-readonly-viewer-guard/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr11-readonly-viewer-guard/qualification.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
-        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
@@ -2548,10 +2600,14 @@
       ],
       "evidence": [
         "NEXUS_UI_R1/execution/pr05-panel-onboarding-source-qualification.json",
-        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr07-results-browser/qualification.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
-        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct."
+        "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
@@ -2593,10 +2649,14 @@
         "NEXUS_UI_R1/execution/evidence/pr07-panel09-lost-response/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr11-readonly-viewer-guard/qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr15-attention-authority/qualification.json",
-        "NEXUS_UI_R1/execution/pr17-exact-interrupt-fixture/qualification.json"
+        "NEXUS_UI_R1/execution/pr17-exact-interrupt-fixture/qualification.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
-        "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos."
+        "Subset browser validado; scrollback/maximize/liveviewer403/AT e demais givens completos nao inferidos.",
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
@@ -2635,11 +2695,15 @@
         "NEXUS_UI_R1/execution/pr06-preset-wire-fix.json",
         "NEXUS_UI_R1/execution/pr06-final-client-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr06-onboarding-browser/qualification.md",
-        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json"
+        "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
       "limitations": [
         "Current source/Node/HTTP qualified. Mounted browser, installed package and native/platform gates remain distinct.",
-        "Conexoes e recuperacao qualificadas com peers sinteticos; sessoes runtime/Home e provedores reais exigem evidencias separadas."
+        "Conexoes e recuperacao qualificadas com peers sinteticos; sessoes runtime/Home e provedores reais exigem evidencias separadas.",
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
       ]
     },
     {
@@ -3029,9 +3093,14 @@
         "NEXUS_UI_R1/execution/release-report.md",
         "NEXUS_UI_R1/execution/pr07-doctor-qualification.json",
         "NEXUS_UI_R1/execution/final-review.json",
-        "NEXUS_UI_R1/execution/pr08-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr08-installed-qualification.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
-      "limitations": []
+      "limitations": [
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
+      ]
     },
     {
       "id": "UI-045",
@@ -3070,9 +3139,14 @@
         "NEXUS_UI_R1/execution/final-review.json",
         "NEXUS_UI_R1/execution/pr08-installed-qualification.json",
         "NEXUS_UI_R1/execution/pr14-bgon-package-qualification.json",
-        "NEXUS_UI_R1/execution/pr16-final-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr16-final-installed-qualification.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
-      "limitations": []
+      "limitations": [
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
+      ]
     },
     {
       "id": "UI-046",
@@ -3113,9 +3187,14 @@
         "NEXUS_UI_R1/execution/final-review.json",
         "NEXUS_UI_R1/execution/pr08-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr14-human-session/frontend-correction/qualification.json",
-        "NEXUS_UI_R1/execution/pr16-final-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr16-final-installed-qualification.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
-      "limitations": []
+      "limitations": [
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
+      ]
     },
     {
       "id": "UI-047",
@@ -3152,9 +3231,14 @@
         "NEXUS_UI_R1/execution/final-review.json",
         "NEXUS_UI_R1/execution/pr08-installed-qualification.json",
         "NEXUS_UI_R1/execution/evidence/pr14-human-session/second-run/qualification.json",
-        "NEXUS_UI_R1/execution/pr16-final-installed-qualification.json"
+        "NEXUS_UI_R1/execution/pr16-final-installed-qualification.json",
+        "NEXUS_UI_R1/execution/pr19-board-frontend/qualification.json",
+        "NEXUS_UI_R1/execution/pr20-home-board-frontend.json",
+        "NEXUS_UI_R1/execution/pr21-board-installed-qualification.json"
       ],
-      "limitations": []
+      "limitations": [
+        "Board DXsl/Ds-MK: 328 Node and build, 17 isolated installed checks PASS. Browser, human, native, AT, performance and complete task scenarios remain separate qualifications."
+      ]
     }
   ],
   "tests": [
@@ -5774,6 +5858,10 @@
     {
       "at": "2026-11-17T01:58:38.392484+00:00",
       "event": "User explicitly replaces Active/Needs you/Results tabs with one board of three always-visible columns. BOARD_R2_AMENDMENT.md records additive scope; original inputs/specifications remain unchanged. Backend implements exclusive classification, same authorized relation/read-only UoW, scoped column cursors and global board revision separate from entry details. 7 new SQLite/HTTP scenarios and 17 related legacy checks PASS in two separate cuts; browser/installed/frontend qualification remains in progress. Third human journey achieved navigation/Add technically but clarity remains insufficient (22-click functional cut, 47 final raw exploration, 2 simulated POSTs); no human PASS. Graphical status and specific context labels are being implemented. No model/provider call, Core/protocol/setup/Attention migration or release approval."
+    },
+    {
+      "at": "2026-11-17T02:20:20.827125+00:00",
+      "event": "Board frontend DXslPEEE/Ds-MK2FR implemented and frozen: 328/328 Node, TypeScript/Vite PASS. New isolated PR21 wheel7f488a55/sdist03c76acb:17 installed SQLite/HTTP checks, smoke, Twine and console helps PASS; 716 Nexus/168 Core/127 Connector payloads match wheels, source/fixture drift0. Prior BXP/BGONN/PR16/PR18 prefixes unchanged. Node and installed do not certify browser, human or native outcomes; previous failures/blockers persist. No new provider call, migration, personal install, release or default activation."
     }
   ],
   "risk_acceptances": [],

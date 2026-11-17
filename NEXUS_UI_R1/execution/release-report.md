@@ -151,7 +151,20 @@ passaram. A instrumentação quente adicional de 100 agentes teve p95 de
 com dois eventos não substituem o benchmark maior. O pacote PR18
 `bfcd3a56…41b116` preserva os 708 payloads não estáticos do PR16 e altera somente
 os assets CKl/BP1. Ambos são antecedentes imutáveis do novo quadro, que altera
-backend e frontend e requer nova qualificação instalada.
+backend e frontend.
+
+O pacote Board PR21 `7f488a55…0da9769`/sdist `03c76acb…5515280` passou
+17 focais instalados, smoke, Twine e console helps em novo prefixo temporário.
+Os 716 payloads Nexus, 168 Core e 127 Connector conferem com os wheels. Contra
+PR18, são 706 payloads não estáticos iguais, dois `home_entries.py` alterados e
+`home_board.py` aditivo. Fontes e fixtures sem drift, imports somente do prefixo
+novo e ambientes anteriores preservados. Não é uma campanha de harness ou SLO.
+
+As preferências Seen/Snooze do overview consultam o snapshot Board fresco.
+No painel, a tentativa usa as revisões capturadas e o endpoint canônico valida
+principal, origem e CAS; conflito ou recusa não causam replay. Não há alegação
+de lookup Board fresco para essa preferência no painel pausado. Comandos de
+execução e decisões continuam sob os inspectores e autoridades canônicos.
 
 A proposta real foi vinculada ao pacote BXP, teve 21 testes offline e um smoke
 de lifecycle real com zero admissões. A revisão independente e a conferência de

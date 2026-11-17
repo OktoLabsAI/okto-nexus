@@ -1,0 +1,62 @@
+{
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4\\venv\\Scripts\\python.exe",
+  "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4\\venv",
+  "isolated": 1,
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4",
+  "OS": "Windows-11-10.0.26300-SP0",
+  "sys_path": [
+    "C:\\Python313\\python313.zip",
+    "C:\\Python313\\DLLs",
+    "C:\\Python313\\Lib",
+    "C:\\Python313",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4\\venv",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4\\venv\\Lib\\site-packages",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4\\venv\\Lib\\site-packages\\win32",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4\\venv\\Lib\\site-packages\\win32\\lib",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4\\venv\\Lib\\site-packages\\pythonwin"
+  ],
+  "modules": {
+    "okto_nexus": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "wheel_sha256": "7f488a55f9e1c22fdc881a0322daba62085bf7e99363ad73ec145ea450da9769",
+      "payload_byte_equal_files": 716
+    },
+    "nexus_connector_core": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+      "payload_byte_equal_files": 168
+    },
+    "okto_nexus_connector": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+      "wheel_sha256": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+      "payload_byte_equal_files": 127
+    }
+  },
+  "entrypoints": {
+    "okto-nexus": {
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4\\venv\\Scripts\\okto-nexus.exe",
+        "--help"
+      ],
+      "exit_code": 0
+    },
+    "okto-nexus-connector": {
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r1-board-pr21-ei6yahi4\\venv\\Scripts\\okto-nexus-connector.exe",
+        "--help"
+      ],
+      "exit_code": 0
+    }
+  },
+  "versions": {
+    "okto-nexus": "0.3.5",
+    "okto-nexus-connector-core": "0.0.14",
+    "okto-nexus-connector": "0.0.13"
+  },
+  "assets": {
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-DXslPEEE.js": "c9c8537f3c411cbf5182e6db1f486d72247cc4943d67f969f24f84001456157e",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-Ds-MK2FR.css": "f761e905e0d9642c4c7d0f96d9e0f73404012f0d69d4fead8509e6fd9130b7b7",
+    "src/okto_nexus/adapters/inbound/http/static/index.html": "6c2dd0f7744b123a80e5d725055d97b422459a4e6acc24198f5afa7b0a468f56"
+  }
+}
