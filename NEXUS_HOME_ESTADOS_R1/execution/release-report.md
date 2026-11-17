@@ -5,7 +5,7 @@ has not started.** The selected local functional/context flows have now been
 reviewed against source, installed and browser evidence. Additional supported
 functional/security/compatibility checks remain before the human invitation;
 a reproduced unnamed menu control has been corrected and packaged in R8;
-its browser confirmation is pending. The whole
+its accessible name and expanded state are verified in the actual R8 browser. The whole
 plan's remaining qualification is explicit. Following the user's clarification about other
 processes on this shared machine, performance timings are diagnostic and
 non-blocking for this local delivery; no further tuning is required solely
@@ -74,7 +74,13 @@ Its new bundle is `index-Cyg0aKfe.js`; CSS remains `index-Bh2ghaTD.css`. A fresh
 R8 package passes build/install/base-Core/local-lite/Connector/Twine/pip-check,
 audit and actual HTTP/MCP smoke (54tools, two synthetic identities). All1829
 source pins and1031 payload files remain unchanged; owned processes exited
-normally and physical absence was checked. Browser confirmation is pending.
+normally and physical absence was checked. The separate
+[R8 browser naming cut](remaining-qualification-r7-next/experience-batch/naming-r8/qualification.json)
+passed five focal checks: actual AX Application menu, expanded false/true/false,
+zero browser POST and zero page errors. It used zero runtime sessions or
+operations and ended normally with physical absence and no payload drift.
+This resolves the earlier real defect; complete keyboard/AT qualification
+remains separate.
 R7 prefixes and the original failing AX capture remain immutable. No Python
 behavior changed.
 

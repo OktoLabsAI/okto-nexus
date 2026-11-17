@@ -3151,6 +3151,15 @@
           "command_or_procedure": "Read header-menu actual ariaSnapshot and label/title/text; preserve real failing predicate before source edit",
           "result": "FAIL real I01 accessible name: AX button unnamed, aria-label/title null and text empty; normal0/physical0/payload1031drift0",
           "limitations": "This is a product naming defect, not an oracle failure. No complete keyboard or screen-reader qualification."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:22:57.677968+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/naming-r8/qualification.json",
+          "environment": "Fresh installed R8 wheel; actual own Chrome accessible tree, two registered connections, zero native sessions",
+          "command_or_procedure": "Read actual header menu AX name; toggle open/closed and compare aria-expanded; audit browser POST/errors and owned cleanup",
+          "result": "PASS five focal assertions: Application menu, expanded false/true/false, no POST/page errors; normal0/physical0/payload1031drift0",
+          "limitations": "Resolves the real R7 defect; original negative evidence retained. Complete keyboard journey and AT speech are not qualified by this focal cut."
         }
       ]
     },
@@ -3539,6 +3548,15 @@
           "command_or_procedure": "Build/install/base Core/local lite/Connector/pip check/Twine/audit/CLI plus actual HTTP-MCP smoke",
           "result": "PASS fresh R8 package; 1829 source pins/1031 payload files unchanged; 54 MCP tools/two fixture identities; normal exit and physical absence",
           "limitations": "No real harness/provider or new pytest run. R7 installed 326+7 tests are reusable only for 1024 byte-identical nonstatic backend files; frontend requires R8 browser evidence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:22:57.677968+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/naming-r8/qualification.json",
+          "environment": "Fresh installed R8 wheel; actual own Chrome accessible tree, two registered connections, zero native sessions",
+          "command_or_procedure": "Read actual header menu AX name; toggle open/closed and compare aria-expanded; audit browser POST/errors and owned cleanup",
+          "result": "PASS five focal assertions: Application menu, expanded false/true/false, no POST/page errors; normal0/physical0/payload1031drift0",
+          "limitations": "Resolves the real R7 defect; original negative evidence retained. Complete keyboard journey and AT speech are not qualified by this focal cut."
         }
       ]
     },
@@ -3760,6 +3778,15 @@
           "command_or_procedure": "Build/install/base Core/local lite/Connector/pip check/Twine/audit/CLI plus actual HTTP-MCP smoke",
           "result": "PASS fresh R8 package; 1829 source pins/1031 payload files unchanged; 54 MCP tools/two fixture identities; normal exit and physical absence",
           "limitations": "No real harness/provider or new pytest run. R7 installed 326+7 tests are reusable only for 1024 byte-identical nonstatic backend files; frontend requires R8 browser evidence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:22:57.677968+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/naming-r8/qualification.json",
+          "environment": "Fresh installed R8 wheel; actual own Chrome accessible tree, two registered connections, zero native sessions",
+          "command_or_procedure": "Read actual header menu AX name; toggle open/closed and compare aria-expanded; audit browser POST/errors and owned cleanup",
+          "result": "PASS five focal assertions: Application menu, expanded false/true/false, no POST/page errors; normal0/physical0/payload1031drift0",
+          "limitations": "Resolves the real R7 defect; original negative evidence retained. Complete keyboard journey and AT speech are not qualified by this focal cut."
         }
       ]
     },
@@ -3918,6 +3945,15 @@
           "command_or_procedure": "Build/install/base Core/local lite/Connector/pip check/Twine/audit/CLI plus actual HTTP-MCP smoke",
           "result": "PASS fresh R8 package; 1829 source pins/1031 payload files unchanged; 54 MCP tools/two fixture identities; normal exit and physical absence",
           "limitations": "No real harness/provider or new pytest run. R7 installed 326+7 tests are reusable only for 1024 byte-identical nonstatic backend files; frontend requires R8 browser evidence."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:22:57.677968+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/naming-r8/qualification.json",
+          "environment": "Fresh installed R8 wheel; actual own Chrome accessible tree, two registered connections, zero native sessions",
+          "command_or_procedure": "Read actual header menu AX name; toggle open/closed and compare aria-expanded; audit browser POST/errors and owned cleanup",
+          "result": "PASS five focal assertions: Application menu, expanded false/true/false, no POST/page errors; normal0/physical0/payload1031drift0",
+          "limitations": "Resolves the real R7 defect; original negative evidence retained. Complete keyboard journey and AT speech are not qualified by this focal cut."
         }
       ]
     }
@@ -6331,7 +6367,7 @@
       "when": "Navegar sem mouse",
       "then": "Badges acionáveis/buttons/painel têm foco e nome; nenhuma armadilha fora do modal.",
       "level": "navegador + AT quando disponível",
-      "status": "FAIL",
+      "status": "NOT_RUN",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -6350,9 +6386,18 @@
           "command_or_procedure": "Read header-menu actual ariaSnapshot and label/title/text; preserve real failing predicate before source edit",
           "result": "FAIL real I01 accessible name: AX button unnamed, aria-label/title null and text empty; normal0/physical0/payload1031drift0",
           "limitations": "This is a product naming defect, not an oracle failure. No complete keyboard or screen-reader qualification."
+        },
+        {
+          "commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+          "timestamp": "2026-11-17T22:22:57.677968+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/experience-batch/naming-r8/qualification.json",
+          "environment": "Fresh installed R8 wheel; actual own Chrome accessible tree, two registered connections, zero native sessions",
+          "command_or_procedure": "Read actual header menu AX name; toggle open/closed and compare aria-expanded; audit browser POST/errors and owned cleanup",
+          "result": "PASS five focal assertions: Application menu, expanded false/true/false, no POST/page errors; normal0/physical0/payload1031drift0",
+          "limitations": "Resolves the real R7 defect; original negative evidence retained. Complete keyboard journey and AT speech are not qualified by this focal cut."
         }
       ],
-      "execution_notes": "R8 source adds Application menu and expanded state; Node404/TSC/Vite pass. New installed package/browser verification pending; full keyboard criterion not inferred."
+      "execution_notes": "Real R7 unnamed menu defect resolved and verified on installed R8 in actual Chrome AX; complete literal keyboard journey remains pending, so no whole-scenario PASS."
     },
     {
       "id": "HST-T-I02",
@@ -7264,7 +7309,7 @@
       "human": false
     },
     "local_usability_candidate": {
-      "state": "ADDITIONAL_FUNCTIONAL_QUALIFICATION_IN_PROGRESS; fresh R8 package ready, browser pending",
+      "state": "ADDITIONAL_FUNCTIONAL_QUALIFICATION_IN_PROGRESS; R8 menu correction verified in actual browser",
       "runtime_source": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
       "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
       "supported_scope": [
@@ -7306,9 +7351,12 @@
       "bundle": "assets/index-Cyg0aKfe.js",
       "css": "assets/index-Bh2ghaTD.css",
       "installed": "PASS_FRESH_R8_PACKAGE; browser still pending",
-      "browser": "PENDING_NAMING_THEN_EXPERIENCE",
+      "browser": "PASS_FOCAL_NAME_AND_EXPANDED",
       "backend_source_changed": false,
-      "human": "NOT_INVITED"
+      "human": "NOT_INVITED",
+      "browser_evidence": "execution/remaining-qualification-r7-next/experience-batch/naming-r8/qualification.json",
+      "original_r7_defect": "RESOLVED_ON_R8; negative capture preserved",
+      "complete_keyboard": "NOT_YET_QUALIFIED"
     },
     "r8_package": {
       "source": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
