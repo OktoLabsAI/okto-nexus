@@ -1,0 +1,122 @@
+{
+  "at": "2026-11-17T07:46:57.282081+00:00",
+  "status": "PASS_SCOPED_INSTALLED_ENTRY",
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc13-entry-smoke-dm8rn093",
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc13-entry-smoke-dm8rn093\\project",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\python.exe",
+  "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv",
+  "commands": [
+    {
+      "name": "cold-plan",
+      "command": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\okto-nexus.exe",
+        "connect",
+        "codex",
+        "--plan",
+        "--json",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc13-entry-smoke-dm8rn093\\new-home"
+      ],
+      "exit_code": 3,
+      "result": {
+        "state": "service_not_ready",
+        "service": {
+          "component": "server",
+          "instance_id": "svc_f76783ebb39e22a63968c45ee2e13a58c7ac1a1b5df62c168b5d1739f2054608",
+          "installed_version": "0.3.6",
+          "active_version": null,
+          "generation": null,
+          "state": "stopped",
+          "ready_for_queries": false,
+          "work_state": "not_checked",
+          "reason": "NO_SERVICE_OWNER",
+          "next_action": "Start the configured instance explicitly. Runtime work has not been inspected.",
+          "effective_configuration": {
+            "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc13-entry-smoke-dm8rn093\\new-home",
+            "database": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc13-entry-smoke-dm8rn093\\new-home\\nexus.db",
+            "bind_host": "0.0.0.0",
+            "port": 8202
+          }
+        }
+      }
+    },
+    {
+      "name": "new-add-requires-profile",
+      "command": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc-r1-package-t24_dnfc\\venv\\Scripts\\okto-nexus.exe",
+        "connect",
+        "codex",
+        "--new-connection",
+        "--id",
+        "worker",
+        "--json",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc13-entry-smoke-dm8rn093\\other-home"
+      ],
+      "exit_code": 3,
+      "result": {
+        "state": "selection_required",
+        "reason": "new_connection_requires_profile",
+        "effects_started": false,
+        "lifecycle_requested": false,
+        "choices": []
+      }
+    },
+    {
+      "name": "old-server-capability",
+      "old_server_command": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "serve",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc13-entry-smoke-dm8rn093\\old-server-home",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc13-entry-smoke-dm8rn093\\project",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "56410",
+        "--embedding-mode",
+        "off"
+      ],
+      "new_client_module": "site-packages CLI adapter, exact capability check",
+      "result": {
+        "code": "CONNECT_ID_UNSUPPORTED_SERVER",
+        "message": "This Server must be upgraded to support public Harness IDs."
+      }
+    }
+  ],
+  "cleanup": {
+    "command": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus.adapters.inbound.cli.main",
+      "service",
+      "stop",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-qc13-entry-smoke-dm8rn093\\old-server-home",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "56410",
+      "--timeout",
+      "15",
+      "--json"
+    ],
+    "canonical_exit": 0,
+    "physical_exit": 0,
+    "pid": 39296,
+    "forced": false
+  },
+  "provider_calls": 0,
+  "limitations": [
+    "Cold plan is not a configured connection or real provider journey.",
+    "Old Server test uses the installed new capability adapter, not the whole service upgrade command.",
+    "Temporary state retained after normal stop; no personal installation or earlier artifact changed."
+  ]
+}

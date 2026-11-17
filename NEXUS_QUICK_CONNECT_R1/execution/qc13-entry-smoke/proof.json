@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-17T07:48:38.258355+00:00",
+  "source_candidate_commit": "fa031697b37a1b879d855f7858f01320addf0df7",
+  "wheel_sha256": "a36e448c80a8190c7e8c92d81ea5a251c4bdf7e370eca0f0b395a5ad29e36cc6",
+  "original_failure": "../qc10-entry-smoke/qualification.json",
+  "current_result": "qualification.json",
+  "actual_old_server": true,
+  "scope": "Installed console cold plan / explicit script-add guard / actual old Server capability refusal",
+  "lifecycle": "Canonical stop and direct process handle confirmed exit 0; listener absent at curation",
+  "provider_calls": 0,
+  "listening_after": false,
+  "limitations": [
+    "Cold plan is not a configured connection or real provider journey.",
+    "Old Server test uses the installed new capability adapter, not the whole service upgrade command.",
+    "Temporary state retained after normal stop; no personal installation or earlier artifact changed."
+  ]
+}
