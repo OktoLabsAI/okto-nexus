@@ -24,4 +24,16 @@ Em um perfil descartável, o binário real aceitou um item sintético de histór
 
 Passaram 99 testes direcionados do Core, 40 com o pacote instalado, 44 no Nexus e 67 no Connector. O mesmo wheel de desenvolvimento (SHA-256 `0a377b4b66a158ae05d570e740f4d872b0cb9bfeda5943662f0a6ed19a77aa8d`) está nos dois consumidores. Os pacotes passaram validação estrita. Nenhuma migração foi necessária. Para reverter essa etapa, restaure nos dois consumidores o wheel anterior, de SHA-256 `f43b40c69660cf50129506110576d1890fdc0b00867dff15b6d7ae5219c568f1`. [CI do Core](https://github.com/OktoLabsAI/okto-nexus-connector-core/actions/runs/44392848696)
 
-O próximo passo no Nexus é persistir o vínculo com a sessão de origem e confirmá-lo após o encerramento pelo Core. A autorização e a linhagem da sucessora precisam sobreviver a falhas, preservar a fila de origem e usar configuração MCP e credenciais próprias.
+## Prova de encerramento no Nexus
+
+Com a interação de sessão habilitada, o Nexus embutido captura a prova privada imediatamente antes de um encerramento canônico do Codex qualificado. A captura é limitada pelo tempo restante da concessão e pode ser omitida quando o histórico estiver inacessível. O encerramento segue por seu recibo canônico.
+
+A migração 181 adiciona um registro por pedido de encerramento. A verificação exige o recibo de sucesso no Nexus e no journal do Core, o mesmo processo de origem, a liberação confirmada da reserva do Core e a mesma identidade e SHA-256 do arquivo. Um histórico alterado fica inelegível. Uma prova sem confirmação de encerramento continua pendente. A manutenção pode reconferir o registro após uma interrupção, sem chamar o runtime para executar trabalho. O banco local preserva os identificadores de arquivo do Windows com precisão integral.
+
+Passaram 16 regressões com o wheel do Nexus instalado, incluindo cinco cenários da captura com adaptador sintético. Eles cobrem histórico intacto, arquivo alterado, retomada da verificação por outro reconciliador a partir do registro durável, ausência de prova viva e falta de prova de liberação. Passaram também oito testes de migração. O smoke HTTP usou dois clientes MCP autenticados no Server temporário, confirmou a saída física pelo stop canônico e contabilizou zero chamadas a provedores. O wheel e o sdist passaram a validação estrita.
+
+A migração é aditiva, começa com a tabela vazia e preserva filas, controles e recibos existentes. O código anterior recusa uma base na versão 181. Para voltar diretamente a ele em um ambiente migrado, use a cópia consistente anterior à migração.
+
+A matriz inicial do Core encontrou a ausência de `CodexRolloutEvidence` no guia de API. A correção documental `0c556caa263967b9f25e05edbb91353bb8fd3744` passou 43 testes e reproduziu o mesmo SHA-256 do wheel que os consumidores já usam. [CI da correção do Core](https://github.com/OktoLabsAI/okto-nexus-connector-core/actions/runs/44395910144)
+
+O próximo passo é usar a prova de origem na admissão explícita da sucessora, com consentimento e exclusão duráveis. A retomada deve revalidar o arquivo, preservar a fila de origem e usar configuração MCP e credenciais próprias. O teste com adaptador sintético e um novo reconciliador cobre a recuperação do registro, e a verificação de uma sucessora após a reinicialização do serviço continua pendente.

@@ -174,6 +174,8 @@ class EmbeddedDispatchOwner:
         self.tools = EmbeddedToolsOwner(self)
         from .embedded_capacity import EmbeddedCapacityPublication
         self.capacity_publication = EmbeddedCapacityPublication(self)
+        from .embedded_codex_saved_contexts import EmbeddedCodexSavedContexts
+        self.saved_codex_contexts = EmbeddedCodexSavedContexts(self)
         self.capacity_waiter = CapacityRetryWaiter(self._capacity_revision)
         original_launch=self.host.local_launch_factory
         if original_launch is not None:
@@ -760,6 +762,8 @@ class EmbeddedDispatchOwner:
                     ControlOperation(frame["operation_id"],key,action.split(".")[1],text=payload.get("text"),
                         reason=payload.get("reason"),expected_turn_id=frame.get("expected_turn_id")),context))
             elif action == "runtime.close":
+                await self.saved_codex_contexts.capture(frame, runtime, executor.workspace_root,
+                                                       lease_deadline=context.lease_deadline_monotonic)
                 receipt = await runtime.close(r4_close_operation(frame),context,wait_for_completion=True)
             elif action in ("approval.decide", "input.provide"):
                 receipt = await self._command_receipt(frame,
@@ -786,6 +790,7 @@ class EmbeddedDispatchOwner:
             if action == "runtime.close" and receipt.stage == "SUCCEEDED":
                 await self.tools.release_session(key)
                 self.sessions.pop(key, None)
+                await self.saved_codex_contexts.reconcile(frame['operation_id'])
 
     async def _command_receipt(self, frame, invoke):
         try:
@@ -1013,6 +1018,7 @@ class EmbeddedDispatchOwner:
                 self.capacity_publication.tick()
                 await self.agents.tick()
                 if time.monotonic()>=pending_at:
+                    await self.saved_codex_contexts.reconcile()
                     from ..application.runtime_recovery import drain_pending
                     try:
                         await asyncio.to_thread(drain_pending,self.deps)

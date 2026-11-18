@@ -59,6 +59,20 @@ class ManagedNativeSession:
     codex_configuration_hash: str | None
 
 
+# Windows x64 app-server used in the local viewer and saved-history probes.
+_CODEX_STATE_ENGINE = (
+    '0.157.0', 'win32', 'x86_64',
+    'sha256:ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f',
+)
+
+
+def reviewed_codex_context(mapping: ManagedNativeSession) -> bool:
+    build = mapping.launch_build
+    return (mapping.adapter_id == 'codex_app_server' and mapping.codex_thread_id is not None
+            and build is not None and build.qualification == 'qualified'
+            and (build.version, build.platform, build.architecture, build.content_fingerprint) == _CODEX_STATE_ENGINE)
+
+
 def _codex_opening_thread(conn, scope, stream_epoch):
     events = conn.execute("""
         SELECT e.sequence,e.event_hash,e.payload_json

@@ -608,6 +608,133 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
     assert native.native.sent == [('send_turn', operation)]
 
 
+@pytest.mark.parametrize('condition,expected', [
+    ('intact', 'VERIFIED'), ('changed', 'FILE_CHANGED'), ('interrupted_verification', 'VERIFIED'),
+    ('no_live_evidence', None), ('unreleased_slot', 'CAPTURED'),
+])
+def test_saved_codex_context_requires_retirement_and_same_history(
+        interactive_runtime, tmp_path, monkeypatch, condition, expected):
+    from nexus_connector_core import OperationKey, ProcessBirthEvidence
+    from nexus_connector_core.native import process
+    from nexus_connector_core.native.codex_rollout import observe_rollout
+
+    from okto_nexus.bootstrap.embedded_codex_saved_contexts import EmbeddedCodexSavedContexts
+
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_, workspace_root = setup
+    opened = admit(setup, binding, 'saved-source-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    original = opened['scope']
+    server, executor, session = (original[field] for field in ('server_id', 'executor_id', 'session_id'))
+    scope = InputScope(SessionKey(server, executor, session),
+        SessionOwnerGeneration(original['session_owner_generation']), original['binding_id'],
+        original['workspace_id'], original['workspace_binding_id'], original['agent_id'])
+    factory = deps.connection_factory
+    owner = app.state.embedded_dispatch_owner
+
+    def mapping():
+        with factory.unit_of_work(write=False) as uow:
+            return read_managed_native_session(uow, scope)
+
+    eventually(mapping)
+    source = mapping()
+    with factory.unit_of_work(write=False) as uow:
+        epoch = uow.connection.execute(
+            'SELECT stream_epoch FROM execution_local_streams WHERE server_id=? AND executor_id=? AND session_id=?',
+            (server, executor, session)).fetchone()[0]
+    emit_codex_configuration(client, native, server, executor, session, epoch)
+    eventually(lambda: mapping().codex_thread_id == CODEX_THREAD)
+    reviewed = replace(source.launch_build, version='0.157.0', platform='win32',
+        content_fingerprint='sha256:ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f')
+    with factory.unit_of_work() as uow:
+        migration = uow.connection.execute('SELECT MAX(version) FROM schema_migrations').fetchone()[0]
+        assert migration >= 181
+        uow.connection.execute('UPDATE execution_sessions SET native_launch_build_json=? WHERE session_id=?',
+                               (json.dumps(asdict(reviewed)), session))
+
+    _runtime, journal = owner.host._runtime_tasks[(executor, session)].result()
+    birth = ProcessBirthEvidence('win32', 1234, 'filetime:12345678', 'windows_job')
+    client.portal.call(journal.record_process_birth, OperationKey(server, executor, opened['operation_id']), session, birth)
+    native.native.owned_process_birth = birth
+    monkeypatch.setattr(process, 'observe_recorded_process_birth',
+                        lambda evidence: 'MATCHING_LIVE' if evidence == birth else 'DIFFERENT_BIRTH')
+
+    home = tmp_path / 'synthetic-codex-home'
+    path = home / 'sessions' / 'rollout-fixture.jsonl'
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({'type': 'session_meta', 'payload': {
+        'id': CODEX_THREAD, 'cwd': str(workspace_root.resolve())}})
+        + '\n' + '{"type":"response_item","payload":{"text":"fixture-content"}}\n', encoding='utf-8')
+
+    async def read_rollout(thread):
+        assert thread == CODEX_THREAD and not native.native.stopped
+        if condition == 'no_live_evidence':
+            return None
+        return observe_rollout(str(home), str(path), thread, str(workspace_root.resolve()))
+
+    monkeypatch.setattr(native.native, 'read_owned_codex_rollout', read_rollout, raising=False)
+
+    def stored():
+        with factory.unit_of_work(write=False) as uow:
+            rows = uow.connection.execute('SELECT * FROM embedded_codex_saved_contexts WHERE session_id=?',
+                                          (session,)).fetchall()
+            assert len(rows) <= 1
+            return dict(rows[0]) if rows else None
+
+    original_close = native.native.close
+    witnessed = []
+
+    async def close():
+        evidence = stored()
+        witnessed.append(evidence['status'] if evidence else None)
+        await owner.saved_codex_contexts.reconcile(evidence['close_operation_id'] if evidence else None)
+        assert stored() == evidence
+        if condition == 'changed':
+            with path.open('a', encoding='utf-8') as stream:
+                stream.write('{"type":"response_item","payload":{"text":"different"}}\n')
+        return await original_close()
+
+    monkeypatch.setattr(native.native, 'close', close)
+    if condition == 'interrupted_verification':
+        def cannot_commit(*_args):
+            raise OSError('Synthetic interruption before committing the verification.')
+        monkeypatch.setattr(owner.saved_codex_contexts, '_resolve', cannot_commit)
+    if condition == 'unreleased_slot':
+        ledger = client.portal.call(owner.host._ledger)
+        current = ledger.owned_slot_state
+
+        async def no_release_proof(key):
+            slot = await current(key)
+            return replace(slot, released=False) if slot is not None else None
+
+        monkeypatch.setattr(ledger, 'owned_slot_state', no_release_proof)
+
+    closed = admit(setup, binding, 'saved-source-close', 'runtime.close', session_id=session)
+    wait_receipt(setup, closed, stages=('SUCCEEDED',))
+    assert witnessed == ([None] if expected is None else ['CAPTURED'])
+    assert native.opens == 1 and native.native.stopped and native.native.sent == []
+
+    if condition == 'interrupted_verification':
+        assert stored()['status'] == 'CAPTURED'
+        # A new reconciler uses only the persisted candidate and exact receipts.
+        client.portal.call(EmbeddedCodexSavedContexts(owner).reconcile)
+    if expected is None:
+        assert stored() is None
+    else:
+        eventually(lambda: stored()['status'] == expected)
+        witness = stored()
+        assert witness['opening_operation_id'] == opened['operation_id']
+        assert witness['close_operation_id'] == closed['operation_id']
+        assert 'fixture-content' not in witness['witness_json']
+        assert (witness['release_digest'] is not None) == (expected == 'VERIFIED')
+        if expected == 'VERIFIED':
+            assert witness['release_digest'].startswith('sha256:')
+    if condition == 'unreleased_slot':
+        # End the injected observation failure before the fixture drains its
+        # independent Core stores at service shutdown.
+        monkeypatch.setattr(ledger, 'owned_slot_state', current)
+
+
 def test_dashboard_interrupt_admits_exact_target_and_recovers_its_receipt(interactive_runtime):
     setup, binding, native = interactive_runtime
     deps, app, client, *_ = setup
