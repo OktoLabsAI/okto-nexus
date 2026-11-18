@@ -3,6 +3,7 @@ import {runtimeApi, type InteractionScope, type SessionInputReceipt, type Sessio
 import {applyConversationUpdates, assertConversationPage, assertInteractionScope, interactionKey,
   receiptLabel, type ConversationMessage} from '../sessionConversation';
 import {OperatorSignIn} from './OperatorSignIn';
+import {SessionInputQueue} from './SessionInputQueue';
 
 interface Draft {
   text: string;
@@ -257,5 +258,10 @@ export function SessionConversation({scope, active, onAccessLost}: {
       {draft.uncertain ? (busy ? 'Checking message…' : 'Waiting for confirmation of this message.') :
         receiptLabel[draft.latest!.receipt.status]}</p>}
     {messageError && <p role="alert" className="text-sm">{messageError}</p>}
+    {active && capability?.human_login_required === false && <SessionInputQueue scope={scope} onAccessLost={loseAccess}
+      onCancelled={receipt => {
+        const latest = drafts.get(key)?.latest;
+        if (latest?.receipt.input_id === receipt.input_id) installReceipt(latest.intent, receipt);
+      }}/>}
   </section>;
 }

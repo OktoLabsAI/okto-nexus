@@ -199,6 +199,20 @@ export interface SessionInputReceipt {
   possible_effect: boolean;
 }
 
+export interface SessionInputQueueItem extends SessionInputReceipt {
+  can_cancel: boolean;
+}
+
+export interface SessionInputQueuePage {
+  scope: RuntimeScope;
+  session_owner_generation: number;
+  queue_revision: number;
+  paused: boolean;
+  cancel_capability_revision: string | null;
+  items: SessionInputQueueItem[];
+  next_cursor: string | null;
+}
+
 export interface ConversationUpdate {
   update_id: string;
   message_id: string;
@@ -385,6 +399,20 @@ export const runtimeApi = {
     const target = interactionTarget(scope);
     target.query.set('client_intent_id', intent);
     return read<SessionInputReceipt>(`${target.path}/inputs/receipt?${target.query}`, signal);
+  },
+  sessionInputQueue: (scope: InteractionScope, cursor: string | null, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    target.query.set('pending_only', 'true');
+    if (cursor !== null) target.query.set('cursor', cursor);
+    return read<SessionInputQueuePage>(`${target.path}/inputs?${target.query}`, signal);
+  },
+  cancelSessionInput: (scope: InteractionScope, item: SessionInputQueueItem, capability: string, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    return read<SessionInputReceipt>(`${target.path}/inputs/${encodeURIComponent(item.input_id)}/cancel`, signal, {
+      scope: target.scope, expected_session_generation: scope.session_owner_generation,
+      capability_revision: capability, expected_queue_revision: item.queue_revision,
+      expected_input_revision: item.input_revision,
+    });
   },
   sessions: (agentId: string, binding: Pick<BindingView, 'executor_id' | 'binding_id'>, after: string, signal?: AbortSignal) => {
     const query = new URLSearchParams({agent_id: agentId, executor_id: binding.executor_id,
