@@ -1,0 +1,54 @@
+{
+  "scope": "READ_ONLY_BASELINE_WHEEL_SOURCE_COMPARISON",
+  "method": "Compare complete import-package payload in wheel ZIP to immutable git archive; raw and CRLF-normalized comparisons; version and declared dependencies from wheel METADATA",
+  "components": [
+    {
+      "component": "Core",
+      "source_commit": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "version": "0.0.14",
+      "wheel": "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+      "payload_files": 168,
+      "python_files": 134,
+      "commit_raw_matches": 168,
+      "normalized_line_endings_matches": 168,
+      "dependencies": [
+        "rfc8785==0.1.4",
+        "jsonschema==4.26.0",
+        "mcp<2,>=1.30",
+        "anyio<5,>=4.5",
+        "pytest>=8; extra == \"test\"",
+        "pytest-asyncio>=0.24; extra == \"test\"",
+        "build>=1; extra == \"test\""
+      ]
+    },
+    {
+      "component": "Connector",
+      "source_commit": "a4d510080d7a685fa442a4c5c30419952589fe04",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "version": "0.0.13",
+      "wheel": "vendor/ci/okto_nexus_connector-0.0.13-py3-none-any.whl",
+      "wheel_sha256": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+      "payload_files": 127,
+      "python_files": 126,
+      "commit_raw_matches": 85,
+      "normalized_line_endings_matches": 127,
+      "dependencies": [
+        "okto-nexus-connector-core==0.0.14",
+        "websockets<18,>=15",
+        "httpx<1,>=0.27",
+        "pywin32; sys_platform == \"win32\"",
+        "keyring<26,>=25; extra == \"keyring\"",
+        "pytest>=8; extra == \"test\"",
+        "pytest-asyncio>=0.24; extra == \"test\"",
+        "build>=1; extra == \"test\"",
+        "cryptography>=43; extra == \"test\"",
+        "pywin32; sys_platform == \"win32\" and extra == \"test\"",
+        "pywin32; sys_platform == \"win32\" and extra == \"m6-prototype\""
+      ]
+    }
+  ],
+  "connector_vendored_core_wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+  "native_runtime_executed": false
+}

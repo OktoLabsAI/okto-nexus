@@ -1,0 +1,4604 @@
+{
+  "plan": "SESSION-INTERACTION-R1",
+  "created_on": "2026-11-17",
+  "status": "IMPLEMENTATION_IN_PROGRESS",
+  "counts": {
+    "tasks": 41,
+    "tests": 148,
+    "requirements": 24,
+    "phases": 8
+  },
+  "baseline": {
+    "nexus": {
+      "repository": "OktoLabsAI/okto-nexus",
+      "ref": "feature/v0.3.7",
+      "sha": "8b4001fa1db17bf29d0c773eed3535e79fce70cb",
+      "declared_version": "0.3.7"
+    },
+    "core": {
+      "repository": "OktoLabsAI/okto-nexus-connector-core",
+      "ref": "feature/v0.0.14",
+      "sha": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "declared_version": "0.0.14"
+    },
+    "connector": {
+      "repository": "OktoLabsAI/okto-nexus-connector",
+      "ref": "feature/v0.0.13",
+      "sha": "a4d510080d7a685fa442a4c5c30419952589fe04",
+      "declared_version": "0.0.13"
+    }
+  },
+  "requirements": [
+    {
+      "id": "SI-R01",
+      "title": "Chat contextual",
+      "requirement": "Evoluir o painel existente da sessão, com conversa, atividade e composer, sem novo menu ou sessão escolhida por recência."
+    },
+    {
+      "id": "SI-R02",
+      "title": "Entrada humana nativa",
+      "requirement": "Enviar conteúdo como usuário nativo da sessão exata; preservar auditoria humana e não usar inbox/mensagem Operator/handoff para esse transporte."
+    },
+    {
+      "id": "SI-R03",
+      "title": "Histórico verificável",
+      "requirement": "Projetar eventos reais com IDs, deltas/snapshots, origem, lacunas, retenção e autorização; sem conversa fictícia ou raciocínio privado."
+    },
+    {
+      "id": "SI-R04",
+      "title": "Próximo turno por padrão",
+      "requirement": "Enviar enquanto ocupado cria entrada durável para o próximo turno elegível; idle comprovado pode despachar imediatamente respeitando FIFO."
+    },
+    {
+      "id": "SI-R05",
+      "title": "Fila durável e única",
+      "requirement": "Ordenação por sessão, limites, cancelamento seguro, recuperação e integração ao árbitro atual, sem duas filas entregando o mesmo input."
+    },
+    {
+      "id": "SI-R06",
+      "title": "Steer explícito",
+      "requirement": "Ação separada, alvo do turno congelado, efeito/timing por harness e promoção atômica de item pendente; sem fallback automático para novo turno."
+    },
+    {
+      "id": "SI-R07",
+      "title": "Interrupção segura",
+      "requirement": "Interrupt explícito na UI aplica barreira de fila, mira o turno exato e não fecha sessão; retomar fila é outra ação."
+    },
+    {
+      "id": "SI-R08",
+      "title": "Comandos por capacidade",
+      "requirement": "Catálogo versionado de subset nativo/Nexus, argumentos, efeito, disponibilidade por estado/política e evidência da instalação."
+    },
+    {
+      "id": "SI-R09",
+      "title": "Comandos não suportados",
+      "requirement": "Avisar e preservar texto; não converter slash, skill, template ou shell em prompt/execução sem intenção/semântica literal comprovadas."
+    },
+    {
+      "id": "SI-R10",
+      "title": "Connect com modos",
+      "requirement": "-i/--interactive abre nativo; --no-interactive só conecta; sem flag pergunta ao final em TTY; scripts não recebem prompt."
+    },
+    {
+      "id": "SI-R11",
+      "title": "Retomada posterior",
+      "requirement": "Permitir listar/selecionar/attach e resume salvo depois, independente da escolha inicial; work resume conserva recuperação de envio."
+    },
+    {
+      "id": "SI-R12",
+      "title": "Nativo verdadeiro",
+      "requirement": "Não simular TUI nativa com prompt Nexus; qualificar integração real Codex/Pi/Claude preservando a mesma sessão/engine quando vivo."
+    },
+    {
+      "id": "SI-R13",
+      "title": "Detach preserva trabalho",
+      "requirement": "Fechamento/perda do cliente somente desanexa; dono durável drena I/O e mantém execução/fila sob autoridade vigente."
+    },
+    {
+      "id": "SI-R14",
+      "title": "Continuidade de identidade",
+      "requirement": "Mapear conexão, sessão runtime, sessão nativa, geração e contexto exatos; sem fork/clone/latest disfarçado de retomada."
+    },
+    {
+      "id": "SI-R15",
+      "title": "Ownership e arbitragem",
+      "requirement": "Um owner nativo e um escritor bruto; entradas UI/terminal/coordenação serializadas com fences, sem bypass por token/PTY."
+    },
+    {
+      "id": "SI-R16",
+      "title": "Autoridade em cada efeito",
+      "requirement": "Revalidar pessoa, sessão, binding, grant, geração, comando, decisão e attach/takeover; revogação não reatribui trabalho."
+    },
+    {
+      "id": "SI-R17",
+      "title": "Local e remoto",
+      "requirement": "Server coordena, Core executa e Connector hospeda; acesso humano remoto não usa chave de agente como credencial de operador."
+    },
+    {
+      "id": "SI-R18",
+      "title": "Privacidade e isolamento",
+      "requirement": "Segredos no host/canais protegidos; sem tokens em argv/URL; terminal/Markdown/artefatos não ampliam escopo ou executam conteúdo não confiável."
+    },
+    {
+      "id": "SI-R19",
+      "title": "Compatibilidade",
+      "requirement": "Preservar Quick Connect, Git/CWD, ID do Harness, perfis, --no-chat, comandos work, hashes/recibos e consumo dos componentes atuais."
+    },
+    {
+      "id": "SI-R20",
+      "title": "Capacidade comprovada",
+      "requirement": "Separar doc upstream, capability declarada, instalação observada e qualificação real por versão/OS/mode; não anunciar paridade genérica."
+    },
+    {
+      "id": "SI-R21",
+      "title": "Estado/UX consistente",
+      "requirement": "Fila não é execução, detach não é desconexão do Nexus, decisão não é retomada; foco/rascunho/scroll e Home permanecem corretos."
+    },
+    {
+      "id": "SI-R22",
+      "title": "Recuperação sem replay",
+      "requirement": "Intenção durável e correlação na borda do efeito; entrega desconhecida bloqueia duplicação, restart não repete teste/turno/grant."
+    },
+    {
+      "id": "SI-R23",
+      "title": "Plataformas e sinais",
+      "requirement": "Qualificar terminal real/PTY/ConPTY/process tree, clientes lentos e falhas; não prometer sobrevivência a logout/reboot sem prova própria."
+    },
+    {
+      "id": "SI-R24",
+      "title": "Gates e pacote",
+      "requirement": "Testes por camada, campanhas consentidas, migração e rollback com filas pendentes; entrega final com limitações e evidências rastreáveis."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "SI-001",
+      "phase": "SI-00",
+      "title": "Fixar baseline e compatibilidade dos três componentes",
+      "requirements": [
+        "SI-R19",
+        "SI-R20",
+        "SI-R24"
+      ],
+      "depends_on": [],
+      "areas": [
+        "AGENTS.md / CI",
+        "pyproject.toml / wheel vendorizado",
+        "ledgers existentes"
+      ],
+      "steps": [
+        "Registrar branch/HEAD/status, versões instaladas e hash dos artefatos Core consumidos.",
+        "Mapear drift desde os SHAs deste documento sem reset ou substituição de ledgers.",
+        "Registrar quais módulos e campanhas anteriores continuam aplicáveis e quais precisam de revalidação."
+      ],
+      "acceptance": "Baseline reproduzível, sem confundir versão do arquivo/branch/wheel.",
+      "test_ids": [
+        "SI-T-I05",
+        "SI-T-I06"
+      ],
+      "status": "VERIFIED",
+      "evidence": [
+        {
+          "timestamp": "2026-11-18T09:57:43.062888+00:00",
+          "artifact_path": "execution/si001-package.md",
+          "result": "Baseline, fetched refs, wheel provenance and three-package isolated installed smoke checked",
+          "limitations": "Metadata-only milestone; SI-T-I05 and I06 literal native/feature scenarios remain open"
+        }
+      ]
+    },
+    {
+      "id": "SI-002",
+      "phase": "SI-00",
+      "title": "Mapear escrita, sessão, fila e autoridade atuais",
+      "requirements": [
+        "SI-R02",
+        "SI-R04",
+        "SI-R05",
+        "SI-R14",
+        "SI-R16",
+        "SI-R17"
+      ],
+      "depends_on": [
+        "SI-001"
+      ],
+      "areas": [
+        "TerminalWork",
+        "RuntimeOperations",
+        "intents/operations/dispatcher/Core"
+      ],
+      "steps": [
+        "Traçar UI/CLI→resolve→admit→native write→receipt, incluindo barramento e decisões.",
+        "Identificar estrutura apta a admissão diferida e cancelamento; não criar segundo scheduler por ausência de investigação.",
+        "Documentar eventos que provam idle/settled, target/epoch e fronteiras de autorização em cada adapter."
+      ],
+      "acceptance": "Mapa fonte/efeito/autor/escopo por caminho, incluindo lacunas exatas.",
+      "test_ids": [
+        "SI-T-A01",
+        "SI-T-A02",
+        "SI-T-B21"
+      ],
+      "status": "IMPLEMENTED",
+      "evidence": [
+        {
+          "artifact_path": "execution/si002-write-path.md",
+          "result": "Mapped canonical Server/Core paths; reuse same capacity and dispatch gates",
+          "limitations": "Source audit; native wire/actor and concurrent dispatch still need focal tests"
+        }
+      ]
+    },
+    {
+      "id": "SI-003",
+      "phase": "SI-00",
+      "title": "Congelar DTOs, estados e semântica dos controles",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R06",
+        "SI-R07",
+        "SI-R08",
+        "SI-R10",
+        "SI-R14"
+      ],
+      "depends_on": [
+        "SI-002"
+      ],
+      "areas": [
+        "contracts / ADR",
+        "schema HTTP e runtime"
+      ],
+      "steps": [
+        "Definir scope/input/queue/control/attachment/capability e transições dos capítulos 4–10.",
+        "Fixar fila após interrupt pausada, promote-to-steer por CAS e tratamento de unknown.",
+        "Definir gramática -i/--no-interactive, contratos de erros e compatibilidade --no-chat."
+      ],
+      "acceptance": "Contrato tipado compartilhado, sem any, com exemplos válidos e negativos.",
+      "test_ids": [
+        "SI-T-B05",
+        "SI-T-C09",
+        "SI-T-F08"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-004",
+      "phase": "SI-00",
+      "title": "Provar caminhos nativos por harness antes de desenhar attach",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R23"
+      ],
+      "depends_on": [
+        "SI-001",
+        "SI-002"
+      ],
+      "areas": [
+        "Core adapters",
+        "schemas/SDKs upstream versionados",
+        "provas isoladas de protocolo"
+      ],
+      "steps": [
+        "Medir versão/fingerprint das instalações autorizadas e registrar comandos de ajuda/schema somente após consentimento de probe.",
+        "Prototipar attach vivo ou bridge nativo para Codex, Pi e Claude; confirmar seleção exata e saída que não mata engine.",
+        "Demonstrar controle/auditoria/isolamento; descartar caminhos que duplicam writer, fork, perdem ferramentas ou bypassam grants.",
+        "Registrar decisão técnica por harness, dependências/release necessárias e blockers precisos; não implementar só botões com promessa."
+      ],
+      "acceptance": "Matriz de estratégia e evidência por harness; a etapa não qualifica produto inteiro.",
+      "test_ids": [
+        "SI-T-G01",
+        "SI-T-G11",
+        "SI-T-G12",
+        "SI-T-G16",
+        "SI-T-I06"
+      ],
+      "status": "IN_PROGRESS",
+      "evidence": [
+        {
+          "artifact_path": "execution/si004-native-preparation.md",
+          "result": "Static strategies and no-model probes prepared",
+          "limitations": "Native probes pending separate consent under SI-004; no capability is qualified"
+        }
+      ]
+    },
+    {
+      "id": "SI-005",
+      "phase": "SI-00",
+      "title": "Preparar fixtures e harnesses sintéticos",
+      "requirements": [
+        "SI-R03",
+        "SI-R05",
+        "SI-R06",
+        "SI-R13",
+        "SI-R22",
+        "SI-R24"
+      ],
+      "depends_on": [
+        "SI-003"
+      ],
+      "areas": [
+        "tests de peers nativos",
+        "SQLite descartável",
+        "TTY clients"
+      ],
+      "steps": [
+        "Criar peers com busy, settled tardio, tool approval, eco/delta/snapshot, resposta perdida e múltiplas sessões.",
+        "Criar dados de fila/leases e dois operadores/two hosts para interleavings determinísticos.",
+        "Proibir credenciais reais por default e separar campanhas pagas."
+      ],
+      "acceptance": "Fixtures reprodutíveis não apresentadas como suporte real.",
+      "test_ids": [
+        "SI-T-B08",
+        "SI-T-E01",
+        "SI-T-H14"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-006",
+      "phase": "SI-01",
+      "title": "Implementar escopo exato e registros duráveis de input",
+      "requirements": [
+        "SI-R02",
+        "SI-R04",
+        "SI-R05",
+        "SI-R14",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "depends_on": [
+        "SI-003",
+        "SI-005"
+      ],
+      "areas": [
+        "Server aplicação/ports/SQLite",
+        "schema migrations"
+      ],
+      "steps": [
+        "Estender intents/outbox ou adicionar metadado auxiliar subordinado à execução existente.",
+        "Persistir input ID/hash/sequence/scope/autor/modo/payload antes do ACK; índices e limites.",
+        "Não alterar recibos antigos; GET e resolução de viewer não gravam entradas."
+      ],
+      "acceptance": "Input durável único com autorização e transcript ainda separado.",
+      "test_ids": [
+        "SI-T-A01",
+        "SI-T-A02",
+        "SI-T-A03",
+        "SI-T-A04",
+        "SI-T-A05",
+        "SI-T-B10",
+        "SI-T-B14",
+        "SI-T-B15",
+        "SI-T-A06",
+        "SI-T-A07",
+        "SI-T-A09",
+        "SI-T-A10"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-007",
+      "phase": "SI-01",
+      "title": "Implementar FIFO e despacho na fronteira elegível",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R15",
+        "SI-R16"
+      ],
+      "depends_on": [
+        "SI-006"
+      ],
+      "areas": [
+        "dispatcher da sessão",
+        "capacidade/lease atuais"
+      ],
+      "steps": [
+        "Serializar admission entre barramento, UI e native bridge pela mesma sessão.",
+        "Despachar um input por turno somente com prova de estado elegível e geração atual.",
+        "Usar ordem por sequence, TTL/limites explícitos, nenhuma dupla fila nativa."
+      ],
+      "acceptance": "Busy não gera turn.submit concorrente; ordem e fronteira verificadas.",
+      "test_ids": [
+        "SI-T-B01",
+        "SI-T-B02",
+        "SI-T-B03",
+        "SI-T-B04",
+        "SI-T-B06",
+        "SI-T-B07",
+        "SI-T-B08",
+        "SI-T-B09",
+        "SI-T-B17",
+        "SI-T-B18",
+        "SI-T-B21",
+        "SI-T-B22",
+        "SI-T-B11",
+        "SI-T-B12"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-008",
+      "phase": "SI-01",
+      "title": "Recuperar intenções e operações sem replay",
+      "requirements": [
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "depends_on": [
+        "SI-006",
+        "SI-007"
+      ],
+      "areas": [
+        "reconciler de operações",
+        "receipts/journal"
+      ],
+      "steps": [
+        "Persistir tentativa antes da borda externa e usar a mesma operação no recovery.",
+        "Distinguir recusa pre-write de possível efeito, bloqueando unknown.",
+        "Revalidar grants em dispatch e preservar restrições de sessão já vinculada a grant expirado."
+      ],
+      "acceptance": "Restart e resposta perdida não duplicam prompts ou renovam autoridade.",
+      "test_ids": [
+        "SI-T-A08",
+        "SI-T-B13",
+        "SI-T-B14",
+        "SI-T-B16",
+        "SI-T-H16"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-009",
+      "phase": "SI-01",
+      "title": "Implementar cancelamento de fila e limites",
+      "requirements": [
+        "SI-R05",
+        "SI-R22"
+      ],
+      "depends_on": [
+        "SI-006",
+        "SI-007"
+      ],
+      "areas": [
+        "input cancellation",
+        "queue state API"
+      ],
+      "steps": [
+        "Cancelar somente QUEUED/paused antes do envio irreversível por CAS.",
+        "Retornar conflito se começou dispatch; manter itens posteriores e turno corrente.",
+        "Aplicar quota/TTL sem truncar/excluir conteúdo aceito silenciosamente."
+      ],
+      "acceptance": "Cancelamento e despacho têm único vencedor; nenhum cancel de runtime implícito.",
+      "test_ids": [
+        "SI-T-B17",
+        "SI-T-B18",
+        "SI-T-B19",
+        "SI-T-B20"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-010",
+      "phase": "SI-01",
+      "title": "Implementar steer e promoção de entrada",
+      "requirements": [
+        "SI-R06",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22"
+      ],
+      "depends_on": [
+        "SI-007",
+        "SI-008",
+        "SI-009"
+      ],
+      "areas": [
+        "runtime intents de controle",
+        "Core targeting",
+        "capabilities"
+      ],
+      "steps": [
+        "Fixar target/fence, expor timing e semântica real do adapter.",
+        "Promover mensagem queued por CAS com operação derivada e retirar da elegibilidade FIFO.",
+        "Preservar recusa se turno mudou; Claude compound e Pi boundary não disfarçados."
+      ],
+      "acceptance": "Uma intenção não é entregue duas vezes; controles não mudam de turno por corrida.",
+      "test_ids": [
+        "SI-T-C01",
+        "SI-T-C02",
+        "SI-T-C03",
+        "SI-T-C04",
+        "SI-T-C05",
+        "SI-T-C06",
+        "SI-T-C07",
+        "SI-T-C08",
+        "SI-T-C09",
+        "SI-T-C10"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-011",
+      "phase": "SI-01",
+      "title": "Interromper com barreira e retomar fila explicitamente",
+      "requirements": [
+        "SI-R07",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "depends_on": [
+        "SI-007",
+        "SI-008"
+      ],
+      "areas": [
+        "runtime interrupt",
+        "queue pause/resume"
+      ],
+      "steps": [
+        "Instalar barreira antes do interrupt exato e manter fila após parada.",
+        "Não encaminhar interrupt a T2 quando T1 termina antes da escrita.",
+        "Retomar fila somente por ação autorizada; pergunta/approval continuam endpoints próprios."
+      ],
+      "acceptance": "Interrupt não vira close e não começa novo turno involuntariamente.",
+      "test_ids": [
+        "SI-T-C11",
+        "SI-T-C12",
+        "SI-T-C13",
+        "SI-T-C14",
+        "SI-T-C15",
+        "SI-T-C16",
+        "SI-T-C17",
+        "SI-T-C18",
+        "SI-T-C19"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-012",
+      "phase": "SI-02",
+      "title": "Normalizar transcript por origem e identidade",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R14",
+        "SI-R18"
+      ],
+      "depends_on": [
+        "SI-002",
+        "SI-006"
+      ],
+      "areas": [
+        "session events/read models",
+        "Core normalization quando necessário"
+      ],
+      "steps": [
+        "Projetar mensagens/ferramentas/controles por IDs nativos e operação, com paginação e lacunas.",
+        "Tratar deltas/snapshots/eco sem dedup por texto; subagent com origem explícita.",
+        "Limitar/redigir conteúdo e não expor raciocínio não publicado."
+      ],
+      "acceptance": "Histórico verdadeiro, ordenado e limitado.",
+      "test_ids": [
+        "SI-T-E01",
+        "SI-T-E02",
+        "SI-T-E03",
+        "SI-T-E04",
+        "SI-T-E05",
+        "SI-T-E06",
+        "SI-T-H20"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-013",
+      "phase": "SI-02",
+      "title": "Adicionar composer de usuário na sessão existente",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R04",
+        "SI-R21"
+      ],
+      "depends_on": [
+        "SI-006",
+        "SI-007",
+        "SI-012"
+      ],
+      "areas": [
+        "HomeSessionInspection / HomeEntryInspection",
+        "RuntimeOperations shared façade"
+      ],
+      "steps": [
+        "Introduzir conversa como aba padrão e enviar pelo novo coordenador canônico.",
+        "Enter usa next_turn; rascunho por escopo e estado pending/unknown correto.",
+        "Reutilizar RequestContext/guards e ações atuais sem criar outro menu."
+      ],
+      "acceptance": "Pedido entra como user nativo exato, nunca pelo canal Operator.",
+      "test_ids": [
+        "SI-T-A01",
+        "SI-T-A02",
+        "SI-T-E07",
+        "SI-T-E08",
+        "SI-T-E09",
+        "SI-T-E10",
+        "SI-T-E12",
+        "SI-T-A11",
+        "SI-T-A12"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-014",
+      "phase": "SI-02",
+      "title": "Apresentar fila, steer e interrupt com efeitos claros",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R06",
+        "SI-R07",
+        "SI-R21"
+      ],
+      "depends_on": [
+        "SI-009",
+        "SI-010",
+        "SI-011",
+        "SI-013"
+      ],
+      "areas": [
+        "session composer/queue components"
+      ],
+      "steps": [
+        "Listar pendências com posição/status/remove; não mostrar como consumidas.",
+        "Expor steer separado, consentimento de efeito composto e CAS de promoção.",
+        "Mostrar barreira pós-interrupt e botão de retomar fila separado de close/detach."
+      ],
+      "acceptance": "Toda ação tem escopo e efeito compreensíveis sem formulário técnico.",
+      "test_ids": [
+        "SI-T-B19",
+        "SI-T-C01",
+        "SI-T-C05",
+        "SI-T-C08",
+        "SI-T-C14",
+        "SI-T-E07"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-015",
+      "phase": "SI-02",
+      "title": "Criar catálogo de comandos tipado e versionado",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R16",
+        "SI-R20"
+      ],
+      "depends_on": [
+        "SI-003",
+        "SI-004"
+      ],
+      "areas": [
+        "Core declarations",
+        "Server command capabilities"
+      ],
+      "steps": [
+        "Definir subset inicial e estados por superfície/instalação/versão/política.",
+        "Modelar handlers confiáveis e argumentos; distinguir ações Nexus de comandos nativos.",
+        "Desabilitar recursos não qualificados em vez de string-forward."
+      ],
+      "acceptance": "Catálogo demonstra origem e disponibilidade real.",
+      "test_ids": [
+        "SI-T-D01",
+        "SI-T-D02",
+        "SI-T-D03",
+        "SI-T-D04",
+        "SI-T-D10",
+        "SI-T-D11",
+        "SI-T-D12"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-016",
+      "phase": "SI-02",
+      "title": "Implementar comandos e aviso de unsupported",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "depends_on": [
+        "SI-013",
+        "SI-015"
+      ],
+      "areas": [
+        "slash picker UI",
+        "typed handlers Server/Core"
+      ],
+      "steps": [
+        "Mostrar busca/efeito/motivo e confirmação necessária.",
+        "Unknown/native-only preservam texto; literal depende de capability real.",
+        "Bloquear shell/admin/update/permission-bypass na API nova; revalidar revisão."
+      ],
+      "acceptance": "Comando desconhecido não vira prompt ou execução arbitrária.",
+      "test_ids": [
+        "SI-T-D04",
+        "SI-T-D05",
+        "SI-T-D06",
+        "SI-T-D07",
+        "SI-T-D08",
+        "SI-T-D09",
+        "SI-T-D10",
+        "SI-T-D13"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-017",
+      "phase": "SI-02",
+      "title": "Estabilizar navegação, stream e acessibilidade",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R21"
+      ],
+      "depends_on": [
+        "SI-012",
+        "SI-013",
+        "SI-014",
+        "SI-016"
+      ],
+      "areas": [
+        "Home panel lifecycle",
+        "session stream/controller"
+      ],
+      "steps": [
+        "Snapshot+stream com cursor e generation; não refetch por token.",
+        "Preservar foco/rascunho/scroll e impor limpeza em revogação.",
+        "Mobile/zoom/teclado/IME/aria agrupados, uma camada contextual."
+      ],
+      "acceptance": "Fluxo utilizável sem mouse e sem perder contexto no refresh.",
+      "test_ids": [
+        "SI-T-E09",
+        "SI-T-E10",
+        "SI-T-E11",
+        "SI-T-E12",
+        "SI-T-E13",
+        "SI-T-E14",
+        "SI-T-E15",
+        "SI-T-E16"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-018",
+      "phase": "SI-03",
+      "title": "Persistir mapeamento nativo e fences de ownership",
+      "requirements": [
+        "SI-R14",
+        "SI-R15",
+        "SI-R22"
+      ],
+      "depends_on": [
+        "SI-003",
+        "SI-004",
+        "SI-006"
+      ],
+      "areas": [
+        "Core journal/session models",
+        "Server session mapping"
+      ],
+      "steps": [
+        "Mapear namespace canônico a native-session/thread/context epoch/version.",
+        "Distinguir engine, renderer, runtime generation e viewer attachment.",
+        "Revalidar mapping em attach/resume; não adotar arquivo/PID por semelhança."
+      ],
+      "acceptance": "Nunca há dois owners produtivos da mesma sessão.",
+      "test_ids": [
+        "SI-T-A04",
+        "SI-T-A05",
+        "SI-T-G01",
+        "SI-T-G16",
+        "SI-T-G20"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-019",
+      "phase": "SI-03",
+      "title": "Implementar broker e capabilities de attach",
+      "requirements": [
+        "SI-R12",
+        "SI-R15",
+        "SI-R16",
+        "SI-R18"
+      ],
+      "depends_on": [
+        "SI-018"
+      ],
+      "areas": [
+        "Server attachment service",
+        "host local IPC"
+      ],
+      "steps": [
+        "Emitir credencial curta por sessão/superfície e writer epoch via autenticação humana.",
+        "Validar handshake/origin/replay e métodos/contexto permitidos.",
+        "Takeover explícito e múltiplos leitores sem expor engine global."
+      ],
+      "acceptance": "Leitura e escrita restritas à sessão e ao usuário autorizado.",
+      "test_ids": [
+        "SI-T-G06",
+        "SI-T-G07",
+        "SI-T-G08",
+        "SI-T-G10",
+        "SI-T-H03",
+        "SI-T-H04",
+        "SI-T-H05",
+        "SI-T-H06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-020",
+      "phase": "SI-03",
+      "title": "Separar processo durável de cliente terminal",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R23"
+      ],
+      "depends_on": [
+        "SI-004",
+        "SI-018",
+        "SI-019"
+      ],
+      "areas": [
+        "Core native process/containment",
+        "PTY/ConPTY ou frontend bridge"
+      ],
+      "steps": [
+        "Manter engine ou PTY master no host durável, nunca no subprocesso foreground do usuário.",
+        "Drenar saída continuamente com limites e backpressure por viewer.",
+        "Tratar desconexão/EOF/signals como detach do cliente, sem fechar stdin da engine."
+      ],
+      "acceptance": "Teste de processo prova continuidade após morte do cliente.",
+      "test_ids": [
+        "SI-T-G03",
+        "SI-T-G04",
+        "SI-T-G05",
+        "SI-T-H07",
+        "SI-T-H08",
+        "SI-T-H09",
+        "SI-T-H13",
+        "SI-T-H14",
+        "SI-T-H17"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-021",
+      "phase": "SI-03",
+      "title": "Arbitrar entradas nativas e UI sem bypass",
+      "requirements": [
+        "SI-R02",
+        "SI-R05",
+        "SI-R15",
+        "SI-R16",
+        "SI-R18"
+      ],
+      "depends_on": [
+        "SI-007",
+        "SI-010",
+        "SI-011",
+        "SI-019",
+        "SI-020"
+      ],
+      "areas": [
+        "typed native input gateway",
+        "Core bridge/hooks qualificados"
+      ],
+      "steps": [
+        "Traduzir/observar comandos produtivos da TUI por eventos semânticos autorizados.",
+        "Aplicar mesmo árbitro de sessão e atribuição de origem; controlar mutações de thread/config.",
+        "Bloquear combinação de TUI que não permita preservar autoridade/correlação, sem chamar isso de suporte completo."
+      ],
+      "acceptance": "UI e nativo não disparam engines paralelas nem escapam de grants.",
+      "test_ids": [
+        "SI-T-A02",
+        "SI-T-B21",
+        "SI-T-G09",
+        "SI-T-G10",
+        "SI-T-D13",
+        "SI-T-H19"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-022",
+      "phase": "SI-03",
+      "title": "Estender transporte remoto de sessão",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17"
+      ],
+      "depends_on": [
+        "SI-019",
+        "SI-020",
+        "SI-021"
+      ],
+      "areas": [
+        "Server remote transport",
+        "Connector daemon / WSS / local IPC"
+      ],
+      "steps": [
+        "Reusar conexão outbound autenticada, separando stream terminal de controle/leases.",
+        "Encaminhar provas humanas limitadas, não reusar agente como operador.",
+        "Reconectar por cursor/attachment sem replay de input; CWD remoto preservado."
+      ],
+      "acceptance": "Remote tem mesma semântica de detach e nenhuma porta nativa ampla pública.",
+      "test_ids": [
+        "SI-T-H01",
+        "SI-T-H02",
+        "SI-T-H03",
+        "SI-T-H04",
+        "SI-T-H12"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-023",
+      "phase": "SI-03",
+      "title": "Implementar transferência/resume seguro e recovery",
+      "requirements": [
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R15",
+        "SI-R22"
+      ],
+      "depends_on": [
+        "SI-018",
+        "SI-020",
+        "SI-021",
+        "SI-022"
+      ],
+      "areas": [
+        "driver transition / native resume",
+        "queue barriers",
+        "receipt recovery"
+      ],
+      "steps": [
+        "Transferir somente em estado seguro comprovado e sem trabalho background perdido.",
+        "Persistir fases e fence; crash não permite dois owners ou replay.",
+        "Resume salvo preserva contexto exato; sucessora runtime exige linhagem/consentimento, sem mover fila."
+      ],
+      "acceptance": "Semânticas attach/resume/transfer inequívocas e recuperáveis.",
+      "test_ids": [
+        "SI-T-G13",
+        "SI-T-G14",
+        "SI-T-G15",
+        "SI-T-G16",
+        "SI-T-G20",
+        "SI-T-F15"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-024",
+      "phase": "SI-04",
+      "title": "Qualificar integração nativa Codex",
+      "requirements": [
+        "SI-R06",
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20"
+      ],
+      "depends_on": [
+        "SI-004",
+        "SI-019",
+        "SI-020",
+        "SI-021",
+        "SI-023"
+      ],
+      "areas": [
+        "Core codex adapter",
+        "schema gerado da versão instalada",
+        "native TUI gateway"
+      ],
+      "steps": [
+        "Implementar estratégia aprovada em SI-004 para frontend Codex na engine existente.",
+        "Fixar thread/turn, filtrar métodos de engine, correlacionar histórico/entrada e teclas de detach.",
+        "Executar attach busy, fila, steer target, interrupt, detach/reattach e capability downgrade."
+      ],
+      "acceptance": "Native Codex verdadeiro com sessão exata e sem tokens/threads fora do escopo.",
+      "test_ids": [
+        "SI-T-C02",
+        "SI-T-C03",
+        "SI-T-G01",
+        "SI-T-G05",
+        "SI-T-G10",
+        "SI-T-G19",
+        "SI-T-H05",
+        "SI-T-I06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-025",
+      "phase": "SI-04",
+      "title": "Qualificar integração nativa Pi",
+      "requirements": [
+        "SI-R06",
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20"
+      ],
+      "depends_on": [
+        "SI-004",
+        "SI-019",
+        "SI-020",
+        "SI-021",
+        "SI-023"
+      ],
+      "areas": [
+        "Core Pi adapter",
+        "SDK/extension bridge versionado",
+        "native renderer"
+      ],
+      "steps": [
+        "Implementar ponte com um único AgentSession/owner, renderer nativo e protocolo de entrada qualificados.",
+        "Preservar skills/config/auth e settled; separar dispose de detach.",
+        "Testar pending UI, follow-up, steer boundary, interrupção, persistência e TUI sem dupla fila."
+      ],
+      "acceptance": "Pi nativo e UI observam/controlam uma sessão, sem dois processos escritores.",
+      "test_ids": [
+        "SI-T-B08",
+        "SI-T-B22",
+        "SI-T-C04",
+        "SI-T-G01",
+        "SI-T-G04",
+        "SI-T-G18",
+        "SI-T-H13"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-026",
+      "phase": "SI-04",
+      "title": "Qualificar integração nativa Claude Code",
+      "requirements": [
+        "SI-R06",
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20"
+      ],
+      "depends_on": [
+        "SI-004",
+        "SI-019",
+        "SI-020",
+        "SI-021",
+        "SI-023"
+      ],
+      "areas": [
+        "Core Claude stream/background bridge",
+        "native attach qualificado"
+      ],
+      "steps": [
+        "Implementar rota aprovada sem executar resume concorrente ao stream worker.",
+        "Preservar decisões, guard requesting e efeito steer interrupt+resend com recibos.",
+        "Validar que background/attach usado realmente conserva tools/config e não é fork/cloud copy."
+      ],
+      "acceptance": "Claude nativo verdadeiro sem aborto provocado pelo detach ou perda de contexto.",
+      "test_ids": [
+        "SI-T-C05",
+        "SI-T-C06",
+        "SI-T-C07",
+        "SI-T-G01",
+        "SI-T-G03",
+        "SI-T-G17",
+        "SI-T-H10"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-027",
+      "phase": "SI-04",
+      "title": "Consolidar capability matrix e controles de versão",
+      "requirements": [
+        "SI-R08",
+        "SI-R12",
+        "SI-R20",
+        "SI-R24"
+      ],
+      "depends_on": [
+        "SI-024",
+        "SI-025",
+        "SI-026"
+      ],
+      "areas": [
+        "runtime inventory/capabilities",
+        "matrix evidence",
+        "installation fingerprint"
+      ],
+      "steps": [
+        "Publicar suporte por versão/OS/modo com motivos de unavailable.",
+        "Manter docs upstream separadas da prova da instalação e fechar diferenças de targeting/timing.",
+        "Preservar caminhos antigos qualificados; novo wheel/pins só com compatibilidade."
+      ],
+      "acceptance": "Sem blanket support; cada promessa do produto tem teste associado.",
+      "test_ids": [
+        "SI-T-D01",
+        "SI-T-D03",
+        "SI-T-G12",
+        "SI-T-I02",
+        "SI-T-I06",
+        "SI-T-I09"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-028",
+      "phase": "SI-05",
+      "title": "Adicionar flags de superfície ao connect",
+      "requirements": [
+        "SI-R10",
+        "SI-R19"
+      ],
+      "depends_on": [
+        "SI-003",
+        "SI-019"
+      ],
+      "areas": [
+        "connect_arguments.py",
+        "connect.py",
+        "Quick Connect dispatcher"
+      ],
+      "steps": [
+        "-i/--interactive e --no-interactive mutuamente exclusivos com --no-chat.",
+        "Plan não anexa; JSON/nonTTY não pergunta; -ni inválido com orientação.",
+        "Preservar CWD/Git/ID do Harness e hash/receipts anteriores."
+      ],
+      "acceptance": "Erros de gramática não produzem efeitos e flags antigas continuam válidas.",
+      "test_ids": [
+        "SI-T-F04",
+        "SI-T-F05",
+        "SI-T-F06",
+        "SI-T-F07",
+        "SI-T-F08",
+        "SI-T-F09",
+        "SI-T-F10",
+        "SI-T-F17"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-029",
+      "phase": "SI-05",
+      "title": "Perguntar e abrir nativo após recibo positivo",
+      "requirements": [
+        "SI-R10",
+        "SI-R12",
+        "SI-R19"
+      ],
+      "depends_on": [
+        "SI-027",
+        "SI-028"
+      ],
+      "areas": [
+        "post-connect presentation",
+        "CLI output"
+      ],
+      "steps": [
+        "Sem flag TTY, perguntar ao final com default Não; -i pede nativo, não work chat.",
+        "Separar setup_success de post_action_failure e abertura de sessão adicional autorizada.",
+        "Retornar ID/escopo/comando de attach antes da TUI, sem tokens."
+      ],
+      "acceptance": "Escolha inicial é simples e não altera configuração/autoridade existente.",
+      "test_ids": [
+        "SI-T-F01",
+        "SI-T-F02",
+        "SI-T-F03",
+        "SI-T-F13",
+        "SI-T-F16"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-030",
+      "phase": "SI-05",
+      "title": "Implementar session list/attach/resume",
+      "requirements": [
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "depends_on": [
+        "SI-023",
+        "SI-027",
+        "SI-028"
+      ],
+      "areas": [
+        "CLI main/session commands",
+        "catalog/session exact resolver"
+      ],
+      "steps": [
+        "Listar sessão por conexão/projeto autorizado, com completude e estado.",
+        "Attach vivo usa mesmo worker, multiple exige escolha, resume salvo usa ID exato e explica efeito.",
+        "Preservar work resume como receipt recovery; sem --last ou criação invisível."
+      ],
+      "acceptance": "Sessão pode ser aberta posteriormente independente da escolha inicial.",
+      "test_ids": [
+        "SI-T-F11",
+        "SI-T-F12",
+        "SI-T-F14",
+        "SI-T-F15",
+        "SI-T-G01",
+        "SI-T-G02",
+        "SI-T-G16"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-031",
+      "phase": "SI-05",
+      "title": "Integrar CLI remoto e Connector",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R17",
+        "SI-R19"
+      ],
+      "depends_on": [
+        "SI-022",
+        "SI-029",
+        "SI-030"
+      ],
+      "areas": [
+        "Connector connect/daemon client",
+        "Server operator remote access"
+      ],
+      "steps": [
+        "Oferecer mesma decisão abrir/não abrir no host quando suportada, respeitando gramática própria.",
+        "No cliente remoto, preparar attach por autoridade humana e host correto; não iniciar substituto local.",
+        "Usar capacidades/versionamento negociados com diagnóstico de incompatibilidade."
+      ],
+      "acceptance": "Local/remoto preservam significado sem importar tokens de root ou paths errados.",
+      "test_ids": [
+        "SI-T-H01",
+        "SI-T-H02",
+        "SI-T-H03",
+        "SI-T-H12",
+        "SI-T-I02"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-032",
+      "phase": "SI-05",
+      "title": "Definir sinais, saída de terminal e banner",
+      "requirements": [
+        "SI-R13",
+        "SI-R19",
+        "SI-R23"
+      ],
+      "depends_on": [
+        "SI-020",
+        "SI-024",
+        "SI-025",
+        "SI-026",
+        "SI-030"
+      ],
+      "areas": [
+        "TTY launcher",
+        "platform lifecycle",
+        "help/terminal banner"
+      ],
+      "steps": [
+        "Documentar detach externo e diferenças reais de Ctrl+C/Esc//exit.",
+        "Fechar janela/EOF/kill cliente não propaga close/kill ao worker.",
+        "Restaurar modo do terminal ao sair e não deixar stdin/raw mode quebrado."
+      ],
+      "acceptance": "Humano consegue desanexar sem parar; interrupção explícita continua reconhecível.",
+      "test_ids": [
+        "SI-T-G03",
+        "SI-T-G04",
+        "SI-T-G05",
+        "SI-T-H07",
+        "SI-T-H08",
+        "SI-T-H09",
+        "SI-T-H10",
+        "SI-T-H11"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-033",
+      "phase": "SI-05",
+      "title": "Preservar Home, comandos e perfis existentes",
+      "requirements": [
+        "SI-R19",
+        "SI-R21"
+      ],
+      "depends_on": [
+        "SI-017",
+        "SI-029",
+        "SI-030",
+        "SI-031",
+        "SI-032"
+      ],
+      "areas": [
+        "Home state projection",
+        "Quick Connect",
+        "work/participant/legacy"
+      ],
+      "steps": [
+        "Projetar fila/terminal sem tratar detach como offline ou queued como execução.",
+        "Executar regressão de profiles, --no-chat, Operator messages/handoffs e participant.",
+        "Não criar novo menu ou fallback nativo fictício para modo sem suporte."
+      ],
+      "acceptance": "Nova interação é adicional e o ciclo antigo não perde capacidades.",
+      "test_ids": [
+        "SI-T-I01",
+        "SI-T-I04",
+        "SI-T-F09",
+        "SI-T-F14",
+        "SI-T-F17"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-034",
+      "phase": "SI-06",
+      "title": "Auditar segurança e revogação ponta a ponta",
+      "requirements": [
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18"
+      ],
+      "depends_on": [
+        "SI-021",
+        "SI-022",
+        "SI-027",
+        "SI-031",
+        "SI-033"
+      ],
+      "areas": [
+        "API/gateway IPC/WSS",
+        "scoped capabilities",
+        "UI sanitize"
+      ],
+      "steps": [
+        "Testar replay/token scope/CSRF/Origin/ACL e métodos fora da sessão.",
+        "Revogar acesso com UI/terminal/fila ativos e provar isolamento de autor.",
+        "Redigir transcripts/logs e impedir exec/clipboard privilegiados pelo conteúdo."
+      ],
+      "acceptance": "Nenhum native bridge vira caminho de bypass ou vazamento.",
+      "test_ids": [
+        "SI-T-A03",
+        "SI-T-H04",
+        "SI-T-H05",
+        "SI-T-H06",
+        "SI-T-H15",
+        "SI-T-H16",
+        "SI-T-H19",
+        "SI-T-H20"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-035",
+      "phase": "SI-06",
+      "title": "Executar races e falhas de distribuição",
+      "requirements": [
+        "SI-R05",
+        "SI-R06",
+        "SI-R07",
+        "SI-R15",
+        "SI-R22"
+      ],
+      "depends_on": [
+        "SI-008",
+        "SI-010",
+        "SI-011",
+        "SI-023",
+        "SI-033"
+      ],
+      "areas": [
+        "SQLite transaction tests",
+        "Core fault injection",
+        "network faults"
+      ],
+      "steps": [
+        "Forçar interrupção nas fronteiras enqueue/write/ACK/transfer/lease.",
+        "Provar cancel/promote/dispatch winner, queue pause e recuperação de unknown.",
+        "Testar owner restart e dois clientes sem duplicate effects."
+      ],
+      "acceptance": "Resultados adversariais registrados por intenção e efeito real.",
+      "test_ids": [
+        "SI-T-B13",
+        "SI-T-B16",
+        "SI-T-B19",
+        "SI-T-C09",
+        "SI-T-C13",
+        "SI-T-G15",
+        "SI-T-H12"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-036",
+      "phase": "SI-06",
+      "title": "Qualificar navegador e experiência do usuário",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R08",
+        "SI-R09",
+        "SI-R21"
+      ],
+      "depends_on": [
+        "SI-017",
+        "SI-027",
+        "SI-033"
+      ],
+      "areas": [
+        "browser real",
+        "accessibility",
+        "UX acceptance"
+      ],
+      "steps": [
+        "Executar conversa/queue/steer/approval com dados reais de teste via APIs.",
+        "Validar viewport, teclado, foco, rascunho, atualização e seleção exata.",
+        "Inspecionar mensagens humanas de timing/unsupported e obter aceite do fluxo."
+      ],
+      "acceptance": "Não substituir e2e por testes de strings/SSR.",
+      "test_ids": [
+        "SI-T-E09",
+        "SI-T-E10",
+        "SI-T-E11",
+        "SI-T-E12",
+        "SI-T-E13",
+        "SI-T-E14",
+        "SI-T-E15",
+        "SI-T-E16",
+        "SI-T-D04"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-037",
+      "phase": "SI-06",
+      "title": "Qualificar processos e plataformas",
+      "requirements": [
+        "SI-R13",
+        "SI-R17",
+        "SI-R23"
+      ],
+      "depends_on": [
+        "SI-027",
+        "SI-031",
+        "SI-032",
+        "SI-035"
+      ],
+      "areas": [
+        "Windows/macOS/Linux targets",
+        "package process tests",
+        "transport load"
+      ],
+      "steps": [
+        "Executar close janela, signal/kill cliente, rede, stdout sem viewer e viewer lento.",
+        "Medir limites/buffers/latências e restaurar terminal.",
+        "Registrar OS/versão/backend realmente usado, sem generalizar outra plataforma."
+      ],
+      "acceptance": "Detach comprovado por continuidade da execução e resultado, não só PID vivo.",
+      "test_ids": [
+        "SI-T-H07",
+        "SI-T-H08",
+        "SI-T-H09",
+        "SI-T-H11",
+        "SI-T-H13",
+        "SI-T-H14",
+        "SI-T-H18"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-038",
+      "phase": "SI-06",
+      "title": "Executar campanhas reais consentidas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R20",
+        "SI-R24"
+      ],
+      "depends_on": [
+        "SI-034",
+        "SI-035",
+        "SI-036",
+        "SI-037"
+      ],
+      "areas": [
+        "Codex/Pi/Claude instalados",
+        "workspaces descartáveis",
+        "custo autorizado"
+      ],
+      "steps": [
+        "Rodar UI→native→detach→UI com pedido/resultado e ID estável.",
+        "Rodar native→UI queue/steer/interrupt; remoto quando anunciado.",
+        "Associar evidência por harness/OS/versão e manter não executados como NOT_RUN/BLOCKED."
+      ],
+      "acceptance": "Nenhuma simulação promovida a suporte real.",
+      "test_ids": [
+        "SI-T-I07",
+        "SI-T-I08",
+        "SI-T-I09",
+        "SI-T-G11"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-039",
+      "phase": "SI-07",
+      "title": "Empacotar e validar compatibilidade de contratos",
+      "requirements": [
+        "SI-R19",
+        "SI-R20",
+        "SI-R24"
+      ],
+      "depends_on": [
+        "SI-033",
+        "SI-034",
+        "SI-035",
+        "SI-036",
+        "SI-037"
+      ],
+      "areas": [
+        "Core/Server/Connector artifacts",
+        "migrations",
+        "golden receipts"
+      ],
+      "steps": [
+        "Gerar wheels compatíveis e contratos publicados, atualizar pins quando necessário.",
+        "Instalar em ambiente isolado e testar defaults/upgrade de banco/clients antigos.",
+        "Preservar hashes/recibos anteriores e reportar exatamente o build validado."
+      ],
+      "acceptance": "Pacote não depende de dev server ou fork não fixado.",
+      "test_ids": [
+        "SI-T-I01",
+        "SI-T-I02",
+        "SI-T-I05",
+        "SI-T-I06"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-040",
+      "phase": "SI-07",
+      "title": "Documentar comandos e capacidade efetiva",
+      "requirements": [
+        "SI-R08",
+        "SI-R10",
+        "SI-R11",
+        "SI-R13",
+        "SI-R19",
+        "SI-R20",
+        "SI-R24"
+      ],
+      "depends_on": [
+        "SI-027",
+        "SI-029",
+        "SI-030",
+        "SI-031",
+        "SI-032",
+        "SI-036"
+      ],
+      "areas": [
+        "docs terminal-work/connect",
+        "help",
+        "support matrix"
+      ],
+      "steps": [
+        "Documentar diferença entre native user e Operator bus, fila e steer, attach/resume/recover/detach/close.",
+        "Incluir comandos reais de flags/sessão, limitações por versão/OS e instrução de recuperação.",
+        "Não prometer native chat com JSON nem comandos globais que não foram qualificados."
+      ],
+      "acceptance": "Documentação corresponde ao binário/contratos e mensagens da UI.",
+      "test_ids": [
+        "SI-T-F01",
+        "SI-T-F03",
+        "SI-T-F04",
+        "SI-T-F14",
+        "SI-T-H10",
+        "SI-T-I09"
+      ],
+      "status": "TODO",
+      "evidence": []
+    },
+    {
+      "id": "SI-041",
+      "phase": "SI-07",
+      "title": "Decidir gates e executar rollback controlado",
+      "requirements": [
+        "SI-R05",
+        "SI-R13",
+        "SI-R22",
+        "SI-R24"
+      ],
+      "depends_on": [
+        "SI-038",
+        "SI-039",
+        "SI-040"
+      ],
+      "areas": [
+        "release report",
+        "feature controls",
+        "ledger"
+      ],
+      "steps": [
+        "Demonstrar rollback sem abandonar fila nem interromper engine inadvertidamente.",
+        "Conferir todas as tarefas/cenários, blockers e matriz por harness.",
+        "Separar implemented/qualified/blocked; não publicar release ou campanha adicional sem autorização."
+      ],
+      "acceptance": "Relatório final explícito, feature não declarada completa com native goals não implementados.",
+      "test_ids": [
+        "SI-T-I03",
+        "SI-T-I07",
+        "SI-T-I08",
+        "SI-T-I09"
+      ],
+      "status": "TODO",
+      "evidence": []
+    }
+  ],
+  "tests": [
+    {
+      "id": "SI-T-A01",
+      "group": "Escopo, papel nativo e admissão",
+      "title": "Entrada não usa barramento",
+      "given": "sessão exata autorizada",
+      "when": "enviar texto pelo composer",
+      "then": "uma intenção runtime/entrada, zero message_send, inbox ou handoff implícitos",
+      "level": "Unidade + HTTP + peer de protocolo",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R14",
+        "SI-R16",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-A02",
+      "group": "Escopo, papel nativo e admissão",
+      "title": "Papel nativo user",
+      "given": "input humano aceito",
+      "when": "adapter serializa conteúdo",
+      "then": "papel user no protocolo, sem wrapper Operator no texto, auditoria humana preservada",
+      "level": "Unidade + HTTP + peer de protocolo",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R14",
+        "SI-R16",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-A03",
+      "group": "Escopo, papel nativo e admissão",
+      "title": "Autor não personificado",
+      "given": "cliente tenta forjar actor_agent_id",
+      "when": "admitir input",
+      "then": "usar identidade autenticada ou recusar; nunca ampliar autoridade",
+      "level": "Unidade + HTTP + peer de protocolo",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R14",
+        "SI-R16",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-A04",
+      "group": "Escopo, papel nativo e admissão",
+      "title": "Tupla divergente",
+      "given": "session_id correto em executor ou binding errado",
+      "when": "abrir/enviar",
+      "then": "recusar antes de escrita e não buscar outra sessão",
+      "level": "Unidade + HTTP + peer de protocolo",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R14",
+        "SI-R16",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-A05",
+      "group": "Escopo, papel nativo e admissão",
+      "title": "Geração antiga",
+      "given": "painel mantém geração G1 e sessão está G2",
+      "when": "enviar",
+      "then": "exigir revalidação, sem aplicar entrada automaticamente ao novo contexto",
+      "level": "Unidade + HTTP + peer de protocolo",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R14",
+        "SI-R16",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-A06",
+      "group": "Escopo, papel nativo e admissão",
+      "title": "Projeto homônimo",
+      "given": "mesmo ID do Harness em dois workspaces",
+      "when": "selecionar e enviar",
+      "then": "somente workspace confirmado recebe a entrada",
+      "level": "Unidade + HTTP + peer de protocolo",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R14",
+        "SI-R16",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-A07",
+      "group": "Escopo, papel nativo e admissão",
+      "title": "GET puro",
+      "given": "estado/transcript/capabilities consultados",
+      "when": "repetir leituras",
+      "then": "nenhum grant, sessão, turno, fila, decisão ou attach criados",
+      "level": "Unidade + HTTP + peer de protocolo",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R14",
+        "SI-R16",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-A08",
+      "group": "Escopo, papel nativo e admissão",
+      "title": "Autorização expira entre passos",
+      "given": "enqueue autorizado e grant expira antes do dispatch",
+      "when": "worker revalida",
+      "then": "input bloqueado sem renovação ou transferência de sessão automática",
+      "level": "Unidade + HTTP + peer de protocolo",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R14",
+        "SI-R16",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-A09",
+      "group": "Escopo, papel nativo e admissão",
+      "title": "Sessão encerrada",
+      "given": "conversa existe mas runtime não está apto",
+      "when": "enviar",
+      "then": "recusar ou bloquear de forma explícita, sem new_session implícito",
+      "level": "Unidade + HTTP + peer de protocolo",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R14",
+        "SI-R16",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-A10",
+      "group": "Escopo, papel nativo e admissão",
+      "title": "Entrada vazia/grande",
+      "given": "texto vazio ou além do limite efetivo",
+      "when": "enviar",
+      "then": "validação sem truncamento e sem efeito nativo",
+      "level": "Unidade + HTTP + peer de protocolo",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R14",
+        "SI-R16",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-A11",
+      "group": "Escopo, papel nativo e admissão",
+      "title": "Entrada aceitação distinta",
+      "given": "protocolo aceita mas turno ainda não iniciou",
+      "when": "renderizar",
+      "then": "mostrar aceite/espera, não conclusão ou saída do modelo",
+      "level": "Unidade + HTTP + peer de protocolo",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R14",
+        "SI-R16",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-A12",
+      "group": "Escopo, papel nativo e admissão",
+      "title": "Múltiplas sessões",
+      "given": "duas candidatas autorizadas na mesma conexão",
+      "when": "abrir composer",
+      "then": "requer seleção exata; recência não decide",
+      "level": "Unidade + HTTP + peer de protocolo",
+      "requirements": [
+        "SI-R01",
+        "SI-R02",
+        "SI-R14",
+        "SI-R16",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B01",
+      "group": "Fila e fronteira do turno",
+      "title": "Idle sem fila",
+      "given": "sessão apta, idle confirmado",
+      "when": "enviar A",
+      "then": "uma submissão canônica imediata, sem steer",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B02",
+      "group": "Fila e fronteira do turno",
+      "title": "Busy enfileira",
+      "given": "turno T executando",
+      "when": "enviar A",
+      "then": "A persistida QUEUED, nenhum segundo turno enquanto T não estabiliza",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B03",
+      "group": "Fila e fronteira do turno",
+      "title": "FIFO",
+      "given": "A B C aceitas durante T",
+      "when": "T termina e turnos seguintes estabilizam",
+      "then": "entregar A depois B depois C, um por turno",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B04",
+      "group": "Fila e fronteira do turno",
+      "title": "Sem batching oculto",
+      "given": "A e B separadas",
+      "when": "liberar próximo turno",
+      "then": "não concatenar prompts ou modificar conteúdo",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B05",
+      "group": "Fila e fronteira do turno",
+      "title": "Dois autores simultâneos",
+      "given": "duas abas autenticadas na mesma sessão",
+      "when": "enqueue concorrente",
+      "then": "sequência do Server única e consultável",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B06",
+      "group": "Fila e fronteira do turno",
+      "title": "Tool ainda ativo",
+      "given": "texto termina mas ferramenta continua",
+      "when": "receber evento parcial de término",
+      "then": "não liberar próxima entrada",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B07",
+      "group": "Fila e fronteira do turno",
+      "title": "Pergunta bloqueante",
+      "given": "sessão espera aprovação nativa",
+      "when": "enviar texto comum",
+      "then": "texto na fila, não responde aprovação nem desbloqueia por si",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B08",
+      "group": "Fila e fronteira do turno",
+      "title": "Pi settled",
+      "given": "agent_end chega antes de retry/compaction/agent_settled",
+      "when": "processar eventos",
+      "then": "aguardar fronteira qualificada, sem turno sobreposto",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B09",
+      "group": "Fila e fronteira do turno",
+      "title": "Silêncio não idle",
+      "given": "nenhum token há um intervalo",
+      "when": "varrer fila",
+      "then": "nenhuma inferência de idle baseada em timeout",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B10",
+      "group": "Fila e fronteira do turno",
+      "title": "Persistência antes de ACK",
+      "given": "escrita durável da fila falha",
+      "when": "enviar",
+      "then": "recusa, sem mensagem apenas em memória ou ACK otimista",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B11",
+      "group": "Fila e fronteira do turno",
+      "title": "Browser fechado",
+      "given": "A foi aceita na fila",
+      "when": "encerrar aba",
+      "then": "dispatcher entrega A na hora apropriada sem cliente",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B12",
+      "group": "Fila e fronteira do turno",
+      "title": "Terminal fechado",
+      "given": "A foi aceita na fila",
+      "when": "matar cliente attach",
+      "then": "execução corrente e fila continuam sem pausa implícita",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B13",
+      "group": "Fila e fronteira do turno",
+      "title": "Restart Server",
+      "given": "A queued e B talvez enviado",
+      "when": "reiniciar serviço autorizado",
+      "then": "reconciliar B antes de novas submissões; A continua recuperável",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B14",
+      "group": "Fila e fronteira do turno",
+      "title": "Resposta enqueue perdida",
+      "given": "A commitada mas HTTP caiu",
+      "when": "repetir client_intent_id",
+      "then": "devolver o mesmo item e sequence",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B15",
+      "group": "Fila e fronteira do turno",
+      "title": "ID com texto alterado",
+      "given": "intenção A retida",
+      "when": "repetir ID com B",
+      "then": "conflito sem sobrescrever payload",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B16",
+      "group": "Fila e fronteira do turno",
+      "title": "Dispatch unknown",
+      "given": "escrita pode ter chegado sem ACK",
+      "when": "restart/reconnect",
+      "then": "DELIVERY_UNKNOWN e recuperação, sem reenviar cegamente",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B17",
+      "group": "Fila e fronteira do turno",
+      "title": "Limite de fila",
+      "given": "limite atingido",
+      "when": "enviar mais um item",
+      "then": "recusar somente o novo, preservar os aceitos",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B18",
+      "group": "Fila e fronteira do turno",
+      "title": "TTL",
+      "given": "input não enviado ultrapassa prazo",
+      "when": "avaliar fila",
+      "then": "EXPIRED visível, não envio tardio nem remoção silenciosa",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B19",
+      "group": "Fila e fronteira do turno",
+      "title": "Cancelar versus enviar",
+      "given": "worker e cancel disputam o mesmo item",
+      "when": "coordenar interleaving",
+      "then": "só um vencedor; CANCELLED não foi enviado, enviado não é removido falsamente",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B20",
+      "group": "Fila e fronteira do turno",
+      "title": "Cancelamento isolado",
+      "given": "A queued atrás de turno T",
+      "when": "cancelar A",
+      "then": "T continua, B posterior conserva ordem e não é cancelada",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B21",
+      "group": "Fila e fronteira do turno",
+      "title": "Coordenação concorrente",
+      "given": "turno de agente e entrada humana disputam sessão",
+      "when": "admitir",
+      "then": "mesmo árbitro evita simultaneidade; política documentada não perde trabalho",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-B22",
+      "group": "Fila e fronteira do turno",
+      "title": "Sem double queue",
+      "given": "adapter possui follow_up nativo",
+      "when": "enviar próximo turno pelo Nexus",
+      "then": "um único owner de fila e uma única entrega, sem follow_up mais reenvio",
+      "level": "SQLite + HTTP + dispatcher + fault injection",
+      "requirements": [
+        "SI-R04",
+        "SI-R05",
+        "SI-R16",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C01",
+      "group": "Reorientação e interrupção",
+      "title": "Enviar não steer",
+      "given": "sessão ocupada com steer disponível",
+      "when": "Enter normal",
+      "then": "QUEUED sem controle nativo de steer",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C02",
+      "group": "Reorientação e interrupção",
+      "title": "Steer Codex exato",
+      "given": "turno nativo T conhecido",
+      "when": "Reorientar agora",
+      "then": "enviar expectedTurnId T validado no efeito",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C03",
+      "group": "Reorientação e interrupção",
+      "title": "Steer corrida terminal",
+      "given": "T terminou antes do controle",
+      "when": "aplicar steer",
+      "then": "recusar e preservar texto; não atingir T2 nem enviar novo turno",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C04",
+      "group": "Reorientação e interrupção",
+      "title": "Steer Pi fronteira",
+      "given": "controle aceito com timing boundary",
+      "when": "observar ACK e consumo posterior",
+      "then": "status separa aceito, pendente de fronteira e aplicado",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C05",
+      "group": "Reorientação e interrupção",
+      "title": "Steer Claude composto",
+      "given": "adapter indica interrupt_then_send",
+      "when": "abrir ação",
+      "then": "usuário vê interrupção e confirma efeito; dois estágios correlacionados",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C06",
+      "group": "Reorientação e interrupção",
+      "title": "Claude requesting",
+      "given": "turno ainda antes da geração",
+      "when": "solicitar steer",
+      "then": "recusa anterior à escrita preservada; sem retry por sleep nem crash provocado",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C07",
+      "group": "Reorientação e interrupção",
+      "title": "Interrupt seguido de send incerto",
+      "given": "Claude interrompeu, novo prompt tem resultado unknown",
+      "when": "recuperar",
+      "then": "não repetir interrupt/prompt; preservar as duas correlações",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C08",
+      "group": "Reorientação e interrupção",
+      "title": "Promover queued",
+      "given": "A QUEUED e turno T ativo",
+      "when": "escolher reorientar A",
+      "then": "CAS retira elegibilidade da fila e produz um controle, não duas entregas",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C09",
+      "group": "Reorientação e interrupção",
+      "title": "Promoção versus dispatch",
+      "given": "A entrando em DISPATCHING",
+      "when": "promover A",
+      "then": "um vencedor; não virar steer depois de possível envio",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C10",
+      "group": "Reorientação e interrupção",
+      "title": "Steer sem suporte",
+      "given": "capability false/unqualified",
+      "when": "acionar por API ou UI",
+      "then": "recusa com motivo; nenhum stop+send substituto",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C11",
+      "group": "Reorientação e interrupção",
+      "title": "Interromper turno selecionado",
+      "given": "duas sessões irmãs",
+      "when": "interromper sessão 1",
+      "then": "sessão 2 intacta e runtime 1 não fechado",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C12",
+      "group": "Reorientação e interrupção",
+      "title": "Barreira antes do interrupt",
+      "given": "A e B queued e T ativo",
+      "when": "pedir interrupt T",
+      "then": "fila pausada antes da fronteira de próxima admissão",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C13",
+      "group": "Reorientação e interrupção",
+      "title": "Interrupt corrida de término",
+      "given": "T completa antes do pedido",
+      "when": "processar comando",
+      "then": "não atingir o próximo turno; barreira e outcome explícitos",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C14",
+      "group": "Reorientação e interrupção",
+      "title": "Fila retida após stop",
+      "given": "interrupt confirmado",
+      "when": "observar UI e depois fechar painel",
+      "then": "itens continuam pausados, não excluídos ou retomados por close UI",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C15",
+      "group": "Reorientação e interrupção",
+      "title": "Retomar fila",
+      "given": "sessão apta e fila pausada",
+      "when": "usuário confirma resume queue",
+      "then": "revalidar e despachar na ordem restante sem novo grant implícito",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C16",
+      "group": "Reorientação e interrupção",
+      "title": "Interrupt recusado",
+      "given": "pedido nativo falha comprovadamente",
+      "when": "atualizar painel",
+      "then": "explicar turno ainda ativo e fila pausada, sem falso sucesso",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C17",
+      "group": "Reorientação e interrupção",
+      "title": "Sim não é aprovação",
+      "given": "pergunta de ferramenta pendente",
+      "when": "escrever sim no chat",
+      "then": "mensagem não altera decisão canônica",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C18",
+      "group": "Reorientação e interrupção",
+      "title": "Decisão concorrente",
+      "given": "UI e terminal respondem mesmo pedido",
+      "when": "aplicar",
+      "then": "CAS/recibo único; segunda superfície mostra resolvido",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-C19",
+      "group": "Reorientação e interrupção",
+      "title": "Controle não enfileirado como texto",
+      "given": "/interrupt ou botão estruturado",
+      "when": "confirmar controle",
+      "then": "chamada de controle tipada, nunca frase para o modelo",
+      "level": "Unidade + peer nativo + concorrência HTTP",
+      "requirements": [
+        "SI-R06",
+        "SI-R07",
+        "SI-R16",
+        "SI-R21",
+        "SI-R22"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D01",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Catálogo versionado",
+      "given": "instalação e sessão conhecidas",
+      "when": "ler commands",
+      "then": "somente capacidades efetivas com revisão/estado/efeito",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D02",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Comando supported",
+      "given": "handler e argumentos válidos",
+      "when": "executar",
+      "then": "endpoint tipado e autorização própria; auditoria na sessão",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D03",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Indisponível no estado",
+      "given": "comando exige idle mas sessão busy",
+      "when": "selecionar",
+      "then": "motivo visível e recusa no Server",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D04",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Native only",
+      "given": "comando da TUI sem handler web",
+      "when": "tentar pela UI",
+      "then": "aviso nativo somente, sem enviar string como prompt",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D05",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Slash desconhecido",
+      "given": "/comando_inexistente",
+      "when": "pressionar Enviar",
+      "then": "aviso, texto preservado e nenhum envio automático",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D06",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Literal comprovado",
+      "given": "usuário escolhe enviar slash como texto e adapter suporta escape real",
+      "when": "enviar",
+      "then": "modelo recebe literal, sem skill/template/control expansion",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D07",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Literal não suportado",
+      "given": "adapter não comprova escape",
+      "when": "selecionar enviar como texto",
+      "then": "limitação explícita, sem falsa promessa de texto puro",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D08",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Caminho absoluto",
+      "given": "texto começa com /tmp/file",
+      "when": "classificar",
+      "then": "não executar como shell/comando conhecido por heurística",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D09",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Comando shell/injeção",
+      "given": "argumento contém metacaracteres ou !",
+      "when": "executar pela nova API",
+      "then": "não iniciar shell arbitrário nem aceitar método fora de allowlist",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D10",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Revisão mudou",
+      "given": "modelo/settings alterados depois de catálogo",
+      "when": "executar comando antigo",
+      "then": "revalidar capability/argumentos/escopo, sem usar permissão antiga",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D11",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Comando Nexus identificado",
+      "given": "status/help locais",
+      "when": "renderizar catálogo",
+      "then": "diferenciar ação Nexus de comando nativo",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D12",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Extensão desconhecida",
+      "given": "template/plugin registra comando novo",
+      "when": "carregar catálogo",
+      "then": "não adquirir confiança ou autoridade por nome reportado",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-D13",
+      "group": "Catálogo de comandos e literalidade",
+      "title": "Troca de sessão nativa",
+      "given": "TUI tenta resume/fork sem suporte bridge",
+      "when": "gateway processa",
+      "then": "negar ou executar transição canônica explícita; fila não migra sozinha",
+      "level": "Unidade + API + integração UI/adaptador",
+      "requirements": [
+        "SI-R08",
+        "SI-R09",
+        "SI-R15",
+        "SI-R18",
+        "SI-R20"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E01",
+      "group": "Conversa e UI",
+      "title": "Delta e snapshot",
+      "given": "mesma resposta tem snapshots e deltas",
+      "when": "renderizar",
+      "then": "sem duplicação/perda de prefixo, usando semântica do adapter",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E02",
+      "group": "Conversa e UI",
+      "title": "Eco da mensagem",
+      "given": "submissão local e user echo nativo",
+      "when": "correlacionar",
+      "then": "uma mensagem com referência real, não duas bolhas por texto",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E03",
+      "group": "Conversa e UI",
+      "title": "Texto igual legítimo",
+      "given": "dois envios com IDs diferentes e mesmo texto",
+      "when": "renderizar",
+      "then": "ambas mensagens preservadas",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E04",
+      "group": "Conversa e UI",
+      "title": "Histórico incompleto",
+      "given": "cursor tem retention gap",
+      "when": "abrir conversa",
+      "then": "lacuna informada sem sintetizar conteúdo",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E05",
+      "group": "Conversa e UI",
+      "title": "Paginação",
+      "given": "histórico 10 mil itens",
+      "when": "abrir/paginar",
+      "then": "leitura limitada e cursor estável, sem download integral",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E06",
+      "group": "Conversa e UI",
+      "title": "Subagente",
+      "given": "eventos têm origem subordinada",
+      "when": "renderizar",
+      "then": "não atribuir saída a sessão principal indevidamente",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E07",
+      "group": "Conversa e UI",
+      "title": "Mensagem pendente",
+      "given": "input QUEUED sem aceite nativo",
+      "when": "mostrar",
+      "then": "status fila, não afirmar modelo já recebeu",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E08",
+      "group": "Conversa e UI",
+      "title": "Falha de rede UI",
+      "given": "envio pode ter sido admitido",
+      "when": "atualizar/reabrir",
+      "then": "recuperar mesma intenção antes de habilitar reenviar",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E09",
+      "group": "Conversa e UI",
+      "title": "Foco e rascunho",
+      "given": "pessoa digitando e stream atualiza",
+      "when": "renderizar",
+      "then": "texto, foco e alvo preservados",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E10",
+      "group": "Conversa e UI",
+      "title": "Troca de sessão",
+      "given": "rascunho em A e usuário abre B",
+      "when": "navegar",
+      "then": "confirmar descarte ou preservar isolado; não mandar texto de A para B",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E11",
+      "group": "Conversa e UI",
+      "title": "Autoscroll",
+      "given": "pessoa lê histórico antigo",
+      "when": "chegam novos deltas",
+      "then": "manter posição e informar novas mensagens",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E12",
+      "group": "Conversa e UI",
+      "title": "IME e teclado",
+      "given": "composição de caracteres e Shift+Enter",
+      "when": "digitar",
+      "then": "sem envio prematuro; comandos não acionados por Enter comum",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E13",
+      "group": "Conversa e UI",
+      "title": "Mobile e zoom",
+      "given": "viewport 360px e zoom 200%",
+      "when": "usar fila/controle",
+      "then": "botões legíveis, foco correto, sem acesso perdido",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E14",
+      "group": "Conversa e UI",
+      "title": "Leitor de tela",
+      "given": "saída rápida e fim de turno",
+      "when": "anunciar",
+      "then": "avisos agrupados sem cada token e sem roubar foco",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E15",
+      "group": "Conversa e UI",
+      "title": "Permissão revogada",
+      "given": "painel aberto em live",
+      "when": "receber 401/403/logout",
+      "then": "limpar protegido/desabilitar mutações sem apagar journal",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-E16",
+      "group": "Conversa e UI",
+      "title": "Pausa visual",
+      "given": "display pausado e engine continua",
+      "when": "terminar turno/enviar ação",
+      "then": "fila continua no Server, decisão revalidada; visual não muda autoridade",
+      "level": "Componentes + navegador real + API",
+      "requirements": [
+        "SI-R01",
+        "SI-R03",
+        "SI-R18",
+        "SI-R21"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F01",
+      "group": "CLI e escolha de superfície",
+      "title": "Connect -i",
+      "given": "harness suportado, TTY",
+      "when": "conectar",
+      "then": "abrir nativo selecionado após recibo, não prompt work disfarçado",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F02",
+      "group": "CLI e escolha de superfície",
+      "title": "Não interativo explícito",
+      "given": "--no-interactive",
+      "when": "conectar",
+      "then": "somente conexão, sem TUI, prompt, sessão produtiva ou tarefa extra",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F03",
+      "group": "CLI e escolha de superfície",
+      "title": "Pergunta final default",
+      "given": "TTY sem flag",
+      "when": "concluir connect",
+      "then": "perguntar abrir harness, default Não; resposta Não retorna ao shell",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F04",
+      "group": "CLI e escolha de superfície",
+      "title": "JSON sem flag",
+      "given": "--json",
+      "when": "conectar",
+      "then": "zero input/chat, resultado estruturado inclui status e attach argv seguro",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F05",
+      "group": "CLI e escolha de superfície",
+      "title": "i com JSON",
+      "given": "-i --json",
+      "when": "validar argv",
+      "then": "erro anterior a setup/daemon por esse pedido",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F06",
+      "group": "CLI e escolha de superfície",
+      "title": "i sem TTY",
+      "given": "stdin ou stdout não terminal",
+      "when": "validar -i",
+      "then": "erro antes dos efeitos, sem abrir console invisível",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F07",
+      "group": "CLI e escolha de superfície",
+      "title": "Plan -i",
+      "given": "--plan -i em TTY e sem --json",
+      "when": "executar",
+      "then": "só plano; nenhum attach/runtime/provedor adicional",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F08",
+      "group": "CLI e escolha de superfície",
+      "title": "Flags conflitantes",
+      "given": "-i com --no-interactive ou --no-chat",
+      "when": "parse",
+      "then": "erro determinístico, sem última flag vencer",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F09",
+      "group": "CLI e escolha de superfície",
+      "title": "No chat legado",
+      "given": "--no-chat existente",
+      "when": "conectar",
+      "then": "sem pós-interface; --profile e JSON preservados",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F10",
+      "group": "CLI e escolha de superfície",
+      "title": "ni não abreviação",
+      "given": "-ni ou --inter digitados",
+      "when": "parse",
+      "then": "diagnóstico útil, sem composição inesperada",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F11",
+      "group": "CLI e escolha de superfície",
+      "title": "Attach exato",
+      "given": "--id e --session-id concordantes",
+      "when": "abrir",
+      "then": "mesma sessão, nunca última ou nova por fallback",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F12",
+      "group": "CLI e escolha de superfície",
+      "title": "Attach múltiplas",
+      "given": "várias sessões e sem ID exato",
+      "when": "usar TTY versus script",
+      "then": "picker no TTY; seleção requerida no script",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F13",
+      "group": "CLI e escolha de superfície",
+      "title": "Falha pós-setup",
+      "given": "binding criado, nativo indisponível",
+      "when": "-i tenta abrir",
+      "then": "manter conexão e pós-ação falha separada; não repetir setup",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F14",
+      "group": "CLI e escolha de superfície",
+      "title": "Work resume preservado",
+      "given": "submissão incerta antiga",
+      "when": "work resume",
+      "then": "recuperar recibo, não chamar attach ou resumir latest",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F15",
+      "group": "CLI e escolha de superfície",
+      "title": "Resume salvo explícito",
+      "given": "processo encerrado com contexto válido",
+      "when": "session resume ID",
+      "then": "explicar cold resume/linhagem; sem fork ou novo contexto silencioso",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F16",
+      "group": "CLI e escolha de superfície",
+      "title": "Sem permissão abrir",
+      "given": "conexão existe e grants insuficientes",
+      "when": "attach exige runtime open",
+      "then": "informar revisão necessária, não renovar autorização",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-F17",
+      "group": "CLI e escolha de superfície",
+      "title": "Quick Connect invariantes",
+      "given": "CWD/Git/--id colidem ou personalizam",
+      "when": "usar novos flags",
+      "then": "mesmas regras de nome/root/ID e aprovação sem alterar profile por UI mode",
+      "level": "Parser + pseudoterminal + pacote instalado",
+      "requirements": [
+        "SI-R10",
+        "SI-R11",
+        "SI-R12",
+        "SI-R14",
+        "SI-R19"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G01",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Mesma engine viva",
+      "given": "sessão em execução",
+      "when": "anexar terminal",
+      "then": "mesmo native session/thread e trabalho, sem novo processo escritor ou teste",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G02",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Mesmo contexto depois de detach",
+      "given": "turno terminou sem cliente",
+      "when": "reanexar",
+      "then": "histórico/ID preservados e sem prompt automático",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G03",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Sem close stdin",
+      "given": "Claude stream busy",
+      "when": "fechar cliente attach",
+      "then": "canal da engine mantido e resultado ainda observado",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G04",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Master PTY durável",
+      "given": "worker TUI hospedado",
+      "when": "viewer fecha slave/transporte",
+      "then": "master/engine continuam e I/O é drenado",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G05",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Frontend separado",
+      "given": "engine hospeda TUI remota",
+      "when": "frontend termina",
+      "then": "engine continua, cleanup só do frontend",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G06",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Um escritor",
+      "given": "dois terminais tentam controlar",
+      "when": "attach concorrente",
+      "then": "um writer e outro read-only/recusa explícita",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G07",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Takeover",
+      "given": "segundo operador autorizado confirma transferência",
+      "when": "trocar writer",
+      "then": "epoch novo, velho perde efeitos, turno continua",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G08",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Lease de viewer expira",
+      "given": "cliente some sem detach",
+      "when": "expirar apresentação",
+      "then": "liberar viewer sem parar engine ou renovar lease produtiva",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G09",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "UI e nativo simultâneos",
+      "given": "bridge semântico qualificado",
+      "when": "enviar ambos",
+      "then": "arbiter serializa/atribui origens sem duas engines",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G10",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Token de engine amplo proibido",
+      "given": "TUI tenta listar/abrir outro thread",
+      "when": "gateway recebe",
+      "then": "negar fora do escopo sem vazamento",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G11",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Native frontend não falso",
+      "given": "pedido -i",
+      "when": "observar processo/render",
+      "then": "frontend nativo real; prompt Nexus não satisfaz esse aceite",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G12",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Native indisponível",
+      "given": "versão não qualificada",
+      "when": "tentar attach",
+      "then": "limitação explícita e execução atual intacta; tarefa de integração não marcada pronta",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G13",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Transferência espera fronteira",
+      "given": "backend precisa transferir e turno busy",
+      "when": "solicitar attach",
+      "then": "aguardar ponto seguro ou recusar; sem abortar ferramenta",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G14",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Transferência com tool background",
+      "given": "background não migrável",
+      "when": "tentar transferir",
+      "then": "não matar/reexecutar ferramenta; mostrar limitação",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G15",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Crash durante transferência",
+      "given": "depois de fence antes de novo owner",
+      "when": "recuperar",
+      "then": "apenas um owner pode produzir efeito; unknown reconciliado",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G16",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Fork não é resume",
+      "given": "adapter só oferece clone/fork",
+      "when": "retomar",
+      "then": "não declarar mesma sessão; ação separada ou bloquear requisito",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G17",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Claude fase unsafe",
+      "given": "geração ainda não iniciou",
+      "when": "steer via UI/nativo bridge",
+      "then": "preservar guard e recusa antes da escrita",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G18",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Pi duas filas",
+      "given": "bridge SDK e RPC coexistem",
+      "when": "enviar queued/steer",
+      "then": "só uma AgentSession/owner e uma entrega por intenção",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G19",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Codex seleção default",
+      "given": "TUI tenta iniciar thread novo ao attach",
+      "when": "handshake",
+      "then": "forçar/revalidar alvo exato ou abortar attach sem criar thread",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-G20",
+      "group": "Attach, ownership e protocolos nativos",
+      "title": "Native mudança contexto",
+      "given": "comando nativo cria nova conversa autorizado",
+      "when": "atualizar mapeamento",
+      "then": "novo contexto explicitado e filas antigas não são reaproveitadas",
+      "level": "Core + broker + processos reais controlados + campanhas",
+      "requirements": [
+        "SI-R12",
+        "SI-R13",
+        "SI-R14",
+        "SI-R15",
+        "SI-R20",
+        "SI-R22",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H01",
+      "group": "Remote, sinais e segurança",
+      "title": "Remoto outbound",
+      "given": "Connector em outra máquina",
+      "when": "anexar por Server autenticado",
+      "then": "transporte usa canal aprovado, sem porta pública/SSH improvisado",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H02",
+      "group": "Remote, sinais e segurança",
+      "title": "CWD remoto",
+      "given": "cliente em /A e host em /B",
+      "when": "abrir sessão remota",
+      "then": "/B preservado, Git/CWD local não substitui root",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H03",
+      "group": "Remote, sinais e segurança",
+      "title": "Credencial humana",
+      "given": "Connector só tem credencial de agente",
+      "when": "tentar gerar attach humano",
+      "then": "exigir autorização humana/derivada, sem elevação de agente",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H04",
+      "group": "Remote, sinais e segurança",
+      "title": "Token replay",
+      "given": "capability de attach usada de novo ou em outra sessão",
+      "when": "handshake",
+      "then": "rejeitar reuso/escopo/audience inválidos",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H05",
+      "group": "Remote, sinais e segurança",
+      "title": "Segredo em argv",
+      "given": "attach requer token",
+      "when": "lançar frontend",
+      "then": "token por canal protegido, ausente de URL, argv, clipboard e logs",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H06",
+      "group": "Remote, sinais e segurança",
+      "title": "Origin indevido",
+      "given": "browser de origem externa tenta socket",
+      "when": "autenticar",
+      "then": "bloqueio conforme Origin/CSRF e autorização atuais",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H07",
+      "group": "Remote, sinais e segurança",
+      "title": "Close terminal POSIX",
+      "given": "worker executa tarefa longa autorizada",
+      "when": "fechar janela/SIGHUP cliente",
+      "then": "worker e fila continuam com evidência de PID/resultado",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H08",
+      "group": "Remote, sinais e segurança",
+      "title": "Close terminal Windows",
+      "given": "cliente/console fecha sob ConPTY/Job",
+      "when": "executar caso real",
+      "then": "sem kill acidental do processo/árvore da engine",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H09",
+      "group": "Remote, sinais e segurança",
+      "title": "Cliente KILL",
+      "given": "matar somente processo de apresentação",
+      "when": "observar host",
+      "then": "execução segue; lease de viewer expira independentemente",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H10",
+      "group": "Remote, sinais e segurança",
+      "title": "Ctrl C nativo",
+      "given": "tecla tem semântica de interrupt no harness",
+      "when": "usuário a envia",
+      "then": "documentar/mediar como controle explícito, não prometer detach universal",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H11",
+      "group": "Remote, sinais e segurança",
+      "title": "Escape detach",
+      "given": "atalho externo documentado",
+      "when": "desanexar",
+      "then": "nenhuma chamada runtime.close/interrupt/EOF worker",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H12",
+      "group": "Remote, sinais e segurança",
+      "title": "Rede interrompida",
+      "given": "attach remoto perde transporte",
+      "when": "reconnect",
+      "then": "turno segue conforme lease produtiva, sem replay de teclas/prompts",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H13",
+      "group": "Remote, sinais e segurança",
+      "title": "Viewer lento",
+      "given": "cliente para de consumir saída",
+      "when": "produção contínua",
+      "then": "backpressure local ao viewer, bounded buffers e gap/reattach sem travar engine",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H14",
+      "group": "Remote, sinais e segurança",
+      "title": "Saída excessiva",
+      "given": "worker produz grande log",
+      "when": "sem viewers",
+      "then": "drenagem/limites e política explícita; não OOM ou bloqueio de pipe",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H15",
+      "group": "Remote, sinais e segurança",
+      "title": "ANSI malicioso",
+      "given": "evento contém OSC clipboard/link/códigos perigosos",
+      "when": "render UI",
+      "then": "nenhum acesso privilegiado/execução/clipboard automática",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H16",
+      "group": "Remote, sinais e segurança",
+      "title": "Autor revogado com queued",
+      "given": "usuário perde acesso",
+      "when": "worker revalida input",
+      "then": "não executar sob outro autor nem expandir permissão",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H17",
+      "group": "Remote, sinais e segurança",
+      "title": "Detach não é revoke",
+      "given": "fechar UI com execução admitida",
+      "when": "avaliar políticas",
+      "then": "não revogar grant por desconexão de apresentação",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H18",
+      "group": "Remote, sinais e segurança",
+      "title": "Host shutdown",
+      "given": "serviço é parado explicitamente",
+      "when": "comparar com detach",
+      "then": "respeitar lifecycle de shutdown, não prometer continuidade impossível",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H19",
+      "group": "Remote, sinais e segurança",
+      "title": "Commands privilege",
+      "given": "terminal tenta bypassPermissions/exec arbitrário",
+      "when": "gateway processa",
+      "then": "negar não qualificado ou exigir fluxo de autorização, sem bypass implícito",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-H20",
+      "group": "Remote, sinais e segurança",
+      "title": "Paths e segredos",
+      "given": "mensagem/tool revela payload protegido",
+      "when": "listar transcript global",
+      "then": "escopo/redação/retention respeitados, sem vazar por resumo ou erro",
+      "level": "HTTP/WSS + OS nativo + isolamento adversarial",
+      "requirements": [
+        "SI-R13",
+        "SI-R15",
+        "SI-R16",
+        "SI-R17",
+        "SI-R18",
+        "SI-R23"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-I01",
+      "group": "Compatibilidade, produto e rollout",
+      "title": "Migration aditiva",
+      "given": "banco com recibos antigos",
+      "when": "migrar",
+      "then": "hashes antigos preservados e novos campos opcionais",
+      "level": "Integração + pacote + campanha",
+      "requirements": [
+        "SI-R19",
+        "SI-R20",
+        "SI-R21",
+        "SI-R22",
+        "SI-R23",
+        "SI-R24"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-I02",
+      "group": "Compatibilidade, produto e rollout",
+      "title": "Downgrade capability",
+      "given": "cliente novo, Core/Connector antigos",
+      "when": "abrir recursos novos",
+      "then": "indisponibilidade explícita sem simular fila/attach local",
+      "level": "Integração + pacote + campanha",
+      "requirements": [
+        "SI-R19",
+        "SI-R20",
+        "SI-R21",
+        "SI-R22",
+        "SI-R23",
+        "SI-R24"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-I03",
+      "group": "Compatibilidade, produto e rollout",
+      "title": "Rollback com fila",
+      "given": "mensagens aceitas e em trânsito",
+      "when": "desabilitar nova UI",
+      "then": "reconciler/controle mantidos, nenhuma mensagem abandonada ou replay",
+      "level": "Integração + pacote + campanha",
+      "requirements": [
+        "SI-R19",
+        "SI-R20",
+        "SI-R21",
+        "SI-R22",
+        "SI-R23",
+        "SI-R24"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-I04",
+      "group": "Compatibilidade, produto e rollout",
+      "title": "Home estados",
+      "given": "enviar, queued, steer, detach, resultado",
+      "when": "observar Active/Needs You/Results",
+      "then": "fila não vira RUNNING, detach não vira offline, entrega sem verificação fictícia",
+      "level": "Integração + pacote + campanha",
+      "requirements": [
+        "SI-R19",
+        "SI-R20",
+        "SI-R21",
+        "SI-R22",
+        "SI-R23",
+        "SI-R24"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-I05",
+      "group": "Compatibilidade, produto e rollout",
+      "title": "Pacote instalado",
+      "given": "wheels/artefatos compatíveis gerados",
+      "when": "instalar isolado",
+      "then": "CLI/UI/Core/Connector usam contratos/pins corretos, sem dev server",
+      "level": "Integração + pacote + campanha",
+      "requirements": [
+        "SI-R19",
+        "SI-R20",
+        "SI-R21",
+        "SI-R22",
+        "SI-R23",
+        "SI-R24"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-I06",
+      "group": "Compatibilidade, produto e rollout",
+      "title": "Versão não igual docs",
+      "given": "harness instalado difere de referência",
+      "when": "calcular capabilities",
+      "then": "novo suporte somente com qualificação, não por versão do artigo",
+      "level": "Integração + pacote + campanha",
+      "requirements": [
+        "SI-R19",
+        "SI-R20",
+        "SI-R21",
+        "SI-R22",
+        "SI-R23",
+        "SI-R24"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-I07",
+      "group": "Compatibilidade, produto e rollout",
+      "title": "Jornada UI terminal UI",
+      "given": "conectar sem interação, mandar UI, attach, fechar, voltar UI",
+      "when": "executar com provedor consentido",
+      "then": "mesma conversa e continuidade, sem novo processo escritor",
+      "level": "Integração + pacote + campanha",
+      "requirements": [
+        "SI-R19",
+        "SI-R20",
+        "SI-R21",
+        "SI-R22",
+        "SI-R23",
+        "SI-R24"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-I08",
+      "group": "Compatibilidade, produto e rollout",
+      "title": "Jornada terminal fila steer",
+      "given": "conectar -i, executar, enfileirar UI, reorientar, detach",
+      "when": "executar consentido",
+      "then": "próximo turno padrão, steer explícito e evidências separadas",
+      "level": "Integração + pacote + campanha",
+      "requirements": [
+        "SI-R19",
+        "SI-R20",
+        "SI-R21",
+        "SI-R22",
+        "SI-R23",
+        "SI-R24"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "SI-T-I09",
+      "group": "Compatibilidade, produto e rollout",
+      "title": "Gates por harness/plataforma",
+      "given": "só uma campanha rodou",
+      "when": "encerrar relatório",
+      "then": "não marcar outros harnesses/OS PASS nem encerrar requisito faltante como unsupported satisfeito",
+      "level": "Integração + pacote + campanha",
+      "requirements": [
+        "SI-R19",
+        "SI-R20",
+        "SI-R21",
+        "SI-R22",
+        "SI-R23",
+        "SI-R24"
+      ],
+      "status": "NOT_RUN",
+      "evidence": []
+    }
+  ],
+  "phases": [
+    {
+      "id": "SI-00",
+      "status": "NOT_STARTED",
+      "tasks": [
+        "SI-001",
+        "SI-002",
+        "SI-003",
+        "SI-004",
+        "SI-005"
+      ]
+    },
+    {
+      "id": "SI-01",
+      "status": "NOT_STARTED",
+      "tasks": [
+        "SI-006",
+        "SI-007",
+        "SI-008",
+        "SI-009",
+        "SI-010",
+        "SI-011"
+      ]
+    },
+    {
+      "id": "SI-02",
+      "status": "NOT_STARTED",
+      "tasks": [
+        "SI-012",
+        "SI-013",
+        "SI-014",
+        "SI-015",
+        "SI-016",
+        "SI-017"
+      ]
+    },
+    {
+      "id": "SI-03",
+      "status": "NOT_STARTED",
+      "tasks": [
+        "SI-018",
+        "SI-019",
+        "SI-020",
+        "SI-021",
+        "SI-022",
+        "SI-023"
+      ]
+    },
+    {
+      "id": "SI-04",
+      "status": "NOT_STARTED",
+      "tasks": [
+        "SI-024",
+        "SI-025",
+        "SI-026",
+        "SI-027"
+      ]
+    },
+    {
+      "id": "SI-05",
+      "status": "NOT_STARTED",
+      "tasks": [
+        "SI-028",
+        "SI-029",
+        "SI-030",
+        "SI-031",
+        "SI-032",
+        "SI-033"
+      ]
+    },
+    {
+      "id": "SI-06",
+      "status": "NOT_STARTED",
+      "tasks": [
+        "SI-034",
+        "SI-035",
+        "SI-036",
+        "SI-037",
+        "SI-038"
+      ]
+    },
+    {
+      "id": "SI-07",
+      "status": "NOT_STARTED",
+      "tasks": [
+        "SI-039",
+        "SI-040",
+        "SI-041"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "S01",
+      "title": "Nexus versão e dependências",
+      "url": "https://github.com/OktoLabsAI/okto-nexus/blob/8b4001fa1db17bf29d0c773eed3535e79fce70cb/pyproject.toml"
+    },
+    {
+      "id": "S02",
+      "title": "Core versão declarada",
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/blob/497ee2b7a14b99c50cba97eac74f3b00d4863f26/pyproject.toml"
+    },
+    {
+      "id": "S03",
+      "title": "Connector versão e dependências",
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector/blob/a4d510080d7a685fa442a4c5c30419952589fe04/pyproject.toml"
+    },
+    {
+      "id": "S04",
+      "title": "RuntimeOperations e escopo exato",
+      "url": "https://github.com/OktoLabsAI/okto-nexus/blob/8b4001fa1db17bf29d0c773eed3535e79fce70cb/frontend/src/components/RuntimeOperations.tsx"
+    },
+    {
+      "id": "S05",
+      "title": "HomeEntryInspection e abertura de sessão",
+      "url": "https://github.com/OktoLabsAI/okto-nexus/blob/8b4001fa1db17bf29d0c773eed3535e79fce70cb/frontend/src/components/home/HomeEntryInspection.tsx"
+    },
+    {
+      "id": "S06",
+      "title": "TerminalWork: submit/resolve/admit/recover",
+      "url": "https://github.com/OktoLabsAI/okto-nexus/blob/8b4001fa1db17bf29d0c773eed3535e79fce70cb/src/okto_nexus/application/terminal_work.py"
+    },
+    {
+      "id": "S07",
+      "title": "Documentação do trabalho por terminal",
+      "url": "https://github.com/OktoLabsAI/okto-nexus/blob/8b4001fa1db17bf29d0c773eed3535e79fce70cb/docs/terminal-work.md"
+    },
+    {
+      "id": "S08",
+      "title": "Connect e composição Quick Connect",
+      "url": "https://github.com/OktoLabsAI/okto-nexus/blob/8b4001fa1db17bf29d0c773eed3535e79fce70cb/src/okto_nexus/adapters/inbound/cli/connect.py"
+    },
+    {
+      "id": "S09",
+      "title": "Registry Core e targeting/timing",
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/blob/497ee2b7a14b99c50cba97eac74f3b00d4863f26/src/nexus_connector_core/native/registry.py"
+    },
+    {
+      "id": "S10",
+      "title": "Adaptador Codex app-server",
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/blob/497ee2b7a14b99c50cba97eac74f3b00d4863f26/src/nexus_connector_core/native/adapters/codex.py"
+    },
+    {
+      "id": "S11",
+      "title": "Adaptador Pi RPC",
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/blob/497ee2b7a14b99c50cba97eac74f3b00d4863f26/src/nexus_connector_core/native/adapters/pi.py"
+    },
+    {
+      "id": "S12",
+      "title": "Adaptador Claude stream-json",
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/blob/497ee2b7a14b99c50cba97eac74f3b00d4863f26/src/nexus_connector_core/native/adapters/claude_code_stream.py"
+    },
+    {
+      "id": "S13",
+      "title": "Guia de integração Core — referência estrutural, reler versões",
+      "url": "https://github.com/OktoLabsAI/okto-nexus-connector-core/blob/497ee2b7a14b99c50cba97eac74f3b00d4863f26/docs/adding-a-runtime.md"
+    },
+    {
+      "id": "W01",
+      "title": "OpenAI — Codex App Server (consulta oficial; redireciona ao portal Learn)",
+      "url": "https://developers.openai.com/codex/app-server"
+    },
+    {
+      "id": "W02",
+      "title": "OpenAI — Developer commands / remote terminal UI",
+      "url": "https://learn.chatgpt.com/docs/developer-commands"
+    },
+    {
+      "id": "W03",
+      "title": "Anthropic — Claude Code CLI reference",
+      "url": "https://code.claude.com/docs/en/cli-reference"
+    },
+    {
+      "id": "W04",
+      "title": "Pi — RPC protocol, documentação do projeto",
+      "url": "https://raw.githubusercontent.com/badlogic/pi-mono/main/packages/coding-agent/docs/rpc.md"
+    },
+    {
+      "id": "W05",
+      "title": "Pi — RPC commands, semântica de prompt/steer/follow-up",
+      "url": "https://raw.githubusercontent.com/badlogic/pi-mono/main/packages/coding-agent/docs/rpc-commands.md"
+    },
+    {
+      "id": "W06",
+      "title": "Pi — SDK e lifecycle da sessão",
+      "url": "https://raw.githubusercontent.com/badlogic/pi-mono/main/packages/coding-agent/docs/sdk.md"
+    },
+    {
+      "id": "W07",
+      "title": "Anthropic — Agent view, background/attach/detach",
+      "url": "https://code.claude.com/docs/en/agent-view"
+    }
+  ],
+  "notes": [
+    "Inspeção estática somente. Testes da aplicação NÃO executados nesta elaboração.",
+    "Nunca promover capability da documentação upstream a qualified sem campanha da instalação.",
+    "Preservar evidências de outras frentes; IMPLEMENTED não é VERIFIED."
+  ],
+  "execution": {
+    "global_installation": "0.3.7 with Core 0.0.14; separate from feature branches",
+    "paid_campaigns": "NOT_AUTHORIZED_FOR_THIS_PLAN",
+    "qualification_scope": "Tests retain their original literal statuses until exercised"
+  }
+}

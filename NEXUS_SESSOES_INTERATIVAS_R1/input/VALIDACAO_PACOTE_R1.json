@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "scope": "DOCUMENT_PACKAGE_ONLY",
+  "counts": {
+    "tasks": 41,
+    "tests": 148,
+    "requirements": 24,
+    "phases": 8
+  },
+  "checks": [
+    "unique_ids",
+    "all_refs_resolve",
+    "dependency_dag",
+    "test_task_coverage",
+    "requirements_task_coverage",
+    "markdown_ledger_consistency",
+    "json_validity",
+    "fence_balance",
+    "initial_statuses",
+    "capability_template_unqualified",
+    "structure_only"
+  ],
+  "application_tests_executed": false,
+  "native_harness_campaigns_executed": false,
+  "prepared_on": "2026-11-17",
+  "notes": [
+    "Structural verification only; no Nexus, Core, Connector or provider tests run.",
+    "Archive extraction and SHA256 verification performed after this report was generated."
+  ]
+}

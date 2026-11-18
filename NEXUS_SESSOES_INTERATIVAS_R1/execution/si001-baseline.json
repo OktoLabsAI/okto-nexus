@@ -1,0 +1,90 @@
+{
+  "captured_utc": "2026-11-18T09:49:21.143870+00:00",
+  "repositories": [
+    {
+      "repository": "okto_labs_okto_nexus",
+      "branch": "feature/v0.3.7",
+      "head": "2a0f30fb9da392fd80e1ddb1727950087ba8248b",
+      "origin_main_after_fetch": "8d77b50c00b417c86818d027aed7497fababac34",
+      "status_before_plan_archive": "CLEAN",
+      "packet_analysis_baseline": "8b4001fa1db17bf29d0c773eed3535e79fce70cb",
+      "drift_commits": 43,
+      "main_only_and_head_only": [
+        0,
+        303
+      ],
+      "delta_product": "37 files changed, 2863 insertions(+), 1388 deletions(-)",
+      "metadata_version": "0.3.7",
+      "planned_branch": "feature/v0.3.8",
+      "rules": {
+        "CONTRIBUTING.md": "ea980300f34e3b85d207770a7153775f9f9fda775a3212f8e4e3f95b53b9c8ae",
+        ".github/workflows/ci.yml": "86bd199990ed0e61e13d760b80bab40e2ac443f1f72489d64b5d68359ce206f8"
+      }
+    },
+    {
+      "repository": "okto-nexus-connector",
+      "branch": "feature/v0.0.13",
+      "head": "a4d510080d7a685fa442a4c5c30419952589fe04",
+      "origin_main_after_fetch": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "status_before_plan_archive": "CLEAN",
+      "packet_analysis_baseline": "a4d510080d7a685fa442a4c5c30419952589fe04",
+      "drift_commits": 0,
+      "main_only_and_head_only": [
+        0,
+        36
+      ],
+      "delta_product": "",
+      "metadata_version": "0.0.13",
+      "planned_branch": "feature/v0.0.14",
+      "rules": {
+        "CONTRIBUTING.md": "c1d729fdea1a386cffd181f135c6a7b93e8c8e790d4ecde70272a500d1b245b5",
+        ".github/workflows/ci.yml": "6304f97e9ec62ca7dff2c4f943361ce14dd3320d74a1f5448a1c8eb16d033df8",
+        ".github/workflows/pr-source-policy.yml": "476b76fa62664262e4ea007a1470b1a30234e9508fe73f02198ec1903b56211d"
+      }
+    },
+    {
+      "repository": "okto-nexus-connector-core",
+      "branch": "feature/v0.0.14",
+      "head": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "origin_main_after_fetch": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "status_before_plan_archive": "CLEAN",
+      "packet_analysis_baseline": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "drift_commits": 0,
+      "main_only_and_head_only": [
+        0,
+        14
+      ],
+      "delta_product": "",
+      "metadata_version": "0.0.14",
+      "planned_branch": "feature/v0.0.15",
+      "rules": {
+        "CONTRIBUTING.md": "c1d729fdea1a386cffd181f135c6a7b93e8c8e790d4ecde70272a500d1b245b5",
+        ".github/workflows/core-ci.yml": "666cd0034ebc3f3b91bc1dc6373b83989318ccf99b27c684188ccb90cb85cf99",
+        ".github/workflows/core-release.yml": "c8c9ee7251d674d39e2ffb29b686031a64492ece64986a0e6bb8dba6e34dbb80",
+        ".github/workflows/pr-source-policy.yml": "476b76fa62664262e4ea007a1470b1a30234e9508fe73f02198ec1903b56211d"
+      }
+    }
+  ],
+  "pins": {
+    "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+    "vendor/ci/okto_nexus_connector-0.0.13-py3-none-any.whl": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+    "vendor/ci/manifest.json": "cca0a052afde40417050b63707e702f87603831ce607011baac47edcc2b319ed"
+  },
+  "input_hashes": {
+    "MATRIZ_CAPACIDADES_SESSAO_R1.json": "431040ca0782d451ee14c81646618d0182850748a49a7e71803f1feee93d98ac",
+    "MATRIZ_CAPACIDADES_SESSAO_R1.md": "b79010bce731a3aa8f5fcf3198479269a2cae7e511c7aa3af494744ffa294acd",
+    "NEXUS_SESSOES_INTERATIVAS_LEDGER_R1.json": "27259c686a6a7e0c0242741c9a2db672f7021f50f3b1eef4e32422d1ae85c757",
+    "PLANO_CODEX_NEXUS_SESSOES_INTERATIVAS_UI_CLI_R1.md": "dd5a1071bdd3e70e2b59f67a7cf9abdbb6ae19a5e579e01d3783b0b5c5f20def",
+    "PROMPT_CODEX_NEXUS_SESSOES_INTERATIVAS_R1.md": "ede8d6410656161efa314006694e6669e9d6d952d26c6bcbcf77b9b2e41cf8d5",
+    "README.md": "8f1ce33983046d394b3d866b816b562b6a74f3b89f45fbc6bfac98fb03ab0b71",
+    "SHA256SUMS.json": "7d5d6c914187e78ae29ae9bf16c61c1976ce40920ba29af0e1c47cb552a15da2",
+    "VALIDACAO_PACOTE_R1.json": "c5de193624f1098a55cf15bea0ff1f20089c45736c31c0e516fd3c8e1a28a92c",
+    "validate_package.py": "eaa408b218e7932778b9ce3c1de1c5f254c183366d4b8f01baf1561981cccbd3"
+  },
+  "installed_global": {
+    "nexus": "0.3.7",
+    "core_in_nexus_tool": "0.0.14",
+    "package_sha256": "bec841b04c753b5ebc93369b05877b78cdc7e7d53f88ac09d59dad911ef6b09d",
+    "smoke": "HTTP MCP 54 tools, 2 identities, canonical stop exit 0, no provider calls"
+  }
+}

@@ -1,5 +1,14 @@
 # Current development dependency
 
+Core 0.0.15 is built from `c706d19` for the session interaction feature branches.
+Nexus 0.3.8 and Connector 0.0.14 consume the same unpublished wheel with SHA-256
+`02c9454d10633ba760ac1c2d268e84704fbba607a2295ed3161a1df5e5f66657`.
+After normalizing line endings, its 168 package files differ from the previous
+pin only in the version declaration. This milestone establishes package
+compatibility. Session interaction capabilities still require separate evidence.
+
+## Previous development dependency
+
 Core 0.0.14 is built from commit `497ee2b7a14b99c50cba97eac74f3b00d4863f26`.
 Both consumers use identical unpublished wheel bytes, SHA-256 `ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5`.
 This includes explicit, bounded PowerShell native permission approval/denial;

@@ -1,0 +1,199 @@
+{
+  "plan": "SESSION-INTERACTION-R1",
+  "status": "TEMPLATE_NOT_QUALIFIED",
+  "qualification_rule": "Enable only with installation-scoped evidence AND current policy/state/authority. Upstream documentation is not runtime qualification.",
+  "capability_statuses": [
+    "designed",
+    "observed_in_code",
+    "implemented",
+    "qualified",
+    "unsupported",
+    "blocked"
+  ],
+  "adapters": [
+    {
+      "adapter_id": "codex_app_server",
+      "core_reference_sha": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "source": "https://github.com/OktoLabsAI/okto-nexus-connector-core/blob/497ee2b7a14b99c50cba97eac74f3b00d4863f26/src/nexus_connector_core/native/adapters/codex.py",
+      "code_observations": {
+        "user_input": "observed_in_code",
+        "steer": "observed_in_code",
+        "steer_effect": "IMMEDIATE_NATIVE_TARGET",
+        "interrupt": "observed_in_code",
+        "notes": "Native expectedTurnId; stale target refuses rather than affecting another turn."
+      },
+      "features_to_qualify": {
+        "session_chat": {
+          "status": "designed",
+          "evidence": []
+        },
+        "durable_next_turn_fifo": {
+          "status": "designed",
+          "evidence": []
+        },
+        "exact_steer": {
+          "status": "designed",
+          "evidence": []
+        },
+        "interrupt_queue_barrier": {
+          "status": "designed",
+          "evidence": []
+        },
+        "command_subset": {
+          "status": "designed",
+          "evidence": []
+        },
+        "native_live_attach": {
+          "status": "designed",
+          "evidence": []
+        },
+        "saved_context_resume": {
+          "status": "designed",
+          "evidence": []
+        },
+        "detach_keeps_running": {
+          "status": "designed",
+          "evidence": []
+        },
+        "remote_attach": {
+          "status": "designed",
+          "evidence": []
+        },
+        "joint_ui_native_arbitration": {
+          "status": "designed",
+          "evidence": []
+        }
+      },
+      "qualified_combinations": []
+    },
+    {
+      "adapter_id": "pi_rpc",
+      "core_reference_sha": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "source": "https://github.com/OktoLabsAI/okto-nexus-connector-core/blob/497ee2b7a14b99c50cba97eac74f3b00d4863f26/src/nexus_connector_core/native/adapters/pi.py",
+      "code_observations": {
+        "user_input": "observed_in_code",
+        "steer": "observed_in_code",
+        "steer_effect": "NEXT_TURN_BOUNDARY",
+        "interrupt": "observed_in_code",
+        "notes": "Current run with qualified settle signal; follow_up and Nexus queue must not duplicate input."
+      },
+      "features_to_qualify": {
+        "session_chat": {
+          "status": "designed",
+          "evidence": []
+        },
+        "durable_next_turn_fifo": {
+          "status": "designed",
+          "evidence": []
+        },
+        "exact_steer": {
+          "status": "designed",
+          "evidence": []
+        },
+        "interrupt_queue_barrier": {
+          "status": "designed",
+          "evidence": []
+        },
+        "command_subset": {
+          "status": "designed",
+          "evidence": []
+        },
+        "native_live_attach": {
+          "status": "designed",
+          "evidence": []
+        },
+        "saved_context_resume": {
+          "status": "designed",
+          "evidence": []
+        },
+        "detach_keeps_running": {
+          "status": "designed",
+          "evidence": []
+        },
+        "remote_attach": {
+          "status": "designed",
+          "evidence": []
+        },
+        "joint_ui_native_arbitration": {
+          "status": "designed",
+          "evidence": []
+        }
+      },
+      "qualified_combinations": []
+    },
+    {
+      "adapter_id": "claude_stream",
+      "core_reference_sha": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "source": "https://github.com/OktoLabsAI/okto-nexus-connector-core/blob/497ee2b7a14b99c50cba97eac74f3b00d4863f26/src/nexus_connector_core/native/adapters/claude_code_stream.py",
+      "code_observations": {
+        "user_input": "observed_in_code",
+        "steer": "observed_in_code",
+        "steer_effect": "INTERRUPT_THEN_RESEND",
+        "interrupt": "observed_in_code",
+        "notes": "Refuse unsafe requesting window; never call this non-interrupting append."
+      },
+      "features_to_qualify": {
+        "session_chat": {
+          "status": "designed",
+          "evidence": []
+        },
+        "durable_next_turn_fifo": {
+          "status": "designed",
+          "evidence": []
+        },
+        "exact_steer": {
+          "status": "designed",
+          "evidence": []
+        },
+        "interrupt_queue_barrier": {
+          "status": "designed",
+          "evidence": []
+        },
+        "command_subset": {
+          "status": "designed",
+          "evidence": []
+        },
+        "native_live_attach": {
+          "status": "designed",
+          "evidence": []
+        },
+        "saved_context_resume": {
+          "status": "designed",
+          "evidence": []
+        },
+        "detach_keeps_running": {
+          "status": "designed",
+          "evidence": []
+        },
+        "remote_attach": {
+          "status": "designed",
+          "evidence": []
+        },
+        "joint_ui_native_arbitration": {
+          "status": "designed",
+          "evidence": []
+        }
+      },
+      "qualified_combinations": []
+    }
+  ],
+  "campaigns": [],
+  "campaign_template": {
+    "adapter_id": null,
+    "harness_version": null,
+    "installation_fingerprint": null,
+    "core_artifact_sha256": null,
+    "server_sha": null,
+    "connector_sha": null,
+    "os": null,
+    "architecture": null,
+    "execution_location": null,
+    "native_mode": null,
+    "attach_strategy": null,
+    "command_support": [],
+    "test_ids": [],
+    "status": "NOT_RUN",
+    "evidence": [],
+    "limitations": []
+  }
+}

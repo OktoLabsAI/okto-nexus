@@ -158,4 +158,5 @@ tests/ui_simplification/** -text
 # Keep the qualified Quick Connect regression fixture bytes stable across OSes.
 tests/quick_connect/** text eol=lf
 NEXUS_HOME_ESTADOS_R1/** -text -whitespace
+NEXUS_SESSOES_INTERATIVAS_R1/input/** -text -whitespace
 tests/home_states/** text eol=lf
