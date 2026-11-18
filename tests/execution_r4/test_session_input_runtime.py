@@ -401,7 +401,15 @@ def test_dashboard_pauses_an_empty_queue_and_resumes_retained_inputs_in_order(in
     client.cookies.clear()
 
 
-def test_exact_control_target_requires_current_canonical_start_of_the_active_codex_turn(interactive_runtime):
+def test_exact_control_target_requires_current_canonical_start_of_the_active_codex_turn(interactive_runtime, monkeypatch):
+    from nexus_connector_core import (
+        CoreError,
+        NativeSessionTarget,
+        OperationKey,
+        ProcessBirthEvidence,
+    )
+    from nexus_connector_core.native import process
+
     setup, binding, native = interactive_runtime
     deps, app, client, *_ = setup
     opened = admit(setup, binding, 'exact-target-open', 'runtime.start', new_session=True)
@@ -460,6 +468,29 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
         assert read_managed_native_session(uow, replaced) is None
         assert active_native_turn(uow, replaced, current_next_turn_revision=next_turn) is None
     assert active() == proven
+    owner = app.state.embedded_dispatch_owner
+    host = owner.host
+    runtime, journal = host._runtime_tasks[(executor, session)].result()
+    birth = ProcessBirthEvidence('win32', 1234, 'filetime:12345678', 'windows_job')
+    client.portal.call(journal.record_process_birth, OperationKey(server, executor, opened['operation_id']), session, birth)
+    native.native.owned_process_birth = birth
+    monkeypatch.setattr(process, 'observe_recorded_process_birth',
+                        lambda evidence: 'MATCHING_LIVE' if evidence == birth else 'DIFFERENT_BIRTH')
+    target = NativeSessionTarget(mapping.opening_operation_id, mapping.adapter_id, mapping.native_session_id, epoch)
+    scope_document = owner.sessions[session]['scope']
+
+    async def prove(selected):
+        return await host.prove_r4_native_session(selected, target, connection_id=owner.channel.connection_id,
+                                                connection_generation=owner.channel.connection_generation)
+
+    live = client.portal.call(prove, scope_document)
+    assert live.target == target and live.key.session_id == session
+    assert live.process.evidence == birth and live.boot_id == runtime.r4_boot_id
+    with pytest.raises(CoreError, match='SESSION_UNKNOWN'):
+        client.portal.call(prove, scope_document | {'server_id': 'sibling-server'})
+    with pytest.raises(CoreError, match='STALE_GENERATION'):
+        client.portal.call(prove, scope_document | {'session_owner_generation': scope.generation.value + 1})
+    assert len(host._runtime_tasks) == 1
     emit('turn/completed', {'thread_id': thread, 'turn_id': native_turn,
                             'delivery_phase': 'terminal', 'delivery_outcome': 'success'})
     eventually(lambda: active() is None)
