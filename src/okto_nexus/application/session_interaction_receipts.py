@@ -2,7 +2,12 @@
 
 from ..adapters.outbound.sqlite.session_interaction import _scope_params
 from ..domain.runtime_context import RuntimeRequestContext
-from ..domain.session_interaction import InputAuthor, InputDeliveryState, InputScope, QueuedReceipt
+from ..domain.session_interaction import (
+    InputAuthor,
+    InputDeliveryState,
+    InputScope,
+    QueuedReceipt,
+)
 from ..errors import ErrorCode, OktoNexusError
 from .execution_session_views import read_execution_session
 
