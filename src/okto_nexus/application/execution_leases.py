@@ -55,6 +55,21 @@ def _stamp(value):
     return datetime.fromisoformat(value.replace('Z', '+00:00'))
 
 
+def require_applied_dispatch_lease(lease, *, scope, owner, action, now,
+                                   operator_containment=False, containment=False):
+    """Require the exact currently applied lease without spending its grant."""
+    states = ('ACTIVE', 'REVOKED') if operator_containment else ('ACTIVE',)
+    if (lease is None or lease['status'] not in states or action not in json.loads(lease['allowed_actions_json'])
+            or lease['applied_at'] is None or lease['scope_json'] is None or json.loads(lease['scope_json']) != scope
+            or lease['connection_id'] != owner['owner_instance_id'] or lease['connection_generation'] != owner['generation']
+            or lease['authorization_revision'] != scope['authorization_revision']
+            or lease['configuration_revision'] != scope['configuration_revision']
+            or lease['credential_epoch'] != scope['credential_epoch']
+            or lease['owner_generation'] != scope['session_owner_generation']
+            or (not containment and _stamp(lease['valid_until_server']) <= now)):
+        raise _conflict('An applied dispatch lease is required.')
+
+
 def require_execution_lane(uow, *, scope, channel, now, operator_containment=False):
     """Revalidate the binding ticket inside the effect authorization transaction."""
     lane = SqliteExecutionLeaseRepository().lane(uow, scope)

@@ -6,6 +6,20 @@ from .execution_binding_proposals import _agent_guard
 from .runtime_actor_authority import local_operator_binding
 
 
+def require_subject_dispatch_grant(uow, *, access, subject, grant_id, action, endpoint_id,
+                                   workspace_id, mode, consume, audit=True, continuation=None):
+    """Check the represented agent's grant independently of human authority."""
+    context = RuntimeRequestContext(subject.agent_id, 'agent_key', credential_binding=subject.api_key_hash,
+                                    execution_grant_id=grant_id)
+    grant = access.authorize(context, action=action, endpoint_id=endpoint_id,
+        represented_agent_id=subject.agent_id, workspace_id=workspace_id, substrate=mode,
+        consume=consume, check_budget=continuation is None, audit=audit, uow=uow,
+        _continuation_action=continuation)
+    if grant is None:
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'A canonical execution grant is required for dispatch.', {})
+    return grant
+
+
 def require_operator_request(uow, *, actor, subject, access, context, require_feature=True,
                              binding_id=None, action=None):
     if actor == subject:

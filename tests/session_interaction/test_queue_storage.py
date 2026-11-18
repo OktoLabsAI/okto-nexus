@@ -70,7 +70,8 @@ def database(tmp_path):
 
 def enqueue(uow, scope, *, intent="request", author=ALICE, text="Unmodified synthetic message.", now=NOW):
     return accept_input(uow, scope=scope, author=author, client_intent_id=intent,
-                        capability_revision="capability-v1", text=text, now=now)
+                        capability_revision="capability-v1", text=text, now=now,
+                        verify_new_authority=lambda: None)
 
 
 def test_atomic_storage_and_retry_do_not_create_r4_operations(database):

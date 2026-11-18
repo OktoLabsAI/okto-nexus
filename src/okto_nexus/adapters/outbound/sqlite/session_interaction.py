@@ -4,6 +4,7 @@ Callers must hold a write unit of work and independently prove interactive
 authority. This storage layer never wakes a worker or writes to a harness.
 """
 
+from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime, timedelta
 from sqlite3 import Connection
@@ -36,6 +37,7 @@ class PendingInput:
     author: InputAuthor
     capability_revision: str
     text: str
+    source_grant: tuple[str, int] | None
 
 
 def _conflict(reason: str, message: str) -> OktoNexusError:
@@ -76,6 +78,7 @@ def accept_input(
     capability_revision: str,
     text: str,
     now: datetime,
+    verify_new_authority: Callable[[], tuple[str, int] | None],
 ) -> QueuedReceipt:
     """Allocate a FIFO sequence and persist one input in the caller's transaction.
 
@@ -114,6 +117,8 @@ def accept_input(
 
     if not _current_session(connection, params):
         raise _conflict("INPUT_SESSION_CHANGED", "This exact session is unavailable. Reopen it to inspect its current scope.")
+    source_grant = verify_new_authority()
+    grant_id, grant_revision = source_grant if source_grant is not None else (None, None)
     pending = connection.execute(f"""
         SELECT count(*) FROM session_interaction_inputs
         WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
@@ -135,16 +140,17 @@ def accept_input(
         INSERT INTO session_interaction_inputs (
             server_id, executor_id, session_id, owner_generation, binding_id, workspace_id, workspace_binding_id,
             agent_id, input_id, authority_ref, surface, client_intent_id, fingerprint, enqueue_sequence,
-            capability_revision, content, status, created_at, expires_at
+            capability_revision, content, status, created_at, expires_at, source_grant_id, source_grant_revision
         ) VALUES (
             :server_id, :executor_id, :session_id, :owner_generation, :binding_id, :workspace_id, :workspace_binding_id,
             :agent_id, :input_id, :authority_ref, :surface, :client_intent_id, :fingerprint, :sequence,
-            :capability_revision, :text, 'QUEUED', :created_at, :expires_at
+            :capability_revision, :text, 'QUEUED', :created_at, :expires_at, :grant_id, :grant_revision
         )
     """, {
         **params, "input_id": input_id, "surface": author.surface, "fingerprint": fingerprint,
         "sequence": sequence, "capability_revision": capability_revision, "text": text,
         "created_at": now.isoformat(), "expires_at": (now + PENDING_LIFETIME).isoformat(),
+        "grant_id": grant_id, "grant_revision": grant_revision,
     })
     return QueuedReceipt(input_id, sequence, 0, revision, InputDeliveryState.QUEUED, None, False)
 
@@ -184,5 +190,6 @@ def prepare_dispatch_head(uow: SqliteUnitOfWork, *, scope: InputScope, now: date
             or head["workspace_id"] != scope.workspace_id or head["workspace_binding_id"] != scope.workspace_binding_id
             or head["agent_id"] != scope.agent_id):
         return None
+    source_grant = (head['source_grant_id'], head['source_grant_revision']) if head['source_grant_id'] else None
     return PendingInput(head["input_id"], head["input_revision"], InputAuthor(head["authority_ref"], head["surface"]),
-                        head["capability_revision"], head["content"])
+                        head["capability_revision"], head["content"], source_grant)

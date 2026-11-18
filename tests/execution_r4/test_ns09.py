@@ -164,6 +164,48 @@ def admit(deps, app):
     return resolution
 
 
+def assert_session_input_authority(deps, auth, access, scope, expected_grant):
+    from dataclasses import replace
+
+    from okto_nexus.application.session_interaction_authority import enqueue_human_input
+    from okto_nexus.domain.execution.keys import SessionKey, SessionOwnerGeneration
+    from okto_nexus.domain.session_interaction import InputAuthor, InputDeliveryState, InputScope
+
+    assert auth.configure('fixture-operator', 'fixture-password', local=True)
+    token = auth.login('fixture-operator', 'fixture-password')
+    author = InputAuthor(auth.authority_reference(token), 'web')
+    factory = deps.connection_factory
+    exact = InputScope(SessionKey(scope['server_id'], scope['executor_id'], scope['session_id']),
+        SessionOwnerGeneration(scope['session_owner_generation']), scope['binding_id'], scope['workspace_id'],
+        scope['workspace_binding_id'], scope['agent_id'])
+    tables = ('execution_client_intents', 'execution_operations', 'execution_dispatch_outbox')
+    with factory.unit_of_work(write=False) as uow:
+        counts = tuple(uow.connection.execute(f'SELECT count(*) FROM {table}').fetchone()[0] for table in tables)
+    args = dict(factory=factory, access=access, author=author, authority_fence=auth.authority_fence,
+                current_capability_revision=lambda uow, scope: 'synthetic-capability',
+                client_intent_id='human-input', capability_revision='synthetic-capability', text='Queued input')
+    stale = replace(exact, generation=SessionOwnerGeneration(scope['session_owner_generation'] + 1))
+    with pytest.raises(OktoNexusError, match='exact session is unavailable'):
+        enqueue_human_input(scope=stale, **args)
+    with pytest.raises(OktoNexusError, match='capability changed'):
+        enqueue_human_input(scope=exact, **{**args, 'capability_revision': 'stale-capability'})
+    accepted = enqueue_human_input(scope=exact, **args)
+    assert accepted.status is InputDeliveryState.QUEUED
+    assert enqueue_human_input(scope=exact, **args) == accepted
+    with factory.unit_of_work(write=False) as uow:
+        conn = uow.connection
+        assert tuple(conn.execute(f'SELECT count(*) FROM {table}').fetchone()[0] for table in tables) == counts
+        active_grant = conn.execute('SELECT revision,used_executions FROM runtime_execution_grants WHERE grant_id=?',
+                                   (expected_grant,)).fetchone()
+        stored = conn.execute('SELECT authority_ref,source_grant_id,source_grant_revision FROM session_interaction_inputs'
+                              ' WHERE input_id=?', (accepted.input_id,)).fetchone()
+        assert tuple(stored) == (author.authority_ref, expected_grant, active_grant['revision'])
+        assert active_grant['used_executions'] == 0
+    auth.logout(token)
+    with pytest.raises(OktoNexusError, match='no longer signed in'):
+        enqueue_human_input(scope=exact, **args)
+
+
 def test_ns09_02_server_grant_core_application_and_replay(tmp_path, monkeypatch):
     connector = pytest.importorskip('okto_nexus_connector.transport.wss_r4')
     from okto_nexus_connector.transport.https_client import NexusHTTPClient
@@ -267,6 +309,7 @@ def test_ns09_02_server_grant_core_application_and_replay(tmp_path, monkeypatch)
                                 stream_epoch='epoch', receipt_revision=1)
                             with deps.connection_factory.unit_of_work(write=False) as uow:
                                 assert uow.connection.execute('SELECT lifecycle_state FROM execution_sessions').fetchone()[0] == 'READY'
+                            assert_session_input_authority(deps, app.state.operator_auth, access, scope, canonical['grant_id'])
                             for index in range(2):
                                 turn = resolve_execution_intent(deps.connection_factory, actor_agent_id='subject',
                                     request=dict(client_intent_id=f'turn-{index}', intent='turn.submit',
