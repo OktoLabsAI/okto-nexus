@@ -1148,7 +1148,9 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "execution/si024-codex-busy-presentation.md",
-        "execution/si024-codex-controlled-windows.json"
+        "execution/si024-codex-controlled-windows.json",
+        "execution/si024-codex-interrupt-queue-windows.json",
+        "execution/si024-codex-interrupt-queue-windows.md"
       ]
     },
     {
@@ -2452,10 +2454,12 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         "execution/si024-codex-controlled-windows.json",
-        "execution/si024-codex-busy-presentation.md"
+        "execution/si024-codex-busy-presentation.md",
+        "execution/si024-codex-interrupt-queue-windows.json",
+        "execution/si024-codex-interrupt-queue-windows.md"
       ]
     },
     {
@@ -2599,8 +2603,11 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si024-codex-interrupt-queue-windows.json",
+        "execution/si024-codex-interrupt-queue-windows.md"
+      ]
     },
     {
       "id": "SI-T-C12",
@@ -2617,8 +2624,11 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si024-codex-interrupt-queue-windows.json",
+        "execution/si024-codex-interrupt-queue-windows.md"
+      ]
     },
     {
       "id": "SI-T-C13",
@@ -2635,8 +2645,11 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si024-codex-interrupt-queue-windows.json",
+        "execution/si024-codex-interrupt-queue-windows.md"
+      ]
     },
     {
       "id": "SI-T-C14",
@@ -2653,8 +2666,11 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si024-codex-interrupt-queue-windows.json",
+        "execution/si024-codex-interrupt-queue-windows.md"
+      ]
     },
     {
       "id": "SI-T-C15",
@@ -2671,8 +2687,11 @@
         "SI-R21",
         "SI-R22"
       ],
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "execution/si024-codex-interrupt-queue-windows.json",
+        "execution/si024-codex-interrupt-queue-windows.md"
+      ]
     },
     {
       "id": "SI-T-C16",

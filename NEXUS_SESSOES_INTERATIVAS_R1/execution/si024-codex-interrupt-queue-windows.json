@@ -1,0 +1,99 @@
+{
+  "recorded_on": "2026-11-18",
+  "task": "SI-024",
+  "environment": {
+    "platform": "Windows x64",
+    "nexus_application_commit": "0011d0627ff1d2f58244e2ae22ce683e8e63e225",
+    "nexus_wheel_sha256": "0791d34ae2f46e2b54689e8ef0db88fa6fef417b6fc373af40263e00f7978774",
+    "core_commit": "cecd63f40b672e108caf4558f84bc47c1befbc2e",
+    "core_wheel_sha256": "d451ca4ff86fe2991f231480929cbb5153fe3a265f5b91502e4c9da1c5ea7303",
+    "connector_commit": "1bc8be5c341164e25768532d67ea16d5f7e0b6e2",
+    "app_server": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "model_endpoint": "Deterministic Responses SSE on loopback",
+    "browser": "Microsoft Edge headless via Playwright CLI 0.1.25",
+    "external_provider_calls": 0,
+    "human_evaluation": false
+  },
+  "supporting_regressions": {
+    "core_python": 52,
+    "connector_python_with_pinned_core": 140,
+    "installed_nexus_python_with_pinned_core": 12
+  },
+  "cases": {
+    "interrupt_and_resume": {
+      "test_ids": ["SI-T-C11", "SI-T-C12", "SI-T-C15"],
+      "test_exit_code": 0,
+      "pytest_passed": 1,
+      "fixture_directory": "%TEMP%/nexus-si-interrupt-installed-e15cec0165cf47b3a7bbf96895a11364",
+      "fixture_sha256": "3de6a7936f0751cb92f1598de3c2ceafe4e612a64aae1b5b1d4e65153be09c69",
+      "command": "python -B -m pytest -q -s --tb=short --basetemp <scratch> test_live_interrupt.py",
+      "observations": {
+        "two_native_sessions": true,
+        "selected_target_interrupted": true,
+        "sibling_unaffected": true,
+        "pause_before_native_write": true,
+        "distinct_unconfirmed_and_interrupted_receipts": true,
+        "queue_explicit_resume_fifo": true,
+        "stale_interrupt_rejected_on_next_turn": true,
+        "same_grants": true,
+        "native_interrupt_calls": 1,
+        "loopback_model_requests": 4
+      },
+      "sqlite_verified_after_shutdown": {
+        "operations": {"runtime.close": 2, "runtime.open": 2, "turn.interrupt": 1, "turn.submit": 4},
+        "closed_sessions": 2,
+        "inputs_in_sequence_order": ["ACCEPTED_NATIVE", "ACCEPTED_NATIVE"]
+      }
+    },
+    "interrupt_after_natural_completion": {
+      "test_ids": ["SI-T-C13"],
+      "test_exit_code": 0,
+      "pytest_passed": 1,
+      "fixture_directory": "%TEMP%/nexus-si-interrupt-late-e01916f6d95f43cc953fa3452954503a",
+      "fixture_sha256": "97f0bae2df5fcfc1de166c9b7f09ba4b632534080533992516b03fe317dbf985",
+      "command": "python -B -m pytest -q -s --tb=short --basetemp <scratch> test_late_interrupt.py",
+      "observations": {
+        "target_completed_naturally": true,
+        "late_review_status": 409,
+        "next_turn_untouched": true,
+        "queue_barrier_unchanged": true,
+        "native_interrupt_calls": 0,
+        "loopback_model_requests": 2
+      },
+      "sqlite_verified_after_shutdown": {
+        "operations": {"runtime.close": 1, "runtime.open": 1, "turn.submit": 2},
+        "closed_sessions": 1
+      }
+    },
+    "steer_draft_http_conflict": {
+      "test_ids": ["SI-T-C03"],
+      "runtime_layer": "si024-codex-controlled-windows.json#cases.steer_stale_target",
+      "browser_fixture_directory": "%TEMP%/nexus-si-browser-1wwcvyaz.ujc",
+      "browser_script": "verify-draft-http-conflict.js",
+      "browser_script_sha256": "897f1b76fde9d8a28daba911457d74efbb8d7f9511c8cc06d06b5429ce9dd7d5",
+      "test_exit_code": 0,
+      "observations": {
+        "controlled_http_status": 409,
+        "draft_preserved": true,
+        "draft_editable": true,
+        "fallback_sent": false
+      }
+    },
+    "interrupt_ui_close": {
+      "test_ids": ["SI-T-C14"],
+      "runtime_layer": "interrupt_and_resume",
+      "browser_fixture_directory": "%TEMP%/nexus-si-browser-1wwcvyaz.ujc",
+      "browser_script": "verify-interrupt-close-current.js",
+      "browser_script_sha256": "0712e5919ca4f6fb7aee6a423c141117902a25501a224b71e1492290c4263b6b",
+      "test_exit_code": 0,
+      "observations": {
+        "synthetic_peer_and_dropped_http_response": true,
+        "interrupted_confirmed": true,
+        "panel_closed": true,
+        "queue_retained": true,
+        "no_new_dispatch": true
+      }
+    }
+  }
+}

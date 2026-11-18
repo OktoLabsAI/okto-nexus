@@ -1,9 +1,9 @@
 # Current development dependency
 
-Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `35b528cab6995bd0eea1dbec3f55f033a22d2a29`.
-The unpublished wheel SHA-256 is `0530b0c8c7f9b6916d30b5d98834431b07d11da313036575ca66eca9a32a772b`.
-Core observes the real native process birth for live Codex proofs and binds
-saved resume and its R4 receipt to the selected thread.
+Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `cecd63f40b672e108caf4558f84bc47c1befbc2e`.
+The unpublished wheel SHA-256 is `d451ca4ff86fe2991f231480929cbb5153fe3a265f5b91502e4c9da1c5ea7303`.
+The Codex adapter reports idle only for its exact live thread. The Core
+uses that observation when reserving capacity for the next queued turn.
 The Nexus CI manifest also identifies the matching Connector wheel.
 
 ## Previous development dependency
