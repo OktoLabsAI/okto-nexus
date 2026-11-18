@@ -4,6 +4,7 @@ from fastapi import APIRouter
 
 def build_router():
     from .connections_v1 import build_router as connections
+    from .dashboard_session_commands import build_router as session_commands
     from .dashboard_session_input import build_router as session_inputs
     from .dashboard_session_steer import build_router as session_steer
     from .runtime_v1 import build_router as runtime
@@ -31,4 +32,5 @@ def build_router():
         router.routes.extend(route for route in source.routes if route.name in allowed)
     router.include_router(session_inputs())
     router.include_router(session_steer())
+    router.include_router(session_commands())
     return router

@@ -99,6 +99,11 @@ def require_session_input_authority(uow, *, factory, access, scope, author, reso
     if not resolve_human(author.authority_ref):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The session input author is no longer signed in.', {})
     context = RuntimeRequestContext('operator', 'operator_session', trusted_local_operator=True)
+    return require_session_input_grant(uow, factory=factory, access=access, scope=scope, context=context)
+
+
+def require_session_input_grant(uow, *, factory, access, scope, context):
+    """Check the productive grant for an authenticated request without consuming it."""
     access.authenticate(context, uow=uow)
     require_operator_request(uow, actor='operator', subject=scope.agent_id, access=access,
                              context=context, binding_id=scope.binding_id, action='turn.submit')

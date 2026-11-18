@@ -583,6 +583,7 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
     base = {'scope': exact, 'expected_session_generation': generation}
     ui = {'x-nexus-ui': '1'}
     assert client.get(path + '/steer', params=query).status_code == 401
+    assert client.get(path + '/commands', params=query).status_code == 401
     auth = app.state.operator_auth
     assert auth.configure('steer-fixture', 'fixture-password-long', local=True)
     token = auth.login('steer-fixture', 'fixture-password-long')
@@ -593,8 +594,30 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
         assert response.status_code == 200, response.text
         return response.json()['control']
 
+    def catalog():
+        response = client.get(path + '/commands', params=query)
+        assert response.status_code == 200, response.text
+        assert response.headers['cache-control'] == 'no-store'
+        result = response.json()
+        assert result['scope'] == exact and result['session_owner_generation'] == generation
+        assert result['version'] == 1 and result['adapter_id'] == 'codex_app_server'
+        assert result['literal_text_supported'] is False
+        return result['capability_revision'], {item['command_id']: item for item in result['items']}
+
     assert preview() is None
+    idle_revision, idle_commands = catalog()
+    assert catalog()[0] == idle_revision
+    assert idle_commands['help']['source'] == 'nexus' and idle_commands['status']['handler'] == 'session_status'
+    assert idle_commands['send']['state'] == 'supported' and idle_commands['send']['arguments'] == ['message']
+    assert idle_commands['steer']['state'] == idle_commands['interrupt']['state'] == 'disabled_for_state'
+    assert idle_commands['resume']['state'] == 'native_only' and idle_commands['resume']['handler'] is None
+    assert idle_commands['compact']['state'] == 'unqualified' and idle_commands['compact']['handler'] is None
+    assert not {'shell', 'install', 'login', 'extension'} & idle_commands.keys()
+    assert client.get(path + '/commands', params=query | {'command': 'shell'}).status_code == 422
+    assert client.get(path + '/commands', params=query | {'expected_session_generation': generation + 1}).status_code == 404
+    assert client.post(path + '/commands', headers=ui, json={'command': 'shell'}).status_code == 405
     assert auth.authority_reference(token, create=False) is None
+    assert native.native.sent == []
     active = admit(setup, binding, 'steer-active', 'turn.submit', session_id=session, text='Synthetic turn for steering')
     wait_receipt(setup, active)
     with deps.connection_factory.unit_of_work(write=False) as uow:
@@ -605,6 +628,10 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
         'turn_state', 'turn/started', {'turn_id': turn, 'thread_id': thread, 'threadId': thread,
             'turn': {'id': turn, 'status': 'inProgress'}, 'delivery_phase': 'started'}, operation_id=active['operation_id']))
     eventually(preview)
+    active_revision, active_commands = catalog()
+    assert active_revision != idle_revision
+    assert active_commands['steer']['state'] == active_commands['interrupt']['state'] == 'supported'
+    assert active_commands['steer']['requires_confirmation'] and active_commands['interrupt']['requires_confirmation']
     effects = []
     original_send = native.native.send
 
@@ -697,4 +724,13 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
         'client_intent_id': 'target-already-ended',
     }).status_code == 404
     assert len(effects) == 2
+    settled_revision, settled_commands = catalog()
+    assert settled_revision != active_revision
+    assert settled_commands['steer']['state'] == settled_commands['interrupt']['state'] == 'disabled_for_state'
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE agents SET metadata=json_set(COALESCE(metadata, '{}'), '$.fixture', 1) WHERE agent_id=?",
+                               (scope['agent_id'],))
+    updated_revision, _ = catalog()
+    assert updated_revision != settled_revision
+    assert catalog()[0] == updated_revision
     client.cookies.clear()

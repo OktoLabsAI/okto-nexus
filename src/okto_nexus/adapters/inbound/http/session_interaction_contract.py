@@ -213,14 +213,33 @@ class PrepareAttachment(ScopedInteraction):
     access: Literal["read", "write"]
 
 
+CommandId = Literal[
+    "help", "status", "send", "steer", "interrupt", "compact", "model",
+    "effort", "export", "fork", "clear", "resume",
+]
+CommandState = Literal["supported", "disabled_for_state", "denied_by_policy", "native_only", "unsupported", "unqualified"]
+CommandHandler = Literal["catalog", "session_status", "enqueue", "review_steer", "review_interrupt"]
+CommandArgument = Literal["message"]
+
+
 class CommandDescriptor(_Document):
-    command_id: Identifier
+    command_id: CommandId
+    label: str
+    effect: str
     source: Literal["nexus", "native"]
-    state: Literal["supported", "disabled_for_state", "denied_by_policy", "native_only", "unsupported", "unqualified"]
+    surface: Literal["dashboard", "native_terminal"]
+    handler: CommandHandler | None
+    arguments: tuple[CommandArgument, ...] = ()
+    state: CommandState
     reason: str | None
     requires_confirmation: bool
 
 
-class SessionCommandCatalog(ScopedInteraction):
+class SessionCommandCatalog(_Document):
     version: Literal[1] = 1
-    items: Annotated[list[CommandDescriptor], Field(max_length=100)]
+    scope: ExactSessionScope
+    session_owner_generation: Generation
+    capability_revision: Identifier
+    adapter_id: Identifier | None
+    literal_text_supported: Literal[False] = False
+    items: Annotated[tuple[CommandDescriptor, ...], Field(max_length=100)]
