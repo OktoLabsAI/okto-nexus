@@ -1,0 +1,12 @@
+{
+  "gate": "ROOT_APPROVED_BACKEND_BATCH_R8",
+  "authorization": "Explicit parent Root authorization to execute the exact prepared seven-case batch once; stop on first unsuccessful case without rerun or expectation edits.",
+  "manifest_sha256": "df36773e9d4b63250ece1d32d02be3876cadc14df6abdf923f5785297020d419",
+  "runner_sha256": "d5006898579ea6d0780bddf27056197d676b188a1c717be5bdbf64d31d6604db",
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "expected_base_pins": 1829,
+  "expected_payload_files": 1031,
+  "case_selection": "all",
+  "limits": "Only these seven own inert fixture cases. No provider, personal credentials, production source edits, prefix modification, performance measurement, ledger or Git. Preserve first failure and physical cleanup facts."
+}

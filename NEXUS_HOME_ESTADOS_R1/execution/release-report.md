@@ -116,7 +116,8 @@ evidence, without full AT/native200% or all-state theme claims.
 
 The final move/focus phase stopped while waiting for a host revision that was
 not observed by the controller. Its later received-poll buffer was not saved,
-so the cause remains unproven and F07/I02 are not qualified. A separate
+so the cause remains unproven and that R8 cut does not qualify F07/I02. The
+later R9 replay below provides their separate positive qualification. A separate
 [cleanup record](remaining-qualification-r7-next/experience-batch/experience-r8-session-role/canonical-cleanup-detail.json)
 keeps three confirmed session closes and one unconfirmed close/unknown state.
 Normal process exit and physical absence resolve resources, not that receipt.
@@ -203,9 +204,9 @@ dependency versions were compared, not all dependency file bytes.
 | Current frontend |404Node cases plus TypeScript/Vite on the original checkout; actual packaged assetsZSaBIkKg/Bh2ghaTD |[R9 frontend qualification](frontend-r9-focus/qualification.json)|
 | Current package |fresh wheel/sdist/build/install/audit/pip-check/CLI smoke and actual HTTP/MCP54tools/two synthetic identities |[R9 package](package-hst-r9/qualification.json), [R9 live smoke](package-hst-r9/live-qualification.json)|
 | Predecessor browser |21PASS: Working/independent request/full block/exact request-result sessions/partial source/logout;0POST |[R7 browser](browser-hst/r7-functional-report.md)|
-| Current browser subset |44positive predicates; actual singleton/multi-session context, external failure, preserved panel, normal notices and scoped keyboard/mobile evidence; final move/focus incomplete and cleanup unknown retained |[R8 browser subset](remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json)|
+| Predecessor browser subset |44positive predicates on R8; actual singleton/multi-session context, external failure, preserved panel, normal notices and scoped keyboard/mobile evidence; final move/focus incomplete and cleanup unknown retained |[R8 browser subset](remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json)|
 | Fresh focus regression |16PASS on R9: exact move/context/delivery and same canonical harness focus; original failure and A2 cleanup unknown retained |[R9 focus](remaining-qualification-r7-next/experience-batch/focus-r9-positive/qualification.json)|
-| Current installed functional batch |6PASS/1presentation-oracleFAIL; seven literal backend scenarios qualified; no provider/browser claim |[R8 installed batch](remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json)|
+| Unchanged backend qualification |6PASS/1presentation-oracleFAIL on R8; seven literal backend scenarios qualified; byte equivalence to R9 is scoped to unchanged runtime; no provider/browser claim |[R8 installed batch](remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json)|
 | Post-build supplement |7sourcePASS and7actually installedPASS, separate cuts;1828base+1exact additional test/1031payload files unchanged |[supplement](installed-supplement-r7/qualification.json)|
 | Recovery and paging |Same accepted decision after lost response; stale second-screen409; one durable write admission; actual paging409/current200 in the same panel |[scoped captured predicates](browser-hst/nextcuts-report.md)|
 | History and drafts |9history assertions;8draft/auth positives plus captured real UI401 proof; wrapper/late-observer errors retained |[scoped follow-up](browser-hst/remaining-report.md)|
@@ -216,8 +217,10 @@ dependency versions were compared, not all dependency file bytes.
 
 Source, Node, installed package, browser, inert protocol and actual provider
 layers are distinct. No suite count promotes an untested complete scenario.
-All these owned runtime/test processes ended normally with the individual
-guards and limitations recorded in their cuts. An unanswered native request's
+Normal exit is claimed only by the individual cuts that captured it. Earlier
+browser/context and security-launch diagnostic attempts required containment
+of their own processes; those attempts remain unqualified, with physical
+absence recorded separately. An unanswered native request's
 bounded close can remain unconfirmed even when its outer owner drained and
 physical absence was verified; the report does not equate those observations.
 

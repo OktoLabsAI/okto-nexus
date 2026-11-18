@@ -1,0 +1,9 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "changes": 3,
+  "old_locator": "getByLabel('Choose a session',{exact:true})",
+  "new_locator": "getByRole('combobox',{name:'Choose a session',exact:true})",
+  "original_sha256": "4f4d145ecd1472637e7499ea8099783041f4bb01af94ca523d19113596460708",
+  "variant_sha256": "677a636733612018125fd8fb1a9c0c566c2a576a3a7e16c042e2351ac43d0aa7",
+  "node_syntax_exit": 0
+}

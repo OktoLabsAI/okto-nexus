@@ -1,0 +1,18 @@
+{
+  "gate": "ROOT_R9_FOCUS_OPEN",
+  "session": "hst-experience-focus-r9",
+  "binding": {
+    "status": "R9_BOUND_PREPARED_NOT_EXECUTED",
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "ready_sha256": "028274a46776dbc677f096dc6e5493e102c683bd7e87eee1930c21f56111a631",
+    "payload_files": 1031,
+    "files": {
+      "run_focus_return_launch_v2.py": "c2feb7d191eb73184a5501d115bbdfd18a324bac6912865858050be6cd1cfc17",
+      "focus-return.js": "f7328379e2a5fc2b9ab435a100c15911ce4ea9aaa0329dc63da764f27e89141a",
+      "run.py": "298bb89a72bf7ea956ede8dd14bd058b82e718b9eae9161028110581a09f6377",
+      "builder.py": "7ea70759cb64a8925e8d2a194817e70782f5b068daf5ddb58e832372a45b2841",
+      "capture_owned_chrome.py": "ff46bff105bb51c86ce43f08caf7b6df366ffae277984d78e9225c342041de6c"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "mode": "READ_ONLY_AFTER_PHYSICAL_EXIT",
+  "session_file_sha256": "a5598a95d50726e9a8f538e2a7167e475f5b8ef6bf963f191f350d069faddc17",
+  "stored_browser_config": {
+    "browserName": "chromium",
+    "launchOptions": {
+      "channel": "chrome",
+      "headless": true,
+      "chromiumSandbox": true,
+      "args": [
+        "--disable-blink-features=AutomationControlled"
+      ]
+    },
+    "userDataDir": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-lq4_y8ly\\browser-profile"
+  },
+  "last_browser_profile_metadata": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "last_browser_file_sha256": "3615498fbef408a96bf30e01c318dac2d5451b054998119080e7faac5995f590",
+  "last_version": "157.0.8103.51",
+  "limits": [
+    "Actual full process argv was not captured while alive",
+    "Stored args contain custom launch options, not all Playwright defaults",
+    "No personal Chrome profile or policy was inspected",
+    "No browser process or app was started by this review"
+  ]
+}

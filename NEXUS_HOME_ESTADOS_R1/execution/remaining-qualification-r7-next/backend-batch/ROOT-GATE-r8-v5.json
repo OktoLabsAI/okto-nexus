@@ -1,0 +1,10 @@
+{
+  "gate": "ROOT_APPROVED_BACKEND_BATCH_R8",
+  "attempt": 5,
+  "owner_sha256": "039029e73289f6b8eefa1140835d52456a170e9e1882669d515e9c092e4ccd79",
+  "test_sha256": "c0148180f75bac67308407a91542ad54ed124ea3cbee8ed752d4fda40f1d0f47",
+  "runner_sha256": "bfdaa9eec56a2063531e730301221be6aa7829856f6ec81ed34ec9545e906d6d",
+  "manifest_sha256": "a9b9239dbdb6dd2af24b90791ec2f7412099e069b7d5cf223eaa7cd55a6a454f",
+  "authorization": "Explicit Root approval after fixture/test diff review: seven cases once; first unsuccessful case stops, no rerun. Strict preview/reference equality and no deduplication.",
+  "constraints": "Preserve all previous failure cuts. No source, prefix, original test, provider, ledger or Git changes."
+}

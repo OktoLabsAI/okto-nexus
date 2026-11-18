@@ -18,8 +18,8 @@ repair may rescue an expired scenario; start a fresh disclosed fixture.
 Present one neutral task at a time, without explaining the architecture or
 naming the expected column/button:
 
-1. In the project shown, find who is currently working and inspect their latest
-   activity. Say whether it is clear what they are doing.
+1. In the project shown, find which harness is currently working and inspect
+   that work. Say whether it is clear what it is doing.
 2. A collaborator needs your decision. Find the request and respond. Say what
    the interface confirms and whether you think work has resumed.
 3. Another collaborator has reported a result. Find it and say whether it is a

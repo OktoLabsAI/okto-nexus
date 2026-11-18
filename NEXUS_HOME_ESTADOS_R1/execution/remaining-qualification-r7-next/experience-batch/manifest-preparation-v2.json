@@ -1,0 +1,36 @@
+{
+  "status": "PREPARED_FULL_BATCH_NOT_EXECUTED",
+  "active_resources": false,
+  "antecedent_manifest": "manifest.json describes scripts before reviewed oracle changes; actual executed originals preserved in naming-r7/executed-*",
+  "naming_result": "naming-r7/qualification.json",
+  "files": {
+    "browser.js": {
+      "sha256": "61b548fe932e0ee5a7a960452d94ba63eab604904c832aa65f5a7d66c6c8a710",
+      "bytes": 12014
+    },
+    "builder.py": {
+      "sha256": "7ea70759cb64a8925e8d2a194817e70782f5b068daf5ddb58e832372a45b2841",
+      "bytes": 8441
+    },
+    "curate_naming.py": {
+      "sha256": "d1dadbbeb29c8d0ac875021c4f09d04ab4f155d3367560b4104600429625923a",
+      "bytes": 4643
+    },
+    "preflight.md": {
+      "sha256": "0c5de5fe9e2fefb0584c53310dfbd8cd5c721cad765f54b9730894cfadfe3a7c",
+      "bytes": 8368
+    },
+    "run.py": {
+      "sha256": "298bb89a72bf7ea956ede8dd14bd058b82e718b9eae9161028110581a09f6377",
+      "bytes": 9327
+    },
+    "static-validation.json": {
+      "sha256": "2b8f9edb5a6046402f1c08913d7716a6e04a2c91ea4bd5144eb819b8b64bd0f7",
+      "bytes": 1468
+    },
+    "validate_static.py": {
+      "sha256": "df26f955a54c10a3b6a5653579fc456cfa6f4fe367b4d4c1a66a920f9cb1bf48",
+      "bytes": 1562
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "status": "FULL_R8_PREPARED_NOT_EXECUTED",
+  "active_resources": false,
+  "antecedents": [
+    "naming-r7/manifest.json",
+    "naming-r8/manifest.json"
+  ],
+  "review_deltas": [
+    "before-control persisted board observations",
+    "keyboard exact target and session",
+    "Home plus modal alerts, F13 notice explicit or partial",
+    "deadline-based canonical preview instead of sleep800"
+  ],
+  "files": {
+    "browser.js": {
+      "sha256": "fb759979aa6a8fe17d1f564058f2897bb043621a30bcf6335f58d6f2dba62f85",
+      "bytes": 15418
+    },
+    "builder.py": {
+      "sha256": "7ea70759cb64a8925e8d2a194817e70782f5b068daf5ddb58e832372a45b2841",
+      "bytes": 8441
+    },
+    "run.py": {
+      "sha256": "298bb89a72bf7ea956ede8dd14bd058b82e718b9eae9161028110581a09f6377",
+      "bytes": 9327
+    },
+    "preflight.md": {
+      "sha256": "8664d300419a9e9a4d8869b70078dae678db8748447770490c659b05e847f1ba",
+      "bytes": 9308
+    },
+    "validate_static.py": {
+      "sha256": "df26f955a54c10a3b6a5653579fc456cfa6f4fe367b4d4c1a66a920f9cb1bf48",
+      "bytes": 1562
+    },
+    "static-validation.json": {
+      "sha256": "9ffb3534eaf92f6adbd678986bdd8a8abc149b2f3e4acc52f2c077a2dc01fe6d",
+      "bytes": 2060
+    }
+  }
+}

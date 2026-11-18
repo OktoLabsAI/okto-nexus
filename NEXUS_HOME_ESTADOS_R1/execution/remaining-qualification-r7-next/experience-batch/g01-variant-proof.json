@@ -1,0 +1,8 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "original_sha256": "fb759979aa6a8fe17d1f564058f2897bb043621a30bcf6335f58d6f2dba62f85",
+  "variant_sha256": "7277aec8462a8f84bfb0fbed36770a13341e891ff9f7f591e637a4a0c9de59a2",
+  "node_syntax_exit": 0,
+  "change": "Only G01 singleton oracle: observe canonical GET before gesture; compare entire RuntimeSession.scope, exact URL target and actual output. No chooser assumption.",
+  "prior_failure": "experience-r8-first-oracle/qualification.json"
+}

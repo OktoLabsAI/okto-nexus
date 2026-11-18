@@ -1,0 +1,10 @@
+{
+  "gate": "ROOT_APPROVED_BACKEND_BATCH_R8",
+  "attempt": 7,
+  "case_selection": "7",
+  "presentation_sha256": "0767b68e4434a9dfc87f26bcd65d51e4c72a3a8fb6973a723f0927bcfc28f903",
+  "runner_sha256": "d42edb74db860ab971dfa8e77b27e5d7b2f93cbce6eb1a9a595911462ddaf584",
+  "manifest_sha256": "41e7c96318faaa59703d881cb0dc5585cddb12ad741ccf61723e3ff4e446dbfc",
+  "authorization": "Explicit Root gate after reading the nine real assertions: execute case7 only once, stop at first unsuccessful case, no rerun.",
+  "constraints": "Preserve attempt5 failure. Source6eaa/base1829 unchanged until finally/end guards. No provider, personal installation, source, ledger or Git changes."
+}

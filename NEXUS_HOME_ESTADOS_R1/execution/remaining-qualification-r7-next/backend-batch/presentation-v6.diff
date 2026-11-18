@@ -1,0 +1,11 @@
+--- presentation-check.mjs
++++ presentation-check-v6.mjs
+@@ -21,7 +21,7 @@
+ assert.equal(data.before.delivery_semantics.verification,'pending');
+ assert.equal(data.after.delivery_semantics.verification,'approved');
+ assert.deepEqual(deliveryPresentation(data.before.delivery_semantics,{outcome:data.before.outcome,evidence:'canonical'}),
+-  {title:'Delivery available',badges:['Awaiting verification']});
++  {title:'Turn result available',badges:['Awaiting verification']});
+ assert.deepEqual(deliveryPresentation(data.after.delivery_semantics,{outcome:data.after.outcome,evidence:'canonical'}),
+   {title:'Task completed',badges:['Delivery verified']});
+ console.log(JSON.stringify({same_delivery_verified:true,artifacts:3,presentation:'current pinned source, actual canonical API before/after data; not browser'}));
