@@ -1,6 +1,7 @@
 import {useEffect,useRef,useState,type ReactNode} from 'react';
 import {api} from '../../api';
 import {homeApi} from '../../homeApi';
+import {isUntitledHomeWork} from '../../homePresentation';
 import {resolveHomeTarget} from '../../homeNavigation';
 import {attentionTarget} from '../../attentionNavigation';
 import {readEntryInspectionPage,entryInspectionQuery,homeSessionRefKey,homeSessionTarget,homeSessionOptionLabel,initialEntrySession,occurrenceSession,type HomeEntrySelection} from '../../homeEntryInspection';
@@ -71,8 +72,8 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
   const sessionOptions=session&&!sessions.some(ref=>homeSessionRefKey(ref)===homeSessionRefKey(session))?[session,...sessions]:sessions;
   return <section className="space-y-4" aria-label="Activity context">
     {notice&&<p role="status">{notice}</p>}
-    <header><h3 className="font-semibold break-words">{entry.title}</h3><p className="text-xs text-surface-500">{[entry.agent_label||entry.agent_id,entry.harness_label,entry.host_label].filter(Boolean).join(' · ')}</p>
-      <p className="text-xs text-surface-500">Related information as of {entry.as_of||'an unconfirmed snapshot'}. Controls revalidate their canonical records.</p></header>
+    <header><h3 className="font-semibold break-words">{isUntitledHomeWork(entry)?'Work activity':entry.title}</h3>
+      {(entry.agent_label||entry.host_label)&&<p className="text-xs text-surface-500">{[entry.agent_label,entry.host_label].filter(Boolean).join(' · ')}</p>}</header>
     {error&&<p role="status">{error}</p>}
     <section aria-label="Session in this activity" className="space-y-2">
       <h4 className="font-medium">Session</h4>
@@ -81,7 +82,6 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
         <option value="">Choose a session</option>{sessionOptions.map((ref,index)=><option key={homeSessionRefKey(ref)} value={homeSessionRefKey(ref)}>{homeSessionOptionLabel(ref,index)}</option>)}</select></label>}
       {!session&&<p className="text-sm text-surface-500">{entry.sessions_total===0?'No canonical session is linked to this activity.':'Select a session to inspect its exact output. No recent session is selected automatically.'}</p>}
       {session&&<ExactEntrySession key={homeSessionRefKey(session)} session={session} serverId={serverId} workspace={workspace}/>}
-      {session&&<details><summary>Session details</summary><p className="break-all">{session.session_id} · {session.executor_id} · {session.workspace_id}</p></details>}
       {session&&<button type="button" className="btn btn-secondary" onClick={()=>transition(()=>{setActive(null);setRecord({target:homeSessionTarget(session),continuation:true});})}>Continue this exact session</button>}
       {cursors.sessions&&<button type="button" className="btn btn-secondary" disabled={busy} onClick={()=>void more('sessions')}>Load more linked sessions</button>}
     </section>
@@ -99,7 +99,7 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
       {cursors.results&&<button type="button" className="btn btn-secondary" disabled={busy} onClick={()=>void more('results')}>Load more related results</button>}
     </section>}
     {active?<button type="button" className="btn btn-secondary" onClick={()=>transition(()=>{setActive(null);setSession(initialEntrySession(entry,record.target));})}>Show work details</button>:
-      <section aria-label="Original record and canonical controls"><h4 className="font-medium mb-2">{record.continuation?'Continue the exact session':'Original record and controls'}</h4>
+      <section aria-label="Original record and canonical controls"><h4 className="font-medium mb-2">{record.continuation?'Continue this session':'Work details'}</h4>
         {renderRecord(record.target,record.continuation)}</section>}
   </section>;
 }

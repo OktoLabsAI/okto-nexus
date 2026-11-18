@@ -1,7 +1,7 @@
 import { Check, Copy } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-export function CopyMessageButton({ text }: { text: string }) {
+export function CopyMessageButton({ text, item = 'message' }: { text: string; item?: 'message' | 'command' }) {
   const [status, setStatus] = useState<'idle' | 'copied' | 'error'>('idle');
   const timer = useRef<ReturnType<typeof setTimeout>>();
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -37,14 +37,16 @@ export function CopyMessageButton({ text }: { text: string }) {
       setStatus('error');
     }
   }
-  const label = status === 'copied' ? 'Message copied' : status === 'error' ? 'Copy failed. Try again' : 'Copy message';
+  const copied = item === 'command' ? 'Command copied' : 'Message copied';
+  const label = status === 'copied' ? copied : status === 'error' ? 'Copy failed. Try again' : `Copy ${item}`;
   return <>
     <button type="button" onClick={() => void copy()} aria-label={label} title={label}
       className="shrink-0 rounded p-1 text-surface-400 hover:bg-surface-100 hover:text-surface-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500 dark:hover:bg-surface-800 dark:hover:text-surface-100">
       {status === 'copied' ? <Check size={14} /> : <Copy size={14} />}
+      {item === 'command' && <span>{status === 'copied' ? 'Copied' : 'Copy command'}</span>}
     </button>
     <span className={status === 'error' ? 'text-xs text-red-500' : 'sr-only'} role="status">
-      {status === 'copied' ? 'Message copied' : status === 'error' ? 'Could not copy. Select the message and copy it manually.' : ''}
+      {status === 'copied' ? copied : status === 'error' ? `Could not copy. Select the ${item} and copy it manually.` : ''}
     </span>
   </>;
 }

@@ -8,8 +8,7 @@ import {type HomeInvalidation,type HomeStreamStatus} from '../../homeController'
 import {useHomeOverview} from '../../hooks/useHomeOverview';
 import {decodeHomeTarget, encodeHomeTarget,resolveHomeTarget} from '../../homeNavigation';
 import {homeApi} from '../../homeApi';
-import {homeStateLabel} from '../../homePresentation';
-import {homeTargetActionLabel} from '../../homePresentation';
+import {homeStateLabel,homeTargetActionLabel,isUntitledHomeWork} from '../../homePresentation';
 import type {HomeState} from '../../homeController';
 import {AgentActionModal,useAgentModalTransition} from '../AgentActionModal';
 import {PageContainer} from '../PageContainer';
@@ -99,7 +98,7 @@ function HarnessActivityPanel({cardId,state,onMore,onRefresh,onEntry,onSessions,
       <button type="button" className="underline" disabled={denied||state.harnessLoading!==null} onClick={onRefreshSessions}>Refresh sessions</button>
       {moreSessions&&<button type="button" className="btn btn-secondary" disabled={denied||state.harnessLoading!==null} onClick={onSessions}>Load more sessions</button>}
       <button type="button" className="underline" disabled={denied} onClick={()=>transition(()=>onConnection(card.target))}>View connection</button>
-      {selected&&<><details><summary>Session details</summary><p className="break-all">{selected.session_id} · {selected.executor_id} · {selected.workspace_id}</p></details>{renderSession(selected)}</>}
+      {selected&&renderSession(selected)}
     </section>}
     {(requestsIntent||requests.length>0)&&<section aria-label="Pending actions" className="space-y-2">
       <h4 className="font-medium">Pending actions</h4>
@@ -110,7 +109,7 @@ function HarnessActivityPanel({cardId,state,onMore,onRefresh,onEntry,onSessions,
     </section>}
     {!requestsIntent&&<><button type="button" className="btn btn-secondary" disabled={denied||state.harnessLoading!==null} onClick={onRefresh}>Refresh activity</button>
     <ul className="space-y-3">{items.map(entry=><li key={entry.id} className="border-b pb-3" data-home-activity={entry.id}>
-      <p className="font-medium break-words">{entry.title}</p><p className="text-sm">{homeStateLabel(entry.display_state)}</p>
+      {!isUntitledHomeWork(entry)&&<p className="font-medium break-words">{entry.title}</p>}<p className="text-sm">{homeStateLabel(entry.display_state)}</p>
       {entry.shared_reference&&<p className="text-xs text-surface-500">Shared activity</p>}
       {entry.target?<button type="button" className={"underline "+homeFocus} disabled={denied} onClick={()=>transition(()=>onEntry(entry))}>{homeTargetActionLabel(entry.target)}</button>:
         <p className="text-sm text-surface-500">Exact context unavailable.</p>}

@@ -2,6 +2,8 @@ import type {HomeBoardColumn,HomeHarnessCard as HarnessCard,HomeHarnessEvent,Hom
 import {homeEntryStateLabel,homeFocus} from './HomeCards';
 import {attentionDescription,primaryAttentionAction} from '../../attentionPresentation';
 import {deliveryPresentation,harnessBadges,homeActionText,requestKind} from '../../homeStatePresentation';
+import {isUntitledHomeWork} from '../../homePresentation';
+import {formatTime} from '../../timeFormat';
 
 const harnessName=(id:string)=>({codex_app_server:'Codex',claude_stream:'Claude',pi_rpc:'Pi'}[id]??'Other harness');
 const requestButton=(item:HomeHarnessRequest)=>{
@@ -45,21 +47,17 @@ export function HomeHarnessCard({card,column,blocked,onActivity,onEvent,onReques
       {status?.freshness!=='current'&&status&&<p className="text-xs text-surface-500">Connection evidence {status.freshness}. Inspect for current details.</p>}
       {!status&&card.blocks_harness===null&&<p className="text-xs text-surface-500">Blocking status unknown</p>}
       {confirming&&<p className="text-sm">Your decision is recorded. No further response is required while confirmation is pending.</p>}
-      {status?.state_since&&<p className="text-xs text-surface-500">State since <time dateTime={status.state_since}>{status.state_since}</time></p>}
     </header>
     {card.reminder_snoozed&&<p className="text-xs text-surface-500">Reminder snoozed. This does not resume the harness.</p>}
     <ul className="space-y-3" aria-label="Activity preview">{card.events_preview.map(event=><li key={event.id} className="border-l-2 border-surface-200 pl-3" data-home-event={event.id}>
-      <p className="text-sm font-medium break-words">{event.title}</p>
+      {!isUntitledHomeWork(event)?<p className="text-sm font-medium break-words">{event.title}</p>:
+        event.attention&&<p className="text-sm font-medium break-words">{attentionDescription(event.attention).title}</p>}
       <p className="text-xs text-surface-500">{homeEntryStateLabel(event)}</p>
       {(event.target||event.attention)&&(event.kind!=='attention'||!status&&column==='needs_you')&&<button type="button" className={`text-sm underline ${homeFocus}`} disabled={blocked} onClick={()=>onEvent(event)}>{harnessEventAction(event)}</button>}
     </li>)}</ul>
     {card.events_total===0&&<p className="text-sm text-surface-500">No tracked activity.</p>}
     {Object.values(card.events_summary).some(value=>value===null)&&<p className="text-xs text-surface-500">Activity coverage incomplete.</p>}
     <button type="button" className={`btn btn-secondary w-full ${homeFocus}`} disabled={blocked} onClick={open}>{primary}</button>
-    <details className="text-xs text-surface-500"><summary className={`cursor-pointer ${homeFocus}`}>Connection details</summary>
-      <p className="mt-2">{card.reconnect_reason}</p>
-      {status?.as_of&&<p>Evidence observed <time dateTime={status.as_of}>{status.as_of}</time></p>}
-    </details>
   </li>;
 }
 
@@ -80,7 +78,7 @@ export function HomeHarnessSignalCard({item,blocked,onOpen,showProject=false,pro
       <p className="text-sm">{item.blocks_session===true&&item.blocks_harness===false?'Blocks this session; the harness continues other work':item.blocks_harness===null?'Blocking status unconfirmed':item.blocks_harness?'The harness is waiting for this action':'The harness can continue other work'}</p></div>:
       <div className="space-y-2"><p className="text-sm font-medium">{meaning?.title}</p>
         <div className="flex flex-wrap gap-2">{meaning?.badges.map(badge=><span key={badge} className="rounded-md border border-surface-300 dark:border-surface-600 px-2 py-1 text-xs">{badge}</span>)}</div>
-        {item.result?.created_at&&<p className="text-xs text-surface-500">Received <time dateTime={item.result.created_at}>{item.result.created_at}</time></p>}
+        {item.result?.created_at&&<p className="text-xs text-surface-500">Received <time dateTime={item.result.created_at}>{formatTime(item.result.created_at)}</time></p>}
       </div>}
     <button type="button" className={`btn btn-secondary ${homeFocus}`} disabled={blocked} onClick={onOpen}>{label}</button>
   </li>;

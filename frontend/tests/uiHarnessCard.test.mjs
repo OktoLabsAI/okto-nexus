@@ -25,10 +25,25 @@ test('registered harness preview uses friendly identity and Server events, witho
   const html=render();
   assert.match(html,/Research collaborator/);assert.match(html,/Codex/);assert.match(html,/Team computer/);assert.match(html,/Registered harness/);
   assert.match(html,/Report delivered/);assert.match(html,/View delivery/);assert.match(html,/Follow activity/);
-  assert.doesNotMatch(html,/<button[^>]*>Reconnect|12 results/);assert.match(html,/<summary[^>]*>Connection details/);
-  assert.match(html,/Individual reconnection is not available for this host/);
+  assert.doesNotMatch(html,/<button[^>]*>Reconnect|12 results|Connection details|Individual reconnection/);
   assert.doesNotMatch(html,/private-server|private-executor|private-session|private-operation|original-group|Related attention|Related results|Connect or resume|Continue/);
   assert.doesNotMatch(html,/40.*sessions|0 sessions|Running|Ready to execute/);
+});
+test('work previews retain authorized subjects and omit the generic label for a direct turn',()=>{
+  const turn={...event,kind:'work',target:{...target,kind:'execution'},title:'Work request',display_state:'running'};
+  const named={...turn,id:'named',target:{kind:'handoff'},title:'Review storefront accessibility'};
+  const html=render({...card,events_preview:[turn,named]});
+  assert.match(html,/Running/);
+  assert.match(html,/View work/);
+  assert.match(html,/Review storefront accessibility/);
+  assert.doesNotMatch(html,/Work request|private-session/);
+});
+test('delivery shows local received time while retaining the machine-readable timestamp',()=>{
+  const timestamp='2026-11-18T02:27:29.773Z';
+  const item={kind:'delivery',id:'delivery',result:{title:'Storefront review',created_at:timestamp},harness_refs:[]};
+  const html=renderToStaticMarkup(React.createElement(HomeHarnessSignalCard,{item,blocked:false,onOpen(){}}));
+  const local=new Intl.DateTimeFormat('en-US',{month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(timestamp));
+  assert.ok(html.includes(`Received <time dateTime="${timestamp}">${local}</time>`),html);
 });
 test('question/approval affordance respects canonical allowed actions and preserves exact event target on click',()=>{
   assert.equal(harnessEventAction({...event,kind:'attention',attention:{allowed_actions:['respond_native'],resolution:'open',freshness:'current'}}),'Review question');

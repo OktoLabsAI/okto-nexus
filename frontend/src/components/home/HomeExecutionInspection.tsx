@@ -48,13 +48,12 @@ export function HomeExecutionDetails({context,suppressOutput=true,onAccessLost}:
   const uncertain=operation.executor_stage==='OUTCOME_UNKNOWN'||operation.admission_state==='RECONCILING';
   return <section aria-label="Exact execution context" className="space-y-3 min-w-0">
     <h3 className="font-semibold">Execution · {operation.executor_stage||operation.admission_state}</h3>
-    <p className="text-xs break-all">{operation.operation_id}</p>
-    <p className="text-sm">{operation.possible_effect?'The operation may have reached the runtime.':'No possible effect is reported for this operation.'}</p>
+    {uncertain&&operation.possible_effect&&<p className="text-sm">The action may have reached the harness.</p>}
     {operation.executor_stage==='OUTCOME_UNKNOWN'&&<p role="status">The recorded outcome is unknown. Inspect the same request before considering another action.</p>}
     {operation.error&&<p role="alert">{operation.error.code}: {operation.error.message}</p>}
-    <details className="text-xs"><summary>Exact context details</summary><dl>
-      {Object.entries(operation.scope).map(([key,value])=><div key={key}><dt>{key.replaceAll('_',' ')}</dt><dd className="break-all">{String(value)}</dd></div>)}
-    </dl></details>
+    {(uncertain||operation.error)&&<details className="text-xs"><summary>Reference for troubleshooting</summary>
+      <p className="break-all">Operation: {operation.operation_id}</p>
+    </details>}
     {!suppressOutput&&<><SessionExecutionPanel session={session} harness={binding.adapter_id} embedded/>
       {operation.result&&<section aria-label="Retained execution result"><h4 className="font-medium">Retained result</h4>
         <pre className="whitespace-pre-wrap break-words">{operation.result.output_text}{operation.result.output_truncated?'\n[Output truncated]':''}</pre>

@@ -1,5 +1,6 @@
 import type {HomeEntry, HomeEntryFilters, HomeEntryQuery,HomeEntryPage, HomeSessionRef, HomeTarget,HomeHarnessCard,HomeHarnessConnection,HomeSessionContext} from './homeTypes';
 import type {AttentionAction,AttentionOccurrence} from './attentionTypes';
+import {formatTime} from './timeFormat';
 
 export interface HomeEntrySelection {
   groupId:string;entry:HomeEntry;filters:HomeEntryFilters;revision:string|null;
@@ -32,8 +33,8 @@ export function initialHarnessSession(card:HomeHarnessCard):HomeSessionRef|null 
 }
 export function homeSessionOptionLabel(ref:HomeSessionRef,index:number):string {
   const title=ref.title||`Session ${index+1}`;
-  const parts=[title,ref.lifecycle_state||'State unknown',ref.workspace_label||ref.workspace_id];
-  if(ref.last_activity_at){const date=new Date(ref.last_activity_at);if(Number.isFinite(date.getTime()))parts.push(`Updated ${date.toISOString()}`);}
+  const parts=[title,ref.lifecycle_state||'State unknown',ref.workspace_label].filter(Boolean);
+  if(ref.last_activity_at&&Number.isFinite(Date.parse(ref.last_activity_at)))parts.push(`Updated ${formatTime(ref.last_activity_at)}`);
   return parts.join(' · ');
 }
 export function occurrenceSession(item:AttentionOccurrence,serverId:string):HomeSessionRef|null {

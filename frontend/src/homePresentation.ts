@@ -10,6 +10,10 @@ const labels: Record<HomeDisplayState, string> = {
   result_available_cleanup_pending: 'Result available · cleanup pending', failed: 'Failed', cancelled: 'Cancelled', unknown: 'Unknown',
 };
 export function homeStateLabel(state: string): string { return labels[state as HomeDisplayState] ?? 'Unknown'; }
+/** A direct turn can have a private prompt and no public subject. */
+export function isUntitledHomeWork(entry: {title: string; target?: HomeTarget | null}): boolean {
+  return entry.target?.kind === 'execution' && entry.title === 'Work request';
+}
 export function homeTargetActionLabel(target:HomeTarget):string{
   return ({handoff:'View work',execution:'View work',result:'View delivery',session:'View session',
     connection:'View connection',message:'View message',approval:'Review request',external_observation:'View external signal'})[target.kind];

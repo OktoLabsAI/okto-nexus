@@ -105,7 +105,7 @@ test('revalidation compares every scope dimension before a continuation command'
 });
 test('real RuntimeOperations continuation presentation cannot select a new or recent session', () => {
   const markup=html(RuntimeOperations,{agentId:'agent',binding:binding(),canStart:false,continuationScope:scope});
-  assert.match(markup,/Continue as operator in session session/);assert.match(markup,/Review runtime action/);
+  assert.match(markup,/This action applies to the session you’re viewing/);assert.match(markup,/Review runtime action/);
   assert.doesNotMatch(markup,/aria-label="Runtime action"|aria-label="Runtime session ID"|Reuse if unambiguous|Create a new session/);
 });
 test('shared composer uses intention labels and requires an explicit recipient', () => {
@@ -211,7 +211,7 @@ test('registered harness overview stays passive and reserves occurrence preferen
   try{
     const markup=renderHome(snapshot);await new Promise(setImmediate);
     assert.deepEqual(calls,[]);assert.equal(entryRows.length,0);
-    assert.match(markup,/data-home-harness="harness"/);assert.match(markup,/Follow activity/);assert.match(markup,/Connection details/);
+    assert.match(markup,/data-home-harness="harness"/);assert.match(markup,/Follow activity/);assert.doesNotMatch(markup,/Connection details/);
     assert.doesNotMatch(markup,/Related attention|Related results|Choose an exact context|Mark seen|Snooze|Filter details|Filter Home by agent|Home filters|<input/);
   }finally{api.attentionSeen=previous;}
 });

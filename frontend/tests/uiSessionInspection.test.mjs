@@ -50,9 +50,22 @@ test('late cancelled reads and authorization failures never produce a replacemen
 
 test('actual embedded output body is read-only history without a nested dialog or terminal maximizer',()=>{
   const markup=render({session:session(),embedded:true});
-  assert.match(markup,/Read only/);assert.match(markup,/Runtime session history/);assert.match(markup,/exact-session/);
-  assert.doesNotMatch(markup,/<dialog|Maximize terminal|<textarea|Submit|Interrupt|Continue session/);
+  assert.match(markup,/Read only/);assert.match(markup,/Runtime session history/);
+  assert.doesNotMatch(markup,/exact-session|Copy command|<dialog|Maximize terminal|<textarea|Submit|Interrupt|Continue session/);
   assert.match(markup,/aria-pressed="true"[^>]*>History/);
+});
+test('an eligible embedded session offers an exact shell-safe terminal command only in its disclosure',()=>{
+  const active=session({scope:{...session().scope,session_id:'ses_exact_abc'},lifecycle_state:'READY',lease_state:'ACTIVE',control_available:true});
+  const markup=render({session:active,embedded:true});
+  assert.match(markup,/<details[^>]*><summary[^>]*>Open this session in a terminal/);
+  assert.match(markup,/okto-nexus work chat --session-id ses_exact_abc/);
+  assert.match(markup,/matching saved profile/);
+  assert.match(markup,/Copy command/);
+  assert.equal((markup.match(/ses_exact_abc/g)||[]).length,1);
+  for (const patch of [{control_available:false},{durable_release_pending:true},{lifecycle_state:'CLOSED'},
+    {scope:{...active.scope,session_id:'ses_x; unsafe'}}]) {
+    assert.doesNotMatch(render({session:{...active,...patch},embedded:true}),/Copy command|okto-nexus work chat/);
+  }
 });
 
 test('only the read-only session body excludes observation controls from captured draft edits',()=>{
