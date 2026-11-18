@@ -1,0 +1,21 @@
+{
+  "approved": true,
+  "approved_by": "root",
+  "manifest_sha256": "25f48720da92f390b4f52a2caf7d21e8d220f2085b4b30787489826e2724e29a",
+  "reader_variant_manifest_sha256": "4168b8d850e6aa6704a83497fa11121172c3840a5b3f5048fe6c11637aed217b",
+  "effective_driver_sha256": "2b5868ab19112ea425aa0b431f580546d87788a9083d6691b80a94bf1e3b3ad5",
+  "ready_sha256": "028274a46776dbc677f096dc6e5493e102c683bd7e87eee1930c21f56111a631",
+  "case": "S2",
+  "runtime_mode": "baseline",
+  "cut_id": "hst-security-r9-s2-observed-completion-v3",
+  "deadline_seconds": 180,
+  "provider_invocations": 0,
+  "allow_own_containment": true,
+  "allow_exact_observation_inserts": true,
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "source_additions": {},
+  "browser_environment_policy": "windows-path-allowlist-app-env-own-v1",
+  "completion_variant_manifest_sha256": "379630946962a699c35326f9f184215d087a813f20ea74bb963a5cf44755141b",
+  "completion_template_sha256": "03a7d903af3ac6f3c914dfb0cd1beeedb48aeef73e5ead1a81167b0274f3aba3"
+}

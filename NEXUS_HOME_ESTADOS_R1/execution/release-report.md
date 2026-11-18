@@ -147,7 +147,7 @@ browser or three real executions. The six PASS cases were not repeated.
 Prior attempts and the original6PASS/1FAIL remain preserved. Pytest retention
 left only two raw cleanup JSONs; all six passing teardown close assertions ran,
 and missing raw snapshots were not reconstructed. Current ledger counts are
-63PASS/45NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
+64PASS/44NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
 original evidence; fresh R9 focus predicates now pass. No timing target caused
 or resolved these functional qualifications.
 
@@ -208,6 +208,8 @@ dependency versions were compared, not all dependency file bytes.
 | Fresh focus regression |16PASS on R9: exact move/context/delivery and same canonical harness focus; original failure and A2 cleanup unknown retained |[R9 focus](remaining-qualification-r7-next/experience-batch/focus-r9-positive/qualification.json)|
 | Passive reads and scoped revocation |20actual R9 browser checks; thirty productive tables unchanged across Home/card/result reads; exact canonical revocation removes controls; refused runtime.close retained |[R9 security S1](remaining-qualification-r7-next/security-r9-batch/runs/hst-security-r9-s1-comment-only/qualification.json)|
 | CLI work and presentation rollback |13actual browser checks and14installed CLI commands; strict config/root/grant/checkpoint assertions and same foreground owner; canonical close SUCCEEDED and service stop drained |[R9 compatibility S3](remaining-qualification-r7-next/compat-batch/attempt2-s3-r9/qualification.json)|
+| Reported external completion |13actual R9 browser checks; exact reported episode opens without native success/verification; two live thirty-table comparisons allow only the two scoped observation events |[R9 security S2](remaining-qualification-r7-next/security-r9-s2-batch/runs/hst-security-r9-s2-observed-completion-v3/qualification.json)|
+| Native zoom prerequisite |14checks using real Chrome Settings100%→200%, DPR1→2/CSS720→360 at unchanged viewport; no Nexus app ran in this cut |[Native browser guard](remaining-qualification-r7-next/native-zoom-batch/runs/hst-native-zoom-r9-browser-only-2/qualification.json)|
 | Unchanged backend qualification |6PASS/1presentation-oracleFAIL on R8; seven literal backend scenarios qualified; byte equivalence to R9 is scoped to unchanged runtime; no provider/browser claim |[R8 installed batch](remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json)|
 | Post-build supplement |7sourcePASS and7actually installedPASS, separate cuts;1828base+1exact additional test/1031payload files unchanged |[supplement](installed-supplement-r7/qualification.json)|
 | Recovery and paging |Same accepted decision after lost response; stale second-screen409; one durable write admission; actual paging409/current200 in the same panel |[scoped captured predicates](browser-hst/nextcuts-report.md)|
@@ -266,7 +268,7 @@ The [116-scenario audit](remaining-qualification-review-r7.md) records the
 unexecuted clauses and partial layers rather than treating every test count
 as qualification. The [ledger](../NEXUS_HOME_ESTADOS_LEDGER_R1.json) remains
 authoritative for individual task/scenario status. After the subsequent literal
-reviews it has63PASS,45NOT_RUN and8BLOCKED. The original menu and focus
+reviews it has64PASS,44NOT_RUN and8BLOCKED. The original menu and focus
 defects are corrected and have separate actual installed-browser evidence.
 Partial browser/native clauses remain NOT_RUN. This is not a whole-plan
 completion or default approval.
@@ -280,8 +282,10 @@ inventing queue, pause or resume proof would violate the plan. Expanding
 Core/protocols is outside this reader change.
 
 Real provider-family and remote-topology campaigns were not authorized for
-this plan and were not run. Actual screen-reader and native200% browser zoom
-qualification remain unexecuted. The prior UI-R1 novice-user gate, Quick
+this plan and were not run. Actual screen-reader speech remains unexecuted.
+Native Chrome200% selection and geometry are separately verified; the combined
+responsive application/long-name/action-access/context-return scenario remains
+unexecuted. The prior UI-R1 novice-user gate, Quick
 Connect UNKNOWN usage/QC031 and broader regression NOT_GREEN are retained.
 CI status is a separate remote observation, not inferred from local passes.
 At the R9 checkpoint, the GitHub connector reported source run
@@ -323,8 +327,10 @@ revocation; its closed=false fact remains separate from normal owner/browser
 exit and physical absence. Finish the
 additional supported functional/security/compatibility increments before
 inviting a participant. The menu and focus corrections have actual browser
-proof. Foreground CLI and active presentation rollback have scoped actual
-evidence; external-observation security, no-dashboard CLI, full classic-control
+proof. Foreground CLI, active presentation rollback and exact reported external
+completion have scoped actual evidence. Earlier S2 JSON-reader and wrong-modal
+oracle failures remain preserved; no occupied claim/one-shot capacity release
+is inferred from the empty-capacity observation fixture. No-dashboard CLI, full classic-control
 navigation and old-state increments remain distinct pending qualifications.
 The useful-DOM
 observation and shared-machine limitation are already recorded above. No

@@ -1,0 +1,361 @@
+{
+  "status": "FAILED_BROWSER_CUT_RETAINED_READ_ONLY_DIAGNOSIS",
+  "qualification_status_unchanged": "FAIL_OR_INCONCLUSIVE_PRESERVED",
+  "checks": {
+    "idle": [
+      {
+        "id": "board-200",
+        "ok": true
+      },
+      {
+        "id": "exact-unlinked-instance-no-false-harness",
+        "ok": true
+      },
+      {
+        "id": "real-idle-not-canonical-session",
+        "ok": true
+      },
+      {
+        "id": "idle-reported-visible",
+        "ok": true
+      },
+      {
+        "id": "no-canonical-result-from-idle",
+        "ok": true
+      },
+      {
+        "id": "browser-passive-only",
+        "ok": true
+      }
+    ],
+    "completion": [
+      {
+        "id": "board-200",
+        "ok": true
+      },
+      {
+        "id": "one-exact-reported-delivery",
+        "ok": true
+      },
+      {
+        "id": "reported-not-native-verified",
+        "ok": true
+      },
+      {
+        "id": "not-verified-label",
+        "ok": true
+      },
+      {
+        "id": "no-native-success-label",
+        "ok": true
+      },
+      {
+        "id": "exact-observed-completion-open",
+        "ok": false
+      }
+    ]
+  },
+  "browser_requests": {
+    "idle": [
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/assets/index-ZSaBIkKg.js"
+      },
+      {
+        "method": "GET",
+        "path": "/assets/index-Bh2ghaTD.css"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/operator-auth/status"
+      },
+      {
+        "method": "GET",
+        "path": "/logos/nexus-icon.svg"
+      },
+      {
+        "method": "GET",
+        "path": "/logos/nexus-wordmark-light.svg"
+      },
+      {
+        "method": "GET",
+        "path": "/logos/nexus-wordmark-dark.svg"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/agents"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/info"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/graph"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/stream"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/stream"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/home/harness-board"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/operator/unread-count"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/graph"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/home/harness-board"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/home/target"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/home/target"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/observations/instances/obs_inst_0000000000000002"
+      }
+    ],
+    "completion": [
+      {
+        "method": "GET",
+        "path": "/"
+      },
+      {
+        "method": "GET",
+        "path": "/assets/index-ZSaBIkKg.js"
+      },
+      {
+        "method": "GET",
+        "path": "/assets/index-Bh2ghaTD.css"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/operator-auth/status"
+      },
+      {
+        "method": "GET",
+        "path": "/logos/nexus-icon.svg"
+      },
+      {
+        "method": "GET",
+        "path": "/logos/nexus-wordmark-light.svg"
+      },
+      {
+        "method": "GET",
+        "path": "/logos/nexus-wordmark-dark.svg"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/agents"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/info"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/graph"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/workspaces"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/home/harness-board"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/stream"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/stream"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/operator/unread-count"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/graph"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/home/harness-board"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/attention/summary"
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/observations/instances/obs_inst_0000000000000002"
+      }
+    ]
+  },
+  "locator_diagnosis": {
+    "assertion": "exact-observed-completion-open",
+    "expected_by_test": "dialog Activity detail",
+    "actual_retained_snapshot": "dialog Canonical attention record",
+    "selected_completion_region_and_exact_reference_visible_after_failure": true,
+    "cause_proven": "Wrong dialog-name scope in the assertion; actual external inspector exists.",
+    "fetch_timing_or_product_defect_claimed": false,
+    "proposed_derivative": "Use actual canonical dialog, wait for exact reference inside selected completion episode, then assert full safe source/instance/generation/workspace/sequence identity; retain failure DOM/HTTP metadata privately."
+  },
+  "reader_audit": [
+    {
+      "marker": "security-obs-owner",
+      "ordinal": 1,
+      "kind": "missing",
+      "bytes": null,
+      "sha256": null
+    },
+    {
+      "marker": "security-obs-owner",
+      "ordinal": 2,
+      "kind": "missing",
+      "bytes": null,
+      "sha256": null
+    }
+  ],
+  "reader_audit_note": "Two missing-file reads only; no invalid-JSON reads in this cut. Does not prove previous transient-write cause.",
+  "variant_guard": {
+    "before": {
+      "gate_sha256": "cbb3fcbdf0126a73be366f2e31229ec910083f8674efb6922295c678bc66d158",
+      "variant_manifest_sha256": "4168b8d850e6aa6704a83497fa11121172c3840a5b3f5048fe6c11637aed217b",
+      "effective_driver_sha256": "2b5868ab19112ea425aa0b431f580546d87788a9083d6691b80a94bf1e3b3ad5",
+      "base_manifest_sha256": "25f48720da92f390b4f52a2caf7d21e8d220f2085b4b30787489826e2724e29a"
+    },
+    "after": {
+      "gate_sha256": "cbb3fcbdf0126a73be366f2e31229ec910083f8674efb6922295c678bc66d158",
+      "variant_manifest_sha256": "4168b8d850e6aa6704a83497fa11121172c3840a5b3f5048fe6c11637aed217b",
+      "effective_driver_sha256": "2b5868ab19112ea425aa0b431f580546d87788a9083d6691b80a94bf1e3b3ad5",
+      "base_manifest_sha256": "25f48720da92f390b4f52a2caf7d21e8d220f2085b4b30787489826e2724e29a"
+    },
+    "unchanged": true
+  },
+  "source_payload_helper_guard": true,
+  "retained_completion_snapshot_comparison": {
+    "before": "before-obs",
+    "after": "after-completion",
+    "changes": [],
+    "allowed_observation_events": [
+      {
+        "type": "observation.activity",
+        "source_id": "obs_src_0000000000000001",
+        "observed_instance_id": "obs_inst_0000000000000002",
+        "generation": 2,
+        "sequence": 1,
+        "private_event_sha256": "b643a13da6822895c90a99326dd64a6971105944967aea0e3010b681d9e1a463",
+        "receipt_report_hash": "sha256:91c057ebe5739dd7e23fa5eda7f97e4f658aeacf0957704da6a6df4cbae9d98e",
+        "observational_only": true
+      },
+      {
+        "type": "observation.completion",
+        "source_id": "obs_src_0000000000000001",
+        "observed_instance_id": "obs_inst_0000000000000002",
+        "generation": 2,
+        "sequence": 2,
+        "private_event_sha256": "3b07aaa408fbf24a029b24d239ae6e8069a5c6c3e702ec26f9a03f1a62fdddb2",
+        "receipt_report_hash": "sha256:fd0436360b44f80d6f3d67418869fb766ed916ec52c8a8dd3babfea3a45538d8",
+        "observational_only": true
+      }
+    ],
+    "expected_observation_errors": [],
+    "causality": "NOT_ATTRIBUTED",
+    "ignored_tables": [],
+    "ignored_columns": [],
+    "private_rows_curated": false
+  },
+  "comparison_scope": "Read-only after-exit comparison; live run did not reach completion comparator because the browser assertion failed.",
+  "physical_recheck": {
+    "known_birth_records": 36,
+    "survivors": []
+  },
+  "cleanup": {
+    "fixture": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "browser": {
+      "forced_births": [],
+      "remaining": []
+    },
+    "listeners": [],
+    "browser_close_exit_code": 0,
+    "session_closed_flags": [
+      true,
+      true
+    ],
+    "close_failures": []
+  },
+  "limits": [
+    "E13 cut remains failed despite five completion checks passing; no automatic rerun.",
+    "H08 occupied-claim/slot clause remains partial.",
+    "Raw rows, browser snapshot, cookie and publisher token are not copied."
+  ]
+}

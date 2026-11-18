@@ -1,0 +1,50 @@
+{
+  "chrome-argv.private.json": {
+    "sha256": "b0407e3398b8d059677805db4afdd54e07900cf088d9ed21cfa8b27a05fdbe4e",
+    "bytes": 3416
+  },
+  "command-cleanup-browser.private.txt": {
+    "sha256": "99bf974450e4175bbd98744ae2b57c6f2c6a9fd8ef4103ea286fc57e2e4ab10f",
+    "bytes": 52
+  },
+  "command-launch-browser.private.txt": {
+    "sha256": "e61d27435a0c81d4bb5a38d7b59ad43e1dc4b5e1dac36cabc8bffb4e87696ffa",
+    "bytes": 323
+  },
+  "control\\zoom-probe-final.json": {
+    "sha256": "04d080eb7355faf4df1274cb3c1f01a0536d4465651013b3be250311741a794c",
+    "bytes": 84
+  },
+  "control\\zoom-probe-ready.json": {
+    "sha256": "3f102b290ff803c413e4d9780b4be77c3d76e009199cd47639bf904d893599ab",
+    "bytes": 161
+  },
+  "first-failure.private.json": {
+    "sha256": "afb0675bfd86114c4473ad5c94747141d41aeadf2466a8f294e725542712984d",
+    "bytes": 52
+  },
+  "native-zoom-run.private.json": {
+    "sha256": "d765bfdc7552cb65f4051b3623fc9568428854935dadee92574788f6cff3e340",
+    "bytes": 7787
+  },
+  "playwright-cli.json": {
+    "sha256": "b34f903d5a12bd8ef91fd146aa2ee9545d1814cec210c5088c8ae8ece43ea890",
+    "bytes": 310
+  },
+  "probe.private.log": {
+    "sha256": "679faf760b478fcca1eb58c0bc70f13ad8acbda4aba94a3067e4a9b15b77c5ae",
+    "bytes": 146
+  },
+  "qualification.json": {
+    "sha256": "45e3ee21018a92f704d09d28b85b32d966406af61e6215d841c7abd0cc0a9130",
+    "bytes": 3287
+  },
+  "runtime-ready.json": {
+    "sha256": "6ff51fed9682cc6ecad4e1138071a4a32ccd3e0c249c8a9161fc53b8ec3802c7",
+    "bytes": 1699
+  },
+  "zoom-probe.py": {
+    "sha256": "1fe04f4dbffbef537c3e254acc0a2cb419d208372a7329dcb782b7646e8ec88b",
+    "bytes": 2522
+  }
+}

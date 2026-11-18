@@ -1,0 +1,71 @@
+{
+  "status": "FAILED_BROWSER_CUT_RETAINED_READ_ONLY_POST_REVIEW",
+  "qualification_status_unchanged": "FAIL_OR_INCONCLUSIVE_PRESERVED",
+  "browser_assertion_phases_executed": 0,
+  "publication_sequences_present": [
+    1
+  ],
+  "second_publication_not_performed": true,
+  "retained_idle_snapshot_comparison": {
+    "before": "before-obs",
+    "after": "after-idle",
+    "changes": [],
+    "allowed_observation_events": [
+      {
+        "type": "observation.activity",
+        "source_id": "obs_src_0000000000000001",
+        "observed_instance_id": "obs_inst_0000000000000002",
+        "generation": 2,
+        "sequence": 1,
+        "private_event_sha256": "e2514b602cef89b5dcf29122b5a50a798d9a942ffbc3fae18510a236cb3e8d63",
+        "receipt_report_hash": "sha256:eaf7cf235cb4ce784f593ccf344f0d0bf50569cf190f5cdb2538cb60cd79e4cf",
+        "observational_only": true
+      }
+    ],
+    "expected_observation_errors": [],
+    "causality": "NOT_ATTRIBUTED",
+    "ignored_tables": [],
+    "ignored_columns": [],
+    "private_rows_curated": false
+  },
+  "runtime_drift_comparison_was_not_reached": true,
+  "control_done_retained": [
+    "security-obs-idle",
+    "security-obs-owner"
+  ],
+  "parsing_diagnosis": {
+    "basis": "Retained artifacts and frozen control flow, not a captured traceback or transient file bytes",
+    "file_inferred_from_control_flow": "control/controls.json",
+    "reader": "run.py control(): json.loads(path.read_text())",
+    "writer": "fixture.py write(): Path.write_text(json.dumps(...)); called after done.add(name)",
+    "observations": [
+      "Owner marker and idle marker both exist; idle marker is created only after owner control returns and owner JSON is parsed.",
+      "After idle marker the next JSON parser before idle.js creation is control() reading controls.json.",
+      "idle.js does not exist; control JSON is valid after shutdown and done includes idle.",
+      "Failure reports line 1 column 1; no transient failing bytes or traceback were retained."
+    ],
+    "concurrent_write_hypothesis_not_proven": true,
+    "product_failure_or_partial_write_cause_claimed": false
+  },
+  "physical_recheck": {
+    "known_birth_records": 24,
+    "survivors": []
+  },
+  "cleanup": {
+    "fixture_exit_code": 0,
+    "fixture_status": "EXITED",
+    "browser_close_exit_code": 0,
+    "forced_births": [],
+    "listeners_at_cleanup": [],
+    "session_closed_flags": [
+      true,
+      true
+    ],
+    "close_failures": []
+  },
+  "limits": [
+    "E13 browser assertions NOT_RUN; no reported-completion observation was published.",
+    "H08 active-claim clause remains unqualified: no occupied claim/slot baseline.",
+    "Post-exit idle comparison is read-only evidence, not a successful browser phase or rerun."
+  ]
+}

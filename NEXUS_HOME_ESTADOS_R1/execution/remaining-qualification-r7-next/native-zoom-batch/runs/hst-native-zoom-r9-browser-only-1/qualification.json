@@ -1,0 +1,91 @@
+{
+  "status": "DIAGNOSTIC_FAIL_OR_NOT_RUN",
+  "actual_browser_status": null,
+  "scope": "Native Chrome Settings zoom only; I05 application scenario NOT_RUN",
+  "first_failure": {
+    "type": "AssertionError",
+    "message": ""
+  },
+  "cleanup_errors": [],
+  "forced_births": [],
+  "remaining_births": [],
+  "physical": {
+    "profile_processes": [],
+    "listeners": [],
+    "port": 51410
+  },
+  "probe_exit_code": 0,
+  "nexus_processes_started": 0,
+  "provider_invocations": 0,
+  "before": {
+    "manifest_sha256": "a42997692daa7030ee34efbd61ca876223abcf2eaa32bcd422e599dd14ca31ce",
+    "gate_sha256": "64be149b6a8eef83ef3b9b64903105cf388406e4af1affb291753fd3f8a5ace2",
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031,
+    "source_files": 1829,
+    "cli_files": 192
+  },
+  "after": {
+    "manifest_sha256": "a42997692daa7030ee34efbd61ca876223abcf2eaa32bcd422e599dd14ca31ce",
+    "gate_sha256": "64be149b6a8eef83ef3b9b64903105cf388406e4af1affb291753fd3f8a5ace2",
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031,
+    "source_files": 1829,
+    "cli_files": 192
+  },
+  "source_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-0mgi66ve",
+  "copied": [
+    {
+      "path": "native-zoom-run.private.json",
+      "sha256": "d765bfdc7552cb65f4051b3623fc9568428854935dadee92574788f6cff3e340"
+    },
+    {
+      "path": "first-failure.private.json",
+      "sha256": "afb0675bfd86114c4473ad5c94747141d41aeadf2466a8f294e725542712984d"
+    },
+    {
+      "path": "chrome-argv.private.json",
+      "sha256": "b0407e3398b8d059677805db4afdd54e07900cf088d9ed21cfa8b27a05fdbe4e"
+    },
+    {
+      "path": "runtime-ready.json",
+      "sha256": "6ff51fed9682cc6ecad4e1138071a4a32ccd3e0c249c8a9161fc53b8ec3802c7"
+    },
+    {
+      "path": "zoom-probe.py",
+      "sha256": "1fe04f4dbffbef537c3e254acc0a2cb419d208372a7329dcb782b7646e8ec88b"
+    },
+    {
+      "path": "playwright-cli.json",
+      "sha256": "b34f903d5a12bd8ef91fd146aa2ee9545d1814cec210c5088c8ae8ece43ea890"
+    },
+    {
+      "path": "probe.private.log",
+      "sha256": "679faf760b478fcca1eb58c0bc70f13ad8acbda4aba94a3067e4a9b15b77c5ae"
+    },
+    {
+      "path": "control/zoom-probe-ready.json",
+      "sha256": "3f102b290ff803c413e4d9780b4be77c3d76e009199cd47639bf904d893599ab"
+    },
+    {
+      "path": "control/zoom-probe-final.json",
+      "sha256": "04d080eb7355faf4df1274cb3c1f01a0536d4465651013b3be250311741a794c"
+    },
+    {
+      "path": "command-cleanup-browser.private.txt",
+      "sha256": "99bf974450e4175bbd98744ae2b57c6f2c6a9fd8ef4103ea286fc57e2e4ab10f"
+    },
+    {
+      "path": "command-launch-browser.private.txt",
+      "sha256": "e61d27435a0c81d4bb5a38d7b59ad43e1dc4b5e1dac36cabc8bffb4e87696ffa"
+    }
+  ],
+  "limits": [
+    "No Nexus application was started",
+    "No human/AT/native display settings",
+    "Containment, if used, is a diagnostic failure, never normal cleanup",
+    "Own profile/preferences/OS config files are not copied"
+  ]
+}

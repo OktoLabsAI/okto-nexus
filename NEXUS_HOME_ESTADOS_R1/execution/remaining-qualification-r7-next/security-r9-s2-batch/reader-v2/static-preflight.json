@@ -1,0 +1,17 @@
+{
+  "status": "PASS_STATIC_PREPARATION_ONLY",
+  "manifest_sha256": "4168b8d850e6aa6704a83497fa11121172c3840a5b3f5048fe6c11637aed217b",
+  "effective_driver_sha256": "2b5868ab19112ea425aa0b431f580546d87788a9083d6691b80a94bf1e3b3ad5",
+  "base_manifest_sha256": "25f48720da92f390b4f52a2caf7d21e8d220f2085b4b30787489826e2724e29a",
+  "variant_pins": 5,
+  "base_input_pins": 36,
+  "pin_mismatches": 0,
+  "ast_pass": true,
+  "marker_touch_count": 1,
+  "control_deadline_unchanged": true,
+  "owner_deadline_unchanged": true,
+  "writer_unchanged": true,
+  "allocated": false,
+  "runtime_executed": false,
+  "root_gate_not_yet_present": true
+}

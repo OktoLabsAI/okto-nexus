@@ -5551,7 +5551,7 @@
       "when": "Montar Results",
       "then": "Término reportado, evidência externa identificada; não sucesso nativo nem verificação.",
       "level": "unidade + SQLite/HTTP + apresentação",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -5561,9 +5561,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Reported helper+legacy board proven; canonical external producer v2 delivery semantics plus presentation boundary not fully qualified. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T00:25:42.643974+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/security-r9-s2-batch/runs/hst-security-r9-s2-observed-completion-v3/qualification.json",
+          "environment": "Fresh installed R9, actual own-profile Chrome, canonical source/instance/token and observation publication APIs, canonical Core with inert native peer; no provider",
+          "command_or_procedure": "Publish sequence1 idle and sequence2 external completion once each; inspect actual board and exact canonical-attention completion episode; compare thirty productive tables across both live publication/read windows",
+          "result": "PASS13 browser predicates: unlinked idle creates no native session/result, exactly one reported delivery with unknown native outcome/verification, explicit Not verified by Nexus, exact source/instance/workspace/generation/sequence2 reference opens; GET-only; two table comparisons permit only the exact scoped observational events and no other changes; guards0drift, normal0/physical0, both canonical session closes confirmed",
+          "limitations": "No occupied claim or one-shot slot in this baseline, so H08 capacity-release clause is not qualified. Earlier JSON parsing failure and wrong-modal oracle cut remain unchanged. Reader audit observed two missing-control-file reads and zero invalid JSON; it does not prove the first failure cause. No native success/task completion/verification or real provider claim."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Reported helper+legacy board proven; canonical external producer v2 delivery semantics plus presentation boundary not fully qualified."
+      "execution_notes": "Actual canonical reported-completion API/SQLite plus installed browser qualifies explicit reported evidence, no native success/verification, and exact external-completion detail."
     },
     {
       "id": "HST-T-E14",
@@ -6518,9 +6527,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Reported projection has no native success; OBS source stateful slot/claim/grant snapshot plus browser not covered. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T00:25:42.643974+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/security-r9-s2-batch/runs/hst-security-r9-s2-observed-completion-v3/qualification.json",
+          "environment": "Fresh installed R9, actual own-profile Chrome, canonical source/instance/token and observation publication APIs, canonical Core with inert native peer; no provider",
+          "command_or_procedure": "Publish sequence1 idle and sequence2 external completion once each; inspect actual board and exact canonical-attention completion episode; compare thirty productive tables across both live publication/read windows",
+          "result": "PASS13 browser predicates: unlinked idle creates no native session/result, exactly one reported delivery with unknown native outcome/verification, explicit Not verified by Nexus, exact source/instance/workspace/generation/sequence2 reference opens; GET-only; two table comparisons permit only the exact scoped observational events and no other changes; guards0drift, normal0/physical0, both canonical session closes confirmed",
+          "limitations": "No occupied claim or one-shot slot in this baseline, so H08 capacity-release clause is not qualified. Earlier JSON parsing failure and wrong-modal oracle cut remain unchanged. Reader audit observed two missing-control-file reads and zero invalid JSON; it does not prove the first failure cause. No native success/task completion/verification or real provider claim."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Reported projection has no native success; OBS source stateful slot/claim/grant snapshot plus browser not covered."
+      "execution_notes": "PARTIAL: only two exact observational events change across thirty tables; runtime/grant/handoff rows stay identical. No occupied claim/one-shot slot exists in this baseline, so capacity release under active work remains unexecuted."
     },
     {
       "id": "HST-T-H09",
@@ -6726,9 +6744,18 @@
           "result": "Audit: NOT_RUN",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "360px stacked/nooverflow passed; 200% zoom +longnames +return same detail not run. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T00:24:38.848592+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/native-zoom-batch/runs/hst-native-zoom-r9-browser-only-2/qualification.json",
+          "environment": "Own-profile actual Chrome Settings and static own loopback geometry page; no Nexus or provider started",
+          "command_or_procedure": "Select100% then200% in actual Chrome Page zoom control at unchanged720x1000 viewport; measure actual DPR/CSS viewport/outer/screen/visualViewport and capture executable/birth ancestry",
+          "result": "PASS14 native-browser guard checks: DPR1→2 and CSS720x1000→360x500, unchanged outer/screen, visualViewport.scale1; normal CLI/probe exit, physical absence and source1829/payload1031/tool192 unchanged",
+          "limitations": "Prerequisite only. No responsive Nexus application, long-name interaction, context return, keyboard/AT or whole I05 qualification. Earlier launcher-PID/locale-selector failure retained."
         }
       ],
-      "execution_notes": "360px stacked/nooverflow passed; 200% zoom +longnames +return same detail not run."
+      "execution_notes": "PARTIAL: prior360px app layout plus separate actual native Chrome200% capability proven. Combined app200%/longnames/action access/same-context return remains unexecuted; I05 is not promoted."
     },
     {
       "id": "HST-T-I06",
@@ -7584,7 +7611,6 @@
       "remaining_qualification": "Inspect literal NOT_RUN/BLOCKED rows and remaining-qualification-review-r7.md",
       "provisioning": "No short-lived human fixture until participant confirms availability",
       "pending_local_scopes": [
-        "external observation browser security",
         "no-dashboard CLI and full classic-control navigation",
         "old-producer state read compatibility",
         "stream/validity and remaining literal supported clauses"
@@ -7773,6 +7799,30 @@
       "K03": "PARTIAL_CLASSIC_CONTROL_NAVIGATION_NOT_RUN",
       "K05": "NO_DASHBOARD_NOT_RUN",
       "S4": "NOT_RUN"
+    },
+    "r9_native_zoom_prerequisite": {
+      "status": "PASS_NATIVE_BROWSER_ONLY",
+      "qualification": "execution/remaining-qualification-r7-next/native-zoom-batch/runs/hst-native-zoom-r9-browser-only-2/qualification.json",
+      "checks": 14,
+      "nexus_started": false,
+      "I05_app": "NOT_RUN",
+      "human": "NOT_INVITED"
+    },
+    "r9_security_s2": {
+      "status": "PASS_SCOPED_E13",
+      "qualification": "execution/remaining-qualification-r7-next/security-r9-s2-batch/runs/hst-security-r9-s2-observed-completion-v3/qualification.json",
+      "browser_checks": 13,
+      "live_table_windows": 2,
+      "tables_per_window": 30,
+      "allowed_event_sequences": [
+        1,
+        2
+      ],
+      "provider_calls": 0,
+      "canonical_session_closes": "BOTH_CONFIRMED",
+      "normal_exit": true,
+      "physical_absence": true,
+      "H08_occupied_capacity": "NOT_RUN"
     }
   }
 }

@@ -1,0 +1,45 @@
+--- frozen S2 template
++++ completion locator counterpart
+@@ -1,7 +1,8 @@
+ async page => {
+-  const cfg=__CONFIG__,checks=[],requests=[];
++  const cfg=__CONFIG__,checks=[],requests=[],responses=[];
+   const check=(id,ok,detail)=>{checks.push({id,ok,detail});if(!ok)throw Error(id);};
+   page.on('request',r=>requests.push({method:r.method(),path:new URL(r.url()).pathname}));
++  page.on('response',r=>responses.push({method:r.request().method(),path:new URL(r.url()).pathname,status:r.status()}));
+   try {
+     await page.reload({waitUntil:'domcontentloaded'});
+     await page.getByTestId('home-board').waitFor({timeout:15000});
+@@ -33,12 +34,28 @@
+       check('not-verified-label',await card.getByText('Not verified by Nexus',{exact:true}).count()===1,true);
+       check('no-native-success-label',!/(Task completed|Delivery verified|Turn completed)/.test(await card.innerText()),true);
+       await card.getByRole('button',{name:'View result',exact:true}).click();
+-      const dialog=page.getByRole('dialog',{name:'Activity detail'});
+-      await page.getByTestId('external-instance-'+cfg.owner.observed_instance_id).waitFor({timeout:10000});
+-      check('exact-observed-completion-open',await dialog.getByText('hst-security-reported-completion',{exact:true}).count()>=1,true);
++      const dialog=page.getByRole('dialog',{name:'Canonical attention record',exact:true});
++      const episode=dialog.getByTestId('external-completion-episode');
++      const completionReference=episode.getByText('hst-security-reported-completion',{exact:true});
++      await completionReference.waitFor({state:'visible',timeout:10000});
++      const inspector=dialog.getByTestId('external-instance-'+cfg.owner.observed_instance_id);
++      await inspector.waitFor({state:'visible',timeout:10000});
++      const report=delivery.entry.external.find(exact);
++      check('exact-observed-completion-open',
++        report.workspace_id===cfg.reference.workspace_id&&report.last_report.sequence===2&&
++        report.last_report.current_completion_ref==='hst-security-reported-completion'&&
++        await completionReference.count()===1&&
++        await inspector.getByText(cfg.owner.source_id,{exact:true}).count()===1&&
++        await inspector.getByText(cfg.owner.observed_instance_id,{exact:true}).count()===1&&
++        await inspector.getByText(cfg.reference.workspace_id,{exact:true}).count()===1&&
++        await inspector.getByText('Instance · generation '+cfg.owner.generation,{exact:true}).count()===1&&
++        /Sequence: 2(?:\s|$)/.test(await inspector.innerText()),true);
+       await dialog.getByRole('button',{name:'Close modal',exact:true}).click();
+     }
+     check('browser-passive-only',requests.every(x=>['GET','HEAD','OPTIONS'].includes(x.method)),requests);
+     return {status:'PASS_SUBSET',checks,requests,limits:['Typed reported evidence only; productive-table snapshot assertions are separate','No native session correlation, capacity release or verification inferred']};
+-  }catch(error){return {status:'FAIL',error:String(error),checks,requests};}
++  }catch(error){
++    const dialogs=await page.getByRole('dialog').evaluateAll(nodes=>nodes.map(node=>node.outerHTML.slice(0,100000))).catch(()=>[]);
++    return {status:'FAIL',error:String(error),checks,requests,errorDiagnostics:{dialogs,responses}};
++  }
+ }
