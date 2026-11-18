@@ -1,0 +1,50 @@
+{
+  "recorded_on": "2026-11-18",
+  "tasks": ["SI-021", "SI-024"],
+  "scope": "Controlled Windows qualification of the shipped opt-in local Codex write path",
+  "artifacts": {
+    "directory": "%TEMP%/nexus-si-native-write-delivery-build-acf16f9105d04f1fb15dbf744059c9d3",
+    "nexus_wheel_sha256": "101844d827cbbf1cb7e2d5d2c35f4d71e0f5cf5ec45e918f436466483ed51392",
+    "nexus_sdist_sha256": "f1f00849807586da2f21275ac03cb24347b101eaaf087a6d5edcc594c78400f3",
+    "core_wheel_sha256": "d451ca4ff86fe2991f231480929cbb5153fe3a265f5b91502e4c9da1c5ea7303",
+    "strict_twine": "PASS",
+    "changed_modules_matched_to_wheel": 9
+  },
+  "environment": {
+    "viewer": "Codex 0.170.0 in Windows ConPTY",
+    "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "app_server": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "model_boundary": "Deterministic Responses SSE on loopback in isolated projects",
+    "external_provider_calls": 0
+  },
+  "installed_regressions_passed": 25,
+  "cases": {
+    "actual_frontend_write": {
+      "fixture": "%TEMP%/nexus-si-native-cli-write-ab26b8f7638a4272bbf46aac26322443/test_real_native_write.py",
+      "fixture_sha256": "c1e7cf6c6bab8dea26398f7cd08aaa002187dc5fef2c9934cdd350d4f61d24d6",
+      "result": "PASS",
+      "observations": ["One authenticated canonical terminal input", "Exact committed native start returned to the frontend", "Implicit steer refused and visible in frontend", "One normal detach"],
+      "sqlite_operations": {"runtime.open": 1, "turn.submit": 1, "runtime.close": 1},
+      "accepted_inputs_in_sequence_order": ["native_terminal"]
+    },
+    "concurrent_inputs_and_pending_viewer_exit": {
+      "fixture": "%TEMP%/nexus-si-native-write-paused-d61818c85e6948a18cc310a8a1a22157/test_real_native_paused.py",
+      "fixture_sha256": "46c9ef924289021cc690612c9dbc9e9e40273fc0adfa28f36798097935ea5b18",
+      "result": "PASS",
+      "observations": ["Concurrent native frontend and Home HTTP input", "Durable queue status printed by Nexus", "Only the owned test viewer force-closed while awaiting its pending RPC", "No native send until explicit queue resume", "Same thread and existing grant"],
+      "sqlite_operations": {"runtime.open": 1, "turn.submit": 2, "runtime.close": 1},
+      "accepted_inputs_in_sequence_order": ["web", "native_terminal"]
+    },
+    "delayed_response_with_viewer_attached": {
+      "fixture": "%TEMP%/nexus-si-native-write-delayed-91b70e0c94df4cc49d082dfa853a2289/test_delayed_native_response.py",
+      "fixture_sha256": "21de317cdd3722db8185a11f5042fcd1217b4ab74479558702676dff97e761ef",
+      "result": "PASS",
+      "observations": ["Delayed native response after explicit queue resume", "Result visible in the same viewer", "Same thread and existing grant", "Normal viewer exit after completion"],
+      "sqlite_operations": {"runtime.open": 1, "turn.submit": 2, "runtime.close": 1},
+      "accepted_inputs_in_sequence_order": ["native_terminal", "web"]
+    }
+  },
+  "sqlite_final_state_in_each_case": {"sessions": ["CLOSED"], "presentations": ["DETACHED"]},
+  "limitations": ["The pinned native frontend does not process Ctrl+D while waiting for a paused turn/start", "Native steer requires confirmation in Nexus", "The provider campaign required by SI-T-G09 remains pending"]
+}

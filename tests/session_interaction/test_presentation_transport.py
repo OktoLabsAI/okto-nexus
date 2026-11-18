@@ -30,6 +30,7 @@ from okto_nexus.application import (
 )
 from okto_nexus.application.codex_presenter_history import CodexHistorySnapshot
 from okto_nexus.application.codex_viewer_protocol import (
+    CodexPendingInput,
     CodexViewerContext,
     CodexViewerProtocol,
 )
@@ -453,3 +454,36 @@ def test_native_inline_history_has_shared_scope_and_refuses_partial_reads(tmp_pa
     state['cursor'] = 'continuation'
     assert protocol.handle(read)['error']['code'] == -32601
     assert calls[-1] == 'thread/turns/list' and calls.count('thread/items/list') == 1
+
+
+def test_native_next_turn_accepts_only_exact_plain_text_and_keeps_steer_separate(tmp_path):
+    context = viewer_context(tmp_path)
+    recorded = []
+
+    def send(**kwargs):
+        recorded.append(kwargs)
+        return CodexPendingInput('receipt', 'Message recorded')
+
+    protocol = CodexViewerProtocol(context=context, read_page=lambda **_: {'data': [], 'nextCursor': None},
+        viewer_home=str(tmp_path), platform_os='windows', send_next_turn=send)
+    protocol.handle({'id': 1, 'method': 'initialize'})
+    protocol.handle({'id': 2, 'method': 'thread/read', 'params': {'threadId': THREAD, 'includeTurns': True}})
+    client_id = '24447be9-beb8-47a4-ace2-a734561c7b88'
+    params = {'threadId': THREAD, 'clientUserMessageId': client_id,
+        'input': [{'type': 'text', 'text': 'My text.\nSecond line.', 'text_elements': []}],
+        'turnTrigger': 'user', 'cwd': context.cwd, 'model': context.model,
+        'approvalPolicy': context.approval_policy, 'serviceTier': 'default', 'effort': context.reasoning_effort}
+    request = {'id': 3, 'method': 'turn/start', 'params': params}
+    for changed in ({'threadId': 'sibling'}, {'cwd': '/other'}, {'model': 'other'}, {'sandboxPolicy': {}},
+                    {'clientUserMessageId': 'different'}, {'input': [{'type': 'text', 'text': '/send something'}]},
+                    {'input': [{'type': 'image', 'url': 'file:///unavailable'}]}, {'unexpected': True}):
+        assert 'error' in protocol.handle(request | {'params': params | changed})
+    steer = protocol.handle(request | {'method': 'turn/steer'})
+    assert 'confirm reorientation' in steer['error']['message']
+    assert not recorded
+    assert protocol.handle(request) is None
+    assert recorded == [{'thread_id': THREAD, 'intent': 'codex_' + client_id, 'text': 'My text.\nSecond line.'}]
+    assert protocol.pending_delivery == (3, CodexPendingInput('receipt', 'Message recorded'))
+    following = request | {'id': 5, 'params': params | {'clientUserMessageId': '766bc061-86e2-4df3-a032-faafb16b3987'}}
+    assert 'preceding message' in protocol.handle(following)['error']['message']
+    assert protocol.pending_delivery[0] == 3 and len(recorded) == 1

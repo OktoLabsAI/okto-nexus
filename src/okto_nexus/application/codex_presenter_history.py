@@ -2,6 +2,7 @@
 
 import hashlib
 import hmac
+import json
 import secrets
 from copy import deepcopy
 from dataclasses import dataclass, field
@@ -96,6 +97,33 @@ def _read_page(factory, *, mapping, context, access, after_sequence, limit):
             page['scope'].get(field) != expected for field, expected in scope.items()):
         raise OktoNexusError(ErrorCode.NOT_FOUND, 'The history is outside this presentation.', {})
     return page
+
+
+def read_codex_input_start(factory, *, mapping, operation_id):
+    """Project the committed start belonging to an already authorized input."""
+    if mapping.stream_epoch is None:
+        return None
+    with factory.unit_of_work(write=False) as uow:
+        rows = uow.connection.execute("""
+            SELECT e.payload_json,e.event_hash FROM execution_event_ingress e
+            JOIN execution_event_watermarks w USING(server_id,executor_id,session_id,stream_epoch)
+            WHERE e.server_id=:server_id AND e.executor_id=:executor_id AND e.session_id=:session_id
+              AND e.stream_epoch=:stream_epoch AND e.sequence<=w.committed_contiguous AND w.gap_state='none'
+              AND e.event_type='turn_state' AND json_extract(e.payload_json,'$.operation_id')=:operation_id
+              AND json_extract(e.payload_json,'$.native_type')='turn/started'
+              AND json_extract(e.payload_json,'$.payload.delivery_phase')='started'
+            LIMIT 2
+        """, {**_scope_params(mapping.scope), 'stream_epoch': mapping.stream_epoch,
+              'operation_id': operation_id}).fetchall()
+    if len(rows) != 1:
+        return None
+    raw = rows[0]['payload_json']
+    if rows[0]['event_hash'] != 'sha256:' + hashlib.sha256(raw.encode()).hexdigest():
+        return None
+    method, _, turn = _project_event(json.loads(raw), mapping.codex_thread_id)
+    if method == 'turn/started':
+        return {**turn, 'items': [], 'itemsView': 'notLoaded', 'error': None}
+    return None
 
 
 def read_codex_history_updates(factory, *, mapping, context, access, after_sequence, active_turn):

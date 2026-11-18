@@ -21,7 +21,11 @@ from wsproto.events import (
 )
 from wsproto.utilities import ProtocolError
 
-from ....application.codex_viewer_protocol import CodexViewerProtocol
+from ....application.codex_viewer_protocol import (
+    CodexInputStatus,
+    CodexPendingInput,
+    CodexViewerProtocol,
+)
 from ....application.terminal_connection import ConnectionError
 from ....domain.presentation_protocol import (
     MAX_PRESENTATION_REQUEST_BYTES,
@@ -88,7 +92,7 @@ def _notice(peer, wire, frame):
     _reply(peer, wire, {'jsonrpc': '2.0', **frame})
 
 
-def _viewer(peer, wire, protocol, stop, link):
+def _viewer(peer, wire, protocol, stop, link, report_input_status):
     parts, size, deadline = [], 0, None
     next_update = 0.0
 
@@ -99,6 +103,20 @@ def _viewer(peer, wire, protocol, stop, link):
                 or time.monotonic() < next_update):
             return
         next_update = time.monotonic() + _UPDATE_SECONDS
+        if protocol.pending_delivery is not None:
+            request_id, pending = protocol.pending_delivery
+            if pending.input_id is not None:
+                try:
+                    turn = link.confirm_input_delivery(pending.input_id)
+                except CodexInputStatus as status:
+                    if stop.is_set():
+                        return
+                    protocol.pending_delivery = (request_id, CodexPendingInput(None, str(status)))
+                    report_input_status(str(status))
+                else:
+                    if turn is not None:
+                        protocol.pending_delivery = None
+                        _reply(peer, wire, {'id': request_id, 'result': {'turn': turn}})
         for frame in link.updates(protocol.context.thread_id):
             if stop.is_set():
                 return
@@ -129,9 +147,12 @@ def _viewer(peer, wire, protocol, stop, link):
             deadline = deadline or time.monotonic() + _FRAME_SECONDS
             continue
         link.ensure_open()
+        previous_delivery = protocol.pending_delivery
         response = protocol.handle(strict_json(''.join(parts)))
         if response is not None:
             _reply(peer, wire, response)
+        elif protocol.pending_delivery is not previous_delivery:
+            report_input_status(protocol.pending_delivery[1].message)
         if protocol.detached:
             peer.sendall(wire.send(CloseConnection(code=1000)))
             return
@@ -139,7 +160,7 @@ def _viewer(peer, wire, protocol, stop, link):
         follow()
 
 
-def _serve_once(listener, *, host, secret, protocol, stop, link, connected):
+def _serve_once(listener, *, host, secret, protocol, stop, link, connected, report_input_status):
     expires = time.monotonic() + _CONNECT_SECONDS
     while not stop.is_set() and time.monotonic() < expires:
         try:
@@ -163,14 +184,14 @@ def _serve_once(listener, *, host, secret, protocol, stop, link, connected):
                 continue
             listener.close()
             try:
-                _viewer(peer, wire, protocol, stop, link)
+                _viewer(peer, wire, protocol, stop, link, report_input_status)
             except (ConnectionError, OSError, ProtocolError, RecursionError, TypeError, ValueError):
                 return
             return
 
 
 @contextmanager
-def local_codex_relay(link, *, viewer_home, platform_os):
+def local_codex_relay(link, *, viewer_home, platform_os, report_input_status=lambda _: None):
     """Own one loopback socket and its Server link. The viewer gets its own secret."""
     context = link.viewer_context()
     with socket.create_server(('127.0.0.1', 0), backlog=2) as listener:
@@ -180,12 +201,12 @@ def local_codex_relay(link, *, viewer_home, platform_os):
         stop = threading.Event()
         connected = threading.Event()
         protocol = CodexViewerProtocol(context=context, read_page=link.page, viewer_home=viewer_home,
-                                       platform_os=platform_os)
+            platform_os=platform_os, send_next_turn=link.send_next_turn if getattr(link, 'input_revision', None) else None)
 
         def serve():
             try:
                 _serve_once(listener, host=host, secret=('Bearer ' + token).encode(), protocol=protocol,
-                            stop=stop, link=link, connected=connected)
+                            stop=stop, link=link, connected=connected, report_input_status=report_input_status)
             finally:
                 link.close()
 

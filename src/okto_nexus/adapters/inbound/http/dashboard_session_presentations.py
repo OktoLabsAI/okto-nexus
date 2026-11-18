@@ -92,7 +92,13 @@ class _EnqueueRequest(_Document):
     content: TextInput
 
 
-_REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesRequest | _EnqueueRequest,
+class _InputDeliveryRequest(_Document):
+    kind: Literal['input_delivery']
+    request_id: Revision
+    input_id: Identifier
+
+
+_REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest | _UpdatesRequest | _EnqueueRequest | _InputDeliveryRequest,
                                  Field(discriminator='kind')])
 
 
@@ -226,6 +232,8 @@ async def _present(ws, services, author, attachment_id, ticket):
                 reply = {'kind': 'page', 'page': page}
             elif isinstance(request, _EnqueueRequest):
                 reply = await _enqueue(ws.app.state, services, active, history, request)
+            elif isinstance(request, _InputDeliveryRequest):
+                reply = {'kind': 'input_delivery', 'input_delivery': await history.input_delivery(request.input_id)}
             else:
                 if not services.live_updates:
                     raise ValueError('Presentation updates are unavailable')

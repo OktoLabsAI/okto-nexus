@@ -1,10 +1,11 @@
-"""Launch the reviewed read-only Codex frontend on the operator's terminal."""
+"""Launch the reviewed Codex frontend on the operator's terminal."""
 
 import hashlib
 import os
 import platform
 import socket
 import subprocess
+import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from uuid import UUID
@@ -20,7 +21,7 @@ _AUTH_VARIABLE = 'NEXUS_CODEX_VIEWER_TOKEN'
 
 
 def select_viewer(executable=None):
-    """Use the exact frontend build exercised with the local read-only relay."""
+    """Use the exact frontend build exercised with the local relay."""
     if os.name != 'nt' or platform.machine().casefold() not in {'amd64', 'x86_64'}:
         raise ConnectionError('VIEWER_BUILD_UNAVAILABLE', 'This platform has no reviewed local Codex viewer build.')
     try:
@@ -60,6 +61,12 @@ def _check_viewer(executable):
             raise ConnectionError('VIEWER_BUILD_CHANGED', 'The reviewed Codex executable changed before launch.')
 
 
+def _report_input_status(message):
+    # Codex waits for the native turn/start reply before painting its next RPC
+    # notification. The attached Nexus console can report the durable queue now.
+    print(f'\n{message}', file=sys.stderr, flush=True)
+
+
 def present_codex(link, executable):
     """The foreground process is the viewer. Exiting closes only its attachment."""
     try:
@@ -70,7 +77,8 @@ def present_codex(link, executable):
             project = root / 'project'
             project.mkdir()
             environment = _environment(root / 'profile', f'http://127.0.0.1:{deny_proxy.getsockname()[1]}')
-            with local_codex_relay(link, viewer_home=environment['CODEX_HOME'], platform_os='windows') as endpoint:
+            with local_codex_relay(link, viewer_home=environment['CODEX_HOME'], platform_os='windows',
+                                   report_input_status=_report_input_status) as endpoint:
                 thread_id = str(UUID(endpoint.thread_id))
                 if thread_id != endpoint.thread_id:
                     raise ValueError('Invalid native session identity')

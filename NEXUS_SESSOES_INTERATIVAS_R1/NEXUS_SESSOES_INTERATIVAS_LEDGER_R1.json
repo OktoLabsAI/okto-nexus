@@ -1029,7 +1029,9 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "execution/si021-codex-terminal-queue.md",
-        "execution/si021-codex-terminal-queue.json"
+        "execution/si021-codex-terminal-queue.json",
+        "execution/si024-codex-native-input-windows.md",
+        "execution/si024-codex-native-input-windows.json"
       ]
     },
     {
@@ -1153,7 +1155,9 @@
         "execution/si024-codex-busy-presentation.md",
         "execution/si024-codex-controlled-windows.json",
         "execution/si024-codex-interrupt-queue-windows.json",
-        "execution/si024-codex-interrupt-queue-windows.md"
+        "execution/si024-codex-interrupt-queue-windows.md",
+        "execution/si024-codex-native-input-windows.md",
+        "execution/si024-codex-native-input-windows.json"
       ]
     },
     {
@@ -3769,7 +3773,9 @@
       "status": "NOT_RUN",
       "evidence": [
         "execution/si021-codex-terminal-queue.md",
-        "execution/si021-codex-terminal-queue.json"
+        "execution/si021-codex-terminal-queue.json",
+        "execution/si024-codex-native-input-windows.md",
+        "execution/si024-codex-native-input-windows.json"
       ]
     },
     {

@@ -1,15 +1,60 @@
-"""Scoped read-only protocol presented to the Codex 0.170.0 terminal."""
+"""Scoped protocol presented to the reviewed Codex 0.170.0 terminal."""
 
+from dataclasses import dataclass
 from pathlib import PurePosixPath, PureWindowsPath
 from typing import Annotated, Literal
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, Field, JsonValue
 
+from ..domain.session_interaction import validate_input_text
 from ..errors import OktoNexusError
-from .codex_presenter_requests import codex_history_page, codex_thread_presentation
+from .codex_presenter_requests import (
+    _exact_uuid,
+    codex_history_page,
+    codex_thread_presentation,
+)
 
 HISTORY_METHODS = ('thread/turns/list', 'thread/items/list')
 THREAD_METHODS = ('thread/read', 'thread/resume')
+_TURN_START_NULL_FIELDS = frozenset({
+    'disabledPluginIds', 'parentTurnId', 'rootTurnId', 'toolOutput', 'responsesapiClientMetadata',
+    'responsesapiClientMetadataPatch', 'additionalContext', 'environments', 'approvalsReviewer',
+    'sandboxPolicy', 'permissions', 'serviceTierForTurn', 'summary', 'personality', 'outputSchema',
+    'collaborationMode', 'multiAgentMode', 'cyberAccessProgram',
+})
+
+
+def _plain_next_turn(params, context):
+    """Strip only the unchanged defaults sent by the reviewed frontend."""
+    defaults = {'cwd': context.cwd, 'model': context.model, 'effort': context.reasoning_effort,
+                'approvalPolicy': context.approval_policy, 'serviceTier': 'default',
+                'runtimeWorkspaceRoots': [], 'turnTrigger': 'user'}
+    identity = params.get('clientUserMessageId')
+    inputs = params.get('input')
+    if (params.get('threadId') != context.thread_id or not _exact_uuid(identity, identity)
+            or params.keys() - _TURN_START_NULL_FIELDS - defaults.keys() - {'threadId', 'input', 'clientUserMessageId'}
+            or any(params.get(key) is not None for key in _TURN_START_NULL_FIELDS)
+            or any(params.get(key) not in (None, value) for key, value in defaults.items())
+            or not isinstance(inputs, list) or len(inputs) != 1):
+        raise ValueError('The viewer changed the selected thread or launch options.')
+    item = inputs[0]
+    if (not isinstance(item, dict) or item.keys() - {'type', 'text', 'text_elements'}
+            or item.get('type') != 'text' or type(item.get('text')) is not str
+            or item.get('text_elements', []) != [] or item['text'].lstrip().startswith(('/', '!'))):
+        raise ValueError('Send a plain-text message with no attachments or commands.')
+    return 'codex_' + identity, validate_input_text(item['text'])
+
+
+class CodexInputStatus(Exception):
+    """Safe operator feedback from the scoped viewer protocol."""
+
+
+@dataclass(frozen=True, slots=True)
+class CodexPendingInput:
+    input_id: str | None
+    message: str
+
+
 def _printable(value: str) -> str:
     if not value.isprintable():
         raise ValueError('Invalid viewer metadata text.')
@@ -68,16 +113,19 @@ class CodexViewerContext(BaseModel):
 
 
 class CodexViewerProtocol:
-    """Terminates native RPC locally; only reviewed page requests cross the link."""
+    """Terminate native RPC locally and project reviewed reads and input."""
 
-    def __init__(self, *, context: CodexViewerContext, read_page, viewer_home: str, platform_os: str):
+    def __init__(self, *, context: CodexViewerContext, read_page, viewer_home: str, platform_os: str,
+                 send_next_turn=None):
         self.context = context
         self._read_page = read_page
         self._viewer_home = viewer_home
         self._platform_os = platform_os
+        self._send_next_turn = send_next_turn
         self._initialized = False
         self.detached = False
         self.following = False
+        self.pending_delivery = None
 
     def handle(self, request):
         if (not isinstance(request, dict) or request.keys() - {'jsonrpc', 'id', 'method', 'params'}
@@ -97,8 +145,13 @@ class CodexViewerProtocol:
             return self._error(request_id, -32602, 'Invalid viewer parameters.')
         try:
             result = self._dispatch(method, params)
+        except CodexInputStatus as status:
+            return self._error(request_id, -32000, str(status))
         except OktoNexusError:
             return self._error(request_id, -32602, 'The request is outside the selected viewer scope.')
+        if isinstance(result, CodexPendingInput):
+            self.pending_delivery = (request_id, result)
+            return None
         if result is None:
             return self._error(request_id, -32601, 'This method is unavailable in the local viewer.')
         return {'id': request_id, 'result': result}
@@ -111,6 +164,17 @@ class CodexViewerProtocol:
                     'platformOs': self._platform_os}
         if not self._initialized or self.detached:
             return None
+        if self._send_next_turn is not None:
+            if method == 'turn/start' and self.following:
+                if self.pending_delivery is not None:
+                    raise CodexInputStatus('Check the preceding message in the Nexus session queue.')
+                try:
+                    intent, text = _plain_next_turn(params, self.context)
+                except ValueError as error:
+                    raise CodexInputStatus(str(error)) from None
+                return self._send_next_turn(thread_id=self.context.thread_id, intent=intent, text=text)
+            if method == 'turn/steer':
+                raise CodexInputStatus('Review and confirm reorientation in Nexus for the selected turn.')
         if method in THREAD_METHODS:
             request = codex_thread_presentation(method=method, params=params, native_thread_id=self.context.thread_id)
             thread = self.context.thread()

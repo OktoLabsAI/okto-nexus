@@ -4,13 +4,16 @@ import asyncio
 from contextlib import asynccontextmanager
 
 from ..domain.runtime_context import RuntimeRequestContext
+from ..domain.session_interaction import InputDeliveryState
 from ..errors import ErrorCode, OktoNexusError
 from .codex_presenter_history import (
     read_codex_history_snapshot,
     read_codex_history_updates,
+    read_codex_input_start,
 )
 from .codex_presenter_requests import codex_history_page
 from .codex_viewer_protocol import CodexViewerContext
+from .session_interaction_receipts import read_session_input_receipt
 
 
 class CodexPresenterHistoryChannel:
@@ -57,6 +60,23 @@ class CodexPresenterHistoryChannel:
         async with self._bound_owner() as mapping:
             if thread_id != mapping.codex_thread_id:
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The exact Codex thread is unavailable.', {})
+
+    async def input_delivery(self, input_id):
+        if self._subject['attachment'].access != 'write':
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The presentation cannot read input delivery.', {})
+
+        def read(mapping):
+            factory = self._broker.factory
+            with self._broker.authority_fence() as human:
+                receipt = read_session_input_receipt(factory, access=self._access, resolve_human=human,
+                    scope=mapping.scope, author=self._subject['author'], input_id=input_id)
+            start_can_be_observed = receipt.status in (InputDeliveryState.DISPATCHING, InputDeliveryState.ACCEPTED_NATIVE)
+            turn = (read_codex_input_start(factory, mapping=mapping, operation_id=receipt.operation_id)
+                    if start_can_be_observed and receipt.operation_id else None)
+            return {'input_id': receipt.input_id, 'status': receipt.status, 'turn': turn}
+
+        async with self._bound_owner() as mapping:
+            return await asyncio.to_thread(read, mapping)
 
     async def viewer_context(self, read_context, *, can_follow=False):
         async with self._bound_owner() as mapping:

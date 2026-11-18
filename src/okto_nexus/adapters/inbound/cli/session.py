@@ -112,7 +112,7 @@ def _select_session(call, binding, explicit, *, interactive):
     return read_binding_session(call, binding, candidates[int(choice) - 1])
 
 
-def attach_session(call, binding, *, session_id=None, interactive=False, viewer_executable=None):
+def attach_session(call, binding, *, session_id=None, interactive=False, viewer_executable=None, write=False):
     """Open a viewer for the exact existing session and return the detach receipt."""
     selected = _select_session(call, binding, session_id, interactive=interactive)
     if selected is None:
@@ -128,19 +128,33 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
     scope = {name: source[name] for name in (
         'server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id', 'session_id')}
     generation = source['session_owner_generation']
-    revision = review_local_presentation(call, scope=scope, expected_session_generation=generation)
     executable = select_viewer(viewer_executable)
-    print(f'Opening read-only Codex for {display_text(scope["session_id"])} '
+    reviewed = review_local_presentation(call, scope=scope, expected_session_generation=generation, write=write)
+    writer = reviewed if write else None
+    revision = writer.capability_revision if writer else reviewed
+    if writer and writer.occupied:
+        try:
+            confirmation = input('Transfer terminal input from the current writer? [y/N] ')
+        except EOFError:
+            return None
+        if confirmation.strip().lower() not in ('y', 'yes'):
+            return None
+    mode = 'Codex with session input' if writer else 'read-only Codex'
+    print(f'Opening {mode} for {display_text(scope["session_id"])} '
           f'in workspace {display_text(scope["workspace_id"])} on host {display_text(scope["executor_id"])}.')
+    if writer:
+        print('Enter sends plain text when idle. During a turn, use Nexus for durable queue input or explicit reorientation.')
+        print('Tab retains text in this viewer until it can send.')
     print('Exit the viewer to detach from this session.', flush=True)
     with open_local_presentation(call, scope=scope, expected_session_generation=generation,
-                                 capability_revision=revision, client_intent_id='viewer_' + uuid4().hex) as link:
+                                 capability_revision=revision, client_intent_id='viewer_' + uuid4().hex,
+                                 writer=writer) as link:
         print('Presentation ' + link.attachment_id, flush=True)
         present_codex(link, executable)
     _display({'state': 'detached'}, False)
     print('Session ' + display_text(scope['session_id']))
     return {'status': 'detached', 'scope': scope, 'attachment_id': link.attachment_id,
-            'attach_strategy': 'codex_local_read', 'capability_revision': revision}
+            'attach_strategy': 'codex_local_write' if writer else 'codex_local_read', 'capability_revision': revision}
 
 
 def resume_saved_session(call, binding, session_id):
@@ -219,6 +233,7 @@ def run_session(argv):
     parser.add_argument('--operator-profile', help='saved human operator login')
     parser.add_argument('--session-id', help='exact runtime session for attach or saved resume')
     parser.add_argument('--viewer-executable', type=Path, help='absolute path to the reviewed local viewer')
+    parser.add_argument('--write', action='store_true', help='enable plain-text input for a supported local viewer')
     parser.add_argument('--json', action='store_true')
     args, service_args = parser.parse_known_args(argv)
     if args.workspace_id and not args.connect_id:
@@ -227,6 +242,8 @@ def run_session(argv):
         parser.error('choose --workspace-id or --project')
     if args.viewer_executable is not None and args.action != 'attach':
         parser.error('--viewer-executable requires attach')
+    if args.write and (args.action != 'attach' or args.json):
+        parser.error('--write requires interactive attach')
     if args.action == 'list' and args.session_id is not None:
         parser.error('--session-id requires attach or resume')
     if args.action == 'resume' and args.session_id is None:
@@ -258,7 +275,7 @@ def run_session(argv):
             raise ConnectionError('SERVER_ID_MISMATCH', 'The session catalog belongs to another Server.')
         if args.action == 'attach':
             attach_session(call, binding, session_id=args.session_id, viewer_executable=args.viewer_executable,
-                           interactive=not args.json and sys.stdin.isatty() and sys.stdout.isatty())
+                           interactive=not args.json and sys.stdin.isatty() and sys.stdout.isatty(), write=args.write)
             return 0
         if args.action == 'resume':
             if not args.json:

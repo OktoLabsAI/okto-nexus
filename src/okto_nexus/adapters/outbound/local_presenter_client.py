@@ -5,6 +5,7 @@ import socket
 import ssl
 import time
 from contextlib import ExitStack, contextmanager, suppress
+from dataclasses import dataclass
 from ipaddress import ip_address
 from select import select
 from urllib.parse import quote, urlsplit
@@ -21,7 +22,11 @@ from wsproto.events import (
 )
 from wsproto.utilities import ProtocolError
 
-from ...application.codex_viewer_protocol import CodexViewerContext
+from ...application.codex_viewer_protocol import (
+    CodexInputStatus,
+    CodexPendingInput,
+    CodexViewerContext,
+)
 from ...application.terminal_connection import PREFIX, ConnectionError
 from ...domain.presentation_protocol import (
     MAX_PRESENTATION_NOTIFICATIONS,
@@ -29,17 +34,27 @@ from ...domain.presentation_protocol import (
     MAX_PRESENTATION_RESPONSE_BYTES,
     PRESENTATION_SUBPROTOCOL,
 )
+from ...domain.session_interaction import MAX_SQLITE_INTEGER, InputDeliveryState
 
 _HISTORY_METHODS = ('thread/turns/list', 'thread/items/list')
 _TIMEOUT = 10
 
 
+@dataclass(frozen=True, slots=True)
+class LocalWriterReview:
+    capability_revision: str
+    input_revision: str
+    epoch: int
+    occupied: bool
+
+
 class _LocalPresenter:
-    def __init__(self, peer, wire, attachment_id, *, live_updates):
+    def __init__(self, peer, wire, attachment_id, *, live_updates, input_revision=None):
         self._peer = peer
         self._wire = wire
         self.attachment_id = attachment_id
         self.live_updates = live_updates
+        self.input_revision = input_revision
         self._request_id = 0
 
     def close(self):
@@ -143,14 +158,44 @@ class _LocalPresenter:
                 raise _unavailable()
         return notifications
 
-    def _request(self, kind, **payload):
+    def send_next_turn(self, *, thread_id, intent, text):
+        """Queue the source intent and keep the native response pending."""
+        try:
+            queued = self._request('enqueue', flat=True, thread_id=thread_id, client_intent_id=intent,
+                capability_revision=self.input_revision, content={'type': 'text', 'text': text})
+            input_id = queued.get('input_id')
+            if not isinstance(input_id, str) or not re.fullmatch(r'sin_[0-9a-f]{32}', input_id):
+                raise _unavailable()
+        except ConnectionError:
+            return CodexPendingInput(None, 'Delivery is unconfirmed. Check the Nexus session queue before sending again.')
+
+        return CodexPendingInput(input_id, 'Message recorded in the Nexus session queue. Delivery confirmation is pending.')
+
+    def confirm_input_delivery(self, input_id):
+        try:
+            delivery = self._request('input_delivery', input_id=input_id)
+            if delivery.keys() != {'input_id', 'status', 'turn'} or delivery['input_id'] != input_id:
+                raise _unavailable()
+            status = InputDeliveryState(delivery['status'])
+        except (ConnectionError, ValueError):
+            raise CodexInputStatus('Message recorded. Check its delivery in the Nexus session queue.') from None
+        if status not in {InputDeliveryState.QUEUED, InputDeliveryState.DISPATCHING, InputDeliveryState.ACCEPTED_NATIVE}:
+            raise CodexInputStatus('Message recorded. Check its delivery in the Nexus session queue.')
+        turn = delivery['turn']
+        if status is not InputDeliveryState.QUEUED and isinstance(turn, dict):
+            return turn
+        return None
+
+    def _request(self, kind, *, flat=False, **payload):
         self._request_id += 1
         try:
             response = self.exchange({'kind': kind, 'request_id': self._request_id, **payload})
-            if (response.keys() != {'kind', 'request_id', kind} or response['kind'] != kind
-                    or type(response['request_id']) is not int
-                    or response['request_id'] != self._request_id
-                    or not isinstance(response[kind], dict)):
+            if (response.get('kind') != kind or type(response.get('request_id')) is not int
+                    or response['request_id'] != self._request_id):
+                raise ValueError('The presentation response did not match the request')
+            if flat:
+                return response
+            if response.keys() != {'kind', 'request_id', kind} or not isinstance(response[kind], dict):
                 raise ValueError('The presentation response did not match the request')
         except (OSError, TypeError, ValueError, ProtocolError, RecursionError):
             raise _unavailable() from None
@@ -174,31 +219,47 @@ def _local_origin(api, scope):
     return origin
 
 
-def review_local_presentation(api, *, scope, expected_session_generation):
+def _revision(value):
+    return isinstance(value, str) and 1 <= len(value) <= 160 and value.isprintable()
+
+
+def review_local_presentation(api, *, scope, expected_session_generation, write=False):
     """Read an exact viewer capability without issuing an attachment ticket."""
     _local_origin(api, scope)
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
+    if write:
+        state['access'] = 'write'
     response = api('POST', PREFIX + '/sessions/' + quote(scope['session_id'], safe='') + '/attachments:review', state)
     revision = response.get('capability_revision')
     if (type(response.get('version')) is not int or response['version'] != 1
-            or response.get('attach_strategy') != 'codex_local_read'
+            or response.get('attach_strategy') != ('codex_local_write' if write else 'codex_local_read')
             or response.get('scope') != scope or type(response.get('expected_session_generation')) is not int
             or response['expected_session_generation'] != expected_session_generation
-            or not isinstance(revision, str) or not 1 <= len(revision) <= 160 or not revision.isprintable()):
+            or not _revision(revision)):
         raise _unavailable()
+    if write:
+        epoch, occupied = response.get('writer_epoch'), response.get('writer_occupied')
+        input_revision = response.get('input_capability_revision')
+        if (type(epoch) is not int or not 0 <= epoch < MAX_SQLITE_INTEGER or type(occupied) is not bool
+                or not _revision(input_revision)):
+            raise _unavailable()
+        return LocalWriterReview(revision, input_revision, epoch, occupied)
     return revision
 
 
 @contextmanager
-def open_local_presentation(api, *, scope, expected_session_generation, capability_revision, client_intent_id):
+def open_local_presentation(api, *, scope, expected_session_generation, capability_revision, client_intent_id,
+                            writer=None):
     """Exchange the offer and challenge without passing the human session to the viewer."""
     origin = _local_origin(api, scope)
     port = origin.port or (443 if origin.scheme == 'https' else 80)
     host = origin.hostname
     state = {'scope': dict(scope), 'expected_session_generation': expected_session_generation}
+    access = 'write' if writer is not None else 'read'
+    writer_fields = {'expected_writer_epoch': writer.epoch, 'takeover': writer.occupied} if writer is not None else {}
     offer = api('POST', PREFIX + '/sessions/' + quote(scope['session_id'], safe='') + '/attachments:prepare',
         state | {'capability_revision': capability_revision, 'client_intent_id': client_intent_id,
-                 'intent': 'attach_live', 'access': 'read'})
+                 'intent': 'attach_live', 'access': access} | writer_fields)
     attachment_id, ticket = offer.get('attachment_id'), offer.get('ticket')
     live_updates = offer.get('live_updates', False)
     if (type(offer.get('version')) is not int or offer['version'] != 1 or offer.get('state') != 'PREPARED'
@@ -214,7 +275,7 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
             if origin.scheme == 'https':
                 peer = stack.enter_context(ssl.create_default_context().wrap_socket(peer, server_hostname=host))
             link = _LocalPresenter(peer, WSConnection(ConnectionType.CLIENT), attachment_id,
-                                   live_updates=live_updates)
+                                   live_updates=live_updates, input_revision=writer.input_revision if writer else None)
             link.upgrade(host=origin.netloc, path=PREFIX + f'/attachments/{attachment_id}/stream',
                          headers=api.request_headers(), ticket=ticket)
             challenge = link.exchange({'kind': 'hello', 'version': 1, **state})
@@ -223,7 +284,7 @@ def open_local_presentation(api, *, scope, expected_session_generation, capabili
                     or not re.fullmatch(r'[A-Za-z0-9_-]{43}', nonce)):
                 raise ValueError('Invalid presentation challenge')
             result = link.exchange({'kind': 'prove', 'challenge': nonce})
-            if result != {'kind': 'attached', 'attachment_id': attachment_id, 'access': 'read'}:
+            if result != {'kind': 'attached', 'attachment_id': attachment_id, 'access': access}:
                 raise ValueError('Invalid presentation receipt')
         except (OSError, TypeError, ValueError, ProtocolError, RecursionError):
             raise _unavailable() from None
