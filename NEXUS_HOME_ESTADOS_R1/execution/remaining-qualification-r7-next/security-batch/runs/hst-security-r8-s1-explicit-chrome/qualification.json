@@ -1,0 +1,330 @@
+{
+  "status": "FAIL_OR_INCONCLUSIVE_PRESERVED",
+  "case": "S1",
+  "cut_id": "hst-security-r8-s1-explicit-chrome",
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "provider_invocations": 0,
+  "results": [],
+  "missing_phases": [
+    "control-after",
+    "control-before",
+    "passive"
+  ],
+  "table_snapshots": {
+    "before": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 1,
+          "sha256": "beab7c2b9626bbfce3ed6c37940096b05c0c2b6702203ebf344d23ef16053e0d"
+        },
+        "execution_bindings": {
+          "rows": 1,
+          "sha256": "ce38703edb5e040ef4eb510fa5855d86ec8c9d24bc1768aa452cbd9157654e54"
+        },
+        "agent_endpoints": {
+          "rows": 1,
+          "sha256": "1c2230c44af019c4a0fb2d1d70d950b4c16f31b27b6e69b3475c2617b527f185"
+        },
+        "runtime_execution_grants": {
+          "rows": 1,
+          "sha256": "23d2e14a33ce1ccfdc1f8f43e80b391897d68d253303fdb5a7f9a730af76d0c4"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "7a415e7edde53c6a42677085ea65192fbb8535f0e5dd9c17991116eac83abd7f"
+        },
+        "execution_operations": {
+          "rows": 5,
+          "sha256": "8e78ef9b1d7867f45e43d3d35677949dacea4bc07858183faf61cadf877666fc"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 5,
+          "sha256": "56c36caa731ac112d4c8b205088bd0cc715533a98419316f88a695fd6c92a2d4"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 7,
+          "sha256": "ecb21ae5e948d88777b60af673f90739136894d47e3737c0aedf7839c3c8e9e9"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "9273ff1c96b8d21712c9c887f0c9fd9fcef26d8408862790a0ecdb3ce341107d"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "91f54f3bbfcfdcd3336bc39914ef1ee523dac1fa79c8406322c96727164ab1f8"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "4d4414e0ee12c14950a89a7bbc2b0f453aab59c9a9101354a41f19aeeccc95be"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "5f85a9463de778b47f2dc445a3c42d3fe6c1c2d1e5dbd6de9d9ad6586d0dad28"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 2,
+          "sha256": "0cf134efc28327fbbc2e014ba044427b380eec255eb561a0eaeb361b8fed67d2"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  },
+  "drift": [],
+  "commands": [
+    {
+      "name": "open",
+      "pid": 6132,
+      "exit_code": null,
+      "timed_out": true,
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "failure_type": "AssertionError",
+  "guards": {
+    "before": {
+      "status": "READY_TO_ALLOCATE_ONLY",
+      "case": "S1",
+      "cut_id": "hst-security-r8-s1-explicit-chrome",
+      "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe",
+      "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+      "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+      "allocated": false,
+      "started": false,
+      "provider_invocations": 0,
+      "source_pin_count": 1829,
+      "source_pins_sha256": "9d460c6c3da8c02c45272144f53f746da97d53e97589bad7cdca074495106824",
+      "gate_sha256": "2bf695d918ef8805f0356501cd9ea51129d4d64027295fc8549e04cdcdad06e9"
+    },
+    "after": {
+      "status": "READY_TO_ALLOCATE_ONLY",
+      "case": "S1",
+      "cut_id": "hst-security-r8-s1-explicit-chrome",
+      "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe",
+      "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+      "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+      "allocated": false,
+      "started": false,
+      "provider_invocations": 0,
+      "source_pin_count": 1829,
+      "source_pins_sha256": "9d460c6c3da8c02c45272144f53f746da97d53e97589bad7cdca074495106824",
+      "gate_sha256": "2bf695d918ef8805f0356501cd9ea51129d4d64027295fc8549e04cdcdad06e9"
+    },
+    "equal": true
+  },
+  "cleanup": {
+    "normal": false,
+    "physical_absence": true,
+    "forced": true,
+    "fixture": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "browser": {
+      "forced_births": [
+        {
+          "pid": 6132,
+          "birth": 1794955271.013036,
+          "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+        },
+        {
+          "pid": 60532,
+          "birth": 1794955271.037773,
+          "exe": "C:\\Windows\\System32\\cmd.exe"
+        },
+        {
+          "pid": 57536,
+          "birth": 1794955271.2364647,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 39772,
+          "birth": 1794955273.941749,
+          "exe": "C:\\Windows\\System32\\cmd.exe"
+        },
+        {
+          "pid": 40896,
+          "birth": 1794955273.9986145,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 11140,
+          "birth": 1794955275.9764152,
+          "exe": "C:\\Program Files\\nodejs\\node.exe"
+        },
+        {
+          "pid": 48644,
+          "birth": 1794955276.5212755,
+          "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        },
+        {
+          "pid": 35200,
+          "birth": 1794955276.5423975,
+          "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        },
+        {
+          "pid": 34256,
+          "birth": 1794955276.8084495,
+          "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        },
+        {
+          "pid": 29872,
+          "birth": 1794955276.9150655,
+          "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        },
+        {
+          "pid": 51572,
+          "birth": 1794955276.938762,
+          "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        },
+        {
+          "pid": 54596,
+          "birth": 1794955277.0379727,
+          "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        },
+        {
+          "pid": 8012,
+          "birth": 1794955277.0854983,
+          "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        },
+        {
+          "pid": 33608,
+          "birth": 1794955277.086511,
+          "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        }
+      ],
+      "remaining": []
+    },
+    "listeners": [],
+    "sampling_limit": "Observed ancestry plus own-root/birth argv scan; not a claim of capturing every short-lived child",
+    "runtime_close_observations": {
+      "sessions": [
+        {
+          "session_id": "ses_799e50b23eadff3d29720cb70d973994",
+          "reference": {
+            "server_id": "srv_08d160d630255932aff12b65de87f7f2",
+            "executor_id": "exe_a728548c7d7b985f2f1d436e4651609f",
+            "binding_id": "bind_145211c69b72f1567b6b14cd630e4c9f",
+            "endpoint_id": "ep_552af643d782689199658bc6a757764e",
+            "agent_id": "hst-worker",
+            "workspace_id": "wsr_5f87cbe4095db4c7a4eb44af8204d724",
+            "workspace_binding_id": "wxb_44f04ac33308e74fb5fbf8169de53c26"
+          },
+          "text": "HST synthetic output ses_799e50b23eadff3d29720cb70d973994",
+          "closed": true
+        },
+        {
+          "session_id": "ses_b0c376957483457c6e1cb81de80c1607",
+          "reference": {
+            "server_id": "srv_08d160d630255932aff12b65de87f7f2",
+            "executor_id": "exe_a728548c7d7b985f2f1d436e4651609f",
+            "binding_id": "bind_145211c69b72f1567b6b14cd630e4c9f",
+            "endpoint_id": "ep_552af643d782689199658bc6a757764e",
+            "agent_id": "hst-worker",
+            "workspace_id": "wsr_5f87cbe4095db4c7a4eb44af8204d724",
+            "workspace_binding_id": "wxb_44f04ac33308e74fb5fbf8169de53c26"
+          },
+          "text": "HST synthetic output ses_b0c376957483457c6e1cb81de80c1607",
+          "closed": true
+        }
+      ],
+      "close_failures": [],
+      "cleanup_mechanism": "TestClient/embedded-owner lifespan shutdown, then physical process/listener proof",
+      "all_runtime_close_receipts_claimed": false,
+      "revoked_authority_renewed": false,
+      "limit": "Fixture closed=false is retained if runtime.close is refused after revocation; exit0 is not canonical runtime.close PASS"
+    }
+  },
+  "counts": {
+    "public_snapshot_tables": 30
+  },
+  "limits": [
+    "No ledger promotion or broad H01-H10/K completion by case count",
+    "S1 revocation UI is canonical current control availability, not a stale decision submission or same-name successor",
+    "S2 reported completion is not canonical task completion or verified native success",
+    "Any productive table drift is retained with column deltas and no invented causal attribution"
+  ],
+  "private_rows_copied": false,
+  "raw_auth_copied": false,
+  "data_retained_in_own_temp": true,
+  "origins": {
+    "origins": {
+      "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+    },
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv",
+    "isolated": true
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "active_resources": false,
+  "predecessor_manifest": "experience-r8-g01-variant/manifest.json",
+  "files": {
+    "run_g02_variant.py": "8b7c9d3a910666671a2c1de317b9317ff6e51efc66f93b5ed6378c4b826e2d7d",
+    "browser-g02-apply.js": "4f4d145ecd1472637e7499ea8099783041f4bb01af94ca523d19113596460708",
+    "run.py": "298bb89a72bf7ea956ede8dd14bd058b82e718b9eae9161028110581a09f6377",
+    "builder.py": "7ea70759cb64a8925e8d2a194817e70782f5b068daf5ddb58e832372a45b2841"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\profile-r7-worker.py"
+  ],
+  "own_driver": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-profile-r7-driver-lix5c7qu",
+  "pins_before": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r3\\owned_commands.py": "20bbab168db33bafa2f46e68020fbc77f19c418a5a99514d941c35002704c3e0",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\profile-r7-worker.py": "375abfb7595031df0e133efb97420db525a1f04bb27e44caea5f6f3bad1beacd",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\guard-depth.py": "81284445d46bd1e551b3de9582466122153022c2320b253d3cbbddb1cecae205",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\benchmark.py": "45a50d995c69a480ee15b3b7cb4942efbb218e9680580e54eec0b0edd432b9a9",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r7\\READY.json": "a7889b1fe414f96b11ecab4fdb2b2bfdfa4034bccf9ea2a38f1dfe4cd5ce21de"
+  },
+  "deadline_seconds": 180,
+  "layer": "DIAGNOSTIC_ONLY_NOT_P95",
+  "source_commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+  "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+  "owned_command": {
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 61760,
+        "birth": 1794946296.5130727,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 38840,
+        "birth": 1794946296.529634,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  "pins_drift": [],
+  "exit_code": 0
+}

@@ -1,0 +1,25 @@
+{
+  "status": "FAIL_OR_INCOMPLETE",
+  "error": "Error: reload-same-canonical-session",
+  "phase": "reload",
+  "checks": [
+    {
+      "id": "reload-same-full-target",
+      "ok": true,
+      "detail": {
+        "target": {
+          "kind": "session",
+          "server_id": "srv_7e9944e285d6c058d1a76fade202fd2c",
+          "executor_id": "exe_1a0f64917ff5f8a2d9faa214208e6273",
+          "workspace_id": "wsr_5bfdda66177c96524163e86eba9b4f21",
+          "session_id": "ses_473151227dc421ea064ebf9f713519ea"
+        }
+      }
+    },
+    {
+      "id": "reload-same-canonical-session",
+      "ok": false,
+      "detail": true
+    }
+  ]
+}

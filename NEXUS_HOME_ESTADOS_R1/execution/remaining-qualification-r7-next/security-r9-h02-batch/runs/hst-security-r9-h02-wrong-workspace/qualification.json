@@ -1,0 +1,689 @@
+{
+  "status": "PASS_SCOPED",
+  "case": "H02",
+  "cut_id": "hst-security-r9-h02-wrong-workspace",
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "provider_invocations": 0,
+  "results": [
+    {
+      "phase": "wrong-workspace",
+      "status": "PASS_SUBSET",
+      "checks": [
+        {
+          "id": "no-prior-modal",
+          "ok": true
+        },
+        {
+          "id": "exact-original-target-before-adversarial-query",
+          "ok": true
+        },
+        {
+          "id": "actual-server-denial",
+          "ok": true
+        },
+        {
+          "id": "no-error-preview-summary",
+          "ok": true
+        },
+        {
+          "id": "one-query-no-replacement",
+          "ok": true
+        },
+        {
+          "id": "no-protected-dom",
+          "ok": true
+        },
+        {
+          "id": "no-runtime-controls",
+          "ok": true
+        },
+        {
+          "id": "browser-read-only",
+          "ok": true
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/home/target"
+        }
+      ],
+      "limits": [
+        "Real GET query mutation; not a fake response nor a workspace ACL claim"
+      ]
+    }
+  ],
+  "missing_phases": [],
+  "table_snapshots": {
+    "before": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 2,
+          "sha256": "01b6b197f9b5ce06d477b6de79d75356f2e1ebbf7ebae48c91d3036ef5509a35"
+        },
+        "execution_bindings": {
+          "rows": 2,
+          "sha256": "4b07c23388b3bb54ab66055beba5f2484df5f15a40abfb0ed75bfd0b62790f57"
+        },
+        "agent_endpoints": {
+          "rows": 2,
+          "sha256": "015f55549c1094148a1ef504d0a04a362ef968f7d1520d435f63205a41577f6f"
+        },
+        "runtime_execution_grants": {
+          "rows": 2,
+          "sha256": "e866dd47867fbaa8caac917bb384d8d2254dc5a81ed1f000e146235d8af787cb"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "9dee4e5f742a64c7fa2568cba47bd123aaa9e9b74a23cfba2306fe70a96f91a2"
+        },
+        "execution_operations": {
+          "rows": 4,
+          "sha256": "e089380f8c949032a7f48987a4ab695e64d128d1ffc45015ebbba3dda86af8f0"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 4,
+          "sha256": "2551b5c8fedece57db04b8ba71a8060bb90ab79a6410cb081a1dc7a26c157c07"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 6,
+          "sha256": "5374967581e5ffe0555acb14cd905673ad81c503d4873364d843241dc187472e"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "c007fb59dbd96212b7fc6f70e33a59bfa3725901eb5ed748fd3721175f83a919"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "20106990378f61589c779c5478970e623efddd1b1b68ed5450a9dacbfb198f72"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "16c9c229ea0adc718b15ebb0cdb8f48422c5590077dd8be6d3aa135ecae4409d"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "8bb1797028b3cabfc0d97d4da991584096e4e04787576b1ae9bcf75da83fb4e9"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 3,
+          "sha256": "c478ab2a1d8e6cd08429a86e8a8488e94a1ac55c64c5bdda5cf3a5036489724a"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "before-get": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 2,
+          "sha256": "01b6b197f9b5ce06d477b6de79d75356f2e1ebbf7ebae48c91d3036ef5509a35"
+        },
+        "execution_bindings": {
+          "rows": 2,
+          "sha256": "4b07c23388b3bb54ab66055beba5f2484df5f15a40abfb0ed75bfd0b62790f57"
+        },
+        "agent_endpoints": {
+          "rows": 2,
+          "sha256": "015f55549c1094148a1ef504d0a04a362ef968f7d1520d435f63205a41577f6f"
+        },
+        "runtime_execution_grants": {
+          "rows": 2,
+          "sha256": "e866dd47867fbaa8caac917bb384d8d2254dc5a81ed1f000e146235d8af787cb"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "9dee4e5f742a64c7fa2568cba47bd123aaa9e9b74a23cfba2306fe70a96f91a2"
+        },
+        "execution_operations": {
+          "rows": 4,
+          "sha256": "e089380f8c949032a7f48987a4ab695e64d128d1ffc45015ebbba3dda86af8f0"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 4,
+          "sha256": "2551b5c8fedece57db04b8ba71a8060bb90ab79a6410cb081a1dc7a26c157c07"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 6,
+          "sha256": "5374967581e5ffe0555acb14cd905673ad81c503d4873364d843241dc187472e"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "c007fb59dbd96212b7fc6f70e33a59bfa3725901eb5ed748fd3721175f83a919"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "20106990378f61589c779c5478970e623efddd1b1b68ed5450a9dacbfb198f72"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "16c9c229ea0adc718b15ebb0cdb8f48422c5590077dd8be6d3aa135ecae4409d"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "8bb1797028b3cabfc0d97d4da991584096e4e04787576b1ae9bcf75da83fb4e9"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 3,
+          "sha256": "c478ab2a1d8e6cd08429a86e8a8488e94a1ac55c64c5bdda5cf3a5036489724a"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "after-get": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 2,
+          "sha256": "01b6b197f9b5ce06d477b6de79d75356f2e1ebbf7ebae48c91d3036ef5509a35"
+        },
+        "execution_bindings": {
+          "rows": 2,
+          "sha256": "4b07c23388b3bb54ab66055beba5f2484df5f15a40abfb0ed75bfd0b62790f57"
+        },
+        "agent_endpoints": {
+          "rows": 2,
+          "sha256": "015f55549c1094148a1ef504d0a04a362ef968f7d1520d435f63205a41577f6f"
+        },
+        "runtime_execution_grants": {
+          "rows": 2,
+          "sha256": "e866dd47867fbaa8caac917bb384d8d2254dc5a81ed1f000e146235d8af787cb"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "9dee4e5f742a64c7fa2568cba47bd123aaa9e9b74a23cfba2306fe70a96f91a2"
+        },
+        "execution_operations": {
+          "rows": 4,
+          "sha256": "e089380f8c949032a7f48987a4ab695e64d128d1ffc45015ebbba3dda86af8f0"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 4,
+          "sha256": "2551b5c8fedece57db04b8ba71a8060bb90ab79a6410cb081a1dc7a26c157c07"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 6,
+          "sha256": "5374967581e5ffe0555acb14cd905673ad81c503d4873364d843241dc187472e"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "c007fb59dbd96212b7fc6f70e33a59bfa3725901eb5ed748fd3721175f83a919"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "20106990378f61589c779c5478970e623efddd1b1b68ed5450a9dacbfb198f72"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "16c9c229ea0adc718b15ebb0cdb8f48422c5590077dd8be6d3aa135ecae4409d"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "8bb1797028b3cabfc0d97d4da991584096e4e04787576b1ae9bcf75da83fb4e9"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 3,
+          "sha256": "c478ab2a1d8e6cd08429a86e8a8488e94a1ac55c64c5bdda5cf3a5036489724a"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  },
+  "drift": [
+    {
+      "before": "before-get",
+      "after": "after-get",
+      "changes": [],
+      "allowed_observation_events": [],
+      "expected_observation_errors": [],
+      "causality": "NOT_ATTRIBUTED",
+      "ignored_tables": [],
+      "ignored_columns": [],
+      "private_rows_curated": false
+    }
+  ],
+  "commands": [
+    {
+      "name": "open",
+      "pid": 52864,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "bf355d241ea171c0b40c1954c7ea3e8b28a70002734c96896a959de47897cc3b"
+    },
+    {
+      "name": "load-state",
+      "pid": 47360,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "375bbf39498285b2175a10d5c29036be5480cab2a3c6401ed0a8086aea4d2ce0"
+    },
+    {
+      "name": "initialize",
+      "pid": 13868,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "0bb3bbf942c5bb4ba02c353e5ee737ff9dd71f8d405513b6e21c58dde0936d0c"
+    },
+    {
+      "name": "wrong-workspace",
+      "pid": 4224,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "85a6715e7326668adeb236b20763891f0e97f8690144abb82dcf45a20928cc5e"
+    },
+    {
+      "name": "wrong-workspace-snapshot",
+      "pid": 19880,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "161be65d6e40293a8548c3e7f5ece285deb96c2fb90f3a721420023b9efd9e30"
+    },
+    {
+      "name": "wrong-workspace-screenshot",
+      "pid": 52956,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "d00eacd12cc8943e505ac40e5728a37a673f7b0da7a78fa5bc9383a1c920adf1"
+    },
+    {
+      "name": "close",
+      "pid": 17980,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "ae3170ac1be9198041c005a116fa7924651e5755e235b7ec72a224fad30ffd9c"
+    }
+  ],
+  "failure_type": null,
+  "guards": {
+    "before": {
+      "status": "READY_TO_ALLOCATE_ONLY",
+      "case": "H02",
+      "cut_id": "hst-security-r9-h02-wrong-workspace",
+      "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe",
+      "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+      "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+      "allocated": false,
+      "started": false,
+      "provider_invocations": 0,
+      "source_pin_count": 1829,
+      "source_pins_sha256": "b9028b100af813f12330b5167b49d5e67cb566837f08c775b127236ae23e48ab",
+      "gate_sha256": "00183b653e2d6a71c4904af53fa9fad4edbd61f51ae1c29da1708570ea357c78"
+    },
+    "after": {
+      "status": "READY_TO_ALLOCATE_ONLY",
+      "case": "H02",
+      "cut_id": "hst-security-r9-h02-wrong-workspace",
+      "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe",
+      "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+      "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+      "allocated": false,
+      "started": false,
+      "provider_invocations": 0,
+      "source_pin_count": 1829,
+      "source_pins_sha256": "b9028b100af813f12330b5167b49d5e67cb566837f08c775b127236ae23e48ab",
+      "gate_sha256": "00183b653e2d6a71c4904af53fa9fad4edbd61f51ae1c29da1708570ea357c78"
+    },
+    "equal": true
+  },
+  "cleanup": {
+    "normal": true,
+    "physical_absence": true,
+    "forced": false,
+    "fixture": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "browser": {
+      "forced_births": [],
+      "remaining": []
+    },
+    "listeners": [],
+    "sampling_limit": "Observed ancestry plus own-root/birth argv scan; not a claim of capturing every short-lived child",
+    "runtime_close_observations": {
+      "sessions": [
+        {
+          "session_id": "ses_8ec9784751229b10abb720b88036c06b",
+          "reference": {
+            "server_id": "srv_5591d89b150b0aa4330c78d57315b0f8",
+            "executor_id": "exe_5bd81ca051a2b3dcd0e438d46d184853",
+            "binding_id": "bind_992b0c96f3eddcebe205f9da25e414dd",
+            "endpoint_id": "ep_b30746cf270e5d3fc7be451bcf49627c",
+            "agent_id": "hst-a",
+            "workspace_id": "wsr_9ede0b5b10b6c0ffefb45fe2d34abed4",
+            "workspace_binding_id": "wxb_b4f421244163817e7544f8d1b6da9172"
+          },
+          "text": "HST synthetic output ses_8ec9784751229b10abb720b88036c06b",
+          "closed": true
+        },
+        {
+          "session_id": "ses_2e75cdc5bcae4f03c9a107fe866f7d95",
+          "reference": {
+            "server_id": "srv_5591d89b150b0aa4330c78d57315b0f8",
+            "executor_id": "exe_5bd81ca051a2b3dcd0e438d46d184853",
+            "binding_id": "bind_25b8b1cc0508d60bd2f1f02556247833",
+            "endpoint_id": "ep_e7d3ab12d20dae4c636a0f748d02219c",
+            "agent_id": "hst-b",
+            "workspace_id": "wsr_3ad9aff140ef23dad0fba644170ed911",
+            "workspace_binding_id": "wxb_fc72a62af5a1ef2e9777e3a66cde8fb5"
+          },
+          "text": "HST synthetic output ses_2e75cdc5bcae4f03c9a107fe866f7d95",
+          "closed": true
+        }
+      ],
+      "close_failures": [],
+      "cleanup_mechanism": "TestClient/embedded-owner lifespan shutdown, then physical process/listener proof",
+      "all_runtime_close_receipts_claimed": false,
+      "revoked_authority_renewed": false,
+      "limit": "Fixture closed=false is retained if runtime.close is refused after revocation; exit0 is not canonical runtime.close PASS"
+    }
+  },
+  "counts": {
+    "public_snapshot_tables": 30
+  },
+  "limits": [
+    "No ledger promotion or broad H01-H10/K completion by case count",
+    "H02 mutates a GET target workspace; this is not a global-operator workspace ACL test",
+    "One wrong-workspace navigation only; other forged tuple dimensions and H03 remain untested",
+    "Any productive table drift is retained with column deltas and no invented causal attribution"
+  ],
+  "private_rows_copied": false,
+  "raw_auth_copied": false,
+  "data_retained_in_own_temp": true,
+  "browser_environment_policy": "windows-path-allowlist-app-env-own-v1",
+  "npx_or_npm_used": false,
+  "actual_own_browser_before_home": {
+    "status": "EXACT_OWN_PROFILE_MAIN_CAPTURED",
+    "records": [
+      {
+        "pid": 17844,
+        "birth": 1794966994.4899237,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "argv": [
+          "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          "--disable-field-trial-config",
+          "--disable-background-networking",
+          "--disable-background-timer-throttling",
+          "--disable-backgrounding-occluded-windows",
+          "--disable-back-forward-cache",
+          "--disable-breakpad",
+          "--disable-component-extensions-with-background-pages",
+          "--disable-component-update",
+          "--no-default-browser-check",
+          "--disable-default-apps",
+          "--disable-dev-shm-usage",
+          "--disable-edgeupdater",
+          "--disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,HttpsUpgrades,HttpsFirstBalancedModeAutoEnable,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,AvoidCorsURLLoaderRestartOnRedirect,TcpPortRandomizationWin,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,PreconnectToSearch,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion",
+          "--enable-features=CDPScreenshotNewSurface,SkipListAccountsWithoutGaiaCookies",
+          "--allow-pre-commit-input",
+          "--disable-hang-monitor",
+          "--disable-ipc-flooding-protection",
+          "--disable-popup-blocking",
+          "--disable-prompt-on-repost",
+          "--disable-renderer-backgrounding",
+          "--disable-updater-scheduler",
+          "--force-color-profile=srgb",
+          "--metrics-recording-only",
+          "--no-first-run",
+          "--password-store=basic",
+          "--use-mock-keychain",
+          "--no-service-autorun",
+          "--disable-search-engine-choice-screen",
+          "--unsafely-disable-devtools-self-xss-warnings",
+          "--enable-unsafe-swiftshader",
+          "--edge-skip-compat-layer-relaunch",
+          "--disable-stack-profiler",
+          "--disable-infobars",
+          "--disable-sync",
+          "--do-not-de-elevate",
+          "--headless",
+          "--hide-scrollbars",
+          "--mute-audio",
+          "--blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4",
+          "--disable-blink-features=AutomationControlled",
+          "--user-data-dir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-66lkantv\\browser-profile",
+          "--remote-debugging-pipe",
+          "about:blank"
+        ],
+        "own_profile": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-66lkantv\\browser-profile",
+        "before_home_navigation": true
+      }
+    ],
+    "environment_policy": "windows-path-allowlist-app-env-own-v1",
+    "host_keys": [
+      "SYSTEMROOT",
+      "WINDIR",
+      "COMSPEC",
+      "PATHEXT",
+      "SYSTEMDRIVE",
+      "OS",
+      "PROCESSOR_ARCHITECTURE",
+      "PROGRAMFILES",
+      "PROGRAMFILES(X86)",
+      "COMMONPROGRAMFILES",
+      "COMMONPROGRAMFILES(X86)",
+      "PROGRAMDATA",
+      "USERPROFILE",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LOCALAPPDATA",
+      "APPDATA"
+    ],
+    "environment_equivalence_to_working_capture_claimed": false,
+    "no_personal_cli_config": "Own PWTEST_CLI_GLOBAL_CONFIG; own cwd .playwright; no npx/npm/update check",
+    "app_environment": "Unchanged Owned.start total-ownTemp/own credentials/provider PATH empty"
+  },
+  "origins": {
+    "origins": {
+      "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+    },
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv",
+    "isolated": true
+  }
+}

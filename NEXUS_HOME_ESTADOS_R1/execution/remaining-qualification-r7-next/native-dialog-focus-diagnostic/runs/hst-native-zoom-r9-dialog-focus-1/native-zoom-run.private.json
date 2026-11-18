@@ -1,0 +1,5080 @@
+{
+  "scope": "NATIVE_DIALOG_FOCUS_BROWSER_ONLY",
+  "cut_id": "hst-native-zoom-r9-dialog-focus-1",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-dbnnmrl4",
+  "result": {
+    "status": "DIAGNOSTIC_COMPLETED_NATIVE_DIALOG",
+    "checks": [
+      {
+        "id": "opener-keyboard-reached",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "initial-UA-modal",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "expand",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "open",
+              "time": 262.89999997615814,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "open",
+              "time": 263,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 263.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "expand",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 263.39999997615814,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "expand",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "initial-modal-focus",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Expand modal\""
+        }
+      },
+      {
+        "id": "eleven-synthetic-controls",
+        "pass": true,
+        "actual": [
+          "expand",
+          "close",
+          "live",
+          "history",
+          "pause",
+          "auto",
+          "latest",
+          "decrease",
+          "reset",
+          "increase",
+          "events"
+        ]
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-0",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-0",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "close",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 309.7999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 310,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 310.10000002384186,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "close",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 310.2000000476837,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "close",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-0",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Close modal\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-1",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-1",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "live",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 335.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 335.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 335.5,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "live",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 335.5,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "live",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-1",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Live tail\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-2",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-2",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "history",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 377.10000002384186,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 377.2000000476837,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 377.39999997615814,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "history",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 377.39999997615814,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "history",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-2",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"History\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-3",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-3",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "pause",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 404.10000002384186,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 404.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "pause",
+              "time": 404.39999997615814,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "pause",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "pause",
+              "time": 404.39999997615814,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "pause",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-3",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Pause tail\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-4",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-4",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "INPUT",
+          "activeId": "auto",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "pause",
+              "time": 429.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "pause",
+              "time": 429.39999997615814,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "INPUT",
+              "targetId": "auto",
+              "time": 429.7000000476837,
+              "hasFocus": true,
+              "activeTag": "INPUT",
+              "activeId": "auto",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "INPUT",
+              "targetId": "auto",
+              "time": 429.7000000476837,
+              "hasFocus": true,
+              "activeTag": "INPUT",
+              "activeId": "auto",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-4",
+          "focusLocatorCount": 1,
+          "focusAX": "- checkbox \"Auto-scroll\" [checked]"
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-5",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-5",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "latest",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "INPUT",
+              "targetId": "auto",
+              "time": 458.2000000476837,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "INPUT",
+              "targetId": "auto",
+              "time": 458.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "latest",
+              "time": 458.39999997615814,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "latest",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "latest",
+              "time": 458.5,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "latest",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-5",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Latest events\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-6",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-6",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "decrease",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "latest",
+              "time": 482.89999997615814,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "latest",
+              "time": 483,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "decrease",
+              "time": 483.2000000476837,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "decrease",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "decrease",
+              "time": 483.2000000476837,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "decrease",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-6",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Decrease terminal font size\": \u2212"
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-7",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-7",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "reset",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "decrease",
+              "time": 509.5,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "decrease",
+              "time": 509.5,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "reset",
+              "time": 509.7000000476837,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "reset",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "reset",
+              "time": 509.7000000476837,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "reset",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-7",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Reset terminal font size\": 12px"
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-8",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-8",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "increase",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "reset",
+              "time": 533.7000000476837,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "reset",
+              "time": 533.7000000476837,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "increase",
+              "time": 534,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "increase",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "increase",
+              "time": 534,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "increase",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-8",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Increase terminal font size\": +"
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-9",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-9",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "OL",
+          "activeId": "events",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "increase",
+              "time": 562.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "increase",
+              "time": 562.7000000476837,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "OL",
+              "targetId": "events",
+              "time": 562.8999999761581,
+              "hasFocus": true,
+              "activeTag": "OL",
+              "activeId": "events",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "OL",
+              "targetId": "events",
+              "time": 562.8999999761581,
+              "hasFocus": true,
+              "activeTag": "OL",
+              "activeId": "events",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-9",
+          "focusLocatorCount": 1,
+          "focusAX": "- list \"Live runtime events\":\n  - listitem: Static synthetic event; no native execution."
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-10",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-10",
+        "pass": true,
+        "actual": {
+          "hasFocus": false,
+          "focusCount": 0,
+          "activeTag": "BODY",
+          "activeId": "",
+          "activeMatchesFocus": false,
+          "focusVisible": false,
+          "insideDialog": false,
+          "modal": true,
+          "open": true,
+          "outline": "none",
+          "outlineWidth": "3px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "OL",
+              "targetId": "events",
+              "time": 593.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "OL",
+              "targetId": "events",
+              "time": 593.5,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "window-blur",
+              "time": 593.8999999761581,
+              "hasFocus": false,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            }
+          ],
+          "label": "Tab-10",
+          "focusLocatorCount": 0,
+          "focusAX": null
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-11",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-11",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "expand",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "window-focus",
+              "time": 626,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 626.2000000476837,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "expand",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 626.2000000476837,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "expand",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-11",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Expand modal\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-12",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-12",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "close",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 660.7999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 660.7999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 661.1000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "close",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 661.1000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "close",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-12",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Close modal\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-13",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-13",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "live",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 689.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 689.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 689.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "live",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 689.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "live",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-13",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Live tail\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-14",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-14",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "history",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 716.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 716.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 716.7999999523163,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "history",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 716.7999999523163,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "history",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-14",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"History\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Tab-15",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Tab-15",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "pause",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 742.1000000238419,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 742.1000000238419,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "pause",
+              "time": 742.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "pause",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "pause",
+              "time": 742.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "pause",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Tab-15",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Pause tail\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-0",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-0",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "history",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "pause",
+              "time": 766.7000000476837,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "pause",
+              "time": 766.7000000476837,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 767,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "history",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 767,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "history",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-0",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"History\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-1",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-1",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "live",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 793.1000000238419,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 793.1000000238419,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 793.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "live",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 793.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "live",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-1",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Live tail\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-2",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-2",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "close",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 818.7000000476837,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 818.7000000476837,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 819,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "close",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 819,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "close",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-2",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Close modal\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-3",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-3",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "expand",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 843.7999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 843.8999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 844,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "expand",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 844,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "expand",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-3",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Expand modal\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-4",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-4",
+        "pass": true,
+        "actual": {
+          "hasFocus": false,
+          "focusCount": 0,
+          "activeTag": "BODY",
+          "activeId": "",
+          "activeMatchesFocus": false,
+          "focusVisible": false,
+          "insideDialog": false,
+          "modal": true,
+          "open": true,
+          "outline": "none",
+          "outlineWidth": "3px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 870.8999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 870.8999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "window-blur",
+              "time": 871.1000000238419,
+              "hasFocus": false,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-4",
+          "focusLocatorCount": 0,
+          "focusAX": null
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-5",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-5",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "OL",
+          "activeId": "events",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "window-focus",
+              "time": 891.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "OL",
+              "targetId": "events",
+              "time": 891.6000000238419,
+              "hasFocus": true,
+              "activeTag": "OL",
+              "activeId": "events",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "OL",
+              "targetId": "events",
+              "time": 891.7000000476837,
+              "hasFocus": true,
+              "activeTag": "OL",
+              "activeId": "events",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-5",
+          "focusLocatorCount": 1,
+          "focusAX": "- list \"Live runtime events\":\n  - listitem: Static synthetic event; no native execution."
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-6",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-6",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "increase",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "OL",
+              "targetId": "events",
+              "time": 916.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "OL",
+              "targetId": "events",
+              "time": 916.5,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "increase",
+              "time": 916.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "increase",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "increase",
+              "time": 916.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "increase",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-6",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Increase terminal font size\": +"
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-7",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-7",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "reset",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "increase",
+              "time": 939.8999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "increase",
+              "time": 939.8999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "reset",
+              "time": 940.1000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "reset",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "reset",
+              "time": 940.1000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "reset",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-7",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Reset terminal font size\": 12px"
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-8",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-8",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "decrease",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "reset",
+              "time": 965.2000000476837,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "reset",
+              "time": 965.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "decrease",
+              "time": 965.5,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "decrease",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "decrease",
+              "time": 965.5,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "decrease",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-8",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Decrease terminal font size\": \u2212"
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-9",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-9",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "latest",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "decrease",
+              "time": 989.8999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "decrease",
+              "time": 990,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "latest",
+              "time": 990.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "latest",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "latest",
+              "time": 990.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "latest",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-9",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Latest events\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-10",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-10",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "INPUT",
+          "activeId": "auto",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "latest",
+              "time": 1016.1000000238419,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "latest",
+              "time": 1016.1000000238419,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "INPUT",
+              "targetId": "auto",
+              "time": 1016.3999999761581,
+              "hasFocus": true,
+              "activeTag": "INPUT",
+              "activeId": "auto",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "INPUT",
+              "targetId": "auto",
+              "time": 1016.3999999761581,
+              "hasFocus": true,
+              "activeTag": "INPUT",
+              "activeId": "auto",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-10",
+          "focusLocatorCount": 1,
+          "focusAX": "- checkbox \"Auto-scroll\" [checked]"
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-11",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-11",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "pause",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "INPUT",
+              "targetId": "auto",
+              "time": 1039.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "INPUT",
+              "targetId": "auto",
+              "time": 1039.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "pause",
+              "time": 1039.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "pause",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "pause",
+              "time": 1039.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "pause",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-11",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Pause tail\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-12",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-12",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "history",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "pause",
+              "time": 1062.7000000476837,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "pause",
+              "time": 1062.7999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 1063,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "history",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 1063,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "history",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-12",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"History\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-13",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-13",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "live",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 1084.5,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "history",
+              "time": 1084.5,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 1084.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "live",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 1084.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "live",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-13",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Live tail\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-14",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-14",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "close",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 1105.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "live",
+              "time": 1105.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 1105.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "close",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 1105.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "close",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-14",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Close modal\""
+        }
+      },
+      {
+        "id": "UA-modal-stays-open-Shift+Tab-15",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "no-focused-outside-page-control-Shift+Tab-15",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "expand",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": true,
+          "modal": true,
+          "open": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 1128.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "close",
+              "time": 1128.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 1128.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "expand",
+              "focusCount": 1,
+              "modal": true
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 1128.6000000238419,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "expand",
+              "focusCount": 1,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-15",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Expand modal\""
+        }
+      },
+      {
+        "id": "all-controls-including-initial-observed",
+        "pass": true,
+        "actual": {
+          "inventory": [
+            "expand",
+            "close",
+            "live",
+            "history",
+            "pause",
+            "auto",
+            "latest",
+            "decrease",
+            "reset",
+            "increase",
+            "events"
+          ],
+          "visited": [
+            "expand",
+            "close",
+            "live",
+            "history",
+            "pause",
+            "auto",
+            "latest",
+            "decrease",
+            "reset",
+            "increase",
+            "events"
+          ]
+        }
+      },
+      {
+        "id": "escape-returns-opener",
+        "pass": true,
+        "actual": {
+          "hasFocus": true,
+          "focusCount": 1,
+          "activeTag": "BUTTON",
+          "activeId": "open",
+          "activeMatchesFocus": true,
+          "focusVisible": true,
+          "insideDialog": false,
+          "modal": false,
+          "open": false,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 1175,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": false
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 1175.2000000476837,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": false
+            },
+            {
+              "event": "focus",
+              "targetTag": "BUTTON",
+              "targetId": "open",
+              "time": 1175.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "open",
+              "focusCount": 1,
+              "modal": false
+            },
+            {
+              "event": "focusin",
+              "targetTag": "BUTTON",
+              "targetId": "open",
+              "time": 1175.2999999523163,
+              "hasFocus": true,
+              "activeTag": "BUTTON",
+              "activeId": "open",
+              "focusCount": 1,
+              "modal": false
+            }
+          ],
+          "label": "after-escape",
+          "focusLocatorCount": 1,
+          "focusAX": "- button \"Open diagnostic dialog\""
+        }
+      }
+    ],
+    "records": [
+      {
+        "hasFocus": true,
+        "focusCount": 0,
+        "activeTag": "BODY",
+        "activeId": "",
+        "activeMatchesFocus": false,
+        "focusVisible": false,
+        "insideDialog": false,
+        "modal": false,
+        "open": false,
+        "outline": "none",
+        "outlineWidth": "3px",
+        "shadow": "none",
+        "events": [],
+        "label": "before-open",
+        "focusLocatorCount": 0,
+        "focusAX": null
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "open",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": false,
+        "modal": false,
+        "open": false,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "open",
+            "time": 155.60000002384186,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "open",
+            "focusCount": 1,
+            "modal": false
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "open",
+            "time": 155.70000004768372,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "open",
+            "focusCount": 1,
+            "modal": false
+          }
+        ],
+        "label": "to-opener-0",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Open diagnostic dialog\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "expand",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "open",
+            "time": 262.89999997615814,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "open",
+            "time": 263,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 263.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "expand",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 263.39999997615814,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "expand",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "initial-modal-focus",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Expand modal\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "close",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 309.7999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 310,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 310.10000002384186,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "close",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 310.2000000476837,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "close",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-0",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Close modal\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "live",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 335.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 335.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 335.5,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "live",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 335.5,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "live",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-1",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Live tail\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "history",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 377.10000002384186,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 377.2000000476837,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 377.39999997615814,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "history",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 377.39999997615814,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "history",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-2",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"History\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "pause",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 404.10000002384186,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 404.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "pause",
+            "time": 404.39999997615814,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "pause",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "pause",
+            "time": 404.39999997615814,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "pause",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-3",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Pause tail\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "INPUT",
+        "activeId": "auto",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "pause",
+            "time": 429.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "pause",
+            "time": 429.39999997615814,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "INPUT",
+            "targetId": "auto",
+            "time": 429.7000000476837,
+            "hasFocus": true,
+            "activeTag": "INPUT",
+            "activeId": "auto",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "INPUT",
+            "targetId": "auto",
+            "time": 429.7000000476837,
+            "hasFocus": true,
+            "activeTag": "INPUT",
+            "activeId": "auto",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-4",
+        "focusLocatorCount": 1,
+        "focusAX": "- checkbox \"Auto-scroll\" [checked]"
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "latest",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "INPUT",
+            "targetId": "auto",
+            "time": 458.2000000476837,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "INPUT",
+            "targetId": "auto",
+            "time": 458.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "latest",
+            "time": 458.39999997615814,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "latest",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "latest",
+            "time": 458.5,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "latest",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-5",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Latest events\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "decrease",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "latest",
+            "time": 482.89999997615814,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "latest",
+            "time": 483,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "decrease",
+            "time": 483.2000000476837,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "decrease",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "decrease",
+            "time": 483.2000000476837,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "decrease",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-6",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Decrease terminal font size\": \u2212"
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "reset",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "decrease",
+            "time": 509.5,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "decrease",
+            "time": 509.5,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "reset",
+            "time": 509.7000000476837,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "reset",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "reset",
+            "time": 509.7000000476837,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "reset",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-7",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Reset terminal font size\": 12px"
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "increase",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "reset",
+            "time": 533.7000000476837,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "reset",
+            "time": 533.7000000476837,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "increase",
+            "time": 534,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "increase",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "increase",
+            "time": 534,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "increase",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-8",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Increase terminal font size\": +"
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "OL",
+        "activeId": "events",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "increase",
+            "time": 562.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "increase",
+            "time": 562.7000000476837,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "OL",
+            "targetId": "events",
+            "time": 562.8999999761581,
+            "hasFocus": true,
+            "activeTag": "OL",
+            "activeId": "events",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "OL",
+            "targetId": "events",
+            "time": 562.8999999761581,
+            "hasFocus": true,
+            "activeTag": "OL",
+            "activeId": "events",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-9",
+        "focusLocatorCount": 1,
+        "focusAX": "- list \"Live runtime events\":\n  - listitem: Static synthetic event; no native execution."
+      },
+      {
+        "hasFocus": false,
+        "focusCount": 0,
+        "activeTag": "BODY",
+        "activeId": "",
+        "activeMatchesFocus": false,
+        "focusVisible": false,
+        "insideDialog": false,
+        "modal": true,
+        "open": true,
+        "outline": "none",
+        "outlineWidth": "3px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "OL",
+            "targetId": "events",
+            "time": 593.3999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "OL",
+            "targetId": "events",
+            "time": 593.5,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "window-blur",
+            "time": 593.8999999761581,
+            "hasFocus": false,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          }
+        ],
+        "label": "Tab-10",
+        "focusLocatorCount": 0,
+        "focusAX": null
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "expand",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "window-focus",
+            "time": 626,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 626.2000000476837,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "expand",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 626.2000000476837,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "expand",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-11",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Expand modal\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "close",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 660.7999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 660.7999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 661.1000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "close",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 661.1000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "close",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-12",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Close modal\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "live",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 689.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 689.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 689.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "live",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 689.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "live",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-13",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Live tail\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "history",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 716.3999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 716.3999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 716.7999999523163,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "history",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 716.7999999523163,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "history",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-14",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"History\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "pause",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 742.1000000238419,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 742.1000000238419,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "pause",
+            "time": 742.3999999761581,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "pause",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "pause",
+            "time": 742.3999999761581,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "pause",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Tab-15",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Pause tail\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "history",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "pause",
+            "time": 766.7000000476837,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "pause",
+            "time": 766.7000000476837,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 767,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "history",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 767,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "history",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-0",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"History\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "live",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 793.1000000238419,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 793.1000000238419,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 793.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "live",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 793.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "live",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-1",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Live tail\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "close",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 818.7000000476837,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 818.7000000476837,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 819,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "close",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 819,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "close",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-2",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Close modal\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "expand",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 843.7999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 843.8999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 844,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "expand",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 844,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "expand",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-3",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Expand modal\""
+      },
+      {
+        "hasFocus": false,
+        "focusCount": 0,
+        "activeTag": "BODY",
+        "activeId": "",
+        "activeMatchesFocus": false,
+        "focusVisible": false,
+        "insideDialog": false,
+        "modal": true,
+        "open": true,
+        "outline": "none",
+        "outlineWidth": "3px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 870.8999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 870.8999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "window-blur",
+            "time": 871.1000000238419,
+            "hasFocus": false,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-4",
+        "focusLocatorCount": 0,
+        "focusAX": null
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "OL",
+        "activeId": "events",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "window-focus",
+            "time": 891.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "OL",
+            "targetId": "events",
+            "time": 891.6000000238419,
+            "hasFocus": true,
+            "activeTag": "OL",
+            "activeId": "events",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "OL",
+            "targetId": "events",
+            "time": 891.7000000476837,
+            "hasFocus": true,
+            "activeTag": "OL",
+            "activeId": "events",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-5",
+        "focusLocatorCount": 1,
+        "focusAX": "- list \"Live runtime events\":\n  - listitem: Static synthetic event; no native execution."
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "increase",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "OL",
+            "targetId": "events",
+            "time": 916.3999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "OL",
+            "targetId": "events",
+            "time": 916.5,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "increase",
+            "time": 916.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "increase",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "increase",
+            "time": 916.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "increase",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-6",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Increase terminal font size\": +"
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "reset",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "increase",
+            "time": 939.8999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "increase",
+            "time": 939.8999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "reset",
+            "time": 940.1000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "reset",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "reset",
+            "time": 940.1000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "reset",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-7",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Reset terminal font size\": 12px"
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "decrease",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "reset",
+            "time": 965.2000000476837,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "reset",
+            "time": 965.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "decrease",
+            "time": 965.5,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "decrease",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "decrease",
+            "time": 965.5,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "decrease",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-8",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Decrease terminal font size\": \u2212"
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "latest",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "decrease",
+            "time": 989.8999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "decrease",
+            "time": 990,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "latest",
+            "time": 990.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "latest",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "latest",
+            "time": 990.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "latest",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-9",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Latest events\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "INPUT",
+        "activeId": "auto",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "latest",
+            "time": 1016.1000000238419,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "latest",
+            "time": 1016.1000000238419,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "INPUT",
+            "targetId": "auto",
+            "time": 1016.3999999761581,
+            "hasFocus": true,
+            "activeTag": "INPUT",
+            "activeId": "auto",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "INPUT",
+            "targetId": "auto",
+            "time": 1016.3999999761581,
+            "hasFocus": true,
+            "activeTag": "INPUT",
+            "activeId": "auto",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-10",
+        "focusLocatorCount": 1,
+        "focusAX": "- checkbox \"Auto-scroll\" [checked]"
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "pause",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "INPUT",
+            "targetId": "auto",
+            "time": 1039.3999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "INPUT",
+            "targetId": "auto",
+            "time": 1039.3999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "pause",
+            "time": 1039.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "pause",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "pause",
+            "time": 1039.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "pause",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-11",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Pause tail\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "history",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "pause",
+            "time": 1062.7000000476837,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "pause",
+            "time": 1062.7999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 1063,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "history",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 1063,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "history",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-12",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"History\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "live",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 1084.5,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "history",
+            "time": 1084.5,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 1084.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "live",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 1084.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "live",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-13",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Live tail\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "close",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 1105.3999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "live",
+            "time": 1105.3999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 1105.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "close",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 1105.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "close",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-14",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Close modal\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "expand",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 1128.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "close",
+            "time": 1128.3999999761581,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": true
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 1128.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "expand",
+            "focusCount": 1,
+            "modal": true
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 1128.6000000238419,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "expand",
+            "focusCount": 1,
+            "modal": true
+          }
+        ],
+        "label": "Shift+Tab-15",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Expand modal\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "expand",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": true,
+        "modal": true,
+        "open": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [],
+        "label": "before-escape-0",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Expand modal\""
+      },
+      {
+        "hasFocus": true,
+        "focusCount": 1,
+        "activeTag": "BUTTON",
+        "activeId": "open",
+        "activeMatchesFocus": true,
+        "focusVisible": true,
+        "insideDialog": false,
+        "modal": false,
+        "open": false,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "events": [
+          {
+            "event": "blur",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 1175,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": false
+          },
+          {
+            "event": "focusout",
+            "targetTag": "BUTTON",
+            "targetId": "expand",
+            "time": 1175.2000000476837,
+            "hasFocus": true,
+            "activeTag": "BODY",
+            "activeId": "",
+            "focusCount": 0,
+            "modal": false
+          },
+          {
+            "event": "focus",
+            "targetTag": "BUTTON",
+            "targetId": "open",
+            "time": 1175.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "open",
+            "focusCount": 1,
+            "modal": false
+          },
+          {
+            "event": "focusin",
+            "targetTag": "BUTTON",
+            "targetId": "open",
+            "time": 1175.2999999523163,
+            "hasFocus": true,
+            "activeTag": "BUTTON",
+            "activeId": "open",
+            "focusCount": 1,
+            "modal": false
+          }
+        ],
+        "label": "after-escape",
+        "focusLocatorCount": 1,
+        "focusAX": "- button \"Open diagnostic dialog\""
+      }
+    ],
+    "observations": {
+      "outsideDocument": [
+        {
+          "hasFocus": false,
+          "focusCount": 0,
+          "activeTag": "BODY",
+          "activeId": "",
+          "activeMatchesFocus": false,
+          "focusVisible": false,
+          "insideDialog": false,
+          "modal": true,
+          "open": true,
+          "outline": "none",
+          "outlineWidth": "3px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "OL",
+              "targetId": "events",
+              "time": 593.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "OL",
+              "targetId": "events",
+              "time": 593.5,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "window-blur",
+              "time": 593.8999999761581,
+              "hasFocus": false,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            }
+          ],
+          "label": "Tab-10",
+          "focusLocatorCount": 0,
+          "focusAX": null
+        },
+        {
+          "hasFocus": false,
+          "focusCount": 0,
+          "activeTag": "BODY",
+          "activeId": "",
+          "activeMatchesFocus": false,
+          "focusVisible": false,
+          "insideDialog": false,
+          "modal": true,
+          "open": true,
+          "outline": "none",
+          "outlineWidth": "3px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 870.8999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 870.8999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "window-blur",
+              "time": 871.1000000238419,
+              "hasFocus": false,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-4",
+          "focusLocatorCount": 0,
+          "focusAX": null
+        }
+      ],
+      "zeroFocusCount": [
+        {
+          "hasFocus": false,
+          "focusCount": 0,
+          "activeTag": "BODY",
+          "activeId": "",
+          "activeMatchesFocus": false,
+          "focusVisible": false,
+          "insideDialog": false,
+          "modal": true,
+          "open": true,
+          "outline": "none",
+          "outlineWidth": "3px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "OL",
+              "targetId": "events",
+              "time": 593.3999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "OL",
+              "targetId": "events",
+              "time": 593.5,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "window-blur",
+              "time": 593.8999999761581,
+              "hasFocus": false,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            }
+          ],
+          "label": "Tab-10",
+          "focusLocatorCount": 0,
+          "focusAX": null
+        },
+        {
+          "hasFocus": false,
+          "focusCount": 0,
+          "activeTag": "BODY",
+          "activeId": "",
+          "activeMatchesFocus": false,
+          "focusVisible": false,
+          "insideDialog": false,
+          "modal": true,
+          "open": true,
+          "outline": "none",
+          "outlineWidth": "3px",
+          "shadow": "none",
+          "events": [
+            {
+              "event": "blur",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 870.8999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "focusout",
+              "targetTag": "BUTTON",
+              "targetId": "expand",
+              "time": 870.8999999761581,
+              "hasFocus": true,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            },
+            {
+              "event": "window-blur",
+              "time": 871.1000000238419,
+              "hasFocus": false,
+              "activeTag": "BODY",
+              "activeId": "",
+              "focusCount": 0,
+              "modal": true
+            }
+          ],
+          "label": "Shift+Tab-4",
+          "focusLocatorCount": 0,
+          "focusAX": null
+        }
+      ]
+    },
+    "limits": [
+      "Static native-dialog probe only; not evidence of the original Nexus failure cause",
+      "Outside-document observation does not identify the exact browser chrome widget",
+      "No manual trap, CSS focus mutation, programmatic focus or AT"
+    ]
+  },
+  "first_failure": null,
+  "cleanup_errors": [],
+  "before": {
+    "manifest_sha256": "5099e5b3ace9d3abd1c3be0a9f04e4a0c2ad7e10ccbb6a37218097e35b5edb2d",
+    "gate_sha256": "dd3939fdb08452857b1f432bb4c19add6845254f9892862b64b9a819db8dc40e",
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031,
+    "source_files": 1829,
+    "cli_files": 192
+  },
+  "after": {
+    "manifest_sha256": "5099e5b3ace9d3abd1c3be0a9f04e4a0c2ad7e10ccbb6a37218097e35b5edb2d",
+    "gate_sha256": "dd3939fdb08452857b1f432bb4c19add6845254f9892862b64b9a819db8dc40e",
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031,
+    "source_files": 1829,
+    "cli_files": 192
+  },
+  "commands": [
+    {
+      "name": "launch-browser",
+      "pid": 61908,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "6471618ac980e0406116acfc16883189af752e7dfc99ddc3a0bc5765f4eccad1"
+    },
+    {
+      "name": "before-diagnostic",
+      "pid": 19384,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "a4bfd2d803843b3493ad04274d505e788a6cb5499301a39f3e101bd521c1434d"
+    },
+    {
+      "name": "native-guard",
+      "pid": 58892,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "40b0e260b8a9fd819fad06d6f596bc717478c5599b5f4773dd0b89eb00549f9e"
+    },
+    {
+      "name": "cleanup-browser",
+      "pid": 60452,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "7de8911f62ef64177f63ecc6ef8a621a80ad11f3d30e0658fade957364640d01"
+    }
+  ],
+  "known_births": [
+    {
+      "pid": 61908,
+      "birth": 1794964916.9807982,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 19604,
+      "birth": 1794964920.5107872,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 30688,
+      "birth": 1794964920.8631363,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 43508,
+      "birth": 1794964919.8951976,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 44840,
+      "birth": 1794964920.7985573,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 54008,
+      "birth": 1794964921.0313196,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 55932,
+      "birth": 1794964919.7917943,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 56448,
+      "birth": 1794964921.0970352,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 57852,
+      "birth": 1794964918.4347851,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 59012,
+      "birth": 1794964921.097993,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 22716,
+      "birth": 1794964924.8381293,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 27844,
+      "birth": 1794964924.8771234,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 19384,
+      "birth": 1794964925.6903083,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 60276,
+      "birth": 1794964925.7536654,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 58892,
+      "birth": 1794964927.0840516,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 60172,
+      "birth": 1794964927.146519,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 60452,
+      "birth": 1794964930.3626783,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 59500,
+      "birth": 1794964930.412346,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    }
+  ],
+  "containment": {
+    "forced_births": [],
+    "remaining": []
+  },
+  "listeners": [],
+  "probe_exit_code": 0,
+  "probe_final": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/probe",
+        "status": 200
+      },
+      {
+        "method": "GET",
+        "path": "/favicon.ico",
+        "status": 404
+      }
+    ],
+    "server_thread_alive": false,
+    "nexus_started": false
+  },
+  "browser_argv": {
+    "status": "EXACT_OWN_PROFILE_MAIN_CAPTURED",
+    "records": [
+      {
+        "pid": 55932,
+        "birth": 1794964919.7917943,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "argv": [
+          "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          "--disable-field-trial-config",
+          "--disable-background-networking",
+          "--disable-background-timer-throttling",
+          "--disable-backgrounding-occluded-windows",
+          "--disable-back-forward-cache",
+          "--disable-breakpad",
+          "--disable-component-extensions-with-background-pages",
+          "--disable-component-update",
+          "--no-default-browser-check",
+          "--disable-default-apps",
+          "--disable-dev-shm-usage",
+          "--disable-edgeupdater",
+          "--disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,HttpsUpgrades,HttpsFirstBalancedModeAutoEnable,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,AvoidCorsURLLoaderRestartOnRedirect,TcpPortRandomizationWin,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,PreconnectToSearch,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion",
+          "--enable-features=CDPScreenshotNewSurface,SkipListAccountsWithoutGaiaCookies",
+          "--allow-pre-commit-input",
+          "--disable-hang-monitor",
+          "--disable-ipc-flooding-protection",
+          "--disable-popup-blocking",
+          "--disable-prompt-on-repost",
+          "--disable-renderer-backgrounding",
+          "--disable-updater-scheduler",
+          "--force-color-profile=srgb",
+          "--metrics-recording-only",
+          "--no-first-run",
+          "--password-store=basic",
+          "--use-mock-keychain",
+          "--no-service-autorun",
+          "--disable-search-engine-choice-screen",
+          "--unsafely-disable-devtools-self-xss-warnings",
+          "--enable-unsafe-swiftshader",
+          "--edge-skip-compat-layer-relaunch",
+          "--disable-stack-profiler",
+          "--disable-infobars",
+          "--disable-sync",
+          "--do-not-de-elevate",
+          "--headless",
+          "--hide-scrollbars",
+          "--mute-audio",
+          "--blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4",
+          "--disable-blink-features=AutomationControlled",
+          "--user-data-dir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-dbnnmrl4\\browser-profile",
+          "--remote-debugging-pipe",
+          "about:blank"
+        ],
+        "own_profile": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-dbnnmrl4\\browser-profile",
+        "before_home_navigation": true
+      }
+    ],
+    "environment_policy": "windows-path-allowlist-app-env-own-v1",
+    "host_keys": [
+      "SYSTEMROOT",
+      "WINDIR",
+      "COMSPEC",
+      "PATHEXT",
+      "SYSTEMDRIVE",
+      "OS",
+      "PROCESSOR_ARCHITECTURE",
+      "PROGRAMFILES",
+      "PROGRAMFILES(X86)",
+      "COMMONPROGRAMFILES",
+      "COMMONPROGRAMFILES(X86)",
+      "PROGRAMDATA",
+      "USERPROFILE",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LOCALAPPDATA",
+      "APPDATA"
+    ],
+    "environment_equivalence_to_working_capture_claimed": false,
+    "no_personal_cli_config": "Own PWTEST_CLI_GLOBAL_CONFIG; own cwd .playwright; no npx/npm/update check",
+    "app_environment": "Unchanged Owned.start total-ownTemp/own credentials/provider PATH empty"
+  },
+  "deadline_seconds": 180,
+  "nexus_processes_started": 0,
+  "provider_invocations": 0,
+  "sampling_limit": "Observed process ancestry and exact own-root/birth scan; not every short-lived child"
+}

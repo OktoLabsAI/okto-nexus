@@ -1,0 +1,72 @@
+{
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-backend-batch-r8-1d345jow",
+  "runtime_source": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "payload_files": 1031,
+  "results": [
+    {
+      "case": "test_shared_owner_bindings_keep_distinct_current_state",
+      "owned_command": {
+        "exit_code": 1,
+        "timed_out": false,
+        "force_used": false,
+        "stdin": "closed PIPE",
+        "known_processes": [
+          {
+            "pid": 10780,
+            "birth": 1794955168.6696627,
+            "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+          },
+          {
+            "pid": 60636,
+            "birth": 1794955168.68783,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 38104,
+            "birth": 1794955177.0542352,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 51952,
+            "birth": 1794955177.0762992,
+            "exe": "C:\\Windows\\System32\\conhost.exe"
+          },
+          {
+            "pid": 27512,
+            "birth": 1794955177.6162207,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 61000,
+            "birth": 1794955177.6214116,
+            "exe": "C:\\Windows\\System32\\conhost.exe"
+          }
+        ],
+        "actions": [],
+        "remaining_known_processes": [],
+        "remaining_listeners": [],
+        "success": false,
+        "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+      }
+    }
+  ],
+  "not_run": [
+    "test_hidden_productive_sibling_same_binding_prevents_false_full_block",
+    "test_current_core_work_survives_external_unavailable_only",
+    "test_explicit_nonblocking_input_keeps_working_and_one_independent_action",
+    "test_idle_sibling_cannot_make_a_full_block_independent",
+    "test_admitted_queued_sibling_has_no_independence_proof",
+    "test_same_delivery_verification_three_files_seen_and_no_ack"
+  ],
+  "source_drift": [],
+  "payload_drift": [],
+  "copied_drift": [],
+  "source_extra_inputs": [],
+  "presentation_drift": [],
+  "external_helper_tooling_drift": [],
+  "own_helper_closure_drift": [],
+  "r7_r8_nonstatic_drift": [],
+  "snapshot_scope": "Six explicitly listed tables per test; not a whole-database read-only claim. Auth telemetry/real control renewal are separate.",
+  "layer": "Installed Python/Core/Connector; copied original fixtures + new tests; source-copy TypeScript presentation only; no provider/browser/latency qualification"
+}

@@ -1,0 +1,43 @@
+{
+  "label": "legacy-home-queries",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-h4gndlfo\\bootstrap.py",
+    "-p",
+    "qc38_plugin",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-h4gndlfo\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\home_evolution\\test_home_queries.py",
+    "-v",
+    "-s",
+    "-o",
+    "faulthandler_timeout=0",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-h4gndlfo\\legacy-home-queries\\junit.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-h4gndlfo\\legacy-home-queries\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T12:49:13.047979+00:00",
+  "signals": [],
+  "exit_code": 1,
+  "processes_after": [
+    {
+      "pid": 11652,
+      "parent_pid": null,
+      "birth_filetime": 134393933530498685,
+      "alive": false
+    },
+    {
+      "pid": 13444,
+      "parent_pid": 11652,
+      "birth_filetime": 134393933530614160,
+      "alive": false
+    }
+  ],
+  "rejected_nonowned_births": [],
+  "ended_at": "2026-11-17T12:49:45.309092+00:00"
+}

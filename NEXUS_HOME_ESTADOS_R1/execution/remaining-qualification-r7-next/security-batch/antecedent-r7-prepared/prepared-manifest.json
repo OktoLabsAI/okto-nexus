@@ -1,0 +1,32 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "runtime_started": false,
+  "browser_started": false,
+  "provider_invocations": 0,
+  "input_pins": {
+    "NEXUS_HOME_ESTADOS_R1/execution/browser-hst/browser_surface.py": "c93a97d0b3debf10a0158fdf6dc0b98024909b842b834167c2fdcdf804196d17",
+    "NEXUS_HOME_ESTADOS_R1/execution/browser-hst/canonical_controls.py": "ff63d981f9a23208e0878987e2ffcf94bd81e2d10e43c0fd8b6c82b6f7e75fb0",
+    "NEXUS_HOME_ESTADOS_R1/execution/browser-hst/containment.py": "c8dfda77d8a33943266fb47c6a55de9f154693a0a0ebc8d46fc70da5dd945f8e",
+    "NEXUS_HOME_ESTADOS_R1/execution/browser-hst/fixture.py": "0a009a334ec53e9036f9bc61b3f85d0d4df4a5abd5a44f30e1d1fbd37a87321e",
+    "NEXUS_HOME_ESTADOS_R1/execution/browser-hst/initialize-template.js": "838fdb105f6762456cae5e443b2721ed575afb9221d906c3321fbae131bb344e",
+    "NEXUS_HOME_ESTADOS_R1/execution/browser-hst/peer_source.py": "f639cf000fcfe2effa8f85ae758e9991a0ef5ce84ed95e01e09135b8e45ce79b",
+    "NEXUS_HOME_ESTADOS_R1/execution/browser-hst/prepare_runtime.py": "753a3b067850c08f64ce8d35424e4168fc7e5b45ef44816c77d567deeeea1814",
+    "NEXUS_HOME_ESTADOS_R1/execution/browser-hst/protocol_fixture.py.txt": "716d64c1768cf05babdfe7407921c182e39d516772156f2f613c3bfd03cb7acc",
+    "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r7/READY.json": "a7889b1fe414f96b11ecab4fdb2b2bfdfa4034bccf9ea2a38f1dfe4cd5ce21de",
+    "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r7/evidence/payload-manifest.json": "32038fa809022e31f542adc34c2bd85a33647c8278d566aa143aaf30c3d07199",
+    "NEXUS_HOME_ESTADOS_R1/execution/package-hst-r7/evidence/source-pins-before.json": "28e5eeffba785be2f103f7d7172b883cd1d034c6ee4f057bb296c702d4867724",
+    "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-batch/assert_captures.py": "02fb48906d11a8af9dce05103cfdae96a39c2b520b532825935b64f18dcf485c",
+    "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-batch/curate.py": "049711d1aceecf172d0db4f74e76c1ea5696b678f7f5d1f4683ec31eedf0f9af",
+    "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-batch/drift.py": "2312aef52ac245ffab6812286148b8f847da54a1e7944d9922ea393e3482a6a5",
+    "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-batch/fixture_builder.py": "1e563db4aeef22645886a05c028e10827b419a19bac17655101814dd8af7e415",
+    "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-batch/plan.md": "fe8e83e855054b78298f5487ff86a44cc04a67ca10d26332675ad2ed2c8a0771",
+    "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-batch/preflight.py": "c55e9995eca2e46d07f73dcc18e5a4360190dad12613ac5b6554b92a99613dff",
+    "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-batch/prepare.py": "cbe8178ba307fd04bb28d45f9bd8786e6cc654cbc82614fa434705543c5b9acd",
+    "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-batch/run.py": "cd895c5edfd36c4515b13fd43b09d3c47e6fc4193d86445734d851a3128619a9",
+    "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-batch/s1-passive.js": "91db007a8e69bde5b3a00596fcecd01efb800b24f5d1cf5390b4c4da763c8f40",
+    "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-batch/s1-revocation.js": "62e0555eed594e6fff1272c1c2c5f6f2b8a9048d1b7598468680f987bc109b38",
+    "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-batch/s2-reported.js": "acc0a999d3281ab0b19335f92e71a8263ff9c34a75acd3ac3a4d1a2eadc4b11a",
+    "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-batch/security_controls.py": "2e3bebc960cbc948cacf2d1f32bff9accdf835276e47d86444db2da64d4cde6e",
+    "tests/home_states/test_results_boundary_completion.py": "17e0e923b80e068d6cda05621b76bd4a3e96d3e35e4cf3d36a1c731fe14d7df1"
+  }
+}

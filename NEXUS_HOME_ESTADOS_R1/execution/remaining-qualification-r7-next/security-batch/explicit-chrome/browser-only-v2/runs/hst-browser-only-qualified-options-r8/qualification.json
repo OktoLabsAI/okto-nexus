@@ -1,0 +1,167 @@
+{
+  "status": "FAIL_OR_INCONCLUSIVE_PRESERVED",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-diagnostic-pxyi2npo",
+  "kind": "BROWSER_ONLY_ABOUT_BLANK",
+  "cut_id": "hst-browser-only-qualified-options-r8",
+  "gate_sha256": "78f3f1cfc02415c9236602698448da071da0d620c68a828e5fddd7021d03323f",
+  "manifest_sha256": "c0ceac5077671ec64f9c90e87d2cd53a362752617182968deb9b9c7a57eb62e1",
+  "phases": [],
+  "commands": [
+    {
+      "name": "open",
+      "pid": 50904,
+      "exit_code": null,
+      "timed_out": true,
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "result": null,
+  "immutable": true,
+  "cleanup": {
+    "forced_births": [
+      {
+        "pid": 50904,
+        "birth": 1794956977.4925065,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 40896,
+        "birth": 1794956977.51887,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 56560,
+        "birth": 1794956978.0236528,
+        "exe": "C:\\Program Files\\nodejs\\node.exe"
+      },
+      {
+        "pid": 37488,
+        "birth": 1794956978.5317764,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+      },
+      {
+        "pid": 23948,
+        "birth": 1794956978.5641532,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+      },
+      {
+        "pid": 58432,
+        "birth": 1794956978.80978,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+      },
+      {
+        "pid": 56052,
+        "birth": 1794956978.946843,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+      },
+      {
+        "pid": 13336,
+        "birth": 1794956978.97532,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+      },
+      {
+        "pid": 57396,
+        "birth": 1794956979.0569792,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+      },
+      {
+        "pid": 44924,
+        "birth": 1794956979.111667,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+      },
+      {
+        "pid": 22084,
+        "birth": 1794956979.112295,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+      }
+    ],
+    "remaining": []
+  },
+  "known_births": [
+    {
+      "pid": 50904,
+      "birth": 1794956977.4925065,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 40896,
+      "birth": 1794956977.51887,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 56560,
+      "birth": 1794956978.0236528,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 37488,
+      "birth": 1794956978.5317764,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 23948,
+      "birth": 1794956978.5641532,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 58432,
+      "birth": 1794956978.80978,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 56052,
+      "birth": 1794956978.946843,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 13336,
+      "birth": 1794956978.97532,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 57396,
+      "birth": 1794956979.0569792,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 44924,
+      "birth": 1794956979.111667,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 22084,
+      "birth": 1794956979.112295,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 39868,
+      "birth": 1794956981.2868068,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 59984,
+      "birth": 1794957008.9491415,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 30168,
+      "birth": 1794957008.9558995,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    }
+  ],
+  "remaining_listeners": [],
+  "product_modules_loaded": [],
+  "server_started": false,
+  "native_peer_started": false,
+  "provider_invocations": 0,
+  "npx_used": false,
+  "npm_used": false,
+  "NO_UPDATE_NOTIFIER": "1",
+  "DEBUG": "pw:browser*,pw:api",
+  "owner_seconds": 90,
+  "scope": "About:blank startup/inspection/close only; no Home/security/app/browser performance claim",
+  "sampling_limit": "Known ancestry plus own-root/birth scan; no enumeration claim for every short-lived child",
+  "failure_type": "AssertionError",
+  "raw_debug_copied": false,
+  "raw_logs_location": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-diagnostic-pxyi2npo"
+}

@@ -1,0 +1,159 @@
+"""One finite SOURCE_ONLY cut; never an installed or browser qualification."""
+import argparse
+import ast
+from collections import Counter
+from datetime import datetime, timezone
+import hashlib
+import importlib.util
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import tempfile
+import xml.etree.ElementTree as ET
+
+HERE = Path(__file__).resolve().parent
+REPO = HERE.parents[2]
+PACKAGE = HERE.parent / "package-hst-r7"
+sys.path.insert(0, str(PACKAGE))
+spec = importlib.util.spec_from_file_location("source_builder", PACKAGE / "package.py")
+builder = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(builder)
+from owned_commands import run_owned
+
+GUARD = '''import hashlib,importlib,json,pathlib,sys
+import pytest
+COLLECTED=[]
+FINISHED=[]
+def verify(stage):
+    expected={'okto_nexus':SOURCE,'nexus_connector_core':PREFIX,'okto_nexus_connector':PREFIX}
+    origins={n:importlib.import_module(n).__file__ for n in expected}
+    loaded={n:getattr(m,'__file__',None) for n,m in list(sys.modules.items()) if any(n==p or n.startswith(p+'.') for p in expected)}
+    assert all(not p or pathlib.Path(p).resolve().is_relative_to(pathlib.Path(expected[n.split('.')[0]]).resolve()) for n,p in loaded.items()),loaded
+    assert sys.flags.isolated and sys.dont_write_bytecode
+    (OUT/('origins-'+stage+'.json')).write_text(json.dumps(dict(origins=origins,loaded=loaded,isolated=True,dont_write_bytecode=True,stdin_isatty=sys.stdin.isatty()),indent=2))
+def pytest_sessionstart(session):verify('start')
+def pytest_collection_finish(session):
+    COLLECTED.extend(item.nodeid for item in session.items)
+    (OUT/'collected.json').write_text(json.dumps(COLLECTED,indent=2))
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item,call):
+    result=yield
+    report=result.get_result()
+    value=dict(nodeid=report.nodeid,phase=report.when,outcome=report.outcome,duration=report.duration)
+    if report.failed:value['diagnostic_sha256']=hashlib.sha256(report.longreprtext.encode()).hexdigest()
+    with (OUT/'phases.jsonl').open('a') as f:f.write(json.dumps(value)+'\\n')
+def pytest_runtest_logfinish(nodeid,location):FINISHED.append(nodeid)
+def pytest_sessionfinish(session,exitstatus):
+    verify('end')
+    (OUT/'inventory.json').write_text(json.dumps(dict(exitstatus=int(exitstatus),collected=COLLECTED,finished=FINISHED,not_run=[n for n in COLLECTED if n not in FINISHED]),indent=2))
+'''
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--label", choices=("source-initial", "source-corrected"), default="source-initial")
+    args = parser.parse_args()
+    evidence = HERE / args.label
+    assert not evidence.exists(), "Preserve this cut; no automatic rerun"
+    ready = json.loads((PACKAGE / "READY.json").read_text())
+    base = json.loads((PACKAGE / "evidence/source-pins-after.json").read_text())
+    test = REPO / "tests/home_states/test_final_boundaries_r7.py"
+    test_name = test.relative_to(REPO).as_posix()
+    ast.parse(test.read_text())
+    before = builder.pins()
+    assert len(base) == 1828 and set(before) == set(base) | {test_name}
+    assert all(before[name] == pin for name, pin in base.items())
+    prefix = Path(ready["root"]) / "venv"
+    payload_paths = json.loads((PACKAGE / "evidence/payload-manifest.json").read_text())
+
+    def payload():
+        values = {name: sha(prefix / "Lib/site-packages" / name)
+            for files in payload_paths.values() for name in files}
+        assert len(values) == 1031
+        assert all(values[name] == pin for files in payload_paths.values() for name, pin in files.items())
+        return values
+
+    payload_before = payload()
+    helper = REPO / "NEXUS_UI_R1/execution/fixtures.py"
+    blob = subprocess.run(["rtk", "proxy", "git", "cat-file", "blob",
+        ready["source_commit"] + ":NEXUS_UI_R1/execution/fixtures.py"], cwd=REPO,
+        input=b"", capture_output=True, check=True, timeout=15).stdout
+    assert helper.read_bytes() == blob
+    evidence.mkdir()
+    root = Path(tempfile.mkdtemp(prefix="nexus-hst-boundaries-source-"))
+    (root / "cwd").mkdir()
+    (root / "guard").mkdir()
+    (evidence / "allocation.json").write_text(json.dumps({"root": str(root)}, indent=2))
+    ini = root / "pytest.ini"
+    ini.write_text("[pytest]\nasyncio_mode=auto\nasyncio_default_fixture_loop_scope=function\n")
+    guard = "OUT=__import__('pathlib').Path(" + repr(str(root)) + ")\nSOURCE=" + repr(str(REPO / "src")) + "\nPREFIX=" + repr(str(prefix)) + "\n" + GUARD
+    (root / "guard/boundary_guard.py").write_text(guard)
+    paths = [REPO / "src", REPO, REPO / "tests", REPO / "tests/execution_r4",
+        REPO / "tests/home_evolution", REPO / "tests/home_states", REPO / "tests/ui_simplification", root / "guard"]
+    args = ["-p", "pytest_asyncio.plugin", "-p", "boundary_guard", "-p", "no:cacheprovider",
+        "-c", str(ini), "--rootdir=" + str(REPO), "--confcutdir=" + str(REPO),
+        "--basetemp=" + str(root / "cases"), "-v", "--tb=short", "-o", "faulthandler_timeout=0",
+        "--junitxml=" + str(root / "tests.xml"), str(test)]
+    code = "import sys;sys.path[:0]=" + repr(list(map(str, paths))) + ";import pytest;raise SystemExit(pytest.main(" + repr(args) + "))"
+    argv = [ready["python"], "-I", "-B", "-X", "utf8", "-c", code]
+    env = builder.environment(root)
+    env.update(PATH=";".join([str(prefix / "Scripts"), "C:/Python313", "C:/Windows/System32", "C:/Windows", "C:/Program Files/Git/cmd"]),
+        PYTEST_DISABLE_PLUGIN_AUTOLOAD="1", CODEX_HOME=str(root / "absent-codex"), CLAUDE_CONFIG_DIR=str(root / "absent-claude"))
+    started = datetime.now(timezone.utc).isoformat()
+    (root / "source-before.json").write_text(json.dumps(before, indent=2))
+    with (root / "stdout.log").open("w", encoding="utf-8") as log:
+        process = run_owned(argv, root=root, cwd=root / "cwd", env=env, log=log, timeout=300)
+    after, payload_after = builder.pins(), payload()
+    source_drift = [name for name in before.keys() | after.keys() if before.get(name) != after.get(name)]
+    inventory = json.loads((root / "inventory.json").read_text()) if (root / "inventory.json").exists() else None
+    phases = [json.loads(line) for line in (root / "phases.jsonl").read_text().splitlines()] if (root / "phases.jsonl").exists() else []
+    counts = Counter()
+    nodes = []
+    for node in (inventory or {}).get("collected", []):
+        reports = [row for row in phases if row["nodeid"] == node]
+        status = "FAIL" if any(row["outcome"] == "failed" for row in reports) else "SKIP" if any(row["outcome"] == "skipped" for row in reports) else "PASS" if node in inventory["finished"] and any(row["phase"] == "call" and row["outcome"] == "passed" for row in reports) else "NOT_RUN"
+        counts[status] += 1
+        nodes.append({"nodeid": node, "status": status, "phases": reports})
+    report = dict(mode="SOURCE_ONLY_NOT_INSTALLED_NEXUS", started_at=started, ended_at=datetime.now(timezone.utc).isoformat(),
+        root=str(root), argv=argv, process=process, counts=dict(counts), source_pin_count=len(before),
+        source_drift=source_drift, payload_files=len(payload_before), payload_drift=payload_before != payload_after,
+        helper_drift=sha(helper) != hashlib.sha256(blob).hexdigest(), test_sha256=sha(test), runner_sha256=sha(Path(__file__)),
+        raw_logs={"path": str(root / "stdout.log"), "sha256": sha(root / "stdout.log"), "copied": False},
+        limits=["A06 is a SQLite reader proof, not runtime authority or browser classification.",
+            "Historical result/capture/artifact inputs are synthetic; H07 uses a canonical request and SQL negative-fixture revocation, not a canonical revocation action.",
+            "No browser, real provider, installed-Nexus execution or SLO claim.",
+            "100ms descendant sampling does not prove enumeration of every short-lived child."])
+    clean = process["success"] and inventory is not None and not inventory["not_run"] and counts == {"PASS": 7} and not source_drift and payload_before == payload_after and not report["helper_drift"]
+    report["status"] = "PASS_SOURCE_SCOPED" if clean else "NOT_GREEN"
+    for name in ("origins-start.json", "origins-end.json", "inventory.json", "collected.json", "source-before.json"):
+        if (root / name).exists():
+            shutil.copyfile(root / name, evidence / name)
+    (evidence / "source-after.json").write_text(json.dumps(after, indent=2))
+    (evidence / "phase-inventory.json").write_text(json.dumps(nodes, indent=2))
+    (evidence / "payload-before.json").write_text(json.dumps(payload_before, indent=2))
+    (evidence / "payload-after.json").write_text(json.dumps(payload_after, indent=2))
+    if (root / "tests.xml").exists():
+        xml = ET.parse(root / "tests.xml")
+        for parent in xml.iter():
+            for child in list(parent):
+                if child.tag in {"system-out", "system-err", "properties"}:
+                    parent.remove(child)
+                elif child.tag in {"failure", "error", "skipped"}:
+                    pin = hashlib.sha256(ET.tostring(child)).hexdigest()
+                    child.attrib.clear()
+                    child.set("raw_sha256", pin)
+                    child.text = "Raw diagnostic retained in the owned Temp."
+        xml.write(evidence / "tests-sanitized.xml", encoding="utf-8", xml_declaration=True)
+    (evidence / "qualification.json").write_text(json.dumps(report, indent=2))
+    print(json.dumps({"status": report["status"], "counts": dict(counts), "root": str(root), "report_sha256": sha(evidence / "qualification.json")}))
+    raise SystemExit(0 if clean else 1)
+
+
+if __name__ == "__main__":
+    main()

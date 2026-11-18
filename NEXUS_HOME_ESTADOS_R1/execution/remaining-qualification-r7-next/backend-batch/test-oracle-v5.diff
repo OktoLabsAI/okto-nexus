@@ -1,0 +1,35 @@
+--- test_backend_batch.py
++++ test_backend_batch_v5.py
+@@ -17,6 +17,16 @@
+ 
+ def own_requests(owner, board, turn):
+     return [item for item in owner.requests(board) if item['request'].get('operation_id') == turn['operation_id']]
++
++
++def assert_active_request_reference(card, placement):
++    """One action placement may have a same-scope reference, not another action card."""
++    refs = [item for item in card['requests_preview'] if item['id'] == placement['id']]
++    assert len(refs) == 1
++    assert refs[0]['request'] == placement['request']
++    assert refs[0]['harness_refs'] == placement['harness_refs']
++    for key in ('id', 'group_id', 'entry_revision', 'target', 'workspace_id'):
++        assert refs[0]['entry'][key] == placement['entry'][key]
+ 
+ 
+ def assert_current(owner, card, session):
+@@ -122,6 +132,7 @@
+         assert working['operation_id'] not in child_operations
+         assert len(own_requests(owner, board, blocked)) == 1
+         assert board['columns']['needs_you']['items'][0]['kind'] == 'request'
++        assert_active_request_reference(card, own_requests(owner, board, blocked)[0])
+         assert owner.snapshot() == before
+ 
+ 
+@@ -167,6 +178,7 @@
+         assert requests[0]['blocks_session'] is False and requests[0]['blocks_harness'] is False
+         assert [ref['connection']['binding_id'] for ref in requests[0]['harness_refs']] == [owner.binding['binding_id']]
+         assert board['columns']['needs_you']['items'] == requests
++        assert_active_request_reference(card, requests[0])
+         assert owner.snapshot() == before
+ 
+ 

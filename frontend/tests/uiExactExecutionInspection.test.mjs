@@ -148,7 +148,7 @@ test('actual contextual controls exclude start, manual session/native-turn, othe
 test('actual exact inspector suppresses duplicate output for entry panels; legacy standalone retains one viewer',()=>{
   const context={operation:operation(),session:session(),binding:binding()};
   const suppressed=html(HomeExecutionDetails,{context,suppressOutput:true});
-  assert.match(suppressed,/exact-operation/);assert.doesNotMatch(suppressed,/Session execution output|retained-output-marker|Running instances|Last 10/);
+  assert.doesNotMatch(suppressed,/exact-operation|Session execution output|retained-output-marker|Running instances|Last 10/);
   const standalone=html(HomeExecutionDetails,{context,suppressOutput:false});
   assert.equal((standalone.match(/aria-label="Session execution output"/g)||[]).length,1);
   assert.match(standalone,/retained-output-marker/);assert.doesNotMatch(standalone,/<dialog|Maximize terminal|Running instances|Last 10/);
@@ -157,6 +157,7 @@ test('actual exact inspector suppresses duplicate output for entry panels; legac
 test('uncertain original execution exposes no new actions, while Advanced retains its existing full selector',()=>{
   const markup=html(HomeExecutionDetails,{context:{operation:operation({executor_stage:'OUTCOME_UNKNOWN'}),session:session(),binding:binding()}});
   assert.match(markup,/recorded outcome is unknown/);assert.doesNotMatch(markup,/Review runtime action|Runtime action/);
+  assert.match(markup,/Reference for troubleshooting[\s\S]*exact-operation/);
   const advanced=html(RuntimeOperations,{agentId:'agent',binding:binding(),canStart:true});
   assert.match(advanced,/Start or reuse a runtime/);assert.match(advanced,/Runtime session ID|Session selection/);
 });

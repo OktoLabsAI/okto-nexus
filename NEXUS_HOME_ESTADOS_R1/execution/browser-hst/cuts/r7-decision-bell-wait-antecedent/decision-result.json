@@ -1,0 +1,133 @@
+{
+  "status": "FAIL_OR_INCOMPLETE",
+  "error": "Error: bell-one-canonical-occurrence",
+  "checks": [
+    {
+      "id": "original-question-window",
+      "ok": true,
+      "detail": {
+        "expires_at": "2026-11-17T20:18:35.714000+00:00"
+      }
+    },
+    {
+      "id": "bell-one-canonical-occurrence",
+      "ok": false,
+      "detail": true
+    }
+  ],
+  "posts": [],
+  "gets": [
+    {
+      "path": "/api/v1/operator-auth/status"
+    },
+    {
+      "path": "/logos/nexus-icon.svg"
+    },
+    {
+      "path": "/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "path": "/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "path": "/api/v1/agents"
+    },
+    {
+      "path": "/api/v1/info"
+    },
+    {
+      "path": "/api/v1/graph"
+    },
+    {
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "path": "/api/v1/stream"
+    },
+    {
+      "path": "/api/v1/stream"
+    },
+    {
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "path": "/api/v1/graph"
+    },
+    {
+      "path": "/api/v1/graph"
+    },
+    {
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/home/target"
+    },
+    {
+      "path": "/api/v1/home/target"
+    },
+    {
+      "path": "/api/v1/approvals/r4request_e7ef1c9d7dfcc83cf881f08d54bf1a23983031e450e1294d0acd24a08be21ef5"
+    },
+    {
+      "path": "/api/v1/runtime-management/connections/me"
+    },
+    {
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_525225ac95bfd36e88f7fde5ddbeb03b"
+    },
+    {
+      "path": "/api/v1/approvals/r4request_e7ef1c9d7dfcc83cf881f08d54bf1a23983031e450e1294d0acd24a08be21ef5"
+    },
+    {
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_525225ac95bfd36e88f7fde5ddbeb03b/events"
+    },
+    {
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_525225ac95bfd36e88f7fde5ddbeb03b"
+    },
+    {
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/stream"
+    }
+  ],
+  "errors": []
+}

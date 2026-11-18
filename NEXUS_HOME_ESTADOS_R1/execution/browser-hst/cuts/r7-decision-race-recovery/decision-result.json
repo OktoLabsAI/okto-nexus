@@ -1,0 +1,259 @@
+{
+  "status": "FAIL_OR_INCOMPLETE",
+  "error": "Error: original-intent-preserved",
+  "checks": [
+    {
+      "id": "original-question-window",
+      "ok": true,
+      "detail": {
+        "expires_at": "2026-11-17T20:22:47.859000+00:00"
+      }
+    },
+    {
+      "id": "bell-one-canonical-occurrence",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "exact-session-reviewed-home",
+      "ok": true,
+      "detail": "ses_5f5d8ce46748aca54dec19f63f8607a7"
+    },
+    {
+      "id": "exact-session-reviewed-bell",
+      "ok": true,
+      "detail": "ses_5f5d8ce46748aca54dec19f63f8607a7"
+    },
+    {
+      "id": "independent-contexts",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "authority-before-submit",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "exactly-two-explicit-post-attempts",
+      "ok": true,
+      "detail": [
+        {
+          "client_intent_id": "ui_e7fa5c8f2afe3d7ebbe7ca4619743aa5",
+          "request_id": "r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348",
+          "status": 202
+        },
+        {
+          "client_intent_id": "ui_cf011afacdf9f2d258bda64fdbc31705",
+          "request_id": "r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348",
+          "status": 409
+        }
+      ]
+    },
+    {
+      "id": "lost-real-acceptance-and-stale-conflict-or-receipt",
+      "ok": true,
+      "detail": [
+        {
+          "client_intent_id": "ui_e7fa5c8f2afe3d7ebbe7ca4619743aa5",
+          "request_id": "r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348",
+          "status": 202
+        },
+        {
+          "client_intent_id": "ui_cf011afacdf9f2d258bda64fdbc31705",
+          "request_id": "r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348",
+          "status": 409
+        }
+      ]
+    },
+    {
+      "id": "recover-same-decision-and-native-operation",
+      "ok": true,
+      "detail": {
+        "decision_id": "r4decision_a41a21de3907889ad901861d29b96426",
+        "native_operation_id": "r4op_77f7712ea27cd1a063543053912fc38b"
+      }
+    },
+    {
+      "id": "exact-request-and-session-on-receipt",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "original-intent-preserved",
+      "ok": false,
+      "detail": "ui_e7fa5c8f2afe3d7ebbe7ca4619743aa5"
+    }
+  ],
+  "posts": [
+    {
+      "client_intent_id": "ui_e7fa5c8f2afe3d7ebbe7ca4619743aa5",
+      "request_id": "r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348",
+      "status": 202
+    },
+    {
+      "client_intent_id": "ui_cf011afacdf9f2d258bda64fdbc31705",
+      "request_id": "r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348",
+      "status": 409
+    }
+  ],
+  "gets": [
+    {
+      "path": "/api/v1/operator-auth/status"
+    },
+    {
+      "path": "/logos/nexus-icon.svg"
+    },
+    {
+      "path": "/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "path": "/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "path": "/api/v1/agents"
+    },
+    {
+      "path": "/api/v1/info"
+    },
+    {
+      "path": "/api/v1/graph"
+    },
+    {
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "path": "/api/v1/stream"
+    },
+    {
+      "path": "/api/v1/stream"
+    },
+    {
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "path": "/api/v1/graph"
+    },
+    {
+      "path": "/api/v1/graph"
+    },
+    {
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/home/target"
+    },
+    {
+      "path": "/api/v1/home/target"
+    },
+    {
+      "path": "/api/v1/approvals/r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348"
+    },
+    {
+      "path": "/api/v1/runtime-management/connections/me"
+    },
+    {
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_5f5d8ce46748aca54dec19f63f8607a7"
+    },
+    {
+      "path": "/api/v1/approvals/r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348"
+    },
+    {
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_5f5d8ce46748aca54dec19f63f8607a7/events"
+    },
+    {
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_5f5d8ce46748aca54dec19f63f8607a7"
+    },
+    {
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/stream"
+    },
+    {
+      "path": "/api/v1/attention"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/attention"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/approvals/r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348"
+    },
+    {
+      "path": "/api/v1/runtime-management/connections/me"
+    },
+    {
+      "path": "/api/v1/approvals/r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348"
+    },
+    {
+      "path": "/api/v1/approvals/r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348"
+    },
+    {
+      "path": "/api/v1/approvals/r4request_1cccaca0179d0fd86ffb90f30e4a5da86f6449e61c4f149fbf901d58b659f348"
+    },
+    {
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a41a21de3907889ad901861d29b96426"
+    },
+    {
+      "path": "/api/v1/runtime-management/runtime/approval-decisions/r4decision_a41a21de3907889ad901861d29b96426"
+    },
+    {
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "path": "/api/v1/home/harness-board"
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,89 @@
+{
+  "status": "PASS_SUBSET",
+  "stage": "completed",
+  "checks": [
+    {
+      "id": "exact-managed-turn-completed",
+      "ok": true,
+      "detail": {
+        "operation_id": "op_490be3fcacd11aa73c8f88c69c626947",
+        "candidates": [
+          {
+            "id": "home_delivery_canonical:result_961ae7dba414923511279c4d7d610c40b73d6ac2c197b5d3ead17bc3181460bb",
+            "semantics": {
+              "cleanup": "unknown",
+              "content_state": "available",
+              "evidence": "canonical",
+              "execution_outcome": "succeeded",
+              "historical": false,
+              "scope": "turn",
+              "semantic_revision": "14d8e0360f25f160a333bd0b4d20f937c7852b78c9c0a4e424ab701fd5037fd4",
+              "task_state": "completed",
+              "verification": "approved",
+              "verification_evidence_ref": "handoff-verification:6:0e3ee74417a8bb6f8d9ed6a97f481eff92186b2e4075a58181fd9da94e7e4954",
+              "version": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "canonical-outcome-not-inferred",
+      "ok": true,
+      "detail": {
+        "cleanup": "unknown",
+        "content_state": "available",
+        "evidence": "canonical",
+        "execution_outcome": "succeeded",
+        "historical": false,
+        "scope": "turn",
+        "semantic_revision": "14d8e0360f25f160a333bd0b4d20f937c7852b78c9c0a4e424ab701fd5037fd4",
+        "task_state": "completed",
+        "verification": "approved",
+        "verification_evidence_ref": "handoff-verification:6:0e3ee74417a8bb6f8d9ed6a97f481eff92186b2e4075a58181fd9da94e7e4954",
+        "version": 1
+      }
+    },
+    {
+      "id": "positive-verification-evidence",
+      "ok": true,
+      "detail": {
+        "cleanup": "unknown",
+        "content_state": "available",
+        "evidence": "canonical",
+        "execution_outcome": "succeeded",
+        "historical": false,
+        "scope": "turn",
+        "semantic_revision": "14d8e0360f25f160a333bd0b4d20f937c7852b78c9c0a4e424ab701fd5037fd4",
+        "task_state": "completed",
+        "verification": "approved",
+        "verification_evidence_ref": "handoff-verification:6:0e3ee74417a8bb6f8d9ed6a97f481eff92186b2e4075a58181fd9da94e7e4954",
+        "version": 1
+      }
+    },
+    {
+      "id": "rendered-completed",
+      "ok": true,
+      "detail": "Results\nTotal unknown \u00b7 Revalidating\n\nHarness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\n\nHandoff result\n\nTask completed\n\nDelivery verified\n\nReceived 2026-11-17T16:42:41.136Z\n\nView result"
+    },
+    {
+      "id": "one-home-region",
+      "ok": true,
+      "detail": 1
+    }
+  ],
+  "delivery_id": "home_delivery_canonical:result_961ae7dba414923511279c4d7d610c40b73d6ac2c197b5d3ead17bc3181460bb",
+  "semantics": {
+    "cleanup": "unknown",
+    "content_state": "available",
+    "evidence": "canonical",
+    "execution_outcome": "succeeded",
+    "historical": false,
+    "scope": "turn",
+    "semantic_revision": "14d8e0360f25f160a333bd0b4d20f937c7852b78c9c0a4e424ab701fd5037fd4",
+    "task_state": "completed",
+    "verification": "approved",
+    "verification_evidence_ref": "handoff-verification:6:0e3ee74417a8bb6f8d9ed6a97f481eff92186b2e4075a58181fd9da94e7e4954",
+    "version": 1
+  }
+}

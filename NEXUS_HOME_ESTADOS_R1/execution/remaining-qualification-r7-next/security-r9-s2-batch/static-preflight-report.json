@@ -1,0 +1,28 @@
+{
+  "status": "PASS_STATIC_ONLY_NOT_GATE_PREFLIGHT",
+  "manifest_sha256": "25f48720da92f390b4f52a2caf7d21e8d220f2085b4b30787489826e2724e29a",
+  "input_pins_verified": 36,
+  "input_pin_mismatches": [],
+  "invariant_helpers_byte_equal_to_S1": {
+    "fixture_builder.py": true,
+    "security_controls.py": true,
+    "drift.py": true,
+    "assert_captures.py": true,
+    "browser_driver.py": true,
+    "prepare.py": true,
+    "playwright-cli.json": true
+  },
+  "python_ast_files": 10,
+  "node_check_exit_codes": {
+    "s2-reported.js": 0,
+    "initialize-template.js": 0
+  },
+  "effective_placeholder_counts": {
+    "s2-reported.js": 1,
+    "initialize-template.js": 1
+  },
+  "allocated": false,
+  "application_imported": false,
+  "browser_started": false,
+  "root_gate_required": true
+}

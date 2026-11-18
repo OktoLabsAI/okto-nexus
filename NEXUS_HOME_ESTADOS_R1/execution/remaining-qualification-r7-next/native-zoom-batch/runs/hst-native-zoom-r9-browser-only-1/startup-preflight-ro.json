@@ -1,0 +1,27 @@
+{
+  "mode": "READ_ONLY_ANTECEDENT",
+  "probe_reported_pid": 13564,
+  "known_python_births": [
+    {
+      "pid": 61496,
+      "birth": 1794960705.6889243,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 13564,
+      "birth": 1794960705.7071412,
+      "exe": "C:\\Python313\\python.exe"
+    }
+  ],
+  "ancestor_link_serialized": false,
+  "interpretation": "The direct PID equality guard failed before guard JS was generated. The venv launcher and effective base Python were both observed. A future counterpart must capture and verify actual ancestry, not infer it from names.",
+  "native_webui_snapshot_sha256": "1695edc49ded2d1c76100051d12d14a9f60030ffc32c4c48307c7602370489e8",
+  "native_zoom_AX_excerpt": [
+    "                - generic [aria-hidden] [ref=e138]: \"Zoom da p\u00e1gina:\"",
+    "                - combobox \"Zoom da p\u00e1gina:\" [ref=e139] [cursor=pointer]:",
+    "                  - option \"100%\" [selected]",
+    "                  - option \"200%\""
+  ],
+  "native_zoom_was_selected": false,
+  "nexus_started": false
+}

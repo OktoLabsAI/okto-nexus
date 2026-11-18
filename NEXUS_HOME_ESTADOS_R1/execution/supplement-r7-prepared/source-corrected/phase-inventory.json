@@ -1,0 +1,170 @@
+[
+  {
+    "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_a06_visual_filter_keeps_complete_private_sibling_proof",
+    "status": "PASS",
+    "phases": [
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_a06_visual_filter_keeps_complete_private_sibling_proof",
+        "phase": "setup",
+        "outcome": "passed",
+        "duration": 0.0008475999347865582
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_a06_visual_filter_keeps_complete_private_sibling_proof",
+        "phase": "call",
+        "outcome": "passed",
+        "duration": 5.0588603999931365
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_a06_visual_filter_keeps_complete_private_sibling_proof",
+        "phase": "teardown",
+        "outcome": "passed",
+        "duration": 0.34937920002266765
+      }
+    ]
+  },
+  {
+    "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[FAILED-failed]",
+    "status": "PASS",
+    "phases": [
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[FAILED-failed]",
+        "phase": "setup",
+        "outcome": "passed",
+        "duration": 0.0007845000363886356
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[FAILED-failed]",
+        "phase": "call",
+        "outcome": "passed",
+        "duration": 4.332823200034909
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[FAILED-failed]",
+        "phase": "teardown",
+        "outcome": "passed",
+        "duration": 0.017722600023262203
+      }
+    ]
+  },
+  {
+    "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[CANCELLED-cancelled]",
+    "status": "PASS",
+    "phases": [
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[CANCELLED-cancelled]",
+        "phase": "setup",
+        "outcome": "passed",
+        "duration": 0.0008938999380916357
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[CANCELLED-cancelled]",
+        "phase": "call",
+        "outcome": "passed",
+        "duration": 5.055288399918936
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[CANCELLED-cancelled]",
+        "phase": "teardown",
+        "outcome": "passed",
+        "duration": 0.03583850001450628
+      }
+    ]
+  },
+  {
+    "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_e16_offpage_seen_three_links_retention_and_no_inbox_ack",
+    "status": "PASS",
+    "phases": [
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_e16_offpage_seen_three_links_retention_and_no_inbox_ack",
+        "phase": "setup",
+        "outcome": "passed",
+        "duration": 0.0005986000178381801
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_e16_offpage_seen_three_links_retention_and_no_inbox_ack",
+        "phase": "call",
+        "outcome": "passed",
+        "duration": 5.713303799973801
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_e16_offpage_seen_three_links_retention_and_no_inbox_ack",
+        "phase": "teardown",
+        "outcome": "passed",
+        "duration": 0.014268200029619038
+      }
+    ]
+  },
+  {
+    "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_h02_forged_exact_targets_disclose_no_preview_or_counter",
+    "status": "PASS",
+    "phases": [
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_h02_forged_exact_targets_disclose_no_preview_or_counter",
+        "phase": "setup",
+        "outcome": "passed",
+        "duration": 0.0004265999887138605
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_h02_forged_exact_targets_disclose_no_preview_or_counter",
+        "phase": "call",
+        "outcome": "passed",
+        "duration": 4.88638619997073
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_h02_forged_exact_targets_disclose_no_preview_or_counter",
+        "phase": "teardown",
+        "outcome": "passed",
+        "duration": 0.017732999986037612
+      }
+    ]
+  },
+  {
+    "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_h03_http_hostile_public_label_does_not_expose_private_marker",
+    "status": "PASS",
+    "phases": [
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_h03_http_hostile_public_label_does_not_expose_private_marker",
+        "phase": "setup",
+        "outcome": "passed",
+        "duration": 0.0005375000182539225
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_h03_http_hostile_public_label_does_not_expose_private_marker",
+        "phase": "call",
+        "outcome": "passed",
+        "duration": 3.776800199993886
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_h03_http_hostile_public_label_does_not_expose_private_marker",
+        "phase": "teardown",
+        "outcome": "passed",
+        "duration": 0.9495423999615014
+      }
+    ]
+  },
+  {
+    "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_h07_revoked_scope_refuses_same_cas_and_keeps_exact_history[input]",
+    "status": "PASS",
+    "phases": [
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_h07_revoked_scope_refuses_same_cas_and_keeps_exact_history[input]",
+        "phase": "setup",
+        "outcome": "passed",
+        "duration": 2.9936569000128657
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_h07_revoked_scope_refuses_same_cas_and_keeps_exact_history[input]",
+        "phase": "call",
+        "outcome": "passed",
+        "duration": 0.7493745998945087
+      },
+      {
+        "nodeid": "tests/home_states/test_final_boundaries_r7.py::test_h07_revoked_scope_refuses_same_cas_and_keeps_exact_history[input]",
+        "phase": "teardown",
+        "outcome": "passed",
+        "duration": 1.0529229999519885
+      }
+    ]
+  }
+]

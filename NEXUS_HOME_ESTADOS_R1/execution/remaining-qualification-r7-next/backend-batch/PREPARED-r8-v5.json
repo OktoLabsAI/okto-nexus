@@ -1,0 +1,123 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "expected_cases": 7,
+  "runtime_source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "runtime_wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "runtime_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv",
+  "required_gate": "ROOT_APPROVED_BACKEND_BATCH_R8",
+  "selections": [
+    "tests/execution_r4/test_backend_batch_r8.py::test_shared_owner_bindings_keep_distinct_current_state",
+    "tests/execution_r4/test_backend_batch_r8.py::test_hidden_productive_sibling_same_binding_prevents_false_full_block",
+    "tests/execution_r4/test_backend_batch_r8.py::test_current_core_work_survives_external_unavailable_only",
+    "tests/execution_r4/test_backend_batch_r8.py::test_explicit_nonblocking_input_keeps_working_and_one_independent_action",
+    "tests/execution_r4/test_backend_batch_r8.py::test_idle_sibling_cannot_make_a_full_block_independent",
+    "tests/execution_r4/test_backend_batch_r8.py::test_admitted_queued_sibling_has_no_independence_proof",
+    "tests/execution_r4/test_backend_batch_r8.py::test_same_delivery_verification_three_files_seen_and_no_ack"
+  ],
+  "file_sha256": {
+    "peer_source.py": "f639cf000fcfe2effa8f85ae758e9991a0ef5ce84ed95e01e09135b8e45ce79b",
+    "presentation-check.mjs": "981fa47a0030aa7e33f1d46a8c6252b213fd77126a8bc69908d0f177fd814b95",
+    "protocol_fixture.py": "716d64c1768cf05babdfe7407921c182e39d516772156f2f613c3bfd03cb7acc",
+    "results_case.py": "f3f938f02d784f5afa98499538f37e8ba5394db47626494d872d17ddd3c578ba",
+    "README-r8.md": "b4b5a6215aa9f76a8631fe7463db8bc2d9298646f59fe0b6c609dcfa838a49b8",
+    "fixture-v3.diff": "ad0cad7a829178968ee787e258916767942fa2a99bf3de13b9a9817eb77bb568",
+    "fixture-v4.diff": "4481a364def996b9c5d5be99e31fc2ed51d3433feb8c26f9253744958119a83a",
+    "canonical_owner_v5.py": "039029e73289f6b8eefa1140835d52456a170e9e1882669d515e9c092e4ccd79",
+    "run_installed_r8_v5.py": "bfdaa9eec56a2063531e730301221be6aa7829856f6ec81ed34ec9545e906d6d",
+    "fixture-v5.diff": "a3047aa05ecb369521511d5a18b8b9911711c744c3357b87eb5ae1635214b578",
+    "test_backend_batch_v5.py": "c0148180f75bac67308407a91542ad54ed124ea3cbee8ed752d4fda40f1d0f47",
+    "test-oracle-v5.diff": "899698edf477cc336b05e28dac6b64bfbe718ee5eca40894a3d6cf1aa2238110"
+  },
+  "static_checks": {
+    "new_python_AST": "PASS",
+    "new_own_files_default_Ruff_0_17_5": "PASS",
+    "presentation_Node_syntax": "PASS",
+    "pytest_collection_and_execution": "NOT_RUN",
+    "application_or_fixture_allocated": false
+  },
+  "copied_helpers_byte_equal": {
+    "protocol_fixture.py": true,
+    "peer_source.py": true
+  },
+  "limits": [
+    "Six live-state cases use actual canonical Core/public APIs with inert protocol peers; no real provider.",
+    "Shared-work correlation and E16 native capture/artifacts are historical migrated read facts, not real managed execution/authority.",
+    "E16 complete/verify/seen writes are canonical and presentation consumes same test actual before/after API JSON; TypeScript presentation layer is source-copy, not installed browser.",
+    "No source/tests/helpers/ledger/prefix/Git changes and no performance measurement.",
+    "Attempt1 helper-import error preserved; this v2 has not been executed and requires a new Root retry gate.",
+    "v3 static only; first fixture FAIL remains authoritative for attempt2, and a new explicit Root gate is required."
+  ],
+  "preparation_revision": "R8 v5: request placement oracle excludes Active reference previews, without any global ID deduplication",
+  "runtime_ready_sha256": "8195150a17182c2f651dd2c924372fab172a76645a8d7f098c3d47b0a002ffd5",
+  "expected_base_pins": 1829,
+  "expected_payload_files": 1031,
+  "external_sha256": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r8\\READY.json": "8195150a17182c2f651dd2c924372fab172a76645a8d7f098c3d47b0a002ffd5",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r8\\SOURCE_ASSET_READY.json": "502d3042cc78ebb003f976bb0095a0df4ce519a7ed241ba2e8d4701b90a9f93f",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r8\\runtime-equivalence-vs-r7.json": "44e4c0592400e84c779d1b230972da6c81ed72b53422b1bee3e946c211d991ee",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r8\\package.py": "fbc035a3811a5a8165b64f8746ad5bc9dabe7d03dd5766ea210046bb04b4a869",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\build-manifest.json": "48d14b7138a87a704d9d5b309bc9e9778abac88a7fa9f3794f0c62f448b55b23",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\installed-audit.json": "7211ffed5b020fb90c88d0295dec487403e30b0a41b3f2005c3c9bdf3451ddbd",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\payload-manifest.json": "7ecdf0bf0abeacce1f5f1b7f021315d94d777c80ecf93271cf3303a86beca85b",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r3\\owned_commands.py": "20bbab168db33bafa2f46e68020fbc77f19c418a5a99514d941c35002704c3e0",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\node_modules\\typescript\\lib\\typescript.js": "3ae902c92cc44dace175c0e69e13a4b0899f6983c6121d76b9ab8dd5795e7675",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\src\\homeStatePresentation.ts": "bd82708b33960d66244d4b5d223693489cc74582b7ae7d2b90896ce2d6833a18",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend\\src\\homeStateContracts.ts": "4e0b79a9aafdf985dae5a949bb9696d90270d43288f3c86c05d9e72ed7a3919e",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\ci\\okto_nexus_connector-0.0.13-py3-none-any.whl": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+    "C:\\Program Files\\nodejs\\node.exe": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+    "C:\\Python313\\python.exe": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r8\\owned_commands.py": "20bbab168db33bafa2f46e68020fbc77f19c418a5a99514d941c35002704c3e0"
+  },
+  "r7_prepared_sha256": "20633e1412bbf585589199cda67a78da042c4d30650e64f2f8e5057ee2b539d7",
+  "expected_runtime_nonstatic_equal": 1024,
+  "snapshot_scope": "Six explicitly listed tables, not whole DB",
+  "end_audit": "finally: source/payload/test copies/own closure/TypeScript compiler and source copies/external tooling/R7-R8 raw runtime equality, including test failure",
+  "antecedent_attempt1": {
+    "runner_sha256": "d5006898579ea6d0780bddf27056197d676b188a1c717be5bdbf64d31d6604db",
+    "manifest_sha256": "df36773e9d4b63250ece1d32d02be3876cadc14df6abdf923f5785297020d419",
+    "record_sha256": "0e3e945d86a427b13d8f09a717d552f2a30c6f9d7d54f2e8d6b486679b1afa94"
+  },
+  "antecedent_attempt2": {
+    "qualification_sha256": "59b8af61e02fd5745b48ecb47d0ecbeeecd6838578dfd9a1fb3036368c1d1b42",
+    "manifest_sha256": "03bf24a50ba32747fc652c65a7dcaac637c3e3bf300c95a6831b502960495fb5",
+    "result": "0 PASS / 1 FAIL / 6 NOT_RUN; correct HTTP409 for invalid READY realization reuse; no product defect established"
+  },
+  "fixture_delta": {
+    "path": "canonical_owner_v3.py::Owner.second_binding",
+    "canonical_publish": "Existing test_local_realization.publish, new client_intent_id and local_consent_id, original workspace/root/candidate/agent; no authority SQL writes",
+    "proof": "New realization differs and is PENDING_APPROVAL before bindings:prepare/apply; first READY realization unchanged",
+    "before_after": "Full selected first binding/endpoint/profile/realization/local realization config/workspace/WXB/endpoint grants; zero sessions",
+    "tests_changed": false,
+    "scenario_scope_expanded": false
+  },
+  "antecedent_attempt3": {
+    "qualification_sha256": "57f91ca921d528dc24568cd5a751307aef474ff7d330943794a5cab8ba40a4ba",
+    "manifest_sha256": "0d0f2196af38b6a52add21938da5695ed6f694727c21675720fe3c4b586b976b",
+    "result": "0 PASS / 1 FAIL / 6 NOT_RUN; actor-mismatched receipt404 and canonical cleanup failure retained"
+  },
+  "receipt_delta": {
+    "mapping": "Recorded only from actual successful admission/submission in admit; unknown operation raises KeyError, no fallback",
+    "operator": "/api/v1/runtime-management/runtime/operations/{id} and headers.operator",
+    "subject": "/v1/runtime/operations/{id} and headers.subject",
+    "permissions_changed": false,
+    "DB_read_bypass": false,
+    "tests_changed": false
+  },
+  "antecedent_attempt4": {
+    "qualification_sha256": "bea0adb50ba2bea8e8ded09cf079ebd27c81028c0e52607070dd5ca88653c8ce",
+    "manifest_sha256": "14ab5bda85dca48a2c70dacfe1da9f8fc2e1fd0f0f46658c7de54fdee897e58a",
+    "result": "1 PASS / 1 FAIL / 5 NOT_RUN; same request counted across Active reference and NeedsYou action; strict cleanup passed"
+  },
+  "request_oracle_delta": {
+    "top_level": "All kind=request card placements are retained",
+    "embedded": "Only requests_preview inside a harness in needs_you are action placements; Active previews remain references",
+    "deduplication": false,
+    "two_independent_cards_still_fail": true,
+    "classification_assertions_changed": false,
+    "test_source_changed": true,
+    "explicit_preview_proof": "A06/C01 compare same attention object, complete harness refs and original entry id/group/revision/target/workspace against the single NeedsYou action placement"
+  },
+  "prior_unexecuted_v5_manifest_sha256": "9d71a2a3213d0923a70b0845c633d66ec229d273c62a07464cad047ec4f0f0d9"
+}

@@ -1,0 +1,17 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "syntax": "AST_PASS",
+  "pins": {
+    "benchmark.py": "45a50d995c69a480ee15b3b7cb4942efbb218e9680580e54eec0b0edd432b9a9",
+    "measure-worker.py": "fb0f52cec2f66a72359daa295c35c400e6b8414cf844474c3ecd8fe055d56e02",
+    "dataset.py": "530816b1396b904c28061da7f98ab64222beba202f81636fbf78658d862e27e6",
+    "persistent-worker.py": "d839f3255c018048a74054a81c53304eb5c8544461aa06e2e157557fa74684bb",
+    "persistent-prepare.py": "ac7cea740242bb959fdb1a2e5403ffe0bd38c0b1f2e87f2db7ab4ecd96e9e280",
+    "persistent-launch.py": "b1f19429e3764093ed13f999d0681a175757932a3dd4543e13baa8ea17ee04ac",
+    "persistent-README.md": "b1995d6d967cd0fcd082619569d8c18f8bd266837055766180266385b2f30666"
+  },
+  "executed": false,
+  "read_calls": 4,
+  "all_reads_awaited": true,
+  "notes": "AST/text generation only; no product imports or processes"
+}

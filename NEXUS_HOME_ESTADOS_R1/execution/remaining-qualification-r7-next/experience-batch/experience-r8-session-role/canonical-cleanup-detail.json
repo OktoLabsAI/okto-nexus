@@ -1,0 +1,36 @@
+{
+  "scope": "Canonical close outcomes are separate from physical process exit",
+  "unknown": true,
+  "sessions": [
+    {
+      "session_id": "ses_d64b122b1b0c0e5e6ee003c8cfaf6a04",
+      "close_confirmed": true
+    },
+    {
+      "session_id": "ses_81874f781271bca8f7cee84d5e5b9b35",
+      "close_confirmed": true
+    },
+    {
+      "session_id": "ses_9631313ab5d6f261f5e541ac18aa8cc3",
+      "close_confirmed": true
+    },
+    {
+      "session_id": "ses_a31c90f2fffc7f60aa345707690d4d87",
+      "close_confirmed": false
+    }
+  ],
+  "close_failures": {
+    "close-failure-3.json": {
+      "type": "RuntimeError"
+    }
+  },
+  "blocked_last_operation": {
+    "intent": "runtime.close",
+    "operation_id": "op_1d0e0d979c607f9f62184126612ad9df",
+    "stage": null
+  },
+  "process_exit": 0,
+  "signals": [],
+  "physical_resources_absent": true,
+  "interpretation": "Three session closes confirmed; the fourth canonical runtime.close did not confirm before its own bounded wait. Do not equate normal supervisor exit with all sessions CLOSED. Data retained; no retry, renewal, forced signal or decision was added."
+}

@@ -1,0 +1,80 @@
+{
+  "started_at": "2026-11-17T19:50:09.743772+00:00",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-ua5qfz74",
+  "selected": [
+    "tests\\execution_r4\\test_meta_harness_sessions.py",
+    "tests\\execution_r4\\test_native_decisions.py",
+    "tests\\home_evolution\\test_home_boundaries.py",
+    "tests\\home_evolution\\test_home_queries.py",
+    "tests\\home_evolution\\test_home_result_artifact_grouping.py",
+    "tests\\home_states\\test_atomic_ingress_readiness.py",
+    "tests\\home_states\\test_atomic_working.py",
+    "tests\\home_states\\test_delivery_semantics.py",
+    "tests\\home_states\\test_delivery_semantics_sqlite.py",
+    "tests\\home_states\\test_group_identity_cache.py",
+    "tests\\home_states\\test_operational_board.py",
+    "tests\\home_states\\test_operational_sqlite.py",
+    "tests\\home_states\\test_operational_status.py",
+    "tests\\home_states\\test_page_metadata_equivalence.py",
+    "tests\\home_states\\test_presentation_negotiation.py",
+    "tests\\home_states\\test_productive_progress_propagation.py",
+    "tests\\home_states\\test_productive_progress_status.py",
+    "tests\\home_states\\test_progress_equivalence.py",
+    "tests\\home_states\\test_projection_batch.py",
+    "tests\\home_states\\test_result_attention_lookup_equivalence.py",
+    "tests\\home_states\\test_results_boundary_completion.py",
+    "tests\\home_states\\test_revision_equivalence.py",
+    "tests\\home_states\\test_verification_proof.py",
+    "tests\\ui_simplification\\test_entry_app_integration.py",
+    "tests\\ui_simplification\\test_entry_pages.py",
+    "tests\\ui_simplification\\test_entry_related.py",
+    "tests\\ui_simplification\\test_harness_blocking.py",
+    "tests\\ui_simplification\\test_harness_board.py"
+  ],
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path[:0]=['C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\guard', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\execution_r4', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_evolution', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\legacy_native_fixture', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\quick_connect', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\ui_simplification'];import pytest;raise SystemExit(pytest.main(['-p', 'hst_origin_guard', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\pytest.ini', '--rootdir=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree', '--confcutdir=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\execution_r4\\\\test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[handoff-private]', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\execution_r4\\\\test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[message-private]', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\execution_r4\\\\test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_evolution\\\\test_home_boundaries.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_evolution\\\\test_home_queries.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_evolution\\\\test_home_result_artifact_grouping.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_atomic_ingress_readiness.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_atomic_working.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_delivery_semantics.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_delivery_semantics_sqlite.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_group_identity_cache.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_operational_board.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_operational_sqlite.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_operational_status.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_page_metadata_equivalence.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_presentation_negotiation.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_productive_progress_propagation.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_productive_progress_status.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_progress_equivalence.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_projection_batch.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_result_attention_lookup_equivalence.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_results_boundary_completion.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_revision_equivalence.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\home_states\\\\test_verification_proof.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\ui_simplification\\\\test_entry_app_integration.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\ui_simplification\\\\test_entry_pages.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\ui_simplification\\\\test_entry_related.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\ui_simplification\\\\test_harness_blocking.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\tree\\\\tests\\\\ui_simplification\\\\test_harness_board.py', '-v', '--tb=short', '-o', 'faulthandler_timeout=0', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-ua5qfz74\\\\reports\\\\tests.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-ua5qfz74\\cwd",
+  "helper_paths": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-ua5qfz74\\tree",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-ua5qfz74\\tree\\tests",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-ua5qfz74\\tree\\tests\\execution_r4",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-ua5qfz74\\tree\\tests\\home_evolution",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-ua5qfz74\\tree\\tests\\home_states",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-ua5qfz74\\tree\\tests\\legacy_native_fixture",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-ua5qfz74\\tree\\tests\\quick_connect",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-ua5qfz74\\tree\\tests\\ui_simplification"
+  ],
+  "stdin": "closed PIPE; no NUL console reopening",
+  "timeout": 1200,
+  "signals": [],
+  "build_source_pin_count": 1828,
+  "exit_code": 0,
+  "timed_out": false,
+  "forced": false,
+  "remaining_known_processes": [],
+  "observation_limit": "250ms descendant polling does not enumerate every short-lived child; no claim that it does.",
+  "helper_drift": [],
+  "ended_at": "2026-11-17T20:02:59.750062+00:00",
+  "payload_files": 1031,
+  "payload_drift": [],
+  "source_drift": [],
+  "known_processes": [
+    {
+      "pid": 59300,
+      "birth": 1794945009.7512407,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 44728,
+      "birth": 1794945009.790732,
+      "exe": "C:\\Python313\\python.exe"
+    }
+  ]
+}

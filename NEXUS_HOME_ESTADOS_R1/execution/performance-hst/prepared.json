@@ -1,0 +1,9 @@
+{
+  "state": "PREPARED_NOT_EXECUTED",
+  "validation": "stdlib ast.parse only; no product/test helper import or dataset generation",
+  "files": {
+    "PLAN.md": "34e5c1a1f05ebef13ffcb6df5ded9a94c41cd86f0e199d294180f1753119cc66",
+    "dataset.py": "530816b1396b904c28061da7f98ab64222beba202f81636fbf78658d862e27e6",
+    "benchmark.py": "e2cd71275f5757cb1114f917d605bf479b0c031eeb2061cdbe7c20ef53342b66"
+  }
+}

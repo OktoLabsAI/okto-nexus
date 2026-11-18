@@ -1,0 +1,544 @@
+[
+  {
+    "at": "2026-11-17T19:41:52.083796+00:00",
+    "label": "venv",
+    "argv": [
+      "rtk",
+      "proxy",
+      "uv",
+      "venv",
+      "--python",
+      "C:/Python313/python.exe",
+      "--seed",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp",
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 27444,
+        "birth": 1794944512.094586,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 35212,
+        "birth": 1794944512.156309,
+        "exe": "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\Scripts\\uv.exe"
+      },
+      {
+        "pid": 60124,
+        "birth": 1794944512.2487972,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  {
+    "at": "2026-11-17T19:42:04.132903+00:00",
+    "label": "build",
+    "argv": [
+      "rtk",
+      "proxy",
+      "uv",
+      "build",
+      "--out-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\artifacts",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\source"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp",
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 36960,
+        "birth": 1794944524.169004,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 34832,
+        "birth": 1794944524.240034,
+        "exe": "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\Scripts\\uv.exe"
+      },
+      {
+        "pid": 55352,
+        "birth": 1794944525.6153383,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\uv-cache\\builds-v0\\.tmp9lN6DJ\\Scripts\\python.exe"
+      },
+      {
+        "pid": 56640,
+        "birth": 1794944525.644374,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 39920,
+        "birth": 1794944527.9124744,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\uv-cache\\builds-v0\\.tmp9lN6DJ\\Scripts\\python.exe"
+      },
+      {
+        "pid": 26396,
+        "birth": 1794944527.9301312,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 50584,
+        "birth": 1794944554.6518211,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\uv-cache\\builds-v0\\.tmpH6hIe0\\Scripts\\python.exe"
+      },
+      {
+        "pid": 57376,
+        "birth": 1794944554.679486,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 27496,
+        "birth": 1794944556.5439708,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\uv-cache\\builds-v0\\.tmpH6hIe0\\Scripts\\python.exe"
+      },
+      {
+        "pid": 55448,
+        "birth": 1794944556.563053,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  {
+    "at": "2026-11-17T19:43:19.916329+00:00",
+    "label": "ci-install",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe",
+      "-I",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+      "install",
+      "--wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\artifacts\\okto_nexus-0.3.7-py3-none-any.whl",
+      "--output",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\ci"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp",
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 58612,
+        "birth": 1794944599.9362357,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 61008,
+        "birth": 1794944600.0285618,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 58680,
+        "birth": 1794944600.0677452,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 19808,
+        "birth": 1794944600.2618804,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 39492,
+        "birth": 1794944600.277667,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 3720,
+        "birth": 1794944658.1916733,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 55664,
+        "birth": 1794944658.2076628,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 55252,
+        "birth": 1794944661.8056176,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 57440,
+        "birth": 1794944661.8213253,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 60220,
+        "birth": 1794944686.7702136,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 57772,
+        "birth": 1794944686.7943788,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 50736,
+        "birth": 1794944695.196732,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 34768,
+        "birth": 1794944695.215625,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  {
+    "at": "2026-11-17T19:45:44.739263+00:00",
+    "label": "ci-smoke",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe",
+      "-I",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tools\\ci_installed.py",
+      "smoke",
+      "--wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\artifacts\\okto_nexus-0.3.7-py3-none-any.whl",
+      "--output",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\ci"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp",
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 45544,
+        "birth": 1794944744.7689817,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 45292,
+        "birth": 1794944744.8187387,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 41456,
+        "birth": 1794944744.8480325,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 38064,
+        "birth": 1794944745.1819725,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 37980,
+        "birth": 1794944745.206608,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  {
+    "at": "2026-11-17T19:45:56.054080+00:00",
+    "label": "twine-install",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe",
+      "-m",
+      "pip",
+      "install",
+      "twine"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp",
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 58136,
+        "birth": 1794944756.0824373,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 9720,
+        "birth": 1794944756.1601372,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 36260,
+        "birth": 1794944756.1883316,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  {
+    "at": "2026-11-17T19:46:23.295758+00:00",
+    "label": "twine",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe",
+      "-m",
+      "twine",
+      "check",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\artifacts\\okto_nexus-0.3.7-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\artifacts\\okto_nexus-0.3.7.tar.gz",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\ci\\okto_nexus_connector-0.0.13-py3-none-any.whl"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp",
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 33728,
+        "birth": 1794944783.3219073,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 11652,
+        "birth": 1794944783.3557448,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 44892,
+        "birth": 1794944783.3740764,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  {
+    "at": "2026-11-17T19:46:25.138177+00:00",
+    "label": "pip-check",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe",
+      "-m",
+      "pip",
+      "check"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp",
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 56724,
+        "birth": 1794944785.1614888,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 29760,
+        "birth": 1794944785.1946688,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 32600,
+        "birth": 1794944785.2097933,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  {
+    "at": "2026-11-17T19:46:54.638682+00:00",
+    "label": "installed-audit",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe",
+      "-I",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r7\\audit.py"
+    ],
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp",
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 46472,
+        "birth": 1794944814.6659913,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 49988,
+        "birth": 1794944814.708954,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 13772,
+        "birth": 1794944814.7337017,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 49036,
+        "birth": 1794944818.0106127,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 61220,
+        "birth": 1794944818.14948,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\okto-nexus.exe"
+      },
+      {
+        "pid": 48304,
+        "birth": 1794944818.1777015,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 8372,
+        "birth": 1794944818.1953876,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 61272,
+        "birth": 1794944818.3152747,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 57852,
+        "birth": 1794944818.441749,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\okto-nexus-connector.exe"
+      },
+      {
+        "pid": 35328,
+        "birth": 1794944818.469494,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 48864,
+        "birth": 1794944818.4868972,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 5300,
+        "birth": 1794944818.8891397,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 55932,
+        "birth": 1794944818.9250112,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\okto-nexus.exe"
+      },
+      {
+        "pid": 60068,
+        "birth": 1794944818.9404309,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 56556,
+        "birth": 1794944818.9558823,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 58032,
+        "birth": 1794944820.1038132,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 37700,
+        "birth": 1794944820.1421368,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\okto-nexus.exe"
+      },
+      {
+        "pid": 60136,
+        "birth": 1794944820.159492,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 61252,
+        "birth": 1794944820.1754427,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 51408,
+        "birth": 1794944821.3404355,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 53552,
+        "birth": 1794944821.3764513,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\okto-nexus.exe"
+      },
+      {
+        "pid": 29768,
+        "birth": 1794944821.3901715,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 55836,
+        "birth": 1794944821.4073668,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 32228,
+        "birth": 1794944822.729192,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 57980,
+        "birth": 1794944822.7615616,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\okto-nexus.exe"
+      },
+      {
+        "pid": 53120,
+        "birth": 1794944822.7762225,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 60624,
+        "birth": 1794944822.79328,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  }
+]

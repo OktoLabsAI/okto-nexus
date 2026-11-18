@@ -1,0 +1,163 @@
+# HST-002 — Source proof map and proposed v2 read contract
+
+Static audit, 2026-11-17. This report changes no product, authority, ledger, package, runtime, or qualification status. No test or provider was executed. Existing test bodies are reusable specifications, not a current PASS. The complete package plan/prompt and the ledger's A–E/H scenarios informed this map; the remaining plan sections constrain compatibility, performance, accessibility, and qualification.
+
+## Source cut
+
+| Source | Read pin |
+| --- | --- |
+| Nexus | `f28a31a22436c366a4c8dbdf5e3b250d606a61be` |
+| Connector Core | `497ee2b7a14b99c50cba97eac74f3b00d4863f26` |
+| Connector | `a4d510080d7a685fa442a4c5c30419952589fe04` |
+| Package plan SHA256 | `e1944fcf94823fc9f6c32e4b7b3958bc5103311e04f0658b17a00d5e53b10247` |
+| Package ledger SHA256 | `5c1dc8cec525643e4b27d1acb8bb3fad25b069d114b15543ae24e7bab03fe771` |
+| Package prompt SHA256 | `e96fd831513218efedd4b045c022ad64be19ca3aaf8d4070f8c2d8671bcdbc6f` |
+
+Repositories are sibling checkouts under `D:/Projetos/Techridy`; the package is `C:/Users/jpamb/Downloads/NEXUS_HOME_ESTADOS_R1_PACOTE_CODEX`. Pins describe source inspection, not an installed or native campaign. Root's forthcoming HST branch/bump is a different cut.
+
+## Authoritative facts already available
+
+| Fact | Producer/read source | What it proves and its limit |
+| --- | --- | --- |
+| Registered connection | Nexus `sqlite/home_entries.py::CONNECTIONS`; bindings, workspace bindings, endpoints, agents, executors | Exact registered relationship. Current `ConnectionContext` carries server/executor/binding/workspace/workspace-binding/agent; public-ID lookup also matches endpoint. Registration, enabled metadata, and public ID do not prove a live runtime. Preserve endpoint and revisions in internal proof facts without changing the existing group identity. |
+| Session ownership and control | `application/execution_session_views.py::read_execution_session`; `execution_session_reuse.py`; SQLite lease authority/effective records | Exact session owner generation, lease expiry, connection generation, executor control, lifecycle, and binding/endpoint authority can establish scoped control availability. The public session view deliberately reports process/ownership facts as UNKNOWN where not proven. Its agent summary is capped and cannot prove complete absence. Reuse these predicates in batch; do not call the view/service per card. |
+| Productive operation | `execution_operations`, dispatch state and latest operation receipt; current `HARNESS_BLOCKING` query | Operation identity is server/executor/operation, attached to an exact session and connection. Admission/dispatch, RUNNING, terminal, and possible-effect outcomes are different facts. Current RUNNING is not automatically current progress after a human request. Queue admission is not proof of an independent executable path. |
+| Native event ordering | `execution_event_ingress`; `application/execution_native_requests.py`; `application/execution_results.py` | Accepted contiguous events have stream epoch, source sequence and an authenticated operation/session context. A gap does not publish a fresh actionable request. Terminal output projection is bounded and correlated; it does not require transcript reads in Home. Stream ordering is stronger than receipt arrival time. |
+| Native human request | `execution_native_requests.py`, `execution_native_recipient.py`, native request/approval rows | Canonical request ID includes server/executor/session/epoch/owner generation/native ID. Source operation, request hash/revision, TTL and recipient are persisted. Replay does not renew TTL. Original actor/immutable linked message identifies the recipient; a visible question for another agent is not an operator action. |
+| Decision accepted | `execution_native_decisions.py`, native decision row, operation and outbox; migrations 087/088 | Unique request/intent CAS and exact authority revalidation protect one decision and one native operation. A 202 proves registration. `SUBMITTED` also covers a SUCCEEDED native-write operation; it does not prove that the harness applied the answer or resumed work. `REFUSED_BEFORE_EFFECT` and `OUTCOME_UNKNOWN` remain distinct. |
+| Coordination action | Canonical Attention and handoff services | Actual allowed action and recipient decide whether a human action exists. OPEN handoff, verifier eligibility, shared work, or informative watch alone do not prove suspension of any harness. Do not attach one occurrence to every binding of an agent. |
+| Connector transport/runtime | Connector `services/r4_execution.py`, `services/r4_events.py`, `services/core_host.py`, `daemon/r4_control.py` | R4 scope includes session owner and connection generations. Core owns native parsers/runtime; Connector forwards scoped events/decisions and durable receipts, not a new Home classifier. The control loop can preserve leases while offline (`r4_control.py`, preserve-leases branch); transport loss is not proof that the process ended. Receipt-publication failure cannot justify native replay. |
+| Session release | Connector `services/r4_session_release.py` and Nexus session/release records | Public Core outcomes and canonical release history can distinguish closed/releasing states. A lifecycle value, process PID, host heartbeat, or empty pending map alone is insufficient for physical exit or Idle. No individual reconnect capability is created by these reads. |
+
+## Adapter × request proof matrix
+
+These are contracts found in source, not current provider observations. Every row still needs the exact adapter, authenticated scope, current generation/epoch, source operation, TTL, recipient and allowed-action validation. A method name alone is not sufficient.
+
+| Adapter / request | Blocking proof available | Generation/currentness | Response and resumption limit |
+| --- | --- | --- | --- |
+| Codex `item/tool/requestUserInput` | Native input validator accepts only a real boolean `isBlocking`. True can prove suspension of that turn/session; false proves this question is not a blocker. Neither alone decides full connection blocking. | Codex checks active thread/turn and pending request hash; Nexus persists session owner generation, stream epoch and request source sequence. | Reply revalidates exact pending request and writes the native reply. No universal causal stream watermark in the decision receipt establishes application/resumption. |
+| Codex command/file approval | Typed supported approval method and exact pending turn establish an actionable permission, not an explicit `isBlocking` boolean. Blocking stays unknown without an additional method contract. | Same exact thread/turn, pending hash, session/epoch and authority fences. | `approval.decide` accepted/write receipt is not native progress. Denial does not synthesize native cancellation. |
+| Codex `mcpServer/elicitation/request` | Typed form/permission schema supports action. No requestUserInput blocking semantics may be borrowed. | Core requires exact active thread/turn and request identity; Nexus recipient handling distinguishes elicitation permissions from agent questions. | Input reply is correlated; application/resumption remains unconfirmed absent causal evidence. |
+| Claude `claude/AskUserQuestion` | Bounded typed questions and supported control input; no explicit pause boolean found. Blocking unknown. | Claude stream adapter records its local generation, active approval turn, tool-use identity and consumed request IDs; stale generation/hash cannot be answered. | Successful control response writes allow/updated input. No adapter-wide post-answer applied/resumed acknowledgement was found. |
+| Claude tool permissions | `can_use_tool` and the tool contract support specific permission decisions; tool parser support is not a universal blocking or version qualification claim. | Same local-generation/request/tool-use fences. | An approved tool invocation is not proof that the harness has resumed productive work. |
+| Pi `extension_ui_request`: select/confirm/input/editor | Typed UI request and bounded timeout, but no `isBlocking` equivalent found. Blocking unknown for each of the four methods. | `native/pi_inputs.py` uses start-turn generation, active request identity/hash and deadline, consumes a response once, and clears requests at turn end. | The adapter's agent-start/settled events describe activity, but its wire protocol lacks a universal true per-turn correlation. Do not turn a later generic event into same-decision causal proof. |
+| Nexus question / approval / handoff verification | Canonical recipient and allowed actions prove the operator's task, not native suspension. | Attention occurrence/source/preference revisions and source relationship must remain current. | Existing exact decision/verify/inspect/recovery flow remains authoritative; Home adds no write endpoint. |
+| Agent-directed request / external report | Operator visibility does not grant response authority. External completion is reported evidence, not native success or a pause contract. | Preserve the occurrence and exact canonical correlation, or explicitly unknown origin. | No lease/slot/claim/grant change, native retry, or invented apply/verification signal. |
+
+Core source anchors: `native/native_inputs.py`, `decision_bridge_r4.py`, `approval_reducer_r4.py`, `native/runtime_bridge.py`, `native/pi_inputs.py`, `native/adapters/{codex,pi,claude_code_stream,compatibility}.py`, `runtime.py::decide_native_approval`, and `models.py::OperationReceipt`.
+
+Exact-version allowlists in `compatibility.py` differ by method. For example Codex 0.156.1 lists several request contracts, whereas 0.157.0 lists command approval only; Pi 0.87.1 lists its four inputs; Claude versions list different tools/questions. `tested_version_contract` and `capabilities_verified=False` must not become a claim that all methods or current native versions were qualified by HST. Availability is established from the exact selected adapter/session and current authority, not a family-wide checkbox.
+
+## Concrete gaps in the current Home reduction
+
+1. **Incomplete input facts.** `HARNESS_BLOCKING` currently selects request/epoch/method/TTL, approval state/decision time, source operation and latest receipt arrival time. It omits adapter identity, owner generation, event sequence, decision/native-operation linkage, current lease/control proof and scoped coverage. `SESSIONS` exposes lifecycle only. `passive_record` derives its legacy idle state from READY/ACTIVE alone; v2 must not treat that as an Idle proof.
+2. **Method and dimension conflation.** `home_harness_blocking.project` recognizes requestUserInput by method only. v2 must require Codex provenance and expose session blocking separately from connection aggregation. Other native methods remain actionable with unknown blocking.
+3. **False release risk after a decision.** The reducer compares receipt `received_at` with `decided_at`; an unblocked RUNNING branch precedes confirmation. An old RUNNING record delivered late can therefore outrank the intended confirmation state. Arrival timestamps are not causal proof. Core `OperationReceipt` and projected decision receipts do not supply a stream sequence/watermark at answer application. Request sequence alone cannot prove an event happened after the decision.
+4. **Partial-source blanket suppression.** One global completeness flag rejects all positive working proof when any relevant source fails. v2 needs per-connection/session/operation coverage: preserve independently proven Working, but do not claim Idle, no pending work, or full blocking from incomplete absence.
+5. **Aggregation before visual filters.** Relation facts used to decide full connection blocking must include every authorized relevant session before agent/state/harness/host presentation filtering. A blocked sibling and a filtered-out working sibling are still one connection. Same-agent different binding is not a sibling.
+6. **Shared request incorporation.** Current board incorporation uses an any-blocked-owner test. Shared coordination without a uniquely proven request owner must remain one independent notification, rather than disappear into one arbitrarily blocked harness. Native exact ownership must not be broadened by shared parent work.
+7. **Placement versus blocking.** Current board places a harness in Needs you only for `blocks_harness=True`; its frontend validator enforces that invariant. v2 confirmation placement requires a separate reason and correlated prior block/decision, not fabricated true. The answered request contributes zero pending human actions.
+8. **Counts and semantic expiry.** Registered harness count is not connected/working/idle count. Full pending actions and confirmation counts cannot use the event/child preview. Raw blocking rows, including arrival timestamps, currently participate in revision hashing; enrich them only through a semantic projection. Include actual TTL/lease state transitions and `next_refresh_at`; do not invalidate merely because an unchanged heartbeat or generated time changed.
+
+## Results boundary and verification limitation
+
+`sqlite/home.py::RESULTS` already distinguishes terminal native receipt, handoff association/current claim and historical claims. Artifacts are deduplicated through authorized result relationships. `result_item` currently exposes handoff status as `verification_state`; this does not independently prove verification. Turn SUCCEEDED, task COMPLETED, output availability, verification and cleanup need the separate semantics owned by the Results agent.
+
+`HandoffService.handoff_verify(pass)` verifies eligibility and CASes VERIFYING/current claim epoch before emitting `handoff.completed` with `verified_by`; failure returns to CLAIMED and advances the claim epoch. However emitted verification events do not explicitly carry claim epoch; `_emit` adds trace ID, and repository verification fields retain criteria/verifier/latest feedback rather than a per-delivery verdict ledger. Do not attach the latest `verified_by` to an arbitrary historical/current delivery. E05 requires a provable current-claim chain or a narrowly documented evidence-contract extension; if the exact version cannot be proven, emit verification unknown. E04 remains completed without a verified badge. E06 must never inherit prior-claim verification. This is a source-contract limitation to resolve with the Results owner, not permission to rewrite receipts.
+
+## Minimum negotiated v2 contract proposed for G0
+
+Root's proposed negotiation is appropriate: `/info.home_presentation_versions=[1,2]`; omitted `presentation_version` selects **1**; explicit `2` returns `metadata.presentation_version=2` on the harness family. Keep v1 placement, enum validation, envelope and serializers intact. Compute the new projection separately (`project_v2`) from the same authorized relation, with `page(..., presentation_version=1)` as the default. No new productive table, authority, command, or Home region.
+
+Internal additions should be frozen typed facts attached optionally to `EntryRelations`, not public raw metadata:
+
+- Connection/session runtime facts: exact connection and endpoint identity/revisions; session ID, owner generation, stream epoch; effective lease/control generation and validity; lifecycle and relevant completeness. Read current lease authority/effective predicates in bounded SQL batches. Do not call Core/Connector or inspect processes/files from Home.
+- Operation facts: full server/executor/operation key, exact session/generation, admission/dispatch/current outcome and bounded progress/terminal references. Unknown possible effects stay explicit. A queue contributes independent progress only with a proven admissible path unrelated to the blocked request.
+- Dependency facts: canonical request/Attention identity/revisions, actual adapter/method, exact source operation/session/generation/epoch, current TTL/recipient/actionability, tri-state session-blocking contract, source sequence, and decision/native-operation references. Keep decision registration, delivery and causal application proof separate.
+- Coverage: per pertinent source/scope completeness and reason; missing rows cannot mean known zero. No prompt, response body, tool arguments, token, lease secret, or raw metadata enters the DTO.
+
+Public `operational_status.version=1` uses plan §8.2 enums for connection/activity/blocking/freshness and nullable `as_of/state_since/reason_code`; count objects use the existing project convention **`{value,total_is_exact}`** (an intentional reconciliation of the plan's conceptual `exact` spelling). Include bounded pending refs, has-more/cursor, running/blocked session counts and confirmation state. `placement_reason` is separate (`normal_monitoring`, `human_block_confirmed`, `awaiting_native_confirmation`, `monitoring_unconfirmed`). Correlation refs are opaque authorized request/decision/session/operation/epoch identifiers, not new capabilities.
+
+Add the negotiated **requests** partition, `GET /home/harness-board/cards/{card_id}/requests?presentation_version=2`, with a `HomeHarnessRequestsPage` of existing canonical request DTOs, card/scope/revision metadata and its own cursor. Read/count the full relation before preview or paging; a request answered in another tab must disappear from open-action totals without a new queue. Bind every cursor/revision to presentation version, principal, Server, scope, card/column/partition, filters and semantic revision. Version1 does not gain the v2-only partition accidentally.
+
+Pending confirmation may keep a formerly fully blocked harness in Needs you with `blocks_harness=null`, pending actions zero and the same decision/prior-block references. Independently proven current productive work keeps Active and does not claim the answered session resumed. Without a native causal fence, retain uncertainty; never substitute timestamp, decision 202, native write SUCCEEDED, empty pending map, or session READY for resumed proof. A genuinely proven terminal execution/current live idle context may establish the new current state without asserting that the answer was applied. Unsupported methods cannot acquire a positive blocking contract through this fallback.
+
+New delivery metadata is read from `HomeResult.delivery_semantics` / the Results helper, not recomputed from titles or free text in the board. Keep native canonical and external reported evidence distinct.
+
+For v2 result membership, `SqliteHomeEntryRelations.read(..., presentation_version=1)` can accept an internal presentation selector and set SQL parameter `delivery_presentation_version`. Root calls the extra keyword only for v2, preserving existing v1 query fakes. The selector does not become an undocumented public scope key. The Results owner adds VERIFYING membership only for value 2; old result membership remains unchanged.
+
+### HST-008 causal gap: exact path and smallest compatible option
+
+Further source tracing finds no native `APPLIED` state in this path. `execution_native_decisions.py` stores canonical state CONFIRMED or DENIED, then returns native stage DISPATCH_PENDING, SUBMITTED, OUTCOME_UNKNOWN or REFUSED_BEFORE_EFFECT. `sqlite/execution_receipts.py:323` maps OUTCOME_UNKNOWN to RECONCILING and native terminal receipt stages to RESOLVED_TERMINAL. APPLIED elsewhere in Nexus belongs to setup proposals or runtime handoff-result application; neither proves a native answer was applied.
+
+Receipt provenance stores `source_connection_id`, `source_connection_generation`, digest and canonical frame. This protects source/integrity and operation identity, but contains no event-stream watermark at application. The Core native reply revalidates ownership and invokes a transport write; successful completion establishes that write's effect, not the external process's semantic acceptance. Server-side MAX(sequence) captured at decision registration, dispatch, or receipt ingestion would only fence already received events. A delayed pre-decision event may exceed that number later. It is useful diagnostic metadata but cannot be labelled causal acknowledgement.
+
+HST-008 can still implement exact confirmation references, no duplicate response, zero pending-action count after decision, conservative placement, native refusal/unknown inspection, old-generation invalidation, independent-work exception, and terminal/current-runtime reconciliation. D07 must explicitly reject the late old RUNNING case. These are useful functional changes, not a reason to leave the whole task untouched. D08's positive claim of resumed **same blocked execution after application** needs an additional genuine producer guarantee where one is absent today.
+
+The minimum compatible producer extension, if approved, is an optional authenticated ordered event or equivalent durable fact for the same session/owner generation/stream epoch, correlated with the exact native request and decision operation. Distinguish `response_written` from `response_applied` and `productive_progress`; emit an applied/resumed assertion only when that adapter's protocol supplies such evidence. A Core-generated marker immediately after its own write may fence local write ordering but must not be called applied; an event merely received afterwards still needs adapter-level causal correlation. Carry the proof kind and ordered reference through Connector unchanged, persist through the existing event ingress, and expose only opaque refs to Home. Old producers omit the optional fact and remain unknown; no required field, synthetic success, replay or lease change. Producer fact validation and adapter tests must precede a positive native qualification. A schema extension cannot create an acknowledgement the native wire does not provide.
+
+This report does not implement that extension or alter Core/Connector. It identifies the exact boundary for a separate small contract decision, while the existing source supports the conservative v2 read model now.
+
+## Implementation and test seams
+
+| Task/scenarios | Reuse inspected | New proof required before qualification |
+| --- | --- | --- |
+| HST005; A01–A08, B01–B12 | Complete connection/session joins and operation-owner/history links in `sqlite/home_entries.py`; `test_session_views.py` especially disconnected/session collision cases | Same-agent two bindings, two epochs/generations, endpoint revoked/control stale; complete-versus-truncated coverage. Current connected persistent runtime with all turns terminal versus registration/host heartbeat/one-shot only. No N+1 or cross-authority expansion. |
+| HST006–007; C01–C12 | `test_harness_blocking.py` existing explicit nonblocking, parallel work, stale proof, exact ownership tests; Core typed-input tests | Codex provenance guard, all four Pi methods/Claude requests unknown, idle sibling does not release full block, independently executable versus dependent queue, visual filter cannot hide progress, shared occurrence not incorporated by any-owner. |
+| HST008; D01–D14 | `test_native_request_ingress.py` gap/replay/terminal/old-generation tests; `test_native_decisions.py`, `test_native_decision_provenance.py`, `test_native_question_recipient.py` | Decision 202/native write never implies resume. Delay an old RUNNING event/receipt past the decision; same generation and true causal later evidence required. Lost response, exact same intent, two-tab CAS, deny/expiry, snooze and seen do not release. Do not make D08 pass using synthetic timestamps as a causal contract. |
+| HST009–010; A/C/D and J | `test_harness_board.py` paging/related revision/authorization, stable-row-order test in `test_harness_blocking.py` | v1 byte/placement compatibility; v2 confirmation placement with null blocking; requests beyond preview all reachable; count unit/exactness before paging; shared dedup; cross-version/principal/card cursors rejected; heartbeat semantic stability then true expiry without SSE. |
+| E01–E16 | `sqlite/home.py`, execution result projection, `tests/test_verification.py`, existing Home result/artifact tests | Current/old claim, explicit verifier versus plain COMPLETED, negative verdict, output absence, partial output/cleanup, external report versus native success; stable delivery/view-state identity and authorized three-artifact relationships. Results owner must resolve exact claim evidence before a verified badge. |
+| H01–H10 | Native provenance/recipient/CAS tests; exact target/session resolvers; current read-only Home UoW guards | Snapshot all productive tables and command counters around v2 GET/page/detail. Auth last-seen metadata documented separately. Foreign IDs/expired generation forbidden; hostile labels/private data redacted; no decision as another agent; no retry/reconnect/grant/claim/ACK effects. Browser required separately for badge/bell routing and user interactions. |
+
+Use controlled clock and barriers, not sleeps. Reuse the canonical native ingress/decision fixtures with authenticated epoch/nonce/lease maintained through APIs; do not mutate TTL/recipient to hide a refusal. A unit test of normalized facts can prove reducer behavior, but cannot qualify an adapter's real native pause/resume contract. HST-L campaigns, OS/topology, accessibility speech, performance targets, prior human failures and default-activation gates remain separate and unexecuted here.
+
+## R3 correction: canonical contiguous projection proof
+
+Browser preflight exposed an invalid reader assumption introduced after this initial map: `execution_event_watermarks.projected_through` has no canonical writer. The real `commit_execution_events` producer projects results/native requests and writes `committed_contiguous` atomically, rolling both back on projection failure. Thus a gap-free committed watermark proves the existing projection boundary; equality with the unmaintained legacy column does not. The authorized reader-only correction removes that equality while preserving current authority, revision, scope, lease, generation, opening receipt and gap fences. It does not supply the still-missing native decision application/resumption acknowledgement required for D08. See `operational-currentness/browser-proof-mismatch.md`; the failed initial browser cut remains an antecedent. New canonical-ingress regression execution is separately qualified after coordinated freeze.
+
+The subsequent sufficiency trace also found that Core's committed `core.event_pump_failed / EVENT_STREAM_UNAVAILABLE` incident does not atomically close the Server lease/control/session: containment is asynchronous. The reader therefore additionally excludes that exact committed current-session/epoch incident using the existing error partial index, matching the already canonical Attention/admission fence. Gap-free ingress alone is not a claim that a stream remains available. The first gap test was itself invalid (future sequence absent from Core journal) and its contained incomplete cut is preserved; its replacement uses and reconciles only real Core-journaled sequences. Neither correction supplies a decision-application acknowledgement or resolves D08.
+
+Safe ownership: Root owns negotiation/router/service and frontend types/API; this agent can implement the optional relation facts, batch adapter, v2 operational reducer/placement/paging and focused tests after G0. Results owner owns `sqlite/home.py` and result semantic helper. Frontend controller/validator/renderer owner consumes negotiated DTOs and fixes presentation pause separately. No initial Core/Connector edit is needed to expose existing facts; any additional native causal proof would require a documented adapter-specific contract change and separate qualification, not a Home heuristic.
+
+## Read-file hashes
+
+These hashes fix the audited Home/native projection inputs; they are not a build manifest.
+
+| File under Nexus | SHA256 |
+| --- | --- |
+| `src/okto_nexus/domain/home_entries.py` | `63b0593277226c310d6151157ec7a6ab3781668e6fe9ac8dabd91ffc3b0569f9` |
+| `src/okto_nexus/adapters/outbound/sqlite/home_entries.py` | `324ca1b40e22dc55e0f55f26b666a877923a90ca7fba9fc4f06c6730fc97128a` |
+| `src/okto_nexus/domain/home_harness_blocking.py` | `f3fe6b223e4340d1a4cbdd93ee206459f60335c59b0da9a911d953790795b5ef` |
+| `src/okto_nexus/domain/home_harness_board.py` | `e3714d2e3601a0a611baaf14dc4fea594c52ff7851944d4364f0b8ceaf3197d0` |
+| `src/okto_nexus/application/execution_native_requests.py` | `8d2d030ff2ae0f8000dfce565f7c8abf7e4829231b16a468fc5fd62194040138` |
+| `src/okto_nexus/application/execution_native_decisions.py` | `81110658b06514b867420cea7756f21e43648f5e8bcfbb6485d3b05aa35df644` |
+| `src/okto_nexus/application/execution_session_views.py` | `7d8b5415a45ba7261b8a35a091128772a7046fbdaf37684a15b33bb887ee6caf` |
+| `frontend/src/homeTypes.ts` | `0d2eaeb8e81d509881412c17f590494e3435fa3460f25e419303614e5278b78e` |
+| `frontend/src/homeController.ts` | `5d0de1e04e503f3eb4892d2876a6f02bbed40f2d228cd3b0aefa539db9f92c65` |
+
+Audit commands were read-only `rtk proxy rg`, `rtk proxy python -B -X utf8` for bounded text/hash reads, and repository pin reads. There is no test command/result, service PID, provider usage, cleanup action or new PASS to report.
+
+## R5 correction: productive events with a SUBMITTED receipt
+
+The real R3 browser fixture exposed a second reader assumption: Core retains a
+`SUBMITTED` receipt while the admitted turn emits committed `started` and
+`progress` events. It does not write a productive `RUNNING` receipt. The older
+Work relation already recognizes these events, but the new harness reducer
+required `RUNNING`, so it could not recognize actual independent work.
+
+The R5 correction transports a private, complete set of positive progress
+identities from the existing Work SQL relation, before preview truncation. It
+matches server, executor, operation, session, workspace, subject agent, binding,
+workspace binding, owner generation and stream epoch. This is separate from
+legacy item JSON and revisions. Only an exact positive match can supplement a
+`SUBMITTED` operation. Missing facts remain unknown; labels, running counts and
+the first twenty preview references are not evidence.
+
+The reducer retains current authority, runtime, lease/control and stream
+fences, excludes uncertain dispatches, and respects exact native blockers and
+unconfirmed decisions. Thus independent current work can keep the harness in
+Active while the request remains in Needs You. Terminal independent work does
+not release another session's block. This does not create causal proof that a
+decision was applied. Core, receipt stages, schema and native protocols are
+unchanged. R5 execution and final qualification are recorded separately; this
+source explanation is not itself a passing test.

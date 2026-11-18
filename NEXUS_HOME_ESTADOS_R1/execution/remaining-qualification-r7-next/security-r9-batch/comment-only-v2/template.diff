@@ -1,0 +1,10 @@
+--- base/s1-passive.js
++++ comment-only-v2/s1-passive.js
+@@ -1,6 +1,6 @@
+ async page => {
+   // Use with playwright-cli run-code, after own storage-state load and snapshot.
+-  // __CONFIG__ is substituted only in an own Temp copy, never in this source.
++  // Configuration is substituted only in an own Temp copy, never in this source.
+   const cfg = __CONFIG__, checks = [], network = [], consoleErrors = [];
+   const check = (id, ok, detail) => {
+     checks.push({id, ok, detail});

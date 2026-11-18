@@ -1,0 +1,20 @@
+{
+  "runtime_source_commit": "90b94ca9673c087554b7dc4a226490ef5417bd32",
+  "runtime_wheel_sha256": "8ab8f08e8f5e06b428ed4642045ad5e4069d93891a869d4dc61fcaa5bb3ffa19",
+  "additions": {
+    "tests/home_states/test_results_boundary_completion.py": "17e0e923b80e068d6cda05621b76bd4a3e96d3e35e4cf3d36a1c731fe14d7df1"
+  },
+  "selections": [
+    "tests/home_states/test_results_boundary_completion.py",
+    "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor",
+    "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[message-private]",
+    "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[handoff-private]"
+  ],
+  "scope": "Six new Results boundaries plus original-recipient denial and canonical private operator message/handoff cases.",
+  "qualification": "NOT_RUN; post-build supplementary test closure, not inherited R5 execution",
+  "limits": [
+    "No source/prefix/helper/TTL changes; only the exact new test file is added.",
+    "Historical synthetic read fixtures are not native execution; no provider or human.",
+    "Existing private-message/handoff tests use inert native fixtures; broadcast is outside this supplement."
+  ]
+}

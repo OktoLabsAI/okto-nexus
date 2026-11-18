@@ -1,0 +1,121 @@
+--- native-settings-guard.js
++++ native-settings-guard-v2.js
+@@ -14,7 +14,7 @@
+   const nativeSelect=async percent=>{
+     await page.goto('chrome://settings/appearance');
+     // Accessible role from the actual WebUI, never prefs files or private APIs.
+-    const select=page.getByRole('combobox',{name:/^(Page zoom|Zoom da página)$/i});
++    const select=page.getByRole('combobox',{name:/^(Page zoom|Zoom da página):?$/i});
+     await select.waitFor({state:'visible',timeout:12000});
+     check('native-Page-zoom-control-'+percent,await select.count()===1&&await select.evaluate(e=>e.tagName==='SELECT'),await select.ariaSnapshot());
+     check('native-Page-zoom-enabled-'+percent,await select.isEnabled(),true);
+--- probe_server.py
++++ probe_server_v2.py
+@@ -3,6 +3,8 @@
+ from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
+ import json
+ import os
++import sys
++import hashlib
+ from pathlib import Path
+ import threading
+ import time
+@@ -23,7 +25,7 @@
+         def do_POST(self):self.send_response(405);self.end_headers()
+     server=ThreadingHTTPServer(('127.0.0.1',0),Handler);server.daemon_threads=True
+     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
+-    ready=dict(pid=os.getpid(),origin='http://127.0.0.1:'+str(server.server_port),scope='Static geometry calibration only; no Nexus import/process',duration_seconds=90)
++    ready=dict(pid=os.getpid(),root=str(root),worker=str(Path(__file__).resolve()),worker_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),prefix=sys.prefix,executable=sys.executable,base_executable=sys._base_executable,origin='http://127.0.0.1:'+str(server.server_port),scope='Static geometry calibration only; no Nexus import/process',duration_seconds=90)
+     path=root/'control/zoom-probe-ready.json';assert not path.exists();path.write_text(json.dumps(ready,indent=2)+'\n');print(json.dumps(ready),flush=True)
+     end=time.monotonic()+90
+     try:
+--- run.py
++++ run_v2.py
+@@ -20,7 +20,7 @@
+ def write(path,value):
+     with path.open('x',encoding='utf-8')as stream:stream.write(json.dumps(value,indent=2)+'\n')
+ def check(gate_path):
+-    manifest_path=HERE/'prepared-bound.json';manifest=json.loads(manifest_path.read_text());gate=json.loads(gate_path.read_text())
++    manifest_path=HERE/'prepared-bound-v2.json';manifest=json.loads(manifest_path.read_text());gate=json.loads(gate_path.read_text())
+     assert gate['approved']is True and gate['scope']=='NATIVE_ZOOM_BROWSER_ONLY'and gate['start_nexus']is False
+     assert gate['deadline_seconds']==180 and gate['allow_own_containment']is True
+     assert re.fullmatch(r'hst-native-zoom-r9-[a-z0-9-]{1,60}',gate['cut_id'])
+@@ -39,6 +39,11 @@
+     modules=Path(tooling['node_modules']);actual={path.relative_to(modules).as_posix():sha(path)for name in ['@playwright/cli','playwright','playwright-core']for path in(modules/name).rglob('*')if path.is_file()}
+     assert actual==tooling['cli_payload_pins']
+     assert json.loads((modules/'@playwright/cli/package.json').read_text())['version']=='0.1.24'
++    runtime=manifest['probe_runtime']
++    prefix=Path(ready['python']).parent.parent
++    assert sha(prefix/'pyvenv.cfg')==runtime['venv_config_sha256'],'Frozen venv metadata drift'
++    assert sha(ready['python'])==runtime['venv_python_sha256'],'Frozen venv launcher drift'
++    assert sha(runtime['base_executable'])==runtime['base_executable_sha256'],'Expected base interpreter drift'
+     return dict(manifest_sha256=sha(manifest_path),gate_sha256=sha(gate_path),source_commit=ready['source_commit'],wheel_sha256=ready['wheel_sha256'],payload_files=1031,source_files=1829,cli_files=len(actual)),manifest,gate,ready
+ def main():
+     p=argparse.ArgumentParser();p.add_argument('--gate',type=Path,required=True);a=p.parse_args()
+@@ -49,7 +54,7 @@
+     prepared=subprocess.run([sys.executable,'-B',str(browser/'prepare_runtime.py'),'--package-ready',str((REPO/manifest['ready']).resolve()),'--expected-source',ready['source_commit'],'--mode','baseline','--browser-window-open'],input=b'',capture_output=True,timeout=20,check=True)
+     root=Path(json.loads(prepared.stdout)['root']).resolve();print(json.dumps(dict(event='ALLOCATED',root=str(root))),flush=True)
+     # Allocation copies fixture source but NEVER starts it. Only this static probe runs.
+-    shutil.copyfile(HERE/'probe_server.py',root/'zoom-probe.py');shutil.copyfile(HERE/'playwright-cli.json',root/'playwright-cli.json')
++    shutil.copyfile(HERE/'probe_server_v2.py',root/'zoom-probe.py');shutil.copyfile(HERE/'playwright-cli.json',root/'playwright-cli.json')
+     manager=load('zoom_commands',security/'run.py');driver=load('zoom_browser_driver',security/'browser_driver.py');lifecycle=load('zoom_probe_environment',browser/'containment.py')
+     commands=manager.Commands(root,driver.environment(root),action_deadline);tooling=manifest['tooling'];rtk=shutil.which('rtk');assert rtk
+     opened=False;probe=None;probe_log=None;result=None;failure=None;cleanup_errors=[];port=None;after=None;argv_proof=None
+@@ -66,9 +71,35 @@
+         while not(root/'control/zoom-probe-ready.json').exists():
+             assert probe.poll()is None and time.monotonic()<end,'Static calibration server did not become ready'
+             commands.sample(probe.pid);time.sleep(.1)
+-        probe_ready=json.loads((root/'control/zoom-probe-ready.json').read_text());port=int(probe_ready['origin'].rsplit(':',1)[1]);assert probe_ready['pid']==probe.pid
++        probe_ready_path=root/'control/zoom-probe-ready.json'
++        assert not probe_ready_path.is_symlink()and probe_ready_path.resolve().is_relative_to((root/'control').resolve())
++        probe_ready=json.loads(probe_ready_path.read_text());port=int(probe_ready['origin'].rsplit(':',1)[1])
++        commands.sample(probe.pid)
++        actual_pid=probe_ready['pid'];assert type(actual_pid)is int and actual_pid>0,'Invalid worker PID'
++        actual_record=commands.known.get(actual_pid);assert actual_record and commands.alive(actual_record),'Worker birth was not observed alive'
++        parent_record=commands.known.get(probe.pid);assert parent_record and commands.alive(parent_record),'Popen launcher birth is not current'
++        actual=psutil.Process(actual_pid);runtime=manifest['probe_runtime']
++        assert Path(actual.exe()).resolve()==Path(runtime['base_executable']).resolve(),'Unexpected effective interpreter executable'
++        assert Path(parent_record['exe']).resolve()==Path(ready['python']).resolve(),'Unexpected venv launcher executable'
++        assert Path(probe_ready['prefix']).resolve()==Path(ready['python']).parent.parent.resolve(),'Unexpected interpreter prefix'
++        assert Path(probe_ready['executable']).resolve()==Path(ready['python']).resolve(),'Unexpected sys.executable'
++        assert Path(probe_ready['base_executable']).resolve()==Path(runtime['base_executable']).resolve(),'Unexpected base interpreter declaration'
++        assert Path(probe_ready['root']).resolve()==root,'Worker root mismatch'
++        worker=(root/'zoom-probe.py').resolve()
++        assert Path(probe_ready['worker']).resolve()==worker and worker.is_relative_to(root),'Worker path mismatch'
++        assert probe_ready['worker_sha256']==sha(worker)==sha(HERE/'probe_server_v2.py'),'Worker bytes mismatch'
++        ancestry=[];cursor=actual;found=False
++        for unused in range(16):
++            record=commands.known.get(cursor.pid)
++            assert record and commands.alive(record),'Unobserved/reused process in worker ancestry'
++            ancestry.append(record)
++            if cursor.pid==probe.pid:found=True;break
++            cursor=cursor.parent()
++            if cursor is None:break
++        assert found,'Worker is not the actual Popen process or its observed descendant'
++        write(root/'probe-process-proof.json',dict(popen_pid=probe.pid,actual_pid=actual_pid,ancestry=ancestry,worker_sha256=sha(worker),prefix=probe_ready['prefix'],executable=probe_ready['executable'],base_executable=probe_ready['base_executable'],root=str(root),same_process=actual_pid==probe.pid))
+         cfg=dict(window='ROOT_NATIVE_ZOOM_BROWSER_GUARD',probeOrigin=probe_ready['origin'],outputPrefix=str(root/'native-zoom'))
+-        source=(HERE/'native-settings-guard.js').read_text();assert source.count('__CONFIG__')==1
++        source=(HERE/'native-settings-guard-v2.js').read_text();assert source.count('__CONFIG__')==1
+         (root/'native-zoom.js').write_text(source.replace('__CONFIG__',json.dumps(cfg)),encoding='utf-8')
+         cli('appearance-before','snapshot')
+         result=manager.cli_result(cli('native-guard','run-code','--filename='+str(root/'native-zoom.js')));write(root/'native-guard-result.private.json',result)
+@@ -89,7 +120,7 @@
+         listeners=[dict(pid=item.pid,port=item.laddr.port)for item in psutil.net_connections(kind='tcp')if port and item.status=='LISTEN'and item.laddr.port==port]
+         try:
+             after=check(a.gate)[0];assert before==after
+-            assert sha(root/'zoom-probe.py')==sha(HERE/'probe_server.py')and sha(root/'playwright-cli.json')==sha(HERE/'playwright-cli.json')
++            assert sha(root/'zoom-probe.py')==sha(HERE/'probe_server_v2.py')and sha(root/'playwright-cli.json')==sha(HERE/'playwright-cli.json')
+         except BaseException as error:cleanup_errors.append(dict(stage='final pin guard',type=type(error).__name__))
+         probe_final_path=root/'control/zoom-probe-final.json';probe_final=json.loads(probe_final_path.read_text())if probe_final_path.exists()else None
+         if probe and(probe.poll()!=0 or not probe_final or probe_final['server_thread_alive']):cleanup_errors.append(dict(stage='probe normal settlement',exit_code=probe.poll()))
+--- curate.py
++++ curate_v2.py
+@@ -27,7 +27,7 @@
+     assert not remaining and not profile_processes and not listeners_now and not raw['containment']['remaining']and not raw['listeners'],'Do not publish while own resources remain'
+     assert not(root/'control/ready.json').exists()and not(root/'control/origins.json').exists(),'Unexpected Nexus fixture startup artifacts'
+     dest=HERE/'runs'/raw['cut_id'];assert not dest.exists();dest.mkdir(parents=True)
+-    names=['native-zoom-run.private.json','native-guard-result.private.json','first-failure.private.json','chrome-argv.private.json','runtime-ready.json','native-zoom.js','zoom-probe.py','playwright-cli.json','probe.private.log','control/zoom-probe-ready.json','control/zoom-probe-final.json']
++    names=['probe-process-proof.json','native-zoom-run.private.json','native-guard-result.private.json','first-failure.private.json','chrome-argv.private.json','runtime-ready.json','native-zoom.js','zoom-probe.py','playwright-cli.json','probe.private.log','control/zoom-probe-ready.json','control/zoom-probe-final.json']
+     names+=[str(p.relative_to(root))for pattern in ['command-*.private.txt','native-zoom-*.png']for p in root.glob(pattern)]
+     copied=[]
+     for name in names:

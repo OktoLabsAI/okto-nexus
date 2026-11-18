@@ -1,0 +1,22 @@
+{
+  "popen_pid": 61852,
+  "actual_pid": 30536,
+  "ancestry": [
+    {
+      "pid": 30536,
+      "birth": 1794961173.3579807,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 61852,
+      "birth": 1794961173.3362885,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe"
+    }
+  ],
+  "worker_sha256": "0f69f4eebab50812b1da9e6f759538128293b464fddbd167bcaaa65adb697f58",
+  "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv",
+  "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe",
+  "base_executable": "C:\\Python313\\python.exe",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-ijxuc4gj",
+  "same_process": false
+}

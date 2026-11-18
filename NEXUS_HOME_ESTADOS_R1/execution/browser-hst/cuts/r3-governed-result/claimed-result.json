@@ -1,0 +1,89 @@
+{
+  "status": "PASS_SUBSET",
+  "stage": "claimed",
+  "checks": [
+    {
+      "id": "exact-managed-turn-claimed",
+      "ok": true,
+      "detail": {
+        "operation_id": "op_490be3fcacd11aa73c8f88c69c626947",
+        "candidates": [
+          {
+            "id": "home_delivery_canonical:result_961ae7dba414923511279c4d7d610c40b73d6ac2c197b5d3ead17bc3181460bb",
+            "semantics": {
+              "cleanup": "unknown",
+              "content_state": "available",
+              "evidence": "canonical",
+              "execution_outcome": "succeeded",
+              "historical": false,
+              "scope": "turn",
+              "semantic_revision": "7780036cc4e30de13dd6c21e5b6735ebd80d7238db4d8ef0cd2d65d52ffc3b96",
+              "task_state": "claimed",
+              "verification": "unknown",
+              "verification_evidence_ref": null,
+              "version": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "canonical-outcome-not-inferred",
+      "ok": true,
+      "detail": {
+        "cleanup": "unknown",
+        "content_state": "available",
+        "evidence": "canonical",
+        "execution_outcome": "succeeded",
+        "historical": false,
+        "scope": "turn",
+        "semantic_revision": "7780036cc4e30de13dd6c21e5b6735ebd80d7238db4d8ef0cd2d65d52ffc3b96",
+        "task_state": "claimed",
+        "verification": "unknown",
+        "verification_evidence_ref": null,
+        "version": 1
+      }
+    },
+    {
+      "id": "turn-not-task-completion",
+      "ok": true,
+      "detail": {
+        "cleanup": "unknown",
+        "content_state": "available",
+        "evidence": "canonical",
+        "execution_outcome": "succeeded",
+        "historical": false,
+        "scope": "turn",
+        "semantic_revision": "7780036cc4e30de13dd6c21e5b6735ebd80d7238db4d8ef0cd2d65d52ffc3b96",
+        "task_state": "claimed",
+        "verification": "unknown",
+        "verification_evidence_ref": null,
+        "version": 1
+      }
+    },
+    {
+      "id": "rendered-claimed",
+      "ok": true,
+      "detail": "Results\nTotal unknown \u00b7 Revalidating\n\nHarness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\n\nHandoff result\n\nTurn result available\n\nTask not yet completed\n\nReceived 2026-11-17T16:42:41.136Z\n\nView result"
+    },
+    {
+      "id": "one-home-region",
+      "ok": true,
+      "detail": 1
+    }
+  ],
+  "delivery_id": "home_delivery_canonical:result_961ae7dba414923511279c4d7d610c40b73d6ac2c197b5d3ead17bc3181460bb",
+  "semantics": {
+    "cleanup": "unknown",
+    "content_state": "available",
+    "evidence": "canonical",
+    "execution_outcome": "succeeded",
+    "historical": false,
+    "scope": "turn",
+    "semantic_revision": "7780036cc4e30de13dd6c21e5b6735ebd80d7238db4d8ef0cd2d65d52ffc3b96",
+    "task_state": "claimed",
+    "verification": "unknown",
+    "verification_evidence_ref": null,
+    "version": 1
+  }
+}

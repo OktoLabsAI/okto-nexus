@@ -1,0 +1,1 @@
+async page=>({alerts:await page.getByRole('alert').allTextContents(),dialogs:await page.getByRole('dialog').count()})

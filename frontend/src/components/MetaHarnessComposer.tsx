@@ -369,9 +369,9 @@ return (
                 >
                   <Paperclip size={15} />
                 </button>
-                <div className="flex rounded-xl bg-surface-50 p-0.5 dark:bg-surface-900" aria-label="Delivery type">
-                  <ChoiceButton active={kind === "message"} onClick={() => setKind("message")} icon={<MessageSquare size={13} />} testId="meta-kind-message">Message</ChoiceButton>
-                  <ChoiceButton active={kind === "handoff"} onClick={() => setKind("handoff")} icon={<Waypoints size={13} />} testId="meta-kind-handoff">Handoff</ChoiceButton>
+                <div className="flex rounded-xl bg-surface-50 p-0.5 dark:bg-surface-900" role="group" aria-label="Interaction">
+                  <ChoiceButton active={kind === "message"} onClick={() => setKind("message")} icon={<MessageSquare size={13} />} testId="meta-kind-message">Chat</ChoiceButton>
+                  <ChoiceButton active={kind === "handoff"} onClick={() => setKind("handoff")} icon={<Waypoints size={13} />} testId="meta-kind-handoff">Ask for work</ChoiceButton>
                 </div>
                 <div className="flex rounded-xl bg-surface-50 p-0.5 dark:bg-surface-900" aria-label="Audience">
                   <ChoiceButton active={audience === "private"} onClick={() => setAudience("private")} icon={<UserRound size={13} />} testId="meta-audience-private">Private</ChoiceButton>
@@ -392,12 +392,12 @@ return (
                   <select
                     value={sendWorkspace}
                     onChange={(event) => setSendWorkspace(event.target.value)}
-                    aria-label="Send namespace"
+                    aria-label="Project for this interaction"
                     disabled={!namespacesReady || sendWorkspaces.length === 0}
-                    title="Namespaces available for the selected agent"
+                    title="Projects available for the selected agent"
                     className="rounded-lg border border-surface-200 bg-white px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-accent-500/40 dark:border-surface-700 dark:bg-surface-800"
                   >
-                    {sendWorkspaces.length === 0 && <option value="">{namespaceError ? "Could not load namespaces" : !namespacesReady ? "Loading namespaces…" : "No namespace available"}</option>}
+                    {sendWorkspaces.length === 0 && <option value="">{namespaceError ? "Could not load projects" : !namespacesReady ? "Loading projects…" : "No project available"}</option>}
                     {sendWorkspaces.map((item) => (
                       <option key={item.workspace_id} value={item.workspace_id}>
                         {shortWorkspace(item.workspace_id, workspaces)} · {item.workspace_id.slice(-8)}
@@ -418,7 +418,7 @@ return (
                   type="submit"
                   disabled={cannotSend}
                   className="btn btn-primary ml-auto !rounded-xl !px-3 disabled:cursor-not-allowed disabled:opacity-40"
-                  aria-label="Send turn"
+                  aria-label={kind === "handoff" ? "Ask for work" : "Send chat message"}
                   data-testid="meta-harness-send"
                 >
                   {sending ? <LoaderCircle className="animate-spin" size={15} /> : <Send size={15} />}

@@ -1,0 +1,71 @@
+--- worker.py
++++ worker_v2.py
+@@ -135,15 +135,19 @@
+     app = build_app(deps)
+     before = benchmark.productive(deps.connection_factory)
+     reads = []
++    instrumentation = None
+     try:
+         with observe(deps.connection_factory, home.parent / "synthetic-artifacts") as instrumentation:
+             async with AsyncClient(transport=ASGITransport(app, client=("127.0.0.1", 65123)), base_url="http://j04-own.invalid") as client:
+                 async def get(path, params):
+                     response = await client.get(path, params=params)
++                    read = {"path": path, "http_status": response.status_code, "bytes": len(response.content),
++                        "response_sha256": hashlib.sha256(response.content).hexdigest()}
++                    reads.append(read)
+                     assert response.status_code == 200, (path, response.status_code)
+                     assert MARKER.encode() not in response.content
+                     body = response.json().get("data", response.json())
+-                    reads.append({"path": path, "bytes": len(response.content), "response_sha256": hashlib.sha256(response.content).hexdigest(), "item_count": len(body.get("items", [])), "total": body.get("total"), "has_more": body.get("has_more")})
++                    read.update(item_count=len(body.get("items", [])), total=body.get("total"), has_more=body.get("has_more"))
+                     return body
+ 
+                 overview = await get("/api/v1/home/overview", {"workspace_id": "hst-perf"})
+@@ -152,10 +156,10 @@
+                 assert any(lane["items"] for lane in board["columns"].values())
+                 assert all(len(lane["items"]) <= 3 for lane in board["columns"].values())
+                 assert all(len(item.get("events_preview", [])) <= 2 for lane in board["columns"].values() for item in lane["items"] if item["kind"] == "harness")
+-                first = await get("/api/v1/home/results", {"workspace_id": "hst-perf", "limit": 3, "quick": "all"})
++                first = await get("/api/v1/home/results", {"workspace_id": "hst-perf", "limit": 3})
+                 assert len(first["items"]) == 3 and first["has_more"] and first["next_cursor"]
+                 assert first["total"] == 25 and first["total_is_exact"] is True
+-                second = await get("/api/v1/home/results", {"workspace_id": "hst-perf", "limit": 3, "quick": "all", "cursor": first["next_cursor"]})
++                second = await get("/api/v1/home/results", {"workspace_id": "hst-perf", "limit": 3, "cursor": first["next_cursor"]})
+                 assert len(second["items"]) == 3
+                 assert {item["id"] for item in first["items"]}.isdisjoint(item["id"] for item in second["items"])
+                 assert any(item.get("artifacts") for item in first["items"] + second["items"]), "Nonempty artifact metadata required"
+@@ -165,7 +169,13 @@
+         assert benchmark.productive(deps.connection_factory) == before
+         return {"reads": reads, "instrumentation": instrumentation, "productive_rows_unchanged": True}
+     finally:
+-        deps.connection_factory.close()
++        try:
++            deps.connection_factory.close()
++        finally:
++            # Diagnostic only: keep partial observations on any assertion/error,
++            # without completing, weakening or replaying the original checks.
++            save(home.parent / "partial-read-diagnostics.json", {"reads": reads,
++                "instrumentation": instrumentation, "latencies_collected": False})
+ 
+ 
+ def main():
+--- run.py
++++ run_v2.py
+@@ -39,7 +39,7 @@
+     parser.add_argument("--gate", choices=["ROOT_APPROVED_J04_FUNCTIONAL"], required=True)
+     parser.add_argument("--manifest-sha256", required=True)
+     args = parser.parse_args()
+-    path = HERE / "PREPARED.json"
++    path = HERE / "PREPARED-v2.json"
+     assert sha(path) == args.manifest_sha256
+     manifest = json.loads(path.read_text(encoding="utf-8"))
+     before = guard(manifest)
+@@ -66,7 +66,7 @@
+     failure = None
+     forced = []
+     try:
+-        manager.run("functional-history", [ready["python"], "-I", "-B", "-X", "utf8", str(HERE / "worker.py"),
++        manager.run("functional-history", [ready["python"], "-I", "-B", "-X", "utf8", str(HERE / "worker_v2.py"),
+             "--manifest", str(path), "--manifest-sha256", args.manifest_sha256, "--root", str(root)], timeout=180)
+     except BaseException as error:  # noqa: BLE001 -- finally retains cleanup and guards, no retry.
+         failure = {"type": type(error).__name__, "message": str(error)}

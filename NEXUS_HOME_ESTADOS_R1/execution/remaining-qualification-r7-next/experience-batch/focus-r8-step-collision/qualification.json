@@ -1,0 +1,282 @@
+{
+  "status": "INCOMPLETE_RUNNER_STEP_FILENAME_COLLISION",
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "results": {
+    "initialize": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "phase": "initialize",
+      "checks": [
+        {
+          "id": "focus-observer-installed-before-arrival",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "id": "zero-browser-POST",
+          "pass": true,
+          "actual": []
+        },
+        {
+          "id": "zero-page-errors",
+          "pass": true,
+          "actual": []
+        }
+      ],
+      "records": [
+        {
+          "revision": "af902c1ffa4870e3023f2b50282c509de7e8acad03c62cd7da53f209ebbe8e57",
+          "status": 200,
+          "rows": [
+            {
+              "kind": "harness",
+              "column": "active",
+              "id": "home_group_cf73a8db49ec0259ed31cf420d77900abb4ed77f980532ab3c48aecb6f7f90ec",
+              "connection": {
+                "server_id": "srv_6d769194007b4e2a4230f2399dae666c",
+                "executor_id": "exe_16fa7beb41b1e908b3b7811f80da8e3b",
+                "binding_id": "bind_e324e2fd4ec14c689fcde08270bc2d8c",
+                "workspace_id": "wsr_b8193d0c9e075dad4fca65eb00179378",
+                "workspace_binding_id": "wxb_bc0f6275f829bfcbd5f315f409cac321",
+                "agent_id": "hst-a"
+              },
+              "activity": "unknown",
+              "blocking": "unknown",
+              "freshness": "stale",
+              "pending_request_ids": [],
+              "requests": []
+            },
+            {
+              "kind": "harness",
+              "column": "active",
+              "id": "home_group_f8fea3e0c6a30c910d27f3a0a80df6088381d3947162ffc1b25ba93943eb75eb",
+              "connection": {
+                "server_id": "srv_6d769194007b4e2a4230f2399dae666c",
+                "executor_id": "exe_16fa7beb41b1e908b3b7811f80da8e3b",
+                "binding_id": "bind_da5eacee1cffff6b2e93b18408963808",
+                "workspace_id": "wsr_697df3659c1b09c78f6f17370294ddb4",
+                "workspace_binding_id": "wxb_d17a7c5ec5c98dd8426ae75b5ba8035b",
+                "agent_id": "hst-b"
+              },
+              "activity": "idle",
+              "blocking": "none",
+              "freshness": "current",
+              "pending_request_ids": [],
+              "requests": []
+            },
+            {
+              "kind": "delivery",
+              "column": "results",
+              "id": "home_delivery_canonical:result_93e3cef022abf5f38a3cfc54d19f751e36908c87cc6e4b55d1d005bb6e2130ea",
+              "target": {
+                "executor_id": "exe_16fa7beb41b1e908b3b7811f80da8e3b",
+                "kind": "execution",
+                "operation_id": "op_f5f79cdccba9be7f92c6063f78d236c7",
+                "server_id": "srv_6d769194007b4e2a4230f2399dae666c",
+                "session_id": "ses_444ff615307813b6133b95c21669f55c",
+                "workspace_id": "wsr_697df3659c1b09c78f6f17370294ddb4"
+              },
+              "sessions": [
+                {
+                  "server_id": "srv_6d769194007b4e2a4230f2399dae666c",
+                  "executor_id": "exe_16fa7beb41b1e908b3b7811f80da8e3b",
+                  "workspace_id": "wsr_697df3659c1b09c78f6f17370294ddb4",
+                  "session_id": "ses_444ff615307813b6133b95c21669f55c"
+                }
+              ],
+              "harness_refs": [
+                {
+                  "card_id": "home_group_f8fea3e0c6a30c910d27f3a0a80df6088381d3947162ffc1b25ba93943eb75eb",
+                  "connection": {
+                    "server_id": "srv_6d769194007b4e2a4230f2399dae666c",
+                    "executor_id": "exe_16fa7beb41b1e908b3b7811f80da8e3b",
+                    "binding_id": "bind_da5eacee1cffff6b2e93b18408963808",
+                    "workspace_id": "wsr_697df3659c1b09c78f6f17370294ddb4",
+                    "workspace_binding_id": "wxb_d17a7c5ec5c98dd8426ae75b5ba8035b",
+                    "agent_id": "hst-b"
+                  }
+                }
+              ],
+              "outcome": "succeeded"
+            }
+          ]
+        }
+      ],
+      "overflow": false
+    }
+  },
+  "summary": {
+    "initialize": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "passed": 3,
+      "failed": 0,
+      "check_ids": [
+        "focus-observer-installed-before-arrival",
+        "zero-browser-POST",
+        "zero-page-errors"
+      ]
+    }
+  },
+  "interpretation": "initialize succeeded. run(open) attempted to reuse cli-experience-open.txt already reserved by the CLI browser launch, and the overwrite guard raised before any panel-opening JS executed. Generated experience-open.js is an unexecuted artifact. No F07/I02 assertion ran.",
+  "canonical_close": {
+    "unknown": true,
+    "sessions": [
+      {
+        "session_id": "ses_444ff615307813b6133b95c21669f55c",
+        "close_confirmed": true
+      },
+      {
+        "session_id": "ses_9be29806f3502147002607170fafcb17",
+        "close_confirmed": false
+      },
+      {
+        "session_id": "ses_a85caa6afb8a21bb6379a390698f33b9",
+        "close_confirmed": false
+      }
+    ],
+    "failures": {
+      "close-failure-1.json": {
+        "type": "RuntimeError"
+      },
+      "close-failure-2.json": {
+        "type": "RuntimeError"
+      }
+    }
+  },
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "physical": {
+    "port": 56681,
+    "listeners": [],
+    "browser_profile_processes": [],
+    "active_resources": false
+  },
+  "payload_after": {
+    "files": 1031,
+    "mismatches": []
+  },
+  "browser_post_count": 0,
+  "provider_invocations": 0,
+  "fixture_cas_redactions": 0,
+  "cas_fingerprints": [
+    "c30be621854a42d9474d1419fabf3f5c751270ba69a45b968bb6c41f5244af43"
+  ],
+  "withheld_private_images": [],
+  "curation": [
+    {
+      "path": "runtime-ready.json",
+      "raw_sha256": "b5efe7b42a7b603a91fabe1ad1cbab5844d3676ead3cb2754907f70548ce3f56",
+      "curated_sha256": "b5efe7b42a7b603a91fabe1ad1cbab5844d3676ead3cb2754907f70548ce3f56",
+      "cas_redactions": 0
+    },
+    {
+      "path": "fixture.py",
+      "raw_sha256": "a8eb4b18d4242e8d104493e40a0eed8e9ccfd61b43aec596f839ee52b18f535c",
+      "curated_sha256": "a8eb4b18d4242e8d104493e40a0eed8e9ccfd61b43aec596f839ee52b18f535c",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-builder-proof.json",
+      "raw_sha256": "92ba2371676f4811498968a066f137e92e872c3e00060eedc1b3c8d76e648375",
+      "curated_sha256": "92ba2371676f4811498968a066f137e92e872c3e00060eedc1b3c8d76e648375",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-failure.json",
+      "raw_sha256": "afb0675bfd86114c4473ad5c94747141d41aeadf2466a8f294e725542712984d",
+      "curated_sha256": "afb0675bfd86114c4473ad5c94747141d41aeadf2466a8f294e725542712984d",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-steps.json",
+      "raw_sha256": "455a4270f77bf1d2b159d6178c4dfdcf8024544f26ef0741ff12c24350fdeaff",
+      "curated_sha256": "455a4270f77bf1d2b159d6178c4dfdcf8024544f26ef0741ff12c24350fdeaff",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/origins.json",
+      "raw_sha256": "03de414af58046a265142b03c1a4385e6b0d5636a2817bc7e65640c0978564d6",
+      "curated_sha256": "03de414af58046a265142b03c1a4385e6b0d5636a2817bc7e65640c0978564d6",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/final.json",
+      "raw_sha256": "28c6624ada80de94274640103c2037206199a8e2aa6fb427f5d9db084a01b237",
+      "curated_sha256": "28c6624ada80de94274640103c2037206199a8e2aa6fb427f5d9db084a01b237",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/supervisor-cleanup.json",
+      "raw_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "curated_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/controls.json",
+      "raw_sha256": "7f539fd0a1edb512eb076f92ef09fa1416483071dcb1931a7b58fff983d97a23",
+      "curated_sha256": "7f539fd0a1edb512eb076f92ef09fa1416483071dcb1931a7b58fff983d97a23",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-close.txt",
+      "raw_sha256": "b4e4d125bd0d2474c98173224c6e81f4ebc0edaee0875f9b7ef4310c50f0f385",
+      "curated_sha256": "b4e4d125bd0d2474c98173224c6e81f4ebc0edaee0875f9b7ef4310c50f0f385",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-initialize.txt",
+      "raw_sha256": "27f8530b487e5dd39461fb7e1a590ef075c5120d421c3671769ebefeafd83f84",
+      "curated_sha256": "27f8530b487e5dd39461fb7e1a590ef075c5120d421c3671769ebefeafd83f84",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-open.txt",
+      "raw_sha256": "58d945fe16b3b714742d62299ef9bc2879bd854e7f0d65feb77303514c809851",
+      "curated_sha256": "58d945fe16b3b714742d62299ef9bc2879bd854e7f0d65feb77303514c809851",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-storage.txt",
+      "raw_sha256": "27bdcaefc4e707efe6964c3a76cc2338f575bda985eb73978143e504ffc6a481",
+      "curated_sha256": "27bdcaefc4e707efe6964c3a76cc2338f575bda985eb73978143e504ffc6a481",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-initialize.js",
+      "raw_sha256": "ef23d572f3977ef3b5d7a9fcf26692bdb23238ab4e6234e9886f25ece0ca2c95",
+      "curated_sha256": "ef23d572f3977ef3b5d7a9fcf26692bdb23238ab4e6234e9886f25ece0ca2c95",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-open.js",
+      "raw_sha256": "1454c247711af7f221137081f82b4715852c29645e68829727a233dc2f45386d",
+      "curated_sha256": "1454c247711af7f221137081f82b4715852c29645e68829727a233dc2f45386d",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control\\exp-active-identities.json",
+      "raw_sha256": "f787dcdd9a5dcca5e0efd8b784485d07db1c51bb99b5ebcc9abd40ee2e954297",
+      "curated_sha256": "f787dcdd9a5dcca5e0efd8b784485d07db1c51bb99b5ebcc9abd40ee2e954297",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control\\exp-active.json",
+      "raw_sha256": "34abae6cf58e7a6948fe25f12d8f8630d384fab81be77532a82c7ec91c8286b5",
+      "curated_sha256": "34abae6cf58e7a6948fe25f12d8f8630d384fab81be77532a82c7ec91c8286b5",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control\\exp-base.json",
+      "raw_sha256": "08fffb81983140b5963b95c7a8f674d5375d506e93ac6d7abf79767d88c048a9",
+      "curated_sha256": "08fffb81983140b5963b95c7a8f674d5375d506e93ac6d7abf79767d88c048a9",
+      "cas_redactions": 0
+    }
+  ],
+  "original_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-9im8nf49"
+}

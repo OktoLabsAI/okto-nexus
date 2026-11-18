@@ -297,7 +297,7 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
         onChange={event => {const next=event.target.value as RuntimeIntent;if(exactContext)transition(()=>setIntent(next));else setIntent(next);}}>
         {permitted.map(value => <option key={value} value={value}>{exactContext?exactRuntimeLabels[value]:labels[value]}</option>)}
       </select></label>}
-      {fixedScope && <p className="text-sm break-all">{exactContext?'Act':'Continue'} as operator in session {fixedScope.session_id}. Workspace and recipient are fixed.</p>}
+      {fixedScope && <p className="text-sm">This action applies to the session you’re viewing.</p>}
       {intent === "runtime.start" && <label className="block">Session selection <select aria-label="Session selection" className={fieldClass}
         value={selection} onChange={event => setSelection(event.target.value)}>
         <option value="automatic">Reuse if unambiguous; otherwise start</option><option value="new">Create a new session</option>

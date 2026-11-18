@@ -1,0 +1,43 @@
+{
+  "status": "NOT_GREEN_COLLECTION_ERROR",
+  "cuts": [
+    {
+      "shard": 0,
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-pj35h53y",
+      "status": "COLLECTION_ERROR",
+      "collected": 438,
+      "not_run": 438,
+      "executed": 0,
+      "pytest_exit_code": 2,
+      "controller_exit_code": 1,
+      "collection_errors": 3,
+      "source_pins": 1821,
+      "payload_files": 1031,
+      "source_payload_helper_drift": [],
+      "remaining_known_processes": []
+    },
+    {
+      "shard": 1,
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-ni6fytip",
+      "status": "COLLECTION_ERROR",
+      "collected": 263,
+      "not_run": 263,
+      "executed": 0,
+      "pytest_exit_code": 2,
+      "controller_exit_code": 1,
+      "collection_errors": 2,
+      "source_pins": 1821,
+      "payload_files": 1031,
+      "source_payload_helper_drift": [],
+      "remaining_known_processes": []
+    }
+  ],
+  "executed_tests": 0,
+  "known_collected_not_run": 701,
+  "collection_errors": 5,
+  "classification": "Runner helper namespace setup; parent copied tree is missing from sys.path.",
+  "proposed_fix": "Add only owned copied tree to helper paths, keeping src absent and prefix origin checks intact.",
+  "workload_caveat": "Functional browser ran concurrently; no latency benchmark claim.",
+  "gate_fail_antecedent": "../installed-gate-failure.json",
+  "automatic_retry": false
+}

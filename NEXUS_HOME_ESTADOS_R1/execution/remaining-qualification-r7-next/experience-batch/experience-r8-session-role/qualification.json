@@ -1,0 +1,1361 @@
+{
+  "status": "PARTIAL_POSITIVE_UNTIL_MOVED_CLOSE_REVISION_ORACLE",
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "results": {
+    "active": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "phase": "active",
+      "checks": [
+        {
+          "id": "G05-authorized-projects-readable",
+          "pass": true,
+          "actual": [
+            "Harness ID: reviewerCollaborator: Hst ACodex \u00b7 Host not reportedProject: Alpha project for readable authorized collaborator activity and questionsWorkingResponse pendingWork requestNeeds your responseWork requestNeeds your responseView workWork requestRunningView workFollow activityConnection detailsIndividual reconnection is not supported by the current canonical API.Evidence observed 2026-11-17T22:39:15.655Z",
+            "Harness ID: reviewerCollaborator: Hst BCodex \u00b7 Host not reportedProject: Beta project for readable authorized collaborator activity and deliveryIdleWork requestFailedView deliveryWork requestTurn completedView deliveryWork requestTurn completedView deliveryFollow activityConnection detailsIndividual reconnection is not supported by the current canonical API.Evidence observed 2026-11-17T22:39:01.476Z",
+            "Harness ID: reviewer \u00b7 Codex \u00b7 Host not reportedRuntime question for the operatorProject: Alpha project for readable authorized collaborator activity and questionsResponse pendingBlocks this session; the harness continues other workRespond",
+            "Harness ID: reviewer \u00b7 Codex \u00b7 Host not reportedWork resultProject: Beta project for readable authorized collaborator activity and deliveryExecution ended with failureReceived 2026-11-17T22:39:01.476ZView result",
+            "Harness ID: reviewer \u00b7 Codex \u00b7 Host not reportedWork resultProject: Beta project for readable authorized collaborator activity and deliveryResponse availableReceived 2026-11-17T22:39:01.053ZView result",
+            "Harness ID: reviewer \u00b7 Codex \u00b7 Host not reportedWork resultProject: Beta project for readable authorized collaborator activity and deliveryResponse availableReceived 2026-11-17T22:38:45.039ZView result"
+          ]
+        },
+        {
+          "id": "G06-no-invented-state-duration",
+          "pass": true,
+          "actual": {
+            "stateSince": null
+          }
+        },
+        {
+          "id": "I01-tab-reaches-populated-board",
+          "pass": true,
+          "actual": {
+            "inventory": [
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": "Collapse navigation",
+                "title": "Collapse menu",
+                "text": "",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": "Needs attention. All projects and Server. 1 need action, 3 to watch.",
+                "title": "Needs attention. All projects and Server. 1 need action, 3 to watch.",
+                "text": "Needs attention4",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": "Sign out",
+                "title": "Sign out",
+                "text": "",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": "Application menu",
+                "title": null,
+                "text": "",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "Home",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "Conversations",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "Graph",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "Artifacts",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "Advanced",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": " Ask for work or chat",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": true,
+                "label": null,
+                "title": null,
+                "text": " Refresh",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": " Pause display",
+                "labels": []
+              },
+              {
+                "tag": "SELECT",
+                "disabled": false,
+                "label": "Project",
+                "title": null,
+                "text": "All projectsAlpha project for readable authorized collaborator activity and questionsBeta project for readable authorized collaborator activity and delivery",
+                "labels": [
+                  "ProjectAll projectsAlpha project for readable authorized collaborator activity and questionsBeta project for readable authorized collaborator activity and delivery"
+                ]
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "Add harness",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "View work",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "View work",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "Follow activity",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "View delivery",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "View delivery",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "View delivery",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "Follow activity",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "Respond",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "View result",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "View result",
+                "labels": []
+              },
+              {
+                "tag": "BUTTON",
+                "disabled": false,
+                "label": null,
+                "title": null,
+                "text": "View result",
+                "labels": []
+              }
+            ],
+            "ariaSnapshot": "- banner:\n  - button \"Collapse navigation\" [expanded]\n  - img \"Okto Nexus\"\n  - navigation \"Breadcrumb\": Home\n  - button \"Needs attention. All projects and Server. 1 need action, 3 to watch.\": Needs attention 4\n  - text: \u25cf Live\n  - button \"Sign out\"\n  - button \"Application menu\"\n- complementary:\n  - navigation \"Main navigation\":\n    - list \"Main destinations\":\n      - listitem:\n        - button \"Home\"\n      - listitem:\n        - button \"Conversations\"\n      - listitem:\n        - button \"Graph\"\n      - listitem:\n        - button \"Artifacts\"\n    - list \"More destinations\":\n      - listitem:\n        - button \"Advanced\"\n- main:\n  - heading \"Home\" [level=1]\n  - paragraph: Follow each harness below. Open an activity to see its exact context, or add a harness to this project.\n  - button \"Ask for work or chat\"\n  - button \"Refresh\" [disabled]\n  - button \"Pause display\"\n  - region \"Project\":\n    - text: Project\n    - combobox \"Project\":\n      - option \"All projects\" [selected]\n      - option \"Alpha project for readable authorized collaborator activity and questions\"\n      - option \"Beta project for readable authorized collaborator activity and delivery\"\n    - text: All projects\n    - button \"Add harness\"\n  - region \"Project overview\":\n    - paragraph: 2 connected \u00b7 1 working \u00b7 1 Idle\n    - paragraph: 1 action \u00b7 0 harnesses paused\n  - status: Updated harness activity changed the board. All columns were revalidated.\n  - status\n  - region \"Follow-up\":\n    - heading \"Follow-up\" [level=2]\n    - region \"Active\":\n      - heading \"Active\" [level=3]\n      - text: 2 harnesses \u00b7 Revalidating\n      - list:\n        - listitem:\n          - 'heading \"Harness ID: reviewer\" [level=4]'\n          - paragraph: \"Collaborator: Hst A\"\n          - paragraph: Codex \u00b7 Host not reported\n          - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n          - text: Working Response pending\n          - list \"Activity preview\":\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Needs your response\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Needs your response\n              - button \"View work\"\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Running\n              - button \"View work\"\n          - button \"Follow activity\"\n          - group: Connection details\n        - listitem:\n          - 'heading \"Harness ID: reviewer\" [level=4]'\n          - paragraph: \"Collaborator: Hst B\"\n          - paragraph: Codex \u00b7 Host not reported\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - text: Idle\n          - list \"Activity preview\":\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Failed\n              - button \"View delivery\"\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Turn completed\n              - button \"View delivery\"\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Turn completed\n              - button \"View delivery\"\n          - button \"Follow activity\"\n          - group: Connection details\n    - region \"Needs you\":\n      - heading \"Needs you\" [level=3]\n      - text: 1 items \u00b7 Revalidating\n      - list:\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Runtime question for the operator\" [level=4]\n          - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n          - text: Response pending\n          - paragraph: Blocks this session; the harness continues other work\n          - button \"Respond\"\n    - region \"Results\":\n      - heading \"Results\" [level=3]\n      - text: 3 deliveries \u00b7 Revalidating\n      - list:\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - paragraph: Execution ended with failure\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T22:39:01.476Z\n          - button \"View result\"\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T22:39:01.053Z\n          - button \"View result\"\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T22:38:45.039Z\n          - button \"View result\"",
+            "visits": [
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": " Pause display"
+              },
+              {
+                "tag": "SELECT",
+                "tid": null,
+                "text": "All projectsAlpha project for readable authorized collaborator activity and questionsBeta project for readable authorized collaborator activity and delivery"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": "Add harness"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "harness": "home_group_dfc99006a1d92b08f8146208c33012e4122ba7a5b7a1a67c266a0c61f1aa20e9",
+                "text": "View work"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "harness": "home_group_dfc99006a1d92b08f8146208c33012e4122ba7a5b7a1a67c266a0c61f1aa20e9",
+                "text": "View work"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "harness": "home_group_dfc99006a1d92b08f8146208c33012e4122ba7a5b7a1a67c266a0c61f1aa20e9",
+                "text": "Follow activity"
+              },
+              {
+                "tag": "SUMMARY",
+                "tid": null,
+                "harness": "home_group_dfc99006a1d92b08f8146208c33012e4122ba7a5b7a1a67c266a0c61f1aa20e9",
+                "text": "Connection details"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "harness": "home_group_ea186ec17856964bb28f7e2af4abbbdc07fa32c1f7730c065d57594c89a77c9b",
+                "text": "View delivery"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "harness": "home_group_ea186ec17856964bb28f7e2af4abbbdc07fa32c1f7730c065d57594c89a77c9b",
+                "text": "View delivery"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "harness": "home_group_ea186ec17856964bb28f7e2af4abbbdc07fa32c1f7730c065d57594c89a77c9b",
+                "text": "View delivery"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "harness": "home_group_ea186ec17856964bb28f7e2af4abbbdc07fa32c1f7730c065d57594c89a77c9b",
+                "text": "Follow activity"
+              },
+              {
+                "tag": "SUMMARY",
+                "tid": null,
+                "harness": "home_group_ea186ec17856964bb28f7e2af4abbbdc07fa32c1f7730c065d57594c89a77c9b",
+                "text": "Connection details"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": "Respond"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": "View result"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": "View result"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": "View result"
+              },
+              {
+                "tag": "BODY",
+                "tid": null,
+                "text": "\n     / HomeNeeds attention4\u25cf LiveHomeConversationsGraphArtifactsAdvancedHomeFollow each harness below. Open an activity to see its exact context, or add a harness to this project. Ask for work or chat Refresh Pause displayProjectAll projectsAlpha project for readable authorized collaborator activity and questionsBeta project for readable authorized collaborator activity and deliveryAll projectsAdd harness2 connected \u00b7 1 working \u00b7 1 Idle1 action \u00b7 0 harnesses pausedUpdated harness activity changed the board. All columns were revalidated.Follow-upActive2 harnesses \u00b7 RevalidatingHarness ID: reviewerCollaborator: Hst ACodex \u00b7 Host not reportedProject: Alpha project for readable authorized collaborator activity and questionsWorkingResponse pendingWork requestNeeds your responseWork requestNeeds your responseView workWork requestRunningView workFollow activityConnection detailsIndividual reconnection is not supported by the current canonical API.Evidence observed 2026-11-17T22:39:15.655ZHarness ID: reviewerCollaborator: Hst BCodex \u00b7 Host not reportedProject: Beta project for readable authorized collaborator activity and deliveryIdleWork requestFailedView deliveryWork requestTurn completedView deliveryWork requestTurn completedView deliveryFollow activityConnection detailsIndividual reconnection is not supported by the current canonical API.Evidence observed 2026-11-17T22:39:01.476ZNeeds you1 items \u00b7 RevalidatingHarness ID: reviewer \u00b7 Codex \u00b7 Host not reportedRuntime question for the operatorProject: Alpha project for readable authorized collaborator activity and questionsResponse pendingBlocks this session; the harness continues other workRespondResults3 deliveries \u00b7 RevalidatingHarness ID: reviewer \u00b7 Codex \u00b7 Host not reportedWork resultProject: Beta project for readable authorized collaborator activity and deliveryExecution ended with failureReceived 2026-11-17T22:39:01.476ZView resultHarness ID: reviewer \u00b7 Codex \u00b7 Host not reportedWork resultProject: Beta project for readable authorized collaborator activity and deliveryResponse availableReceived 2026-11-17T22:39:01.053ZView resultHarness ID: reviewer \u00b7 Codex \u00b7 Host not reportedWork resultProject: Beta project for readable authorized collaborator activity and deliveryResponse availableReceived 2026-11-17T22:38:45.039ZView result\n  \n\n"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": "sidebar-toggle",
+                "text": ""
+              },
+              {
+                "tag": "BUTTON",
+                "tid": "global-attention-button",
+                "text": "Needs attention4*"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": ""
+              },
+              {
+                "tag": "BUTTON",
+                "tid": "header-menu",
+                "text": ""
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": "Home"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": "Conversations"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": "Graph"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": "Artifacts"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": "Advanced"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": " Ask for work or chat"
+              },
+              {
+                "tag": "BUTTON",
+                "tid": null,
+                "text": " Refresh"
+              }
+            ]
+          }
+        },
+        {
+          "id": "I01-Enter-opens-known-harness",
+          "pass": true,
+          "actual": {
+            "tabs": 7,
+            "harness": "home_group_dfc99006a1d92b08f8146208c33012e4122ba7a5b7a1a67c266a0c61f1aa20e9"
+          }
+        },
+        {
+          "id": "I01-keyboard-selects-known-session",
+          "pass": true,
+          "actual": {
+            "expected": "ses_a31c90f2fffc7f60aa345707690d4d87",
+            "value": "[\"srv_83c36267c49e82aa6d3036abfb3ade49\",\"exe_83291175d64de43ade48fafc240f56aa\",\"wsr_3a833a556453277b86852ca1d994ff80\",\"ses_a31c90f2fffc7f60aa345707690d4d87\"]"
+          }
+        },
+        {
+          "id": "I01-Enter-opens-known-request",
+          "pass": true,
+          "actual": {
+            "tabs": 14,
+            "session": "ses_a31c90f2fffc7f60aa345707690d4d87"
+          }
+        },
+        {
+          "id": "I01-open-panel-keyboard-focus-contained",
+          "pass": true,
+          "actual": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "id": "F02-panel-initial-exact-question",
+          "pass": true,
+          "actual": {
+            "session": "ses_a31c90f2fffc7f60aa345707690d4d87"
+          }
+        },
+        {
+          "id": "zero-browser-POST",
+          "pass": true,
+          "actual": []
+        },
+        {
+          "id": "zero-page-errors",
+          "pass": true,
+          "actual": []
+        }
+      ],
+      "posts": [],
+      "errors": [],
+      "observations": {},
+      "unasserted": [
+        "specific meaningful session titles without a canonical producer",
+        "native 200 percent zoom",
+        "screen reader speech",
+        "full keyboard coverage beyond enumerated traversal",
+        "F12 new decision (prior evidence only)"
+      ]
+    },
+    "base": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "phase": "base",
+      "checks": [
+        {
+          "id": "G01-real-canonical-GET-entire-scope",
+          "pass": true,
+          "actual": {
+            "status": 200,
+            "expectedScope": {
+              "server_id": "srv_83c36267c49e82aa6d3036abfb3ade49",
+              "executor_id": "exe_83291175d64de43ade48fafc240f56aa",
+              "binding_id": "bind_c80fabf53949e1808f30606e10f8de1a",
+              "agent_id": "hst-b",
+              "workspace_id": "wsr_d92b13f83b39367fe3264477d4e70a94",
+              "workspace_binding_id": "wxb_bd0e77d93fbafcea1286bc00c4a988b4",
+              "session_id": "ses_d64b122b1b0c0e5e6ee003c8cfaf6a04",
+              "session_owner_generation": 1,
+              "authorization_revision": 2,
+              "configuration_revision": 2,
+              "binding_revision": 1,
+              "credential_epoch": 1
+            },
+            "actualScope": {
+              "server_id": "srv_83c36267c49e82aa6d3036abfb3ade49",
+              "executor_id": "exe_83291175d64de43ade48fafc240f56aa",
+              "binding_id": "bind_c80fabf53949e1808f30606e10f8de1a",
+              "agent_id": "hst-b",
+              "workspace_id": "wsr_d92b13f83b39367fe3264477d4e70a94",
+              "workspace_binding_id": "wxb_bd0e77d93fbafcea1286bc00c4a988b4",
+              "session_id": "ses_d64b122b1b0c0e5e6ee003c8cfaf6a04",
+              "session_owner_generation": 1,
+              "authorization_revision": 2,
+              "configuration_revision": 2,
+              "binding_revision": 1,
+              "credential_epoch": 1
+            },
+            "comparedKeys": [
+              "agent_id",
+              "authorization_revision",
+              "binding_id",
+              "binding_revision",
+              "configuration_revision",
+              "credential_epoch",
+              "executor_id",
+              "server_id",
+              "session_id",
+              "session_owner_generation",
+              "workspace_binding_id",
+              "workspace_id"
+            ]
+          }
+        },
+        {
+          "id": "G01-exact-target-not-latest",
+          "pass": true,
+          "actual": {
+            "executor_id": "exe_83291175d64de43ade48fafc240f56aa",
+            "kind": "session",
+            "server_id": "srv_83c36267c49e82aa6d3036abfb3ade49",
+            "session_id": "ses_d64b122b1b0c0e5e6ee003c8cfaf6a04",
+            "workspace_id": "wsr_d92b13f83b39367fe3264477d4e70a94"
+          }
+        },
+        {
+          "id": "G01-one-modal-one-gesture-exact-output",
+          "pass": true,
+          "actual": {
+            "marker": "HST synthetic output ses_d64b122b1b0c0e5e6ee003c8cfaf6a04",
+            "chooserNotRequired": true
+          }
+        },
+        {
+          "id": "G04-registered-no-session-no-implicit-open",
+          "pass": true,
+          "actual": {
+            "policy": {
+              "hst-a": {
+                "agent_id": "hst-a",
+                "runtime_enabled": true,
+                "revision": 1,
+                "inherit_global_mcps": null,
+                "session_policy": "per_sender",
+                "broadcast_handoff_auto_claim": null,
+                "defaults": {
+                  "runtime_enabled": true,
+                  "session_policy": "shared",
+                  "revision": 1,
+                  "automatic_recovery": true,
+                  "inherit_global_mcps": false,
+                  "broadcast_handoff_auto_claim": false
+                },
+                "effective": {
+                  "runtime_enabled": true,
+                  "session_policy": "per_sender",
+                  "inherit_global_mcps": false,
+                  "broadcast_handoff_auto_claim": false
+                },
+                "handoff_auto_claim_rollout_enabled": false
+              },
+              "hst-b": {
+                "agent_id": "hst-b",
+                "runtime_enabled": true,
+                "revision": 1,
+                "inherit_global_mcps": null,
+                "session_policy": "per_sender",
+                "broadcast_handoff_auto_claim": null,
+                "defaults": {
+                  "runtime_enabled": true,
+                  "session_policy": "shared",
+                  "revision": 1,
+                  "automatic_recovery": true,
+                  "inherit_global_mcps": false,
+                  "broadcast_handoff_auto_claim": false
+                },
+                "effective": {
+                  "runtime_enabled": true,
+                  "session_policy": "per_sender",
+                  "inherit_global_mcps": false,
+                  "broadcast_handoff_auto_claim": false
+                },
+                "handoff_auto_claim_rollout_enabled": false
+              }
+            }
+          }
+        },
+        {
+          "id": "zero-browser-POST",
+          "pass": true,
+          "actual": []
+        },
+        {
+          "id": "zero-page-errors",
+          "pass": true,
+          "actual": []
+        }
+      ],
+      "posts": [],
+      "errors": [],
+      "observations": {},
+      "unasserted": [
+        "specific meaningful session titles without a canonical producer",
+        "native 200 percent zoom",
+        "screen reader speech",
+        "full keyboard coverage beyond enumerated traversal",
+        "F12 new decision (prior evidence only)"
+      ]
+    },
+    "external": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "phase": "external",
+      "checks": [
+        {
+          "id": "F10-native-exact-read-survives-external-source-failure",
+          "pass": true,
+          "actual": {
+            "scope": {
+              "server_id": "srv_83c36267c49e82aa6d3036abfb3ade49",
+              "executor_id": "exe_83291175d64de43ade48fafc240f56aa",
+              "binding_id": "bind_c80fabf53949e1808f30606e10f8de1a",
+              "agent_id": "hst-b",
+              "workspace_id": "wsr_d92b13f83b39367fe3264477d4e70a94",
+              "workspace_binding_id": "wxb_bd0e77d93fbafcea1286bc00c4a988b4",
+              "session_id": "ses_81874f781271bca8f7cee84d5e5b9b35",
+              "session_owner_generation": 1,
+              "authorization_revision": 2,
+              "configuration_revision": 2,
+              "binding_revision": 1,
+              "credential_epoch": 1
+            }
+          }
+        },
+        {
+          "id": "zero-browser-POST",
+          "pass": true,
+          "actual": []
+        },
+        {
+          "id": "zero-page-errors",
+          "pass": true,
+          "actual": []
+        }
+      ],
+      "posts": [],
+      "errors": [],
+      "observations": {},
+      "unasserted": [
+        "specific meaningful session titles without a canonical producer",
+        "native 200 percent zoom",
+        "screen reader speech",
+        "full keyboard coverage beyond enumerated traversal",
+        "F12 new decision (prior evidence only)"
+      ]
+    },
+    "history": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "phase": "history",
+      "checks": [
+        {
+          "id": "G02-canonical-preview-query-observed",
+          "pass": true,
+          "actual": "/api/v1/home/harness-board?limit=10&preview=1&presentation_version=2"
+        },
+        {
+          "id": "G02-one-preview-not-unique",
+          "pass": true,
+          "actual": {
+            "preview": 1,
+            "total": 2,
+            "hasMore": true
+          }
+        },
+        {
+          "id": "G02-current-relation-exact-card-two-sessions",
+          "pass": true,
+          "actual": {
+            "status": 200,
+            "card": "home_group_ea186ec17856964bb28f7e2af4abbbdc07fa32c1f7730c065d57594c89a77c9b",
+            "total": 2,
+            "exact": true
+          }
+        },
+        {
+          "id": "G02-no-automatic-preview-choice",
+          "pass": true,
+          "actual": ""
+        },
+        {
+          "id": "G03-known-session-option-ses_d64b122b1b0c0e5e6ee003c8cfaf6a04",
+          "pass": true,
+          "actual": "Session \u00b7 CLOSED \u00b7 Beta project for readable authorized collaborator activity and delivery \u00b7 Updated 2026-11-17T22:39:00.106Z"
+        },
+        {
+          "id": "G03-known-session-option-ses_81874f781271bca8f7cee84d5e5b9b35",
+          "pass": true,
+          "actual": "Session \u00b7 READY \u00b7 Beta project for readable authorized collaborator activity and delivery \u00b7 Updated 2026-11-17T22:39:01.476Z"
+        },
+        {
+          "id": "G03-distinct-session-targets",
+          "pass": true,
+          "actual": [
+            "Session \u00b7 CLOSED \u00b7 Beta project for readable authorized collaborator activity and delivery \u00b7 Updated 2026-11-17T22:39:00.106Z",
+            "Session \u00b7 READY \u00b7 Beta project for readable authorized collaborator activity and delivery \u00b7 Updated 2026-11-17T22:39:01.476Z"
+          ]
+        },
+        {
+          "id": "zero-browser-POST",
+          "pass": true,
+          "actual": []
+        },
+        {
+          "id": "zero-page-errors",
+          "pass": true,
+          "actual": []
+        }
+      ],
+      "posts": [],
+      "errors": [],
+      "observations": {
+        "g02Before": {
+          "url": "http://127.0.0.1:64547/",
+          "applyVisible": false,
+          "homeAX": "- heading \"Home\" [level=1]\n- paragraph: Follow each harness below. Open an activity to see its exact context, or add a harness to this project.\n- button \"Ask for work or chat\"\n- button \"Refresh\"\n- button \"Pause display\"\n- region \"Project\":\n  - text: Project\n  - combobox \"Project\":\n    - option \"All projects\" [selected]\n    - option \"Alpha project for readable authorized collaborator activity and questions\"\n    - option \"Beta project for readable authorized collaborator activity and delivery\"\n  - text: All projects\n  - button \"Add harness\"\n- region \"Project overview\":\n  - paragraph: \"connected: unknown \u00b7 working: unknown \u00b7 Idle: unknown \u00b7 queued: unknown \u00b7 1 unconfirmed \u00b7 disconnected: unknown\"\n  - paragraph: \"0 actions \u00b7 harnesses paused: unknown\"\n- status: Updated harness activity changed the board. All columns were revalidated.\n- status\n- region \"Follow-up\":\n  - heading \"Follow-up\" [level=2]\n  - region \"Active\":\n    - heading \"Active\" [level=3]\n    - text: 2 harnesses\n    - list:\n      - listitem:\n        - 'heading \"Harness ID: reviewer\" [level=4]'\n        - paragraph: \"Collaborator: Hst A\"\n        - paragraph: Codex \u00b7 Host not reported\n        - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n        - text: Registered harness\n        - paragraph: Connection evidence stale. Inspect for current details.\n        - list \"Activity preview\"\n        - paragraph: No tracked activity.\n        - button \"Follow activity\"\n        - group: Connection details\n      - listitem:\n        - 'heading \"Harness ID: reviewer\" [level=4]'\n        - paragraph: \"Collaborator: Hst B\"\n        - paragraph: Codex \u00b7 Host not reported\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - text: Idle\n        - list \"Activity preview\":\n          - listitem:\n            - paragraph: Work request\n            - paragraph: Failed\n            - button \"View delivery\"\n        - button \"Follow activity\"\n        - group: Connection details\n  - region \"Needs you\":\n    - heading \"Needs you\" [level=3]\n    - text: 0 items\n    - list\n    - status: No needs you items in this view.\n  - region \"Results\":\n    - heading \"Results\" [level=3]\n    - text: 3 deliveries\n    - list:\n      - listitem:\n        - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n        - heading \"Work result\" [level=4]\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - paragraph: Execution ended with failure\n        - paragraph:\n          - text: Received\n          - time: 2026-11-17T22:39:01.476Z\n        - button \"View result\"\n      - listitem:\n        - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n        - heading \"Work result\" [level=4]\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - paragraph: Response available\n        - paragraph:\n          - text: Received\n          - time: 2026-11-17T22:39:01.053Z\n        - button \"View result\"\n      - listitem:\n        - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n        - heading \"Work result\" [level=4]\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - paragraph: Response available\n        - paragraph:\n          - text: Received\n          - time: 2026-11-17T22:38:45.039Z\n        - button \"View result\""
+        },
+        "g02PanelAX": "- dialog \"Activity detail\":\n  - banner:\n    - heading \"Activity detail\" [level=2]\n    - button \"Expand modal\"\n    - button \"Close modal\"\n  - region \"Harness activity\":\n    - heading \"Hst B\" [level=3]\n    - paragraph: 3 linked activities. Select an activity to review its canonical context.\n    - region \"Session context\":\n      - text: Choose a session\n      - combobox \"Choose a session\":\n        - option \"Choose a session\" [selected]\n        - option \"Session \u00b7 READY \u00b7 Beta project for readable authorized collaborator activity and delivery \u00b7 Updated 2026-11-17T22:39:01.476Z\"\n        - option \"Session \u00b7 CLOSED \u00b7 Beta project for readable authorized collaborator activity and delivery \u00b7 Updated 2026-11-17T22:39:00.106Z\"\n      - button \"Refresh sessions\"\n      - button \"View connection\"\n    - button \"Refresh activity\"\n    - list:\n      - listitem:\n        - paragraph: Work request\n        - paragraph: Failed\n        - button \"View work\"\n    - button \"Load more activity\""
+      },
+      "unasserted": [
+        "specific meaningful session titles without a canonical producer",
+        "native 200 percent zoom",
+        "screen reader speech",
+        "full keyboard coverage beyond enumerated traversal",
+        "F12 new decision (prior evidence only)"
+      ]
+    },
+    "moved-close": {
+      "status": "INCOMPLETE",
+      "phase": "moved-close",
+      "checks": [],
+      "posts": [],
+      "errors": [],
+      "observations": {
+        "failure": {
+          "url": "http://127.0.0.1:64547/",
+          "bodyAX": "- banner:\n  - button \"Collapse navigation\" [expanded]\n  - img \"Okto Nexus\"\n  - navigation \"Breadcrumb\": Home\n  - button \"Needs attention. All projects and Server. 1 need action, 4 to watch.\": Needs attention 5\n  - text: \u25cf Live\n  - button \"Sign out\"\n  - button \"Application menu\"\n- complementary:\n  - navigation \"Main navigation\":\n    - list \"Main destinations\":\n      - listitem:\n        - button \"Home\"\n      - listitem:\n        - button \"Conversations\"\n      - listitem:\n        - button \"Graph\"\n      - listitem:\n        - button \"Artifacts\"\n    - list \"More destinations\":\n      - listitem:\n        - button \"Advanced\"\n- main:\n  - heading \"Home\" [level=1]\n  - paragraph: Follow each harness below. Open an activity to see its exact context, or add a harness to this project.\n  - button \"Ask for work or chat\"\n  - button \"Refresh\"\n  - button \"Pause display\"\n  - region \"Project\":\n    - text: Project\n    - combobox \"Project\":\n      - option \"All projects\" [selected]\n      - option \"Alpha project for readable authorized collaborator activity and questions\"\n      - option \"Beta project for readable authorized collaborator activity and delivery\"\n    - text: All projects\n    - button \"Add harness\"\n  - region \"Project overview\":\n    - paragraph: Previous snapshot \u00b7 2 connected \u00b7 1 working \u00b7 1 Idle\n    - paragraph: 1 action \u00b7 0 harnesses paused\n  - status: Display updates paused. Agents keep running; decisions require a fresh canonical review.\n  - status:\n    - text: Updates are available.\n    - button \"Apply updates\" [disabled]\n  - status: Home updated. New work, attention or results are available.\n  - region \"Follow-up\":\n    - heading \"Follow-up\" [level=2]\n    - region \"Active\":\n      - heading \"Active\" [level=3]\n      - text: 2 harnesses \u00b7 Revalidating\n      - list:\n        - listitem:\n          - 'heading \"Harness ID: reviewer\" [level=4]'\n          - paragraph: \"Collaborator: Hst A\"\n          - paragraph: Codex \u00b7 Host not reported\n          - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n          - text: \"Last known: Working Response pending\"\n          - list \"Activity preview\":\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Needs your response\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Needs your response\n              - button \"View work\"\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Running\n              - button \"View work\"\n          - button \"Follow activity\"\n          - group: Connection details\n        - listitem:\n          - 'heading \"Harness ID: reviewer\" [level=4]'\n          - paragraph: \"Collaborator: Hst B\"\n          - paragraph: Codex \u00b7 Host not reported\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - text: \"Last known: Idle\"\n          - list \"Activity preview\":\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Failed\n              - button \"View delivery\"\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Turn completed\n              - button \"View delivery\"\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Turn completed\n              - button \"View delivery\"\n          - button \"Follow activity\"\n          - group: Connection details\n    - region \"Needs you\":\n      - heading \"Needs you\" [level=3]\n      - text: 1 items \u00b7 Revalidating\n      - list:\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Runtime question for the operator\" [level=4]\n          - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n          - text: Response pending\n          - paragraph: Blocks this session; the harness continues other work\n          - button \"Respond\"\n    - region \"Results\":\n      - heading \"Results\" [level=3]\n      - text: 3 deliveries \u00b7 Revalidating\n      - list:\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - paragraph: Execution ended with failure\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T22:39:01.476Z\n          - button \"View result\"\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T22:39:01.053Z\n          - button \"View result\"\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T22:38:45.039Z\n          - button \"View result\"\n- dialog \"Activity detail\":\n  - banner:\n    - heading \"Activity detail\" [level=2]\n    - button \"Expand modal\"\n    - button \"Close modal\"\n  - region \"Activity context\":\n    - heading \"Work request\" [level=3]\n    - paragraph: Hst A \u00b7 codex_app_server\n    - paragraph: Related information as of 2026-11-17T22:39:18.384307Z. Controls revalidate their canonical records.\n    - region \"Session in this activity\":\n      - heading \"Session\" [level=4]\n      - region \"Session execution output\":\n        - paragraph: READY \u00b7 Read only\n        - paragraph: ses_a31c90f2fffc7f60aa345707690d4d87\n        - group \"Terminal mode\":\n          - button \"Live tail\" [pressed]\n          - button \"History\"\n        - region \"Session live tail\":\n          - status: Following live events\n          - button \"Pause tail\"\n          - checkbox \"Auto-scroll\" [checked]\n          - text: Auto-scroll\n          - button \"Latest events\"\n          - paragraph: Showing 1\u20134 of 4 committed events. Scroll up to load earlier events.\n          - text: Session \u00b7 terminal Read only\n          - group \"Terminal font size\":\n            - button \"Decrease terminal font size\"\n            - button \"Reset terminal font size\": 12px\n            - button \"Increase terminal font size\"\n          - list \"Live runtime events\":\n            - listitem:\n              - strong: Core codex thread configuration\n              - time: 19:39:15\n              - term: Adapter id\n              - definition: codex_app_server\n              - term: Fields \u00b7 Approval Policy \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Approvals Reviewer \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Cwd \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Instruction Sources \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Model \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Model Provider \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Reasoning Effort \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Sandbox \u00b7 Status\n              - definition: missing\n              - term: Schema version\n              - definition: \"1\"\n              - term: Source\n              - definition: thread/start/response\n            - listitem:\n              - strong: Harness ready\n              - time: 19:39:15\n            - listitem:\n              - strong: Turn started\n              - time: 19:39:15\n            - listitem:\n              - strong: Input requested\n              - time: 19:39:15\n              - term: Is Blocking\n              - definition: \"true\"\n              - term: Item Id\n              - definition: hst-question-turn_1\n              - term: Questions 1 \u00b7 Header\n              - definition: Format\n              - term: Questions 1 \u00b7 Id\n              - definition: format\n              - term: Questions 1 \u00b7 Is Other\n              - definition: \"false\"\n              - term: Questions 1 \u00b7 Is Secret\n              - definition: \"[REDACTED]\"\n              - term: Questions 1 \u00b7 Options 1 \u00b7 Description\n              - definition: Fixture only\n              - term: Questions 1 \u00b7 Options 1 \u00b7 Label\n              - definition: text\n              - term: Questions 1 \u00b7 Question\n              - definition: Choose fixture output format\n              - term: Thread Id\n              - definition: th_1\n              - term: Turn Id\n              - definition: turn_1\n      - group: Session details\n      - button \"Continue this exact session\"\n    - region \"Questions and decisions in this activity\":\n      - heading \"Questions and decisions\" [level=4]\n      - list:\n        - listitem:\n          - heading \"Runtime question for the operator\" [level=5]\n          - paragraph: The runtime has a question for its authorized operator.\n          - paragraph: hst-a \u00b7 Alpha project for readable authorized collaborator activity and questions\n          - button \"Review question\"\n          - button \"Mark seen\"\n          - button \"Snooze 1 hour\"\n      - paragraph: execution_native_request \u00b7 r4request_99d03ef442d1f375644199494f949b2e643c81fb2c0500af36b7e88f41e488b2\n      - region \"Canonical approval\":\n        - paragraph: r4request_99d03ef442d1f375644199494f949b2e643c81fb2c0500af36b7e88f41e488b2\n        - button \"Refresh record\"\n        - paragraph: pending \u00b7 execution.native.respond \u00b7 Requested by hst-a\n        - group:\n          - text: workspace Alpha project for readable authorized collaborator activity and questions policy native-runtime-permission\n          - region \"Native runtime decision\":\n            - paragraph: Agent hst-a \u00b7 Host exe_83291175d64de43ade48fafc240f56aa \u00b7 Session ses_a31c90f2fffc7f60aa345707690d4d87\n            - group:\n              - paragraph: \"Runtime request: PENDING. Your decision is recorded separately from delivery to the runtime.\"\n              - text: Choose fixture output format\n              - paragraph: Select one or more answers.\n              - listbox \"Choose fixture output format\":\n                - option \"text\"\n              - paragraph: \"text: Fixture only\"\n              - button \"Send answer\"\n              - button \"Deny runtime request\"\n            - button \"Check native decision\"\n          - text: \"Runtime request details { \\\"kind\\\": \\\"execution.native.respond\\\", \\\"kwargs\\\": { \\\"approval_key\\\": { \\\"server_id\\\": \\\"srv_83c36267c49e82aa6d3036abfb3ade49\\\", \\\"executor_id\\\": \\\"exe_83291175d64de43ade48fafc240f56aa\\\", \\\"binding_id\\\": \\\"bind_ea397d14883d7add638f977822746230\\\", \\\"agent_id\\\": \\\"hst-a\\\", \\\"workspace_id\\\": \\\"wsr_3a833a556453277b86852ca1d994ff80\\\", \\\"session_id\\\": \\\"ses_a31c90f2fffc7f60aa345707690d4d87\\\", \\\"session_owner_generation\\\": 1, \\\"canonical_request_id\\\": \\\"r4request_99d03ef442d1f375644199494f949b2e643c81fb2c0500af36b7e88f41e488b2\\\", \\\"kind\\\": \\\"native_input\\\" }, \\\"request_hash\\\": \\\"sha256:e032be8e539999664bb87b5a9cdac7423119d641c2c3a507b68494b9d0c2b22d\\\", \\\"expected_revision\\\": 1, \\\"cas_token\\\": \\\"<redacted-fixture-cas>\\\", \\\"expires_at\\\": \\\"2026-11-17T22:41:15.776000+00:00\\\", \\\"recipient_agent_id\\\": \\\"operator\\\", \\\"display\\\": { \\\"method\\\": \\\"item/tool/requestUserInput\\\", \\\"params\\\": { \\\"isBlocking\\\": true, \\\"itemId\\\": \\\"hst-question-turn_1\\\", \\\"questions\\\": [ { \\\"header\\\": \\\"Format\\\", \\\"id\\\": \\\"format\\\", \\\"isOther\\\": false, \\\"isSecret\\\": \\\"[REDACTED]\\\", \\\"options\\\": [ { \\\"description\\\": \\\"Fixture only\\\", \\\"label\\\": \\\"text\\\" } ], \\\"question\\\": \\\"Choose fixture output format\\\" } ], \\\"threadId\\\": \\\"th_1\\\", \\\"turnId\\\": \\\"turn_1\\\" }, \\\"request_hash\\\": \\\"3a0270e6bef322bee31a69920f3196db588c45a54bc0cc5f5419d66805f6f03c\\\", \\\"request_id\\\": 10001, \\\"schema_version\\\": 1 } } }\"\n    - button \"Show work details\"",
+          "openDialogs": 1
+        }
+      },
+      "error": "Error: Authoritative board revision not observed by the controller"
+    },
+    "naming": {
+      "status": "PASS_NAMING_PREFLIGHT",
+      "checks": [
+        {
+          "id": "I01-header-menu-accessible-name",
+          "pass": true,
+          "actual": {
+            "attributes": {
+              "ariaLabel": "Application menu",
+              "title": null,
+              "text": ""
+            },
+            "ariaSnapshot": "- button \"Application menu\"",
+            "computedNameFromAX": "Application menu"
+          }
+        },
+        {
+          "id": "I01-header-menu-canonical-name",
+          "pass": true,
+          "actual": "Application menu"
+        },
+        {
+          "id": "I01-header-menu-expanded-state",
+          "pass": true,
+          "actual": {
+            "expandedBefore": "false",
+            "expandedOpen": "true",
+            "expandedClosed": "false",
+            "openAX": "- button \"Application menu\" [expanded]"
+          }
+        },
+        {
+          "id": "zero-browser-POST",
+          "pass": true,
+          "actual": []
+        },
+        {
+          "id": "zero-page-errors",
+          "pass": true,
+          "actual": []
+        }
+      ],
+      "posts": [],
+      "errors": []
+    },
+    "panel-after": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "phase": "panel-after",
+      "checks": [
+        {
+          "id": "F02-authoritative-poll-with-unrelated-change",
+          "pass": true,
+          "actual": {
+            "revision": "d0d18b6b1985805752d0bd42b5c00d1bbf847cc2b4c86b6c19f2f985763e18dc",
+            "status": 200,
+            "ids": {
+              "active": [
+                "home_group_dfc99006a1d92b08f8146208c33012e4122ba7a5b7a1a67c266a0c61f1aa20e9",
+                "home_group_ea186ec17856964bb28f7e2af4abbbdc07fa32c1f7730c065d57594c89a77c9b"
+              ],
+              "needs_you": [
+                "home_request_att_945b0e472d29e7cbff2fd33073aafdb7d4961091b68a33f58690578c6b548239"
+              ],
+              "results": [
+                "home_delivery_canonical:result_d9c8a01e147c2daf67ee8a9488609eb47df12fc535f1ca031a5bdd22dda97fc4",
+                "home_delivery_canonical:result_e24a629e8eb1646931e3cb4ac0eb41e541316c759e1a73fac6fd6c22798db121",
+                "home_delivery_canonical:result_6339e3cdb1480ca859986534f47747f72e9327bf6f28ace72373d58ee52e2e1b"
+              ]
+            }
+          }
+        },
+        {
+          "id": "F02-unrelated-change-retains-panel",
+          "pass": true,
+          "actual": true
+        },
+        {
+          "id": "F13-no-Home-or-panel-alert",
+          "pass": true,
+          "actual": {
+            "modalStatus": [
+              "Following live events"
+            ],
+            "homeStatus": [
+              "Display updates paused. Agents keep running; decisions require a fresh canonical review.",
+              "Updates are available.Apply updates",
+              "Updated harness activity changed the board. All columns were revalidated.",
+              "Home updated. New work, attention or results are available."
+            ],
+            "modalAlerts": [],
+            "homeAlerts": [],
+            "noticeObserved": true,
+            "fullPromotionRequiresNotice": true
+          }
+        },
+        {
+          "id": "zero-browser-POST",
+          "pass": true,
+          "actual": []
+        },
+        {
+          "id": "zero-page-errors",
+          "pass": true,
+          "actual": []
+        }
+      ],
+      "posts": [],
+      "errors": [],
+      "observations": {
+        "f13": {
+          "modalStatus": [
+            "Following live events"
+          ],
+          "homeStatus": [
+            "Display updates paused. Agents keep running; decisions require a fresh canonical review.",
+            "Updates are available.Apply updates",
+            "Updated harness activity changed the board. All columns were revalidated.",
+            "Home updated. New work, attention or results are available."
+          ],
+          "modalAlerts": [],
+          "homeAlerts": [],
+          "noticeObserved": true,
+          "fullPromotionRequiresNotice": true
+        }
+      },
+      "unasserted": [
+        "specific meaningful session titles without a canonical producer",
+        "native 200 percent zoom",
+        "screen reader speech",
+        "full keyboard coverage beyond enumerated traversal",
+        "F12 new decision (prior evidence only)"
+      ]
+    },
+    "themes-mobile": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "phase": "themes-mobile",
+      "checks": [
+        {
+          "id": "I04-semantic-labels-theme-0",
+          "pass": true,
+          "actual": [
+            "Registered harness",
+            "Idle"
+          ]
+        },
+        {
+          "id": "I04-semantic-labels-theme-1",
+          "pass": true,
+          "actual": [
+            "Registered harness",
+            "Idle"
+          ]
+        },
+        {
+          "id": "I04-both-themes-same-meaning",
+          "pass": true,
+          "actual": [
+            {
+              "dark": true,
+              "labels": [
+                "Registered harness",
+                "Idle"
+              ]
+            },
+            {
+              "dark": false,
+              "labels": [
+                "Registered harness",
+                "Idle"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "I05-360-stack-no-horizontal-overflow",
+          "pass": true,
+          "actual": [
+            {
+              "column": "active",
+              "x": 16,
+              "y": -66,
+              "width": 328,
+              "height": 844
+            },
+            {
+              "column": "needs_you",
+              "x": 16,
+              "y": 794,
+              "width": 328,
+              "height": 100
+            },
+            {
+              "column": "results",
+              "x": 16,
+              "y": 910,
+              "width": 328,
+              "height": 768
+            }
+          ]
+        },
+        {
+          "id": "zero-browser-POST",
+          "pass": true,
+          "actual": []
+        },
+        {
+          "id": "zero-page-errors",
+          "pass": true,
+          "actual": []
+        }
+      ],
+      "posts": [],
+      "errors": [],
+      "observations": {},
+      "unasserted": [
+        "specific meaningful session titles without a canonical producer",
+        "native 200 percent zoom",
+        "screen reader speech",
+        "full keyboard coverage beyond enumerated traversal",
+        "F12 new decision (prior evidence only)"
+      ]
+    }
+  },
+  "summary": {
+    "active": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "passed": 10,
+      "failed": 0,
+      "check_ids": [
+        "G05-authorized-projects-readable",
+        "G06-no-invented-state-duration",
+        "I01-tab-reaches-populated-board",
+        "I01-Enter-opens-known-harness",
+        "I01-keyboard-selects-known-session",
+        "I01-Enter-opens-known-request",
+        "I01-open-panel-keyboard-focus-contained",
+        "F02-panel-initial-exact-question",
+        "zero-browser-POST",
+        "zero-page-errors"
+      ]
+    },
+    "base": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "passed": 6,
+      "failed": 0,
+      "check_ids": [
+        "G01-real-canonical-GET-entire-scope",
+        "G01-exact-target-not-latest",
+        "G01-one-modal-one-gesture-exact-output",
+        "G04-registered-no-session-no-implicit-open",
+        "zero-browser-POST",
+        "zero-page-errors"
+      ]
+    },
+    "external": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "passed": 3,
+      "failed": 0,
+      "check_ids": [
+        "F10-native-exact-read-survives-external-source-failure",
+        "zero-browser-POST",
+        "zero-page-errors"
+      ]
+    },
+    "history": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "passed": 9,
+      "failed": 0,
+      "check_ids": [
+        "G02-canonical-preview-query-observed",
+        "G02-one-preview-not-unique",
+        "G02-current-relation-exact-card-two-sessions",
+        "G02-no-automatic-preview-choice",
+        "G03-known-session-option-ses_d64b122b1b0c0e5e6ee003c8cfaf6a04",
+        "G03-known-session-option-ses_81874f781271bca8f7cee84d5e5b9b35",
+        "G03-distinct-session-targets",
+        "zero-browser-POST",
+        "zero-page-errors"
+      ]
+    },
+    "moved-close": {
+      "status": "INCOMPLETE",
+      "passed": 0,
+      "failed": 0,
+      "check_ids": []
+    },
+    "naming": {
+      "status": "PASS_NAMING_PREFLIGHT",
+      "passed": 5,
+      "failed": 0,
+      "check_ids": [
+        "I01-header-menu-accessible-name",
+        "I01-header-menu-canonical-name",
+        "I01-header-menu-expanded-state",
+        "zero-browser-POST",
+        "zero-page-errors"
+      ]
+    },
+    "panel-after": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "passed": 5,
+      "failed": 0,
+      "check_ids": [
+        "F02-authoritative-poll-with-unrelated-change",
+        "F02-unrelated-change-retains-panel",
+        "F13-no-Home-or-panel-alert",
+        "zero-browser-POST",
+        "zero-page-errors"
+      ]
+    },
+    "themes-mobile": {
+      "status": "PASS_EXECUTED_SUBSET",
+      "passed": 6,
+      "failed": 0,
+      "check_ids": [
+        "I04-semantic-labels-theme-0",
+        "I04-semantic-labels-theme-1",
+        "I04-both-themes-same-meaning",
+        "I05-360-stack-no-horizontal-overflow",
+        "zero-browser-POST",
+        "zero-page-errors"
+      ]
+    }
+  },
+  "base_authority_invariants": {
+    "operations_unchanged": true,
+    "grant_digest_unchanged": true
+  },
+  "scope_limits": [
+    "G01/G02 exact observed checks only; G03 meaningful specific titles not produced",
+    "I01 bounded keyboard path, not entire application or AT speech",
+    "360 layout is not native 200 percent zoom",
+    "F13 notice must be reviewed from actual Home/modal status captures",
+    "moved-close failed before its assertions; focus return and moved-card DOM not qualified",
+    "Authority was never renewed; one native question was published canonically only after base phases"
+  ],
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "physical": {
+    "port": 64547,
+    "listeners": [],
+    "browser_profile_processes": [],
+    "active_resources": false
+  },
+  "payload_after": {
+    "files": 1031,
+    "mismatches": []
+  },
+  "browser_post_count": 0,
+  "provider_invocations": 0,
+  "fixture_cas_redactions": 1,
+  "cas_fingerprints": [
+    "1dce0fce0048f180f0f96dc265d56b33a174f79903d5cd3b32cace8fb3fd60f5"
+  ],
+  "withheld_private_images": [
+    {
+      "name": "experience-mobile-moved-close-failure.png",
+      "raw_sha256": "a43d5cbb1b03126485c8e6c1f8af5d202acd78867673111de60b2ae94211260b",
+      "reason": "Private native-question failure screenshot may show canonical CAS"
+    }
+  ],
+  "curation": [
+    {
+      "path": "runtime-ready.json",
+      "raw_sha256": "8609e39de448842f47135748e771783236ae85416c1fbcac3371515aa394bb78",
+      "curated_sha256": "8609e39de448842f47135748e771783236ae85416c1fbcac3371515aa394bb78",
+      "cas_redactions": 0
+    },
+    {
+      "path": "fixture.py",
+      "raw_sha256": "a8eb4b18d4242e8d104493e40a0eed8e9ccfd61b43aec596f839ee52b18f535c",
+      "curated_sha256": "a8eb4b18d4242e8d104493e40a0eed8e9ccfd61b43aec596f839ee52b18f535c",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-builder-proof.json",
+      "raw_sha256": "92ba2371676f4811498968a066f137e92e872c3e00060eedc1b3c8d76e648375",
+      "curated_sha256": "92ba2371676f4811498968a066f137e92e872c3e00060eedc1b3c8d76e648375",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-failure.json",
+      "raw_sha256": "3ce23ec0e82cd897c948af12d365bf31a65f5329d7c07ec11f77eabcf34a03b5",
+      "curated_sha256": "3ce23ec0e82cd897c948af12d365bf31a65f5329d7c07ec11f77eabcf34a03b5",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-steps.json",
+      "raw_sha256": "72e66cf8d244318aaf19ae49b2c422ce0c83da2cb706ee5d7ab47fa5c7cd5dd9",
+      "curated_sha256": "72e66cf8d244318aaf19ae49b2c422ce0c83da2cb706ee5d7ab47fa5c7cd5dd9",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/origins.json",
+      "raw_sha256": "03de414af58046a265142b03c1a4385e6b0d5636a2817bc7e65640c0978564d6",
+      "curated_sha256": "03de414af58046a265142b03c1a4385e6b0d5636a2817bc7e65640c0978564d6",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/final.json",
+      "raw_sha256": "8e0ca4778f68296a20e80c30530502ae1ecb4502af33da00bba9311cfe2f124b",
+      "curated_sha256": "8e0ca4778f68296a20e80c30530502ae1ecb4502af33da00bba9311cfe2f124b",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/supervisor-cleanup.json",
+      "raw_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "curated_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/controls.json",
+      "raw_sha256": "7dbdbc58d46a131c8700d1243070e0a78f9820eecb7d705e62a910abac774508",
+      "curated_sha256": "7dbdbc58d46a131c8700d1243070e0a78f9820eecb7d705e62a910abac774508",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-active.txt",
+      "raw_sha256": "db8858d92c94a0ed566d8ee00b87d9f15c99b91c74916642fe0d9851fd2a0199",
+      "curated_sha256": "db8858d92c94a0ed566d8ee00b87d9f15c99b91c74916642fe0d9851fd2a0199",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-base.txt",
+      "raw_sha256": "55e8034b528ccf88d90929358dc797bfa65826ed20655e3a0957fd5e1f71480b",
+      "curated_sha256": "55e8034b528ccf88d90929358dc797bfa65826ed20655e3a0957fd5e1f71480b",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-close.txt",
+      "raw_sha256": "2d982b3717ce11bd517b61b670e8331b80598d7cd5eae77a01c98d6d3f174ebc",
+      "curated_sha256": "2d982b3717ce11bd517b61b670e8331b80598d7cd5eae77a01c98d6d3f174ebc",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-external.txt",
+      "raw_sha256": "1da82841b626b3535c16c6841b6b9ab704b1746ed867042cf82f031e034bc364",
+      "curated_sha256": "1da82841b626b3535c16c6841b6b9ab704b1746ed867042cf82f031e034bc364",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-history.txt",
+      "raw_sha256": "7cdf7b91570f333d1dd2a1162c2ddf3cd30c998eb77daaa046565bc5d9038f4b",
+      "curated_sha256": "7cdf7b91570f333d1dd2a1162c2ddf3cd30c998eb77daaa046565bc5d9038f4b",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-moved-close.txt",
+      "raw_sha256": "1d29da2ca1f9b21451f900f14e91f059e5b09e585cf346d729d421a4185a5f68",
+      "curated_sha256": "db8aa1f3b766f9287fbc95016ed0da6869bd93b13ae1c9e7e7d937ab407b1a48",
+      "cas_redactions": 1
+    },
+    {
+      "path": "cli-experience-naming.txt",
+      "raw_sha256": "ee16bdee96058e13b9a5005efa1ce1a021477480f73aac6462938f9fce505fd1",
+      "curated_sha256": "ee16bdee96058e13b9a5005efa1ce1a021477480f73aac6462938f9fce505fd1",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-open.txt",
+      "raw_sha256": "6f558479f4508e8a328582de4e88bcf212470f4a1dbb3b35384ec46c7d852cbc",
+      "curated_sha256": "6f558479f4508e8a328582de4e88bcf212470f4a1dbb3b35384ec46c7d852cbc",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-panel-after.txt",
+      "raw_sha256": "80889f566de4880e914378f9ba92fdfa17523548ef3c725420c2437f62f89aeb",
+      "curated_sha256": "80889f566de4880e914378f9ba92fdfa17523548ef3c725420c2437f62f89aeb",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-storage.txt",
+      "raw_sha256": "f6d78cd61b385ff2dc79516156dd3dfd87dd7798bc52fabd037dae77dce73f39",
+      "curated_sha256": "f6d78cd61b385ff2dc79516156dd3dfd87dd7798bc52fabd037dae77dce73f39",
+      "cas_redactions": 0
+    },
+    {
+      "path": "cli-experience-themes-mobile.txt",
+      "raw_sha256": "40741ffc3d80ef9da578dc0ca06b38421e47ac1ded750581668718cc642206a4",
+      "curated_sha256": "40741ffc3d80ef9da578dc0ca06b38421e47ac1ded750581668718cc642206a4",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-active.js",
+      "raw_sha256": "40f303f7a61731e7b5b22cbfe02142785e3002c6a046d298d01f94f25b1ae721",
+      "curated_sha256": "40f303f7a61731e7b5b22cbfe02142785e3002c6a046d298d01f94f25b1ae721",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-base.js",
+      "raw_sha256": "6faf3ff24b1d0f0fdd735f42904b3d58c0add9d8f184abfd179a592bc98c46dd",
+      "curated_sha256": "6faf3ff24b1d0f0fdd735f42904b3d58c0add9d8f184abfd179a592bc98c46dd",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-external.js",
+      "raw_sha256": "541800cb3ed383366dcc0cfa67cb0572cefdd4d1f7bf64502b25c142d2b8316f",
+      "curated_sha256": "541800cb3ed383366dcc0cfa67cb0572cefdd4d1f7bf64502b25c142d2b8316f",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-history.js",
+      "raw_sha256": "24aa83fc6836f88188d1b5afac783125cd4acc4b6aaf4b39512e2cb5815a4a04",
+      "curated_sha256": "24aa83fc6836f88188d1b5afac783125cd4acc4b6aaf4b39512e2cb5815a4a04",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-moved-close.js",
+      "raw_sha256": "9a4b0693df9acb5937327a24edbb4fb3c0dbc0ca3de1dcab551d4a2ec3e4d867",
+      "curated_sha256": "9a4b0693df9acb5937327a24edbb4fb3c0dbc0ca3de1dcab551d4a2ec3e4d867",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-naming.js",
+      "raw_sha256": "e4dd7b683c46bb2cd5a17b6f97754c84c574ef80c20e42a809389f9d53eb4d25",
+      "curated_sha256": "e4dd7b683c46bb2cd5a17b6f97754c84c574ef80c20e42a809389f9d53eb4d25",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-panel-after.js",
+      "raw_sha256": "f90f6bbcba1900f5dac299b63fb5a8277a35722812b57e38c57345a0d8e0f962",
+      "curated_sha256": "f90f6bbcba1900f5dac299b63fb5a8277a35722812b57e38c57345a0d8e0f962",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-themes-mobile.js",
+      "raw_sha256": "f3fa42bf2bc2f345e7e5097d8781bc52cc13f04d23f3e1e52a665f2ebc6e218f",
+      "curated_sha256": "f3fa42bf2bc2f345e7e5097d8781bc52cc13f04d23f3e1e52a665f2ebc6e218f",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control\\exp-a-terminal.json",
+      "raw_sha256": "2bdcfeae85c4a0fc9c601823891af1af6ab63588a53f69d0b7eef2a7b64d8523",
+      "curated_sha256": "2bdcfeae85c4a0fc9c601823891af1af6ab63588a53f69d0b7eef2a7b64d8523",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control\\exp-active-identities.json",
+      "raw_sha256": "c6d0d0474a8ec97e000f5e9bd058c184f57327eca7cc06b4be3099911e7efce0",
+      "curated_sha256": "c6d0d0474a8ec97e000f5e9bd058c184f57327eca7cc06b4be3099911e7efce0",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control\\exp-active.json",
+      "raw_sha256": "68f89ca66abbecf9cd78ed13cadb96e0cd286139e8cfa863db0a3e9fab499f2c",
+      "curated_sha256": "68f89ca66abbecf9cd78ed13cadb96e0cd286139e8cfa863db0a3e9fab499f2c",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control\\exp-b-closed.json",
+      "raw_sha256": "31c480350c06b73b6356c2339a89c2ce53d8b07d9003d630470501d8b2c6bd4e",
+      "curated_sha256": "31c480350c06b73b6356c2339a89c2ce53d8b07d9003d630470501d8b2c6bd4e",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control\\exp-base-after.json",
+      "raw_sha256": "6d522897d8677b4b716956df66650083197c7f490a338c8fe7e372436b3cb1c3",
+      "curated_sha256": "6d522897d8677b4b716956df66650083197c7f490a338c8fe7e372436b3cb1c3",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control\\exp-base.json",
+      "raw_sha256": "373eb884c161c7e7e5f06306a3d0b3b9abfcbf3c1d332068c12c50ce3f47e57f",
+      "curated_sha256": "373eb884c161c7e7e5f06306a3d0b3b9abfcbf3c1d332068c12c50ce3f47e57f",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control\\exp-external-failed.json",
+      "raw_sha256": "1f5811d636629062ee7538f9ce1435475765ff39e290c32e052015eb6f74ffd8",
+      "curated_sha256": "1f5811d636629062ee7538f9ce1435475765ff39e290c32e052015eb6f74ffd8",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control\\exp-external-restored.json",
+      "raw_sha256": "2251c87bf755b568fd617800f1fc9b400d7cba2d0dd47816eb1192a814f21666",
+      "curated_sha256": "2251c87bf755b568fd617800f1fc9b400d7cba2d0dd47816eb1192a814f21666",
+      "cas_redactions": 0
+    },
+    {
+      "path": "control\\exp-history.json",
+      "raw_sha256": "186d2276cda1630934a7cfaeff122f998d198dcb003c9bc00d803ac0b94889cc",
+      "curated_sha256": "186d2276cda1630934a7cfaeff122f998d198dcb003c9bc00d803ac0b94889cc",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-mobile-active.png",
+      "raw_sha256": "684b891e843ac2fe7ef9140f7ac116e955d1db354da5b693e758704f8383d447",
+      "curated_sha256": "684b891e843ac2fe7ef9140f7ac116e955d1db354da5b693e758704f8383d447",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-mobile-needs_you.png",
+      "raw_sha256": "6020c732fa99742ed8227922ff19f99e7bb16a9cd059a31a90a5e88342ddea80",
+      "curated_sha256": "6020c732fa99742ed8227922ff19f99e7bb16a9cd059a31a90a5e88342ddea80",
+      "cas_redactions": 0
+    },
+    {
+      "path": "experience-mobile-results.png",
+      "raw_sha256": "62266bc6a68a7014c2243059c302a345e0696d4ab0ec820f18331296977953ef",
+      "curated_sha256": "62266bc6a68a7014c2243059c302a345e0696d4ab0ec820f18331296977953ef",
+      "cas_redactions": 0
+    }
+  ],
+  "original_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-0swzotrz"
+}

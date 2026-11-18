@@ -1,0 +1,712 @@
+{
+  "mode": "READ_ONLY_STATIC_REVIEW_NO_EXECUTION",
+  "source_cut": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+  "status_changes": false,
+  "scenarios": [
+    {
+      "id": "HST-T-G01",
+      "assessment": "PARTIAL_CHEAP_FINAL_CUT_RECONFIRMATION",
+      "node": [
+        {
+          "file": "frontend/tests/uiEntryInspection.test.mjs",
+          "title": "harness direct selection requires full binding relation and strips display metadata from target",
+          "source_sha256": "915d0e47b021f6a99ae0e2d791edbc9149521f4fb72492151e8b6338005b7184",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 38
+        }
+      ],
+      "api": [
+        "tests/home_states/test_operational_sqlite.py::test_canonical_embedded_open_receipt_proves_ready_idle_without_claiming_process_alive"
+      ],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r5-scope-response-abandoned/scope-result.json",
+          "checks": [
+            "singleton-direct-exact-session"
+          ],
+          "source_sha256": "904a54cf36381bd845b0539711a545f9ae73ecade4f236f8f1a1a35c22aa46be",
+          "observed": {
+            "singleton-direct-exact-session": true
+          }
+        }
+      ],
+      "missing": "R5 actual one-gesture singleton succeeded before the unrelated transport observer failed. Final R7 direct harness singleton click itself was not reasserted; result deep-link and two-session selection are different paths.",
+      "proposal": "One canonical B session, exact sessions_total1/has_morefalse/cursornull, click Follow activity once; match preflight RuntimeSession.scope and output marker, no intermediate chooser or write.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Conjunto completo contém uma sessão elegível",
+        "when": "Clicar Acompanhar no harness",
+        "then": "Abrir seu acompanhamento em um gesto, sem lista intermediária vazia.",
+        "level": "componente + navegador"
+      },
+      "python_execution": [
+        {
+          "nodeid": "tests/home_states/test_operational_sqlite.py::test_canonical_embedded_open_receipt_proves_ready_idle_without_claiming_process_alive",
+          "finished": true,
+          "layer": "real SQLite/ASGI read or canonical inert-Core boundary; scope limited to assertions"
+        }
+      ]
+    },
+    {
+      "id": "HST-T-G02",
+      "assessment": "CONDITIONAL_CANONICAL_PREVIEW_GIVEN",
+      "node": [
+        {
+          "file": "frontend/tests/uiEntryInspection.test.mjs",
+          "title": "multiple or incomplete session relations require explicit choice; a proven unique relation can open",
+          "source_sha256": "915d0e47b021f6a99ae0e2d791edbc9149521f4fb72492151e8b6338005b7184",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 29
+        },
+        {
+          "file": "frontend/tests/uiEntryInspection.test.mjs",
+          "title": "harness direct selection requires full binding relation and strips display metadata from target",
+          "source_sha256": "915d0e47b021f6a99ae0e2d791edbc9149521f4fb72492151e8b6338005b7184",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 38
+        }
+      ],
+      "api": [
+        "tests/home_states/test_operational_board.py::test_sessions_are_complete_paged_and_bound_to_card_version_principal"
+      ],
+      "browser": [],
+      "missing": "No actual browser singleton preview with has_moretrue or unknown total. Default Home requests preview3, so two complete sessions naturally produce two previews, not the literal one-preview Given.",
+      "proposal": "Do not invent JSON or erase a session. Conditional Root-reviewed transport variant may forward an actual canonical preview1 query/response unchanged and label the controlled query. Otherwise retain NOT_RUN until a real partial-coverage producer gives this shape.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Preview tem uma sessão e has_more=true ou total desconhecido",
+        "when": "Clicar",
+        "then": "Não escolher automaticamente; seletor/revalidação com cobertura explícita.",
+        "level": "componente + navegador"
+      },
+      "python_execution": [
+        {
+          "nodeid": "tests/home_states/test_operational_board.py::test_sessions_are_complete_paged_and_bound_to_card_version_principal",
+          "finished": true,
+          "layer": "domain metadata projection; not actual HTTP/native producer"
+        }
+      ]
+    },
+    {
+      "id": "HST-T-G03",
+      "assessment": "PARTIAL_TITLE_SOURCE_BOUNDARY",
+      "node": [
+        {
+          "file": "frontend/tests/uiEntryInspection.test.mjs",
+          "title": "harness direct selection requires full binding relation and strips display metadata from target",
+          "source_sha256": "915d0e47b021f6a99ae0e2d791edbc9149521f4fb72492151e8b6338005b7184",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 38
+        }
+      ],
+      "api": [
+        "tests/home_states/test_operational_sqlite.py::test_session_selector_labels_share_connection_redaction_and_bounds"
+      ],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r3-reading-partial-logout/functional-result.json",
+          "checks": [
+            "exact-two-session-catalog",
+            "exact-session-retained",
+            "exact-session-current"
+          ],
+          "source_sha256": "17a6c792a83af510b05ff44de11517938ca585f3b83c4ce6aad94294a470ed64",
+          "observed": {
+            "exact-two-session-catalog": true,
+            "exact-session-retained": true,
+            "exact-session-current": true
+          }
+        }
+      ],
+      "missing": "Actual labels already contain CLOSED/READY, authorized project and Updated ISO time; IDs are exact. Meaningful known objective/title is only a Node fixture. Current SQLite normalize never supplies SessionRuntimeFact.title; session_ref falls back to Session.",
+      "proposal": "Reuse two canonically CLOSED/READY B sessions and inspect labels and Session details IDs. Do not claim a specific objective title or fabricate it in SQL/DTO; first identify an authoritative title producer, or report that clause unavailable.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Duas sessões conhecidas com títulos/estados",
+        "when": "Abrir seletor",
+        "then": "Opções por objetivo/projeto/tempo; IDs disponíveis em detalhes.",
+        "level": "componente + navegador"
+      },
+      "python_execution": [
+        {
+          "nodeid": "tests/home_states/test_operational_sqlite.py::test_session_selector_labels_share_connection_redaction_and_bounds",
+          "finished": true,
+          "layer": "real SQLite/ASGI read or canonical inert-Core boundary; scope limited to assertions"
+        }
+      ]
+    },
+    {
+      "id": "HST-T-G04",
+      "assessment": "PARTIAL_CANONICAL_POLICY_PREFLIGHT_REQUIRED",
+      "node": [
+        {
+          "file": "frontend/tests/uiSessionTarget.test.mjs",
+          "title": "connection target preserves exact binding identity without requiring a session",
+          "source_sha256": "935e4bc405e0e72fed56e729a05fe780ccf52f04d973a08ba61614d0173f5c30",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 40
+        }
+      ],
+      "api": [
+        "tests/home_states/test_operational_sqlite.py::test_http_negotiation_sessions_and_requests_are_canonical_read_only"
+      ],
+      "browser": [],
+      "missing": "No final browser card with no active session and canonical lazy/on-demand policy plus unchanged operations/identity/authority snapshots. A closed-session history is not a policy proof by itself.",
+      "proposal": "Inspect configured A before admitting any session. Capture its actual configuration/effective session_policy, context and honest empty history, zero runtime.open/start/turn/Test. No new on_demand enum is invented: existing policy names are shared/per_sender/per_sender_session/one_shot.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Binding válido com política sob demanda",
+        "when": "Abrir card",
+        "then": "Contexto e histórico, sem criar runtime/sessão ou consumir provedor.",
+        "level": "componente + navegador"
+      },
+      "python_execution": [
+        {
+          "nodeid": "tests/home_states/test_operational_sqlite.py::test_http_negotiation_sessions_and_requests_are_canonical_read_only",
+          "finished": true,
+          "layer": "real SQLite/ASGI read or canonical inert-Core boundary; scope limited to assertions"
+        }
+      ]
+    },
+    {
+      "id": "HST-T-G05",
+      "assessment": "PARTIAL_THREE_TYPES_NOT_ASSERTED_TOGETHER",
+      "node": [
+        {
+          "file": "frontend/tests/uiHarnessCard.test.mjs",
+          "title": "v2 one exact open action opens its canonical request only once and shows project",
+          "source_sha256": "02f2ecb75d72652cf8272955ba83f492c8a2c911b77a29e478bf33e1c714b98b",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 110
+        }
+      ],
+      "api": [],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r5-scope-response-abandoned/scope-result.json",
+          "checks": [
+            "same-public-id-two-canonical-projects",
+            "all-project-cards-labeled"
+          ],
+          "source_sha256": "904a54cf36381bd845b0539711a545f9ae73ecade4f236f8f1a1a35c22aa46be",
+          "observed": {
+            "same-public-id-two-canonical-projects": true,
+            "all-project-cards-labeled": true
+          }
+        }
+      ],
+      "missing": "Two actual reviewer harness cards are labeled. A request and delivery from different authorized projects have not both been explicitly checked alongside those cards in All projects.",
+      "proposal": "Two bindings in projects Alpha/Beta, same public reviewer ID, exact canonical association. All projects must label harnesses, A request and B delivery correctly; projectA filter must not show B.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "All projects com IDs iguais",
+        "when": "Renderizar harness/request/delivery",
+        "then": "Projeto aparece em todos os três tipos; projeto único pode omitir redundância.",
+        "level": "componente + navegador"
+      },
+      "python_execution": []
+    },
+    {
+      "id": "HST-T-G06",
+      "assessment": "PARTIAL_NEGATIVE_DURATION_ASSERTION_CHEAP",
+      "node": [],
+      "api": [],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r7-functional/r7-result.json",
+          "checks": [
+            "canonical-parallel",
+            "rendered-parallel"
+          ],
+          "source_sha256": "8f7865111631ddb46c656dc7121c22ec2ce1a0645239ac0dee12230ab90ccb97",
+          "observed": {
+            "canonical-parallel": true,
+            "rendered-parallel": true
+          }
+        }
+      ],
+      "missing": "Canonical state_since null and rendered Working text exist; Received ISO text appears in actual mobile captures. No dedicated browser assertion binds null transition proof to absence of an invented running duration.",
+      "proposal": "Reuse actual admitted state_since null and result.created_at; assert Received/Evidence observed dates match source, no State since or running-for wording inferred from created_at/occurred_at.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Só created_at ou occurred_at disponível",
+        "when": "Renderizar duração",
+        "then": "Usar recebido/atualizado há, não tempo de execução inventado.",
+        "level": "componente + navegador"
+      },
+      "python_execution": []
+    },
+    {
+      "id": "HST-T-I01",
+      "assessment": "PARTIAL_FULL_TRAVERSAL_MISSING",
+      "node": [
+        {
+          "file": "frontend/tests/uiSessionInspection.test.mjs",
+          "title": "actual embedded output body is read-only history without a nested dialog or terminal maximizer",
+          "source_sha256": "f6566e9d80d07c27a445c075da28aad366894f2d58cee0eb633f73e306db683a",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 51
+        }
+      ],
+      "api": [],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r6-final-working-intents/smoke-result.json",
+          "checks": [
+            "keyboard-opens-single-context",
+            "keyboard-close-returns-focus"
+          ],
+          "source_sha256": "62b3b4a9f2bc3ed5e9d3cabf34162671a08cb6ed263b42f427e477f6389c4053",
+          "observed": {
+            "keyboard-opens-single-context": true,
+            "keyboard-close-returns-focus": true
+          }
+        },
+        {
+          "path": "browser-hst/cuts/r3-reading-partial-logout/functional-result.json",
+          "checks": [
+            "keyboard-focus-in-dialog"
+          ],
+          "source_sha256": "17a6c792a83af510b05ff44de11517938ca585f3b83c4ce6aad94294a470ed64",
+          "observed": {
+            "keyboard-focus-in-dialog": true
+          }
+        }
+      ],
+      "missing": "Enter/Escape and dialog focus subsets are not Tab/ShiftTab coverage of all actionable badges/buttons across populated three columns or proof of leaving the modal without an outside trap.",
+      "proposal": "Use the compact two-binding fixture once all three columns contain real items. Enumerate actual visible tabbable controls/names, traverse by keyboard within a finite bound derived from that inventory, activate exact read-only targets only, check modal containment and return. No AT speech claim.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Home com cards nas três colunas",
+        "when": "Navegar sem mouse",
+        "then": "Badges acionáveis/buttons/painel têm foco e nome; nenhuma armadilha fora do modal.",
+        "level": "navegador + AT quando disponível"
+      },
+      "python_execution": []
+    },
+    {
+      "id": "HST-T-I02",
+      "assessment": "PARTIAL_MOVED_ORIGIN_NOT_EXERCISED",
+      "node": [
+        {
+          "file": "frontend/tests/uiBoardController.test.mjs",
+          "title": "a new global revision moves one card once and resets all loaded columns and related pages",
+          "source_sha256": "7e28490192b86d492f45880280ff952058ee09ee38c1ed7bed44015ca3ad23c8",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 42
+        }
+      ],
+      "api": [],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r6-info-draft-focus/info-result.json",
+          "checks": [
+            "close-restores-board-focus"
+          ],
+          "source_sha256": "49c5bdd2a6b5e3743abf57fd3da7438c8c66540ccafd544916596e27ad4f2778",
+          "observed": {
+            "close-restores-board-focus": true
+          }
+        }
+      ],
+      "missing": "Existing return focus is in-board but no canonical origin movement occurred. Root close policy searches original DOM or canonical attribute/ID, then stable heading; this is source intent, not the missing browser proof.",
+      "proposal": "Open A harness then its exact question in the same panel, preserving harness origin. Complete its independent sibling. Assert new canonical column while presentation is held; close lets pause(false).apply publish current data before RAF focus restoration. Inspect actual destination same A ID or stable heading, never B. Do not force board reorder behind a paused modal.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Card origem mudou de Active para Needs You",
+        "when": "Fechar painel",
+        "then": "Foco retorna ao mesmo ID canônico ou destino estável, não outro harness.",
+        "level": "navegador + AT quando disponível"
+      },
+      "python_execution": []
+    },
+    {
+      "id": "HST-T-I04",
+      "assessment": "PARTIAL_THEME_AND_NONCOLOR_BROWSER_MISSING",
+      "node": [
+        {
+          "file": "frontend/tests/homeStatesPresentation.test.mjs",
+          "title": "Working plus a nonblocking request has two badges with independent meanings",
+          "source_sha256": "4eaf9c79889321a64c3493848ae5e2c152a3840ae1577e9812217bde06d7c8b9",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 14
+        },
+        {
+          "file": "frontend/tests/homeStatesPresentation.test.mjs",
+          "title": "Idle and normal one-shot session closure have distinct labels",
+          "source_sha256": "4eaf9c79889321a64c3493848ae5e2c152a3840ae1577e9812217bde06d7c8b9",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 18
+        },
+        {
+          "file": "frontend/tests/homeStatesPresentation.test.mjs",
+          "title": "Failure, cancellation, rejected verification and cleanup have independent meanings",
+          "source_sha256": "4eaf9c79889321a64c3493848ae5e2c152a3840ae1577e9812217bde06d7c8b9",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 38
+        }
+      ],
+      "api": [],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r7-functional/r7-result.json",
+          "checks": [
+            "rendered-parallel"
+          ],
+          "source_sha256": "8f7865111631ddb46c656dc7121c22ec2ce1a0645239ac0dee12230ab90ccb97",
+          "observed": {
+            "rendered-parallel": true
+          }
+        },
+        {
+          "path": "browser-hst/cuts/r5-failed-cancelled/negative-result.json",
+          "checks": [
+            "failed-cancelled-labels"
+          ],
+          "source_sha256": "af0452c3ca00a097f28e74c89642cf4b19c779e1107f0b02884b3233beef77f8",
+          "observed": {
+            "failed-cancelled-labels": true
+          }
+        }
+      ],
+      "missing": "No light/dark browser review of all Working/Idle/pending/failure/unconfirmed meanings independent of color. Labels alone in separate cuts do not verify the themed surface.",
+      "proposal": "Use canonical light/dark theme control, exact status text and accessible names in both modes; capture representative badges. Registered A, Idle B, failed B result, then Working/question A supply genuine meanings in phases. Do not claim contrast or screen-reader certification.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Tema claro/escuro e percepção sem cor",
+        "when": "Inspecionar badges",
+        "then": "Texto/ícone semântico distinguem Working/Idle/pendência/erro e estado não confirmado.",
+        "level": "navegador + AT quando disponível"
+      },
+      "python_execution": []
+    },
+    {
+      "id": "HST-T-I05",
+      "assessment": "PARTIAL_NATIVE_ZOOM_CAPABILITY_NOT_PROVED",
+      "node": [],
+      "api": [],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r6-mobile-intents-derivative/visual-result.json",
+          "checks": [
+            "mobile-navigation-closed",
+            "three-columns-no-horizontal-overflow",
+            "visible-uncovered-active",
+            "visible-uncovered-needs_you",
+            "visible-uncovered-results"
+          ],
+          "source_sha256": "8587ba48d81cbd849382363ed10bab293a8f9613fd61b67347d54fc51239da8d",
+          "observed": {
+            "mobile-navigation-closed": true,
+            "three-columns-no-horizontal-overflow": true,
+            "visible-uncovered-active": true,
+            "visible-uncovered-needs_you": true,
+            "visible-uncovered-results": true
+          }
+        }
+      ],
+      "missing": "360px uncovered column captures and hit-tests are real; numeric stack oracle remains failed because it compared viewport positions after different scrolls, with separate visual confirmation. Native200percent zoom, long names plus same-context return are not qualified.",
+      "proposal": "Reuse small fixture at360px with canonical accepted long labels. Native200percent requires separate actual browser zoom capability and measured zoom factor; innerWidth/DPR are supporting data only. If unavailable, record exact runtime/version/error and leave that clause NOT_RUN. CSS, viewport and deviceScale are not substitutes. Actual AT speech has not been run or newly probed in this review.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "360px e zoom 200% com nomes longos",
+        "when": "Operar",
+        "then": "Colunas empilhadas, ações acessíveis sem overflow obrigatório de página; detalhe volta ao mesmo contexto.",
+        "level": "navegador + AT quando disponível"
+      },
+      "python_execution": []
+    },
+    {
+      "id": "HST-T-F02",
+      "assessment": "PARTIAL_OTHER_HARNESS_TRANSITION_MISSING",
+      "node": [
+        {
+          "file": "frontend/tests/uiHarnessController.test.mjs",
+          "title": "a paused real transition is retained, but normal board changes are notices rather than errors",
+          "source_sha256": "4ed340a601cec69738dd0902fe190df735f3833f792e82dd8223cf0e00208c82",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 69
+        },
+        {
+          "file": "frontend/tests/uiHarnessController.test.mjs",
+          "title": "pending board presentation does not block current contextual reads and pages",
+          "source_sha256": "4ed340a601cec69738dd0902fe190df735f3833f792e82dd8223cf0e00208c82",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 104
+        }
+      ],
+      "api": [],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r5-working-draft-terminal/after-terminal-result.json",
+          "checks": [
+            "same-dialog-still-open",
+            "same-panel-new-native-output"
+          ],
+          "source_sha256": "57327dea85f7939d263334c340815efbc95554ffee3fe4f7c24ab96458b7a731",
+          "observed": {
+            "same-dialog-still-open": true,
+            "same-panel-new-native-output": true
+          }
+        }
+      ],
+      "missing": "Current browser changes belong to the selected connection, or an unrelated source fault; distinct B harness change while A is read was not asserted.",
+      "proposal": "While A panel/session stays exact, canonically close B's known idle session. Wait actual changed board response; assert one panel, same node/tuple, appropriate status notice and no role alert.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Painel aberto e outro harness muda",
+        "when": "Atualizar board",
+        "then": "Aviso discreto e revalidação apropriada; painel não fecha e sessão selecionada não muda.",
+        "level": "unidade com relógio/promessas + browser"
+      },
+      "python_execution": []
+    },
+    {
+      "id": "HST-T-F07",
+      "assessment": "PARTIAL_COMBINE_WITH_I02",
+      "node": [
+        {
+          "file": "frontend/tests/uiBoardController.test.mjs",
+          "title": "a new global revision moves one card once and resets all loaded columns and related pages",
+          "source_sha256": "7e28490192b86d492f45880280ff952058ee09ee38c1ed7bed44015ca3ad23c8",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 42
+        }
+      ],
+      "api": [],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r7-functional/blocked-result.json",
+          "checks": [
+            "single-card-full-block",
+            "parallel-result-retained"
+          ],
+          "source_sha256": "e25b22e1b13866965e42abd1b6c92ac9130f1a4739d645d6626a2585ff3902ad",
+          "observed": {
+            "single-card-full-block": true,
+            "parallel-result-retained": true
+          }
+        }
+      ],
+      "missing": "Movement was observed before opening the panel. Same-panel continuity and origin focus across that movement are missing.",
+      "proposal": "Same A sibling-terminal phase as I02. Assert one canonical harness ID, unchanged open question/session, then actual focus destination after close and current snapshot application.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Painel mostra ocorrência; harness deixa Active",
+        "when": "Publicar novo estado",
+        "then": "Uma identidade, painel independente da coluna, retorno de foco correto.",
+        "level": "unidade com relógio/promessas + browser"
+      },
+      "python_execution": []
+    },
+    {
+      "id": "HST-T-F10",
+      "assessment": "PARTIAL_EXACT_EXTERNAL_FAILURE_GIVEN_MISSING",
+      "node": [
+        {
+          "file": "frontend/tests/uiHarnessController.test.mjs",
+          "title": "current v2 partial coverage does not age current harness proof; legacy mapping stays compatible",
+          "source_sha256": "4ed340a601cec69738dd0902fe190df735f3833f792e82dd8223cf0e00208c82",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 247
+        },
+        {
+          "file": "frontend/tests/uiHarnessController.test.mjs",
+          "title": "pending board presentation does not block current contextual reads and pages",
+          "source_sha256": "4ed340a601cec69738dd0902fe190df735f3833f792e82dd8223cf0e00208c82",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 104
+        }
+      ],
+      "api": [],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r7-functional/partial-result.json",
+          "checks": [
+            "actual-results-source-failed",
+            "other-sources-retained"
+          ],
+          "source_sha256": "9d10c5a46d15a6a4965a7159f1d8f4ca25ea695045a3e953f1f02f4f7d47de0e",
+          "observed": {
+            "actual-results-source-failed": true,
+            "other-sources-retained": true
+          }
+        }
+      ],
+      "missing": "Results unavailable and external disabled are not literal external unavailable plus exact current native reading.",
+      "proposal": "Enable the existing observations feature in the own fixture, make only queries.external throw OperationalError at its read port, assert external unavailable in actual HTTP, then exact native session/metadata read. Restore finally. No fabricated DTO or failure of unrelated native sources.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Fonte externa indisponível, sessão nativa disponível",
+        "when": "Abrir leitura da sessão",
+        "then": "Leitura exata permitida com revalidação; não bloquear toda Home por uma fonte.",
+        "level": "unidade com relógio/promessas + browser"
+      },
+      "python_execution": []
+    },
+    {
+      "id": "HST-T-F12",
+      "assessment": "EXISTING_EVIDENCE_RECONCILIATION_CANDIDATE",
+      "node": [
+        {
+          "file": "frontend/tests/uiHarnessController.test.mjs",
+          "title": "explicit contextual paging uses the same queue while display is paused, without publishing a newer root",
+          "source_sha256": "4ed340a601cec69738dd0902fe190df735f3833f792e82dd8223cf0e00208c82",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 47
+        }
+      ],
+      "api": [],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r5-working-draft-terminal/form-result.json",
+          "checks": [
+            "dirty-two-real-identical-polls",
+            "dirty-focus-and-value-retained",
+            "one-canonical-decision"
+          ],
+          "source_sha256": "080df6184a78f7ff473a26d062107242caa22524d21e5d918b28b60e15e0428c",
+          "observed": {
+            "dirty-two-real-identical-polls": true,
+            "dirty-focus-and-value-retained": true,
+            "one-canonical-decision": true
+          }
+        },
+        {
+          "path": "browser-hst/cuts/r5-working-draft-terminal/after-terminal-result.json",
+          "checks": [
+            "actual-post-answer-turn-terminal",
+            "same-panel-new-native-output"
+          ],
+          "source_sha256": "57327dea85f7939d263334c340815efbc95554ffee3fe4f7c24ab96458b7a731",
+          "observed": {
+            "actual-post-answer-turn-terminal": true,
+            "same-panel-new-native-output": true
+          }
+        }
+      ],
+      "missing": "The actual form script pollWhileDirtytrue clicks Pause display, sends one canonical202, and the held native operation later terminates with new output without unpausing. Most literal behavior already exists. A dedicated before/after grant/expiry invariant was not asserted.",
+      "proposal": "First reconcile existing script/config and request/operation logs; do not repeat the answer merely to improve a label. If Root requires stronger authority proof, one separately reviewed fresh request variant may compare original expiry/grant fields while paused; allow only one exact decision POST, never runtime.pause or renewal.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Usuário pausa apresentação",
+        "when": "Tentar ação a partir de alvo conhecido",
+        "then": "Agentes seguem; leitura/ação revalidam, pausa não renova autoridade nem é runtime.pause.",
+        "level": "unidade com relógio/promessas + browser"
+      },
+      "python_execution": []
+    },
+    {
+      "id": "HST-T-F13",
+      "assessment": "PARTIAL_NORMAL_REVISION_ALERT_NEGATIVE_MISSING",
+      "node": [
+        {
+          "file": "frontend/tests/uiHarnessController.test.mjs",
+          "title": "a paused real transition is retained, but normal board changes are notices rather than errors",
+          "source_sha256": "4ed340a601cec69738dd0902fe190df735f3833f792e82dd8223cf0e00208c82",
+          "source_matches_executed_r6_pin": true,
+          "executed_title_in_r6_pass_log": true,
+          "definition_line": 69
+        }
+      ],
+      "api": [],
+      "browser": [
+        {
+          "path": "browser-hst/cuts/r3-reading-partial-logout/functional-result.json",
+          "checks": [
+            "no-error-alert"
+          ],
+          "source_sha256": "17a6c792a83af510b05ff44de11517938ca585f3b83c4ce6aad94294a470ed64",
+          "observed": {
+            "no-error-alert": true
+          }
+        }
+      ],
+      "missing": "No alert on identical polls was asserted. Later post-terminal alerts[]/one dialog is only an observation; normal non-error revision transition was not bound to a dedicated alert/status assertion.",
+      "proposal": "Reuse F02 B change and F07 A movement. Record actual revision transition, status notice and role alert count before/during/after; no injected transport error in this phase.",
+      "ledger_status": "NOT_RUN",
+      "literal": {
+        "given": "Revisão do board mudou sem falha",
+        "when": "Renderizar notice",
+        "then": "Mensagem normal não entra em error/role alert persistente.",
+        "level": "unidade com relógio/promessas + browser"
+      },
+      "python_execution": []
+    }
+  ],
+  "minimum_fixture": {
+    "bindings": 2,
+    "projects": 2,
+    "public_ids": "reviewer in each authorized workspace",
+    "sessions_max": 4,
+    "phases": [
+      "A configured without runtime: passive context/policy preflight G04, unknown label. B single READY session: G01. Canonical accepted long project labels only.",
+      "Close B1, create B2 and capture real terminal success/failure as needed: two retained CLOSED/READY refs for G03 state/project/time and actual failure label; no claim of meaningful title if producer lacks it.",
+      "Theme/mobile/base inspection before starting A's authority window; record source timestamps for G06. External read-port fault variant F10 remains isolated/restored.",
+      "Only now create A1 productive and A2 canonical operator question: three columns populated, G05 and finite keyboard I01; short phase within original120s.",
+      "A harness-origin panel then its exact question. B2 canonical close gives F02/F13; A1 real terminal gives F07/I02. Observe current API transition while visual order is held, then close and verify same-ID/stable focus after apply.",
+      "F12 first uses existing evidence; a new canonical decision is optional only if a real authority assertion remains. G02 and native200percent are separate conditional capabilities, never faked to fit this dataset."
+    ],
+    "authority": "No question before base work; original grant/request/lease deadlines unchanged. Observe real freshness; do not prolong expiry for a long keyboard or theme pass.",
+    "required_preflight": [
+      "Actual RuntimeSession.scope full tuple",
+      "Canonical card session totals/coverage/cursor before singleton decision",
+      "Actual effective session policy for G04",
+      "Producer availability for meaningful session title G03",
+      "Observations feature enabled before F10 failure",
+      "Exact UI wrapper return-status labels",
+      "All named browser checks return before any native beforeunload dialog"
+    ]
+  },
+  "out_of_scope_claims": [
+    "No new execution in this review",
+    "No ledger promotions",
+    "No provider/native-family or human acceptance",
+    "No actual AT speech or native200percent proof",
+    "No performance target gate or new measurement",
+    "No UI rework absent a reproduced product defect"
+  ],
+  "review_inputs": {
+    "ledger_sha256": "db39e648a82f35d03f638036f5fa3da8c5afa327406c3cc85b28d16a6ea11165",
+    "ledger_counts": {
+      "PASS": 42,
+      "NOT_RUN": 66,
+      "BLOCKED": 8
+    },
+    "node_qualification": "frontend-r6-original/qualification.json",
+    "node_pass_count": 404,
+    "node_log_sha256": "bba4b0a5889685c080144c5049bb2424c8ffaf36befc74d40f5aa91f9a233665",
+    "installed_inventory": "package-hst-r7/installed-shard-0/inventory.json",
+    "r6_r7_ui_asset_equivalence": [
+      {
+        "path": "okto_nexus/adapters/inbound/http/static/assets/index-Bh2ghaTD.css",
+        "r6": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036",
+        "r7": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036",
+        "equal": true
+      },
+      {
+        "path": "okto_nexus/adapters/inbound/http/static/assets/index-CefKJTtn.js",
+        "r6": "491444f17abbebbb34fa2f133f4e34f0cbded025e401b634a35ff851fde35247",
+        "r7": "491444f17abbebbb34fa2f133f4e34f0cbded025e401b634a35ff851fde35247",
+        "equal": true
+      }
+    ]
+  }
+}

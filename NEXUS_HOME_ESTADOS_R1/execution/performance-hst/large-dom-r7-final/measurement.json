@@ -1,0 +1,295 @@
+{
+  "status": "SINGLE_LARGE_DOM_MEASUREMENT",
+  "workload": {
+    "registered_connections": 100,
+    "open_activities": 1000,
+    "native_events": 100000
+  },
+  "seed_clock": "2026-11-16T12:00:00.000000Z",
+  "clockOverride": "PERFORMANCE_FIXTURE_DATE_ONLY",
+  "performanceClock": "real untouched performance.now",
+  "hostAnchor": 1794947982775,
+  "useful": {
+    "at": 2725.600000023842,
+    "timeOrigin": 1794947982785.7,
+    "cards": [
+      {
+        "id": "home_group_014baa806227304c97b5a27cea229ee2adfa20259417a94613e2a53173f2fb7d",
+        "column": "active"
+      },
+      {
+        "id": "home_group_0221d3694500c2aaeb17e77c9a9332b435246f7624f653a8219ce7a526b1d47f",
+        "column": "active"
+      },
+      {
+        "id": "home_group_05f7285908ce681766f46a5f7784fd9c1b1c966bd15def5504a2036a14d25a2c",
+        "column": "active"
+      },
+      {
+        "id": "home_group_07a99d792bdc1bda751a170e088d6dbc522fbf81ee574dfc4f2eb0fe25bf63d3",
+        "column": "active"
+      },
+      {
+        "id": "home_group_0cc8ab4da2a4c2b8d147835d3d4b450d920c7c5ffbf5f0a6d2338b00a8b1772b",
+        "column": "active"
+      },
+      {
+        "id": "home_group_0cd051dad41408430cc00a397e5469aa688d1e70e03a7b8e149e22105230ab83",
+        "column": "active"
+      },
+      {
+        "id": "home_group_0cd5e44019851393380dcffb9af98e0daee8605e6bb4edc74b80dab15854ae45",
+        "column": "active"
+      },
+      {
+        "id": "home_group_0d91b1f0545ba46f0be9cb019da9680e7feff8ebac03ffd14a7b29f1e0964d40",
+        "column": "active"
+      },
+      {
+        "id": "home_group_11f3c70d8f8bba7bcd5910ac905508119960199ed949137b024e0ef5f9e5ba16",
+        "column": "active"
+      },
+      {
+        "id": "home_group_120dd14594de0f6b34d5ced3f4b5928481022636cafc51c3c25d84dfeca883d5",
+        "column": "active"
+      }
+    ],
+    "summary": "connected: unknown \u00b7 working: unknown \u00b7 Idle: unknown \u00b7 queued: unknown \u00b7 100 unconfirmed \u00b7 disconnected: unknown\n\n0 actions \u00b7 harnesses paused: unknown",
+    "project": "Project\nAll projects\nSynthetic performance project\nWorkspace 2\nSynthetic performance project\nAdd harness",
+    "projectValue": "hst-perf",
+    "headers": [
+      "Active",
+      "Needs you",
+      "Results"
+    ]
+  },
+  "canonicalResponse": {
+    "status": 200,
+    "version": 2,
+    "server_id": "srv_daf3d195853a1ec7fd8e25a038c5cc1f",
+    "scope": {
+      "workspace_id": "hst-perf",
+      "quick": "all",
+      "include_recent_results": false
+    },
+    "source_status": {
+      "attention": "ready",
+      "work": "ready",
+      "results": "ready",
+      "connections": "ready",
+      "sessions": "ready",
+      "correlations": "ready",
+      "external": "ready"
+    },
+    "status_value": "ready",
+    "inventory": {
+      "connections": {
+        "value": 100,
+        "total_is_exact": true,
+        "unit": "connections"
+      },
+      "registered_harnesses": {
+        "value": 100,
+        "total_is_exact": true,
+        "unit": "harnesses"
+      }
+    },
+    "summary": {
+      "connected": {
+        "value": null,
+        "total_is_exact": false
+      },
+      "working": {
+        "value": null,
+        "total_is_exact": false
+      },
+      "idle": {
+        "value": null,
+        "total_is_exact": false
+      },
+      "queued": {
+        "value": null,
+        "total_is_exact": false
+      },
+      "unconfirmed": {
+        "value": 100,
+        "total_is_exact": true
+      },
+      "disconnected": {
+        "value": null,
+        "total_is_exact": false
+      },
+      "blocked_harnesses": {
+        "value": null,
+        "total_is_exact": false
+      },
+      "pending_actions": {
+        "value": 0,
+        "total_is_exact": true
+      },
+      "visible_notifications": {
+        "value": 0,
+        "total_is_exact": true
+      },
+      "resume_confirmations": {
+        "value": 0,
+        "total_is_exact": true
+      }
+    },
+    "cards": [
+      {
+        "id": "home_group_014baa806227304c97b5a27cea229ee2adfa20259417a94613e2a53173f2fb7d",
+        "column": "active"
+      },
+      {
+        "id": "home_group_0221d3694500c2aaeb17e77c9a9332b435246f7624f653a8219ce7a526b1d47f",
+        "column": "active"
+      },
+      {
+        "id": "home_group_05f7285908ce681766f46a5f7784fd9c1b1c966bd15def5504a2036a14d25a2c",
+        "column": "active"
+      },
+      {
+        "id": "home_group_07a99d792bdc1bda751a170e088d6dbc522fbf81ee574dfc4f2eb0fe25bf63d3",
+        "column": "active"
+      },
+      {
+        "id": "home_group_0cc8ab4da2a4c2b8d147835d3d4b450d920c7c5ffbf5f0a6d2338b00a8b1772b",
+        "column": "active"
+      },
+      {
+        "id": "home_group_0cd051dad41408430cc00a397e5469aa688d1e70e03a7b8e149e22105230ab83",
+        "column": "active"
+      },
+      {
+        "id": "home_group_0cd5e44019851393380dcffb9af98e0daee8605e6bb4edc74b80dab15854ae45",
+        "column": "active"
+      },
+      {
+        "id": "home_group_0d91b1f0545ba46f0be9cb019da9680e7feff8ebac03ffd14a7b29f1e0964d40",
+        "column": "active"
+      },
+      {
+        "id": "home_group_11f3c70d8f8bba7bcd5910ac905508119960199ed949137b024e0ef5f9e5ba16",
+        "column": "active"
+      },
+      {
+        "id": "home_group_120dd14594de0f6b34d5ced3f4b5928481022636cafc51c3c25d84dfeca883d5",
+        "column": "active"
+      }
+    ],
+    "bytes": 174986
+  },
+  "requiredSummaryLabels": [
+    "connected: unknown",
+    "working: unknown",
+    "Idle: unknown",
+    "queued: unknown",
+    "100 unconfirmed",
+    "disconnected: unknown",
+    "0 actions",
+    "harnesses paused: unknown"
+  ],
+  "assets": [
+    {
+      "name": "index-Bh2ghaTD.css",
+      "status": 200,
+      "sha256": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036"
+    },
+    {
+      "name": "index-CefKJTtn.js",
+      "status": 200,
+      "sha256": "491444f17abbebbb34fa2f133f4e34f0cbded025e401b634a35ff851fde35247"
+    }
+  ],
+  "navigationURL": "http://127.0.0.1:57947/",
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-CefKJTtn.js"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Bh2ghaTD.css"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-icon.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    }
+  ],
+  "errors": [],
+  "targetMs": 2000,
+  "withinTarget": false,
+  "samples": 1,
+  "isP95": false,
+  "cache": "browser disabled; server/OS cache state separately recorded",
+  "provenance": "Synthetic SQL performance fixture; not native, authority, realtime or provider proof."
+}

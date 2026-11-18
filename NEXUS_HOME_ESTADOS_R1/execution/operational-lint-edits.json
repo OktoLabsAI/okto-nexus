@@ -1,0 +1,32 @@
+[
+  {
+    "path": "src/okto_nexus/adapters/outbound/sqlite/home_entries.py",
+    "before_sha256": "2ff9aca189892214a2a67a8f2e6df3ffbdcf4a03852bb3f53d12904dbae5f613",
+    "after_sha256": "8e2b9ebfd28570739957f2ad8f540355affae9ba71570f9787706a228eabf1d5",
+    "reviewed_rows": [
+      258
+    ],
+    "dictionary_normalized_ast_equal": true
+  },
+  {
+    "path": "src/okto_nexus/domain/home_harness_board.py",
+    "before_sha256": "5eac9c6262dfcbfecde3aaae70c63633fd0319948351580742ccf6339de4331b",
+    "after_sha256": "e592010122e5ec3b9c11b9efd5c22f8440fce94f88877ec99ec10957c005ab61",
+    "reviewed_rows": [
+      324,
+      338,
+      403,
+      413
+    ],
+    "dictionary_normalized_ast_equal": true
+  },
+  {
+    "path": "src/okto_nexus/domain/home_entry_pages.py",
+    "before_sha256": "5feb94c400f916a5f2630738781c6422187d75b0a654f79c911dc9f2def72f40",
+    "after_sha256": "4f714b0b959ab759c1c486bbf63f7e400d7d37812b8a15ad530e2afaf6428f84",
+    "reviewed_rows": [
+      331
+    ],
+    "dictionary_normalized_ast_equal": true
+  }
+]

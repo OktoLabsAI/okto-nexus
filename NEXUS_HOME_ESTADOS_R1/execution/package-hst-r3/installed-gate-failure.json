@@ -1,0 +1,17 @@
+{
+  "status": "GATE_FAILED_BEFORE_ALLOCATION",
+  "runner": "installed_regression.py",
+  "shards_requested": [0, 1],
+  "tool_outputs": ["104106", "179498"],
+  "exit_codes": [1, 1],
+  "cause": "ValueError: stdin and input arguments may not both be used.",
+  "location": "ancestor subprocess.run at line 75; same invalid combination also present in helper Git-blob call",
+  "classification": "Runner preparation defect, not application or test failure",
+  "collected_tests": 0,
+  "executed_tests": 0,
+  "new_installed_test_roots_allocated": 0,
+  "child_pytest_started": false,
+  "provider_calls": 0,
+  "automatic_retry": false,
+  "proposed_change": "Driver only: retain input=b'' and omit stdin=PIPE; subprocess.run creates/closes its PIPE automatically. No authority or source/payload guard change."
+}

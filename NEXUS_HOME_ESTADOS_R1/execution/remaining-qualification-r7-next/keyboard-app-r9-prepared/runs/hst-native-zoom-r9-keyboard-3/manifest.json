@@ -1,0 +1,158 @@
+{
+  "app-bootstrap-result.private.json": {
+    "sha256": "24a4be59d6a60f9e71c06db78ca907ca70c1c0cc688a41d72c51ddb134daf7a3",
+    "bytes": 733
+  },
+  "app-bootstrap.js": {
+    "sha256": "6dbbd70bce982e21d8ef698e6e3669b8e11cbe85ddd7e375475abab78e004854",
+    "bytes": 17031
+  },
+  "chrome-argv.private.json": {
+    "sha256": "c138f099c40dbe9ac0f3641ad1a04f9793adb389eefee776b8f45e0a36927c42",
+    "bytes": 3415
+  },
+  "command-app-bootstrap.private.txt": {
+    "sha256": "e558b26d9f9a2bb60e8f09e117cfe31779def8f26fb9105de2714a6a65b6ad9c",
+    "bytes": 17683
+  },
+  "command-appearance-before.private.txt": {
+    "sha256": "e49c80693e64ce39c2fae6b60a3a67125498254c6ab0b8f5a6d54aef21236e2a",
+    "bytes": 7247
+  },
+  "command-cleanup-browser.private.txt": {
+    "sha256": "cf77d66397e6c0161b366adfcbf006b9977549ccea3c52a7783998df5aabee3c",
+    "bytes": 48
+  },
+  "command-keyboard-case.private.txt": {
+    "sha256": "9a009b2fb127213149fda5409250107663a650ae003f7adc92bf0111a09f0d57",
+    "bytes": 448535
+  },
+  "command-launch-browser.private.txt": {
+    "sha256": "6cdac63dae691a8fde6b142bb936223e2902a672877309d2aebf572d4d9096ff",
+    "bytes": 319
+  },
+  "command-load-own-cookie.private.txt": {
+    "sha256": "e3a544449739f9f4c19303ebee6eda671ff75ef7bd8f551a60e9fad7df602356",
+    "bytes": 318
+  },
+  "command-native-guard.private.txt": {
+    "sha256": "4fcaf658c5320928eb679a6b7b2619e656cfe2a7bffb85a6d17ef5adf141b135",
+    "bytes": 10496
+  },
+  "command-ui-native100.private.txt": {
+    "sha256": "4f84da7aa5c2c07005811e987acde7989c5732a647abc57ace226d6f33e84476",
+    "bytes": 2496
+  },
+  "control\\controls.json": {
+    "sha256": "7f539fd0a1edb512eb076f92ef09fa1416483071dcb1931a7b58fff983d97a23",
+    "bytes": 48
+  },
+  "control\\exp-active.json": {
+    "sha256": "d91bdeb2c0df83bb2819367550ee080f0d64c60cc1645374531dad5c8b723d97",
+    "bytes": 122044
+  },
+  "control\\exp-base.json": {
+    "sha256": "a8c27d30aea87ec7d188568821ce858adbd6dd7def451907e60bb0a8de379337",
+    "bytes": 61028
+  },
+  "control\\final.json": {
+    "sha256": "58f48481bd7ab0cde2ca6be12422af9a45dbde0e5e824a83b3dea38fd9c0242d",
+    "bytes": 123329
+  },
+  "control\\origins.json": {
+    "sha256": "542e0c92d2ac151d8322672d859e98c7d6e2cb1697435de55cfd173f07f5dcea",
+    "bytes": 608
+  },
+  "control\\zoom-probe-final.json": {
+    "sha256": "eec0e78a1e1be6efdfa6f76e492affc79263ca8439c202311eb1367a37512525",
+    "bytes": 348
+  },
+  "control\\zoom-probe-ready.json": {
+    "sha256": "c493e79a84cfec00820a4d23624afaf6d4a2375a956cb14aba2461a9b90e9185",
+    "bytes": 688
+  },
+  "fixture.py": {
+    "sha256": "a8eb4b18d4242e8d104493e40a0eed8e9ccfd61b43aec596f839ee52b18f535c",
+    "bytes": 26034
+  },
+  "i01-app-desktop.png": {
+    "sha256": "937b2a65d899ea15dd620b8bd88ec2c7e5faecde4b33bb95f935af2747ace5e5",
+    "bytes": 92169
+  },
+  "i01-builder-proof.json": {
+    "sha256": "92ba2371676f4811498968a066f137e92e872c3e00060eedc1b3c8d76e648375",
+    "bytes": 393
+  },
+  "i01-control-invalid-reads.jsonl": {
+    "sha256": "b8d4b6bf0a6bbf5ac71a839fb4018fcfcdeb7ec1b3e21cfc73804d28abd4914f",
+    "bytes": 2319
+  },
+  "i01-public-preflight.json": {
+    "sha256": "2ff90323b48d824ed3e67eaa28f846c1af4be883dd9969ed88fc2b5b9bff9262",
+    "bytes": 2502
+  },
+  "keyboard-case-result.private.json": {
+    "sha256": "afcc891e8c6960761f7aa6f6013ce3988e949fb3d067c1af45ce20e29f14f242",
+    "bytes": 791399
+  },
+  "keyboard-case.js": {
+    "sha256": "eee74813680fd25ea9fc15c14ae6ebdb770c2638d80df664f44f26f848907ac5",
+    "bytes": 19201
+  },
+  "native-guard-result.private.json": {
+    "sha256": "6d8ddb65ef03f0b2a0d53843e621872b53ffeb53d07b867527d3b2371128c634",
+    "bytes": 8188
+  },
+  "native-zoom-native-ui-100.png": {
+    "sha256": "d8908d42e303f299e262e7b3cb962d6ce507eb15d8a82293da4e0c9ed1ec8afd",
+    "bytes": 43543
+  },
+  "native-zoom-native-ui-200.png": {
+    "sha256": "e17b8f800840f11cc438d7c2c348f1db6c507292328ee59788602b7788c75599",
+    "bytes": 39676
+  },
+  "native-zoom-probe-100.png": {
+    "sha256": "0f854d2fad20f4eb3735bff79c92523af6c6f2460d6eafd4e057082cd36c044e",
+    "bytes": 13273
+  },
+  "native-zoom-probe-200.png": {
+    "sha256": "a20c85627fde12c0363e8d6bf2b47a256d5ad3d27368f5a88ab93f66ef09a5f0",
+    "bytes": 33084
+  },
+  "native-zoom-run.private.json": {
+    "sha256": "af0fa93df9a98d8f0f1517165decf9bce8e7b173c90f787f81e968fa1e412479",
+    "bytes": 1099884
+  },
+  "native-zoom.js": {
+    "sha256": "5d6cf80bee0358e4fedb00310ae6369ed61c439d93749544647cbf0ff8668c42",
+    "bytes": 5222
+  },
+  "playwright-cli.json": {
+    "sha256": "b34f903d5a12bd8ef91fd146aa2ee9545d1814cec210c5088c8ae8ece43ea890",
+    "bytes": 310
+  },
+  "probe-process-proof.json": {
+    "sha256": "67bbe7f7b2b52d1e52cdc9b03a5ed4ba1ff0d805e5aaf478208cca59408e7c4f",
+    "bytes": 828
+  },
+  "qualification.json": {
+    "sha256": "fbeb6f734ab18d493959be42651eb918dbd1aad5f6a7045161e69cafbfaa7b55",
+    "bytes": 11951
+  },
+  "runtime-ready.json": {
+    "sha256": "3dc8697dfa81edd04a1132f9e7a52d609a4a798e00d56f005dba1a53a8203a29",
+    "bytes": 1699
+  },
+  "ui-native100-result.private.json": {
+    "sha256": "0307aec894bb53a59e8ffc12bcb95c6dacd11f3173481b8ac052f6e585b34045",
+    "bytes": 1642
+  },
+  "ui-native100.js": {
+    "sha256": "80c634c1dc50324584e29d55c12a4e77d5dd9ae108d6678200c9900297ff4424",
+    "bytes": 1247
+  },
+  "zoom-probe.py": {
+    "sha256": "0f69f4eebab50812b1da9e6f759538128293b464fddbd167bcaaa65adb697f58",
+    "bytes": 2787
+  }
+}

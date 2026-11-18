@@ -1,0 +1,78 @@
+{
+  "at": "2026-11-17T20:32:08.493761+00:00",
+  "status": "PASS_R7_INSTALLED_SUPPLEMENT",
+  "counts": {
+    "PASS": 7,
+    "SKIP": 0,
+    "FAIL": 0,
+    "NOT_RUN": 0
+  },
+  "junit_errors": 0,
+  "junit_seconds": 40.908,
+  "collected": [
+    "tests/home_states/test_final_boundaries_r7.py::test_a06_visual_filter_keeps_complete_private_sibling_proof",
+    "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[FAILED-failed]",
+    "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[CANCELLED-cancelled]",
+    "tests/home_states/test_final_boundaries_r7.py::test_e16_offpage_seen_three_links_retention_and_no_inbox_ack",
+    "tests/home_states/test_final_boundaries_r7.py::test_h02_forged_exact_targets_disclose_no_preview_or_counter",
+    "tests/home_states/test_final_boundaries_r7.py::test_h03_http_hostile_public_label_does_not_expose_private_marker",
+    "tests/home_states/test_final_boundaries_r7.py::test_h07_revoked_scope_refuses_same_cas_and_keeps_exact_history[input]"
+  ],
+  "runtime_source_commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+  "runtime_wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+  "new_test_file": {
+    "tests/home_states/test_final_boundaries_r7.py": "511ce2cf5fd6cea72d560d9e9475aa5cbbfe36c97c0b1f3d5d6c1750d31beb27"
+  },
+  "expected_base_pins": 1828,
+  "actual_guarded_pins": 1829,
+  "payload_files": 1031,
+  "source_equal": true,
+  "payload_equal": true,
+  "copied_test_files": 894,
+  "copied_test_drift": [],
+  "copied_source_mismatch": [],
+  "helper_drift": [],
+  "process_exit": 0,
+  "timed_out": false,
+  "force_used": false,
+  "signals": [],
+  "known_processes": [
+    {
+      "pid": 26392,
+      "birth": 1794947466.2923243,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 32432,
+      "birth": 1794947466.3257768,
+      "exe": "C:\\Python313\\python.exe"
+    }
+  ],
+  "known_processes_still_alive": [],
+  "remaining_known_processes": [],
+  "stdout": {
+    "raw_preserved": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-supplement-hpwm29jb\\reports\\stdout.log",
+    "sha256": "0f6e330c41fc43b506aa7751eca73501de06844eca96f850c48adbc07f4e989e",
+    "copied": false
+  },
+  "provider_calls": 0,
+  "prefix_mutated": false,
+  "test_assertions_rewritten": false,
+  "layers": {
+    "A06": "SQLite private-proof/filter component only; no fabricated lease or runtime Working claim",
+    "E08_E09": "2 historical receipt/capture SQLite and actual ASGI partial-output cases",
+    "E16": "Off-page seen/retention and three same-claim artifact references; no inbox ACK",
+    "H02_H03": "HTTP denial/minimization, not DOM/ANSI execution proof",
+    "H07": "Canonical native request/HTTP denial; grant revocation is SQL negative fixture, not canonical lifecycle"
+  },
+  "limits": [
+    "A06 covers the complete SQLite private sibling proof under filtering, without real live lease or full Working/browser qualification.",
+    "H07 uses a canonical native-request fixture and real decision denial, but grant revocation itself is a negative SQL fixture, not canonical lifecycle proof.",
+    "Results captures/artifacts are historical migrated read fixtures. H02/H03 cover API denial/minimization, not adversarial browser execution.",
+    "Only this exact new test file may supplement the frozen 1828 baseline pins. Existing source, copied helpers, prefix and all 1031 installed payload files must remain unchanged.",
+    "All loaded Nexus/Core/Connector application modules must resolve to the frozen R7 prefix under isolated -I -B execution, with no copied src.",
+    "No provider, personal installation, browser, human, AT or SLO qualification is authorized or inferred by this gate. No complete ledger scenario is promoted by count.",
+    "250ms descendant polling does not enumerate every short-lived child; no claim that it does.",
+    "Initial source 6 PASS/1 FAIL and corrected source 7 PASS remain separate cuts."
+  ]
+}

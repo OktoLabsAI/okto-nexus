@@ -1,15 +1,27 @@
 import {FolderOpen, Layers, MessagesSquare, PackageCheck, Users} from 'lucide-react';
 import type {WorkspaceListItem} from '../../api';
-import type {HomeEntrySummary} from '../../homeTypes';
+import type {HomeEntrySummary,HomeOperationalSummary} from '../../homeTypes';
+import {homeCountText} from '../../homeStatePresentation';
 import {workspaceDisplayName} from '../WorkspaceNames';
 
 /** One controlled project value; this component never reads or stores scope. */
-export function HomeProjectCard({workspace,workspaces,onChange,onConnect,connectDisabled=false,setupLabel='Connect or resume'}: {
+export function HomeProjectCard({workspace,workspaces,onChange,onConnect,connectDisabled=false,setupLabel='Connect or resume',compact=false}: {
   workspace:string;workspaces:WorkspaceListItem[];onChange?:(id:string)=>void;
-  onConnect:()=>void;connectDisabled?:boolean;setupLabel?:string;
+  onConnect:()=>void;connectDisabled?:boolean;setupLabel?:string;compact?:boolean;
 }) {
   const selected=workspaces.find(item=>item.workspace_id===workspace);
   const name=workspace==='all'?'All projects':selected?workspaceDisplayName(selected,workspaces.indexOf(selected)):'Unavailable project';
+  if(compact)return <section className="panel px-4 py-3 flex flex-wrap items-end gap-3" aria-label="Project" data-testid="home-project-card">
+    <label className="text-sm min-w-0 flex-1"><span className="block text-xs text-surface-500 mb-1">Project</span>
+      <select className="w-full rounded-lg border border-surface-300 dark:border-surface-600 bg-transparent px-3 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500"
+        aria-label="Project" value={workspace} disabled={!onChange} onChange={event=>onChange?.(event.currentTarget.value)}>
+        <option value="all">All projects</option>
+        {workspace!=='all'&&!selected&&<option value={workspace}>Unavailable project</option>}
+        {workspaces.map((item,index)=><option key={item.workspace_id} value={item.workspace_id}>{workspaceDisplayName(item,index)}</option>)}
+      </select></label>
+    <span className="sr-only" data-testid="home-project-name">{name}</span>
+    <button type="button" className="btn btn-primary" disabled={connectDisabled} onClick={onConnect}>{setupLabel}</button>
+  </section>;
   return <section className="panel p-5 space-y-4" aria-label="Project" data-testid="home-project-card">
     <div className="flex flex-wrap items-start justify-between gap-4">
       <div><h2 className="font-semibold text-base inline-flex items-center gap-2"><FolderOpen size={18}/>Project</h2>
@@ -29,7 +41,20 @@ export function HomeProjectCard({workspace,workspaces,onChange,onConnect,connect
 }
 
 /** These counters are supplied by one authorized backend Home snapshot. */
-export function HomeSummaryCards({summary,stale=false}: {summary:HomeEntrySummary;stale?:boolean}) {
+export function HomeSummaryCards({summary,stale=false,operationalSummary}: {summary:HomeEntrySummary;stale?:boolean;operationalSummary?:HomeOperationalSummary}) {
+  if(operationalSummary){
+    const s=operationalSummary;
+    const counters=[homeCountText(s.connected,'connected'),homeCountText(s.working,'working'),homeCountText(s.idle,'Idle')];
+    for(const [key,label] of [['queued','queued'],['unconfirmed','unconfirmed'],['disconnected','disconnected']] as const)
+      if(s[key].value===null||(s[key].value??0)>0)counters.push(homeCountText(s[key],label));
+    const onlyConfirmation=s.pending_actions.total_is_exact&&s.pending_actions.value===0&&s.blocked_harnesses.total_is_exact&&
+      s.blocked_harnesses.value===0&&(s.resume_confirmations.value??0)>0;
+    return <section className="text-sm text-surface-600 dark:text-surface-300 space-y-1" aria-label="Project overview" data-testid="home-summary-cards">
+      <p>{stale?'Previous snapshot · ':''}{counters.join(' · ')}</p>
+      <p>{onlyConfirmation?homeCountText(s.resume_confirmations,'resume confirmations'):<>{homeCountText(s.pending_actions,'actions')} · {homeCountText(s.blocked_harnesses,'harnesses paused')}
+        {(s.resume_confirmations.value===null||(s.resume_confirmations.value??0)>0)?` · ${homeCountText(s.resume_confirmations,'resume confirmations')}`:''}</>}</p>
+    </section>;
+  }
   const cards=[
     {key:'activities',title:'Work',detail:'Activities in this view',icon:Layers},
     {key:'sessions',title:'Sessions',detail:'Session contexts',icon:Users},

@@ -1,0 +1,83 @@
+{
+  "status": "PASS_R7_R8_RUNTIME_BYTE_EQUIVALENCE",
+  "baseline_ready": {
+    "ready": true,
+    "version": "0.3.7",
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\artifacts\\okto_nexus-0.3.7-py3-none-any.whl",
+    "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+    "payload_files": 1031,
+    "source_commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+    "prefix_frozen": true
+  },
+  "current_ready": {
+    "ready": true,
+    "version": "0.3.7",
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\artifacts\\okto_nexus-0.3.7-py3-none-any.whl",
+    "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+    "payload_files": 1031,
+    "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+    "prefix_frozen": true
+  },
+  "runtime_nonstatic_files": {
+    "nexus_connector_core": 168,
+    "okto_nexus": 729,
+    "okto_nexus_connector": 127
+  },
+  "total_runtime_nonstatic_files": 1024,
+  "comparison": "Raw file byte equality plus immutable manifest hashes for all1024 nonstatic module files",
+  "frozen_r7_all_payload_files": 1031,
+  "static_delta": {
+    "added": [
+      "okto_nexus/adapters/inbound/http/static/assets/index-Cyg0aKfe.js"
+    ],
+    "removed": [
+      "okto_nexus/adapters/inbound/http/static/assets/index-CefKJTtn.js"
+    ],
+    "changed": [
+      "okto_nexus/adapters/inbound/http/static/index.html"
+    ]
+  },
+  "python_version_equal": true,
+  "dependency_versions_equal": true,
+  "packaging_and_lock_equal": [
+    "pyproject.toml",
+    "uv.lock"
+  ],
+  "third_party_limit": "Version metadata equality; raw third-party dependency bytes not compared",
+  "reusable_installed_evidence": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r7\\installed-qualification.json",
+      "sha256": "e12e2b605e592686403a57b1ccf240a7f596b9b526eeeb2bfd4440b42a83d94a",
+      "counts": {
+        "PASS": 326,
+        "SKIP": 0,
+        "FAIL": 0,
+        "NOT_RUN": 0
+      },
+      "executed_on": "Frozen R7 wheel, not R8",
+      "scope": "Exact unchanged installed backend bytes only; original fixture/SQL/browser/native limits remain"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\installed-supplement-r7\\qualification.json",
+      "sha256": "6c3e28f6ebffed2c4c65606f395945c03d011246c1f339b03050d953054f2b9c",
+      "counts": {
+        "PASS": 7,
+        "SKIP": 0,
+        "FAIL": 0,
+        "NOT_RUN": 0
+      },
+      "executed_on": "Frozen R7 wheel, not R8",
+      "scope": "Exact unchanged installed backend bytes only; original fixture/SQL/browser/native limits remain"
+    }
+  ],
+  "pytest_executed_on_r8": false,
+  "source_321_reuse": "R7 source tests are antecedent evidence only; backend byte proof does not rerun them on R8",
+  "browser_evidence_reused": false,
+  "required_separate_evidence": "R8 compiled UI real-browser checks",
+  "old_prefix_reinstalled": false,
+  "provider_calls": 0
+}

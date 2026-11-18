@@ -1,0 +1,15 @@
+{
+  "source_asset_ready": true,
+  "version": "0.3.7",
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "assets": {
+    "index.html": "fdc0ffe67097cadcd6e1591103aed0d9c3596d1e0aa634073e416fc78b67345f",
+    "assets/index-Cyg0aKfe.js": "b365e254027f6bda1143aaf44765181203a752bc3d72ed986b9b91f6bd6a8d45",
+    "assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036"
+  },
+  "frontend_qualification": "execution/frontend-r8-menu/qualification.json",
+  "scope": "Original-checkout Node404 and TypeScript/Vite pass after the real unnamed-menu reproduction. Installed/browser confirmation pending.",
+  "backend_reuse": "Conditional only: require exact non-static Nexus/Core/Connector payload and Python/dependency equivalence to the frozen R7 prefix. No blanket installed/browser test reuse.",
+  "performance": "No new timing/SLO campaign; diagnostic/non-blocking shared-machine policy per user.",
+  "default_rollout": false
+}

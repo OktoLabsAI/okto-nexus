@@ -1,0 +1,26 @@
+[
+  {
+    "operation_id": "op_b1bbc8c28155d7efcc9a4c09bf9f5177",
+    "action": "runtime.open",
+    "admission_state": "DISPATCHED",
+    "latest_stage": "SUBMITTED"
+  },
+  {
+    "operation_id": "op_79b48ba063ccca5b9947ecc6d97f792b",
+    "action": "turn.submit",
+    "admission_state": "RESOLVED_TERMINAL",
+    "latest_stage": "SUCCEEDED"
+  },
+  {
+    "operation_id": "r4op_dacfe9ddabf8ed82180a5d2cd5350488",
+    "action": "input.provide",
+    "admission_state": "DISPATCHED",
+    "latest_stage": "SUBMITTED"
+  },
+  {
+    "operation_id": "op_021a90da4996896f8c5d5c9dd356820a",
+    "action": "runtime.close",
+    "admission_state": "RESOLVED_TERMINAL",
+    "latest_stage": "SUCCEEDED"
+  }
+]

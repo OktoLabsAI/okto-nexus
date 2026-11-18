@@ -1,0 +1,102 @@
+--- worker_v2.py
++++ worker_v3.py
+@@ -76,12 +76,36 @@
+         "large_event_payloads": 10, "artifact_files": 25, "large_field_bytes": len(LARGE.encode()), "terminal_operation_ids": ids}
+ 
+ 
++def canonical_artifact_paths(factory, home):
++    """Metadata only: mirror LocalArtifactStore root, never read file content."""
++    storage_root = (home / "artifacts").resolve()
++    assert storage_root.is_relative_to(home.resolve())
++    expected = {f"j04-synthetic-artifact-{index:03}" for index in range(25)}
++    with factory.unit_of_work(write=False) as uow:
++        rows = uow.connection.execute("SELECT artifact_id,storage_path FROM artifacts "
++            "WHERE artifact_id LIKE 'j04-synthetic-artifact-%' ORDER BY artifact_id").fetchall()
++    assert {row["artifact_id"] for row in rows} == expected and len(rows) == 25
++    mapping = []
++    for row in rows:
++        stored = row["storage_path"]
++        assert isinstance(stored, str) and stored and not Path(stored).is_absolute()
++        path = (storage_root / stored).resolve()
++        assert path.is_relative_to(storage_root) and path != storage_root
++        assert path.is_relative_to(home.parent.resolve()) and path.is_file()
++        mapping.append({"artifact_id": row["artifact_id"], "storage_path": stored, "canonical_path": str(path)})
++    return mapping
++
++
+ @contextmanager
+-def observe(factory, artifacts):
++def observe(factory, artifacts, canonical_paths):
+     """Row factories return the exact original objects; only metadata is recorded."""
+     factory.close()
+     original = factory._open_connection
+     report = {"rows_materialized": 0, "max_string_bytes": 0, "full_payload_materialized": [], "artifact_content_sql_reads": 0, "artifact_file_reads": []}
++    protected_paths = frozenset(Path(item["canonical_path"]).resolve() for item in canonical_paths)
++    assert protected_paths and len(canonical_paths) == 25
++    report["guarded_artifact_ids"] = 25
++    report["guarded_canonical_payload_paths"] = len(protected_paths)
+ 
+     def opening(*args, **kwargs):
+         conn = original(*args, **kwargs)
+@@ -108,7 +132,7 @@
+     def audit(event, args):
+         if event == "open" and isinstance(args[0], (str, bytes)):
+             path = Path(os.fsdecode(args[0])).resolve()
+-            if path.is_relative_to(artifacts):
++            if path.is_relative_to(artifacts) or path in protected_paths:
+                 report["artifact_file_reads"].append(path.name)
+                 raise AssertionError("Overview/results must not read artifact content files")
+ 
+@@ -133,11 +157,12 @@
+     deps.clock = fixtures.ControlledClock(clock)
+     deps.config.feature_attention = deps.config.feature_observations = deps.config.feature_hitl = True
+     app = build_app(deps)
++    canonical_paths = canonical_artifact_paths(deps.connection_factory, home)
+     before = benchmark.productive(deps.connection_factory)
+     reads = []
+     instrumentation = None
+     try:
+-        with observe(deps.connection_factory, home.parent / "synthetic-artifacts") as instrumentation:
++        with observe(deps.connection_factory, home.parent / "synthetic-artifacts", canonical_paths) as instrumentation:
+             async with AsyncClient(transport=ASGITransport(app, client=("127.0.0.1", 65123)), base_url="http://j04-own.invalid") as client:
+                 async def get(path, params):
+                     response = await client.get(path, params=params)
+@@ -167,7 +192,8 @@
+             assert not instrumentation["full_payload_materialized"], instrumentation
+             assert not instrumentation["artifact_content_sql_reads"] and not instrumentation["artifact_file_reads"], instrumentation
+         assert benchmark.productive(deps.connection_factory) == before
+-        return {"reads": reads, "instrumentation": instrumentation, "productive_rows_unchanged": True}
++        return {"reads": reads, "instrumentation": instrumentation, "productive_rows_unchanged": True,
++            "canonical_artifact_paths": canonical_paths}
+     finally:
+         try:
+             deps.connection_factory.close()
+@@ -175,7 +201,7 @@
+             # Diagnostic only: keep partial observations on any assertion/error,
+             # without completing, weakening or replaying the original checks.
+             save(home.parent / "partial-read-diagnostics.json", {"reads": reads,
+-                "instrumentation": instrumentation, "latencies_collected": False})
++                "instrumentation": instrumentation, "canonical_artifact_paths": canonical_paths, "latencies_collected": False})
+ 
+ 
+ def main():
+--- run_v2.py
++++ run_v3.py
+@@ -39,7 +39,7 @@
+     parser.add_argument("--gate", choices=["ROOT_APPROVED_J04_FUNCTIONAL"], required=True)
+     parser.add_argument("--manifest-sha256", required=True)
+     args = parser.parse_args()
+-    path = HERE / "PREPARED-v2.json"
++    path = HERE / "PREPARED-v3.json"
+     assert sha(path) == args.manifest_sha256
+     manifest = json.loads(path.read_text(encoding="utf-8"))
+     before = guard(manifest)
+@@ -66,7 +66,7 @@
+     failure = None
+     forced = []
+     try:
+-        manager.run("functional-history", [ready["python"], "-I", "-B", "-X", "utf8", str(HERE / "worker_v2.py"),
++        manager.run("functional-history", [ready["python"], "-I", "-B", "-X", "utf8", str(HERE / "worker_v3.py"),
+             "--manifest", str(path), "--manifest-sha256", args.manifest_sha256, "--root", str(root)], timeout=180)
+     except BaseException as error:  # noqa: BLE001 -- finally retains cleanup and guards, no retry.
+         failure = {"type": type(error).__name__, "message": str(error)}

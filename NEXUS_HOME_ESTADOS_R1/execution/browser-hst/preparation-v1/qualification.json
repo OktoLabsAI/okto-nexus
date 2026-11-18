@@ -1,0 +1,17 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "browser_started": false,
+  "server_started": false,
+  "peer_started": false,
+  "provider_invocations": 0,
+  "source_gate": false,
+  "static_ast": "PASS only",
+  "fixture_scope": "Protocol helper prepared; canonical scenario bootstrap still to adapt after freeze; no J1-J8 PASS",
+  "gaps": [
+    "Final backend and assets not supplied",
+    "No canonical admissions yet",
+    "J5 handoff/verification linkage helper",
+    "Canonical revocation API preflight",
+    "Real browser keyboard/mobile/zoom/AT separate"
+  ]
+}

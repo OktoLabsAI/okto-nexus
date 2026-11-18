@@ -1,0 +1,24 @@
+{
+  "status": "STATIC_AST_AND_EFFECTIVE_PLACEHOLDER_CHECK",
+  "python_files": [
+    "assert_captures.py",
+    "browser_driver.py",
+    "curate.py",
+    "drift.py",
+    "fixture_builder.py",
+    "preflight.py",
+    "prepare.py",
+    "prepare_static.py",
+    "run.py",
+    "security_controls.py"
+  ],
+  "effective_template_counts": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\remaining-qualification-r7-next\\security-r9-s2-batch\\s2-reported.js": 1,
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\browser-hst\\initialize-template.js": 1
+  },
+  "input_pins": 36,
+  "cli_payload_files": 192,
+  "manifest_sha256": "25f48720da92f390b4f52a2caf7d21e8d220f2085b4b30787489826e2724e29a",
+  "allocated": false,
+  "browser_started": false
+}

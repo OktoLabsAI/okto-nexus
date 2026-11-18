@@ -1,0 +1,38 @@
+{
+  "status": "PREPARED_NOT_EXECUTED_NOT_RUNTIME_GATED",
+  "scenarios": [
+    "H10",
+    "K03",
+    "K05",
+    "K02"
+  ],
+  "current_source": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "current_READY_present": true,
+  "file_sha256": {
+    "browser-s3.js": "598d4ac95e0a812837abf1be1d3366d9fd8af32adc87b3bccbbc34c0de3221a6",
+    "cli_cycle.py": "08ceb39ebcfbb87aa9b018e471e048888b10f43ea070a083af6c369443aff09b",
+    "foreground_owner.py": "865dbd8c710bcbf669b0881373cb029678fb3eab6dfd40b820dd23283070cda4",
+    "history_copy.py": "39dce64f1f1d4fdade52554c73667391c3d6e97035849c09b6bd3bcab6b6fcfa",
+    "plan.md": "bb00e1b5f0c96f6c42d20adad85ccdd46b3df24f047ad0a96284aaa96fbb4391",
+    "projection_reader.py": "d92fd57ff5369bb66c45c75fcad84b8ddd6efa7b90612389606d033cda26cbb5"
+  },
+  "external_sha256": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc36-final-package\\READY.json": "b83971a428a8e76fc804fc1decba05ecb559c4fca1c065deef8b7d99fb4ba4d4",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r9\\SOURCE_ASSET_READY.json": "4156e453bf869fa30ae79e5f50ac8b7b97d875f916d05bfd6dd79bb1505246f4",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\remaining-qualification-r7-next\\backend-batch\\protocol_fixture.py": "716d64c1768cf05babdfe7407921c182e39d516772156f2f613c3bfd03cb7acc",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\remaining-qualification-r7-next\\backend-batch\\peer_source.py": "f639cf000fcfe2effa8f85ae758e9991a0ef5ce84ed95e01e09135b8e45ce79b"
+  },
+  "static_checks": {
+    "AST": "PASS",
+    "Ruff_0_17_5": "PASS",
+    "Node_syntax": "PASS",
+    "application_CLI_browser_started": false,
+    "fixtures_allocated": false
+  },
+  "missing_before_run": [
+    "R9READY+wheel/source/payload binding and start/end guard",
+    "outer supervisor own-env/ownership/canonicalstop/physical0 wiring",
+    "canonical own human browser login+public IDs+marker wiring"
+  ],
+  "limits": "Scripts are concrete preparation only; no scenario PASS, native provider qualification, daemon persistence or wholeDB read-only claim."
+}

@@ -1,0 +1,17 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "base_manifest_sha256": "a4709ef7f680c8fb61e9ac53ba005dfdd5885c0eb12e44cce69ad20ba2a6a43d",
+  "effective_template_sha256": "926d0d6e881665727118b42a874f4489fc4c3c811dc931cac69a84c52b1ccaa5",
+  "input_pins": {
+    "comment-only-v2/README.md": "20943fb93991572b8f9a56d69e980dd112513602f9419f4e93b119468b5fe37e",
+    "comment-only-v2/curate.py": "ec483d95e5d4e220ca4108c2ac03fb28098de1a347cb9943c929647fddd67557",
+    "comment-only-v2/run.py": "6328b92a0284d7245ad8231d2433f51fcf0e9a95fbefa1d3b8f90fbfb8c0ade1",
+    "comment-only-v2/s1-passive.js": "926d0d6e881665727118b42a874f4489fc4c3c811dc931cac69a84c52b1ccaa5",
+    "comment-only-v2/template.diff": "45d25f7a758d2780ea9f73541d158cf282482dc15bad517ebd34276aeab054d5",
+    "curate.py": "0ff1210aa2e798f0810a364eb21f92aa03fb0901b904aa1b504a09f7842fff17",
+    "prepared-manifest.json": "a4709ef7f680c8fb61e9ac53ba005dfdd5885c0eb12e44cce69ad20ba2a6a43d",
+    "run.py": "5f568435ab8cb28780247949ac7336de864a20f5267c900b4f060d6c2d7026e5",
+    "s1-passive.js": "91db007a8e69bde5b3a00596fcecd01efb800b24f5d1cf5390b4c4da763c8f40",
+    "s1-revocation.js": "62e0555eed594e6fff1272c1c2c5f6f2b8a9048d1b7598468680f987bc109b38"
+  }
+}

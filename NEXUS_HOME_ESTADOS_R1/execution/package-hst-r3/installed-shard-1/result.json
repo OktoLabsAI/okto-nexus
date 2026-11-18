@@ -1,0 +1,229 @@
+{
+  "started_at": "2026-11-17T16:36:31.630001+00:00",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-cizcqxnv",
+  "selected": [
+    "tests\\home_evolution\\test_home_result_artifact_grouping.py",
+    "tests\\home_states\\test_delivery_semantics.py",
+    "tests\\home_states\\test_operational_board.py",
+    "tests\\home_states\\test_operational_status.py",
+    "tests\\home_states\\test_progress_equivalence.py",
+    "tests\\home_states\\test_revision_equivalence.py",
+    "tests\\quick_connect\\test_ancestor_privacy.py",
+    "tests\\quick_connect\\test_connect_dispatch.py",
+    "tests\\quick_connect\\test_git_cli_integration.py",
+    "tests\\quick_connect\\test_git_project_trust.py",
+    "tests\\quick_connect\\test_harness_alternatives.py",
+    "tests\\quick_connect\\test_local_edge_scenarios.py",
+    "tests\\quick_connect\\test_posix_physical_paths.py",
+    "tests\\quick_connect\\test_qc15_policy_denial.py",
+    "tests\\quick_connect\\test_qc24_namespace_http.py",
+    "tests\\quick_connect\\test_qc30_remote_public_id.py",
+    "tests\\quick_connect\\test_qc35_review_cancel.py",
+    "tests\\quick_connect\\test_quick_connect_cli.py",
+    "tests\\quick_connect\\test_quick_connect_customization_output.py",
+    "tests\\quick_connect\\test_quick_connect_extra_scenarios.py",
+    "tests\\quick_connect\\test_quick_connect_git_recovery.py",
+    "tests\\quick_connect\\test_quick_connect_outcome.py",
+    "tests\\quick_connect\\test_quick_connect_project_directory_scenarios.py",
+    "tests\\quick_connect\\test_quick_connect_pty.py",
+    "tests\\quick_connect\\test_quick_connect_selection.py",
+    "tests\\ui_simplification\\test_entry_app_integration.py",
+    "tests\\ui_simplification\\test_entry_related.py"
+  ],
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-2f5l3545\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path[:0]=['C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\guard', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\execution_r4', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\home_evolution', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\home_states', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\legacy_native_fixture', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\ui_simplification'];import pytest;raise SystemExit(pytest.main(['-p', 'hst_origin_guard', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\pytest.ini', '--rootdir=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree', '--confcutdir=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\home_evolution\\\\test_home_result_artifact_grouping.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\home_states\\\\test_delivery_semantics.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\home_states\\\\test_operational_board.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\home_states\\\\test_operational_status.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\home_states\\\\test_progress_equivalence.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\home_states\\\\test_revision_equivalence.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_ancestor_privacy.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_connect_dispatch.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_git_cli_integration.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_git_project_trust.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_harness_alternatives.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_local_edge_scenarios.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_posix_physical_paths.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_qc15_policy_denial.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_qc24_namespace_http.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_qc30_remote_public_id.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_qc35_review_cancel.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_cli.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_customization_output.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_extra_scenarios.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_git_recovery.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_outcome.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_project_directory_scenarios.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_pty.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\quick_connect\\\\test_quick_connect_selection.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\ui_simplification\\\\test_entry_app_integration.py', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\tree\\\\tests\\\\ui_simplification\\\\test_entry_related.py', '-v', '--tb=short', '-o', 'faulthandler_timeout=0', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-installed-cizcqxnv\\\\reports\\\\tests.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-cizcqxnv\\cwd",
+  "helper_paths": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-cizcqxnv\\tree",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-cizcqxnv\\tree\\tests",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-cizcqxnv\\tree\\tests\\execution_r4",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-cizcqxnv\\tree\\tests\\home_evolution",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-cizcqxnv\\tree\\tests\\home_states",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-cizcqxnv\\tree\\tests\\legacy_native_fixture",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-cizcqxnv\\tree\\tests\\quick_connect",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-installed-cizcqxnv\\tree\\tests\\ui_simplification"
+  ],
+  "stdin": "closed PIPE; no NUL console reopening",
+  "timeout": 1800,
+  "signals": [],
+  "build_source_pin_count": 1821,
+  "exit_code": 0,
+  "timed_out": false,
+  "forced": false,
+  "remaining_known_processes": [],
+  "observation_limit": "250ms descendant polling does not enumerate every short-lived child; no claim that it does.",
+  "helper_drift": [],
+  "ended_at": "2026-11-17T16:46:02.006975+00:00",
+  "payload_files": 1031,
+  "payload_drift": [],
+  "source_drift": [],
+  "known_processes": [
+    {
+      "pid": 51192,
+      "birth": 1794933391.6344273,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-2f5l3545\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 59916,
+      "birth": 1794933391.657642,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 50904,
+      "birth": 1794933469.9884815,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 47940,
+      "birth": 1794933470.014544,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 54580,
+      "birth": 1794933470.2624671,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 22112,
+      "birth": 1794933470.2783573,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 56196,
+      "birth": 1794933472.496624,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 52460,
+      "birth": 1794933472.5073335,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 36052,
+      "birth": 1794933481.0436814,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 7924,
+      "birth": 1794933481.0525384,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 17396,
+      "birth": 1794933481.0781033,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 59344,
+      "birth": 1794933490.699149,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 28556,
+      "birth": 1794933490.716098,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 19040,
+      "birth": 1794933506.438737,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 24652,
+      "birth": 1794933508.6672516,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 51316,
+      "birth": 1794933516.7266295,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 50740,
+      "birth": 1794933516.743023,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    },
+    {
+      "pid": 42464,
+      "birth": 1794933525.3136227,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 46896,
+      "birth": 1794933525.5938296,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 45420,
+      "birth": 1794933534.5624995,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 17932,
+      "birth": 1794933534.5700214,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 58844,
+      "birth": 1794933536.228907,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 52924,
+      "birth": 1794933564.7145727,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 61096,
+      "birth": 1794933564.9784515,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 2652,
+      "birth": 1794933564.9861767,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 34460,
+      "birth": 1794933577.880191,
+      "exe": "C:\\Windows\\System32\\cmd.exe"
+    },
+    {
+      "pid": 61168,
+      "birth": 1794933577.8965545,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 44760,
+      "birth": 1794933592.6865215,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-2f5l3545\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 48376,
+      "birth": 1794933783.6852484,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 60408,
+      "birth": 1794933783.6953096,
+      "exe": "C:\\Windows\\System32\\conhost.exe"
+    },
+    {
+      "pid": 51040,
+      "birth": 1794933899.050706,
+      "exe": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    {
+      "pid": 45172,
+      "birth": 1794933900.9419985,
+      "exe": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe"
+    }
+  ]
+}

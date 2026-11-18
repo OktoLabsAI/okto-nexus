@@ -1,0 +1,109 @@
+{
+  "status": "PASS_BROWSER_SUBSET",
+  "checks": [
+    {
+      "id": "invalid-reference-denied",
+      "ok": true,
+      "detail": 404
+    },
+    {
+      "id": "invalid-reference-never-reads-latest-session",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "id": "invalid-reference-zero-write",
+      "ok": true,
+      "detail": true
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-CefKJTtn.js"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Bh2ghaTD.css"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    }
+  ],
+  "limits": [
+    "Missing exact reference, not foreign-principal preview/counter audit"
+  ]
+}

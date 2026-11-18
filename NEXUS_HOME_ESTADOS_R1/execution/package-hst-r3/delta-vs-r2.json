@@ -1,0 +1,44 @@
+{
+  "status": "PASS_EXACT_EXPECTED_DELTA",
+  "baseline_report_sha256": "b2bd029b5ab1ebd849ed893e893bdca4ce7e539e96d9d363c68849cf89e20c70",
+  "candidate_report_sha256": "5f88639ff243ebd3bbc58de864f4c620283d05a9a848b83b58d06d36e357d84b",
+  "payload_changes": {
+    "nexus_connector_core": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "okto_nexus_connector": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "okto_nexus": {
+      "added": [],
+      "removed": [],
+      "changed": [
+        "okto_nexus/adapters/outbound/sqlite/home.py",
+        "okto_nexus/adapters/outbound/sqlite/home_operational_facts.py"
+      ]
+    }
+  },
+  "assets_unchanged": true,
+  "schema_payload_unchanged": true,
+  "source_inputs": {
+    "before": 1818,
+    "after": 1821,
+    "added": [
+      "tests/home_states/fixtures/home_progress_legacy.sql",
+      "tests/home_states/test_atomic_ingress_readiness.py",
+      "tests/home_states/test_progress_equivalence.py"
+    ],
+    "removed": [],
+    "changed": [
+      "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "src/okto_nexus/adapters/outbound/sqlite/home_operational_facts.py"
+    ]
+  },
+  "intentional_behavior": "Committed-contiguous/currentness correction is distinct from batch-performance equivalence; v1 factual status/revision may correct while IDs/shape/targets are preserved by source qualification.",
+  "old_prefix_reinstalled": false,
+  "scope": "Module payload bytes, not identical raw wheel ZIP metadata/timestamps"
+}

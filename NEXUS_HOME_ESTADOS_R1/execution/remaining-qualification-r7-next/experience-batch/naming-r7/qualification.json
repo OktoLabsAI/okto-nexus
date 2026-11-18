@@ -1,0 +1,62 @@
+{
+  "status": "FAIL_PRODUCT_ACCESSIBLE_NAME",
+  "scenario": "I01",
+  "scope": "Only actual header-menu accessible name, not whole keyboard journey",
+  "source_commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+  "wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+  "runtime": {
+    "status": "PRODUCT_DEFECT_UNNAMED_HEADER_MENU",
+    "phase": "naming",
+    "checks": [
+      {
+        "id": "I01-header-menu-accessible-name",
+        "pass": false,
+        "actual": {
+          "attributes": {
+            "ariaLabel": null,
+            "title": null,
+            "text": ""
+          },
+          "ariaSnapshot": "- button",
+          "computedNameFromAX": ""
+        }
+      }
+    ],
+    "posts": [],
+    "errors": [],
+    "error": "Error: I01-header-menu-accessible-name"
+  },
+  "canonical_fixture": {
+    "sessions": 0,
+    "runtime_operations": 0,
+    "provider_invocations": 0,
+    "browser_posts": 0,
+    "registered_connections": 2
+  },
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "physical": {
+    "browser_profile_processes": [],
+    "listeners": [],
+    "port": 56973,
+    "active_resources": false
+  },
+  "payload_after": {
+    "files": 1031,
+    "mismatches": []
+  },
+  "payload_before": "Runner validated all READY-manifest bytes before allocation; no separate initial JSON was persisted on failure",
+  "preserved_private_data": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-e922fzsc",
+  "limitations": [
+    "No screen reader speech",
+    "No complete I01 keyboard traversal",
+    "No new product test/build or full experience batch",
+    "Physical scan is a point-in-time observation; supervisor sampling cannot inventory every short-lived child"
+  ]
+}

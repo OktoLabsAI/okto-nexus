@@ -1,0 +1,1109 @@
+{
+  "status": "PASS_SCOPED",
+  "case": "S2",
+  "cut_id": "hst-security-r9-s2-observed-completion-v3",
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "provider_invocations": 0,
+  "results": [
+    {
+      "phase": "idle",
+      "status": "PASS_SUBSET",
+      "checks": [
+        {
+          "id": "board-200",
+          "ok": true
+        },
+        {
+          "id": "exact-unlinked-instance-no-false-harness",
+          "ok": true
+        },
+        {
+          "id": "real-idle-not-canonical-session",
+          "ok": true
+        },
+        {
+          "id": "idle-reported-visible",
+          "ok": true
+        },
+        {
+          "id": "no-canonical-result-from-idle",
+          "ok": true
+        },
+        {
+          "id": "browser-passive-only",
+          "ok": true
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/"
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-ZSaBIkKg.js"
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-Bh2ghaTD.css"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/operator-auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-icon.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-wordmark-light.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-wordmark-dark.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/agents"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/info"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/graph"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/workspaces"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/harness-board"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/stream"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/stream"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/operator/unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/graph"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/harness-board"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/target"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/target"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/observations/instances/obs_inst_0000000000000002"
+        }
+      ],
+      "limits": [
+        "Typed reported evidence only; productive-table snapshot assertions are separate",
+        "No native session correlation, capacity release or verification inferred"
+      ]
+    },
+    {
+      "phase": "completion",
+      "status": "PASS_SUBSET",
+      "checks": [
+        {
+          "id": "board-200",
+          "ok": true
+        },
+        {
+          "id": "one-exact-reported-delivery",
+          "ok": true
+        },
+        {
+          "id": "reported-not-native-verified",
+          "ok": true
+        },
+        {
+          "id": "not-verified-label",
+          "ok": true
+        },
+        {
+          "id": "no-native-success-label",
+          "ok": true
+        },
+        {
+          "id": "exact-observed-completion-open",
+          "ok": true
+        },
+        {
+          "id": "browser-passive-only",
+          "ok": true
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/"
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-ZSaBIkKg.js"
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-Bh2ghaTD.css"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/operator-auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-icon.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-wordmark-light.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-wordmark-dark.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/agents"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/info"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/graph"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/workspaces"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/stream"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/stream"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/harness-board"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/operator/unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/graph"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/harness-board"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/observations/instances/obs_inst_0000000000000002"
+        }
+      ],
+      "limits": [
+        "Typed reported evidence only; productive-table snapshot assertions are separate",
+        "No native session correlation, capacity release or verification inferred"
+      ]
+    }
+  ],
+  "missing_phases": [],
+  "table_snapshots": {
+    "before": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 1,
+          "sha256": "45e1f077afe8003e7a343543e23514f0b800f692dfaf1f6347b6cb00d7e6a5d1"
+        },
+        "execution_bindings": {
+          "rows": 1,
+          "sha256": "58ba375862af496fae63ac929094b6dd1d29c7086cc04accda7bab6d6ada3b80"
+        },
+        "agent_endpoints": {
+          "rows": 1,
+          "sha256": "5dbf8ec5cafb08ab7d012d6449391e8c8be65cb216f6d6c91b8af3930a6d2006"
+        },
+        "runtime_execution_grants": {
+          "rows": 1,
+          "sha256": "c239ee8ed98e3789095b7131bbaf3fa50351c69d8e8a3d568571c5941063ae00"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "e24c278c0f8cc68bc5825c17dd13674842ba1280c304d1adbb6e2c57d30760b4"
+        },
+        "execution_operations": {
+          "rows": 5,
+          "sha256": "a76228a284e9f952852c6996cb2045734539ce1a27201762f5570257579c23bb"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 5,
+          "sha256": "7292fc69f35bb9c7794f30ad7bb55f594579ec588a2e476816f9fe5c30b90334"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 7,
+          "sha256": "d2cd7ca2290e0bfb051031afbb41c6481718998a8b9b46030e1dc398d6f5aaf9"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "9aa6f3c93fd1cf0828223835c7cfc325f76c2545cbddc1e295bfd1a61ce5fddc"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "d58a154931f76abbced63b90a3c4b7390b6eadbdf4992d70518a5ec110f8cc19"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "0ef0ce7c328388138600a7bf52e021a9ba6f77a6788d02d697ba6b314709560a"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "7dc4d6274573ec83cacc42e5dd0bb2020f17a65eef193b78873d1c38aa370dee"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 2,
+          "sha256": "745508820e797cb549d121bbd87b78314a77b8c8bd03f29978f584876d5f1f93"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "before-obs": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 1,
+          "sha256": "45e1f077afe8003e7a343543e23514f0b800f692dfaf1f6347b6cb00d7e6a5d1"
+        },
+        "execution_bindings": {
+          "rows": 1,
+          "sha256": "58ba375862af496fae63ac929094b6dd1d29c7086cc04accda7bab6d6ada3b80"
+        },
+        "agent_endpoints": {
+          "rows": 1,
+          "sha256": "5dbf8ec5cafb08ab7d012d6449391e8c8be65cb216f6d6c91b8af3930a6d2006"
+        },
+        "runtime_execution_grants": {
+          "rows": 1,
+          "sha256": "c239ee8ed98e3789095b7131bbaf3fa50351c69d8e8a3d568571c5941063ae00"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "e24c278c0f8cc68bc5825c17dd13674842ba1280c304d1adbb6e2c57d30760b4"
+        },
+        "execution_operations": {
+          "rows": 5,
+          "sha256": "a76228a284e9f952852c6996cb2045734539ce1a27201762f5570257579c23bb"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 5,
+          "sha256": "7292fc69f35bb9c7794f30ad7bb55f594579ec588a2e476816f9fe5c30b90334"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 7,
+          "sha256": "d2cd7ca2290e0bfb051031afbb41c6481718998a8b9b46030e1dc398d6f5aaf9"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "9aa6f3c93fd1cf0828223835c7cfc325f76c2545cbddc1e295bfd1a61ce5fddc"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "d58a154931f76abbced63b90a3c4b7390b6eadbdf4992d70518a5ec110f8cc19"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "0ef0ce7c328388138600a7bf52e021a9ba6f77a6788d02d697ba6b314709560a"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "7dc4d6274573ec83cacc42e5dd0bb2020f17a65eef193b78873d1c38aa370dee"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 2,
+          "sha256": "745508820e797cb549d121bbd87b78314a77b8c8bd03f29978f584876d5f1f93"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "after-idle": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 1,
+          "sha256": "45e1f077afe8003e7a343543e23514f0b800f692dfaf1f6347b6cb00d7e6a5d1"
+        },
+        "execution_bindings": {
+          "rows": 1,
+          "sha256": "58ba375862af496fae63ac929094b6dd1d29c7086cc04accda7bab6d6ada3b80"
+        },
+        "agent_endpoints": {
+          "rows": 1,
+          "sha256": "5dbf8ec5cafb08ab7d012d6449391e8c8be65cb216f6d6c91b8af3930a6d2006"
+        },
+        "runtime_execution_grants": {
+          "rows": 1,
+          "sha256": "c239ee8ed98e3789095b7131bbaf3fa50351c69d8e8a3d568571c5941063ae00"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "e24c278c0f8cc68bc5825c17dd13674842ba1280c304d1adbb6e2c57d30760b4"
+        },
+        "execution_operations": {
+          "rows": 5,
+          "sha256": "a76228a284e9f952852c6996cb2045734539ce1a27201762f5570257579c23bb"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 5,
+          "sha256": "7292fc69f35bb9c7794f30ad7bb55f594579ec588a2e476816f9fe5c30b90334"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 7,
+          "sha256": "d2cd7ca2290e0bfb051031afbb41c6481718998a8b9b46030e1dc398d6f5aaf9"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "9aa6f3c93fd1cf0828223835c7cfc325f76c2545cbddc1e295bfd1a61ce5fddc"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "d58a154931f76abbced63b90a3c4b7390b6eadbdf4992d70518a5ec110f8cc19"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "0ef0ce7c328388138600a7bf52e021a9ba6f77a6788d02d697ba6b314709560a"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 1,
+          "sha256": "9e7cdadd51be2fd00aeaad080d5bbe0f1377df7e420fbd39959b1ee62209911e"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "7dc4d6274573ec83cacc42e5dd0bb2020f17a65eef193b78873d1c38aa370dee"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 2,
+          "sha256": "745508820e797cb549d121bbd87b78314a77b8c8bd03f29978f584876d5f1f93"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "after-completion": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 1,
+          "sha256": "45e1f077afe8003e7a343543e23514f0b800f692dfaf1f6347b6cb00d7e6a5d1"
+        },
+        "execution_bindings": {
+          "rows": 1,
+          "sha256": "58ba375862af496fae63ac929094b6dd1d29c7086cc04accda7bab6d6ada3b80"
+        },
+        "agent_endpoints": {
+          "rows": 1,
+          "sha256": "5dbf8ec5cafb08ab7d012d6449391e8c8be65cb216f6d6c91b8af3930a6d2006"
+        },
+        "runtime_execution_grants": {
+          "rows": 1,
+          "sha256": "c239ee8ed98e3789095b7131bbaf3fa50351c69d8e8a3d568571c5941063ae00"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "e24c278c0f8cc68bc5825c17dd13674842ba1280c304d1adbb6e2c57d30760b4"
+        },
+        "execution_operations": {
+          "rows": 5,
+          "sha256": "a76228a284e9f952852c6996cb2045734539ce1a27201762f5570257579c23bb"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 5,
+          "sha256": "7292fc69f35bb9c7794f30ad7bb55f594579ec588a2e476816f9fe5c30b90334"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 7,
+          "sha256": "d2cd7ca2290e0bfb051031afbb41c6481718998a8b9b46030e1dc398d6f5aaf9"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "9aa6f3c93fd1cf0828223835c7cfc325f76c2545cbddc1e295bfd1a61ce5fddc"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "d58a154931f76abbced63b90a3c4b7390b6eadbdf4992d70518a5ec110f8cc19"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "0ef0ce7c328388138600a7bf52e021a9ba6f77a6788d02d697ba6b314709560a"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 2,
+          "sha256": "2a62ade3dfd95d58255ac6e5d7ab16836e795c0432a8301075201cf75a21069c"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "7dc4d6274573ec83cacc42e5dd0bb2020f17a65eef193b78873d1c38aa370dee"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 2,
+          "sha256": "745508820e797cb549d121bbd87b78314a77b8c8bd03f29978f584876d5f1f93"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  },
+  "drift": [
+    {
+      "before": "before-obs",
+      "after": "after-idle",
+      "changes": [],
+      "allowed_observation_events": [
+        {
+          "type": "observation.activity",
+          "source_id": "obs_src_0000000000000001",
+          "observed_instance_id": "obs_inst_0000000000000002",
+          "generation": 2,
+          "sequence": 1,
+          "private_event_sha256": "e596d46e977c006c9c40d17e6ee88a4aad65c732ea08f66db5675e309a61478e",
+          "receipt_report_hash": "sha256:bf67fbda77ff0ea4d13a7c82e4837b21b9c5ae87fba29527c55d65488f99c683",
+          "observational_only": true
+        }
+      ],
+      "expected_observation_errors": [],
+      "causality": "NOT_ATTRIBUTED",
+      "ignored_tables": [],
+      "ignored_columns": [],
+      "private_rows_curated": false
+    },
+    {
+      "before": "before-obs",
+      "after": "after-completion",
+      "changes": [],
+      "allowed_observation_events": [
+        {
+          "type": "observation.activity",
+          "source_id": "obs_src_0000000000000001",
+          "observed_instance_id": "obs_inst_0000000000000002",
+          "generation": 2,
+          "sequence": 1,
+          "private_event_sha256": "e596d46e977c006c9c40d17e6ee88a4aad65c732ea08f66db5675e309a61478e",
+          "receipt_report_hash": "sha256:bf67fbda77ff0ea4d13a7c82e4837b21b9c5ae87fba29527c55d65488f99c683",
+          "observational_only": true
+        },
+        {
+          "type": "observation.completion",
+          "source_id": "obs_src_0000000000000001",
+          "observed_instance_id": "obs_inst_0000000000000002",
+          "generation": 2,
+          "sequence": 2,
+          "private_event_sha256": "62cb1a12ed6ef31237900fc19059e90718d2da00c16d4344ec66af8d8be0a525",
+          "receipt_report_hash": "sha256:8647268f0fd7237df4f900380f51c71cce098426ee28a1c2bb8944234462970d",
+          "observational_only": true
+        }
+      ],
+      "expected_observation_errors": [],
+      "causality": "NOT_ATTRIBUTED",
+      "ignored_tables": [],
+      "ignored_columns": [],
+      "private_rows_curated": false
+    }
+  ],
+  "commands": [
+    {
+      "name": "open",
+      "pid": 59068,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "5c13ce6bb0c458977d10074b09c795c8807d87c67478cc469b4771b0361fb8c5"
+    },
+    {
+      "name": "load-state",
+      "pid": 56560,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "ea60e37350fd186581757330cdddaade211205d03dd019efc64be7dcc8edf8e2"
+    },
+    {
+      "name": "initialize",
+      "pid": 9188,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "15aa3a1db8ed108244a5f38b75345abc724d9959787156ca215862758920010c"
+    },
+    {
+      "name": "idle",
+      "pid": 43200,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "8e9bdf77fc76742c39693ba95babf293c412f27643e9a36b48e1705084d4b3b5"
+    },
+    {
+      "name": "idle-snapshot",
+      "pid": 56916,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "6bc9327570888c1ca06c77b4475dc8821b9a6e52e3cacd67c15f065a779d1830"
+    },
+    {
+      "name": "idle-screenshot",
+      "pid": 58700,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "68ffc05377fe208dc5d52e36de215157af8e165969ea619cd1654065d69b0bcf"
+    },
+    {
+      "name": "completion",
+      "pid": 12392,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "8586782e9cd6b34a27c38e89eeb7f938ccc8e322b721adf12871b1f20248135a"
+    },
+    {
+      "name": "completion-snapshot",
+      "pid": 60840,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "dd3abf619feff6d1bf3292913b72e47c6d4b6f817ab7d362540282321d1521e2"
+    },
+    {
+      "name": "completion-screenshot",
+      "pid": 48760,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "410d47f426e3683e190e188d19c4564f4bb77c916db88048cc2f0be33ed15890"
+    },
+    {
+      "name": "close",
+      "pid": 46928,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "f2a24b81a66701c6bf55df4c8afa579f09acbfc35521f9cb3d0cfa3ea332292f"
+    }
+  ],
+  "failure_type": null,
+  "guards": {
+    "before": {
+      "status": "READY_TO_ALLOCATE_ONLY",
+      "case": "S2",
+      "cut_id": "hst-security-r9-s2-observed-completion-v3",
+      "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe",
+      "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+      "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+      "allocated": false,
+      "started": false,
+      "provider_invocations": 0,
+      "source_pin_count": 1829,
+      "source_pins_sha256": "b9028b100af813f12330b5167b49d5e67cb566837f08c775b127236ae23e48ab",
+      "gate_sha256": "e9be5bf487f1b448541bff58aa81de691b21676096275067be7c63a5558b29c3"
+    },
+    "after": {
+      "status": "READY_TO_ALLOCATE_ONLY",
+      "case": "S2",
+      "cut_id": "hst-security-r9-s2-observed-completion-v3",
+      "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe",
+      "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+      "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+      "allocated": false,
+      "started": false,
+      "provider_invocations": 0,
+      "source_pin_count": 1829,
+      "source_pins_sha256": "b9028b100af813f12330b5167b49d5e67cb566837f08c775b127236ae23e48ab",
+      "gate_sha256": "e9be5bf487f1b448541bff58aa81de691b21676096275067be7c63a5558b29c3"
+    },
+    "equal": true
+  },
+  "cleanup": {
+    "normal": true,
+    "physical_absence": true,
+    "forced": false,
+    "fixture": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "browser": {
+      "forced_births": [],
+      "remaining": []
+    },
+    "listeners": [],
+    "sampling_limit": "Observed ancestry plus own-root/birth argv scan; not a claim of capturing every short-lived child",
+    "runtime_close_observations": {
+      "sessions": [
+        {
+          "session_id": "ses_4d922989575668acb8ade5dd4062d0ad",
+          "reference": {
+            "server_id": "srv_9f8498c01d4a9f315766c03ee2e942b6",
+            "executor_id": "exe_5b1de176d7e1f38f9d32624c0c546c9e",
+            "binding_id": "bind_e1d478a6de2b1ab1c8f6eae6940419eb",
+            "endpoint_id": "ep_0903cc860d89baf1001352e5945029f7",
+            "agent_id": "hst-worker",
+            "workspace_id": "wsr_038db3e37edc47ac9c5d04c66d321d7e",
+            "workspace_binding_id": "wxb_86be26f4d7beed3b4e4ecdf89ce58d09"
+          },
+          "text": "HST synthetic output ses_4d922989575668acb8ade5dd4062d0ad",
+          "closed": true
+        },
+        {
+          "session_id": "ses_a81984764540063e30e6c6f0b7ece759",
+          "reference": {
+            "server_id": "srv_9f8498c01d4a9f315766c03ee2e942b6",
+            "executor_id": "exe_5b1de176d7e1f38f9d32624c0c546c9e",
+            "binding_id": "bind_e1d478a6de2b1ab1c8f6eae6940419eb",
+            "endpoint_id": "ep_0903cc860d89baf1001352e5945029f7",
+            "agent_id": "hst-worker",
+            "workspace_id": "wsr_038db3e37edc47ac9c5d04c66d321d7e",
+            "workspace_binding_id": "wxb_86be26f4d7beed3b4e4ecdf89ce58d09"
+          },
+          "text": "HST synthetic output ses_a81984764540063e30e6c6f0b7ece759",
+          "closed": true
+        }
+      ],
+      "close_failures": [],
+      "cleanup_mechanism": "TestClient/embedded-owner lifespan shutdown, then physical process/listener proof",
+      "all_runtime_close_receipts_claimed": false,
+      "revoked_authority_renewed": false,
+      "limit": "Fixture closed=false is retained if runtime.close is refused after revocation; exit0 is not canonical runtime.close PASS"
+    }
+  },
+  "counts": {
+    "public_snapshot_tables": 30
+  },
+  "limits": [
+    "No ledger promotion or broad H01-H10/K completion by case count",
+    "S2 baseline has no occupied handoff claim/one-shot slot; H08 active-work clause remains partial",
+    "S2 reported completion is not canonical task completion or verified native success",
+    "Any productive table drift is retained with column deltas and no invented causal attribution"
+  ],
+  "private_rows_copied": false,
+  "raw_auth_copied": false,
+  "data_retained_in_own_temp": true,
+  "browser_environment_policy": "windows-path-allowlist-app-env-own-v1",
+  "npx_or_npm_used": false,
+  "actual_own_browser_before_home": {
+    "status": "EXACT_OWN_PROFILE_MAIN_CAPTURED",
+    "records": [
+      {
+        "pid": 47384,
+        "birth": 1794961372.804829,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "argv": [
+          "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          "--disable-field-trial-config",
+          "--disable-background-networking",
+          "--disable-background-timer-throttling",
+          "--disable-backgrounding-occluded-windows",
+          "--disable-back-forward-cache",
+          "--disable-breakpad",
+          "--disable-component-extensions-with-background-pages",
+          "--disable-component-update",
+          "--no-default-browser-check",
+          "--disable-default-apps",
+          "--disable-dev-shm-usage",
+          "--disable-edgeupdater",
+          "--disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,HttpsUpgrades,HttpsFirstBalancedModeAutoEnable,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,AvoidCorsURLLoaderRestartOnRedirect,TcpPortRandomizationWin,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,PreconnectToSearch,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion",
+          "--enable-features=CDPScreenshotNewSurface,SkipListAccountsWithoutGaiaCookies",
+          "--allow-pre-commit-input",
+          "--disable-hang-monitor",
+          "--disable-ipc-flooding-protection",
+          "--disable-popup-blocking",
+          "--disable-prompt-on-repost",
+          "--disable-renderer-backgrounding",
+          "--disable-updater-scheduler",
+          "--force-color-profile=srgb",
+          "--metrics-recording-only",
+          "--no-first-run",
+          "--password-store=basic",
+          "--use-mock-keychain",
+          "--no-service-autorun",
+          "--disable-search-engine-choice-screen",
+          "--unsafely-disable-devtools-self-xss-warnings",
+          "--enable-unsafe-swiftshader",
+          "--edge-skip-compat-layer-relaunch",
+          "--disable-stack-profiler",
+          "--disable-infobars",
+          "--disable-sync",
+          "--do-not-de-elevate",
+          "--headless",
+          "--hide-scrollbars",
+          "--mute-audio",
+          "--blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4",
+          "--disable-blink-features=AutomationControlled",
+          "--user-data-dir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-wb89jwrf\\browser-profile",
+          "--remote-debugging-pipe",
+          "about:blank"
+        ],
+        "own_profile": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-wb89jwrf\\browser-profile",
+        "before_home_navigation": true
+      }
+    ],
+    "environment_policy": "windows-path-allowlist-app-env-own-v1",
+    "host_keys": [
+      "SYSTEMROOT",
+      "WINDIR",
+      "COMSPEC",
+      "PATHEXT",
+      "SYSTEMDRIVE",
+      "OS",
+      "PROCESSOR_ARCHITECTURE",
+      "PROGRAMFILES",
+      "PROGRAMFILES(X86)",
+      "COMMONPROGRAMFILES",
+      "COMMONPROGRAMFILES(X86)",
+      "PROGRAMDATA",
+      "USERPROFILE",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LOCALAPPDATA",
+      "APPDATA"
+    ],
+    "environment_equivalence_to_working_capture_claimed": false,
+    "no_personal_cli_config": "Own PWTEST_CLI_GLOBAL_CONFIG; own cwd .playwright; no npx/npm/update check",
+    "app_environment": "Unchanged Owned.start total-ownTemp/own credentials/provider PATH empty"
+  },
+  "origins": {
+    "origins": {
+      "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+    },
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv",
+    "isolated": true
+  },
+  "observation_permission_precondition": {
+    "agent_id": "hst-worker",
+    "method": "PATCH",
+    "before_contexts": true,
+    "identity_unchanged": true,
+    "other_permissions_unchanged": true,
+    "enabled": [
+      "observations.manage_self",
+      "observations.publish"
+    ]
+  }
+}

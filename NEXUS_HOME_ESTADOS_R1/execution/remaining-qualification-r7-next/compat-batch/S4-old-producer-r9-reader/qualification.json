@@ -1,0 +1,439 @@
+{
+  "status": "PASS_K02_OLD_PRODUCER_R9_PROJECTION_WITH_POSTCUT_RO_PROFILE_SUPPLEMENT",
+  "scenario": "HST-T-K02",
+  "manifest_sha256": "3dc1aae92c4c7b8963de98aca94e011a2d8e222d05bda41741f527db8d20f458",
+  "runner_sha256": "a485a6536381ea4bb3319b92c2cce1c3e82cf50194ccd7a39ab9388c0bc6f76e",
+  "runner_exit_code": 0,
+  "old_artifact": {
+    "version": "0.3.6",
+    "source_candidate": "9bc4034663ca63cfee43790b4bc03c38f8bdebcc",
+    "wheel_sha256": "d2c322168d56e87bde22cfe262d5d2fbc9a5737b0572144774894624d561cf88",
+    "payload_files": 1028
+  },
+  "new_artifact": {
+    "version": "0.3.7",
+    "source_candidate": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031
+  },
+  "checks": [
+    "Actual old installed CLI/foreground producer generated request, decision, terminal result, receipts, binding and grant; no SQL authority/receipt fixtures",
+    "Confirmed close SUCCEEDED/CLOSED and canonical drained stop plus physical absence before the single own-home copy",
+    "All21 files byte-equal at copy; no context/DB repair or reset",
+    "Same own account canonical login on R9 copy, current HTTP limited to login, GETs and canonical stop",
+    "Real old info lacks v2, old request omits version; R9 info offers1/2 and returns presentation_version2",
+    "Same nonempty result ID set and Server ID; all protected column/type/row hashes unchanged through copy, R9 GETs and final stop",
+    "Posterior RO supplement independently confirms five terminal files, including two concrete nonempty profile/checkpoint documents, match their captured at-copy hashes"
+  ],
+  "protected_table_row_counts": {
+    "execution_operations": 4,
+    "execution_receipts": 5,
+    "execution_native_requests": 1,
+    "execution_decisions": 1,
+    "runtime_execution_grants": 1,
+    "execution_bindings": 1,
+    "execution_domain_deliveries": 0,
+    "execution_results": 1
+  },
+  "canonical_stop_and_physical_are_separate": true,
+  "phases": [
+    {
+      "phase": "s4-old",
+      "port": 60082,
+      "owner_before": {
+        "pid": 15180,
+        "instance_id": "svc_dbd3c70c2d73e3be2d54ecdbb0f314bd0b6cc586aa9fef3cec48b6691ee3ac82",
+        "generation": "85dba7bea9ca7a2cfe489cc5371b5230"
+      },
+      "owner_after": {
+        "pid": 15180,
+        "instance_id": "svc_dbd3c70c2d73e3be2d54ecdbb0f314bd0b6cc586aa9fef3cec48b6691ee3ac82",
+        "generation": "85dba7bea9ca7a2cfe489cc5371b5230"
+      },
+      "birth": 1794962365.99058,
+      "server_exit_code": 0,
+      "canonical_stop": {
+        "state": "stopped",
+        "reason": "SHUTDOWN_COMPLETE",
+        "shutdown_outcome": "drained"
+      },
+      "http_request_count": 153,
+      "dashboard_requests": [],
+      "browser_births": []
+    },
+    {
+      "phase": "s4-current",
+      "port": 49849,
+      "owner_before": {
+        "pid": 59904,
+        "instance_id": "svc_9b241ee3d14fe2e703183937f47768be3bde66db17d7cec62d7fa16403c90d0b",
+        "generation": "8c6f9c0595bcabd8725a0be106196298"
+      },
+      "owner_after": {
+        "pid": 59904,
+        "instance_id": "svc_9b241ee3d14fe2e703183937f47768be3bde66db17d7cec62d7fa16403c90d0b",
+        "generation": "8c6f9c0595bcabd8725a0be106196298"
+      },
+      "birth": 1794962405.6787715,
+      "server_exit_code": 0,
+      "canonical_stop": {
+        "state": "stopped",
+        "reason": "SHUTDOWN_COMPLETE",
+        "shutdown_outcome": "drained"
+      },
+      "http_request_count": 9,
+      "dashboard_requests": [],
+      "browser_births": []
+    }
+  ],
+  "physical": [
+    {
+      "phase": "s4-old",
+      "pid": 38404,
+      "expected_birth": 1794962365.9466453,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 15180,
+      "expected_birth": 1794962365.99058,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 58144,
+      "expected_birth": 1794962377.5652354,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 48788,
+      "expected_birth": 1794962377.5839744,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 59948,
+      "expected_birth": 1794962377.8282633,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 59604,
+      "expected_birth": 1794962377.8448138,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 4044,
+      "expected_birth": 1794962379.0982232,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 24868,
+      "expected_birth": 1794962379.112784,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 45956,
+      "expected_birth": 1794962380.9352531,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 36756,
+      "expected_birth": 1794962380.9529169,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 57420,
+      "expected_birth": 1794962384.197514,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 35212,
+      "expected_birth": 1794962384.214952,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 5616,
+      "expected_birth": 1794962386.1509273,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 61028,
+      "expected_birth": 1794962386.1699026,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 59348,
+      "expected_birth": 1794962386.539332,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 56396,
+      "expected_birth": 1794962387.9388144,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 55656,
+      "expected_birth": 1794962387.9513664,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 56236,
+      "expected_birth": 1794962389.385156,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 4056,
+      "expected_birth": 1794962389.4024506,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 60764,
+      "expected_birth": 1794962390.9882777,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 60532,
+      "expected_birth": 1794962391.0057244,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 23996,
+      "expected_birth": 1794962392.546049,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 15632,
+      "expected_birth": 1794962392.554036,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 61572,
+      "expected_birth": 1794962394.1664662,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 61540,
+      "expected_birth": 1794962394.1747005,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 35868,
+      "expected_birth": 1794962395.37368,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 56896,
+      "expected_birth": 1794962395.38929,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 43504,
+      "expected_birth": 1794962396.8930645,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 57032,
+      "expected_birth": 1794962396.901719,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 51304,
+      "expected_birth": 1794962398.0292544,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 45576,
+      "expected_birth": 1794962398.0462842,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 61808,
+      "expected_birth": 1794962399.495503,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 33944,
+      "expected_birth": 1794962399.507874,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 29056,
+      "expected_birth": 1794962401.0899775,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 38968,
+      "expected_birth": 1794962401.1084743,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 17844,
+      "expected_birth": 1794962402.002568,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-old",
+      "pid": 35468,
+      "expected_birth": 1794962402.0169177,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-current",
+      "pid": 58380,
+      "expected_birth": 1794962405.66004,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-current",
+      "pid": 59904,
+      "expected_birth": 1794962405.6787715,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-current",
+      "pid": 59116,
+      "expected_birth": 1794962411.7838576,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-current",
+      "pid": 62268,
+      "expected_birth": 1794962411.8005269,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-current",
+      "pid": 8852,
+      "expected_birth": 1794962412.5657535,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "phase": "s4-current",
+      "pid": 28404,
+      "expected_birth": 1794962412.5810692,
+      "same_birth_alive": false,
+      "present": false
+    }
+  ],
+  "physical_same_birth_remaining": 0,
+  "actual_audited_ports": [
+    49849,
+    60082
+  ],
+  "listeners_after": [],
+  "forced_containment": [],
+  "source_guard_before": {
+    "source_count": 1829,
+    "runtime_payloads": {
+      "r9": 1031,
+      "i4_readonly": 1028
+    },
+    "cli_payload_count": 192,
+    "drift": []
+  },
+  "source_guard_after": {
+    "source_count": 1829,
+    "runtime_payloads": {
+      "r9": 1031,
+      "i4_readonly": 1028
+    },
+    "cli_payload_count": 192,
+    "drift": []
+  },
+  "current_Test_Finish_work_grant_created": false,
+  "copy_count": 1,
+  "copied_files": 21,
+  "original_profile_post_assertion": "VACUOUS because the terminal/ predicate did not match Windows backslash paths; not relabeled as executed nonempty proof",
+  "profile_preservation_evidence": "POSTERIOR_READONLY_INDEPENDENT_SUPPLEMENT over the original full file map, not a rerun or data change",
+  "browser_started": false,
+  "browser_marker_written": false,
+  "provider_invocations": 0,
+  "not_inherited_from_K05": true,
+  "input_readers_released": true,
+  "raw_retained_private_only": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-compat-s4-r9wju4pc",
+  "raw_final_sha256": "5447b178765e980036b66ab1a21f428541ad18722c47fa1831553710f97fe221",
+  "private_logs_copied": false,
+  "cookie_token_auth_content_copied": false,
+  "limits": [
+    "Old records were produced now by the actual pre-feature artifact, not backdated; no claim of calendar-age coverage.",
+    "Native Codex protocol peer, version and setup Test are inert synthetic; no real provider/account/inference.",
+    "Protected8-table/full-column hashes and selected filesystem proof, not wholeDB/filesystem immutability after bootstrap/auth lifecycle.",
+    "New home means new foreground service instance/generation; stored data/Server/result/binding/grant identities remain intact.",
+    "No Windows service/session event, human acceptance, UI/AT or performance qualification.",
+    "Bounded ancestry/root sampling cannot enumerate every short-lived process."
+  ]
+}

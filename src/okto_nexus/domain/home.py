@@ -7,6 +7,7 @@ from typing import Generic, Literal, NotRequired, TypedDict, TypeVar
 
 from ..errors import ErrorCode, OktoNexusError
 from .attention import canonical, digest
+from .home_delivery_semantics import DeliverySemantics
 
 
 class SourceRef(TypedDict):
@@ -95,6 +96,7 @@ class HomeActivity(TypedDict):
 
 
 class HomeResult(TypedDict):
+    delivery_semantics: NotRequired[DeliverySemantics]
     id: str
     source_ref: SourceRef
     workspace_id: str

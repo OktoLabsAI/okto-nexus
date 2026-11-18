@@ -1,0 +1,52 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\large-dom-http-prepared.py",
+    "--window",
+    "PERF_DOM_WINDOW_OPEN",
+    "--ready",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r7\\READY.json",
+    "--dataset",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9\\dataset.json",
+    "--max-seconds",
+    "240"
+  ],
+  "owned_command": {
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 15324,
+        "birth": 1794947932.248478,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 45316,
+        "birth": 1794947932.3293734,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  "ready_exposed": true,
+  "pins_before": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r7\\READY.json": "a7889b1fe414f96b11ecab4fdb2b2bfdfa4034bccf9ea2a38f1dfe4cd5ce21de",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r3\\owned_commands.py": "20bbab168db33bafa2f46e68020fbc77f19c418a5a99514d941c35002704c3e0",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\large-dom-r7-launch.py": "36f772b0052df086b1056866f5e5cbe18090cee755d05a8a8afd32c987fd822f",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\large-dom-http-prepared.py": "60e7f89a53c7d351eefc5590a538edcfba0cdb47c684b4fdb8ad5f325c743c18",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\large-dom-driver-prepared.js": "5e47407becce7aafb00324726fd31e53c8b18fb5f5a275c1c18db772f35e28ea",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\benchmark.py": "45a50d995c69a480ee15b3b7cb4942efbb218e9680580e54eec0b0edd432b9a9",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\persistent-worker.py": "d839f3255c018048a74054a81c53304eb5c8544461aa06e2e157557fa74684bb"
+  },
+  "pins_drift": []
+}

@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "layer": "source-first real SQLite fixture, no provider",
+  "result": "1 PASS",
+  "seconds": 6.91,
+  "tool": "fdb04b",
+  "command": [
+    "rtk",
+    "proxy",
+    "C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "tests/home_states/test_operational_sqlite.py::test_session_selector_labels_share_connection_redaction_and_bounds",
+    "-q",
+    "--tb=short",
+    "--junitxml=NEXUS_HOME_ESTADOS_R1/execution/operational-label-delta/junit.xml"
+  ],
+  "antecedent": "../operational-focals/qualification.json",
+  "input_current": {
+    "src/okto_nexus/domain/home_entries.py": "ff2b73d17cf1b85e632b62a99e71aa9f9025e15ace6707ff61921812da6bdbe8",
+    "src/okto_nexus/domain/home_entry_pages.py": "dae997c1b388a2e457eb0edd987c893fe7e67aa52a182aae671587fcc1012e21",
+    "src/okto_nexus/domain/home_harness_blocking.py": "ee90149ef3f5348298d6be07375057318035491c15b09df7adc0936ca2ead71b",
+    "src/okto_nexus/domain/home_harness_board.py": "35b83261f6d05cfc6e3eedbc76da95991305d3ecfd4ec800503d17c1c3234216",
+    "src/okto_nexus/domain/home_operational_status.py": "ef3c1d7402a517d03a92028835fa3b6e3fe0746ec8b12207e9e227c22ea7bf54",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "9e21f169325ccb0d636ca62416cc48fe46af706976b6d422fa525f40d29d866e",
+    "src/okto_nexus/adapters/outbound/sqlite/home_operational_facts.py": "882cca1ee880dc0d0cdbb7bc3b331bb90ea104d7ed929305b9fe570abc0b0961",
+    "tests/home_states/test_operational_status.py": "a4a4f6d4c0647feb57ae3a37ffbb8b10d6f2ff1c4451996abf5d598e03127d91",
+    "tests/home_states/test_operational_board.py": "f6a11105b6cf1d7ff45fdb180594a6e6b5bc6dac686ea1283346b9f1620780be",
+    "tests/home_states/test_operational_sqlite.py": "9e27c2d957a7c4e587e881caae17ce546ba4f111a20dc51d96e2a3bb851cf7ec"
+  },
+  "changed_since_48_case_cut": [
+    "src/okto_nexus/adapters/outbound/sqlite/home_operational_facts.py",
+    "tests/home_states/test_operational_sqlite.py"
+  ],
+  "delta": "Workspace label redaction, whitespace normalization and bound160; own SQLite focal added. No query/authority/operational semantics change.",
+  "ruff": "PASS tool1d43db",
+  "junit_sha256": "b2bfb6e6f41b69f4f62dbc8a389aecbad2a20c4c67ea2ab91d20151165d6fab8"
+}

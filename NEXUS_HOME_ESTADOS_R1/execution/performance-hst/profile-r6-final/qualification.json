@@ -1,0 +1,645 @@
+{
+  "status": "DIAGNOSTIC_COMPLETE_NOT_P95",
+  "get_count": 3,
+  "source_commit": "90b94ca9673c087554b7dc4a226490ef5417bd32",
+  "wheel_sha256": "8ab8f08e8f5e06b428ed4642045ad5e4069d93891a869d4dc61fcaa5bb3ffa19",
+  "payload_files": 1031,
+  "package_modules": {
+    "okto_nexus": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "count": 736
+    },
+    "nexus_connector_core": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "count": 168
+    },
+    "okto_nexus_connector": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+      "count": 127
+    }
+  },
+  "transport": "Persistent httpx ASGITransport/one loop, no TCP/lifespan",
+  "dataset_sha256": "d55f49237607e8cb28f294954685daed9b180f30a7de888e0bbd19c220b0b6fd",
+  "seed_db_sha256": "4f2a64bf6652673aecb4f53af241137b8fb9e93e6481fa9072325101591c5857",
+  "guarded_scope": "Own pristine mixed100/1000activities/100000history clone, installed-I-B, controlledclock, no lifespan/provider/native process/TCP.",
+  "first_get_ms": {
+    "http": 1744.346100022085,
+    "service": 1394.7368999943137,
+    "json_render": 3.3889999613165855,
+    "outside_service_render": 346.2202000664547
+  },
+  "service_top20": [
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\application\\home_entries.py",
+      "line": 26,
+      "function": "read",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 0.0914,
+      "cumulative_ms": 1394.2069000000001
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\application\\home.py",
+      "line": 39,
+      "function": "_safe",
+      "primitive_calls": 1,
+      "calls": 4,
+      "own_ms": 0.020600000000000004,
+      "cumulative_ms": 1372.4628
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\application\\home_entries.py",
+      "line": 59,
+      "function": "<lambda>",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 4.5181000000000004,
+      "cumulative_ms": 1372.4579
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\application\\home_entries.py",
+      "line": 89,
+      "function": "_read",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 2.568,
+      "cumulative_ms": 1367.9398
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py",
+      "line": 328,
+      "function": "read",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 22.448900000000002,
+      "cumulative_ms": 844.8677
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py",
+      "line": 267,
+      "function": "_work_results",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 65.905,
+      "cumulative_ms": 613.3162000000001
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\domain\\home_harness_board.py",
+      "line": 65,
+      "function": "page",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 26.959100000000003,
+      "cumulative_ms": 422.0599
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'execute' of 'sqlite3.Connection' objects>",
+      "primitive_calls": 60,
+      "calls": 60,
+      "own_ms": 225.31250000000003,
+      "cumulative_ms": 354.1247
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\domain\\attention.py",
+      "line": 38,
+      "function": "canonical",
+      "primitive_calls": 12253,
+      "calls": 12253,
+      "own_ms": 10.906,
+      "cumulative_ms": 349.5113
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\__init__.py",
+      "line": 183,
+      "function": "dumps",
+      "primitive_calls": 12359,
+      "calls": 12359,
+      "own_ms": 33.2774,
+      "cumulative_ms": 339.6541
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\encoder.py",
+      "line": 183,
+      "function": "encode",
+      "primitive_calls": 12359,
+      "calls": 12359,
+      "own_ms": 26.079500000000003,
+      "cumulative_ms": 299.88100000000003
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\domain\\home_entry_pages.py",
+      "line": 233,
+      "function": "page",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 11.4012,
+      "cumulative_ms": 265.32090000000005
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\encoder.py",
+      "line": 205,
+      "function": "iterencode",
+      "primitive_calls": 12359,
+      "calls": 12359,
+      "own_ms": 262.25870000000003,
+      "cumulative_ms": 262.25870000000003
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\domain\\attention.py",
+      "line": 42,
+      "function": "digest",
+      "primitive_calls": 7264,
+      "calls": 7264,
+      "own_ms": 16.9766,
+      "cumulative_ms": 261.11500000000007
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\domain\\home_entry_pages.py",
+      "line": 149,
+      "function": "revision",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 18.7182,
+      "cumulative_ms": 214.68890000000002
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\home.py",
+      "line": 308,
+      "function": "result_item",
+      "primitive_calls": 925,
+      "calls": 925,
+      "own_ms": 21.101200000000002,
+      "cumulative_ms": 196.38360000000003
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\__init__.py",
+      "line": 299,
+      "function": "loads",
+      "primitive_calls": 7978,
+      "calls": 7978,
+      "own_ms": 13.6582,
+      "cumulative_ms": 133.4755
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py",
+      "line": 346,
+      "function": "source",
+      "primitive_calls": 7,
+      "calls": 7,
+      "own_ms": 0.0505,
+      "cumulative_ms": 130.60750000000002
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\home.py",
+      "line": 333,
+      "function": "activity_item",
+      "primitive_calls": 1000,
+      "calls": 1000,
+      "own_ms": 6.6521,
+      "cumulative_ms": 127.7325
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\decoder.py",
+      "line": 340,
+      "function": "decode",
+      "primitive_calls": 7978,
+      "calls": 7978,
+      "own_ms": 23.5472,
+      "cumulative_ms": 114.97840000000001
+    }
+  ],
+  "serialization_top20": [
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\starlette\\responses.py",
+      "line": 199,
+      "function": "render",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 0.008000000000000002,
+      "cumulative_ms": 3.177
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\__init__.py",
+      "line": 183,
+      "function": "dumps",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 0.006900000000000001,
+      "cumulative_ms": 3.14
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\encoder.py",
+      "line": 183,
+      "function": "encode",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 0.013800000000000002,
+      "cumulative_ms": 3.1319000000000004
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\encoder.py",
+      "line": 205,
+      "function": "iterencode",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 3.1152,
+      "cumulative_ms": 3.1152
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 0.09740000000000001,
+      "cumulative_ms": 0.09740000000000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'encode' of 'str' objects>",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 0.029,
+      "cumulative_ms": 0.029
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.isinstance>",
+      "primitive_calls": 2,
+      "calls": 2,
+      "own_ms": 0.0019,
+      "cumulative_ms": 0.0019
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\encoder.py",
+      "line": 105,
+      "function": "__init__",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 0.0012000000000000001,
+      "cumulative_ms": 0.0012000000000000001
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'join' of 'str' objects>",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 0.0010000000000000002,
+      "cumulative_ms": 0.0010000000000000002
+    }
+  ],
+  "sql_get_ms": {
+    "http": 988.0173999117687,
+    "execute": 270.7853999454528,
+    "fetch": 246.25049566384405
+  },
+  "sql_top20": [
+    {
+      "template_sha256": "2e2e8a17fbf1f38204d9d4e6214f6db6ddc43d2979180c88190bd1e3e04dd496",
+      "calls": 1,
+      "execute_ms": 198.61069996841252,
+      "fetch_ms": 202.22510036546737,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "d32123b4d14450d9b0c7baa9f596fba49e8d6319c649f6ef9a9c6703bfa5506e",
+      "calls": 1,
+      "execute_ms": 39.266300038434565,
+      "fetch_ms": 0.007899943739175797,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "9b6d50444f0a458c3213ee3ec19e2f2f4e4152c31b18b711a925c1954595d72b",
+      "calls": 1,
+      "execute_ms": 16.597599955275655,
+      "fetch_ms": 10.988499270752072,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "1d241c7904da6fc88a471f0dec8abde00e76e79b2a5976d27c3833bdd144de55",
+      "calls": 1,
+      "execute_ms": 11.586699984036386,
+      "fetch_ms": 2.6942010736092925,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "77c99108835aed34490804dad7a86b147f0c11c8a01215864be693e44a4c886a",
+      "calls": 1,
+      "execute_ms": 0.09440002031624317,
+      "fetch_ms": 10.851899860426784,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "556c8d009da6c6ff9fea25ed899d48ee34dfa570bb6dcf440a6c0fdf87f33058",
+      "calls": 1,
+      "execute_ms": 0.4422999918460846,
+      "fetch_ms": 7.354998611845076,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "33938cc3630f4f661af7e3a695766697b217a1e62e016169702b29ef757440ce",
+      "calls": 1,
+      "execute_ms": 0.41470001451671124,
+      "fetch_ms": 2.6949994498863816,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "527412ce2e8b25f9818b06fbb50ef5fd744d9befffce63b5f776f264b44928c1",
+      "calls": 1,
+      "execute_ms": 0.08909997995942831,
+      "fetch_ms": 2.6008993154391646,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "26afa7c90aa3465370999c01167b7769881062f1e3255ca1ba3ad71b88d199f9",
+      "calls": 1,
+      "execute_ms": 0.5300999619066715,
+      "fetch_ms": 1.0613997001200914,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "354c840431f9250fb21e19c8f27e49cd496d66b542abb0fb8d46740cd66e8f55",
+      "calls": 1,
+      "execute_ms": 0.056900084018707275,
+      "fetch_ms": 1.1724987998604774,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "44b00c3156b4ec4a33a2007bd94340a3e572d9c41544b4563817d4926b406114",
+      "calls": 1,
+      "execute_ms": 0.22899999748915434,
+      "fetch_ms": 0.9091998217627406,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "035e64a78039781a9add8327b2bbc0408954eb80ac01be4da63a14a8d8a6dd73",
+      "calls": 1,
+      "execute_ms": 0.21249998826533556,
+      "fetch_ms": 0.8770000422373414,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "f10614dede30c7e34d088f56385fbdac9812dc160f8e5e746774bfef08de1920",
+      "calls": 1,
+      "execute_ms": 0.03699993249028921,
+      "fetch_ms": 0.46519935131073,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "ae5cba6fbdcb983d5994f246fe4a1351a08397e090ad44eb83f691967da7fb19",
+      "calls": 1,
+      "execute_ms": 0.05539995618164539,
+      "fetch_ms": 0.40460005402565,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "d1f769f0c5a718eb4b90ddcb4a79ce73e1f22384d5c2b31cd9cd1212d4569817",
+      "calls": 1,
+      "execute_ms": 0.045199994929134846,
+      "fetch_ms": 0.4115999909117818,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "c4a3c65b1e6e6669aa77ee2f3054d9d3b1e216248fb6b7603b2e380c3295b7a9",
+      "calls": 1,
+      "execute_ms": 0.4467000253498554,
+      "fetch_ms": 0.001400010660290718,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "a7c8a9cf1bf23d3f0506be30ab9bb4c8eba07acae0f4515a7dcdc630e46a0208",
+      "calls": 1,
+      "execute_ms": 0.04279997665435076,
+      "fetch_ms": 0.377400079742074,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "d1a54ea78936d6754a36e2e50f6fd349e34456dd06e9774c0be88578ac3a6c1f",
+      "calls": 1,
+      "execute_ms": 0.33740000799298286,
+      "fetch_ms": 0.0034999102354049683,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "732a59fbfda7da77a1e15533816ea892b2bfe70db3fde9ae450e835adf4de6ca",
+      "calls": 1,
+      "execute_ms": 0.039499951526522636,
+      "fetch_ms": 0.29059965163469315,
+      "explain_error": null
+    },
+    {
+      "template_sha256": "5d0b0130edcbfebca0e09a0e6727d331316a6120ea4b4177fe90e19c47641d99",
+      "calls": 1,
+      "execute_ms": 0.06500002928078175,
+      "fetch_ms": 0.2559005515649915,
+      "explain_error": null
+    }
+  ],
+  "transport_get_ms": 1174.9482000013813,
+  "transport_top20": [
+    {
+      "file": "C:\\Python313\\Lib\\asyncio\\base_events.py",
+      "line": 1953,
+      "function": "_run_once",
+      "primitive_calls": 30,
+      "calls": 31,
+      "own_ms": 0.8178000000000001,
+      "cumulative_ms": 1170.4628000000002
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'run' of '_contextvars.Context' objects>",
+      "primitive_calls": 48,
+      "calls": 50,
+      "own_ms": 0.21620000000000003,
+      "cumulative_ms": 1168.6814000000002
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\application\\home_entries.py",
+      "line": 26,
+      "function": "read",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 0.0767,
+      "cumulative_ms": 1143.0857
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\application\\home.py",
+      "line": 39,
+      "function": "_safe",
+      "primitive_calls": 1,
+      "calls": 4,
+      "own_ms": 0.026200000000000005,
+      "cumulative_ms": 1141.7699
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\application\\home_entries.py",
+      "line": 59,
+      "function": "<lambda>",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 4.336,
+      "cumulative_ms": 1141.7588
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\application\\home_entries.py",
+      "line": 89,
+      "function": "_read",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 2.6791,
+      "cumulative_ms": 1137.4228000000003
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py",
+      "line": 328,
+      "function": "read",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 24.5294,
+      "cumulative_ms": 698.5393000000001
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py",
+      "line": 267,
+      "function": "_work_results",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 49.4733,
+      "cumulative_ms": 520.4673
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\domain\\home_harness_board.py",
+      "line": 65,
+      "function": "page",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 26.2876,
+      "cumulative_ms": 386.2642
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'execute' of 'sqlite3.Connection' objects>",
+      "primitive_calls": 56,
+      "calls": 56,
+      "own_ms": 178.55020000000002,
+      "cumulative_ms": 320.74980000000005
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\domain\\attention.py",
+      "line": 38,
+      "function": "canonical",
+      "primitive_calls": 12253,
+      "calls": 12253,
+      "own_ms": 9.9601,
+      "cumulative_ms": 292.819
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\__init__.py",
+      "line": 183,
+      "function": "dumps",
+      "primitive_calls": 12360,
+      "calls": 12360,
+      "own_ms": 26.3279,
+      "cumulative_ms": 289.1112
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\encoder.py",
+      "line": 183,
+      "function": "encode",
+      "primitive_calls": 12360,
+      "calls": 12360,
+      "own_ms": 23.7454,
+      "cumulative_ms": 256.9886
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\domain\\home_entry_pages.py",
+      "line": 233,
+      "function": "page",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 10.7095,
+      "cumulative_ms": 236.0687
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\encoder.py",
+      "line": 205,
+      "function": "iterencode",
+      "primitive_calls": 12360,
+      "calls": 12360,
+      "own_ms": 223.10110000000003,
+      "cumulative_ms": 223.10110000000003
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\domain\\attention.py",
+      "line": 42,
+      "function": "digest",
+      "primitive_calls": 7264,
+      "calls": 7264,
+      "own_ms": 14.4349,
+      "cumulative_ms": 209.41000000000003
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\domain\\home_entry_pages.py",
+      "line": 149,
+      "function": "revision",
+      "primitive_calls": 1,
+      "calls": 1,
+      "own_ms": 21.412200000000002,
+      "cumulative_ms": 183.33010000000002
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\home.py",
+      "line": 333,
+      "function": "activity_item",
+      "primitive_calls": 1000,
+      "calls": 1000,
+      "own_ms": 7.125500000000001,
+      "cumulative_ms": 141.1151
+    },
+    {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-vmoup3wt\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\home.py",
+      "line": 308,
+      "function": "result_item",
+      "primitive_calls": 925,
+      "calls": 925,
+      "own_ms": 14.249600000000001,
+      "cumulative_ms": 129.2914
+    },
+    {
+      "file": "C:\\Python313\\Lib\\json\\__init__.py",
+      "line": 299,
+      "function": "loads",
+      "primitive_calls": 7978,
+      "calls": 7978,
+      "own_ms": 11.131700000000002,
+      "cumulative_ms": 102.76020000000001
+    }
+  ],
+  "raw_diagnostic": "../candidate-r6-100-v2-diagnostics.json",
+  "owned_launch": "../profile-r6-launch.json",
+  "cleanup": {
+    "normal_exit": true,
+    "force": false,
+    "timeout": false,
+    "remaining_processes": [],
+    "remaining_listeners": [],
+    "pins_drift": [],
+    "payload_productive_schema_seed_dataset_drift": false
+  },
+  "limits": [
+    "Each diagnostic GET is separate, not nested profiling, not a p95 sample and not a new SLO PASS.",
+    "cProfile cumulative times and SQL UDF execute/fetch times overlap; do not add them.",
+    "First GET includes cold routing/auth/import initialization. Third GET includes service execution in the main event-loop profile; await/select wall cost is not independent CPU cost.",
+    "SQL plans contain templates only, no bound parameters or expanded SQL; EXPLAIN instrumentation overhead is separate from execute/fetch timers.",
+    "The final10 measurement verdict remains FAIL for all six100-connection cuts. No optimization or threshold change was performed.",
+    "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  ]
+}

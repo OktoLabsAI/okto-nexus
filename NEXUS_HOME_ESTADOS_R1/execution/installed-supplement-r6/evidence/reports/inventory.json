@@ -1,0 +1,30 @@
+{
+  "exitstatus": 0,
+  "collected": [
+    "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[handoff-private]",
+    "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[message-private]",
+    "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[input]",
+    "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[agent_input]",
+    "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[nonblocking_input]",
+    "tests/home_states/test_results_boundary_completion.py::test_e10_canonical_rejected_handoff_without_native_result_has_no_native_outcome",
+    "tests/home_states/test_results_boundary_completion.py::test_e12_historical_terminal_receipt_without_capture_is_ended_but_content_pending",
+    "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[None]",
+    "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[Done: terminei]",
+    "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[verified]",
+    "tests/home_states/test_results_boundary_completion.py::test_e15_unknown_attempt_keeps_exact_monitorable_target_and_confirmed_history"
+  ],
+  "finished": [
+    "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[handoff-private]",
+    "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[message-private]",
+    "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[input]",
+    "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[agent_input]",
+    "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[nonblocking_input]",
+    "tests/home_states/test_results_boundary_completion.py::test_e10_canonical_rejected_handoff_without_native_result_has_no_native_outcome",
+    "tests/home_states/test_results_boundary_completion.py::test_e12_historical_terminal_receipt_without_capture_is_ended_but_content_pending",
+    "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[None]",
+    "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[Done: terminei]",
+    "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[verified]",
+    "tests/home_states/test_results_boundary_completion.py::test_e15_unknown_attempt_keeps_exact_monitorable_target_and_confirmed_history"
+  ],
+  "not_run": []
+}

@@ -1,0 +1,714 @@
+{
+  "sessions": [
+    {
+      "session_id": "ses_7d4b8310f26f1909dedfbbe4e6debf8d",
+      "reference": {
+        "server_id": "srv_55aeba8e05af377df0159cf2ed13210e",
+        "executor_id": "exe_5d33c43665f7a0deda9d6c5a4d896cf0",
+        "binding_id": "bind_ac3a25e93e7d4c90b293112469b0a991",
+        "endpoint_id": "ep_6ebe1d04ee620dcd5a5988be4f3bc05b",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_4b68f1b52af2b28d3e7c3eb8ad11c491",
+        "workspace_binding_id": "wxb_65faea41125422ead9968658315c3e70"
+      },
+      "text": "HST synthetic output ses_7d4b8310f26f1909dedfbbe4e6debf8d",
+      "closed": true
+    },
+    {
+      "session_id": "ses_cc4b1b8158201316ebeed58740210c53",
+      "reference": {
+        "server_id": "srv_55aeba8e05af377df0159cf2ed13210e",
+        "executor_id": "exe_5d33c43665f7a0deda9d6c5a4d896cf0",
+        "binding_id": "bind_ac3a25e93e7d4c90b293112469b0a991",
+        "endpoint_id": "ep_6ebe1d04ee620dcd5a5988be4f3bc05b",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_4b68f1b52af2b28d3e7c3eb8ad11c491",
+        "workspace_binding_id": "wxb_65faea41125422ead9968658315c3e70"
+      },
+      "text": "HST synthetic output ses_cc4b1b8158201316ebeed58740210c53",
+      "closed": true
+    }
+  ],
+  "operations": [
+    {
+      "intent": "runtime.start",
+      "operation_id": "op_53c921d633abfd841595d957912261fe",
+      "scope": {
+        "server_id": "srv_55aeba8e05af377df0159cf2ed13210e",
+        "executor_id": "exe_5d33c43665f7a0deda9d6c5a4d896cf0",
+        "binding_id": "bind_ac3a25e93e7d4c90b293112469b0a991",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_4b68f1b52af2b28d3e7c3eb8ad11c491",
+        "workspace_binding_id": "wxb_65faea41125422ead9968658315c3e70",
+        "session_id": "ses_7d4b8310f26f1909dedfbbe4e6debf8d",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      }
+    },
+    {
+      "intent": "turn.submit",
+      "operation_id": "op_fb659c64d72f7d87e5bbd7475ecf0a73",
+      "scope": {
+        "server_id": "srv_55aeba8e05af377df0159cf2ed13210e",
+        "executor_id": "exe_5d33c43665f7a0deda9d6c5a4d896cf0",
+        "binding_id": "bind_ac3a25e93e7d4c90b293112469b0a991",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_4b68f1b52af2b28d3e7c3eb8ad11c491",
+        "workspace_binding_id": "wxb_65faea41125422ead9968658315c3e70",
+        "session_id": "ses_7d4b8310f26f1909dedfbbe4e6debf8d",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      }
+    },
+    {
+      "intent": "runtime.close",
+      "operation_id": "op_c2ffbb781a1a6175212dd52664e65f8e",
+      "scope": {
+        "server_id": "srv_55aeba8e05af377df0159cf2ed13210e",
+        "executor_id": "exe_5d33c43665f7a0deda9d6c5a4d896cf0",
+        "binding_id": "bind_ac3a25e93e7d4c90b293112469b0a991",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_4b68f1b52af2b28d3e7c3eb8ad11c491",
+        "workspace_binding_id": "wxb_65faea41125422ead9968658315c3e70",
+        "session_id": "ses_7d4b8310f26f1909dedfbbe4e6debf8d",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      }
+    },
+    {
+      "intent": "runtime.start",
+      "operation_id": "op_edbc619a16fdbbea67825e3b56aa5c12",
+      "scope": {
+        "server_id": "srv_55aeba8e05af377df0159cf2ed13210e",
+        "executor_id": "exe_5d33c43665f7a0deda9d6c5a4d896cf0",
+        "binding_id": "bind_ac3a25e93e7d4c90b293112469b0a991",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_4b68f1b52af2b28d3e7c3eb8ad11c491",
+        "workspace_binding_id": "wxb_65faea41125422ead9968658315c3e70",
+        "session_id": "ses_cc4b1b8158201316ebeed58740210c53",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      }
+    },
+    {
+      "intent": "turn.submit",
+      "operation_id": "op_3ad499d6be1ca86045cebaea146f2782",
+      "scope": {
+        "server_id": "srv_55aeba8e05af377df0159cf2ed13210e",
+        "executor_id": "exe_5d33c43665f7a0deda9d6c5a4d896cf0",
+        "binding_id": "bind_ac3a25e93e7d4c90b293112469b0a991",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_4b68f1b52af2b28d3e7c3eb8ad11c491",
+        "workspace_binding_id": "wxb_65faea41125422ead9968658315c3e70",
+        "session_id": "ses_cc4b1b8158201316ebeed58740210c53",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      }
+    },
+    {
+      "intent": "runtime.close",
+      "operation_id": "op_1d0c2bf17dc15bc228c86a4ade543042",
+      "scope": {
+        "server_id": "srv_55aeba8e05af377df0159cf2ed13210e",
+        "executor_id": "exe_5d33c43665f7a0deda9d6c5a4d896cf0",
+        "binding_id": "bind_ac3a25e93e7d4c90b293112469b0a991",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_4b68f1b52af2b28d3e7c3eb8ad11c491",
+        "workspace_binding_id": "wxb_65faea41125422ead9968658315c3e70",
+        "session_id": "ses_cc4b1b8158201316ebeed58740210c53",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-DjtzLUDc.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Bh2ghaTD.css",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-icon.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "controlled_delay_seconds": 0,
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "status": 200
+    }
+  ],
+  "controls": [
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/setup/hst-worker",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/agents/hst-worker/executors",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/agents/hst-worker/runtime-options",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime-management/runtime/executors/exe_5d33c43665f7a0deda9d6c5a4d896cf0/installations:check",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/agents/hst-worker/runtime-options",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime-management/connections/setup:test",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/setup-tests/connect_a6283167c0d547fd8b74387484064643",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime-management/connections/setup:finish",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/setup/hst-worker",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/bindings/bind_ac3a25e93e7d4c90b293112469b0a991",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime-management/connections/public-ids/associate-existing",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/intents:resolve",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/operations",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_53c921d633abfd841595d957912261fe",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_53c921d633abfd841595d957912261fe",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_53c921d633abfd841595d957912261fe",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_53c921d633abfd841595d957912261fe",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_53c921d633abfd841595d957912261fe",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_53c921d633abfd841595d957912261fe",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_53c921d633abfd841595d957912261fe",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_53c921d633abfd841595d957912261fe",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_53c921d633abfd841595d957912261fe",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_7d4b8310f26f1909dedfbbe4e6debf8d",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/intents:resolve",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/operations",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_fb659c64d72f7d87e5bbd7475ecf0a73",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_fb659c64d72f7d87e5bbd7475ecf0a73",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_fb659c64d72f7d87e5bbd7475ecf0a73",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_fb659c64d72f7d87e5bbd7475ecf0a73",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_fb659c64d72f7d87e5bbd7475ecf0a73",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_fb659c64d72f7d87e5bbd7475ecf0a73",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/intents:resolve",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/operations",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_c2ffbb781a1a6175212dd52664e65f8e",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_c2ffbb781a1a6175212dd52664e65f8e",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_c2ffbb781a1a6175212dd52664e65f8e",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_c2ffbb781a1a6175212dd52664e65f8e",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_c2ffbb781a1a6175212dd52664e65f8e",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/intents:resolve",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/operations",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_edbc619a16fdbbea67825e3b56aa5c12",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_edbc619a16fdbbea67825e3b56aa5c12",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_edbc619a16fdbbea67825e3b56aa5c12",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_edbc619a16fdbbea67825e3b56aa5c12",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_edbc619a16fdbbea67825e3b56aa5c12",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_edbc619a16fdbbea67825e3b56aa5c12",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_edbc619a16fdbbea67825e3b56aa5c12",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_edbc619a16fdbbea67825e3b56aa5c12",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_edbc619a16fdbbea67825e3b56aa5c12",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_cc4b1b8158201316ebeed58740210c53",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/intents:resolve",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/operations",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_3ad499d6be1ca86045cebaea146f2782",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_3ad499d6be1ca86045cebaea146f2782",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_3ad499d6be1ca86045cebaea146f2782",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_3ad499d6be1ca86045cebaea146f2782",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_3ad499d6be1ca86045cebaea146f2782",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/operator-auth/account",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/operator-auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/intents:resolve",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/runtime/operations",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_1d0c2bf17dc15bc228c86a4ade543042",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_1d0c2bf17dc15bc228c86a4ade543042",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_1d0c2bf17dc15bc228c86a4ade543042",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/operations/op_1d0c2bf17dc15bc228c86a4ade543042",
+      "status": 200
+    }
+  ],
+  "unknown": false,
+  "provider_invocations": 0
+}

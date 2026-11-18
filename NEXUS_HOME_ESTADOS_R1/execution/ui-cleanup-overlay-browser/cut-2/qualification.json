@@ -1,0 +1,102 @@
+{
+  "status": "PASS_PRESENTATION_OVERLAY_CANONICAL_CLOSE_UNKNOWN",
+  "layer": "Real Chrome + real installed R9 API + Vite static-only overlay; not new installed package",
+  "runtime_exit": 0,
+  "checks_passed": 13,
+  "checks_failed": 0,
+  "failure": null,
+  "qualified": [
+    "actual-new-asset",
+    "home-no-connection-details-or-evidence-time",
+    "home-no-generic-work-request-heading",
+    "local-time-preserves-datetime",
+    "exact-session-GET",
+    "full-scope-unchanged",
+    "View-work-exact-target",
+    "technical-identities-not-in-basic-visible-text",
+    "real-READY-controls",
+    "exact-existing-session-command",
+    "Copy-command-present-enabled",
+    "zero-browser-POST",
+    "zero-page-errors"
+  ],
+  "not_qualified": [
+    "Actual clipboard copy; button was not clicked",
+    "New SQL subject projection and new installed package; runtime API remains old R9"
+  ],
+  "cause_evidence": "No failure; all13 scoped presentation assertions passed",
+  "browser_writes": [],
+  "page_errors": [],
+  "provider_invocations": 0,
+  "before": {
+    "wheel": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload1031": true,
+    "checkout_exception": {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "sha256": "50835c0a009ba5b1d67dac8a01827aae57424c49d8812b2e6a3d1da287e42d25",
+      "runtime_uses_original_installed_home_py": true
+    },
+    "backend_count": 729,
+    "backend_hash": "3bd0e2c61f340d8d9ff685bb4e63f2a0344423b0a3f1ef46a7cda85bc48d481d",
+    "assets": {
+      "/index.html": "91ac7a1ad3d99b1803a64c66eaedd8e1cef2d890da3b0eca313e9863a57b3a11",
+      "/assets/index-8qNwMfLq.js": "81153c541199000df8f181b386f189984cca7828baf5be1b2b4edbf1e7a17c07",
+      "/assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036"
+    }
+  },
+  "after": {
+    "wheel": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload1031": true,
+    "checkout_exception": {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "sha256": "50835c0a009ba5b1d67dac8a01827aae57424c49d8812b2e6a3d1da287e42d25",
+      "runtime_uses_original_installed_home_py": true
+    },
+    "backend_count": 729,
+    "backend_hash": "3bd0e2c61f340d8d9ff685bb4e63f2a0344423b0a3f1ef46a7cda85bc48d481d",
+    "assets": {
+      "/index.html": "91ac7a1ad3d99b1803a64c66eaedd8e1cef2d890da3b0eca313e9863a57b3a11",
+      "/assets/index-8qNwMfLq.js": "81153c541199000df8f181b386f189984cca7828baf5be1b2b4edbf1e7a17c07",
+      "/assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036"
+    }
+  },
+  "before_after_equal": true,
+  "fixture_cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "containment": {
+    "forced_births": [],
+    "remaining": []
+  },
+  "physical": {
+    "remaining_births": [],
+    "profiles": [],
+    "listeners": [],
+    "port": 52730
+  },
+  "canonical_close": {
+    "unknown": true,
+    "sessions": [
+      {
+        "session_id": "ses_7ea5c28d3a51dca24b1367849d6a74ec",
+        "confirmed": true
+      },
+      {
+        "session_id": "ses_dbc966ee99d1e0c11a2a40dab566e112",
+        "confirmed": false
+      },
+      {
+        "session_id": "ses_9e0aee86a3f373a1f2a8a573bf1228fe",
+        "confirmed": false
+      }
+    ]
+  },
+  "clipboard": "Not clicked; Windows clipboard untouched.",
+  "redactions": 0,
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-eikz3b0y"
+}

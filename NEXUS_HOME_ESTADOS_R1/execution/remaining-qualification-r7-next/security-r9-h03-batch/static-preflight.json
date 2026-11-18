@@ -1,0 +1,21 @@
+{
+  "status": "PASS_STATIC_ONLY_NO_GATE_NO_ALLOCATION",
+  "manifest_sha256": "c7b110ffc3ea488cd090b991df0019dc71f64efded13553a9797a34e021d9293",
+  "input_pins": 64,
+  "pin_mismatches": 0,
+  "ast_pass": true,
+  "pure_fixture_transform_ast_pass": true,
+  "node_check_exit_code": 0,
+  "placeholder_count": 1,
+  "case": "H03",
+  "phase": "hostile-overview",
+  "runtime_mode": "baseline",
+  "private_prompt_path": "canonical turn.submit synthetic peer",
+  "label_path": "canonical connection review and Finish",
+  "parsed_escape_presence_not_rejected": true,
+  "canonical_label_refusal_not_DOM_PASS": true,
+  "artifact_filename_dom_not_covered": true,
+  "allocated": false,
+  "application_imported": false,
+  "browser_started": false
+}

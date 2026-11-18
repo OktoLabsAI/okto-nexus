@@ -1,0 +1,18 @@
+{"state": "refused", "code": "INVALID_ARGUMENTS", "message": "Invalid connect arguments. Use connect --help.", "effects_started": false, "lifecycle_requested": false}
+usage: okto-nexus connect [-h] [--id HARNESS_ID] [--profile PROFILE]
+                          [--new-connection]
+                          [--operator-profile OPERATOR_PROFILE]
+                          [--remote-draft REMOTE_DRAFT]
+                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]
+                          [--review-current] [--start-at-login |
+                          --no-start-at-login] [--agent AGENT |
+                          --new-agent NEW_AGENT] [--name NAME]
+                          [--client CLIENT] [--project PROJECT]
+                          [--workspace-id WORKSPACE_ID]
+                          [--binding-id BINDING_ID]
+                          [--candidate-ref CANDIDATE_REF]
+                          [--provider-home PROVIDER_HOME] [--plan]
+                          [--approve APPROVE] [--json] [--no-chat]
+                          [--timeout TIMEOUT]
+                          [harness] [project_name]
+okto-nexus connect: error: unrecognized argument: --qc08-unknown-flag

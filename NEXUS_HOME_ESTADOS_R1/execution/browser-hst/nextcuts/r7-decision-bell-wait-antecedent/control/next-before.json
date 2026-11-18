@@ -1,0 +1,55 @@
+{
+  "at": "2026-11-17T20:16:37.100852Z",
+  "decisions": [],
+  "native_writes": [],
+  "productive_operations": [
+    {
+      "operation_id": "op_24e150adfb6c36a0bedfebd03ae75dd2",
+      "server_id": "srv_17fbd09703e07d53d2417d09deb25da6",
+      "executor_id": "exe_d7e1b8c99a84c4c984c7993500e1c54c",
+      "session_id": "ses_525225ac95bfd36e88f7fde5ddbeb03b",
+      "action": "turn.submit"
+    },
+    {
+      "operation_id": "op_87999102c516f380c959014ad0e72fac",
+      "server_id": "srv_17fbd09703e07d53d2417d09deb25da6",
+      "executor_id": "exe_d7e1b8c99a84c4c984c7993500e1c54c",
+      "session_id": "ses_db38cfc125860302998d16f526674a0b",
+      "action": "turn.submit"
+    },
+    {
+      "operation_id": "op_9eb0e2b7493eee84201477d97074f1fd",
+      "server_id": "srv_17fbd09703e07d53d2417d09deb25da6",
+      "executor_id": "exe_d7e1b8c99a84c4c984c7993500e1c54c",
+      "session_id": "ses_525225ac95bfd36e88f7fde5ddbeb03b",
+      "action": "runtime.open"
+    },
+    {
+      "operation_id": "op_fd4a46bb91bbe5563ed447413c739c7c",
+      "server_id": "srv_17fbd09703e07d53d2417d09deb25da6",
+      "executor_id": "exe_d7e1b8c99a84c4c984c7993500e1c54c",
+      "session_id": "ses_db38cfc125860302998d16f526674a0b",
+      "action": "runtime.open"
+    }
+  ],
+  "receipts": {},
+  "requests": [
+    {
+      "request_id": "r4request_e7ef1c9d7dfcc83cf881f08d54bf1a23983031e450e1294d0acd24a08be21ef5",
+      "approval_key": {
+        "server_id": "srv_17fbd09703e07d53d2417d09deb25da6",
+        "executor_id": "exe_d7e1b8c99a84c4c984c7993500e1c54c",
+        "binding_id": "bind_636878be50d34cf917b08b8235fc680d",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_c56e2771676ec1f35b494259e912da7c",
+        "session_id": "ses_525225ac95bfd36e88f7fde5ddbeb03b",
+        "session_owner_generation": 1,
+        "canonical_request_id": "r4request_e7ef1c9d7dfcc83cf881f08d54bf1a23983031e450e1294d0acd24a08be21ef5",
+        "kind": "native_input"
+      },
+      "recipient_agent_id": "operator",
+      "expected_revision": 1,
+      "expires_at": "2026-11-17T20:18:35.714000+00:00"
+    }
+  ]
+}

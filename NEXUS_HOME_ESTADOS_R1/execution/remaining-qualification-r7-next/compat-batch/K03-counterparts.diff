@@ -1,0 +1,83 @@
+--- browser-s3-reviewed.js
++++ browser-s3-k03.js
+@@ -53,8 +53,42 @@
+     await page.getByTestId('global-attention-button').click();await page.getByTestId('attention-heading').waitFor();
+     await page.getByTestId('attention-open-'+cfg.attention_id).waitFor();
+     check('known-global-question-exposed',true,{attention_id:cfg.attention_id});
++
++    // Attach before opening: inspect the exact original approval, not a queue DTO.
++    const approvalPath='/api/v1/approvals/'+encodeURIComponent(cfg.approval_id);
++    const detailResponse=page.waitForResponse(response=>new URL(response.url()).pathname===approvalPath&&response.request().method()==='GET',{timeout:10000});
++    await page.getByTestId('attention-open-'+cfg.attention_id).click();
++    const observedDetail=await detailResponse;
++    check('classic-original-approval-GET-200',observedDetail.status()===200,observedDetail.status());
++    const detailRaw=await observedDetail.json(),detail=detailRaw.data??detailRaw;
++    const proposal=detail.request_payload?.kwargs,key=proposal?.approval_key;
++    const expected={server_id:cfg.reference.server_id,executor_id:cfg.reference.executor_id,
++      agent_id:cfg.reference.agent_id,binding_id:cfg.binding_id,workspace_id:cfg.workspace_id,
++      session_id:cfg.session_id,canonical_request_id:cfg.approval_id};
++    check('classic-original-request-identity',detail.approval_id===cfg.approval_id&&detail.workspace_id===cfg.workspace_id&&
++      Object.entries(expected).every(([name,value])=>key?.[name]===value),
++      {approval_id:detail.approval_id,workspace_id:detail.workspace_id,matched_scope:Object.keys(expected)});
++    check('classic-original-request-pending',detail.status==='pending'&&!detail.executed_result,
++      {status:detail.status,decision_recorded:!!detail.executed_result});
++    const dialog=page.locator('dialog[open]');
++    const native=dialog.getByRole('region',{name:'Native runtime decision',exact:true});
++    await native.waitFor({state:'visible',timeout:10000});
++    const choices=native.getByRole('listbox',{name:'Choose fixture output format',exact:true});
++    await choices.waitFor({state:'visible',timeout:10000});
++    check('classic-canonical-form-original-options',await choices.evaluate(el=>el.multiple&&el.selectedOptions.length===0&&
++      Array.from(el.options).some(option=>option.textContent==='text')),true);
++    const deny=native.getByRole('button',{name:'Deny runtime request',exact:true});
++    const end=Date.now()+10000;
++    while(!await deny.isEnabled()&&Date.now()<end)await page.waitForTimeout(50);
++    check('classic-canonical-controls-accessible',await native.getByRole('button',{name:'Send answer',exact:true}).isVisible()&&
++      await deny.isEnabled()&&await native.getByRole('button',{name:'Check native decision',exact:true}).isEnabled(),
++      {answer_visible:true,deny_enabled:await deny.isEnabled(),recovery_read_enabled:await native.getByRole('button',{name:'Check native decision',exact:true}).isEnabled()});
++    // No selection/edit/submit: the original CLI answers only after this panel closes.
++    await dialog.getByRole('button',{name:'Close modal',exact:true}).click();
++    await page.locator('dialog[open]').waitFor({state:'hidden',timeout:10000});
++    check('classic-form-closed-without-answer',writes.length===0,writes);
+     check('zero-non-read-browser-requests',writes.length===0,writes);
+-    return {status:'PASS_BROWSER_S3_SUBSET',checks,writes,classic_default:true,settings_enable:true,operational_exact_binding:true,settings_rollback:true,classic_sessions_summary:true,exact_global_question:true,selected_project_preserved:true,productive_posts:0,limits:['UI presentation toggle and exact queue item only','Classic Conversations navigation itself was not exercised','PID/birth/generation/roots/profile/checkpoint/grant invariants require paired external snapshots','No direct operational-Home localStorage writes; only the actual Settings callback changes preference']};
++    return {status:'PASS_BROWSER_S3_SUBSET',checks,writes,classic_default:true,settings_enable:true,operational_exact_binding:true,settings_rollback:true,classic_sessions_summary:true,exact_global_question:true,selected_project_preserved:true,productive_posts:0,limits:['UI presentation toggle and exact queue item only','K03 literal requires classic Home/controls/bell; Conversations navigation is not claimed','PID/birth/generation/roots/profile/checkpoint/grant invariants require paired external snapshots','No direct operational-Home localStorage writes; only the actual Settings callback changes preference']};
+   }catch(error){
+     return {status:'INCOMPLETE_BROWSER_S3',checks,writes,error:String(error),url:page.url(),limits:['No interpretation as a product defect without DOM/HTTP diagnosis','No paired CLI activity/invariant claim from this JS alone']};
+   }
+--- run_s3_v2.py
++++ run_k03.py
+@@ -58,18 +58,18 @@
+ 
+ def main():
+     parser = argparse.ArgumentParser(allow_abbrev=False)
+-    parser.add_argument('--gate', choices=['ROOT_APPROVED_COMPAT_BATCH_S3'], required=True)
++    parser.add_argument('--gate', choices=['ROOT_APPROVED_COMPAT_K03'], required=True)
+     parser.add_argument('--manifest-sha256', required=True)
+     args = parser.parse_args()
+-    manifest_path = HERE / 'PREPARED-S3-R9-v2.json'
++    manifest_path = HERE / 'PREPARED-K03-R9.json'
+     assert sha(manifest_path) == args.manifest_sha256
+     manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+     assert manifest['status'] == 'PREPARED_BOUND_NOT_EXECUTED'
+     assert manifest['current_source'] == 'f07163ab7fd618b2ff4247ba6cdb2547b5d4e038'
+-    script = (HERE / 'browser-s3-reviewed.js').read_text(encoding='utf-8')
++    script = (HERE / 'browser-s3-k03.js').read_text(encoding='utf-8')
+     assert script.count('__CONFIG__') == 1, 'Count effective placeholders before allocation'
+     before = guards(manifest)  # No allocation or app/browser process before gates.
+-    root = Path(tempfile.mkdtemp(prefix='nexus-hst-compat-s3-')).resolve()
++    root = Path(tempfile.mkdtemp(prefix='nexus-hst-compat-k03-')).resolve()
+     for name in ('control', 'cwd', 'peer-root', 'peer-home', 'project', 'provider-home', 'candidate'):
+         (root / name).mkdir()
+     browser_root = root / 'nexus-hst-browser-s3'
+@@ -200,7 +200,10 @@
+         assert len(attention_ids) == 1
+         body = browser_root / 's3-reviewed.js'
+         public = {'origin': origin, 'workspace_id': active['binding']['workspace_id'],
+-            'binding_id': active['binding']['binding_id'], 'attention_id': next(iter(attention_ids))}
++            'binding_id': active['binding']['binding_id'], 'attention_id': next(iter(attention_ids)),
++            'approval_id': active['approval_id'], 'session_id': active['session_id'],
++            'operation_id': active['operation_id'],
++            'reference': {key: active['binding'][key] for key in ('server_id', 'executor_id', 'agent_id')}}
+         body.write_text(script.replace('__CONFIG__', json.dumps(public)), encoding='utf-8')
+         rendered_pins[str(body)] = sha(body)
+         browser_result = manager.cli_result(cli('browser-settings-rollback', 'run-code', '--filename=' + str(body)))

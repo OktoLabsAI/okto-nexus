@@ -42,3 +42,13 @@ test('overview cards render only supplied units and keep unknown/stale totals ho
   assert.match(markup,/Questions and updates/);assert.match(markup,/Not available/);assert.match(markup,/At least 3/);assert.match(markup,/Previous snapshot/);
   assert.doesNotMatch(markup,/executions|unseen|>9<|<ul|<select|<button/i);
 });
+
+test('negotiated summary is compact and distinguishes connected harnesses from actions',()=>{
+  const count=value=>({value,total_is_exact:value!==null});
+  const operationalSummary=Object.fromEntries(['connected','working','idle','queued','unconfirmed','disconnected','blocked_harnesses','pending_actions','visible_notifications','resume_confirmations'].map(k=>[k,count(0)]));
+  Object.assign(operationalSummary,{connected:count(3),working:count(1),idle:count(2),pending_actions:count(2),blocked_harnesses:count(1)});
+  const html=renderToStaticMarkup(React.createElement(HomeSummaryCards,{summary:{},operationalSummary}));
+  assert.match(html,/3 connected · 1 working · 2 Idle/);assert.match(html,/2 actions · 1 harness paused/);assert.doesNotMatch(html,/grid-cols|Session contexts/);
+  const project=HomeProjectCard({workspace:'all',workspaces:[workspace],onChange(){},onConnect(){},compact:true,setupLabel:'Add harness'});
+  const all=nodes(project);assert.equal(all.filter(n=>n.type==='select').length,1);assert.equal(all.filter(n=>n.type==='button').length,1);
+});

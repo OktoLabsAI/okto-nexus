@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="6.551" timestamp="2026-11-17T19:31:50.097653-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_backend_batch_r8" name="test_shared_owner_bindings_keep_distinct_current_state" time="5.532"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;CONFLICT&quot;,&quot;stage&quot;:&quot;binding.prepare&quot;,&quot;message&quot;:&quot;The selected realization has changed.&quot;,&quot;possible_effect&quot;:false,&quot;retry_safe&quot;:false,&quot;operation_id&quot;:null,&quot;action&quot;:&quot;&quot;}}&#10;assert 409 == 200&#10; +  where 409 = &lt;Response [409 Conflict]&gt;.status_code">..\tree\tests\execution_r4\test_backend_batch_r8.py:66: in test_shared_owner_bindings_keep_distinct_current_state
+    other = owner.second_binding()
+            ^^^^^^^^^^^^^^^^^^^^^^
+..\tree\tests\execution_r4\backend_batch_owner.py:60: in second_binding
+    proposal, apply = prepare_operator(self.client, self.headers, {
+..\tree\tests\execution_r4\test_binding_operator.py:120: in prepare_operator
+    assert response.status_code == 200, response.text
+E   AssertionError: {"error":{"code":"CONFLICT","stage":"binding.prepare","message":"The selected realization has changed.","possible_effect":false,"retry_safe":false,"operation_id":null,"action":""}}
+E   assert 409 == 200
+E    +  where 409 = &lt;Response [409 Conflict]&gt;.status_code</failure></testcase></testsuite></testsuites>

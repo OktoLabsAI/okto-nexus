@@ -1,0 +1,12 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "active_resources": false,
+  "predecessor_manifest": "experience-r8-g02-apply/manifest.json",
+  "files": {
+    "run_session_role_variant.py": "313297bec020d878103f23ca0c1eaa16089fa6bd04e8c0c56c6f737fe11c9171",
+    "browser-session-role.js": "677a636733612018125fd8fb1a9c0c566c2a576a3a7e16c042e2351ac43d0aa7",
+    "run.py": "298bb89a72bf7ea956ede8dd14bd058b82e718b9eae9161028110581a09f6377",
+    "builder.py": "7ea70759cb64a8925e8d2a194817e70782f5b068daf5ddb58e832372a45b2841",
+    "session-role-variant-proof.json": "ddf69a86ea3b36eebd526cb2b4b327289cb34983c330f6eb406b17808ba6aa21"
+  }
+}

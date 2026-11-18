@@ -1,0 +1,211 @@
+{
+  "status": "OBSERVED_BIRTHS_ABSENT",
+  "observed": 40,
+  "checks": [
+    {
+      "pid": 56048,
+      "birth": 1794959914.7281206,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 62060,
+      "birth": 1794959914.7483995,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 45336,
+      "birth": 1794959925.8267643,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 42348,
+      "birth": 1794959925.852627,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 59968,
+      "birth": 1794959927.7407875,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 56924,
+      "birth": 1794959927.7483516,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 45052,
+      "birth": 1794959931.072536,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 61476,
+      "birth": 1794959931.1149137,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 47796,
+      "birth": 1794959931.8637319,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 39452,
+      "birth": 1794959932.5542047,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 50072,
+      "birth": 1794959932.590881,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 57684,
+      "birth": 1794959932.9500127,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 61840,
+      "birth": 1794959933.1166456,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 61496,
+      "birth": 1794959933.1589177,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 51880,
+      "birth": 1794959933.2775402,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 53388,
+      "birth": 1794959933.349348,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 27576,
+      "birth": 1794959933.3504872,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 13936,
+      "birth": 1794959933.9644473,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 53740,
+      "birth": 1794959934.0117204,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 58900,
+      "birth": 1794959935.1365387,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 53548,
+      "birth": 1794959935.175544,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 42136,
+      "birth": 1794959935.625177,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 61228,
+      "birth": 1794959939.255733,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 55436,
+      "birth": 1794959939.2962267,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 58804,
+      "birth": 1794959940.0875566,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 23548,
+      "birth": 1794959940.1345532,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 55544,
+      "birth": 1794959941.262938,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 61468,
+      "birth": 1794959941.2989683,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 50496,
+      "birth": 1794959944.8861709,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 60076,
+      "birth": 1794959944.9250407,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 46508,
+      "birth": 1794959945.8746135,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 60876,
+      "birth": 1794959945.905691,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 49944,
+      "birth": 1794959946.9589105,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 56764,
+      "birth": 1794959947.0064957,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 61324,
+      "birth": 1794959950.1927836,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 31476,
+      "birth": 1794959950.2275746,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 56848,
+      "birth": 1794959951.0347512,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 54644,
+      "birth": 1794959951.0700576,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 56148,
+      "birth": 1794959951.8512106,
+      "same_birth_exe_alive": false
+    },
+    {
+      "pid": 62136,
+      "birth": 1794959951.8973327,
+      "same_birth_exe_alive": false
+    }
+  ],
+  "listeners_from_supervisor": [],
+  "force_used": false,
+  "timeout_used": false,
+  "input_readers_released": true,
+  "limitation": "Observed ancestry plus own-root/birth argv scan; not a claim of capturing every short-lived child"
+}

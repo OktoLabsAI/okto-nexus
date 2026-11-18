@@ -1,0 +1,49 @@
+{
+  "files": [
+    {
+      "path": "candidate-r7-100-v2-diagnostics.json",
+      "sha256": "28b5491c647d7adcb83d2d93d2d96b0744e8fe5e40b415e4e299ad254d031a69",
+      "bytes": 451293
+    },
+    {
+      "path": "curate-profile-r7.py",
+      "sha256": "12548d00b4bdbb2701844221ba33227178108fde5796b87bda3233fa355297b0",
+      "bytes": 7653
+    },
+    {
+      "path": "prepare-profile-r7.py",
+      "sha256": "746b41d8555f6a2c080e29da68aa90e2b299acacde1bdf0e2dd52c373f5ee98a",
+      "bytes": 1005
+    },
+    {
+      "path": "profile-r7-final/qualification.json",
+      "sha256": "00f130e526c1c4ca4e90567a0629bc5105e4527e9d82e9ce7e4c30e37c3e643b",
+      "bytes": 24328
+    },
+    {
+      "path": "profile-r7-final/report.md",
+      "sha256": "91e634508c8f191685786701679881c68feca4e2c55f3cdbccb9c96a37b4f1bd",
+      "bytes": 4812
+    },
+    {
+      "path": "profile-r7-final/worker.log",
+      "sha256": "57f5d8eca3a86d202d796205c4020c0ae459f3fb8ed9a61b14bf65e7046cee12",
+      "bytes": 6980
+    },
+    {
+      "path": "profile-r7-launch.json",
+      "sha256": "62ca320c62b8ee7d40932c5a0fb906d6474d667800724b7a5097919064227a00",
+      "bytes": 2521
+    },
+    {
+      "path": "profile-r7-launch.py",
+      "sha256": "e83a4fc48f79e05324623f3a842bea4de519e275b8696237bcf93b7900898b52",
+      "bytes": 2843
+    },
+    {
+      "path": "profile-r7-worker.py",
+      "sha256": "375abfb7595031df0e133efb97420db525a1f04bb27e44caea5f6f3bad1beacd",
+      "bytes": 11576
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "package_ready_manifest_sha256": "be7389b58e330061fdab190118d9c8e35c52f58bdc66cc4763588f8211ed4fab",
+  "existing_member_changes": {
+    "curate_delta.py": {
+      "before": "101ad8fba1523929a2c049d87afc90c5beeaff60a687c790460b5af86b9507d2",
+      "after": "776272b7b9fbef839a40cf195dc216c85b64892691630585a1cffaae2bbf7640"
+    }
+  },
+  "reason": "Comparison helper corrected its expected changed-file list from two to the three authorized Python files; initial assertion failure is recorded in delta-vs-r1.json. No package/prefix/product modification.",
+  "raw_auth_session_logs_copied": false,
+  "package_qualification_sha256": "b2bd029b5ab1ebd849ed893e893bdca4ce7e539e96d9d363c68849cf89e20c70",
+  "live_qualification_sha256": "9ac24cf47651625dc748eec7d0896e56779a545425a5a2fbf26a3dfdfe14532c"
+}

@@ -1,0 +1,202 @@
+{
+  "before": {
+    "wheel": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload1031": true,
+    "backend_count": 729,
+    "backend_hash": "3bd0e2c61f340d8d9ff685bb4e63f2a0344423b0a3f1ef46a7cda85bc48d481d",
+    "assets": {
+      "/index.html": "0c20372ed3ebd423d2a86c16798fff7dae9ab00d8e67148921baac40ab6fc40d",
+      "/assets/index-Cp1x7DiS.js": "4de81033815e01a26224260a8b943f34b71e9369406a93ec39f96821e8a69e5e",
+      "/assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036"
+    }
+  },
+  "after": {
+    "wheel": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload1031": true,
+    "backend_count": 729,
+    "backend_hash": "3bd0e2c61f340d8d9ff685bb4e63f2a0344423b0a3f1ef46a7cda85bc48d481d",
+    "assets": {
+      "/index.html": "0c20372ed3ebd423d2a86c16798fff7dae9ab00d8e67148921baac40ab6fc40d",
+      "/assets/index-Cp1x7DiS.js": "4de81033815e01a26224260a8b943f34b71e9369406a93ec39f96821e8a69e5e",
+      "/assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036"
+    }
+  },
+  "result": {
+    "status": "INCOMPLETE_OVERLAY_FOCAL",
+    "checks": [
+      {
+        "id": "actual-new-asset",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "home-no-connection-details-or-evidence-time",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "home-no-generic-work-request-heading",
+        "pass": false,
+        "actual": true
+      }
+    ],
+    "error": "Error: home-no-generic-work-request-heading",
+    "writes": [],
+    "pageErrors": [],
+    "AX": "- banner:\n  - button \"Collapse navigation\" [expanded]\n  - img \"Okto Nexus\"\n  - navigation \"Breadcrumb\": Home\n  - button \"Needs attention. All projects and Server. 1 need action, 1 to watch.\": Needs attention 2\n  - text: \u25cf Live\n  - button \"Sign out\"\n  - button \"Application menu\"\n- complementary:\n  - navigation \"Main navigation\":\n    - list \"Main destinations\":\n      - listitem:\n        - button \"Home\"\n      - listitem:\n        - button \"Conversations\"\n      - listitem:\n        - button \"Graph\"\n      - listitem:\n        - button \"Artifacts\"\n    - list \"More destinations\":\n      - listitem:\n        - button \"Advanced\"\n- main:\n  - heading \"Home\" [level=1]\n  - paragraph: Follow each harness below. Open an activity to see its exact context, or add a harness to this project.\n  - button \"Ask for work or chat\"\n  - button \"Refresh\"\n  - button \"Pause display\"\n  - region \"Project\":\n    - text: Project\n    - combobox \"Project\":\n      - option \"All projects\" [selected]\n      - option \"Alpha project for readable authorized collaborator activity and questions\"\n      - option \"Beta project for readable authorized collaborator activity and delivery\"\n    - text: All projects\n    - button \"Add harness\"\n  - region \"Project overview\":\n    - paragraph: 2 connected \u00b7 1 working \u00b7 1 Idle\n    - paragraph: 1 action \u00b7 0 harnesses paused\n  - status\n  - region \"Follow-up\":\n    - heading \"Follow-up\" [level=2]\n    - region \"Active\":\n      - heading \"Active\" [level=3]\n      - text: 2 harnesses\n      - list:\n        - listitem:\n          - 'heading \"Harness ID: reviewer\" [level=4]'\n          - paragraph: \"Collaborator: Hst A\"\n          - paragraph: Codex \u00b7 Host not reported\n          - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n          - text: Working Response pending\n          - list \"Activity preview\":\n            - listitem:\n              - paragraph: Runtime question for the operator\n              - paragraph: Needs your response\n            - listitem:\n              - paragraph: Needs your response\n              - button \"View work\"\n            - listitem:\n              - paragraph: Running\n              - button \"View work\"\n          - button \"Follow activity\"\n        - listitem:\n          - 'heading \"Harness ID: reviewer\" [level=4]'\n          - paragraph: \"Collaborator: Hst B\"\n          - paragraph: Codex \u00b7 Host not reported\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - text: Idle\n          - list \"Activity preview\":\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Turn completed\n              - button \"View delivery\"\n          - button \"Follow activity\"\n    - region \"Needs you\":\n      - heading \"Needs you\" [level=3]\n      - text: 1 items\n      - list:\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Runtime question for the operator\" [level=4]\n          - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n          - text: Response pending\n          - paragraph: Blocks this session; the harness continues other work\n          - button \"Respond\"\n    - region \"Results\":\n      - heading \"Results\" [level=3]\n      - text: 1 deliveries\n      - list:\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: Nov 17, 11:48 PM\n          - button \"View result\""
+  },
+  "failure": {
+    "type": "AssertionError",
+    "message": ""
+  },
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "containment": {
+    "forced_births": [],
+    "remaining": []
+  },
+  "known_births": [
+    {
+      "pid": 61372,
+      "birth": 1794970137.525545,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 51080,
+      "birth": 1794970134.7092075,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 56392,
+      "birth": 1794970124.2678216,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 58840,
+      "birth": 1794970124.2881415,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 8428,
+      "birth": 1794970139.0864668,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 37860,
+      "birth": 1794970139.2291284,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 38244,
+      "birth": 1794970138.5806808,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 39540,
+      "birth": 1794970139.2296772,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 42208,
+      "birth": 1794970139.0572617,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 45684,
+      "birth": 1794970139.1765268,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 51908,
+      "birth": 1794970138.9204683,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 52924,
+      "birth": 1794970138.0481782,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 61404,
+      "birth": 1794970138.6161833,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 46036,
+      "birth": 1794970141.645992,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 61136,
+      "birth": 1794970141.6838386,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 47008,
+      "birth": 1794970145.2485645,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 5724,
+      "birth": 1794970145.2790408,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 47404,
+      "birth": 1794970144.081243,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 59608,
+      "birth": 1794970142.9712732,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 48880,
+      "birth": 1794970149.1397262,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 61976,
+      "birth": 1794970149.1753037,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    }
+  ],
+  "commands": [
+    {
+      "name": "launch",
+      "pid": 61372,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "06a642fd62fd04deab36fd619179a99f8308735f74b99f859ba65b2adb65cdd7"
+    },
+    {
+      "name": "cookie",
+      "pid": 46036,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "00f48fbfc56b1fec683eab55d7308f6674ad84ea2bc163127867a5f0df211c1a"
+    },
+    {
+      "name": "focal",
+      "pid": 47008,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "5577f97177d5376dff4ba818209b7b8b59e6398198ced8c3c7cdd0ac3acd610e"
+    },
+    {
+      "name": "browser-close",
+      "pid": 48880,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "153d6f090270076cb777f297986946313faa955e808ae9633c350c41be4ee006"
+    }
+  ],
+  "layer": "Real Chrome + real installed R9 API + Vite static-only overlay; not new installed package"
+}

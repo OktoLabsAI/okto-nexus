@@ -1,0 +1,109 @@
+{
+  "status": "PASS_SUBSET",
+  "checks": [
+    {
+      "id": "stable-full-identity-after-terminal",
+      "ok": true,
+      "detail": {
+        "server_id": "srv_204ad92c3a4d33c28e92677809c97f7a",
+        "executor_id": "exe_821da94f3fb3bad4d9ac7c30f10d711b",
+        "workspace_id": "wsr_90ece924d566fd998a3b4511f9b4febd",
+        "binding_id": "bind_045ebd60a1e221ef33cbc1f49513bdb3",
+        "workspace_binding_id": "wxb_813a8dbc67b1307cbe0a2d49868efc7d",
+        "agent_id": "hst-worker",
+        "harness_id": "codex_app_server",
+        "workspace_label": "HST Demo Project",
+        "host_label": null,
+        "agent_label": "Hst Worker",
+        "connect_id": "reviewer-1"
+      }
+    },
+    {
+      "id": "canonical-question-exact-session",
+      "ok": true,
+      "detail": {
+        "session_id": "ses_7963ab4a43629d6206442b4306847dcf",
+        "binding_id": "bind_045ebd60a1e221ef33cbc1f49513bdb3",
+        "workspace_id": "wsr_90ece924d566fd998a3b4511f9b4febd"
+      }
+    },
+    {
+      "id": "independent-terminal-result-exact-target",
+      "ok": true,
+      "detail": [
+        {
+          "id": "home_delivery_canonical:result_95a3eafe268cc147ae01573234901a6357abd1ff7a92f21f0325235bfbbf4ee8",
+          "target": {
+            "executor_id": "exe_821da94f3fb3bad4d9ac7c30f10d711b",
+            "kind": "result",
+            "operation_id": "op_afda421fbde85713d5cd0125b4f12c1a",
+            "server_id": "srv_204ad92c3a4d33c28e92677809c97f7a",
+            "session_id": "ses_c2899167ff54374247aa378f5e0b2e88",
+            "workspace_id": "wsr_90ece924d566fd998a3b4511f9b4febd"
+          },
+          "semantics": {
+            "cleanup": "unknown",
+            "content_state": "available",
+            "evidence": "canonical",
+            "execution_outcome": "succeeded",
+            "historical": false,
+            "scope": "turn",
+            "semantic_revision": "e237431e33479ec288c5fe6c67c4f178466daea5f7f3325dd8122bccee058904",
+            "task_state": "not_applicable",
+            "verification": "not_applicable",
+            "verification_evidence_ref": null,
+            "version": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "same-canonical-question-form-available",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "context-read-zero-post",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_a0c5a073d92247d01c4ae50044ca1a4248e049a7c403a0bfb312225d9ab6d0d1"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_7963ab4a43629d6206442b4306847dcf"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_7963ab4a43629d6206442b4306847dcf/events"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_7963ab4a43629d6206442b4306847dcf"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_a0c5a073d92247d01c4ae50044ca1a4248e049a7c403a0bfb312225d9ab6d0d1"
+    }
+  ],
+  "limits": [
+    "No decision or seen-preference mutation; result-unseen observation only",
+    "Question/parallel-session identities arise through canonical admissions and inert protocol peers"
+  ]
+}

@@ -1,0 +1,56 @@
+### Ran Playwright code
+```js
+await (async page=>{
+ const cfg={"window": "POST_PERF_BROWSER_WINDOW_OPEN", "url": "http://127.0.0.1:58133", "workspace_id": "wsr_1fe1602d67b5ed178d5284e2ebc9493e", "request_id": "r4request_2dada63c4e7cb1e091daf6cd2bf00af3c51872ba1d40294a00c8c5742b80aac4", "session_id": "ses_4466b29a6a854605aa7391f0db5ac126", "question_expires_at": "2026-11-17T20:25:42.247000+00:00", "storage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-sy8tw3k0\\control\\browser-storage.private.json", "selected": "[\"srv_0d6a09e6bbca331a1de65cba71e5876f\",\"exe_f8aa87f7bd372f9fa2262bc8a2f8642d\",\"wsr_1fe1602d67b5ed178d5284e2ebc9493e\",\"ses_4466b29a6a854605aa7391f0db5ac126\"]", "relation_path": "/api/v1/home/harness-board/cards/home_group_76d8bb69f06de0238878e6b9096babfec62b3f68097dad4d02a216ccb3ff3bb5/sessions", "workspace_b": "wsr_161c454ae35e001b412a093518575600"},checks=[],reads=[],posts=[],beforeUnload=[];if(cfg.window!=='POST_PERF_BROWSER_WINDOW_OPEN')throw Error('Window required');
+ page.on('dialog',async d=>{if(d.type()==='beforeunload'){beforeUnload.push('readonly-context-history-confirmed');await d.accept();}else await d.dismiss();});
+ const check=(id,ok,detail)=>{checks.push({id,ok,detail});if(!ok)throw Error(id);};
+ page.on('request',r=>{if(r.method()!=='GET')posts.push({method:r.method(),path:new URL(r.url()).pathname});});
+ page.on('response',async r=>{if(new URL(r.url()).pathname===cfg.relation_path){const item={status:r.status(),at:Date.now()};if(r.status()===200){const raw=await r.json(),body=raw.data??raw;item.ids=body.items.map(x=>x.session_id);item.revision=body.revision;}reads.push(item);}});
+ try{
+  const dialog=page.getByRole('dialog',{name:'Activity detail'}),selector=dialog.getByRole('combobox',{name:'Choose a session',exact:true});
+  await dialog.getByRole('button',{name:'Load more sessions',exact:true}).click();
+  for(let i=0;i<120&&!reads.some(x=>x.status===200&&x.at>=(reads.find(y=>y.status===409)?.at??Infinity));i++)await page.waitForTimeout(100);
+  const current=reads.find(x=>x.status===200&&x.at>=(reads.find(y=>y.status===409)?.at??Infinity));
+  check('real409-followed-by-current-reread',!!current&&reads.some(x=>x.status===409),reads);
+  check('same-panel-and-exact-selection',await dialog.evaluate(e=>e===window.__nextPanel)&&await selector.inputValue()===cfg.selected,true);
+  const ids=await selector.locator('option').evaluateAll(es=>es.filter(e=>e.value).map(e=>JSON.parse(e.value).at(-1)));
+  const allowed=new Set([...current.ids,JSON.parse(cfg.selected).at(-1)]);
+  check('no-mixed-revision-or-duplicate-options',new Set(ids).size===ids.length&&ids.length===allowed.size&&ids.every(id=>allowed.has(id)),{ids,current_ids:current.ids});
+  await dialog.getByRole('button',{name:'Close modal',exact:true}).click();await dialog.waitFor({state:'hidden'});
+  const [server_id,executor_id,workspace_id,session_id]=JSON.parse(cfg.selected),target={kind:'session',server_id,executor_id,workspace_id,session_id};
+  const url=new URL(cfg.url);url.searchParams.set('home_target',JSON.stringify(target));
+  await page.goto(url.toString(),{waitUntil:'domcontentloaded'});await dialog.waitFor({timeout:10000});
+  await page.reload({waitUntil:'domcontentloaded'});await dialog.waitFor({timeout:10000});
+  const sameTarget=()=>{const actual=JSON.parse(new URL(page.url()).searchParams.get('home_target'));return Object.keys(actual).length===Object.keys(target).length&&Object.entries(target).every(([k,v])=>actual[k]===v);};
+  check('refresh-keeps-exact-target',sameTarget(),true);
+  await page.goBack();await dialog.waitFor({state:'hidden'});await page.goForward();await dialog.waitFor({timeout:10000});
+  check('back-forward-keeps-exact-target',sameTarget(),true);
+  const bad=await page.context().newPage(),badReads=[];bad.on('request',r=>badReads.push(new URL(r.url()).pathname));
+  const forged={...target,session_id:'hst-not-a-canonical-session'};const invalid=new URL(cfg.url);invalid.searchParams.set('home_target',JSON.stringify(forged));
+  const denial=bad.waitForResponse(r=>new URL(r.url()).pathname==='/api/v1/home/target'&&[403,404].includes(r.status()),{timeout:10000});
+  await bad.goto(invalid.toString(),{waitUntil:'domcontentloaded'});const denied=await denial;await bad.waitForTimeout(500);
+  check('invalid-target-denied-no-latest-session-read',badReads.every(p=>!p.includes('/runtime/sessions/')||p.includes(forged.session_id)),{status:denied.status(),session_reads:badReads.filter(p=>p.includes('/runtime/sessions/'))});await bad.close();
+  await dialog.getByRole('button',{name:'Close modal',exact:true}).click();await dialog.waitFor({state:'hidden'});
+  check('original-question-still-within-expiry',Date.parse(cfg.question_expires_at)-Date.now()>15000,{expires_at:cfg.question_expires_at});
+  await page.locator('[data-home-column="needs_you"]').getByRole('button',{name:'Respond',exact:true}).click();
+  const answer=dialog.getByLabel('Choose fixture output format',{exact:true});await answer.waitFor({timeout:10000});await answer.selectOption(['0']);await answer.focus();await answer.evaluate(e=>{window.__nextDraft=e;});
+  await page.keyboard.press('Escape');await dialog.getByText('Discard unsaved changes?',{exact:true}).waitFor();await dialog.getByRole('button',{name:'Keep editing',exact:true}).click();
+  check('escape-cancel-retains-same-draft-and-request',await answer.evaluate(e=>e===window.__nextDraft&&e.selectedOptions.length===1&&e.selectedOptions[0].value==='0')&&(await dialog.innerText()).includes(cfg.session_id),true);
+  const project=page.getByRole('combobox',{name:'Project',exact:true});
+  const inert=await project.evaluate(e=>!!e.closest('[inert]')||Array.from(document.querySelectorAll('dialog[open]')).some(d=>!d.contains(e)));
+  check('project-switch-not-forced-through-modal',inert,true);
+  await page.keyboard.press('Escape');await dialog.getByRole('button',{name:'Discard changes',exact:true}).click();await dialog.waitFor({state:'hidden'});
+  await project.selectOption(cfg.workspace_b);
+  await page.waitForTimeout(600);
+  await page.locator('[data-home-column="needs_you"]').getByRole('button',{name:'Respond',exact:true}).click();await answer.waitFor({timeout:10000});
+  check('no-draft-copied-to-project-b',await answer.evaluate(e=>e!==window.__nextDraft&&Array.from(e.selectedOptions).every(o=>o.value===''))&&!(await dialog.innerText()).includes(cfg.session_id),true);
+  check('zero-ui-posts',posts.length===0,posts);
+  return {status:'PASS_BROWSER_SUBSET',checks,reads,posts,beforeUnload,limits:['Modal prevents direct project selector operation while editing; tested real Escape discard followed by explicit project switch, not forced DOM onchange','Host separately snapshots decisions/writes and explicit facilitator arrival','No native answer/seen mutation/provider']};
+ }catch(error){return {status:'FAIL_OR_INCOMPLETE',error:String(error),checks,reads,posts};}
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:58133/?home_target=%7B%22kind%22%3A%22session%22%2C%22server_id%22%3A%22srv_0d6a09e6bbca331a1de65cba71e5876f%22%2C%22executor_id%22%3A%22exe_f8aa87f7bd372f9fa2262bc8a2f8642d%22%2C%22workspace_id%22%3A%22wsr_1fe1602d67b5ed178d5284e2ebc9493e%22%2C%22session_id%22%3A%22ses_4466b29a6a854605aa7391f0db5ac126%22%7D
+### Modal state
+- ["beforeunload" dialog with message ""]: can be handled by dialog-accept or dialog-dismiss

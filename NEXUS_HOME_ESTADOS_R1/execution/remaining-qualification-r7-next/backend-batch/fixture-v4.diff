@@ -1,0 +1,35 @@
+--- canonical_owner_v3.py
++++ canonical_owner_v4.py
+@@ -34,6 +34,7 @@
+         _, self.binding, _ = dispatch.connect_local(setup)
+         self.bindings = [self.binding]
+         self.sessions, self.turns, self.records = [], [], []
++        self.operation_actors = {}
+         env = {key: value for key, value in os.environ.items()
+             if key.upper() in {'SYSTEMROOT', 'WINDIR', 'COMSPEC', 'PATHEXT'}}
+         env.update(PATH='', HOME=str(control.parent / 'peer-home'), USERPROFILE=str(control.parent / 'peer-home'),
+@@ -128,6 +129,7 @@
+         return second
+ 
+     def admit(self, binding, intent, *, actor='operator', **extra):
++        assert actor in ('operator', 'subject')
+         managed = actor == 'operator'
+         prefix = '/api/v1/runtime-management/runtime' if managed else '/v1/runtime'
+         body = {'client_intent_id': 'backend-' + str(len(self.records)), 'intent': intent,
+@@ -139,10 +141,15 @@
+         self.call('POST', prefix + '/operations', {key: resolution[key] for key in
+             ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')}, actor=actor,
+             expected=(200, 202))
++        operation_id = resolution['operation_id']
++        assert self.operation_actors.get(operation_id, actor) == actor
++        self.operation_actors[operation_id] = actor
+         return resolution
+ 
+     def receipt(self, operation):
+-        return self.call('GET', '/api/v1/runtime-management/runtime/operations/' + operation['operation_id'])
++        actor = self.operation_actors[operation['operation_id']]
++        prefix = '/api/v1/runtime-management/runtime' if actor == 'operator' else '/v1/runtime'
++        return self.call('GET', prefix + '/operations/' + operation['operation_id'], actor=actor)
+ 
+     def stage(self, operation, stages=('SUBMITTED', 'SUCCEEDED')):
+         return wait(lambda: (value if (value := self.receipt(operation)).get('executor_stage') in stages else None),

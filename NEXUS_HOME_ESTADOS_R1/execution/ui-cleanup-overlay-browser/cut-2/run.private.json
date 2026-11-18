@@ -1,0 +1,297 @@
+{
+  "before": {
+    "wheel": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload1031": true,
+    "checkout_exception": {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "sha256": "50835c0a009ba5b1d67dac8a01827aae57424c49d8812b2e6a3d1da287e42d25",
+      "runtime_uses_original_installed_home_py": true
+    },
+    "backend_count": 729,
+    "backend_hash": "3bd0e2c61f340d8d9ff685bb4e63f2a0344423b0a3f1ef46a7cda85bc48d481d",
+    "assets": {
+      "/index.html": "91ac7a1ad3d99b1803a64c66eaedd8e1cef2d890da3b0eca313e9863a57b3a11",
+      "/assets/index-8qNwMfLq.js": "81153c541199000df8f181b386f189984cca7828baf5be1b2b4edbf1e7a17c07",
+      "/assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036"
+    }
+  },
+  "after": {
+    "wheel": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload1031": true,
+    "checkout_exception": {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "sha256": "50835c0a009ba5b1d67dac8a01827aae57424c49d8812b2e6a3d1da287e42d25",
+      "runtime_uses_original_installed_home_py": true
+    },
+    "backend_count": 729,
+    "backend_hash": "3bd0e2c61f340d8d9ff685bb4e63f2a0344423b0a3f1ef46a7cda85bc48d481d",
+    "assets": {
+      "/index.html": "91ac7a1ad3d99b1803a64c66eaedd8e1cef2d890da3b0eca313e9863a57b3a11",
+      "/assets/index-8qNwMfLq.js": "81153c541199000df8f181b386f189984cca7828baf5be1b2b4edbf1e7a17c07",
+      "/assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036"
+    }
+  },
+  "result": {
+    "status": "PASS_OVERLAY_BROWSER_FOCAL",
+    "checks": [
+      {
+        "id": "actual-new-asset",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "home-no-connection-details-or-evidence-time",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "home-no-generic-work-request-heading",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "local-time-preserves-datetime",
+        "pass": true,
+        "actual": [
+          {
+            "datetime": "2026-11-18T02:54:21.983Z",
+            "text": "Nov 17, 11:54 PM",
+            "expected": "Nov 17, 11:54 PM",
+            "zone": "America/Sao_Paulo"
+          }
+        ]
+      },
+      {
+        "id": "exact-session-GET",
+        "pass": true,
+        "actual": true
+      },
+      {
+        "id": "full-scope-unchanged",
+        "pass": true,
+        "actual": {
+          "status": 200,
+          "scope": {
+            "server_id": "srv_bcd02d55ef243f93f9810b3df09cb0f8",
+            "executor_id": "exe_52f66a817c0043f4c6016ab55737f371",
+            "binding_id": "bind_53ff4e54157d9d0fdbbcc5016c9f5cfe",
+            "agent_id": "hst-a",
+            "workspace_id": "wsr_8730c5f5442ff3d45e47063077cbdb3b",
+            "workspace_binding_id": "wxb_c33478d9ba21e5ef3bf2b211fdafc27a",
+            "session_id": "ses_dbc966ee99d1e0c11a2a40dab566e112",
+            "session_owner_generation": 1,
+            "authorization_revision": 2,
+            "configuration_revision": 2,
+            "binding_revision": 1,
+            "credential_epoch": 1
+          }
+        }
+      },
+      {
+        "id": "View-work-exact-target",
+        "pass": true,
+        "actual": {
+          "executor_id": "exe_52f66a817c0043f4c6016ab55737f371",
+          "kind": "execution",
+          "operation_id": "op_3d609a8ee1251a2c4a69cee75406cc4c",
+          "server_id": "srv_bcd02d55ef243f93f9810b3df09cb0f8",
+          "session_id": "ses_dbc966ee99d1e0c11a2a40dab566e112",
+          "workspace_id": "wsr_8730c5f5442ff3d45e47063077cbdb3b"
+        }
+      },
+      {
+        "id": "technical-identities-not-in-basic-visible-text",
+        "pass": true,
+        "actual": {
+          "checked": 6
+        }
+      },
+      {
+        "id": "real-READY-controls",
+        "pass": true,
+        "actual": {
+          "state": "READY",
+          "control": true,
+          "releasePending": false
+        }
+      },
+      {
+        "id": "exact-existing-session-command",
+        "pass": true,
+        "actual": "okto-nexus work chat --session-id ses_dbc966ee99d1e0c11a2a40dab566e112"
+      },
+      {
+        "id": "Copy-command-present-enabled",
+        "pass": true,
+        "actual": {
+          "clipboard": "NOT_CLICKED: no proven browser-only clipboard isolation; Windows clipboard untouched"
+        }
+      },
+      {
+        "id": "zero-browser-POST",
+        "pass": true,
+        "actual": []
+      },
+      {
+        "id": "zero-page-errors",
+        "pass": true,
+        "actual": []
+      }
+    ],
+    "limits": [
+      "Real Chrome + real installed R9 HTTP API + new Vite static-only overlay; not a new installed wheel",
+      "No clipboard click, provider or human acceptance"
+    ]
+  },
+  "failure": null,
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "containment": {
+    "forced_births": [],
+    "remaining": []
+  },
+  "known_births": [
+    {
+      "pid": 2800,
+      "birth": 1794970464.837768,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 37364,
+      "birth": 1794970461.214991,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 58324,
+      "birth": 1794970446.2574973,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 61176,
+      "birth": 1794970446.2787468,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 25568,
+      "birth": 1794970466.9601865,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 29768,
+      "birth": 1794970466.2493267,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 31556,
+      "birth": 1794970466.9593673,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 36632,
+      "birth": 1794970466.2085564,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 52600,
+      "birth": 1794970466.7992132,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 58696,
+      "birth": 1794970465.548494,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 59920,
+      "birth": 1794970466.7584877,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 60340,
+      "birth": 1794970466.898215,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 62428,
+      "birth": 1794970466.6033247,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 53944,
+      "birth": 1794970470.4219823,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 57300,
+      "birth": 1794970470.4691975,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 49988,
+      "birth": 1794970475.5190704,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 16500,
+      "birth": 1794970475.566134,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 56244,
+      "birth": 1794970474.001704,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 62304,
+      "birth": 1794970472.1409311,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 60372,
+      "birth": 1794970480.7890968,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 40572,
+      "birth": 1794970480.831974,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    }
+  ],
+  "commands": [
+    {
+      "name": "launch",
+      "pid": 2800,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "4b2b86d6e1a8137853a6d22fa76eca37e2a9b238644b5ff332c834d4bf29bc48"
+    },
+    {
+      "name": "cookie",
+      "pid": 53944,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "054b53fd74a30f4381c11b7bc4b6e3e10378643a2eec296b43916d0a4406677a"
+    },
+    {
+      "name": "focal",
+      "pid": 49988,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "a72a7a0fb3513f489933b281c112e883a3f5c6ab1b76563a58178e0a218bb8b1"
+    },
+    {
+      "name": "browser-close",
+      "pid": 60372,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "f8867d54b43d1ff1a1297b128db08c1f2ccb4994d5f32366a1215311200a505a"
+    }
+  ],
+  "layer": "Real Chrome + real installed R9 API + Vite static-only overlay; not new installed package"
+}

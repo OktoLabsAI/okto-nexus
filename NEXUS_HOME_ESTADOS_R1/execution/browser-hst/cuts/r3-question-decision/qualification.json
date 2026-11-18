@@ -1,0 +1,146 @@
+{
+  "status": "SUBSET_PASS_PARALLEL_WORKING_FAIL",
+  "provider_invocations": 0,
+  "checks_pass": 14,
+  "checks_fail": 1,
+  "results": {
+    "blocked": "PASS_SUBSET",
+    "confirmation": "PASS_SUBSET",
+    "form": "PASS_SUBSET",
+    "initialize": null,
+    "parallel": "FAIL"
+  },
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-hu6u7xc4",
+  "cleanup": {
+    "supervisor": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "own_root_processes": [],
+    "listener_port": 57221,
+    "listener_pids": [],
+    "excluded": "Current curation process/ancestors, not runtime or browser",
+    "secret_cookie_scan": "NO_MATCH",
+    "private_auth_and_wire_logs": "Not copied",
+    "data_preserved": true
+  },
+  "limits": [
+    "Synthetic Codex protocol through real Core/Server; no real provider or three-adapter claim",
+    "No human/AT/native-zoom claim",
+    "Functional runs after DOM timing may share CPU with installed pytest"
+  ],
+  "copies": [
+    {
+      "path": "runtime-ready.json",
+      "source_sha256": "6bf38bf793c6186d27c136fa96a6ed7d600359d8828ab589b415de465caec604",
+      "curated_sha256": "6bf38bf793c6186d27c136fa96a6ed7d600359d8828ab589b415de465caec604"
+    },
+    {
+      "path": "fixture.py",
+      "source_sha256": "58079ce642e09df136b67f3574152377f95b5ce0f2b5b6a68f98d641799e9788",
+      "curated_sha256": "58079ce642e09df136b67f3574152377f95b5ce0f2b5b6a68f98d641799e9788"
+    },
+    {
+      "path": "initialize.js",
+      "source_sha256": "44ec76ad6643e134c14da7cfbea55d5b08ab2e044da8115db326f5b62bdce3f0",
+      "curated_sha256": "44ec76ad6643e134c14da7cfbea55d5b08ab2e044da8115db326f5b62bdce3f0"
+    },
+    {
+      "path": "question-parallel.js",
+      "source_sha256": "d8ec00da075f109f4f405c1540777af3796b3054c61e4cfb73123d861709c191",
+      "curated_sha256": "d8ec00da075f109f4f405c1540777af3796b3054c61e4cfb73123d861709c191"
+    },
+    {
+      "path": "question-blocked.js",
+      "source_sha256": "3ceec4496d8433851130438b8a15724330d1c3c47397e8eccdc591b51fa897b9",
+      "curated_sha256": "3ceec4496d8433851130438b8a15724330d1c3c47397e8eccdc591b51fa897b9"
+    },
+    {
+      "path": "question-confirmation.js",
+      "source_sha256": "1cb274f6df692449a8853d7ad7de22e10c3e80babbaed7e49d964be3096e3da0",
+      "curated_sha256": "1cb274f6df692449a8853d7ad7de22e10c3e80babbaed7e49d964be3096e3da0"
+    },
+    {
+      "path": "question-form.js",
+      "source_sha256": "561cc53f8ebcb6a0e4c94c9d58136649be5969d3d2ef041cb6fd449050dc2e3e",
+      "curated_sha256": "561cc53f8ebcb6a0e4c94c9d58136649be5969d3d2ef041cb6fd449050dc2e3e"
+    },
+    {
+      "path": "cli-blocked.txt",
+      "source_sha256": "48e8cff533d48533a8845ebc437b07cca79bfba80215b0f000ecb5a80d960615",
+      "curated_sha256": "48e8cff533d48533a8845ebc437b07cca79bfba80215b0f000ecb5a80d960615"
+    },
+    {
+      "path": "cli-close.txt",
+      "source_sha256": "e63900370ea2ee0e7ea4404ccf7e13ac115dffde3ed8a72d966d5693bde7092d",
+      "curated_sha256": "e63900370ea2ee0e7ea4404ccf7e13ac115dffde3ed8a72d966d5693bde7092d"
+    },
+    {
+      "path": "cli-confirmation.txt",
+      "source_sha256": "fc101a4503aee5ff74583d9d9260a55322cfc6b26806015a33af06828e0e512d",
+      "curated_sha256": "fc101a4503aee5ff74583d9d9260a55322cfc6b26806015a33af06828e0e512d"
+    },
+    {
+      "path": "cli-form.txt",
+      "source_sha256": "9b52822c7289b8f842b1695ad222d76bcd7369086d3c33830f6761cd536ff6a9",
+      "curated_sha256": "9b52822c7289b8f842b1695ad222d76bcd7369086d3c33830f6761cd536ff6a9"
+    },
+    {
+      "path": "cli-initialize.txt",
+      "source_sha256": "dd504282ec4a30e27ba5d45028fe187a7aba440b02f144cd693fd6edb30f29c4",
+      "curated_sha256": "dd504282ec4a30e27ba5d45028fe187a7aba440b02f144cd693fd6edb30f29c4"
+    },
+    {
+      "path": "cli-open.txt",
+      "source_sha256": "f242ba7feb32502428dad0119f8b05500222910aa8718f4f1bb2d18162b147f3",
+      "curated_sha256": "f242ba7feb32502428dad0119f8b05500222910aa8718f4f1bb2d18162b147f3"
+    },
+    {
+      "path": "cli-parallel.txt",
+      "source_sha256": "269073e9f0fe00990ff3dfbc060bfc4e95659e6881932fa08fe0c39f1a281d7f",
+      "curated_sha256": "269073e9f0fe00990ff3dfbc060bfc4e95659e6881932fa08fe0c39f1a281d7f"
+    },
+    {
+      "path": "cli-state.txt",
+      "source_sha256": "26089ae3b8087a1add69dc556dd20706bbc78a279a0e50769da0088bd545ac79",
+      "curated_sha256": "26089ae3b8087a1add69dc556dd20706bbc78a279a0e50769da0088bd545ac79"
+    },
+    {
+      "path": "control/initial-board.json",
+      "source_sha256": "1eadea2942e9523a0bcf462bb6e60bb8f9a9574175142f06a08323bdb8f5a455",
+      "curated_sha256": "1eadea2942e9523a0bcf462bb6e60bb8f9a9574175142f06a08323bdb8f5a455"
+    },
+    {
+      "path": "control/final.json",
+      "source_sha256": "ad5dbd725c360d85dd6b2440e36fce49e41cb146f52d9b60d0e231b3f57d5f2b",
+      "curated_sha256": "ad5dbd725c360d85dd6b2440e36fce49e41cb146f52d9b60d0e231b3f57d5f2b"
+    },
+    {
+      "path": "control/origins.json",
+      "source_sha256": "87df8789b96c510f485a6a601898f62f26ce970994ed7326694a3bfacbf9dce6",
+      "curated_sha256": "87df8789b96c510f485a6a601898f62f26ce970994ed7326694a3bfacbf9dce6"
+    },
+    {
+      "path": "control/blocked.json",
+      "source_sha256": "d1cd5a6fdec83112bc9a0376c2c92ce7f96e7052f88622501d3fd7c3f751141a",
+      "curated_sha256": "d1cd5a6fdec83112bc9a0376c2c92ce7f96e7052f88622501d3fd7c3f751141a"
+    },
+    {
+      "path": "control/supervisor-cleanup.json",
+      "source_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "curated_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e"
+    }
+  ],
+  "browser_http_counts": {
+    "GET": 121,
+    "POST": 1
+  },
+  "browser_status_counts": {
+    "200": 121,
+    "202": 1
+  }
+}

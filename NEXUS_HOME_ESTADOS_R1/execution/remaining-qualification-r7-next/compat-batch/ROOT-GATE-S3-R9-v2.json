@@ -1,0 +1,9 @@
+{
+  "gate": "ROOT_APPROVED_COMPAT_BATCH_S3",
+  "attempt": 2,
+  "manifest_sha256": "80343e799416efa3f7d5a69c1cd5551d7317f2bd3e6516c84ace8c2ef91d59e2",
+  "runner_sha256": "756382661c65af3320314e553248d3dd8f79cd986bcef87e7df3498831e573d4",
+  "owner_sha256": "8b5d80ea5f28ee52b84be153d9471c661ccce01703c8ceb89961cc65aaa984cb",
+  "authorization": "Explicit Root approval after minimal diff review: one variant execution, first failure stop; preserve attempt1.",
+  "constraints": "No S4, rerun, TTL rescue or extra productive step. No source/prefix/provider/ledger/Git changes. Canonical stop and physical absence remain distinct. K05 without-dashboard acceptance not claimed."
+}

@@ -1,0 +1,78 @@
+{
+  "cli-experience-base.txt": {
+    "sha256": "e9cdd00df0cb893a60e9c4ab35ac6e357926777d6781ad69bedf4ffd0efbce6c",
+    "bytes": 21600
+  },
+  "cli-experience-close.txt": {
+    "sha256": "bc5ac39925eb511e1a8520da7e52a5e2e044ad6c5b372e45aef3efc2a318b3b1",
+    "bytes": 40
+  },
+  "cli-experience-history.txt": {
+    "sha256": "7bd3a15ea42465ce5a0459c682c527e8b4480851ccf0089b258055ac51689010",
+    "bytes": 18338
+  },
+  "cli-experience-naming.txt": {
+    "sha256": "9b21dea9e226d62ccac8fdfcad7024680ba1e94f0a065d0f70f411a541c1ae99",
+    "bytes": 17207
+  },
+  "control\\exp-base-after.json": {
+    "sha256": "ddd17419901fa0aae912b69b84331570368450e9412d69324a78ce9b2f149ae5",
+    "bytes": 61028
+  },
+  "control\\exp-base.json": {
+    "sha256": "e5c9f1904de983b8dc114b1711792c2c25270992d68cee65638e39425c1f0098",
+    "bytes": 61028
+  },
+  "control\\exp-history.json": {
+    "sha256": "db836c48b2ea53d097c3ed99a44497b92bef2512c3fcafcfb74a5836aa106170",
+    "bytes": 144186
+  },
+  "control\\final.json": {
+    "sha256": "fb130cdf0a3f870bc519d3a84e27a1ab8ec01d5b5e7ad1b06eed790ea06013b7",
+    "bytes": 23571
+  },
+  "control\\origins.json": {
+    "sha256": "03de414af58046a265142b03c1a4385e6b0d5636a2817bc7e65640c0978564d6",
+    "bytes": 608
+  },
+  "control\\supervisor-cleanup.json": {
+    "sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+    "bytes": 196
+  },
+  "experience-base.js": {
+    "sha256": "7d0f4006547ea4080604ced8d6f4e5fb183e24b44da94de021c983fc87abf714",
+    "bytes": 18290
+  },
+  "experience-builder-proof.json": {
+    "sha256": "92ba2371676f4811498968a066f137e92e872c3e00060eedc1b3c8d76e648375",
+    "bytes": 393
+  },
+  "experience-failure.json": {
+    "sha256": "5e640d913c0a28142e45b8bde82d8a85bc017e3cd20d83a56c137c92514b7faa",
+    "bytes": 100
+  },
+  "experience-history.js": {
+    "sha256": "0a65cd05b5677e6eaeae8dda15cc67f49093f5c8a78303dd5dc1f6492bacd0cd",
+    "bytes": 17765
+  },
+  "experience-naming.js": {
+    "sha256": "d2dd6e458b76118eafbb9e6eaf3b0154e62d45b228633286129f1a1d6aaa20ff",
+    "bytes": 16419
+  },
+  "experience-steps.json": {
+    "sha256": "6b6ac7fe1b8e5452e2430c6b8d39c02055d0af0da59ea48e5c417ab53bc0a7b9",
+    "bytes": 920
+  },
+  "fixture.py": {
+    "sha256": "a8eb4b18d4242e8d104493e40a0eed8e9ccfd61b43aec596f839ee52b18f535c",
+    "bytes": 26034
+  },
+  "qualification.json": {
+    "sha256": "6346fc956068a10ad40dab57abc44cb7b0110a1ab4a0d8eaace8c92d0ddbf762",
+    "bytes": 8856
+  },
+  "runtime-ready.json": {
+    "sha256": "fb39923f91e2f6cd568c057543bebb07f3061d07e9f903bcb247291ed3ae9a51",
+    "bytes": 1699
+  }
+}

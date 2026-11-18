@@ -1,0 +1,16 @@
+--- canonical_owner_v4.py
++++ canonical_owner_v5.py
+@@ -212,11 +212,11 @@
+     @staticmethod
+     def requests(board):
+         result = []
+-        for page in board['columns'].values():
++        for column, page in board['columns'].items():
+             for item in page['items']:
+                 if item['kind'] == 'request':
+                     result.append(item)
+-                elif item['kind'] == 'harness':
++                elif item['kind'] == 'harness' and column == 'needs_you':
+                     result.extend(item.get('requests_preview', []))
+         return result
+ 

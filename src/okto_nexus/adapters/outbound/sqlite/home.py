@@ -2,6 +2,7 @@
 from contextlib import contextmanager
 from datetime import timedelta
 import json
+from ....domain.home_delivery_semantics import project as delivery_semantics
 import time
 
 from ....domain.attention import canonical, digest, instant
@@ -13,22 +14,52 @@ from .attention import _SetDigest
 
 # Current and historic links are deduplicated before joining receipts. A claim's
 # operations are attached only to that epoch, never to a later owner of the work.
+# Canonical event commit projects and advances committed_contiguous atomically;
+# projected_through is retained schema with no writer. Eligible session history
+# is scanned once. Malformed legacy JSON delegates to the old EXISTS so its
+# short-circuit/error behavior is preserved, rather than silently dropping it.
+# The work composer saves its explicit subject on the operator's structured
+# handoff. Project only that bounded label, never the message body or prompt.
 FACTS = """
 WITH links AS MATERIALIZED (
  SELECT server_id,executor_id,operation_id,domain_operation_id FROM execution_domain_deliveries
  UNION SELECT server_id,executor_id,operation_id,domain_operation_id FROM execution_delivery_attempt_history
+), progress_sessions AS MATERIALIZED (
+ SELECT DISTINCT o.server_id,o.executor_id,o.session_id,s.stream_epoch
+ FROM execution_operations o JOIN execution_sessions s USING(server_id,executor_id,session_id)
+ JOIN execution_receipts r ON r.server_id=o.server_id AND r.executor_id=o.executor_id AND r.operation_id=o.operation_id
+  AND r.receipt_revision=(SELECT MAX(rr.receipt_revision) FROM execution_receipts rr
+   WHERE rr.server_id=o.server_id AND rr.executor_id=o.executor_id AND rr.operation_id=o.operation_id)
+ WHERE o.server_id=:server_id AND (:workspace_id IS NULL OR o.workspace_id=:workspace_id)
+  AND o.action='turn.submit' AND s.lifecycle_state IN ('READY','ACTIVE') AND s.lease_state='ACTIVE'
+  AND r.stage NOT IN ('SUCCEEDED','FAILED','CANCELLED','OUTCOME_UNKNOWN','REFUSED_BEFORE_EFFECT')
+  AND json_extract(o.expected_revisions_json,'$.session_owner_generation')=s.owner_generation
+), progress_keys AS MATERIALIZED (
+ SELECT DISTINCT e.server_id,e.executor_id,e.session_id,e.stream_epoch,
+  CASE WHEN json_valid(e.payload_json) THEN CAST(json_extract(e.payload_json,'$.operation_id') AS TEXT) END AS operation_id,
+  CASE WHEN json_valid(e.payload_json) THEN 0 ELSE 1 END AS malformed
+ FROM progress_sessions s JOIN execution_event_watermarks w USING(server_id,executor_id,session_id,stream_epoch)
+ JOIN execution_event_ingress e ON e.server_id=s.server_id AND e.executor_id=s.executor_id
+  AND e.session_id=s.session_id AND e.stream_epoch=s.stream_epoch AND e.sequence<=w.committed_contiguous
+ WHERE w.gap_state='none' AND CASE WHEN json_valid(e.payload_json)
+  THEN json_extract(e.payload_json,'$.payload.delivery_phase') IN ('started','progress') ELSE 1 END
 ), scoped_ops AS MATERIALIZED (
  SELECT o.server_id,o.executor_id,o.operation_id,o.session_id,o.workspace_id,o.subject_agent_id,
+   o.binding_id,o.workspace_binding_id,
+   s.owner_generation AS progress_owner_generation,
+   s.stream_epoch AS progress_stream_epoch,
    o.actor_agent_id,o.admission_state,o.created_at,r.stage,r.received_at,r.receipt_revision,s.lifecycle_state,
    CASE WHEN s.lifecycle_state IN ('READY','ACTIVE') AND s.lease_state='ACTIVE'
      AND r.stage NOT IN ('SUCCEEDED','FAILED','CANCELLED','OUTCOME_UNKNOWN','REFUSED_BEFORE_EFFECT')
      AND json_extract(o.expected_revisions_json,'$.session_owner_generation')=s.owner_generation
-     AND EXISTS(SELECT 1 FROM execution_event_ingress e JOIN execution_event_watermarks w
-       USING(server_id,executor_id,session_id,stream_epoch)
-       WHERE e.server_id=o.server_id AND e.executor_id=o.executor_id AND e.session_id=o.session_id
-         AND e.stream_epoch=s.stream_epoch AND e.sequence<=w.projected_through AND w.gap_state='none'
+     AND CASE WHEN invalid_progress.malformed=1 THEN
+       EXISTS(SELECT 1 FROM execution_event_ingress e JOIN execution_event_watermarks w
+        USING(server_id,executor_id,session_id,stream_epoch)
+        WHERE e.server_id=o.server_id AND e.executor_id=o.executor_id AND e.session_id=o.session_id
+         AND e.stream_epoch=s.stream_epoch AND e.sequence<=w.committed_contiguous AND w.gap_state='none'
          AND json_extract(e.payload_json,'$.operation_id')=o.operation_id
          AND json_extract(e.payload_json,'$.payload.delivery_phase') IN ('started','progress'))
+       ELSE progress.operation_id IS NOT NULL END
      AND NOT EXISTS(SELECT 1 FROM execution_results x WHERE x.server_id=o.server_id AND x.executor_id=o.executor_id
        AND x.operation_id=o.operation_id AND x.terminal_sequence IS NOT NULL)
      THEN 1 ELSE 0 END AS observed_running,
@@ -42,6 +73,11 @@ WITH links AS MATERIALIZED (
    AND r.receipt_revision=(SELECT MAX(rr.receipt_revision) FROM execution_receipts rr
      WHERE rr.server_id=o.server_id AND rr.executor_id=o.executor_id AND rr.operation_id=o.operation_id)
  LEFT JOIN execution_sessions s USING(server_id,executor_id,session_id)
+ LEFT JOIN progress_keys progress ON progress.server_id=o.server_id AND progress.executor_id=o.executor_id
+  AND progress.session_id=o.session_id AND progress.stream_epoch=s.stream_epoch AND progress.operation_id=o.operation_id
+  AND progress.malformed=0
+ LEFT JOIN progress_keys invalid_progress ON invalid_progress.server_id=o.server_id AND invalid_progress.executor_id=o.executor_id
+  AND invalid_progress.session_id=o.session_id AND invalid_progress.stream_epoch=s.stream_epoch AND invalid_progress.malformed=1
  LEFT JOIN execution_session_containment k ON k.server_id=s.server_id AND k.executor_id=s.executor_id
    AND k.session_id=s.session_id AND k.owner_generation=s.owner_generation
  LEFT JOIN links l ON l.server_id=o.server_id AND l.executor_id=o.executor_id AND l.operation_id=o.operation_id
@@ -57,12 +93,20 @@ WITH links AS MATERIALIZED (
   NULL AS running_since,
   MAX(COALESCE(received_at,created_at)) AS latest,
   json_group_array(json_object('executor_id',executor_id,'session_id',session_id,'operation_id',operation_id))
-    FILTER(WHERE position<=20) AS runtime_refs
+    FILTER(WHERE position<=20) AS runtime_refs,
+  NULL AS native_progress_current
  FROM ranked GROUP BY group_key
 ), parents AS MATERIALIZED (
  SELECT 'handoff' AS kind,h.handoff_id AS source_id,h.workspace_id,h.status,h.created_at AS created,
-  h.updated_at AS changed,substr(t.title,1,160) AS title,
-  CASE WHEN t.title IS NULL OR t.title='' THEN 'fallback' ELSE 'canonical_title' END AS title_origin,
+  h.updated_at AS changed,
+  COALESCE(NULLIF(substr(t.title,1,160),''), CASE
+   WHEN h.from_agent_id='operator' AND length(CAST(h.payload AS BLOB))<=65536 THEN CASE
+    WHEN json_valid(h.payload) THEN CASE
+     WHEN json_extract(h.payload,'$.kind')='meta_harness.request' AND json_type(h.payload,'$.subject')='text'
+     THEN NULLIF(NULLIF(trim(substr(json_extract(h.payload,'$.subject'),1,160)),''),'Meta-harness handoff')
+    END
+   END
+  END) AS title,
   h.from_agent_id AS sender,COALESCE(h.claimed_by,json_extract(h.target,'$.agent_id')) AS recipient,
   NULL AS message_id,NULL AS executor_id,NULL AS session_id,
   json_array('handoff',h.handoff_id,h.claim_epoch) AS group_key,
@@ -73,23 +117,25 @@ WITH links AS MATERIALIZED (
  WHERE (:workspace_id IS NULL OR h.workspace_id=:workspace_id)
  UNION ALL
  SELECT 'conversation_turn',d.operation_id,d.workspace_id,d.status,d.created_at,NULL,
-  substr(m.subject,1,160),CASE WHEN m.subject IS NULL OR m.subject='' THEN 'fallback' ELSE 'message_subject' END,
+  substr(m.subject,1,160),
   m.from_agent_id,d.recipient_agent_id,m.message_id,NULL,NULL,json_array('conversation_turn',d.operation_id),0,0
  FROM delivery_outbox d JOIN messages m ON m.message_id=d.message_id
  WHERE (:workspace_id IS NULL OR d.workspace_id=:workspace_id)
    AND NOT EXISTS(SELECT 1 FROM runtime_handoff_bindings b WHERE b.operation_id=d.operation_id)
  UNION ALL
- SELECT 'direct_operation',o.operation_id,o.workspace_id,o.admission_state,o.created_at,NULL,NULL,'fallback',
+ SELECT 'direct_operation',o.operation_id,o.workspace_id,o.admission_state,o.created_at,NULL,NULL,
   o.actor_agent_id,o.subject_agent_id,NULL,o.executor_id,o.session_id,o.group_key,0,0
  FROM scoped_ops o WHERE o.domain_operation_id IS NULL
 ), facts AS MATERIALIZED (
  SELECT json_object('kind',p.kind,'source_id',p.source_id,'workspace_id',p.workspace_id,'status',p.status,
-  'created',p.created,'changed',p.changed,'title',p.title,'title_origin',p.title_origin,
+  'created',p.created,'changed',p.changed,'title',p.title,'title_origin',
+  CASE WHEN p.title IS NULL OR p.title='' THEN 'fallback'
+       WHEN p.kind='conversation_turn' THEN 'message_subject' ELSE 'canonical_title' END,
   'agent_ids',json_array(p.sender,p.recipient),'message_id',p.message_id,'executor_id',p.executor_id,
   'session_id',p.session_id,'blocked',p.blocked,'claim_expired',p.claim_expired,'running',COALESCE(g.running,0),
   'running_since',g.running_since,'latest',g.latest,'attempt_count',COALESCE(g.attempts,0),
   'runtime_refs',json(COALESCE(g.runtime_refs,'[]')),'stage',last.stage,'receipt_at',last.received_at,
-  'cleanup',COALESCE(last.cleanup,0)) AS fact
+  'cleanup',COALESCE(last.cleanup,0)) AS fact,g.native_progress_current AS native_progress_current
  FROM parents p LEFT JOIN grouped g ON g.group_key=p.group_key
  LEFT JOIN ranked last ON last.group_key=p.group_key AND last.position=1
  WHERE (:agent_id IS NULL OR p.sender=:agent_id OR p.recipient=:agent_id
@@ -105,25 +151,85 @@ WITH links AS MATERIALIZED (
  OR (json_extract(item,'$.source_type') IN ('execution_native_request','execution_operation','execution_result','handoff_result') AND EXISTS(SELECT 1 FROM json_each(fact,'$.runtime_refs') ref
   WHERE json_extract(item,'$.operation_id')=json_extract(ref.value,'$.operation_id')
     AND json_extract(item,'$.executor_id')=json_extract(ref.value,'$.executor_id')
-    AND json_extract(item,'$.session_id')=json_extract(ref.value,'$.session_id')))))) AS item FROM facts),
-filtered AS MATERIALIZED (SELECT item FROM projected WHERE
+    AND json_extract(item,'$.session_id')=json_extract(ref.value,'$.session_id')))))) AS item,native_progress_current FROM facts),
+filtered AS MATERIALIZED (SELECT item,native_progress_current FROM projected WHERE
  (:state IS NOT NULL AND (:state='all' OR json_extract(item,'$.display_state')=:state)) OR
  (:state IS NULL AND json_extract(item,'$.display_state') NOT IN ('completed','turn_completed','failed','cancelled')))
 """
+
+# Only the internal v2 relation serializes complete positive operation proof.
+# Legacy/public queries keep NULL and do not allocate this JSON collection.
+FACTS_NATIVE_PROGRESS = FACTS.replace('NULL AS native_progress_current', """
+  json_group_array(json_object('server_id',server_id,'executor_id',executor_id,'operation_id',operation_id,
+    'session_id',session_id,'workspace_id',workspace_id,'agent_id',subject_agent_id,
+    'binding_id',binding_id,'workspace_binding_id',workspace_binding_id,
+    'owner_generation',progress_owner_generation,'stream_epoch',progress_stream_epoch))
+    FILTER(WHERE observed_running=1) AS native_progress_current""")
 
 
 RESULTS = """
 WITH links AS MATERIALIZED (
  SELECT server_id,executor_id,operation_id,domain_operation_id FROM execution_domain_deliveries
  UNION SELECT server_id,executor_id,operation_id,domain_operation_id FROM execution_delivery_attempt_history
+), proof_payloads AS MATERIALIZED (
+ SELECT event_id,workspace_id,actor_agent_id,type,
+  CASE WHEN NOT json_valid(payload) THEN '{}' WHEN json_type(payload,'$.delivery_ref')='object'
+   THEN json_extract(payload,'$.delivery_ref') ELSE '{}' END AS ref,
+  json_extract(CASE WHEN json_valid(payload) THEN payload ELSE '{}' END,'$.handoff_id') AS declared_handoff,
+  json_extract(CASE WHEN json_valid(payload) THEN payload ELSE '{}' END,'$.claim_epoch') AS declared_epoch,
+  json_type(CASE WHEN json_valid(payload) THEN payload ELSE '{}' END,'$.claim_epoch') AS declared_epoch_type,
+  json_extract(CASE WHEN json_valid(payload) THEN payload ELSE '{}' END,'$.delivery_revision') AS declared_revision,
+  json_extract(CASE WHEN json_valid(payload) THEN payload ELSE '{}' END,'$.verified_by') AS verified_by,
+  json_extract(CASE WHEN json_valid(payload) THEN payload ELSE '{}' END,'$.verification_verdict') AS verdict
+ FROM events WHERE stream='handoff' AND type IN ('handoff.completed','handoff.verification_failed','handoff.verification_requested')
+  AND (:workspace_id IS NULL OR workspace_id=:workspace_id)
+), proof_facts AS MATERIALIZED (
+ SELECT event_id,workspace_id,type,json_extract(ref,'$.handoff_id') AS handoff_id,
+  json_extract(ref,'$.claim_epoch') AS claim_epoch,
+  json_object('version',json_extract(ref,'$.version'),
+   'kind',json_extract(ref,'$.kind'),
+   'workspace_id',json_extract(ref,'$.workspace_id'),
+   'handoff_id',json_extract(ref,'$.handoff_id'),
+   'claim_epoch',json_extract(ref,'$.claim_epoch'),
+   'delivery_revision',json_extract(ref,'$.delivery_revision'),
+   'event_claim_epoch',declared_epoch,
+   'event_delivery_revision',declared_revision,
+   'event_id',event_id,'event_type',type,'actor_agent_id',actor_agent_id,
+   'verified_by',verified_by,'verdict',verdict) AS proof
+ FROM proof_payloads WHERE json_type(ref,'$.version')='integer' AND json_extract(ref,'$.version')=1
+  AND json_type(ref,'$.claim_epoch')='integer' AND declared_epoch_type='integer'
+  AND json_extract(ref,'$.kind')='handoff_delivery'
+  AND json_extract(ref,'$.workspace_id')=workspace_id
+  AND json_extract(ref,'$.handoff_id')=declared_handoff
+  AND json_extract(ref,'$.claim_epoch')=declared_epoch
+  AND json_extract(ref,'$.delivery_revision')=declared_revision
+), delivery_submissions AS MATERIALIZED (
+ SELECT workspace_id,handoff_id,claim_epoch,event_id AS submission_event_id,
+  json_extract(proof,'$.delivery_revision') AS delivery_revision
+ FROM (SELECT *,ROW_NUMBER() OVER(PARTITION BY workspace_id,handoff_id,claim_epoch ORDER BY event_id DESC) AS submission_position
+  FROM proof_facts WHERE type='handoff.verification_requested') WHERE submission_position=1
+), last_submission AS MATERIALIZED (
+ SELECT workspace_id,handoff_id,MAX(submission_event_id) AS last_submission_event_id
+ FROM delivery_submissions GROUP BY workspace_id,handoff_id
+), verification_proofs AS MATERIALIZED (
+ SELECT workspace_id,handoff_id,claim_epoch,proof FROM (
+  SELECT f.workspace_id,f.handoff_id,f.claim_epoch,
+   json_set(f.proof,'$.submission_event_id',d.submission_event_id) AS proof,
+   ROW_NUMBER() OVER(PARTITION BY f.workspace_id,f.handoff_id,f.claim_epoch ORDER BY f.event_id DESC) AS proof_position
+  FROM proof_facts f JOIN delivery_submissions d USING(workspace_id,handoff_id,claim_epoch)
+  WHERE f.type IN ('handoff.completed','handoff.verification_failed')
+   AND d.delivery_revision=json_extract(f.proof,'$.delivery_revision') AND d.submission_event_id<f.event_id
+ ) WHERE proof_position=1
 ), native_facts AS MATERIALIZED (
  SELECT o.server_id,o.executor_id,o.operation_id,o.session_id,o.workspace_id,o.subject_agent_id,
   r.stage,r.received_at,r.receipt_revision,x.stream_epoch,x.terminal_sequence,x.captured_at,
   CASE WHEN x.terminal_sequence IS NOT NULL THEN substr(x.output_text,1,401) END AS preview,
   x.output_truncated,
-  CASE WHEN k.state='REQUESTED' THEN 'pending' END AS cleanup,
+  CASE WHEN k.state='REQUESTED' THEN 'pending' END AS cleanup,k.state AS containment_state,
   h.handoff_id,CASE WHEN h.handoff_id IS NOT NULL THEN b.claim_epoch END AS claim_epoch,
   h.claim_epoch AS current_epoch,h.status AS handoff_status,
+  d.delivery_revision,
+  CASE WHEN h.handoff_id IS NOT NULL THEN json(CASE WHEN h.acceptance_criteria IS NULL THEN 'false' ELSE 'true' END) END AS verification_required,
   substr(t.title,1,160) AS title
  FROM execution_operations o JOIN execution_receipts r USING(server_id,executor_id,operation_id)
  LEFT JOIN execution_results x USING(server_id,executor_id,operation_id)
@@ -133,6 +239,7 @@ WITH links AS MATERIALIZED (
  LEFT JOIN links l ON l.server_id=o.server_id AND l.executor_id=o.executor_id AND l.operation_id=o.operation_id
  LEFT JOIN runtime_handoff_bindings b ON b.operation_id=l.domain_operation_id
  LEFT JOIN handoffs h ON h.handoff_id=b.handoff_id AND h.workspace_id=o.workspace_id
+  LEFT JOIN delivery_submissions d ON d.workspace_id=h.workspace_id AND d.handoff_id=h.handoff_id AND d.claim_epoch=b.claim_epoch
  LEFT JOIN tasks t ON t.task_id=h.task_id AND t.workspace_id=h.workspace_id
  WHERE o.server_id=:server_id AND o.action='turn.submit' AND r.stage IN ('SUCCEEDED','FAILED','CANCELLED')
   AND r.receipt_revision=(SELECT MAX(rr.receipt_revision) FROM execution_receipts rr
@@ -161,18 +268,48 @@ WITH links AS MATERIALIZED (
   'revision',receipt_revision,'cleanup',cleanup,'handoff_id',handoff_id,'claim_epoch',claim_epoch,
   'stream_epoch',stream_epoch,'terminal_sequence',terminal_sequence,'preview',preview,
   'truncated',output_truncated,'artifacts',json(COALESCE(artifacts,'[]')),
-  'verification',CASE WHEN claim_epoch=current_epoch THEN handoff_status ELSE 'historical_claim' END) AS fact
- FROM ranked LEFT JOIN artifact_arrays USING(result_group,workspace_id) WHERE position=1
+   'verification',CASE WHEN claim_epoch=current_epoch THEN handoff_status ELSE 'historical_claim' END,
+   'current_epoch',current_epoch,'handoff_status',handoff_status,'containment_state',containment_state,
+   'verification_required',json(verification_required),'delivery_revision',
+     CASE WHEN claim_epoch<>current_epoch AND proof IS NOT NULL THEN json_extract(proof,'$.delivery_revision') ELSE delivery_revision END,
+   'verification_proof',json(proof)) AS fact
+  FROM ranked LEFT JOIN artifact_arrays USING(result_group,workspace_id)
+   LEFT JOIN verification_proofs USING(workspace_id,handoff_id,claim_epoch) WHERE position=1
  UNION ALL
  SELECT json_object('server_id',:server_id,'workspace_id',h.workspace_id,'agent_id',COALESCE(h.claimed_by,h.from_agent_id),
   'handoff_id',h.handoff_id,'claim_epoch',h.claim_epoch,'stage',h.status,'verification',h.status,
   'received_at',COALESCE(h.updated_at,h.created_at),'revision',h.claim_epoch,
-  'preview',substr(h.result,1,401),'title',substr(t.title,1,160))
+   'preview',substr(h.result,1,401),'title',substr(t.title,1,160),
+   'current_epoch',h.claim_epoch,'handoff_status',h.status,
+   'verification_required',json(CASE WHEN h.acceptance_criteria IS NULL THEN 'false' ELSE 'true' END),
+   'handoff_content_available',json(CASE WHEN h.result IS NULL THEN 'false' ELSE 'true' END),
+    'delivery_revision',d.delivery_revision,
+   'verification_proof',json(v.proof))
  FROM handoffs h LEFT JOIN tasks t ON t.task_id=h.task_id AND t.workspace_id=h.workspace_id
- WHERE h.status IN ('COMPLETED','REJECTED')
+  LEFT JOIN verification_proofs v ON v.workspace_id=h.workspace_id AND v.handoff_id=h.handoff_id AND v.claim_epoch=h.claim_epoch
+   LEFT JOIN delivery_submissions d ON d.workspace_id=h.workspace_id AND d.handoff_id=h.handoff_id AND d.claim_epoch=h.claim_epoch
+  WHERE (h.status IN ('COMPLETED','REJECTED') OR (:delivery_presentation_version=2 AND h.status='VERIFYING'))
   AND (:workspace_id IS NULL OR h.workspace_id=:workspace_id)
   AND (:agent_id IS NULL OR COALESCE(h.claimed_by,h.from_agent_id)=:agent_id)
   AND NOT EXISTS(SELECT 1 FROM native n WHERE n.handoff_id=h.handoff_id AND n.claim_epoch=h.claim_epoch)
+ UNION ALL
+ SELECT json_object('server_id',:server_id,'workspace_id',h.workspace_id,'agent_id',COALESCE(h.claimed_by,h.from_agent_id),
+  'handoff_id',h.handoff_id,'claim_epoch',v.claim_epoch,'stage','REJECTED','verification','historical_claim',
+  'received_at',e.created_at,'revision',e.event_id,'current_epoch',h.claim_epoch,'handoff_status',h.status,
+  'delivery_revision',json_extract(v.proof,'$.delivery_revision'),
+  'verification_required',json('true'),'verification_proof',json(v.proof),
+   'handoff_content_available',json(CASE WHEN json_extract(v.proof,'$.submission_event_id')=last_submission_event_id AND h.result IS NOT NULL THEN 'true' ELSE 'false' END),
+   'preview',CASE WHEN json_extract(v.proof,'$.submission_event_id')=last_submission_event_id THEN substr(h.result,1,401) END,
+  'title',substr(t.title,1,160))
+ FROM verification_proofs v JOIN handoffs h ON h.workspace_id=v.workspace_id AND h.handoff_id=v.handoff_id
+  JOIN events e ON e.event_id=json_extract(v.proof,'$.event_id')
+   LEFT JOIN last_submission s ON s.workspace_id=h.workspace_id AND s.handoff_id=h.handoff_id
+  LEFT JOIN tasks t ON t.task_id=h.task_id AND t.workspace_id=h.workspace_id
+ WHERE :delivery_presentation_version=2 AND v.claim_epoch<h.claim_epoch
+  AND json_extract(v.proof,'$.verdict')='fail'
+  AND (:workspace_id IS NULL OR h.workspace_id=:workspace_id)
+  AND (:agent_id IS NULL OR COALESCE(h.claimed_by,h.from_agent_id)=:agent_id)
+  AND NOT EXISTS(SELECT 1 FROM native n WHERE n.handoff_id=h.handoff_id AND n.claim_epoch=v.claim_epoch)
 ), projected AS MATERIALIZED (SELECT home_result_v1(fact) AS item FROM facts),
 filtered AS MATERIALIZED (SELECT home_result_attention_v1(item,
  (SELECT item FROM home_attention WHERE json_extract(item,'$.attention_id')=json_extract(projected.item,'$._attention_id'))) AS item FROM projected)
@@ -196,6 +333,7 @@ def result_item(raw):
         preview=redact((f.get('preview') or '')[:400])[:400] or None,
         truncated=bool(f.get('truncated') or len(f.get('preview') or '')>400),
         outcome=f['stage'], verification_state=f.get('verification'), cleanup_state=f.get('cleanup'),
+        delivery_semantics=delivery_semantics(f),
         created_at=f['received_at'], detail_target=target,
         artifacts=[{k:redact(v)[:160] if k=='filename' else v for k,v in a.items() if v is not None}
             for a in (f.get('artifacts') or [])],
@@ -222,11 +360,16 @@ def activity_item(raw, server, occurrences):
 
 def result_attention(raw, occurrence):
     item = json.loads(raw)
-    item.pop('_attention_id', None)
     value = json.loads(occurrence) if occurrence else None
+    return canonical(result_attention_value(item, value))
+
+
+def result_attention_value(item, value):
+    """The same projection for an already decoded, request-local occurrence."""
+    item.pop('_attention_id', None)
     item['attention'] = value
     item['view_state'] = ('seen' if value['seen_state']['seen'] else 'unseen') if value else 'not_tracked'
-    return canonical(item)
+    return item
 
 
 class SqliteHomeQueries:
@@ -265,7 +408,7 @@ class SqliteHomeQueries:
             WHERE json_extract(item,'$.next_change_at')>:now),
           'items',json((SELECT json_group_array(json(item)) FROM (''' + page + ''')))) FROM (''' + source + ')'
 
-    def overview(self, uow, *, scope, server_id, now, limits, attention_relation):
+    def overview(self, uow, *, scope, server_id, now, limits, attention_relation, presentation_version=1):
         """Share the canonical occurrence projection across three Home blocks.
 
         This is a statement-local materialization, never a stored snapshot or
@@ -273,6 +416,7 @@ class SqliteHomeQueries:
         """
         attention_ctes, params = self._attention_relations(attention_relation)
         params.update(server_id=server_id, home_now=now, workspace_id=scope.get('workspace_id'),
+            delivery_presentation_version=presentation_version,
             agent_id=scope.get('agent_id'), state=scope.get('state'),
             after_time=None, after_id=None, home_attention_limit=limits['attention']+1,
             home_server_attention_limit=limits['server_attention']+1, now=now)
@@ -353,10 +497,11 @@ class SqliteHomeQueries:
             conn.create_function('home_result_attention_v1', 2, None)
             conn.create_aggregate('home_digest_v1', 1, None)
 
-    def page(self, uow, *, section, scope, server_id, now, limit, after=None, attention_relation=None):
+    def page(self, uow, *, section, scope, server_id, now, limit, after=None, attention_relation=None, presentation_version=1):
         relation = FACTS if section == 'work' else RESULTS if section == 'results' else ACTIVITY
         time_field = 'last_activity_at' if section == 'work' else 'created_at'
         params = dict(server_id=server_id, home_now=now, workspace_id=scope.get('workspace_id'), agent_id=scope.get('agent_id'),
+            delivery_presentation_version=presentation_version,
             state=scope.get('state'), limit=limit + 1,
             after_time=after['key'][0] if after else None, after_id=after['key'][1] if after else None)
         if section in ('work', 'results'):

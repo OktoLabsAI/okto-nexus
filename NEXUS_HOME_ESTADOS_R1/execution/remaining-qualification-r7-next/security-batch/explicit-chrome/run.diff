@@ -1,0 +1,62 @@
+--- base/run.py
++++ explicit-chrome/run.py
+@@ -16,7 +16,8 @@
+ 
+ import psutil
+ 
+-HERE = Path(__file__).resolve().parent
++VARIANT = Path(__file__).resolve().parent
++HERE = VARIANT.parent
+ 
+ 
+ def load(name, path):
+@@ -124,13 +125,20 @@
+     parser.add_argument('--gate', type=Path, required=True)
+     args = parser.parse_args()
+     preflight = load('security_preflight_run', HERE/'preflight.py')
++    instrument = load('explicit_chrome_validation', VARIANT/'validate.py')
++    instrument_before = instrument.check(args.gate)
+     before = preflight.check(args.gate)  # Before allocation/process/browser.
++    instrument.claim(instrument_before)
+     gate = json.loads(args.gate.read_text())
+     browser = preflight.REPO/'NEXUS_HOME_ESTADOS_R1/execution/browser-hst'
+     preparation = subprocess.run(['rtk','proxy',sys.executable,'-B',str(HERE/'prepare.py'),
+         '--gate',str(args.gate.resolve())], input=b'', capture_output=True, timeout=25, check=True)
+     root = Path(json.loads(preparation.stdout)['root']).resolve()
+     write(root/'security-guard-before.json', before)
++    explicit_config = root/'playwright-cli-explicit.json'
++    assert not explicit_config.exists()
++    explicit_config.write_bytes((VARIANT/'playwright-cli.json').read_bytes())
++    assert hashlib.sha256(explicit_config.read_bytes()).hexdigest()==instrument_before['config_sha256']
+     deadline = time.monotonic()+180
+     lifecycle = load('security_containment', browser/'containment.py')
+     owner = lifecycle.Owned(root)
+@@ -207,7 +215,7 @@
+         assert len(cards)==1
+         ref = fixture_ready['references'][0]
+         cfg = {'url':url,'reference':ref,'baseline_card_ids':[item['id'] for item in cards]}
+-        cli('open','open','about:blank','--browser=chrome','--profile='+str(root/'browser-profile'))
++        cli('open','open','about:blank','--browser=chrome','--profile='+str(root/'browser-profile'),'--config='+str(explicit_config))
+         opened=True
+         cli('load-state','state-load',fixture_ready['storage'])
+         # Native peer question TTL is unchanged120s; baseline has no question.
+@@ -258,9 +266,11 @@
+         listeners = [row.pid for row in psutil.net_connections(kind='tcp') if port and row.status=='LISTEN' and row.laddr.port==port]
+         after = None
+         helper_guarded = False
++        instrument_after = None
+         try:
+             after=preflight.check(args.gate)
+             assert before==after, 'Root gate/source/payload guard changed during cut'
++            instrument_after = instrument.after(instrument_before, explicit_config)
+             runtime_config=json.loads((root/'runtime-ready.json').read_text())
+             assert preflight.sha(root/'fixture.py')==runtime_config['fixture_sha256']
+             assert all(preflight.sha(root/'helpers'/name)==expected
+@@ -273,6 +283,7 @@
+             'browser_cleanup':containment,'known_births':list(commands.known.values()),'listeners':listeners,
+             'provider_invocations':0,'root':str(root),'deadline_seconds':180,
+             'runtime_helper_guarded':helper_guarded,
++            'instrumentation':{'before':instrument_before,'after':instrument_after},
+             'sampling_limit':'Observed ancestry plus own-root/birth argv scan; not a claim of capturing every short-lived child'}
+         final_path=root/'control/final.json'
+         fixture_final=json.loads(final_path.read_text()) if final_path.exists() else None

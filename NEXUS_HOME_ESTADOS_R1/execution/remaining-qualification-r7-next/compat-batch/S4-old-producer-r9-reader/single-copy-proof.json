@@ -1,0 +1,18 @@
+{
+  "copy_count": 1,
+  "copied_file_count": 21,
+  "all_files_byte_equal_at_copy": true,
+  "file_map_sha256": "b25b2f650362f1821b9b8ec91aa63f124865eb5f588eb33527afc78023f44bab",
+  "service_context_present_at_copy": false,
+  "old_stop_proof": {
+    "canonical_stop_state": "stopped",
+    "shutdown_outcome": "drained",
+    "physical_same_birth_remaining": 0,
+    "old_info_sha256": "7a82b19b775cedae3bc5e384e1e540d7863a421d44a8e0c3ab460f76948beecf",
+    "old_offered_v2": false
+  },
+  "raw_copy_record_sha256": "ace94b1d148756a4c7d7b6fa732a2bc693fcf766153d7f90b23781d2c353f1ec",
+  "profiles_original_selector_vacuous": true,
+  "profile_proof": "Separate posterior independent RO supplement; full at-copy map existed before R9 startup",
+  "auth_data_or_private_file_contents_exported": false
+}

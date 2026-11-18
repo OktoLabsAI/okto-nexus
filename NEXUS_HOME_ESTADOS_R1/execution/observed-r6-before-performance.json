@@ -1,0 +1,41 @@
+{
+  "at": "2026-11-17T18:53:44.022785+00:00",
+  "status": "FUNCTIONAL_SCOPES_RECORDED_PERFORMANCE_PENDING",
+  "runtime_source_commit": "90b94ca9673c087554b7dc4a226490ef5417bd32",
+  "runtime_wheel_sha256": "8ab8f08e8f5e06b428ed4642045ad5e4069d93891a869d4dc61fcaa5bb3ffa19",
+  "counts": {
+    "source_focal": 90,
+    "source_home": 251,
+    "installed_r5": 251,
+    "actual_r6_installed_supplement": 11,
+    "frontend_node": 404
+  },
+  "report_hashes": {
+    "source-tests/r5-working-focal/qualification.json": "f1e6b9e27aa301ed7cdc9c854813550fa7c6a6123a1284cc1160be2434eb9aa9",
+    "source-tests/r5-home/qualification.json": "cebd10766d11b800877ab9d26c121e5fa55f595effe3aedfe4a8305453befe3e",
+    "package-hst-r5/installed-qualification.json": "c7afc804934bf3d511385f8d5b5a079961296886cdb71ac6fdf6c3068d025e36",
+    "package-hst-r6/qualification.json": "3f8c9de2b99ae3fcf089daf66f4e70b98eadb3410bb2ddd8f6800a57ee33f633",
+    "package-hst-r6/live-qualification.json": "5821f99e7bba18d7a84185eb956dcbf3395f54b59b22fcae4670ce087d5598df",
+    "package-hst-r6/runtime-equivalence-vs-r5.json": "624e3bd9b68140dc97f66a3ab794ceb75d1a0620edd8553ee618cba82564601f",
+    "installed-supplement-r6/qualification.json": "032dbc55e8db2de047284a6f44872cb23f00f80928b76ae791d4a3c2f7b56ef4",
+    "frontend-r6-original/qualification.json": "55bf7d50ef2cfc85caad4f58d799d6122f7463ada86715c3ac9060f13297128f",
+    "browser-hst/r5-r6-final-report.md": "a56de48603cca44db7bdd217945aaabd92da8dbddc507a9539afb69aed1e76e5",
+    "browser-hst/mobile-intents-derivative.md": "c666be862e069a1353b5b4ab781e267010cbeb7d7b7796d2123c5b925db1b354",
+    "scenario-final-review-r5-prepared.json": "110af218b0939aae992b188a273bd3b040ec9e553dd2f96076de61d1244aa2da",
+    "contract-blockers-r6-review.json": "192307829b16e2a69424839ab8d3fd07f327d4872e8476a8d30165f0fb9f110c",
+    "results-security-gap-review-r6.json": "54d795c307b5c4db9bdb78c5a6cef29187085beb8f347c46870013696166e3fc",
+    "static-checks/r6-supplement.json": "f33e6afa7b9774736c267bb785a2efeea05cd1289fbef89bfbb8999340bfcbc6"
+  },
+  "caveats": [
+    "Counts are separate cuts, never a combined final-prefix pytest count.",
+    "Backend R5 evidence reused only after 1024 exact module payload/dependency-version comparisons.",
+    "Browser historical errors, abandoned-transport limitation and invalid coordinate/selector oracles remain visible.",
+    "Some unanswered-question cleanup commands reached their guard before normal owner drain. Physical exit0 is not a claim of confirmed runtime.close in every cut.",
+    "Only supplied contract/OS/fixture scopes passed. Remaining scenario criteria, native producer limitations, AT, real campaigns and human acceptance are not qualified.",
+    "Original broad NOT_GREEN, Quick Connect UNKNOWN usage/QC031 and prior novice-user gates remain."
+  ],
+  "human": "DEFERRED",
+  "paid_provider_calls": 0,
+  "default_rollout": false,
+  "performance": "Pending original thresholds and paired datasets; no waiver."
+}

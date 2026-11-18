@@ -1,9 +1,10 @@
 import {useEffect,useRef,useState,type ReactNode} from 'react';
 import {api} from '../../api';
 import {homeApi} from '../../homeApi';
+import {isUntitledHomeWork} from '../../homePresentation';
 import {resolveHomeTarget} from '../../homeNavigation';
 import {attentionTarget} from '../../attentionNavigation';
-import {assertEntryInspectionPage,homeSessionRefKey,initialEntrySession,occurrenceSession,type HomeEntrySelection} from '../../homeEntryInspection';
+import {readEntryInspectionPage,entryInspectionQuery,homeSessionRefKey,homeSessionTarget,homeSessionOptionLabel,initialEntrySession,occurrenceSession,type HomeEntrySelection} from '../../homeEntryInspection';
 import type {HomeEntryPage,HomeResult,HomeSessionRef,HomeTarget} from '../../homeTypes';
 import type {AttentionAction,AttentionOccurrence} from '../../attentionTypes';
 import {CanonicalInspection} from '../AttentionInspection';
@@ -23,6 +24,8 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
   const [sessions,setSessions]=useState(entry.sessions),[attention,setAttention]=useState(entry.attention_preview),[results,setResults]=useState(entry.results_preview);
   const [cursors,setCursors]=useState({sessions:entry.sessions_cursor,attention:entry.attention_cursor,results:entry.results_cursor});
   const [error,setError]=useState(''),[busy,setBusy]=useState(false),[lost,setLost]=useState(false);
+  const [notice,setNotice]=useState('');
+  const revisions=useRef({sessions:selection.revision,attention:selection.revision,results:selection.revision});
   const [pending,setPending]=useState<string[]>([]),[preferencesStale,setPreferencesStale]=useState(false);
   const lock=useRef(false),preferenceLocks=useRef(new Set<string>()),abort=useRef(new AbortController());
   const revoke=()=>{abort.current.abort();setLost(true);setSessions([]);setAttention([]);setResults([]);setActive(null);setSession(null);};
@@ -35,18 +38,22 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
     if(lock.current||abort.current.signal.aborted||!cursors[partition])return;
     lock.current=true;setBusy(true);setError('');
     try {
-      const query={...selection.filters,cursor:cursors[partition]!,limit:10,preview:3};
-      const page:HomeEntryPage<unknown>=await(partition==='sessions'?homeApi.entrySessions(selection.groupId,entry.id,query,abort.current.signal):
-        partition==='attention'?homeApi.entryAttention(selection.groupId,entry.id,query,abort.current.signal):homeApi.entryResults(selection.groupId,entry.id,query,abort.current.signal));
+      const read=(cursor:string|null)=>{
+        const query=entryInspectionQuery(selection,cursor);
+        return partition==='sessions'?homeApi.entrySessions(selection.groupId,entry.id,query,abort.current.signal):
+          partition==='attention'?homeApi.entryAttention(selection.groupId,entry.id,query,abort.current.signal):homeApi.entryResults(selection.groupId,entry.id,query,abort.current.signal);
+      };
+      const {page,replaced}=await readEntryInspectionPage<unknown>(read,cursors[partition],selection,serverId,partition,revisions.current[partition],abort.current.signal);
       if(abort.current.signal.aborted)return;
-      assertEntryInspectionPage(page,selection,serverId,partition,selection.revision);
       const append=<T,>(before:T[],next:T[],key:(item:T)=>string)=>{const ids=new Set(before.map(key));return [...before,...next.filter(item=>!ids.has(key(item)))];};
-      if(partition==='sessions')setSessions(before=>append(before,page.items as HomeSessionRef[],homeSessionRefKey));
-      if(partition==='attention')setAttention(before=>append(before,page.items as AttentionOccurrence[],item=>item.attention_id));
-      if(partition==='results')setResults(before=>append(before,page.items as HomeResult[],item=>item.id));
+      if(partition==='sessions')setSessions(before=>append(replaced?[]:before,page.items as HomeSessionRef[],homeSessionRefKey));
+      if(partition==='attention')setAttention(before=>append(replaced?[]:before,page.items as AttentionOccurrence[],item=>item.attention_id));
+      if(partition==='results')setResults(before=>append(replaced?[]:before,page.items as HomeResult[],item=>item.id));
+      revisions.current[partition]=page.revision;
+      if(replaced)setNotice('Related information was refreshed. Your selected context is unchanged.');
       setCursors(before=>({...before,[partition]:page.next_cursor}));
     }catch(failure){if(!abort.current.signal.aborted){if([401,403].includes((failure as {status?:number}).status??0)){revoke();return;}
-      setError((failure as Error).message);setCursors({sessions:null,attention:null,results:null});}}
+      setError('This exact context could not be refreshed. No replacement was selected.');setCursors({sessions:null,attention:null,results:null});}}
     finally{lock.current=false;if(!abort.current.signal.aborted)setBusy(false);}
   };
   const preference=async(item:AttentionOccurrence,seen?:boolean)=>{
@@ -64,17 +71,18 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
   if(lost)return <p role="alert">Operator access is required. Protected context has been cleared.</p>;
   const sessionOptions=session&&!sessions.some(ref=>homeSessionRefKey(ref)===homeSessionRefKey(session))?[session,...sessions]:sessions;
   return <section className="space-y-4" aria-label="Activity context">
-    <header><h3 className="font-semibold break-words">{entry.title}</h3><p className="text-xs text-surface-500">{[entry.agent_label||entry.agent_id,entry.harness_label,entry.host_label].filter(Boolean).join(' · ')}</p>
-      <p className="text-xs text-surface-500">Related information as of {entry.as_of||'an unconfirmed snapshot'}. Controls revalidate their canonical records.</p></header>
+    {notice&&<p role="status">{notice}</p>}
+    <header><h3 className="font-semibold break-words">{isUntitledHomeWork(entry)?'Work activity':entry.title}</h3>
+      {(entry.agent_label||entry.host_label)&&<p className="text-xs text-surface-500">{[entry.agent_label,entry.host_label].filter(Boolean).join(' · ')}</p>}</header>
     {error&&<p role="status">{error}</p>}
     <section aria-label="Session in this activity" className="space-y-2">
       <h4 className="font-medium">Session</h4>
       {(sessions.length>1||entry.sessions_total===null||entry.has_more_sessions)&&<label className="block text-sm">Choose the exact session<select data-modal-passive className="block border rounded p-2 w-full bg-transparent" value={session?homeSessionRefKey(session):''}
-        onChange={event=>{const value=sessionOptions.find(ref=>homeSessionRefKey(ref)===event.target.value)??null;transition(()=>{setSession(value);setActive(null);setRecord({target:value?{kind:'session',...value}:target,continuation:false});});}}>
-        <option value="">Choose a session</option>{sessionOptions.map(ref=><option key={homeSessionRefKey(ref)} value={homeSessionRefKey(ref)}>{ref.session_id} · {ref.workspace_id} · {ref.executor_id}</option>)}</select></label>}
+        onChange={event=>{const value=sessionOptions.find(ref=>homeSessionRefKey(ref)===event.target.value)??null;transition(()=>{setSession(value);setActive(null);setRecord({target:value?homeSessionTarget(value):target,continuation:false});});}}>
+        <option value="">Choose a session</option>{sessionOptions.map((ref,index)=><option key={homeSessionRefKey(ref)} value={homeSessionRefKey(ref)}>{homeSessionOptionLabel(ref,index)}</option>)}</select></label>}
       {!session&&<p className="text-sm text-surface-500">{entry.sessions_total===0?'No canonical session is linked to this activity.':'Select a session to inspect its exact output. No recent session is selected automatically.'}</p>}
       {session&&<ExactEntrySession key={homeSessionRefKey(session)} session={session} serverId={serverId} workspace={workspace}/>}
-      {session&&<button type="button" className="btn btn-secondary" onClick={()=>transition(()=>{setActive(null);setRecord({target:{kind:'session',...session},continuation:true});})}>Continue this exact session</button>}
+      {session&&<button type="button" className="btn btn-secondary" onClick={()=>transition(()=>{setActive(null);setRecord({target:homeSessionTarget(session),continuation:true});})}>Continue this exact session</button>}
       {cursors.sessions&&<button type="button" className="btn btn-secondary" disabled={busy} onClick={()=>void more('sessions')}>Load more linked sessions</button>}
     </section>
     {entry.external.length>0&&<p className="text-sm">External reports do not provide native terminal capture. Open the retained source below for its evidence and limitations.</p>}
@@ -91,14 +99,14 @@ export function HomeEntryInspection({selection,target,serverId,workspace,onClose
       {cursors.results&&<button type="button" className="btn btn-secondary" disabled={busy} onClick={()=>void more('results')}>Load more related results</button>}
     </section>}
     {active?<button type="button" className="btn btn-secondary" onClick={()=>transition(()=>{setActive(null);setSession(initialEntrySession(entry,record.target));})}>Show work details</button>:
-      <section aria-label="Original record and canonical controls"><h4 className="font-medium mb-2">{record.continuation?'Continue the exact session':'Original record and controls'}</h4>
+      <section aria-label="Original record and canonical controls"><h4 className="font-medium mb-2">{record.continuation?'Continue this session':'Work details'}</h4>
         {renderRecord(record.target,record.continuation)}</section>}
   </section>;
 }
 
 function ExactEntrySession({session,serverId,workspace}: {session:HomeSessionRef;serverId:string;workspace:string|null}) {
   const [resolved,setResolved]=useState<Awaited<ReturnType<typeof resolveHomeTarget>>|null>(null),[error,setError]=useState('');
-  useEffect(()=>{const abort=new AbortController();void resolveHomeTarget(homeApi,{kind:'session',...session},{server_id:serverId,workspace_id:workspace},abort.signal)
+  useEffect(()=>{const abort=new AbortController();void resolveHomeTarget(homeApi,homeSessionTarget(session),{server_id:serverId,workspace_id:workspace},abort.signal)
     .then(value=>{if(!abort.signal.aborted)setResolved(value);}).catch(()=>{if(!abort.signal.aborted)setError('This exact session is unavailable. No replacement was selected.');});return()=>abort.abort();},[]);
   return error?<p role="alert">{error}</p>:resolved?.session_context?<HomeSessionInspection context={resolved.session_context}/>:<p role="status">Revalidating the exact session…</p>;
 }

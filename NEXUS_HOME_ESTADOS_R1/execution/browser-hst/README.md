@@ -1,0 +1,42 @@
+# HST browser preparation — not started
+
+No browser, server, Core peer or authority was started by this preparation. Root must provide frozen backend/source/assets and an explicit start. `runtime-ready.template.json` is deliberately false. Do not treat presence of files or a prior UI/QC prefix as READY. No human trial is authorized by this preparation.
+
+Use the Playwright skill CLI with a new named session and own Temp profile. npx is present. Reuse QC31's file-output CLI transport (not inherited capture pipes), full process-birth/opening guard and same-loop Uvicorn/TestClient bridge with lifespan off. Close each own CLI, canonical-close each own session, stop server normally and verify known process births/profile/listener absence. Sampling does not prove every short-lived child. Data is retained after uncertain cleanup. No global kill or Windows session action.
+
+## Provenance and execution boundary
+
+`prepare_sources.py` extracts the complete existing `install_native` function and base inert JSON-RPC source. Two helper changes enable native approvals on the **fixture peer**, subject to the actual reviewed Server policy/grant, and supply the owner session ID for a non-secret output marker. Opening guards, birth recorder and process launch are retained. `peer_source.py` adds finite file gates and a protocol question; it does not create receipts, frames, identities, decisions or grants in SQL. Its visible output is a constant synthetic marker plus session ID, never the managed prompt/capability. Preparation parses code only; protocol compatibility is not yet proved on this cut.
+
+Use canonical IdentityService/Auth services for new synthetic subjects, TerminalConnection Review/Test/Finish for binding/grant, and public-ID association API. Test/version boundary is explicitly inert. Core uses only own Python source and empty provider environments, no installed Codex/Claude. Raw databases/keys/provider homes stay private in Temp. Logs contain IDs, paths/status and summaries, never keys/cookies or form text.
+
+For operator questions, use `/api/v1/runtime-management/runtime/intents:resolve` and operations with loopback operator authority and explicit subject agent. This preserves actor=operator/subject=collaborator; do not use an agent key pretending to be human. Native input must come through the real peer/Core ingress. If the current contract refuses, stop and report; never update recipient/permissions/lease timestamps by SQL. Decision POSTs are disabled by default and require a separately reviewed allowlist for this own fixture; no fake successful POSTs. No provider cost.
+
+## Small lanes / J1–J8
+
+| Lane | Canonical preparation | Browser assertions | Limits before execution |
+|---|---|---|---|
+| J1 idle | Three own reviewed bindings, sessions opened/turns completed by Core; keep processes/session alive | Three Active cards Idle, separate deliveries, exact counters | Same inert adapter; not three real model families. Need positive current control + opening receipt; registration alone fails precondition. |
+| J2 question | Operator turn emits requestUserInput with explicit blocking false/true; new request IDs | Active plus independent request, then blocking placement; single exact form | Cannot change isBlocking on existing request or call simulation native. Authority/request TTL remains real. |
+| J3 parallel | One binding, two admitted sessions, one blocked and other gate-held Working | One Active harness + request, exact session selector, no latest | Need real receipt showing independent work, no SQL RUNNING rows. |
+| J4 decision | Actual current request/CAS; allow one fixture decision POST; peer holds terminal evidence | Recorded decision != resumed; second tab stale CAS refuses | No blind retry/replay; preserve uncertain outcome. UI-only injected403 is not canonical revocation. |
+| J5 delivery | Canonical task/handoff and runtime relation + receipt | Turn result != task completed; verifier evidence exact | Helper still to be adapted from canonical-delivery tests; domain-only DTO fixtures do not prove this browser lane. |
+| J6 failure | Fake peer error/interrupt protocol through owners; original op retained | Failed/cancelled/cleanup distinct; no success | Do not fabricate cleanup proof or terminal frame. |
+| J7 partition | Own read-port failure, then restore; real policy revocation only through supported API | Native read remains, unknown totals;403 clears | Private read fault qualifies partial-source UI only. Real revocation API preflight remains required. |
+| J8 reading | Open one context, two real fallback polls; hold board movement; related cursor changes | No pending on identical; draft/focus/target stable; in-place resync | Requires >=30s observation; cannot accelerate grants/TTL. Native request lane must be separate and fresh. |
+
+The baseline QC31 fixture supports one binding and retained/current sessions. It is reusable, but is **not** already all eight lanes. Do not claim missing handoff/verifier/authority lanes from metadata-only `tests/home_states` fixtures. Those tests are useful oracles, not live authority.
+
+## Browser order and evidence
+
+1. Pin source and bundle; GET info verifies v2, scope/server/identity. Compare each DOM lane's IDs/count units with the real HTTP page. One follow-up board, three columns, no hidden tabs. Initial script is `checks-template.js` and has only a scoped initial-read assertion.
+2. Do current request/draft cases before its 120-second deadline. Type only nonprivate fixture response, do not submit unless allowed. Switch exact target through guard and cancel discard; verify text/recipient unchanged. Never renew silently. A new fixture/request is a new arrival, not replay.
+3. Idle/multi lane: open context by card, prove full7+session in target response; unique complete goes directly, preview1/unknown/more does not. Two sessions' outputs have distinct markers and no sibling fallback. Only one output region/stream.
+4. Pause: capture canonical revision, wait two actual fallback reads, assert semantic revision unchanged and no Updates available. Read/page still works. Publish genuine new fact; pending is status, not alert, target stays.409 replaces relation page without append.401/403 clears immediately, even paused.
+5. Keyboard: named dialog, initial focus, Tab/ShiftTab, Escape, guarded transition and return to same identity after movement. Back/Forward exact target needs its own case; no SSR claim. Record page exceptions and HTTP statuses separately.
+6. 360px: geometry and horizontal overflow, three stacked columns; capture each column start separately. Native200% zoom only with proven browser zoom API, never CSS equivalence. AT and human comprehension remain NOT_RUN unless actually observed.
+7. Capture screenshots and HTTP/DOM metadata. Provider0/browserPOST0 for read lane; count explicit decision separately. Close own resources, compare protected tables/payload/source before/after, publish hashes and literal outcomes. No full PASS from subsets.
+
+The installed package is READY at `../package-hst/READY.json` (0.3.7, wheel `15cc6dfc6b43fc815d5031a8378232b1bfa96f9048eefb4d85699337994a5af7`, 1031 payload files), but Root has not released the browser execution window. `prepare_runtime.py` requires that explicit release and does not launch processes itself. `fixture.py` is a prepared installed-only runner with finite 180-second exposure. J5 uses authenticated creator/worker MCP calls, explicit work authorization and operator verification; the read-only relation join uses `execution_domain_deliveries.domain_operation_id`. J7 creates its own human account/session and revokes it through logout with official session-required headers. These paths have only been reviewed/parsed, not positively preflighted. No screenshots, admission or cleanup claim exists yet.
+
+After release, preflight then **fresh-profile first-useful DOM timing run first**, during Root's exclusive browser CPU window. `timing-template.js` records navigation and browser performance clocks, cache-disabled CDP state, 1440x1100 viewport and real HTTP/DOM data. A healthy v2 response with ready sources is mandatory; an error/partial shell cannot qualify. One load is one sample, never p95. Notify Root `DOM_TIMING_DONE` before the installed pytest window opens; subsequent functional measurements must mention concurrent machine load. Execution uses finite lanes rather than stretching one authority window over all tests.

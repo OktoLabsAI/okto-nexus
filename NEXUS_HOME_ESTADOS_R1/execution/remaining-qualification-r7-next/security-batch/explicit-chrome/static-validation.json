@@ -1,0 +1,14 @@
+{
+  "status": "STATIC_AST_ONLY",
+  "files": [
+    "build_variant.py",
+    "curate.py",
+    "run.py",
+    "validate.py"
+  ],
+  "input_pins": 8,
+  "manifest_sha256": "580a1cf76438371f97a601629b3069d207ee6e93fb97cd1274d490abf05634ae",
+  "base_manifest_unchanged": true,
+  "allocated": false,
+  "browser_started": false
+}

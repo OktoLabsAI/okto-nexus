@@ -1,0 +1,44 @@
+{
+  "status": "PREPARED_ONLY_NO_RUNTIME",
+  "active_resources": false,
+  "gate_proposed": "ROOT_NATIVE_ZOOM_BROWSER_GUARD",
+  "nexus_start_forbidden_until_guard_and_separate_gate": true,
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "ready_sha256": "028274a46776dbc677f096dc6e5493e102c683bd7e87eee1930c21f56111a631",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "payload_files": 1031,
+  "files": {
+    "native-settings-guard.js": {
+      "sha256": "da7714da058dde640ab1d3f2a798da98681aafbef5071ed56a4dc19ee1bf7267",
+      "bytes": 4994
+    },
+    "probe_server.py": {
+      "sha256": "1fe04f4dbffbef537c3e254acc0a2cb419d208372a7329dcb782b7646e8ec88b",
+      "bytes": 2522
+    },
+    "plan.md": {
+      "sha256": "9f76654a92be359e111f2ae3a081b84bcfda34b20afbb42b49962d118ee6a5c4",
+      "bytes": 5685
+    }
+  },
+  "validation": {
+    "node_syntax_exit": 0,
+    "python_ast": "PASS",
+    "runtime_tests": "NOT_RUN"
+  },
+  "primary_reference": "https://support.google.com/chrome/answer/96810?hl=en",
+  "viewport_contract": {
+    "requested": {
+      "width": 720,
+      "height": 1000
+    },
+    "expected_css_at_native_200": 360,
+    "same_viewport_for_100_and_200": true,
+    "device_scale_factor_changes": false,
+    "css_or_page_scale_substitution": false
+  },
+  "immutable_reused_helpers": {
+    "prepare_runtime.py": "753a3b067850c08f64ce8d35424e4168fc7e5b45ef44816c77d567deeeea1814",
+    "containment.py": "c8dfda77d8a33943266fb47c6a55de9f154693a0a0ebc8d46fc70da5dd945f8e"
+  }
+}

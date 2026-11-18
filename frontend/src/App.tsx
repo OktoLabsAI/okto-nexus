@@ -675,7 +675,7 @@ function Dashboard({
           </label>}
           <GlobalAttentionButton state={globalAttention.state} onOpen={() => {globalAttention.refresh();setView('Attention');}}/>
           <LiveChip status={sseStatus} />
-          <button
+          {!(view==='Home'&&homeOperational&&info?.features?.feature_home!==false)&&<button
             className="btn btn-secondary !px-2"
             onClick={() => setRefreshTick((t) => t + 1)}
             title={`Refresh ${getNavigationEntry(view).label}`}
@@ -683,7 +683,7 @@ function Dashboard({
             data-testid="header-refresh"
           >
             <RotateCw size={14} />
-          </button>
+          </button>}
           {!localOpen && (
             <button
               className="btn btn-secondary !px-2"
@@ -703,6 +703,8 @@ function Dashboard({
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setShowMenu((v) => !v)}
+              aria-label="Application menu"
+              aria-expanded={showMenu}
               className={`btn btn-secondary flex items-center gap-1 !px-2 ${
                 showMenu ? "ring-2 ring-accent-300" : ""
               }`}
@@ -857,6 +859,7 @@ function Dashboard({
             <div className="min-h-0 flex-1">
               {homeOperational && info?.features?.feature_home !== false
                 ? <OperationalHome key={workspace} workspace={workspace} workspaces={workspaces} identityKey={identityKey}
+                    presentationVersion={info?.home_presentation_versions?.includes(2)?2:1}
                     refreshTick={refreshTick} latestEvent={latestHomeEvent} streamStatus={sseStatus} onNavigate={setView}
                     onAttentionChanged={attention.refresh} onSetupAgent={openAddHarness} onWorkspaceChange={pickWorkspace} registerLeaveGuard={registerHomeLeaveGuard}/>
                 : <HomeView key={workspace} workspace={workspace} refreshTick={refreshTick} attention={attention.state}

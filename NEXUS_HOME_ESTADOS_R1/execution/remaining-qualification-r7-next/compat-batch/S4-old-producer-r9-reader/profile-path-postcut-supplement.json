@@ -1,0 +1,54 @@
+{
+  "status": "PASS_READONLY_POSTCUT_SUPPLEMENT",
+  "layer": "Read-only filesystem hash comparison after the actual old-copy-R9 lifecycle finished",
+  "original_slash_predicate_selected": 0,
+  "original_profile_post_assertion": "VACUOUS; never relabeled as a nonempty executed assertion",
+  "captured_full_file_hash_count": 21,
+  "selected_terminal_files": 5,
+  "required_nonempty_documents": [
+    "terminal/profiles/compat.json",
+    "terminal/work/compat.json"
+  ],
+  "files": [
+    {
+      "relative_path": "terminal/connection-intents/catalog.guard",
+      "bytes_after": 0,
+      "at_single_copy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "post_R9_stop_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required_profile_or_checkpoint": false
+    },
+    {
+      "relative_path": "terminal/connection-intents/compat.json",
+      "bytes_after": 1592,
+      "at_single_copy_sha256": "e4f06fcad5cc750ae8c24e4559807e5190778058a713f8d58cf2ca96ec563c3c",
+      "post_R9_stop_sha256": "e4f06fcad5cc750ae8c24e4559807e5190778058a713f8d58cf2ca96ec563c3c",
+      "required_profile_or_checkpoint": false
+    },
+    {
+      "relative_path": "terminal/profiles/compat.guard",
+      "bytes_after": 0,
+      "at_single_copy_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "post_R9_stop_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required_profile_or_checkpoint": false
+    },
+    {
+      "relative_path": "terminal/profiles/compat.json",
+      "bytes_after": 10790,
+      "at_single_copy_sha256": "7f3131b6f2f7c439748b0d89086d71dcb03b4efb1a40b5438314c734e0c590d9",
+      "post_R9_stop_sha256": "7f3131b6f2f7c439748b0d89086d71dcb03b4efb1a40b5438314c734e0c590d9",
+      "required_profile_or_checkpoint": true
+    },
+    {
+      "relative_path": "terminal/work/compat.json",
+      "bytes_after": 3324,
+      "at_single_copy_sha256": "24b35af8e386dbd4d5dbfafb9a617add3e19726b924d8f4c6215edde1830e413",
+      "post_R9_stop_sha256": "24b35af8e386dbd4d5dbfafb9a617add3e19726b924d8f4c6215edde1830e413",
+      "required_profile_or_checkpoint": true
+    }
+  ],
+  "data_modified": false,
+  "runtime_or_browser_started": false,
+  "rerun": false,
+  "basis": "Original full 21-file hash map captured after the one copy and before R9 startup; only path separators normalized for selection, not data/content/hash",
+  "limits": "This is posterior independent RO evidence, not an assertion that the original terminal/ selector worked on Windows."
+}

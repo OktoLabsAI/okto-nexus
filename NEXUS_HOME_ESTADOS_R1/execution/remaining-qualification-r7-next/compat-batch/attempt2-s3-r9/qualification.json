@@ -1,0 +1,570 @@
+{
+  "status": "PASS_SCOPED_S3",
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "manifest_sha256": "80343e799416efa3f7d5a69c1cd5551d7317f2bd3e6516c84ace8c2ef91d59e2",
+  "runner_sha256": "756382661c65af3320314e553248d3dd8f79cd986bcef87e7df3498831e573d4",
+  "runner_exit_code": 0,
+  "browser_checks_passed": 13,
+  "CLI_commands": [
+    {
+      "command": "service",
+      "subcommand": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "connect",
+      "subcommand": "codex",
+      "exit_code": 0
+    },
+    {
+      "command": "connect",
+      "subcommand": "codex",
+      "exit_code": 0
+    },
+    {
+      "command": "work",
+      "subcommand": "send",
+      "exit_code": 0
+    },
+    {
+      "command": "work",
+      "subcommand": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "service",
+      "subcommand": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "service",
+      "subcommand": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "work",
+      "subcommand": "answer",
+      "exit_code": 0
+    },
+    {
+      "command": "work",
+      "subcommand": "answer",
+      "exit_code": 0
+    },
+    {
+      "command": "work",
+      "subcommand": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "service",
+      "subcommand": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "connect",
+      "subcommand": "codex",
+      "exit_code": 0
+    },
+    {
+      "command": "service",
+      "subcommand": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "work",
+      "subcommand": "close",
+      "exit_code": 0
+    }
+  ],
+  "canonical_operations": [
+    {
+      "operation_id": "op_b1bbc8c28155d7efcc9a4c09bf9f5177",
+      "action": "runtime.open",
+      "admission_state": "DISPATCHED",
+      "latest_stage": "SUBMITTED"
+    },
+    {
+      "operation_id": "op_79b48ba063ccca5b9947ecc6d97f792b",
+      "action": "turn.submit",
+      "admission_state": "RESOLVED_TERMINAL",
+      "latest_stage": "SUCCEEDED"
+    },
+    {
+      "operation_id": "r4op_dacfe9ddabf8ed82180a5d2cd5350488",
+      "action": "input.provide",
+      "admission_state": "DISPATCHED",
+      "latest_stage": "SUBMITTED"
+    },
+    {
+      "operation_id": "op_021a90da4996896f8c5d5c9dd356820a",
+      "action": "runtime.close",
+      "admission_state": "RESOLVED_TERMINAL",
+      "latest_stage": "SUCCEEDED"
+    }
+  ],
+  "selected_binding": {
+    "binding_id": "bind_d97f18d14f42a2b579453ccc8f4a10d5",
+    "server_id": "srv_3bbcae9a251efdf7d1585aace427b6f6",
+    "executor_id": "exe_7bd2b3b51e2f0d24fd41bdcf196c369d",
+    "agent_id": "compat-project-ab1834844a5c",
+    "endpoint_id": "ep_10b14a2ce0b907b646d11fd7e4a18dab",
+    "workspace_id": "wsr_70e88bddf5c9f05dd98411133d7386ad",
+    "workspace_binding_id": "wxb_baecd4812492850adb602b3d2f4d3df8",
+    "adapter_id": "codex_app_server",
+    "candidate_ref": "nexus-install-v1:7465279e3e57f7377a992fcbac8e25db85eae289349d334495fa62b330a14148",
+    "inventory_revision": "sha256:4d9d19952120342674e4b146e7f77ae2b84d7924e1a315668b318e856645add1",
+    "realization_ref": "real_6603998a419a8977b6c170f6a3ae615f",
+    "realization_revision": 1,
+    "binding_revision": 1,
+    "authorization_revision": 2,
+    "configuration_revision": 2,
+    "state": "APPROVED"
+  },
+  "active_scope": {
+    "session_id": "ses_5710d445350a97ba6176a6a6edbf99f6",
+    "operation_id": "op_79b48ba063ccca5b9947ecc6d97f792b",
+    "approval_id": "r4request_fdc1e2e930eefba46c448f274e8496e3fab9d11754e2d1ea50a1b275b0751430"
+  },
+  "UI_interval_profile_checkpoint_hashes_before": {
+    "terminal/profiles/compat.json": "ffd229d51650d8e2ff897868f82583ef0134613a011674ab2a1e558a46f1405e",
+    "terminal/work/compat.json": "ba8eac9d9406c766070aed6e83b0761c23630e6d2b34f6825a8d4d8bb0b86bb7"
+  },
+  "strict_invariants_asserted_by_successful_cli_cycle": [
+    "Before/after UI exact profile and work checkpoint file hashes",
+    "Before/after UI selected binding/endpoint/profile/realization/local configuration/workspace/grant snapshot digest",
+    "Before/after reconnect same binding and project; selected config/grant digest, work checkpoint and Test/probe log unchanged",
+    "PID/instance/generation status tuple unchanged throughout CLI cycle; outer observed matching process birth"
+  ],
+  "invariant_evidence_limit": "Snapshot digests were compared in the executed pinned cli_cycle_v2.py but their local variable values were not separately logged; do not fabricate post hashes.",
+  "synthetic_effects": [
+    {
+      "kind": "synthetic_version_probe"
+    },
+    {
+      "kind": "synthetic_setup_test",
+      "intent": "connect_d1ff23fc6859492ea13ade78f0dcec0b"
+    }
+  ],
+  "canonical_stop": {
+    "state": "stopped",
+    "shutdown_outcome": "drained",
+    "reason": "SHUTDOWN_COMPLETE"
+  },
+  "physical": [
+    {
+      "pid": 58480,
+      "expected_birth": 1794960251.2334375,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 29964,
+      "expected_birth": 1794960251.2587593,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 58348,
+      "expected_birth": 1794960270.611178,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 30748,
+      "expected_birth": 1794960270.6401873,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 18292,
+      "expected_birth": 1794960266.2571163,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 22632,
+      "expected_birth": 1794960266.328564,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 26396,
+      "expected_birth": 1794960264.5783484,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 32576,
+      "expected_birth": 1794960265.9232929,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 33276,
+      "expected_birth": 1794960266.3279052,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 49428,
+      "expected_birth": 1794960265.44022,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 50500,
+      "expected_birth": 1794960266.1876528,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 52248,
+      "expected_birth": 1794960265.3963075,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 59476,
+      "expected_birth": 1794960266.1087005,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 29160,
+      "expected_birth": 1794960270.9785225,
+      "same_birth_alive": false,
+      "birth_reused": true
+    },
+    {
+      "pid": 54956,
+      "expected_birth": 1794960270.9980528,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 15428,
+      "expected_birth": 1794960272.5785625,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 58472,
+      "expected_birth": 1794960272.5998075,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 6984,
+      "expected_birth": 1794960275.0644617,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 56724,
+      "expected_birth": 1794960275.0400124,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 36244,
+      "expected_birth": 1794960278.8355353,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 43492,
+      "expected_birth": 1794960278.811654,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 48920,
+      "expected_birth": 1794960281.2312925,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 58832,
+      "expected_birth": 1794960281.2596595,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 61460,
+      "expected_birth": 1794960281.7318363,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 44932,
+      "expected_birth": 1794960281.76843,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 23560,
+      "expected_birth": 1794960283.6921992,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 43072,
+      "expected_birth": 1794960283.7050495,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 31952,
+      "expected_birth": 1794960293.1725488,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 62176,
+      "expected_birth": 1794960293.1832252,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 38384,
+      "expected_birth": 1794960294.7401788,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 58492,
+      "expected_birth": 1794960267.003615,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 4900,
+      "expected_birth": 1794960296.1343665,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 23972,
+      "expected_birth": 1794960296.1200228,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 43892,
+      "expected_birth": 1794960297.7340028,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 46436,
+      "expected_birth": 1794960297.7550614,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 59972,
+      "expected_birth": 1794960300.3291087,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 61980,
+      "expected_birth": 1794960300.3159547,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 12556,
+      "expected_birth": 1794960302.5861132,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 38296,
+      "expected_birth": 1794960302.5748837,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 40592,
+      "expected_birth": 1794960304.4605615,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 57824,
+      "expected_birth": 1794960304.4823687,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 28564,
+      "expected_birth": 1794960306.7961287,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 31364,
+      "expected_birth": 1794960306.812982,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 45180,
+      "expected_birth": 1794960308.8687325,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 47360,
+      "expected_birth": 1794960308.895177,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 57748,
+      "expected_birth": 1794960313.5255816,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 47624,
+      "expected_birth": 1794960313.552407,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 34332,
+      "expected_birth": 1794960263.5401323,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 57244,
+      "expected_birth": 1794960263.5971775,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 41404,
+      "expected_birth": 1794960267.061869,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 11012,
+      "expected_birth": 1794960268.2590668,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 1424,
+      "expected_birth": 1794960268.312632,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 21436,
+      "expected_birth": 1794960285.7952845,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 56520,
+      "expected_birth": 1794960285.847436,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 55856,
+      "expected_birth": 1794960290.5829563,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 58768,
+      "expected_birth": 1794960290.6439517,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 46820,
+      "expected_birth": 1794960291.8579867,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 2892,
+      "expected_birth": 1794960291.9003186,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 61104,
+      "expected_birth": 1794960311.690241,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 56944,
+      "expected_birth": 1794960311.7480853,
+      "same_birth_alive": false,
+      "present": false
+    }
+  ],
+  "physical_same_birth_remaining": 0,
+  "listeners_after": [],
+  "forced_containment": [],
+  "guards_before": {
+    "source_count": 1829,
+    "runtime_payloads": {
+      "r9": 1031,
+      "i4_readonly": 1028
+    },
+    "cli_payload_count": 192,
+    "drift": []
+  },
+  "guards_after": {
+    "source_count": 1829,
+    "runtime_payloads": {
+      "r9": 1031,
+      "i4_readonly": 1028
+    },
+    "cli_payload_count": 192,
+    "drift": []
+  },
+  "guarded_generated_pins": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-compat-s3-tmkm3ve5\\nexus-hst-browser-s3\\playwright-cli.json": "031705d680d2dcfa060d48b2fe44ed76f871786f9b66141841e0c2a61508b90c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-compat-s3-tmkm3ve5\\nexus-hst-browser-s3\\warmup.js": "cba253602b8feaf790d469d870742647ba253439d9860b60ec2b6cdc91acffd7",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-compat-s3-tmkm3ve5\\nexus-hst-browser-s3\\s3-reviewed.js": "c69c028c697f87de0fd450110f79f567e3ff20fd2d5f17ea6abab784a859e255"
+  },
+  "canonical_human_login_and_warmup_before_admissions": true,
+  "browser_profile_proof": {
+    "status": "EXACT_OWN_PROFILE_MAIN_CAPTURED",
+    "raw_sha256": "f759f7547ab5dcf7a74307a06c9e26581fe9b5ab6138d1a0bc43910478e0a276",
+    "raw_argv_private_only": true
+  },
+  "provider_invocations": 0,
+  "old_i4_app_started": false,
+  "K05_without_dashboard": "NOT_QUALIFIED: browser was already open; separate CLI-only candidate cut required",
+  "S4": "NOT_RUN",
+  "scenario_scope_notes": {
+    "H10": "Executed presentation rollback with active CLI and exact own foreground owner/config/root/grant/checkpoint invariants",
+    "K03": "Executed classic/operational/classic Settings preference, exact Home binding, classic session summary, selected project and exact global bell question. No full classic Conversations navigation claimed."
+  },
+  "layer": "Actual isolated installed CLI subprocesses + real foreground HTTP/ServiceLifecycle + headless own-profile Chrome + canonical SQLite writes; version/setup-Test/native protocol peers explicitly synthetic",
+  "raw_retained_private_only": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-compat-s3-tmkm3ve5",
+  "raw_final_sha256": "d7fac4d8fcd353c24ebd189427b7fbc92c08b00ffe0a7a18dfabf6fd94042d68",
+  "private_logs_copied": false,
+  "cookie_or_token_copied": false,
+  "input_readers_released": true,
+  "limits": [
+    "No real harness/provider account, Windows service task, logoff/reboot, human acceptance or performance claim.",
+    "Selected snapshot scope, not all telemetry/lease/control rows or whole-DB read-only behavior.",
+    "Runtime.close/turn terminal receipts are actual; decision CONFIRMED alone is not native resume acknowledgement.",
+    "Bounded ancestry/root sampling cannot enumerate every short-lived process.",
+    "Attempt1 fixture startup failure remains unchanged."
+  ]
+}

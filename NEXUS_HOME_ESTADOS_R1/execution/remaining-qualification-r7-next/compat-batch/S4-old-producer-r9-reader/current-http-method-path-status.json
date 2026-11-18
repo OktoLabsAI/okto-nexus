@@ -1,0 +1,47 @@
+[
+  {
+    "method": "GET",
+    "path": "/api/v1/service",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/operator-auth/login",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/info",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/info",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/harness-board",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/home/results",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/service",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/service",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/service/stop",
+    "status": 200
+  }
+]

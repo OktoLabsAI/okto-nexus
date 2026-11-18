@@ -1,0 +1,412 @@
+TAP version 13
+# Subtest: bursts coalesce while pending and never exceed one read/second
+ok 1 - bursts coalesce while pending and never exceed one read/second
+  ---
+  duration_ms: 10.4969
+  type: 'test'
+  ...
+# Subtest: scope generation clears protected state and ignores late old reads without overlap
+ok 2 - scope generation clears protected state and ignores late old reads without overlap
+  ---
+  duration_ms: 1.8961
+  type: 'test'
+  ...
+# Subtest: 401 clears visible and paused data and blocks refresh until a new identity
+ok 3 - 401 clears visible and paused data and blocks refresh until a new identity
+  ---
+  duration_ms: 1.1937
+  type: 'test'
+  ...
+# Subtest: 403 clears visible and paused data and blocks refresh until a new identity
+ok 4 - 403 clears visible and paused data and blocks refresh until a new identity
+  ---
+  duration_ms: 1.4897
+  type: 'test'
+  ...
+# Subtest: partial failure retains only same-scope stale block, never successful empty or stale forbidden data
+ok 5 - partial failure retains only same-scope stale block, never successful empty or stale forbidden data
+  ---
+  duration_ms: 2.3851
+  type: 'test'
+  ...
+# Subtest: visual pause keeps published identity and accepts newest snapshot only when applied
+ok 6 - visual pause keeps published identity and accepts newest snapshot only when applied
+  ---
+  duration_ms: 1.3991
+  type: 'test'
+  ...
+# Subtest: pagination deduplicates immutable IDs; conflict resets via coherent overview instead of replaying cursor
+ok 7 - pagination deduplicates immutable IDs; conflict resets via coherent overview instead of replaying cursor
+  ---
+  duration_ms: 2.6117
+  type: 'test'
+  ...
+# Subtest: fallback and source TTL refresh independently of live stream; hidden events reduce work then wake
+ok 8 - fallback and source TTL refresh independently of live stream; hidden events reduce work then wake
+  ---
+  duration_ms: 2.7517
+  type: 'test'
+  ...
+# Subtest: returning from background fences sensitive sections until the fresh GET completes
+ok 9 - returning from background fences sensitive sections until the fresh GET completes
+  ---
+  duration_ms: 1.6073
+  type: 'test'
+  ...
+# Subtest: a GET begun in background cannot clear the wake revalidation fence
+ok 10 - a GET begun in background cannot clear the wake revalidation fence
+  ---
+  duration_ms: 2.2512
+  type: 'test'
+  ...
+# Subtest: reconnect/gap invalidate, unrelated events do not, and disposal removes timers
+ok 11 - reconnect/gap invalidate, unrelated events do not, and disposal removes timers
+  ---
+  duration_ms: 2.1708
+  type: 'test'
+  ...
+# Subtest: wrong-server response is not admitted into the current cache
+ok 12 - wrong-server response is not admitted into the current cache
+  ---
+  duration_ms: 0.9186
+  type: 'test'
+  ...
+# Subtest: project Attention pagination uses Home scope and opaque partition cursor with canonical occurrence identities
+ok 13 - project Attention pagination uses Home scope and opaque partition cursor with canonical occurrence identities
+  ---
+  duration_ms: 1.3547
+  type: 'test'
+  ...
+# Subtest: external generations remain distinct during paginated append and never change native results
+ok 14 - external generations remain distinct during paginated append and never change native results
+  ---
+  duration_ms: 1.1942
+  type: 'test'
+  ...
+# Subtest: invalidation matrix and scope keys distinguish external, attention, origin and identity
+ok 15 - invalidation matrix and scope keys distinguish external, attention, origin and identity
+  ---
+  duration_ms: 0.405
+  type: 'test'
+  ...
+# Subtest: time spent reading does not extend source TTL by another full interval
+ok 16 - time spent reading does not extend source TTL by another full interval
+  ---
+  duration_ms: 1.3153
+  type: 'test'
+  ...
+# Subtest: business feed pages use actual id/kind/agent_id projection and retain distinct records
+ok 17 - business feed pages use actual id/kind/agent_id projection and retain distinct records
+  ---
+  duration_ms: 1.6086
+  type: 'test'
+  ...
+# Subtest: overview refresh retains loaded feed as stale then revalidates first page without old cursor
+ok 18 - overview refresh retains loaded feed as stale then revalidates first page without old cursor
+  ---
+  duration_ms: 6.2926
+  type: 'test'
+  ...
+# Subtest: modal pause retains expanded pages only for same revision, resets changed revisions, and never crosses scope
+ok 19 - modal pause retains expanded pages only for same revision, resets changed revisions, and never crosses scope
+  ---
+  duration_ms: 2.7772
+  type: 'test'
+  ...
+# Subtest: E02 event during initial snapshot survives its older cursor and queues a fresh canonical read
+ok 20 - E02 event during initial snapshot survives its older cursor and queues a fresh canonical read
+  ---
+  duration_ms: 1.9705
+  type: 'test'
+  ...
+# Subtest: E02 reconnect and retention gap during a read resnapshot without replaying an obsolete page cursor
+ok 21 - E02 reconnect and retention gap during a read resnapshot without replaying an obsolete page cursor
+  ---
+  duration_ms: 1.4513
+  type: 'test'
+  ...
+# Subtest: E03 duplicate and out-of-order hints cannot replay activity states over newer canonical snapshots
+ok 22 - E03 duplicate and out-of-order hints cannot replay activity states over newer canonical snapshots
+  ---
+  duration_ms: 1.3368
+  type: 'test'
+  ...
+# Subtest: E05 a continuously live stream does not renew external TTL or replace stale reported work with native activity
+ok 23 - E05 a continuously live stream does not renew external TTL or replace stale reported work with native activity
+  ---
+  duration_ms: 3.4316
+  type: 'test'
+  ...
+# Subtest: Server and project attention paginate independently by canonical attention_id without changing project counters
+ok 24 - Server and project attention paginate independently by canonical attention_id without changing project counters
+  ---
+  duration_ms: 2.4201
+  type: 'test'
+  ...
+# Subtest: Server failure and TTL remain section-scoped, while Server paging authorization loss clears every protected section
+ok 25 - Server failure and TTL remain section-scoped, while Server paging authorization loss clears every protected section
+  ---
+  duration_ms: 1.1602
+  type: 'test'
+  ...
+# Subtest: Server pages are generation-bound, paused reads do not publish, and page conflicts refresh both partitions
+ok 26 - Server pages are generation-bound, paused reads do not publish, and page conflicts refresh both partitions
+  ---
+  duration_ms: 2.1161
+  type: 'test'
+  ...
+# Subtest: one board read and explicit column append reuse the serialized queue; related pages use entry revision
+ok 27 - one board read and explicit column append reuse the serialized queue; related pages use entry revision
+  ---
+  duration_ms: 37.903
+  type: 'test'
+  ...
+# Subtest: a new global revision moves one card once and resets all loaded columns and related pages
+ok 28 - a new global revision moves one card once and resets all loaded columns and related pages
+  ---
+  duration_ms: 7.0958
+  type: 'test'
+  ...
+# Subtest: 409 in one column closes every cursor before a full board resnapshot, never appending moved work
+ok 29 - 409 in one column closes every cursor before a full board resnapshot, never appending moved work
+  ---
+  duration_ms: 3.2093
+  type: 'test'
+  ...
+# Subtest: an enqueued old column cursor is discarded when a stream invalidation requests a new snapshot
+ok 30 - an enqueued old column cursor is discarded when a stream invalidation requests a new snapshot
+  ---
+  duration_ms: 2.4951
+  type: 'test'
+  ...
+# Subtest: late403 from aborted scope cannot revoke the new board, and focus/pause do not publish moved rows
+ok 31 - late403 from aborted scope cannot revoke the new board, and focus/pause do not publish moved rows
+  ---
+  duration_ms: 2.6399
+  type: 'test'
+  ...
+# Subtest: duplicate cross-column cards or foreign column pages fail closed rather than masquerading as counts
+ok 32 - duplicate cross-column cards or foreign column pages fail closed rather than masquerading as counts
+  ---
+  duration_ms: 0.8071
+  type: 'test'
+  ...
+# Subtest: entries uses the same serialized burst queue and preserves event received during initial snapshot
+ok 33 - entries uses the same serialized burst queue and preserves event received during initial snapshot
+  ---
+  duration_ms: 11.6424
+  type: 'test'
+  ...
+# Subtest: family, identity and exact quick defaults fence old reads before exposing new state
+ok 34 - family, identity and exact quick defaults fence old reads before exposing new state
+  ---
+  duration_ms: 3.239
+  type: 'test'
+  ...
+# Subtest: group and session pagination bind parents/revision and append immutable identities only
+ok 35 - group and session pagination bind parents/revision and append immutable identities only
+  ---
+  duration_ms: 5.1769
+  type: 'test'
+  ...
+# Subtest: foreign server/parent response is not admitted, and409 resnapshots without replaying an action
+ok 36 - foreign server/parent response is not admitted, and409 resnapshots without replaying an action
+  ---
+  duration_ms: 3.3864
+  type: 'test'
+  ...
+# Subtest: 401 clears every paused entries cache and blocks repeated reads
+ok 37 - 401 clears every paused entries cache and blocks repeated reads
+  ---
+  duration_ms: 2.0581
+  type: 'test'
+  ...
+# Subtest: 403 clears every paused entries cache and blocks repeated reads
+ok 38 - 403 clears every paused entries cache and blocks repeated reads
+  ---
+  duration_ms: 1.3831
+  type: 'test'
+  ...
+# Subtest: paused group order remains stable until apply and changed revision clears parent pages
+ok 39 - paused group order remains stable until apply and changed revision clears parent pages
+  ---
+  duration_ms: 1.9233
+  type: 'test'
+  ...
+# Subtest: live SSE cannot extend TTL, and background wake revalidates before displaying old actions
+ok 40 - live SSE cannot extend TTL, and background wake revalidates before displaying old actions
+  ---
+  duration_ms: 6.3369
+  type: 'test'
+  ...
+# Subtest: holding order keeps exact group membership and blocks old cursor until explicit apply
+ok 41 - holding order keeps exact group membership and blocks old cursor until explicit apply
+  ---
+  duration_ms: 1.3368
+  type: 'test'
+  ...
+# Subtest: stable held rows accept text updates, but a new revision cannot discard expanded child pages
+ok 42 - stable held rows accept text updates, but a new revision cannot discard expanded child pages
+  ---
+  duration_ms: 2.1074
+  type: 'test'
+  ...
+# Subtest: partial totals remain unknown and unavailable data is retained only as explicit same-scope stale content
+ok 43 - partial totals remain unknown and unavailable data is retained only as explicit same-scope stale content
+  ---
+  duration_ms: 1.583
+  type: 'test'
+  ...
+# Subtest: connection and workspace context hints invalidate entries through the existing coalesced queue
+ok 44 - connection and workspace context hints invalidate entries through the existing coalesced queue
+  ---
+  duration_ms: 0.7655
+  type: 'test'
+  ...
+# Subtest: related attention/results use entry-specific cursors without changing group inventory
+ok 45 - related attention/results use entry-specific cursors without changing group inventory
+  ---
+  duration_ms: 1.6225
+  type: 'test'
+  ...
+# Subtest: multiple or incomplete session relations require explicit choice; a proven unique relation can open
+ok 46 - multiple or incomplete session relations require explicit choice; a proven unique relation can open
+  ---
+  duration_ms: 2.2279
+  type: 'test'
+  ...
+# Subtest: relation conflict rereads first page once without changing exact selection or merging revisions
+ok 47 - relation conflict rereads first page once without changing exact selection or merging revisions
+  ---
+  duration_ms: 0.803
+  type: 'test'
+  ...
+# Subtest: relation reads never retry forbidden/foreign scope or cross an aborted generation
+ok 48 - relation reads never retry forbidden/foreign scope or cross an aborted generation
+  ---
+  duration_ms: 0.755
+  type: 'test'
+  ...
+# Subtest: panel pagination rejects foreign parent, scope, revision and hidden default changes
+ok 49 - panel pagination rejects foreign parent, scope, revision and hidden default changes
+  ---
+  duration_ms: 0.5131
+  type: 'test'
+  ...
+# Subtest: one contextual panel composes work and exact session choice without a runtime directory or nested dialog
+ok 50 - one contextual panel composes work and exact session choice without a runtime directory or nested dialog
+  ---
+  duration_ms: 8.1149
+  type: 'test'
+  ...
+# Subtest: a question uses its own explicit session and external or missing context never adopts a sibling
+ok 51 - a question uses its own explicit session and external or missing context never adopts a sibling
+  ---
+  duration_ms: 0.2668
+  type: 'test'
+  ...
+# Subtest: one Server board admits Active harness plus distinct request/delivery of the same connection, without source merging
+ok 52 - one Server board admits Active harness plus distinct request/delivery of the same connection, without source merging
+  ---
+  duration_ms: 14.6883
+  type: 'test'
+  ...
+# Subtest: explicit contextual paging uses the same queue while display is paused, without publishing a newer root
+ok 53 - explicit contextual paging uses the same queue while display is paused, without publishing a newer root
+  ---
+  duration_ms: 4.1905
+  type: 'test'
+  ...
+# Subtest: identical paused polling and observation timestamps do not create pending changes or block detail paging
+ok 54 - identical paused polling and observation timestamps do not create pending changes or block detail paging
+  ---
+  duration_ms: 5.9856
+  type: 'test'
+  ...
+# Subtest: a paused real transition is retained, but normal board changes are notices rather than errors
+ok 55 - a paused real transition is retained, but normal board changes are notices rather than errors
+  ---
+  duration_ms: 1.8585
+  type: 'test'
+  ...
+# Subtest: presentation negotiation is generation-bound and v1 omits the query parameter
+ok 56 - presentation negotiation is generation-bound and v1 omits the query parameter
+  ---
+  duration_ms: 2.84
+  type: 'test'
+  ...
+# Subtest: v2 admits awaiting confirmation without inventing blocks_harness and requires scoped semantic fields
+ok 57 - v2 admits awaiting confirmation without inventing blocks_harness and requires scoped semantic fields
+  ---
+  duration_ms: 4.5284
+  type: 'test'
+  ...
+# Subtest: pending board presentation does not block current contextual reads and pages
+ok 58 - pending board presentation does not block current contextual reads and pages
+  ---
+  duration_ms: 2.8529
+  type: 'test'
+  ...
+# Subtest: a context read queued during background polling survives and uses the current scope
+ok 59 - a context read queued during background polling survives and uses the current scope
+  ---
+  duration_ms: 2.2567
+  type: 'test'
+  ...
+# Subtest: 409 rereads the context first page in place and does not append old rows or replay forever
+ok 60 - 409 rereads the context first page in place and does not append old rows or replay forever
+  ---
+  duration_ms: 2.782
+  type: 'test'
+  ...
+# Subtest: 403 clears paused detail caches and queued reads immediately
+ok 61 - 403 clears paused detail caches and queued reads immediately
+  ---
+  duration_ms: 1.7534
+  type: 'test'
+  ...
+# Subtest: a contextual409 invalidates every root/page cursor and resnapshots all columns before any old append
+ok 62 - a contextual409 invalidates every root/page cursor and resnapshots all columns before any old append
+  ---
+  duration_ms: 2.3006
+  type: 'test'
+  ...
+# Subtest: new global revision clears all loaded children and unlinked pages; queued cursors and oldscope403 cannot survive
+ok 63 - new global revision clears all loaded children and unlinked pages; queued cursors and oldscope403 cannot survive
+  ---
+  duration_ms: 3.8261
+  type: 'test'
+  ...
+# Subtest: foreign parents, duplicate item IDs and forbidden column variants fail closed
+ok 64 - foreign parents, duplicate item IDs and forbidden column variants fail closed
+  ---
+  duration_ms: 2.2872
+  type: 'test'
+  ...
+# Subtest: request and reported delivery with unknown origin do not invalidate the board or fabricate a harness
+ok 65 - request and reported delivery with unknown origin do not invalidate the board or fabricate a harness
+  ---
+  duration_ms: 0.9159
+  type: 'test'
+  ...
+# Subtest: nonempty origin references remain fully scoped and complete
+ok 66 - nonempty origin references remain fully scoped and complete
+  ---
+  duration_ms: 1.417
+  type: 'test'
+  ...
+# Subtest: QC public metadata association changes revision and resets pages without renaming the canonical card or adapter
+ok 67 - QC public metadata association changes revision and resets pages without renaming the canonical card or adapter
+  ---
+  duration_ms: 4.8485
+  type: 'test'
+  ...
+1..67
+# tests 67
+# suites 0
+# pass 67
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3344.5307

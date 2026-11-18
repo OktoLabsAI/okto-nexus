@@ -1,0 +1,22 @@
+{
+  "status": "READ_ONLY_CAPTURED_LAUNCH_COMPARISON",
+  "literal_error": "DevTools remote debugging requires a non-default data directory. Specify this using --user-data-dir.",
+  "same_error_observed": true,
+  "actual_user_data_arguments": [
+    "--user-data-dir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-diagnostic-pxyi2npo\\browser-profile",
+    "--remote-debugging-pipe about:blank"
+  ],
+  "headless": true,
+  "no_sandbox_present": false,
+  "automation_controlled_argument_present": true,
+  "raw_debug_sha256": "eaaccdb042c67397e2f51abc4cf3948ed724474584a6c183c61d74b501774133",
+  "raw_debug_copied": false,
+  "known_births": 14,
+  "forced_births": 11,
+  "remaining": 0,
+  "listeners": [],
+  "immutable": true,
+  "product_modules_loaded": [],
+  "causality": "No isolated flag cause or product/performance diagnosis inferred",
+  "rerun": false
+}

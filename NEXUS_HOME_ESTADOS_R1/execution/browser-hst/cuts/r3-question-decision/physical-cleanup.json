@@ -1,0 +1,17 @@
+{
+  "supervisor": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "own_root_processes": [],
+  "listener_port": 57221,
+  "listener_pids": [],
+  "excluded": "Current curation process/ancestors, not runtime or browser",
+  "secret_cookie_scan": "NO_MATCH",
+  "private_auth_and_wire_logs": "Not copied",
+  "data_preserved": true
+}

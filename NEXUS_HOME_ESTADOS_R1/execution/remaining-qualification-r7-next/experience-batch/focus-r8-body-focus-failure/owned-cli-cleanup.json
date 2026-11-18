@@ -1,0 +1,9 @@
+{
+  "reason": "Read-only browser cleanup after output filename collision; no test rerun",
+  "command": "rtk proxy npx.cmd --yes --package @playwright/cli playwright-cli --session=hst-experience-focus-launch-r8 close",
+  "chunk_id": "492538",
+  "wall_time_seconds": 3.6094744,
+  "exit_code": 0,
+  "original_token_count": 13,
+  "output": "Browser 'hst-experience-focus-launch-r8' closed\n\n"
+}

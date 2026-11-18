@@ -1348,6 +1348,11 @@ class HandoffService:
                 # (it is what a dynamic capability verifier needs to act), the
                 # delivered RESULT does not - the verifier inspects it via
                 # handoff_get. Feedback does not exist yet by construction.
+                from ..domain.home_delivery_semantics import delivery_reference
+                persisted = self._handoffs.read_outcome(uow, workspace_id=workspace_id,
+                    handoff_id=handoff_id) or {}
+                delivery_ref = delivery_reference(workspace_id, handoff_id,
+                    updated.claim_epoch, persisted.get("result"))
                 verify_by_descriptor = _loads_target(verification.get("verify_by"))
                 self._emit(
                     uow,
@@ -1359,6 +1364,9 @@ class HandoffService:
                         "workspace_id": updated.workspace_id,
                         "status": updated.status,
                         "claimed_by": updated.claimed_by,
+                        "claim_epoch": delivery_ref["claim_epoch"],
+                        "delivery_ref": delivery_ref,
+                        "delivery_revision": delivery_ref["delivery_revision"],
                         "verify_by": verify_by_descriptor,
                         "acceptance_criteria": _loads_target(
                             verification.get("acceptance_criteria")
@@ -1490,6 +1498,9 @@ class HandoffService:
             outcome = self._handoffs.read_outcome(
                 uow, workspace_id=workspace_id, handoff_id=handoff_id
             ) or {"result": None, "rejected_reason": None}
+            from ..domain.home_delivery_semantics import delivery_reference
+            delivery_ref = delivery_reference(workspace_id, handoff_id,
+                handoff.claim_epoch, outcome.get("result"))
             if verdict_value == VERDICT_PASS:
                 updated = self._handoffs.transition_verifying(
                     uow,
@@ -1510,6 +1521,10 @@ class HandoffService:
                     "workspace_id": updated.workspace_id,
                     "status": updated.status,
                     "verified_by": agent_id,
+                    "claim_epoch": delivery_ref["claim_epoch"],
+                    "delivery_ref": delivery_ref,
+                    "delivery_revision": delivery_ref["delivery_revision"],
+                    "verification_verdict": "pass",
                 }
                 if outcome.get("result") is not None:
                     event_payload["result"] = outcome["result"]
@@ -1556,6 +1571,12 @@ class HandoffService:
                     "status": updated.status,
                     "claimed_by": updated.claimed_by,
                     "lease_expires_at": updated.lease_expires_at,
+                    "claim_epoch": delivery_ref["claim_epoch"],
+                    "current_claim_epoch": updated.claim_epoch,
+                    "delivery_ref": delivery_ref,
+                    "delivery_revision": delivery_ref["delivery_revision"],
+                    "verification_verdict": "fail",
+                    "verified_by": agent_id,
                 }
                 if feedback_value is not None:
                     event_payload["feedback"] = feedback_value

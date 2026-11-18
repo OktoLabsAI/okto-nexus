@@ -1,0 +1,9 @@
+{
+  "gate": "ROOT_APPROVED_BACKEND_BATCH_R8",
+  "attempt": 4,
+  "owner_sha256": "8d974736c743c4cc9aa1bfb3d0017222bcb064d888b9b757337bd3368664f55f",
+  "runner_sha256": "90f0840be336a53b95be18d90f85ec264357bc2f32b925febdbe2932da030815",
+  "manifest_sha256": "14ab5bda85dca48a2c70dacfe1da9f8fc2e1fd0f0f46658c7de54fdee897e58a",
+  "authorization": "Explicit Root approval after diff review: execute all seven once, stop at first unsuccessful case; preserve all prior attempts and strict operation actor map.",
+  "constraints": "R8 source/prefix unchanged. No provider. No product, original tests, ledger or Git edits."
+}

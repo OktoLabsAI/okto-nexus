@@ -1,0 +1,76 @@
+--- R8/security-batch/run.py
++++ R9/security-r9-batch/run.py
+@@ -7,7 +7,6 @@
+ import hashlib
+ import importlib.util
+ import json
+-import os
+ from pathlib import Path
+ import subprocess
+ import sys
+@@ -126,6 +125,11 @@
+     preflight = load('security_preflight_run', HERE/'preflight.py')
+     before = preflight.check(args.gate)  # Before allocation/process/browser.
+     gate = json.loads(args.gate.read_text())
++    import re
++    assert re.fullmatch(r'hst-security-r9-s1-[a-z0-9-]{1,80}',gate['cut_id'])
++    with (HERE/('attempt-'+gate['cut_id']+'.json')).open('x',encoding='utf-8') as attempt:
++        attempt.write(json.dumps({'gate_sha256':preflight.sha(args.gate),
++                                  'manifest_sha256':preflight.sha(HERE/'prepared-manifest.json')})+'\n')
+     browser = preflight.REPO/'NEXUS_HOME_ESTADOS_R1/execution/browser-hst'
+     preparation = subprocess.run(['rtk','proxy',sys.executable,'-B',str(HERE/'prepare.py'),
+         '--gate',str(args.gate.resolve())], input=b'', capture_output=True, timeout=25, check=True)
+@@ -134,21 +138,21 @@
+     deadline = time.monotonic()+180
+     lifecycle = load('security_containment', browser/'containment.py')
+     owner = lifecycle.Owned(root)
+-    env = lifecycle.environment(root)
+-    env['PATH'] = str(Path(r'C:/Program Files/nodejs')) + os.pathsep + str(Path(os.environ['SYSTEMROOT'])/'System32')
+-    env['npm_config_cache'] = str(root/'npm-cache')
+-    env['npm_config_userconfig'] = str(root/'no-user-npmrc')
++    browser_driver = load('security_r9_browser_driver', HERE/'browser_driver.py')
++    env = browser_driver.environment(root)
++    # Browser path-only host env differs from the separately isolated app env.
++    tooling=json.loads((HERE/'prepared-manifest.json').read_text())['browser_tooling']
++    explicit_config=root/'playwright-cli.json'
++    shutil.copyfile(HERE/'playwright-cli.json',explicit_config)
+     commands = Commands(root, env, deadline)
+-    npx = Path(r'C:/Program Files/nodejs/npx.cmd')
+-    assert npx.is_file()
++    assert Path(tooling['node']).is_file() and Path(tooling['entry']).is_file()
+     rtk = shutil.which('rtk')
+     assert rtk, 'Resolve RTK before sanitized child PATH'
+     session = gate['cut_id']
+     opened, failure, results, diffs, fixture_ready = False, None, [], [], None
+ 
+     def cli(name, *arguments, cleanup=False):
+-        return commands.run(name, [rtk,'proxy',str(npx),'--yes','--package','@playwright/cli',
+-            'playwright-cli','--session='+session,*arguments], cleanup=cleanup)
++        return commands.run(name, [rtk,'proxy',tooling['node'],tooling['entry'],'--session='+session,*arguments], cleanup=cleanup)
+ 
+     def body(name, filename, config):
+         target = root/(name+'.js')
+@@ -207,9 +211,12 @@
+         assert len(cards)==1
+         ref = fixture_ready['references'][0]
+         cfg = {'url':url,'reference':ref,'baseline_card_ids':[item['id'] for item in cards]}
+-        cli('open','open','about:blank','--browser=chrome','--profile='+str(root/'browser-profile'))
++        cli('open','open','about:blank','--browser=chrome','--profile='+str(root/'browser-profile'),'--config='+str(explicit_config))
+         opened=True
+-        cli('load-state','state-load',fixture_ready['storage'])
++        commands.sample()
++        argv_proof=browser_driver.capture(root,commands.known,tooling)
++        write(root/'browser-argv-before-home.json',argv_proof)
++        cli('load-state' ,'state-load',fixture_ready['storage'])
+         # Native peer question TTL is unchanged120s; baseline has no question.
+         if gate['case']=='S1':
+             closed = [item for item in fixture_ready['sessions'] if item['closed']]
+@@ -273,6 +280,8 @@
+             'browser_cleanup':containment,'known_births':list(commands.known.values()),'listeners':listeners,
+             'provider_invocations':0,'root':str(root),'deadline_seconds':180,
+             'runtime_helper_guarded':helper_guarded,
++            'browser_environment_policy':'windows-path-allowlist-app-env-own-v1',
++            'npx_or_npm_used':False,
+             'sampling_limit':'Observed ancestry plus own-root/birth argv scan; not a claim of capturing every short-lived child'}
+         final_path=root/'control/final.json'
+         fixture_final=json.loads(final_path.read_text()) if final_path.exists() else None

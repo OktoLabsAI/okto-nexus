@@ -1,0 +1,25 @@
+{
+  "status": "READY_FOR_HUMAN_NOT_PASS",
+  "url": "http://127.0.0.1:59626",
+  "ownroot": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-fwikzglf",
+  "supervisor_pid": 51996,
+  "fixture_launcher_pid": 59856,
+  "browser_session": "hst-human-r9-1",
+  "read_window_seconds": 900,
+  "authority": "Original lease/question120s and peer150s; no renewal. Read window does not extend evidence currentness.",
+  "question_expires_at": "2026-11-18T02:29:48.813000+00:00",
+  "active_observed_at": "2026-11-18T02:27:49.393735Z",
+  "source": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "stop": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-fwikzglf\\control\\stop",
+  "supervisor_stop": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-fwikzglf\\control\\human-supervisor-stop",
+  "profile": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-fwikzglf\\browser-profile",
+  "public_observations": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\human-r9-session-1\\observations.json",
+  "provider_invocations": 0,
+  "ready": {
+    "url": "http://127.0.0.1:59626/",
+    "working": true,
+    "openDialogs": 0,
+    "httpWrites": []
+  }
+}

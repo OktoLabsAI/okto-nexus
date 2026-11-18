@@ -1,0 +1,66 @@
+{
+  "at": "2026-11-17T23:22:13.957799+00:00",
+  "status": "PASS",
+  "process_observations": [
+    {
+      "pid": 61652,
+      "birth": 1794957692.4108145,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe",
+      "same_process_still_alive": false
+    },
+    {
+      "pid": 56548,
+      "birth": 1794957692.4417453,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe",
+      "same_process_still_alive": false
+    },
+    {
+      "pid": 29576,
+      "birth": 1794957692.4580495,
+      "exe": "C:\\Python313\\python.exe",
+      "same_process_still_alive": false
+    },
+    {
+      "pid": 27080,
+      "birth": 1794957695.228614,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe",
+      "same_process_still_alive": false
+    },
+    {
+      "pid": 44336,
+      "birth": 1794957695.2420065,
+      "exe": "C:\\Python313\\python.exe",
+      "same_process_still_alive": false
+    },
+    {
+      "pid": 61520,
+      "birth": 1794957700.8868504,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe",
+      "same_process_still_alive": false
+    },
+    {
+      "pid": 29772,
+      "birth": 1794957700.9023843,
+      "exe": "C:\\Python313\\python.exe",
+      "same_process_still_alive": false
+    }
+  ],
+  "raw_logs": {
+    "location": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-live-mcp-ybmoxtks\\stdout.log",
+    "sha256": "82c15aee7e2b689d3042375b8a52f6f1d4696674d6b46fe26f22b37957228e25",
+    "size": 899,
+    "copied_to_repository": false
+  },
+  "canonical_stop": {
+    "physical_exit": true,
+    "exit_code": 0,
+    "canonical_stop_exit_code": 0
+  },
+  "provider_calls": 0,
+  "personal_credentials_accessed": false,
+  "limits": [
+    "Smoke qualifies real HTTP MCP/SDK transport, not a real model/harness or browser.",
+    "100ms process polling does not enumerate every short-lived child.",
+    "Only sanitized origins, payload hashes, summary and cleanup metadata are curated."
+  ]
+}

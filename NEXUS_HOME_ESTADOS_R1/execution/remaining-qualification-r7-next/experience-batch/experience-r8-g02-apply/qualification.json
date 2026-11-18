@@ -1,0 +1,282 @@
+{
+  "status": "PARTIAL_G01_G04_POSITIVE_G02_LOCATOR_ORACLE_INCOMPLETE",
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "naming": {
+    "status": "PASS_NAMING_PREFLIGHT",
+    "checks": [
+      {
+        "id": "I01-header-menu-accessible-name",
+        "pass": true,
+        "actual": {
+          "attributes": {
+            "ariaLabel": "Application menu",
+            "title": null,
+            "text": ""
+          },
+          "ariaSnapshot": "- button \"Application menu\"",
+          "computedNameFromAX": "Application menu"
+        }
+      },
+      {
+        "id": "I01-header-menu-canonical-name",
+        "pass": true,
+        "actual": "Application menu"
+      },
+      {
+        "id": "I01-header-menu-expanded-state",
+        "pass": true,
+        "actual": {
+          "expandedBefore": "false",
+          "expandedOpen": "true",
+          "expandedClosed": "false",
+          "openAX": "- button \"Application menu\" [expanded]"
+        }
+      },
+      {
+        "id": "zero-browser-POST",
+        "pass": true,
+        "actual": []
+      },
+      {
+        "id": "zero-page-errors",
+        "pass": true,
+        "actual": []
+      }
+    ],
+    "posts": [],
+    "errors": []
+  },
+  "base": {
+    "status": "PASS_EXECUTED_SUBSET",
+    "phase": "base",
+    "checks": [
+      {
+        "id": "G01-real-canonical-GET-entire-scope",
+        "pass": true,
+        "actual": {
+          "status": 200,
+          "expectedScope": {
+            "server_id": "srv_b6276a8d443dcb105e17f34137f715ff",
+            "executor_id": "exe_9767a2101934e853be4bed7f536734c7",
+            "binding_id": "bind_00038d1623e96476be1e5473e0c0b76b",
+            "agent_id": "hst-b",
+            "workspace_id": "wsr_bad3803d3ac19dfbfcab7cdae8127483",
+            "workspace_binding_id": "wxb_440f85541b8877bd4afe0846e5efe195",
+            "session_id": "ses_512ddf28a3822e76cc20efb553f91f3c",
+            "session_owner_generation": 1,
+            "authorization_revision": 2,
+            "configuration_revision": 2,
+            "binding_revision": 1,
+            "credential_epoch": 1
+          },
+          "actualScope": {
+            "server_id": "srv_b6276a8d443dcb105e17f34137f715ff",
+            "executor_id": "exe_9767a2101934e853be4bed7f536734c7",
+            "binding_id": "bind_00038d1623e96476be1e5473e0c0b76b",
+            "agent_id": "hst-b",
+            "workspace_id": "wsr_bad3803d3ac19dfbfcab7cdae8127483",
+            "workspace_binding_id": "wxb_440f85541b8877bd4afe0846e5efe195",
+            "session_id": "ses_512ddf28a3822e76cc20efb553f91f3c",
+            "session_owner_generation": 1,
+            "authorization_revision": 2,
+            "configuration_revision": 2,
+            "binding_revision": 1,
+            "credential_epoch": 1
+          },
+          "comparedKeys": [
+            "agent_id",
+            "authorization_revision",
+            "binding_id",
+            "binding_revision",
+            "configuration_revision",
+            "credential_epoch",
+            "executor_id",
+            "server_id",
+            "session_id",
+            "session_owner_generation",
+            "workspace_binding_id",
+            "workspace_id"
+          ]
+        }
+      },
+      {
+        "id": "G01-exact-target-not-latest",
+        "pass": true,
+        "actual": {
+          "executor_id": "exe_9767a2101934e853be4bed7f536734c7",
+          "kind": "session",
+          "server_id": "srv_b6276a8d443dcb105e17f34137f715ff",
+          "session_id": "ses_512ddf28a3822e76cc20efb553f91f3c",
+          "workspace_id": "wsr_bad3803d3ac19dfbfcab7cdae8127483"
+        }
+      },
+      {
+        "id": "G01-one-modal-one-gesture-exact-output",
+        "pass": true,
+        "actual": {
+          "marker": "HST synthetic output ses_512ddf28a3822e76cc20efb553f91f3c",
+          "chooserNotRequired": true
+        }
+      },
+      {
+        "id": "G04-registered-no-session-no-implicit-open",
+        "pass": true,
+        "actual": {
+          "policy": {
+            "hst-a": {
+              "agent_id": "hst-a",
+              "runtime_enabled": true,
+              "revision": 1,
+              "inherit_global_mcps": null,
+              "session_policy": "per_sender",
+              "broadcast_handoff_auto_claim": null,
+              "defaults": {
+                "runtime_enabled": true,
+                "session_policy": "shared",
+                "revision": 1,
+                "automatic_recovery": true,
+                "inherit_global_mcps": false,
+                "broadcast_handoff_auto_claim": false
+              },
+              "effective": {
+                "runtime_enabled": true,
+                "session_policy": "per_sender",
+                "inherit_global_mcps": false,
+                "broadcast_handoff_auto_claim": false
+              },
+              "handoff_auto_claim_rollout_enabled": false
+            },
+            "hst-b": {
+              "agent_id": "hst-b",
+              "runtime_enabled": true,
+              "revision": 1,
+              "inherit_global_mcps": null,
+              "session_policy": "per_sender",
+              "broadcast_handoff_auto_claim": null,
+              "defaults": {
+                "runtime_enabled": true,
+                "session_policy": "shared",
+                "revision": 1,
+                "automatic_recovery": true,
+                "inherit_global_mcps": false,
+                "broadcast_handoff_auto_claim": false
+              },
+              "effective": {
+                "runtime_enabled": true,
+                "session_policy": "per_sender",
+                "inherit_global_mcps": false,
+                "broadcast_handoff_auto_claim": false
+              },
+              "handoff_auto_claim_rollout_enabled": false
+            }
+          }
+        }
+      },
+      {
+        "id": "zero-browser-POST",
+        "pass": true,
+        "actual": []
+      },
+      {
+        "id": "zero-page-errors",
+        "pass": true,
+        "actual": []
+      }
+    ],
+    "posts": [],
+    "errors": [],
+    "observations": {},
+    "unasserted": [
+      "specific meaningful session titles without a canonical producer",
+      "native 200 percent zoom",
+      "screen reader speech",
+      "full keyboard coverage beyond enumerated traversal",
+      "F12 new decision (prior evidence only)"
+    ]
+  },
+  "history": {
+    "status": "INCOMPLETE",
+    "phase": "history",
+    "checks": [
+      {
+        "id": "G02-canonical-preview-query-observed",
+        "pass": true,
+        "actual": "/api/v1/home/harness-board?limit=10&preview=1&presentation_version=2"
+      },
+      {
+        "id": "G02-one-preview-not-unique",
+        "pass": true,
+        "actual": {
+          "preview": 1,
+          "total": 2,
+          "hasMore": true
+        }
+      },
+      {
+        "id": "G02-current-relation-exact-card-two-sessions",
+        "pass": true,
+        "actual": {
+          "status": 200,
+          "card": "home_group_9de5c9dce67e751ef8a7982c5b1daccc5d8bb1d70974fc7de22539af4475d67f",
+          "total": 2,
+          "exact": true
+        }
+      }
+    ],
+    "posts": [],
+    "errors": [],
+    "observations": {
+      "g02Before": {
+        "url": "http://127.0.0.1:60472/",
+        "applyVisible": false,
+        "homeAX": "- heading \"Home\" [level=1]\n- paragraph: Follow each harness below. Open an activity to see its exact context, or add a harness to this project.\n- button \"Ask for work or chat\"\n- button \"Refresh\"\n- button \"Pause display\"\n- region \"Project\":\n  - text: Project\n  - combobox \"Project\":\n    - option \"All projects\" [selected]\n    - option \"Alpha project for readable authorized collaborator activity and questions\"\n    - option \"Beta project for readable authorized collaborator activity and delivery\"\n  - text: All projects\n  - button \"Add harness\"\n- region \"Project overview\":\n  - paragraph: \"connected: unknown \u00b7 working: unknown \u00b7 Idle: unknown \u00b7 queued: unknown \u00b7 1 unconfirmed \u00b7 disconnected: unknown\"\n  - paragraph: \"0 actions \u00b7 harnesses paused: unknown\"\n- status: Updated harness activity changed the board. All columns were revalidated.\n- status\n- region \"Follow-up\":\n  - heading \"Follow-up\" [level=2]\n  - region \"Active\":\n    - heading \"Active\" [level=3]\n    - text: 2 harnesses\n    - list:\n      - listitem:\n        - 'heading \"Harness ID: reviewer\" [level=4]'\n        - paragraph: \"Collaborator: Hst A\"\n        - paragraph: Codex \u00b7 Host not reported\n        - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n        - text: Registered harness\n        - paragraph: Connection evidence stale. Inspect for current details.\n        - list \"Activity preview\"\n        - paragraph: No tracked activity.\n        - button \"Follow activity\"\n        - group: Connection details\n      - listitem:\n        - 'heading \"Harness ID: reviewer\" [level=4]'\n        - paragraph: \"Collaborator: Hst B\"\n        - paragraph: Codex \u00b7 Host not reported\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - text: Idle\n        - list \"Activity preview\":\n          - listitem:\n            - paragraph: Work request\n            - paragraph: Failed\n            - button \"View delivery\"\n        - button \"Follow activity\"\n        - group: Connection details\n  - region \"Needs you\":\n    - heading \"Needs you\" [level=3]\n    - text: 0 items\n    - list\n    - status: No needs you items in this view.\n  - region \"Results\":\n    - heading \"Results\" [level=3]\n    - text: 3 deliveries\n    - list:\n      - listitem:\n        - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n        - heading \"Work result\" [level=4]\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - paragraph: Execution ended with failure\n        - paragraph:\n          - text: Received\n          - time: 2026-11-17T22:35:22.054Z\n        - button \"View result\"\n      - listitem:\n        - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n        - heading \"Work result\" [level=4]\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - paragraph: Response available\n        - paragraph:\n          - text: Received\n          - time: 2026-11-17T22:35:21.636Z\n        - button \"View result\"\n      - listitem:\n        - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n        - heading \"Work result\" [level=4]\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - paragraph: Response available\n        - paragraph:\n          - text: Received\n          - time: 2026-11-17T22:35:05.221Z\n        - button \"View result\""
+      },
+      "failure": {
+        "url": "http://127.0.0.1:60472/",
+        "bodyAX": "- banner:\n  - button \"Collapse navigation\" [expanded]\n  - img \"Okto Nexus\"\n  - navigation \"Breadcrumb\": Home\n  - button \"Needs attention. All projects and Server. 0 need action, 3 to watch.\": Needs attention 3\n  - text: \u25cf Live\n  - button \"Sign out\"\n  - button \"Application menu\"\n- complementary:\n  - navigation \"Main navigation\":\n    - list \"Main destinations\":\n      - listitem:\n        - button \"Home\"\n      - listitem:\n        - button \"Conversations\"\n      - listitem:\n        - button \"Graph\"\n      - listitem:\n        - button \"Artifacts\"\n    - list \"More destinations\":\n      - listitem:\n        - button \"Advanced\"\n- main:\n  - heading \"Home\" [level=1]\n  - paragraph: Follow each harness below. Open an activity to see its exact context, or add a harness to this project.\n  - button \"Ask for work or chat\"\n  - button \"Refresh\"\n  - button \"Pause display\"\n  - region \"Project\":\n    - text: Project\n    - combobox \"Project\":\n      - option \"All projects\" [selected]\n      - option \"Alpha project for readable authorized collaborator activity and questions\"\n      - option \"Beta project for readable authorized collaborator activity and delivery\"\n    - text: All projects\n    - button \"Add harness\"\n  - region \"Project overview\":\n    - paragraph: \"connected: unknown \u00b7 working: unknown \u00b7 Idle: unknown \u00b7 queued: unknown \u00b7 1 unconfirmed \u00b7 disconnected: unknown\"\n    - paragraph: \"0 actions \u00b7 harnesses paused: unknown\"\n  - status: Display updates paused. Agents keep running; decisions require a fresh canonical review.\n  - status: Home updated. New work, attention or results are available.\n  - region \"Follow-up\":\n    - heading \"Follow-up\" [level=2]\n    - region \"Active\":\n      - heading \"Active\" [level=3]\n      - text: 2 harnesses \u00b7 Revalidating\n      - list:\n        - listitem:\n          - 'heading \"Harness ID: reviewer\" [level=4]'\n          - paragraph: \"Collaborator: Hst A\"\n          - paragraph: Codex \u00b7 Host not reported\n          - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n          - text: Registered harness\n          - paragraph: Connection evidence stale. Inspect for current details.\n          - list \"Activity preview\"\n          - paragraph: No tracked activity.\n          - button \"Follow activity\"\n          - group: Connection details\n        - listitem:\n          - 'heading \"Harness ID: reviewer\" [level=4]'\n          - paragraph: \"Collaborator: Hst B\"\n          - paragraph: Codex \u00b7 Host not reported\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - text: Idle\n          - list \"Activity preview\":\n            - listitem:\n              - paragraph: Work request\n              - paragraph: Failed\n              - button \"View delivery\"\n          - button \"Follow activity\"\n          - group: Connection details\n    - region \"Needs you\":\n      - heading \"Needs you\" [level=3]\n      - text: 0 items \u00b7 Revalidating\n      - list\n      - status: No needs you items in this view.\n    - region \"Results\":\n      - heading \"Results\" [level=3]\n      - text: 3 deliveries \u00b7 Revalidating\n      - list:\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - paragraph: Execution ended with failure\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T22:35:22.054Z\n          - button \"View result\"\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T22:35:21.636Z\n          - button \"View result\"\n        - listitem:\n          - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n          - heading \"Work result\" [level=4]\n          - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n          - paragraph: Response available\n          - paragraph:\n            - text: Received\n            - time: 2026-11-17T22:35:05.221Z\n          - button \"View result\"\n- dialog \"Activity detail\":\n  - banner:\n    - heading \"Activity detail\" [level=2]\n    - button \"Expand modal\"\n    - button \"Close modal\"\n  - region \"Harness activity\":\n    - heading \"Hst B\" [level=3]\n    - paragraph: 3 linked activities. Select an activity to review its canonical context.\n    - region \"Session context\":\n      - text: Choose a session\n      - combobox \"Choose a session\":\n        - option \"Choose a session\" [selected]\n        - option \"Session \u00b7 CLOSED \u00b7 Beta project for readable authorized collaborator activity and delivery \u00b7 Updated 2026-11-17T22:35:20.600Z\"\n        - option \"Session \u00b7 READY \u00b7 Beta project for readable authorized collaborator activity and delivery \u00b7 Updated 2026-11-17T22:35:22.054Z\"\n      - button \"Refresh sessions\"\n      - button \"View connection\"\n    - button \"Refresh activity\"\n    - list:\n      - listitem:\n        - paragraph: Work request\n        - paragraph: Failed\n        - button \"View work\"\n    - button \"Load more activity\"",
+        "openDialogs": 1
+      }
+    },
+    "error": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('dialog[open]').getByLabel('Choose a session', { exact: true }) to be visible\u001b[22m\n"
+  },
+  "base_authority_invariants": {
+    "operations_unchanged": true,
+    "grant_digest_unchanged": true
+  },
+  "interpretation": "G02 real canonical preview1/total2/hasMore and exact relation GET200/total2 passed. Failure AX contains one Harness activity modal and a Choose a session combobox whose placeholder is selected, with distinct CLOSED/READY options and actual project/time labels. getByLabel(exact) timed out despite that AX; getByRole(combobox) is the observed selector. This is an oracle failure, not evidence of a missing product chooser.",
+  "observed_target": {
+    "executor_id": "exe_9767a2101934e853be4bed7f536734c7",
+    "kind": "session",
+    "server_id": "srv_b6276a8d443dcb105e17f34137f715ff",
+    "session_id": "ses_512ddf28a3822e76cc20efb553f91f3c",
+    "workspace_id": "wsr_bad3803d3ac19dfbfcab7cdae8127483"
+  },
+  "preflight_exact_target_match": true,
+  "not_asserted": [
+    "G02 inputValue assertion was not reached; no-auto-selection only observed in failure AX",
+    "G03 exact session choice/output after chooser and meaningful titles",
+    "All phases after history"
+  ],
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "physical": {
+    "port": 60472,
+    "browser_profile_processes": [],
+    "listeners": [],
+    "active_resources": false
+  },
+  "payload_after": {
+    "files": 1031,
+    "mismatches": []
+  },
+  "provider_invocations": 0,
+  "browser_post_count": 0,
+  "original_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-fmb86v0o"
+}

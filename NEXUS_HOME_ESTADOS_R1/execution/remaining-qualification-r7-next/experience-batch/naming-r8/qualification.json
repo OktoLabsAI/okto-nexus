@@ -1,0 +1,85 @@
+{
+  "status": "PASS_FOCAL_ACCESSIBLE_NAME_EXPANDED",
+  "scenario": "I01",
+  "scope": "Actual header-menu name and expanded toggles only; not whole keyboard journey",
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "runtime": {
+    "status": "PASS_NAMING_PREFLIGHT",
+    "checks": [
+      {
+        "id": "I01-header-menu-accessible-name",
+        "pass": true,
+        "actual": {
+          "attributes": {
+            "ariaLabel": "Application menu",
+            "title": null,
+            "text": ""
+          },
+          "ariaSnapshot": "- button \"Application menu\"",
+          "computedNameFromAX": "Application menu"
+        }
+      },
+      {
+        "id": "I01-header-menu-canonical-name",
+        "pass": true,
+        "actual": "Application menu"
+      },
+      {
+        "id": "I01-header-menu-expanded-state",
+        "pass": true,
+        "actual": {
+          "expandedBefore": "false",
+          "expandedOpen": "true",
+          "expandedClosed": "false",
+          "openAX": "- button \"Application menu\" [expanded]"
+        }
+      },
+      {
+        "id": "zero-browser-POST",
+        "pass": true,
+        "actual": []
+      },
+      {
+        "id": "zero-page-errors",
+        "pass": true,
+        "actual": []
+      }
+    ],
+    "posts": [],
+    "errors": []
+  },
+  "canonical_fixture": {
+    "sessions": 0,
+    "runtime_operations": 0,
+    "provider_invocations": 0,
+    "browser_posts": 0,
+    "registered_connections": 2
+  },
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "physical": {
+    "browser_profile_processes": [],
+    "listeners": [],
+    "port": 65420,
+    "active_resources": false
+  },
+  "payload_after": {
+    "files": 1031,
+    "mismatches": []
+  },
+  "payload_before": "Runner validated all READY-manifest bytes before allocation; no separate initial JSON was persisted on failure",
+  "preserved_private_data": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-yxjqqegb",
+  "limitations": [
+    "No screen reader speech",
+    "No complete I01 keyboard traversal",
+    "No new product test/build or full experience batch",
+    "Physical scan is a point-in-time observation; supervisor sampling cannot inventory every short-lived child"
+  ]
+}

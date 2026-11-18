@@ -1,0 +1,124 @@
+{
+  "status": "INCOMPLETE_RESPONSE_ABANDONED_AFTER_HEADERS",
+  "provider_invocations": 0,
+  "checks_pass": 5,
+  "checks_fail": 1,
+  "results": {
+    "initialize": null,
+    "scope": "FAIL"
+  },
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-i309x59_",
+  "cleanup": {
+    "supervisor": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "own_root_processes": [],
+    "listener_port": 63248,
+    "listener_pids": [],
+    "excluded": "Current curation process/ancestors, not runtime or browser",
+    "secret_cookie_scan": "NO_MATCH",
+    "private_auth_and_wire_logs": "Not copied",
+    "data_preserved": true
+  },
+  "limits": [
+    "Synthetic Codex protocol through real Core/Server; no real provider or three-adapter claim",
+    "No human/AT/native-zoom claim",
+    "Functional runs after DOM timing may share CPU with installed pytest"
+  ],
+  "copies": [
+    {
+      "path": "runtime-ready.json",
+      "source_sha256": "888110ce993fae2263ca36472db4bb8d98f9f0afd4fa2eefbdc9e9bb99a26e51",
+      "curated_sha256": "888110ce993fae2263ca36472db4bb8d98f9f0afd4fa2eefbdc9e9bb99a26e51",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "fixture.py",
+      "source_sha256": "0a009a334ec53e9036f9bc61b3f85d0d4df4a5abd5a44f30e1d1fbd37a87321e",
+      "curated_sha256": "0a009a334ec53e9036f9bc61b3f85d0d4df4a5abd5a44f30e1d1fbd37a87321e",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "initialize.js",
+      "source_sha256": "e763f87eed4b90343c6246a793fd3c27109cbac9c4858445f73d7b0630336371",
+      "curated_sha256": "e763f87eed4b90343c6246a793fd3c27109cbac9c4858445f73d7b0630336371",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "scope-race.js",
+      "source_sha256": "2dc5da89f2df35e0e786851255dfb4ccd22518bccd3b1d029f65af23e01eb18c",
+      "curated_sha256": "2dc5da89f2df35e0e786851255dfb4ccd22518bccd3b1d029f65af23e01eb18c",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-close.txt",
+      "source_sha256": "382c8979a4c9ce69cf73620f0a4d84ba9bd76aecaf2ac21e3b311b98262dc8bf",
+      "curated_sha256": "382c8979a4c9ce69cf73620f0a4d84ba9bd76aecaf2ac21e3b311b98262dc8bf",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-initialize.txt",
+      "source_sha256": "940eddc10eed7177e96d7db3d65e160d47c2c113990646d461bb557c882db414",
+      "curated_sha256": "940eddc10eed7177e96d7db3d65e160d47c2c113990646d461bb557c882db414",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-open.txt",
+      "source_sha256": "882af94c113334ea74849f44646b9aa02a1700e8240e52e6a3337c1985290d8f",
+      "curated_sha256": "882af94c113334ea74849f44646b9aa02a1700e8240e52e6a3337c1985290d8f",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-scope.txt",
+      "source_sha256": "76abe532fc0688b7c5a04f59b2a6febe1cbc3a9a168944e23cf0bfce787a19b5",
+      "curated_sha256": "76abe532fc0688b7c5a04f59b2a6febe1cbc3a9a168944e23cf0bfce787a19b5",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-state.txt",
+      "source_sha256": "79bf4f36df877ee729e3d3fca3f7c925ae76166d8db672f95c8e9771fb177e6a",
+      "curated_sha256": "79bf4f36df877ee729e3d3fca3f7c925ae76166d8db672f95c8e9771fb177e6a",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/initial-board.json",
+      "source_sha256": "7a129afc875343b36fb07d9d9d1718e57e305eb35572cefe5e363b33060a3d51",
+      "curated_sha256": "7a129afc875343b36fb07d9d9d1718e57e305eb35572cefe5e363b33060a3d51",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/final.json",
+      "source_sha256": "743b9ccc157368de03db84fc0ee4de03ada5957f1bb3652ac691458b8879b7b3",
+      "curated_sha256": "743b9ccc157368de03db84fc0ee4de03ada5957f1bb3652ac691458b8879b7b3",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/origins.json",
+      "source_sha256": "cb3a1309b78c8e99a4f5516ef1966ffcbe2ff3019a728db6a6812b83a6be4606",
+      "curated_sha256": "cb3a1309b78c8e99a4f5516ef1966ffcbe2ff3019a728db6a6812b83a6be4606",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/supervisor-cleanup.json",
+      "source_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "curated_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "fixture_cas_redactions": 0
+    }
+  ],
+  "privacy": {
+    "fixture_cas_values_redacted": 0,
+    "fixture_cas_fingerprints": [],
+    "raw": "Retained only in explicitly owned Temp root"
+  },
+  "browser_http_counts": {
+    "GET": 58
+  },
+  "browser_status_counts": {
+    "200": 58
+  }
+}

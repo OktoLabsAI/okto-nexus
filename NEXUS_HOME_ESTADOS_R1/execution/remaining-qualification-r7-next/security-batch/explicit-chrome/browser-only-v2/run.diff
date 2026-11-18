@@ -1,0 +1,12 @@
+--- browser-only/run.py
++++ browser-only-v2/run.py
+@@ -45,8 +45,7 @@
+         for path in (tool/name).rglob('*') if path.is_file()}
+     assert actual==manifest['cli_payload_pins'], 'Exact CLI closure drift'
+     assert Path(manifest['entry']).resolve().is_relative_to(tool)
+-    assert json.loads((HERE/'playwright-cli.json').read_text())=={
+-        'browser':{'launchOptions':{'executablePath':manifest['chrome']}}}
++    assert json.loads((HERE/'playwright-cli.json').read_text())==manifest['browser_config']
+     return gate,manifest
+ 
+ 

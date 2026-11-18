@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Program Files\\nodejs\\node.EXE",
+    "--test",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\frontend-reproduction\\reproduction.mjs"
+  ],
+  "started_at": "2026-11-17T12:27:57.994165+00:00",
+  "ended_at": "2026-11-17T12:27:58.933341+00:00",
+  "exit_code": 1,
+  "expected_exit": 1,
+  "source_drift": [],
+  "scope": "Controlled Node only; no HTTP/SQLite/browser/provider/user qualification."
+}

@@ -1,0 +1,31 @@
+{
+  "status": "PASS_I01_EXECUTED_SUBSET",
+  "phase": "bootstrap",
+  "checks": [
+    {
+      "id": "native100-desktop",
+      "pass": true,
+      "actual": {
+        "innerWidth": 1440,
+        "devicePixelRatio": 1,
+        "scale": 1
+      }
+    },
+    {
+      "id": "zero-browser-writes",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "id": "zero-page-errors",
+      "pass": true,
+      "actual": []
+    }
+  ],
+  "records": [],
+  "limits": [
+    "Desktop native100 only; no AT speech/theme claim",
+    "Tab inventory covers visible enabled sequential controls; collapsed content remains collapsed",
+    "No Enter on submit/decision; no answer selection or native execution control"
+  ]
+}

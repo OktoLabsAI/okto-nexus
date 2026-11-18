@@ -1,0 +1,63 @@
+{
+  "status": "STATIC_ONLY_PREPARED",
+  "runtime_started": false,
+  "product_imported": false,
+  "tests_executed": false,
+  "node_syntax_exit": 0,
+  "python_ast": "PASS",
+  "derivatives": [
+    {
+      "naming_only": true,
+      "ast": "PASS",
+      "lf_rendered_sha256": "eb285a04e0a0f102b6e615482562b3e0cbee9dd8aeb1154454842c5eba948779"
+    },
+    {
+      "naming_only": false,
+      "ast": "PASS",
+      "lf_rendered_sha256": "faec913d11f7231a51bb0b84ff7d5008a8838c33c67cd964d43e0192e835c173"
+    }
+  ],
+  "original_fixture_sha256": "0a009a334ec53e9036f9bc61b3f85d0d4df4a5abd5a44f30e1d1fbd37a87321e",
+  "files": {
+    "browser.js": {
+      "bytes": 15418,
+      "sha256": "fb759979aa6a8fe17d1f564058f2897bb043621a30bcf6335f58d6f2dba62f85"
+    },
+    "builder.py": {
+      "bytes": 8441,
+      "sha256": "7ea70759cb64a8925e8d2a194817e70782f5b068daf5ddb58e832372a45b2841"
+    },
+    "curate_naming.py": {
+      "bytes": 4643,
+      "sha256": "d1dadbbeb29c8d0ac875021c4f09d04ab4f155d3367560b4104600429625923a"
+    },
+    "curate_naming_r8.py": {
+      "bytes": 833,
+      "sha256": "8d08e6d352fbb65834b236f2b43eb200a1c1beef6d4d739e1fed5b681ad32500"
+    },
+    "gate-naming-r8.json": {
+      "bytes": 541,
+      "sha256": "73de3ed09221fbee350fe18870d4b947b225a2e6f70411d0dd09164cb78aeb2f"
+    },
+    "manifest-preparation-v2.json": {
+      "bytes": 1278,
+      "sha256": "fecae08fd787e3850673db78d9fcae0ca0df5fdc4d7b075a8e3eacead32e7e94"
+    },
+    "manifest-preparation-v3.json": {
+      "bytes": 1437,
+      "sha256": "15d0843a516557323ddf6164593db21cd69e07716cbda67389d1634d14258d0c"
+    },
+    "preflight.md": {
+      "bytes": 9308,
+      "sha256": "8664d300419a9e9a4d8869b70078dae678db8748447770490c659b05e847f1ba"
+    },
+    "run.py": {
+      "bytes": 9327,
+      "sha256": "298bb89a72bf7ea956ede8dd14bd058b82e718b9eae9161028110581a09f6377"
+    },
+    "validate_static.py": {
+      "bytes": 1562,
+      "sha256": "df26f955a54c10a3b6a5653579fc456cfa6f4fe367b4d4c1a66a920f9cb1bf48"
+    }
+  }
+}

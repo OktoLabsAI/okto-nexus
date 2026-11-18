@@ -15,7 +15,7 @@ function load(url){
     const path=['.ts','.tsx','/index.ts'].map(ext=>new URL(name+ext,url)).find(p=>existsSync(p));assert.ok(path,name);return load(path);};
   new Function('require','module','exports',code)(localRequire,module,module.exports);return module.exports;
 }
-const {initialEntrySession,assertEntryInspectionPage,occurrenceSession}=load(new URL('../src/homeEntryInspection.ts',import.meta.url));
+const {initialEntrySession,initialHarnessSession,homeSessionTarget,homeSessionOptionLabel,assertHarnessSessionContext,assertEntryInspectionPage,entryInspectionQuery,occurrenceSession,readEntryInspectionPage}=load(new URL('../src/homeEntryInspection.ts',import.meta.url));
 const {HomeEntryInspection}=load(new URL('../src/components/home/HomeEntryInspection.tsx',import.meta.url));
 const target={kind:'handoff',server_id:'server',workspace_id:'ws',handoff_id:'handoff'};
 const session=id=>({server_id:'server',executor_id:'executor',workspace_id:'ws',session_id:id});
@@ -29,9 +29,48 @@ const page={version:1,server_id:'server',partition:'sessions',group_id:'group',e
 test('multiple or incomplete session relations require explicit choice; a proven unique relation can open',()=>{
   assert.equal(initialEntrySession(entry,target),null);
   assert.equal(initialEntrySession({...entry,sessions:[session('one')],sessions_total:null},target),null);
+  assert.equal(initialEntrySession({...entry,sessions:[session('one')],sessions_total:1,has_more_sessions:true},target),null);
   assert.deepEqual(initialEntrySession({...entry,sessions:[session('one')],sessions_total:1},target),session('one'));
   assert.deepEqual(initialEntrySession(entry,{kind:'session',...session('two')}),session('two'));
   assert.deepEqual(initialEntrySession(entry,{kind:'execution',...session('two'),operation_id:'exact-op'}),session('two'));
+});
+
+test('harness direct selection requires full binding relation and strips display metadata from target',()=>{
+  const ref={...session('one'),lifecycle_state:'READY',title:'Review API',workspace_label:'API',last_activity_at:'2026-11-17T12:00:00Z'};
+  const c={connection:{server_id:'server',executor_id:'executor',workspace_id:'ws'},sessions:[ref],sessions_total:1,has_more_sessions:false,sessions_cursor:null};
+  assert.equal(initialHarnessSession(c),ref);
+  for(const patch of [{sessions_total:null},{has_more_sessions:true,sessions_cursor:'next'},{sessions:[ref,session('two')]},
+    {sessions:[{...ref,lifecycle_state:undefined}]},{sessions:[{...ref,executor_id:'other'}]}])assert.equal(initialHarnessSession({...c,...patch}),null);
+  assert.deepEqual(homeSessionTarget(ref),{kind:'session',...session('one')});
+  const label=homeSessionOptionLabel(ref,0);assert.match(label,/Review API.*READY.*API.*Updated/);assert.doesNotMatch(label,/executor|one/);
+});
+
+test('session viewer must revalidate full connection identity, including same-agent sibling binding',()=>{
+  const connection={server_id:'server',executor_id:'executor',workspace_id:'ws',binding_id:'binding',workspace_binding_id:'wxb',agent_id:'agent'};
+  const context={...connection,session_id:'one',lifecycle_state:'READY'};
+  assert.doesNotThrow(()=>assertHarnessSessionContext(context,connection,session('one')));
+  for(const patch of [{session_id:'two'},{binding_id:'other'},{workspace_binding_id:'other'},{executor_id:'other'},{agent_id:'other'}])
+    assert.throws(()=>assertHarnessSessionContext({...context,...patch},connection,session('one')));
+  assert.throws(()=>assertHarnessSessionContext(context,connection,{...session('one'),executor_id:'other'}));
+});
+
+test('relation conflict rereads first page once without changing exact selection or merging revisions',async()=>{
+  const calls=[];const original=JSON.stringify(selection);
+  const read=async cursor=>{calls.push(cursor);if(cursor)throw Object.assign(Error('changed'),{status:409});
+    return {...page,revision:'new',items:[session('two')]};};
+  const next=await readEntryInspectionPage(read,'old-cursor',selection,'server','sessions','rev');
+  assert.deepEqual(calls,['old-cursor',null]);assert.equal(next.replaced,true);assert.equal(next.page.revision,'new');
+  assert.deepEqual(next.page.items,[session('two')]);assert.equal(JSON.stringify(selection),original);
+});
+
+test('relation reads never retry forbidden/foreign scope or cross an aborted generation',async()=>{
+  for(const scenario of ['forbidden','foreign','abort']){
+    const abort=new AbortController();let calls=0;
+    const read=async()=>{calls++;if(scenario==='forbidden')throw Object.assign(Error('denied'),{status:403});
+      if(scenario==='abort')abort.abort();return {...page,server_id:scenario==='foreign'?'other':'server'};};
+    await assert.rejects(()=>readEntryInspectionPage(read,'cursor',selection,'server','sessions','rev',abort.signal));
+    assert.equal(calls,1);
+  }
 });
 
 test('panel pagination rejects foreign parent, scope, revision and hidden default changes',()=>{
@@ -40,6 +79,16 @@ test('panel pagination rejects foreign parent, scope, revision and hidden defaul
     {scope:{...page.scope,workspace_id:'other'}},{scope:{...page.scope,include_recent_results:false}},
     {scope:{...page.scope,agent_id:'other'}},{status:'unavailable'}])
     assert.throws(()=>assertEntryInspectionPage({...page,...delta},selection,'server','sessions','rev'));
+});
+
+test('related pages cannot cross negotiated presentation versions',()=>{
+  const v2={...selection,presentationVersion:2};
+  assert.throws(()=>assertEntryInspectionPage(page,v2,'server','sessions','rev'));
+  assert.doesNotThrow(()=>assertEntryInspectionPage({...page,presentation_version:2},v2,'server','sessions','rev'));
+  assert.throws(()=>assertEntryInspectionPage({...page,presentation_version:2},selection,'server','sessions','rev'));
+  assert.equal('presentation_version'in entryInspectionQuery(selection,'v1'),false);
+  assert.equal(entryInspectionQuery(v2,'v2').presentation_version,2);
+  assert.equal(entryInspectionQuery(v2,null).cursor,undefined);
 });
 
 test('one contextual panel composes work and exact session choice without a runtime directory or nested dialog',()=>{

@@ -1,0 +1,17 @@
+{
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-eikz3b0y",
+  "result": "PASS_OVERLAY_BROWSER_FOCAL",
+  "failure": null,
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "containment": {
+    "forced_births": [],
+    "remaining": []
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "change": "Only CLI cleanup artifact cli('close','close',...) renamed cli('shutdown','close',...); JS close phase/predicates unchanged",
+  "original_sha256": "cbf688327c566002a326ff85d4d7b3b92c2a75c5a0d10ecd9f20f1e746e33530",
+  "variant_sha256": "c2feb7d191eb73184a5501d115bbdfd18a324bac6912865858050be6cd1cfc17",
+  "focus_js_sha256": "f7328379e2a5fc2b9ab435a100c15911ce4ea9aaa0329dc63da764f27e89141a",
+  "wrapper_and_generated_ast": "PASS"
+}

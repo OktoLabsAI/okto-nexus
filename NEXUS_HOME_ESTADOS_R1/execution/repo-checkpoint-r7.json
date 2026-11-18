@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-11-17T20:27:10.931576+00:00",
+  "main_refs_fetched": true,
+  "qualification": "Repository state only; no runtime/default approval",
+  "repositories": {
+    "nexus": {
+      "directory": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+      "branch": "feature/v0.3.7",
+      "head": "d163c1f60ba5134322b8a7e764f61a4d5ec81d2a",
+      "main": "8d77b50c00b417c86818d027aed7497fababac34",
+      "main_left_head_right": "0\t277",
+      "working_tree": [
+        "M docs/operational-home.md",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/audit_checkpoint_r7.py",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/cuts/r7-decision-bell-wait-antecedent/",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/cuts/r7-decision-race-recovery/",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/nextcuts-context-browser.js",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/nextcuts-context-finish.js",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/nextcuts-decision-browser.js",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/nextcuts/",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/nextcuts_curate.py",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/nextcuts_fixture_builder.py",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/nextcuts_run.py",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/prepared-next-context-cut.js",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/prepared-next-decision-cut.js",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/prepared-next-two-cuts-manifest.json",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/browser-hst/prepared-next-two-cuts.md",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/performance-hst/large-dom-r7-launch.py",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/performance-hst/large-dom-r7-runbook.md",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/release-report.md",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/supplement-r7-prepared/manifest.json",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/supplement-r7-prepared/run_source.py",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/supplement-r7-prepared/source-corrected/",
+        "?? NEXUS_HOME_ESTADOS_R1/execution/supplement-r7-prepared/source-initial/",
+        "?? tests/home_states/test_final_boundaries_r7.py"
+      ]
+    },
+    "connector": {
+      "directory": "D:\\Projetos\\Techridy\\okto-nexus-connector",
+      "branch": "feature/v0.0.13",
+      "head": "a4d510080d7a685fa442a4c5c30419952589fe04",
+      "main": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+      "main_left_head_right": "0\t36",
+      "working_tree": []
+    },
+    "core": {
+      "directory": "D:\\Projetos\\Techridy\\okto-nexus-connector-core",
+      "branch": "feature/v0.0.14",
+      "head": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "main": "19c99f15b17ae994653ad9e190964229a0e296e8",
+      "main_left_head_right": "0\t14",
+      "working_tree": []
+    }
+  },
+  "pins": {
+    "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl": {
+      "expected": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+      "actual": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+      "matches": true
+    },
+    "vendor/ci/okto_nexus_connector-0.0.13-py3-none-any.whl": {
+      "expected": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+      "actual": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+      "matches": true
+    }
+  },
+  "notes": [
+    "Nexus contains the declared in-progress supplementary tests/evidence/docs; no uncommitted product source change.",
+    "Core/Connector remain clean/read-only and use their existing branches/versions; no bump for an unimpacted repository.",
+    "This records its generation HEAD before a subsequent evidence commit; it cannot name its own future commit.",
+    "Fetching main updates remote references only; no checkout reset, merge or main rollback was performed."
+  ]
+}

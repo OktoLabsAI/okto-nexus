@@ -1,0 +1,84 @@
+{
+  "files": [
+    {
+      "path": "cli-close.txt",
+      "bytes": 31,
+      "sha256": "d59654cfd9d254cfcb694cd3183aaa5b3d0bf9f81f8361e673b62f9a5ee9df7f"
+    },
+    {
+      "path": "cli-open.txt",
+      "bytes": 226,
+      "sha256": "c6bed04d58a35179aeabe33521ff5b31c94ea420f608a9c621afbe0ded72b773"
+    },
+    {
+      "path": "cli-state-load.txt",
+      "bytes": 318,
+      "sha256": "fbb7822f2702e5de3f53cd0f219bb85cb0ddb36ae689033ac6c769e29b9cfd75"
+    },
+    {
+      "path": "cli-timing-file.txt",
+      "bytes": 58,
+      "sha256": "b4989eef932ccce807660d4c78e2e28f2eda228ad16c65439a032f908bdcec75"
+    },
+    {
+      "path": "cli-timing.txt",
+      "bytes": 47,
+      "sha256": "c2ef5214fbffacebb03645ab220ab0f575cb2b92862c2ba76fe8e350e7b07cdf"
+    },
+    {
+      "path": "control/currentness-diagnostic.json",
+      "bytes": 2437,
+      "sha256": "4a643e0d8b0a8fcdbe2875539991009ea19eaf07d3cee313c5c2b6b906ff7c73"
+    },
+    {
+      "path": "control/final.json",
+      "bytes": 19754,
+      "sha256": "d7a68a45325aadef22792c59f7b9196f1e67e4bd27acd79ce87c1f572ddd8705"
+    },
+    {
+      "path": "control/initial-board.json",
+      "bytes": 85512,
+      "sha256": "721c5a3bef6eb75e992d506d38e7f61c362081ffddf9d55e3fad48572e55c7f8"
+    },
+    {
+      "path": "control/supervisor-cleanup.json",
+      "bytes": 196,
+      "sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e"
+    },
+    {
+      "path": "control/supervisor.json",
+      "bytes": 196,
+      "sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e"
+    },
+    {
+      "path": "fixture.py",
+      "bytes": 14238,
+      "sha256": "de8914406eb3f5531ef4d5bf25cd1414e28cbe7be29cdae29052735de4ac4ba1"
+    },
+    {
+      "path": "physical-cleanup.json",
+      "bytes": 101,
+      "sha256": "142bd5b8e8478d97e92383c33993a4d83fd394aebb33f9531126ee5733144336"
+    },
+    {
+      "path": "qualification.json",
+      "bytes": 2288,
+      "sha256": "e74d85e30bbc6d4425f878066ad6b7c7d47e41782ebda969261b9aa742dd7557"
+    },
+    {
+      "path": "ready-public.json",
+      "bytes": 2050,
+      "sha256": "4434163e2d4e1f2eaee8d1899641b11d9b2be4d2211a5d30eab5997b0b73cbcc"
+    },
+    {
+      "path": "runtime-ready.json",
+      "bytes": 1609,
+      "sha256": "33c41d22d0cd74bc58c0ddc27d8d57f33df9a93dac5e79b4cadfbac3a99af2e4"
+    },
+    {
+      "path": "timing.js",
+      "bytes": 4082,
+      "sha256": "4f8aa27455f9dec6e6638d42c3bcf87e8fff8c6a139f7c27f6ede40bc784a5c4"
+    }
+  ]
+}

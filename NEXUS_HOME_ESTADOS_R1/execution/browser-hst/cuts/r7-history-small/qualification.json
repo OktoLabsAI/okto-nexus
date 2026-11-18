@@ -1,0 +1,158 @@
+{
+  "status": "PASS_F14_CHECKS_WITH_RUNNER_STATUS_LABEL_LIMIT",
+  "provider_invocations": 0,
+  "checks_pass": 9,
+  "checks_fail": 0,
+  "results": {
+    "back-verify": "PASS_SUBSET",
+    "forward-verify": "PASS_SUBSET",
+    "history-open": "PASS_SUBSET",
+    "invalid": "PASS_BROWSER_SUBSET",
+    "reload-verify": "PASS_SUBSET"
+  },
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-2arxec6z",
+  "cleanup": {
+    "supervisor": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "own_root_processes": [],
+    "listener_port": 54792,
+    "listener_pids": [],
+    "excluded": "Current curation process/ancestors, not runtime or browser",
+    "secret_cookie_scan": "NO_MATCH",
+    "private_auth_and_wire_logs": "Not copied",
+    "data_preserved": true
+  },
+  "limits": [
+    "Synthetic Codex protocol through real Core/Server; no real provider or three-adapter claim",
+    "No human/AT/native-zoom claim",
+    "Functional runs after DOM timing may share CPU with installed pytest"
+  ],
+  "copies": [
+    {
+      "path": "runtime-ready.json",
+      "source_sha256": "a549fde6f30c5abbfc311bfb7282f9c3a3cda7551cf0ede049999ec6e0855bfa",
+      "curated_sha256": "a549fde6f30c5abbfc311bfb7282f9c3a3cda7551cf0ede049999ec6e0855bfa",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "fixture.py",
+      "source_sha256": "83ad28c5e3b8a9d858ea8f1ef864d3efc36894141d4aeaa301c0c06dfc7cc897",
+      "curated_sha256": "83ad28c5e3b8a9d858ea8f1ef864d3efc36894141d4aeaa301c0c06dfc7cc897",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-back-verify.txt",
+      "source_sha256": "1ac83793e5067a1576bb195562bc10a5b156b7bde1b0a146f80fd63bfd122722",
+      "curated_sha256": "1ac83793e5067a1576bb195562bc10a5b156b7bde1b0a146f80fd63bfd122722",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-back.txt",
+      "source_sha256": "6ed5a6e368595bd7ad595e09360902f5023b6c3b8094f8de73b9eac05ed807e9",
+      "curated_sha256": "6ed5a6e368595bd7ad595e09360902f5023b6c3b8094f8de73b9eac05ed807e9",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-close.txt",
+      "source_sha256": "c718c3a96fc262c251db7380b8b9231a87480b1e3a883e4409dd242d57adcafb",
+      "curated_sha256": "c718c3a96fc262c251db7380b8b9231a87480b1e3a883e4409dd242d57adcafb",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-forward-verify.txt",
+      "source_sha256": "b1b0473b56553c87fffb3f7fd712ca7c13d754a64b3a079ac31fbe500f7150f0",
+      "curated_sha256": "b1b0473b56553c87fffb3f7fd712ca7c13d754a64b3a079ac31fbe500f7150f0",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-forward.txt",
+      "source_sha256": "60be13b0e72c0421c82f7f81d7c7d0e9c0335b45e61d9e2f2b174fd53932b706",
+      "curated_sha256": "60be13b0e72c0421c82f7f81d7c7d0e9c0335b45e61d9e2f2b174fd53932b706",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-history-open.txt",
+      "source_sha256": "6ea2d6fe02bd7e84d0261071cadde85ac24c206fbfc0d21391ff26132ddec4f1",
+      "curated_sha256": "6ea2d6fe02bd7e84d0261071cadde85ac24c206fbfc0d21391ff26132ddec4f1",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-invalid.txt",
+      "source_sha256": "ff0f862a42d29b620d034b003f06a9adffa5d9d504cc9575b0e5fbf79033c4f5",
+      "curated_sha256": "ff0f862a42d29b620d034b003f06a9adffa5d9d504cc9575b0e5fbf79033c4f5",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-open.txt",
+      "source_sha256": "8bb9b2793603bb4479d869038498a6140914af071e2c3e101d30e0806325b684",
+      "curated_sha256": "8bb9b2793603bb4479d869038498a6140914af071e2c3e101d30e0806325b684",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-reload-accept.txt",
+      "source_sha256": "9e84b9545a6c6c5851e8877a41e11219df3d9af9d26db57739707d14880e8524",
+      "curated_sha256": "9e84b9545a6c6c5851e8877a41e11219df3d9af9d26db57739707d14880e8524",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-reload-verify.txt",
+      "source_sha256": "5dfeb7ca5e183fc68b4025d179c6a1e73ec8e2f5094dad1a218f503430d23129",
+      "curated_sha256": "5dfeb7ca5e183fc68b4025d179c6a1e73ec8e2f5094dad1a218f503430d23129",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-reload.txt",
+      "source_sha256": "dae105bcf105f1730d7c1f36bda1f564155967889dbc0e0cf051075ccfefbde5",
+      "curated_sha256": "dae105bcf105f1730d7c1f36bda1f564155967889dbc0e0cf051075ccfefbde5",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-state.txt",
+      "source_sha256": "0307911f51d7faa4756a8b49d57c4bc6fb4fd35b1d8262fa84aeb308e9386071",
+      "curated_sha256": "0307911f51d7faa4756a8b49d57c4bc6fb4fd35b1d8262fa84aeb308e9386071",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/initial-board.json",
+      "source_sha256": "ecbc39a3bd00785d735042fd3cdc6ec099324c55eceaaea90538913bee0a5712",
+      "curated_sha256": "ecbc39a3bd00785d735042fd3cdc6ec099324c55eceaaea90538913bee0a5712",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/final.json",
+      "source_sha256": "8f37d87c84ef57be8142c47d659b1f2d1b68c27389f20fb41f7e10b31d2d1ef3",
+      "curated_sha256": "8f37d87c84ef57be8142c47d659b1f2d1b68c27389f20fb41f7e10b31d2d1ef3",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/origins.json",
+      "source_sha256": "54b85096fd66656311a95914cbf99df7f7d01fcd1c4e3329184d6d85651022f2",
+      "curated_sha256": "54b85096fd66656311a95914cbf99df7f7d01fcd1c4e3329184d6d85651022f2",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/supervisor-cleanup.json",
+      "source_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "curated_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "fixture_cas_redactions": 0
+    }
+  ],
+  "privacy": {
+    "fixture_cas_values_redacted": 0,
+    "fixture_cas_fingerprints": [],
+    "raw": "Retained only in explicitly owned Temp root"
+  },
+  "browser_http_counts": {
+    "GET": 82
+  },
+  "browser_status_counts": {
+    "200": 81,
+    "404": 1
+  }
+}

@@ -1,0 +1,11 @@
+--- S1/R9/run.py
++++ S2/R9/run.py
+@@ -126,7 +126,7 @@
+     before = preflight.check(args.gate)  # Before allocation/process/browser.
+     gate = json.loads(args.gate.read_text())
+     import re
+-    assert re.fullmatch(r'hst-security-r9-s1-[a-z0-9-]{1,80}',gate['cut_id'])
++    assert re.fullmatch(r'hst-security-r9-s2-[a-z0-9-]{1,80}',gate['cut_id'])
+     with (HERE/('attempt-'+gate['cut_id']+'.json')).open('x',encoding='utf-8') as attempt:
+         attempt.write(json.dumps({'gate_sha256':preflight.sha(args.gate),
+                                   'manifest_sha256':preflight.sha(HERE/'prepared-manifest.json')})+'\n')

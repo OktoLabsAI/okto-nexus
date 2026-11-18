@@ -1,0 +1,19 @@
+{
+  "status": "OFFLINE_CAPTURED_UI_DENIAL",
+  "actual_denied_ui_reads": [
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_6edba0b35b98c9d428ef5106515352b9/events",
+      "status": 401
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_6edba0b35b98c9d428ef5106515352b9",
+      "status": 401
+    }
+  ],
+  "browser_post_count": 0,
+  "auth_script_path": "/api/v1/home/harness-board",
+  "assertion": "Native session/events401 belong to actual browser viewer, not the auth script APIRequest. Response observer attached later and missed them; original FAIL retained.",
+  "private_final_sha256": "ff9fdaffe7f5e937f8dd9f7312a2786ca0990c037610e2f0a87be7c22feba9ec"
+}

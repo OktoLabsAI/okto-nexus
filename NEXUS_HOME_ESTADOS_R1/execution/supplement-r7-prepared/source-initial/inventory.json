@@ -1,0 +1,22 @@
+{
+  "exitstatus": 1,
+  "collected": [
+    "tests/home_states/test_final_boundaries_r7.py::test_a06_visual_filter_keeps_complete_private_sibling_proof",
+    "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[FAILED-failed]",
+    "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[CANCELLED-cancelled]",
+    "tests/home_states/test_final_boundaries_r7.py::test_e16_offpage_seen_three_links_retention_and_no_inbox_ack",
+    "tests/home_states/test_final_boundaries_r7.py::test_h02_forged_exact_targets_disclose_no_preview_or_counter",
+    "tests/home_states/test_final_boundaries_r7.py::test_h03_http_hostile_public_label_does_not_expose_private_marker",
+    "tests/home_states/test_final_boundaries_r7.py::test_h07_revoked_scope_refuses_same_cas_and_keeps_exact_history[input]"
+  ],
+  "finished": [
+    "tests/home_states/test_final_boundaries_r7.py::test_a06_visual_filter_keeps_complete_private_sibling_proof",
+    "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[FAILED-failed]",
+    "tests/home_states/test_final_boundaries_r7.py::test_e08_e09_partial_capture_remains_readable_at_exact_unsuccessful_target[CANCELLED-cancelled]",
+    "tests/home_states/test_final_boundaries_r7.py::test_e16_offpage_seen_three_links_retention_and_no_inbox_ack",
+    "tests/home_states/test_final_boundaries_r7.py::test_h02_forged_exact_targets_disclose_no_preview_or_counter",
+    "tests/home_states/test_final_boundaries_r7.py::test_h03_http_hostile_public_label_does_not_expose_private_marker",
+    "tests/home_states/test_final_boundaries_r7.py::test_h07_revoked_scope_refuses_same_cas_and_keeps_exact_history[input]"
+  ],
+  "not_run": []
+}

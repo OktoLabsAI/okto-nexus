@@ -1,0 +1,25 @@
+{
+  "state": "PREPARED_NOT_RUN",
+  "required_version": "0.3.7",
+  "tests": [
+    "tests/home_states",
+    "tests/home_evolution/test_home_queries.py",
+    "tests/home_evolution/test_home_result_artifact_grouping.py",
+    "tests/ui_simplification/test_entry_pages.py",
+    "tests/ui_simplification/test_entry_related.py",
+    "tests/ui_simplification/test_entry_app_integration.py",
+    "tests/ui_simplification/test_harness_board.py",
+    "tests/ui_simplification/test_harness_blocking.py",
+    "tests/home_evolution/test_home_boundaries.py"
+  ],
+  "shard_count": 1,
+  "timeout_seconds_per_shard": 900,
+  "limits": [
+    "No browser, AT, provider, human acceptance or performance-SLO claim.",
+    "Parent application/Core/Connector origins must be inside the new installed prefix.",
+    "Nested test subprocess argv are unchanged; their provenance needs separate review where applicable.",
+    "PTY skips in closed-PIPE execution do not qualify PTY.",
+    "No fail-fast or automatic rerun; all phase and NOT_RUN inventories retained.",
+    "R3 Quick Connect regression remains historical; R5 executes the changed Home and SQLite/HTTP scopes against its new installed wheel."
+  ]
+}

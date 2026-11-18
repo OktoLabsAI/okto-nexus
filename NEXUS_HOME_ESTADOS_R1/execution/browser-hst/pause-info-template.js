@@ -1,0 +1,17 @@
+async page=>{
+ const cfg=__CONFIG__,checks=[],boards=[];let info=false;
+ const check=(id,ok,detail)=>{checks.push({id,ok,detail});if(!ok)throw Error(id);};
+ page.on('response',async r=>{const u=new URL(r.url());if(u.pathname.includes('/home/harness-board'))boards.push({version:u.searchParams.get('presentation_version')??'1',status:r.status()});if(u.pathname==='/api/v1/info'&&r.status()===200)info=true;});
+ try{
+  await page.addInitScript(({workspace})=>{localStorage.setItem('okto-nexus-home-operational','enabled');localStorage.setItem('okto-nexus-workspace',workspace);localStorage.setItem('okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0',new Date().toISOString());},{workspace:cfg.workspace_id});
+  await page.goto(cfg.url,{waitUntil:'domcontentloaded'});
+  const pause=page.getByRole('button',{name:'Pause display',exact:true});await pause.waitFor({timeout:8000});await pause.click();
+  check('manual-pause-before-info',!info,true);
+  await page.getByRole('heading',{name:'Home',exact:true}).evaluate(e=>{e.setAttribute('tabindex','-1');e.focus();});
+  for(let i=0;i<200&&!info;i++)await page.waitForTimeout(100);
+  await page.waitForTimeout(700);
+  check('manual-pause-retains-v1-after-info',info&&!boards.some(x=>x.version==='2')&&await page.getByRole('button',{name:'Resume display',exact:true}).count()===1,boards);
+  check('protected-data-present-before-revocation',await page.locator('[data-home-harness]').count()>0,true);
+  return {status:'PASS_SUBSET',checks,boards,limits:['Manual pause only; next phase revokes own session canonically']};
+ }catch(error){return {status:'FAIL',error:String(error),checks,boards};}
+}

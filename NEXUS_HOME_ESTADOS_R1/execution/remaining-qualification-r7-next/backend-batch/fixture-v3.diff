@@ -1,0 +1,83 @@
+--- canonical_owner.py
++++ canonical_owner_v3.py
+@@ -52,26 +52,78 @@
+         return value.get('data', value)
+ 
+     def second_binding(self):
+-        """Approve another endpoint/profile; all grants precede session openings."""
++        """Publish and approve a NEW realization; never reuse the first READY one."""
++        import hashlib
++
+         from test_binding_operator import prepare_operator
++        from test_local_realization import publish
+ 
+         from okto_nexus.domain.base import iso_plus
++
+         first = self.binding
++
++        def first_state():
++            selections = {
++                'execution_bindings': ('binding_id', first['binding_id']),
++                'agent_endpoints': ('endpoint_id', first['endpoint_id']),
++                'execution_realizations': ('realization_ref', first['realization_ref']),
++                'execution_local_realizations': ('realization_ref', first['realization_ref']),
++                'execution_workspace_bindings': ('workspace_binding_id', first['workspace_binding_id']),
++                'workspaces': ('workspace_id', first['workspace_id']),
++                'runtime_execution_grants': ('endpoint_id', first['endpoint_id']),
++            }
++            with self.deps.connection_factory.unit_of_work(write=False) as uow:
++                conn = uow.connection
++                assert conn.execute('SELECT COUNT(*) FROM execution_sessions').fetchone()[0] == 0
++                state = {table: [tuple(row) for row in conn.execute(
++                    'SELECT * FROM ' + table + ' WHERE ' + field + '=? ORDER BY rowid', (value,))]
++                    for table, (field, value) in selections.items()}
++                state['runtime_profiles'] = [tuple(row) for row in conn.execute(
++                    'SELECT * FROM runtime_profiles WHERE profile_id IN '
++                    '(SELECT profile_id FROM agent_endpoints WHERE endpoint_id=?) ORDER BY rowid',
++                    (first['endpoint_id'],))]
++                return state
++
++        before = first_state()
++        response = publish(self.setup, changes={
++            'client_intent_id': 'backend-second-realization',
++            'local_consent_id': 'backend-second-local-consent',
++            'workspace_id': first['workspace_id'], 'secret_bindings': {}})
++        assert response.status_code == 201, response.text
++        realization = response.json()
++        assert realization['realization_ref'] != first['realization_ref']
++        assert realization['workspace_id'] == first['workspace_id']
++        with self.deps.connection_factory.unit_of_work(write=False) as uow:
++            row = uow.connection.execute(
++                'SELECT status,candidate_ref,subject_agent_id FROM execution_realizations '
++                'WHERE realization_ref=?', (realization['realization_ref'],)).fetchone()
++            assert tuple(row) == ('PENDING_APPROVAL', first['candidate_ref'], first['agent_id'])
++        assert first_state() == before, 'Publishing a new realization changed the first connection'
+         proposal, apply = prepare_operator(self.client, self.headers, {
+             'client_intent_id': 'backend-second-binding', 'agent_id_hint': first['agent_id'],
+             'executor_id': first['executor_id'], 'adapter_id': 'codex_app_server',
+             'candidate_ref': first['candidate_ref'], 'inventory_revision': first['inventory_revision'],
+-            'realization_ref': first['realization_ref'], 'workspace_id': first['workspace_id'],
++            'realization_ref': realization['realization_ref'], 'workspace_id': first['workspace_id'],
+             'alias': 'backend-second-profile'})
+         assert proposal['can_apply'], proposal
+         apply['client_intent_id'] = 'backend-second-apply'
+         second = self.call('POST', '/v1/connections/bindings:apply', apply)
+         assert second['binding_id'] != first['binding_id']
++        assert second['realization_ref'] == realization['realization_ref']
+         assert second['agent_id'] == first['agent_id'] and second['workspace_id'] == first['workspace_id']
+         self.call('POST', '/api/v1/harness/grants', {
+             'actor_agent_id': second['agent_id'], 'endpoint_id': second['endpoint_id'],
+             'actions': ['open', 'send', 'steer', 'interrupt', 'close'], 'max_executions': 10,
+             'expires_at': iso_plus(self.deps.clock.now_iso(), 600)})
++        after = first_state()
++        assert after == before, 'Adding the second connection changed the first config/root/grant'
++        digest = lambda value: hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
++        (self.control / 'second-binding-precondition.json').write_text(json.dumps({
++            'new_realization': realization['realization_ref'], 'first_realization': first['realization_ref'],
++            'new_realization_was_pending': True, 'first_state_sha256_before': digest(before),
++            'first_state_sha256_after': digest(after), 'first_connection_intact': True,
++            'tables_compared': sorted(before), 'sessions_before_open': 0,
++            'authority_sql_written': False}, indent=2), encoding='utf-8')
+         self.bindings.append(second)
+         return second
+ 

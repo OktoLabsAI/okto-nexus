@@ -1,0 +1,44 @@
+{
+  "classification": "INCOMPLETE_FIRST_PAGE_TARGET_ORACLE",
+  "base_cut": "../../cuts/r7-context-offpage-known-session-antecedent",
+  "base_qualification_sha256": "725fafb84eb5b3e3b871c1fdc0249091c388255fd56cc2a94577340da8822f7d",
+  "copies": [
+    {
+      "path": "next-builder-proof.json",
+      "sha256": "af50cdea5e804031f140ed7d56ff58b4b13dfe96b767640011e92802b3b96c00",
+      "source_sha256": "af50cdea5e804031f140ed7d56ff58b4b13dfe96b767640011e92802b3b96c00",
+      "bytes": 246,
+      "cas_redactions": 0
+    },
+    {
+      "path": "next-run-failure.json",
+      "sha256": "785a02a5061940e24e0f241266fc403e273156d372e84652df765f1fd88279f2",
+      "source_sha256": "785a02a5061940e24e0f241266fc403e273156d372e84652df765f1fd88279f2",
+      "bytes": 85,
+      "cas_redactions": 0
+    },
+    {
+      "path": "next-steps.json",
+      "sha256": "27b3ff0419dadf44629372d3976b2f48918ca7ab0e0cde254889ff8657ed09d9",
+      "source_sha256": "27b3ff0419dadf44629372d3976b2f48918ca7ab0e0cde254889ff8657ed09d9",
+      "bytes": 733,
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/next-before.json",
+      "sha256": "483d013b13df1e279bf87c46a6c4b8df12de06cf9531bae236bebeea1e7fef31",
+      "source_sha256": "483d013b13df1e279bf87c46a6c4b8df12de06cf9531bae236bebeea1e7fef31",
+      "bytes": 9936,
+      "cas_redactions": 0
+    },
+    {
+      "path": "next-context.js",
+      "sha256": "e8f6f142294f3a0c7a0bd5337eca73e72df8eb90c5fe2679fb8686b539b43c56",
+      "source_sha256": "e8f6f142294f3a0c7a0bd5337eca73e72df8eb90c5fe2679fb8686b539b43c56",
+      "bytes": 3093,
+      "cas_redactions": 0
+    }
+  ],
+  "credentials": "Private cookie/storage/wire not copied; exact fixtureCAS redacted",
+  "active_resources": false
+}

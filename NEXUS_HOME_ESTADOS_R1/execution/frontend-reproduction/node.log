@@ -1,0 +1,37 @@
+REPRODUCTION [{"cycle":1,"clock":16000,"paused":true,"pending":true,"sameVisibleSnapshot":true,"status":"ready","error":null,"staleSections":[],"boardReads":2,"childReads":0,"peak":1},{"cycle":2,"clock":32000,"paused":true,"pending":true,"sameVisibleSnapshot":true,"status":"ready","error":null,"staleSections":[],"boardReads":3,"childReads":0,"peak":1}]
+✔ characterization: identical paused polling prevents contextual pagination (8.4484ms)
+✔ control: paused contextual pagination works before the first identical poll (2.161ms)
+✖ HST-T-F01 desired contract: two identical polls must not block exact detail (2.9561ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 807.8738
+
+✖ failing tests:
+
+test at NEXUS_HOME_ESTADOS_R1\execution\frontend-reproduction\reproduction.mjs:58:1
+✖ HST-T-F01 desired contract: two identical polls must not block exact detail (2.9561ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   childReads: 0,
+  +   pending: true
+  -   childReads: 1,
+  -   pending: false
+    }
+  
+      at TestContext.<anonymous> (file:///D:/Projetos/Techridy/okto_labs_okto_nexus/NEXUS_HOME_ESTADOS_R1/execution/frontend-reproduction/reproduction.mjs:64:9)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { pending: true, childReads: 0 },
+    expected: { pending: false, childReads: 1 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

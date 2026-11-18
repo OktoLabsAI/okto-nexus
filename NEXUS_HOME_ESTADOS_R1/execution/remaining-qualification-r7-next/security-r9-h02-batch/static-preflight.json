@@ -1,0 +1,17 @@
+{
+  "status": "PASS_STATIC_ONLY_NO_GATE_NO_ALLOCATION",
+  "manifest_sha256": "5316340d12b916e9bc7152243ea4f1bdf3e298833c1ccc2b709211e64b86bd08",
+  "input_pins": 49,
+  "pin_mismatches": 0,
+  "python_ast_files": 9,
+  "node_check_exit_code": 0,
+  "placeholder_count": 1,
+  "case": "H02",
+  "runtime_mode": "scope_two",
+  "phase": "wrong-workspace",
+  "cases": 1,
+  "allocated": false,
+  "browser_started": false,
+  "application_imported": false,
+  "preparation_failure_preserved": "Initial static generator rejected ambiguous replacement anchor; corrected to exact assert anchor, no runtime or allocation occurred."
+}

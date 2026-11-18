@@ -1,0 +1,60 @@
+{
+  "mode": "SOURCE_ONLY_NOT_INSTALLED_NEXUS",
+  "started_at": "2026-11-17T20:21:17.217298+00:00",
+  "ended_at": "2026-11-17T20:21:51.136221+00:00",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-boundaries-source-0p8l8b68",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path[:0]=['D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\src', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_evolution', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\ui_simplification', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-boundaries-source-0p8l8b68\\\\guard'];import pytest;raise SystemExit(pytest.main(['-p', 'pytest_asyncio.plugin', '-p', 'boundary_guard', '-p', 'no:cacheprovider', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-boundaries-source-0p8l8b68\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--basetemp=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-boundaries-source-0p8l8b68\\\\cases', '-v', '--tb=short', '-o', 'faulthandler_timeout=0', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-boundaries-source-0p8l8b68\\\\tests.xml', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_final_boundaries_r7.py']))"
+  ],
+  "process": {
+    "exit_code": 1,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 57200,
+        "birth": 1794946877.2242672,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-1ow4ahtp\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 57840,
+        "birth": 1794946877.2475772,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": false,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  "counts": {
+    "PASS": 6,
+    "FAIL": 1
+  },
+  "source_pin_count": 1829,
+  "source_drift": [],
+  "payload_files": 1031,
+  "payload_drift": false,
+  "helper_drift": false,
+  "test_sha256": "49e264835e64c4c298330b0bd4e78eb047e4327ae0d33d4f1868d4763cbf14a7",
+  "raw_logs": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-boundaries-source-0p8l8b68\\stdout.log",
+    "sha256": "02f8dfd82330003472f042392dd1be61af3ff0f9bf0fd852e361fac25199ccc9",
+    "copied": false
+  },
+  "limits": [
+    "A06 is a SQLite reader proof, not runtime authority or browser classification.",
+    "Historical result/capture/artifact inputs are synthetic; H07 uses canonical request authority.",
+    "No browser, real provider, installed-Nexus execution or SLO claim.",
+    "100ms descendant sampling does not prove enumeration of every short-lived child."
+  ],
+  "status": "NOT_GREEN"
+}

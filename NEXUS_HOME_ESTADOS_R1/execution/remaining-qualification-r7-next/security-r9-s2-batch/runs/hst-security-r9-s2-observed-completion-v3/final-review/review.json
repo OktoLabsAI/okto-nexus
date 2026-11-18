@@ -1,0 +1,69 @@
+{
+  "status": "PASS_SCOPED_FINAL_GUARDS_AND_PHYSICAL_EXIT",
+  "qualification_sha256": "2635b94d33c6e80f8e2ea0e82e06eacd815077b9b7a8c8ca32f819d5a476fa64",
+  "variant_guard": {
+    "before": {
+      "gate_sha256": "e9be5bf487f1b448541bff58aa81de691b21676096275067be7c63a5558b29c3",
+      "variant_manifest_sha256": "4168b8d850e6aa6704a83497fa11121172c3840a5b3f5048fe6c11637aed217b",
+      "effective_driver_sha256": "2b5868ab19112ea425aa0b431f580546d87788a9083d6691b80a94bf1e3b3ad5",
+      "base_manifest_sha256": "25f48720da92f390b4f52a2caf7d21e8d220f2085b4b30787489826e2724e29a",
+      "completion_variant_manifest_sha256": "379630946962a699c35326f9f184215d087a813f20ea74bb963a5cf44755141b",
+      "completion_template_sha256": "03a7d903af3ac6f3c914dfb0cd1beeedb48aeef73e5ead1a81167b0274f3aba3"
+    },
+    "after": {
+      "gate_sha256": "e9be5bf487f1b448541bff58aa81de691b21676096275067be7c63a5558b29c3",
+      "variant_manifest_sha256": "4168b8d850e6aa6704a83497fa11121172c3840a5b3f5048fe6c11637aed217b",
+      "effective_driver_sha256": "2b5868ab19112ea425aa0b431f580546d87788a9083d6691b80a94bf1e3b3ad5",
+      "base_manifest_sha256": "25f48720da92f390b4f52a2caf7d21e8d220f2085b4b30787489826e2724e29a",
+      "completion_variant_manifest_sha256": "379630946962a699c35326f9f184215d087a813f20ea74bb963a5cf44755141b",
+      "completion_template_sha256": "03a7d903af3ac6f3c914dfb0cd1beeedb48aeef73e5ead1a81167b0274f3aba3"
+    },
+    "unchanged": true
+  },
+  "invalid_control_reads": [
+    {
+      "marker": "security-obs-owner",
+      "ordinal": 1,
+      "kind": "missing",
+      "bytes": null,
+      "sha256": null
+    },
+    {
+      "marker": "security-obs-owner",
+      "ordinal": 2,
+      "kind": "missing",
+      "bytes": null,
+      "sha256": null
+    }
+  ],
+  "known_birth_records": 36,
+  "same_birth_survivors": [],
+  "fixture_exit_code": 0,
+  "browser_close_exit_code": 0,
+  "forced_births": [],
+  "listeners_at_cleanup": [],
+  "session_closed_flags": [
+    true,
+    true
+  ],
+  "close_failures": [],
+  "literal_checks_passed": 13,
+  "checks_are_not_scenario_count": true,
+  "live_snapshot_comparisons": 2,
+  "snapshot_tables": 30,
+  "unexpected_changes": 0,
+  "allowed_events": [
+    "observation.activity sequence1",
+    "observation.completion sequence2"
+  ],
+  "evidence_layer": "real browser, isolated installed ASGI/SQLite, synthetic native peer; canonical OBS HTTP publications; provider0",
+  "limits": [
+    "H08 active managed claim/oneshot clause not tested; no occupied claim/slot baseline",
+    "No task verification/native success/capacity release inferred",
+    "No performance or SLO claim"
+  ],
+  "screenshots": {
+    "completion.png": "b5c0ad182ba04fdb55f459e63fd4a40cbc0dbb32d337309d65c18d0dae4feccd",
+    "idle.png": "4e1a8d93e58b2b2496f288b6aeb165a227d7d732fc190f630a330827ea7381d2"
+  }
+}

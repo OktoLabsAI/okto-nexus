@@ -1,0 +1,45 @@
+{
+  "label": "canonical-verification",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-h4gndlfo\\bootstrap.py",
+    "-p",
+    "qc38_plugin",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-h4gndlfo\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_verification.py",
+    "-v",
+    "-s",
+    "-o",
+    "faulthandler_timeout=0",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-h4gndlfo\\canonical-verification\\junit.xml",
+    "-k",
+    "test_ts4_complete_with_criteria_parks_in_verifying or test_ts5_verify_pass_completes_with_verified_by_on_the_canonical_event or test_ts6_verify_fail_drives_rework_cycles_with_renewed_lease"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-delivery-source-h4gndlfo\\canonical-verification\\cwd",
+  "deadline_seconds": 180,
+  "started_at": "2026-11-17T12:49:45.312841+00:00",
+  "signals": [],
+  "exit_code": 0,
+  "processes_after": [
+    {
+      "pid": 55668,
+      "parent_pid": null,
+      "birth_filetime": 134393933853150695,
+      "alive": false
+    },
+    {
+      "pid": 54232,
+      "parent_pid": 55668,
+      "birth_filetime": 134393933853260378,
+      "alive": false
+    }
+  ],
+  "rejected_nonowned_births": [],
+  "ended_at": "2026-11-17T12:49:52.950792+00:00"
+}

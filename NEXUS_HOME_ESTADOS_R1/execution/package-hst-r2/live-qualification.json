@@ -1,0 +1,93 @@
+{
+  "started_at": "2026-11-17T15:12:59.902163+00:00",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-live-mcp-24pdjhml",
+  "argv": [
+    "rtk",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-bw63b9u7\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-c",
+    "import importlib,importlib.metadata,json,pathlib,runpy,sys\nprefix=pathlib.Path(sys.prefix).resolve()\norigins={n:importlib.import_module(n).__file__ for n in ('okto_nexus','nexus_connector_core','okto_nexus_connector')}\nassert sys.flags.isolated and sys.dont_write_bytecode\nassert all(pathlib.Path(p).resolve().is_relative_to(prefix) for p in origins.values()), origins\nassert importlib.metadata.version('okto-nexus')=='0.3.7'\npathlib.Path(sys.argv[2]).write_text(json.dumps(dict(origins=origins,prefix=str(prefix),sys_path=sys.path,isolated=True,dont_write_bytecode=True),indent=2),encoding='utf-8')\nrunpy.run_path(sys.argv[1],run_name='__main__')\n",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\scripts\\live_client.py",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-live-mcp-24pdjhml\\origins.json"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-live-mcp-24pdjhml\\cwd",
+  "script_sha256": "c45643a809319861f21d73a3ddb2fc536b39f2e19e408563fd6cf907d26f2aa8",
+  "wheel_sha256": "14ca237285cd2ecee516f1b0df8cbff8277466ca6160e696f49867d077021560",
+  "provider_calls": 0,
+  "real_harnesses": false,
+  "process": {
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 42292,
+        "birth": 1794928379.909862,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+      },
+      {
+        "pid": 57476,
+        "birth": 1794928379.9340713,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-bw63b9u7\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 38244,
+        "birth": 1794928379.9483037,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 55720,
+        "birth": 1794928383.58039,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-bw63b9u7\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 37000,
+        "birth": 1794928383.59462,
+        "exe": "C:\\Python313\\python.exe"
+      },
+      {
+        "pid": 46228,
+        "birth": 1794928391.1792736,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-bw63b9u7\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 38872,
+        "birth": 1794928391.1938424,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  "summary": {
+    "transport": "HTTP /mcp/",
+    "authenticated_agents": 2,
+    "provider_calls": 0,
+    "real_harnesses_tested": false,
+    "tools_count": 54,
+    "message_observed_via_event_wait": true,
+    "handoff_completed": true,
+    "artifact_round_trip": true,
+    "shared_md_written": true,
+    "workspace_id": "b0cad7729542540340996e532ab20c32068a25b4311c2c7f62b459a5a41b61fe",
+    "all_envelopes_ok": true,
+    "cleanup": {
+      "physical_exit": true,
+      "exit_code": 0,
+      "canonical_stop_exit_code": 0
+    }
+  },
+  "ended_at": "2026-11-17T15:13:16.686618+00:00",
+  "payload_files": 1031,
+  "payload_drift": false,
+  "source_drift": [],
+  "banner_pass": true,
+  "cleanup_verified": true,
+  "status": "PASS"
+}

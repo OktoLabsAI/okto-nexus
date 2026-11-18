@@ -1,5 +1,6 @@
 import type { HomeActivity, HomeCounter, HomeDisplayState, HomeResult, HomeSection,HomeTarget } from './homeTypes';
 import type { ExternalObservation } from './observationTypes';
+import {deliveryPresentation} from './homeStatePresentation';
 
 const labels: Record<HomeDisplayState, string> = {
   awaiting_owner: 'Awaiting owner', claimed: 'Claimed', queued: 'Queued', native_accepted: 'Accepted by runtime',
@@ -9,6 +10,10 @@ const labels: Record<HomeDisplayState, string> = {
   result_available_cleanup_pending: 'Result available · cleanup pending', failed: 'Failed', cancelled: 'Cancelled', unknown: 'Unknown',
 };
 export function homeStateLabel(state: string): string { return labels[state as HomeDisplayState] ?? 'Unknown'; }
+/** A direct turn can have a private prompt and no public subject. */
+export function isUntitledHomeWork(entry: {title: string; target?: HomeTarget | null}): boolean {
+  return entry.target?.kind === 'execution' && entry.title === 'Work request';
+}
 export function homeTargetActionLabel(target:HomeTarget):string{
   return ({handoff:'View work',execution:'View work',result:'View delivery',session:'View session',
     connection:'View connection',message:'View message',approval:'Review request',external_observation:'View external signal'})[target.kind];
@@ -24,9 +29,10 @@ export function homeSectionLabel(section: HomeSection<unknown> | null): string {
 export function homeActivityKey(item: HomeActivity): string { return item.id; }
 export function homeResultKey(item: HomeResult): string { return item.id; }
 export function homeResultLabel(result: HomeResult): string {
-  if (result.cleanup_state && !['CLOSED', 'RELEASED', 'complete', 'completed'].includes(result.cleanup_state))
-    return `${result.outcome} · cleanup ${result.cleanup_state}`;
-  return result.verification_state ? `${result.outcome} · verification ${result.verification_state}` : result.outcome;
+  const meaning=deliveryPresentation(result.delivery_semantics,{outcome:result.outcome,evidence:'canonical'});
+  const badges=[...meaning.badges];
+  if(!result.delivery_semantics&&result.cleanup_state&&!['CLOSED','RELEASED','complete','completed'].includes(result.cleanup_state))badges.push('Cleanup pending');
+  return [meaning.title,...badges].join(' · ');
 }
 export function homeExternalLabel(item: ExternalObservation): string {
   const evidence = item.last_report?.evidence ?? 'evidence unknown';

@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "state": "PREPARED_NOT_RUN",
+  "required_candidate_version": "0.3.7",
+  "source_ready": null,
+  "installed_python": null,
+  "wheel_sha256": null,
+  "script": "scripts/live_client.py",
+  "script_sha256": "c45643a809319861f21d73a3ddb2fc536b39f2e19e408563fd6cf907d26f2aa8",
+  "command_template": ["rtk", "proxy", "<NEW_INSTALLED_PYTHON>", "-I", "-B", "<ABSOLUTE_REPO>/scripts/live_client.py"],
+  "working_directory": "<NEW_OWN_TEMP>/cwd",
+  "deadline_seconds": 180,
+  "provider_calls": 0,
+  "execute_allowed_now": false,
+  "required_gates": [
+    "Root SOURCE_READY and new installed candidate READY with exact wheel hash",
+    "Module origins and three-package payloads verified under the new prefix",
+    "Script hash rechecked; drift requires review",
+    "Parent and child environment sanitized before bootstrap; own HOME and project, empty PATH",
+    "Capture exact argv, origins, pins, result and canonical shutdown plus physical exit"
+  ],
+  "success_requires": ["exit_code=0", "LIVE E2E RESULT: PASS", "canonical own-server cleanup and physical exit"],
+  "failure_policy": "Preserve state and logs; no replay, provider fallback, personal-prefix modification or unowned PID termination. Deadline is containment, not PASS."
+}

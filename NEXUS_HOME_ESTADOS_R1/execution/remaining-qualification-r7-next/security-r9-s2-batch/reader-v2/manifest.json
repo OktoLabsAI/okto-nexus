@@ -1,0 +1,12 @@
+{
+  "kind": "S2_CONTROL_READER_ONLY_PREPARED_NOT_EXECUTED",
+  "base_manifest_sha256": "25f48720da92f390b4f52a2caf7d21e8d220f2085b4b30787489826e2724e29a",
+  "base_driver_sha256": "a887a03a576c01736a1f7ffc6f2fa9af73a82c2a714a1b49cfcd9ca1e8c31b9e",
+  "variant_pins": {
+    "run.py": "acd7ba36dc5464e51e826474eac9c83d85efc505a300f929b96ae23a10d90392",
+    "prepare_static.py": "e94f4adb360099341227dd40829a7a80f036f57894a3380f79ac18f76f4a90dc",
+    "effective-run.py.txt": "2b5868ab19112ea425aa0b431f580546d87788a9083d6691b80a94bf1e3b3ad5",
+    "reader-only.diff": "d13985ce84ee00692cc6990079e65ed1fe876b4966d5db1f8fde8e922d85025f",
+    "README.md": "ab051663888644b493537ca238c1bb70a4249e533503cfc40173dc25ad5cf664"
+  }
+}

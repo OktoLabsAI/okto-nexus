@@ -1,0 +1,37 @@
+{
+  "aCard": "home_group_3a7b9b6bbc936003fc69788238960dd6d4b30583d478a8b348fd762854c969b5",
+  "bCard": "home_group_b42639453dc15dbd59328b5d32bd438e85488c21b7fb73bf7c699c83dde19922",
+  "connection": {
+    "server_id": "srv_c1d23e9c60d89a04fd62392b69846a07",
+    "executor_id": "exe_a0403c7f31a1c25d21983cf411ed0ee3",
+    "binding_id": "bind_d00d153f4a4b61abeb03afe27fd6b978",
+    "endpoint_id": "ep_b3c96ba54d633c4c541014226a2ef6ba",
+    "agent_id": "hst-a",
+    "workspace_id": "wsr_1b073e7e5187f0e7c66ff2f0e5321e3b",
+    "workspace_binding_id": "wxb_25f0de20e5ffd2e87ba0040fce3ca590"
+  },
+  "a2Scope": {
+    "server_id": "srv_c1d23e9c60d89a04fd62392b69846a07",
+    "executor_id": "exe_a0403c7f31a1c25d21983cf411ed0ee3",
+    "binding_id": "bind_d00d153f4a4b61abeb03afe27fd6b978",
+    "agent_id": "hst-a",
+    "workspace_id": "wsr_1b073e7e5187f0e7c66ff2f0e5321e3b",
+    "workspace_binding_id": "wxb_25f0de20e5ffd2e87ba0040fce3ca590",
+    "session_id": "ses_cf61d5eff9bd1c36460bf9fd3e05a4af",
+    "session_owner_generation": 1,
+    "authorization_revision": 2,
+    "configuration_revision": 2,
+    "binding_revision": 1,
+    "credential_epoch": 1
+  },
+  "a2Session": "ses_cf61d5eff9bd1c36460bf9fd3e05a4af",
+  "a2Operation": "op_fa7eaff6453d84b3a8b197aaaf9b9f6d",
+  "requestId": "r4request_267f58a531783f16ef0dd82d2fd84045d06180da3326c22811db394bee84b8b0",
+  "requestCard": "home_request_att_0a56de0ff18af7e3f1db9626439b018ede4f456e0b338701e6daa21b8f903c5f",
+  "attentionId": "att_0a56de0ff18af7e3f1db9626439b018ede4f456e0b338701e6daa21b8f903c5f",
+  "expiresAt": "2026-11-17T23:27:16.085000+00:00",
+  "a1Session": "ses_9ad04fb399f84338ec9977bb280df292",
+  "a1Operation": "op_7162b2b2d36004b47ca835da3838f138",
+  "hostRevision": "3f08783f8f0243057d6296bdcc4123e00e8a296d4636d3509eb296c6b071eeaf",
+  "deliveryId": "home_delivery_canonical:result_f4bcc16c3fd9ddb394b1f9359bcc5a177994fd8bb4ac21575147bf8e384b5193"
+}

@@ -1,0 +1,43 @@
+### Result
+{"status":"PASS_SUBSET","checks":[{"id":"optional-source-disabled-current-proof","ok":true,"detail":{"attention":"ready","work":"ready","results":"ready","connections":"ready","sessions":"ready","correlations":"ready","external":"disabled"}},{"id":"current-partial-idle-not-last-known","ok":true,"detail":"Idle"},{"id":"current-summary-not-previous","ok":true,"detail":"1 connected · 0 working · 1 Idle\n\n0 actions · 0 harnesses paused"},{"id":"paused-two-successful-identical-polls","ok":true,"detail":[{"at":1794935402747,"revision":"e0988530885d49c3fc65888d6a7f48350d799b4daec97664c12326a94e0330b8"},{"at":1794935417765,"revision":"e0988530885d49c3fc65888d6a7f48350d799b4daec97664c12326a94e0330b8"}]},{"id":"paused-current-still-fresh","ok":true,"detail":"Idle"},{"id":"paused-no-false-update","ok":true,"detail":true},{"id":"failed-read-stale-not-fresh","ok":true,"detail":"Last known: Idle"},{"id":"failed-read-alert","ok":true,"detail":["Tracking information could not be refreshed. Try Refresh or narrow the filters."]},{"id":"successful-read-recovers-current-while-paused","ok":true,"detail":"Idle"}],"reads":[{"at":1794935402747,"revision":"e0988530885d49c3fc65888d6a7f48350d799b4daec97664c12326a94e0330b8"},{"at":1794935417765,"revision":"e0988530885d49c3fc65888d6a7f48350d799b4daec97664c12326a94e0330b8"},{"at":1794935423204,"revision":"e0988530885d49c3fc65888d6a7f48350d799b4daec97664c12326a94e0330b8"}],"limits":["One controlled browser transport abort; not real server or authority failure","No Working qualification on R4","Functional host load may include installed tests"]}
+### Ran Playwright code
+```js
+await (async page=>{
+ const cfg={"url": "http://127.0.0.1:52749", "workspace_id": "wsr_4b68f1b52af2b28d3e7c3eb8ad11c491", "freshScreenshot": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\output\\playwright\\home-states\\r4-current-idle.png", "failedScreenshot": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\output\\playwright\\home-states\\r4-failed-refresh.png"},checks=[],reads=[];
+ const check=(id,ok,detail)=>{checks.push({id,ok,detail});if(!ok)throw Error(id);};
+ try{
+  const badge=page.locator('[data-home-badge="Idle"]').first();
+  await badge.waitFor({timeout:15000});
+  const r=await page.request.get(cfg.url+'/api/v1/home/harness-board?presentation_version=2&workspace_id='+cfg.workspace_id);
+  const board=(await r.json()).data;
+  check('optional-source-disabled-current-proof',board.source_status.external==='disabled'&&board.operational_summary.idle.value===1&&board.columns.active.items[0].operational_status.freshness==='current',board.source_status);
+  check('current-partial-idle-not-last-known',(await badge.innerText()).trim()==='Idle',await badge.innerText());
+  check('current-summary-not-previous',!(await page.getByRole('region',{name:'Project overview'}).innerText()).includes('Previous snapshot'),await page.getByRole('region',{name:'Project overview'}).innerText());
+  await page.screenshot({path:cfg.freshScreenshot,fullPage:true});
+  page.on('response',async response=>{if(new URL(response.url()).pathname==='/api/v1/home/harness-board'&&response.status()===200){const b=(await response.json()).data;reads.push({at:Date.now(),revision:b.revision});}});
+  await page.getByRole('button',{name:'Pause display',exact:true}).click();
+  await page.waitForTimeout(32000);
+  check('paused-two-successful-identical-polls',reads.length>=2&&new Set(reads.map(x=>x.revision)).size===1,reads.slice());
+  check('paused-current-still-fresh',(await badge.innerText()).trim()==='Idle',await badge.innerText());
+  check('paused-no-false-update',!(await page.locator('body').innerText()).includes('Updates are available'),true);
+  // A deliberate transport failure, not a forged canonical DTO or ACL result.
+  await page.route('**/api/v1/home/harness-board?*',route=>route.abort('failed'),{times:1});
+  await page.getByRole('button',{name:'Refresh',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('[data-home-badge="Idle"]')?.textContent?.includes('Last known:'));
+  check('failed-read-stale-not-fresh',(await badge.innerText()).includes('Last known:'),await badge.innerText());
+  check('failed-read-alert',await page.getByRole('alert').count()>0,await page.getByRole('alert').allTextContents());
+  await page.screenshot({path:cfg.failedScreenshot,fullPage:false});
+  await page.getByRole('button',{name:'Refresh',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('[data-home-badge="Idle"]')?.textContent?.trim()==='Idle');
+  check('successful-read-recovers-current-while-paused',(await badge.innerText()).trim()==='Idle',await badge.innerText());
+  return {status:'PASS_SUBSET',checks,reads,limits:['One controlled browser transport abort; not real server or authority failure','No Working qualification on R4','Functional host load may include installed tests']};
+ }catch(error){return {status:'FAIL',error:String(error),checks,reads,body:await page.locator('body').innerText()};}
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:52749/
+- Page Title: Okto Nexus
+- Console: 1 errors, 0 warnings
+### Events
+- New console entries: .playwright-cli\console-2026-11-17T17-09-41-233Z.log#L1

@@ -1,0 +1,54 @@
+{
+  "at": "2026-11-17T18:34:17.117755+00:00",
+  "status": "PASS_R6_INSTALLED_SUPPLEMENT",
+  "counts": {
+    "PASS": 11,
+    "SKIP": 0,
+    "FAIL": 0,
+    "ERROR": 0,
+    "NOT_RUN": 0
+  },
+  "collected": [
+    "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[handoff-private]",
+    "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[message-private]",
+    "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[input]",
+    "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[agent_input]",
+    "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[nonblocking_input]",
+    "tests/home_states/test_results_boundary_completion.py::test_e10_canonical_rejected_handoff_without_native_result_has_no_native_outcome",
+    "tests/home_states/test_results_boundary_completion.py::test_e12_historical_terminal_receipt_without_capture_is_ended_but_content_pending",
+    "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[None]",
+    "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[Done: terminei]",
+    "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[verified]",
+    "tests/home_states/test_results_boundary_completion.py::test_e15_unknown_attempt_keeps_exact_monitorable_target_and_confirmed_history"
+  ],
+  "runtime_source_commit": "90b94ca9673c087554b7dc4a226490ef5417bd32",
+  "runtime_wheel_sha256": "8ab8f08e8f5e06b428ed4642045ad5e4069d93891a869d4dc61fcaa5bb3ffa19",
+  "new_test_file": {
+    "tests/home_states/test_results_boundary_completion.py": "17e0e923b80e068d6cda05621b76bd4a3e96d3e35e4cf3d36a1c731fe14d7df1"
+  },
+  "existing_build_pins": 1824,
+  "guarded_total_pins": 1825,
+  "process_exit": 0,
+  "timed_out": false,
+  "force_used": false,
+  "remaining_known_processes": [],
+  "source_payload_helper_drift": [],
+  "provider_calls": 0,
+  "human": false,
+  "stdout": {
+    "raw_preserved": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-supplement-r5eoquvk\\reports\\stdout.log",
+    "sha256": "014a9dc6e9d3c1fc61f7587f441e7b38249f8f394c200edf52df17772f3f4ba2"
+  },
+  "layers": {
+    "canonical_handoff_rejection": 1,
+    "historical_read_contracts": 5,
+    "original_recipient_api_authorization": 3,
+    "canonical_private_operator_message_handoff": 2
+  },
+  "limitations": [
+    "These eleven ran on R6 after build; the original 251 remain R5 execution with scoped backend equivalence.",
+    "Historical read fixtures use the existing injected read-service HTTP fixture, not full application/native assembly.",
+    "No real provider/harness, browser, AT, human, performance or default activation is qualified.",
+    "250ms descendant polling does not enumerate every short-lived child; no claim that it does."
+  ]
+}

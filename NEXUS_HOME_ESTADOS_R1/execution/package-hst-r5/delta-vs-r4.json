@@ -1,0 +1,46 @@
+{
+  "status": "PASS_EXACT_EXPECTED_HOME_DELTA",
+  "baseline_report_sha256": "63efb0f66baf79fb31d4ebf36716d3862daf68bef3271973fc9e7d64f0ff331e",
+  "candidate_report_sha256": "f59caae5f73ca837d8089ae936c377929655a33d7968d2e090d1bcf11fd71908",
+  "payload_changes": {
+    "okto_nexus": {
+      "added": [],
+      "removed": [],
+      "changed": [
+        "okto_nexus/adapters/outbound/sqlite/home.py",
+        "okto_nexus/adapters/outbound/sqlite/home_entries.py",
+        "okto_nexus/domain/home_operational_status.py"
+      ]
+    },
+    "nexus_connector_core": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "okto_nexus_connector": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    }
+  },
+  "assets_unchanged": true,
+  "schema_payload_unchanged": true,
+  "source_inputs": {
+    "before": 1821,
+    "after": 1824,
+    "added": [
+      "tests/home_states/test_atomic_working.py",
+      "tests/home_states/test_productive_progress_propagation.py",
+      "tests/home_states/test_productive_progress_status.py"
+    ],
+    "removed": [],
+    "changed": [
+      "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "src/okto_nexus/adapters/outbound/sqlite/home_entries.py",
+      "src/okto_nexus/domain/home_operational_status.py"
+    ]
+  },
+  "old_prefix_reinstalled": false,
+  "qualification_limit": "R3 746 PASS/8 SKIP remains historical, not pytest executed on R5. Changed Home runtime requires the prepared fresh R5 installed Home selection; no automatic full-suite reuse claim.",
+  "provider_calls": 0
+}

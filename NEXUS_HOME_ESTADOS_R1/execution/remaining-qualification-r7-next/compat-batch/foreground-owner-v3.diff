@@ -1,0 +1,16 @@
+--- foreground_owner_v2.py
++++ foreground_owner_v3.py
+@@ -103,12 +103,12 @@
+                 log.write(json.dumps({'kind': 'synthetic_setup_test', 'intent': request['client_intent_id']}) + '\n')
+             entry.update(status='succeeded', stage='Synthetic connection verified')
+ 
+-        application.state.connection_tests.run = synthetic_test
+         original_lifespan = application.router.lifespan_context
+ 
+         @asynccontextmanager
+         async def lifespan(app):
+             async with original_lifespan(app):
++                app.state.connection_tests.run = synthetic_test
+                 setup = (deps, app, None, None, {}, candidate, root / 'peer-root')
+                 peer_env = {k: v for k, v in os.environ.items()
+                     if k.upper() in {'SYSTEMROOT', 'WINDIR', 'COMSPEC', 'PATHEXT'}}

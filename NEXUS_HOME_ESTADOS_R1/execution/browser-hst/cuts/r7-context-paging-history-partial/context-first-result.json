@@ -1,0 +1,32 @@
+{
+  "status": "READY_CANONICAL_ARRIVAL",
+  "checks": [
+    {
+      "id": "canonical-known-session-found-by-bounded-paging",
+      "ok": true,
+      "detail": {
+        "session_id": "ses_473151227dc421ea064ebf9f713519ea",
+        "loaded_options": 10
+      }
+    },
+    {
+      "id": "real-relation-has-next-page",
+      "ok": true,
+      "detail": 10
+    }
+  ],
+  "selected": "[\"srv_7e9944e285d6c058d1a76fade202fd2c\",\"exe_1a0f64917ff5f8a2d9faa214208e6273\",\"wsr_5bfdda66177c96524163e86eba9b4f21\",\"ses_473151227dc421ea064ebf9f713519ea\"]",
+  "relation_path": "/api/v1/home/harness-board/cards/home_group_4c8ac5147967db10da87c9ef273b5f58af175956cf9d050814d82f09b29a1fd6/sessions",
+  "initial_ids": [
+    "ses_15e19484af5da65b4ac5a46894babca1",
+    "ses_1f588f9d0dc38f517db9446da9a6d402",
+    "ses_22e7c202224f1ad6d2409c72b9b5e17b",
+    "ses_2ddc9be9c9eea33fbfa3dbf0e62b5560",
+    "ses_3f8b2223b075ae15f3f7eff1b5b406e4",
+    "ses_473151227dc421ea064ebf9f713519ea",
+    "ses_60ad185bc77fe9656e9ce5522e90df8d",
+    "ses_76ee421f3c5bcf10dc60ab8cf86db636",
+    "ses_b43806ce4468cae171633e32346c12b9",
+    "ses_bb0d4a7784cd8d9019c23e3e1d8a5c9c"
+  ]
+}

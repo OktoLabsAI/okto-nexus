@@ -4,16 +4,28 @@ No page API is called here. Work/result builders and the authorized Attention
 relation are shared with Home v1. No transcript, native control or host access.
 """
 import json
+import re
 import sqlite3
+from copy import deepcopy
 
-from ....domain.attention import digest
+from ....domain.attention import canonical, digest
 from ....domain.home_entries import (
-    ConnectionContext, EntryRecord, EntryRelations, SessionContext,
-    activity_record, passive_record,
+    ConnectionContext,
+    EntryRecord,
+    EntryRelations,
+    SessionContext,
+    activity_record,
+    passive_record,
 )
-from .home import FACTS, RESULTS, SqliteHomeQueries
 from ..harness.event_journal import redact
-
+from . import home_operational_facts
+from .home import (
+    FACTS,
+    FACTS_NATIVE_PROGRESS,
+    RESULTS,
+    SqliteHomeQueries,
+    result_attention_value,
+)
 
 # This relation is independent of the old runtime_refs preview (20). The
 # persisted delivery/claim is resolved before sender filtering or pagination.
@@ -127,6 +139,111 @@ WHERE r.server_id=:server_id AND json_valid(r.operational_frame_json)
  AND (:workspace_id IS NULL OR json_extract(r.operational_frame_json,'$.workspace_id')=:workspace_id)
 '''
 
+# Separate from the legacy SQL: no new facts or decision placement are sent to
+# old consumers. Adapter is the exact bound endpoint, not a family guess.
+HARNESS_BLOCKING_V2 = HARNESS_BLOCKING.replace(
+    'WITH latest AS MATERIALIZED (',
+    '''WITH native_write_receipts AS MATERIALIZED (
+ SELECT r.*,ROW_NUMBER() OVER(PARTITION BY r.server_id,r.executor_id,r.operation_id
+ ORDER BY r.receipt_revision DESC) AS position
+ FROM execution_receipts r JOIN execution_operations o USING(server_id,executor_id,operation_id)
+ WHERE o.server_id=:server_id AND (:workspace_id IS NULL OR o.workspace_id=:workspace_id)
+ AND o.action IN ('input.provide','approval.decide')
+), latest AS MATERIALIZED ('''
+).replace(
+    "'received_at',r.received_at,'dispatch_state',d.dispatch_state)",
+    "'received_at',r.received_at,'dispatch_state',d.dispatch_state,"
+    "'owner_generation',json_extract(o.expected_revisions_json,'$.session_owner_generation'),"
+    "'stream_epoch',s.stream_epoch)").replace(
+    'LEFT JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id)',
+    'LEFT JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id) '
+    'LEFT JOIN execution_sessions s ON s.server_id=o.server_id AND s.executor_id=o.executor_id AND s.session_id=o.session_id'
+).replace(
+    "'approval_status',ap.status,'decided_at',ap.decided_at)",
+    "'approval_status',ap.status,'decided_at',ap.decided_at,"
+    "'owner_generation',r.session_owner_generation,'source_sequence',r.source_sequence,"
+    "'adapter_id',ep.adapter_id,'decision_id',decision.decision_id,'native_operation_id',decision.native_operation_id,"
+    "'decision_scope_matches',CASE WHEN reply.operation_id IS NOT NULL THEN 1 ELSE 0 END,"
+    "'native_write_stage',write_receipt.stage,'native_write_possible_effect',write_receipt.possible_effect,"
+    "'native_write_dispatch',write_dispatch.dispatch_state)"
+).replace(
+    'LEFT JOIN approvals ap ON ap.approval_id=r.canonical_request_id',
+    'LEFT JOIN approvals ap ON ap.approval_id=r.canonical_request_id '
+    'LEFT JOIN execution_bindings rb ON rb.server_id=r.server_id AND rb.executor_id=r.executor_id '
+    "AND rb.binding_id=json_extract(r.operational_frame_json,'$.binding_id') "
+    'LEFT JOIN agent_endpoints ep ON ep.endpoint_id=rb.endpoint_id '
+    'LEFT JOIN execution_decisions decision ON decision.canonical_request_id=r.canonical_request_id '
+    'AND decision.server_id=r.server_id AND decision.executor_id=r.executor_id '
+    'LEFT JOIN execution_operations reply ON reply.server_id=r.server_id AND reply.executor_id=r.executor_id '
+    'AND reply.operation_id=decision.native_operation_id AND reply.decision_id=decision.decision_id '
+    "AND reply.action IN ('input.provide','approval.decide') AND reply.session_id=r.session_id "
+    "AND reply.binding_id=json_extract(r.operational_frame_json,'$.binding_id') "
+    "AND reply.workspace_binding_id=json_extract(r.operational_frame_json,'$.workspace_binding_id') "
+    "AND reply.workspace_id=json_extract(r.operational_frame_json,'$.workspace_id') "
+    "AND reply.subject_agent_id=json_extract(r.operational_frame_json,'$.agent_id') "
+    "AND json_extract(reply.expected_revisions_json,'$.session_owner_generation')=r.session_owner_generation "
+    'LEFT JOIN native_write_receipts write_receipt ON write_receipt.server_id=reply.server_id '
+    'AND write_receipt.executor_id=reply.executor_id AND write_receipt.operation_id=reply.operation_id AND write_receipt.position=1 '
+    'LEFT JOIN execution_dispatch_outbox write_dispatch ON write_dispatch.server_id=reply.server_id '
+    'AND write_dispatch.executor_id=reply.executor_id AND write_dispatch.operation_id=reply.operation_id'
+)
+
+
+class _WorkRows(list):
+    """Request-local private metadata; list items remain legacy activity JSON."""
+
+    def __init__(self, values=(), native_progress_current=()):
+        super().__init__(values)
+        self.native_progress_current = list(native_progress_current)
+
+
+_RESULT_ATTENTION_FILTER = """filtered AS MATERIALIZED (SELECT home_result_attention_v1(item,
+ (SELECT item FROM home_attention WHERE json_extract(item,'$.attention_id')=json_extract(projected.item,'$._attention_id'))) AS item FROM projected)"""
+
+
+class _ResultAttentionIndex:
+    """Complete decoded relation, owned by exactly one read/UoW/scope."""
+
+    def __init__(self, connection, relation, workspace_id, occurrences):
+        self.connection = connection
+        self.relation = relation
+        self.workspace_id = workspace_id
+        self.occurrences = occurrences
+
+    def project(self, item):
+        try:
+            value = self.occurrences.get(item.get('_attention_id'))
+            if value is not None and value['workspace_id'] != item.get('workspace_id'):
+                # Preserve the scalar SQL behavior for ambiguous data.
+                raise sqlite3.OperationalError('Result Attention workspace requires legacy lookup')
+            # Legacy UDF JSON decoding produced independent nested objects.
+            return result_attention_value(item, deepcopy(value))
+        except Exception as error:
+            # Match SQLite's UDF failure boundary; budget/authority callbacks
+            # run outside this pure transformation and are never caught here.
+            raise sqlite3.OperationalError('user-defined function raised exception') from error
+
+
+def _progress_collection(raw):
+    try:
+        values = json.loads(raw) if raw is not None else []
+    except (TypeError, ValueError):
+        return []
+    return values if isinstance(values, list) else []
+
+
+def _progress_key(value):
+    if not isinstance(value, dict):
+        return None
+    names = ('server_id', 'executor_id', 'operation_id', 'session_id', 'workspace_id',
+        'agent_id', 'binding_id', 'workspace_binding_id', 'stream_epoch')
+    if any(type(value.get(name)) is not str or not value[name] for name in names):
+        return None
+    owner = value.get('owner_generation')
+    if type(owner) is not int or owner < 1:
+        return None
+    return (*tuple(value[name] for name in names), owner)
+
 
 class SqliteHomeEntryRelations:
     """Internal, unpaged projection. Does not authenticate or grant authority.
@@ -157,20 +274,117 @@ class SqliteHomeEntryRelations:
             cursor.close()  # UDF cleanup must not retain an unfinished statement.
 
     def _project(self, uow, *, relation, params, attention_relation, check_budget=None):
+        include_progress = relation is FACTS and params.get('delivery_presentation_version') == 2
+        if include_progress:
+            relation = FACTS_NATIVE_PROGRESS
         if attention_relation is None:
             ctes = 'WITH home_attention AS MATERIALIZED (SELECT NULL AS item WHERE 0)'
             additions = {}
         else:
             ctes, additions = self.home._attention_relations(attention_relation)
-        sql = ctes + ',' + relation.lstrip()[4:] + ' SELECT item FROM filtered'
+        sql = ctes + ',' + relation.lstrip()[4:] + (' SELECT item,native_progress_current FROM filtered' if include_progress else ' SELECT item FROM filtered')
+        progress = []
+        def decode(row):
+            if include_progress:
+                progress.extend(_progress_collection(row[1]))
+            return json.loads(row[0])
         with self.home.bounded(uow.connection):
-            return self._collect(uow.connection.execute(sql, dict(params, **additions)), lambda row: json.loads(row[0]), check_budget)
+            values = self._collect(uow.connection.execute(sql, dict(params, **additions)), decode, check_budget)
+        return _WorkRows(values, progress) if include_progress else values
 
     def _work(self, uow, **kwargs):
         return self._project(uow, relation=FACTS, **kwargs)
 
     def _results(self, uow, **kwargs):
         return self._project(uow, relation=RESULTS, **kwargs)
+
+    def _work_results(self, uow, *, params, attention_relation, check_budget, result_attention_index=None):
+        """Share statement-local authorized Attention, keeping both relations intact.
+
+        Nested WITH scopes preserve the independent Work/Results CTE names.
+        Results deliberately retain receiver facts outside the Work agent filter.
+        Any SQLite failure discards this batch; read() retries isolated sources.
+        """
+        if attention_relation is None:
+            ctes = 'WITH home_attention AS MATERIALIZED (SELECT NULL AS item WHERE 0)'
+            additions = {}
+        else:
+            ctes, additions = self.home._attention_relations(attention_relation)
+        include_progress = params.get('delivery_presentation_version') == 2
+        work_relation = FACTS_NATIVE_PROGRESS if include_progress else FACTS
+        progress_column = 'native_progress_current' if include_progress else 'NULL'
+        indexed = (result_attention_index is not None
+            and result_attention_index.connection is uow.connection
+            and result_attention_index.relation is attention_relation
+            and result_attention_index.workspace_id == params.get('workspace_id')
+            and include_progress and RESULTS.count(_RESULT_ATTENTION_FILTER) == 1)
+        result_relation = (RESULTS.replace(_RESULT_ATTENTION_FILTER,
+            'filtered AS MATERIALIZED (SELECT item FROM projected)') if indexed else RESULTS)
+        results = re.sub(r':agent_id\b', ':result_agent_id', result_relation)
+        sql = (ctes + " SELECT 'work' AS section,item," + progress_column + ' FROM (' + work_relation
+            + " SELECT item,native_progress_current FROM filtered LIMIT :batch_source_limit) UNION ALL SELECT 'results',item,NULL FROM ("
+            + results + ' SELECT item FROM filtered LIMIT :batch_source_limit)')
+        values = {'work': _WorkRows() if include_progress else [], 'results': []}
+        with self.home.bounded(uow.connection):
+            cursor = uow.connection.execute(sql, dict(params, result_agent_id=None,
+                batch_source_limit=self.MAX_RELATION_ROWS + 1, **additions))
+            try:
+                for row in cursor:
+                    check_budget()
+                    section = values[row[0]]
+                    # The existing ceiling belongs to each complete source,
+                    # not to the sum of two otherwise valid source relations.
+                    if len(section) >= self.MAX_RELATION_ROWS:
+                        raise sqlite3.OperationalError('Home entry source resource budget exceeded')
+                    item = json.loads(row[1])
+                    if indexed and row[0] == 'results':
+                        item = result_attention_index.project(item)
+                    section.append(item)
+                    if include_progress and row[0] == 'work':
+                        section.native_progress_current.extend(_progress_collection(row[2]))
+            finally:
+                cursor.close()
+        return values['work'], values['results']
+
+    def _can_batch_work_results(self):
+        # Custom query ports/fault injection retain their isolated semantics.
+        return all(getattr(getattr(self, name), '__func__', None) is getattr(SqliteHomeEntryRelations, name)
+            for name in ('_work', '_results', '_project'))
+
+    def _result_attention_index(self, uow, relation, occurrences, params, check_budget):
+        # Only the builtin collector attests complete source materialization.
+        # Custom ports retain their SQL/error behavior without new arguments.
+        if (params.get('delivery_presentation_version') != 2 or relation is None
+                or type(self.home) is not SqliteHomeQueries
+                or self.home._attention_relations is not SqliteHomeQueries._attention_relations
+                or getattr(self.home.bounded, '__func__', None) is not SqliteHomeQueries.bounded
+                or any(getattr(getattr(self, name), '__func__', None)
+                    is not getattr(SqliteHomeEntryRelations, name)
+                    for name in ('_attention', '_work_results'))):
+            return None
+        values = {}
+        for value in occurrences:
+            check_budget()
+            if not isinstance(value, dict):
+                return None
+            workspace = value.get('workspace_id')
+            if workspace is None:
+                continue  # Matches home_attention, not home_server_attention.
+            if type(workspace) is not str:
+                return None
+            if params.get('workspace_id') is not None and workspace != params['workspace_id']:
+                continue
+            identity = value.get('attention_id')
+            seen = value.get('seen_state')
+            if (type(identity) is not str or not identity or identity in values
+                    or not isinstance(seen, dict) or type(seen.get('seen')) is not bool):
+                return None
+            try:
+                canonical(value)  # Preserve the legacy UDF's finite JSON contract.
+            except (TypeError, ValueError, RecursionError):
+                return None
+            values[identity] = value
+        return _ResultAttentionIndex(uow.connection, relation, params.get('workspace_id'), values)
 
     def _rows(self, uow, sql, params, check_budget=None):
         with self.home.bounded(uow.connection):
@@ -182,20 +396,29 @@ class SqliteHomeEntryRelations:
             return self._collect(uow.connection.execute(sql + ' SELECT item FROM filtered', params), lambda row: json.loads(row[0]), check_budget)
 
     def blocking(self, uow, *, scope, server_id, relations, check_budget):
+        if relations.presentation_version == 2:
+            # read() already assembled the same v2 batch in this UoW.
+            return
         with self.home.bounded(uow.connection):
             relations.harness_blocking = self._collect(uow.connection.execute(HARNESS_BLOCKING,
                 dict(server_id=server_id, workspace_id=scope.get('workspace_id'))),
                 lambda row: json.loads(row[0]), check_budget)
 
-    def read(self, uow, *, scope, server_id, now, attention_relation, check_budget=None):
+    def read(self, uow, *, scope, server_id, now, attention_relation, check_budget=None, presentation_version=1):
         """Return all canonical relations before UI-020 sorting/count/paging.
 
         ``scope`` is the already normalized/authorized Home workspace/agent
         scope. State/quick filters belong after enrichment, not at source read.
         No authority is inferred from the caller's possession of these IDs.
         """
-        params = dict(server_id=server_id, workspace_id=scope.get('workspace_id'),
-                      agent_id=scope.get('agent_id'), home_now=now, state='all')
+        if presentation_version == 2:
+            # Workspace authorization has already run. Agent is a visual
+            # selection, never permission to hide a productive sibling before
+            # calculating a connection's operational state.
+            scope = dict(scope, agent_id=None)
+        params = {'server_id': server_id, 'workspace_id': scope.get('workspace_id'),
+                      'agent_id': scope.get('agent_id'), 'home_now': now, 'state': 'all',
+                      'delivery_presentation_version': presentation_version}
         status = {}
         check_budget = check_budget or (lambda: None)
 
@@ -215,8 +438,24 @@ class SqliteHomeEntryRelations:
         if attention_relation is None:
             status['attention'] = 'unavailable'
         effective_attention = attention_relation if status['attention'] == 'ready' else None
-        work = source('work', lambda: self._work(uow, params=params, attention_relation=effective_attention, check_budget=check_budget))
-        results = source('results', lambda: self._results(uow, params=dict(params, agent_id=None), attention_relation=effective_attention, check_budget=check_budget))
+        combined = None
+        if self._can_batch_work_results():
+            check_budget()
+            try:
+                index = self._result_attention_index(uow, effective_attention, occurrences, params, check_budget)
+                arguments = {'result_attention_index': index} if index is not None else {}
+                combined = self._work_results(uow, params=params,
+                    attention_relation=effective_attention, check_budget=check_budget, **arguments)
+            except sqlite3.Error:
+                # Preserve source isolation: e.g. a missing Results table must
+                # not erase independently readable Work (or the reverse).
+                pass
+        if combined is None:
+            work = source('work', lambda: self._work(uow, params=params, attention_relation=effective_attention, check_budget=check_budget))
+            results = source('results', lambda: self._results(uow, params=dict(params, agent_id=None), attention_relation=effective_attention, check_budget=check_budget))
+        else:
+            work, results = combined
+            status.update(work='ready', results='ready')
         raw_connections = source('connections', lambda: self._rows(uow, CONNECTIONS, params, check_budget))
         raw_sessions = source('sessions', lambda: self._rows(uow, SESSIONS, params, check_budget))
         owners = source('correlations', lambda: self._rows(uow, OPERATION_OWNERS, params, check_budget))
@@ -349,9 +588,32 @@ class SqliteHomeEntryRelations:
             entry = passive_record(connection)
             entry.connection = connection
             entries.append(entry)
-        return EntryRelations(entries, server_attention, status,
+        relations = EntryRelations(entries, server_attention, status,
             connection_count=len(connections) if status['connections'] == 'ready' else None,
             connections=tuple(connections[key] for key in sorted(connections)) if status['connections'] == 'ready' else None)
+        if presentation_version == 2:
+            relations.presentation_version = 2
+            operational_rows = source('operational_sessions', lambda: self._rows(uow, home_operational_facts.SESSIONS, params, check_budget))
+            leases = source('operational_leases', lambda: self._rows(uow, home_operational_facts.LEASES, params, check_budget))
+            if status['operational_sessions'] == status['operational_leases'] == 'ready':
+                relations.operational_sessions = home_operational_facts.normalize(operational_rows, leases, check_budget)
+            rows = source('operational_dependencies', lambda: self._rows(uow, HARNESS_BLOCKING_V2, params, check_budget))
+            if status['operational_dependencies'] == 'ready':
+                relations.harness_blocking = [json.loads(row['item']) for row in rows]
+                if status['work'] == 'ready':
+                    positive_progress = set()
+                    for proof in getattr(work, 'native_progress_current', ()):
+                        check_budget()
+                        key = _progress_key(proof)
+                        if key is not None:
+                            positive_progress.add(key)
+                    for operation in relations.harness_blocking:
+                        check_budget()
+                        if operation.get('family') == 'operation' and _progress_key(operation) in positive_progress:
+                            operation['productive_progress_current'] = True
+            relations.operational_source_status = {name: status.pop(name) for name in
+                ('operational_sessions', 'operational_leases', 'operational_dependencies')}
+        return relations
 
     def external(self, uow, *, scope, server_id, now, config, observations, relations, check_budget):
         """Read the canonical complete observation source in this same UoW.

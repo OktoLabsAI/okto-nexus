@@ -1,0 +1,26 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "ledger_sha256": "94276b9c49775d62681019ede8ca5e2b90fd67c7a97738e10257d58b420fdc72",
+  "entries": [
+    {
+      "path": "remaining-qualification-review-r7.md",
+      "sha256": "f5478542bd73cd8c4ee08d1a4b95f82caee4a45c8d389e7bdd55b09d96c3c7f4",
+      "bytes": 8782
+    },
+    {
+      "path": "browser-hst/prepared-next-two-cuts.md",
+      "sha256": "3e94004c31302de946742db825aedfe462c7b8663e873593a9fda569bff12e00",
+      "bytes": 7207
+    },
+    {
+      "path": "browser-hst/prepared-next-decision-cut.js",
+      "sha256": "69e2dee5c7b2ad8a2ddaa492caa121a7e54b1fab68f1cb05c970764c95771ede",
+      "bytes": 4191
+    },
+    {
+      "path": "browser-hst/prepared-next-context-cut.js",
+      "sha256": "479a15191c245688e69b340e1b21187803b758d3a2ed8c0884c3d888611aedcb",
+      "bytes": 4087
+    }
+  ]
+}

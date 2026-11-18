@@ -1,0 +1,105 @@
+--- run.py
++++ run_v2.py
+@@ -1,4 +1,4 @@
+-"""Gated browser-only native zoom proof. Never starts or imports Nexus."""
++"""Gated I05 application proof. Nexus starts only after native zoom qualifies."""
+ import argparse
+ import hashlib
+ import importlib.util
+@@ -22,7 +22,7 @@
+ def write(path,value):
+     with path.open('x',encoding='utf-8')as stream:stream.write(json.dumps(value,indent=2)+'\n')
+ def check(gate_path):
+-    manifest_path=HERE/'prepared-app.json';manifest=json.loads(manifest_path.read_text());gate=json.loads(gate_path.read_text())
++    manifest_path=HERE/'prepared-app-v2.json';manifest=json.loads(manifest_path.read_text());gate=json.loads(gate_path.read_text())
+     assert gate['approved']is True and gate['scope']=='I05_APP_NATIVE_ZOOM'and gate['start_nexus']is True
+     assert gate['deadline_seconds']==300 and gate['allow_own_containment']is True and gate['allow_fixture_canonical_admissions']is True
+     assert re.fullmatch(r'hst-native-zoom-r9-[a-z0-9-]{1,60}',gate['cut_id'])
+@@ -55,7 +55,7 @@
+     browser=REPO/'NEXUS_HOME_ESTADOS_R1/execution/browser-hst';security=REPO/'NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/security-r9-batch'
+     prepared=subprocess.run([sys.executable,'-B',str(browser/'prepare_runtime.py'),'--package-ready',str((REPO/manifest['ready']).resolve()),'--expected-source',ready['source_commit'],'--mode','scope_two','--browser-window-open'],input=b'',capture_output=True,timeout=20,check=True)
+     root=Path(json.loads(prepared.stdout)['root']).resolve();print(json.dumps(dict(event='ALLOCATED',root=str(root))),flush=True)
+-    # Allocation copies fixture source but NEVER starts it. Only this static probe runs.
++    # Allocation only copies fixture source here; Nexus start remains after native proof.
+     shutil.copyfile(NATIVE/'probe_server_v2.py',root/'zoom-probe.py');shutil.copyfile(NATIVE/'playwright-cli.json',root/'playwright-cli.json')
+     manager=load('zoom_commands',security/'run.py');driver=load('zoom_browser_driver',security/'browser_driver.py');lifecycle=load('zoom_probe_environment',browser/'containment.py')
+     commands=manager.Commands(root,driver.environment(root),action_deadline);tooling=manifest['tooling'];rtk=shutil.which('rtk');assert rtk
+@@ -74,11 +74,27 @@
+         write(root/(name+'-result.private.json'),value);app_results.append(dict(phase=name,result=value))
+         assert value['status']in ['PASS_I05_EXECUTED_SUBSET','PASS_NATIVE_UI100_SELECTED'],'I05 case did not qualify: '+name
+         return value
++    control_invalid_reads=[0]
+     def control(name):
+         (root/'control'/name).touch();end=min(action_deadline,time.monotonic()+35)
+         while time.monotonic()<end:
+             path=root/'control/controls.json'
+-            if path.exists()and name in json.loads(path.read_text()).get('done',[]):return
++            invalid_read=None
++            try:
++                raw_control=path.read_bytes()
++            except FileNotFoundError:
++                invalid_read=dict(kind='missing',bytes=None,sha256=None)
++            else:
++                try:
++                    observed=json.loads(raw_control)
++                except json.JSONDecodeError:
++                    invalid_read=dict(kind='invalid_json',bytes=len(raw_control),sha256=hashlib.sha256(raw_control).hexdigest())
++                else:
++                    if name in observed.get('done',[]):return
++            if invalid_read is not None:
++                with(root/'i05-control-invalid-reads.jsonl').open('a',encoding='utf-8')as audit:
++                    audit.write(json.dumps(dict(marker=name,ordinal=control_invalid_reads[0]+1,**invalid_read))+'\n')
++                control_invalid_reads[0]+=1
+             assert owner.process.poll()is None,'Fixture exited during canonical control'
+             owner.sample();commands.sample(owner.process.pid);time.sleep(.1)
+         raise RuntimeError('Canonical fixture control deadline '+name)
+@@ -139,7 +155,7 @@
+         assert set(origins['origins'])=={'okto_nexus','nexus_connector_core','okto_nexus_connector'}and all(Path(value).resolve().is_relative_to(prefix)for value in origins['origins'].values())
+         cli('load-own-cookie','state-load',fixture_ready['storage'])
+         bootstrap=dict(window='ROOT_I05_NATIVE_APP_OPEN',phase='bootstrap',url=fixture_ready['url'],nativeDpr200=result['observations']['zoomed']['devicePixelRatio'])
+-        body('app-bootstrap','app-display.js',bootstrap)
++        body('app-bootstrap','app-display-v2.js',bootstrap)
+         # Native/browser warmup and app bootstrap precede fresh original120s questions.
+         control('exp-start-active');active=snapshot('active');identity=json.loads((root/'control/exp-active-identities.json').read_text());baseline=snapshot('base');refs=fixture_ready['references']
+         cards=[item for column in active['board']['columns'].values()for item in column['items']if item['kind']=='harness']
+@@ -152,13 +168,13 @@
+         deliveries=[item for item in active['board']['columns']['results']['items']if item['kind']=='delivery'and item['entry']['target'].get('operation_id')==turns[0]['operation_id']];assert len(deliveries)==1;delivery=deliveries[0]
+         exact=dict(window='ROOT_I05_NATIVE_APP_OPEN',phase='case',url=fixture_ready['url'],outputPrefix=str(root/'i05-app'),expiresAt=identity['question']['expires_at'],aCard=a['id'],bCard=b['id'],bScope=b1['scope'],bMarker=b1['marker'],a2Scope=a2['scope'],requestCard=request['id'],requestId=identity['question']['request_id'],deliveryId=delivery['id'],deliveryTarget=delivery['result']['detail_target'],projectA=a['connection']['workspace_label'],projectB=b['connection']['workspace_label'])
+         write(root/'i05-public-preflight.json',exact)
+-        body('app-200','app-display.js',dict(exact,caseName='native200-css360',requestedWidth=720,expectedDpr=result['observations']['zoomed']['devicePixelRatio']))
++        body('app-200','app-display-v2.js',dict(exact,caseName='native200-css360',requestedWidth=720,expectedDpr=result['observations']['zoomed']['devicePixelRatio']))
+         body('ui-native100','native100.js',dict(window='ROOT_I05_NATIVE_APP_OPEN'))
+-        body('app-100','app-display.js',dict(exact,caseName='native100-css360',requestedWidth=360,expectedDpr=result['observations']['baseline']['devicePixelRatio']))
++        body('app-100','app-display-v2.js',dict(exact,caseName='native100-css360',requestedWidth=360,expectedDpr=result['observations']['baseline']['devicePixelRatio']))
+     except BaseException as error:
+         failure=dict(type=type(error).__name__,message=str(error));write(root/'first-failure.private.json',failure)
+     finally:
+-        # Normal close/stop FIRST. No retry and no next-stage application branch.
++        # Normal close/stop FIRST. No retry, fallback or additional scenario branch.
+         if opened:
+             try:cli('cleanup-browser','close',cleanup=True)
+             except BaseException as error:cleanup_errors.append(dict(stage='CLI close',type=type(error).__name__))
+--- app-display.js
++++ app-display-v2.js
+@@ -54,8 +54,8 @@
+       const apply=page.getByRole('button',{name:'Apply updates',exact:true});if(await apply.isVisible().catch(()=>false))await apply.click();
+       observations.geometry=await measure();
+       check('native-zoom-and-CSS360-'+cfg.caseName,Math.abs(observations.geometry.devicePixelRatio-cfg.expectedDpr)<.03&&Math.abs(observations.geometry.innerWidth-360)<=3&&observations.geometry.visualScale===1,{requestedWidth:cfg.requestedWidth,...observations.geometry});
+-      const columns=page.locator('[data-home-column]');const boxes=await columns.evaluateAll(nodes=>nodes.map(e=>{const r=e.getBoundingClientRect();return {column:e.getAttribute('data-home-column'),x:r.x,y:r.y,width:r.width,height:r.height};}));
+-      check('three-stacked-columns-'+cfg.caseName,boxes.length===3&&boxes.every((b,i)=>b.width>0&&b.width<=observations.geometry.innerWidth+1&&(!i||b.y>boxes[i-1].y)),boxes);
++      const columns=page.locator('[data-home-column]');const boxes=await columns.evaluateAll(nodes=>nodes.map(e=>{const r=e.getBoundingClientRect();return {column:e.getAttribute('data-home-column'),x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom};}));
++      check('three-stacked-columns-'+cfg.caseName,boxes.length===3&&boxes.every((b,i)=>b.width>0&&b.width<=observations.geometry.innerWidth+1&&Math.abs(b.x-boxes[0].x)<=1&&(!i||b.y>=boxes[i-1].bottom)),boxes);
+       check('no-page-horizontal-overflow-'+cfg.caseName,observations.geometry.scrollWidth<=observations.geometry.innerWidth+1,observations.geometry);
+       const labelRows=await page.locator('[data-home-harness],[data-home-signal]').allTextContents();
+       check('real-long-project-labels-'+cfg.caseName,labelRows.every(text=>text.includes('Project:'))&&labelRows.some(text=>text.includes(cfg.projectA))&&labelRows.some(text=>text.includes(cfg.projectB)),labelRows);
+--- curate.py
++++ curate_v2.py
+@@ -34,7 +34,7 @@
+     cas=privacy.cas_values(root);cookies=[];storage=root/'control/browser-storage.private.json'
+     if storage.exists():cookies=[item['value']for item in json.loads(storage.read_text())['cookies']]
+     dest=HERE/'runs'/raw['cut_id'];assert not dest.exists();dest.mkdir(parents=True)
+-    names=['native-zoom-run.private.json','native-guard-result.private.json','first-failure.private.json','chrome-argv.private.json','probe-process-proof.json','runtime-ready.json','i05-builder-proof.json','i05-public-preflight.json','native-zoom.js','zoom-probe.py','fixture.py','playwright-cli.json','control/zoom-probe-ready.json','control/zoom-probe-final.json','control/final.json','control/origins.json','control/controls.json','control/exp-base.json','control/exp-active.json']
++    names=['i05-control-invalid-reads.jsonl','native-zoom-run.private.json','native-guard-result.private.json','first-failure.private.json','chrome-argv.private.json','probe-process-proof.json','runtime-ready.json','i05-builder-proof.json','i05-public-preflight.json','native-zoom.js','zoom-probe.py','fixture.py','playwright-cli.json','control/zoom-probe-ready.json','control/zoom-probe-final.json','control/final.json','control/origins.json','control/controls.json','control/exp-base.json','control/exp-active.json']
+     names+=[str(path.relative_to(root))for pattern in ['command-*.private.txt','app-*.js','ui-native100.js','*-result.private.json','native-zoom-*.png','i05-app-*.png']for path in root.glob(pattern)]
+     copied=[];redactions=0
+     for name in sorted(set(names)):

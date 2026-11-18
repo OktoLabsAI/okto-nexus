@@ -1,0 +1,22 @@
+{
+  "status": "INCOMPLETE_I04",
+  "phase": "known",
+  "checks": [
+    {
+      "id": "original-question-valid-before-known",
+      "pass": true,
+      "actual": {
+        "expiresAt": "2026-11-18T02:14:49.087000+00:00"
+      }
+    },
+    {
+      "id": "canonical-known-HTTP-snapshot",
+      "pass": false
+    }
+  ],
+  "observations": [],
+  "error": "Error: canonical-known-HTTP-snapshot",
+  "writes": [],
+  "pageErrors": [],
+  "homeAX": "- region \"Follow-up\":\n  - heading \"Follow-up\" [level=2]\n  - region \"Active\":\n    - heading \"Active\" [level=3]\n    - text: 2 harnesses \u00b7 Revalidating\n    - list:\n      - listitem:\n        - 'heading \"Harness ID: reviewer\" [level=4]'\n        - paragraph: \"Collaborator: Hst A\"\n        - paragraph: Codex \u00b7 Host not reported\n        - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n        - text: Working Response pending\n        - list \"Activity preview\":\n          - listitem:\n            - paragraph: Work request\n            - paragraph: Needs your response\n          - listitem:\n            - paragraph: Work request\n            - paragraph: Needs your response\n            - button \"View work\"\n          - listitem:\n            - paragraph: Work request\n            - paragraph: Running\n            - button \"View work\"\n        - button \"Follow activity\"\n        - group: Connection details\n      - listitem:\n        - 'heading \"Harness ID: reviewer\" [level=4]'\n        - paragraph: \"Collaborator: Hst B\"\n        - paragraph: Codex \u00b7 Host not reported\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - text: Idle\n        - list \"Activity preview\":\n          - listitem:\n            - paragraph: Work request\n            - paragraph: Failed\n            - button \"View delivery\"\n          - listitem:\n            - paragraph: Work request\n            - paragraph: Turn completed\n            - button \"View delivery\"\n          - listitem:\n            - paragraph: Work request\n            - paragraph: Turn completed\n            - button \"View delivery\"\n        - button \"Follow activity\"\n        - group: Connection details\n  - region \"Needs you\":\n    - heading \"Needs you\" [level=3]\n    - text: 1 items \u00b7 Revalidating\n    - list:\n      - listitem:\n        - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n        - heading \"Runtime question for the operator\" [level=4]\n        - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n        - text: Response pending\n        - paragraph: Blocks this session; the harness continues other work\n        - button \"Respond\"\n  - region \"Results\":\n    - heading \"Results\" [level=3]\n    - text: 3 deliveries \u00b7 Revalidating\n    - list:\n      - listitem:\n        - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n        - heading \"Work result\" [level=4]\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - paragraph: Execution ended with failure\n        - paragraph:\n          - text: Received\n          - time: 2026-11-18T02:12:45.445Z\n        - button \"View result\"\n      - listitem:\n        - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n        - heading \"Work result\" [level=4]\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - paragraph: Response available\n        - paragraph:\n          - text: Received\n          - time: 2026-11-18T02:12:44.878Z\n        - button \"View result\"\n      - listitem:\n        - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n        - heading \"Work result\" [level=4]\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - paragraph: Response available\n        - paragraph:\n          - text: Received\n          - time: 2026-11-18T02:12:37.063Z\n        - button \"View result\""
+}

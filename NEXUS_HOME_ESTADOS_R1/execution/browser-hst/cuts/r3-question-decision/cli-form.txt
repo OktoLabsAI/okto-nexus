@@ -1,0 +1,33 @@
+### Result
+{"status":"PASS_SUBSET","checks":[{"id":"single-exact-question-form","ok":true,"detail":1},{"id":"dirty-close-guard","ok":true,"detail":"Discard unsaved changes?"},{"id":"draft-preserved","ok":true,"detail":true},{"id":"zero-post-before-explicit-answer","ok":true,"detail":[{"path":"/api/v1/runtime-management/runtime/approval-decisions","status":202,"body":{"decision_id":"r4decision_0ce8cf96d46fe9b6993984e3d1881fee","client_intent_id":"ui_28c24808881c41e0f9591386f301b233","approval_key":{"server_id":"srv_3432cd3343d015075d3c29d18b943356","executor_id":"exe_f533a1c4b2c982ea7880eccbab75aab7","binding_id":"bind_28f5459634ac18ef440029e7a1f8be81","agent_id":"hst-worker","workspace_id":"wsr_37d5f7bcd16e6aad21b4b2eceed6274d","session_id":"ses_4f23fa71012a335cf76c8f1ee74ac8b3","session_owner_generation":1,"canonical_request_id":"r4request_43863870c77394632577da5aade116dae3ffa34ed1381ec892eba07d7f24c3a1","kind":"native_input"},"request_hash":"sha256:e032be8e539999664bb87b5a9cdac7423119d641c2c3a507b68494b9d0c2b22d","request_revision":1,"proposal_decision":"approve","native_decision":"accept","actor_agent_id":"operator","subject_agent_id":"hst-worker","canonical_state":"CONFIRMED","native_operation_id":"r4op_cf433e953a3721317de780d45a255906","native_stage":"DISPATCH_PENDING","possible_effect":false,"retry_safe":true,"response_digest":"sha256:b28e162b41a9ebbd565bdb79090acbb4e8538a403d1e24ace84d6f34b47c39d3","expires_at":"2026-11-17T17:00:01.544000+00:00"}}]},{"id":"recorded-not-provider-applied","ok":true,"detail":"Decision: CONFIRMED. Native delivery: DISPATCH_PENDING.\n\nA recorded decision does not prove application by the provider."},{"id":"one-canonical-decision","ok":true,"detail":[{"path":"/api/v1/runtime-management/runtime/approval-decisions","status":202,"body":{"decision_id":"r4decision_0ce8cf96d46fe9b6993984e3d1881fee","client_intent_id":"ui_28c24808881c41e0f9591386f301b233","approval_key":{"server_id":"srv_3432cd3343d015075d3c29d18b943356","executor_id":"exe_f533a1c4b2c982ea7880eccbab75aab7","binding_id":"bind_28f5459634ac18ef440029e7a1f8be81","agent_id":"hst-worker","workspace_id":"wsr_37d5f7bcd16e6aad21b4b2eceed6274d","session_id":"ses_4f23fa71012a335cf76c8f1ee74ac8b3","session_owner_generation":1,"canonical_request_id":"r4request_43863870c77394632577da5aade116dae3ffa34ed1381ec892eba07d7f24c3a1","kind":"native_input"},"request_hash":"sha256:e032be8e539999664bb87b5a9cdac7423119d641c2c3a507b68494b9d0c2b22d","request_revision":1,"proposal_decision":"approve","native_decision":"accept","actor_agent_id":"operator","subject_agent_id":"hst-worker","canonical_state":"CONFIRMED","native_operation_id":"r4op_cf433e953a3721317de780d45a255906","native_stage":"DISPATCH_PENDING","possible_effect":false,"retry_safe":true,"response_digest":"sha256:b28e162b41a9ebbd565bdb79090acbb4e8538a403d1e24ace84d6f34b47c39d3","expires_at":"2026-11-17T17:00:01.544000+00:00"}}]}],"posts":[{"path":"/api/v1/runtime-management/runtime/approval-decisions","status":202,"body":{"decision_id":"r4decision_0ce8cf96d46fe9b6993984e3d1881fee","client_intent_id":"ui_28c24808881c41e0f9591386f301b233","approval_key":{"server_id":"srv_3432cd3343d015075d3c29d18b943356","executor_id":"exe_f533a1c4b2c982ea7880eccbab75aab7","binding_id":"bind_28f5459634ac18ef440029e7a1f8be81","agent_id":"hst-worker","workspace_id":"wsr_37d5f7bcd16e6aad21b4b2eceed6274d","session_id":"ses_4f23fa71012a335cf76c8f1ee74ac8b3","session_owner_generation":1,"canonical_request_id":"r4request_43863870c77394632577da5aade116dae3ffa34ed1381ec892eba07d7f24c3a1","kind":"native_input"},"request_hash":"sha256:e032be8e539999664bb87b5a9cdac7423119d641c2c3a507b68494b9d0c2b22d","request_revision":1,"proposal_decision":"approve","native_decision":"accept","actor_agent_id":"operator","subject_agent_id":"hst-worker","canonical_state":"CONFIRMED","native_operation_id":"r4op_cf433e953a3721317de780d45a255906","native_stage":"DISPATCH_PENDING","possible_effect":false,"retry_safe":true,"response_digest":"sha256:b28e162b41a9ebbd565bdb79090acbb4e8538a403d1e24ace84d6f34b47c39d3","expires_at":"2026-11-17T17:00:01.544000+00:00"}}]}
+### Ran Playwright code
+```js
+await (async page=>{
+ const cfg={},checks=[],posts=[];
+ const check=(id,ok,detail)=>{checks.push({id,ok,detail});if(!ok)throw Error(id);};
+ try{
+  page.on('response',async r=>{if(r.request().method()==='POST')posts.push({path:new URL(r.url()).pathname,status:r.status(),body:await r.json()});});
+  await page.locator('[data-home-column="needs_you"]').getByRole('button',{name:'Respond',exact:true}).click();
+  const dialog=page.getByRole('dialog',{name:'Activity detail'});
+  const answer=dialog.getByLabel('Choose fixture output format',{exact:true});
+  await answer.waitFor({timeout:10000});
+  check('single-exact-question-form',await page.getByRole('dialog').count()===1&&await answer.count()===1,1);
+  await answer.selectOption(['0']);
+  await dialog.getByRole('button',{name:'Close modal',exact:true}).click();
+  await dialog.getByText('Discard unsaved changes?',{exact:true}).waitFor();
+  check('dirty-close-guard',true,'Discard unsaved changes?');
+  await dialog.getByRole('button',{name:'Keep editing',exact:true}).click();
+  check('draft-preserved',JSON.stringify(await answer.evaluate(e=>Array.from(e.selectedOptions,o=>o.value)))==='["0"]',true);
+  check('zero-post-before-explicit-answer',posts.length===0,posts);
+  await dialog.getByRole('button',{name:'Send answer',exact:true}).click();
+  await dialog.getByTestId('canonical-native-status').waitFor({timeout:15000});
+  const status=await dialog.getByTestId('canonical-native-status').innerText();
+  check('recorded-not-provider-applied',status.includes('does not prove application'),status);
+  check('one-canonical-decision',posts.length===1&&posts[0].path==='/api/v1/runtime-management/runtime/approval-decisions'&&[200,202].includes(posts[0].status),posts);
+  await dialog.getByRole('button',{name:'Close modal',exact:true}).click();
+  await dialog.waitFor({state:'hidden'});
+  return {status:'PASS_SUBSET',checks,posts};
+ }catch(error){return {status:'FAIL',error:String(error),checks,posts,body:await page.locator('body').innerText()};}
+}
+)(page);
+```

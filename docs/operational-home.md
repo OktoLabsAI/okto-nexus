@@ -1,5 +1,9 @@
 # Operational Home
 
+For the three-column harness board and its current states, see
+[Following work in Home](home-operational-states.md). The work-group
+presentation described below remains a compatibility path during qualification.
+
 Operational Home brings work, decisions and results into the dashboard's first
 screen. The terminal remains a complete way to use Nexus; visiting Home is
 optional. This presentation does not start an agent or grant execution access.

@@ -1,0 +1,12 @@
+async page=>{
+ const cfg={"url": "http://127.0.0.1:62116", "server_id": "srv_ccc5cab99e410aaa06c70e0953a101a0", "workspace_id": "wsr_9e0d86d954aab82a5f10f198b7deb8ea", "references": [{"server_id": "srv_ccc5cab99e410aaa06c70e0953a101a0", "executor_id": "exe_c6756e97b060ae38769227d33c6d9c3e", "binding_id": "bind_9220fb7f34967b2c483eaa1c02513165", "endpoint_id": "ep_a48500d74ca8ff20d6af0cacb6e10373", "agent_id": "hst-worker", "workspace_id": "wsr_9e0d86d954aab82a5f10f198b7deb8ea", "workspace_binding_id": "wxb_3d471e8533578781557ae2c31d8a6642"}], "sessions": [{"session_id": "ses_7f61cf09652183c34772349d1d51c213", "reference": {"server_id": "srv_ccc5cab99e410aaa06c70e0953a101a0", "executor_id": "exe_c6756e97b060ae38769227d33c6d9c3e", "binding_id": "bind_9220fb7f34967b2c483eaa1c02513165", "endpoint_id": "ep_a48500d74ca8ff20d6af0cacb6e10373", "agent_id": "hst-worker", "workspace_id": "wsr_9e0d86d954aab82a5f10f198b7deb8ea", "workspace_binding_id": "wxb_3d471e8533578781557ae2c31d8a6642"}, "text": "HST synthetic output ses_7f61cf09652183c34772349d1d51c213", "closed": true}, {"session_id": "ses_b55d4f38513ba7f73ae7e14fd54c9fd8", "reference": {"server_id": "srv_ccc5cab99e410aaa06c70e0953a101a0", "executor_id": "exe_c6756e97b060ae38769227d33c6d9c3e", "binding_id": "bind_9220fb7f34967b2c483eaa1c02513165", "endpoint_id": "ep_a48500d74ca8ff20d6af0cacb6e10373", "agent_id": "hst-worker", "workspace_id": "wsr_9e0d86d954aab82a5f10f198b7deb8ea", "workspace_binding_id": "wxb_3d471e8533578781557ae2c31d8a6642"}, "text": "HST synthetic output ses_b55d4f38513ba7f73ae7e14fd54c9fd8", "closed": false}], "card_id": "home_group_0ef51bba563545d192b23090c4abb08bbd2a518e7474b0130546d2fcf9c7dee8", "storage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-_yoxg__y\\control\\browser-storage.private.json", "mode": "baseline", "j5": null, "provider_invocations": 0, "mobileScreenshot": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\output\\playwright\\home-states\\r3-functional-mobile.png"};
+ await page.addInitScript(({workspace})=>{
+  localStorage.setItem('okto-nexus-home-operational','enabled');
+  localStorage.setItem('okto-nexus-workspace',workspace);
+  localStorage.setItem('okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0',new Date().toISOString());
+ },{workspace:cfg.workspace_id});
+ await page.setViewportSize({width:1440,height:1100});
+ await page.goto(cfg.url,{waitUntil:'domcontentloaded'});
+ await page.getByTestId('home-board').waitFor({timeout:15000});
+ return {url:page.url(),snapshot:await page.locator('body').ariaSnapshot()};
+}

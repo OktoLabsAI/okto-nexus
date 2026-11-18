@@ -1,0 +1,119 @@
+{
+  "status": "FAIL_NEGOTIATION_REMOUNTS_DRAFT_AND_FOCUS",
+  "provider_invocations": 0,
+  "checks_pass": 4,
+  "checks_fail": 1,
+  "results": {
+    "info-upgrade": "FAIL"
+  },
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-53ipa67n",
+  "cleanup": {
+    "supervisor": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "own_root_processes": [],
+    "listener_port": 51783,
+    "listener_pids": [],
+    "excluded": "Current curation process/ancestors, not runtime or browser",
+    "secret_cookie_scan": "NO_MATCH",
+    "private_auth_and_wire_logs": "Not copied",
+    "data_preserved": true
+  },
+  "limits": [
+    "Synthetic Codex protocol through real Core/Server; no real provider or three-adapter claim",
+    "No human/AT/native-zoom claim",
+    "Functional runs after DOM timing may share CPU with installed pytest"
+  ],
+  "copies": [
+    {
+      "path": "runtime-ready.json",
+      "source_sha256": "e1a85547d3351c4f56cbf4688f97a11b67321af6c769767eabc39d22d1265c71",
+      "curated_sha256": "e1a85547d3351c4f56cbf4688f97a11b67321af6c769767eabc39d22d1265c71",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "fixture.py",
+      "source_sha256": "0a009a334ec53e9036f9bc61b3f85d0d4df4a5abd5a44f30e1d1fbd37a87321e",
+      "curated_sha256": "0a009a334ec53e9036f9bc61b3f85d0d4df4a5abd5a44f30e1d1fbd37a87321e",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "info-upgrade.js",
+      "source_sha256": "b061525993937e2dced4ed5650f1c07471d257a1b90a808836d0573e03f760d6",
+      "curated_sha256": "b061525993937e2dced4ed5650f1c07471d257a1b90a808836d0573e03f760d6",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-close.txt",
+      "source_sha256": "c89ec23285e8cdd70619ea1b72e55770bc1244b869ad3515f6ead13a03c2947f",
+      "curated_sha256": "c89ec23285e8cdd70619ea1b72e55770bc1244b869ad3515f6ead13a03c2947f",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-info-upgrade.txt",
+      "source_sha256": "0f111239e957a9c6b454ec18d261140c91b49e74159b2d70279fd954f5b23344",
+      "curated_sha256": "0f111239e957a9c6b454ec18d261140c91b49e74159b2d70279fd954f5b23344",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-open.txt",
+      "source_sha256": "296f19b614779a0ea4ec47861a062baa43cfd9244f3e65a647c4d71376a04c56",
+      "curated_sha256": "296f19b614779a0ea4ec47861a062baa43cfd9244f3e65a647c4d71376a04c56",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-state.txt",
+      "source_sha256": "f9e7dbea86a58f395de9003dbff90e0ef72eef8e9c4ee180f308ccc1611446f3",
+      "curated_sha256": "f9e7dbea86a58f395de9003dbff90e0ef72eef8e9c4ee180f308ccc1611446f3",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/initial-board.json",
+      "source_sha256": "9faaf3304e5544fd041b3a133aaf6ecba091b5d128282d4e54f1e5036faf700e",
+      "curated_sha256": "9faaf3304e5544fd041b3a133aaf6ecba091b5d128282d4e54f1e5036faf700e",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/final.json",
+      "source_sha256": "28442b3469538ccad675d48ab8e3f54aeb8acbdc7524146730e62fd5a99bffab",
+      "curated_sha256": "28442b3469538ccad675d48ab8e3f54aeb8acbdc7524146730e62fd5a99bffab",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/origins.json",
+      "source_sha256": "cb3a1309b78c8e99a4f5516ef1966ffcbe2ff3019a728db6a6812b83a6be4606",
+      "curated_sha256": "cb3a1309b78c8e99a4f5516ef1966ffcbe2ff3019a728db6a6812b83a6be4606",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/blocked.json",
+      "source_sha256": "9341f40cfa89737d47e7ebbe488b679369a96861c84cf18c89da6e2846bba6a1",
+      "curated_sha256": "9341f40cfa89737d47e7ebbe488b679369a96861c84cf18c89da6e2846bba6a1",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/supervisor-cleanup.json",
+      "source_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "curated_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "fixture_cas_redactions": 0
+    }
+  ],
+  "privacy": {
+    "fixture_cas_values_redacted": 0,
+    "fixture_cas_fingerprints": [
+      "db352772242b1b892a3fbaa467bd484c8c09419823db114b9b39aaff11be3592"
+    ],
+    "raw": "Retained only in explicitly owned Temp root"
+  },
+  "browser_http_counts": {
+    "GET": 190
+  },
+  "browser_status_counts": {
+    "200": 190
+  }
+}

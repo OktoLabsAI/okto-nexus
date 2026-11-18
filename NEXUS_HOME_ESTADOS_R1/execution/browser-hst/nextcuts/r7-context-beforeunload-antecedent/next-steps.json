@@ -1,0 +1,44 @@
+{
+  "cut": "context",
+  "steps": [
+    {
+      "step": "open",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "step": "state",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "step": "context-first",
+      "exit_code": 0,
+      "status": "READY_CANONICAL_ARRIVAL"
+    },
+    {
+      "step": "context-finish",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "step": "close",
+      "exit_code": 0,
+      "status": null
+    }
+  ],
+  "failure": {
+    "type": "RuntimeError",
+    "message": "Context functional check failed or incomplete"
+  },
+  "cleanup": {
+    "exit_code": 3221225786,
+    "remaining_known_births": [],
+    "signals": [
+      "own group CTRL_BREAK"
+    ],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  }
+}

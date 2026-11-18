@@ -1,0 +1,50 @@
+[
+  {
+    "phase": "s4-old",
+    "port": 60082,
+    "owner_before": {
+      "pid": 15180,
+      "instance_id": "svc_dbd3c70c2d73e3be2d54ecdbb0f314bd0b6cc586aa9fef3cec48b6691ee3ac82",
+      "generation": "85dba7bea9ca7a2cfe489cc5371b5230"
+    },
+    "owner_after": {
+      "pid": 15180,
+      "instance_id": "svc_dbd3c70c2d73e3be2d54ecdbb0f314bd0b6cc586aa9fef3cec48b6691ee3ac82",
+      "generation": "85dba7bea9ca7a2cfe489cc5371b5230"
+    },
+    "birth": 1794962365.99058,
+    "server_exit_code": 0,
+    "canonical_stop": {
+      "state": "stopped",
+      "reason": "SHUTDOWN_COMPLETE",
+      "shutdown_outcome": "drained"
+    },
+    "http_request_count": 153,
+    "dashboard_requests": [],
+    "browser_births": []
+  },
+  {
+    "phase": "s4-current",
+    "port": 49849,
+    "owner_before": {
+      "pid": 59904,
+      "instance_id": "svc_9b241ee3d14fe2e703183937f47768be3bde66db17d7cec62d7fa16403c90d0b",
+      "generation": "8c6f9c0595bcabd8725a0be106196298"
+    },
+    "owner_after": {
+      "pid": 59904,
+      "instance_id": "svc_9b241ee3d14fe2e703183937f47768be3bde66db17d7cec62d7fa16403c90d0b",
+      "generation": "8c6f9c0595bcabd8725a0be106196298"
+    },
+    "birth": 1794962405.6787715,
+    "server_exit_code": 0,
+    "canonical_stop": {
+      "state": "stopped",
+      "reason": "SHUTDOWN_COMPLETE",
+      "shutdown_outcome": "drained"
+    },
+    "http_request_count": 9,
+    "dashboard_requests": [],
+    "browser_births": []
+  }
+]

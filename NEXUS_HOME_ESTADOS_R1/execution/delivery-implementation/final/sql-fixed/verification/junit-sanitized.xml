@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite><testcase classname="tests.home_states.test_verification_proof" name="test_pending_and_positive_proof_keep_one_result_id_and_legacy_membership" time="1.760" /><testcase classname="tests.home_states.test_verification_proof" name="test_rejected_delivery_uses_old_epoch_and_never_verifies_next_delivery" time="1.038" /><testcase classname="tests.home_states.test_verification_proof" name="test_completed_without_verification_contract_has_no_approved_badge" time="0.936" /></testsuite>

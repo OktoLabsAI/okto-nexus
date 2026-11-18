@@ -1,0 +1,19 @@
+{
+  "kind": "H03_PRIVATE_ORIGIN_INPUT_ONLY_PREPARED_NOT_EXECUTED",
+  "variant_pins": {
+    "run.py": "e53cb80cc07dbffc011cec0ce705a4d7f2d9a031e8b8fec539b942c37ee335aa",
+    "prepare.py": "02ed8b43aeaf300ca6430660e44d04ca47459b3417867abb487df0cd85bc3a71",
+    "validate.py": "7de4de3831114c25b215b0fb41a4d8876779460831d647ff1d50ae5779f9dbc2",
+    "fixture_transform.py": "01014e9795c66a3fb427f070c52f3b21cdaa1c81c8c8622164efd20d5dcaf3ab",
+    "prepare_static.py": "e66fc4770ee446dad5c890207db510cbe5013107fb411800f50b30fd7422a964",
+    "inputs-only.diff": "c9543752402697e7ef80d1fd9855287aaaf81dd0cf66c4ce10c6c8e06f28dc85",
+    "README.md": "027445910e6c6b1ffb63b080e0f862996b80986303ce231f9c6428cefc839e1b"
+  },
+  "base_pins": {
+    "prepared-manifest.json": "c7b110ffc3ea488cd090b991df0019dc71f64efded13553a9797a34e021d9293",
+    "run.py": "e73c6e8e92609fbea8aafef74cd8de990163cb266a714151ef1b9f2a048c1729",
+    "prepare.py": "c99d4fb15c782bb54df8135b1cfea52258db139a5e2ef3be933b8d77d60063c1",
+    "fixture_transform.py": "8735d76b94133dc3f6035bc285d175d1027edce768dca398483403037d9fe868",
+    "h03-overview.js": "560ac547b87c8d71cffde656fb26cef44980d9af23ac4cb7a371504f0697cf7a"
+  }
+}

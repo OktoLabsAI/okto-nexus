@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="6.244" timestamp="2026-11-17T19:52:30.532798-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_backend_batch_r8" name="test_same_delivery_verification_three_files_seen_and_no_ack" time="5.164"><failure message="AssertionError: node:internal/modules/run_main:107&#10;    triggerUncaughtException(&#10;    ^&#10;&#10;AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:&#10;+ actual - expected&#10;&#10;  {&#10;    badges: [&#10;      'Awaiting verification'&#10;    ],&#10;+   title: 'Turn result available'&#10;-   title: 'Delivery available'&#10;  }&#10;&#10;    at file:///C:/Users/jpamb/AppData/Local/Temp/nexus-hst-backend-batch-r8-9w1sfl87/presentation-check.mjs:23:8 {&#10;  generatedMessage: true,&#10;  code: 'ERR_ASSERTION',&#10;  actual: {&#10;[+9 more lines; full report in element text]">..\tree\tests\execution_r4\test_backend_batch_r8.py:231: in test_same_delivery_verification_three_files_seen_and_no_ack
+    composed_delivery_case(tmp_path)
+..\tree\tests\execution_r4\backend_batch_results.py:110: in composed_delivery_case
+    assert node.returncode == 0, node.stdout + node.stderr
+           ^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: node:internal/modules/run_main:107
+E       triggerUncaughtException(
+E       ^
+E   
+E   AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+E   + actual - expected
+E   
+E     {
+E       badges: [
+E         'Awaiting verification'
+E       ],
+E   +   title: 'Turn result available'
+E   -   title: 'Delivery available'
+E     }
+E   
+E       at file:///C:/Users/jpamb/AppData/Local/Temp/nexus-hst-backend-batch-r8-9w1sfl87/presentation-check.mjs:23:8 {
+E     generatedMessage: true,
+E     code: 'ERR_ASSERTION',
+E     actual: {
+E       title: 'Turn result available',
+E       badges: [ 'Awaiting verification' ]
+E     },
+E     expected: { title: 'Delivery available', badges: [ 'Awaiting verification' ] },
+E     operator: 'deepStrictEqual',
+E     diff: 'simple'
+E   }
+E   
+E   Node.js v24.15.0</failure></testcase></testsuite></testsuites>

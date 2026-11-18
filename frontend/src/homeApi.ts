@@ -3,7 +3,7 @@ import { encodeHomeTarget } from './homeNavigation';
 import type { HomeActivity, HomeAgent, HomeFeedEvent, HomeFilters, HomeOverview, HomePage,
   HomePageQuery, HomeResolvedTarget, HomeResult, HomeTarget, HomeEntryFilters, HomeEntryQuery, HomeEntryPage,
   HomeEntryGroup, HomeEntry, HomeSessionRef,HomeBoard,HomeBoardPage,HomeBoardColumn,HomeBoardQuery,
-  HomeHarnessBoard,HomeHarnessBoardPage,HomeHarnessChildrenPage } from './homeTypes';
+  HomeHarnessBoard,HomeHarnessBoardPage,HomeHarnessChildrenPage,HomeHarnessRequestsPage,HomeHarnessSessionsPage } from './homeTypes';
 import type { ExternalObservation } from './observationTypes';
 import type { AttentionOccurrence } from './attentionTypes';
 
@@ -27,6 +27,8 @@ export interface HomeApi {
   harnessBoardColumn(column:HomeBoardColumn,query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeHarnessBoardPage>;
   harnessChildren(cardId:string,query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeHarnessChildrenPage>;
   harnessUnlinked(query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeHarnessChildrenPage>;
+  harnessRequests?(cardId:string,query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeHarnessRequestsPage>;
+  harnessSessions?(cardId:string,query:HomeBoardQuery,signal?:AbortSignal):Promise<HomeHarnessSessionsPage>;
   target(target: HomeTarget, workspace: string | null, signal?: AbortSignal): Promise<HomeResolvedTarget>;
   resolveTarget(target: HomeTarget, workspace: string | null, signal?: AbortSignal): Promise<HomeResolvedTarget>;
 }
@@ -63,5 +65,7 @@ export const homeApi: HomeApi = {
   harnessBoardColumn:(column,query,signal)=>get<HomeHarnessBoardPage>(`harness-board/${encodeURIComponent(column)}?${queryString(query)}`,signal),
   harnessChildren:(card,query,signal)=>get<HomeHarnessChildrenPage>(`harness-board/cards/${encodeURIComponent(card)}/children?${queryString(query)}`,signal),
   harnessUnlinked:(query,signal)=>get<HomeHarnessChildrenPage>(`harness-board/unlinked?${queryString(query)}`,signal),
+  harnessRequests:(card,query,signal)=>get<HomeHarnessRequestsPage>(`harness-board/cards/${encodeURIComponent(card)}/requests?${queryString(query)}`,signal),
+  harnessSessions:(card,query,signal)=>get<HomeHarnessSessionsPage>(`harness-board/cards/${encodeURIComponent(card)}/sessions?${queryString(query)}`,signal),
   target, resolveTarget: target,
 };

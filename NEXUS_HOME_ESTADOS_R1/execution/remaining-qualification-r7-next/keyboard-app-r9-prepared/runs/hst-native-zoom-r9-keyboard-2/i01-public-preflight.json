@@ -1,0 +1,51 @@
+{
+  "window": "ROOT_I01_KEYBOARD_APP_OPEN",
+  "phase": "case",
+  "url": "http://127.0.0.1:58542",
+  "outputPrefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-5kwfjcac\\i01-app",
+  "expiresAt": "2026-11-18T01:34:57.860000+00:00",
+  "aCard": "home_group_ec81dc1f5dd13fd972c77a3a80463eb542c0211d4a66e0ae11db60b5bfd1280d",
+  "bCard": "home_group_58651e3dff686c2248bbf2c76752c3c0a6c8a679fd4dd7efbcd8280fb84f449d",
+  "bScope": {
+    "server_id": "srv_e3b089aa7a33e2a7f1a3cb64bcb95972",
+    "executor_id": "exe_07e3ac589544206b11d3a58f0e6b9305",
+    "binding_id": "bind_643a5c620e2bcf4780df08dbc827cbec",
+    "agent_id": "hst-b",
+    "workspace_id": "wsr_03a7dc31184e7bb65bcbd4bc476ef902",
+    "workspace_binding_id": "wxb_4ba2edba636509c9eb5e07204980bd62",
+    "session_id": "ses_d9fd81506a53f74569f6efcef80e260d",
+    "session_owner_generation": 1,
+    "authorization_revision": 2,
+    "configuration_revision": 2,
+    "binding_revision": 1,
+    "credential_epoch": 1
+  },
+  "bMarker": "HST synthetic output ses_d9fd81506a53f74569f6efcef80e260d",
+  "a2Scope": {
+    "server_id": "srv_e3b089aa7a33e2a7f1a3cb64bcb95972",
+    "executor_id": "exe_07e3ac589544206b11d3a58f0e6b9305",
+    "binding_id": "bind_190ff7b5f1d742f79875fa2f5e8eb802",
+    "agent_id": "hst-a",
+    "workspace_id": "wsr_472d2d338b0a0bc9df0ffa8e79290472",
+    "workspace_binding_id": "wxb_52bfee47a08cb087f85610cc9a806c98",
+    "session_id": "ses_f5e10e7cc8db9af150d680c84f6bde6b",
+    "session_owner_generation": 1,
+    "authorization_revision": 2,
+    "configuration_revision": 2,
+    "binding_revision": 1,
+    "credential_epoch": 1
+  },
+  "requestCard": "home_request_att_7ea701e6c131bbfef9e99adfc76bb4f58db9b0be272fbd575bc2cca65ee12ab2",
+  "requestId": "r4request_868564ec430027d7b2cb01785f0a99914a84a25cb64326bd5a60cffe0eaaae71",
+  "deliveryId": "home_delivery_canonical:result_a0eb6f69b99fe645ef71518310d2fd26fd9164538ceca2b2ddd139f2e9684d4d",
+  "deliveryTarget": {
+    "executor_id": "exe_07e3ac589544206b11d3a58f0e6b9305",
+    "kind": "result",
+    "operation_id": "op_a0ae6b64c108b92725c2ade4cbc226ce",
+    "server_id": "srv_e3b089aa7a33e2a7f1a3cb64bcb95972",
+    "session_id": "ses_d9fd81506a53f74569f6efcef80e260d",
+    "workspace_id": "wsr_03a7dc31184e7bb65bcbd4bc476ef902"
+  },
+  "projectA": "Alpha project for readable authorized collaborator activity and questions",
+  "projectB": "Beta project for readable authorized collaborator activity and delivery"
+}

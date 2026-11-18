@@ -1,0 +1,1402 @@
+[
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 82,
+      "row": 243
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'server_id': server_id, 'workspace_id': scope.get('workspace_id')}",
+          "end_location": {
+            "column": 82,
+            "row": 243
+          },
+          "location": {
+            "column": 17,
+            "row": 243
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 17,
+      "row": 243
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 243,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 74,
+      "row": 260
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'server_id': server_id, 'workspace_id': scope.get('workspace_id'),\n                      'agent_id': scope.get('agent_id'), 'home_now': now, 'state': 'all',\n                      'delivery_presentation_version': presentation_version}",
+          "end_location": {
+            "column": 74,
+            "row": 260
+          },
+          "location": {
+            "column": 18,
+            "row": 258
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 18,
+      "row": 258
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 258,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 138,
+      "row": 316
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'executor_id': row['executor_id'], 'session_id': row['session_id'], 'operation_id': row['operation_id']}",
+          "end_location": {
+            "column": 138,
+            "row": 316
+          },
+          "location": {
+            "column": 38,
+            "row": 316
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 38,
+      "row": 316
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 316,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 134,
+      "row": 479
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'type': 'external_observation', 'id': item['observed_instance_id'], 'revision': digest(item)}",
+          "end_location": {
+            "column": 134,
+            "row": 479
+          },
+          "location": {
+            "column": 45,
+            "row": 479
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 45,
+      "row": 479
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 479,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 131,
+      "row": 483
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'kind': 'external_observation', 'server_id': server_id, 'workspace_id': item['workspace_id'],\n                    'source_id': item['source_id'], 'observed_instance_id': item['observed_instance_id'], 'generation': item['generation']}",
+          "end_location": {
+            "column": 131,
+            "row": 483
+          },
+          "location": {
+            "column": 24,
+            "row": 482
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 24,
+      "row": 482
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 482,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 56,
+      "row": 508
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\home_entries.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'type': occurrence['source_type'], 'id': occurrence['source_id'],\n                'revision': occurrence['source_revision']}",
+          "end_location": {
+            "column": 56,
+            "row": 508
+          },
+          "location": {
+            "column": 42,
+            "row": 507
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 42,
+      "row": 507
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 507,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 53,
+      "row": 153
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entries.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'kind': kind, 'server_id': context.server_id, 'executor_id': context.executor_id,\n                  'workspace_id': context.workspace_id}",
+          "end_location": {
+            "column": 53,
+            "row": 153
+          },
+          "location": {
+            "column": 14,
+            "row": 152
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 14,
+      "row": 152
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 152,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 84,
+      "row": 161
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entries.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'type': kind, 'id': source_id, 'revision': digest(context.__dict__)}",
+          "end_location": {
+            "column": 84,
+            "row": 161
+          },
+          "location": {
+            "column": 20,
+            "row": 161
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 20,
+      "row": 161
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 161,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 101,
+      "row": 50
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'v': 1, 'binding': binding, 'revision': revision, 'key': key}",
+          "end_location": {
+            "column": 101,
+            "row": 50
+          },
+          "location": {
+            "column": 47,
+            "row": 50
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 47,
+      "row": 50
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 50,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 89,
+      "row": 160
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'entries': entries, 'server_attention': sorted(relations.server_attention, key=lambda row: row['attention_id']),\n                         'source_status': relations.source_status, 'connection_count': relations.connection_count,\n                         'connections': None if relations.connections is None else sorted(\n                             (asdict(c) for c in relations.connections), key=canonical)}",
+          "end_location": {
+            "column": 89,
+            "row": 160
+          },
+          "location": {
+            "column": 21,
+            "row": 157
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 21,
+      "row": 157
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 157,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 72,
+      "row": 207
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'id': entry.id, 'kind': entry.kind, 'source_ref': entry.source_ref,\n        'workspace_id': entry.workspace_id, 'agent_id': entry.agent_id, 'title': entry.title,\n        'agent_label': entry.connection.agent_label if entry.connection else None,\n        'harness_label': entry.connection.harness_id if entry.connection else None,\n        'host_label': entry.connection.host_label if entry.connection else None,\n        'display_state': entry.display_state, 'evidence': entry.evidence,\n        'state_since': entry.activity['state_since'] if entry.activity else None,\n        'sessions': [session_ref(s) for s in sessions[:preview]], 'sessions_total': len(sessions) if sessions_exact else None,\n        'has_more_sessions': more,\n        'sessions_cursor': cursor_encode(session_binding, revision, [0, sessions[preview-1].executor_id, sessions[preview-1].session_id]) if more else None,\n        'attention_preview': attention_preview, 'attention_total': len(attention) if attention_exact else None,\n        'has_more_attention': len(attention)>3,\n        'attention_cursor': cursor_encode(attention_binding, revision, list(attention_key(attention_preview[-1]))) if len(attention)>3 else None,\n        'results_preview': results_preview, 'results_total': len(results) if results_exact else None,\n        'has_more_results': len(results)>3,\n        'results_cursor': cursor_encode(result_binding, revision, list(result_key(results_preview[-1]))) if len(results)>3 else None,\n        'related_coverage': dict(attention='ready' if attention_exact else 'unknown', results='ready' if results_exact else 'unknown'),\n        'attention_refs': [o['attention_id'] for o in attention_preview],\n        'result_refs': [r['id'] for r in results_preview], 'target': entry.target,\n        'result_tracking': 'unseen' if any(r['view_state'] == 'unseen' for r in entry.results) else\n            'unknown' if any(r['view_state'] == 'not_tracked' for r in entry.results) else\n            'seen' if entry.results else 'not_applicable',\n        'actions': ([dict(kind='inspect', target=entry.target)] if entry.target else []) +\n            [dict(kind='attention', attention_id=o['attention_id'], action=action) for o in attention_preview for action in o['allowed_actions']],\n        'external': entry.external, 'as_of': now, 'next_refresh_at': refresh_at}",
+          "end_location": {
+            "column": 72,
+            "row": 207
+          },
+          "location": {
+            "column": 12,
+            "row": 183
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 12,
+      "row": 183
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 183,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 132,
+      "row": 199
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'attention': 'ready' if attention_exact else 'unknown', 'results': 'ready' if results_exact else 'unknown'}",
+          "end_location": {
+            "column": 132,
+            "row": 199
+          },
+          "location": {
+            "column": 26,
+            "row": 199
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 26,
+      "row": 199
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 199,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 60,
+      "row": 205
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'kind': 'inspect', 'target': entry.target}",
+          "end_location": {
+            "column": 60,
+            "row": 205
+          },
+          "location": {
+            "column": 19,
+            "row": 205
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 19,
+      "row": 205
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 205,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 83,
+      "row": 206
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'kind': 'attention', 'attention_id': o['attention_id'], 'action': action}",
+          "end_location": {
+            "column": 83,
+            "row": 206
+          },
+          "location": {
+            "column": 14,
+            "row": 206
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 14,
+      "row": 206
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 206,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 78,
+      "row": 256
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'server_id': server_id, 'principal': principal, 'scope': scope,\n                   'partition': partition, 'group_id': group_id, 'entry_id': entry_id}",
+          "end_location": {
+            "column": 78,
+            "row": 256
+          },
+          "location": {
+            "column": 15,
+            "row": 255
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 15,
+      "row": 255
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 255,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 154,
+      "row": 312
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'id': key, 'server_id': server_id, 'executor_id': c.executor_id if c else None,\n                'workspace_id': first.workspace_id, 'agent_id': first.agent_id,\n                'connection': {k: getattr(c, k) for k in ('server_id', 'executor_id', 'binding_id', 'workspace_id', 'agent_id')} if c else None,\n                'label': ' · '.join(context_labels)[:160] if c else first.title,\n                'agent_label': c.agent_label if c else None, 'workspace_label': c.workspace_label if c else None, 'host_label': c.host_label if c else None,\n                'children': [entry_dto(e, binding=binding, revision=material_revision, group_id=key, now=now, refresh_at=refresh_at, preview=preview, sessions_exact=relations.source_status.get('sessions') == 'ready' and relations.source_status.get('correlations') == 'ready', attention_exact=attention_exact, results_exact=results_exact) for e in children[:preview]],\n                'children_total': len(children) if exact else None,\n                'has_more_children': len(children)>preview,\n                'children_cursor': cursor_encode(child_binding, material_revision, list(entry_key(children[preview-1]))) if len(children)>preview else None}",
+          "end_location": {
+            "column": 154,
+            "row": 312
+          },
+          "location": {
+            "column": 26,
+            "row": 304
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 26,
+      "row": 304
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 304,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 88,
+      "row": 320
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'activities': 0, 'external_instances': 0, 'occurrences': 0}",
+          "end_location": {
+            "column": 88,
+            "row": 320
+          },
+          "location": {
+            "column": 33,
+            "row": 320
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 33,
+      "row": 320
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 320,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 127,
+      "row": 349
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'version': 1, 'scope': scope, 'server_id': server_id, 'generated_at': now,\n        'snapshot_id': material_revision, 'revision': material_revision, 'partition': partition,\n        'group_id': group_id, 'entry_id': entry_id, 'status': 'ready' if exact else 'partial',\n        'source_status': relations.source_status, 'items': items, 'total': len(keyed) if exact else None,\n        'total_is_exact': exact, 'has_more': more,\n        'inventory': dict(connections=dict(value=relations.connection_count,\n            total_is_exact=relations.connection_count is not None,\n            unit='connections')),\n        'coverage': dict(result_tracking='unknown' if relations.source_status.get('attention') != 'ready' else 'partial' if tracking_unknown else 'ready'),\n        'next_cursor': cursor_encode(binding, material_revision, list(chosen[-1][0])) if more else None,\n        'as_of': now, 'next_refresh_at': refresh_at,\n        'server_attention': dict(status='ready' if relations.source_status.get('attention') == 'ready' else 'unavailable',\n            items=[o for o in relations.server_attention if o['active']][:3] if partition == 'groups' else [],\n            total=sum(o['active'] for o in relations.server_attention) if relations.source_status.get('attention') == 'ready' else None,\n            total_is_exact=relations.source_status.get('attention') == 'ready', has_more=sum(o['active'] for o in relations.server_attention)>3),\n        'summary': dict({key: dict(value=count if exact else None,\n            total_is_exact=exact, unit=key) for key, count in counts.items()},\n            unseen_results=dict(value=None if tracking_unknown or relations.source_status.get('attention') != 'ready' else len(unseen_results),\n                total_is_exact=not tracking_unknown and relations.source_status.get('attention') == 'ready', unit='results'))}",
+          "end_location": {
+            "column": 127,
+            "row": 349
+          },
+          "location": {
+            "column": 13,
+            "row": 331
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 13,
+      "row": 331
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 331,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 33,
+      "row": 338
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'connections': dict(value=relations.connection_count,\n            total_is_exact=relations.connection_count is not None,\n            unit='connections')}",
+          "end_location": {
+            "column": 33,
+            "row": 338
+          },
+          "location": {
+            "column": 19,
+            "row": 336
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 19,
+      "row": 336
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 336,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 32,
+      "row": 338
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'value': relations.connection_count,\n            'total_is_exact': relations.connection_count is not None,\n            'unit': 'connections'}",
+          "end_location": {
+            "column": 32,
+            "row": 338
+          },
+          "location": {
+            "column": 36,
+            "row": 336
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 36,
+      "row": 336
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 336,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 152,
+      "row": 339
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'result_tracking': 'unknown' if relations.source_status.get('attention') != 'ready' else 'partial' if tracking_unknown else 'ready'}",
+          "end_location": {
+            "column": 152,
+            "row": 339
+          },
+          "location": {
+            "column": 18,
+            "row": 339
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 18,
+      "row": 339
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 339,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 145,
+      "row": 345
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'status': 'ready' if relations.source_status.get('attention') == 'ready' else 'unavailable',\n            'items': [o for o in relations.server_attention if o['active']][:3] if partition == 'groups' else [],\n            'total': sum(o['active'] for o in relations.server_attention) if relations.source_status.get('attention') == 'ready' else None,\n            'total_is_exact': relations.source_status.get('attention') == 'ready', 'has_more': sum(o['active'] for o in relations.server_attention)>3}",
+          "end_location": {
+            "column": 145,
+            "row": 345
+          },
+          "location": {
+            "column": 26,
+            "row": 342
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 26,
+      "row": 342
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 342,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 44,
+      "row": 347
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'value': count if exact else None,\n            'total_is_exact': exact, 'unit': key}",
+          "end_location": {
+            "column": 44,
+            "row": 347
+          },
+          "location": {
+            "column": 28,
+            "row": 346
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 28,
+      "row": 346
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 346,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 125,
+      "row": 349
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_entry_pages.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'value': None if tracking_unknown or relations.source_status.get('attention') != 'ready' else len(unseen_results),\n                'total_is_exact': not tracking_unknown and relations.source_status.get('attention') == 'ready', 'unit': 'results'}",
+          "end_location": {
+            "column": 125,
+            "row": 349
+          },
+          "location": {
+            "column": 28,
+            "row": 348
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 28,
+      "row": 348
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 348,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 110,
+      "row": 87
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_blocking.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'blocks_harness': state, 'activity_state': activity,\n            'blocking_request_ids': [o['attention_id'] for o in pending_occurrences],\n            'reminder_snoozed': any(o.get('seen_state', {}).get('snoozed', False) for o in pending_occurrences)}",
+          "end_location": {
+            "column": 110,
+            "row": 87
+          },
+          "location": {
+            "column": 23,
+            "row": 85
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 23,
+      "row": 85
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 85,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 95,
+      "row": 46
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'items': [], 'total': None, 'total_is_exact': False, 'has_more': False, 'next_cursor': None}",
+          "end_location": {
+            "column": 95,
+            "row": 46
+          },
+          "location": {
+            "column": 13,
+            "row": 46
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 13,
+      "row": 46
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 46,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 106,
+      "row": 49
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'value': None, 'total_is_exact': False, 'unit': 'harnesses'}",
+          "end_location": {
+            "column": 106,
+            "row": 49
+          },
+          "location": {
+            "column": 50,
+            "row": 49
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 50,
+      "row": 49
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 49,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 48,
+      "row": 262
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'value': len(cards) if exact else None,\n        'total_is_exact': exact, 'unit': 'harnesses'}",
+          "end_location": {
+            "column": 48,
+            "row": 262
+          },
+          "location": {
+            "column": 49,
+            "row": 261
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 49,
+      "row": 261
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 261,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 118,
+      "row": 284
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'value': len(deliveries) if exact else None, 'total_is_exact': exact, 'unit': 'results'}",
+          "end_location": {
+            "column": 118,
+            "row": 284
+          },
+          "location": {
+            "column": 34,
+            "row": 284
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 34,
+      "row": 284
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 284,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 124,
+      "row": 285
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'value': len(requests) if exact else None, 'total_is_exact': exact, 'unit': 'occurrences'}",
+          "end_location": {
+            "column": 124,
+            "row": 285
+          },
+          "location": {
+            "column": 38,
+            "row": 285
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 38,
+      "row": 285
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 285,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 53,
+      "row": 288
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'value': len(delivery_unseen) if unseen_exact else None,\n        'total_is_exact': unseen_exact, 'unit': 'results'}",
+          "end_location": {
+            "column": 53,
+            "row": 288
+          },
+          "location": {
+            "column": 41,
+            "row": 287
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 41,
+      "row": 287
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 287,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 96,
+      "row": 290
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'canonical': canonical_deliveries if exact else None,\n        'reported': len(deliveries)-canonical_deliveries if exact else None, 'total_is_exact': exact}",
+          "end_location": {
+            "column": 96,
+            "row": 290
+          },
+          "location": {
+            "column": 31,
+            "row": 289
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 31,
+      "row": 289
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 289,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 83,
+      "row": 295
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'result_tracking': 'unknown' if relations.source_status.get('attention') != 'ready'\n        else 'partial' if tracking_unknown else 'ready',\n        'harness_linkage': 'ready' if relations.connections is not None and relations.source_status.get('correlations') == 'ready' else 'unknown',\n        'blocking': 'ready' if relations.harness_blocking is not None else 'unknown'}",
+          "end_location": {
+            "column": 83,
+            "row": 295
+          },
+          "location": {
+            "column": 24,
+            "row": 292
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 24,
+      "row": 292
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 292,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 109,
+      "row": 325
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'server_id': server_id, 'principal': principal, 'scope': scope,\n            'partition': ('harness:v2:' if operational else 'harness:') + kind, 'group_id': parent, 'entry_id': None}",
+          "end_location": {
+            "column": 109,
+            "row": 325
+          },
+          "location": {
+            "column": 17,
+            "row": 324
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 17,
+      "row": 324
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 324,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 103,
+      "row": 340
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'items': [render(value) for _, value in chosen], 'total': len(keyed) if known else None,\n            'total_is_exact': known, 'has_more': more,\n            'next_cursor': entries.cursor_encode(fence, revision, list(chosen[-1][0])) if more else None}",
+          "end_location": {
+            "column": 103,
+            "row": 340
+          },
+          "location": {
+            "column": 16,
+            "row": 338
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 16,
+      "row": 338
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 338,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 81,
+      "row": 397
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'card_id': key_to_card[key], 'connection': asdict(registry[key])}",
+          "end_location": {
+            "column": 81,
+            "row": 397
+          },
+          "location": {
+            "column": 17,
+            "row": 397
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 17,
+      "row": 397
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 397,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 84,
+      "row": 405
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'kind': 'request', 'id': 'home_request_' + identifier, 'request': occurrence,\n            'entry': child_dto(('needs_you', entry)), 'harness_refs': references(keys),\n            'blocks_harness': blocks, 'notification_visible': bool(occurrence['active'])}",
+          "end_location": {
+            "column": 84,
+            "row": 405
+          },
+          "location": {
+            "column": 17,
+            "row": 403
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 17,
+      "row": 403
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 403,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 71,
+      "row": 415
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'kind': 'delivery', 'id': 'home_delivery_' + identifier, 'result': result, 'report': report,\n            'entry': child_dto(('results', entry)), 'harness_refs': references(keys),\n            'completion_evidence': 'canonical' if result else 'reported'}",
+          "end_location": {
+            "column": 71,
+            "row": 415
+          },
+          "location": {
+            "column": 17,
+            "row": 413
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 17,
+      "row": 413
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 413,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 74,
+      "row": 472
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'attention': 0, 'results': 0, 'work': 0, 'sessions': 0, 'external': 0}",
+          "end_location": {
+            "column": 74,
+            "row": 472
+          },
+          "location": {
+            "column": 14,
+            "row": 472
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 14,
+      "row": 472
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 472,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  },
+  {
+    "cell": null,
+    "code": "C408",
+    "end_location": {
+      "column": 88,
+      "row": 477
+    },
+    "filename": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\domain\\home_harness_board.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "{'entry_id': entry.id, 'group_id': entry.group_id, 'entry_revision': entry_revision,\n            'target': entry.target, 'title': entry.title, 'display_state': entry.display_state,\n            'evidence': entry.evidence, 'shared_reference': len(links.get(entry.id, ())) > 1}",
+          "end_location": {
+            "column": 88,
+            "row": 477
+          },
+          "location": {
+            "column": 18,
+            "row": 475
+          }
+        }
+      ],
+      "message": "Rewrite as a literal"
+    },
+    "location": {
+      "column": 18,
+      "row": 475
+    },
+    "message": "Unnecessary `dict()` call (rewrite as a literal)",
+    "name": "unnecessary-collection-call",
+    "noqa_row": 475,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unnecessary-collection-call"
+  }
+]

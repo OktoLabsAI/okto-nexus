@@ -1,0 +1,48 @@
+{
+  "status": "REVIEWED_PRE_EXECUTION",
+  "source": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+  "files": [
+    {
+      "path": "remaining_auth.js",
+      "sha256": "ae308c89b5fc1f09362987a8d5ec9b532c07e56139d2a55ddb9a91072141c1c1"
+    },
+    {
+      "path": "remaining_dirty.js",
+      "sha256": "164d18e7b605aa96a5bbb5d38d7add51a316edb4dedd4ed64dd794f1e646dcc9"
+    },
+    {
+      "path": "remaining_dirty_ready.js",
+      "sha256": "685cf8418b18e158c27867e79831e441b0b129308d02c22d9b195ee4c2cfe96d"
+    },
+    {
+      "path": "remaining_fixture_builder.py",
+      "sha256": "81a7b5e85c420d250c75166bf80bd49238217db3db0b9b8744c0588016cbf977"
+    },
+    {
+      "path": "remaining_history_open.js",
+      "sha256": "5b497c1dafeb95bb2b74b81ae45611985de4cc62daec1a2a67b1d6f4f4c103ca"
+    },
+    {
+      "path": "remaining_history_verify.js",
+      "sha256": "4b4474775279cb9327b4285334b5dee9392899b2ed9da8760535baf239207ca8"
+    },
+    {
+      "path": "remaining_run.py",
+      "sha256": "3157ea6605ee0a531e56644d0fa40e5f13159f9594318fffae95a55e2ccea345"
+    }
+  ],
+  "response_shape": {
+    "contract": "RuntimeSession.scope",
+    "fields": [
+      "server_id",
+      "executor_id",
+      "binding_id",
+      "workspace_id",
+      "workspace_binding_id",
+      "session_id"
+    ],
+    "captured_raw_RuntimeSession_body_available": false,
+    "actual_preflight": "Small own fixture must GET and save remaining-session-metadata.json and verify complete scope before browser. Failure prevents browser.",
+    "prior_capture": "QC31 canonical-histories/events.scope confirms tuple structure, not RuntimeSession response body."
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "status": "PASS_SUBSET",
+  "checks": [
+    {
+      "id": "canonical-working-current",
+      "ok": true,
+      "detail": {
+        "version": 1,
+        "connection": "connected",
+        "activity": "working",
+        "blocking": "partial",
+        "freshness": "current",
+        "as_of": "2026-11-17T18:23:33.512Z",
+        "state_since": null,
+        "reason_code": "CURRENT_PRODUCTIVE_OPERATION",
+        "pending_actions": {
+          "value": 1,
+          "total_is_exact": true
+        },
+        "pending_by_kind": {
+          "question": {
+            "value": 1,
+            "total_is_exact": true
+          },
+          "approval": {
+            "value": 0,
+            "total_is_exact": true
+          },
+          "decision": {
+            "value": 0,
+            "total_is_exact": true
+          },
+          "verification": {
+            "value": 0,
+            "total_is_exact": true
+          }
+        },
+        "pending_request_ids": [
+          "att_a3302e4661b2b26fdcde7f8efb3e4479a7f66dc7f714c5899e710cb7374d7140"
+        ],
+        "has_more_pending_requests": false,
+        "pending_requests_cursor": null,
+        "running_sessions": {
+          "value": 1,
+          "total_is_exact": true
+        },
+        "blocked_sessions": {
+          "value": 1,
+          "total_is_exact": true
+        },
+        "awaiting_native_confirmation": false
+      }
+    },
+    {
+      "id": "independent-question-retained",
+      "ok": true,
+      "detail": [
+        "home_request_att_a3302e4661b2b26fdcde7f8efb3e4479a7f66dc7f714c5899e710cb7374d7140"
+      ]
+    },
+    {
+      "id": "parallel-not-blocked",
+      "ok": true,
+      "detail": false
+    },
+    {
+      "id": "working-rendered-current",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "keyboard-opens-single-context",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "chat-intent-label",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "work-intent-label",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "keyboard-close-returns-focus",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "mobile-three-columns-no-overflow",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "zero-write-intent-inspection",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "posts": [],
+  "limits": [
+    "Actual canonical Working and independent native question; Chat/Ask labels and canonical test IDs inspected only, no send/payload integration claim",
+    "One inert Codex protocol fixture, not three native families; keyboard subset, not full accessibility or AT"
+  ]
+}

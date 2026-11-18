@@ -1,0 +1,56 @@
+{
+  "mode": "SOURCE_ONLY_NOT_INSTALLED_NEXUS",
+  "started_at": "2026-11-17T19:35:57.902765+00:00",
+  "ended_at": "2026-11-17T19:38:29.166846+00:00",
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus');sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\src');import pytest;raise SystemExit(pytest.main(['-p', 'pytest_asyncio.plugin', '-p', 'no:cacheprovider', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-cuujmaz_\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--basetemp=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-cuujmaz_\\\\cases', '-q', '--tb=short', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-cuujmaz_\\\\tests.xml', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_page_metadata_equivalence.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_result_attention_lookup_equivalence.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_revision_equivalence.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states\\\\test_projection_batch.py']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-source-cuujmaz_\\cwd",
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-source-cuujmaz_",
+  "exit_code": 0,
+  "original_pid": 53888,
+  "process_exited": true,
+  "owned_command": {
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 53888,
+        "birth": 1794944157.9064128,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 57584,
+        "birth": 1794944157.9316733,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  "deadline_seconds": 300.0,
+  "stdin": "closed PIPE",
+  "provider_auth_environment_copied": false,
+  "test_files": {
+    "tests\\home_states\\test_page_metadata_equivalence.py": "47e4a1ec0676592af0e194a250fee2792ea711a892150c6d127862ce360f07f3",
+    "tests\\home_states\\test_result_attention_lookup_equivalence.py": "d71690af363005f1acdc22baddc4e1f4bb90714ec1ae90a31234d36930d7fcb5",
+    "tests\\home_states\\test_revision_equivalence.py": "7b744743416d08d58283187147fd673642d3b3cd0fb6022cb910a2ad6d6a0049",
+    "tests\\home_states\\test_projection_batch.py": "4ef93d4d063bdf2819c86a03184a1a8cd98e4d388f4771fb0eb5ff1f8f19be4d"
+  },
+  "limitations": [
+    "No installed app/browser/real harness/human qualification.",
+    "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  ],
+  "source_and_test_drift": []
+}

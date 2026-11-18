@@ -1,0 +1,102 @@
+{
+  "chrome-process-capture.json": {
+    "sha256": "f0a109d6554a9f48f5f415ec6381de681cd7a44e8c5911cb0c0b35a305a21787",
+    "bytes": 14943
+  },
+  "cli-experience-close.txt": {
+    "sha256": "4385bf4ccca182828fc8726691333dd600edb2c56fcd434b2d358487ee55533c",
+    "bytes": 24244
+  },
+  "cli-experience-initialize.txt": {
+    "sha256": "7078ee1eee5c652798ef2b2ea369e33b64c26e78a6f247923cde36ca5dbf26b8",
+    "bytes": 12956
+  },
+  "cli-experience-launch.txt": {
+    "sha256": "11c84597e3fbd776ef37c2be3993141cc0d4fda117a164e21e79a701b0e64bc3",
+    "bytes": 237
+  },
+  "cli-experience-open.txt": {
+    "sha256": "d1dbef33e094872c5e9055aee8f1b203b6cbee6b46902d017794554b619a3ee3",
+    "bytes": 20455
+  },
+  "cli-experience-shutdown.txt": {
+    "sha256": "363e2491a3c4a3c571ea3ffe742e72a99648607434503885eb1c22c25f89ad13",
+    "bytes": 42
+  },
+  "cli-experience-storage.txt": {
+    "sha256": "0b923b7619d02b6be94c69b41116112304380d065288a71f7c2c530404a23f37",
+    "bytes": 318
+  },
+  "control\\controls.json": {
+    "sha256": "4656644c6b8f3dcb657f2edc955e95efc85a8306466d6667d7c50d40877c0b6e",
+    "bytes": 72
+  },
+  "control\\exp-a-terminal.json": {
+    "sha256": "e217e325d7d6bd4918ee701b7972e8127f5b9e7e41e517fb34b23201705f216f",
+    "bytes": 129509
+  },
+  "control\\exp-active-identities.json": {
+    "sha256": "c610179a20f9822743db8fb2f68a1e13cfa0c1e14d736b079c398bf66be455e1",
+    "bytes": 1861
+  },
+  "control\\exp-active.json": {
+    "sha256": "39bf3158c9e2d96e57142aca3c1531e05ac46e4f9abfb77e6c4e2fc661e0b503",
+    "bytes": 122044
+  },
+  "control\\exp-base.json": {
+    "sha256": "32e549cc8859c1c6121cdd89e83502b79e797610eff973bbb6f61d219df16cc5",
+    "bytes": 61028
+  },
+  "control\\final.json": {
+    "sha256": "fb6f0b1d1bb68a681f6a0080b4a97480fcac774ef8048a2bd896aa84c205f3dd",
+    "bytes": 125448
+  },
+  "control\\origins.json": {
+    "sha256": "542e0c92d2ac151d8322672d859e98c7d6e2cb1697435de55cfd173f07f5dcea",
+    "bytes": 608
+  },
+  "control\\supervisor-cleanup.json": {
+    "sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+    "bytes": 196
+  },
+  "experience-builder-proof.json": {
+    "sha256": "92ba2371676f4811498968a066f137e92e872c3e00060eedc1b3c8d76e648375",
+    "bytes": 393
+  },
+  "experience-close.js": {
+    "sha256": "3cbab6cb6b7cede5c2869605c4a94f09c9046f58b712fb094326860872128ec8",
+    "bytes": 11917
+  },
+  "experience-initialize.js": {
+    "sha256": "ba584e540e6d043f66a0fa043b25ba7bdf4db96ac3cb128d8de5a647c6bac22a",
+    "bytes": 10304
+  },
+  "experience-open.js": {
+    "sha256": "eb80d28f2125c2e741ee52979a71e7bbe177abf684a8eb0561c9cc7f942c824d",
+    "bytes": 11719
+  },
+  "experience-payload.json": {
+    "sha256": "00b24a1122f1c12b44bc17c3d30e5ba14a5945e4a4c234e467d19bb8bcdbbb18",
+    "bytes": 308
+  },
+  "experience-steps.json": {
+    "sha256": "6846ab5a1026745c2a0f566c92e6f32e2820d75d5c09303dc5f0b552c8533cd5",
+    "bytes": 836
+  },
+  "fixture.py": {
+    "sha256": "a8eb4b18d4242e8d104493e40a0eed8e9ccfd61b43aec596f839ee52b18f535c",
+    "bytes": 26034
+  },
+  "focus-host-predicate.json": {
+    "sha256": "2ac6ab52650df2849327aea2e1a5f60e7eb22959d8ddb7cddb2676143eb93fb1",
+    "bytes": 1946
+  },
+  "qualification.json": {
+    "sha256": "43c22b4b95fbfe903c7ae4170ebee2fe8c189e59d889caf452848f9b0dff672d",
+    "bytes": 47254
+  },
+  "runtime-ready.json": {
+    "sha256": "cadee21ee7edc572c828a28a0059d5264c8af7ea79d5095101098e7d90aec335",
+    "bytes": 1699
+  }
+}

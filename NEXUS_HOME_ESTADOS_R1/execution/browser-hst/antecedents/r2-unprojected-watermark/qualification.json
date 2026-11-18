@@ -1,0 +1,53 @@
+{
+  "status": "BLOCKED_PRODUCT_CURRENTNESS",
+  "browser_timing": "NOT_QUALIFIED",
+  "provider_invocations": 0,
+  "browser_post_requests": 0,
+  "canonical_fixture_setup": "POSITIVE binding/publicID +twoCoreSessions/turns",
+  "cause": "Canonical event projection materializes requests/results but never advances projected_through; Home reader requires projected==committed. Initial board INSUFFICIENT_CURRENT_PROOF, unknown/stale.",
+  "first_attempt": "Inline run-code CMD SyntaxError before execution; --filename subsequent real UI timeout waiting truthful Idle.",
+  "cleanup": {
+    "fixture_pid46288_exists": false,
+    "browser_pid15928_exists": false,
+    "listener49754": []
+  },
+  "limits": [
+    "No healthy DOM2s sample",
+    "No J1-J8 PASS",
+    "Closed state cannot prove initial control; initial board + event receipt timestamps retained"
+  ],
+  "source_commit": "4e890949c94c9d8625837d566e5182920bfb2cec",
+  "browser_http_counts": {
+    "GET": 44
+  },
+  "canonical_session_cleanup": [
+    {
+      "session_id": "ses_a8d7167cee16e36dd4f84749b2542efe",
+      "reference": {
+        "server_id": "srv_bc1d12017d24439d8d59b6b8c96dd6da",
+        "executor_id": "exe_f76f7a03155a90e3a0c2276b6aad71e7",
+        "binding_id": "bind_4fca7a9fbf8d83ce27952005f533b6b5",
+        "endpoint_id": "ep_ad4ff39506a14848daed173c6080406e",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_53e781fe9ebbebcaae3cdedf64f764df",
+        "workspace_binding_id": "wxb_1a8c87c7fe0c9beabd47da504a3b3d0e"
+      },
+      "text": "HST synthetic output ses_a8d7167cee16e36dd4f84749b2542efe",
+      "closed": true
+    },
+    {
+      "session_id": "ses_1a8e6716e9dc3f61dbcac1e798313a13",
+      "reference": {
+        "server_id": "srv_bc1d12017d24439d8d59b6b8c96dd6da",
+        "executor_id": "exe_f76f7a03155a90e3a0c2276b6aad71e7",
+        "binding_id": "bind_4fca7a9fbf8d83ce27952005f533b6b5",
+        "endpoint_id": "ep_ad4ff39506a14848daed173c6080406e",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_53e781fe9ebbebcaae3cdedf64f764df",
+        "workspace_binding_id": "wxb_1a8c87c7fe0c9beabd47da504a3b3d0e"
+      },
+      "text": "HST synthetic output ses_1a8e6716e9dc3f61dbcac1e798313a13",
+      "closed": true
+    }
+  ]
+}

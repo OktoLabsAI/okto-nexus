@@ -1,0 +1,65 @@
+{
+  "classification": "PASS_F05_SUBSET_HISTORY_SCOPE_ORACLE_LIMIT_DIRTY_NOT_RUN",
+  "base_cut": "../../cuts/r7-context-paging-history-partial",
+  "base_qualification_sha256": "9445aa09f6102cf00adb8b1a7cf13ed8d8a51370a7b7c5bdb76f9a923ae6f9ac",
+  "copies": [
+    {
+      "path": "next-builder-proof.json",
+      "sha256": "af50cdea5e804031f140ed7d56ff58b4b13dfe96b767640011e92802b3b96c00",
+      "source_sha256": "af50cdea5e804031f140ed7d56ff58b4b13dfe96b767640011e92802b3b96c00",
+      "bytes": 246,
+      "cas_redactions": 0
+    },
+    {
+      "path": "next-run-failure.json",
+      "sha256": "e48e70d56a19cc244f80a0668d501795ff72df62615f3d24ec8eb3b7f0aebf53",
+      "source_sha256": "e48e70d56a19cc244f80a0668d501795ff72df62615f3d24ec8eb3b7f0aebf53",
+      "bytes": 92,
+      "cas_redactions": 0
+    },
+    {
+      "path": "next-steps.json",
+      "sha256": "26bac7fcf23c51aac543fe3f8c8bd9fdd5a3df8e90e058c11803a2f0752159f4",
+      "source_sha256": "26bac7fcf23c51aac543fe3f8c8bd9fdd5a3df8e90e058c11803a2f0752159f4",
+      "bytes": 1167,
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/next-before.json",
+      "sha256": "5a6a7a8f123fe864f7ea7d5694663a79cd2dd0275ab06adbef8ccea1bf9f13d0",
+      "source_sha256": "5a6a7a8f123fe864f7ea7d5694663a79cd2dd0275ab06adbef8ccea1bf9f13d0",
+      "bytes": 9943,
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/next-arrival.json",
+      "sha256": "76ca67a12b9d876b1e2d45adb8fc44bd2428999b86d7c51e8bba5eb9b693fb7a",
+      "source_sha256": "76ca67a12b9d876b1e2d45adb8fc44bd2428999b86d7c51e8bba5eb9b693fb7a",
+      "bytes": 668,
+      "cas_redactions": 0
+    },
+    {
+      "path": "next-context.js",
+      "sha256": "a489c225be0d500d8a92fa00b4adf5081eb3c0fa45e02f1247d7720cb0946c13",
+      "source_sha256": "a489c225be0d500d8a92fa00b4adf5081eb3c0fa45e02f1247d7720cb0946c13",
+      "bytes": 4018,
+      "cas_redactions": 0
+    },
+    {
+      "path": "next-context-page.js",
+      "sha256": "f93ab75c5ec47ba476361a0c580219d4a92acadfe266fa2ae273f2141a212008",
+      "source_sha256": "f93ab75c5ec47ba476361a0c580219d4a92acadfe266fa2ae273f2141a212008",
+      "bytes": 3477,
+      "cas_redactions": 0
+    },
+    {
+      "path": "history-reload.js",
+      "sha256": "44ec1d7f815c8d6d1d675f06677f4fbaeb98e395bd9e0744b3e0fb6f2a682067",
+      "source_sha256": "44ec1d7f815c8d6d1d675f06677f4fbaeb98e395bd9e0744b3e0fb6f2a682067",
+      "bytes": 2151,
+      "cas_redactions": 0
+    }
+  ],
+  "credentials": "Private cookie/storage/wire not copied; exact fixtureCAS redacted",
+  "active_resources": false
+}

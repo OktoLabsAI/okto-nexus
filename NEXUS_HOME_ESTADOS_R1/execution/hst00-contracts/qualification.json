@@ -1,0 +1,61 @@
+{
+  "timestamp": "2026-11-17T12:48:43.986761+00:00",
+  "status": "PASS_SOURCE_CONTRACTS_ONLY",
+  "commands": [
+    {
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--test",
+        "tests/homeStatesContracts.test.mjs"
+      ],
+      "cwd": "frontend",
+      "exit_code": 0,
+      "passed": 10
+    },
+    {
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "--target",
+        "es2021",
+        "--moduleResolution",
+        "bundler",
+        "--module",
+        "esnext",
+        "src/homeStateContracts.ts"
+      ],
+      "cwd": "frontend",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-b",
+        "--noEmit"
+      ],
+      "cwd": "frontend",
+      "exit_code": 0
+    }
+  ],
+  "source_pins": {
+    "frontend/src/homeTypes.ts": "6f770925a6bdcb18c18cbb463932db9dbad62567d352acf9cca65617b6ee306e",
+    "frontend/src/homeStateContracts.ts": "4e0b79a9aafdf985dae5a949bb9696d90270d43288f3c86c05d9e72ed7a3919e",
+    "frontend/tests/homeStatesContracts.test.mjs": "6cb80130626bf4e2ebb56e217ee6ea206232222578cfe0900181bc676d68b88c",
+    "frontend/src/homeApi.ts": "382256936868c95aa42044e00be621a667989f39f1f05b47d30f8e50ced4e06d",
+    "frontend/src/api.ts": "5a221c22c71ad326fdd9fda5d1ae4d364376d4037357d3f70fd4cb7f3d50ae46",
+    "frontend/src/App.tsx": "fc15173a8b9ea25b5b677ce1c1de680e9851ad0286fe986357b88b15a5c90b11"
+  },
+  "environment": "Windows; existing Node/TypeScript dependency tree; no provider/browser/installation",
+  "limitations": [
+    "Pure DTO invariants and compile only; no API/runtime/browser/human qualification.",
+    "Backend negotiated v2 is being implemented independently; contract source pins are authoritative."
+  ]
+}

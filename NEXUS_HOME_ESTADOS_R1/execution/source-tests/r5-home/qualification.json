@@ -1,0 +1,60 @@
+{
+  "mode": "SOURCE_ONLY_NOT_INSTALLED_NEXUS",
+  "started_at": "2026-11-17T17:24:42.827109+00:00",
+  "ended_at": "2026-11-17T17:31:26.365371+00:00",
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import sys;sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus');sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\src');import pytest;raise SystemExit(pytest.main(['-p', 'pytest_asyncio.plugin', '-p', 'no:cacheprovider', '-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-jtxfzih2\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus', '--basetemp=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-jtxfzih2\\\\cases', '-q', '--tb=short', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\nexus-hst-source-jtxfzih2\\\\tests.xml', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_states', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\ui_simplification\\\\test_entry_pages.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\ui_simplification\\\\test_entry_app_integration.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\ui_simplification\\\\test_entry_related.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\ui_simplification\\\\test_harness_board.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\ui_simplification\\\\test_harness_blocking.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_evolution\\\\test_home_queries.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_evolution\\\\test_home_result_artifact_grouping.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\home_evolution\\\\test_home_boundaries.py']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-source-jtxfzih2\\cwd",
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-source-jtxfzih2",
+  "exit_code": 0,
+  "original_pid": 40656,
+  "process_exited": true,
+  "owned_command": {
+    "exit_code": 0,
+    "timed_out": false,
+    "force_used": false,
+    "stdin": "closed PIPE",
+    "known_processes": [
+      {
+        "pid": 40656,
+        "birth": 1794936282.829965,
+        "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ui-r3-harness-pr27-gsg_twh1\\venv\\Scripts\\python.exe"
+      },
+      {
+        "pid": 52748,
+        "birth": 1794936282.8465123,
+        "exe": "C:\\Python313\\python.exe"
+      }
+    ],
+    "actions": [],
+    "remaining_known_processes": [],
+    "remaining_listeners": [],
+    "success": true,
+    "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  },
+  "deadline_seconds": 900.0,
+  "stdin": "closed PIPE",
+  "provider_auth_environment_copied": false,
+  "test_files": {
+    "tests\\ui_simplification\\test_entry_pages.py": "9ecaf62906116bdd1e5d56ca7430afa1f056b03cbc4ae89a7c190b6841b22365",
+    "tests\\ui_simplification\\test_entry_app_integration.py": "2c829ea4ceb0ffbe01661384e7958f77e5840571fd0291cb923126066836e308",
+    "tests\\ui_simplification\\test_entry_related.py": "92dbb0436ceddb84ed161e145578279c562d05771643a518dc5c52a52cd0dacb",
+    "tests\\ui_simplification\\test_harness_board.py": "44bde6c7ef6fbeb598b36d7d2da4b9c8c73139c5592129e32550749d2a276c4b",
+    "tests\\ui_simplification\\test_harness_blocking.py": "26e251db6d866c31e462a338996d77a033dfefbe69aefe3537ee6aa99ac1a409",
+    "tests\\home_evolution\\test_home_queries.py": "48ea97f6f704428886c92dadb0f9edf2a1eab502bb7ab7f13a3596f9aff18349",
+    "tests\\home_evolution\\test_home_result_artifact_grouping.py": "d329ad50e8328434ab0cbd9ecc3e56ed14ec4f93b04d631476352f3c6d16ac46",
+    "tests\\home_evolution\\test_home_boundaries.py": "9b375d71902a83ed05476efee88d3540339309b49563cde2d85ce5282e6f3e0f"
+  },
+  "limitations": [
+    "No installed app/browser/real harness/human qualification.",
+    "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+  ],
+  "source_and_test_drift": []
+}

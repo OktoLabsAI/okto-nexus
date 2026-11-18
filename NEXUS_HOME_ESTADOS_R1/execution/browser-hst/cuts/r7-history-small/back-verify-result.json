@@ -1,0 +1,11 @@
+{
+  "status": "PASS_SUBSET",
+  "checks": [
+    {
+      "id": "back-returns-to-home-without-target",
+      "ok": true,
+      "detail": true
+    }
+  ],
+  "phase": "back"
+}

@@ -1,0 +1,41 @@
+--- frozen S2/run.py
++++ S2 reader counterpart
+@@ -168,6 +168,8 @@
+         assert value.get('status','').startswith('PASS_'), 'Browser assertions failed at '+name
+         return value
+ 
++    control_invalid_reads = [0]
++
+     def control(name):
+         marker = root/'control'/name
+         assert not marker.exists()
+@@ -177,8 +179,27 @@
+             owner.sample()
+             commands.sample()
+             path = root/'control/controls.json'
+-            if path.exists() and name in json.loads(path.read_text()).get('done',[]):
+-                return
++            invalid_read = None
++            try:
++                raw = path.read_bytes()
++            except FileNotFoundError:
++                invalid_read = {'kind': 'missing', 'bytes': None, 'sha256': None}
++            else:
++                try:
++                    observed = json.loads(raw)
++                except json.JSONDecodeError:
++                    invalid_read = {'kind': 'invalid_json', 'bytes': len(raw),
++                                    'sha256': hashlib.sha256(raw).hexdigest()}
++                else:
++                    if name in observed.get('done', []):
++                        return
++            if invalid_read is not None:
++                audit = root / 'security-control-invalid-reads.jsonl'
++                with audit.open('a', encoding='utf-8') as stream:
++                    stream.write(json.dumps({'marker': name,
++                        'ordinal': control_invalid_reads[0] + 1,
++                        **invalid_read}) + '\n')
++                control_invalid_reads[0] += 1
+             assert owner.process.poll() is None, 'Fixture exited during canonical control'
+             time.sleep(.1)
+         raise RuntimeError('Canonical control deadline')

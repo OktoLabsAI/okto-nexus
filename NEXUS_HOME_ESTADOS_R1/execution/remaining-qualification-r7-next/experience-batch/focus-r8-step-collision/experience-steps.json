@@ -1,0 +1,36 @@
+{
+  "steps": [
+    {
+      "step": "open",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "step": "storage",
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "step": "initialize",
+      "exit_code": 0,
+      "status": "PASS_EXECUTED_SUBSET"
+    },
+    {
+      "step": "close",
+      "exit_code": 0,
+      "status": null
+    }
+  ],
+  "failure": {
+    "type": "AssertionError",
+    "message": ""
+  },
+  "cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  }
+}

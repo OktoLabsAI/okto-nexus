@@ -1,0 +1,74 @@
+{
+  "status": "PASS_F14_CHECKS_WITH_RUNNER_STATUS_LABEL_LIMIT",
+  "base_cut": "../../cuts/r7-history-small",
+  "base_qualification_sha256": "7bb0a7324b40c15e2f728fe8fadb8a3ef0f637d5a904ed81467e72b7d19fe9b4",
+  "checks_pass": 9,
+  "checks_fail": 0,
+  "copies": [
+    {
+      "path": "remaining-builder-proof.json",
+      "source_sha256": "154ca5d4122ffef90619edc413816f15c5698113496b59b8cff892142af2c682",
+      "sha256": "154ca5d4122ffef90619edc413816f15c5698113496b59b8cff892142af2c682",
+      "bytes": 421,
+      "cas_redactions": 0
+    },
+    {
+      "path": "remaining-failure.json",
+      "source_sha256": "a33f57e432a94b2cd1a9e4c3fb77c8328292219a0635c40288e63b1aeb523f68",
+      "sha256": "a33f57e432a94b2cd1a9e4c3fb77c8328292219a0635c40288e63b1aeb523f68",
+      "bytes": 91,
+      "cas_redactions": 0
+    },
+    {
+      "path": "remaining-steps.json",
+      "source_sha256": "a101b1ac1233f0c1b481498cb3e270e4d82c9d39b5e4b0752ff10c581b271ab1",
+      "sha256": "a101b1ac1233f0c1b481498cb3e270e4d82c9d39b5e4b0752ff10c581b271ab1",
+      "bytes": 1483,
+      "cas_redactions": 0
+    },
+    {
+      "path": "control/remaining-session-metadata.json",
+      "source_sha256": "22401a5a6aec583b7339e09a58819a1cf1552f5b28d69312ff60c08dad407bb4",
+      "sha256": "22401a5a6aec583b7339e09a58819a1cf1552f5b28d69312ff60c08dad407bb4",
+      "bytes": 1928,
+      "cas_redactions": 0
+    },
+    {
+      "path": "back-verify.js",
+      "source_sha256": "2c07005f31b6c3a6c5b5fea2eb63c6ae15d923206a739082c3e280a22e5e2e5b",
+      "sha256": "2c07005f31b6c3a6c5b5fea2eb63c6ae15d923206a739082c3e280a22e5e2e5b",
+      "bytes": 2533,
+      "cas_redactions": 0
+    },
+    {
+      "path": "forward-verify.js",
+      "source_sha256": "c989fa6a2f8ce3ddd4e77452e7a1fc79556300b0c38193b9ff0d5c6ae4663109",
+      "sha256": "c989fa6a2f8ce3ddd4e77452e7a1fc79556300b0c38193b9ff0d5c6ae4663109",
+      "bytes": 2536,
+      "cas_redactions": 0
+    },
+    {
+      "path": "history-open.js",
+      "source_sha256": "85111bad2ec55a07013fb64fee4ea827bd383264830f30f4b9e703992fc91ae3",
+      "sha256": "85111bad2ec55a07013fb64fee4ea827bd383264830f30f4b9e703992fc91ae3",
+      "bytes": 2593,
+      "cas_redactions": 0
+    },
+    {
+      "path": "invalid.js",
+      "source_sha256": "bb02ee077e69ae3002f0e0799f7cfee09d1dc71281f9bb437aba8c412e551ba1",
+      "sha256": "bb02ee077e69ae3002f0e0799f7cfee09d1dc71281f9bb437aba8c412e551ba1",
+      "bytes": 2784,
+      "cas_redactions": 0
+    },
+    {
+      "path": "reload-verify.js",
+      "source_sha256": "e53552cc3b31203cca999a21fe759bf376f1eaa759643caa8726760587cbbf19",
+      "sha256": "e53552cc3b31203cca999a21fe759bf376f1eaa759643caa8726760587cbbf19",
+      "bytes": 2535,
+      "cas_redactions": 0
+    }
+  ],
+  "active_resources": false,
+  "credentials": "Cookie/storage/wire/private question proposal never copied; exactCAS redacted"
+}

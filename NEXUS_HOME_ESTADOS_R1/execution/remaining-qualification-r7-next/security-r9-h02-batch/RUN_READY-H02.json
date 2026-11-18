@@ -1,0 +1,17 @@
+{
+  "approved": true,
+  "approved_by": "root",
+  "manifest_sha256": "5316340d12b916e9bc7152243ea4f1bdf3e298833c1ccc2b709211e64b86bd08",
+  "ready_sha256": "028274a46776dbc677f096dc6e5493e102c683bd7e87eee1930c21f56111a631",
+  "case": "H02",
+  "runtime_mode": "scope_two",
+  "cut_id": "hst-security-r9-h02-wrong-workspace",
+  "deadline_seconds": 180,
+  "provider_invocations": 0,
+  "allow_own_containment": true,
+  "allow_exact_observation_inserts": false,
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "source_additions": {},
+  "browser_environment_policy": "windows-path-allowlist-app-env-own-v1"
+}

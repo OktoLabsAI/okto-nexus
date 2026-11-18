@@ -3,9 +3,18 @@ import {runtimeApi, type RuntimeSession} from '../runtimeApi';
 import {sessionReleased} from '../connectionSessions';
 import {assertHomeSessionContext} from '../homeSessionInspection';
 import {RuntimeEventStream} from './RuntimeEventStream';
+import {CopyMessageButton} from './CopyMessageButton';
 
 export interface SessionExecutionPanelProps {
   session: RuntimeSession; harness?: string; host?: string; embedded?: boolean;
+}
+
+/** Build a shell-safe invocation of the Nexus CLI's existing-session prompt. */
+function terminalSessionCommand(session: RuntimeSession): string | null {
+  const id = session.scope.session_id;
+  if (!session.control_available || session.durable_release_pending || !['READY','ACTIVE'].includes(session.lifecycle_state) ||
+      !/^ses_[a-zA-Z0-9_-]+$/.test(id)) return null;
+  return `okto-nexus work chat --session-id ${id}`;
 }
 /** Shared output body: no dialog, command input, session selection or execution controls. */
 export function SessionExecutionPanel(props: SessionExecutionPanelProps) {
@@ -46,9 +55,10 @@ function ExecutionBody({session,harness,host,embedded=false}: SessionExecutionPa
     return()=>{controller.abort();window.clearTimeout(timer);window.removeEventListener('nexus-auth-expired',revoke);window.removeEventListener('nexus-operator-logout',revoke);};
   },[]);
   if(blocked||!current)return <p role="alert">{error}</p>;
+  const command = embedded && !error ? terminalSessionCommand(current) : null;
   return <section aria-label="Session execution output" data-modal-passive className="space-y-3 min-w-0">
     <p className="text-xs text-surface-500 break-words">{[harness,host,current.lifecycle_state].filter(Boolean).join(' · ')} · Read only</p>
-    <p className="text-xs text-surface-500 break-all">{session.scope.session_id}</p>
+    {!embedded&&<p className="text-xs text-surface-500 break-all">{session.scope.session_id}</p>}
     {error&&<p role="alert" className="text-xs text-red-600">{error}</p>}
     <div className="flex gap-2" role="group" aria-label="Terminal mode">
       <button type="button" className="btn btn-secondary" aria-pressed={tab==='tail'} disabled={sessionReleased(current)} onClick={()=>setTab('tail')}>Live tail</button>
@@ -56,5 +66,13 @@ function ExecutionBody({session,harness,host,embedded=false}: SessionExecutionPa
     </div>
     <RuntimeEventStream scope={current.scope} harness={harness} history={tab==='history'}
       active={tab==='tail'&&!sessionReleased(current)} allowMaximize={!embedded} onAccessLost={clear}/>
+    {command&&<details className="text-sm">
+      <summary className="cursor-pointer">Open this session in a terminal</summary>
+      <p className="mt-2 text-surface-500">Run from the project folder to open the Nexus prompt for this session. If you use a saved profile for this connection, include its name with <code>--profile</code>.</p>
+      <div className="mt-2 flex flex-wrap items-center gap-2 rounded-md bg-surface-100 p-2 dark:bg-surface-800">
+        <code className="min-w-0 break-all text-xs">{command}</code>
+        <CopyMessageButton text={command} item="command"/>
+      </div>
+    </details>}
   </section>;
 }

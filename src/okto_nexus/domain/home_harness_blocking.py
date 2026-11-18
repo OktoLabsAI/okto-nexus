@@ -1,9 +1,13 @@
 """Conservative current request placement from metadata, never preferences."""
 from .attention import instant
 
-
 FIELDS = ('server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id')
 TERMINAL = frozenset(('SUCCEEDED', 'FAILED', 'CANCELLED', 'REJECTED'))
+
+
+def project_v2(relations, registry, *, now, check_budget):
+    from .home_operational_status import project as operational_project
+    return operational_project(relations, registry, now=now, check_budget=check_budget)
 
 
 def project(relations, registry, *, now, check_budget):
@@ -55,9 +59,7 @@ def project(relations, registry, *, now, check_budget):
             if current and proven_method and row['is_blocking'] == 1:
                 blocking.setdefault(row['operation_id'], []).append(occurrence)
                 waiting[occurrence['attention_id']] = occurrence
-            elif operation and row['state'] == 'PENDING' and (not current or not proven_method or row['is_blocking'] is None):
-                undecidable.add(row['operation_id'])
-            elif operation and row['is_blocking'] == 1 and not current:
+            elif operation and row['state'] == 'PENDING' and (not current or not proven_method or row['is_blocking'] is None) or operation and row['is_blocking'] == 1 and not current:
                 undecidable.add(row['operation_id'])
             if operation and row['is_blocking'] == 1 and row['decided_at'] and (
                     operation['received_at'] is None or instant(operation['received_at']) <= instant(row['decided_at'])):

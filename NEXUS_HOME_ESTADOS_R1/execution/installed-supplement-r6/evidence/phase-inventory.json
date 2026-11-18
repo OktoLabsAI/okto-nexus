@@ -1,0 +1,200 @@
+[
+  {
+    "nodeid": "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[handoff-private]",
+    "phase": "setup",
+    "outcome": "passed",
+    "duration": 4.4286934999981895
+  },
+  {
+    "nodeid": "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[handoff-private]",
+    "phase": "call",
+    "outcome": "passed",
+    "duration": 2.55416099994909
+  },
+  {
+    "nodeid": "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[handoff-private]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "duration": 1.0455340000335127
+  },
+  {
+    "nodeid": "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[message-private]",
+    "phase": "setup",
+    "outcome": "passed",
+    "duration": 3.180128600099124
+  },
+  {
+    "nodeid": "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[message-private]",
+    "phase": "call",
+    "outcome": "passed",
+    "duration": 1.9145424000453204
+  },
+  {
+    "nodeid": "tests/execution_r4/test_meta_harness_sessions.py::test_operator_message_and_handoff_sessions_are_scoped[message-private]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "duration": 1.0315144999185577
+  },
+  {
+    "nodeid": "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[input]",
+    "phase": "setup",
+    "outcome": "passed",
+    "duration": 2.192294899956323
+  },
+  {
+    "nodeid": "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[input]",
+    "phase": "call",
+    "outcome": "passed",
+    "duration": 0.26914480002596974
+  },
+  {
+    "nodeid": "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[input]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "duration": 0.5221245000138879
+  },
+  {
+    "nodeid": "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[agent_input]",
+    "phase": "setup",
+    "outcome": "passed",
+    "duration": 2.5366207999177277
+  },
+  {
+    "nodeid": "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[agent_input]",
+    "phase": "call",
+    "outcome": "passed",
+    "duration": 0.3396659999853
+  },
+  {
+    "nodeid": "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[agent_input]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "duration": 0.3912265000399202
+  },
+  {
+    "nodeid": "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[nonblocking_input]",
+    "phase": "setup",
+    "outcome": "passed",
+    "duration": 2.5802273999433964
+  },
+  {
+    "nodeid": "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[nonblocking_input]",
+    "phase": "call",
+    "outcome": "passed",
+    "duration": 0.32000339997466654
+  },
+  {
+    "nodeid": "tests/execution_r4/test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[nonblocking_input]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "duration": 1.021628599963151
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e10_canonical_rejected_handoff_without_native_result_has_no_native_outcome",
+    "phase": "setup",
+    "outcome": "passed",
+    "duration": 0.0020924999844282866
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e10_canonical_rejected_handoff_without_native_result_has_no_native_outcome",
+    "phase": "call",
+    "outcome": "passed",
+    "duration": 2.10436060000211
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e10_canonical_rejected_handoff_without_native_result_has_no_native_outcome",
+    "phase": "teardown",
+    "outcome": "passed",
+    "duration": 0.0003497999859973788
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e12_historical_terminal_receipt_without_capture_is_ended_but_content_pending",
+    "phase": "setup",
+    "outcome": "passed",
+    "duration": 0.0003781999694183469
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e12_historical_terminal_receipt_without_capture_is_ended_but_content_pending",
+    "phase": "call",
+    "outcome": "passed",
+    "duration": 3.449013900011778
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e12_historical_terminal_receipt_without_capture_is_ended_but_content_pending",
+    "phase": "teardown",
+    "outcome": "passed",
+    "duration": 0.017707499908283353
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[None]",
+    "phase": "setup",
+    "outcome": "passed",
+    "duration": 0.0005278999451547861
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[None]",
+    "phase": "call",
+    "outcome": "passed",
+    "duration": 3.6637310999212787
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[None]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "duration": 0.012802000041119754
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[Done: terminei]",
+    "phase": "setup",
+    "outcome": "passed",
+    "duration": 0.0005722000496461987
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[Done: terminei]",
+    "phase": "call",
+    "outcome": "passed",
+    "duration": 3.2048548000166193
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[Done: terminei]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "duration": 0.013371199951507151
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[verified]",
+    "phase": "setup",
+    "outcome": "passed",
+    "duration": 0.00047470000572502613
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[verified]",
+    "phase": "call",
+    "outcome": "passed",
+    "duration": 3.1404127000132576
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e14_silence_idle_or_free_text_without_terminal_fact_never_invents_results[verified]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "duration": 0.019724200014024973
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e15_unknown_attempt_keeps_exact_monitorable_target_and_confirmed_history",
+    "phase": "setup",
+    "outcome": "passed",
+    "duration": 0.0006469000363722444
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e15_unknown_attempt_keeps_exact_monitorable_target_and_confirmed_history",
+    "phase": "call",
+    "outcome": "passed",
+    "duration": 3.5195573000237346
+  },
+  {
+    "nodeid": "tests/home_states/test_results_boundary_completion.py::test_e15_unknown_attempt_keeps_exact_monitorable_target_and_confirmed_history",
+    "phase": "teardown",
+    "outcome": "passed",
+    "duration": 0.010883499984629452
+  }
+]

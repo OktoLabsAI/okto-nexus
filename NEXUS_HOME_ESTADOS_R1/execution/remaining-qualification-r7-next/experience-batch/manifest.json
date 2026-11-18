@@ -1,0 +1,30 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "active_resources": false,
+  "files": {
+    "browser.js": {
+      "sha256": "0d6a9f4151aa87f21e3b9a8d5f851bd045509c077f20fdac0fd610ac99a6e314",
+      "bytes": 11899
+    },
+    "builder.py": {
+      "sha256": "7ea70759cb64a8925e8d2a194817e70782f5b068daf5ddb58e832372a45b2841",
+      "bytes": 8441
+    },
+    "preflight.md": {
+      "sha256": "0c5de5fe9e2fefb0584c53310dfbd8cd5c721cad765f54b9730894cfadfe3a7c",
+      "bytes": 8368
+    },
+    "run.py": {
+      "sha256": "298bb89a72bf7ea956ede8dd14bd058b82e718b9eae9161028110581a09f6377",
+      "bytes": 9327
+    },
+    "static-validation.json": {
+      "sha256": "add395cec0c0c42dc2857b4dab464b688ac7a4259eac6044d4c462babb3344c7",
+      "bytes": 1327
+    },
+    "validate_static.py": {
+      "sha256": "df26f955a54c10a3b6a5653579fc456cfa6f4fe367b4d4c1a66a920f9cb1bf48",
+      "bytes": 1562
+    }
+  }
+}

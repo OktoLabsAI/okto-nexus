@@ -1,0 +1,9 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "original_sha256": "7277aec8462a8f84bfb0fbed36770a13341e891ff9f7f591e637a4a0c9de59a2",
+  "variant_sha256": "4f4d145ecd1472637e7499ea8099783041f4bb01af94ca523d19113596460708",
+  "node_syntax_exit": 0,
+  "change": "Only apply pending snapshot through public Apply updates; require real Harness activity and exact relation total2 before no-auto-choice assertion; capture AX/URL/screenshot on failure.",
+  "prior_failure": "experience-r8-g01-variant/qualification.json",
+  "response_waiter": "Await relation response before modal-region wait to avoid an unhandled timed-out response promise"
+}

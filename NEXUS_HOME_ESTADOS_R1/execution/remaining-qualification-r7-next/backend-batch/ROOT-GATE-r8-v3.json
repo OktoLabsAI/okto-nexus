@@ -1,0 +1,10 @@
+{
+  "gate": "ROOT_APPROVED_BACKEND_BATCH_R8",
+  "attempt": 3,
+  "authorization": "Explicit parent Root approval after canonical fixture diff review; execute the seven cases once and stop on first unsuccessful case.",
+  "owner_sha256": "dd6a5546e26397c0d2b91a183cede76d40de6fb02666ff031bbadb6f1a1dbcac",
+  "runner_sha256": "bea5487a6aaac241d28ff1fff789e4a409c138c8014fe26c0329251b4d99b160",
+  "manifest_sha256": "0d0f2196af38b6a52add21938da5695ed6f694727c21675720fe3c4b586b976b",
+  "case_selection": "all",
+  "constraints": "Keep first configuration/root/grant comparisons strict. Preserve attempts1/2 and active inputs. No provider, source or prefix edits."
+}

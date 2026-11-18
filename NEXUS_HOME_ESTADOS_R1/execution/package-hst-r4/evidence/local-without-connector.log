@@ -1,0 +1,9 @@
+{"local_boot_without_connector": true, "torch_installed": false, "protocol_status": 200, "provider_qualified": false}
+C:\Users\jpamb\AppData\Local\Temp\nexus-hst-r1-package-mwu_9e4g\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+Runtime recovery: RECOVERY_READY Local host ready. Agents with retained history recover independently; previous work was not replayed.
+StreamableHTTP session manager started
+HTTP Request: GET http://testserver/v1/connections/protocol "HTTP/1.1 200 OK"
+HTTP Request: GET http://testserver/ "HTTP/1.1 200 OK"
+HTTP Request: GET http://testserver/v1/connections/me "HTTP/1.1 401 Unauthorized"
+StreamableHTTP session manager shutting down

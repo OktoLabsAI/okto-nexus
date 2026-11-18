@@ -1,0 +1,31 @@
+..............F............F..FF.                                        [100%]
+================================== FAILURES ===================================
+__ test_batched_progress_equals_corrected_correlated_oracle[terminal-result] __
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\home_states\test_progress_equivalence.py:104: in test_batched_progress_equals_corrected_correlated_oracle
+    c.execute('INSERT INTO execution_results(server_id,executor_id,operation_id,session_id,stream_epoch,terminal_sequence,captured_at) '
+E   sqlite3.IntegrityError: FOREIGN KEY constraint failed
+____________ test_progress_relation_is_batched_once_in_query_plan _____________
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\home_states\test_progress_equivalence.py:187: in test_progress_relation_is_batched_once_in_query_plan
+    assert any('SEARCH progress USING' in line for line in plan)
+E   assert False
+E    +  where False = any(<generator object test_progress_relation_is_batched_once_in_query_plan.<locals>.<genexpr> at 0x000001A4C49A1560>)
+______ test_progress_keys_cannot_leak_from_another_full_scope[executor] _______
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\home_states\test_progress_equivalence.py:224: in test_progress_keys_cannot_leak_from_another_full_scope
+    copy_row(c, 'execution_executors', executor, server_id=key['server_id'],
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\home_states\test_progress_equivalence.py:26: in copy_row
+    c.execute('INSERT INTO '+table+'('+','.join(values)+') VALUES('+','.join('?' for _ in values)+')',
+E   sqlite3.IntegrityError: CHECK constraint failed: (kind = 'embedded' AND connector_id IS NULL AND registered_by_agent_id IS NULL) OR
+E              (kind = 'remote' AND connector_id IS NOT NULL AND registered_by_agent_id IS NOT NULL)
+_______ test_progress_keys_cannot_leak_from_another_full_scope[server] ________
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\home_states\test_progress_equivalence.py:224: in test_progress_keys_cannot_leak_from_another_full_scope
+    copy_row(c, 'execution_executors', executor, server_id=key['server_id'],
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\home_states\test_progress_equivalence.py:26: in copy_row
+    c.execute('INSERT INTO '+table+'('+','.join(values)+') VALUES('+','.join('?' for _ in values)+')',
+E   sqlite3.IntegrityError: CHECK constraint failed: (kind = 'embedded' AND connector_id IS NULL AND registered_by_agent_id IS NULL) OR
+E              (kind = 'remote' AND connector_id IS NOT NULL AND registered_by_agent_id IS NOT NULL)
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\home_states\test_progress_equivalence.py::test_batched_progress_equals_corrected_correlated_oracle[terminal-result]
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\home_states\test_progress_equivalence.py::test_progress_relation_is_batched_once_in_query_plan
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\home_states\test_progress_equivalence.py::test_progress_keys_cannot_leak_from_another_full_scope[executor]
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\home_states\test_progress_equivalence.py::test_progress_keys_cannot_leak_from_another_full_scope[server]
+4 failed, 29 passed in 39.17s

@@ -1,0 +1,114 @@
+{
+  "status": "INCOMPLETE_FIRST_PAGE_TARGET_ORACLE",
+  "provider_invocations": 0,
+  "checks_pass": 0,
+  "checks_fail": 1,
+  "results": {
+    "context-first": "FAIL_OR_INCOMPLETE"
+  },
+  "own_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-lckx7fa_",
+  "cleanup": {
+    "supervisor": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "own_root_processes": [],
+    "listener_port": 63337,
+    "listener_pids": [],
+    "excluded": "Current curation process/ancestors, not runtime or browser",
+    "secret_cookie_scan": "NO_MATCH",
+    "private_auth_and_wire_logs": "Not copied",
+    "data_preserved": true
+  },
+  "limits": [
+    "Synthetic Codex protocol through real Core/Server; no real provider or three-adapter claim",
+    "No human/AT/native-zoom claim",
+    "Functional runs after DOM timing may share CPU with installed pytest"
+  ],
+  "copies": [
+    {
+      "path": "runtime-ready.json",
+      "source_sha256": "148243457660f69198f5b9fd9161aa83bffeb5989d938636cbf0808fbb4fc61a",
+      "curated_sha256": "148243457660f69198f5b9fd9161aa83bffeb5989d938636cbf0808fbb4fc61a",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "fixture.py",
+      "source_sha256": "cf7811a7a47e265c9981b0c4bd629dc63a76b9fca91630099362b9b7739498b4",
+      "curated_sha256": "cf7811a7a47e265c9981b0c4bd629dc63a76b9fca91630099362b9b7739498b4",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-close.txt",
+      "source_sha256": "d64a6d6294f8d9ca1697a083336782df8710fdcaf38789af2c0fee432e96484f",
+      "curated_sha256": "d64a6d6294f8d9ca1697a083336782df8710fdcaf38789af2c0fee432e96484f",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-context-first.txt",
+      "source_sha256": "d2700d96cf0c4e00ac1e59d7068703a7827753bc6bbd31f567de42aae744716d",
+      "curated_sha256": "d2700d96cf0c4e00ac1e59d7068703a7827753bc6bbd31f567de42aae744716d",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-open.txt",
+      "source_sha256": "96f2376fedfb3bfce07c597296753b65df36ca6d17a5c52db33d6b271aab4ed6",
+      "curated_sha256": "96f2376fedfb3bfce07c597296753b65df36ca6d17a5c52db33d6b271aab4ed6",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "cli-state.txt",
+      "source_sha256": "20bbb644aa8a30106fec870454cddb2813563c80220e5b3de709be8ad9cd46aa",
+      "curated_sha256": "20bbb644aa8a30106fec870454cddb2813563c80220e5b3de709be8ad9cd46aa",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/initial-board.json",
+      "source_sha256": "c94fbd76026138c5fd5d6d9bb8460ecdfa5fac8f72d825b9ee461d588fd71550",
+      "curated_sha256": "c94fbd76026138c5fd5d6d9bb8460ecdfa5fac8f72d825b9ee461d588fd71550",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/final.json",
+      "source_sha256": "f1921afea2b3a116bc26416fcc350ea5f1d79035ace710435ba739e85fd00032",
+      "curated_sha256": "f1921afea2b3a116bc26416fcc350ea5f1d79035ace710435ba739e85fd00032",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/origins.json",
+      "source_sha256": "54b85096fd66656311a95914cbf99df7f7d01fcd1c4e3329184d6d85651022f2",
+      "curated_sha256": "54b85096fd66656311a95914cbf99df7f7d01fcd1c4e3329184d6d85651022f2",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/blocked.json",
+      "source_sha256": "c6b2dfaf3292d86f42056a93ac27a04fcee40caa527ba49fcf3a1e652076bda8",
+      "curated_sha256": "c6b2dfaf3292d86f42056a93ac27a04fcee40caa527ba49fcf3a1e652076bda8",
+      "fixture_cas_redactions": 0
+    },
+    {
+      "path": "control/supervisor-cleanup.json",
+      "source_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "curated_sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "fixture_cas_redactions": 0
+    }
+  ],
+  "privacy": {
+    "fixture_cas_values_redacted": 0,
+    "fixture_cas_fingerprints": [
+      "d5a68cf60143389afce4d75e6db6f754af2e7bbb23958af547c6513f9f076a56",
+      "e81349baeaefa3159f83635e7130ff86e523245a6e76b98006e71a9e47f844f7"
+    ],
+    "raw": "Retained only in explicitly owned Temp root"
+  },
+  "browser_http_counts": {
+    "GET": 23
+  },
+  "browser_status_counts": {
+    "200": 23
+  }
+}

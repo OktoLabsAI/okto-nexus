@@ -1,0 +1,57 @@
+{
+  "status": "FAIL",
+  "error": "Error: canonical-parallel",
+  "checks": [
+    {
+      "id": "canonical-parallel",
+      "ok": false,
+      "detail": {
+        "version": 1,
+        "connection": "connected",
+        "activity": "unknown",
+        "blocking": "unknown",
+        "freshness": "current",
+        "as_of": "2026-11-17T16:58:02.423Z",
+        "state_since": null,
+        "reason_code": "INSUFFICIENT_CURRENT_PROOF",
+        "pending_actions": {
+          "value": 1,
+          "total_is_exact": true
+        },
+        "pending_by_kind": {
+          "question": {
+            "value": 1,
+            "total_is_exact": true
+          },
+          "approval": {
+            "value": 0,
+            "total_is_exact": true
+          },
+          "decision": {
+            "value": 0,
+            "total_is_exact": true
+          },
+          "verification": {
+            "value": 0,
+            "total_is_exact": true
+          }
+        },
+        "pending_request_ids": [
+          "att_0bda8777bf61d2be9f9041d5aa8cff911f4c893079c00e4004208ffa215cd410"
+        ],
+        "has_more_pending_requests": false,
+        "pending_requests_cursor": null,
+        "running_sessions": {
+          "value": 0,
+          "total_is_exact": true
+        },
+        "blocked_sessions": {
+          "value": 1,
+          "total_is_exact": true
+        },
+        "awaiting_native_confirmation": false
+      }
+    }
+  ],
+  "body": "/ Home\nNeeds attention\n1\n\u25cf LIVE\nHome\nConversations\nGraph\nArtifacts\nAdvanced\nHome\n\nFollow each harness below. Open an activity to see its exact context, or add a harness to this project.\n\nAsk for work or chat\nRefresh\nPause display\nProject\nAll projects\nHST Demo Project\nHST Demo Project\nAdd harness\n\nPrevious snapshot \u00b7 1 connected \u00b7 working: unknown \u00b7 Idle: unknown \u00b7 queued: unknown \u00b7 1 unconfirmed\n\n1 action \u00b7 harnesses paused: unknown\n\nSome information is incomplete or unavailable. Totals may be unknown; refresh before acting.\n\nFollow-up\nActive\nTotal unknown\nHarness ID: reviewer-1\n\nCollaborator: Hst Worker\n\nCodex \u00b7 Host not reported\n\nLast known: State unconfirmed\nResponse pending\n\nWork request\n\nNeeds your response\n\nWork request\n\nRunning\n\nView work\n\nWork request\n\nNeeds your response\n\nView work\n\nActivity coverage incomplete.\n\nFollow activity\nConnection details\nNeeds you\nTotal unknown\n\nHarness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\n\nRuntime question for the operator\nResponse pending\n\nBlocking status unconfirmed\n\nRespond\nResults\nTotal unknown\n\nTracking is incomplete or unavailable. Refresh to read this column.\n\nSome activity has incomplete connection tracking. These are separate from harness cards.\n\nView other activity"
+}

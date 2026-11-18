@@ -1,0 +1,253 @@
+{
+  "version": 1,
+  "state": "PASS_SCOPED_SOURCE_ONLY",
+  "command": [
+    "rtk",
+    "proxy",
+    "C:/Users/jpamb/AppData/Local/Temp/nexus-ui-r3-harness-pr27-gsg_twh1/venv/Scripts/python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "tests/home_states/test_operational_status.py",
+    "tests/home_states/test_operational_board.py",
+    "tests/home_states/test_operational_sqlite.py",
+    "-q",
+    "--tb=short",
+    "--junitxml=NEXUS_HOME_ESTADOS_R1/execution/operational-currentness/junit.xml"
+  ],
+  "result": {
+    "passed": 40,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 65.37,
+    "exit_code": 0,
+    "terminal_tool": "25d761"
+  },
+  "layer": "Source-first Nexus + PR27 installed dependencies; canonical SQLite/ASGI HTTP and inert Core native peer, not installed Nexus or native provider qualification",
+  "source_pins_end": {
+    "src/okto_nexus/domain/home_entries.py": "5cc0cdc225caaba4590d2c0a4a92790e3d115853d4a16acdd65319356eb6d947",
+    "src/okto_nexus/domain/home_entry_pages.py": "4f714b0b959ab759c1c486bbf63f7e400d7d37812b8a15ad530e2afaf6428f84",
+    "src/okto_nexus/domain/home_harness_blocking.py": "f5f7675add1e4d6f56551e34d0e135af15e1f5a7f1fd054f85b93062ca468af7",
+    "src/okto_nexus/domain/home_harness_board.py": "e592010122e5ec3b9c11b9efd5c22f8440fce94f88877ec99ec10957c005ab61",
+    "src/okto_nexus/domain/home_operational_status.py": "20e0f3f6851de4d876d88221fd9f51cc6debf5d1b5d7408864aafe0b2561fd36",
+    "src/okto_nexus/adapters/outbound/sqlite/home_entries.py": "8e2b9ebfd28570739957f2ad8f540355affae9ba71570f9787706a228eabf1d5",
+    "src/okto_nexus/adapters/outbound/sqlite/home_operational_facts.py": "1ad210421efc3a4da9ad0c695c6f037f1ba5f4fa0e331f427859e23e54620504",
+    "tests/home_states/test_operational_status.py": "ce81b4d47cb0ab3b1c1788c6ae75816196e90857873398bee06cc8ea42204e43",
+    "tests/home_states/test_operational_board.py": "666036280f0326a8e6a9c1e04beffca78a8bcb45c942ac4847b9db9f0b7ffb47",
+    "tests/home_states/test_operational_sqlite.py": "9e225a7917c09a99e941ef813b9d54d7aa763ed510cdd021f8abab9cfdefa6e1"
+  },
+  "input_before_after_claim": false,
+  "before_after_note": "This cut records end pins; prior 48-case before/after audit remains immutable and is not attributed to these changed bytes.",
+  "changes": [
+    "Compare current authorization_revision/configuration_revision/credential_epoch in same batch",
+    "Compare realization.workspace_binding_id with exact session/workspace binding",
+    "Private authority_current fact prevents current Idle/Working/full-block/confirmation with stale authority",
+    "Four real SQLite per-field negatives, four pure prior-state fences",
+    "Imports and reviewed dictionary literal substitutions only; legacy reducer body unchanged"
+  ],
+  "new_test_nodes": [
+    {
+      "node": "tests.home_states.test_operational_status::test_live_idle_requires_complete_absence_and_does_not_follow_registration",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_expired_control_never_proves_idle_or_working",
+      "seconds": "0.001"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_active_lease_without_runtime_open_proof_never_proves_idle",
+      "seconds": "0.001"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_offline_or_incomplete_prior_block_does_not_place_confirmation_in_needs_you",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_unrelated_external_failure_preserves_positive_working_but_not_unknown_absence",
+      "seconds": "0.001"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_blocked_session_and_independent_working_session_have_distinct_dimensions",
+      "seconds": "0.001"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_idle_sibling_does_not_supply_independent_progress",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_no_cross_adapter_blocking_extrapolation[pi_rpc-extension_ui_request]",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_no_cross_adapter_blocking_extrapolation[claude_code_stream_json-claude/AskUserQuestion]",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_no_cross_adapter_blocking_extrapolation[pi_rpc-item/tool/requestUserInput]",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_decision_and_late_old_running_never_claim_resume",
+      "seconds": "0.001"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_old_epoch_or_owner_cannot_establish_current_block_or_confirmation[owner_generation-2]",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_old_epoch_or_owner_cannot_establish_current_block_or_confirmation[stream_epoch-old]",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_queue_is_not_working_idle_or_evidence_of_an_independent_turn",
+      "seconds": "0.001"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_agent_recipient_does_not_become_operator_blocking_card",
+      "seconds": "0.001"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_outcome_unknown_cannot_prove_global_pause_despite_old_question",
+      "seconds": "0.001"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_native_write_refusal_unknown_and_success_are_not_application[FAILED-0-NATIVE_RESPONSE_NOT_APPLIED-False]",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_native_write_refusal_unknown_and_success_are_not_application[OUTCOME_UNKNOWN-1-NATIVE_RESPONSE_OUTCOME_UNKNOWN-True]",
+      "seconds": "0.005"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_native_write_refusal_unknown_and_success_are_not_application[SUCCEEDED-1-NATIVE_APPLICATION_UNCONFIRMED-True]",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_changed_authority_never_keeps_current_activity_or_confirmation[idle]",
+      "seconds": "0.001"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_changed_authority_never_keeps_current_activity_or_confirmation[working]",
+      "seconds": "0.001"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_changed_authority_never_keeps_current_activity_or_confirmation[blocked]",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_status::test_changed_authority_never_keeps_current_activity_or_confirmation[confirmation]",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_board::test_sessions_are_complete_paged_and_bound_to_card_version_principal",
+      "seconds": "0.008"
+    },
+    {
+      "node": "tests.home_states.test_operational_board::test_all_requests_are_reachable_beyond_bounded_blocker_preview",
+      "seconds": "0.024"
+    },
+    {
+      "node": "tests.home_states.test_operational_board::test_semantic_revision_ignores_arrival_time_but_expires_control_without_event",
+      "seconds": "0.005"
+    },
+    {
+      "node": "tests.home_states.test_operational_board::test_awaiting_confirmation_placement_never_fabricates_full_block",
+      "seconds": "0.003"
+    },
+    {
+      "node": "tests.home_states.test_operational_board::test_old_and_new_cursor_spaces_cannot_mix",
+      "seconds": "0.006"
+    },
+    {
+      "node": "tests.home_states.test_operational_board::test_board_child_related_cursor_uses_real_v2_entry_revision",
+      "seconds": "0.008"
+    },
+    {
+      "node": "tests.home_states.test_operational_board::test_unknown_runtime_does_not_synthesize_exact_zero_connection_counts",
+      "seconds": "0.002"
+    },
+    {
+      "node": "tests.home_states.test_operational_sqlite::test_v2_batch_queries_read_real_schema_and_keep_private_coverage",
+      "seconds": "7.990"
+    },
+    {
+      "node": "tests.home_states.test_operational_sqlite::test_applied_lease_and_ready_session_without_opening_receipt_is_not_runtime_proof",
+      "seconds": "3.288"
+    },
+    {
+      "node": "tests.home_states.test_operational_sqlite::test_http_negotiation_sessions_and_requests_are_canonical_read_only",
+      "seconds": "5.676"
+    },
+    {
+      "node": "tests.home_states.test_operational_sqlite::test_canonical_embedded_open_receipt_proves_ready_idle_without_claiming_process_alive",
+      "seconds": "6.520"
+    },
+    {
+      "node": "tests.home_states.test_operational_sqlite::test_canonical_decision_projects_exact_native_write_reference_without_application_claim",
+      "seconds": "5.006"
+    },
+    {
+      "node": "tests.home_states.test_operational_sqlite::test_session_selector_labels_share_connection_redaction_and_bounds",
+      "seconds": "5.035"
+    },
+    {
+      "node": "tests.home_states.test_operational_sqlite::test_current_agent_and_realization_fences_in_real_sqlite_projection[authorization_revision]",
+      "seconds": "7.234"
+    },
+    {
+      "node": "tests.home_states.test_operational_sqlite::test_current_agent_and_realization_fences_in_real_sqlite_projection[configuration_revision]",
+      "seconds": "6.116"
+    },
+    {
+      "node": "tests.home_states.test_operational_sqlite::test_current_agent_and_realization_fences_in_real_sqlite_projection[credential_epoch]",
+      "seconds": "6.691"
+    },
+    {
+      "node": "tests.home_states.test_operational_sqlite::test_current_agent_and_realization_fences_in_real_sqlite_projection[realization_workspace_binding_id]",
+      "seconds": "6.817"
+    }
+  ],
+  "ruff": {
+    "command": [
+      "rtk",
+      "proxy",
+      "uvx",
+      "--offline",
+      "ruff",
+      "check",
+      "src/okto_nexus/domain/home_entries.py",
+      "src/okto_nexus/domain/home_entry_pages.py",
+      "src/okto_nexus/domain/home_harness_blocking.py",
+      "src/okto_nexus/domain/home_harness_board.py",
+      "src/okto_nexus/domain/home_operational_status.py",
+      "src/okto_nexus/adapters/outbound/sqlite/home_entries.py",
+      "src/okto_nexus/adapters/outbound/sqlite/home_operational_facts.py",
+      "tests/home_states/test_operational_status.py",
+      "tests/home_states/test_operational_board.py",
+      "tests/home_states/test_operational_sqlite.py",
+      "--output-format",
+      "json",
+      "--output-file",
+      "NEXUS_HOME_ESTADOS_R1/execution/ruff-operational-final.json"
+    ],
+    "version": "0.17.5",
+    "exit_code": 1,
+    "retained_legacy_C408": 34,
+    "new_helpers_and_tests_have_diagnostics": false,
+    "introduced_vs_baseline_final_audit": "Root execution/static_checks.py owns the differential conclusion; no full default-green claim here",
+    "normalization_proof": "../operational-lint-edits.json"
+  },
+  "artifacts": {
+    "junit.xml": "5152552b114f13aec2b0018bc8380f1eb52c28b6b1a8b83a52e7e92ad620da73",
+    "../ruff-operational-final.json": "9fe263059f24b3f3e61bc5469281203427cb84da602f96105ee3edc04e4de15e",
+    "../operational-lint-edits.json": "77fa75a6162536a97cd511ab24fe98ddee0e5ce6bbf6b6bac02efd7cbfe91d2c"
+  },
+  "cleanup": "Each own fixture/lifespan/factory context exited; pytest process exited0. Native peer is in-process inert; no provider binary process created.",
+  "limits": [
+    "No provider or personal account/credential",
+    "No new installed Nexus qualification",
+    "No browser/AT/performance or multi-host claim",
+    "D08 positive native application/resumption needs actual producer causal evidence; not fabricated",
+    "No performance execution; prepared scripts only"
+  ]
+}

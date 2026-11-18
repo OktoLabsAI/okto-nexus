@@ -1,0 +1,335 @@
+{
+  "status": "FAIL",
+  "error": "Error: draft-and-focus-retained-across-negotiation",
+  "checks": [
+    {
+      "id": "action-before-info",
+      "ok": true,
+      "detail": {
+        "elapsed": 1042
+      }
+    },
+    {
+      "id": "dirty-form-before-version-upgrade",
+      "ok": true,
+      "detail": {
+        "selected": [
+          "0"
+        ],
+        "snapshot": "- dialog \"Activity detail\":\n  - banner:\n    - heading \"Activity detail\" [level=2]\n    - button \"Expand modal\"\n    - button \"Close modal\"\n  - region \"Activity context\":\n    - heading \"Work request\" [level=3]\n    - paragraph: Hst Worker \u00b7 codex_app_server\n    - paragraph: Related information as of 2026-11-17T17:40:14.919556Z. Controls revalidate their canonical records.\n    - region \"Session in this activity\":\n      - heading \"Session\" [level=4]\n      - region \"Session execution output\":\n        - paragraph: READY \u00b7 Read only\n        - paragraph: ses_2775c76972a1eb519a955d2379d5d489\n        - group \"Terminal mode\":\n          - button \"Live tail\" [pressed]\n          - button \"History\"\n        - region \"Session live tail\":\n          - status: Following live events\n          - button \"Pause tail\"\n          - checkbox \"Auto-scroll\" [checked]\n          - text: Auto-scroll\n          - button \"Latest events\"\n          - paragraph: Showing 1\u20134 of 4 committed events. Scroll up to load earlier events.\n          - text: Session \u00b7 terminal Read only\n          - group \"Terminal font size\":\n            - button \"Decrease terminal font size\"\n            - button \"Reset terminal font size\": 12px\n            - button \"Increase terminal font size\"\n          - list \"Live runtime events\":\n            - listitem:\n              - strong: Core codex thread configuration\n              - time: 14:39:42\n              - term: Adapter id\n              - definition: codex_app_server\n              - term: Fields \u00b7 Approval Policy \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Approvals Reviewer \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Cwd \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Instruction Sources \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Model \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Model Provider \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Reasoning Effort \u00b7 Status\n              - definition: missing\n              - term: Fields \u00b7 Sandbox \u00b7 Status\n              - definition: missing\n              - term: Schema version\n              - definition: \"1\"\n              - term: Source\n              - definition: thread/start/response\n            - listitem:\n              - strong: Harness ready\n              - time: 14:39:42\n            - listitem:\n              - strong: Turn started\n              - time: 14:39:43\n            - listitem:\n              - strong: Input requested\n              - time: 14:39:43\n              - term: Is Blocking\n              - definition: \"true\"\n              - term: Item Id\n              - definition: hst-question-turn_1\n              - term: Questions 1 \u00b7 Header\n              - definition: Format\n              - term: Questions 1 \u00b7 Id\n              - definition: format\n              - term: Questions 1 \u00b7 Is Other\n              - definition: \"false\"\n              - term: Questions 1 \u00b7 Is Secret\n              - definition: \"[REDACTED]\"\n              - term: Questions 1 \u00b7 Options 1 \u00b7 Description\n              - definition: Fixture only\n              - term: Questions 1 \u00b7 Options 1 \u00b7 Label\n              - definition: text\n              - term: Questions 1 \u00b7 Question\n              - definition: Choose fixture output format\n              - term: Thread Id\n              - definition: th_1\n              - term: Turn Id\n              - definition: turn_1\n      - group: Session details\n      - button \"Continue this exact session\"\n    - region \"Questions and decisions in this activity\":\n      - heading \"Questions and decisions\" [level=4]\n      - list:\n        - listitem:\n          - heading \"Runtime question for the operator\" [level=5]\n          - paragraph: The runtime has a question for its authorized operator.\n          - paragraph: hst-worker \u00b7 HST Demo Project\n          - button \"Review question\"\n          - button \"Mark seen\"\n          - button \"Snooze 1 hour\"\n      - paragraph: execution_native_request \u00b7 r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf\n      - region \"Canonical approval\":\n        - paragraph: r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf\n        - button \"Refresh record\"\n        - paragraph: pending \u00b7 execution.native.respond \u00b7 Requested by hst-worker\n        - group:\n          - text: workspace HST Demo Project policy native-runtime-permission\n          - region \"Native runtime decision\":\n            - paragraph: Agent hst-worker \u00b7 Host exe_1d3c8cbaefd9bbb92d9f0240f00018c3 \u00b7 Session ses_2775c76972a1eb519a955d2379d5d489\n            - group:\n              - paragraph: \"Runtime request: PENDING. Your decision is recorded separately from delivery to the runtime.\"\n              - text: Choose fixture output format\n              - paragraph: Select one or more answers.\n              - listbox \"Choose fixture output format\":\n                - option \"text\" [selected]\n              - paragraph: \"text: Fixture only\"\n              - button \"Send answer\"\n              - button \"Deny runtime request\"\n            - button \"Check native decision\"\n          - text: \"Runtime request details { \\\"kind\\\": \\\"execution.native.respond\\\", \\\"kwargs\\\": { \\\"approval_key\\\": { \\\"server_id\\\": \\\"srv_4fbe7a06c94dc0a30ca65da1790ab6f8\\\", \\\"executor_id\\\": \\\"exe_1d3c8cbaefd9bbb92d9f0240f00018c3\\\", \\\"binding_id\\\": \\\"bind_bae7a0aafd9cb8abb833846d552119a7\\\", \\\"agent_id\\\": \\\"hst-worker\\\", \\\"workspace_id\\\": \\\"wsr_21e190ad208514e170c638c327084cf9\\\", \\\"session_id\\\": \\\"ses_2775c76972a1eb519a955d2379d5d489\\\", \\\"session_owner_generation\\\": 1, \\\"canonical_request_id\\\": \\\"r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf\\\", \\\"kind\\\": \\\"native_input\\\" }, \\\"request_hash\\\": \\\"sha256:e032be8e539999664bb87b5a9cdac7423119d641c2c3a507b68494b9d0c2b22d\\\", \\\"expected_revision\\\": 1, \\\"cas_token\\\": \\\"<redacted-fixture-cas>\\\", \\\"expires_at\\\": \\\"2026-11-17T17:41:43.100000+00:00\\\", \\\"recipient_agent_id\\\": \\\"operator\\\", \\\"display\\\": { \\\"method\\\": \\\"item/tool/requestUserInput\\\", \\\"params\\\": { \\\"isBlocking\\\": true, \\\"itemId\\\": \\\"hst-question-turn_1\\\", \\\"questions\\\": [ { \\\"header\\\": \\\"Format\\\", \\\"id\\\": \\\"format\\\", \\\"isOther\\\": false, \\\"isSecret\\\": \\\"[REDACTED]\\\", \\\"options\\\": [ { \\\"description\\\": \\\"Fixture only\\\", \\\"label\\\": \\\"text\\\" } ], \\\"question\\\": \\\"Choose fixture output format\\\" } ], \\\"threadId\\\": \\\"th_1\\\", \\\"turnId\\\": \\\"turn_1\\\" }, \\\"request_hash\\\": \\\"3a0270e6bef322bee31a69920f3196db588c45a54bc0cc5f5419d66805f6f03c\\\", \\\"request_id\\\": 10001, \\\"schema_version\\\": 1 } } }\"\n    - button \"Show work details\"",
+        "at": 1794937215914
+      }
+    },
+    {
+      "id": "real-info-upgrade-arrived",
+      "ok": true,
+      "detail": {
+        "at": 1794937226811,
+        "versions": [
+          1,
+          2
+        ],
+        "status": 200
+      }
+    },
+    {
+      "id": "same-panel-retained-across-negotiation",
+      "ok": true,
+      "detail": {
+        "dialogs": 1,
+        "forms": 1,
+        "body": "/ Home\nNeeds attention\n1\n\u25cf LIVE\nHome\nConversations\nGraph\nArtifacts\nAdvanced\nHome\n\nFollow each harness below. Open an activity to see its exact context, or add a harness to this project.\n\nAsk for work or chat\nRefresh\nPause display\nProject\nAll projects\nHST Demo Project\nHST Demo Project\nAdd harness\n\n1 connected \u00b7 1 working \u00b7 0 Idle\n\n1 action \u00b7 0 harnesses paused\n\nSome information is incomplete or unavailable. Totals may be unknown; refresh before acting.\n\nFollow-up\nActive\nTotal unknown\nHarness ID: reviewer-1\n\nCollaborator: Hst Worker\n\nCodex \u00b7 Host not reported\n\nWorking\nResponse pending\n\nWork request\n\nNeeds your response\n\nWork request\n\nRunning\n\nView work\n\nWork request\n\nNeeds your response\n\nView work\n\nActivity coverage incomplete.\n\nFollow activity\nConnection details\nNeeds you\nTotal unknown\n\nHarness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\n\nRuntime question for the operator\nResponse pending\n\nBlocks this session; the harness continues other work\n\nRespond\nResults\nTotal unknown\n\nTracking is incomplete or unavailable. Refresh to read this column.\n\nSome activity has incomplete connection tracking. These are separate from harness cards.\n\nView other activity\nActivity detail\nWork request\n\nHst Worker \u00b7 codex_app_server\n\nRelated information as of 2026-11-17T17:40:14.919556Z. Controls revalidate their canonical records.\n\nSession\n\nREADY \u00b7 Read only\n\nses_2775c76972a1eb519a955d2379d5d489\n\nLive tail\nHistory\nFollowing live events\nPause tail\n Auto-scroll\nLatest events\n\nShowing 1\u20134 of 4 committed events. Scroll up to load earlier events.\n\nSession \u00b7 terminal\nRead only\n12px\nCore codex thread configuration\n14:39:42\nAdapter id\ncodex_app_server\nFields \u00b7 Approval Policy \u00b7 Status\nmissing\nFields \u00b7 Approvals Reviewer \u00b7 Status\nmissing\nFields \u00b7 Cwd \u00b7 Status\nmissing\nFields \u00b7 Instruction Sources \u00b7 Status\nmissing\nFields \u00b7 Model \u00b7 Status\nmissing\nFields \u00b7 Model Provider \u00b7 Status\nmissing\nFields \u00b7 Reasoning Effort \u00b7 Status\nmissing\nFields \u00b7 Sandbox \u00b7 Status\nmissing\nSchema version\n1\nSource\nthread/start/response\nHarness ready\n14:39:42\nTurn started\n14:39:43\nInput requested\n14:39:43\nIs Blocking\ntrue\nItem Id\nhst-question-turn_1\nQuestions 1 \u00b7 Header\nFormat\nQuestions 1 \u00b7 Id\nformat\nQuestions 1 \u00b7 Is Other\nfalse\nQuestions 1 \u00b7 Is Secret\n[REDACTED]\nQuestions 1 \u00b7 Options 1 \u00b7 Description\nFixture only\nQuestions 1 \u00b7 Options 1 \u00b7 Label\ntext\nQuestions 1 \u00b7 Question\nChoose fixture output format\nThread Id\nth_1\nTurn Id\nturn_1\nSession details\nContinue this exact session\nQuestions and decisions\nRuntime question for the operator\n\nThe runtime has a question for its authorized operator.\n\nhst-worker \u00b7 HST Demo Project\n\nReview question\nMark seen\nSnooze 1 hour\n\nexecution_native_request \u00b7 r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf\n\nr4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf\n\nRefresh record\n\npending \u00b7 execution.native.respond \u00b7 Requested by hst-worker\n\nworkspace HST Demo Project\npolicy native-runtime-permission\n\nAgent hst-worker \u00b7 Host exe_1d3c8cbaefd9bbb92d9f0240f00018c3 \u00b7 Session ses_2775c76972a1eb519a955d2379d5d489\n\nRuntime request: PENDING. Your decision is recorded separately from delivery to the runtime.\n\nChoose fixture output format\n\nSelect one or more answers.\n\ntext\n\ntext: Fixture only\n\nSend answer\nDeny runtime request\nCheck native decision\nRUNTIME REQUEST DETAILS\n{\n  \"kind\": \"execution.native.respond\",\n  \"kwargs\": {\n    \"approval_key\": {\n      \"server_id\": \"srv_4fbe7a06c94dc0a30ca65da1790ab6f8\",\n      \"executor_id\": \"exe_1d3c8cbaefd9bbb92d9f0240f00018c3\",\n      \"binding_id\": \"bind_bae7a0aafd9cb8abb833846d552119a7\",\n      \"agent_id\": \"hst-worker\",\n      \"workspace_id\": \"wsr_21e190ad208514e170c638c327084cf9\",\n      \"session_id\": \"ses_2775c76972a1eb519a955d2379d5d489\",\n      \"session_owner_generation\": 1,\n      \"canonical_request_id\": \"r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf\",\n      \"kind\": \"native_input\"\n    },\n    \"request_hash\": \"sha256:e032be8e539999664bb87b5a9cdac7423119d641c2c3a507b68494b9d0c2b22d\",\n    \"expected_revision\": 1,\n    \"cas_token\": \"<redacted-fixture-cas>\",\n    \"expires_at\": \"2026-11-17T17:41:43.100000+00:00\",\n    \"recipient_agent_id\": \"operator\",\n    \"display\": {\n      \"method\": \"item/tool/requestUserInput\",\n      \"params\": {\n        \"isBlocking\": true,\n        \"itemId\": \"hst-question-turn_1\",\n        \"questions\": [\n          {\n            \"header\": \"Format\",\n            \"id\": \"format\",\n            \"isOther\": false,\n            \"isSecret\": \"[REDACTED]\",\n            \"options\": [\n              {\n                \"description\": \"Fixture only\",\n                \"label\": \"text\"\n              }\n            ],\n            \"question\": \"Choose fixture output format\"\n          }\n        ],\n        \"threadId\": \"th_1\",\n        \"turnId\": \"turn_1\"\n      },\n      \"request_hash\": \"3a0270e6bef322bee31a69920f3196db588c45a54bc0cc5f5419d66805f6f03c\",\n      \"request_id\": 10001,\n      \"schema_version\": 1\n    }\n  }\n}\nShow work details"
+      }
+    },
+    {
+      "id": "draft-and-focus-retained-across-negotiation",
+      "ok": false,
+      "detail": {
+        "dialogs": 1,
+        "forms": 1,
+        "body": "/ Home\nNeeds attention\n1\n\u25cf LIVE\nHome\nConversations\nGraph\nArtifacts\nAdvanced\nHome\n\nFollow each harness below. Open an activity to see its exact context, or add a harness to this project.\n\nAsk for work or chat\nRefresh\nPause display\nProject\nAll projects\nHST Demo Project\nHST Demo Project\nAdd harness\n\n1 connected \u00b7 1 working \u00b7 0 Idle\n\n1 action \u00b7 0 harnesses paused\n\nSome information is incomplete or unavailable. Totals may be unknown; refresh before acting.\n\nFollow-up\nActive\nTotal unknown\nHarness ID: reviewer-1\n\nCollaborator: Hst Worker\n\nCodex \u00b7 Host not reported\n\nWorking\nResponse pending\n\nWork request\n\nNeeds your response\n\nWork request\n\nRunning\n\nView work\n\nWork request\n\nNeeds your response\n\nView work\n\nActivity coverage incomplete.\n\nFollow activity\nConnection details\nNeeds you\nTotal unknown\n\nHarness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\n\nRuntime question for the operator\nResponse pending\n\nBlocks this session; the harness continues other work\n\nRespond\nResults\nTotal unknown\n\nTracking is incomplete or unavailable. Refresh to read this column.\n\nSome activity has incomplete connection tracking. These are separate from harness cards.\n\nView other activity\nActivity detail\nWork request\n\nHst Worker \u00b7 codex_app_server\n\nRelated information as of 2026-11-17T17:40:14.919556Z. Controls revalidate their canonical records.\n\nSession\n\nREADY \u00b7 Read only\n\nses_2775c76972a1eb519a955d2379d5d489\n\nLive tail\nHistory\nFollowing live events\nPause tail\n Auto-scroll\nLatest events\n\nShowing 1\u20134 of 4 committed events. Scroll up to load earlier events.\n\nSession \u00b7 terminal\nRead only\n12px\nCore codex thread configuration\n14:39:42\nAdapter id\ncodex_app_server\nFields \u00b7 Approval Policy \u00b7 Status\nmissing\nFields \u00b7 Approvals Reviewer \u00b7 Status\nmissing\nFields \u00b7 Cwd \u00b7 Status\nmissing\nFields \u00b7 Instruction Sources \u00b7 Status\nmissing\nFields \u00b7 Model \u00b7 Status\nmissing\nFields \u00b7 Model Provider \u00b7 Status\nmissing\nFields \u00b7 Reasoning Effort \u00b7 Status\nmissing\nFields \u00b7 Sandbox \u00b7 Status\nmissing\nSchema version\n1\nSource\nthread/start/response\nHarness ready\n14:39:42\nTurn started\n14:39:43\nInput requested\n14:39:43\nIs Blocking\ntrue\nItem Id\nhst-question-turn_1\nQuestions 1 \u00b7 Header\nFormat\nQuestions 1 \u00b7 Id\nformat\nQuestions 1 \u00b7 Is Other\nfalse\nQuestions 1 \u00b7 Is Secret\n[REDACTED]\nQuestions 1 \u00b7 Options 1 \u00b7 Description\nFixture only\nQuestions 1 \u00b7 Options 1 \u00b7 Label\ntext\nQuestions 1 \u00b7 Question\nChoose fixture output format\nThread Id\nth_1\nTurn Id\nturn_1\nSession details\nContinue this exact session\nQuestions and decisions\nRuntime question for the operator\n\nThe runtime has a question for its authorized operator.\n\nhst-worker \u00b7 HST Demo Project\n\nReview question\nMark seen\nSnooze 1 hour\n\nexecution_native_request \u00b7 r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf\n\nr4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf\n\nRefresh record\n\npending \u00b7 execution.native.respond \u00b7 Requested by hst-worker\n\nworkspace HST Demo Project\npolicy native-runtime-permission\n\nAgent hst-worker \u00b7 Host exe_1d3c8cbaefd9bbb92d9f0240f00018c3 \u00b7 Session ses_2775c76972a1eb519a955d2379d5d489\n\nRuntime request: PENDING. Your decision is recorded separately from delivery to the runtime.\n\nChoose fixture output format\n\nSelect one or more answers.\n\ntext\n\ntext: Fixture only\n\nSend answer\nDeny runtime request\nCheck native decision\nRUNTIME REQUEST DETAILS\n{\n  \"kind\": \"execution.native.respond\",\n  \"kwargs\": {\n    \"approval_key\": {\n      \"server_id\": \"srv_4fbe7a06c94dc0a30ca65da1790ab6f8\",\n      \"executor_id\": \"exe_1d3c8cbaefd9bbb92d9f0240f00018c3\",\n      \"binding_id\": \"bind_bae7a0aafd9cb8abb833846d552119a7\",\n      \"agent_id\": \"hst-worker\",\n      \"workspace_id\": \"wsr_21e190ad208514e170c638c327084cf9\",\n      \"session_id\": \"ses_2775c76972a1eb519a955d2379d5d489\",\n      \"session_owner_generation\": 1,\n      \"canonical_request_id\": \"r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf\",\n      \"kind\": \"native_input\"\n    },\n    \"request_hash\": \"sha256:e032be8e539999664bb87b5a9cdac7423119d641c2c3a507b68494b9d0c2b22d\",\n    \"expected_revision\": 1,\n    \"cas_token\": \"<redacted-fixture-cas>\",\n    \"expires_at\": \"2026-11-17T17:41:43.100000+00:00\",\n    \"recipient_agent_id\": \"operator\",\n    \"display\": {\n      \"method\": \"item/tool/requestUserInput\",\n      \"params\": {\n        \"isBlocking\": true,\n        \"itemId\": \"hst-question-turn_1\",\n        \"questions\": [\n          {\n            \"header\": \"Format\",\n            \"id\": \"format\",\n            \"isOther\": false,\n            \"isSecret\": \"[REDACTED]\",\n            \"options\": [\n              {\n                \"description\": \"Fixture only\",\n                \"label\": \"text\"\n              }\n            ],\n            \"question\": \"Choose fixture output format\"\n          }\n        ],\n        \"threadId\": \"th_1\",\n        \"turnId\": \"turn_1\"\n      },\n      \"request_hash\": \"3a0270e6bef322bee31a69920f3196db588c45a54bc0cc5f5419d66805f6f03c\",\n      \"request_id\": 10001,\n      \"schema_version\": 1\n    }\n  }\n}\nShow work details"
+      }
+    }
+  ],
+  "info": {
+    "at": 1794937226811,
+    "versions": [
+      1,
+      2
+    ],
+    "status": 200
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "at": 1794937214534
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-DjtzLUDc.js",
+      "at": 1794937214612
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-Bh2ghaTD.css",
+      "at": 1794937214613
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "at": 1794937214720
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-icon.svg",
+      "at": 1794937214722
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg",
+      "at": 1794937214736
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg",
+      "at": 1794937214737
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents",
+      "at": 1794937214779
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "at": 1794937214780
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "at": 1794937214780
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "at": 1794937214780
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794937214780
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794937214780
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "at": 1794937214787
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "at": 1794937214787
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "at": 1794937214787
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "at": 1794937215030
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794937215150
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794937215200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794937215307
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "at": 1794937215356
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "at": 1794937215606
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "at": 1794937215725
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+      "at": 1794937215725
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "at": 1794937215739
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489",
+      "at": 1794937215764
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+      "at": 1794937215764
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489/events",
+      "at": 1794937215786
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489",
+      "at": 1794937215786
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "at": 1794937215791
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489/events",
+      "at": 1794937217819
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489",
+      "at": 1794937217833
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+      "at": 1794937218274
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489/events",
+      "at": 1794937219827
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489",
+      "at": 1794937219843
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+      "at": 1794937220772
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489/events",
+      "at": 1794937221840
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489",
+      "at": 1794937221856
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+      "at": 1794937223273
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489/events",
+      "at": 1794937223854
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489",
+      "at": 1794937223870
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "at": 1794937224791
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+      "at": 1794937225778
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489/events",
+      "at": 1794937225871
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489",
+      "at": 1794937225885
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "at": 1794937226811
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "at": 1794937226925
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "at": 1794937226930
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+      "at": 1794937226930
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489",
+      "at": 1794937226941
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489/events",
+      "at": 1794937226954
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_2775c76972a1eb519a955d2379d5d489",
+      "at": 1794937226955
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/connections/me",
+      "at": 1794937226968
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals/r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf",
+      "at": 1794937226981
+    }
+  ],
+  "body": "/ Home\nNeeds attention\n1\n\u25cf LIVE\nHome\nConversations\nGraph\nArtifacts\nAdvanced\nHome\n\nFollow each harness below. Open an activity to see its exact context, or add a harness to this project.\n\nAsk for work or chat\nRefresh\nPause display\nProject\nAll projects\nHST Demo Project\nHST Demo Project\nAdd harness\n\n1 connected \u00b7 1 working \u00b7 0 Idle\n\n1 action \u00b7 0 harnesses paused\n\nSome information is incomplete or unavailable. Totals may be unknown; refresh before acting.\n\nFollow-up\nActive\nTotal unknown\nHarness ID: reviewer-1\n\nCollaborator: Hst Worker\n\nCodex \u00b7 Host not reported\n\nWorking\nResponse pending\n\nWork request\n\nNeeds your response\n\nWork request\n\nRunning\n\nView work\n\nWork request\n\nNeeds your response\n\nView work\n\nActivity coverage incomplete.\n\nFollow activity\nConnection details\nNeeds you\nTotal unknown\n\nHarness ID: reviewer-1 \u00b7 Codex \u00b7 Host not reported\n\nRuntime question for the operator\nResponse pending\n\nBlocks this session; the harness continues other work\n\nRespond\nResults\nTotal unknown\n\nTracking is incomplete or unavailable. Refresh to read this column.\n\nSome activity has incomplete connection tracking. These are separate from harness cards.\n\nView other activity\nActivity detail\nWork request\n\nHst Worker \u00b7 codex_app_server\n\nRelated information as of 2026-11-17T17:40:14.919556Z. Controls revalidate their canonical records.\n\nSession\n\nREADY \u00b7 Read only\n\nses_2775c76972a1eb519a955d2379d5d489\n\nLive tail\nHistory\nFollowing live events\nPause tail\n Auto-scroll\nLatest events\n\nShowing 1\u20134 of 4 committed events. Scroll up to load earlier events.\n\nSession \u00b7 terminal\nRead only\n12px\nCore codex thread configuration\n14:39:42\nAdapter id\ncodex_app_server\nFields \u00b7 Approval Policy \u00b7 Status\nmissing\nFields \u00b7 Approvals Reviewer \u00b7 Status\nmissing\nFields \u00b7 Cwd \u00b7 Status\nmissing\nFields \u00b7 Instruction Sources \u00b7 Status\nmissing\nFields \u00b7 Model \u00b7 Status\nmissing\nFields \u00b7 Model Provider \u00b7 Status\nmissing\nFields \u00b7 Reasoning Effort \u00b7 Status\nmissing\nFields \u00b7 Sandbox \u00b7 Status\nmissing\nSchema version\n1\nSource\nthread/start/response\nHarness ready\n14:39:42\nTurn started\n14:39:43\nInput requested\n14:39:43\nIs Blocking\ntrue\nItem Id\nhst-question-turn_1\nQuestions 1 \u00b7 Header\nFormat\nQuestions 1 \u00b7 Id\nformat\nQuestions 1 \u00b7 Is Other\nfalse\nQuestions 1 \u00b7 Is Secret\n[REDACTED]\nQuestions 1 \u00b7 Options 1 \u00b7 Description\nFixture only\nQuestions 1 \u00b7 Options 1 \u00b7 Label\ntext\nQuestions 1 \u00b7 Question\nChoose fixture output format\nThread Id\nth_1\nTurn Id\nturn_1\nSession details\nContinue this exact session\nQuestions and decisions\nRuntime question for the operator\n\nThe runtime has a question for its authorized operator.\n\nhst-worker \u00b7 HST Demo Project\n\nReview question\nMark seen\nSnooze 1 hour\n\nexecution_native_request \u00b7 r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf\n\nr4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf\n\nRefresh record\n\npending \u00b7 execution.native.respond \u00b7 Requested by hst-worker\n\nworkspace HST Demo Project\npolicy native-runtime-permission\n\nAgent hst-worker \u00b7 Host exe_1d3c8cbaefd9bbb92d9f0240f00018c3 \u00b7 Session ses_2775c76972a1eb519a955d2379d5d489\n\nRuntime request: PENDING. Your decision is recorded separately from delivery to the runtime.\n\nChoose fixture output format\n\nSelect one or more answers.\n\ntext\n\ntext: Fixture only\n\nSend answer\nDeny runtime request\nCheck native decision\nRUNTIME REQUEST DETAILS\n{\n  \"kind\": \"execution.native.respond\",\n  \"kwargs\": {\n    \"approval_key\": {\n      \"server_id\": \"srv_4fbe7a06c94dc0a30ca65da1790ab6f8\",\n      \"executor_id\": \"exe_1d3c8cbaefd9bbb92d9f0240f00018c3\",\n      \"binding_id\": \"bind_bae7a0aafd9cb8abb833846d552119a7\",\n      \"agent_id\": \"hst-worker\",\n      \"workspace_id\": \"wsr_21e190ad208514e170c638c327084cf9\",\n      \"session_id\": \"ses_2775c76972a1eb519a955d2379d5d489\",\n      \"session_owner_generation\": 1,\n      \"canonical_request_id\": \"r4request_1012fa0408e17d188e29e6291b8993b7de9dd5c77a05463faecb8e79439543bf\",\n      \"kind\": \"native_input\"\n    },\n    \"request_hash\": \"sha256:e032be8e539999664bb87b5a9cdac7423119d641c2c3a507b68494b9d0c2b22d\",\n    \"expected_revision\": 1,\n    \"cas_token\": \"<redacted-fixture-cas>\",\n    \"expires_at\": \"2026-11-17T17:41:43.100000+00:00\",\n    \"recipient_agent_id\": \"operator\",\n    \"display\": {\n      \"method\": \"item/tool/requestUserInput\",\n      \"params\": {\n        \"isBlocking\": true,\n        \"itemId\": \"hst-question-turn_1\",\n        \"questions\": [\n          {\n            \"header\": \"Format\",\n            \"id\": \"format\",\n            \"isOther\": false,\n            \"isSecret\": \"[REDACTED]\",\n            \"options\": [\n              {\n                \"description\": \"Fixture only\",\n                \"label\": \"text\"\n              }\n            ],\n            \"question\": \"Choose fixture output format\"\n          }\n        ],\n        \"threadId\": \"th_1\",\n        \"turnId\": \"turn_1\"\n      },\n      \"request_hash\": \"3a0270e6bef322bee31a69920f3196db588c45a54bc0cc5f5419d66805f6f03c\",\n      \"request_id\": 10001,\n      \"schema_version\": 1\n    }\n  }\n}\nShow work details"
+}

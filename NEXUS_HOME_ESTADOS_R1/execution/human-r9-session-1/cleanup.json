@@ -1,0 +1,756 @@
+{
+  "failure": null,
+  "fixture_cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "browser_containment": {
+    "forced_births": [],
+    "remaining": []
+  },
+  "before": {
+    "manifest_sha256": "370bd5bfa1743a1e5ef58646980b0777c571ee43bc4b4ad8972adce2cd50a3af",
+    "gate_sha256": "e089498ebc31cd29150ed76a761ae02e1bfa324ee9bd3fe694c15199cd7d5c9d",
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031,
+    "source_files": 1829,
+    "cli_files": 192
+  },
+  "after": {
+    "manifest_sha256": "370bd5bfa1743a1e5ef58646980b0777c571ee43bc4b4ad8972adce2cd50a3af",
+    "gate_sha256": "e089498ebc31cd29150ed76a761ae02e1bfa324ee9bd3fe694c15199cd7d5c9d",
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031,
+    "source_files": 1829,
+    "cli_files": 192
+  },
+  "known_births": [
+    {
+      "pid": 56936,
+      "birth": 1794968852.4069092,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 27028,
+      "birth": 1794968833.73409,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 50536,
+      "birth": 1794968848.5621784,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 59856,
+      "birth": 1794968833.6959336,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 12864,
+      "birth": 1794968855.9811697,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 26392,
+      "birth": 1794968855.729592,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 39660,
+      "birth": 1794968855.4229512,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 39800,
+      "birth": 1794968854.8972936,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 42788,
+      "birth": 1794968855.9802158,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 42888,
+      "birth": 1794968853.7490373,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 50880,
+      "birth": 1794968854.8352797,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 51580,
+      "birth": 1794968855.881101,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 60040,
+      "birth": 1794968855.66433,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 50348,
+      "birth": 1794968860.0813851,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 56020,
+      "birth": 1794968860.1337943,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 28988,
+      "birth": 1794968861.2419417,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 35260,
+      "birth": 1794968861.332467,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 49760,
+      "birth": 1794968869.620587,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 8800,
+      "birth": 1794968869.6726477,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 39492,
+      "birth": 1794968865.0567915,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 42556,
+      "birth": 1794968867.1135652,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 36928,
+      "birth": 1794968884.2547944,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 24736,
+      "birth": 1794968884.2989652,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 25400,
+      "birth": 1794968885.6825988,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 55324,
+      "birth": 1794968885.6699767,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 6984,
+      "birth": 1794968896.08381,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 60392,
+      "birth": 1794968896.1229696,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 60600,
+      "birth": 1794968908.1042445,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 34056,
+      "birth": 1794968908.154856,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 38944,
+      "birth": 1794968919.8336465,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 50892,
+      "birth": 1794968919.910614,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 24868,
+      "birth": 1794968932.2071931,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 50124,
+      "birth": 1794968932.2513068,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 57852,
+      "birth": 1794968943.91567,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 62152,
+      "birth": 1794968943.9861672,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 61200,
+      "birth": 1794968955.5600674,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 56232,
+      "birth": 1794968955.602376,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 56612,
+      "birth": 1794968967.1004455,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 13420,
+      "birth": 1794968967.1382275,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 34340,
+      "birth": 1794968978.9129436,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 41804,
+      "birth": 1794968978.9487834,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 59724,
+      "birth": 1794968990.4414308,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 27408,
+      "birth": 1794968990.480225,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 24076,
+      "birth": 1794969002.0089755,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 53672,
+      "birth": 1794969002.045092,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 22572,
+      "birth": 1794969013.7509768,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 56172,
+      "birth": 1794969013.8003953,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 48700,
+      "birth": 1794969025.6007583,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 39388,
+      "birth": 1794969025.6351097,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 44500,
+      "birth": 1794969037.4779,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 36500,
+      "birth": 1794969037.5218875,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 50960,
+      "birth": 1794969035.6767159,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 39920,
+      "birth": 1794969049.3329284,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 9844,
+      "birth": 1794969049.3729866,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 59400,
+      "birth": 1794969061.1614811,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 57700,
+      "birth": 1794969061.2098157,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 42604,
+      "birth": 1794969073.072012,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 50000,
+      "birth": 1794969073.1359038,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 61556,
+      "birth": 1794969085.4288268,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 60212,
+      "birth": 1794969085.463877,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 50600,
+      "birth": 1794969097.558976,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 57364,
+      "birth": 1794969097.5952768,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 55484,
+      "birth": 1794969109.6182137,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 47216,
+      "birth": 1794969109.648798,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 29204,
+      "birth": 1794969121.6705077,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 15152,
+      "birth": 1794969121.7134838,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 35440,
+      "birth": 1794969133.677276,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 60220,
+      "birth": 1794969133.7312388,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 45848,
+      "birth": 1794969146.0424252,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 54784,
+      "birth": 1794969146.1077409,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 54340,
+      "birth": 1794969158.5117683,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 45280,
+      "birth": 1794969158.54905,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 44200,
+      "birth": 1794969170.3479168,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 44636,
+      "birth": 1794969170.3990102,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 60324,
+      "birth": 1794969182.6526084,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 45228,
+      "birth": 1794969182.7150247,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 61972,
+      "birth": 1794969194.7722971,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 33144,
+      "birth": 1794969194.825193,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 49444,
+      "birth": 1794969207.612266,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 48520,
+      "birth": 1794969207.6531851,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 21752,
+      "birth": 1794969219.4298227,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 53552,
+      "birth": 1794969219.479314,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 55700,
+      "birth": 1794969232.2733076,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 30600,
+      "birth": 1794969232.309788,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 61940,
+      "birth": 1794969244.2118125,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 47128,
+      "birth": 1794969244.285228,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 19824,
+      "birth": 1794969256.2159145,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 60352,
+      "birth": 1794969256.254794,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 24968,
+      "birth": 1794969268.0389676,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 25512,
+      "birth": 1794969268.0853372,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 38060,
+      "birth": 1794969280.3563008,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 59356,
+      "birth": 1794969280.3913517,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 58600,
+      "birth": 1794969292.5571728,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 48560,
+      "birth": 1794969292.5973027,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 33448,
+      "birth": 1794969304.8128085,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 29072,
+      "birth": 1794969304.863234,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 22204,
+      "birth": 1794969316.7730525,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 30040,
+      "birth": 1794969316.8186517,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 27204,
+      "birth": 1794969328.7643616,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 43180,
+      "birth": 1794969328.799846,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 48412,
+      "birth": 1794969340.5801644,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 62304,
+      "birth": 1794969340.6237693,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 57392,
+      "birth": 1794969352.2028928,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 61928,
+      "birth": 1794969352.2449217,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 61560,
+      "birth": 1794969364.0795567,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 43060,
+      "birth": 1794969364.1181228,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 60388,
+      "birth": 1794969375.6758542,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 39220,
+      "birth": 1794969375.715515,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 61404,
+      "birth": 1794969387.95011,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 14576,
+      "birth": 1794969387.9883206,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 14788,
+      "birth": 1794969399.7931292,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 61908,
+      "birth": 1794969399.8337476,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 59924,
+      "birth": 1794969412.0228684,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 8076,
+      "birth": 1794969412.0586672,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 48596,
+      "birth": 1794969423.7077737,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 58108,
+      "birth": 1794969423.7622845,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 61088,
+      "birth": 1794969435.7429605,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 57688,
+      "birth": 1794969435.7861223,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 50288,
+      "birth": 1794969447.735842,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 10188,
+      "birth": 1794969447.7779725,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 55360,
+      "birth": 1794969459.604714,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 30200,
+      "birth": 1794969459.6458807,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 47492,
+      "birth": 1794969471.91775,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 43136,
+      "birth": 1794969471.9545035,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 53960,
+      "birth": 1794969483.5996974,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 27444,
+      "birth": 1794969483.660454,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 55496,
+      "birth": 1794969495.5023708,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 61048,
+      "birth": 1794969495.5376751,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 24396,
+      "birth": 1794969507.6880603,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 19100,
+      "birth": 1794969507.743478,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 18932,
+      "birth": 1794969519.4446392,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 44236,
+      "birth": 1794969519.4952707,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 53232,
+      "birth": 1794969531.9380655,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 56336,
+      "birth": 1794969531.973984,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 58556,
+      "birth": 1794969543.4822567,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 40656,
+      "birth": 1794969543.5426333,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 11620,
+      "birth": 1794969555.9728737,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 40252,
+      "birth": 1794969556.0500295,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 34108,
+      "birth": 1794969567.799528,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 44208,
+      "birth": 1794969567.8313136,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 47460,
+      "birth": 1794969579.3273036,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 58136,
+      "birth": 1794969579.3947144,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 54976,
+      "birth": 1794969581.9262464,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 48984,
+      "birth": 1794969581.9817498,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    }
+  ],
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-fwikzglf"
+}

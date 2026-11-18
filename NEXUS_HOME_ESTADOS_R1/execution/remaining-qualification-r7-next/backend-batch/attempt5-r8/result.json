@@ -1,0 +1,306 @@
+{
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-backend-batch-r8-9w1sfl87",
+  "runtime_source": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "payload_files": 1031,
+  "results": [
+    {
+      "case": "test_shared_owner_bindings_keep_distinct_current_state",
+      "owned_command": {
+        "exit_code": 0,
+        "timed_out": false,
+        "force_used": false,
+        "stdin": "closed PIPE",
+        "known_processes": [
+          {
+            "pid": 50052,
+            "birth": 1794955877.2469077,
+            "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+          },
+          {
+            "pid": 30560,
+            "birth": 1794955877.2580757,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 58040,
+            "birth": 1794955883.2733116,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 56792,
+            "birth": 1794955883.293017,
+            "exe": "C:\\Windows\\System32\\conhost.exe"
+          },
+          {
+            "pid": 16740,
+            "birth": 1794955883.783658,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 48840,
+            "birth": 1794955883.7891448,
+            "exe": "C:\\Windows\\System32\\conhost.exe"
+          }
+        ],
+        "actions": [],
+        "remaining_known_processes": [],
+        "remaining_listeners": [],
+        "success": true,
+        "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+      }
+    },
+    {
+      "case": "test_hidden_productive_sibling_same_binding_prevents_false_full_block",
+      "owned_command": {
+        "exit_code": 0,
+        "timed_out": false,
+        "force_used": false,
+        "stdin": "closed PIPE",
+        "known_processes": [
+          {
+            "pid": 61276,
+            "birth": 1794955888.910575,
+            "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+          },
+          {
+            "pid": 43032,
+            "birth": 1794955888.9214592,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 62332,
+            "birth": 1794955896.0233424,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 17744,
+            "birth": 1794955896.0427248,
+            "exe": "C:\\Windows\\System32\\conhost.exe"
+          },
+          {
+            "pid": 18360,
+            "birth": 1794955896.530049,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 41444,
+            "birth": 1794955896.534669,
+            "exe": "C:\\Windows\\System32\\conhost.exe"
+          }
+        ],
+        "actions": [],
+        "remaining_known_processes": [],
+        "remaining_listeners": [],
+        "success": true,
+        "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+      }
+    },
+    {
+      "case": "test_current_core_work_survives_external_unavailable_only",
+      "owned_command": {
+        "exit_code": 0,
+        "timed_out": false,
+        "force_used": false,
+        "stdin": "closed PIPE",
+        "known_processes": [
+          {
+            "pid": 59752,
+            "birth": 1794955900.9152248,
+            "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+          },
+          {
+            "pid": 42976,
+            "birth": 1794955900.92831,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 52088,
+            "birth": 1794955908.5410693,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 50880,
+            "birth": 1794955908.5643685,
+            "exe": "C:\\Windows\\System32\\conhost.exe"
+          }
+        ],
+        "actions": [],
+        "remaining_known_processes": [],
+        "remaining_listeners": [],
+        "success": true,
+        "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+      }
+    },
+    {
+      "case": "test_explicit_nonblocking_input_keeps_working_and_one_independent_action",
+      "owned_command": {
+        "exit_code": 0,
+        "timed_out": false,
+        "force_used": false,
+        "stdin": "closed PIPE",
+        "known_processes": [
+          {
+            "pid": 26692,
+            "birth": 1794955911.8996463,
+            "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+          },
+          {
+            "pid": 50072,
+            "birth": 1794955911.9143603,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 29180,
+            "birth": 1794955918.70936,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 60168,
+            "birth": 1794955918.728444,
+            "exe": "C:\\Windows\\System32\\conhost.exe"
+          }
+        ],
+        "actions": [],
+        "remaining_known_processes": [],
+        "remaining_listeners": [],
+        "success": true,
+        "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+      }
+    },
+    {
+      "case": "test_idle_sibling_cannot_make_a_full_block_independent",
+      "owned_command": {
+        "exit_code": 0,
+        "timed_out": false,
+        "force_used": false,
+        "stdin": "closed PIPE",
+        "known_processes": [
+          {
+            "pid": 59856,
+            "birth": 1794955922.3057036,
+            "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+          },
+          {
+            "pid": 61976,
+            "birth": 1794955922.343099,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 50788,
+            "birth": 1794955930.7729018,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 60844,
+            "birth": 1794955930.7915583,
+            "exe": "C:\\Windows\\System32\\conhost.exe"
+          },
+          {
+            "pid": 43108,
+            "birth": 1794955931.3357832,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 26268,
+            "birth": 1794955931.3410711,
+            "exe": "C:\\Windows\\System32\\conhost.exe"
+          }
+        ],
+        "actions": [],
+        "remaining_known_processes": [],
+        "remaining_listeners": [],
+        "success": true,
+        "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+      }
+    },
+    {
+      "case": "test_admitted_queued_sibling_has_no_independence_proof",
+      "owned_command": {
+        "exit_code": 0,
+        "timed_out": false,
+        "force_used": false,
+        "stdin": "closed PIPE",
+        "known_processes": [
+          {
+            "pid": 56088,
+            "birth": 1794955935.2476366,
+            "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+          },
+          {
+            "pid": 30496,
+            "birth": 1794955935.2624772,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 56064,
+            "birth": 1794955944.1961365,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 15764,
+            "birth": 1794955944.2163153,
+            "exe": "C:\\Windows\\System32\\conhost.exe"
+          },
+          {
+            "pid": 40120,
+            "birth": 1794955944.8012004,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 17128,
+            "birth": 1794955944.8071003,
+            "exe": "C:\\Windows\\System32\\conhost.exe"
+          }
+        ],
+        "actions": [],
+        "remaining_known_processes": [],
+        "remaining_listeners": [],
+        "success": true,
+        "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+      }
+    },
+    {
+      "case": "test_same_delivery_verification_three_files_seen_and_no_ack",
+      "owned_command": {
+        "exit_code": 1,
+        "timed_out": false,
+        "force_used": false,
+        "stdin": "closed PIPE",
+        "known_processes": [
+          {
+            "pid": 20396,
+            "birth": 1794955949.6033921,
+            "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe"
+          },
+          {
+            "pid": 43736,
+            "birth": 1794955949.6175525,
+            "exe": "C:\\Python313\\python.exe"
+          },
+          {
+            "pid": 60004,
+            "birth": 1794955955.9927745,
+            "exe": "C:\\Program Files\\nodejs\\node.exe"
+          }
+        ],
+        "actions": [],
+        "remaining_known_processes": [],
+        "remaining_listeners": [],
+        "success": false,
+        "observation_limit": "100ms ancestry polling cannot enumerate every short-lived child; no such completeness claim"
+      }
+    }
+  ],
+  "not_run": [],
+  "source_drift": [],
+  "payload_drift": [],
+  "copied_drift": [],
+  "source_extra_inputs": [],
+  "presentation_drift": [],
+  "external_helper_tooling_drift": [],
+  "own_helper_closure_drift": [],
+  "r7_r8_nonstatic_drift": [],
+  "snapshot_scope": "Six explicitly listed tables per test; not a whole-database read-only claim. Auth telemetry/real control renewal are separate.",
+  "layer": "Installed Python/Core/Connector; copied original fixtures + new tests; source-copy TypeScript presentation only; no provider/browser/latency qualification"
+}

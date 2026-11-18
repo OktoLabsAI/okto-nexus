@@ -1,0 +1,166 @@
+{
+  "status": "FROZEN_DERIVATIVE",
+  "prior_freeze": "r5-r6-freeze-manifest.json",
+  "prior_script_pins_are_antecedents": [
+    "run_case.py",
+    "curate.py"
+  ],
+  "entries": [
+    {
+      "path": "curate.py",
+      "sha256": "ae610438cb14bcdbcc831ba0613ce66d2f17ca4c7ce529202b16c6711c5ffcc4",
+      "bytes": 6433
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/case-steps.json",
+      "sha256": "2fb3c70d29e8c4230ccdc8076d355b920e37fd6edb41d688fcf61f49c6e0c01f",
+      "bytes": 878
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/cli-close.txt",
+      "sha256": "5c98abf16980b84b37352e52c938760631df9c72b4d2d0d512a2dd7ba378ce4d",
+      "bytes": 40
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/cli-initialize.txt",
+      "sha256": "c9c405df0daed9807d8263615da28f065b512ae27872ddf8e3ba1c6dc37799c7",
+      "bytes": 2908
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/cli-open.txt",
+      "sha256": "c415da13431878cbc2119903fcb811b06e9fef0314ae08da9fbbb4b55b34e7fd",
+      "bytes": 235
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/cli-state.txt",
+      "sha256": "72cdeaaf447abb9abad15e9b6d7af214e941232de2ee5e3b1bbbb4d7bb07de0c",
+      "bytes": 318
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/cli-visual.txt",
+      "sha256": "496525b659713309c137c56e88a4a0d93e0f67f097911ea4925494ab217e6eee",
+      "bytes": 15791
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/control/final.json",
+      "sha256": "6b720af26bd8cd66426c89667677b77b1989a4355324fda80e2fb6733eeea5c5",
+      "bytes": 17012
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/control/initial-board.json",
+      "sha256": "b9633c2c430358c86c23691c4b9bde1e6118aad74b0d35cc35e214217a48adf2",
+      "bytes": 85509
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/control/origins.json",
+      "sha256": "eb816d40f7f131c426d13eb47def26c9ed5328c0bd9007b73f2520ac699d574f",
+      "bytes": 608
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/control/supervisor-cleanup.json",
+      "sha256": "0d742419fa22e4d857a5782fc05edd15cae2f6d402b8be804fc39d33dfc9c34e",
+      "bytes": 196
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/fixture.py",
+      "sha256": "0a009a334ec53e9036f9bc61b3f85d0d4df4a5abd5a44f30e1d1fbd37a87321e",
+      "bytes": 19532
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/initialize-result.json",
+      "sha256": "ed21f663f834460d22285f80800892efee2986c9721a18f888a35a275fb8e23f",
+      "bytes": 2135
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/initialize.js",
+      "sha256": "bd997ebbf6543ac235c0db7076c2b3ba64bc1d488e24fc11859ccb794ee2200d",
+      "bytes": 685
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/manifest.json",
+      "sha256": "956e5ac415ce2bff82e00116c2fd0ef9cab33f48b481868b351bf8335f954f2d",
+      "bytes": 3179
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/mobile-intents.js",
+      "sha256": "9db2f3d875b9c6318f40d5b2c089fdf8e0cee3456fa9a3c7925322f9966ad472",
+      "bytes": 4102
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/physical-cleanup.json",
+      "sha256": "9d584eaaeb4e637a47f57165506b974c6736eb049e3bfdc741a3c9c648ae3c63",
+      "bytes": 500
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/qualification.json",
+      "sha256": "9ebc112b75fbeefff7cfd29c4a551d5764ed605351df692c40f7b3a2984b42c7",
+      "bytes": 5152
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/ready-public.json",
+      "sha256": "2eb8207a231713097367af3ac083f564a5de177c56f68d798efb9dbd1bf0716c",
+      "bytes": 2052
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/runtime-facts-public.json",
+      "sha256": "85d382ed38eaad30d0ed0f2ac687ac9eabd7e36451b739f8c9c741f86b376e9e",
+      "bytes": 1845
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/runtime-ready.json",
+      "sha256": "82f8eb21c6089c2c6122774e22d756b8eaf84ced26b47d009b96b518635bd97f",
+      "bytes": 1699
+    },
+    {
+      "path": "cuts/r6-mobile-intents-derivative/visual-result.json",
+      "sha256": "8587ba48d81cbd849382363ed10bab293a8f9613fd61b67347d54fc51239da8d",
+      "bytes": 12706
+    },
+    {
+      "path": "mobile-intents-derivative.md",
+      "sha256": "c666be862e069a1353b5b4ab781e267010cbeb7d7b7796d2123c5b925db1b354",
+      "bytes": 2049
+    },
+    {
+      "path": "mobile-intents-observations.json",
+      "sha256": "bb2b47716fab43330d5962cb1c70aee9dd3a0eee63b013669a03ee1dab47bcc7",
+      "bytes": 288
+    },
+    {
+      "path": "mobile-intents-template.js",
+      "sha256": "2a3ed8ff7cceaef2ea81a89b62ad2d1e56ce4e5a521b44dd426376b0fb95b3b2",
+      "bytes": 3760
+    },
+    {
+      "path": "run_case.py",
+      "sha256": "a9757eaedd21c6d99a311b11507d4c38695de229c8643776ff7c664d4edc5248",
+      "bytes": 7025
+    },
+    {
+      "path": "screenshots-r6-mobile-derivative/manifest.json",
+      "sha256": "05a6887a2418fa4ffc28d25b67224e4bd7b360a4686a0c50d2337551f975a3a8",
+      "bytes": 635
+    },
+    {
+      "path": "screenshots-r6-mobile-derivative/r6-visual-desktop.png",
+      "sha256": "ee25638d9449d52bb53acced6eb885d88c27a4601feeb6fd9171e1028f9771ae",
+      "bytes": 99931
+    },
+    {
+      "path": "screenshots-r6-mobile-derivative/r6-visual-mobile-active.png",
+      "sha256": "90f3cd191048fb22bb0c6eb615c4b9f06297a18c5c39849c752494ae2f6609d5",
+      "bytes": 39308
+    },
+    {
+      "path": "screenshots-r6-mobile-derivative/r6-visual-mobile-needs_you.png",
+      "sha256": "6d7488b7f72fa18f3431fa3e2b1b2fa948b38dc431ad15a3d71d3094b9004430",
+      "bytes": 39262
+    },
+    {
+      "path": "screenshots-r6-mobile-derivative/r6-visual-mobile-results.png",
+      "sha256": "072c2b0fe19a97d79a56d304e2eb2d5e292160d98ddc74a8098de480e02bdab5",
+      "bytes": 39045
+    }
+  ],
+  "active_resources": false
+}

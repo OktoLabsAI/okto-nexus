@@ -1,0 +1,214 @@
+{
+  "scope": "NATIVE_BROWSER_ONLY_NO_NEXUS",
+  "cut_id": "hst-native-zoom-r9-browser-only-1",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-0mgi66ve",
+  "result": null,
+  "first_failure": {
+    "type": "AssertionError",
+    "message": ""
+  },
+  "cleanup_errors": [],
+  "before": {
+    "manifest_sha256": "a42997692daa7030ee34efbd61ca876223abcf2eaa32bcd422e599dd14ca31ce",
+    "gate_sha256": "64be149b6a8eef83ef3b9b64903105cf388406e4af1affb291753fd3f8a5ace2",
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031,
+    "source_files": 1829,
+    "cli_files": 192
+  },
+  "after": {
+    "manifest_sha256": "a42997692daa7030ee34efbd61ca876223abcf2eaa32bcd422e599dd14ca31ce",
+    "gate_sha256": "64be149b6a8eef83ef3b9b64903105cf388406e4af1affb291753fd3f8a5ace2",
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031,
+    "source_files": 1829,
+    "cli_files": 192
+  },
+  "commands": [
+    {
+      "name": "launch-browser",
+      "pid": 29140,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "e61d27435a0c81d4bb5a38d7b59ad43e1dc4b5e1dac36cabc8bffb4e87696ffa"
+    },
+    {
+      "name": "cleanup-browser",
+      "pid": 30992,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "99bf974450e4175bbd98744ae2b57c6f2c6a9fd8ef4103ea286fc57e2e4ab10f"
+    }
+  ],
+  "known_births": [
+    {
+      "pid": 29140,
+      "birth": 1794960700.25767,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 5948,
+      "birth": 1794960702.7474475,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 14032,
+      "birth": 1794960702.3294792,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 16672,
+      "birth": 1794960701.7223241,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 19092,
+      "birth": 1794960702.291253,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 23344,
+      "birth": 1794960702.422125,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 32756,
+      "birth": 1794960700.982057,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    {
+      "pid": 59732,
+      "birth": 1794960702.1152904,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 60632,
+      "birth": 1794960702.4797204,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 60752,
+      "birth": 1794960701.74948,
+      "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    },
+    {
+      "pid": 61496,
+      "birth": 1794960705.6889243,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe"
+    },
+    {
+      "pid": 13564,
+      "birth": 1794960705.7071412,
+      "exe": "C:\\Python313\\python.exe"
+    },
+    {
+      "pid": 30992,
+      "birth": 1794960706.2484612,
+      "exe": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe"
+    },
+    {
+      "pid": 51376,
+      "birth": 1794960706.294622,
+      "exe": "C:\\Program Files\\nodejs\\node.exe"
+    }
+  ],
+  "containment": {
+    "forced_births": [],
+    "remaining": []
+  },
+  "listeners": [],
+  "probe_exit_code": 0,
+  "probe_final": {
+    "requests": [],
+    "server_thread_alive": false,
+    "nexus_started": false
+  },
+  "browser_argv": {
+    "status": "EXACT_OWN_PROFILE_MAIN_CAPTURED",
+    "records": [
+      {
+        "pid": 16672,
+        "birth": 1794960701.7223241,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "argv": [
+          "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          "--disable-field-trial-config",
+          "--disable-background-networking",
+          "--disable-background-timer-throttling",
+          "--disable-backgrounding-occluded-windows",
+          "--disable-back-forward-cache",
+          "--disable-breakpad",
+          "--disable-component-extensions-with-background-pages",
+          "--disable-component-update",
+          "--no-default-browser-check",
+          "--disable-default-apps",
+          "--disable-dev-shm-usage",
+          "--disable-edgeupdater",
+          "--disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,HttpsUpgrades,HttpsFirstBalancedModeAutoEnable,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,AvoidCorsURLLoaderRestartOnRedirect,TcpPortRandomizationWin,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,PreconnectToSearch,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion",
+          "--enable-features=CDPScreenshotNewSurface,SkipListAccountsWithoutGaiaCookies",
+          "--allow-pre-commit-input",
+          "--disable-hang-monitor",
+          "--disable-ipc-flooding-protection",
+          "--disable-popup-blocking",
+          "--disable-prompt-on-repost",
+          "--disable-renderer-backgrounding",
+          "--disable-updater-scheduler",
+          "--force-color-profile=srgb",
+          "--metrics-recording-only",
+          "--no-first-run",
+          "--password-store=basic",
+          "--use-mock-keychain",
+          "--no-service-autorun",
+          "--disable-search-engine-choice-screen",
+          "--unsafely-disable-devtools-self-xss-warnings",
+          "--enable-unsafe-swiftshader",
+          "--edge-skip-compat-layer-relaunch",
+          "--disable-stack-profiler",
+          "--disable-infobars",
+          "--disable-sync",
+          "--do-not-de-elevate",
+          "--headless",
+          "--hide-scrollbars",
+          "--mute-audio",
+          "--blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4",
+          "--disable-blink-features=AutomationControlled",
+          "--user-data-dir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-0mgi66ve\\browser-profile",
+          "--remote-debugging-pipe",
+          "about:blank"
+        ],
+        "own_profile": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-0mgi66ve\\browser-profile",
+        "before_home_navigation": true
+      }
+    ],
+    "environment_policy": "windows-path-allowlist-app-env-own-v1",
+    "host_keys": [
+      "SYSTEMROOT",
+      "WINDIR",
+      "COMSPEC",
+      "PATHEXT",
+      "SYSTEMDRIVE",
+      "OS",
+      "PROCESSOR_ARCHITECTURE",
+      "PROGRAMFILES",
+      "PROGRAMFILES(X86)",
+      "COMMONPROGRAMFILES",
+      "COMMONPROGRAMFILES(X86)",
+      "PROGRAMDATA",
+      "USERPROFILE",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LOCALAPPDATA",
+      "APPDATA"
+    ],
+    "environment_equivalence_to_working_capture_claimed": false,
+    "no_personal_cli_config": "Own PWTEST_CLI_GLOBAL_CONFIG; own cwd .playwright; no npx/npm/update check",
+    "app_environment": "Unchanged Owned.start total-ownTemp/own credentials/provider PATH empty"
+  },
+  "deadline_seconds": 180,
+  "nexus_processes_started": 0,
+  "provider_invocations": 0,
+  "sampling_limit": "Observed process ancestry and exact own-root/birth scan; not every short-lived child"
+}

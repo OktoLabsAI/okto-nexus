@@ -1,0 +1,1290 @@
+{
+  "status": "PASS_SCOPED",
+  "case": "S1",
+  "cut_id": "hst-security-r9-s1-comment-only",
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "provider_invocations": 0,
+  "results": [
+    {
+      "phase": "passive",
+      "status": "PASS_API_AND_HOME_SUBSET",
+      "checks": [
+        {
+          "id": "own-loopback-origin",
+          "ok": true
+        },
+        {
+          "id": "board-http-200",
+          "ok": true
+        },
+        {
+          "id": "one-exact-registered-card",
+          "ok": true
+        },
+        {
+          "id": "no-invented-reconnect",
+          "ok": true
+        },
+        {
+          "id": "exact-card-expansion-one-panel",
+          "ok": true
+        },
+        {
+          "id": "one-exact-retained-delivery",
+          "ok": true
+        },
+        {
+          "id": "result-open-one-panel",
+          "ok": true
+        },
+        {
+          "id": "passive-network",
+          "ok": true
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/"
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-ZSaBIkKg.js"
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-Bh2ghaTD.css"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/operator-auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-icon.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-wordmark-light.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-wordmark-dark.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/agents"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/info"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/graph"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/workspaces"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/harness-board"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/stream"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/stream"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/operator/unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/harness-board"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/target"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/target"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/target"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/runtime/sessions/ses_3c742ce797f673d94b52198d9287d863"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/agents/hst-worker/runtime-executions/op_3586c680fd73851731798ed9910cc4f3"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/harness-board/cards/home_group_423aeac6fbcadf5b9ac72a7a0e19c49cb3678428a2ac18e1fc7dcf21a56c548b/sessions"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/runtime/sessions/ses_3c742ce797f673d94b52198d9287d863/events"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/connections/me"
+        }
+      ],
+      "limits": [
+        "No forged URL, hostile DOM, decision denial or revoke-browser assertion in this increment",
+        "Network checks alone do not prove database passivity; require paired fixture snapshots"
+      ]
+    },
+    {
+      "phase": "control-before",
+      "status": "PASS_SUBSET",
+      "checks": [
+        {
+          "id": "exact-session-http-200",
+          "ok": true
+        },
+        {
+          "id": "full-session-identity",
+          "ok": true
+        },
+        {
+          "id": "current-control-authority",
+          "ok": true
+        },
+        {
+          "id": "pre-revocation-real-control-visible",
+          "ok": true
+        },
+        {
+          "id": "no-productive-or-review-post",
+          "ok": true
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/"
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-ZSaBIkKg.js"
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-Bh2ghaTD.css"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/operator-auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-icon.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-wordmark-light.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-wordmark-dark.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/agents"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/info"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/graph"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/workspaces"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/harness-board"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/stream"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/stream"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/operator/unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/harness-board"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/target"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/target"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/target"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/agents/hst-worker/runtime-executions/op_78cf0d251858e0d8786084e9d6156ee5"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/runtime/sessions/ses_2359f6eb594dd1a1043f387d261e4a43"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/connections/me"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/runtime/sessions/ses_2359f6eb594dd1a1043f387d261e4a43/events"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/runtime/sessions/ses_2359f6eb594dd1a1043f387d261e4a43"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/runtime/sessions/ses_2359f6eb594dd1a1043f387d261e4a43"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/connections/bindings/bind_7c03dc8847fb1e43a223264465ff116c"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/connections/me"
+        }
+      ],
+      "limits": [
+        "No stale decision submission or same-name successor; historical reads may remain authorized",
+        "No claim that grant revocation exits the process or closes its lifecycle"
+      ]
+    },
+    {
+      "phase": "control-after",
+      "status": "PASS_SUBSET",
+      "checks": [
+        {
+          "id": "exact-session-http-200",
+          "ok": true
+        },
+        {
+          "id": "full-session-identity",
+          "ok": true
+        },
+        {
+          "id": "current-control-authority",
+          "ok": true
+        },
+        {
+          "id": "canonical-lease-revoked",
+          "ok": true
+        },
+        {
+          "id": "stale-controls-not-offered",
+          "ok": true
+        },
+        {
+          "id": "no-productive-or-review-post",
+          "ok": true
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/"
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-ZSaBIkKg.js"
+        },
+        {
+          "method": "GET",
+          "path": "/assets/index-Bh2ghaTD.css"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/operator-auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-icon.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-wordmark-light.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/logos/nexus-wordmark-dark.svg"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/agents"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/info"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/graph"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/workspaces"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/harness-board"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/stream"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/stream"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/operator/unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/attention/summary"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/harness-board"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/target"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/target"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/home/target"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/runtime/sessions/ses_2359f6eb594dd1a1043f387d261e4a43"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/agents/hst-worker/runtime-executions/op_78cf0d251858e0d8786084e9d6156ee5"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/connections/me"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/runtime/sessions/ses_2359f6eb594dd1a1043f387d261e4a43/events"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/runtime/sessions/ses_2359f6eb594dd1a1043f387d261e4a43"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/runtime/sessions/ses_2359f6eb594dd1a1043f387d261e4a43"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runtime-management/connections/bindings/bind_7c03dc8847fb1e43a223264465ff116c"
+        }
+      ],
+      "limits": [
+        "No stale decision submission or same-name successor; historical reads may remain authorized",
+        "No claim that grant revocation exits the process or closes its lifecycle"
+      ]
+    }
+  ],
+  "missing_phases": [],
+  "table_snapshots": {
+    "before": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 1,
+          "sha256": "0a315590deb311bbdfd9c9627c6db7c3041f2b60482f7033cabe0270d6c01b86"
+        },
+        "execution_bindings": {
+          "rows": 1,
+          "sha256": "49a256b2bd33ca35c5f8a06c7756f361332f17d43ba8c5f94252fa3510e5925e"
+        },
+        "agent_endpoints": {
+          "rows": 1,
+          "sha256": "c7f6b3cff751c85a8f433139b12d5107b1226ac7377ecb2b26571720982ad1d5"
+        },
+        "runtime_execution_grants": {
+          "rows": 1,
+          "sha256": "2609a187a6c7e4075e6c7255ece813b9868133c568a52bc0fabc7f1387f2e815"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "cc1f9030a25af9dfa569189e5dd6bdf02fbaa63672496001f1bcea8c69f9ebbc"
+        },
+        "execution_operations": {
+          "rows": 5,
+          "sha256": "4a230c36342e2a9461e0fbfc0beeca8a3888daf085b1b19875ba10fecd85beea"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 5,
+          "sha256": "d73baecb343d7e7aa76509684065c5e38addac01a1438b6825fedf95a63fd458"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 7,
+          "sha256": "c236072ce2829d0da86702933c8e2889ac6574ffb340f46d04cb4af3f603d4a8"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "7f0df3401bc7c53aa983199659dbec1bccb08774e20b720c2831287225b9dfce"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "9811825a33e457a0da0338a9b4c96e0b6b8d695a9cb62a89e9f2a749cfb93107"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "a863c476a30b42dbb259f4ab11e244f56fd61f33c785eeb4019e0a946a5d0792"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "b6457756e822585644a6720ad46168cb5658779b05ca9e4d1d9e059dacdc4609"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 2,
+          "sha256": "ce757980bc59b9f647fb38b517f6261e2da57d0979b4ee19efb3b56bb25d1896"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "before-get": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 1,
+          "sha256": "0a315590deb311bbdfd9c9627c6db7c3041f2b60482f7033cabe0270d6c01b86"
+        },
+        "execution_bindings": {
+          "rows": 1,
+          "sha256": "49a256b2bd33ca35c5f8a06c7756f361332f17d43ba8c5f94252fa3510e5925e"
+        },
+        "agent_endpoints": {
+          "rows": 1,
+          "sha256": "c7f6b3cff751c85a8f433139b12d5107b1226ac7377ecb2b26571720982ad1d5"
+        },
+        "runtime_execution_grants": {
+          "rows": 1,
+          "sha256": "2609a187a6c7e4075e6c7255ece813b9868133c568a52bc0fabc7f1387f2e815"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "cc1f9030a25af9dfa569189e5dd6bdf02fbaa63672496001f1bcea8c69f9ebbc"
+        },
+        "execution_operations": {
+          "rows": 5,
+          "sha256": "4a230c36342e2a9461e0fbfc0beeca8a3888daf085b1b19875ba10fecd85beea"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 5,
+          "sha256": "d73baecb343d7e7aa76509684065c5e38addac01a1438b6825fedf95a63fd458"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 7,
+          "sha256": "c236072ce2829d0da86702933c8e2889ac6574ffb340f46d04cb4af3f603d4a8"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "7f0df3401bc7c53aa983199659dbec1bccb08774e20b720c2831287225b9dfce"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "9811825a33e457a0da0338a9b4c96e0b6b8d695a9cb62a89e9f2a749cfb93107"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "a863c476a30b42dbb259f4ab11e244f56fd61f33c785eeb4019e0a946a5d0792"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "b6457756e822585644a6720ad46168cb5658779b05ca9e4d1d9e059dacdc4609"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 2,
+          "sha256": "ce757980bc59b9f647fb38b517f6261e2da57d0979b4ee19efb3b56bb25d1896"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "after-get": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 1,
+          "sha256": "0a315590deb311bbdfd9c9627c6db7c3041f2b60482f7033cabe0270d6c01b86"
+        },
+        "execution_bindings": {
+          "rows": 1,
+          "sha256": "49a256b2bd33ca35c5f8a06c7756f361332f17d43ba8c5f94252fa3510e5925e"
+        },
+        "agent_endpoints": {
+          "rows": 1,
+          "sha256": "c7f6b3cff751c85a8f433139b12d5107b1226ac7377ecb2b26571720982ad1d5"
+        },
+        "runtime_execution_grants": {
+          "rows": 1,
+          "sha256": "2609a187a6c7e4075e6c7255ece813b9868133c568a52bc0fabc7f1387f2e815"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "cc1f9030a25af9dfa569189e5dd6bdf02fbaa63672496001f1bcea8c69f9ebbc"
+        },
+        "execution_operations": {
+          "rows": 5,
+          "sha256": "4a230c36342e2a9461e0fbfc0beeca8a3888daf085b1b19875ba10fecd85beea"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 5,
+          "sha256": "d73baecb343d7e7aa76509684065c5e38addac01a1438b6825fedf95a63fd458"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 7,
+          "sha256": "c236072ce2829d0da86702933c8e2889ac6574ffb340f46d04cb4af3f603d4a8"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "7f0df3401bc7c53aa983199659dbec1bccb08774e20b720c2831287225b9dfce"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "9811825a33e457a0da0338a9b4c96e0b6b8d695a9cb62a89e9f2a749cfb93107"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "a863c476a30b42dbb259f4ab11e244f56fd61f33c785eeb4019e0a946a5d0792"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "b6457756e822585644a6720ad46168cb5658779b05ca9e4d1d9e059dacdc4609"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 2,
+          "sha256": "ce757980bc59b9f647fb38b517f6261e2da57d0979b4ee19efb3b56bb25d1896"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "after-revoke": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 1,
+          "sha256": "0a315590deb311bbdfd9c9627c6db7c3041f2b60482f7033cabe0270d6c01b86"
+        },
+        "execution_bindings": {
+          "rows": 1,
+          "sha256": "49a256b2bd33ca35c5f8a06c7756f361332f17d43ba8c5f94252fa3510e5925e"
+        },
+        "agent_endpoints": {
+          "rows": 1,
+          "sha256": "c7f6b3cff751c85a8f433139b12d5107b1226ac7377ecb2b26571720982ad1d5"
+        },
+        "runtime_execution_grants": {
+          "rows": 1,
+          "sha256": "0bc446f9ce6fcbff54e3ab5c97b3f12ce680f49782ca4255012450db1bfaf7a3"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "241d2b09a544977f03ca4697349355529b0ec333ac9672be3c0a51b882ffc78a"
+        },
+        "execution_operations": {
+          "rows": 5,
+          "sha256": "4a230c36342e2a9461e0fbfc0beeca8a3888daf085b1b19875ba10fecd85beea"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 5,
+          "sha256": "d73baecb343d7e7aa76509684065c5e38addac01a1438b6825fedf95a63fd458"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 7,
+          "sha256": "c236072ce2829d0da86702933c8e2889ac6574ffb340f46d04cb4af3f603d4a8"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "7f0df3401bc7c53aa983199659dbec1bccb08774e20b720c2831287225b9dfce"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "9811825a33e457a0da0338a9b4c96e0b6b8d695a9cb62a89e9f2a749cfb93107"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "a863c476a30b42dbb259f4ab11e244f56fd61f33c785eeb4019e0a946a5d0792"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "b9f151f4dcdf9cfe1645fe62c868585dc7d58706b2fc4ba9e49da7dbfa835491"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 2,
+          "sha256": "ce757980bc59b9f647fb38b517f6261e2da57d0979b4ee19efb3b56bb25d1896"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  },
+  "drift": [
+    {
+      "before": "before-get",
+      "after": "after-get",
+      "changes": [],
+      "allowed_observation_events": [],
+      "expected_observation_errors": [],
+      "causality": "NOT_ATTRIBUTED",
+      "ignored_tables": [],
+      "ignored_columns": [],
+      "private_rows_curated": false
+    }
+  ],
+  "commands": [
+    {
+      "name": "open",
+      "pid": 45052,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "7a2feefc6397ec9622be8b0275f3c5f90808c5a130b59e0b06dbab278859e750"
+    },
+    {
+      "name": "load-state",
+      "pid": 13936,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "76f1599620081249cf8a73462d3f0b25dd7fda35d77f7453eb94c3befa183762"
+    },
+    {
+      "name": "passive",
+      "pid": 58900,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "22196a3e76a72fb805c901e056fae6d572b859b07cb070b477e88dea6f479b23"
+    },
+    {
+      "name": "passive-snapshot",
+      "pid": 61228,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "465bab63bc05bca4363e663e118dc37f06c3e46427b24465c2cc0b9442c5bf10"
+    },
+    {
+      "name": "passive-screenshot",
+      "pid": 58804,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "b18de2e02dcda7d2298e75139a676bcd3f8190b7552704ba499de8644e70ca2c"
+    },
+    {
+      "name": "control-before",
+      "pid": 55544,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "c8a07511da43411c251dd4094c1a6eb507709aca8497446a9ce14d876685ed1e"
+    },
+    {
+      "name": "control-before-snapshot",
+      "pid": 50496,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "aa6cabf09655d86cb8f2faa8c4a0ab1fada5fe2137dddaa6459e2407fb211b43"
+    },
+    {
+      "name": "control-before-screenshot",
+      "pid": 46508,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "fbc42da84d1b26bc4a57a3bb26b1ed6c66b8e132fbaf8f8f75cdf6803b9e8d13"
+    },
+    {
+      "name": "control-after",
+      "pid": 49944,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "2b4b1a2f9548a9428e3bcbf98b9801bed2a3fca621a7069f05a6797c9e7978eb"
+    },
+    {
+      "name": "control-after-snapshot",
+      "pid": 61324,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "770fd6186b6459fa9438fe0109d1ba68f35e487b662dca99f85de4b7e4546689"
+    },
+    {
+      "name": "control-after-screenshot",
+      "pid": 56848,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "72180a544c4213e86198432b3605300ab85b40e2bcf944f941c76c6accdbbebf"
+    },
+    {
+      "name": "close",
+      "pid": 56148,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "5f9799b49b391967d6bcd2e2d3bc484ad258042bc967728bfe8c3baae2db6001"
+    }
+  ],
+  "failure_type": null,
+  "guards": {
+    "before": {
+      "status": "READY_TO_ALLOCATE_ONLY",
+      "case": "S1",
+      "cut_id": "hst-security-r9-s1-comment-only",
+      "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe",
+      "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+      "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+      "allocated": false,
+      "started": false,
+      "provider_invocations": 0,
+      "source_pin_count": 1829,
+      "source_pins_sha256": "b9028b100af813f12330b5167b49d5e67cb566837f08c775b127236ae23e48ab",
+      "gate_sha256": "2cfcb748460f1b68017f45c4d657bc57f958b8b545d7ebc3f448b7722da91881"
+    },
+    "after": {
+      "status": "READY_TO_ALLOCATE_ONLY",
+      "case": "S1",
+      "cut_id": "hst-security-r9-s1-comment-only",
+      "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Scripts\\python.exe",
+      "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+      "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+      "allocated": false,
+      "started": false,
+      "provider_invocations": 0,
+      "source_pin_count": 1829,
+      "source_pins_sha256": "b9028b100af813f12330b5167b49d5e67cb566837f08c775b127236ae23e48ab",
+      "gate_sha256": "2cfcb748460f1b68017f45c4d657bc57f958b8b545d7ebc3f448b7722da91881"
+    },
+    "equal": true
+  },
+  "cleanup": {
+    "normal": true,
+    "physical_absence": true,
+    "forced": false,
+    "fixture": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "browser": {
+      "forced_births": [],
+      "remaining": []
+    },
+    "listeners": [],
+    "sampling_limit": "Observed ancestry plus own-root/birth argv scan; not a claim of capturing every short-lived child",
+    "runtime_close_observations": {
+      "sessions": [
+        {
+          "session_id": "ses_3c742ce797f673d94b52198d9287d863",
+          "reference": {
+            "server_id": "srv_27a60b28b0de0cea17521e7af14c3764",
+            "executor_id": "exe_22bbd6c9c5b41aa7ed55f60738d500e7",
+            "binding_id": "bind_7c03dc8847fb1e43a223264465ff116c",
+            "endpoint_id": "ep_450cb4618a16ed1cab8c23cdf2ed8902",
+            "agent_id": "hst-worker",
+            "workspace_id": "wsr_45ddeafa40f53b35f9500e26ac4176e7",
+            "workspace_binding_id": "wxb_b5a77cd08bfad8fc7563bf13179ff40a"
+          },
+          "text": "HST synthetic output ses_3c742ce797f673d94b52198d9287d863",
+          "closed": true
+        },
+        {
+          "session_id": "ses_2359f6eb594dd1a1043f387d261e4a43",
+          "reference": {
+            "server_id": "srv_27a60b28b0de0cea17521e7af14c3764",
+            "executor_id": "exe_22bbd6c9c5b41aa7ed55f60738d500e7",
+            "binding_id": "bind_7c03dc8847fb1e43a223264465ff116c",
+            "endpoint_id": "ep_450cb4618a16ed1cab8c23cdf2ed8902",
+            "agent_id": "hst-worker",
+            "workspace_id": "wsr_45ddeafa40f53b35f9500e26ac4176e7",
+            "workspace_binding_id": "wxb_b5a77cd08bfad8fc7563bf13179ff40a"
+          },
+          "text": "HST synthetic output ses_2359f6eb594dd1a1043f387d261e4a43",
+          "closed": false
+        }
+      ],
+      "close_failures": [
+        {
+          "name": "close-failure-1.json",
+          "type": "AssertionError"
+        }
+      ],
+      "cleanup_mechanism": "TestClient/embedded-owner lifespan shutdown, then physical process/listener proof",
+      "all_runtime_close_receipts_claimed": false,
+      "revoked_authority_renewed": false,
+      "limit": "Fixture closed=false is retained if runtime.close is refused after revocation; exit0 is not canonical runtime.close PASS"
+    }
+  },
+  "counts": {
+    "public_snapshot_tables": 30
+  },
+  "limits": [
+    "No ledger promotion or broad H01-H10/K completion by case count",
+    "S1 revocation UI is canonical current control availability, not a stale decision submission or same-name successor",
+    "S2 reported completion is not canonical task completion or verified native success",
+    "Any productive table drift is retained with column deltas and no invented causal attribution"
+  ],
+  "private_rows_copied": false,
+  "raw_auth_copied": false,
+  "data_retained_in_own_temp": true,
+  "browser_environment_policy": "windows-path-allowlist-app-env-own-v1",
+  "npx_or_npm_used": false,
+  "actual_own_browser_before_home": {
+    "status": "EXACT_OWN_PROFILE_MAIN_CAPTURED",
+    "records": [
+      {
+        "pid": 39452,
+        "birth": 1794959932.5542047,
+        "exe": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "argv": [
+          "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          "--disable-field-trial-config",
+          "--disable-background-networking",
+          "--disable-background-timer-throttling",
+          "--disable-backgrounding-occluded-windows",
+          "--disable-back-forward-cache",
+          "--disable-breakpad",
+          "--disable-component-extensions-with-background-pages",
+          "--disable-component-update",
+          "--no-default-browser-check",
+          "--disable-default-apps",
+          "--disable-dev-shm-usage",
+          "--disable-edgeupdater",
+          "--disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,HttpsUpgrades,HttpsFirstBalancedModeAutoEnable,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,AvoidCorsURLLoaderRestartOnRedirect,TcpPortRandomizationWin,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,PreconnectToSearch,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion",
+          "--enable-features=CDPScreenshotNewSurface,SkipListAccountsWithoutGaiaCookies",
+          "--allow-pre-commit-input",
+          "--disable-hang-monitor",
+          "--disable-ipc-flooding-protection",
+          "--disable-popup-blocking",
+          "--disable-prompt-on-repost",
+          "--disable-renderer-backgrounding",
+          "--disable-updater-scheduler",
+          "--force-color-profile=srgb",
+          "--metrics-recording-only",
+          "--no-first-run",
+          "--password-store=basic",
+          "--use-mock-keychain",
+          "--no-service-autorun",
+          "--disable-search-engine-choice-screen",
+          "--unsafely-disable-devtools-self-xss-warnings",
+          "--enable-unsafe-swiftshader",
+          "--edge-skip-compat-layer-relaunch",
+          "--disable-stack-profiler",
+          "--disable-infobars",
+          "--disable-sync",
+          "--do-not-de-elevate",
+          "--headless",
+          "--hide-scrollbars",
+          "--mute-audio",
+          "--blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4",
+          "--disable-blink-features=AutomationControlled",
+          "--user-data-dir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-zrz1lyfh\\browser-profile",
+          "--remote-debugging-pipe",
+          "about:blank"
+        ],
+        "own_profile": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-zrz1lyfh\\browser-profile",
+        "before_home_navigation": true
+      }
+    ],
+    "environment_policy": "windows-path-allowlist-app-env-own-v1",
+    "host_keys": [
+      "SYSTEMROOT",
+      "WINDIR",
+      "COMSPEC",
+      "PATHEXT",
+      "SYSTEMDRIVE",
+      "OS",
+      "PROCESSOR_ARCHITECTURE",
+      "PROGRAMFILES",
+      "PROGRAMFILES(X86)",
+      "COMMONPROGRAMFILES",
+      "COMMONPROGRAMFILES(X86)",
+      "PROGRAMDATA",
+      "USERPROFILE",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LOCALAPPDATA",
+      "APPDATA"
+    ],
+    "environment_equivalence_to_working_capture_claimed": false,
+    "no_personal_cli_config": "Own PWTEST_CLI_GLOBAL_CONFIG; own cwd .playwright; no npx/npm/update check",
+    "app_environment": "Unchanged Owned.start total-ownTemp/own credentials/provider PATH empty"
+  },
+  "origins": {
+    "origins": {
+      "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+    },
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv",
+    "isolated": true
+  }
+}

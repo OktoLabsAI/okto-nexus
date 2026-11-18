@@ -1,0 +1,40 @@
+{
+  "status": "FAIL",
+  "error": "Error: protected-data-present-before-revocation",
+  "checks": [
+    {
+      "id": "manual-pause-before-info",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "manual-pause-retains-v1-after-info",
+      "ok": true,
+      "detail": [
+        {
+          "version": "1",
+          "status": 200
+        },
+        {
+          "version": "1",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "id": "protected-data-present-before-revocation",
+      "ok": false,
+      "detail": true
+    }
+  ],
+  "boards": [
+    {
+      "version": "1",
+      "status": 200
+    },
+    {
+      "version": "1",
+      "status": 200
+    }
+  ]
+}

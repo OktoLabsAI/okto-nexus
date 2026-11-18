@@ -1,0 +1,50 @@
+{
+  "url": "http://127.0.0.1:56524",
+  "server_id": "srv_329af732877fc06ba91923ff3b311e6e",
+  "workspace_id": "wsr_271875c006b04a2472932b1505355571",
+  "references": [
+    {
+      "server_id": "srv_329af732877fc06ba91923ff3b311e6e",
+      "executor_id": "exe_3720669181a43180b2cf143e7c02e2e2",
+      "binding_id": "bind_276c5a65b650a8d11835b64a6cc35c43",
+      "endpoint_id": "ep_fa901d2a53d96daf63ddb9b9e918b713",
+      "agent_id": "hst-worker",
+      "workspace_id": "wsr_271875c006b04a2472932b1505355571",
+      "workspace_binding_id": "wxb_9b215e62e7971e144f51714ceec47b89"
+    }
+  ],
+  "sessions": [
+    {
+      "session_id": "ses_40980bb9ba5e525a3bcf33a57690277c",
+      "reference": {
+        "server_id": "srv_329af732877fc06ba91923ff3b311e6e",
+        "executor_id": "exe_3720669181a43180b2cf143e7c02e2e2",
+        "binding_id": "bind_276c5a65b650a8d11835b64a6cc35c43",
+        "endpoint_id": "ep_fa901d2a53d96daf63ddb9b9e918b713",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_271875c006b04a2472932b1505355571",
+        "workspace_binding_id": "wxb_9b215e62e7971e144f51714ceec47b89"
+      },
+      "text": "HST synthetic output ses_40980bb9ba5e525a3bcf33a57690277c",
+      "closed": true
+    },
+    {
+      "session_id": "ses_280538d95a396fb356560f37e2a4d465",
+      "reference": {
+        "server_id": "srv_329af732877fc06ba91923ff3b311e6e",
+        "executor_id": "exe_3720669181a43180b2cf143e7c02e2e2",
+        "binding_id": "bind_276c5a65b650a8d11835b64a6cc35c43",
+        "endpoint_id": "ep_fa901d2a53d96daf63ddb9b9e918b713",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_271875c006b04a2472932b1505355571",
+        "workspace_binding_id": "wxb_9b215e62e7971e144f51714ceec47b89"
+      },
+      "text": "HST synthetic output ses_280538d95a396fb356560f37e2a4d465",
+      "closed": false
+    }
+  ],
+  "card_id": "home_group_7ed0aa5d97c357201117f104b7b4a55e1c6cecaf0b794c9489b3443c9c52ec19",
+  "mode": "baseline",
+  "j5": null,
+  "provider_invocations": 0
+}

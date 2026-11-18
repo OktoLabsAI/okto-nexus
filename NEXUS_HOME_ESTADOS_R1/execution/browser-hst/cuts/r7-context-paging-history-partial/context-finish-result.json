@@ -1,0 +1,98 @@
+{
+  "status": "PASS_F05_HISTORY_READY",
+  "checks": [
+    {
+      "id": "real409-followed-by-current-reread",
+      "ok": true,
+      "detail": [
+        {
+          "status": 409,
+          "at": 1794947699943
+        },
+        {
+          "status": 200,
+          "at": 1794947701906,
+          "ids": [
+            "ses_015ad4ad5a97f6dd80be229b1cc0cb47",
+            "ses_15e19484af5da65b4ac5a46894babca1",
+            "ses_1f588f9d0dc38f517db9446da9a6d402",
+            "ses_22e7c202224f1ad6d2409c72b9b5e17b",
+            "ses_2ddc9be9c9eea33fbfa3dbf0e62b5560",
+            "ses_3f8b2223b075ae15f3f7eff1b5b406e4",
+            "ses_473151227dc421ea064ebf9f713519ea",
+            "ses_60ad185bc77fe9656e9ce5522e90df8d",
+            "ses_76ee421f3c5bcf10dc60ab8cf86db636",
+            "ses_b43806ce4468cae171633e32346c12b9"
+          ],
+          "revision": "c421e649291bc6d94f3cdc8facaf49f56ac3c24ad89f33d1d9d2225027a36686"
+        }
+      ]
+    },
+    {
+      "id": "same-panel-and-exact-selection",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "no-mixed-revision-or-duplicate-options",
+      "ok": true,
+      "detail": {
+        "ids": [
+          "ses_015ad4ad5a97f6dd80be229b1cc0cb47",
+          "ses_15e19484af5da65b4ac5a46894babca1",
+          "ses_1f588f9d0dc38f517db9446da9a6d402",
+          "ses_22e7c202224f1ad6d2409c72b9b5e17b",
+          "ses_2ddc9be9c9eea33fbfa3dbf0e62b5560",
+          "ses_3f8b2223b075ae15f3f7eff1b5b406e4",
+          "ses_473151227dc421ea064ebf9f713519ea",
+          "ses_60ad185bc77fe9656e9ce5522e90df8d",
+          "ses_76ee421f3c5bcf10dc60ab8cf86db636",
+          "ses_b43806ce4468cae171633e32346c12b9"
+        ],
+        "current_ids": [
+          "ses_015ad4ad5a97f6dd80be229b1cc0cb47",
+          "ses_15e19484af5da65b4ac5a46894babca1",
+          "ses_1f588f9d0dc38f517db9446da9a6d402",
+          "ses_22e7c202224f1ad6d2409c72b9b5e17b",
+          "ses_2ddc9be9c9eea33fbfa3dbf0e62b5560",
+          "ses_3f8b2223b075ae15f3f7eff1b5b406e4",
+          "ses_473151227dc421ea064ebf9f713519ea",
+          "ses_60ad185bc77fe9656e9ce5522e90df8d",
+          "ses_76ee421f3c5bcf10dc60ab8cf86db636",
+          "ses_b43806ce4468cae171633e32346c12b9"
+        ]
+      }
+    }
+  ],
+  "reads": [
+    {
+      "status": 409,
+      "at": 1794947699943
+    },
+    {
+      "status": 200,
+      "at": 1794947701906,
+      "ids": [
+        "ses_015ad4ad5a97f6dd80be229b1cc0cb47",
+        "ses_15e19484af5da65b4ac5a46894babca1",
+        "ses_1f588f9d0dc38f517db9446da9a6d402",
+        "ses_22e7c202224f1ad6d2409c72b9b5e17b",
+        "ses_2ddc9be9c9eea33fbfa3dbf0e62b5560",
+        "ses_3f8b2223b075ae15f3f7eff1b5b406e4",
+        "ses_473151227dc421ea064ebf9f713519ea",
+        "ses_60ad185bc77fe9656e9ce5522e90df8d",
+        "ses_76ee421f3c5bcf10dc60ab8cf86db636",
+        "ses_b43806ce4468cae171633e32346c12b9"
+      ],
+      "revision": "c421e649291bc6d94f3cdc8facaf49f56ac3c24ad89f33d1d9d2225027a36686"
+    }
+  ],
+  "posts": [],
+  "historyTarget": {
+    "kind": "session",
+    "server_id": "srv_7e9944e285d6c058d1a76fade202fd2c",
+    "executor_id": "exe_1a0f64917ff5f8a2d9faa214208e6273",
+    "workspace_id": "wsr_5bfdda66177c96524163e86eba9b4f21",
+    "session_id": "ses_473151227dc421ea064ebf9f713519ea"
+  }
+}

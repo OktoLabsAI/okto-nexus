@@ -1,0 +1,8 @@
+{
+  "gate": "ROOT_APPROVED_COMPAT_K05_CANDIDATE",
+  "journey": "K05",
+  "manifest_sha256": "b2269d9b19283ee9442eeba62ccde1462e5d8c1a37ac1ec6ba94d37114a98970",
+  "runner_sha256": "a485a6536381ea4bb3319b92c2cce1c3e82cf50194ccd7a39ab9388c0bc6f76e",
+  "authorization": "Explicit Root review of three diffs and prior close receipt; one K05 execution only, first error stops without retry.",
+  "constraints": "No dashboard, browser marker or S4. Preserve TTL and permissions. Record canonical stop, PID/birth and actual port scan separately; curate only public data. No product, ledger or Git edits."
+}

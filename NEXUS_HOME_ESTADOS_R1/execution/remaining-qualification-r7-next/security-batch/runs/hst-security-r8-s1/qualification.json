@@ -1,0 +1,259 @@
+{
+  "status": "FAIL_OR_INCONCLUSIVE_PRESERVED",
+  "case": "S1",
+  "cut_id": "hst-security-r8-s1",
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "provider_invocations": 0,
+  "results": [],
+  "missing_phases": [
+    "control-after",
+    "control-before",
+    "passive"
+  ],
+  "table_snapshots": {
+    "before": {
+      "tables": {
+        "connection_setup_commits": {
+          "rows": 1,
+          "sha256": "5c89bad30e2926020d53a239addde859dc42c94cbacda99df27a1eab377d6f60"
+        },
+        "execution_bindings": {
+          "rows": 1,
+          "sha256": "071ebb5091e9ba7213737e60dd220275112d281ab4abbd1256c9d07274c38275"
+        },
+        "agent_endpoints": {
+          "rows": 1,
+          "sha256": "d9003f24d2237785ed9d7a802a3e9502c9120a52adb80d52ab50300114ae9520"
+        },
+        "runtime_execution_grants": {
+          "rows": 1,
+          "sha256": "ff3acf3689547ed78bfc7def4a33aae866bfc3f7dbb111c5b2036a0c09d922d4"
+        },
+        "messages": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "message_deliveries": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "handoffs": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "sessions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_sessions": {
+          "rows": 2,
+          "sha256": "6722f6ec091ad25ba548feb8613fffd97e7b081e2208bc74dfd2e25669db6f1f"
+        },
+        "execution_operations": {
+          "rows": 5,
+          "sha256": "7fd6d35a172cb3e2cd52e20e43fe1541082f2d491b13c163eff6415fc6f0392d"
+        },
+        "execution_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_dispatch_outbox": {
+          "rows": 5,
+          "sha256": "801b731aa463814ff7cd771f25cbfee49d8e6ee4537c31875bdffd1bc81a6873"
+        },
+        "delivery_outbox": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_handoff_bindings": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "connection_authorization_receipts": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_receipts": {
+          "rows": 7,
+          "sha256": "e2fe71722f51a92550c7fcf45a3ef3de01e619cf4b26e539fa55ee1c4afa86cf"
+        },
+        "runtime_native_approvals": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "runtime_relay_decisions": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_results": {
+          "rows": 2,
+          "sha256": "9bd6a5f7e65951afadd62f66bb90a95975bfd84c191bfd33a1ee6e6260831b7c"
+        },
+        "execution_event_ingress": {
+          "rows": 14,
+          "sha256": "edc836df4677b40420d0153e04a0ffeace84d329e02f98b1c9ccf625c811e376"
+        },
+        "execution_event_watermarks": {
+          "rows": 2,
+          "sha256": "e2d304df8a19de699c760c1b58faf89f3db8976970a4332774890aba3d7651de"
+        },
+        "runtime_results": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "events": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_leases": {
+          "rows": 2,
+          "sha256": "82d7fe7be5f9c0c7bc840517b2f88aeb432effeaedad0f8c3c735f7177800b2d"
+        },
+        "execution_session_capabilities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "agents": {
+          "rows": 2,
+          "sha256": "42d8077e887ee02338a33aed45383327c1871125feab204fb31e98f610bf96bc"
+        },
+        "runtime_work_outcomes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "one_shot_slots": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "execution_tool_claims": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  },
+  "drift": [],
+  "commands": [
+    {
+      "name": "open",
+      "pid": 4912,
+      "exit_code": 1,
+      "timed_out": false,
+      "raw_sha256": "37110f5213cb9c228999a6bde4dc6caf5bfe44ebb53912d280331bdfe66920f0"
+    }
+  ],
+  "failure_type": "AssertionError",
+  "guards": {
+    "before": {
+      "status": "READY_TO_ALLOCATE_ONLY",
+      "case": "S1",
+      "cut_id": "hst-security-r8-s1",
+      "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe",
+      "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+      "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+      "allocated": false,
+      "started": false,
+      "provider_invocations": 0,
+      "source_pin_count": 1829,
+      "source_pins_sha256": "9d460c6c3da8c02c45272144f53f746da97d53e97589bad7cdca074495106824",
+      "gate_sha256": "dbd84b1eeffae2a00733b5f99480c4752187dfd30c7b9644523137fe7a1598c9"
+    },
+    "after": {
+      "status": "READY_TO_ALLOCATE_ONLY",
+      "case": "S1",
+      "cut_id": "hst-security-r8-s1",
+      "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Scripts\\python.exe",
+      "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+      "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+      "allocated": false,
+      "started": false,
+      "provider_invocations": 0,
+      "source_pin_count": 1829,
+      "source_pins_sha256": "9d460c6c3da8c02c45272144f53f746da97d53e97589bad7cdca074495106824",
+      "gate_sha256": "dbd84b1eeffae2a00733b5f99480c4752187dfd30c7b9644523137fe7a1598c9"
+    },
+    "equal": true
+  },
+  "cleanup": {
+    "normal": true,
+    "physical_absence": true,
+    "forced": false,
+    "fixture": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "browser": {
+      "forced_births": [],
+      "remaining": []
+    },
+    "listeners": [],
+    "sampling_limit": "Observed ancestry plus own-root/birth argv scan; not a claim of capturing every short-lived child",
+    "runtime_close_observations": {
+      "sessions": [
+        {
+          "session_id": "ses_0fce8a361ca839a0d17b26cfc9eaea20",
+          "reference": {
+            "server_id": "srv_68ff8f53454a677cc9c9aa6ddb50f1eb",
+            "executor_id": "exe_1cf466f3363f8b60e5d96b2db440369f",
+            "binding_id": "bind_4b41b60cb4b4feac03918e2fc48a077b",
+            "endpoint_id": "ep_4090a897a843181eb26e25d23fa7c7be",
+            "agent_id": "hst-worker",
+            "workspace_id": "wsr_d8fe87c80d1ec71ebc36d10d6d11382a",
+            "workspace_binding_id": "wxb_3ec1809dbf53b38065ba167f64c4f86a"
+          },
+          "text": "HST synthetic output ses_0fce8a361ca839a0d17b26cfc9eaea20",
+          "closed": true
+        },
+        {
+          "session_id": "ses_798b5e4507a213452ee8353a83796c88",
+          "reference": {
+            "server_id": "srv_68ff8f53454a677cc9c9aa6ddb50f1eb",
+            "executor_id": "exe_1cf466f3363f8b60e5d96b2db440369f",
+            "binding_id": "bind_4b41b60cb4b4feac03918e2fc48a077b",
+            "endpoint_id": "ep_4090a897a843181eb26e25d23fa7c7be",
+            "agent_id": "hst-worker",
+            "workspace_id": "wsr_d8fe87c80d1ec71ebc36d10d6d11382a",
+            "workspace_binding_id": "wxb_3ec1809dbf53b38065ba167f64c4f86a"
+          },
+          "text": "HST synthetic output ses_798b5e4507a213452ee8353a83796c88",
+          "closed": true
+        }
+      ],
+      "close_failures": [],
+      "cleanup_mechanism": "TestClient/embedded-owner lifespan shutdown, then physical process/listener proof",
+      "all_runtime_close_receipts_claimed": false,
+      "revoked_authority_renewed": false,
+      "limit": "Fixture closed=false is retained if runtime.close is refused after revocation; exit0 is not canonical runtime.close PASS"
+    }
+  },
+  "counts": {
+    "public_snapshot_tables": 30
+  },
+  "limits": [
+    "No ledger promotion or broad H01-H10/K completion by case count",
+    "S1 revocation UI is canonical current control availability, not a stale decision submission or same-name successor",
+    "S2 reported completion is not canonical task completion or verified native success",
+    "Any productive table drift is retained with column deltas and no invented causal attribution"
+  ],
+  "private_rows_copied": false,
+  "raw_auth_copied": false,
+  "data_retained_in_own_temp": true,
+  "origins": {
+    "origins": {
+      "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+    },
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-8o7veyhk\\venv",
+    "isolated": true
+  }
+}

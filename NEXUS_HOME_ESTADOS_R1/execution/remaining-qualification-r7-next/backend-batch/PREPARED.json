@@ -1,0 +1,45 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "expected_cases": 7,
+  "runtime_source_commit": "01b0de385398950ac4547aa8a5dcbc29473c12cb",
+  "runtime_wheel_sha256": "18c948b49844c7c551360732970fdc2ba91cba50075b73c1a7472571775d7681",
+  "runtime_prefix": "C:/Users/jpamb/AppData/Local/Temp/nexus-hst-r1-package-1ow4ahtp/venv",
+  "required_gate": "ROOT_APPROVED_BACKEND_BATCH",
+  "selections": [
+    "tests/execution_r4/test_backend_batch_r7.py::test_shared_owner_bindings_keep_distinct_current_state",
+    "tests/execution_r4/test_backend_batch_r7.py::test_hidden_productive_sibling_same_binding_prevents_false_full_block",
+    "tests/execution_r4/test_backend_batch_r7.py::test_current_core_work_survives_external_unavailable_only",
+    "tests/execution_r4/test_backend_batch_r7.py::test_explicit_nonblocking_input_keeps_working_and_one_independent_action",
+    "tests/execution_r4/test_backend_batch_r7.py::test_idle_sibling_cannot_make_a_full_block_independent",
+    "tests/execution_r4/test_backend_batch_r7.py::test_admitted_queued_sibling_has_no_independence_proof",
+    "tests/execution_r4/test_backend_batch_r7.py::test_same_delivery_verification_three_files_seen_and_no_ack"
+  ],
+  "file_sha256": {
+    "canonical_owner.py": "3dd6dc51f65cbc2d10c563ad488eaf024c829486e4dcca7d8cf6959a902f7048",
+    "peer_source.py": "f639cf000fcfe2effa8f85ae758e9991a0ef5ce84ed95e01e09135b8e45ce79b",
+    "presentation-check.mjs": "981fa47a0030aa7e33f1d46a8c6252b213fd77126a8bc69908d0f177fd814b95",
+    "protocol_fixture.py": "716d64c1768cf05babdfe7407921c182e39d516772156f2f613c3bfd03cb7acc",
+    "README.md": "fa9e5c240841bdc7f599bb79f4c8e53536839c3d33559c2a8ac97b536f6722a5",
+    "results_case.py": "f3f938f02d784f5afa98499538f37e8ba5394db47626494d872d17ddd3c578ba",
+    "run_installed.py": "67b30e20017443ff2a7990f69af4c1fbc606257d8aa15ebfdf6b772efbfc4ca1",
+    "test_backend_batch.py": "fa26ef440323c22bf73d6356f67e1001b53684409a7ae85927d606cd9925bf49"
+  },
+  "static_checks": {
+    "new_python_AST": "PASS",
+    "new_own_files_default_Ruff_0_17_5": "PASS",
+    "presentation_Node_syntax": "PASS",
+    "pytest_collection_and_execution": "NOT_RUN",
+    "application_or_fixture_allocated": false
+  },
+  "copied_helpers_byte_equal": {
+    "protocol_fixture.py": true,
+    "peer_source.py": true
+  },
+  "limits": [
+    "Six live-state cases use actual canonical Core/public APIs with inert protocol peers; no real provider.",
+    "Shared-work correlation and E16 native capture/artifacts are historical migrated read facts, not real managed execution/authority.",
+    "E16 complete/verify/seen writes are canonical and presentation consumes same test actual before/after API JSON; TypeScript presentation layer is source-copy, not installed browser.",
+    "No source/tests/helpers/ledger/prefix/Git changes and no performance measurement."
+  ],
+  "preparation_revision": "Root review: A04/B12 separated from A06, which now proves the filtered hidden sibling within one binding."
+}

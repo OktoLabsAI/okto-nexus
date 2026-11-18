@@ -1,0 +1,34 @@
+{
+  "identity_hash_matches_original_fulltuple": true,
+  "card_id": "home_group_141be10f9b3953c05bcd79b7f48637d6b6919bac69916735bd7eff0bf87164ee",
+  "expected": "home_group_141be10f9b3953c05bcd79b7f48637d6b6919bac69916735bd7eff0bf87164ee",
+  "deliveries": [
+    {
+      "id": "home_delivery_canonical:result_95a3eafe268cc147ae01573234901a6357abd1ff7a92f21f0325235bfbbf4ee8",
+      "view_state": "unseen",
+      "target": {
+        "executor_id": "exe_821da94f3fb3bad4d9ac7c30f10d711b",
+        "kind": "result",
+        "operation_id": "op_afda421fbde85713d5cd0125b4f12c1a",
+        "server_id": "srv_204ad92c3a4d33c28e92677809c97f7a",
+        "session_id": "ses_c2899167ff54374247aa378f5e0b2e88",
+        "workspace_id": "wsr_90ece924d566fd998a3b4511f9b4febd"
+      },
+      "semantics": {
+        "cleanup": "unknown",
+        "content_state": "available",
+        "evidence": "canonical",
+        "execution_outcome": "succeeded",
+        "historical": false,
+        "scope": "turn",
+        "semantic_revision": "e237431e33479ec288c5fe6c67c4f178466daea5f7f3325dd8122bccee058904",
+        "task_state": "not_applicable",
+        "verification": "not_applicable",
+        "verification_evidence_ref": null,
+        "version": 1
+      }
+    }
+  ],
+  "seen_mutation": "NOT_RUN",
+  "scope": "Read-only observations from preserved canonical board response; not extra browser assertions"
+}

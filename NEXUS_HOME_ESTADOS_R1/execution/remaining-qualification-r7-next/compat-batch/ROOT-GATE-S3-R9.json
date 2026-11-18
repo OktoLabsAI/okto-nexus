@@ -1,0 +1,9 @@
+{
+  "gate": "ROOT_APPROVED_COMPAT_BATCH_S3",
+  "manifest_sha256": "4513c1b92cd71397b50e93f61b1b6816fb6420758d10ff970686d6887d091521",
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "authorization": "Explicit Root review and gate for one S3 execution only. First error preserved, no rerun or S4.",
+  "acceptance_limit": "This S3 may qualify rollback and invariants; it does not qualify K05 without-dashboard lifecycle because the dashboard is open.",
+  "constraints": "No TTL, grant or recipient changes to pass. No provider, product, original tests, ledger or Git edits. Curate no cookie/token/private raw log."
+}

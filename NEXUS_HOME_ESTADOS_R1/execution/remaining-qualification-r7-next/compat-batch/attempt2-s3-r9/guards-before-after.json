@@ -1,0 +1,25 @@
+{
+  "before": {
+    "source_count": 1829,
+    "runtime_payloads": {
+      "r9": 1031,
+      "i4_readonly": 1028
+    },
+    "cli_payload_count": 192,
+    "drift": []
+  },
+  "after": {
+    "source_count": 1829,
+    "runtime_payloads": {
+      "r9": 1031,
+      "i4_readonly": 1028
+    },
+    "cli_payload_count": 192,
+    "drift": []
+  },
+  "generated_pins": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-compat-s3-tmkm3ve5\\nexus-hst-browser-s3\\playwright-cli.json": "031705d680d2dcfa060d48b2fe44ed76f871786f9b66141841e0c2a61508b90c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-compat-s3-tmkm3ve5\\nexus-hst-browser-s3\\warmup.js": "cba253602b8feaf790d469d870742647ba253439d9860b60ec2b6cdc91acffd7",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-compat-s3-tmkm3ve5\\nexus-hst-browser-s3\\s3-reviewed.js": "c69c028c697f87de0fd450110f79f567e3ff20fd2d5f17ea6abab784a859e255"
+  }
+}

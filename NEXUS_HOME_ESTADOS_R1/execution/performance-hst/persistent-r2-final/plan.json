@@ -1,0 +1,124 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "jobs": [
+    {
+      "name": "mixed-1-baseline-v1",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\dataset.json",
+      "connections": 1,
+      "variant": "baseline-v1",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc36-final-package\\READY.json"
+    },
+    {
+      "name": "mixed-1-candidate-v1",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\dataset.json",
+      "connections": 1,
+      "variant": "candidate-v1",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r2\\READY.json"
+    },
+    {
+      "name": "mixed-1-candidate-v2",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\dataset.json",
+      "connections": 1,
+      "variant": "candidate-v2",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r2\\READY.json"
+    },
+    {
+      "name": "mixed-10-baseline-v1",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\dataset.json",
+      "connections": 10,
+      "variant": "baseline-v1",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc36-final-package\\READY.json"
+    },
+    {
+      "name": "mixed-10-candidate-v1",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\dataset.json",
+      "connections": 10,
+      "variant": "candidate-v1",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r2\\READY.json"
+    },
+    {
+      "name": "mixed-10-candidate-v2",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\dataset.json",
+      "connections": 10,
+      "variant": "candidate-v2",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r2\\READY.json"
+    },
+    {
+      "name": "mixed-100-baseline-v1",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\dataset.json",
+      "connections": 100,
+      "variant": "baseline-v1",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc36-final-package\\READY.json"
+    },
+    {
+      "name": "mixed-100-candidate-v1",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\dataset.json",
+      "connections": 100,
+      "variant": "candidate-v1",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r2\\READY.json"
+    },
+    {
+      "name": "mixed-100-candidate-v2",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\dataset.json",
+      "connections": 100,
+      "variant": "candidate-v2",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r2\\READY.json"
+    },
+    {
+      "name": "mixed-100-r1-v2",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\dataset.json",
+      "connections": 100,
+      "variant": "candidate-v2",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst\\READY.json"
+    },
+    {
+      "name": "open-100-baseline-v1",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9\\dataset.json",
+      "connections": 100,
+      "variant": "baseline-v1",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_QUICK_CONNECT_R1\\execution\\qc36-final-package\\READY.json"
+    },
+    {
+      "name": "open-100-candidate-v1",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9\\dataset.json",
+      "connections": 100,
+      "variant": "candidate-v1",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r2\\READY.json"
+    },
+    {
+      "name": "open-100-candidate-v2",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9\\dataset.json",
+      "connections": 100,
+      "variant": "candidate-v2",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst-r2\\READY.json"
+    },
+    {
+      "name": "open-100-r1-v2",
+      "dataset": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9\\dataset.json",
+      "connections": 100,
+      "variant": "candidate-v2",
+      "ready": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\package-hst\\READY.json"
+    }
+  ],
+  "helper_pins": {
+    "NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\benchmark.py": "45a50d995c69a480ee15b3b7cb4942efbb218e9680580e54eec0b0edd432b9a9",
+    "NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\dataset.py": "530816b1396b904c28061da7f98ab64222beba202f81636fbf78658d862e27e6",
+    "NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\measure-worker.py": "fb0f52cec2f66a72359daa295c35c400e6b8414cf844474c3ecd8fe055d56e02",
+    "NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\persistent-worker.py": "d839f3255c018048a74054a81c53304eb5c8544461aa06e2e157557fa74684bb",
+    "NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\persistent-launch.py": "10cdbf8263b98a59981d2bb0170aadaa0318bc76b043ab618efb8565b3d6a0fa",
+    "NEXUS_HOME_ESTADOS_R1\\execution\\performance-hst\\persistent-matrix.py": "d13a91710f27ab8599c1c6d82aa5d8850eb3ba9bbe6d15e3c1a9a99eb85fa08a"
+  },
+  "datasets": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-dataset-3dccbd580bd34431bb61ba507dfa9559\\dataset.json": "d55f49237607e8cb28f294954685daed9b180f30a7de888e0bbd19c220b0b6fd",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-performance-open-c7deab6559c14026bbedef93822237d9\\dataset.json": "3e561a1643359700486b49321784858fd90839b982f5c3d88c3948f3d01914db"
+  },
+  "samples": 20,
+  "warmup": 3,
+  "worker_deadline_seconds": 180,
+  "parent_deadline_seconds": 240,
+  "thresholds": {
+    "read_p95_ms": 500,
+    "first_http_proxy_ms": 2000,
+    "first_useful_dom": "NOT_RUN"
+  }
+}

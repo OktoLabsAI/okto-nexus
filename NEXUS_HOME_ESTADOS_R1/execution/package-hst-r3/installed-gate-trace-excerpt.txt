@@ -1,0 +1,17 @@
+Antecedent tool output 104106, shard 0, exit 1 before allocation:
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_HOME_ESTADOS_R1\execution\package-hst-r3\installed_regression.py", line 75, in main
+    ancestor=subprocess.run(['rtk','proxy','git','merge-base','--is-ancestor',
+        frozen['source_commit'],'HEAD'],cwd=REPO,stdin=subprocess.PIPE,
+        input=b'',stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15)
+  File "C:\Python313\Lib\subprocess.py", line 544, in run
+    raise ValueError('stdin and input arguments may not both be used.')
+ValueError: stdin and input arguments may not both be used.
+
+Antecedent tool output 179498, shard 1, exit 1 before allocation:
+  File "D:\Projetos\Techridy\okto_labs_okto_nexus\NEXUS_HOME_ESTADOS_R1\execution\package-hst-r3\installed_regression.py", line 75, in main
+    ancestor=subprocess.run(['rtk','proxy','git','merge-base','--is-ancestor',
+        frozen['source_commit'],'HEAD'],cwd=REPO,stdin=subprocess.PIPE,
+        input=b'',stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=15)
+  File "C:\Python313\Lib\subprocess.py", line 544, in run
+    raise ValueError('stdin and input arguments may not both be used.')
+ValueError: stdin and input arguments may not both be used.

@@ -1,0 +1,391 @@
+{
+  "status": "PASS_SUBSET",
+  "checks": [
+    {
+      "id": "paused-detail-one-modal",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "id": "exact-two-session-catalog",
+      "ok": true,
+      "detail": [
+        {
+          "value": "",
+          "label": "Choose a session"
+        },
+        {
+          "value": "[\"srv_ccc5cab99e410aaa06c70e0953a101a0\",\"exe_c6756e97b060ae38769227d33c6d9c3e\",\"wsr_9e0d86d954aab82a5f10f198b7deb8ea\",\"ses_7f61cf09652183c34772349d1d51c213\"]",
+          "label": "Session \u00b7 CLOSED \u00b7 HST Demo Project \u00b7 Updated 2026-11-17T16:34:15.410Z"
+        },
+        {
+          "value": "[\"srv_ccc5cab99e410aaa06c70e0953a101a0\",\"exe_c6756e97b060ae38769227d33c6d9c3e\",\"wsr_9e0d86d954aab82a5f10f198b7deb8ea\",\"ses_b55d4f38513ba7f73ae7e14fd54c9fd8\"]",
+          "label": "Session \u00b7 READY \u00b7 HST Demo Project \u00b7 Updated 2026-11-17T16:34:16.510Z"
+        }
+      ]
+    },
+    {
+      "id": "exact-session-retained",
+      "ok": true,
+      "detail": "ses_7f61cf09652183c34772349d1d51c213"
+    },
+    {
+      "id": "exact-session-current",
+      "ok": true,
+      "detail": "ses_b55d4f38513ba7f73ae7e14fd54c9fd8"
+    },
+    {
+      "id": "keyboard-focus-in-dialog",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "two-real-fallback-polls",
+      "ok": true,
+      "detail": {
+        "boardReads": [
+          {
+            "status": 200,
+            "at": 1794933326913,
+            "revision": "b80db47c111fc2b5495432baaa94c0d1769cd9978d4f92cc8976dbc4c43ae107"
+          },
+          {
+            "status": 200,
+            "at": 1794933341913,
+            "revision": "b80db47c111fc2b5495432baaa94c0d1769cd9978d4f92cc8976dbc4c43ae107"
+          }
+        ],
+        "elapsed": 32004
+      }
+    },
+    {
+      "id": "identical-semantic-revision",
+      "ok": true,
+      "detail": [
+        {
+          "status": 200,
+          "at": 1794933326913,
+          "revision": "b80db47c111fc2b5495432baaa94c0d1769cd9978d4f92cc8976dbc4c43ae107"
+        },
+        {
+          "status": 200,
+          "at": 1794933341913,
+          "revision": "b80db47c111fc2b5495432baaa94c0d1769cd9978d4f92cc8976dbc4c43ae107"
+        }
+      ]
+    },
+    {
+      "id": "paused-target-preserved",
+      "ok": true,
+      "detail": "[\"srv_ccc5cab99e410aaa06c70e0953a101a0\",\"exe_c6756e97b060ae38769227d33c6d9c3e\",\"wsr_9e0d86d954aab82a5f10f198b7deb8ea\",\"ses_b55d4f38513ba7f73ae7e14fd54c9fd8\"]"
+    },
+    {
+      "id": "identical-polls-no-false-update",
+      "ok": true,
+      "detail": false
+    },
+    {
+      "id": "no-error-alert",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "id": "escape-closed-readonly-without-discard",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "id": "mobile-no-overflow-three-stacked",
+      "ok": true,
+      "detail": {
+        "innerWidth": 360,
+        "scrollWidth": 360,
+        "columns": [
+          {
+            "name": "active",
+            "x": 16,
+            "y": 630,
+            "width": 328
+          },
+          {
+            "name": "needs_you",
+            "x": 16,
+            "y": 1080,
+            "width": 328
+          },
+          {
+            "name": "results",
+            "x": 16,
+            "y": 1196,
+            "width": 328
+          }
+        ]
+      }
+    },
+    {
+      "id": "no-page-exceptions",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "id": "browser-readonly",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "at": 1794933323143
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_7f61cf09652183c34772349d1d51c213",
+      "at": 1794933323152
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_7f61cf09652183c34772349d1d51c213/events",
+      "at": 1794933323182
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target",
+      "at": 1794933323265
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933323300
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933323315
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933323315
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933325338
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933325338
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794933326292
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794933326361
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "at": 1794933326795
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933327364
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933327364
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933329381
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933329381
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "at": 1794933330752
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933331398
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933331406
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933333412
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933333420
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933335433
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933335433
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933337455
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933337455
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933339476
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933339476
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "at": 1794933340748
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794933341298
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794933341361
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "at": 1794933341427
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933341493
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933341493
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/home/harness-board",
+      "at": 1794933341799
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933343506
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933343516
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933345528
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933345528
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933347542
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933347542
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933349557
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933349567
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "at": 1794933350738
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933351574
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933351581
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8/events",
+      "at": 1794933353584
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime-management/runtime/sessions/ses_b55d4f38513ba7f73ae7e14fd54c9fd8",
+      "at": 1794933353594
+    }
+  ],
+  "responses": [
+    {
+      "status": 200,
+      "at": 1794933326913,
+      "revision": "b80db47c111fc2b5495432baaa94c0d1769cd9978d4f92cc8976dbc4c43ae107"
+    },
+    {
+      "status": 200,
+      "at": 1794933341913,
+      "revision": "b80db47c111fc2b5495432baaa94c0d1769cd9978d4f92cc8976dbc4c43ae107"
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Codex synthetic protocol only",
+    "No draft/decision case in this lane",
+    "No native zoom or screen-reader claim"
+  ]
+}

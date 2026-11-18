@@ -1,0 +1,80 @@
+{
+  "status": "FIXTURE_STARTUP_FAILED_NO_SCENARIO_PASS",
+  "scenarios": {
+    "H10": "NOT_RUN",
+    "K03": "NOT_RUN",
+    "K05": "NOT_RUN"
+  },
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "manifest_sha256": "4513c1b92cd71397b50e93f61b1b6816fb6420758d10ff970686d6887d091521",
+  "runner_sha256": "82cbcd494b8ca152cd6b176d2dcd21261cce94d8e47187440545f5881731c0cc",
+  "runner_exit_code": 1,
+  "original_failure": [
+    {
+      "type": "AssertionError",
+      "message": "Foreground owner exited"
+    }
+  ],
+  "root_cause": {
+    "file": "foreground_owner_v2.py",
+    "line": 106,
+    "exception": "AttributeError",
+    "message": "State object has no attribute connection_tests",
+    "classification": "Fixture setup seam assigned before application lifespan initializes connection_tests; no product defect established"
+  },
+  "before": {
+    "source_count": 1829,
+    "runtime_payloads": {
+      "r9": 1031,
+      "i4_readonly": 1028
+    },
+    "cli_payload_count": 192,
+    "drift": []
+  },
+  "after": {
+    "source_count": 1829,
+    "runtime_payloads": {
+      "r9": 1031,
+      "i4_readonly": 1028
+    },
+    "cli_payload_count": 192,
+    "drift": []
+  },
+  "immutable_guards_equal": true,
+  "physical": [
+    {
+      "pid": 52884,
+      "same_birth_alive": false,
+      "present": false
+    },
+    {
+      "pid": 57976,
+      "same_birth_alive": false,
+      "present": false
+    }
+  ],
+  "physical_same_birth_remaining": 0,
+  "remaining": [],
+  "listeners": [],
+  "containment": [],
+  "canonical_stop": "NOT_APPLICABLE: app construction failed before HTTP startup; foreground process exited and ServeLock cleanup ran through production run_serve finally. No canonical runtime-close success claimed.",
+  "before_login_browser_admissions": true,
+  "browser_started": false,
+  "CLI_work_started": false,
+  "fixture_login_or_cookie_created": false,
+  "provider_invocations": 0,
+  "old_i4_application_started": false,
+  "raw_retained_private_only": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-compat-s3-_xm_mvff",
+  "raw_final_sha256": "f6a42e11f8d891570e3950760ddea711ff4b54d410238881d2c9847d820e6088",
+  "raw_server_log_sha256": "91e193d63abb3d626edb39e1d5d53eb126bcf640862dfd610c0be0dada20867a",
+  "private_logs_copied": false,
+  "cookie_or_token_copied": false,
+  "rerun": false,
+  "limits": [
+    "No acceptance or product-failure conclusion from a fixture startup failure.",
+    "K05 requires a separate no-dashboard run, even if later S3 succeeds.",
+    "S4 was not executed; i4 payload checks are read-only.",
+    "Observed ancestry/root sampling cannot enumerate every short-lived process."
+  ]
+}

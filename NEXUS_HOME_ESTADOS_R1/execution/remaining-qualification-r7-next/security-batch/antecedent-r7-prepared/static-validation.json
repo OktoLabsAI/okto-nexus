@@ -1,0 +1,42 @@
+{
+  "status": "STATIC_AST_AND_JS_SYNTAX_ONLY",
+  "python_files": [
+    "assert_captures.py",
+    "curate.py",
+    "drift.py",
+    "fixture_builder.py",
+    "preflight.py",
+    "prepare.py",
+    "run.py",
+    "security_controls.py",
+    "fixture.py",
+    "prepare_runtime.py",
+    "canonical_controls.py",
+    "peer_source.py",
+    "browser_surface.py",
+    "containment.py",
+    "test_results_boundary_completion.py"
+  ],
+  "pin_count": 24,
+  "manifest_sha256": "c47b5f009941d8303544186fc79575d08743d490917f69ec2bcf7905a747d315",
+  "productive_tables_source_literal_equal": true,
+  "productive_base_tables": 24,
+  "productive_total_tables": 30,
+  "applications_imported": 0,
+  "fixture_executed": false,
+  "browser_executed": false,
+  "javascript_syntax": {
+    "s1-passive.js": {
+      "command": "rtk proxy node --check NEXUS_HOME_ESTADOS_R1\\execution\\remaining-qualification-r7-next\\security-batch\\s1-passive.js",
+      "exit_code": 0
+    },
+    "s1-revocation.js": {
+      "command": "rtk proxy node --check NEXUS_HOME_ESTADOS_R1\\execution\\remaining-qualification-r7-next\\security-batch\\s1-revocation.js",
+      "exit_code": 0
+    },
+    "s2-reported.js": {
+      "command": "rtk proxy node --check NEXUS_HOME_ESTADOS_R1\\execution\\remaining-qualification-r7-next\\security-batch\\s2-reported.js",
+      "exit_code": 0
+    }
+  }
+}

@@ -63,7 +63,7 @@ export function CanonicalInspection({target, item, action, onClose, onChanged, r
         <HomeSessionControls key={`controls:${targetKey}`} context={target.context}/></>}
       {target.kind === 'connection' && <section aria-label="Connection context" className="space-y-2 text-sm">
         <h3 className="font-semibold">Connection · Read only</h3>
-        <p>Saved context only. Configuration does not establish session readiness or permission to execute.</p>
+        <p>This connection can be inspected here. Individual reconnection is unavailable.</p>
         <dl>{(['agent_id','workspace_id','executor_id','binding_id','workspace_binding_id'] as const).map(key=><div key={key}>
           <dt className="text-surface-500">{key.replaceAll('_',' ')}</dt><dd className="break-all">{target.context[key]}</dd>
         </div>)}</dl>

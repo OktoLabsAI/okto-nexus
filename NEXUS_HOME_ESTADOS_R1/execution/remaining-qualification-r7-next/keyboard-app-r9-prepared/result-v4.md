@@ -1,0 +1,13 @@
+# I01 focal keyboard result — positive with canonical-close limit
+
+The single authorized v4 execution passed all 190 keyboard predicates, plus Native calibration14 and desktop bootstrap3. Runner, browser CLI, probe and fixture exited0; no first failure, cleanup error, signal or forced containment was recorded. All earlier partial cuts and the independent native-dialog probe remain unchanged.
+
+Real keyboard traversal covered Home23/23 inventoried visible/enabled controls, Active modal11/11, Needs you22/22 and Results19/19. Extra native-focusable static content was observed separately. Actionable controls and each parent dialog had names and painted focus. Actual initial modal focus counted toward coverage. Native outside-document boundaries were recorded with hasFocus=false, DOM/locator counts0, no focused page element and UA modal still open; bounded Tab/Shift+Tab returned without programmatic focus or manual trapping. No focusin into background controls was observed.
+
+Tab/Enter opened the exact known retained session (GET200/full12-field scope and output marker), the original request's exact session/unanswered listbox, and the exact authoritative result target. Each modal completed coverage and Escape restored focus to the originating card/action. Original question validity passed at both bounds; no renewal or decision was used.
+
+The narrow static PRE check observed no role/tabindex/editability/actionable child, actual overflow and nonempty AX/text content recorded only as bytes/hash. Real ArrowDown changed its own scrollTop0→40; ArrowUp restored40→0. Window scroll, text selection, unanswered form count and browser write count remained unchanged. No Copy, submission, answer selection or productive control activation occurred. Browser writes0, pageErrors0, provider invocations0.
+
+Evidence: `runs/hst-native-zoom-r9-keyboard-3/qualification.json`, status `PASS_I01_BROWSER_CANONICAL_CLOSE_UNKNOWN`; manifest SHA256 `cb1438d024bc46a52f5a7af1d3bf0ef52a9923b0b2d9af2a31b5a4e3eee3220c`. Manifest entries and before/after1031 payload/1829 source/192 CLI pins matched. Exact own-fixture CAS scan of all curated bytes found zero matches. Public desktop screenshot was viewed and contains only synthetic fixture UI, without private inputs/CAS/cookies.
+
+All observed own process births/profile processes/listeners56761 and55394 were absent. B1 canonical close was confirmed; A1/A2 close remain UNKNOWN. Physical absence/exit0 does not resolve those receipts. This is one desktop1440/native100 dataset and keyboard path, with no AT speech, human acceptance, theme matrix or provider qualification claim. Root owns any ledger promotion.

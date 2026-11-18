@@ -1,0 +1,45 @@
+--- canonical browser fixture unchanged
++++ own H03 canonical inputs
+@@ -78,12 +78,21 @@
+             records.append(dict(method=method,path=path.split('?')[0],status=response.status_code))
+             assert response.status_code<400,('Canonical request refused',response.status_code,response.json().get('error',{}).get('code'))
+             value=response.json();return value.get('data',value)
++        def review_h03(flow,selection):
++            write('h03-input.private.json',dict(label=selection['label']))
++            try:
++                review=flow.review(selection)
++            except BaseException as error:
++                write('h03-label-admission.json',dict(review_accepted=False,error_type=type(error).__name__,dom_exercised_at_review=False))
++                raise
++            write('h03-label-admission.json',dict(review_accepted=True,dom_exercised_at_review=False))
++            return review
+         workers=['hst-a','hst-b'] if mode=='scope_two' else ['hst-worker'] if mode!='idle_three' else ['hst-one','hst-two','hst-three']
+         for index,name in enumerate(workers):
+             agent(name);home=ROOT/('provider-'+str(index));home.mkdir()
+             flow=TerminalConnection(call,lambda value:None)
+             project=ROOT/('project-b' if mode=='scope_two' and index else 'project');project.mkdir(exist_ok=True)
+-            review=flow.review(dict(agent=name,client='codex',project=str(project),label='HST Second Project' if mode=='scope_two' and index else 'HST Demo Project',
++            review=review_h03(flow,dict(agent=name,client='codex',project=str(project),label='<img src=x onerror="globalThis.HST_BROWSER_PUBLIC_EXECUTED=true">\x1b[31m Bearer HST_BROWSER_PRIVATE_TOKEN',
+                 workspace_id=refs[0]['workspace_id'] if refs and mode!='scope_two' else None,binding_id=None,candidate_ref=None,provider_home=str(home)))
+             configured=flow.apply(review,approval=review['review_revision']);assert configured['state']=='configured'
+             binding=call('GET','/api/v1/runtime-management/connections/bindings/'+configured['binding_id'])
+@@ -103,7 +112,9 @@
+             if operator:body['agent_id']=ref['agent_id']
+             resolution=call('POST',path+'/intents:resolve',body,headers);assert resolution['can_submit']
+             call('POST',path+'/operations',{k:resolution[k] for k in ['client_intent_id','operation_id','resolution_revision','intent_hash']},headers)
+-            operations.append(dict(intent=intent,operation_id=resolution['operation_id'],scope=resolution['scope']))
++            operations.append(dict(intent=intent,operation_id=resolution['operation_id'],scope=resolution['scope']))
++            if intent=='turn.submit' and extra.get('text')=='HST_BROWSER_PRIVATE_PROMPT_NOT_FOR_OVERVIEW':
++                write('h03-prompt-issued-'+str(len(operations))+'.json',dict(operation_id=resolution['operation_id'],scope=resolution['scope'],canonical_submit_accepted=True))
+             end=time.monotonic()+30
+             while True:
+                 state=call('GET',path+'/operations/'+resolution['operation_id'],headers=headers)
+@@ -129,7 +140,7 @@
+                 opened=admit(ref,'runtime.start',new_session=True);sid=opened['scope']['session_id']
+                 sessions.append(dict(session_id=sid,reference=ref,text='HST synthetic output '+sid,closed=False))
+                 gated=mode in ['question','delayed_info']
+-                text='HST:'+json.dumps(dict(gate='release-'+str(index),question=index==0,blocking=True,message='Synthetic output')) if gated else 'HST safe fixture turn'
++                text='HST:'+json.dumps(dict(gate='release-'+str(index),question=index==0,blocking=True,message='Synthetic output')) if gated else 'HST_BROWSER_PRIVATE_PROMPT_NOT_FOR_OVERVIEW'
+                 admit(ref,'turn.submit',session_id=sid,text=text,operator=gated,wait=not gated)
+                 if not gated and index==0 and total==2:
+                     admit(ref,'runtime.close',session_id=sid);sessions[-1]['closed']=True

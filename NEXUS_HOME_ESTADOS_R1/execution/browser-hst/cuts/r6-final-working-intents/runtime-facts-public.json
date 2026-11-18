@@ -1,0 +1,47 @@
+{
+  "at": "2026-11-17T18:23:33.620705Z",
+  "facts": [
+    {
+      "server_id": "srv_59c37e0c46185d988160ac693cbd4b77",
+      "executor_id": "exe_045ebc9d5be697b25b790395a72cabbc",
+      "binding_id": "bind_b05600089192c2a7da32f03771a39dcc",
+      "workspace_id": "wsr_1d768338242d64e2d2a5c2de51f26ce6",
+      "workspace_binding_id": "wxb_5f417193d3ace8fd506abf6c1c5cc0c4",
+      "agent_id": "hst-worker",
+      "session_id": "ses_9b5ba178b218c4c3a1c3f27a63010bee",
+      "stream_epoch": "stream_59c10af906f51f0f9566338a953f5f3d",
+      "owner_generation": 1,
+      "lifecycle_state": "READY",
+      "control_current": true,
+      "valid_until": "2026-11-17T18:25:32.090938+00:00",
+      "observed_at": "2026-11-17T18:23:32.695Z",
+      "title": null,
+      "workspace_label": "HST Demo Project",
+      "revoked": false,
+      "runtime_ready": true,
+      "persistent_runtime": true,
+      "authority_current": true
+    },
+    {
+      "server_id": "srv_59c37e0c46185d988160ac693cbd4b77",
+      "executor_id": "exe_045ebc9d5be697b25b790395a72cabbc",
+      "binding_id": "bind_b05600089192c2a7da32f03771a39dcc",
+      "workspace_id": "wsr_1d768338242d64e2d2a5c2de51f26ce6",
+      "workspace_binding_id": "wxb_5f417193d3ace8fd506abf6c1c5cc0c4",
+      "agent_id": "hst-worker",
+      "session_id": "ses_5638263bb13b01cefc5137c800fa749c",
+      "stream_epoch": "stream_35d35171ef09aa17531d69d6f37c0b14",
+      "owner_generation": 1,
+      "lifecycle_state": "READY",
+      "control_current": true,
+      "valid_until": "2026-11-17T18:25:32.987301+00:00",
+      "observed_at": "2026-11-17T18:23:33.512Z",
+      "title": null,
+      "workspace_label": "HST Demo Project",
+      "revoked": false,
+      "runtime_ready": true,
+      "persistent_runtime": true,
+      "authority_current": true
+    }
+  ]
+}

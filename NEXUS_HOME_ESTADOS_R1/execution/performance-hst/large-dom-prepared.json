@@ -1,0 +1,18 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "no_server_browser_clone_account_allocated": true,
+  "priority": "After final10 ASGI cuts and explicit Root DOM window",
+  "npx_available": true,
+  "workload": {
+    "registered_connections": 100,
+    "open_activities": 1000,
+    "history_events": 100000
+  },
+  "clock_contract": "Root approved Date and Date.now aligned to unchanged original seed ControlledClock; performance.now/timers/OS/auth expiry untouched; not native/authority proof",
+  "files": {
+    "large-dom-prepared.md": "b11223363c8a0fd12f4c8c8b8305fdb0823009dad991f3f96f110cf6f353fa03",
+    "large-dom-driver-prepared.js": "5e47407becce7aafb00324726fd31e53c8b18fb5f5a275c1c18db772f35e28ea"
+  },
+  "syntax": "Source prepared, no browser/Node execution performed",
+  "executor_interface": "Browser owner CLI run-code --filename with canonical private storage loaded beforehand, future public HTTP READY config; preparedOnly guard fails before page APIs"
+}

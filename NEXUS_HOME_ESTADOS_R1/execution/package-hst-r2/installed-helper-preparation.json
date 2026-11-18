@@ -1,0 +1,26 @@
+{
+  "status": "PREPARED_NOT_RUN",
+  "source_candidate": "4e890949c94c9d8625837d566e5182920bfb2cec",
+  "runner_sha256": "455d80b875c3b02343ddaf9318db5066701b231e1025837eaaf50e313df486d7",
+  "extra_helpers": {
+    "NEXUS_UI_R1/execution/fixtures.py": {
+      "bytes": 13819,
+      "current_and_candidate_git_blob_sha256": "7f8ca1874f7a87d7c70743c4404cc88bd3d212ea24ef5ab987ca075ae090bf20",
+      "read_only_git_blob_comparison": "byte equal",
+      "imports": "stdlib, pytest, installed okto_nexus",
+      "dynamic_loads": ["tests/execution_r4/test_open_bootstrap.py", "tests/execution_r4/test_native_decisions.py"],
+      "closure": "Both dynamic fixture modules and their test helpers are already inside the complete copied tests tree. No additional execution directory is copied.",
+      "unused_test_function_dependency": "test_native_decisions has a schema-reading test function; scenario invokes only decision_state fixture, not that test. No unproven plans tree is copied."
+    }
+  },
+  "runtime_guards_prepared": [
+    "Reject source or copied helper paths outside their exact repo/owned tree",
+    "Require candidate Git blob bytes equal current source before copying",
+    "Record copied-helpers-before.json and copied-helpers-after.json",
+    "Reject any source/copied helper hash drift",
+    "No src copied; installed origin guard for every loaded Nexus/Core/Connector module unchanged",
+    "No test assertions or subprocess argv rewritten"
+  ],
+  "validation": "AST parse only; no pytest or application process started",
+  "manifest_scope": "Runner changed after package/live curation as explicitly authorized preparation; package/prefix/payload and R1 driver unchanged."
+}

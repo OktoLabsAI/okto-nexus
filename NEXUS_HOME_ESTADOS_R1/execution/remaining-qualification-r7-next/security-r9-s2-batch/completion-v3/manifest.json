@@ -1,0 +1,12 @@
+{
+  "kind": "S2_COMPLETION_LOCATOR_ONLY_PREPARED_NOT_EXECUTED",
+  "base_template_sha256": "acc0a999d3281ab0b19335f92e71a8263ff9c34a75acd3ac3a4d1a2eadc4b11a",
+  "reader_manifest_sha256": "4168b8d850e6aa6704a83497fa11121172c3840a5b3f5048fe6c11637aed217b",
+  "variant_pins": {
+    "run.py": "34af990627a9b86afc77cedd6165d30125a1dd62d032c7887ffd954c65174e7e",
+    "prepare_static.py": "7e06a095831682f2b2ce18652450ed057ff883c503593670a5fad9e1348d51d5",
+    "s2-reported.js": "03a7d903af3ac6f3c914dfb0cd1beeedb48aeef73e5ead1a81167b0274f3aba3",
+    "completion-only.diff": "5a94a95e2e1f3f8fc88aa2e2b702ab82ac3d8de98922b19b52988d89c74f6d9a",
+    "README.md": "d6e2d56bbe52eec541f86223b98255c61352e8eb198337e848587b7baa972d64"
+  }
+}

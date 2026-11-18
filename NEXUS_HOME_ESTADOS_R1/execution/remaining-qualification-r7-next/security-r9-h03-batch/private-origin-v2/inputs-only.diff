@@ -1,0 +1,21 @@
+--- unexecuted H03 mixed-origin draft
++++ H03 private-origin counterpart
+@@ -6,8 +6,8 @@
+ 
+ PUBLIC = '<img src=x onerror="globalThis.HST_BROWSER_PUBLIC_EXECUTED=true">'
+ PRIVATE_TOKEN = 'HST_BROWSER_PRIVATE_TOKEN'
+-PRIVATE_PROMPT = 'HST_BROWSER_PRIVATE_PROMPT_NOT_FOR_OVERVIEW'
+-LABEL = PUBLIC + '\x1b[31m Bearer ' + PRIVATE_TOKEN
++PRIVATE_PROMPT = 'HST_BROWSER_PRIVATE_PROMPT_NOT_FOR_OVERVIEW' + '\x1b[31m Bearer ' + PRIVATE_TOKEN
++LABEL = PUBLIC
+ 
+ 
+ def transform_text(raw):
+@@ -54,4 +54,6 @@
+     return {'source_sha256': expected_sha256,
+             'fixture_sha256': hashlib.sha256(fixture.read_bytes()).hexdigest(),
+             'sql_authority_mutations': 0, 'canonical_label_input': True,
+-            'canonical_turn_submit_input': True}
++            'canonical_turn_submit_input': True,
++            'public_label_origin': 'hostile HTML only',
++            'private_prompt_origin': ['private marker', 'ESC', 'synthetic Bearer token']}

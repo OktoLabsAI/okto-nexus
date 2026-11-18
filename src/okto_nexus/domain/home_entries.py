@@ -7,8 +7,15 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 from .attention import digest
-from .home import ConnectionTarget, HomeActivity, HomeResult, HomeTarget, RuntimeRef, SessionTarget, SourceRef
-
+from .home import (
+    ConnectionTarget,
+    HomeActivity,
+    HomeResult,
+    HomeTarget,
+    RuntimeRef,
+    SessionTarget,
+    SourceRef,
+)
 
 EntryKind = Literal['work', 'session', 'connection', 'external', 'attention']
 EntryState = Literal[
@@ -79,7 +86,17 @@ class EntryRecord:
 
     @property
     def group_id(self):
-        return 'home_group_' + digest(self.group_key())
+        key = self.group_key()
+        # Memoize only this deterministic identity hash, never source facts,
+        # authority or freshness. Mutable/unsupported legacy keys keep the old
+        # calculation; a changed connection tuple invalidates the saved value.
+        if type(key) is not tuple or any(type(value) not in (str, int, type(None)) for value in key):
+            return 'home_group_' + digest(key)
+        cached = getattr(self, '_group_identity_cache', None)
+        if cached is None or cached[0] != key:
+            cached = (key, 'home_group_' + digest(key))
+            self._group_identity_cache = cached
+        return cached[1]
 
 
 @dataclass
@@ -92,6 +109,11 @@ class EntryRelations:
     connection_count: int | None = None
     connections: tuple[ConnectionContext, ...] | None = None
     harness_blocking: list[dict[str, object]] | None = None
+    # Only the negotiated operational projection reads these optional facts.
+    # None is unavailable, not an empty authoritative session inventory.
+    operational_sessions: tuple['SessionRuntimeFact', ...] | None = None
+    presentation_version: int = 1
+    operational_source_status: dict[str, SourceState] | None = None
 
     @property
     def total_is_exact(self):
@@ -100,6 +122,29 @@ class EntryRelations:
     @property
     def total(self):
         return len(self.entries) if self.total_is_exact else None
+
+
+@dataclass(frozen=True)
+class SessionRuntimeFact:
+    server_id: str
+    executor_id: str
+    binding_id: str
+    workspace_id: str
+    workspace_binding_id: str
+    agent_id: str
+    session_id: str
+    stream_epoch: str | None
+    owner_generation: int
+    lifecycle_state: str
+    control_current: bool
+    valid_until: str | None
+    observed_at: str | None = None
+    title: str | None = None
+    workspace_label: str | None = None
+    revoked: bool = False
+    runtime_ready: bool = False
+    persistent_runtime: bool = False
+    authority_current: bool = False
 
 
 def activity_record(item: HomeActivity, *, agent_id: str | None = None):

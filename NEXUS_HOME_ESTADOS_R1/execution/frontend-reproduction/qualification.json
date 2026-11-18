@@ -1,0 +1,47 @@
+{
+  "status": "REPRODUCED_EXPECTED_RED",
+  "acceptance": "NOT_PASS",
+  "scenario_subset": "HST-T-F01 controlled controller only; panel represented by its pause effect",
+  "node": "v24.15.0",
+  "diagnostic_pass": 2,
+  "desired_contract_fail": 1,
+  "observations": [
+    {
+      "cycle": 1,
+      "clock": 16000,
+      "paused": true,
+      "pending": true,
+      "sameVisibleSnapshot": true,
+      "status": "ready",
+      "error": null,
+      "staleSections": [],
+      "boardReads": 2,
+      "childReads": 0,
+      "peak": 1
+    },
+    {
+      "cycle": 2,
+      "clock": 32000,
+      "paused": true,
+      "pending": true,
+      "sameVisibleSnapshot": true,
+      "status": "ready",
+      "error": null,
+      "staleSections": [],
+      "boardReads": 3,
+      "childReads": 0,
+      "peak": 1
+    }
+  ],
+  "source_drift": [],
+  "browser_run": false,
+  "http_run": false,
+  "provider_invocations": 0,
+  "product_changes": false,
+  "limits": [
+    "No full HST-004/J1-J8 fixture qualification",
+    "No F/G/J matrix promotion",
+    "No mounted React/browser/AT/human test"
+  ],
+  "plan_sha256": "e1944fcf94823fc9f6c32e4b7b3958bc5103311e04f0658b17a00d5e53b10247"
+}

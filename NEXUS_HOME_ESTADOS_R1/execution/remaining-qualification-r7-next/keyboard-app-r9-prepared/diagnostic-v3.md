@@ -1,0 +1,13 @@
+# I01 native-dialog-aware cut — partial
+
+One authorized execution, no repetition. Original partial cut and standalone probe remain unchanged. Runner exit1 and first-failure stop are preserved. The keyboard case recorded 114 positive predicates and one failed predicate; Native calibration14 and desktop bootstrap3 also passed.
+
+Home23/23 visible/enabled sequential controls were reached through real Tab with names, focus-visible and actual outline/shadow. The Active retained-session target opened by Tab/Enter, actual GET200 matched its full12-field scope, and its marker was observed. Active initial focus, all inventoried modal controls, allowed outside-document boundary observations, bounded keyboard returns and Escape to the same card passed.
+
+Needs you opened via the exact request's Respond control, confirmed its original session and unanswered listbox, and waited for enabled Deny before inventory. Twenty further Tab positions remained inside the UA modal with named controls/painted focus and no background focusin. Tab20 reached a static PRE containing technical request text. Runtime data: document.hasFocus=true, DOM/locator focus counts1, active :focus true, UA modal/open true, visible and painted focus, in-modal focusin. Its AX first line was a nonempty `text` node; the generic name predicate expected a quoted control-role name and failed. The source request-details PRE has bounded height and overflow-y-auto, with no button/input role or explicit tabindex. The evidence is compatible with a sequentially focusable scroll container, not a containment failure. Whether any product labeling change is warranted requires review; the cut does not establish an unnamed actionable-control defect.
+
+No answer selection, submission, decision or Copy was activated. Catch observations recorded browser writes0 and pageErrors[]. Needs-you complete coverage/Escape and Results were not reached, so I01 as a whole remains partial.
+
+Evidence: `runs/hst-native-zoom-r9-keyboard-2/qualification.json`; manifest SHA256 `431f093908451c3c9161ea44195a2727824a53892a5c4dbe3d6900e9924f025d`. All manifest entries match. Nine exact own-fixture CAS occurrences were redacted and a post-publication scan found zero remaining matches; raw remains Temp.
+
+Before/after pins equal (1031 payload/1829 source/192 CLI). CLI/probe/fixture exited normally0, cleanup errors/signals/forced containment absent. Observed own process births/profile/listeners61428 and58542 absent. B1 close confirmed; A1/A2 canonical close UNKNOWN remains distinct from physical absence. No product/Git/ledger edit or AT/human claim.

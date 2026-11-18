@@ -1,0 +1,45 @@
+{
+  "status": "STATIC_CAPTURED_PUBLIC_DTO_REVIEW",
+  "source": "NEXUS_HOME_ESTADOS_R1/execution/remaining-qualification-r7-next/themes-app-r9-prepared/runs/hst-native-zoom-r9-themes-1/control/exp-active.json",
+  "source_sha256": "6f9a654f5c7c58b8918a08e8b30d5c8d0af4856abff58b59133d0fba5e41f754",
+  "presentation_version": 2,
+  "public_source_status": {
+    "attention": "ready",
+    "work": "ready",
+    "results": "ready",
+    "connections": "ready",
+    "sessions": "ready",
+    "correlations": "ready",
+    "external": "ready"
+  },
+  "internal_operational_source_key_absent": true,
+  "operational_status_keys": [
+    "activity",
+    "as_of",
+    "awaiting_native_confirmation",
+    "blocked_sessions",
+    "blocking",
+    "connection",
+    "freshness",
+    "has_more_pending_requests",
+    "pending_actions",
+    "pending_by_kind",
+    "pending_request_ids",
+    "pending_requests_cursor",
+    "reason_code",
+    "running_sessions",
+    "state_since",
+    "version"
+  ],
+  "captured_operational_values": [
+    {
+      "activity": "working",
+      "freshness": "current"
+    },
+    {
+      "activity": "idle",
+      "freshness": "current"
+    }
+  ],
+  "unknown_shape": "Same public operational_status fields; expected unknown/unavailable is a future runtime assertion, not executed evidence"
+}

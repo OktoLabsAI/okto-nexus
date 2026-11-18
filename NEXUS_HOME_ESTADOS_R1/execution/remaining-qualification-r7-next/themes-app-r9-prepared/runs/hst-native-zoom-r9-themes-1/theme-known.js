@@ -1,0 +1,63 @@
+// PREPARED ONLY. Themes by actual UI; meaning by text and AX, never color alone.
+async page=>{
+  const cfg={"window": "ROOT_I04_THEME_APP_OPEN", "phase": "known", "url": "http://127.0.0.1:49712", "outputPrefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-m3mxmk8o\\i04-app", "expiresAt": "2026-11-18T02:14:49.087000+00:00", "aCard": "home_group_60fe0128b7b96575abea9fbbee5051109c43db497c2584dcff2c1549116d655a", "bCard": "home_group_5d91b7b505fb6b8291c6ec97db7a9775fb3d60ed315d3b647a4ac0e130fec5c6", "bScope": {"server_id": "srv_7def39197d42867e2abf3a0a5c9b5f78", "executor_id": "exe_eebb50844eb306e279286c8415766751", "binding_id": "bind_bc60e88e0d7de6e4a7d8ff2c9db7111c", "agent_id": "hst-b", "workspace_id": "wsr_a4879aad99f6ce7dde6def5c767e6cfe", "workspace_binding_id": "wxb_14b7a5426a971e20d4b23eb820f9bc80", "session_id": "ses_27002ad401f3e976341779723df70ea0", "session_owner_generation": 1, "authorization_revision": 2, "configuration_revision": 2, "binding_revision": 1, "credential_epoch": 1}, "bMarker": "HST synthetic output ses_27002ad401f3e976341779723df70ea0", "a2Scope": {"server_id": "srv_7def39197d42867e2abf3a0a5c9b5f78", "executor_id": "exe_eebb50844eb306e279286c8415766751", "binding_id": "bind_1a332c5082a825b0dc9c2f7d3bf0b6b6", "agent_id": "hst-a", "workspace_id": "wsr_ea6ec63a5365e46ff9595ec26c6ef6f2", "workspace_binding_id": "wxb_4896c2e61e9177102e324711dc66ff57", "session_id": "ses_c381921b1d39215c9f5d960d0366414e", "session_owner_generation": 1, "authorization_revision": 2, "configuration_revision": 2, "binding_revision": 1, "credential_epoch": 1}, "requestCard": "home_request_att_8584b6d3f8d70013e53ee3a053272dfe4ffb99770566654ff0223a390ce41ab0", "requestId": "r4request_7fd85f976b14fd13610afe21915369e5361dc050ea7f3c5ebe79f84c325e8f66", "deliveryId": "home_delivery_canonical:result_e476ff3d20f51134ef9e382d075834915c16a2251b55f7ee239992c52b1596a9", "deliveryTarget": {"executor_id": "exe_eebb50844eb306e279286c8415766751", "kind": "result", "operation_id": "op_4a614b65f4c12e0cbcad166dbb8c5e86", "server_id": "srv_7def39197d42867e2abf3a0a5c9b5f78", "session_id": "ses_27002ad401f3e976341779723df70ea0", "workspace_id": "wsr_a4879aad99f6ce7dde6def5c767e6cfe"}, "projectA": "Alpha project for readable authorized collaborator activity and questions", "projectB": "Beta project for readable authorized collaborator activity and delivery", "failedId": "home_delivery_canonical:result_82cf5330a963d576b2d3240aca3b3b937f8215959076d8e18d102ed84f32187c", "failedTarget": {"executor_id": "exe_eebb50844eb306e279286c8415766751", "kind": "result", "operation_id": "op_28c916c74cfaf6ba62e69fd75ebe3016", "server_id": "srv_7def39197d42867e2abf3a0a5c9b5f78", "session_id": "ses_2ff456f229daf55185a880419e72868d", "workspace_id": "wsr_a4879aad99f6ce7dde6def5c767e6cfe"}},checks=[],observations=[];
+  if(cfg.window!=='ROOT_I04_THEME_APP_OPEN'||new URL(cfg.url).hostname!=='127.0.0.1')throw Error('Own theme gate required');
+  const check=(id,pass,actual)=>{checks.push({id,pass:!!pass,actual});if(!pass)throw Error(id);};
+  const harness=id=>page.locator('[data-home-harness='+JSON.stringify(id)+']');
+  const signal=id=>page.locator('[data-home-signal='+JSON.stringify(id)+']');
+  const setTheme=async theme=>{
+    const dark=await page.locator('html').evaluate(e=>e.classList.contains('dark'));
+    if(dark!==(theme==='dark')){
+      await page.getByRole('button',{name:'Application menu',exact:true}).click();
+      await page.getByRole('button',{name:theme==='dark'?'Dark Mode':'Light Mode',exact:true}).click();
+    }
+    await page.waitForFunction(dark=>document.documentElement.classList.contains('dark')===dark,theme==='dark');
+    check('actual-UI-theme-'+cfg.phase+'-'+theme,await page.locator('html').evaluate((e,expected)=>e.classList.contains('dark')===expected,theme==='dark'),theme);
+  };
+  const textProof=async(locator,label)=>{
+    await locator.waitFor();const text=await locator.innerText(),ax=await locator.ariaSnapshot();
+    check(cfg.phase+'-'+label+'-noncolor-meaning',text.trim().length>0&&ax.includes(text.trim()),{text,ax,svgCount:await locator.locator('svg').count()});
+  };
+  try{
+    if(cfg.phase==='bootstrap'){
+      page.__i04Writes=[];page.__i04Errors=[];page.__i04Boards=[];
+      page.on('request',r=>{if(!['GET','HEAD','OPTIONS'].includes(r.method()))page.__i04Writes.push({method:r.method(),path:new URL(r.url()).pathname});});
+      page.on('pageerror',e=>page.__i04Errors.push(e.message));
+      page.on('response',async response=>{
+        if(!new URL(response.url()).pathname.endsWith('/home/harness-board')||response.status()!==200)return;
+        try{const raw=await response.json(),v=raw.data??raw;page.__i04Boards.push({at:Date.now(),revision:v.revision,presentation_version:v.presentation_version,status:v.status,source_status:v.source_status,columns:Object.fromEntries(Object.entries(v.columns).map(([name,slice])=>[name,slice.items.map(item=>({id:item.id,kind:item.kind,connection:item.connection?.binding_id,status:item.operational_status,requestId:item.request?.source_id,session:item.request?.session_id,semantics:item.delivery_semantics??item.result?.delivery_semantics}))]))});}catch{/* Aborted response is not proof. */}
+      });
+      await page.addInitScript(origin=>{if(location.origin!==origin)return;localStorage.setItem('okto-nexus-home-operational','enabled');localStorage.setItem('okto-nexus-workspace','all');localStorage.setItem('okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0',new Date().toISOString());},new URL(cfg.url).origin);
+      await page.setViewportSize({width:1440,height:1000});await page.goto(cfg.url);await page.getByTestId('home-follow-up').waitFor({timeout:25000});
+      const g=await page.evaluate(()=>({innerWidth,devicePixelRatio,scale:visualViewport?.scale}));check('native100',g.innerWidth===1440&&Math.abs(g.devicePixelRatio-cfg.nativeDpr100)<.03&&g.scale===1,g);
+    }else if(['known','unknown'].includes(cfg.phase)){
+      check('original-question-valid-before-'+cfg.phase,Date.now()<Date.parse(cfg.expiresAt),{expiresAt:cfg.expiresAt});
+      const start=Date.now();await page.getByRole('button',{name:'Refresh',exact:true}).click();
+      const end=Math.min(Date.now()+15000,Date.parse(cfg.expiresAt));let actual;
+      do{
+        actual=page.__i04Boards.find(v=>v.at>=start&&v.presentation_version===2&&(cfg.phase==='known'?v.source_status.operational_sessions==='ready':v.source_status.operational_sessions==='unavailable'));
+        if(actual)break;await page.waitForTimeout(50);
+      }while(Date.now()<end);
+      check('canonical-'+cfg.phase+'-HTTP-snapshot',!!actual,actual);
+      const apply=page.getByRole('button',{name:'Apply updates',exact:true});if(await apply.isVisible().catch(()=>false))await apply.click();
+      const items=Object.values(actual.columns).flat();
+      const a=items.find(i=>i.id===cfg.aCard),b=items.find(i=>i.id===cfg.bCard),request=items.find(i=>i.id===cfg.requestCard),failed=items.find(i=>i.id===cfg.failedId);
+      check('same-canonical-IDs-'+cfg.phase,!!a&&!!b&&request?.requestId===cfg.requestId&&request?.session===cfg.a2Scope.session_id&&failed?.semantics?.execution_outcome==='failed',{a:a?.id,b:b?.id,request:request?.id,failed:failed?.id,failedSemantics:failed?.semantics});
+      check('canonical-operational-'+cfg.phase,cfg.phase==='known'?a.status.activity==='working'&&b.status.activity==='idle'&&a.status.freshness==='current'&&b.status.freshness==='current':a.status.activity==='unknown'&&b.status.activity==='unknown'&&a.status.freshness==='unavailable'&&b.status.freshness==='unavailable',{a:a.status,b:b.status});
+      for(const theme of ['light','dark']){
+        await setTheme(theme);
+        await textProof(harness(cfg.aCard).locator('[data-home-badge='+JSON.stringify(cfg.phase==='known'?'Working':'State unconfirmed')+']'),'a-'+theme);
+        await textProof(harness(cfg.bCard).locator('[data-home-badge='+JSON.stringify(cfg.phase==='known'?'Idle':'State unconfirmed')+']'),'b-'+theme);
+        await textProof(signal(cfg.requestCard).getByText('Response pending',{exact:true}),'request-'+theme);
+        await textProof(signal(cfg.failedId).getByText('Execution ended with failure',{exact:true}),'failed-'+theme);
+        const requestButton=signal(cfg.requestCard).getByRole('button',{name:'Respond',exact:true}),failedButton=signal(cfg.failedId).getByRole('button',{name:'View result',exact:true});
+        check('named-context-actions-'+cfg.phase+'-'+theme,(await requestButton.ariaSnapshot()).includes('Respond')&&(await failedButton.ariaSnapshot()).includes('View result'),{requestEnabled:await requestButton.isEnabled(),failedEnabled:await failedButton.isEnabled()});
+        await page.getByTestId('home-follow-up').scrollIntoViewIfNeeded();await page.screenshot({path:cfg.outputPrefix+'-'+cfg.phase+'-'+theme+'.png'});
+        observations.push({phase:cfg.phase,theme,revision:actual.revision,source_status:actual.source_status,cardIds:[a.id,b.id,request.id,failed.id],stateIcons:'Harness badges are text spans in current source; no dedicated state icon is invented. Text and AX carry meaning.'});
+      }
+      check('original-question-valid-after-'+cfg.phase,Date.now()<Date.parse(cfg.expiresAt),{expiresAt:cfg.expiresAt});
+    }else throw Error('Unknown theme phase');
+    check('zero-browser-writes',page.__i04Writes.length===0,page.__i04Writes);check('zero-page-errors',page.__i04Errors.length===0,page.__i04Errors);
+    return {status:'PASS_I04_EXECUTED_SUBSET',phase:cfg.phase,checks,observations,limits:['Five observed meanings only; not full state matrix','Inert canonical terminal-failed peer; query fault is fixture-only read-source failure','No AT/human/color-contrast measurement claim; no state icons invented']};
+  }catch(error){return {status:'INCOMPLETE_I04',phase:cfg.phase,checks,observations,error:String(error),writes:page.__i04Writes??[],pageErrors:page.__i04Errors??[],homeAX:await page.getByTestId('home-follow-up').ariaSnapshot().catch(()=>null)};}
+}

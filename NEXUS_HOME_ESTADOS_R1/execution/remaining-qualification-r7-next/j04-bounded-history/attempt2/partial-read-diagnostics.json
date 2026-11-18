@@ -1,0 +1,48 @@
+{
+  "reads": [
+    {
+      "path": "/api/v1/home/overview",
+      "http_status": 200,
+      "bytes": 29016,
+      "response_sha256": "3f5aa6c0b980ce6b4b7f85d64d812825bb58be12c5b63c2bea0a7893ab0845d7",
+      "item_count": 0,
+      "total": null,
+      "has_more": null
+    },
+    {
+      "path": "/api/v1/home/harness-board",
+      "http_status": 200,
+      "bytes": 69383,
+      "response_sha256": "cf864cf309f3e3dc61ec6a20df034f9dea702a97a2f3837eb8f071a25cd71a6c",
+      "item_count": 0,
+      "total": null,
+      "has_more": null
+    },
+    {
+      "path": "/api/v1/home/results",
+      "http_status": 200,
+      "bytes": 8350,
+      "response_sha256": "571cec8e4b3f22cf663cb11907689418d2cd7fd9315ca4669d5b970bff4626a4",
+      "item_count": 3,
+      "total": 25,
+      "has_more": true
+    },
+    {
+      "path": "/api/v1/home/results",
+      "http_status": 200,
+      "bytes": 8350,
+      "response_sha256": "050f72d338a989ddb25356828c237ddabc6ad25243c50086bd5f65aaf8c7f427",
+      "item_count": 3,
+      "total": 25,
+      "has_more": true
+    }
+  ],
+  "instrumentation": {
+    "rows_materialized": 16123,
+    "max_string_bytes": 17680,
+    "full_payload_materialized": [],
+    "artifact_content_sql_reads": 0,
+    "artifact_file_reads": []
+  },
+  "latencies_collected": false
+}

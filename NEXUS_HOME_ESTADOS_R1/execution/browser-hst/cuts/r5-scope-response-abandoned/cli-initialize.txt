@@ -1,0 +1,21 @@
+### Result
+{"url":"http://127.0.0.1:63248/","snapshot":"- banner:\n  - button \"Collapse navigation\" [expanded]\n  - img \"Okto Nexus\"\n  - navigation \"Breadcrumb\": Home\n  - button \"Needs attention. All projects and Server. Attention counts are loading.\": Needs attention …\n  - text: ● Connecting\n  - button \"Sign out\"\n  - button\n- complementary:\n  - navigation \"Main navigation\":\n    - list \"Main destinations\":\n      - listitem:\n        - button \"Home\"\n      - listitem:\n        - button \"Conversations\"\n      - listitem:\n        - button \"Graph\"\n      - listitem:\n        - button \"Artifacts\"\n    - list \"More destinations\":\n      - listitem:\n        - button \"Advanced\"\n- main:\n  - heading \"Home\" [level=1]\n  - paragraph: Follow each harness below. Open an activity to see its exact context, or add a harness to this project.\n  - button \"Ask for work or chat\" [disabled]\n  - button \"Refresh\"\n  - button \"Pause display\"\n  - region \"Project\":\n    - text: Project\n    - combobox \"Project\":\n      - option \"All projects\" [selected]\n    - text: All projects\n    - button \"Add harness\"\n  - status\n  - status: Loading follow-up…\n  - region \"Follow-up\":\n    - heading \"Follow-up\" [level=2]\n    - region \"Active\":\n      - heading \"Active\" [level=3]\n      - text: Total unknown · Revalidating\n      - status: Loading active…\n    - region \"Needs you\":\n      - heading \"Needs you\" [level=3]\n      - text: Total unknown · Revalidating\n      - status: Loading needs you…\n    - region \"Results\":\n      - heading \"Results\" [level=3]\n      - text: Total unknown · Revalidating\n      - status: Loading results…"}
+### Ran Playwright code
+```js
+await (async page=>{
+ const cfg={"url": "http://127.0.0.1:63248", "workspace_id": "all"};
+ await page.addInitScript(({workspace})=>{
+  localStorage.setItem('okto-nexus-home-operational','enabled');
+  localStorage.setItem('okto-nexus-workspace',workspace);
+  localStorage.setItem('okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0',new Date().toISOString());
+ },{workspace:cfg.workspace_id});
+ await page.setViewportSize({width:1440,height:1100});
+ await page.goto(cfg.url,{waitUntil:'domcontentloaded'});
+ await page.getByTestId('home-board').waitFor({timeout:15000});
+ return {url:page.url(),snapshot:await page.locator('body').ariaSnapshot()};
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:63248/
+- Page Title: Okto Nexus

@@ -1,0 +1,13 @@
+{
+  "original_sha256": "0a009a334ec53e9036f9bc61b3f85d0d4df4a5abd5a44f30e1d1fbd37a87321e",
+  "derivative_sha256": "4b72e1060096e8ca2f740d9b49c7ee754769aedf68c64c2220cff3cfbb6bb811",
+  "naming_only": false,
+  "max_sessions": 4,
+  "question_published_after_base": true,
+  "question_ttl": "Original120s, never renewed",
+  "authority_sql_mutations": false,
+  "provider_invocations": 0,
+  "fault": "Only installed SQLiteHomeEntryRelations instance _rows when SQL equals installed home_operational_facts.SESSIONS; restore original callable",
+  "authority_mutations": false,
+  "synthetic_outcome_unknown": false
+}
