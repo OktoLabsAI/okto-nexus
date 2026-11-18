@@ -1,7 +1,7 @@
 import {useEffect, useId, useLayoutEffect, useRef, useState} from 'react';
 import {runtimeApi, type InteractionScope, type SessionInputReceipt, type SessionInteraction} from '../runtimeApi';
-import {applyConversationUpdates, assertConversationPage, assertInteractionScope, interactionKey,
-  receiptLabel, type ConversationMessage} from '../sessionConversation';
+import {applyConversationUpdates, assertConversationPage, assertInteractionScope, clearInputIntents,
+  inputIntentStorageKey, interactionKey, readInputIntent, receiptLabel, type ConversationMessage} from '../sessionConversation';
 import {OperatorSignIn} from './OperatorSignIn';
 import {SessionCommandPicker} from './SessionCommandPicker';
 import {SessionInputQueue} from './SessionInputQueue';
@@ -22,8 +22,13 @@ const drafts = new Map<string, Draft>();
 export function clearConversationDrafts() {
   drafts.clear();
   if (typeof window !== 'undefined') {
-    clearInterruptIntents(window.sessionStorage);
-    clearSteerReferences(window.sessionStorage);
+    try {
+      clearInputIntents(window.sessionStorage);
+      clearInterruptIntents(window.sessionStorage);
+      clearSteerReferences(window.sessionStorage);
+    } catch {
+      // Browser storage may be disabled. Revocation still clears in-memory state.
+    }
   }
 }
 
@@ -51,8 +56,9 @@ export function SessionConversation({scope, active, onAccessLost}: {
   onAccessLost: () => void;
 }) {
   const key = interactionKey(scope);
+  const intentKey = inputIntentStorageKey(scope);
   const editorId = useId();
-  const [draft, setDraft] = useState(() => drafts.get(key) ?? emptyDraft);
+  const [draft, setDraft] = useState(currentDraft);
   const [history, setHistory] = useState<History>(() => emptyHistory());
   const [interaction, setInteraction] = useState<SessionInteraction | null>(null);
   const [reading, setReading] = useState('');
@@ -70,10 +76,30 @@ export function SessionConversation({scope, active, onAccessLost}: {
   const lastInteraction = useRef<SessionInteraction | null>(null);
   const polling = useRef<() => void>(() => {});
   const mutation = useRef<AbortController | null>(null);
+  const recoverOnOpen = useRef(!!draft.uncertain);
   const scroll = useRef<HTMLDivElement>(null);
   const following = useRef(true);
   const revoke = useRef(onAccessLost);
   revoke.current = onAccessLost;
+
+  function currentDraft() {
+    const inMemory = drafts.get(key);
+    if (inMemory || typeof window === 'undefined') return inMemory ?? emptyDraft;
+    try {
+      const intent = readInputIntent(window.sessionStorage, intentKey);
+      return intent ? {...emptyDraft, uncertain: intent} : emptyDraft;
+    } catch {
+      return emptyDraft;
+    }
+  }
+
+  function clearReceiptReference(intent: string) {
+    try {
+      if (readInputIntent(window.sessionStorage, intentKey) === intent) window.sessionStorage.removeItem(intentKey);
+    } catch {
+      // The durable server-side receipt remains available if storage access changes.
+    }
+  }
 
   function save(value: Draft) {
     drafts.set(key, value);
@@ -82,9 +108,11 @@ export function SessionConversation({scope, active, onAccessLost}: {
 
   function installReceipt(intent: string, receipt: SessionInputReceipt) {
     assertInteractionScope({...receipt.scope, session_owner_generation: receipt.session_owner_generation}, scope);
-    const prior = drafts.get(key) ?? emptyDraft;
-    if (prior.uncertain === intent) save({text: '', uncertain: null, latest: {intent, receipt}});
-    else if (prior.latest?.intent === intent && receipt.input_revision >= prior.latest.receipt.input_revision &&
+    const prior = currentDraft();
+    if (prior.uncertain === intent) {
+      clearReceiptReference(intent);
+      save({text: '', uncertain: null, latest: {intent, receipt}});
+    } else if (prior.latest?.intent === intent && receipt.input_revision >= prior.latest.receipt.input_revision &&
              receipt.input_id === prior.latest.receipt.input_id) save({...prior, latest: {intent, receipt}});
   }
 
@@ -97,6 +125,7 @@ export function SessionConversation({scope, active, onAccessLost}: {
 
   useEffect(() => {
     const controller = new AbortController();
+    setBusy(false);
     let timer: number | undefined;
     let inFlight = false;
     const signal = controller.signal;
@@ -209,9 +238,17 @@ export function SessionConversation({scope, active, onAccessLost}: {
   }
 
   async function send(recover: boolean, selected?: {message: string; revision: string}) {
-    if (mutation.current || recover && !draft.uncertain) return;
+    if (mutation.current || recover && (!draft.uncertain || capability?.human_login_required !== false)) return;
     if (!recover && (!canSend || draftHeld || draft.uncertain || (!selected && (!draft.text.trim() || command || tooLong)))) return;
     const intent = recover ? draft.uncertain! : 'ui_' + crypto.randomUUID();
+    if (!recover) {
+      try {
+        window.sessionStorage.setItem(intentKey, intent);
+      } catch {
+        setMessageError('The receipt reference could not be saved. Your message is still a draft.');
+        return;
+      }
+    }
     const controller = new AbortController();
     mutation.current = controller;
     setBusy(true);
@@ -229,6 +266,7 @@ export function SessionConversation({scope, active, onAccessLost}: {
       if (status === 401) {
         loseAccess();
       } else if (!recover && [400, 403, 409, 422, 429].includes(status ?? 0)) {
+        clearReceiptReference(intent);
         save({...draft, uncertain: null});
         setMessageError(error instanceof Error ? error.message : 'The message was refused.');
       } else {
@@ -243,6 +281,12 @@ export function SessionConversation({scope, active, onAccessLost}: {
       }
     }
   }
+
+  useEffect(() => {
+    if (!recoverOnOpen.current || capability?.human_login_required !== false) return;
+    recoverOnOpen.current = false;
+    void send(true);
+  }, [capability?.human_login_required]);
 
   return <section aria-label="Session conversation" className="space-y-3 min-w-0">
     <div ref={scroll} className="max-h-80 overflow-y-auto rounded-lg border p-3" tabIndex={0}
@@ -299,7 +343,7 @@ export function SessionConversation({scope, active, onAccessLost}: {
         {steerAvailable && <button type="button" className="btn btn-secondary"
           disabled={!canReviewSteer || !draft.text.trim() || command || tooLong}
           onClick={event => reviewSteer({kind: 'draft', text: draft.text}, event.currentTarget)}>Reorient current turn</button>}
-        {draft.uncertain && <button type="button" disabled={busy} className="btn btn-secondary"
+        {draft.uncertain && <button type="button" disabled={busy || capability?.human_login_required !== false} className="btn btn-secondary"
           onClick={() => void send(true)}>Check message receipt</button>}
       </div>
     </form>}

@@ -26,7 +26,8 @@ function load(url){
   new Function('require','module','exports',code)(localRequire,module,module.exports);return module.exports;
 }
 const {SessionExecutionPanel}=load(new URL('../src/components/SessionExecutionPanel.tsx',import.meta.url));
-const {assertConversationPage,applyConversationUpdates,interactionKey}=load(new URL('../src/sessionConversation.ts',import.meta.url));
+const {assertConversationPage,applyConversationUpdates,interactionKey,inputIntentStorageKey,readInputIntent,clearInputIntents}=
+  load(new URL('../src/sessionConversation.ts',import.meta.url));
 const {interruptStatus,canDismissInterrupt,interruptStorageKey,clearInterruptIntents}=load(new URL('../src/sessionInterrupt.ts',import.meta.url));
 const {assertSteerPreview,steerReceiptOutcome,steerStorageKey,readSteerReference,clearSteerReferences}=
   load(new URL('../src/sessionSteer.ts',import.meta.url));
@@ -55,6 +56,22 @@ test('interrupt recovery references stay isolated by full scope and are cleared 
   const items=new Map([[exactKey,'intent-a'],['unrelated-ui-preference','keep'],[otherKey,'intent-b']]);
   clearInterruptIntents({get length(){return items.size;},key:index=>[...items.keys()][index],removeItem:key=>items.delete(key)});
   assert.deepEqual([...items], [['unrelated-ui-preference','keep']]);
+});
+
+test('next-turn recovery restores only a valid intent in the exact owner scope',()=>{
+  const scope={...context,session_owner_generation:3};
+  const exactKey=inputIntentStorageKey(scope);
+  const otherKey=inputIntentStorageKey({...scope,session_id:'different-session'});
+  const nextOwnerKey=inputIntentStorageKey({...scope,session_owner_generation:4});
+  const intent='ui_12345678-1234-1234-1234-123456789abc';
+  const items=new Map([[exactKey,intent],[otherKey,'invalid-draft-text'],['preference','keep']]);
+  const storage={get length(){return items.size;},key:index=>[...items.keys()][index],getItem:key=>items.get(key),
+    removeItem:key=>items.delete(key)};
+  assert.equal(readInputIntent(storage,exactKey),intent);
+  assert.equal(readInputIntent(storage,nextOwnerKey),null);
+  assert.equal(readInputIntent(storage,otherKey),null);
+  clearInputIntents(storage);
+  assert.deepEqual([...items], [['preference','keep']]);
 });
 
 test('reorientation reviews freeze the supported effect, owner generation and queued input',()=>{

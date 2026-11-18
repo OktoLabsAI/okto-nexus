@@ -6,6 +6,24 @@ export function interactionKey(scope: InteractionScope) {
     scope.workspace_binding_id, scope.agent_id, scope.session_id, scope.session_owner_generation]);
 }
 
+const inputIntentPrefix = 'okto-nexus:session-input:';
+
+export function inputIntentStorageKey(scope: InteractionScope) {
+  return inputIntentPrefix + interactionKey(scope);
+}
+
+export function readInputIntent(storage: Storage, key: string) {
+  const intent = storage.getItem(key);
+  return intent && /^ui_[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/.test(intent) ? intent : null;
+}
+
+export function clearInputIntents(storage: Storage) {
+  for (let index = storage.length - 1; index >= 0; index -= 1) {
+    const key = storage.key(index);
+    if (key?.startsWith(inputIntentPrefix)) storage.removeItem(key);
+  }
+}
+
 export function assertInteractionScope(actual: InteractionScope, expected: InteractionScope) {
   if (!sameRuntimeScope(actual, expected) || actual.session_owner_generation !== expected.session_owner_generation) {
     throw new Error('The response belongs to a different session.');
