@@ -135,7 +135,8 @@ export function SessionSteerControl({scope, available, source, pending, draftRet
     onCloseReview();
     try {
       const receipt = source.kind === 'draft' && reference.kind === 'draft'
-        ? await runtimeApi.steerSessionInput(scope, reviewed.control, reference.intent, source.text, controller.signal)
+        ? await runtimeApi.steerSessionInput(scope, reviewed.control, reference.intent, source.text, controller.signal,
+          source.catalogRevision)
         : await runtimeApi.promoteSessionInput(scope, reviewed.control, reviewed.queued_input!, controller.signal);
       if (!controller.signal.aborted) {
         acceptReceipt(reference, receipt);
@@ -148,7 +149,10 @@ export function SessionSteerControl({scope, available, source, pending, draftRet
       else if ([400, 403, 404, 409, 422, 429].includes(status ?? 0)) {
         finish();
         callbacks.current.onQueueChanged();
-        const reason = status === 409 ? 'The turn or queue changed.' : 'The reorientation was refused.';
+        const reason = status === 409
+          ? (source.kind === 'draft' && source.catalogRevision ? 'The commands, turn or queue changed. Refresh commands and review again.'
+            : 'The turn or queue changed.')
+          : 'The reorientation was refused.';
         setNotice(reason + (source.kind === 'draft' ? ' Your draft is available.' : ' Refresh the queue to review its state.'));
       } else {
         setNotice('Reorientation is unconfirmed. Check the original receipt before taking another action.');

@@ -36,7 +36,7 @@ def _exact_scope(scope):
 
 def request_exact_human_interrupt(*, factory, access, authority_fence, current_interrupt_target,
                                   scope, author, client_intent_id, native_turn_id, capability_revision,
-                                  expected_queue_revision, fresh_publications, remote_ready):
+                                  expected_queue_revision, fresh_publications, remote_ready, verify_command=None):
     """Route an exact native target through the existing R4 interrupt path."""
     if type(native_turn_id) is not str or not 1 <= len(native_turn_id) <= 160 or not native_turn_id.isprintable():
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'An exact native turn ID is required.', {})
@@ -66,6 +66,8 @@ def request_exact_human_interrupt(*, factory, access, authority_fence, current_i
         control = (scope.session.session_id, scope.generation.value, author.authority_ref, author.surface,
                    capability_revision, native_turn_id)
         if existing is None:
+            if verify_command is not None:
+                verify_command(uow)
             if has_unresolved_interrupt(uow.connection, scope.session):
                 raise OktoNexusError(ErrorCode.CONFLICT, 'An interrupt is already pending in this session.', {})
             target = current_interrupt_target(uow, scope)

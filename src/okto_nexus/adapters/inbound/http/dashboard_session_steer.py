@@ -46,6 +46,36 @@ from .session_interaction_contract import (
 )
 
 
+async def steer_response(session_id, body, request, operation, arguments):
+    if not getattr(request.state, 'operator_session', False):
+        return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to reorient a turn.')
+    if body.scope.session_id != session_id or request.query_params:
+        return _error(422, 'VALIDATION_ERROR', 'The reorientation must use the exact session scope.')
+    if not isinstance(body.target, NativeTurnTarget):
+        return _error(409, 'CONFLICT', 'An exact native turn is required for reorientation.')
+    state = request.app.state
+    options = getattr(state, 'session_input_dispatch_options', {})
+    if not options:
+        return _error(409, 'CONFLICT', 'Session interaction controls are disabled.')
+
+    def admit():
+        auth = state.operator_auth
+        ref = auth.authority_reference(request.cookies.get(COOKIE), create=operation is steer_human_input)
+        if ref is None:
+            raise OktoNexusError(ErrorCode.NOT_FOUND, 'No input is available for this login and session.')
+        receipt = operation(factory=state.deps.connection_factory, access=build_execution_access(state.deps),
+            authority_fence=options['session_input_authority_fence'], current_steer_revisions=options['session_steer_revisions'],
+            scope=body.input_scope(), author=InputAuthor(ref, 'web'), native_turn_id=body.target.turn_id,
+            capability_revision=body.capability_revision, confirmed_effect_revision=body.confirmed_effect_revision,
+            expected_queue_revision=body.expected_queue_revision, fresh_publications=state.inventory_fresh_publications,
+            remote_ready=protocol_info()['remote_execution_ready'], **arguments)
+        return _receipt_document(body.scope, body.expected_session_generation, receipt)
+
+    try:
+        return JSONResponse(await anyio.to_thread.run_sync(admit), status_code=202, headers=_HEADERS)
+    except OktoNexusError as error:
+        return _runtime_error(error)
+
 def build_router():
     router = APIRouter(prefix='/runtime/sessions/{session_id}')
 
@@ -104,44 +134,14 @@ def build_router():
         except OktoNexusError as error:
             return _runtime_error(error)
 
-    async def apply(session_id, body, request, operation, arguments):
-        if not getattr(request.state, 'operator_session', False):
-            return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to reorient a turn.')
-        if body.scope.session_id != session_id or request.query_params:
-            return _error(422, 'VALIDATION_ERROR', 'The reorientation must use the exact session scope.')
-        if not isinstance(body.target, NativeTurnTarget):
-            return _error(409, 'CONFLICT', 'An exact native turn is required for reorientation.')
-        state = request.app.state
-        options = getattr(state, 'session_input_dispatch_options', {})
-        if not options:
-            return _error(409, 'CONFLICT', 'Session interaction controls are disabled.')
-
-        def admit():
-            auth = state.operator_auth
-            ref = auth.authority_reference(request.cookies.get(COOKIE), create=operation is steer_human_input)
-            if ref is None:
-                raise OktoNexusError(ErrorCode.NOT_FOUND, 'No input is available for this login and session.')
-            receipt = operation(factory=state.deps.connection_factory, access=build_execution_access(state.deps),
-                authority_fence=options['session_input_authority_fence'], current_steer_revisions=options['session_steer_revisions'],
-                scope=body.input_scope(), author=InputAuthor(ref, 'web'), native_turn_id=body.target.turn_id,
-                capability_revision=body.capability_revision, confirmed_effect_revision=body.confirmed_effect_revision,
-                expected_queue_revision=body.expected_queue_revision, fresh_publications=state.inventory_fresh_publications,
-                remote_ready=protocol_info()['remote_execution_ready'], **arguments)
-            return _receipt_document(body.scope, body.expected_session_generation, receipt)
-
-        try:
-            return JSONResponse(await anyio.to_thread.run_sync(admit), status_code=202, headers=_HEADERS)
-        except OktoNexusError as error:
-            return _runtime_error(error)
-
     @router.post('/steer', status_code=202)
     async def steer(session_id: str, body: SteerInput, request: Request):
-        return await apply(session_id, body, request, steer_human_input,
+        return await steer_response(session_id, body, request, steer_human_input,
                            {'client_intent_id': body.client_intent_id, 'text': body.content[0].text})
 
     @router.post('/inputs/{input_id}/promote', status_code=202)
     async def promote(session_id: str, input_id: str, body: PromoteInput, request: Request):
-        return await apply(session_id, body, request, promote_queued_human_input,
+        return await steer_response(session_id, body, request, promote_queued_human_input,
                            {'input_id': input_id, 'expected_input_revision': body.expected_input_revision})
 
     return router

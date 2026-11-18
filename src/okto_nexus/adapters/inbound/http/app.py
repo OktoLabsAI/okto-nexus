@@ -825,7 +825,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             return err(422, 'VALIDATION_ERROR',
                        'Enter a username (1–80 characters) and a password. New passwords require 12–1024 characters.')
         if re.fullmatch(r'/api/v1/runtime-management/runtime/sessions/[^/]+/'
-                        r'(?:inputs(?:/queue-state|/[^/]+/(?:cancel|promote))?|interrupt|steer)/?', request.url.path):
+                        r'(?:inputs(?:/queue-state|/[^/]+/(?:cancel|promote))?|interrupt|steer|commands:execute)/?', request.url.path):
             response = v1_err(422, 'VALIDATION_ERROR', 'The request does not match the session interaction contract.',
                               stage='validation')
             response.headers['Cache-Control'] = 'no-store'

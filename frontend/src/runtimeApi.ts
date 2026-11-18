@@ -189,6 +189,33 @@ export interface SessionInteraction {
   next_turn: {supported: boolean; capability_revision: string | null; human_login_required: boolean};
 }
 
+export interface SessionCommandDescriptor {
+  command_id: string;
+  label: string;
+  effect: string;
+  source: 'nexus' | 'native';
+  surface: 'dashboard' | 'native_terminal';
+  handler: 'catalog' | 'session_status' | 'enqueue' | 'review_steer' | 'review_interrupt' | null;
+  arguments: 'message'[];
+  state: 'supported' | 'disabled_for_state' | 'denied_by_policy' | 'native_only' | 'unsupported' | 'unqualified';
+  reason: string | null;
+  requires_confirmation: boolean;
+}
+
+export interface SessionCommandCatalog {
+  version: 1;
+  scope: RuntimeScope;
+  session_owner_generation: number;
+  capability_revision: string;
+  literal_text_supported: false;
+  items: SessionCommandDescriptor[];
+}
+
+export interface SessionCommandStatus extends Pick<RuntimeSession, 'lifecycle_state' | 'lease_state' | 'control_available'> {
+  scope: RuntimeScope;
+  session_owner_generation: number;
+}
+
 export interface SessionInputReceipt {
   scope: RuntimeScope;
   session_owner_generation: number;
@@ -360,6 +387,12 @@ function steerConfirmation(scope: InteractionScope, reviewed: SessionSteerTarget
   };
 }
 
+function commandMutation(path: string, actionPath: string, command: 'send' | 'steer' | 'interrupt', revision?: string) {
+  return revision
+    ? {url: path + '/commands:execute', confirmation: {command, catalog_revision: revision, confirmed: true}}
+    : {url: path + actionPath, confirmation: {}};
+}
+
 // Save the complete immutable request before sending it. Retrying an uncertain
 // request uses the same identity/body; credentials never enter this record.
 export function durableBindingRequest(key: string, payload: Record<string, unknown>): Record<string, unknown> {
@@ -445,15 +478,29 @@ export const runtimeApi = {
     const target = interactionTarget(scope);
     return read<SessionInteraction>(`${target.path}/interaction?${target.query}`, signal);
   },
+  sessionCommands: (scope: InteractionScope, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    return read<SessionCommandCatalog>(`${target.path}/commands?${target.query}`, signal);
+  },
+  sessionCommandStatus: (scope: InteractionScope, revision: string, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    return read<SessionCommandStatus>(`${target.path}/commands:execute`, signal, {
+      scope: target.scope, expected_session_generation: scope.session_owner_generation,
+      command: 'status', catalog_revision: revision,
+    });
+  },
   sessionConversation: (scope: InteractionScope, after: number, epoch: string | null, signal: AbortSignal) => {
     const target = interactionTarget(scope);
     target.query.set('after_sequence', String(after));
     if (epoch !== null) target.query.set('stream_epoch', epoch);
     return read<SessionConversationPage>(`${target.path}/conversation?${target.query}`, signal);
   },
-  enqueueSessionInput: (scope: InteractionScope, intent: string, text: string, capability: string, signal: AbortSignal) => {
+  enqueueSessionInput: (scope: InteractionScope, intent: string, text: string, capability: string, signal: AbortSignal,
+    catalogRevision?: string) => {
     const target = interactionTarget(scope);
-    return read<SessionInputReceipt>(`${target.path}/inputs`, signal, {
+    const command = commandMutation(target.path, '/inputs', 'send', catalogRevision);
+    return read<SessionInputReceipt>(command.url, signal, {
+      ...command.confirmation,
       scope: target.scope, expected_session_generation: scope.session_owner_generation,
       client_intent_id: intent, capability_revision: capability, mode: 'next_turn',
       content: [{type: 'text', text}],
@@ -468,10 +515,14 @@ export const runtimeApi = {
     if (inputId !== null) target.query.set('input_id', inputId);
     return read<SessionSteerAvailability>(`${target.path}/steer?${target.query}`, signal);
   },
-  steerSessionInput: (scope: InteractionScope, reviewed: SessionSteerTarget, intent: string, text: string, signal: AbortSignal) =>
-    read<SessionInputReceipt>(`${interactionTarget(scope).path}/steer`, signal, {
-      ...steerConfirmation(scope, reviewed), client_intent_id: intent, content: [{type: 'text', text}],
-    }),
+  steerSessionInput: (scope: InteractionScope, reviewed: SessionSteerTarget, intent: string, text: string, signal: AbortSignal,
+    catalogRevision?: string) => {
+    const command = commandMutation(interactionTarget(scope).path, '/steer', 'steer', catalogRevision);
+    return read<SessionInputReceipt>(command.url, signal, {
+      ...command.confirmation, ...steerConfirmation(scope, reviewed),
+      client_intent_id: intent, content: [{type: 'text', text}],
+    });
+  },
   promoteSessionInput: (scope: InteractionScope, reviewed: SessionSteerTarget, input: QueuedSteerPreview, signal: AbortSignal) => {
     const target = interactionTarget(scope);
     return read<SessionInputReceipt>(`${target.path}/inputs/${encodeURIComponent(input.input_id)}/promote`, signal, {
@@ -503,9 +554,12 @@ export const runtimeApi = {
     const target = interactionTarget(scope);
     return read<SessionInterruptAvailability>(`${target.path}/interrupt?${target.query}`, signal);
   },
-  interruptSessionTurn: (scope: InteractionScope, reviewed: SessionInterruptTarget, intent: string, signal: AbortSignal) => {
+  interruptSessionTurn: (scope: InteractionScope, reviewed: SessionInterruptTarget, intent: string, signal: AbortSignal,
+    catalogRevision?: string) => {
     const target = interactionTarget(scope);
-    return read<RuntimeOperation>(`${target.path}/interrupt`, signal, {
+    const command = commandMutation(target.path, '/interrupt', 'interrupt', catalogRevision);
+    return read<RuntimeOperation>(command.url, signal, {
+      ...command.confirmation,
       scope: target.scope, expected_session_generation: scope.session_owner_generation, client_intent_id: intent,
       capability_revision: reviewed.capability_revision, expected_queue_revision: reviewed.queue_revision, target: reviewed.target,
     });

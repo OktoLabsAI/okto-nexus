@@ -106,6 +106,64 @@ def _interrupt_target_for(state):
     return partial(active_native_turn, current_next_turn_revision=next_turn) if next_turn is not None else None
 
 
+async def enqueue_input_response(session_id: str, body: EnqueueInput, request: Request, *, verify_command=None):
+    if not getattr(request.state, 'operator_session', False):
+        return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to send a message.')
+    if body.scope.session_id != session_id or request.query_params:
+        return _error(422, 'VALIDATION_ERROR', 'The message must use the exact session scope.')
+    state = request.app.state
+    options = getattr(state, 'session_input_dispatch_options', {})
+    if not options:
+        return _error(409, 'CONFLICT', 'Sending messages through the session queue is disabled.')
+    auth = state.operator_auth
+
+    def submit():
+        reference = auth.authority_reference(request.cookies.get(COOKIE))
+        if reference is None:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The operator login has expired.')
+        receipt = enqueue_human_input(factory=state.deps.connection_factory,
+            access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
+            current_capability_revision=options['session_input_capability_revision'], scope=body.input_scope(),
+            author=InputAuthor(reference, 'web'), client_intent_id=body.client_intent_id,
+            capability_revision=body.capability_revision, text=body.content[0].text, verify_command=verify_command)
+        return _receipt_document(body.scope, body.expected_session_generation, receipt)
+
+    try:
+        return JSONResponse(await anyio.to_thread.run_sync(submit), status_code=202, headers=_HEADERS)
+    except OktoNexusError as error:
+        return _runtime_error(error)
+
+async def interrupt_response(session_id: str, body: InterruptInput, request: Request, *, verify_command=None):
+    if not getattr(request.state, 'operator_session', False):
+        return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to interrupt a turn.')
+    if body.scope.session_id != session_id or request.query_params:
+        return _error(422, 'VALIDATION_ERROR', 'The interrupt must use the exact session scope.')
+    if not isinstance(body.target, NativeTurnTarget):
+        return _error(409, 'CONFLICT', 'An exact native turn is required by this control.')
+    state = request.app.state
+    options = getattr(state, 'session_input_dispatch_options', {})
+    if not options:
+        return _error(409, 'CONFLICT', 'Session interaction controls are disabled.')
+
+    def admit():
+        ref = state.operator_auth.authority_reference(request.cookies.get(COOKIE))
+        if ref is None:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The operator login has expired.')
+        return request_exact_human_interrupt(factory=state.deps.connection_factory,
+            access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
+            current_interrupt_target=partial(active_native_turn,
+                current_next_turn_revision=options['session_input_capability_revision']), scope=body.input_scope(),
+            author=InputAuthor(ref, 'web'), client_intent_id=body.client_intent_id, native_turn_id=body.target.turn_id,
+            capability_revision=body.capability_revision, expected_queue_revision=body.expected_queue_revision,
+            fresh_publications=state.inventory_fresh_publications, remote_ready=protocol_info()['remote_execution_ready'],
+            verify_command=verify_command)
+
+    try:
+        operation, reused = await anyio.to_thread.run_sync(admit)
+        return JSONResponse(operation, status_code=200 if reused else 202, headers=_HEADERS)
+    except OktoNexusError as error:
+        return _runtime_error(error)
+
 def build_router():
     router = APIRouter(prefix='/runtime/sessions/{session_id}')
 
@@ -152,31 +210,7 @@ def build_router():
 
     @router.post('/inputs', status_code=202)
     async def enqueue_input(session_id: str, body: EnqueueInput, request: Request):
-        if not getattr(request.state, 'operator_session', False):
-            return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to send a message.')
-        if body.scope.session_id != session_id or request.query_params:
-            return _error(422, 'VALIDATION_ERROR', 'The message must use the exact session scope.')
-        state = request.app.state
-        options = getattr(state, 'session_input_dispatch_options', {})
-        if not options:
-            return _error(409, 'CONFLICT', 'Sending messages through the session queue is disabled.')
-        auth = state.operator_auth
-
-        def submit():
-            reference = auth.authority_reference(request.cookies.get(COOKIE))
-            if reference is None:
-                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The operator login has expired.')
-            receipt = enqueue_human_input(factory=state.deps.connection_factory,
-                access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
-                current_capability_revision=options['session_input_capability_revision'], scope=body.input_scope(),
-                author=InputAuthor(reference, 'web'), client_intent_id=body.client_intent_id,
-                capability_revision=body.capability_revision, text=body.content[0].text)
-            return _receipt_document(body.scope, body.expected_session_generation, receipt)
-
-        try:
-            return JSONResponse(await anyio.to_thread.run_sync(submit), status_code=202, headers=_HEADERS)
-        except OktoNexusError as error:
-            return _runtime_error(error)
+        return await enqueue_input_response(session_id, body, request)
 
     @router.get('/inputs/receipt')
     async def input_receipt(session_id: str, request: Request):
@@ -358,34 +392,7 @@ def build_router():
 
     @router.post('/interrupt', status_code=202)
     async def interrupt(session_id: str, body: InterruptInput, request: Request):
-        if not getattr(request.state, 'operator_session', False):
-            return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to interrupt a turn.')
-        if body.scope.session_id != session_id or request.query_params:
-            return _error(422, 'VALIDATION_ERROR', 'The interrupt must use the exact session scope.')
-        if not isinstance(body.target, NativeTurnTarget):
-            return _error(409, 'CONFLICT', 'An exact native turn is required by this control.')
-        state = request.app.state
-        options = getattr(state, 'session_input_dispatch_options', {})
-        if not options:
-            return _error(409, 'CONFLICT', 'Session interaction controls are disabled.')
-
-        def admit():
-            ref = state.operator_auth.authority_reference(request.cookies.get(COOKIE))
-            if ref is None:
-                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The operator login has expired.')
-            return request_exact_human_interrupt(factory=state.deps.connection_factory,
-                access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
-                current_interrupt_target=partial(active_native_turn,
-                    current_next_turn_revision=options['session_input_capability_revision']), scope=body.input_scope(),
-                author=InputAuthor(ref, 'web'), client_intent_id=body.client_intent_id, native_turn_id=body.target.turn_id,
-                capability_revision=body.capability_revision, expected_queue_revision=body.expected_queue_revision,
-                fresh_publications=state.inventory_fresh_publications, remote_ready=protocol_info()['remote_execution_ready'])
-
-        try:
-            operation, reused = await anyio.to_thread.run_sync(admit)
-            return JSONResponse(operation, status_code=200 if reused else 202, headers=_HEADERS)
-        except OktoNexusError as error:
-            return _runtime_error(error)
+        return await interrupt_response(session_id, body, request)
 
     @router.get('/interrupt/receipt')
     async def interrupt_receipt(session_id: str, request: Request):

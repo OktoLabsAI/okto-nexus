@@ -45,7 +45,8 @@ def promote_queued_human_input(*, factory, access, authority_fence, current_stee
 
 def steer_human_input(*, factory, access, authority_fence, current_steer_revisions,
                       scope, author, client_intent_id, text, native_turn_id, capability_revision,
-                      confirmed_effect_revision, expected_queue_revision, fresh_publications, remote_ready):
+                      confirmed_effect_revision, expected_queue_revision, fresh_publications, remote_ready,
+                      verify_command=None):
     """Accept and link new text in one writer, with no observable FIFO intake on refusal."""
     _validate_ids(client_intent_id, native_turn_id, capability_revision, confirmed_effect_revision)
     _require_plain_text(text)
@@ -54,6 +55,8 @@ def steer_human_input(*, factory, access, authority_fence, current_steer_revisio
         context = require_human_queue_control(uow, access=access, author=author, resolve_human=resolve_human)
 
         def verify_intake():
+            if verify_command is not None:
+                verify_command(uow)
             row = uow.connection.execute("""
                 SELECT revision FROM session_interaction_queues
                 WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id

@@ -14,7 +14,9 @@ from ....adapters.outbound.sqlite.session_interaction_queue_controls import (
     is_input_queue_paused,
 )
 from ....application.execution_operator_authority import require_operator_request
+from ....application.execution_session_views import read_execution_session
 from ....application.session_interaction_authority import require_session_input_grant
+from ....application.session_interaction_promotion import steer_human_input
 from ....application.session_interaction_targets import (
     active_native_turn,
     steer_effect_revisions,
@@ -28,13 +30,20 @@ from .dashboard_session_input import (
     _exact_view,
     _read_scope,
     _runtime_error,
+    enqueue_input_response,
+    interrupt_response,
 )
+from .dashboard_session_steer import steer_response
 from .identity_ctx import runtime_request_context
 from .session_interaction_contract import (
     CommandDescriptor,
     CommandHandler,
     CommandId,
     CommandState,
+    EnqueueSessionCommand,
+    InterruptSessionCommand,
+    ReadSessionCommand,
+    SessionCommand,
     SessionCommandCatalog,
 )
 
@@ -178,6 +187,54 @@ def build_router():
             with factory.unit_of_work(write=False) as uow:
                 return read_command_catalog(uow, factory=factory, access=access, scope=scope, document=document,
                     context=context, options=options).model_dump(mode='json')
+
+        try:
+            return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)
+        except OktoNexusError as error:
+            return _runtime_error(error)
+
+    @router.post('/commands:execute')
+    async def execute_command(session_id: str, body: SessionCommand, request: Request):
+        if not getattr(request.state, 'operator_session', False):
+            return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to use session commands.')
+        if body.scope.session_id != session_id or request.query_params:
+            return _error(422, 'VALIDATION_ERROR', 'The command must use the exact session scope.')
+        state = request.app.state
+        factory = state.deps.connection_factory
+        access = build_execution_access(state.deps)
+        context = runtime_request_context()
+        options = getattr(state, 'session_input_dispatch_options', {})
+        scope = body.input_scope()
+
+        def verify_command(uow):
+            catalog = read_command_catalog(uow, factory=factory, access=access, scope=scope, document=body.scope,
+                                           context=context, options=options)
+            if catalog.capability_revision != body.catalog_revision:
+                raise OktoNexusError(ErrorCode.CONFLICT, 'Session commands changed. Review the current action again.', {})
+            action = next(item for item in catalog.items if item.command_id == body.command)
+            if action.state != 'supported':
+                code = ErrorCode.PERMISSION_DENIED if action.state == 'denied_by_policy' else ErrorCode.CONFLICT
+                raise OktoNexusError(code, action.reason or 'The session command is unavailable.', {})
+            return catalog
+
+        if isinstance(body, EnqueueSessionCommand):
+            return await enqueue_input_response(session_id, body, request, verify_command=verify_command)
+        if isinstance(body, InterruptSessionCommand):
+            return await interrupt_response(session_id, body, request, verify_command=verify_command)
+        if not isinstance(body, ReadSessionCommand):
+            return await steer_response(session_id, body, request, steer_human_input, {
+                'client_intent_id': body.client_intent_id, 'text': body.content[0].text, 'verify_command': verify_command,
+            })
+
+        def read():
+            with factory.unit_of_work(write=False) as uow:
+                catalog = verify_command(uow)
+                if body.command == 'help':
+                    return catalog.model_dump(mode='json')
+                session = read_execution_session(factory, server_id=scope.session.server_id,
+                    executor_id=scope.session.executor_id, session_id=session_id, context=context, access=access, _uow=uow)
+                return {**{key: session[key] for key in ('lifecycle_state', 'lease_state', 'control_available')},
+                        'scope': body.scope.model_dump(), 'session_owner_generation': scope.generation.value}
 
         try:
             return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)

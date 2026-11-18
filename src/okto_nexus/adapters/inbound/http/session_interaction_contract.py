@@ -57,16 +57,19 @@ class ExactSessionScope(_Document):
                           self.workspace_id, self.workspace_binding_id, self.agent_id)
 
 
-class ScopedInteraction(_Document):
+class ScopedSession(_Document):
     scope: ExactSessionScope
     expected_session_generation: Generation
-    capability_revision: Identifier
 
     def owner_generation(self) -> SessionOwnerGeneration:
         return SessionOwnerGeneration(self.expected_session_generation)
 
     def input_scope(self) -> InputScope:
         return self.scope.input_scope(self.expected_session_generation)
+
+
+class ScopedInteraction(ScopedSession):
+    capability_revision: Identifier
 
 
 class TextInput(_Document):
@@ -243,3 +246,32 @@ class SessionCommandCatalog(_Document):
     adapter_id: Identifier | None
     literal_text_supported: Literal[False] = False
     items: Annotated[tuple[CommandDescriptor, ...], Field(max_length=100)]
+
+
+class ReadSessionCommand(ScopedSession):
+    command: Literal["help", "status"]
+    catalog_revision: Identifier
+
+
+class EnqueueSessionCommand(EnqueueInput):
+    command: Literal["send"]
+    catalog_revision: Identifier
+    confirmed: Literal[True]
+
+
+class SteerSessionCommand(SteerInput):
+    command: Literal["steer"]
+    catalog_revision: Identifier
+    confirmed: Literal[True]
+
+
+class InterruptSessionCommand(InterruptInput):
+    command: Literal["interrupt"]
+    catalog_revision: Identifier
+    confirmed: Literal[True]
+
+
+SessionCommand = Annotated[
+    ReadSessionCommand | EnqueueSessionCommand | SteerSessionCommand | InterruptSessionCommand,
+    Field(discriminator="command"),
+]

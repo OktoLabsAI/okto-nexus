@@ -29,7 +29,7 @@ from .runtime_policy import effective
 
 
 def enqueue_human_input(*, factory, access, authority_fence, current_capability_revision,
-                        scope, author, client_intent_id, capability_revision, text):
+                        scope, author, client_intent_id, capability_revision, text, verify_command=None):
     """Commit one input for an already identified human and exact session."""
     if isinstance(text, str) and text.lstrip().startswith(('/', '!')):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Commands are unavailable in this message input.', {})
@@ -38,6 +38,8 @@ def enqueue_human_input(*, factory, access, authority_fence, current_capability_
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The session input author is no longer signed in.', {})
 
         def verify_new_authority():
+            if verify_command is not None:
+                verify_command(uow)
             grant = require_session_input_authority(uow, factory=factory, access=access, scope=scope,
                                                    author=author, resolve_human=resolve_human)
             if not capability_revision or current_capability_revision(uow, scope) != capability_revision:

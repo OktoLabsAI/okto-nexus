@@ -3,15 +3,16 @@ import {runtimeApi, type InteractionScope, type RuntimeOperation, type SessionIn
 import {assertInteractionScope} from '../sessionConversation';
 import {canDismissInterrupt, interruptStatus, interruptStorageKey} from '../sessionInterrupt';
 
-export function SessionInterruptControl({scope, canReview, onAccessLost, onQueueChanged}: {
+export function SessionInterruptControl({scope, canReview, commandReview, onAccessLost, onQueueChanged}: {
   scope: InteractionScope;
   canReview: boolean;
+  commandReview?: {revision: string} | null;
   onAccessLost: () => void;
   onQueueChanged: () => void;
 }) {
   const key = interruptStorageKey(scope);
   const [intent, setIntent] = useState(() => typeof window === 'undefined' ? null : window.sessionStorage.getItem(key));
-  const [review, setReview] = useState<SessionInterruptTarget | null>(null);
+  const [review, setReview] = useState<{target: SessionInterruptTarget; catalogRevision?: string} | null>(null);
   const [receipt, setReceipt] = useState<SessionInterruptReceipt | null>(null);
   const [notice, setNotice] = useState('');
   const [busy, setBusy] = useState(false);
@@ -40,9 +41,9 @@ export function SessionInterruptControl({scope, canReview, onAccessLost, onQueue
     setReceipt(null);
   }
 
-  async function run(action: 'review' | 'confirm' | 'receipt', background = false) {
+  async function run(action: 'review' | 'confirm' | 'receipt', background = false, catalogRevision?: string) {
     if (request.current || (action !== 'receipt' && (!canReview || intent))
-        || (action === 'receipt' && !intent) || (action === 'confirm' && !review)) return;
+        || (action === 'receipt' && !intent) || (action === 'confirm' && !review) || (action === 'review' && review)) return;
     const controller = new AbortController();
     request.current = controller;
     if (!background) {
@@ -54,14 +55,15 @@ export function SessionInterruptControl({scope, canReview, onAccessLost, onQueue
         const availability = await runtimeApi.sessionInterruptTarget(scope, controller.signal);
         if (controller.signal.aborted) return;
         assertInteractionScope({...availability.scope, session_owner_generation: availability.session_owner_generation}, scope);
-        setReview(availability.control);
+        setReview(availability.control ? {target: availability.control, catalogRevision} : null);
         if (!availability.control) setNotice('There is no confirmed turn to interrupt.');
       } else if (action === 'confirm' && review) {
         const originalIntent = 'stop_' + crypto.randomUUID();
         window.sessionStorage.setItem(key, originalIntent);
         setIntent(originalIntent);
         setReview(null);
-        const operation = await runtimeApi.interruptSessionTurn(scope, review, originalIntent, controller.signal);
+        const operation = await runtimeApi.interruptSessionTurn(scope, review.target, originalIntent, controller.signal,
+          review.catalogRevision);
         if (controller.signal.aborted) return;
         assertControl(operation);
         setNotice('Interrupt requested. Checking its receipt…');
@@ -87,7 +89,9 @@ export function SessionInterruptControl({scope, canReview, onAccessLost, onQueue
         onLost.current();
       } else if (action === 'confirm' && [400, 403, 409, 422, 429].includes(status ?? 0)) {
         removeIntent();
-        setNotice(status === 409 ? 'The turn or its queue changed. Review the current turn before interrupting.'
+        setNotice(status === 409 ? (review?.catalogRevision
+          ? 'The commands, turn or queue changed. Refresh commands and review again.'
+          : 'The turn or its queue changed. Review the current turn before interrupting.')
           : 'The interrupt request was refused.');
       } else if (action !== 'review') {
         setNotice('The interrupt could not be confirmed. Check its original receipt.');
@@ -101,6 +105,10 @@ export function SessionInterruptControl({scope, canReview, onAccessLost, onQueue
       }
     }
   }
+
+  useEffect(() => {
+    if (commandReview) void run('review', false, commandReview.revision);
+  }, [commandReview]);
 
   useEffect(() => {
     if (!intent) return;

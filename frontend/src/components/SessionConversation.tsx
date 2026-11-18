@@ -3,6 +3,7 @@ import {runtimeApi, type InteractionScope, type SessionInputReceipt, type Sessio
 import {applyConversationUpdates, assertConversationPage, assertInteractionScope, interactionKey,
   receiptLabel, type ConversationMessage} from '../sessionConversation';
 import {OperatorSignIn} from './OperatorSignIn';
+import {SessionCommandPicker} from './SessionCommandPicker';
 import {SessionInputQueue} from './SessionInputQueue';
 import {SessionInterruptControl} from './SessionInterruptControl';
 import {SessionSteerControl} from './SessionSteerControl';
@@ -60,6 +61,7 @@ export function SessionConversation({scope, active, onAccessLost}: {
   const [newMessages, setNewMessages] = useState(false);
   const [queueRefresh, setQueueRefresh] = useState(0);
   const [steerSource, setSteerSource] = useState<SteerSource | null>(null);
+  const [interruptCommand, setInterruptCommand] = useState<{revision: string} | null>(null);
   const [steerPending, setSteerPending] = useState<SteerReference | null>(() =>
     typeof window === 'undefined' ? null : readSteerReference(window.sessionStorage, steerStorageKey(scope)));
   const steerTrigger = useRef<HTMLButtonElement | null>(null);
@@ -178,10 +180,12 @@ export function SessionConversation({scope, active, onAccessLost}: {
   const canSend = active && !!capability?.supported && !capability.human_login_required;
   const firstCharacter = draft.text.trimStart()[0];
   const command = firstCharacter === '/' || firstCharacter === '!';
+  const slashCommand = firstCharacter === '/' && capability?.human_login_required === false;
   const tooLong = new TextEncoder().encode(draft.text).length > 64 * 1024;
   const steerAvailable = active && interaction?.steer_review_supported === true && !capability?.human_login_required;
   const canReviewSteer = steerAvailable && !steerSource && !steerPending && !draft.uncertain && !busy;
   const draftHeld = steerSource?.kind === 'draft' || steerPending?.kind === 'draft';
+  const canReviewInterrupt = active && interaction?.interrupt_review_supported === true;
 
   function reviewSteer(source: SteerSource, trigger: HTMLButtonElement) {
     if (!canReviewSteer || mutation.current) return;
@@ -204,9 +208,9 @@ export function SessionConversation({scope, active, onAccessLost}: {
     else if (prior.latest?.receipt.input_id === receipt.input_id) save({...prior, latest: null});
   }
 
-  async function send(recover: boolean) {
+  async function send(recover: boolean, selected?: {message: string; revision: string}) {
     if (mutation.current || recover && !draft.uncertain) return;
-    if (!recover && (!canSend || draftHeld || !draft.text.trim() || draft.uncertain || command || tooLong)) return;
+    if (!recover && (!canSend || draftHeld || draft.uncertain || (!selected && (!draft.text.trim() || command || tooLong)))) return;
     const intent = recover ? draft.uncertain! : 'ui_' + crypto.randomUUID();
     const controller = new AbortController();
     mutation.current = controller;
@@ -216,7 +220,8 @@ export function SessionConversation({scope, active, onAccessLost}: {
     try {
       const receipt = recover
         ? await runtimeApi.sessionInputReceipt(scope, intent, controller.signal)
-        : await runtimeApi.enqueueSessionInput(scope, intent, draft.text, capability!.capability_revision!, controller.signal);
+        : await runtimeApi.enqueueSessionInput(scope, intent, selected?.message ?? draft.text,
+          capability!.capability_revision!, controller.signal, selected?.revision);
       if (!controller.signal.aborted) installReceipt(intent, receipt);
     } catch (error) {
       if (controller.signal.aborted) return;
@@ -284,8 +289,10 @@ export function SessionConversation({scope, active, onAccessLost}: {
           }
         }}/>
       <p id={editorId + '-hint'} className="text-xs text-surface-500">Enter sends. Shift+Enter adds a line.</p>
-      {command && <p role="status" className="text-xs">Commands are unavailable in this message input.</p>}
-      {tooLong && <p role="status" className="text-xs">The message is longer than 64 KiB.</p>}
+      {command && !slashCommand && <p role="status" className="text-xs">
+        {firstCharacter === '!' ? 'Shell commands are unavailable. Your draft is kept.' : 'Sign in to view session commands.'}
+      </p>}
+      {tooLong && !slashCommand && <p role="status" className="text-xs">The message is longer than 64 KiB.</p>}
       <div className="flex flex-wrap gap-2">
         <button type="submit" className="btn btn-primary"
           disabled={!canSend || busy || draftHeld || !!draft.uncertain || !draft.text.trim() || command || tooLong}>Send for next turn</button>
@@ -296,6 +303,15 @@ export function SessionConversation({scope, active, onAccessLost}: {
           onClick={() => void send(true)}>Check message receipt</button>}
       </div>
     </form>}
+    {slashCommand && <SessionCommandPicker scope={scope} draft={draft.text}
+      locked={busy || !!draft.uncertain || draftHeld} canSend={canSend} canSteer={canReviewSteer}
+      canInterrupt={canReviewInterrupt} onSelect={(id, needsMessage) => {
+        save({...draft, text: '/' + id + (needsMessage ? ' ' : '')});
+        setMessageError('');
+        editor.current?.focus();
+      }} onSend={(message, revision) => void send(false, {message, revision})}
+      onSteer={(text, catalogRevision, trigger) => reviewSteer({kind: 'draft', text, catalogRevision}, trigger)}
+      onInterrupt={revision => setInterruptCommand({revision})} onAccessLost={loseAccess}/>}
     {(draft.latest || draft.uncertain) && <p role="status" className="text-sm">
       {draft.uncertain ? (busy ? 'Checking message…' : 'Waiting for confirmation of this message.') :
         draft.latest!.receipt.steer_submitted ? 'Reorientation sent. Harness acceptance is unconfirmed.' :
@@ -314,7 +330,7 @@ export function SessionConversation({scope, active, onAccessLost}: {
           const latest = drafts.get(key)?.latest;
           if (latest?.receipt.input_id === receipt.input_id) installReceipt(latest.intent, receipt);
         }}/>}
-      <SessionInterruptControl scope={scope} canReview={active && interaction?.interrupt_review_supported === true}
+      <SessionInterruptControl scope={scope} canReview={canReviewInterrupt} commandReview={interruptCommand}
         onAccessLost={loseAccess} onQueueChanged={() => setQueueRefresh(value => value + 1)}/>
     </>}
   </section>;

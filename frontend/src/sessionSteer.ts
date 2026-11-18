@@ -1,7 +1,7 @@
 import type {InteractionScope, SessionInputReceipt, SessionSteerAvailability} from './runtimeApi';
 import {assertInteractionScope, interactionKey} from './sessionConversation';
 
-export type SteerSource = {kind: 'draft'; text: string} | {kind: 'queue'; inputId: string};
+export type SteerSource = {kind: 'draft'; text: string; catalogRevision?: string} | {kind: 'queue'; inputId: string};
 export type SteerReference = {kind: 'draft'; intent: string} | {kind: 'queue'; inputId: string};
 
 const prefix = 'okto-nexus:session-steer:';

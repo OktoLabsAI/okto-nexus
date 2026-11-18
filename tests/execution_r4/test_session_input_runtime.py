@@ -169,7 +169,12 @@ def test_dashboard_admits_exact_input_once_under_the_original_human_login(intera
         command = client.post(path + '/inputs', json=body | {'content': [{'type': 'text', 'text': text}]}, headers=ui)
         assert command.status_code == 422 and text not in command.text
     assert client.post(path + '/inputs', json=body | {'capability_revision': 'stale'}, headers=ui).status_code == 409
-    first = client.post(path + '/inputs', json=body, headers=ui)
+    catalog = client.get(path + '/commands', params=query).json()
+    command = body | {'command': 'send', 'catalog_revision': catalog['capability_revision'], 'confirmed': True}
+    assert client.post(path + '/commands:execute', json=command | {'confirmed': False}, headers=ui).status_code == 422
+    stale_command = client.post(path + '/commands:execute', json=command | {'catalog_revision': 'stale'}, headers=ui)
+    assert stale_command.status_code == 409 and 'Session commands changed.' in stale_command.text
+    first = client.post(path + '/commands:execute', json=command, headers=ui)
     assert first.status_code == 202, first.text
     assert first.headers['cache-control'] == 'no-store'
     retained = first.json()
@@ -520,7 +525,11 @@ def test_dashboard_interrupt_admits_exact_target_and_recovers_its_receipt(intera
     no_effect = client.get(path + '/inputs', params=query).json()
     assert no_effect['paused'] is False and not seen
 
-    stopped = client.post(path + '/interrupt', json=body, headers=ui)
+    catalog = client.get(path + '/commands', params=query).json()
+    command = body | {'command': 'interrupt', 'catalog_revision': catalog['capability_revision'], 'confirmed': True}
+    assert client.post(path + '/commands:execute', json=command | {'catalog_revision': 'stale'}, headers=ui).status_code == 409
+    assert client.get(path + '/inputs', params=query).json()['paused'] is False
+    stopped = client.post(path + '/commands:execute', json=command, headers=ui)
     assert stopped.status_code == 202, stopped.text
     control_op = stopped.json()['operation_id']
     eventually(lambda: len(seen) == 1)
@@ -616,6 +625,17 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
     assert client.get(path + '/commands', params=query | {'command': 'shell'}).status_code == 422
     assert client.get(path + '/commands', params=query | {'expected_session_generation': generation + 1}).status_code == 404
     assert client.post(path + '/commands', headers=ui, json={'command': 'shell'}).status_code == 405
+    for name in ('shell', 'resume', 'model', '/tmp/file', 'extension'):
+        blocked = client.post(path + '/commands:execute', headers=ui, json=base | {
+            'command': name, 'catalog_revision': idle_revision, 'argv': ['private-fixture-argument'],
+        })
+        assert blocked.status_code == 422 and 'private-fixture-argument' not in blocked.text
+    help_view = client.post(path + '/commands:execute', headers=ui,
+                            json=base | {'command': 'help', 'catalog_revision': idle_revision})
+    assert help_view.status_code == 200 and help_view.json()['capability_revision'] == idle_revision
+    status_view = client.post(path + '/commands:execute', headers=ui,
+                              json=base | {'command': 'status', 'catalog_revision': idle_revision})
+    assert status_view.status_code == 200 and status_view.json()['lifecycle_state'] == 'READY'
     assert auth.authority_reference(token, create=False) is None
     assert native.native.sent == []
     active = admit(setup, binding, 'steer-active', 'turn.submit', session_id=session, text='Synthetic turn for steering')
@@ -661,7 +681,10 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
     assert client.post(path + '/steer', headers=ui, json=body | {
         'content': [{'type': 'text', 'text': '/private-fixture-command'}],
     }).status_code == 422
-    direct = client.post(path + '/steer', headers=ui, json=body)
+    command = body | {'command': 'steer', 'catalog_revision': active_revision, 'confirmed': True}
+    stale_command = client.post(path + '/commands:execute', headers=ui, json=command | {'catalog_revision': idle_revision})
+    assert stale_command.status_code == 409 and 'Session commands changed.' in stale_command.text
+    direct = client.post(path + '/commands:execute', headers=ui, json=command)
     assert direct.status_code == 202, direct.text
     first = direct.json()
     assert first['reorientation'] is True
