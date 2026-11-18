@@ -147,7 +147,7 @@ browser or three real executions. The six PASS cases were not repeated.
 Prior attempts and the original6PASS/1FAIL remain preserved. Pytest retention
 left only two raw cleanup JSONs; all six passing teardown close assertions ran,
 and missing raw snapshots were not reconstructed. Current ledger counts are
-66PASS/42NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
+68PASS/40NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
 original evidence; fresh R9 focus predicates now pass. No timing target caused
 or resolved these functional qualifications.
 
@@ -212,6 +212,8 @@ dependency versions were compared, not all dependency file bytes.
 | Native zoom prerequisite |14checks using real Chrome Settings100%→200%, DPR1→2/CSS720→360 at unchanged viewport; no Nexus app ran in this cut |[Native browser guard](remaining-qualification-r7-next/native-zoom-batch/runs/hst-native-zoom-r9-browser-only-2/qualification.json)|
 | CLI without dashboard |Fresh R9 candidate:14CLI documents and150API request traces, zero HTML/assets/browser/marker; strict reconnect invariants, exact close SUCCEEDED/CLOSED and normal drained stop |[K05 candidate](remaining-qualification-r7-next/compat-batch/K05-candidate-r9/qualification.json)|
 | Actual old-state compatibility |Pre-feature0.3.6 produces the native request/decision/result, then one drained-state copy is read by R9; eight protected typed-row hashes and exact result/Server IDs remain; independent posterior RO profile/checkpoint proof |[K02 old producer/current reader](remaining-qualification-r7-next/compat-batch/S4-old-producer-r9-reader/qualification.json)|
+| Responsive application |48actual app checks at native200%720requested→CSS360 and native100%360requested→CSS360; actions/full scope/targets/same-card focus pass; original final-guard error and A1/A2 close UNKNOWN retained with later RO pin proof |[I05 focal](remaining-qualification-r7-next/native-zoom-app-r9-prepared/focal-i05/qualification.json)|
+| Classic original controls |19actual browser checks, original canonical question/options/Send/Deny/Check visible after active rollback; UI does not answer, CLI continues afterward |[K03 original controls](remaining-qualification-r7-next/compat-batch/K03-original-controls-r9/qualification.json)|
 | Unchanged backend qualification |6PASS/1presentation-oracleFAIL on R8; seven literal backend scenarios qualified; byte equivalence to R9 is scoped to unchanged runtime; no provider/browser claim |[R8 installed batch](remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json)|
 | Post-build supplement |7sourcePASS and7actually installedPASS, separate cuts;1828base+1exact additional test/1031payload files unchanged |[supplement](installed-supplement-r7/qualification.json)|
 | Recovery and paging |Same accepted decision after lost response; stale second-screen409; one durable write admission; actual paging409/current200 in the same panel |[scoped captured predicates](browser-hst/nextcuts-report.md)|
@@ -270,7 +272,7 @@ The [116-scenario audit](remaining-qualification-review-r7.md) records the
 unexecuted clauses and partial layers rather than treating every test count
 as qualification. The [ledger](../NEXUS_HOME_ESTADOS_LEDGER_R1.json) remains
 authoritative for individual task/scenario status. After the subsequent literal
-reviews it has66PASS,42NOT_RUN and8BLOCKED. The original menu and focus
+reviews it has68PASS,40NOT_RUN and8BLOCKED. The original menu and focus
 defects are corrected and have separate actual installed-browser evidence.
 Partial browser/native clauses remain NOT_RUN. This is not a whole-plan
 completion or default approval.
@@ -285,9 +287,13 @@ Core/protocols is outside this reader change.
 
 Real provider-family and remote-topology campaigns were not authorized for
 this plan and were not run. Actual screen-reader speech remains unexecuted.
-Native Chrome200% selection and geometry are separately verified; the combined
-responsive application/long-name/action-access/context-return scenario remains
-unexecuted. The prior UI-R1 novice-user gate, Quick
+Native Chrome200% selection and geometry and the combined responsive app
+scenario now have actual browser proof. The app run's final pin guard failed
+because a local card variable shadowed argparse; its exit1/after=null remain
+unchanged. A separate later offline check confirms the original immutable pins,
+while the48 app predicates and same-card focus were captured in the original
+run. Two canonical closes remain UNKNOWN despite normal physical exit.
+Complete keyboard/theme/AT qualification remains separate. The prior UI-R1 novice-user gate, Quick
 Connect UNKNOWN usage/QC031 and broader regression NOT_GREEN are retained.
 CI status is a separate remote observation, not inferred from local passes.
 At the R9 checkpoint, the GitHub connector reported source run
@@ -313,8 +319,9 @@ bell, identities, native sessions, decisions and retained results. A whole
 daemon restart is not presented as an individual connection recovery action.
 Actual active-work rollback now exposes the classic session summary, selected
 project and exact global question while the CLI continues with unchanged
-selected configuration and service owner. Full classic-control navigation
-remains unexecuted. The separate candidate CLI cycle without a dashboard now
+selected configuration and service owner. A subsequent19-check browser cut
+also opens the exact original canonical form on classic Home and verifies its
+options and controls, without UI selection/answer. The separate candidate CLI cycle without a dashboard now
 passes K05, with actual API-only traffic, unchanged selected invariants and
 exact successful close; it is not inferred from the UI rollback cut. No reset, clean,
 force-push, release, deployment, merge or default activation was performed.
@@ -338,8 +345,10 @@ CLI cycle and actual old-producer/current-reader compatibility pass separately.
 The latter preserves the original vacuous Windows path selector and uses an
 explicit independent posterior RO comparison for the five terminal files,
 including the two nonempty profile/checkpoint documents. No data were changed
-to obtain that proof. Full classic-control navigation and the remaining
-supported functional/security/accessibility clauses are pending.
+to obtain that proof. The classic original-control and responsive application
+clauses now pass separately. Remaining supported functional/security/keyboard/
+theme clauses are pending before the participant invitation; AT speech and
+real-provider/topology qualification remain explicit separate gates.
 The useful-DOM
 observation and shared-machine limitation are already recorded above. No
 further performance-only optimization round is required for this local delivery.

@@ -1,0 +1,312 @@
+{
+  "status": "PASS_I05_EXECUTED_SUBSET",
+  "phase": "case",
+  "caseName": "native200-css360",
+  "checks": [
+    {
+      "id": "original-question-valid-native200-css360",
+      "pass": true,
+      "actual": {
+        "expiresAt": "2026-11-18T00:53:21.657000+00:00"
+      }
+    },
+    {
+      "id": "navigation-hidden",
+      "pass": true,
+      "actual": "true"
+    },
+    {
+      "id": "current-three-category-canonical-board-native200-css360",
+      "pass": true,
+      "actual": {
+        "receivedAt": 1794963084318,
+        "revision": "9a2994eb28f3a1ef5672d1e35ea1d59fc343203454d9af4f5b253c01217570f3",
+        "version": 2,
+        "columns": {
+          "active": [
+            {
+              "id": "home_group_2260586cc4aed32cc5adf632c143a015b603cc9118ed23fccab444f898d1176d",
+              "kind": "harness",
+              "binding": "bind_e10b5657e6aebb7b413285c6c64d5dfe",
+              "activity": "working",
+              "blocking": "partial",
+              "freshness": "current"
+            },
+            {
+              "id": "home_group_2defc7c135e5803c8b4e55ed34efde037a570fb3a68821877437b142e5c23fde",
+              "kind": "harness",
+              "binding": "bind_3f1a550025c73cf3b3f3bd6016366db7",
+              "activity": "idle",
+              "blocking": "none",
+              "freshness": "current"
+            }
+          ],
+          "needs_you": [
+            {
+              "id": "home_request_att_be49854a91cf62d45f2ac7878421a82ae48e6be9eeb9829dbdc62ef18fe1f8be",
+              "kind": "request",
+              "sourceId": "r4request_dd75c744596e71d2541334bc8ae098f65ccfcf67c7e49b224c0bb5c951f31d44",
+              "session": "ses_b68df1f895aa3a983e4df670de3d07ba"
+            }
+          ],
+          "results": [
+            {
+              "id": "home_delivery_canonical:result_bc436c84c22c0168ea2f8a90cdf70e0d8d7669af8a99c160bd9be42a3097c4ec",
+              "kind": "delivery"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "native-zoom-and-CSS360-native200-css360",
+      "pass": true,
+      "actual": {
+        "requestedWidth": 720,
+        "innerWidth": 360,
+        "innerHeight": 500,
+        "outerWidth": 720,
+        "devicePixelRatio": 2,
+        "visualScale": 1,
+        "scrollWidth": 360
+      }
+    },
+    {
+      "id": "three-stacked-columns-native200-css360",
+      "pass": true,
+      "actual": [
+        {
+          "column": "active",
+          "x": 16,
+          "y": 509.5,
+          "width": 328,
+          "height": 804,
+          "bottom": 1313.5
+        },
+        {
+          "column": "needs_you",
+          "x": 16,
+          "y": 1329.5,
+          "width": 328,
+          "height": 310.5,
+          "bottom": 1640
+        },
+        {
+          "column": "results",
+          "x": 16,
+          "y": 1656,
+          "width": 328,
+          "height": 288,
+          "bottom": 1944
+        }
+      ]
+    },
+    {
+      "id": "no-page-horizontal-overflow-native200-css360",
+      "pass": true,
+      "actual": {
+        "innerWidth": 360,
+        "innerHeight": 500,
+        "outerWidth": 720,
+        "devicePixelRatio": 2,
+        "visualScale": 1,
+        "scrollWidth": 360
+      }
+    },
+    {
+      "id": "real-long-project-labels-native200-css360",
+      "pass": true,
+      "actual": [
+        "Harness ID: reviewerCollaborator: Hst ACodex \u00b7 Host not reportedProject: Alpha project for readable authorized collaborator activity and questionsWorkingResponse pendingWork requestNeeds your responseWork requestNeeds your responseView workWork requestRunningView workFollow activityConnection detailsIndividual reconnection is not supported by the current canonical API.Evidence observed 2026-11-18T00:51:21.480Z",
+        "Harness ID: reviewerCollaborator: Hst BCodex \u00b7 Host not reportedProject: Beta project for readable authorized collaborator activity and deliveryIdleWork requestTurn completedView deliveryFollow activityConnection detailsIndividual reconnection is not supported by the current canonical API.Evidence observed 2026-11-18T00:51:13.140Z",
+        "Harness ID: reviewer \u00b7 Codex \u00b7 Host not reportedRuntime question for the operatorProject: Alpha project for readable authorized collaborator activity and questionsResponse pendingBlocks this session; the harness continues other workRespond",
+        "Harness ID: reviewer \u00b7 Codex \u00b7 Host not reportedWork resultProject: Beta project for readable authorized collaborator activity and deliveryResponse availableReceived 2026-11-18T00:51:13.140ZView result"
+      ]
+    },
+    {
+      "id": "hit-test-active-native200-css360",
+      "pass": true,
+      "actual": {
+        "x": 180,
+        "y": 294.5,
+        "width": 270,
+        "height": 34,
+        "hit": true,
+        "name": "Follow activity"
+      }
+    },
+    {
+      "id": "active-metadata-observed-native200-css360",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-exact-full-scope-native200-css360",
+      "pass": true,
+      "actual": {
+        "status": 200,
+        "scope": {
+          "server_id": "srv_f0c4aa0f120a80a43ad9957311ade4a7",
+          "executor_id": "exe_fc665aee92d476afd74d6709b2036d0b",
+          "binding_id": "bind_3f1a550025c73cf3b3f3bd6016366db7",
+          "agent_id": "hst-b",
+          "workspace_id": "wsr_dd806fa2821e1e581386428135334a73",
+          "workspace_binding_id": "wxb_e5aa96b1fff214483ea9a385f8aa3011",
+          "session_id": "ses_283ad29069c5ca2c365f3acfc00f94ee",
+          "session_owner_generation": 1,
+          "authorization_revision": 2,
+          "configuration_revision": 2,
+          "binding_revision": 1,
+          "credential_epoch": 1
+        }
+      }
+    },
+    {
+      "id": "hit-test-close-home_group_2defc7c135e5803c8b4e55ed34efde037a570fb3a68821877437b142e5c23fde",
+      "pass": true,
+      "actual": {
+        "x": 331,
+        "y": 29,
+        "width": 34,
+        "height": 34,
+        "hit": true,
+        "name": "Close modal"
+      }
+    },
+    {
+      "id": "same-context-focus-home_group_2defc7c135e5803c8b4e55ed34efde037a570fb3a68821877437b142e5c23fde",
+      "pass": true,
+      "actual": {
+        "attribute": "data-home-harness",
+        "id": "home_group_2defc7c135e5803c8b4e55ed34efde037a570fb3a68821877437b142e5c23fde",
+        "tag": "BUTTON",
+        "text": "Follow activity"
+      }
+    },
+    {
+      "id": "hit-test-needs-you-native200-css360",
+      "pass": true,
+      "actual": {
+        "x": 85.61328125,
+        "y": 294.5,
+        "width": 81.2265625,
+        "height": 34,
+        "hit": true,
+        "name": "Respond"
+      }
+    },
+    {
+      "id": "request-same-known-session-unanswered-native200-css360",
+      "pass": true,
+      "actual": {
+        "requestId": "r4request_dd75c744596e71d2541334bc8ae098f65ccfcf67c7e49b224c0bb5c951f31d44",
+        "session": "ses_b68df1f895aa3a983e4df670de3d07ba"
+      }
+    },
+    {
+      "id": "hit-test-close-home_request_att_be49854a91cf62d45f2ac7878421a82ae48e6be9eeb9829dbdc62ef18fe1f8be",
+      "pass": true,
+      "actual": {
+        "x": 331,
+        "y": 29,
+        "width": 34,
+        "height": 34,
+        "hit": true,
+        "name": "Close modal"
+      }
+    },
+    {
+      "id": "same-context-focus-home_request_att_be49854a91cf62d45f2ac7878421a82ae48e6be9eeb9829dbdc62ef18fe1f8be",
+      "pass": true,
+      "actual": {
+        "attribute": "data-home-signal",
+        "id": "home_request_att_be49854a91cf62d45f2ac7878421a82ae48e6be9eeb9829dbdc62ef18fe1f8be",
+        "tag": "BUTTON",
+        "text": "Respond"
+      }
+    },
+    {
+      "id": "hit-test-results-native200-css360",
+      "pass": true,
+      "actual": {
+        "x": 92.96875,
+        "y": 430,
+        "width": 95.9375,
+        "height": 34,
+        "hit": true,
+        "name": "View result"
+      }
+    },
+    {
+      "id": "delivery-exact-target-native200-css360",
+      "pass": true,
+      "actual": {
+        "executor_id": "exe_fc665aee92d476afd74d6709b2036d0b",
+        "kind": "result",
+        "operation_id": "op_ffdc73b42c47ed37c383bddf788bedcd",
+        "server_id": "srv_f0c4aa0f120a80a43ad9957311ade4a7",
+        "session_id": "ses_283ad29069c5ca2c365f3acfc00f94ee",
+        "workspace_id": "wsr_dd806fa2821e1e581386428135334a73"
+      }
+    },
+    {
+      "id": "hit-test-close-home_delivery_canonical:result_bc436c84c22c0168ea2f8a90cdf70e0d8d7669af8a99c160bd9be42a3097c4ec",
+      "pass": true,
+      "actual": {
+        "x": 331,
+        "y": 29,
+        "width": 34,
+        "height": 34,
+        "hit": true,
+        "name": "Close modal"
+      }
+    },
+    {
+      "id": "same-context-focus-home_delivery_canonical:result_bc436c84c22c0168ea2f8a90cdf70e0d8d7669af8a99c160bd9be42a3097c4ec",
+      "pass": true,
+      "actual": {
+        "attribute": "data-home-signal",
+        "id": "home_delivery_canonical:result_bc436c84c22c0168ea2f8a90cdf70e0d8d7669af8a99c160bd9be42a3097c4ec",
+        "tag": "BUTTON",
+        "text": "View result"
+      }
+    },
+    {
+      "id": "project-scope-preserved-native200-css360",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "original-question-valid-native200-css360",
+      "pass": true,
+      "actual": {
+        "expiresAt": "2026-11-18T00:53:21.657000+00:00"
+      }
+    },
+    {
+      "id": "zero-browser-writes",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "id": "zero-page-errors",
+      "pass": true,
+      "actual": []
+    }
+  ],
+  "observations": {
+    "geometry": {
+      "innerWidth": 360,
+      "innerHeight": 500,
+      "outerWidth": 720,
+      "devicePixelRatio": 2,
+      "visualScale": 1,
+      "scrollWidth": 360
+    }
+  },
+  "limits": [
+    "No AT speech or I01 expansion",
+    "All provider/runtime events are explicit inert-protocol fixtures",
+    "720 requested at200% and360 requested at100% both measured CSS360; not360outer at200%"
+  ]
+}

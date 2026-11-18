@@ -1,0 +1,25 @@
+{
+  "decision_id": "r4decision_0395e5f4c37127cdc95a015b3a34edea",
+  "result_operation_id": "op_3888260d1ccb9da89714ce96a86811ec",
+  "binding": {
+    "binding_id": "bind_f2bc825fe31d8eaad6639332e66bd1fc",
+    "server_id": "srv_054dac0b06b19e5b3f4aef70a09dbc4e",
+    "executor_id": "exe_8f05afa3aea3b7f40e703d8c29291641",
+    "agent_id": "compat-project-801f819ef48f",
+    "endpoint_id": "ep_cd2da7fc86925544de3c0823a297535f",
+    "workspace_id": "wsr_cb6dfa879c988f1d4bae7ab339afbb9b",
+    "workspace_binding_id": "wxb_44d28a0caf4c482561013c2bc424f62c",
+    "adapter_id": "codex_app_server",
+    "candidate_ref": "nexus-install-v1:034c477629a130061634c5e24fecc977094ede00cd501bdd144445ad01b00cec",
+    "inventory_revision": "sha256:5f777f976b100a039ff1cec87a28b6ca9927f159369c2f8e7c9fee8bd1403308",
+    "realization_ref": "real_63421a99d70752bb888f8ab3505a35f7",
+    "realization_revision": 1,
+    "binding_revision": 1,
+    "authorization_revision": 2,
+    "configuration_revision": 2,
+    "state": "APPROVED"
+  },
+  "session_id": "ses_f14acee79ad02a4e1008e5552468bc1a",
+  "operation_id": "op_3888260d1ccb9da89714ce96a86811ec",
+  "approval_id": "r4request_b30893493fc8d2c0964f6b96cef1ca7939a516a672079f13cab005f84ee931d7"
+}

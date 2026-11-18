@@ -1,0 +1,28 @@
+{
+  "status": "PASS_OFFLINE_POST_EXIT_PIN_CHECK",
+  "method": "Import frozen run_v2.py and call pure check(Path gate) only; no main, allocation, browser, fixture or provider invocation",
+  "original_runtime_exit": 1,
+  "original_runtime_error": {
+    "stage": "final pin guard",
+    "type": "AttributeError",
+    "cause": "Local card variable a shadows argparse namespace before check(a.gate)."
+  },
+  "raw_run_sha256": "87894fc932b12e3285f366012151312aa61299f5321f3890910ece05e9d9bbb4",
+  "original_qualification_sha256": "cc110a83227425df5871becd2a34b0996186c4975ac8e61836d600935080311b",
+  "original_manifest_sha256": "38f05a0a61dc47256ac7b9fee5fb079085d13889e0eb7b5d34e2ee52f6853977",
+  "checked": {
+    "manifest_sha256": "8a1e5e309e2196ecc2d5d1ec6f4d830b015c2b05d83fc44b934725fab06e231f",
+    "gate_sha256": "4f83aa887e721c7fac4b1a1b6a628479308d6489ab62cb391591aa51c727bf78",
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031,
+    "source_files": 1829,
+    "cli_files": 192
+  },
+  "matching_original_before": true,
+  "probe_worker_and_config_match": true,
+  "limits": [
+    "Offline later observation; original runtime error and after=null remain unchanged.",
+    "Canonical close UNKNOWN for A1/A2 is not resolved by this pin check."
+  ]
+}

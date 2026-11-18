@@ -1,0 +1,122 @@
+{
+  "status": "PASS_SCOPED_K03",
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "manifest_sha256": "0122c21a8a7e224cbee0d027e6d0239a224689f4d5403e5b688a4337ee038376",
+  "runner_sha256": "71157459481eaa8a62c7dfa7deae82b3d6bc2f0928f86cdab36b99d247854f26",
+  "root_gate_sha256": "adf727551bd462141dcda5c353fc87de0cb2284fb7a33a77f1a90a62a1304970",
+  "runner_exit_code": 0,
+  "browser_checks_passed": 19,
+  "previous_S3_predicates_preserved": 13,
+  "new_original_form_checks": 6,
+  "UI_non_read_requests": [],
+  "UI_form_selection_or_decision": false,
+  "CLI_commands": 14,
+  "CLI_response_after_panel_closed": true,
+  "canonical_stop": {
+    "state": "stopped",
+    "shutdown_outcome": "drained"
+  },
+  "physical_same_birth_remaining": [],
+  "listeners_after": [],
+  "audited_port": 50907,
+  "forced_containment": [],
+  "commands": [
+    {
+      "name": "service-final-stop",
+      "pid": 56400,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "ff03d17b3e08bbaff0ce99161e7383d07958d8e4a60a41dc7d317d168a235f1c"
+    },
+    {
+      "name": "browser-open",
+      "pid": 22688,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "bf37aeb7e3bb7d0363f3c2a5cb26a7a171a3d553add54dec82c695f0ff0e5768"
+    },
+    {
+      "name": "browser-load-state",
+      "pid": 59056,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "4f799170768e58d911bd515e63012ab6e447d31fbb5c646f3b435d80a37f9555"
+    },
+    {
+      "name": "browser-warmup",
+      "pid": 61208,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "a269a8449ee62d65a9bc6529f6cfa59ea8c1ad1643225c05d94699f941114473"
+    },
+    {
+      "name": "browser-settings-rollback",
+      "pid": 48216,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "f395d017c1dd8177998fd2cd47bdec4838931271c82f1c99248f5c03cac49145"
+    },
+    {
+      "name": "browser-after-rollback-snapshot",
+      "pid": 45796,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "3c4d23543034310ea2d48b048243a985caa6ead74f7238e5902ce59aede7534f"
+    },
+    {
+      "name": "browser-after-rollback-screenshot",
+      "pid": 17560,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "ad8f20ab0e59c9b320d0dff0007b262b63462e0fa65a605e16d04af4e645c392"
+    },
+    {
+      "name": "browser-final-close",
+      "pid": 47036,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "fd747f43fbcd5762ba30e3a8df9d86e6a658a333f6190f903cf6ff3d830b29b7"
+    }
+  ],
+  "guards_before": {
+    "source_count": 1829,
+    "runtime_payloads": {
+      "r9": 1031,
+      "i4_readonly": 1028
+    },
+    "cli_payload_count": 192,
+    "drift": []
+  },
+  "guards_after": {
+    "source_count": 1829,
+    "runtime_payloads": {
+      "r9": 1031,
+      "i4_readonly": 1028
+    },
+    "cli_payload_count": 192,
+    "drift": []
+  },
+  "input_readers_released": true,
+  "provider_invocations": 0,
+  "request_TTL_changed": false,
+  "strict_CLI_invariants": [
+    "same real foreground PID/birth/instance/generation",
+    "exact profile/checkpoint bytes across browser interval",
+    "selected root/configuration/binding/grant digest unchanged",
+    "reconnect same binding and no additional Test/version probe",
+    "close receipt SUCCEEDED and session CLOSED"
+  ],
+  "raw_final_sha256": "f743d67c6d62983be185fcb71bbc51d26ec2f68dc3fee54e5d51c6fa2f01583d",
+  "private_logs_copied": false,
+  "cookie_or_token_copied": false,
+  "layer": "Installed R9 CLI + real foreground HTTP ServiceLifecycle + actual Chrome with own canonical human cookie; inert Core protocol/Test/version peers",
+  "limits": [
+    "Foreground local scope only; no Windows service/logoff/reboot",
+    "Selected protected rows/config/file invariants, not wholeDB read-only",
+    "No Conversations navigation claimed or required by literal K03",
+    "No UI answer/selection/deny/Seen/Snooze; CLI alone answered",
+    "No real provider, human acceptance or performance qualification",
+    "Private raw logs/auth remain in owned Temp; public data is allowlisted"
+  ]
+}

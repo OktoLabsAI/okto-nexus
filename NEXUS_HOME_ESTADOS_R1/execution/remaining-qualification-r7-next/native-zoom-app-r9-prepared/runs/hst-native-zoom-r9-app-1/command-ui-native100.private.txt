@@ -1,0 +1,22 @@
+### Result
+{"status":"PASS_NATIVE_UI100_SELECTED","selected":"100%","ariaSnapshot":"- combobox \"Zoom da página:\":\n  - option \"25%\"\n  - option \"33%\"\n  - option \"50%\"\n  - option \"67%\"\n  - option \"75%\"\n  - option \"80%\"\n  - option \"90%\"\n  - option \"100%\" [selected]\n  - option \"110%\"\n  - option \"125%\"\n  - option \"150%\"\n  - option \"175%\"\n  - option \"200%\"\n  - option \"250%\"\n  - option \"300%\"\n  - option \"400%\"\n  - option \"500%\"","options":[{"value":"0.25","label":"25%"},{"value":"0.3333333333333333","label":"33%"},{"value":"0.5","label":"50%"},{"value":"0.6666666666666666","label":"67%"},{"value":"0.75","label":"75%"},{"value":"0.8","label":"80%"},{"value":"0.9","label":"90%"},{"value":"1","label":"100%"},{"value":"1.1","label":"110%"},{"value":"1.25","label":"125%"},{"value":"1.5","label":"150%"},{"value":"1.75","label":"175%"},{"value":"2","label":"200%"},{"value":"2.5","label":"250%"},{"value":"3","label":"300%"},{"value":"4","label":"400%"},{"value":"5","label":"500%"}],"scope":"Native UI selection only; app geometry is checked separately"}
+### Ran Playwright code
+```js
+await (// Public Chrome Settings UI only; app modal must already be closed.
+async page=>{
+  const cfg={"window": "ROOT_I05_NATIVE_APP_OPEN"};if(cfg.window!=='ROOT_I05_NATIVE_APP_OPEN')throw Error('I05 gate required');
+  if(await page.locator('dialog[open]').count())throw Error('Do not navigate away from an open context');
+  await page.goto('chrome://settings/appearance');
+  const select=page.getByRole('combobox',{name:/^(Page zoom|Zoom da página):?$/i});await select.waitFor({timeout:12000});
+  if(await select.evaluate(e=>e.tagName)!=='SELECT')throw Error('Unsupported native WebUI control');
+  const options=await select.locator('option').evaluateAll(nodes=>nodes.map(n=>({value:n.value,label:n.label})));
+  const match=options.filter(n=>n.label.replace(/\s/g,'')==='100%');if(match.length!==1)throw Error('Actual native100 option not observed');
+  await select.selectOption({value:match[0].value});const actual=await select.evaluate(e=>e.selectedOptions[0].label);
+  if(actual.replace(/\s/g,'')!=='100%')throw Error('Native100 UI did not confirm');
+  return {status:'PASS_NATIVE_UI100_SELECTED',selected:actual,ariaSnapshot:await select.ariaSnapshot(),options,scope:'Native UI selection only; app geometry is checked separately'};
+}
+)(page);
+```
+### Page
+- Page URL: chrome://settings/appearance
+- Page Title: Configurações: Aparência

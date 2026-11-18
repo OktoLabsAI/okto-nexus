@@ -1,0 +1,146 @@
+{
+  "status": "PASS_BROWSER_S3_SUBSET",
+  "checks": [
+    {
+      "id": "shipped-classic-default",
+      "pass": true,
+      "actual": null
+    },
+    {
+      "id": "initial-project-exact",
+      "pass": true,
+      "actual": "wsr_cb6dfa879c988f1d4bae7ab339afbb9b"
+    },
+    {
+      "id": "Settings-enables-presentation",
+      "pass": true,
+      "actual": "enabled"
+    },
+    {
+      "id": "three-board-column-elements",
+      "pass": true,
+      "actual": 3
+    },
+    {
+      "id": "operational-project-exact",
+      "pass": true,
+      "actual": "wsr_cb6dfa879c988f1d4bae7ab339afbb9b"
+    },
+    {
+      "id": "canonical-Home-projection-200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "id": "exact-CLI-binding-in-canonical-projection",
+      "pass": true,
+      "actual": {
+        "bindings": [
+          {
+            "id": "home_group_d2314d63277e5b45da09afc92b6186fcbb74bfc2e2ada5a747798d7357c44e30",
+            "binding_id": "bind_f2bc825fe31d8eaad6639332e66bd1fc",
+            "workspace_id": "wsr_cb6dfa879c988f1d4bae7ab339afbb9b"
+          }
+        ]
+      }
+    },
+    {
+      "id": "canonical-CLI-card-visible-in-Home",
+      "pass": true,
+      "actual": {
+        "card_id": "home_group_d2314d63277e5b45da09afc92b6186fcbb74bfc2e2ada5a747798d7357c44e30"
+      }
+    },
+    {
+      "id": "Settings-rolls-back-presentation",
+      "pass": true,
+      "actual": "disabled"
+    },
+    {
+      "id": "operational-board-unmounted",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "rollback-project-preserved",
+      "pass": true,
+      "actual": "wsr_cb6dfa879c988f1d4bae7ab339afbb9b"
+    },
+    {
+      "id": "known-global-question-exposed",
+      "pass": true,
+      "actual": {
+        "attention_id": "att_a9b27a26bde476ff4de564152f666f7307a1054855e89231107f8822182bef29"
+      }
+    },
+    {
+      "id": "classic-original-approval-GET-200",
+      "pass": true,
+      "actual": 200
+    },
+    {
+      "id": "classic-original-request-identity",
+      "pass": true,
+      "actual": {
+        "approval_id": "r4request_b30893493fc8d2c0964f6b96cef1ca7939a516a672079f13cab005f84ee931d7",
+        "workspace_id": "wsr_cb6dfa879c988f1d4bae7ab339afbb9b",
+        "matched_scope": [
+          "server_id",
+          "executor_id",
+          "agent_id",
+          "binding_id",
+          "workspace_id",
+          "session_id",
+          "canonical_request_id"
+        ]
+      }
+    },
+    {
+      "id": "classic-original-request-pending",
+      "pass": true,
+      "actual": {
+        "status": "pending",
+        "decision_recorded": false
+      }
+    },
+    {
+      "id": "classic-canonical-form-original-options",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "classic-canonical-controls-accessible",
+      "pass": true,
+      "actual": {
+        "answer_visible": true,
+        "deny_enabled": true,
+        "recovery_read_enabled": true
+      }
+    },
+    {
+      "id": "classic-form-closed-without-answer",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "id": "zero-non-read-browser-requests",
+      "pass": true,
+      "actual": []
+    }
+  ],
+  "writes": [],
+  "classic_default": true,
+  "settings_enable": true,
+  "operational_exact_binding": true,
+  "settings_rollback": true,
+  "classic_sessions_summary": true,
+  "exact_global_question": true,
+  "selected_project_preserved": true,
+  "productive_posts": 0,
+  "limits": [
+    "UI presentation toggle and exact queue item only",
+    "K03 literal requires classic Home/controls/bell; Conversations navigation is not claimed",
+    "PID/birth/generation/roots/profile/checkpoint/grant invariants require paired external snapshots",
+    "No direct operational-Home localStorage writes; only the actual Settings callback changes preference"
+  ]
+}

@@ -1,0 +1,221 @@
+[
+  {
+    "name": "cli-s3-current-1.stdout",
+    "raw_sha256": "349a6d230339a7a23e91fe8b4857fb394bb5db39e698ca2966270ac2d6c12834",
+    "public_fields": {
+      "state": "ready",
+      "component": "server",
+      "instance_id": "svc_b759a397ec4dd45a0899fb44448061bd187f4f5cbe7ab089e49f90e1eea54a08",
+      "generation": "5d8949257e5b7951dde69606e78b3232",
+      "pid": 12564,
+      "ready_for_queries": true
+    }
+  },
+  {
+    "name": "cli-s3-current-2.stdout",
+    "raw_sha256": "80f77aea56c76296f5ef0b06ceefc1e9386d2bf5e81374d94779541418e0a720",
+    "public_fields": {
+      "state": "review",
+      "server_id": "srv_054dac0b06b19e5b3f4aef70a09dbc4e",
+      "review_revision": "a6f1d60e074db427103446c861314ba85f71d62c3dc5a80c533afd5908ba1be6"
+    }
+  },
+  {
+    "name": "cli-s3-current-3.stdout",
+    "raw_sha256": "3af6a6e7837511260422a84e1684298e0baf731d0a3cdb6cf60cc9d1c5aa716e",
+    "public_fields": {
+      "state": "configured",
+      "server_id": "srv_054dac0b06b19e5b3f4aef70a09dbc4e",
+      "agent_id": "compat-project-801f819ef48f",
+      "binding_id": "bind_f2bc825fe31d8eaad6639332e66bd1fc",
+      "workspace_id": "wsr_cb6dfa879c988f1d4bae7ab339afbb9b"
+    }
+  },
+  {
+    "name": "cli-s3-current-4.stdout",
+    "raw_sha256": "2b40c62ab07488f3c9b6c82a3aa135ff395ae3542e8c127ed1fcd5dd7730fca6",
+    "public_fields": {
+      "operation_id": "op_fe05d6cb0bbfb23840eed359acc2cdba",
+      "client_intent_id": "terminal_78b02bcfa81348a5a7e1144b139467bb",
+      "action": "runtime.open",
+      "intent_hash": "sha256:5917091d822382a78d90b90a71e6c618708e7172dd6ca428501335aaad9e0201",
+      "admission_state": "ACCEPTED",
+      "executor_stage": null,
+      "possible_effect": false,
+      "retry_safe": false,
+      "receipt_revision": 0,
+      "scope": {
+        "agent_id": "compat-project-801f819ef48f",
+        "authorization_revision": 2,
+        "binding_id": "bind_f2bc825fe31d8eaad6639332e66bd1fc",
+        "binding_revision": 1,
+        "configuration_revision": 2,
+        "credential_epoch": 1,
+        "executor_id": "exe_8f05afa3aea3b7f40e703d8c29291641",
+        "server_id": "srv_054dac0b06b19e5b3f4aef70a09dbc4e",
+        "session_id": "ses_f14acee79ad02a4e1008e5552468bc1a",
+        "session_owner_generation": 1,
+        "workspace_binding_id": "wxb_44d28a0caf4c482561013c2bc424f62c",
+        "workspace_id": "wsr_cb6dfa879c988f1d4bae7ab339afbb9b"
+      }
+    }
+  },
+  {
+    "name": "cli-s3-current-5.stdout",
+    "raw_sha256": "830f65045cb2e1e9aed5b9590f6b14159ddc9f15e5ad551738653757c18b8562",
+    "public_fields": {
+      "state": "needs_input",
+      "session": {
+        "scope": {
+          "server_id": "srv_054dac0b06b19e5b3f4aef70a09dbc4e",
+          "executor_id": "exe_8f05afa3aea3b7f40e703d8c29291641",
+          "binding_id": "bind_f2bc825fe31d8eaad6639332e66bd1fc",
+          "agent_id": "compat-project-801f819ef48f",
+          "workspace_id": "wsr_cb6dfa879c988f1d4bae7ab339afbb9b",
+          "workspace_binding_id": "wxb_44d28a0caf4c482561013c2bc424f62c",
+          "session_id": "ses_f14acee79ad02a4e1008e5552468bc1a",
+          "session_owner_generation": 1,
+          "authorization_revision": 2,
+          "configuration_revision": 2,
+          "binding_revision": 1,
+          "credential_epoch": 1
+        },
+        "lifecycle_state": "READY"
+      }
+    }
+  },
+  {
+    "name": "cli-s3-current-6.stdout",
+    "raw_sha256": "a00d73729755b996b9120f61ac59992d646d51990669cdfeeafe4e83e6810ba9",
+    "public_fields": {
+      "state": "ready",
+      "component": "server",
+      "instance_id": "svc_b759a397ec4dd45a0899fb44448061bd187f4f5cbe7ab089e49f90e1eea54a08",
+      "generation": "5d8949257e5b7951dde69606e78b3232",
+      "pid": 12564,
+      "ready_for_queries": true
+    }
+  },
+  {
+    "name": "cli-s3-current-7.stdout",
+    "raw_sha256": "bee1e94e919da70c7a55a1d7cbaa9d460df9de3a74a1acffdd0be75fbe25cb98",
+    "public_fields": {
+      "state": "ready",
+      "component": "server",
+      "instance_id": "svc_b759a397ec4dd45a0899fb44448061bd187f4f5cbe7ab089e49f90e1eea54a08",
+      "generation": "5d8949257e5b7951dde69606e78b3232",
+      "pid": 12564,
+      "ready_for_queries": true
+    }
+  },
+  {
+    "name": "cli-s3-current-8.stdout",
+    "raw_sha256": "81b40745f89de7d6b277b36d6e5fa2acc57abe0bdf7850a4ebe222446dc748f6",
+    "public_fields": {
+      "state": "decision_review",
+      "review_revision": "0484809fde6ab0d1d606281af7b6b7a98f612cd1081c6d862d87082885790127"
+    }
+  },
+  {
+    "name": "cli-s3-current-9.stdout",
+    "raw_sha256": "a931234080cd8e4b4a9f914ef26d4886327f5bd36479ba14fff1561ead7a95a9",
+    "public_fields": {
+      "client_intent_id": "terminal_decision_625dbc21af414066bd399719c567f7e3",
+      "possible_effect": false,
+      "retry_safe": true,
+      "decision_id": "r4decision_0395e5f4c37127cdc95a015b3a34edea",
+      "canonical_state": "CONFIRMED",
+      "native_operation_id": "r4op_b61f7666cc7bf4217afed0fb9f4f0e52",
+      "native_stage": "DISPATCH_PENDING",
+      "response_digest": "sha256:b28e162b41a9ebbd565bdb79090acbb4e8538a403d1e24ace84d6f34b47c39d3"
+    }
+  },
+  {
+    "name": "cli-s3-current-10.stdout",
+    "raw_sha256": "f8582973f1fa71f5aeb7a1a7d4f5c92ef0af3ab28c795f2e3c63dce772b7f082",
+    "public_fields": {
+      "state": "completed",
+      "session": {
+        "scope": {
+          "server_id": "srv_054dac0b06b19e5b3f4aef70a09dbc4e",
+          "executor_id": "exe_8f05afa3aea3b7f40e703d8c29291641",
+          "binding_id": "bind_f2bc825fe31d8eaad6639332e66bd1fc",
+          "agent_id": "compat-project-801f819ef48f",
+          "workspace_id": "wsr_cb6dfa879c988f1d4bae7ab339afbb9b",
+          "workspace_binding_id": "wxb_44d28a0caf4c482561013c2bc424f62c",
+          "session_id": "ses_f14acee79ad02a4e1008e5552468bc1a",
+          "session_owner_generation": 1,
+          "authorization_revision": 2,
+          "configuration_revision": 2,
+          "binding_revision": 1,
+          "credential_epoch": 1
+        },
+        "lifecycle_state": "READY"
+      }
+    }
+  },
+  {
+    "name": "cli-s3-current-11.stdout",
+    "raw_sha256": "0792af91df075c1b6552e87a7ee29f7324ddb56628fef5e1185ab0368a241b4d",
+    "public_fields": {
+      "state": "ready",
+      "component": "server",
+      "instance_id": "svc_b759a397ec4dd45a0899fb44448061bd187f4f5cbe7ab089e49f90e1eea54a08",
+      "generation": "5d8949257e5b7951dde69606e78b3232",
+      "pid": 12564,
+      "ready_for_queries": true
+    }
+  },
+  {
+    "name": "cli-s3-current-12.stdout",
+    "raw_sha256": "5a00315fc8986b97188087fabea5a2daea2fecaeaf79edcbcd0026e870192e17",
+    "public_fields": {
+      "state": "configured",
+      "server_id": "srv_054dac0b06b19e5b3f4aef70a09dbc4e",
+      "agent_id": "compat-project-801f819ef48f",
+      "binding_id": "bind_f2bc825fe31d8eaad6639332e66bd1fc",
+      "workspace_id": "wsr_cb6dfa879c988f1d4bae7ab339afbb9b"
+    }
+  },
+  {
+    "name": "cli-s3-current-13.stdout",
+    "raw_sha256": "e3969f109b64c96d8a31226c7b67ec228cfd5f13b19ca6d325a2b58d70055773",
+    "public_fields": {
+      "state": "ready",
+      "component": "server",
+      "instance_id": "svc_b759a397ec4dd45a0899fb44448061bd187f4f5cbe7ab089e49f90e1eea54a08",
+      "generation": "5d8949257e5b7951dde69606e78b3232",
+      "pid": 12564,
+      "ready_for_queries": true
+    }
+  },
+  {
+    "name": "cli-s3-current-14.stdout",
+    "raw_sha256": "72f9fd06a9b5c571e704b50f3532f7f4ee2dd11d45ec510e33ff1ed252b72025",
+    "public_fields": {
+      "operation_id": "op_85701338d41031cb70ea13c9b806c137",
+      "client_intent_id": "terminal_401af4699d9a423db27d79633a92e5bb",
+      "action": "runtime.close",
+      "intent_hash": "sha256:5f1213c33801521d26be195b4347a05f5c59efb164c342210f4752925e05a74f",
+      "admission_state": "ACCEPTED",
+      "executor_stage": null,
+      "possible_effect": false,
+      "retry_safe": false,
+      "receipt_revision": 0,
+      "scope": {
+        "agent_id": "compat-project-801f819ef48f",
+        "authorization_revision": 2,
+        "binding_id": "bind_f2bc825fe31d8eaad6639332e66bd1fc",
+        "binding_revision": 1,
+        "configuration_revision": 2,
+        "credential_epoch": 1,
+        "executor_id": "exe_8f05afa3aea3b7f40e703d8c29291641",
+        "server_id": "srv_054dac0b06b19e5b3f4aef70a09dbc4e",
+        "session_id": "ses_f14acee79ad02a4e1008e5552468bc1a",
+        "session_owner_generation": 1,
+        "workspace_binding_id": "wxb_44d28a0caf4c482561013c2bc424f62c",
+        "workspace_id": "wsr_cb6dfa879c988f1d4bae7ab339afbb9b"
+      }
+    }
+  }
+]

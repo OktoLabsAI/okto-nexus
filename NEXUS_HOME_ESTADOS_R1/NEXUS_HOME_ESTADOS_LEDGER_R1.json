@@ -6734,7 +6734,7 @@
       "when": "Operar",
       "then": "Colunas empilhadas, ações acessíveis sem overflow obrigatório de página; detalhe volta ao mesmo contexto.",
       "level": "navegador + AT quando disponível",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -6753,9 +6753,18 @@
           "command_or_procedure": "Select100% then200% in actual Chrome Page zoom control at unchanged720x1000 viewport; measure actual DPR/CSS viewport/outer/screen/visualViewport and capture executable/birth ancestry",
           "result": "PASS14 native-browser guard checks: DPR1→2 and CSS720x1000→360x500, unchanged outer/screen, visualViewport.scale1; normal CLI/probe exit, physical absence and source1829/payload1031/tool192 unchanged",
           "limitations": "Prerequisite only. No responsive Nexus application, long-name interaction, context return, keyboard/AT or whole I05 qualification. Earlier launcher-PID/locale-selector failure retained."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T00:58:59.997829+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/native-zoom-app-r9-prepared/focal-i05/qualification.json",
+          "environment": "Fresh installed R9; actual own-profile Chrome Settings native zoom, canonical Core with inert native peer and original120s question; no provider",
+          "command_or_procedure": "After native14/bootstrap4 prerequisites, operate Active/Needs you/Results at native200%720requested→CSS360 and native100%360requested→CSS360 with long real project labels; strict stack/nooverflow, hit-test/click, exact12-field context/result target, original unanswered request, same-card focus; independent post-exit immutable pin check",
+          "result": "PASS24 application predicates in each case; actual returned focus is BUTTON inside the same canonical card for all six closes; browser writes/errors/provider0, normal CLI/probe/fixture exit and physical absence. Root viewed three representative public PNGs, agent reviewed all six. Later offline check confirms same source1829/payload1031/tool192 and gate/input pins",
+          "limitations": "Original runner exit1 and after=null remain: local card variable a shadowed argparse before final check(a.gate). Pin confirmation is an independent later read-only supplement, not a passing original final guard. B1 close confirmed; A1/A2 canonical closes remain UNKNOWN despite physical absence. Native200 geometry is real, without CSS/deviceScale/PageScale substitution. No full keyboard/AT/theme/real-provider/human qualification."
         }
       ],
-      "execution_notes": "PARTIAL: prior360px app layout plus separate actual native Chrome200% capability proven. Combined app200%/longnames/action access/same-context return remains unexecuted; I05 is not promoted."
+      "execution_notes": "PASS two actual responsive browser cases with native zoom, long names, action hit-tests/exact targets and same-card focus; original runner final-guard failure, independent offline pin proof and two unknown canonical closes retained explicitly."
     },
     {
       "id": "HST-T-I06",
@@ -7087,7 +7096,7 @@
       "when": "Reverter",
       "then": "Home/controles antigos e sino acessíveis; sessões/IDs/dados continuam intactos.",
       "level": "contrato + instalação isolada",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -7106,9 +7115,18 @@
           "command_or_procedure": "Canonical CLI connect/work and original native question; actual Settings classic/operational/classic toggle during that work; exact global question; CLI answer/result/reconnect/close with strict config/root/grant/checkpoint and owner assertions",
           "result": "PASS13 browser checks and14 installed CLI commands; UI writes0; same PID/birth/instance/generation throughout; selected config/grants/root/checkpoint unchanged by UI and reconnect; actual turn.submit and runtime.close SUCCEEDED; canonical service stop drained, physical0, source1829/R9payload1031/oldreadonly1028/tool192 drift0",
           "limitations": "Own foreground Nexus service, not Windows scheduled task or real Connector daemon qualification. Browser was open, so K05 no-dashboard is not qualified. Classic session summary/project/global question were exposed, but full classic Conversations/control navigation was not exercised. Selected invariant digests were compared by the successful pinned CLI process but not separately logged; post hashes are not fabricated. No real provider/human/performance claim."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T01:10:50.456063+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/compat-batch/K03-original-controls-r9/qualification.json",
+          "environment": "Fresh installed R9, real foreground HTTP service, separate installed CLI processes and own-profile Chrome with canonical own human cookie; inert version/Test/native protocol peer",
+          "command_or_procedure": "During original active CLI work, use actual Settings classic/operational/classic; open the exact global question on classic Home, observe original approval GET and key, pending native form, original empty options and accessible Send/Deny/Check controls; close unchanged, let CLI answer/result/reconnect/close",
+          "result": "PASS19 browser predicates preserving all13 prior S3 checks plus6 original-control checks, with zero browser writes or answer selection. Same selected project/connection/request, strict profile/checkpoint/config/root/grant assertions and same owner; CLI responds after panel closes, normal drained service stop and physical/actual-port absence; source1829/payload1031/oldreadonly1028/tool192 unchanged",
+          "limitations": "K03 covers classic Home, canonical original controls and global bell. Conversations navigation is not claimed or required by this literal scenario. Selected protected data, not whole-DB immutability. Foreground service and inert peer, without Windows task/login/reboot, real provider, human acceptance or performance qualification."
         }
       ],
-      "execution_notes": "PARTIAL actual active-work rollback: classic summary/project/global question reachable and CLI/canonical data retained; full classic controls/Conversations navigation not exercised. No whole-scenario promotion."
+      "execution_notes": "PASS actual active-work rollback preserves classic Home, exact global question and original canonical form/controls; CLI continues after read-only UI inspection with selected invariants unchanged."
     },
     {
       "id": "HST-T-K04",
@@ -7629,7 +7647,6 @@
       "remaining_qualification": "Inspect literal NOT_RUN/BLOCKED rows and remaining-qualification-review-r7.md",
       "provisioning": "No short-lived human fixture until participant confirms availability",
       "pending_local_scopes": [
-        "full classic-control navigation",
         "stream/validity and remaining literal supported clauses"
       ]
     },
@@ -7862,6 +7879,31 @@
       "current_productive_setup_or_work": false,
       "provider_calls": 0,
       "canonical_stops": "BOTH_DRAINED",
+      "physical_absence": true
+    },
+    "r9_responsive_application": {
+      "status": "PASS_FOCAL_I05_WITH_POST_EXIT_PIN_SUPPLEMENT",
+      "qualification": "execution/remaining-qualification-r7-next/native-zoom-app-r9-prepared/focal-i05/qualification.json",
+      "application_checks": 48,
+      "native_prerequisite_checks": 14,
+      "bootstrap_checks": 4,
+      "original_runner_exit": 1,
+      "final_original_guard": "ATTRIBUTEERROR_AFTER_NULL_RETAINED",
+      "pin_proof": "INDEPENDENT_LATER_RO",
+      "canonical_closes": "B1_CONFIRMED; A1_A2_UNKNOWN",
+      "normal_owner_exit": true,
+      "physical_absence": true,
+      "provider_calls": 0
+    },
+    "r9_classic_controls": {
+      "status": "PASS_K03_ORIGINAL_CONTROLS",
+      "qualification": "execution/remaining-qualification-r7-next/compat-batch/K03-original-controls-r9/qualification.json",
+      "browser_checks": 19,
+      "original_s3_checks_preserved": 13,
+      "new_control_checks": 6,
+      "ui_writes": 0,
+      "provider_calls": 0,
+      "canonical_service_stop": "DRAINED",
       "physical_absence": true
     }
   }

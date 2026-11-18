@@ -1,0 +1,130 @@
+### Page
+- Page URL: chrome://settings/appearance
+- Page Title: Configurações: Aparência
+### Snapshot
+```yaml
+- generic [active] [ref=e2]:
+  - banner [ref=e3]:
+    - heading "Configurações" [level=1] [ref=e8]
+    - generic [ref=e11]:
+      - button [aria-hidden] [ref=e12] [cursor=pointer]
+      - generic [ref=e13]:
+        - generic [aria-hidden] [ref=e14]: Pesquise nas configurações
+        - searchbox "Pesquise nas configurações" [ref=e15]
+  - generic [ref=e16]:
+    - navigation [ref=e19]:
+      - menu [ref=e20]:
+        - generic:
+          - menuitem "Você e o Google" [ref=e21] [cursor=pointer]
+          - menuitem "Preenchim. automático e senhas" [ref=e22] [cursor=pointer]
+          - menuitem "Privacidade e segurança" [ref=e23] [cursor=pointer]
+          - menuitem "Desempenho" [ref=e24] [cursor=pointer]
+          - menuitem "Inovações com IA" [ref=e25] [cursor=pointer]
+          - menuitem "Aparência" [ref=e26] [cursor=pointer]
+          - menuitem "Mecanismo de pesquisa" [ref=e27] [cursor=pointer]
+          - menuitem "Navegador padrão" [ref=e28] [cursor=pointer]
+          - menuitem "Inicialização" [ref=e29] [cursor=pointer]
+          - menuitem "Idiomas" [ref=e31] [cursor=pointer]
+          - menuitem "Downloads" [ref=e32] [cursor=pointer]
+          - menuitem "Acessibilidade" [ref=e33] [cursor=pointer]
+          - menuitem "Sistema" [ref=e34] [cursor=pointer]
+          - menuitem "Redefinir configurações" [ref=e35] [cursor=pointer]
+          - menuitem "Extensões" [ref=e37] [cursor=pointer]
+          - menuitem "Sobre o Chrome" [ref=e39] [cursor=pointer]
+    - main [ref=e40]:
+      - generic [ref=e41]:
+        - heading "Aparência" [level=2] [ref=e43]
+        - generic [ref=e44]:
+          - generic:
+            - generic [ref=e45]:
+              - generic [ref=e47] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e49]: Tema
+                - generic [aria-hidden] [ref=e50]: Abre em uma nova guia
+                - link "Tema" [ref=e51]
+              - generic [ref=e53] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e55]: Personalizar sua barra de ferramentas
+                - generic [aria-hidden] [ref=e56]: Abre em uma nova guia
+                - link "Personalizar sua barra de ferramentas" [ref=e57]
+              - generic [ref=e58]:
+                - generic [aria-hidden] [ref=e59]: Modo
+                - combobox "Modo" [ref=e60] [cursor=pointer]:
+                  - option "Claro"
+                  - option "Escuro"
+                  - option "Dispositivo" [selected]
+              - generic [ref=e63] [cursor=pointer]:
+                - generic [ref=e64]:
+                  - generic [aria-hidden] [ref=e65]: Mostrar botão "Página inicial"
+                  - generic [ref=e66]: Desativado
+                - switch "Mostrar botão \"Página inicial\"" [ref=e67]
+              - generic [ref=e71]:
+                - generic [aria-hidden] [ref=e72]: Barra de favoritos
+                - combobox "Barra de favoritos" [ref=e74] [cursor=pointer]:
+                  - option "Sempre mostrar"
+                  - option "Mostrar apenas na página Nova Guia" [selected]
+                  - option "Ocultar sempre"
+              - generic [ref=e75]:
+                - generic [aria-hidden] [ref=e76]: Posição da guia
+                - combobox "Posição da guia" [ref=e78] [cursor=pointer]:
+                  - option "Vertical"
+                  - option "Horizontal" [selected]
+              - generic [ref=e80] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e82]: Mostrar botão de pesquisa em todas as guias
+                - switch "Mostrar botão de pesquisa em todas as guias" [checked] [ref=e83]
+              - generic [ref=e87] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e89]: Mostrar grupos de guias na barra de favoritos
+                - switch "Mostrar grupos de guias na barra de favoritos" [checked] [ref=e90]
+              - generic [ref=e94] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e96]: Fixar automaticamente os novos grupos de guias criados em qualquer dispositivo na barra de favoritos
+                - switch "Fixar automaticamente os novos grupos de guias criados em qualquer dispositivo na barra de favoritos" [checked] [ref=e97]
+              - generic [ref=e101] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e103]: Alternar entre as duas guias usadas mais recentemente com Ctrl+Tab
+                - switch "Alternar entre as duas guias usadas mais recentemente com Ctrl+Tab" [ref=e104]
+              - generic [ref=e107]: Posição do painel lateral
+              - generic [ref=e109]:
+                - generic [aria-hidden] [ref=e110]: Painéis do Chrome
+                - combobox "Painéis do Chrome Posição do painel lateral" [ref=e112] [cursor=pointer]:
+                  - option "À esquerda"
+                  - option "À direita" [selected]
+              - generic [ref=e113]: Card de visualização ao passar cursor sobre a guia
+              - generic [ref=e114]:
+                - generic [ref=e116] [cursor=pointer]:
+                  - generic [aria-hidden] [ref=e118]: Mostrar imagens de prévia da guia
+                  - switch "Mostrar imagens de prévia da guia" [checked] [ref=e119]
+                - generic [ref=e123] [cursor=pointer]:
+                  - generic [aria-hidden] [ref=e125]: Mostrar uso de memória da guia
+                  - switch "Mostrar uso de memória da guia" [checked] [ref=e126]
+              - generic [ref=e129]:
+                - generic [aria-hidden] [ref=e130]: Tamanho da fonte
+                - combobox "Tamanho da fonte" [ref=e132] [cursor=pointer]:
+                  - option "Muito pequeno"
+                  - option "Pequeno"
+                  - option "Médio (recomendado)" [selected]
+                  - option "Grande"
+                  - option "Muito grande"
+              - generic [ref=e133] [cursor=pointer]:
+                - generic [aria-hidden] [ref=e135]: Personalizar fontes
+                - link "Personalizar fontes" [ref=e136]
+              - generic [ref=e137]:
+                - generic [aria-hidden] [ref=e138]: "Zoom da página:"
+                - combobox "Zoom da página:" [ref=e139] [cursor=pointer]:
+                  - option "25%"
+                  - option "33%"
+                  - option "50%"
+                  - option "67%"
+                  - option "75%"
+                  - option "80%"
+                  - option "90%"
+                  - option "100%" [selected]
+                  - option "110%"
+                  - option "125%"
+                  - option "150%"
+                  - option "175%"
+                  - option "200%"
+                  - option "250%"
+                  - option "300%"
+                  - option "400%"
+                  - option "500%"
+            - generic [ref=e141] [cursor=pointer]:
+              - generic [aria-hidden] [ref=e143]: Permitir arrastar e soltar na visualização dividida na borda esquerda, direita ou inferior da janela
+              - switch "Permitir arrastar e soltar na visualização dividida na borda esquerda, direita ou inferior da janela" [checked] [ref=e144]
+```

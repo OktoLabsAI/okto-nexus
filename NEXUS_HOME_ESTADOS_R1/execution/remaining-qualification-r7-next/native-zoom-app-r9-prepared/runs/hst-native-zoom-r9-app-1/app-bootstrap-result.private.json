@@ -1,0 +1,48 @@
+{
+  "status": "PASS_I05_EXECUTED_SUBSET",
+  "phase": "bootstrap",
+  "checks": [
+    {
+      "id": "native200-survives-app-cookie-load",
+      "pass": true,
+      "actual": {
+        "innerWidth": 360,
+        "innerHeight": 500,
+        "outerWidth": 720,
+        "devicePixelRatio": 2,
+        "visualScale": 1,
+        "scrollWidth": 360
+      }
+    },
+    {
+      "id": "navigation-hidden",
+      "pass": true,
+      "actual": "true"
+    },
+    {
+      "id": "zero-browser-writes",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "id": "zero-page-errors",
+      "pass": true,
+      "actual": []
+    }
+  ],
+  "observations": {
+    "geometry": {
+      "innerWidth": 360,
+      "innerHeight": 500,
+      "outerWidth": 720,
+      "devicePixelRatio": 2,
+      "visualScale": 1,
+      "scrollWidth": 360
+    }
+  },
+  "limits": [
+    "No AT speech or I01 expansion",
+    "All provider/runtime events are explicit inert-protocol fixtures",
+    "720 requested at200% and360 requested at100% both measured CSS360; not360outer at200%"
+  ]
+}

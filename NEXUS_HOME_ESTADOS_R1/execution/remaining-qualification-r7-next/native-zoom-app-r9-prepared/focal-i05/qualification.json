@@ -1,0 +1,169 @@
+{
+  "status": "PASS_FOCAL_I05_BROWSER_WITH_OFFLINE_PIN_SUPPLEMENT",
+  "original_runtime_status": "PARTIAL_OR_DIAGNOSTIC_FAIL_I05",
+  "original_runtime_exit": 1,
+  "original_runtime_error": [
+    {
+      "stage": "final pin guard",
+      "type": "AttributeError"
+    }
+  ],
+  "original_qualification": "../runs/hst-native-zoom-r9-app-1/qualification.json",
+  "original_qualification_sha256": "cc110a83227425df5871becd2a34b0996186c4975ac8e61836d600935080311b",
+  "original_manifest_sha256": "38f05a0a61dc47256ac7b9fee5fb079085d13889e0eb7b5d34e2ee52f6853977",
+  "offline_pin_supplement": "../offline-pin-supplement/qualification.json",
+  "offline_pin_supplement_sha256": "e85f4b6e777ff4076e456e9ed8342f89c4bf4ce21d6dc83b7545cc0542d74e05",
+  "assertions": {
+    "app-200": {
+      "passed": 24,
+      "failed": 0,
+      "ids": [
+        "original-question-valid-native200-css360",
+        "navigation-hidden",
+        "current-three-category-canonical-board-native200-css360",
+        "native-zoom-and-CSS360-native200-css360",
+        "three-stacked-columns-native200-css360",
+        "no-page-horizontal-overflow-native200-css360",
+        "real-long-project-labels-native200-css360",
+        "hit-test-active-native200-css360",
+        "active-metadata-observed-native200-css360",
+        "active-exact-full-scope-native200-css360",
+        "hit-test-close-home_group_2defc7c135e5803c8b4e55ed34efde037a570fb3a68821877437b142e5c23fde",
+        "same-context-focus-home_group_2defc7c135e5803c8b4e55ed34efde037a570fb3a68821877437b142e5c23fde",
+        "hit-test-needs-you-native200-css360",
+        "request-same-known-session-unanswered-native200-css360",
+        "hit-test-close-home_request_att_be49854a91cf62d45f2ac7878421a82ae48e6be9eeb9829dbdc62ef18fe1f8be",
+        "same-context-focus-home_request_att_be49854a91cf62d45f2ac7878421a82ae48e6be9eeb9829dbdc62ef18fe1f8be",
+        "hit-test-results-native200-css360",
+        "delivery-exact-target-native200-css360",
+        "hit-test-close-home_delivery_canonical:result_bc436c84c22c0168ea2f8a90cdf70e0d8d7669af8a99c160bd9be42a3097c4ec",
+        "same-context-focus-home_delivery_canonical:result_bc436c84c22c0168ea2f8a90cdf70e0d8d7669af8a99c160bd9be42a3097c4ec",
+        "project-scope-preserved-native200-css360",
+        "original-question-valid-native200-css360",
+        "zero-browser-writes",
+        "zero-page-errors"
+      ],
+      "geometry": {
+        "innerWidth": 360,
+        "innerHeight": 500,
+        "outerWidth": 720,
+        "devicePixelRatio": 2,
+        "visualScale": 1,
+        "scrollWidth": 360
+      }
+    },
+    "app-100": {
+      "passed": 24,
+      "failed": 0,
+      "ids": [
+        "original-question-valid-native100-css360",
+        "navigation-hidden",
+        "current-three-category-canonical-board-native100-css360",
+        "native-zoom-and-CSS360-native100-css360",
+        "three-stacked-columns-native100-css360",
+        "no-page-horizontal-overflow-native100-css360",
+        "real-long-project-labels-native100-css360",
+        "hit-test-active-native100-css360",
+        "active-metadata-observed-native100-css360",
+        "active-exact-full-scope-native100-css360",
+        "hit-test-close-home_group_2defc7c135e5803c8b4e55ed34efde037a570fb3a68821877437b142e5c23fde",
+        "same-context-focus-home_group_2defc7c135e5803c8b4e55ed34efde037a570fb3a68821877437b142e5c23fde",
+        "hit-test-needs-you-native100-css360",
+        "request-same-known-session-unanswered-native100-css360",
+        "hit-test-close-home_request_att_be49854a91cf62d45f2ac7878421a82ae48e6be9eeb9829dbdc62ef18fe1f8be",
+        "same-context-focus-home_request_att_be49854a91cf62d45f2ac7878421a82ae48e6be9eeb9829dbdc62ef18fe1f8be",
+        "hit-test-results-native100-css360",
+        "delivery-exact-target-native100-css360",
+        "hit-test-close-home_delivery_canonical:result_bc436c84c22c0168ea2f8a90cdf70e0d8d7669af8a99c160bd9be42a3097c4ec",
+        "same-context-focus-home_delivery_canonical:result_bc436c84c22c0168ea2f8a90cdf70e0d8d7669af8a99c160bd9be42a3097c4ec",
+        "project-scope-preserved-native100-css360",
+        "original-question-valid-native100-css360",
+        "zero-browser-writes",
+        "zero-page-errors"
+      ],
+      "geometry": {
+        "innerWidth": 360,
+        "innerHeight": 1000,
+        "outerWidth": 516,
+        "devicePixelRatio": 1,
+        "visualScale": 1,
+        "scrollWidth": 360
+      }
+    }
+  },
+  "native_guard_passed": 14,
+  "app_bootstrap_passed": 4,
+  "canonical_close": {
+    "unknown": true,
+    "sessions": [
+      {
+        "session_id": "ses_283ad29069c5ca2c365f3acfc00f94ee",
+        "close_confirmed": true
+      },
+      {
+        "session_id": "ses_ac1bdcd6a24e85e7a1d2d64e80424c48",
+        "close_confirmed": false
+      },
+      {
+        "session_id": "ses_b68df1f895aa3a983e4df670de3d07ba",
+        "close_confirmed": false
+      }
+    ]
+  },
+  "physical": {
+    "remaining_births": [],
+    "profile_processes": [],
+    "listeners": [],
+    "ports": [
+      51255,
+      51280
+    ]
+  },
+  "fixture_cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "provider_invocations": 0,
+  "browser_writes": 0,
+  "page_errors": 0,
+  "image_review": {
+    "method": "Viewed all six exact public PNGs; only synthetic fixture labels, IDs, UI and timestamps visible; no cookie, CAS/approval token or personal input.",
+    "images": [
+      {
+        "path": "../runs/hst-native-zoom-r9-app-1/i05-app-native100-css360-active.png",
+        "sha256": "dc0899ba52c82890b52cf0405f643836723bf92d25c12e3fbe49f1de7948e906"
+      },
+      {
+        "path": "../runs/hst-native-zoom-r9-app-1/i05-app-native100-css360-needs_you.png",
+        "sha256": "5fddd6a03eed602f2d3c454b1d62af969d32a333711b6e5f9e1ea32da87a6d99"
+      },
+      {
+        "path": "../runs/hst-native-zoom-r9-app-1/i05-app-native100-css360-results.png",
+        "sha256": "5fddd6a03eed602f2d3c454b1d62af969d32a333711b6e5f9e1ea32da87a6d99"
+      },
+      {
+        "path": "../runs/hst-native-zoom-r9-app-1/i05-app-native200-css360-active.png",
+        "sha256": "624204a5700a50cb432a4cfce824b466819a043d4fcfee757311ed7eefe59b56"
+      },
+      {
+        "path": "../runs/hst-native-zoom-r9-app-1/i05-app-native200-css360-needs_you.png",
+        "sha256": "b742a96d61fd131304fed252765a4a9ffedfff6e804a5b69f34cefdb00c2c565"
+      },
+      {
+        "path": "../runs/hst-native-zoom-r9-app-1/i05-app-native200-css360-results.png",
+        "sha256": "6a959e187f37c5b173dd726b299ea4e8ced3c1f46127c0c95aaa4546662a86ef"
+      }
+    ]
+  },
+  "limits": [
+    "Original runner exit1/final after=null remains immutable; only a later offline check confirms identical pins.",
+    "A1/A2 canonical runtime.close remain UNKNOWN despite normal physical process exit.",
+    "Actual Chrome Settings zoom, no CSS/deviceScale/PageScale substitution.",
+    "Only this inert-protocol dataset: two bindings, three sessions, one operator question; no real provider, AT, human acceptance, all keyboard path or theme expansion.",
+    "Both cases CSS360: requested720/native200/DPR2 and requested360/native100/DPR1; no 360outer/native200 claim."
+  ]
+}
