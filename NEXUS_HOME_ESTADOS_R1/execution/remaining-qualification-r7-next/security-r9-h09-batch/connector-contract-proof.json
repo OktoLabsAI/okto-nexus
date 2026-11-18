@@ -1,0 +1,22 @@
+{
+  "layer": "READ_ONLY_ACTUAL_PINNED_WHEEL_AND_INSTALLED_SOURCE",
+  "wheel_sha256": "4095484f14110b845b3481941330810f3de1d8fadf9051de0b724cb824177b90",
+  "members": {
+    "okto_nexus_connector/cli/main.py": {
+      "wheel_installed_sha256": "0ab9fe7e9f6b6680699e127f32c0377a553459e0791a5276adf0d4a726b48c4b",
+      "bytes": 30534
+    },
+    "okto_nexus_connector/cli/commands/reconnect.py": {
+      "wheel_installed_sha256": "78b9b37a618fe3c7dc8f38600b8a858a296b6e4874e96ac2eb0e18d4ecbe6cec",
+      "bytes": 881
+    },
+    "okto_nexus_connector/cli/commands/daemon.py": {
+      "wheel_installed_sha256": "a6325a122c921b68801cdc1b30c2616b3695278eed796e7c8b28328747b62fde",
+      "bytes": 1907
+    }
+  },
+  "reconnect_cli_scope": "all configured connections / whole daemon",
+  "command_executed": false,
+  "individual_capability_exposed": false,
+  "live_connector_daemon_preservation_qualified": false
+}

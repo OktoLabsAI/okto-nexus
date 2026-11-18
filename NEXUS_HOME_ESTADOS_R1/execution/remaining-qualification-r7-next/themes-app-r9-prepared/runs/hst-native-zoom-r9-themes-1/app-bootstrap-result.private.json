@@ -1,0 +1,31 @@
+{
+  "status": "PASS_I04_EXECUTED_SUBSET",
+  "phase": "bootstrap",
+  "checks": [
+    {
+      "id": "native100",
+      "pass": true,
+      "actual": {
+        "innerWidth": 1440,
+        "devicePixelRatio": 1,
+        "scale": 1
+      }
+    },
+    {
+      "id": "zero-browser-writes",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "id": "zero-page-errors",
+      "pass": true,
+      "actual": []
+    }
+  ],
+  "observations": [],
+  "limits": [
+    "Five observed meanings only; not full state matrix",
+    "Inert canonical terminal-failed peer; query fault is fixture-only read-source failure",
+    "No AT/human/color-contrast measurement claim; no state icons invented"
+  ]
+}

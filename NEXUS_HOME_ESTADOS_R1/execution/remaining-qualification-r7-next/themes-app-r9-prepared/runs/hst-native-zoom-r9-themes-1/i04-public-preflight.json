@@ -1,0 +1,60 @@
+{
+  "window": "ROOT_I04_THEME_APP_OPEN",
+  "phase": "known",
+  "url": "http://127.0.0.1:49712",
+  "outputPrefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-m3mxmk8o\\i04-app",
+  "expiresAt": "2026-11-18T02:14:49.087000+00:00",
+  "aCard": "home_group_60fe0128b7b96575abea9fbbee5051109c43db497c2584dcff2c1549116d655a",
+  "bCard": "home_group_5d91b7b505fb6b8291c6ec97db7a9775fb3d60ed315d3b647a4ac0e130fec5c6",
+  "bScope": {
+    "server_id": "srv_7def39197d42867e2abf3a0a5c9b5f78",
+    "executor_id": "exe_eebb50844eb306e279286c8415766751",
+    "binding_id": "bind_bc60e88e0d7de6e4a7d8ff2c9db7111c",
+    "agent_id": "hst-b",
+    "workspace_id": "wsr_a4879aad99f6ce7dde6def5c767e6cfe",
+    "workspace_binding_id": "wxb_14b7a5426a971e20d4b23eb820f9bc80",
+    "session_id": "ses_27002ad401f3e976341779723df70ea0",
+    "session_owner_generation": 1,
+    "authorization_revision": 2,
+    "configuration_revision": 2,
+    "binding_revision": 1,
+    "credential_epoch": 1
+  },
+  "bMarker": "HST synthetic output ses_27002ad401f3e976341779723df70ea0",
+  "a2Scope": {
+    "server_id": "srv_7def39197d42867e2abf3a0a5c9b5f78",
+    "executor_id": "exe_eebb50844eb306e279286c8415766751",
+    "binding_id": "bind_1a332c5082a825b0dc9c2f7d3bf0b6b6",
+    "agent_id": "hst-a",
+    "workspace_id": "wsr_ea6ec63a5365e46ff9595ec26c6ef6f2",
+    "workspace_binding_id": "wxb_4896c2e61e9177102e324711dc66ff57",
+    "session_id": "ses_c381921b1d39215c9f5d960d0366414e",
+    "session_owner_generation": 1,
+    "authorization_revision": 2,
+    "configuration_revision": 2,
+    "binding_revision": 1,
+    "credential_epoch": 1
+  },
+  "requestCard": "home_request_att_8584b6d3f8d70013e53ee3a053272dfe4ffb99770566654ff0223a390ce41ab0",
+  "requestId": "r4request_7fd85f976b14fd13610afe21915369e5361dc050ea7f3c5ebe79f84c325e8f66",
+  "deliveryId": "home_delivery_canonical:result_e476ff3d20f51134ef9e382d075834915c16a2251b55f7ee239992c52b1596a9",
+  "deliveryTarget": {
+    "executor_id": "exe_eebb50844eb306e279286c8415766751",
+    "kind": "result",
+    "operation_id": "op_4a614b65f4c12e0cbcad166dbb8c5e86",
+    "server_id": "srv_7def39197d42867e2abf3a0a5c9b5f78",
+    "session_id": "ses_27002ad401f3e976341779723df70ea0",
+    "workspace_id": "wsr_a4879aad99f6ce7dde6def5c767e6cfe"
+  },
+  "projectA": "Alpha project for readable authorized collaborator activity and questions",
+  "projectB": "Beta project for readable authorized collaborator activity and delivery",
+  "failedId": "home_delivery_canonical:result_82cf5330a963d576b2d3240aca3b3b937f8215959076d8e18d102ed84f32187c",
+  "failedTarget": {
+    "executor_id": "exe_eebb50844eb306e279286c8415766751",
+    "kind": "result",
+    "operation_id": "op_28c916c74cfaf6ba62e69fd75ebe3016",
+    "server_id": "srv_7def39197d42867e2abf3a0a5c9b5f78",
+    "session_id": "ses_2ff456f229daf55185a880419e72868d",
+    "workspace_id": "wsr_a4879aad99f6ce7dde6def5c767e6cfe"
+  }
+}

@@ -1,0 +1,95 @@
+--- themes.js
++++ themes-v2.js
+@@ -35,7 +35,11 @@
+       const start=Date.now();await page.getByRole('button',{name:'Refresh',exact:true}).click();
+       const end=Math.min(Date.now()+15000,Date.parse(cfg.expiresAt));let actual;
+       do{
+-        actual=page.__i04Boards.find(v=>v.at>=start&&v.presentation_version===2&&(cfg.phase==='known'?v.source_status.operational_sessions==='ready':v.source_status.operational_sessions==='unavailable'));
++        actual=page.__i04Boards.find(v=>{
++          if(v.at<start||v.presentation_version!==2)return false;
++          const items=Object.values(v.columns).flat(),a=items.find(i=>i.id===cfg.aCard),b=items.find(i=>i.id===cfg.bCard);
++          return cfg.phase==='known'?a?.status?.activity==='working'&&b?.status?.activity==='idle'&&a.status.freshness==='current'&&b.status.freshness==='current':a?.status?.activity==='unknown'&&b?.status?.activity==='unknown'&&a.status.freshness==='unavailable'&&b.status.freshness==='unavailable';
++        });
+         if(actual)break;await page.waitForTimeout(50);
+       }while(Date.now()<end);
+       check('canonical-'+cfg.phase+'-HTTP-snapshot',!!actual,actual);
+--- reader_builder.py
++++ reader_builder_v2.py
+@@ -21,14 +21,21 @@
+                         import sqlite3
+                         query=app.state.home_entries.queries
+                         exp['theme_rows_original']=query._rows
++                        exp['theme_fault_audit']=dict(sql_sha256=hashlib.sha256(theme_facts.SESSIONS.encode()).hexdigest(),hits=0,started_at=deps.clock.now_iso(),restored=False)
++                        write('theme-facts-fault-audit.json',exp['theme_fault_audit'])
+                         def fail_operational_rows(uow,sql,params,check_budget=None):
+                             if sql==theme_facts.SESSIONS:
++                                exp['theme_fault_audit']['hits']+=1
++                                exp['theme_fault_audit']['last_hit_at']=deps.clock.now_iso()
+                                 raise sqlite3.OperationalError('Own fixture operational fact reader unavailable')
+                             return exp['theme_rows_original'](uow,sql,params,check_budget)
+                         patch.setattr(query,'_rows',fail_operational_rows)
+                         exp_snapshot('theme-unknown')
++                        write('theme-facts-fault-audit.json',exp['theme_fault_audit'])
+                     if name=='theme-facts-restore':
+                         patch.setattr(app.state.home_entries.queries,'_rows',exp.pop('theme_rows_original'))
++                        exp['theme_fault_audit'].update(restored=True,restored_at=deps.clock.now_iso())
++                        write('theme-facts-fault-audit.json',exp['theme_fault_audit'])
+                         exp_snapshot('theme-restored')
+ '''
+     anchor="                    done.add(name);write('controls.json',dict(done=sorted(done)))"
+--- run.py
++++ run_v2.py
+@@ -22,7 +22,7 @@
+ def write(path,value):
+     with path.open('x',encoding='utf-8')as stream:stream.write(json.dumps(value,indent=2)+'\n')
+ def check(gate_path):
+-    manifest_path=HERE/'prepared-themes.json';manifest=json.loads(manifest_path.read_text());gate=json.loads(gate_path.read_text())
++    manifest_path=HERE/'prepared-themes-v2.json';manifest=json.loads(manifest_path.read_text());gate=json.loads(gate_path.read_text())
+     assert gate['approved']is True and gate['scope']=='I04_APP_NATIVE_ZOOM'and gate['start_nexus']is True
+     assert gate['deadline_seconds']==300 and gate['allow_own_containment']is True and gate['allow_fixture_canonical_admissions']is True
+     assert re.fullmatch(r'hst-native-zoom-r9-[a-z0-9-]{1,60}',gate['cut_id'])
+@@ -61,7 +61,7 @@
+     commands=manager.Commands(root,driver.environment(root),action_deadline);tooling=manifest['tooling'];rtk=shutil.which('rtk');assert rtk
+     opened=False;probe=None;probe_log=None;result=None;failure=None;cleanup_errors=[];port=None;after=None;argv_proof=None
+     owner=lifecycle.Owned(root);fixture_ready=None;fixture_cleanup=None;app_results=[];app_port=None
+-    builder=load('i04_fixture_builder',HERE/'reader_builder.py');derivative=builder.build(root,naming_only=False)
++    builder=load('i04_fixture_builder',HERE/'reader_builder_v2.py');derivative=builder.build(root,naming_only=False)
+     write(root/'i04-builder-proof.json',derivative)
+     runtime=json.loads((root/'runtime-ready.json').read_text());runtime['fixture_sha256']=sha(root/'fixture.py');(root/'runtime-ready.json').write_text(json.dumps(runtime,indent=2)+'\n')
+     def cli(name,*arguments,cleanup=False):
+@@ -156,7 +156,7 @@
+         assert set(origins['origins'])=={'okto_nexus','nexus_connector_core','okto_nexus_connector'}and all(Path(value).resolve().is_relative_to(prefix)for value in origins['origins'].values())
+         cli('load-own-cookie','state-load',fixture_ready['storage'])
+         bootstrap=dict(window='ROOT_I04_THEME_APP_OPEN',phase='bootstrap',url=fixture_ready['url'],nativeDpr100=result['observations']['baseline']['devicePixelRatio'])
+-        body('app-bootstrap','themes.js',bootstrap)
++        body('app-bootstrap','themes-v2.js',bootstrap)
+         # Native/browser warmup and app bootstrap precede fresh original120s questions.
+         control('exp-b-history');history=snapshot('history')
+         control('exp-start-active');active=snapshot('active');identity=json.loads((root/'control/exp-active-identities.json').read_text());baseline=snapshot('base');refs=fixture_ready['references']
+@@ -173,10 +173,12 @@
+         assert len(failed)==1,'Expected exactly the canonical peer FAILED turn delivery'
+         exact.update(phase='known',failedId=failed[0]['id'],failedTarget=failed[0]['result']['detail_target'])
+         write(root/'i04-public-preflight.json',exact)
+-        body('theme-known','themes.js',exact)
++        body('theme-known','themes-v2.js',exact)
+         control('theme-facts-fail');fault=snapshot('theme-unknown')
+-        assert fault['board']['source_status']['operational_sessions']=='unavailable'
+-        body('theme-unknown','themes.js',dict(exact,phase='unknown'))
++        fault_cards=[item for column in fault['board']['columns'].values()for item in column['items']if item['kind']=='harness'and item['id']in[exact['aCard'],exact['bCard']]]
++        assert len(fault_cards)==2 and all(item['operational_status']['activity']=='unknown'and item['operational_status']['freshness']=='unavailable'for item in fault_cards)
++        audit=json.loads((root/'control/theme-facts-fault-audit.json').read_text());assert audit['hits']>0 and not audit['restored']and audit['sql_sha256']==manifest['operational_sessions_sql_sha256']
++        body('theme-unknown','themes-v2.js',dict(exact,phase='unknown'))
+         control('theme-facts-restore')
+     except BaseException as error:
+         failure=dict(type=type(error).__name__,message=str(error));write(root/'first-failure.private.json',failure)
+--- curate.py
++++ curate_v2.py
+@@ -34,7 +34,7 @@
+     cas=privacy.cas_values(root);cookies=[];storage=root/'control/browser-storage.private.json'
+     if storage.exists():cookies=[item['value']for item in json.loads(storage.read_text())['cookies']]
+     dest=HERE/'runs'/raw['cut_id'];assert not dest.exists();dest.mkdir(parents=True)
+-    names=['i04-control-invalid-reads.jsonl','native-zoom-run.private.json','native-guard-result.private.json','first-failure.private.json','chrome-argv.private.json','probe-process-proof.json','runtime-ready.json','i04-builder-proof.json','i04-public-preflight.json','native-zoom.js','zoom-probe.py','fixture.py','playwright-cli.json','control/zoom-probe-ready.json','control/zoom-probe-final.json','control/final.json','control/origins.json','control/controls.json','control/exp-base.json','control/exp-active.json','control/exp-history.json','control/exp-theme-unknown.json','control/exp-theme-restored.json']
++    names=['i04-control-invalid-reads.jsonl','native-zoom-run.private.json','native-guard-result.private.json','first-failure.private.json','chrome-argv.private.json','probe-process-proof.json','runtime-ready.json','i04-builder-proof.json','i04-public-preflight.json','native-zoom.js','zoom-probe.py','fixture.py','playwright-cli.json','control/zoom-probe-ready.json','control/zoom-probe-final.json','control/final.json','control/origins.json','control/controls.json','control/exp-base.json','control/exp-active.json','control/exp-history.json','control/exp-theme-unknown.json','control/exp-theme-restored.json','control/theme-facts-fault-audit.json']
+     names+=[str(path.relative_to(root))for pattern in ['command-*.private.txt','app-*.js','theme-*.js','ui-native100.js','*-result.private.json','native-zoom-*.png','i04-app-*.png']for path in root.glob(pattern)]
+     copied=[];redactions=0
+     for name in sorted(set(names)):
