@@ -221,6 +221,27 @@ class EmbeddedDispatchOwner:
     async def prove_native_presentation_owner(
             self, scope: InputScope) -> tuple[ManagedNativeSession, NativeSessionOwnerProof]:
         """Observe a running owner for an exact session. No viewer authority is conferred."""
+        async with self._native_presentation_context(scope) as (runtime_scope, mapping, target, channel):
+            proof = await self.host.prove_r4_native_session(runtime_scope, target,
+                connection_id=channel.connection_id, connection_generation=channel.connection_generation)
+            if (asdict(proof.key) != asdict(scope.session) or proof.target != target
+                    or proof.owner_generation != scope.generation.value
+                    or (proof.connection_id, proof.connection_generation) != (
+                        channel.connection_id, channel.connection_generation)):
+                raise CoreError('STALE_GENERATION', 'native_presentation_owner')
+        return mapping, proof
+
+    async def read_native_presentation_metadata(self, scope: InputScope) -> dict:
+        """Observe the recorded Codex thread on the existing embedded owner."""
+        async with self._native_presentation_context(scope) as (runtime_scope, mapping, target, channel):
+            if mapping.codex_thread_id is None:
+                raise CoreError('SESSION_CONFLICT', 'native_presentation_read')
+            result = await self.host.read_r4_codex_thread(runtime_scope, target, mapping.codex_thread_id,
+                connection_id=channel.connection_id, connection_generation=channel.connection_generation)
+        return result
+
+    @asynccontextmanager
+    async def _native_presentation_context(self, scope):
         key = scope.session.session_id
         session = self.sessions.get(key)
         unavailable = CoreError('SESSION_UNKNOWN', 'native_presentation_owner')
@@ -243,16 +264,10 @@ class EmbeddedDispatchOwner:
         channel = self.channel
         target = NativeSessionTarget(mapping.opening_operation_id, mapping.adapter_id,
                                      mapping.native_session_id, mapping.stream_epoch)
-        proof = await self.host.prove_r4_native_session(runtime_scope, target,
-            connection_id=channel.connection_id, connection_generation=channel.connection_generation)
+        yield runtime_scope, mapping, target, channel
         current = await asyncio.to_thread(self._native_presentation_mapping, scope, runtime_scope)
-        if (not live() or session['scope'] != runtime_scope or self.channel != channel or current != mapping
-                or asdict(proof.key) != asdict(scope.session) or proof.target != target
-                or proof.owner_generation != scope.generation.value
-                or (proof.connection_id, proof.connection_generation) != (
-                    channel.connection_id, channel.connection_generation)):
+        if not live() or session['scope'] != runtime_scope or self.channel != channel or current != mapping:
             raise CoreError('STALE_GENERATION', 'native_presentation_owner')
-        return mapping, proof
 
     def _native_presentation_mapping(self, scope, runtime_scope):
         with self.factory.unit_of_work(write=False) as uow:

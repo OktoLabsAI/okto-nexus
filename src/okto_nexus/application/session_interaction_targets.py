@@ -30,7 +30,7 @@ def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) ->
     if capability is None:
         return None
     mapping = read_managed_native_session(uow, scope)
-    if mapping is None or mapping.adapter_id != 'codex_app_server' or mapping.stream_epoch is None:
+    if mapping is None or mapping.codex_thread_id is None or mapping.stream_epoch is None:
         return None
     conn = uow.connection
     scope_params = _scope_params(scope)
@@ -93,12 +93,13 @@ def active_native_turn(uow, scope: InputScope, *, current_next_turn_revision) ->
     turn = payload.get('turn_id')
     details = payload.get('turn')
     if (not isinstance(turn, str) or not 1 <= len(turn) <= 160 or not turn.isprintable()
-            or 'REDACTED' in turn or payload.get('thread_id') != mapping.native_session_id
-            or payload.get('threadId') != mapping.native_session_id
+            or 'REDACTED' in turn or payload.get('thread_id') != mapping.codex_thread_id
+            or payload.get('threadId') != mapping.codex_thread_id
             or not isinstance(details, dict) or details.get('id') != turn):
         return None
     revision = 'sha256:' + digest({'action': 'exact_native_turn.v1', 'capability': capability,
-        'operation_id': selected['operation_id'], 'epoch': selected['stream_epoch'], 'start': start['event_hash']})
+        'operation_id': selected['operation_id'], 'epoch': selected['stream_epoch'], 'start': start['event_hash'],
+        'thread_configuration': mapping.codex_configuration_hash})
     return ExactNativeTurn(turn, selected['operation_id'], revision, selected['stream_epoch'])
 
 

@@ -2,6 +2,8 @@
 
 import json
 from dataclasses import asdict, dataclass
+from hashlib import sha256
+from uuid import UUID
 
 from ..adapters.outbound.sqlite.session_interaction import _scope_params
 from ..domain.session_interaction import InputScope
@@ -53,6 +55,46 @@ class ManagedNativeSession:
     launch_build: NativeLaunchBuild | None
     receipt_connection_id: str | None
     receipt_connection_generation: int | None
+    codex_thread_id: str | None
+    codex_configuration_hash: str | None
+
+
+def _codex_opening_thread(conn, scope, stream_epoch):
+    events = conn.execute("""
+        SELECT e.sequence,e.event_hash,e.payload_json
+        FROM execution_event_ingress e
+        JOIN execution_event_watermarks w USING(server_id,executor_id,session_id,stream_epoch)
+        WHERE e.server_id=:server_id AND e.executor_id=:executor_id AND e.session_id=:session_id
+          AND e.stream_epoch=:stream_epoch AND e.sequence<=w.committed_contiguous
+          AND e.event_type='lifecycle' AND w.gap_state='none'
+          AND json_extract(e.payload_json,'$.native_type')='core/codex_thread_configuration'
+        LIMIT 2
+    """, _scope_params(scope) | {'stream_epoch': stream_epoch}).fetchall()
+    if len(events) != 1:
+        return None, None
+    event = events[0]
+    raw = event['payload_json']
+    if 'sha256:' + sha256(raw.encode()).hexdigest() != event['event_hash']:
+        return None, None
+    document = json.loads(raw)
+    if (tuple(document.get(key) for key in ('server_id', 'executor_id', 'session_id', 'stream_epoch', 'sequence'))
+            != (scope.session.server_id, scope.session.executor_id, scope.session.session_id, stream_epoch, event['sequence'])
+            or document.get('category') != 'lifecycle' or document.get('operation_id') is not None):
+        return None, None
+    payload = document.get('payload')
+    if (type(payload) is not dict or type(payload.get('schema_version')) is not int or payload['schema_version'] != 1
+            or payload.get('adapter_id') != 'codex_app_server'
+            or payload.get('source') not in ('thread/start/response', 'thread/resume/response')):
+        return None, None
+    thread_id = payload.get('thread_id')
+    if type(thread_id) is not str or len(thread_id) != 36:
+        return None, None
+    try:
+        if str(UUID(thread_id)) != thread_id:
+            return None, None
+    except ValueError:
+        return None, None
+    return thread_id, event['event_hash']
 
 
 def read_managed_native_session(uow, scope: InputScope) -> ManagedNativeSession | None:
@@ -92,5 +134,9 @@ def read_managed_native_session(uow, scope: InputScope) -> ManagedNativeSession 
     if type(revision) is not int or revision < 1:
         return None
     build = _launch_build(json.loads(row['native_launch_build_json'])) if row['native_launch_build_json'] else None
+    thread, configuration_hash = (None, None)
+    if adapter == 'codex_app_server' and row['stream_epoch'] is not None:
+        thread, configuration_hash = _codex_opening_thread(uow.connection, scope, row['stream_epoch'])
     return ManagedNativeSession(scope, row['operation_id'], adapter, native_id, row['stream_epoch'],
-        candidate, inventory, revision, build, row['source_connection_id'], row['source_connection_generation'])
+        candidate, inventory, revision, build, row['source_connection_id'], row['source_connection_generation'],
+        thread, configuration_hash)

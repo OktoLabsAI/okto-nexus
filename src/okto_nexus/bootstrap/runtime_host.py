@@ -71,11 +71,7 @@ class EmbeddedRuntimeHost:
     def draining(self):
         return self._draining
 
-    async def prove_r4_native_session(
-            self, scope: Mapping, target: NativeSessionTarget, *,
-            connection_id: str, connection_generation: int) -> NativeSessionOwnerProof:
-        """Read the existing embedded owner without acquiring or composing a runtime."""
-        stage = 'native_session_proof'
+    def _existing_presentation_runtime(self, scope, stage):
         if self._draining or self._closing:
             raise CoreError('RUNTIME_DRAINING', stage)
         if not isinstance(scope, Mapping):
@@ -90,6 +86,14 @@ class EmbeddedRuntimeHost:
         if (selection is None or selection[4] != server or task is None or not task.done()
                 or task.cancelled() or task.exception() is not None):
             raise CoreError('SESSION_UNKNOWN', stage)
+        return key, selection, task
+
+    async def prove_r4_native_session(
+            self, scope: Mapping, target: NativeSessionTarget, *,
+            connection_id: str, connection_generation: int) -> NativeSessionOwnerProof:
+        """Read the existing embedded owner without acquiring or composing a runtime."""
+        stage = 'native_session_proof'
+        key, selection, task = self._existing_presentation_runtime(scope, stage)
         runtime = task.result()[0]
         proof = await runtime.prove_live_native_session(
             scope, target, connection_id=connection_id, connection_generation=connection_generation)
@@ -97,6 +101,19 @@ class EmbeddedRuntimeHost:
                 or self._selections.get(key) is not selection):
             raise CoreError('STALE_GENERATION', stage)
         return proof
+
+    async def read_r4_codex_thread(
+            self, scope: Mapping, target: NativeSessionTarget, thread_id: str, *,
+            connection_id: str, connection_generation: int) -> dict:
+        """Observe metadata only through an already owned native runtime."""
+        stage = 'native_presentation_read'
+        key, selection, task = self._existing_presentation_runtime(scope, stage)
+        result = await task.result()[0].read_live_codex_thread(scope, target, thread_id,
+            connection_id=connection_id, connection_generation=connection_generation)
+        if (self._draining or self._closing or self._runtime_tasks.get(key) is not task
+                or self._selections.get(key) is not selection):
+            raise CoreError('STALE_GENERATION', stage)
+        return result
 
     def drain_revision(self):
         """Memory-only fence against stale proofs across host/SQLite awaits."""

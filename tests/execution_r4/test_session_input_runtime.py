@@ -24,6 +24,14 @@ from okto_nexus.domain.execution.keys import SessionKey, SessionOwnerGeneration
 from okto_nexus.domain.session_interaction import InputAuthor, InputScope
 
 local_setup = local_realization.local_setup
+CODEX_THREAD = 'bdfe5b81-54cf-43cf-8001-5de670d3dd69'
+
+
+def emit_codex_configuration(client, native, server, executor, session, epoch):
+    client.portal.call(native.native.queue.put, RuntimeEvent(
+        server, executor, session, epoch, 0, 'lifecycle', 'core/codex_thread_configuration',
+        {'schema_version': 1, 'adapter_id': 'codex_app_server', 'thread_id': CODEX_THREAD,
+         'source': 'thread/start/response', 'fields': {}}))
 
 
 @pytest.fixture
@@ -441,7 +449,7 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
 
     operation = submitted['operation_id']
     native_turn = 'fixture-canonical-turn'
-    thread = native.native.native_id
+    thread = CODEX_THREAD
 
     def emit(kind, fields, operation_id=operation):
         client.portal.call(native.native.queue.put, RuntimeEvent(
@@ -450,13 +458,18 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
 
     emit('turn/started', {'thread_id': thread, 'threadId': thread, 'turn_id': native_turn,
          'turn': {'id': native_turn, 'status': 'inProgress'}, 'delivery_phase': 'started'})
+    assert active() is None
+    assert native.native.native_id != thread
+    emit_codex_configuration(client, native, server, executor, session, epoch)
     eventually(active)
     proven = active()
     assert proven.operation_id == operation and proven.native_id == native_turn
     with factory.unit_of_work(write=False) as uow:
         mapping = read_managed_native_session(uow, scope)
         assert mapping is not None and mapping.scope == scope
-        assert mapping.opening_operation_id == opened['operation_id'] and mapping.native_session_id == thread
+        assert mapping.opening_operation_id == opened['operation_id']
+        assert mapping.native_session_id == native.native.native_id and mapping.codex_thread_id == thread
+        assert mapping.codex_configuration_hash.startswith('sha256:')
         assert mapping.stream_epoch == epoch and mapping.adapter_id == 'codex_app_server'
         assert mapping.launch_inventory_revision and mapping.launch_candidate_ref and mapping.launch_profile_revision > 0
         assert mapping.launch_build is not None and mapping.launch_build.version == '0.159.0'
@@ -490,6 +503,14 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
     assert live.target == target and live.key.session_id == session
     assert live.process.evidence == birth and live.boot_id == runtime.r4_boot_id
     assert client.portal.call(owner.prove_native_presentation_owner, scope) == (mapping, live)
+
+    async def read_thread(thread_id):
+        assert thread_id == thread and thread_id != native.native.native_id
+        return {'thread_id': thread_id, 'status': 'active'}
+
+    monkeypatch.setattr(native.native, 'read_owned_codex_thread', read_thread, raising=False)
+    assert client.portal.call(owner.read_native_presentation_metadata, scope) == {
+        'thread_id': thread, 'status': 'active'}
     for field in ('binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id'):
         with pytest.raises(CoreError, match='SESSION_UNKNOWN'):
             client.portal.call(owner.prove_native_presentation_owner, replace(scope, **{field: 'other-' + field}))
@@ -557,7 +578,8 @@ def test_dashboard_interrupt_admits_exact_target_and_recovers_its_receipt(intera
     with factory.unit_of_work(write=False) as uow:
         epoch = uow.connection.execute('SELECT stream_epoch FROM execution_local_streams WHERE session_id=?',
                                        (session,)).fetchone()[0]
-    thread = native.native.native_id
+    thread = CODEX_THREAD
+    emit_codex_configuration(client, native, server, executor, session, epoch)
     native_turn = native.native.active_turn_id
     client.portal.call(native.native.queue.put, RuntimeEvent(server, executor, session, epoch, 0,
         'turn_state', 'turn/started', {'turn_id': native_turn, 'thread_id': thread, 'threadId': thread,
@@ -715,7 +737,8 @@ def test_dashboard_steers_new_and_queued_text_once_and_releases_the_fifo(interac
     with deps.connection_factory.unit_of_work(write=False) as uow:
         epoch = uow.connection.execute('SELECT stream_epoch FROM execution_local_streams WHERE session_id=?',
                                        (session,)).fetchone()[0]
-    thread, turn = native.native.native_id, native.native.active_turn_id
+    thread, turn = CODEX_THREAD, native.native.active_turn_id
+    emit_codex_configuration(client, native, server, executor, session, epoch)
     client.portal.call(native.native.queue.put, RuntimeEvent(server, executor, session, epoch, 0,
         'turn_state', 'turn/started', {'turn_id': turn, 'thread_id': thread, 'threadId': thread,
             'turn': {'id': turn, 'status': 'inProgress'}, 'delivery_phase': 'started'}, operation_id=active['operation_id']))
