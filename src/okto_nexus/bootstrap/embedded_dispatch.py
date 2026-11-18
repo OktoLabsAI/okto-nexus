@@ -31,6 +31,7 @@ from nexus_connector_core import (
     validate_harness_settings,
 )
 from nexus_connector_core.protocol import canonical_json
+from pydantic import ValidationError
 
 from ..adapters.outbound.execution.core_inventory import protocol_info
 from ..adapters.outbound.execution.embedded import EmbeddedExecutor
@@ -40,6 +41,7 @@ from ..adapters.outbound.sqlite.session_interaction import (
     _current_session,
     _scope_params,
 )
+from ..application.codex_viewer_protocol import CodexViewerContext
 from ..application.execution_dispatch_pump import ExecutionDispatchPump
 from ..application.execution_leases import ExecutionChannel, ExecutionLeaseService
 from ..application.execution_local_launch import ApprovedLocalLaunch
@@ -239,6 +241,14 @@ class EmbeddedDispatchOwner:
             result = await self.host.read_r4_codex_thread(runtime_scope, target, mapping.codex_thread_id,
                 connection_id=channel.connection_id, connection_generation=channel.connection_generation)
         return result
+
+    async def read_native_presentation_context(self, scope: InputScope) -> CodexViewerContext | None:
+        metadata = await self.read_native_presentation_metadata(scope)
+        try:
+            context = CodexViewerContext.model_validate(metadata.get('viewer_context'))
+        except ValidationError:
+            return None
+        return context if context.thread_id == metadata['thread_id'] else None
 
     @asynccontextmanager
     async def _native_presentation_context(self, scope):

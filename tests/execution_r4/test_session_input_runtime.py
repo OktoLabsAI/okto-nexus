@@ -504,13 +504,25 @@ def test_exact_control_target_requires_current_canonical_start_of_the_active_cod
     assert live.process.evidence == birth and live.boot_id == runtime.r4_boot_id
     assert client.portal.call(owner.prove_native_presentation_owner, scope) == (mapping, live)
 
+    presentation = {'thread_id': thread, 'status': 'active'}
+
     async def read_thread(thread_id):
         assert thread_id == thread and thread_id != native.native.native_id
-        return {'thread_id': thread_id, 'status': 'active'}
+        return presentation
 
     monkeypatch.setattr(native.native, 'read_owned_codex_thread', read_thread, raising=False)
     assert client.portal.call(owner.read_native_presentation_metadata, scope) == {
         'thread_id': thread, 'status': 'active'}
+    assert client.portal.call(owner.read_native_presentation_context, scope) is None
+    context = {**presentation, 'session_id': 'native-rollout', 'created_at': 1, 'updated_at': 2,
+               'ephemeral': True, 'cwd': '/fixture', 'model': 'synthetic', 'model_provider': 'fixture',
+               'cli_version': '0.170.0', 'source': 'cli', 'approval_policy': 'never', 'approvals_reviewer': 'user',
+               'sandbox': {'type': 'readOnly', 'networkAccess': False}, 'reasoning_effort': 'medium'}
+    presentation['viewer_context'] = context
+    observed = client.portal.call(owner.read_native_presentation_context, scope)
+    assert observed.model_dump() == context
+    presentation['viewer_context'] = context | {'thread_id': 'sibling'}
+    assert client.portal.call(owner.read_native_presentation_context, scope) is None
     for field in ('binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id'):
         with pytest.raises(CoreError, match='SESSION_UNKNOWN'):
             client.portal.call(owner.prove_native_presentation_owner, replace(scope, **{field: 'other-' + field}))

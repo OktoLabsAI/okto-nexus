@@ -1,8 +1,8 @@
 # Current development dependency
 
-Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `566f02349caa861abafd8cc600abc69d1d7d8a75`.
-The unpublished wheel SHA-256 is `0a1729af4a9b996e73d3df3300a4c57d5aadffa47a594ceaa94287517c0b919c`.
-The Core exposes a bounded read of metadata on an already owned Codex thread.
+Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `97afbef88bb115909a010ad71f734d6b9b140cca`.
+The unpublished wheel SHA-256 is `51db0876d00d3225fa13c81dd92386520790d42ed8db512d5524300fcd775821`.
+The Core can return complete viewer metadata from an already owned Codex thread.
 The Nexus CI manifest also identifies the matching Connector wheel.
 
 ## Previous development dependency
