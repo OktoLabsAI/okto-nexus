@@ -112,7 +112,7 @@ The client only owns its view. Verify close-window behavior in addition to
 synthetic disconnects. Keep remote qualification separate.
 [Microsoft ConPTY architecture](https://learn.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session).
 
-## Proposed probe scope, pending consent
+## Probe scope
 
 Run only bounded argv invocations with an exact resolved command under a new
 temporary profile, empty project, no credential variables, no user settings,
@@ -139,3 +139,13 @@ compare transcript/turn identifiers. Exercise unauthorized second writer,
 same-name sibling, stale target, lost response and read-only observer.
 Use a separate isolated root per adapter and platform. Recording these gates
 does not mark SI-T-G01/G11/G12/G16 or SI-T-I06 as passed.
+
+## Installed Windows metadata observed on 2026-11-18
+
+The operator authorized version, help, and schema probes for all three harnesses. The checks used empty temporary projects and explicit child process environments with redirected profile roots and closed stdin. They resolved the actual Codex vendor executable and the Pi package entry before launching the diagnostics. The Pi launcher normally passes its managed installation root to its child. The probe ran the same resolved package entry directly so its working profile stayed temporary. Exit status, binary and launcher SHA-256, help observations, and schema manifest hashes are in [the probe record](si004-native-probe-windows-20261118.json).
+
+- **Codex 0.170.0** advertises a remote TUI endpoint and an explicit session ID with resume. The stable schema has 329 JSON files and the experimental schema has 479. The stable control requests carry the thread ID and the active turn ID. The app-server command advertises stdio, Unix sockets and WebSockets. A session-scoped gateway still needs to prove the actual TUI handshake, exact selection, and continued owner subscription after disconnect. This build version is outside the existing Core production qualification.
+- **Pi 0.87.1** runs on Node 24.15.0. Its installed public declarations export `InteractiveMode` and `runRpcMode`. The interactive constructor takes an `AgentSessionRuntime` and accepts a `Terminal` in its options. This gives the hosted renderer a concrete candidate seam. It leaves runtime ownership, permission interception and safe detach to be proved.
+- **Claude Code 2.1.327** advertises `attach` for its background sessions. The selector can accept a partial name, so a Nexus bridge needs to prove an exact-ID path and reject any fallback selection. Help describes a continuing background session when the viewer returns to the shell. It leaves stream-json ownership and canonical authorization unproved. This build version is outside the existing Core production qualification.
+
+This probe ran no native engine or viewer and created no productive session. No provider credentials were supplied. It does not qualify any attach or saved-resume path, and SI-004 remains in progress.

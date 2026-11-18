@@ -1,0 +1,292 @@
+{
+  "platform": "Windows-11-10.0.26300-SP0",
+  "architecture": "AMD64",
+  "installed": {
+    "codex": [
+      {
+        "filename": "codex.cmd",
+        "bytes": 341,
+        "sha256": "c54db6755e710c39703f7c37512f9e35ed41042d8080558d2b84b8d2694323c3"
+      },
+      {
+        "filename": "codex.js",
+        "bytes": 9154,
+        "sha256": "e14fc83739c13c1074b12bd1acce4010c893c7f6fbfc1593b4a31d74cabb57af"
+      },
+      {
+        "filename": "package.json",
+        "bytes": 1082,
+        "sha256": "3c5c58c0916af7dd1f18178033dc6534877d57d33988b64ae24107abb1bac1bd"
+      },
+      {
+        "filename": "codex.exe",
+        "bytes": 385571120,
+        "sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce"
+      }
+    ],
+    "pi": [
+      {
+        "filename": "pi.cmd",
+        "bytes": 41,
+        "sha256": "5ef81ad2ad1c406ecacc7673764e73b6cc797ab01089221010ecc399b3e2bc4c"
+      },
+      {
+        "filename": "pi-launcher.js",
+        "bytes": 1591,
+        "sha256": "249be6707a99f8783dc686eaa4bdca2c59ed51760cd50b99ed576f851109376e"
+      },
+      {
+        "filename": "current-version",
+        "bytes": 8,
+        "sha256": "15a6e54768768c6ad325eb7527d6e8897cc8249cba72d63518fdad1d019dfc1c"
+      },
+      {
+        "filename": "package.json",
+        "bytes": 4041,
+        "sha256": "627631b613ba4ca29eba8df793f5280fd20b19f01d73826e9ffda14c15def5dc"
+      },
+      {
+        "filename": "cli.js",
+        "bytes": 160,
+        "sha256": "e79626f2dd6f94aa45d30f3fa63cd84319a6eefcd150b353cfaf274366926774"
+      },
+      {
+        "file": "dist/bundle/cli-runtime.js",
+        "bytes": 660,
+        "sha256": "9ca136a7caa977d936aa789d7448a3dfb17851677ff5ac8c0dbcf23c31a02142"
+      }
+    ],
+    "claude": [
+      {
+        "filename": "claude.exe",
+        "bytes": 379536544,
+        "sha256": "d6c8075bfb3b87f1c1254e64b6c35dadc628d21e75930ae51e47047b3f05a4a2"
+      }
+    ],
+    "node": [
+      {
+        "filename": "node.exe",
+        "bytes": 91694408,
+        "sha256": "3331e1ffe19874215472217c5e94f5a0c6d8e18c4ac7111d3937aa0ad5e9b4a5"
+      }
+    ]
+  },
+  "probes": {
+    "codex-version": {
+      "executable": "codex.exe",
+      "args": [
+        "--version"
+      ],
+      "exit": 0,
+      "stdout_bytes": 18,
+      "stderr_bytes": 0,
+      "version": [
+        "codex-cli 0.170.0"
+      ]
+    },
+    "codex-help": {
+      "executable": "codex.exe",
+      "args": [
+        "--help"
+      ],
+      "exit": 0,
+      "stdout_bytes": 5940,
+      "stderr_bytes": 0
+    },
+    "codex-resume-help": {
+      "executable": "codex.exe",
+      "args": [
+        "resume",
+        "--help"
+      ],
+      "exit": 0,
+      "stdout_bytes": 4289,
+      "stderr_bytes": 0
+    },
+    "codex-app-server-help": {
+      "executable": "codex.exe",
+      "args": [
+        "app-server",
+        "--help"
+      ],
+      "exit": 0,
+      "stdout_bytes": 3703,
+      "stderr_bytes": 0
+    },
+    "codex-schema-help": {
+      "executable": "codex.exe",
+      "args": [
+        "app-server",
+        "generate-json-schema",
+        "--help"
+      ],
+      "exit": 0,
+      "stdout_bytes": 1075,
+      "stderr_bytes": 0
+    },
+    "codex-schema-stable": {
+      "executable": "codex.exe",
+      "args": [
+        "app-server",
+        "generate-json-schema",
+        "--out",
+        "<probe-root>\\codex-schema-stable"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    "codex-schema-experimental": {
+      "executable": "codex.exe",
+      "args": [
+        "app-server",
+        "generate-json-schema",
+        "--out",
+        "<probe-root>\\codex-schema-experimental",
+        "--experimental"
+      ],
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    "node-version": {
+      "executable": "node.exe",
+      "args": [
+        "--version"
+      ],
+      "exit": 0,
+      "stdout_bytes": 10,
+      "stderr_bytes": 0,
+      "version": [
+        "v24.15.0"
+      ]
+    },
+    "pi-version": {
+      "executable": "node.exe",
+      "args": [
+        "<pi-package>\\dist\\bundle\\cli.js",
+        "--version"
+      ],
+      "exit": 0,
+      "stdout_bytes": 7,
+      "stderr_bytes": 0,
+      "version": [
+        "0.87.1"
+      ]
+    },
+    "pi-help": {
+      "executable": "node.exe",
+      "args": [
+        "<pi-package>\\dist\\bundle\\cli.js",
+        "--help"
+      ],
+      "exit": 0,
+      "stdout_bytes": 10176,
+      "stderr_bytes": 0
+    },
+    "claude-version": {
+      "executable": "claude.exe",
+      "args": [
+        "--version"
+      ],
+      "exit": 0,
+      "stdout_bytes": 22,
+      "stderr_bytes": 0,
+      "version": [
+        "2.1.327 (Claude Code)"
+      ]
+    },
+    "claude-help": {
+      "executable": "claude.exe",
+      "args": [
+        "--help"
+      ],
+      "exit": 0,
+      "stdout_bytes": 22197,
+      "stderr_bytes": 0
+    },
+    "claude-attach-help": {
+      "executable": "claude.exe",
+      "args": [
+        "attach",
+        "--help"
+      ],
+      "exit": 0,
+      "stdout_bytes": 263,
+      "stderr_bytes": 0
+    }
+  },
+  "recorded_on": "2026-11-18",
+  "qualification": "metadata_only",
+  "pi_sdk_declarations": [
+    {
+      "file": "dist/index.d.ts",
+      "bytes": 10697,
+      "sha256": "1e89f64c284248e8004bc040be1b8d886f20c158091d4e466cb130fa9d13d458"
+    },
+    {
+      "file": "dist/modes/interactive/interactive-mode.d.ts",
+      "bytes": 16839,
+      "sha256": "f4beb43004161ab6d38807c8641ff3e35c77cc3adfc513141654e37947b91f0c"
+    }
+  ],
+  "pi_observations": [
+    "CLI advertises rpc mode",
+    "Public SDK exports InteractiveMode and runRpcMode",
+    "InteractiveMode takes an AgentSessionRuntime with optional Terminal in options"
+  ],
+  "claude_observations": [
+    "CLI advertises attach for background sessions",
+    "Selector accepts id, name, or partial name",
+    "Help describes returning to shell while the background session continues"
+  ],
+  "codex_observations": [
+    "resume advertises explicit session ID, remote TUI and a remote auth token environment name",
+    "App server advertises stdio, Unix socket and WebSocket listeners"
+  ],
+  "codex_schemas": {
+    "stable": {
+      "files": 329,
+      "manifest_sha256": "933a69b15f37dc1610762e44a659d4d6a6d69d5e269e65e166eef825bef1bb8d",
+      "relevant_v2_parameters": {
+        "ThreadReadParams": {
+          "sha256": "dfe040c6ac71d30795b8be3f3ff232e66f362a37f883b491e5d1ea367f470db4",
+          "required": [
+            "threadId"
+          ]
+        },
+        "ThreadResumeParams": {
+          "sha256": "cb2daef3e452f9dcb6cdd7a7a389b866ac486614558a46f3ec5538f3fe3b3ea1",
+          "required": [
+            "threadId"
+          ]
+        },
+        "ThreadUnsubscribeParams": {
+          "sha256": "77c67e0dc0a729af2d4612f30ed63f1297160232e96cd32b7cb9cc3e7fff0233",
+          "required": [
+            "threadId"
+          ]
+        },
+        "TurnSteerParams": {
+          "sha256": "092cbdd6159de13ac3cb8acd223766b4450ab3004ad35608ad3c1746ece94c14",
+          "required": [
+            "expectedTurnId",
+            "input",
+            "threadId"
+          ]
+        },
+        "TurnInterruptParams": {
+          "sha256": "6dff382dae73d1dbc58406ed045605f647e7a49660e2540fbd2c6c24d60c5f2b",
+          "required": [
+            "threadId",
+            "turnId"
+          ]
+        }
+      }
+    },
+    "experimental": {
+      "files": 479,
+      "manifest_sha256": "49d123c0398042095fb37a355c77a15ba6530b7ef0d489b9fa4b5224e35c976b"
+    }
+  }
+}
