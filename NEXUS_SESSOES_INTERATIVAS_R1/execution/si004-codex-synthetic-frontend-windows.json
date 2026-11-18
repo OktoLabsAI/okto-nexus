@@ -1,0 +1,261 @@
+{
+  "binary_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+  "exit_code": 222,
+  "authenticated": true,
+  "exact_thread_resumed": true,
+  "disconnected": true,
+  "methods": [
+    {
+      "method": "initialize",
+      "exact_thread": false,
+      "answered": true,
+      "parameter_keys": [
+        "capabilities",
+        "clientInfo"
+      ]
+    },
+    {
+      "method": "initialized",
+      "exact_thread": false,
+      "answered": true,
+      "parameter_keys": []
+    },
+    {
+      "method": "account/read",
+      "exact_thread": false,
+      "answered": true,
+      "parameter_keys": []
+    },
+    {
+      "method": "thread/read",
+      "exact_thread": true,
+      "answered": true,
+      "parameter_keys": [
+        "threadId"
+      ]
+    },
+    {
+      "method": "thread/read",
+      "exact_thread": true,
+      "answered": true,
+      "parameter_keys": [
+        "threadId"
+      ]
+    },
+    {
+      "method": "model/list",
+      "exact_thread": false,
+      "answered": true,
+      "parameter_keys": [
+        "cursor",
+        "includeHidden",
+        "limit",
+        "modelProvider"
+      ]
+    },
+    {
+      "method": "configRequirements/read",
+      "exact_thread": false,
+      "answered": true,
+      "parameter_keys": []
+    },
+    {
+      "method": "collaborationMode/list",
+      "exact_thread": false,
+      "answered": true,
+      "parameter_keys": []
+    },
+    {
+      "method": "hooks/list",
+      "exact_thread": false,
+      "answered": true,
+      "parameter_keys": [
+        "cwds",
+        "threadId"
+      ]
+    },
+    {
+      "method": "account/bedrock/checkGovCloudRequirements",
+      "exact_thread": false,
+      "answered": true,
+      "parameter_keys": []
+    },
+    {
+      "method": "thread/read",
+      "exact_thread": true,
+      "answered": true,
+      "parameter_keys": [
+        "threadId"
+      ]
+    },
+    {
+      "method": "thread/resume",
+      "exact_thread": true,
+      "answered": true,
+      "parameter_keys": [
+        "approvalPolicy",
+        "approvalsReviewer",
+        "baseInstructions",
+        "config",
+        "cwd",
+        "developerInstructions",
+        "excludeTurns",
+        "history",
+        "initialTurnsPage",
+        "model",
+        "modelProvider",
+        "path",
+        "permissions",
+        "personality",
+        "runtimeWorkspaceRoots",
+        "sandbox",
+        "threadId"
+      ]
+    },
+    {
+      "method": "thread/list",
+      "exact_thread": false,
+      "answered": false,
+      "parameter_keys": [
+        "ancestorThreadId",
+        "archived",
+        "attachedToThreadId",
+        "currentAccountOnly",
+        "cursor",
+        "cwd",
+        "excludedThreadIds",
+        "limit",
+        "modelProviders",
+        "originators",
+        "parentThreadId",
+        "searchTerm",
+        "sectionId",
+        "sortDirection",
+        "sortKey",
+        "sourceKinds",
+        "useStateDbOnly"
+      ]
+    },
+    {
+      "method": "thread/loaded/list",
+      "exact_thread": false,
+      "answered": false,
+      "parameter_keys": [
+        "cursor",
+        "limit"
+      ]
+    },
+    {
+      "method": "thread/list",
+      "exact_thread": false,
+      "answered": false,
+      "parameter_keys": [
+        "ancestorThreadId",
+        "archived",
+        "attachedToThreadId",
+        "currentAccountOnly",
+        "cursor",
+        "cwd",
+        "excludedThreadIds",
+        "limit",
+        "modelProviders",
+        "originators",
+        "parentThreadId",
+        "searchTerm",
+        "sortDirection",
+        "sortKey",
+        "sourceKinds",
+        "useStateDbOnly"
+      ]
+    },
+    {
+      "method": "thread/list",
+      "exact_thread": false,
+      "answered": false,
+      "parameter_keys": [
+        "ancestorThreadId",
+        "archived",
+        "attachedToThreadId",
+        "currentAccountOnly",
+        "cursor",
+        "cwd",
+        "excludedThreadIds",
+        "limit",
+        "modelProviders",
+        "originators",
+        "parentThreadId",
+        "searchTerm",
+        "sortDirection",
+        "sortKey",
+        "sourceKinds",
+        "useStateDbOnly"
+      ]
+    },
+    {
+      "method": "thread/goal/get",
+      "exact_thread": true,
+      "answered": false,
+      "parameter_keys": [
+        "threadId"
+      ]
+    },
+    {
+      "method": "skills/list",
+      "exact_thread": false,
+      "answered": true,
+      "parameter_keys": [
+        "cwds",
+        "forceReload"
+      ]
+    },
+    {
+      "method": "plugin/installed",
+      "exact_thread": false,
+      "answered": false,
+      "parameter_keys": [
+        "cwds",
+        "installSuggestionPluginNames"
+      ]
+    },
+    {
+      "method": "skills/list",
+      "exact_thread": false,
+      "answered": true,
+      "parameter_keys": [
+        "cwds",
+        "forceReload"
+      ]
+    },
+    {
+      "method": "thread/backgroundTerminals/list",
+      "exact_thread": true,
+      "answered": false,
+      "parameter_keys": [
+        "cursor",
+        "limit",
+        "threadId"
+      ]
+    },
+    {
+      "method": "plugin/installed",
+      "exact_thread": false,
+      "answered": false,
+      "parameter_keys": [
+        "cwds",
+        "installSuggestionPluginNames"
+      ]
+    },
+    {
+      "method": "plugin/installed",
+      "exact_thread": false,
+      "answered": false,
+      "parameter_keys": [
+        "cwds",
+        "installSuggestionPluginNames"
+      ]
+    }
+  ],
+  "synthetic_history_rendered": true,
+  "rejected_proxy_connections": 1,
+  "terminal_bytes": 3947
+}

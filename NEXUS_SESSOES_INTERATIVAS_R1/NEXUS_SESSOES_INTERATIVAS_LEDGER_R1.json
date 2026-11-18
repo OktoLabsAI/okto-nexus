@@ -313,6 +313,11 @@
           "artifact_path": "execution/si004-native-probe-windows-20261118.json",
           "result": "Authorized version, help, schema and installed SDK metadata checks passed for Codex 0.170.0, Pi 0.87.1 and Claude Code 2.1.327",
           "limitations": "No engine session, handshake, model call, ownership transfer or native attach was exercised"
+        },
+        {
+          "artifact_path": "execution/si004-codex-synthetic-frontend-windows.md",
+          "result": "Authorized real Codex frontend authenticated to a synthetic local peer, read and resumed the exact fictitious thread, rendered its history and disconnected when the temporary viewer exited",
+          "limitations": "No live engine, provider, productive methods, saved transfer or remote attachment were qualified"
         }
       ]
     },
