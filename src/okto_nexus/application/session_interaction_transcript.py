@@ -25,6 +25,7 @@ def _native_id(value: object) -> bool:
         and value.isprintable()
         and redact(value) == value
         and "[REDACTED]" not in value
+        and "[NATIVE_TEXT_REDACTED]" not in value
     )
 
 
@@ -33,7 +34,7 @@ def _identity(*values: str | int) -> str:
 
 
 def _text_parts(event: dict, payload: dict):
-    """Allowlist Codex chat shapes with explicit native item identity."""
+    """Allowlist chat shapes with a retained item identifier and origin."""
     kind = (event.get("native_type"), event.get("category"))
     if kind == ("item/agentMessage/delta", "text_delta"):
         yield "assistant", "append", payload.get("itemId"), 0, payload.get("delta")
@@ -100,6 +101,8 @@ def read_session_interaction_transcript(
     A page can have no chat updates and still advance. Replay cannot prove a
     complete native transcript, thread parentage, or an input-to-echo link.
     A truncated body can be a prefix or entirely absent (``text=None``).
+    Core 0.0.15 masks raw identity fields in output deltas and Claude snapshots.
+    Pi terminal message events retain text without a native message identifier.
     """
     if type(limit) is not int or not 1 <= limit <= MAX_SCAN_EVENTS:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid transcript scan limit.", {})

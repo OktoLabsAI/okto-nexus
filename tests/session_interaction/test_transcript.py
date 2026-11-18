@@ -7,6 +7,9 @@ from dataclasses import replace
 from types import SimpleNamespace
 
 import pytest
+from nexus_connector_core.native.adapter_types import HarnessEvent
+from nexus_connector_core.native.event_ingest import translate_native_event
+from nexus_connector_core.native.redaction import NativeSecretRedactor
 from nexus_connector_core.protocol import canonical_json
 
 from okto_nexus.application import execution_event_views
@@ -195,6 +198,67 @@ def test_oversized_body_is_explicitly_absent_from_the_update(stream):
     update, = page["updates"]
     assert update["change"] == "replace" and update["text"] is None
     assert update["text_truncated"] and page["next_after_sequence"] == 1
+
+
+def test_pi_and_claude_text_without_retained_identity_is_omitted(stream):
+    content = [{"type": "text", "text": "Completed assistant response."}]
+    claude_message = {"id": "msg_001", "type": "message", "role": "assistant"}
+    claude_origin = {"session_id": "claude-session", "parent_tool_use_id": "toolu_subagent"}
+    redactor = NativeSecretRedactor()
+
+    def store(sequence, harness, kind, native_type, payload, *, snapshot=False, thread_id=None):
+        native = HarnessEvent(
+            session_id="native-session", harness_kind=harness, kind=kind, native_event=native_type,
+            occurred_at="2026-11-18T00:00:00Z", payload=payload, thread_id=thread_id,
+            output_snapshot=snapshot,
+        )
+        event = translate_native_event(
+            redactor.scrub(native), server_id="server", executor_id="executor", session_id="session",
+            stream_epoch="epoch", native_session_id="native-session",
+        )
+        stream.store(sequence, event.native_type, event.category, event.payload)
+        return event.payload
+
+    claude_start = store(1, "claude_code", "tool_activity", "stream_event:message_start", {
+        **claude_origin, "type": "stream_event",
+        "event": {"type": "message_start", "message": {**claude_message, "content": []}},
+    })
+    claude_delta = store(2, "claude_code", "output_delta", "stream_event:content_block_delta", {
+        "text": content[0]["text"], "index": 0,
+    })
+    claude_snapshot = store(3, "claude_code", "output_delta", "assistant", {
+        "final": True, "text": content[0]["text"],
+        "raw": {**claude_origin, "type": "assistant", "message": {**claude_message, "content": content}},
+    }, snapshot=True)
+    pi_snapshot = store(4, "pi", "tool_activity", "message_end", {
+        "type": "message_end", "message": {"role": "assistant", "content": content, "timestamp": 1789928310150},
+    })
+    codex_delta = store(5, "codex", "output_delta", "item/agentMessage/delta", {
+        "threadId": "codex-thread", "itemId": "codex-item", "delta": content[0]["text"],
+    }, thread_id="codex-thread")
+    store(6, "codex", "tool_activity", "item/completed", {
+        "threadId": "codex-thread",
+        "item": {"id": "codex-item", "type": "agentMessage", "text": content[0]["text"]},
+    }, thread_id="codex-thread")
+    stream.watermark(6)
+
+    assert claude_start["event"]["message"]["id"] == "msg_001"
+    assert claude_start["parent_tool_use_id"] == "toolu_subagent"
+    assert claude_delta["output_text"]
+    assert claude_snapshot["output_text"] and claude_snapshot["raw"]["message"]["id"] == "[NATIVE_TEXT_REDACTED]"
+    assert pi_snapshot["message"]["content"] == content and "id" not in pi_snapshot["message"]
+    assert codex_delta["output_text"] and codex_delta["itemId"] == "[NATIVE_TEXT_REDACTED]"
+    page = stream.read()
+    assert page["next_after_sequence"] == 6
+    assert [(update["sequence"], update["text"]) for update in page["updates"]] == [(6, content[0]["text"])]
+
+
+def test_redaction_marker_does_not_become_native_identity(stream):
+    mask = "[NATIVE_TEXT_REDACTED]"
+    _delta(stream, 1, mask, "unidentified item")
+    _delta(stream, 2, "item-with-redacted-origin", "unidentified origin", thread=mask)
+    stream.watermark(2)
+    assert stream.read()["updates"] == []
 
 
 @pytest.mark.parametrize("field", ["binding_id", "workspace_id", "workspace_binding_id", "agent_id", "generation"])
