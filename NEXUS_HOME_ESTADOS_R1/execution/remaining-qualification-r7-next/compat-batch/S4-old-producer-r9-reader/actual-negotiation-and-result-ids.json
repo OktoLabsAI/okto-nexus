@@ -1,0 +1,33 @@
+{
+  "old": {
+    "home_versions_field_present": false,
+    "advertised_presentation_versions": [],
+    "actual_query_parameters": {
+      "workspace_id": "wsr_38027473fcaf0bfafa298a97b8bf1318"
+    },
+    "result_ids": [
+      "result_92a3477454b6ac1a23df21a70ee518c4c075e68842ccdab16b6fd1a68e1c2bcc"
+    ],
+    "server_id": "srv_f6f03b2ed7d5c37e97579c6aabbb9fdc"
+  },
+  "current": {
+    "advertised_presentation_versions": [
+      1,
+      2
+    ],
+    "actual_query_parameters": {
+      "workspace_id": "wsr_38027473fcaf0bfafa298a97b8bf1318",
+      "presentation_version": 2
+    },
+    "returned_presentation_version": 2,
+    "result_ids": [
+      "result_92a3477454b6ac1a23df21a70ee518c4c075e68842ccdab16b6fd1a68e1c2bcc"
+    ],
+    "server_id": "srv_f6f03b2ed7d5c37e97579c6aabbb9fdc"
+  },
+  "DTO_rewritten": false,
+  "private_raw_response_sha256": {
+    "old": "5c61bac59d5396b5d9edfef5fa2f4911521b8bb3139cbd6e23e67ad96f9b235a",
+    "current": "bf0b337aac3bf8081bb09b2564f8e9f696266eac20c382fb329a8e767a022504"
+  }
+}

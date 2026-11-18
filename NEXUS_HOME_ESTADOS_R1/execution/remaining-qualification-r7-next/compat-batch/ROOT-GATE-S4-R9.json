@@ -1,0 +1,8 @@
+{
+  "gate": "ROOT_APPROVED_COMPAT_S4",
+  "journey": "S4",
+  "manifest_sha256": "3dc1aae92c4c7b8963de98aca94e011a2d8e222d05bda41741f527db8d20f458",
+  "runner_sha256": "a485a6536381ea4bb3319b92c2cce1c3e82cf50194ccd7a39ab9388c0bc6f76e",
+  "authorization": "Explicit Root review of history_copy_v2, projection_reader_v3 and qualified runner: one S4 execution, first error stops without retry.",
+  "constraints": "Actual old producer, confirmed close, drained stop and physical absence before one copy. Same own account canonical login and R9 reads only. No new work/Test/Finish/grant, DB/context repair, auth/private-content publication or inherited K05 PASS."
+}

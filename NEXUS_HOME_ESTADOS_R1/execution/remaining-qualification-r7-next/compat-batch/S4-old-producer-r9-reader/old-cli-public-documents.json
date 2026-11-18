@@ -1,0 +1,364 @@
+[
+  {
+    "sequence": 1,
+    "command": [
+      "service",
+      "status"
+    ],
+    "consent_hash_arguments": {},
+    "exit_code": 0,
+    "raw_stdout_sha256": "2f578053808e08377d1574841a882619d290980510aa6c4e28ad69d3ce754393",
+    "public_document": {
+      "state": "ready",
+      "pid": 15180,
+      "instance_id": "svc_dbd3c70c2d73e3be2d54ecdbb0f314bd0b6cc586aa9fef3cec48b6691ee3ac82",
+      "generation": "85dba7bea9ca7a2cfe489cc5371b5230"
+    }
+  },
+  {
+    "sequence": 2,
+    "command": [
+      "connect",
+      "codex"
+    ],
+    "consent_hash_arguments": {},
+    "exit_code": 0,
+    "raw_stdout_sha256": "b0168cb2b0550034d44ca787d931d441c6ef0025c9cce2c101cc9bfac82405a0",
+    "public_document": {
+      "state": "review",
+      "review_revision": "438ed0dda2e0f07ada74f02e549449605663a0d418af2dbd00856c5977b82edd",
+      "quick_connect": {
+        "version": 1,
+        "status": "planned",
+        "connect_id_status": "proposed",
+        "harness": "codex",
+        "execution_location": "local"
+      }
+    }
+  },
+  {
+    "sequence": 3,
+    "command": [
+      "connect",
+      "codex"
+    ],
+    "consent_hash_arguments": {
+      "--approve": "438ed0dda2e0f07ada74f02e549449605663a0d418af2dbd00856c5977b82edd"
+    },
+    "exit_code": 0,
+    "raw_stdout_sha256": "d0d9d41427702eedd20270e3a79e0b89bc0d18216690168bbc85ab1bc1035311",
+    "public_document": {
+      "state": "configured",
+      "quick_connect": {
+        "version": 1,
+        "status": "connected",
+        "connect_id": "compat-harness",
+        "connect_id_status": "bound",
+        "operation": "created",
+        "harness": "codex",
+        "execution_location": "local",
+        "canonical_reference": {
+          "server_id": "srv_f6f03b2ed7d5c37e97579c6aabbb9fdc",
+          "executor_id": "exe_3f0499792e676369619319367d74bb40",
+          "binding_id": "bind_d34ebb7aec6903cde50a33af3d73bc7e",
+          "endpoint_id": "ep_6de8fc764696e28e7bb37c83ab6f871c",
+          "workspace_id": "wsr_38027473fcaf0bfafa298a97b8bf1318",
+          "workspace_binding_id": "wxb_904cd254efe511823ec2585560304422",
+          "agent_id": "compat-project-6474a8fefe95"
+        }
+      }
+    }
+  },
+  {
+    "sequence": 4,
+    "command": [
+      "work",
+      "send"
+    ],
+    "consent_hash_arguments": {},
+    "exit_code": 0,
+    "raw_stdout_sha256": "e357b1a7436a71050042ca53d305648442943763d9d1ce2b17dcc375efc2cce3",
+    "public_document": {
+      "action": "runtime.open",
+      "operation_id": "op_535b685c213286597638bab218de3c62",
+      "submission_turn_operation_id": "op_e4bfa54f771e02a84a1eda9acbce9b8c",
+      "scope": {
+        "server_id": "srv_f6f03b2ed7d5c37e97579c6aabbb9fdc",
+        "executor_id": "exe_3f0499792e676369619319367d74bb40",
+        "binding_id": "bind_d34ebb7aec6903cde50a33af3d73bc7e",
+        "workspace_id": "wsr_38027473fcaf0bfafa298a97b8bf1318",
+        "workspace_binding_id": "wxb_904cd254efe511823ec2585560304422",
+        "agent_id": "compat-project-6474a8fefe95",
+        "session_id": "ses_e71f3731c997a69c3093c13c4562a71b",
+        "session_owner_generation": 1
+      }
+    }
+  },
+  {
+    "sequence": 5,
+    "command": [
+      "work",
+      "status"
+    ],
+    "consent_hash_arguments": {},
+    "exit_code": 0,
+    "raw_stdout_sha256": "4892dd862df0a3dc4bd2c98561911f76aacfcac82a5be9585fe6ed6279b5175f",
+    "public_document": {
+      "state": "needs_input",
+      "session": {
+        "scope": {
+          "server_id": "srv_f6f03b2ed7d5c37e97579c6aabbb9fdc",
+          "executor_id": "exe_3f0499792e676369619319367d74bb40",
+          "binding_id": "bind_d34ebb7aec6903cde50a33af3d73bc7e",
+          "workspace_id": "wsr_38027473fcaf0bfafa298a97b8bf1318",
+          "workspace_binding_id": "wxb_904cd254efe511823ec2585560304422",
+          "agent_id": "compat-project-6474a8fefe95",
+          "session_id": "ses_e71f3731c997a69c3093c13c4562a71b",
+          "session_owner_generation": 1
+        },
+        "lifecycle_state": "READY"
+      },
+      "operations": [
+        {
+          "operation_id": "op_535b685c213286597638bab218de3c62",
+          "action": "runtime.open",
+          "executor_stage": "SUBMITTED",
+          "admission_state": "DISPATCHED"
+        },
+        {
+          "operation_id": "op_e4bfa54f771e02a84a1eda9acbce9b8c",
+          "action": "turn.submit",
+          "executor_stage": "SUBMITTED",
+          "admission_state": "DISPATCHED"
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 6,
+    "command": [
+      "service",
+      "status"
+    ],
+    "consent_hash_arguments": {},
+    "exit_code": 0,
+    "raw_stdout_sha256": "32e4c141b8c5ae731c113c5ee4112f748b61761b5aed49c31d57dc287c560de8",
+    "public_document": {
+      "state": "ready",
+      "pid": 15180,
+      "instance_id": "svc_dbd3c70c2d73e3be2d54ecdbb0f314bd0b6cc586aa9fef3cec48b6691ee3ac82",
+      "generation": "85dba7bea9ca7a2cfe489cc5371b5230"
+    }
+  },
+  {
+    "sequence": 7,
+    "command": [
+      "work",
+      "answer"
+    ],
+    "consent_hash_arguments": {},
+    "exit_code": 0,
+    "raw_stdout_sha256": "36981c88f7d7cf691164fbcb3ea43ef39a073ccec736ed9a2d837c703b919b37",
+    "public_document": {
+      "state": "decision_review",
+      "review_revision": "e4bbe6510a078a8456d2bb700aa3daecafaa011bde37abb0c7dbb024a8bfb4fe",
+      "detail": {
+        "approval_id": "r4request_0790c22d6ae5cb499ef51d34acd9e14a8c4f731ada5e3472f051c48f18bbbb8b",
+        "status": "pending",
+        "recipient_agent_id": "operator",
+        "approval_key": {
+          "server_id": "srv_f6f03b2ed7d5c37e97579c6aabbb9fdc",
+          "executor_id": "exe_3f0499792e676369619319367d74bb40",
+          "binding_id": "bind_d34ebb7aec6903cde50a33af3d73bc7e",
+          "workspace_id": "wsr_38027473fcaf0bfafa298a97b8bf1318",
+          "agent_id": "compat-project-6474a8fefe95",
+          "session_id": "ses_e71f3731c997a69c3093c13c4562a71b",
+          "session_owner_generation": 1
+        }
+      }
+    }
+  },
+  {
+    "sequence": 8,
+    "command": [
+      "work",
+      "answer"
+    ],
+    "consent_hash_arguments": {
+      "--review": "e4bbe6510a078a8456d2bb700aa3daecafaa011bde37abb0c7dbb024a8bfb4fe"
+    },
+    "exit_code": 0,
+    "raw_stdout_sha256": "509ccf95e056330d297b7669bc1869cdc3475e51aa904cc524ecea36f98425bf",
+    "public_document": {
+      "canonical_state": "CONFIRMED",
+      "decision_id": "r4decision_8b6df429126c08841a71418b4896f093",
+      "native_stage": "DISPATCH_PENDING"
+    }
+  },
+  {
+    "sequence": 9,
+    "command": [
+      "work",
+      "status"
+    ],
+    "consent_hash_arguments": {},
+    "exit_code": 0,
+    "raw_stdout_sha256": "cd740b9b794c129e19cc13bdf13d9251fa4d81e347ad07d37933467225606db9",
+    "public_document": {
+      "state": "completed",
+      "session": {
+        "scope": {
+          "server_id": "srv_f6f03b2ed7d5c37e97579c6aabbb9fdc",
+          "executor_id": "exe_3f0499792e676369619319367d74bb40",
+          "binding_id": "bind_d34ebb7aec6903cde50a33af3d73bc7e",
+          "workspace_id": "wsr_38027473fcaf0bfafa298a97b8bf1318",
+          "workspace_binding_id": "wxb_904cd254efe511823ec2585560304422",
+          "agent_id": "compat-project-6474a8fefe95",
+          "session_id": "ses_e71f3731c997a69c3093c13c4562a71b",
+          "session_owner_generation": 1
+        },
+        "lifecycle_state": "READY"
+      },
+      "operations": [
+        {
+          "operation_id": "op_535b685c213286597638bab218de3c62",
+          "action": "runtime.open",
+          "executor_stage": "SUBMITTED",
+          "admission_state": "DISPATCHED"
+        },
+        {
+          "operation_id": "op_e4bfa54f771e02a84a1eda9acbce9b8c",
+          "action": "turn.submit",
+          "executor_stage": "SUCCEEDED",
+          "admission_state": "RESOLVED_TERMINAL",
+          "result_text": {
+            "characters": 57,
+            "sha256": "2da677ffe2617d1f137e67a1ab0618e2815b2b68aba247fe39142d6cc2ed131e"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 10,
+    "command": [
+      "service",
+      "status"
+    ],
+    "consent_hash_arguments": {},
+    "exit_code": 0,
+    "raw_stdout_sha256": "316e14b096e25114a33016596b50cc466547777b819f57cf57bee2d3f05eb8d1",
+    "public_document": {
+      "state": "ready",
+      "pid": 15180,
+      "instance_id": "svc_dbd3c70c2d73e3be2d54ecdbb0f314bd0b6cc586aa9fef3cec48b6691ee3ac82",
+      "generation": "85dba7bea9ca7a2cfe489cc5371b5230"
+    }
+  },
+  {
+    "sequence": 11,
+    "command": [
+      "connect",
+      "codex"
+    ],
+    "consent_hash_arguments": {},
+    "exit_code": 0,
+    "raw_stdout_sha256": "1c0c8e7374f75374fe1a506dcca60929c124e902aa33a98544ce45567f570d57",
+    "public_document": {
+      "state": "configured",
+      "quick_connect": {
+        "version": 1,
+        "status": "connected",
+        "connect_id": "compat-harness",
+        "connect_id_status": "bound",
+        "operation": "reused",
+        "harness": "codex",
+        "execution_location": "local",
+        "canonical_reference": {
+          "server_id": "srv_f6f03b2ed7d5c37e97579c6aabbb9fdc",
+          "executor_id": "exe_3f0499792e676369619319367d74bb40",
+          "binding_id": "bind_d34ebb7aec6903cde50a33af3d73bc7e",
+          "endpoint_id": "ep_6de8fc764696e28e7bb37c83ab6f871c",
+          "workspace_id": "wsr_38027473fcaf0bfafa298a97b8bf1318",
+          "workspace_binding_id": "wxb_904cd254efe511823ec2585560304422",
+          "agent_id": "compat-project-6474a8fefe95"
+        }
+      }
+    }
+  },
+  {
+    "sequence": 12,
+    "command": [
+      "service",
+      "status"
+    ],
+    "consent_hash_arguments": {},
+    "exit_code": 0,
+    "raw_stdout_sha256": "77f73daab660cc152a8156d5e095318ff981790ae4a4d238fcb5e505dafa8c88",
+    "public_document": {
+      "state": "ready",
+      "pid": 15180,
+      "instance_id": "svc_dbd3c70c2d73e3be2d54ecdbb0f314bd0b6cc586aa9fef3cec48b6691ee3ac82",
+      "generation": "85dba7bea9ca7a2cfe489cc5371b5230"
+    }
+  },
+  {
+    "sequence": 13,
+    "command": [
+      "work",
+      "close"
+    ],
+    "consent_hash_arguments": {},
+    "exit_code": 0,
+    "raw_stdout_sha256": "b9f003b98cb2035d1d78d9b694e66f8a8a83fa91ed43fbd31c6ac96299602c97",
+    "public_document": {
+      "action": "runtime.close",
+      "operation_id": "op_18625959db1715a780838dc98590405d",
+      "submission_turn_operation_id": null,
+      "scope": {
+        "server_id": "srv_f6f03b2ed7d5c37e97579c6aabbb9fdc",
+        "executor_id": "exe_3f0499792e676369619319367d74bb40",
+        "binding_id": "bind_d34ebb7aec6903cde50a33af3d73bc7e",
+        "workspace_id": "wsr_38027473fcaf0bfafa298a97b8bf1318",
+        "workspace_binding_id": "wxb_904cd254efe511823ec2585560304422",
+        "agent_id": "compat-project-6474a8fefe95",
+        "session_id": "ses_e71f3731c997a69c3093c13c4562a71b",
+        "session_owner_generation": 1
+      }
+    }
+  },
+  {
+    "sequence": 14,
+    "command": [
+      "work",
+      "status"
+    ],
+    "consent_hash_arguments": {},
+    "exit_code": 0,
+    "raw_stdout_sha256": "e735764e74a482e265e112ca8b0da30859c86e23c622117ca92d1f2e9572c378",
+    "public_document": {
+      "state": "completed",
+      "session": {
+        "scope": {
+          "server_id": "srv_f6f03b2ed7d5c37e97579c6aabbb9fdc",
+          "executor_id": "exe_3f0499792e676369619319367d74bb40",
+          "binding_id": "bind_d34ebb7aec6903cde50a33af3d73bc7e",
+          "workspace_id": "wsr_38027473fcaf0bfafa298a97b8bf1318",
+          "workspace_binding_id": "wxb_904cd254efe511823ec2585560304422",
+          "agent_id": "compat-project-6474a8fefe95",
+          "session_id": "ses_e71f3731c997a69c3093c13c4562a71b",
+          "session_owner_generation": 1
+        },
+        "lifecycle_state": "CLOSED"
+      },
+      "operations": [
+        {
+          "operation_id": "op_18625959db1715a780838dc98590405d",
+          "action": "runtime.close",
+          "executor_stage": "SUCCEEDED",
+          "admission_state": "RESOLVED_TERMINAL"
+        }
+      ]
+    }
+  }
+]

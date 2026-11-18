@@ -7056,7 +7056,7 @@
       "when": "Projetar",
       "then": "Não reescrever receipts/hashes/grants para adequar texto de UI.",
       "level": "contrato + instalação isolada",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -7066,9 +7066,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Read-only immutable receipts source/SQL tests pass; literal historical prefeature receipt/hash/grant snapshot in finalartifact not complete. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T00:53:43.595577+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/compat-batch/S4-old-producer-r9-reader/qualification.json",
+          "environment": "Actual installed pre-feature0.3.6 producer and R9 reader in sequential isolated foreground services, canonical CLI/Core with inert protocol peer; one own-home copy after drained stop/physical absence",
+          "command_or_procedure": "Produce actual native question/decision/terminal result on old artifact; close/stop, copy21 files once byte-exact, authenticate same own account on R9 and query real negotiated Home/results; compare eight full-column typed-row hashes and exact result/Server IDs",
+          "result": "PASS K02: actual old capability field absent and R9 offers1/2, same nonempty result IDs/Server, eight protected tables unchanged through copy/start/read/stop, no new current Test/Finish/work/grant; both owners stopped/drained/physical0, real two-port audit empty, source/payload/tools unchanged. Independent posterior RO supplement confirms five terminal files including two nonempty profile/checkpoint documents against the captured at-copy map",
+          "limitations": "Original terminal/ path selector was vacuous on Windows and is not relabeled as executed; profile proof is a separate later read-only comparison. Old records were generated now by the actual pre-feature artifact, not backdated. Protected eight-table and selected-file scope, not whole-DB immutability after auth/bootstrap. New process instance/generation is expected for the copied temporary home; stored identities remain. No real provider, UI, human, Windows lifecycle or performance qualification."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Read-only immutable receipts source/SQL tests pass; literal historical prefeature receipt/hash/grant snapshot in finalartifact not complete."
+      "execution_notes": "PASS actual pre-feature producer→one drained-state copy→R9 read, preserving native request/decision/result/receipt/grant hashes and IDs; independent posterior RO profile proof and original vacuous selector retained explicitly."
     },
     {
       "id": "HST-T-K03",
@@ -7621,7 +7630,6 @@
       "provisioning": "No short-lived human fixture until participant confirms availability",
       "pending_local_scopes": [
         "full classic-control navigation",
-        "old-producer state read compatibility",
         "stream/validity and remaining literal supported clauses"
       ]
     },
@@ -7842,6 +7850,18 @@
       "provider_calls": 0,
       "canonical_close": "SUCCEEDED_AND_CLOSED",
       "canonical_service_stop": "DRAINED",
+      "physical_absence": true
+    },
+    "r9_old_state_compatibility": {
+      "status": "PASS_K02_OLD_ARTIFACT_PRODUCER",
+      "qualification": "execution/remaining-qualification-r7-next/compat-batch/S4-old-producer-r9-reader/qualification.json",
+      "protected_tables": 8,
+      "copy_count": 1,
+      "files_equal_at_copy": 21,
+      "profile_proof": "INDEPENDENT_POSTCUT_RO; ORIGINAL_SELECTOR_VACUOUS",
+      "current_productive_setup_or_work": false,
+      "provider_calls": 0,
+      "canonical_stops": "BOTH_DRAINED",
       "physical_absence": true
     }
   }
