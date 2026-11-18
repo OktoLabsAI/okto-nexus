@@ -1,8 +1,9 @@
 # Current development dependency
 
-Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `5d1f7c6233a550c60422d71dc042bc396ed4ae2a`.
-The unpublished wheel SHA-256 is `b6b7061288b536acb64b5afbc3043d7b740e3f70a4c28d715c45c4345d023b36`.
-The Pi adapter records owned process birth before starting protocol readers.
+Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `5df03b51fda46a293ae5f0cca73c8947be139726`.
+The unpublished wheel SHA-256 is `f43b40c69660cf50129506110576d1890fdc0b00867dff15b6d7ae5219c568f1`.
+Core requires an exact matching grant for an explicit saved Codex resume and binds
+the R4 receipt to that target. This includes the Pi process-birth fix.
 The Nexus CI manifest also identifies the matching Connector wheel.
 
 ## Previous development dependency
