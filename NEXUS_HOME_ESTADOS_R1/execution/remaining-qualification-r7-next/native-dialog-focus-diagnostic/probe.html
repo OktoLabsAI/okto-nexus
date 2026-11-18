@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Own native dialog focus diagnostic</title>
+<style>body{font:16px system-ui}button,input{margin:5px}:focus-visible{outline:2px solid #005fcc;outline-offset:2px}dialog{width:700px}ol{max-height:100px;overflow:auto}</style>
+<main><h1>Own native dialog focus diagnostic</h1><p>Static synthetic controls; no Nexus, accounts or runtime.</p>
+<button id="open" type="button">Open diagnostic dialog</button><button id="outside" type="button">Outside page control</button></main>
+<dialog id="diagnostic" aria-labelledby="heading"><header><h2 id="heading">Synthetic execution detail</h2>
+<button id="expand" type="button">Expand modal</button><button id="close" type="button">Close modal</button></header>
+<section aria-label="Synthetic execution output"><div role="group" aria-label="Terminal mode"><button id="live" type="button">Live tail</button><button id="history" type="button">History</button></div>
+<section aria-label="Synthetic live tail"><button id="pause" type="button">Pause tail</button><label><input id="auto" type="checkbox" checked>Auto-scroll</label><button id="latest" type="button">Latest events</button>
+<div role="group" aria-label="Terminal font size"><button id="decrease" type="button" aria-label="Decrease terminal font size">−</button><button id="reset" type="button" aria-label="Reset terminal font size">12px</button><button id="increase" type="button" aria-label="Increase terminal font size">+</button></div>
+<ol id="events" tabindex="0" aria-label="Live runtime events"><li>Static synthetic event; no native execution.</li></ol></section></section></dialog>
+<script>
+window.probeEvents=[];
+const state=()=>({time:performance.now(),hasFocus:document.hasFocus(),activeTag:document.activeElement?.tagName,activeId:document.activeElement?.id,focusCount:document.querySelectorAll(':focus').length,modal:document.querySelector('#diagnostic').matches(':modal')});
+for(const name of ['focusin','focusout','focus','blur'])document.addEventListener(name,e=>{window.probeEvents.push({event:name,targetTag:e.target.tagName??null,targetId:e.target.id??null,...state()});},true);
+for(const name of ['focus','blur'])window.addEventListener(name,e=>window.probeEvents.push({event:'window-'+name,...state()}));
+document.querySelector('#open').addEventListener('click',()=>document.querySelector('#diagnostic').showModal());
+document.querySelector('#close').addEventListener('click',()=>document.querySelector('#diagnostic').close());
+</script></html>

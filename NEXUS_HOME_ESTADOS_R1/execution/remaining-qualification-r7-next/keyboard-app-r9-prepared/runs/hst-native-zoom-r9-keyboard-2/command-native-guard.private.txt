@@ -1,0 +1,63 @@
+### Result
+{"status":"PASS_NATIVE_200_ZOOM_GUARD","checks":[{"id":"native-Page-zoom-control-100","pass":true,"actual":"- combobox \"Zoom da página:\":\n  - option \"25%\"\n  - option \"33%\"\n  - option \"50%\"\n  - option \"67%\"\n  - option \"75%\"\n  - option \"80%\"\n  - option \"90%\"\n  - option \"100%\" [selected]\n  - option \"110%\"\n  - option \"125%\"\n  - option \"150%\"\n  - option \"175%\"\n  - option \"200%\"\n  - option \"250%\"\n  - option \"300%\"\n  - option \"400%\"\n  - option \"500%\""},{"id":"native-Page-zoom-enabled-100","pass":true,"actual":true},{"id":"native-option-100","pass":true,"actual":[{"value":"0.25","label":"25%"},{"value":"0.3333333333333333","label":"33%"},{"value":"0.5","label":"50%"},{"value":"0.6666666666666666","label":"67%"},{"value":"0.75","label":"75%"},{"value":"0.8","label":"80%"},{"value":"0.9","label":"90%"},{"value":"1","label":"100%"},{"value":"1.1","label":"110%"},{"value":"1.25","label":"125%"},{"value":"1.5","label":"150%"},{"value":"1.75","label":"175%"},{"value":"2","label":"200%"},{"value":"2.5","label":"250%"},{"value":"3","label":"300%"},{"value":"4","label":"400%"},{"value":"5","label":"500%"}]},{"id":"native-selected-100","pass":true,"actual":{"value":"1","label":"100%"}},{"id":"native-Page-zoom-control-200","pass":true,"actual":"- combobox \"Zoom da página:\":\n  - option \"25%\"\n  - option \"33%\"\n  - option \"50%\"\n  - option \"67%\"\n  - option \"75%\"\n  - option \"80%\"\n  - option \"90%\"\n  - option \"100%\" [selected]\n  - option \"110%\"\n  - option \"125%\"\n  - option \"150%\"\n  - option \"175%\"\n  - option \"200%\"\n  - option \"250%\"\n  - option \"300%\"\n  - option \"400%\"\n  - option \"500%\""},{"id":"native-Page-zoom-enabled-200","pass":true,"actual":true},{"id":"native-option-200","pass":true,"actual":[{"value":"0.25","label":"25%"},{"value":"0.3333333333333333","label":"33%"},{"value":"0.5","label":"50%"},{"value":"0.6666666666666666","label":"67%"},{"value":"0.75","label":"75%"},{"value":"0.8","label":"80%"},{"value":"0.9","label":"90%"},{"value":"1","label":"100%"},{"value":"1.1","label":"110%"},{"value":"1.25","label":"125%"},{"value":"1.5","label":"150%"},{"value":"1.75","label":"175%"},{"value":"2","label":"200%"},{"value":"2.5","label":"250%"},{"value":"3","label":"300%"},{"value":"4","label":"400%"},{"value":"5","label":"500%"}]},{"id":"native-selected-200","pass":true,"actual":{"value":"2","label":"200%"}},{"id":"same-requested-viewport","pass":true,"actual":{"viewport":{"width":720,"height":1000},"current":{"width":720,"height":1000}}},{"id":"native-DPR-doubled","pass":true,"actual":{"dpr":2,"innerWidth":0.5,"innerHeight":0.5}},{"id":"native-CSS-width-halved","pass":true,"actual":{"dpr":2,"innerWidth":0.5,"innerHeight":0.5}},{"id":"native-CSS-360-at-requested720","pass":true,"actual":{"requestedWidth":720,"actualCssWidth":360}},{"id":"no-pinch-visual-scale","pass":true,"actual":{"baseline":1,"zoomed":1}},{"id":"outer-and-screen-geometry-stable","pass":true,"actual":{"baseline":{"outerWidth":720,"screenWidth":720,"screenHeight":1000},"zoomed":{"outerWidth":720,"screenWidth":720,"screenHeight":1000}}}],"observations":{"ui100":{"selected":{"value":"1","label":"100%"},"ariaSnapshot":"- combobox \"Zoom da página:\":\n  - option \"25%\"\n  - option \"33%\"\n  - option \"50%\"\n  - option \"67%\"\n  - option \"75%\"\n  - option \"80%\"\n  - option \"90%\"\n  - option \"100%\" [selected]\n  - option \"110%\"\n  - option \"125%\"\n  - option \"150%\"\n  - option \"175%\"\n  - option \"200%\"\n  - option \"250%\"\n  - option \"300%\"\n  - option \"400%\"\n  - option \"500%\"","viewport":{"width":720,"height":1000}},"baseline":{"innerWidth":720,"innerHeight":1000,"outerWidth":720,"outerHeight":1090,"devicePixelRatio":1,"screenWidth":720,"screenHeight":1000,"visualViewport":{"width":720,"height":1000,"scale":1},"documentWidth":720,"scrollWidth":720},"ui200":{"selected":{"value":"2","label":"200%"},"ariaSnapshot":"- combobox \"Zoom da página:\":\n  - option \"25%\"\n  - option \"33%\"\n  - option \"50%\"\n  - option \"67%\"\n  - option \"75%\"\n  - option \"80%\"\n  - option \"90%\"\n  - option \"100%\"\n  - option \"110%\"\n  - option \"125%\"\n  - option \"150%\"\n  - option \"175%\"\n  - option \"200%\" [selected]\n  - option \"250%\"\n  - option \"300%\"\n  - option \"400%\"\n  - option \"500%\"","viewport":{"width":720,"height":1000}},"zoomed":{"innerWidth":360,"innerHeight":500,"outerWidth":720,"outerHeight":1090,"devicePixelRatio":2,"screenWidth":720,"screenHeight":1000,"visualViewport":{"width":360,"height":500,"scale":1},"documentWidth":360,"scrollWidth":360},"ratios":{"dpr":2,"innerWidth":0.5,"innerHeight":0.5}},"scope":"Native browser-only proof; no Nexus application or I05 acceptance yet","limits":["No screen reader or Windows settings interaction","Only isolated Chrome profile preference changed through actual Settings UI","Page viewport720 and measured CSS360 are reported separately","No deviceScaleFactor/page-scale/CSS zoom API was used"]}
+### Ran Playwright code
+```js
+await (// PREPARED ONLY. Run solely in a newly allocated own Chrome profile after Root gate.
+async page=>{
+  const cfg={"window": "ROOT_NATIVE_ZOOM_BROWSER_GUARD", "probeOrigin": "http://127.0.0.1:61428", "outputPrefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-5kwfjcac\\native-zoom"};
+  if(cfg.window!=='ROOT_NATIVE_ZOOM_BROWSER_GUARD')throw Error('Native zoom guard is not authorized');
+  const probe=new URL(cfg.probeOrigin);
+  if(probe.protocol!=='http:'||probe.hostname!=='127.0.0.1')throw Error('Own loopback calibration origin required');
+  const checks=[],observations={};let stage='webui';
+  const check=(id,pass,actual)=>{checks.push({id,pass:!!pass,actual});if(!pass)throw Error(id);};
+  // Geometry is established once BEFORE both samples. No deviceScaleFactor,
+  // CSS zoom/style transform, pinch/page-scale command or hidden Chrome API.
+  await page.setViewportSize({width:720,height:1000});
+  const viewport=page.viewportSize();
+  const metrics=()=>page.evaluate(()=>({innerWidth,innerHeight,outerWidth,outerHeight,devicePixelRatio,screenWidth:screen.width,screenHeight:screen.height,visualViewport:{width:visualViewport?.width,height:visualViewport?.height,scale:visualViewport?.scale},documentWidth:document.documentElement.clientWidth,scrollWidth:document.documentElement.scrollWidth}));
+  const nativeSelect=async percent=>{
+    await page.goto('chrome://settings/appearance');
+    // Accessible role from the actual WebUI, never prefs files or private APIs.
+    const select=page.getByRole('combobox',{name:/^(Page zoom|Zoom da página):?$/i});
+    await select.waitFor({state:'visible',timeout:12000});
+    check('native-Page-zoom-control-'+percent,await select.count()===1&&await select.evaluate(e=>e.tagName==='SELECT'),await select.ariaSnapshot());
+    check('native-Page-zoom-enabled-'+percent,await select.isEnabled(),true);
+    const options=await select.locator('option').evaluateAll(items=>items.map(item=>({value:item.value,label:item.label})));
+    const target=options.filter(item=>item.label.replace(/\s/g,'')===percent+'%');
+    check('native-option-'+percent,target.length===1,options);
+    await select.selectOption({value:target[0].value});
+    const selected=await select.evaluate(e=>({value:e.value,label:e.selectedOptions[0]?.label}));
+    check('native-selected-'+percent,selected.label?.replace(/\s/g,'')===percent+'%',selected);
+    await select.scrollIntoViewIfNeeded();
+    await page.screenshot({path:cfg.outputPrefix+'-native-ui-'+percent+'.png'});
+    observations['ui'+percent]={selected,ariaSnapshot:await select.ariaSnapshot(),viewport:page.viewportSize()};
+  };
+  const sample=async percent=>{
+    await page.goto(cfg.probeOrigin+'/probe?native_zoom='+percent);
+    await page.getByRole('heading',{name:'Own native zoom calibration',exact:true}).waitFor();
+    const result=await metrics();await page.screenshot({path:cfg.outputPrefix+'-probe-'+percent+'.png'});return result;
+  };
+  try{
+    await nativeSelect(100);observations.baseline=await sample(100);
+    stage='native200';await nativeSelect(200);observations.zoomed=await sample(200);
+    stage='effect';const a=observations.baseline,b=observations.zoomed;
+    observations.ratios={dpr:b.devicePixelRatio/a.devicePixelRatio,innerWidth:b.innerWidth/a.innerWidth,innerHeight:b.innerHeight/a.innerHeight};
+    check('same-requested-viewport',JSON.stringify(viewport)===JSON.stringify(page.viewportSize())&&JSON.stringify(observations.ui100.viewport)===JSON.stringify(observations.ui200.viewport),{viewport,current:page.viewportSize()});
+    check('native-DPR-doubled',Math.abs(observations.ratios.dpr-2)<.03,observations.ratios);
+    check('native-CSS-width-halved',Math.abs(observations.ratios.innerWidth-.5)<.025,observations.ratios);
+    check('native-CSS-360-at-requested720',Math.abs(b.innerWidth-360)<=3,{requestedWidth:720,actualCssWidth:b.innerWidth});
+    check('no-pinch-visual-scale',a.visualViewport.scale===1&&b.visualViewport.scale===1,{baseline:a.visualViewport.scale,zoomed:b.visualViewport.scale});
+    check('outer-and-screen-geometry-stable',Math.abs(a.outerWidth-b.outerWidth)<=2&&a.screenWidth===b.screenWidth&&a.screenHeight===b.screenHeight,{baseline:{outerWidth:a.outerWidth,screenWidth:a.screenWidth,screenHeight:a.screenHeight},zoomed:{outerWidth:b.outerWidth,screenWidth:b.screenWidth,screenHeight:b.screenHeight}});
+    return {status:'PASS_NATIVE_200_ZOOM_GUARD',checks,observations,scope:'Native browser-only proof; no Nexus application or I05 acceptance yet',limits:['No screen reader or Windows settings interaction','Only isolated Chrome profile preference changed through actual Settings UI','Page viewport720 and measured CSS360 are reported separately','No deviceScaleFactor/page-scale/CSS zoom API was used']};
+  }catch(error){
+    observations.failure={stage,url:page.url(),ariaSnapshot:await page.locator('body').ariaSnapshot().catch(()=>null),viewport:page.viewportSize()};
+    return {status:stage==='webui'?'NOT_RUN_CHROME_WEBUI': 'UNQUALIFIED_NATIVE_ZOOM_EFFECT',checks,observations,error:String(error),nexus_started:false,fallback:'None; never substitute CSS/viewport/device-scale for native zoom'};
+  }
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:61428/probe?native_zoom=200
+- Page Title: Own zoom calibration
+### Events
+- New console entries: .playwright-cli\console-2026-11-18T01-32-19-095Z.log#L1

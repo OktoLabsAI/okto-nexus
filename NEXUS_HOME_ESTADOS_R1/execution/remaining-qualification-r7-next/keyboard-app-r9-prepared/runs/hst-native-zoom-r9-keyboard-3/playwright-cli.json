@@ -1,0 +1,12 @@
+{
+  "browser": {
+    "browserName": "chromium",
+    "launchOptions": {
+      "channel": "chrome",
+      "headless": true,
+      "chromiumSandbox": true,
+      "args": ["--disable-blink-features=AutomationControlled"],
+      "executablePath": "C:/Program Files/Google/Chrome/Application/chrome.exe"
+    }
+  }
+}

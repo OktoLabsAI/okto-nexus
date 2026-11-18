@@ -1,0 +1,110 @@
+{
+  "status": "INCOMPLETE_RUNNER_PRECONDITION",
+  "scenario_J04": "NOT_RUN_COMPLETE_CRITERIA",
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "manifest_sha256": "3a1a08e423daf6f9d23a2784fcadc779473e4fc53774a0fc31ecfb565dfef47f",
+  "gate_sha256": "fe4a7cbb34d0377a6ae82a07308c595db7e7438b85bce4e8eb2ae858f46e85c0",
+  "runner_sha256": "04cac206b1b181936d92cb620e87fd9a6ad5044a6d1ff81c9591e6d086947381",
+  "worker_sha256": "6f9dd073640bf13ea616257676265bd27e23d04053b3dc08138371f17885de0b",
+  "attempts": 1,
+  "rerun": false,
+  "runner_exit_code": 1,
+  "observed_HTTP": [
+    {
+      "path": "/api/v1/home/overview",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/home/harness-board",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/home/results",
+      "status": 422,
+      "invalid_parameter": "quick=all"
+    }
+  ],
+  "fourth_GET": "NOT_RUN",
+  "root_cause": "Runner sends unsupported quick parameter to legacy Home results route. http/home.py only allows workspace_id,agent_id,state,cursor,limit. Correct canonical rejection; not a product defect.",
+  "remaining_assertions": {
+    "full_payload_materialization": "NOT_QUALIFIED: partial in-memory instrumentation was not exported after assertion",
+    "actual_results_pagination": "NOT_RUN",
+    "productive_hashes_after_GETs": "NOT_RUN"
+  },
+  "volume": {
+    "open_activities": 1000,
+    "history_events": 100000,
+    "added_terminal_results": 25,
+    "large_event_payloads": 10,
+    "artifact_files": 25,
+    "large_field_bytes": 131133,
+    "terminal_operation_ids": [
+      "j04-synthetic-terminal-000",
+      "j04-synthetic-terminal-001",
+      "j04-synthetic-terminal-002",
+      "j04-synthetic-terminal-003",
+      "j04-synthetic-terminal-004",
+      "j04-synthetic-terminal-005",
+      "j04-synthetic-terminal-006",
+      "j04-synthetic-terminal-007",
+      "j04-synthetic-terminal-008",
+      "j04-synthetic-terminal-009",
+      "j04-synthetic-terminal-010",
+      "j04-synthetic-terminal-011",
+      "j04-synthetic-terminal-012",
+      "j04-synthetic-terminal-013",
+      "j04-synthetic-terminal-014",
+      "j04-synthetic-terminal-015",
+      "j04-synthetic-terminal-016",
+      "j04-synthetic-terminal-017",
+      "j04-synthetic-terminal-018",
+      "j04-synthetic-terminal-019",
+      "j04-synthetic-terminal-020",
+      "j04-synthetic-terminal-021",
+      "j04-synthetic-terminal-022",
+      "j04-synthetic-terminal-023",
+      "j04-synthetic-terminal-024"
+    ]
+  },
+  "module_origins": {
+    "okto_nexus": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "count": 736
+    },
+    "nexus_connector_core": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "count": 168
+    },
+    "okto_nexus_connector": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+      "count": 127
+    }
+  },
+  "payload_drift": false,
+  "source_and_payload_guards": {
+    "source_pins": 1829,
+    "payload_files": 1031,
+    "drift": []
+  },
+  "original_seed_unchanged": true,
+  "physical": {
+    "worker_pid": 28760,
+    "absent_at_curation": true,
+    "remaining": [],
+    "force": [],
+    "timeout": false
+  },
+  "raw_trace_sha256": "9d1585c47131931be9b58d2655a6c3548c156c454eeacd4819f636e1a84c0b9e",
+  "raw_final_sha256": "8de35d248de29be158a12f34d9110595dae83970a3c00c847a227285f2d3f0df",
+  "latencies_collected": false,
+  "provider_invocations": 0,
+  "input_readers_released": true,
+  "limits": [
+    "SQL synthetic facts only, no canonical native/authority proof",
+    "No new app/browser/test/SQL during curation",
+    "No universal database read-only or materialization PASS",
+    "Original failed scripts/assertions remain unchanged",
+    "No timing or acceptance inference"
+  ]
+}

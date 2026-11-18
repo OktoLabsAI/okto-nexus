@@ -1,0 +1,43 @@
+--- qualified H02 supervisor
++++ H03 overview supervisor
+@@ -126,7 +126,7 @@
+     before = preflight.check(args.gate)  # Before allocation/process/browser.
+     gate = json.loads(args.gate.read_text())
+     import re
+-    assert re.fullmatch(r'hst-security-r9-h02-[a-z0-9-]{1,80}',gate['cut_id'])
++    assert re.fullmatch(r'hst-security-r9-h03-[a-z0-9-]{1,80}',gate['cut_id'])
+     with (HERE/('attempt-'+gate['cut_id']+'.json')).open('x',encoding='utf-8') as attempt:
+         attempt.write(json.dumps({'gate_sha256':preflight.sha(args.gate),
+                                   'manifest_sha256':preflight.sha(HERE/'prepared-manifest.json')})+'\n')
+@@ -239,25 +239,18 @@
+         write(root/'browser-argv-before-home.json',argv_proof)
+         cli('load-state' ,'state-load',fixture_ready['storage'])
+         # Native peer question TTL is unchanged120s; baseline has no question.
+-        assert gate['case']=='H02' and fixture_ready['mode']=='scope_two'
+-        references=fixture_ready['references']
+-        assert len(references)==2 and len({r['workspace_id'] for r in references})==2
+-        assert cards[0]['connection']['binding_id']==ref['binding_id']
+-        events=[e for e in cards[0]['events_preview']
+-                if e['kind']=='result' and e.get('target') and e.get('result')
+-                and e['result'].get('preview')]
+-        assert len(events)==1, 'Require unique canonical result event, never latest/fallback'
+-        event=events[0]
+-        cfg.update(target=event['target'],event_id=event['id'],button_name='View delivery',
+-            changes={},wrong_workspace=references[1]['workspace_id'],expected_status=409,
+-            protected_marker=event['result']['preview'])
++        assert gate['case']=='H03' and fixture_ready['mode']=='baseline'
++        admission=json.loads((root/'control/h03-label-admission.json').read_text())
++        assert admission['review_accepted'] is True, 'Canonical label not admitted; no hostile DOM claim'
++        assert list((root/'control').glob('h03-prompt-issued-*.json')), 'Canonical private prompt not submitted'
++        cfg.update(private_token='HST_BROWSER_PRIVATE_TOKEN',private_prompt='HST_BROWSER_PRIVATE_PROMPT_NOT_FOR_OVERVIEW')
+         init=(browser/'initialize-template.js').read_text()
+         assert init.count('__CONFIG__')==1
+         temporary=root/'initialize.js'
+         temporary.write_text(init.replace('__CONFIG__',json.dumps({'url':url,'workspace_id':ref['workspace_id']})))
+         cli('initialize','run-code','--filename='+str(temporary))
+         control('security-snapshot-before-get')
+-        body('wrong-workspace','h02-wrongtuple.js',cfg)
++        body('hostile-overview','h03-overview.js',cfg)
+         control('security-snapshot-after-get')
+         compare('before-get','after-get')
+     except BaseException as error:

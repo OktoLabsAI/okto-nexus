@@ -1,0 +1,28 @@
+{
+  "failure": null,
+  "before": {
+    "source_pins": 1829,
+    "payload_files": 1031,
+    "drift": []
+  },
+  "after": {
+    "source_pins": 1829,
+    "payload_files": 1031,
+    "drift": []
+  },
+  "commands": [
+    {
+      "name": "functional-history",
+      "pid": 42972,
+      "exit_code": 0,
+      "timed_out": false,
+      "raw_sha256": "70b2cc0708715ffc3c7e1e7ea58227a13327126c3e0930a364b59a68ac26c0a8"
+    }
+  ],
+  "remaining": [],
+  "forced": [],
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-j04-functional-t7lh0xy9",
+  "provider_invocations": 0,
+  "latencies_collected": false,
+  "original_seed_unchanged": true
+}

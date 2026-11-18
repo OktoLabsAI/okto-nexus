@@ -6331,7 +6331,7 @@
       "when": "Resolver detalhe",
       "then": "Negar conforme autorização; não vazar preview/contador pelo erro.",
       "level": "API/SQLite + browser adversarial",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -6350,9 +6350,18 @@
           "environment": "Windows; frozen R7 prefix;1828base+1test pins;1031payload files; isolated-I-B; no provider/browser/human",
           "result": "PASS7SOURCE/PASS7INSTALLED; first source6PASS/1invalid-seedFAIL retained; no runtime/pin/helper drift",
           "limitations": "A06 query-only private sibling proof. E08/E09/E16 are historical migrated read fixtures with real HTTP/SQLite; H02/H03 API only. H07 uses SQL negative grant revocation with canonical request/denied POST, not canonical revoke lifecycle. Full browser clauses remain unverified."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T02:12:59.632687+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/security-r9-h02-batch/runs/hst-security-r9-h02-wrong-workspace/qualification.json",
+          "environment": "Actual own Chrome and frozen installed R9 HTTP/SQLite; two canonical bindings/workspaces, inert protocol peer",
+          "command_or_procedure": "Mutate only workspace_id in the real exact-result target GET; retain original target; inspect actual denial, error DOM and captured requests, then compare thirty live productive tables",
+          "result": "PASS8: actual409, no protected preview/summary/DOM/counter or runtime control, exactly one GET target and no replacement; thirty whole-table hashes unchanged, no ignored columns; both session closes confirmed, normal exit and physical absence; source1829/payload1031 unchanged",
+          "limitations": "Exact tuple/context denial, not an inter-user/global workspace ACL proof. Other forged dimensions remain separately scoped. No real provider, authority fabrication, performance or human qualification."
         }
       ],
-      "execution_notes": "PARTIAL literal scenario: HTTP denial/minimization, not DOM/ANSI execution proof. Missing browser/native clauses remain NOT_RUN; no suite-count promotion."
+      "execution_notes": "PASS8: actual409, no protected preview/summary/DOM/counter or runtime control, exactly one GET target and no replacement; thirty whole-table hashes unchanged, no ignored columns; both session closes confirmed, normal exit and physical absence; source1829/payload1031 unchanged. Exact tuple/context denial, not an inter-user/global workspace ACL proof. Other forged dimensions remain separately scoped. No real provider, authority fabrication, performance or human qualification."
     },
     {
       "id": "HST-T-H03",
@@ -6362,7 +6371,7 @@
       "when": "Renderizar resumo/JSON",
       "then": "Minimizar/redigir/escapar; sem executar HTML/ANSI nem expor credenciais.",
       "level": "API/SQLite + browser adversarial",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -6381,9 +6390,18 @@
           "environment": "Windows; frozen R7 prefix;1828base+1test pins;1031payload files; isolated-I-B; no provider/browser/human",
           "result": "PASS7SOURCE/PASS7INSTALLED; first source6PASS/1invalid-seedFAIL retained; no runtime/pin/helper drift",
           "limitations": "A06 query-only private sibling proof. E08/E09/E16 are historical migrated read fixtures with real HTTP/SQLite; H02/H03 API only. H07 uses SQL negative grant revocation with canonical request/denied POST, not canonical revoke lifecycle. Full browser clauses remain unverified."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T02:15:46.399833+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/security-r9-h03-batch/runs/hst-security-r9-h03-private-origin-v2/qualification.json",
+          "environment": "Own-profile actual Chrome; frozen installed R9 HTTP/SQLite; canonical public label and private turn.submit inputs, inert protocol peer",
+          "command_or_procedure": "Admit literal HTML as public workspace label and private prompt plus ESC/Bearer synthetic token via canonical turn.submit; render actual overview JSON/cards, inspect text/DOM/global handler and compare thirty productive tables",
+          "result": "PASS11: exact authorized card and bounded public label, HTML appears as text with no injected element/handler; private marker/token/ESC excluded from overview JSON/DOM, raw JSON control bytes absent; GET-only/pageerrors0/provider0, live30tables identical, pins unchanged and normal exit/physical0 with both canonical session closes confirmed",
+          "limitations": "Literal summary/JSON boundary only. ESC remains at private origin and is not exposed, so this proves minimization rather than deletion/sanitization of ANSI in an authorized terminal. Hostile artifact filenames and authorized transcript are outside this scenario/cut. Synthetic token is not a real credential. Original unexecuted mixed-origin draft retained; browser assertions unchanged. No broad security-family, real harness, human or performance qualification."
         }
       ],
-      "execution_notes": "PARTIAL literal scenario: HTTP denial/minimization, not DOM/ANSI execution proof. Missing browser/native clauses remain NOT_RUN; no suite-count promotion."
+      "execution_notes": "PASS11: exact authorized card and bounded public label, HTML appears as text with no injected element/handler; private marker/token/ESC excluded from overview JSON/DOM, raw JSON control bytes absent; GET-only/pageerrors0/provider0, live30tables identical, pins unchanged and normal exit/physical0 with both canonical session closes confirmed. Literal summary/JSON boundary only. ESC remains at private origin and is not exposed, so this proves minimization rather than deletion/sanitization of ANSI in an authorized terminal. Hostile artifact filenames and authorized transcript are outside this scenario/cut. Synthetic token is not a real credential. Original unexecuted mixed-origin draft retained; browser assertions unchanged. No broad security-family, real harness, human or performance qualification."
     },
     {
       "id": "HST-T-H04",
@@ -6610,7 +6628,7 @@
       "when": "Navegar sem mouse",
       "then": "Badges acionáveis/buttons/painel têm foco e nome; nenhuma armadilha fora do modal.",
       "level": "navegador + AT quando disponível",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -6638,9 +6656,18 @@
           "command_or_procedure": "Read actual header menu AX name; toggle open/closed and compare aria-expanded; audit browser POST/errors and owned cleanup",
           "result": "PASS five focal assertions: Application menu, expanded false/true/false, no POST/page errors; normal0/physical0/payload1031drift0",
           "limitations": "Resolves the real R7 defect; original negative evidence retained. Complete keyboard journey and AT speech are not qualified by this focal cut."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T02:12:59.632687+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/keyboard-app-r9-prepared/runs/hst-native-zoom-r9-keyboard-3/qualification.json",
+          "environment": "Actual own-profile desktop Chrome native100, frozen installed R9 and canonical inert sessions/question/result",
+          "command_or_procedure": "Traverse all visible sequential Home controls with real Tab; use keyboard to open exact Active/Needs you/Results contexts, traverse their controls and read-only scroll container, use Escape and verify exact originating card focus",
+          "result": "PASS190: Home23/23, Active11/11, Needs22/22, Results19/19 inventories; named controls, painted focus, exact context IDs, Escape returns and PRE ArrowDown/Up40px. Native browser-boundary focus observed without outside-page focus; no POST/page errors/provider calls; normal exits/physical0 and all pins unchanged",
+          "limitations": "No AT speech or human acceptance; I03 remains NOT_RUN. Native dialog may yield to browser chrome: allowed only with hasFocus=false, DOM focus0 and modal still open, followed by bounded return. Static native-focusable PRE is read-only content, not an unnamed action; text/AX hashes and actual scrolling qualify that narrow oracle. Original keyboard-1/2 failures and independent static dialog diagnostic retained; no product change. B1 canonical close confirmed; A1/A2 remain UNKNOWN despite physical absence."
         }
       ],
-      "execution_notes": "Real R7 unnamed menu defect resolved and verified on installed R8 in actual Chrome AX; complete literal keyboard journey remains pending, so no whole-scenario PASS."
+      "execution_notes": "PASS190: Home23/23, Active11/11, Needs22/22, Results19/19 inventories; named controls, painted focus, exact context IDs, Escape returns and PRE ArrowDown/Up40px. Native browser-boundary focus observed without outside-page focus; no POST/page errors/provider calls; normal exits/physical0 and all pins unchanged. No AT speech or human acceptance; I03 remains NOT_RUN. Native dialog may yield to browser chrome: allowed only with hasFocus=false, DOM focus0 and modal still open, followed by bounded return. Static native-focusable PRE is read-only content, not an unnamed action; text/AX hashes and actual scrolling qualify that narrow oracle. Original keyboard-1/2 failures and independent static dialog diagnostic retained; no product change. B1 canonical close confirmed; A1/A2 remain UNKNOWN despite physical absence."
     },
     {
       "id": "HST-T-I02",
@@ -6870,7 +6897,7 @@
       "when": "Abrir overview e resultados",
       "then": "Prévia/metadados paginados; sem carregar transcripts/payloads completos.",
       "level": "SQLite instrumentado + benchmark",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "687295b6cd6758aa36690152fdb4258e36d33c91",
@@ -6925,9 +6952,18 @@
           "environment": "Shared Windows machine; unrelated concurrent processes/load not controlled; only own readers sequenced",
           "result": "DIAGNOSTIC_NON_BLOCKING_FOR_LOCAL_ACCEPTANCE per user; raw threshold misses remain unchanged",
           "limitations": "No numerical pass, causal-regression proof, production qualification or default approval. No further performance-only tuning/measurement round. Functional omissions and previous gates remain separate."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T02:02:12.337808+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/j04-bounded-history/attempt3/qualification.json",
+          "environment": "Installed R9 real ASGI/SQLite, lifespan off; copied owned SQL synthetic1000OPEN/100000event fixture with25 additional terminal captures/artifacts and marked131133-byte fields; no native authority/provider/browser",
+          "command_or_procedure": "Four functional GETs: overview, limited v2 board and two actual results cursor pages; observe unchanged row objects from the installed SQLite factory, forbid artifacts.content SQL reads and opens of all25 resolved canonical payload paths plus the original directory; compare productive rows/pins",
+          "result": "PASS: nonempty metadata, board limit3/preview2, result pages3+3 with disjoint IDs/exact total25 and previews<=401, artifact metadata present. Observed16123 materialized SQL rows/max string17680bytes, zero full-field markers/content SQL reads/protected file opens. Original seed and source1829/payload1031 unchanged, normal worker exit/physical0; no latency collected",
+          "limitations": "SQL synthetic read facts, not valid native receipt/event chains or harness authority. Instrumentation covers GET application materialization and the25 canonical files, not SQLite engine internal I/O, a universal filesystem audit, global memory bound or O(page) cost. Bootstrap initialization/migration is outside the GET window. Attempt1 invalid quick parameter and attempt2 narrower file-hook scope remain preserved. No performance target pass or causal timing regression is inferred."
         }
       ],
-      "execution_notes": "PARTIAL functional J04 criterion: actual1000OPEN/100000history, query counts and paginated response sizes were observed. A dedicated assertion covering transcript/native-payload materialization and adversarial large-output bounds across these endpoints is still missing. Latency is not this Then criterion and is not its failure reason; prior timing-based annotation remains historical evidence."
+      "execution_notes": "PASS functional J04: actual installed scoped pagination/previews at1000OPEN/100000history and bounded marked-payload materialization/file access. Separate raw timing misses remain diagnostic/non-blocking per user and are not reclassified as numerical passes."
     },
     {
       "id": "HST-T-J05",
@@ -7905,6 +7941,40 @@
       "provider_calls": 0,
       "canonical_service_stop": "DRAINED",
       "physical_absence": true
+    },
+    "r9_bounded_history": {
+      "status": "PASS_J04_FUNCTIONAL_ONLY",
+      "qualification": "execution/remaining-qualification-r7-next/j04-bounded-history/attempt3/qualification.json",
+      "open_activities": 1000,
+      "history_events": 100000,
+      "added_results": 25,
+      "guarded_canonical_files": 25,
+      "latencies_collected": false,
+      "provider_calls": 0,
+      "physical_absence": true
+    },
+    "r9_keyboard_and_target_scope": {
+      "status": "PASS_I01_H02_SCOPED",
+      "keyboard_checks": 190,
+      "wrong_workspace_checks": 8,
+      "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+      "provider_calls": 0,
+      "ui_writes": 0,
+      "AT_speech": "NOT_RUN",
+      "human": "NOT_INVITED",
+      "canonical_keyboard_close": "A1_A2_UNKNOWN",
+      "product_changes": false,
+      "physical_absence": true
+    },
+    "r9_private_overview": {
+      "status": "PASS_H03_OVERVIEW",
+      "qualification": "execution/remaining-qualification-r7-next/security-r9-h03-batch/runs/hst-security-r9-h03-private-origin-v2/qualification.json",
+      "browser_checks": 11,
+      "productive_tables": 30,
+      "provider_calls": 0,
+      "public_origin": "literal hostile HTML label",
+      "private_origin": "canonical turn.submit prompt plus ESC and synthetic Bearer token",
+      "authorized_terminal_ANSI_sanitization": "NOT_CLAIMED"
     }
   }
 }

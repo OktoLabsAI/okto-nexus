@@ -1,0 +1,37 @@
+[11/17/26 22:22:00] INFO     HTTP Request: GET                  _client.py:1740
+                             http://j04-own.invalid/api/v1/home                
+                             /overview?workspace_id=hst-perf                   
+                             "HTTP/1.1 200 OK"                                 
+[11/17/26 22:22:02] INFO     HTTP Request: GET                  _client.py:1740
+                             http://j04-own.invalid/api/v1/home                
+                             /harness-board?workspace_id=hst-pe                
+                             rf&presentation_version=2&limit=3&                
+                             preview=2 "HTTP/1.1 200 OK"                       
+                    INFO     HTTP Request: GET                  _client.py:1740
+                             http://j04-own.invalid/api/v1/home                
+                             /results?workspace_id=hst-perf&lim                
+                             it=3&quick=all "HTTP/1.1 422                      
+                             Unprocessable Entity"                             
+Traceback (most recent call last):
+  File "<REPO>\NEXUS_HOME_ESTADOS_R1\execution\remaining-qualification-r7-next\j04-bounded-history\worker.py", line 211, in <module>
+    main()
+    ~~~~^^
+  File "<REPO>\NEXUS_HOME_ESTADOS_R1\execution\remaining-qualification-r7-next\j04-bounded-history\worker.py", line 200, in main
+    result.update(asyncio.run(exercise(home, manifest["clock"], benchmark)))
+                  ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 194, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Python313\Lib\asyncio\base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "<REPO>\NEXUS_HOME_ESTADOS_R1\execution\remaining-qualification-r7-next\j04-bounded-history\worker.py", line 155, in exercise
+    first = await get("/api/v1/home/results", {"workspace_id": "hst-perf", "limit": 3, "quick": "all"})
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>\NEXUS_HOME_ESTADOS_R1\execution\remaining-qualification-r7-next\j04-bounded-history\worker.py", line 143, in get
+    assert response.status_code == 200, (path, response.status_code)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('/api/v1/home/results', 422)

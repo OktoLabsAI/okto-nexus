@@ -1,0 +1,70 @@
+--- qualified reader-v2 effective supervisor
++++ H02 only supervisor
+@@ -126,7 +126,7 @@
+     before = preflight.check(args.gate)  # Before allocation/process/browser.
+     gate = json.loads(args.gate.read_text())
+     import re
+-    assert re.fullmatch(r'hst-security-r9-s2-[a-z0-9-]{1,80}',gate['cut_id'])
++    assert re.fullmatch(r'hst-security-r9-h02-[a-z0-9-]{1,80}',gate['cut_id'])
+     with (HERE/('attempt-'+gate['cut_id']+'.json')).open('x',encoding='utf-8') as attempt:
+         attempt.write(json.dumps({'gate_sha256':preflight.sha(args.gate),
+                                   'manifest_sha256':preflight.sha(HERE/'prepared-manifest.json')})+'\n')
+@@ -239,37 +239,27 @@
+         write(root/'browser-argv-before-home.json',argv_proof)
+         cli('load-state' ,'state-load',fixture_ready['storage'])
+         # Native peer question TTL is unchanged120s; baseline has no question.
+-        if gate['case']=='S1':
+-            closed = [item for item in fixture_ready['sessions'] if item['closed']]
+-            live = [item for item in fixture_ready['sessions'] if not item['closed']]
+-            assert len(closed)==len(live)==1
+-            cfg.update(closed_session_id=closed[0]['session_id'],live_session_id=live[0]['session_id'],card_id=cards[0]['id'])
+-            entries=[item for item in cards[0]['children'] if any(
+-                linked['session_id']==cfg['live_session_id'] for linked in item['sessions'])]
+-            assert len(entries)==1, 'Require exact canonical activity, no first/latest fallback'
+-            cfg['live_entry_id']=entries[0]['id']
+-            control('security-snapshot-before-get')
+-            body('passive','s1-passive.js',cfg)
+-            control('security-snapshot-after-get')
+-            compare('before-get','after-get')
+-            body('control-before','s1-revocation.js',dict(cfg,revoked=False))
+-            control('security-revoke-grant')
+-            body('control-after','s1-revocation.js',dict(cfg,revoked=True))
+-        else:
+-            # First navigation is own Home; this body uses the same explicitly
+-            # documented local presentation preferences as S1, no backend toggle.
+-            init = (browser/'initialize-template.js').read_text()
+-            temporary = root/'initialize.js'
+-            temporary.write_text(init.replace('__CONFIG__',json.dumps({'url':url,'workspace_id':ref['workspace_id']})))
+-            cli('initialize','run-code','--filename='+str(temporary))
+-            control('security-obs-owner')
+-            cfg['owner']=json.loads((root/'control/security-observation-owner.json').read_text())
+-            control('security-obs-idle')
+-            body('idle','s2-reported.js',dict(cfg,completion=False))
+-            compare('before-obs','after-idle')
+-            control('security-obs-completion')
+-            body('completion','s2-reported.js',dict(cfg,completion=True))
+-            compare('before-obs','after-completion')
++        assert gate['case']=='H02' and fixture_ready['mode']=='scope_two'
++        references=fixture_ready['references']
++        assert len(references)==2 and len({r['workspace_id'] for r in references})==2
++        assert cards[0]['connection']['binding_id']==ref['binding_id']
++        events=[e for e in cards[0]['events_preview']
++                if e['kind']=='result' and e.get('target') and e.get('result')
++                and e['result'].get('preview')]
++        assert len(events)==1, 'Require unique canonical result event, never latest/fallback'
++        event=events[0]
++        cfg.update(target=event['target'],event_id=event['id'],button_name='View delivery',
++            changes={},wrong_workspace=references[1]['workspace_id'],expected_status=409,
++            protected_marker=event['result']['preview'])
++        init=(browser/'initialize-template.js').read_text()
++        assert init.count('__CONFIG__')==1
++        temporary=root/'initialize.js'
++        temporary.write_text(init.replace('__CONFIG__',json.dumps({'url':url,'workspace_id':ref['workspace_id']})))
++        cli('initialize','run-code','--filename='+str(temporary))
++        control('security-snapshot-before-get')
++        body('wrong-workspace','h02-wrongtuple.js',cfg)
++        control('security-snapshot-after-get')
++        compare('before-get','after-get')
+     except BaseException as error:
+         failure={'type':type(error).__name__,'message':str(error)}
+         write(root/'security-failure.private.json',failure)

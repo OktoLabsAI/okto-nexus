@@ -1,0 +1,1461 @@
+{
+  "status": "INCOMPLETE_I01",
+  "phase": "case",
+  "checks": [
+    {
+      "id": "original-question-valid-before",
+      "pass": true,
+      "actual": {
+        "expiresAt": "2026-11-18T01:11:52.174000+00:00"
+      }
+    },
+    {
+      "id": "all-three-populated",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "tabbable-inventory-nonempty",
+      "pass": true,
+      "actual": 23
+    },
+    {
+      "id": "home-control-named-focus-0",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/HEADER:0/BUTTON:0",
+          "tag": "BUTTON",
+          "type": null,
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "1px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Collapse navigation\" [expanded]",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-1",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/HEADER:0/DIV:3/BUTTON:0",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Needs attention. All projects and Server. 1 need action, 1 to watch.\": Needs attention 2",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-2",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/HEADER:0/DIV:3/BUTTON:2",
+          "tag": "BUTTON",
+          "type": null,
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Sign out\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-3",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/HEADER:0/DIV:3/DIV:3/BUTTON:0",
+          "tag": "BUTTON",
+          "type": null,
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Application menu\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-4",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:0/BUTTON:0",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "1px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Home\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-5",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:1/BUTTON:0",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "1px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Conversations\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-6",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:2/BUTTON:0",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "1px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Graph\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-7",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:3/BUTTON:0",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "1px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Artifacts\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-8",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:1/LI:0/BUTTON:0",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "1px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Advanced\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-9",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/HEADER:0/DIV:1/BUTTON:0",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "rgba(14, 165, 233, 0.2) 0px 1px 3px 0px",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Ask for work or chat\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-10",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/HEADER:0/DIV:1/BUTTON:1",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Refresh\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-11",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/HEADER:0/DIV:1/BUTTON:2",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Pause display\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-12",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:1/LABEL:0/SELECT:1",
+          "tag": "SELECT",
+          "type": null,
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- combobox \"Project\":",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-13",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:1/BUTTON:2",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "2px",
+          "shadow": "rgba(14, 165, 233, 0.2) 0px 1px 3px 0px",
+          "visible": true,
+          "inModal": false
+        },
+        "name": {
+          "ax": "- button \"Add harness\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-14",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/UL:1/LI:1/BUTTON:2",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false,
+          "homeId": "home_group_d1cbe2f611ec09e6317331efdcf8023f5eb55ca369fbe76f02a5e7576280d9c6"
+        },
+        "name": {
+          "ax": "- button \"View work\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-15",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/UL:1/LI:2/BUTTON:2",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false,
+          "homeId": "home_group_d1cbe2f611ec09e6317331efdcf8023f5eb55ca369fbe76f02a5e7576280d9c6"
+        },
+        "name": {
+          "ax": "- button \"View work\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-16",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/BUTTON:2",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false,
+          "homeId": "home_group_d1cbe2f611ec09e6317331efdcf8023f5eb55ca369fbe76f02a5e7576280d9c6"
+        },
+        "name": {
+          "ax": "- button \"Follow activity\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-17",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/DETAILS:3/SUMMARY:0",
+          "tag": "SUMMARY",
+          "type": null,
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false,
+          "homeId": "home_group_d1cbe2f611ec09e6317331efdcf8023f5eb55ca369fbe76f02a5e7576280d9c6"
+        },
+        "name": {
+          "ax": "- text: Connection details",
+          "named": true,
+          "summaryContentName": true
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-18",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/UL:1/LI:0/BUTTON:2",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false,
+          "homeId": "home_group_14aa1c01e04d74ab5466ef5e9588fca091b962a7494176926303b78904d14521"
+        },
+        "name": {
+          "ax": "- button \"View delivery\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-19",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/BUTTON:2",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false,
+          "homeId": "home_group_14aa1c01e04d74ab5466ef5e9588fca091b962a7494176926303b78904d14521"
+        },
+        "name": {
+          "ax": "- button \"Follow activity\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-20",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/DETAILS:3/SUMMARY:0",
+          "tag": "SUMMARY",
+          "type": null,
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false,
+          "homeId": "home_group_14aa1c01e04d74ab5466ef5e9588fca091b962a7494176926303b78904d14521"
+        },
+        "name": {
+          "ax": "- text: Connection details",
+          "named": true,
+          "summaryContentName": true
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-21",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:1/UL:1/LI:0/BUTTON:3",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false,
+          "homeId": "home_request_att_b90ef33e8fc4e53c630b01fc33e8b0bccc2b4986239549b984f6f1200b90a2cc"
+        },
+        "name": {
+          "ax": "- button \"Respond\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "home-control-named-focus-22",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:2/UL:1/LI:0/BUTTON:3",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false,
+          "homeId": "home_delivery_canonical:result_3ed418139ecd2b1c364250e59b66331d35f38e848587b15e6978a949436ff732"
+        },
+        "name": {
+          "ax": "- button \"View result\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "full-home-keyboard-covers-all-actionable",
+      "pass": true,
+      "actual": {
+        "inventory": [
+          "DIV:0/DIV:0/HEADER:0/BUTTON:0",
+          "DIV:0/DIV:0/HEADER:0/DIV:3/BUTTON:0",
+          "DIV:0/DIV:0/HEADER:0/DIV:3/BUTTON:2",
+          "DIV:0/DIV:0/HEADER:0/DIV:3/DIV:3/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:0/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:1/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:2/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:3/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:1/LI:0/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/HEADER:0/DIV:1/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/HEADER:0/DIV:1/BUTTON:1",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/HEADER:0/DIV:1/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:1/LABEL:0/SELECT:1",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:1/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/UL:1/LI:1/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/UL:1/LI:2/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/DETAILS:3/SUMMARY:0",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/UL:1/LI:0/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/DETAILS:3/SUMMARY:0",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:1/UL:1/LI:0/BUTTON:3",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:2/UL:1/LI:0/BUTTON:3"
+        ],
+        "visited": [
+          "DIV:0/DIV:0/HEADER:0/BUTTON:0",
+          "DIV:0/DIV:0/HEADER:0/DIV:3/BUTTON:0",
+          "DIV:0/DIV:0/HEADER:0/DIV:3/BUTTON:2",
+          "DIV:0/DIV:0/HEADER:0/DIV:3/DIV:3/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:0/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:1/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:2/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:3/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:1/LI:0/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/HEADER:0/DIV:1/BUTTON:0",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/HEADER:0/DIV:1/BUTTON:1",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/HEADER:0/DIV:1/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:1/LABEL:0/SELECT:1",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:1/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/UL:1/LI:1/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/UL:1/LI:2/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/DETAILS:3/SUMMARY:0",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/UL:1/LI:0/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/BUTTON:2",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/DETAILS:3/SUMMARY:0",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:1/UL:1/LI:0/BUTTON:3",
+          "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:2/UL:1/LI:0/BUTTON:3"
+        ],
+        "missing": [],
+        "boundary": null
+      }
+    },
+    {
+      "id": "active-named-visible-keyboard-focus",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/BUTTON:2",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": false,
+          "homeId": "home_group_14aa1c01e04d74ab5466ef5e9588fca091b962a7494176926303b78904d14521"
+        },
+        "name": {
+          "ax": "- button \"Follow activity\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "active-exact-metadata-arrived",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-full-canonical-scope",
+      "pass": true,
+      "actual": {
+        "status": 200,
+        "scope": {
+          "server_id": "srv_3d708d018ffb28a78e8c40135fd5abcf",
+          "executor_id": "exe_2c9cc224bc3dbb49f7e22fa70743cbae",
+          "binding_id": "bind_2c3e6c5794c671ddca2bf85ff443a94e",
+          "agent_id": "hst-b",
+          "workspace_id": "wsr_48b312b26ce3bf92b1603fc6160ceae2",
+          "workspace_binding_id": "wxb_3a9456a793853ddfb61e8aa23f84b231",
+          "session_id": "ses_e23795349b4197451a9ecdd495d0cc48",
+          "session_owner_generation": 1,
+          "authorization_revision": 2,
+          "configuration_revision": 2,
+          "binding_revision": 1,
+          "credential_epoch": 1
+        }
+      }
+    },
+    {
+      "id": "active-ua-modal",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-modal-controls-nonempty",
+      "pass": true,
+      "actual": 11
+    },
+    {
+      "id": "active-focused-element-present-0",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-contained-0",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIALOG:1/HEADER:0/BUTTON:2",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "1px",
+          "shadow": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(14, 165, 233) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "visible": true,
+          "inModal": true
+        },
+        "name": {
+          "ax": "- button \"Close modal\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "active-focused-element-present-1",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-contained-1",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIALOG:1/DIV:1/SECTION:0/DIV:2/BUTTON:0",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": true
+        },
+        "name": {
+          "ax": "- button \"Live tail\" [pressed]",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "active-focused-element-present-2",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-contained-2",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIALOG:1/DIV:1/SECTION:0/DIV:2/BUTTON:1",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": true
+        },
+        "name": {
+          "ax": "- button \"History\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "active-focused-element-present-3",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-contained-3",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIALOG:1/DIV:1/SECTION:0/SECTION:3/DIV:0/BUTTON:1",
+          "tag": "BUTTON",
+          "type": null,
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": true
+        },
+        "name": {
+          "ax": "- button \"Pause tail\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "active-focused-element-present-4",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-contained-4",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIALOG:1/DIV:1/SECTION:0/SECTION:3/DIV:0/LABEL:2/INPUT:0",
+          "tag": "INPUT",
+          "type": "checkbox",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "1px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": true
+        },
+        "name": {
+          "ax": "- checkbox \"Auto-scroll\" [checked]",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "active-focused-element-present-5",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-contained-5",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIALOG:1/DIV:1/SECTION:0/SECTION:3/DIV:0/BUTTON:3",
+          "tag": "BUTTON",
+          "type": null,
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "auto",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": true
+        },
+        "name": {
+          "ax": "- button \"Latest events\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "active-focused-element-present-6",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-contained-6",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIALOG:1/DIV:1/SECTION:0/SECTION:3/DIV:2/HEADER:0/DIV:3/BUTTON:0",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": true
+        },
+        "name": {
+          "ax": "- button \"Decrease terminal font size\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "active-focused-element-present-7",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-contained-7",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIALOG:1/DIV:1/SECTION:0/SECTION:3/DIV:2/HEADER:0/DIV:3/BUTTON:1",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": true
+        },
+        "name": {
+          "ax": "- button \"Reset terminal font size\": 12px",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "active-focused-element-present-8",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-contained-8",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIALOG:1/DIV:1/SECTION:0/SECTION:3/DIV:2/HEADER:0/DIV:3/BUTTON:2",
+          "tag": "BUTTON",
+          "type": "button",
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": true
+        },
+        "name": {
+          "ax": "- button \"Increase terminal font size\"",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "active-focused-element-present-9",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "active-contained-9",
+      "pass": true,
+      "actual": {
+        "focus": {
+          "path": "DIALOG:1/DIV:1/SECTION:0/SECTION:3/DIV:2/OL:1",
+          "tag": "OL",
+          "type": null,
+          "focusVisible": true,
+          "paintedFocus": true,
+          "outline": "solid",
+          "outlineWidth": "2px",
+          "shadow": "none",
+          "visible": true,
+          "inModal": true
+        },
+        "name": {
+          "ax": "- list \"Live runtime events\":",
+          "named": true,
+          "summaryContentName": false
+        }
+      }
+    },
+    {
+      "id": "active-focused-element-present-10",
+      "pass": false,
+      "actual": true
+    }
+  ],
+  "records": [
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/HEADER:0/BUTTON:0",
+        "tag": "BUTTON",
+        "type": null,
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "auto",
+        "outlineWidth": "1px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Collapse navigation\" [expanded]",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/HEADER:0/DIV:3/BUTTON:0",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "auto",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Needs attention. All projects and Server. 1 need action, 1 to watch.\": Needs attention 2",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/HEADER:0/DIV:3/BUTTON:2",
+        "tag": "BUTTON",
+        "type": null,
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "auto",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Sign out\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/HEADER:0/DIV:3/DIV:3/BUTTON:0",
+        "tag": "BUTTON",
+        "type": null,
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "auto",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Application menu\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:0/BUTTON:0",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "auto",
+        "outlineWidth": "1px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Home\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:1/BUTTON:0",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "auto",
+        "outlineWidth": "1px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Conversations\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:2/BUTTON:0",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "auto",
+        "outlineWidth": "1px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Graph\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:0/LI:3/BUTTON:0",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "auto",
+        "outlineWidth": "1px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Artifacts\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/ASIDE:0/DIV:0/NAV:0/UL:1/LI:0/BUTTON:0",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "auto",
+        "outlineWidth": "1px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Advanced\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/HEADER:0/DIV:1/BUTTON:0",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "rgba(14, 165, 233, 0.2) 0px 1px 3px 0px",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Ask for work or chat\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/HEADER:0/DIV:1/BUTTON:1",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Refresh\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/HEADER:0/DIV:1/BUTTON:2",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Pause display\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:1/LABEL:0/SELECT:1",
+        "tag": "SELECT",
+        "type": null,
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- combobox \"Project\":",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:1/BUTTON:2",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "auto",
+        "outlineWidth": "2px",
+        "shadow": "rgba(14, 165, 233, 0.2) 0px 1px 3px 0px",
+        "visible": true,
+        "inModal": false
+      },
+      "name": {
+        "ax": "- button \"Add harness\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/UL:1/LI:1/BUTTON:2",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false,
+        "homeId": "home_group_d1cbe2f611ec09e6317331efdcf8023f5eb55ca369fbe76f02a5e7576280d9c6"
+      },
+      "name": {
+        "ax": "- button \"View work\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/UL:1/LI:2/BUTTON:2",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false,
+        "homeId": "home_group_d1cbe2f611ec09e6317331efdcf8023f5eb55ca369fbe76f02a5e7576280d9c6"
+      },
+      "name": {
+        "ax": "- button \"View work\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/BUTTON:2",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false,
+        "homeId": "home_group_d1cbe2f611ec09e6317331efdcf8023f5eb55ca369fbe76f02a5e7576280d9c6"
+      },
+      "name": {
+        "ax": "- button \"Follow activity\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:0/DETAILS:3/SUMMARY:0",
+        "tag": "SUMMARY",
+        "type": null,
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false,
+        "homeId": "home_group_d1cbe2f611ec09e6317331efdcf8023f5eb55ca369fbe76f02a5e7576280d9c6"
+      },
+      "name": {
+        "ax": "- text: Connection details",
+        "named": true,
+        "summaryContentName": true
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/UL:1/LI:0/BUTTON:2",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false,
+        "homeId": "home_group_14aa1c01e04d74ab5466ef5e9588fca091b962a7494176926303b78904d14521"
+      },
+      "name": {
+        "ax": "- button \"View delivery\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/BUTTON:2",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false,
+        "homeId": "home_group_14aa1c01e04d74ab5466ef5e9588fca091b962a7494176926303b78904d14521"
+      },
+      "name": {
+        "ax": "- button \"Follow activity\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/DETAILS:3/SUMMARY:0",
+        "tag": "SUMMARY",
+        "type": null,
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false,
+        "homeId": "home_group_14aa1c01e04d74ab5466ef5e9588fca091b962a7494176926303b78904d14521"
+      },
+      "name": {
+        "ax": "- text: Connection details",
+        "named": true,
+        "summaryContentName": true
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:1/UL:1/LI:0/BUTTON:3",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false,
+        "homeId": "home_request_att_b90ef33e8fc4e53c630b01fc33e8b0bccc2b4986239549b984f6f1200b90a2cc"
+      },
+      "name": {
+        "ax": "- button \"Respond\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "home-inventory",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:2/UL:1/LI:0/BUTTON:3",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false,
+        "homeId": "home_delivery_canonical:result_3ed418139ecd2b1c364250e59b66331d35f38e848587b15e6978a949436ff732"
+      },
+      "name": {
+        "ax": "- button \"View result\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    },
+    {
+      "phase": "active",
+      "focus": {
+        "path": "DIV:0/DIV:0/DIV:1/MAIN:1/DIV:0/DIV:0/DIV:0/DIV:0/SECTION:4/DIV:1/SECTION:0/UL:1/LI:1/BUTTON:2",
+        "tag": "BUTTON",
+        "type": "button",
+        "focusVisible": true,
+        "paintedFocus": true,
+        "outline": "solid",
+        "outlineWidth": "2px",
+        "shadow": "none",
+        "visible": true,
+        "inModal": false,
+        "homeId": "home_group_14aa1c01e04d74ab5466ef5e9588fca091b962a7494176926303b78904d14521"
+      },
+      "name": {
+        "ax": "- button \"Follow activity\"",
+        "named": true,
+        "summaryContentName": false
+      }
+    }
+  ],
+  "error": "Error: active-focused-element-present-10",
+  "writes": [],
+  "pageErrors": [],
+  "homeAX": "- region \"Follow-up\":\n  - heading \"Follow-up\" [level=2]\n  - region \"Active\":\n    - heading \"Active\" [level=3]\n    - text: 2 harnesses \u00b7 Revalidating\n    - list:\n      - listitem:\n        - 'heading \"Harness ID: reviewer\" [level=4]'\n        - paragraph: \"Collaborator: Hst A\"\n        - paragraph: Codex \u00b7 Host not reported\n        - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n        - text: Working Response pending\n        - list \"Activity preview\":\n          - listitem:\n            - paragraph: Work request\n            - paragraph: Needs your response\n          - listitem:\n            - paragraph: Work request\n            - paragraph: Needs your response\n            - button \"View work\"\n          - listitem:\n            - paragraph: Work request\n            - paragraph: Running\n            - button \"View work\"\n        - button \"Follow activity\"\n        - group: Connection details\n      - listitem:\n        - 'heading \"Harness ID: reviewer\" [level=4]'\n        - paragraph: \"Collaborator: Hst B\"\n        - paragraph: Codex \u00b7 Host not reported\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - text: Idle\n        - list \"Activity preview\":\n          - listitem:\n            - paragraph: Work request\n            - paragraph: Turn completed\n            - button \"View delivery\"\n        - button \"Follow activity\"\n        - group: Connection details\n  - region \"Needs you\":\n    - heading \"Needs you\" [level=3]\n    - text: 1 items \u00b7 Revalidating\n    - list:\n      - listitem:\n        - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n        - heading \"Runtime question for the operator\" [level=4]\n        - paragraph: \"Project: Alpha project for readable authorized collaborator activity and questions\"\n        - text: Response pending\n        - paragraph: Blocks this session; the harness continues other work\n        - button \"Respond\"\n  - region \"Results\":\n    - heading \"Results\" [level=3]\n    - text: 1 deliveries \u00b7 Revalidating\n    - list:\n      - listitem:\n        - paragraph: \"Harness ID: reviewer \u00b7 Codex \u00b7 Host not reported\"\n        - heading \"Work result\" [level=4]\n        - paragraph: \"Project: Beta project for readable authorized collaborator activity and delivery\"\n        - paragraph: Response available\n        - paragraph:\n          - text: Received\n          - time: 2026-11-18T01:09:42.870Z\n        - button \"View result\"",
+  "modalAX": "- dialog \"Activity detail\":\n  - banner:\n    - heading \"Activity detail\" [level=2]\n    - button \"Expand modal\"\n    - button \"Close modal\"\n  - region \"Session execution output\":\n    - paragraph: READY \u00b7 Read only\n    - paragraph: ses_e23795349b4197451a9ecdd495d0cc48\n    - group \"Terminal mode\":\n      - button \"Live tail\" [pressed]\n      - button \"History\"\n    - region \"Session live tail\":\n      - status: Following live events\n      - button \"Pause tail\"\n      - checkbox \"Auto-scroll\" [checked]\n      - text: Auto-scroll\n      - button \"Latest events\"\n      - paragraph: Showing 1\u20137 of 7 committed events. Scroll up to load earlier events.\n      - text: Session \u00b7 terminal Read only\n      - group \"Terminal font size\":\n        - button \"Decrease terminal font size\"\n        - button \"Reset terminal font size\": 12px\n        - button \"Increase terminal font size\"\n      - list \"Live runtime events\":\n        - listitem:\n          - strong: Core codex thread configuration\n          - time: 22:09:42\n          - term: Adapter id\n          - definition: codex_app_server\n          - term: Fields \u00b7 Approval Policy \u00b7 Status\n          - definition: missing\n          - term: Fields \u00b7 Approvals Reviewer \u00b7 Status\n          - definition: missing\n          - term: Fields \u00b7 Cwd \u00b7 Status\n          - definition: missing\n          - term: Fields \u00b7 Instruction Sources \u00b7 Status\n          - definition: missing\n          - term: Fields \u00b7 Model \u00b7 Status\n          - definition: missing\n          - term: Fields \u00b7 Model Provider \u00b7 Status\n          - definition: missing\n          - term: Fields \u00b7 Reasoning Effort \u00b7 Status\n          - definition: missing\n          - term: Fields \u00b7 Sandbox \u00b7 Status\n          - definition: missing\n          - term: Schema version\n          - definition: \"1\"\n          - term: Source\n          - definition: thread/start/response\n        - listitem:\n          - strong: Harness ready\n          - time: 22:09:42\n        - listitem:\n          - strong: Turn started\n          - time: 22:09:42\n        - listitem:\n          - strong: Assistant\n          - time: 22:09:42\n          - paragraph: HST synthetic output ses_e23795349b4197451a9ecdd495d0cc48\n        - listitem:\n          - strong: Turn completed\n          - time: 22:09:42"
+}

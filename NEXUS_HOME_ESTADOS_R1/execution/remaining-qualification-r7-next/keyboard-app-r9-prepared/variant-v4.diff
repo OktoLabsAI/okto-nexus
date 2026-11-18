@@ -1,0 +1,98 @@
+--- keyboard-v3.js
++++ keyboard-v4.js
+@@ -14,10 +14,42 @@
+   };
+   const nameProof=async locator=>{
+     const ax=await locator.ariaSnapshot(),first=ax.split('\n')[0];
+-    // A quoted nonempty accessible name is observed from the browser AX snapshot.
+-    const summary=await locator.evaluate(e=>e.tagName==='SUMMARY');
++    const shape=await locator.evaluate(e=>{
++      const interactive=new Set(['button','link','checkbox','radio','switch','textbox','searchbox','combobox','listbox','option','slider','spinbutton','tab','menuitem','menuitemcheckbox','menuitemradio','treeitem']);
++      const childAction=!!e.querySelector('button,a[href],input,select,textarea,summary,[tabindex],[contenteditable]')||Array.from(e.querySelectorAll('[role]')).some(n=>interactive.has(n.getAttribute('role')));
++      const s=getComputedStyle(e);
++      return {tag:e.tagName,role:e.getAttribute('role'),tabindex:e.getAttribute('tabindex'),editable:e.isContentEditable,childAction,overflowY:s.overflowY,scrollHeight:e.scrollHeight,clientHeight:e.clientHeight,insideDialog:!!e.closest('dialog[open]')};
++    });
++    if(shape.tag==='PRE'){
++      const content=await locator.evaluate(async(e,axText)=>{
++        const enc=new TextEncoder(),text=enc.encode(e.textContent??''),ax=enc.encode(axText);
++        const digest=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(n=>n.toString(16).padStart(2,'0')).join('');
++        return {textNonempty:!!e.textContent?.trim(),axNonempty:!!axText.trim(),textBytes:text.length,axBytes:ax.length,textSha256:await digest(text),axSha256:await digest(ax)};
++      },ax);
++      const parentAX=(await modal.ariaSnapshot()).split('\n')[0];
++      const parentNamed=/^- dialog "[^"\n]+"/.test(parentAX);
++      const staticScrollable=shape.role===null&&shape.tabindex===null&&!shape.editable&&!shape.childAction&&shape.insideDialog&&['auto','scroll'].includes(shape.overflowY)&&shape.scrollHeight>shape.clientHeight&&content.textNonempty&&content.axNonempty&&parentNamed;
++      // Do not serialize the technical payload or CAS into the observation.
++      return {named:false,staticScrollable,shape,content,parentAX};
++    }
++    const summary=shape.tag==='SUMMARY';
+     const named=/^- [\w-]+ "[^"\n]+"/.test(first)||(summary&&/^- (text|generic): \S/.test(first));
+-    return {ax:first,named,summaryContentName:summary};
++    return {ax:first,named,summaryContentName:summary,staticScrollable:false};
++  };
++  const scrollStaticPre=async(locator,label)=>{
++    const snap=()=>locator.evaluate(e=>({top:e.scrollTop,max:e.scrollHeight-e.clientHeight,focused:document.hasFocus()&&e===document.activeElement&&e.matches(':focus'),windowY:scrollY,selectionLength:getSelection()?.toString().length??0,selectCounts:Array.from(e.closest('dialog').querySelectorAll('select')).map(n=>n.selectedOptions.length)}));
++    const settle=async()=>{
++      const end=Date.now()+1500;let last=null,stable=0,value;
++      do{value=await snap();if(last!==null&&Math.abs(value.top-last)<.1)stable++;else stable=0;last=value.top;if(stable>=3)return value;await page.waitForTimeout(40);}while(Date.now()<end);
++      return value;
++    };
++    const before=await settle(),writesBefore=page.__i01Writes.length;
++    check(label+'-pre-scroll-precondition',before.focused&&before.top<before.max,before);
++    await page.keyboard.press('ArrowDown');const down=await settle();
++    check(label+'-ArrowDown-scrolls-own-pre',down.focused&&down.top>before.top&&Math.abs(down.windowY-before.windowY)<=1,{before,down});
++    await page.keyboard.press('ArrowUp');const up=await settle();
++    check(label+'-ArrowUp-restores-own-pre',up.focused&&up.top<down.top&&Math.abs(up.top-before.top)<=2&&Math.abs(up.windowY-before.windowY)<=1,{before,up});
++    check(label+'-arrows-no-selection-or-request-write',before.selectionLength===0&&down.selectionLength===0&&up.selectionLength===0&&JSON.stringify(before.selectCounts)===JSON.stringify(down.selectCounts)&&JSON.stringify(before.selectCounts)===JSON.stringify(up.selectCounts)&&page.__i01Writes.length===writesBefore,{selectionLengths:[before.selectionLength,down.selectionLength,up.selectionLength],selectCounts:[before.selectCounts,down.selectCounts,up.selectCounts],writesBefore,writesAfter:page.__i01Writes.length});
+   };
+   const tabTo=async(target,label)=>{
+     for(let i=0;i<180;i++){
+@@ -34,6 +66,8 @@
+   const inventoryOf=async scope=>scope.locator(sequential).evaluateAll((nodes,fn)=>{const path=Function('return ('+fn+')')();return nodes.filter(e=>e.tabIndex>=0&&!e.disabled&&e.getBoundingClientRect().width>0&&e.getBoundingClientRect().height>0&&getComputedStyle(e).visibility!=='hidden'&&!e.closest('[inert]')).map(e=>path(e));},String(pathOf));
+   const modalCycle=async label=>{
+     check(label+'-ua-modal',await modal.evaluate(e=>e.matches(':modal')),true);
++    const dialogName=await nameProof(modal);check(label+'-dialog-accessible-name',dialogName.named,dialogName);
++    const staticProbed=new Set();
+     const inventory=await inventoryOf(modal);check(label+'-modal-controls-nonempty',inventory.length>0,inventory.length);
+     const visited=[],cycle=[];
+     const observe=async step=>{
+@@ -42,7 +76,10 @@
+       const outsideDocument=f.hasFocus===false&&f.focusCountDOM===0&&f.focusCountLocator===0&&f.activeMatchesFocus===false&&f.modalOpen&&f.uaModal;
+       records.push({phase:label,step,focus:f,name:n,outsideDocument});cycle.push({step,focus:f,name:n,outsideDocument});
+       check(label+'-no-background-focus-event-'+step,!f.focusEvents.some(e=>e.event==='focusin'&&e.modalOpen&&!e.targetInModal),f.focusEvents);
+-      check(label+'-native-modal-focus-state-'+step,f.modalOpen&&f.uaModal&&(outsideDocument||(f.hasFocus&&f.activeMatchesFocus&&f.focusCountDOM===1&&f.focusCountLocator===1&&f.inModal&&f.visible&&f.focusVisible&&f.paintedFocus&&n?.named)),{focus:f,name:n,outsideDocument});
++      check(label+'-native-modal-focus-state-'+step,f.modalOpen&&f.uaModal&&(outsideDocument||(f.hasFocus&&f.activeMatchesFocus&&f.focusCountDOM===1&&f.focusCountLocator===1&&f.inModal&&f.visible&&f.focusVisible&&f.paintedFocus&&(n?.named||n?.staticScrollable))),{focus:f,name:n,outsideDocument});
++      if(n?.staticScrollable&&!staticProbed.has(f.path)){
++        await scrollStaticPre(page.locator(':focus'),label+'-'+step);staticProbed.add(f.path);
++      }
+       if(!outsideDocument&&!visited.includes(f.path))visited.push(f.path);
+       return {f,outsideDocument};
+     };
+--- run_v3.py
++++ run_v4.py
+@@ -22,7 +22,7 @@
+ def write(path,value):
+     with path.open('x',encoding='utf-8')as stream:stream.write(json.dumps(value,indent=2)+'\n')
+ def check(gate_path):
+-    manifest_path=HERE/'prepared-keyboard-v3.json';manifest=json.loads(manifest_path.read_text());gate=json.loads(gate_path.read_text())
++    manifest_path=HERE/'prepared-keyboard-v4.json';manifest=json.loads(manifest_path.read_text());gate=json.loads(gate_path.read_text())
+     assert gate['approved']is True and gate['scope']=='I01_APP_NATIVE_ZOOM'and gate['start_nexus']is True
+     assert gate['deadline_seconds']==300 and gate['allow_own_containment']is True and gate['allow_fixture_canonical_admissions']is True
+     assert re.fullmatch(r'hst-native-zoom-r9-[a-z0-9-]{1,60}',gate['cut_id'])
+@@ -156,7 +156,7 @@
+         assert set(origins['origins'])=={'okto_nexus','nexus_connector_core','okto_nexus_connector'}and all(Path(value).resolve().is_relative_to(prefix)for value in origins['origins'].values())
+         cli('load-own-cookie','state-load',fixture_ready['storage'])
+         bootstrap=dict(window='ROOT_I01_KEYBOARD_APP_OPEN',phase='bootstrap',url=fixture_ready['url'],nativeDpr100=result['observations']['baseline']['devicePixelRatio'])
+-        body('app-bootstrap','keyboard-v3.js',bootstrap)
++        body('app-bootstrap','keyboard-v4.js',bootstrap)
+         # Native/browser warmup and app bootstrap precede fresh original120s questions.
+         control('exp-start-active');active=snapshot('active');identity=json.loads((root/'control/exp-active-identities.json').read_text());baseline=snapshot('base');refs=fixture_ready['references']
+         cards=[item for column in active['board']['columns'].values()for item in column['items']if item['kind']=='harness']
+@@ -169,7 +169,7 @@
+         deliveries=[item for item in active['board']['columns']['results']['items']if item['kind']=='delivery'and item['entry']['target'].get('operation_id')==turns[0]['operation_id']];assert len(deliveries)==1;delivery=deliveries[0]
+         exact=dict(window='ROOT_I01_KEYBOARD_APP_OPEN',phase='case',url=fixture_ready['url'],outputPrefix=str(root/'i01-app'),expiresAt=identity['question']['expires_at'],aCard=card_a['id'],bCard=b['id'],bScope=b1['scope'],bMarker=b1['marker'],a2Scope=a2['scope'],requestCard=request['id'],requestId=identity['question']['request_id'],deliveryId=delivery['id'],deliveryTarget=delivery['result']['detail_target'],projectA=card_a['connection']['workspace_label'],projectB=b['connection']['workspace_label'])
+         write(root/'i01-public-preflight.json',exact)
+-        body('keyboard-case','keyboard-v3.js',exact)
++        body('keyboard-case','keyboard-v4.js',exact)
+     except BaseException as error:
+         failure=dict(type=type(error).__name__,message=str(error));write(root/'first-failure.private.json',failure)
+     finally:

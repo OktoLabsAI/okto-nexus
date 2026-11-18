@@ -1,0 +1,17 @@
+{
+  "status": "PASS_STATIC_ONLY_NO_RUNTIME",
+  "variant_manifest_sha256": "0ebc6aee239c71a2fb043fda74f102a3401e0431c295ac19f820b6efe420e557",
+  "transform_sha256": "01014e9795c66a3fb427f070c52f3b21cdaa1c81c8c8622164efd20d5dcaf3ab",
+  "variant_pins": 7,
+  "base_pins": 5,
+  "base_source_input_pins": 64,
+  "pin_mismatches": 0,
+  "all_python_ast_pass": true,
+  "pure_fixture_transform_ast_pass": true,
+  "public_label_only_html": true,
+  "private_prompt_contains_token_marker_escape": true,
+  "browser_assertions_byte_unchanged": true,
+  "source_runtime_allocated": false,
+  "browser_started": false,
+  "application_imported": false
+}

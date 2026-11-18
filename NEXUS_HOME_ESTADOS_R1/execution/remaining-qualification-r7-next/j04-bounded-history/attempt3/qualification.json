@@ -1,0 +1,163 @@
+{
+  "status": "PASS_FUNCTIONAL_J04_SCOPE",
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "ready_sha256": "028274a46776dbc677f096dc6e5493e102c683bd7e87eee1930c21f56111a631",
+  "manifest_sha256": "afa458809e3cab05fdf2d23a08d139d7df81090eaac930685108a56be6e10b67",
+  "gate_sha256": "c5aece7e34349f4e489794cfcc785c1a6f6c4d560a366190fccfc59b65c06e06",
+  "runner_sha256": "82b8b14403dbb414e5a6ca39f47f5e938015d259a5756391ba07ac75adf94231",
+  "worker_sha256": "2c6a4b6ba252668390e26abf16111999e312c1f0118fd781e435e28dbead9a22",
+  "runner_exit_code": 0,
+  "volume": {
+    "open_activities": 1000,
+    "history_events": 100000,
+    "added_terminal_results": 25,
+    "large_event_payloads": 10,
+    "artifact_files": 25,
+    "large_field_bytes": 131133,
+    "terminal_operation_ids": [
+      "j04-synthetic-terminal-000",
+      "j04-synthetic-terminal-001",
+      "j04-synthetic-terminal-002",
+      "j04-synthetic-terminal-003",
+      "j04-synthetic-terminal-004",
+      "j04-synthetic-terminal-005",
+      "j04-synthetic-terminal-006",
+      "j04-synthetic-terminal-007",
+      "j04-synthetic-terminal-008",
+      "j04-synthetic-terminal-009",
+      "j04-synthetic-terminal-010",
+      "j04-synthetic-terminal-011",
+      "j04-synthetic-terminal-012",
+      "j04-synthetic-terminal-013",
+      "j04-synthetic-terminal-014",
+      "j04-synthetic-terminal-015",
+      "j04-synthetic-terminal-016",
+      "j04-synthetic-terminal-017",
+      "j04-synthetic-terminal-018",
+      "j04-synthetic-terminal-019",
+      "j04-synthetic-terminal-020",
+      "j04-synthetic-terminal-021",
+      "j04-synthetic-terminal-022",
+      "j04-synthetic-terminal-023",
+      "j04-synthetic-terminal-024"
+    ]
+  },
+  "reads": [
+    {
+      "path": "/api/v1/home/overview",
+      "http_status": 200,
+      "bytes": 29016,
+      "response_sha256": "3f5aa6c0b980ce6b4b7f85d64d812825bb58be12c5b63c2bea0a7893ab0845d7",
+      "item_count": 0,
+      "total": null,
+      "has_more": null
+    },
+    {
+      "path": "/api/v1/home/harness-board",
+      "http_status": 200,
+      "bytes": 69383,
+      "response_sha256": "cf864cf309f3e3dc61ec6a20df034f9dea702a97a2f3837eb8f071a25cd71a6c",
+      "item_count": 0,
+      "total": null,
+      "has_more": null
+    },
+    {
+      "path": "/api/v1/home/results",
+      "http_status": 200,
+      "bytes": 8350,
+      "response_sha256": "571cec8e4b3f22cf663cb11907689418d2cd7fd9315ca4669d5b970bff4626a4",
+      "item_count": 3,
+      "total": 25,
+      "has_more": true
+    },
+    {
+      "path": "/api/v1/home/results",
+      "http_status": 200,
+      "bytes": 8350,
+      "response_sha256": "050f72d338a989ddb25356828c237ddabc6ad25243c50086bd5f65aaf8c7f427",
+      "item_count": 3,
+      "total": 25,
+      "has_more": true
+    }
+  ],
+  "instrumentation": {
+    "rows_materialized": 16123,
+    "max_string_bytes": 17680,
+    "full_payload_materialized": [],
+    "artifact_content_sql_reads": 0,
+    "artifact_file_reads": [],
+    "guarded_artifact_ids": 25,
+    "guarded_canonical_payload_paths": 25
+  },
+  "assertions_executed": [
+    "1000 original open activities and100000 history events remain;25 additional terminal results",
+    "Synthetic foreign keys valid;131133-byte marked fields in result/event/artifact fixtures",
+    "Exactly25 expected artifact IDs map to concrete canonical files inside the owned root before GET instrumentation",
+    "Both canonical storage payload paths and original synthetic artifact directory protected by audit hook",
+    "Overview nonempty; board cards present with column limit3/event preview2",
+    "Results page1/page2 each3, disjoint IDs, exact total25, actual cursor and nonempty artifact metadata",
+    "Result previews <=401 characters",
+    "No full-field marker in materialized Python SQL rows or response bytes",
+    "No artifacts.content SQL read; no protected artifact file open",
+    "Productive-table hashes unchanged during GETs"
+  ],
+  "module_origins": {
+    "okto_nexus": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "count": 736
+    },
+    "nexus_connector_core": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "count": 168
+    },
+    "okto_nexus_connector": {
+      "origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-r1-package-ny1cya75\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+      "count": 127
+    }
+  },
+  "guards_before": {
+    "source_pins": 1829,
+    "payload_files": 1031,
+    "drift": []
+  },
+  "guards_after": {
+    "source_pins": 1829,
+    "payload_files": 1031,
+    "drift": []
+  },
+  "original_seed_unchanged": true,
+  "physical": {
+    "worker_pid": 25296,
+    "absent_at_curation": true,
+    "remaining": [],
+    "forced": [],
+    "timeout": false
+  },
+  "input_readers_released": true,
+  "latencies_collected": false,
+  "provider_invocations": 0,
+  "layer": "SQL synthetic fixture + installed real ASGI/SQLite, lifespan off; no native authority proof",
+  "raw_worker_output_sha256": "14abaf05ba5625c528ccafb58c969e80c64361e6a58f4cdcdbd5f28dd7869681",
+  "antecedents": [
+    {
+      "path": "../attempt1/qualification.json",
+      "sha256": "3563bd822d1669a6eebf08bedcad7a72dfd85ca4e4c7adb9410c1e0f113038fd",
+      "status": "422 runner precondition failure preserved"
+    },
+    {
+      "path": "../attempt2/qualification.json",
+      "sha256": "e724477f5ac82bf97aa908ccdb5f631b787d51aaa67f7612b092b701c5f2ca86",
+      "status": "Scoped pass with previous canonical-file-hook limitation preserved"
+    }
+  ],
+  "limits": [
+    "Functional materialization clause only; not a new performance benchmark or target judgment",
+    "SQL synthetic read facts with invalid/non-native receipt/event chains; no runtime/grant/authority qualification",
+    "GET instrumentation excludes bootstrap initialization/migration work",
+    "Complete metadata materialization16123rows does not prove O(page) cost or a global memory bound",
+    "Guarded25 canonical payload files plus original directory, not a universal filesystem audit",
+    "No provider/browser/human acceptance claim",
+    "No raw transcript/payload/artifact file contents or private log copied"
+  ]
+}

@@ -1,0 +1,107 @@
+--- keyboard-v2.js
++++ keyboard-v3.js
+@@ -5,10 +5,13 @@
+   const check=(id,pass,actual)=>{checks.push({id,pass:!!pass,actual});if(!pass)throw Error(id);};
+   const modal=page.locator('dialog[open]');
+   const pathOf=e=>{const parts=[];for(let n=e;n&&n!==document.body;n=n.parentElement){const siblings=Array.from(n.parentElement?.children??[]);parts.unshift(n.tagName+':'+siblings.indexOf(n));}return parts.join('/');};
+-  const focused=async()=>page.locator(':focus').evaluate((e,fn)=>{
+-    const path=Function('return ('+fn+')')()(e),s=getComputedStyle(e),r=e.getBoundingClientRect();
+-    return {path,tag:e.tagName,type:e.getAttribute('type'),focusVisible:e.matches(':focus-visible'),paintedFocus:(s.outlineStyle!=='none'&&parseFloat(s.outlineWidth)>0)||s.boxShadow!=='none',outline:s.outlineStyle,outlineWidth:s.outlineWidth,shadow:s.boxShadow,visible:r.width>0&&r.height>0,inModal:!!e.closest('dialog[open]'),homeId:e.closest('[data-home-harness],[data-home-signal]')?.getAttribute('data-home-harness')||e.closest('[data-home-signal]')?.getAttribute('data-home-signal')};
+-  },String(pathOf));
++  const focused=async()=>{
++    const f=await page.evaluate(fn=>{
++      const e=document.activeElement,d=document.querySelector('dialog[open]'),path=Function('return ('+fn+')')(),s=e?getComputedStyle(e):null,r=e?.getBoundingClientRect();
++      return {path:e?path(e):null,tag:e?.tagName,type:e?.getAttribute('type'),hasFocus:document.hasFocus(),focusCountDOM:document.querySelectorAll(':focus').length,activeMatchesFocus:e?.matches(':focus'),modalOpen:!!d,uaModal:!!d?.matches(':modal'),focusVisible:e?.matches(':focus-visible'),paintedFocus:s?((s.outlineStyle!=='none'&&parseFloat(s.outlineWidth)>0)||s.boxShadow!=='none'):false,outline:s?.outlineStyle,outlineWidth:s?.outlineWidth,shadow:s?.boxShadow,visible:!!r&&r.width>0&&r.height>0,inModal:!!e?.closest('dialog[open]'),homeId:e?.closest('[data-home-harness],[data-home-signal]')?.getAttribute('data-home-harness')||e?.closest('[data-home-signal]')?.getAttribute('data-home-signal'),focusEvents:(window.__i01FocusEvents??[]).splice(0)};
++    },String(pathOf));
++    f.focusCountLocator=await page.locator(':focus').count();return f;
++  };
+   const nameProof=async locator=>{
+     const ax=await locator.ariaSnapshot(),first=ax.split('\n')[0];
+     // A quoted nonempty accessible name is observed from the browser AX snapshot.
+@@ -33,19 +36,29 @@
+     check(label+'-ua-modal',await modal.evaluate(e=>e.matches(':modal')),true);
+     const inventory=await inventoryOf(modal);check(label+'-modal-controls-nonempty',inventory.length>0,inventory.length);
+     const visited=[],cycle=[];
++    const observe=async step=>{
++      const f=await focused();let n=null;
++      if(f.hasFocus&&f.activeMatchesFocus&&f.focusCountDOM===1&&f.focusCountLocator===1)n=await nameProof(page.locator(':focus'));
++      const outsideDocument=f.hasFocus===false&&f.focusCountDOM===0&&f.focusCountLocator===0&&f.activeMatchesFocus===false&&f.modalOpen&&f.uaModal;
++      records.push({phase:label,step,focus:f,name:n,outsideDocument});cycle.push({step,focus:f,name:n,outsideDocument});
++      check(label+'-no-background-focus-event-'+step,!f.focusEvents.some(e=>e.event==='focusin'&&e.modalOpen&&!e.targetInModal),f.focusEvents);
++      check(label+'-native-modal-focus-state-'+step,f.modalOpen&&f.uaModal&&(outsideDocument||(f.hasFocus&&f.activeMatchesFocus&&f.focusCountDOM===1&&f.focusCountLocator===1&&f.inModal&&f.visible&&f.focusVisible&&f.paintedFocus&&n?.named)),{focus:f,name:n,outsideDocument});
++      if(!outsideDocument&&!visited.includes(f.path))visited.push(f.path);
++      return {f,outsideDocument};
++    };
++    // Count the actual initial focus rather than Tab past the first control.
++    await observe('initial');
+     for(let i=0;i<90&&!inventory.every(p=>visited.includes(p));i++){
+-      await page.keyboard.press('Tab');
+-      check(label+'-focused-element-present-'+i,await page.locator(':focus').count()===1,true);
+-      const f=await focused(),n=await nameProof(page.locator(':focus'));
+-      check(label+'-contained-'+i,f.inModal&&f.visible&&f.focusVisible&&f.paintedFocus&&n.named,{focus:f,name:n});
+-      if(visited.includes(f.path)&&!inventory.every(p=>visited.includes(p)))break;
+-      visited.push(f.path);cycle.push({focus:f,name:n});
++      await page.keyboard.press('Tab');await observe('Tab-'+i);
+     }
+     check(label+'-all-enabled-modal-controls-covered',inventory.every(p=>visited.includes(p)),{inventory,visited,missing:inventory.filter(p=>!visited.includes(p)),cycle});
+-    // Cross both ends with benign keys only; never activate Copy/submit/decision.
+     for(const key of ['Tab','Shift+Tab']){
+-      await page.keyboard.press(key);const f=await focused();
+-      check(label+'-boundary-contained-'+key,f.inModal&&f.visible&&f.focusVisible&&f.paintedFocus,f);
++      await page.keyboard.press(key);let state=await observe('boundary-'+key);
++      // Bounded benign navigation can return from browser-level focus; never focus() or trap.
++      for(let i=0;i<6&&state.outsideDocument;i++){
++        await page.keyboard.press(key);state=await observe('return-'+key+'-'+i);
++      }
++      check(label+'-returned-to-dialog-'+key,!state.outsideDocument&&state.f.inModal,state.f);
+     }
+   };
+   const escape=async(id,label)=>{
+@@ -59,7 +72,17 @@
+       page.__i01Writes=[];page.__i01Errors=[];
+       page.on('request',r=>{if(!['GET','HEAD','OPTIONS'].includes(r.method()))page.__i01Writes.push({method:r.method(),path:new URL(r.url()).pathname});});
+       page.on('pageerror',e=>page.__i01Errors.push(e.message));
+-      await page.addInitScript(origin=>{if(location.origin!==origin)return;localStorage.setItem('okto-nexus-home-operational','enabled');localStorage.setItem('okto-nexus-workspace','all');localStorage.setItem('okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0',new Date().toISOString());},new URL(cfg.url).origin);
++      await page.addInitScript(origin=>{
++        if(location.origin!==origin)return;
++        localStorage.setItem('okto-nexus-home-operational','enabled');localStorage.setItem('okto-nexus-workspace','all');localStorage.setItem('okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0',new Date().toISOString());
++        window.__i01FocusEvents=[];
++        const capture=(event,target)=>{
++          const d=document.querySelector('dialog[open]'),e=document.activeElement;
++          window.__i01FocusEvents.push({event,time:performance.now(),hasFocus:document.hasFocus(),focusCountDOM:document.querySelectorAll(':focus').length,activeTag:e?.tagName,activeMatchesFocus:e?.matches(':focus'),modalOpen:!!d,uaModal:!!d?.matches(':modal'),targetTag:target?.tagName??null,targetInModal:!!target?.closest?.('dialog[open]')});
++        };
++        for(const name of ['focusin','focusout','focus','blur'])document.addEventListener(name,event=>capture(name,event.target),true);
++        for(const name of ['focus','blur'])window.addEventListener(name,()=>capture('window-'+name,null));
++      },new URL(cfg.url).origin);
+       await page.setViewportSize({width:1440,height:1000});await page.goto(cfg.url);await page.getByTestId('home-follow-up').waitFor({timeout:25000});
+       const g=await page.evaluate(()=>({innerWidth,devicePixelRatio,scale:visualViewport?.scale}));
+       check('native100-desktop',g.innerWidth===1440&&Math.abs(g.devicePixelRatio-cfg.nativeDpr100)<.03&&g.scale===1,g);
+--- run_v2.py
++++ run_v3.py
+@@ -22,7 +22,7 @@
+ def write(path,value):
+     with path.open('x',encoding='utf-8')as stream:stream.write(json.dumps(value,indent=2)+'\n')
+ def check(gate_path):
+-    manifest_path=HERE/'prepared-keyboard-v2.json';manifest=json.loads(manifest_path.read_text());gate=json.loads(gate_path.read_text())
++    manifest_path=HERE/'prepared-keyboard-v3.json';manifest=json.loads(manifest_path.read_text());gate=json.loads(gate_path.read_text())
+     assert gate['approved']is True and gate['scope']=='I01_APP_NATIVE_ZOOM'and gate['start_nexus']is True
+     assert gate['deadline_seconds']==300 and gate['allow_own_containment']is True and gate['allow_fixture_canonical_admissions']is True
+     assert re.fullmatch(r'hst-native-zoom-r9-[a-z0-9-]{1,60}',gate['cut_id'])
+@@ -156,7 +156,7 @@
+         assert set(origins['origins'])=={'okto_nexus','nexus_connector_core','okto_nexus_connector'}and all(Path(value).resolve().is_relative_to(prefix)for value in origins['origins'].values())
+         cli('load-own-cookie','state-load',fixture_ready['storage'])
+         bootstrap=dict(window='ROOT_I01_KEYBOARD_APP_OPEN',phase='bootstrap',url=fixture_ready['url'],nativeDpr100=result['observations']['baseline']['devicePixelRatio'])
+-        body('app-bootstrap','keyboard-v2.js',bootstrap)
++        body('app-bootstrap','keyboard-v3.js',bootstrap)
+         # Native/browser warmup and app bootstrap precede fresh original120s questions.
+         control('exp-start-active');active=snapshot('active');identity=json.loads((root/'control/exp-active-identities.json').read_text());baseline=snapshot('base');refs=fixture_ready['references']
+         cards=[item for column in active['board']['columns'].values()for item in column['items']if item['kind']=='harness']
+@@ -169,7 +169,7 @@
+         deliveries=[item for item in active['board']['columns']['results']['items']if item['kind']=='delivery'and item['entry']['target'].get('operation_id')==turns[0]['operation_id']];assert len(deliveries)==1;delivery=deliveries[0]
+         exact=dict(window='ROOT_I01_KEYBOARD_APP_OPEN',phase='case',url=fixture_ready['url'],outputPrefix=str(root/'i01-app'),expiresAt=identity['question']['expires_at'],aCard=card_a['id'],bCard=b['id'],bScope=b1['scope'],bMarker=b1['marker'],a2Scope=a2['scope'],requestCard=request['id'],requestId=identity['question']['request_id'],deliveryId=delivery['id'],deliveryTarget=delivery['result']['detail_target'],projectA=card_a['connection']['workspace_label'],projectB=b['connection']['workspace_label'])
+         write(root/'i01-public-preflight.json',exact)
+-        body('keyboard-case','keyboard-v2.js',exact)
++        body('keyboard-case','keyboard-v3.js',exact)
+     except BaseException as error:
+         failure=dict(type=type(error).__name__,message=str(error));write(root/'first-failure.private.json',failure)
+     finally:

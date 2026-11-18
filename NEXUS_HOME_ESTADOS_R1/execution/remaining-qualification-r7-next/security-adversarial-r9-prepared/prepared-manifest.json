@@ -1,0 +1,23 @@
+{
+  "status": "STATIC_DRAFT_NOT_EXECUTABLE_NO_GATE",
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "r9_wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "pins": {
+    "README.md": "b4f803c7cc6930763cb500371e54f2c480a3fd7351431304da013905fd01dfb6",
+    "fixture_transform.py": "b98dc6461510e73ebcdf9dbec8abcf80957f97fc4de761cc0047fbabbdc77978",
+    "h02-wrongtuple.js": "e6ba5c10b1ba14e6d06e538fc2201f00eaf50b99319dca47322e4bd8316bad77",
+    "h03-overview.js": "c56c7ca704371ccfed18a72d6c69039316ff3b7e01f21e276ff1f40b7c769ff3"
+  },
+  "node_check_exit_codes": [
+    0,
+    0
+  ],
+  "ast_pass": true,
+  "runtime_started": false,
+  "browser_started": false,
+  "missing_before_execution": [
+    "fresh supervisor/preflight/gate binding",
+    "Root review canonical label admission and real target-query adversarial layer",
+    "static helper closure/prefix/source full pin gate"
+  ]
+}

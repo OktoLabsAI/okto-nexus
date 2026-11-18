@@ -1,0 +1,114 @@
+{
+  "status": "PASS_SCOPED_FINAL_GUARDS_AND_PHYSICAL_EXIT",
+  "qualification_sha256": "a3b7c7c95e29627e43c3db0129126b6839d6361119897b4e25a8d1164d1401db",
+  "case": "H02_wrong_workspace_context_not_user_ACL",
+  "actual_target_response": [
+    {
+      "status": 409,
+      "path": "/api/v1/home/target"
+    }
+  ],
+  "checks": [
+    {
+      "id": "no-prior-modal",
+      "ok": true
+    },
+    {
+      "id": "exact-original-target-before-adversarial-query",
+      "ok": true
+    },
+    {
+      "id": "actual-server-denial",
+      "ok": true
+    },
+    {
+      "id": "no-error-preview-summary",
+      "ok": true
+    },
+    {
+      "id": "one-query-no-replacement",
+      "ok": true
+    },
+    {
+      "id": "no-protected-dom",
+      "ok": true
+    },
+    {
+      "id": "no-runtime-controls",
+      "ok": true
+    },
+    {
+      "id": "browser-read-only",
+      "ok": true
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/home/target"
+    }
+  ],
+  "full_references": [
+    {
+      "server_id": "srv_5591d89b150b0aa4330c78d57315b0f8",
+      "executor_id": "exe_5bd81ca051a2b3dcd0e438d46d184853",
+      "binding_id": "bind_992b0c96f3eddcebe205f9da25e414dd",
+      "endpoint_id": "ep_b30746cf270e5d3fc7be451bcf49627c",
+      "agent_id": "hst-a",
+      "workspace_id": "wsr_9ede0b5b10b6c0ffefb45fe2d34abed4",
+      "workspace_binding_id": "wxb_b4f421244163817e7544f8d1b6da9172"
+    },
+    {
+      "server_id": "srv_5591d89b150b0aa4330c78d57315b0f8",
+      "executor_id": "exe_5bd81ca051a2b3dcd0e438d46d184853",
+      "binding_id": "bind_25b8b1cc0508d60bd2f1f02556247833",
+      "endpoint_id": "ep_e7d3ab12d20dae4c636a0f748d02219c",
+      "agent_id": "hst-b",
+      "workspace_id": "wsr_3ad9aff140ef23dad0fba644170ed911",
+      "workspace_binding_id": "wxb_fc72a62af5a1ef2e9777e3a66cde8fb5"
+    }
+  ],
+  "distinct_canonical_workspaces": 2,
+  "target_replacement_requests": 0,
+  "live_snapshot_tables": 30,
+  "unexpected_table_changes": 0,
+  "ignored_tables": [],
+  "ignored_columns": [],
+  "source_payload_helper_guards_equal": true,
+  "physical_recheck": {
+    "known_birth_records": 30,
+    "same_birth_survivors": []
+  },
+  "cleanup": {
+    "fixture": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "browser": {
+      "forced_births": [],
+      "remaining": []
+    },
+    "listeners": [],
+    "browser_close_exit_code": 0,
+    "session_closed_flags": [
+      true,
+      true
+    ],
+    "close_failures": []
+  },
+  "provider_invocations": 0,
+  "evidence_layer": "Real browser clicks + URL query mutation continued to actual installed R9 HTTP endpoint; canonical synthetic runtime fixture",
+  "limits": [
+    "One workspace mismatch, not every possible forged scope dimension",
+    "Globally authorized operator; no per-human workspace ACL claim",
+    "No H03/OBS/revocation/performance qualification",
+    "Observed process ancestry plus own-root scan cannot inventory every short-lived child"
+  ],
+  "screenshots": {
+    "wrong-workspace.png": "ab27614028b847ab8721643c3d20918b957265a43ae7a6b6e0e764a6d2d39b7e"
+  }
+}

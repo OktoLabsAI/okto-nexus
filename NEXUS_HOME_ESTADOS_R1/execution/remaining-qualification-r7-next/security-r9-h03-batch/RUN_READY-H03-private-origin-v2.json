@@ -1,0 +1,18 @@
+{
+  "approved": true,
+  "approved_by": "root",
+  "case": "H03",
+  "deadline_seconds": 180,
+  "provider_invocations": 0,
+  "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+  "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+  "cut_id": "hst-security-r9-h03-private-origin-v2",
+  "runtime_mode": "baseline",
+  "allow_own_containment": true,
+  "browser_environment_policy": "windows-path-allowlist-app-env-own-v1",
+  "allow_exact_observation_inserts": false,
+  "manifest_sha256": "c7b110ffc3ea488cd090b991df0019dc71f64efded13553a9797a34e021d9293",
+  "ready_sha256": "028274a46776dbc677f096dc6e5493e102c683bd7e87eee1930c21f56111a631",
+  "input_origin_variant_manifest_sha256": "0ebc6aee239c71a2fb043fda74f102a3401e0431c295ac19f820b6efe420e557",
+  "input_origin_transform_sha256": "01014e9795c66a3fb427f070c52f3b21cdaa1c81c8c8622164efd20d5dcaf3ab"
+}

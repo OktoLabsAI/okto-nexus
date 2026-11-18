@@ -147,7 +147,7 @@ browser or three real executions. The six PASS cases were not repeated.
 Prior attempts and the original6PASS/1FAIL remain preserved. Pytest retention
 left only two raw cleanup JSONs; all six passing teardown close assertions ran,
 and missing raw snapshots were not reconstructed. Current ledger counts are
-68PASS/40NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
+72PASS/36NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
 original evidence; fresh R9 focus predicates now pass. No timing target caused
 or resolved these functional qualifications.
 
@@ -214,6 +214,10 @@ dependency versions were compared, not all dependency file bytes.
 | Actual old-state compatibility |Pre-feature0.3.6 produces the native request/decision/result, then one drained-state copy is read by R9; eight protected typed-row hashes and exact result/Server IDs remain; independent posterior RO profile/checkpoint proof |[K02 old producer/current reader](remaining-qualification-r7-next/compat-batch/S4-old-producer-r9-reader/qualification.json)|
 | Responsive application |48actual app checks at native200%720requested→CSS360 and native100%360requested→CSS360; actions/full scope/targets/same-card focus pass; original final-guard error and A1/A2 close UNKNOWN retained with later RO pin proof |[I05 focal](remaining-qualification-r7-next/native-zoom-app-r9-prepared/focal-i05/qualification.json)|
 | Classic original controls |19actual browser checks, original canonical question/options/Send/Deny/Check visible after active rollback; UI does not answer, CLI continues afterward |[K03 original controls](remaining-qualification-r7-next/compat-batch/K03-original-controls-r9/qualification.json)|
+| Full keyboard path |190actual browser predicates; all sequential Home and three contextual inventories, exact scopes, named/painted focus, native read-only scrolling and Escape to originating cards; no AT speech |[I01 keyboard](remaining-qualification-r7-next/keyboard-app-r9-prepared/runs/hst-native-zoom-r9-keyboard-3/qualification.json)|
+| Wrong-workspace target |8actual browser predicates, one real target GET with only workspace changed returns409 without protected DOM/preview/counter or replacement; thirty productive tables unchanged |[H02 scope denial](remaining-qualification-r7-next/security-r9-h02-batch/runs/hst-security-r9-h02-wrong-workspace/qualification.json)|
+| Private overview boundary |11actual browser predicates; canonical hostile HTML label is text, private prompt/token/ESC excluded from overview JSON/DOM; thirty productive tables unchanged, both session closes confirmed |[H03 overview](remaining-qualification-r7-next/security-r9-h03-batch/runs/hst-security-r9-h03-private-origin-v2/qualification.json)|
+| Functional bounded history |1000OPEN/100000events, four actual GETs and result cursor pages; zero marked full-field materialization, artifact-content SQL reads or opens of25 canonical payload files; no latency collected |[J04 boundary](remaining-qualification-r7-next/j04-bounded-history/attempt3/qualification.json)|
 | Unchanged backend qualification |6PASS/1presentation-oracleFAIL on R8; seven literal backend scenarios qualified; byte equivalence to R9 is scoped to unchanged runtime; no provider/browser claim |[R8 installed batch](remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json)|
 | Post-build supplement |7sourcePASS and7actually installedPASS, separate cuts;1828base+1exact additional test/1031payload files unchanged |[supplement](installed-supplement-r7/qualification.json)|
 | Recovery and paging |Same accepted decision after lost response; stale second-screen409; one durable write admission; actual paging409/current200 in the same panel |[scoped captured predicates](browser-hst/nextcuts-report.md)|
@@ -272,7 +276,7 @@ The [116-scenario audit](remaining-qualification-review-r7.md) records the
 unexecuted clauses and partial layers rather than treating every test count
 as qualification. The [ledger](../NEXUS_HOME_ESTADOS_LEDGER_R1.json) remains
 authoritative for individual task/scenario status. After the subsequent literal
-reviews it has68PASS,40NOT_RUN and8BLOCKED. The original menu and focus
+reviews it has72PASS,36NOT_RUN and8BLOCKED. The original menu and focus
 defects are corrected and have separate actual installed-browser evidence.
 Partial browser/native clauses remain NOT_RUN. This is not a whole-plan
 completion or default approval.
@@ -293,7 +297,18 @@ because a local card variable shadowed argparse; its exit1/after=null remain
 unchanged. A separate later offline check confirms the original immutable pins,
 while the48 app predicates and same-card focus were captured in the original
 run. Two canonical closes remain UNKNOWN despite normal physical exit.
-Complete keyboard/theme/AT qualification remains separate. The prior UI-R1 novice-user gate, Quick
+The complete supported keyboard path now passes I01 on actual Chrome. Its
+first two oracle failures remain preserved: the first omitted native initial
+focus/browser-boundary behavior; the second incorrectly required an actionable
+name on a static native-focusable PRE. A separate static dialog diagnostic and
+the final actual traversal distinguish browser-chrome focus from focus on an
+outside-page control. The PRE has nonempty text/AX, painted focus and actual
+ArrowDown/Up scrolling; no product trap or synthetic role was added. Native
+dialog browser-chrome navigation is documented by [W3C H102](https://www.w3.org/WAI/WCAG22/Techniques/html/H102);
+Chrome documents [native keyboard-focusable scrollers](https://developer.chrome.com/blog/keyboard-focusable-scrollers).
+The keyboard fixture's A1/A2 canonical closes remain UNKNOWN despite normal
+process exits and physical absence. Theme and AT speech qualification remain
+separate. The prior UI-R1 novice-user gate, Quick
 Connect UNKNOWN usage/QC031 and broader regression NOT_GREEN are retained.
 CI status is a separate remote observation, not inferred from local passes.
 At the R9 checkpoint, the GitHub connector reported source run
@@ -346,7 +361,8 @@ The latter preserves the original vacuous Windows path selector and uses an
 explicit independent posterior RO comparison for the five terminal files,
 including the two nonempty profile/checkpoint documents. No data were changed
 to obtain that proof. The classic original-control and responsive application
-clauses now pass separately. Remaining supported functional/security/keyboard/
+clauses now pass separately, together with the actual keyboard path, wrong-scope
+browser denial and bounded-history payload boundary. Remaining supported functional/security/
 theme clauses are pending before the participant invitation; AT speech and
 real-provider/topology qualification remain explicit separate gates.
 The useful-DOM

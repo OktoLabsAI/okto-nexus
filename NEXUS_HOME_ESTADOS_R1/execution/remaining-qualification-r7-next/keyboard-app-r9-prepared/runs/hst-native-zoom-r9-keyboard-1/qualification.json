@@ -1,0 +1,281 @@
+{
+  "status": "PARTIAL_OR_DIAGNOSTIC_FAIL_I01",
+  "scope": "One desktop1440/native100 keyboard case; native calibration precedes the fixture question",
+  "result_summary": {
+    "ui-native100": {
+      "status": "PASS_NATIVE_UI100_SELECTED",
+      "passed": 0,
+      "failed": 0
+    },
+    "app-bootstrap": {
+      "status": "PASS_I01_EXECUTED_SUBSET",
+      "passed": 3,
+      "failed": 0
+    },
+    "keyboard-case": {
+      "status": "INCOMPLETE_I01",
+      "passed": 52,
+      "failed": 1
+    }
+  },
+  "first_failure": {
+    "type": "AssertionError",
+    "message": "I01 case did not qualify: keyboard-case"
+  },
+  "cleanup_errors": [],
+  "canonical_close": {
+    "unknown": true,
+    "sessions": [
+      {
+        "session_id": "ses_e23795349b4197451a9ecdd495d0cc48",
+        "close_confirmed": true
+      },
+      {
+        "session_id": "ses_1efd76898da060f64fc67528d3caa7e6",
+        "close_confirmed": false
+      },
+      {
+        "session_id": "ses_7e74ed1550110efaf0299a54867365bb",
+        "close_confirmed": false
+      }
+    ]
+  },
+  "fixture_cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "forced_births": [],
+  "physical": {
+    "remaining_births": [],
+    "profile_processes": [],
+    "listeners": [],
+    "ports": [
+      63111,
+      56965
+    ]
+  },
+  "nexus_processes_started": 1,
+  "provider_invocations": 0,
+  "before": {
+    "manifest_sha256": "60a29fa04623c88ae12455f43c97eb25c3da2763826f3c113f7d62a9ed773e81",
+    "gate_sha256": "8e163d6d647bb4845d25fd6d7cfba2948cdf83091780374c8680eab33f85ace9",
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031,
+    "source_files": 1829,
+    "cli_files": 192
+  },
+  "after": {
+    "manifest_sha256": "60a29fa04623c88ae12455f43c97eb25c3da2763826f3c113f7d62a9ed773e81",
+    "gate_sha256": "8e163d6d647bb4845d25fd6d7cfba2948cdf83091780374c8680eab33f85ace9",
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031,
+    "source_files": 1829,
+    "cli_files": 192
+  },
+  "fixture_cas_redactions": 0,
+  "copied": [
+    {
+      "path": "app-bootstrap-result.private.json",
+      "raw_sha256": "24a4be59d6a60f9e71c06db78ca907ca70c1c0cc688a41d72c51ddb134daf7a3",
+      "curated_sha256": "24a4be59d6a60f9e71c06db78ca907ca70c1c0cc688a41d72c51ddb134daf7a3"
+    },
+    {
+      "path": "app-bootstrap.js",
+      "raw_sha256": "34c76021ef7beb45bd7970e30d958f62e8173dd9bd33f8caaf4db2620c0b8e50",
+      "curated_sha256": "34c76021ef7beb45bd7970e30d958f62e8173dd9bd33f8caaf4db2620c0b8e50"
+    },
+    {
+      "path": "chrome-argv.private.json",
+      "raw_sha256": "e433ab579c5c24f85b19d3da2cf237f476a2d9d2a5a5400a514560e6929322e9",
+      "curated_sha256": "e433ab579c5c24f85b19d3da2cf237f476a2d9d2a5a5400a514560e6929322e9"
+    },
+    {
+      "path": "command-app-bootstrap.private.txt",
+      "raw_sha256": "e2956d1f0f01972b17f4a1b4907680c55d8f81b74a509e4ab21cae65bf79e62f",
+      "curated_sha256": "e2956d1f0f01972b17f4a1b4907680c55d8f81b74a509e4ab21cae65bf79e62f"
+    },
+    {
+      "path": "command-appearance-before.private.txt",
+      "raw_sha256": "e49c80693e64ce39c2fae6b60a3a67125498254c6ab0b8f5a6d54aef21236e2a",
+      "curated_sha256": "e49c80693e64ce39c2fae6b60a3a67125498254c6ab0b8f5a6d54aef21236e2a"
+    },
+    {
+      "path": "command-cleanup-browser.private.txt",
+      "raw_sha256": "248108d7c73559fae924b952d249fb2e873391a1e3e2c70bc7e4a0b58b67f17f",
+      "curated_sha256": "248108d7c73559fae924b952d249fb2e873391a1e3e2c70bc7e4a0b58b67f17f"
+    },
+    {
+      "path": "command-keyboard-case.private.txt",
+      "raw_sha256": "7e8f8f1304102221d17c705a7a74db79bc13b4e6519d4804fde3db5870781963",
+      "curated_sha256": "7e8f8f1304102221d17c705a7a74db79bc13b4e6519d4804fde3db5870781963"
+    },
+    {
+      "path": "command-launch-browser.private.txt",
+      "raw_sha256": "022ea19a9b83c8c09e7bcacb13b190305b0154890ec3ef466696dd0dbeefb9f9",
+      "curated_sha256": "022ea19a9b83c8c09e7bcacb13b190305b0154890ec3ef466696dd0dbeefb9f9"
+    },
+    {
+      "path": "command-load-own-cookie.private.txt",
+      "raw_sha256": "23a53b5eb67d3bb1566862d79649304aa0b860b3d6c1c4d319462496433d543b",
+      "curated_sha256": "23a53b5eb67d3bb1566862d79649304aa0b860b3d6c1c4d319462496433d543b"
+    },
+    {
+      "path": "command-native-guard.private.txt",
+      "raw_sha256": "8658e4486fd5e13547e55f15bd93a4b1a9d6026ca624819c07df6a4cdb319b5e",
+      "curated_sha256": "8658e4486fd5e13547e55f15bd93a4b1a9d6026ca624819c07df6a4cdb319b5e"
+    },
+    {
+      "path": "command-ui-native100.private.txt",
+      "raw_sha256": "4f84da7aa5c2c07005811e987acde7989c5732a647abc57ace226d6f33e84476",
+      "curated_sha256": "4f84da7aa5c2c07005811e987acde7989c5732a647abc57ace226d6f33e84476"
+    },
+    {
+      "path": "control/controls.json",
+      "raw_sha256": "7f539fd0a1edb512eb076f92ef09fa1416483071dcb1931a7b58fff983d97a23",
+      "curated_sha256": "7f539fd0a1edb512eb076f92ef09fa1416483071dcb1931a7b58fff983d97a23"
+    },
+    {
+      "path": "control/exp-active.json",
+      "raw_sha256": "e8d4d621a98ae447735325ba5dd355c29cd305f3e25bada8dee975a28f165d34",
+      "curated_sha256": "e8d4d621a98ae447735325ba5dd355c29cd305f3e25bada8dee975a28f165d34"
+    },
+    {
+      "path": "control/exp-base.json",
+      "raw_sha256": "ba50ee0f68722014939924ed9225ad513cc19837e6acde107e115483cce2713d",
+      "curated_sha256": "ba50ee0f68722014939924ed9225ad513cc19837e6acde107e115483cce2713d"
+    },
+    {
+      "path": "control/final.json",
+      "raw_sha256": "9f4938007843409442121adca8adcdd7f0c3b6fd39636f49f5dd3aa9355073a5",
+      "curated_sha256": "9f4938007843409442121adca8adcdd7f0c3b6fd39636f49f5dd3aa9355073a5"
+    },
+    {
+      "path": "control/origins.json",
+      "raw_sha256": "542e0c92d2ac151d8322672d859e98c7d6e2cb1697435de55cfd173f07f5dcea",
+      "curated_sha256": "542e0c92d2ac151d8322672d859e98c7d6e2cb1697435de55cfd173f07f5dcea"
+    },
+    {
+      "path": "control/zoom-probe-final.json",
+      "raw_sha256": "eec0e78a1e1be6efdfa6f76e492affc79263ca8439c202311eb1367a37512525",
+      "curated_sha256": "eec0e78a1e1be6efdfa6f76e492affc79263ca8439c202311eb1367a37512525"
+    },
+    {
+      "path": "control/zoom-probe-ready.json",
+      "raw_sha256": "67af585914815499b508cc23aac8508fba651a2c6e6d9721969c348845824730",
+      "curated_sha256": "67af585914815499b508cc23aac8508fba651a2c6e6d9721969c348845824730"
+    },
+    {
+      "path": "first-failure.private.json",
+      "raw_sha256": "2ca93b0f54ddf24045a9c8cd7e6c1f9061502312e3761a56ca20b92feb1e6fc6",
+      "curated_sha256": "2ca93b0f54ddf24045a9c8cd7e6c1f9061502312e3761a56ca20b92feb1e6fc6"
+    },
+    {
+      "path": "fixture.py",
+      "raw_sha256": "a8eb4b18d4242e8d104493e40a0eed8e9ccfd61b43aec596f839ee52b18f535c",
+      "curated_sha256": "a8eb4b18d4242e8d104493e40a0eed8e9ccfd61b43aec596f839ee52b18f535c"
+    },
+    {
+      "path": "i01-builder-proof.json",
+      "raw_sha256": "92ba2371676f4811498968a066f137e92e872c3e00060eedc1b3c8d76e648375",
+      "curated_sha256": "92ba2371676f4811498968a066f137e92e872c3e00060eedc1b3c8d76e648375"
+    },
+    {
+      "path": "i01-control-invalid-reads.jsonl",
+      "raw_sha256": "cdbf1a0da5b89d5b5387333257bb177d72b259803ff21b9f96df50b95c0c80a2",
+      "curated_sha256": "cdbf1a0da5b89d5b5387333257bb177d72b259803ff21b9f96df50b95c0c80a2"
+    },
+    {
+      "path": "i01-public-preflight.json",
+      "raw_sha256": "cb2dcf031973db6e376cadd1c376fa1babf04d982507882c610047e78c578334",
+      "curated_sha256": "cb2dcf031973db6e376cadd1c376fa1babf04d982507882c610047e78c578334"
+    },
+    {
+      "path": "keyboard-case-result.private.json",
+      "raw_sha256": "d40cfa8dc7eab5af1da9bbbb3863929bee16aba693caa22ebc38e302212a3499",
+      "curated_sha256": "d40cfa8dc7eab5af1da9bbbb3863929bee16aba693caa22ebc38e302212a3499"
+    },
+    {
+      "path": "keyboard-case.js",
+      "raw_sha256": "d74a62a0190718255b4350d64c475fab4702b543c2339bb70b9a6789835d23a2",
+      "curated_sha256": "d74a62a0190718255b4350d64c475fab4702b543c2339bb70b9a6789835d23a2"
+    },
+    {
+      "path": "native-guard-result.private.json",
+      "raw_sha256": "6d8ddb65ef03f0b2a0d53843e621872b53ffeb53d07b867527d3b2371128c634",
+      "curated_sha256": "6d8ddb65ef03f0b2a0d53843e621872b53ffeb53d07b867527d3b2371128c634"
+    },
+    {
+      "path": "native-zoom-native-ui-100.png",
+      "raw_sha256": "e48cd62f144f8601bcf97f327ce7174bba502e89e05df48c67c7f1850a5fafff",
+      "curated_sha256": "e48cd62f144f8601bcf97f327ce7174bba502e89e05df48c67c7f1850a5fafff"
+    },
+    {
+      "path": "native-zoom-native-ui-200.png",
+      "raw_sha256": "d9094a235ecd3c06d977b1e15b7e9405942272b1ca795089396e1eaaa8f1bd12",
+      "curated_sha256": "d9094a235ecd3c06d977b1e15b7e9405942272b1ca795089396e1eaaa8f1bd12"
+    },
+    {
+      "path": "native-zoom-probe-100.png",
+      "raw_sha256": "0f854d2fad20f4eb3735bff79c92523af6c6f2460d6eafd4e057082cd36c044e",
+      "curated_sha256": "0f854d2fad20f4eb3735bff79c92523af6c6f2460d6eafd4e057082cd36c044e"
+    },
+    {
+      "path": "native-zoom-probe-200.png",
+      "raw_sha256": "a20c85627fde12c0363e8d6bf2b47a256d5ad3d27368f5a88ab93f66ef09a5f0",
+      "curated_sha256": "a20c85627fde12c0363e8d6bf2b47a256d5ad3d27368f5a88ab93f66ef09a5f0"
+    },
+    {
+      "path": "native-zoom-run.private.json",
+      "raw_sha256": "99c628e8b0e628b27c31fe34f84b52a57f83f300fad9ceb8bf3bbe9400d2937d",
+      "curated_sha256": "99c628e8b0e628b27c31fe34f84b52a57f83f300fad9ceb8bf3bbe9400d2937d"
+    },
+    {
+      "path": "native-zoom.js",
+      "raw_sha256": "f5470cb52eb579bde5f944d043244db47e80447048fad8a16656a5f342420da6",
+      "curated_sha256": "f5470cb52eb579bde5f944d043244db47e80447048fad8a16656a5f342420da6"
+    },
+    {
+      "path": "playwright-cli.json",
+      "raw_sha256": "b34f903d5a12bd8ef91fd146aa2ee9545d1814cec210c5088c8ae8ece43ea890",
+      "curated_sha256": "b34f903d5a12bd8ef91fd146aa2ee9545d1814cec210c5088c8ae8ece43ea890"
+    },
+    {
+      "path": "probe-process-proof.json",
+      "raw_sha256": "6b23d0a8320a5eaa77333208e62539780de638186af9906927d392be3140136a",
+      "curated_sha256": "6b23d0a8320a5eaa77333208e62539780de638186af9906927d392be3140136a"
+    },
+    {
+      "path": "runtime-ready.json",
+      "raw_sha256": "5a1f1c4437f9ca6fd6394986062b184cf86aa0d011f309cf282db5cb468a6f00",
+      "curated_sha256": "5a1f1c4437f9ca6fd6394986062b184cf86aa0d011f309cf282db5cb468a6f00"
+    },
+    {
+      "path": "ui-native100-result.private.json",
+      "raw_sha256": "0307aec894bb53a59e8ffc12bcb95c6dacd11f3173481b8ac052f6e585b34045",
+      "curated_sha256": "0307aec894bb53a59e8ffc12bcb95c6dacd11f3173481b8ac052f6e585b34045"
+    },
+    {
+      "path": "ui-native100.js",
+      "raw_sha256": "80c634c1dc50324584e29d55c12a4e77d5dd9ae108d6678200c9900297ff4424",
+      "curated_sha256": "80c634c1dc50324584e29d55c12a4e77d5dd9ae108d6678200c9900297ff4424"
+    },
+    {
+      "path": "zoom-probe.py",
+      "raw_sha256": "0f69f4eebab50812b1da9e6f759538128293b464fddbd167bcaaa65adb697f58",
+      "curated_sha256": "0f69f4eebab50812b1da9e6f759538128293b464fddbd167bcaaa65adb697f58"
+    }
+  ],
+  "source_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-b99s741g",
+  "limits": [
+    "Inert protocol peer; no real harness/provider qualification",
+    "No human or AT speech; only the asserted keyboard path",
+    "300s supervisor never extends original120s question/lease or150s peer validity",
+    "Process exit0 is not a claim that every canonical runtime.close settled"
+  ]
+}

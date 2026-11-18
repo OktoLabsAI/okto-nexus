@@ -1,0 +1,112 @@
+{
+  "status": "PASS_SCOPED_FINAL_GUARDS_AND_PHYSICAL_EXIT",
+  "qualification_sha256": "d6a807ea2d378e0537e5a9f05d247aa5b942a1f5cd2ae6a7f812a8d7b6b38e06",
+  "input_origin_variant_guard": {
+    "before": {
+      "gate_sha256": "885436d9f6e3a6592445d72f7d1ef17f81582a9a0d49435d3065e94387baab7f",
+      "base_manifest_sha256": "c7b110ffc3ea488cd090b991df0019dc71f64efded13553a9797a34e021d9293",
+      "input_origin_variant_manifest_sha256": "0ebc6aee239c71a2fb043fda74f102a3401e0431c295ac19f820b6efe420e557",
+      "input_origin_transform_sha256": "01014e9795c66a3fb427f070c52f3b21cdaa1c81c8c8622164efd20d5dcaf3ab"
+    },
+    "after": {
+      "gate_sha256": "885436d9f6e3a6592445d72f7d1ef17f81582a9a0d49435d3065e94387baab7f",
+      "base_manifest_sha256": "c7b110ffc3ea488cd090b991df0019dc71f64efded13553a9797a34e021d9293",
+      "input_origin_variant_manifest_sha256": "0ebc6aee239c71a2fb043fda74f102a3401e0431c295ac19f820b6efe420e557",
+      "input_origin_transform_sha256": "01014e9795c66a3fb427f070c52f3b21cdaa1c81c8c8622164efd20d5dcaf3ab"
+    },
+    "unchanged": true
+  },
+  "canonical_label_admission": {
+    "review_accepted": true,
+    "dom_exercised_at_review": false
+  },
+  "actual_dom_phase_exercised": true,
+  "canonical_private_prompt_issued_proofs": [
+    {
+      "operation_id": "op_d081e019beb166af7f1d62f275dc3dc2",
+      "scope": {
+        "server_id": "srv_0d3b5332ab2306be7be45775884385ad",
+        "executor_id": "exe_1748808d7f7b9243cf14c23dd5d0ecfb",
+        "binding_id": "bind_c2117c5e60be6fd6850baf2037f7c169",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_586ff0c6a304be49be5c8e8b896e2bea",
+        "workspace_binding_id": "wxb_df14f235bd8d4c2b57f4da6fe903ebed",
+        "session_id": "ses_93fc6d2c2d133467dedf260618eb52b4",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      },
+      "canonical_submit_accepted": true
+    },
+    {
+      "operation_id": "op_55e5283074d2bf300c3f61014c70e23a",
+      "scope": {
+        "server_id": "srv_0d3b5332ab2306be7be45775884385ad",
+        "executor_id": "exe_1748808d7f7b9243cf14c23dd5d0ecfb",
+        "binding_id": "bind_c2117c5e60be6fd6850baf2037f7c169",
+        "agent_id": "hst-worker",
+        "workspace_id": "wsr_586ff0c6a304be49be5c8e8b896e2bea",
+        "workspace_binding_id": "wxb_df14f235bd8d4c2b57f4da6fe903ebed",
+        "session_id": "ses_be8cdb7fb8c9295cb69371ed93200220",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      },
+      "canonical_submit_accepted": true
+    }
+  ],
+  "literal_browser_checks_passed": 11,
+  "checks_not_scenario_count": true,
+  "ansi_observations": {
+    "serialized_raw_escape": false,
+    "parsed_label_contains_escape": false,
+    "dom_text_contains_escape": false,
+    "interpretation": "ESC may survive as static text; no terminal ANSI interpretation is claimed"
+  },
+  "ansi_limit": "ESC was submitted only in the private prompt; absence in overview proves minimization here, not standalone terminal ANSI sanitization or control-character rejection.",
+  "live_snapshot_tables": 30,
+  "unexpected_changes": 0,
+  "ignored_tables": [],
+  "ignored_columns": [],
+  "source_payload_helper_guard": true,
+  "physical_recheck": {
+    "known_birth_records": 30,
+    "same_birth_survivors": []
+  },
+  "cleanup": {
+    "fixture": {
+      "exit_code": 0,
+      "remaining_known_births": [],
+      "signals": [],
+      "status": "EXITED",
+      "sampling_limit": "0.25s cannot inventory every short-lived child",
+      "data_preserved": true
+    },
+    "browser": {
+      "forced_births": [],
+      "remaining": []
+    },
+    "listeners": [],
+    "browser_close_exit_code": 0,
+    "session_closed_flags": [
+      true,
+      true
+    ],
+    "close_failures": []
+  },
+  "provider_invocations": 0,
+  "scope": "Public HTML label canonical setup + private marker/ESC/Bearer canonical turn.submit; real installed browser overview and JSON, synthetic guarded Python native peer",
+  "limits": [
+    "No hostile artifact/filename or terminal rendering qualification",
+    "No authorized explicit transcript inspector opened; private overview only",
+    "No performance/SLO claim",
+    "No real Codex/Claude/provider invoked"
+  ],
+  "screenshots": {
+    "hostile-overview.png": "e6badeacca2cffe9503d65984b059f4de8af867e32598df2a70a339d2bd61764"
+  }
+}
