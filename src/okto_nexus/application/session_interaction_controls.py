@@ -2,7 +2,11 @@
 
 from dataclasses import asdict
 
+from ..adapters.outbound.sqlite.execution_receipts import (
+    read_execution_operation_history,
+)
 from ..adapters.outbound.sqlite.session_interaction_queue_controls import (
+    has_unresolved_interrupt,
     is_input_queue_paused,
     set_input_queue_paused,
 )
@@ -13,7 +17,18 @@ from ..errors import ErrorCode, OktoNexusError
 from .execution_admission import submit_execution_operation
 from .execution_domain_delivery import DeliveryTransactionFactory
 from .execution_intents import resolve_execution_intent
+from .execution_session_views import read_execution_session
 from .session_interaction_authority import require_human_queue_control
+
+
+def _intent_key(author, client_intent_id):
+    return 'session-interrupt-' + digest({'author': asdict(author), 'intent': client_intent_id})
+
+
+def _exact_scope(scope):
+    return {**asdict(scope.session), 'binding_id': scope.binding_id, 'workspace_id': scope.workspace_id,
+            'workspace_binding_id': scope.workspace_binding_id, 'agent_id': scope.agent_id,
+            'session_owner_generation': scope.generation.value}
 
 
 def request_exact_human_interrupt(*, factory, access, authority_fence, current_interrupt_revision,
@@ -27,19 +42,15 @@ def request_exact_human_interrupt(*, factory, access, authority_fence, current_i
     with authority_fence() as resolve_human, factory.unit_of_work() as uow:
         context = require_human_queue_control(uow, access=access, author=author, resolve_human=resolve_human)
         borrowed = DeliveryTransactionFactory(uow)
-        intent_key = 'session-interrupt-' + digest({'author': asdict(author), 'intent': client_intent_id})
         common = {'actor_agent_id': 'operator', 'context': context, 'access': access,
                   'fresh_publications': fresh_publications, 'remote_ready': remote_ready}
         resolved = resolve_execution_intent(borrowed, request={
-            'client_intent_id': intent_key, 'intent': 'turn.interrupt', 'agent_id': scope.agent_id,
+            'client_intent_id': _intent_key(author, client_intent_id), 'intent': 'turn.interrupt', 'agent_id': scope.agent_id,
             'binding_id': scope.binding_id, 'workspace_binding_id': scope.workspace_binding_id,
             'session_id': scope.session.session_id,
             'target': {'kind': 'native_turn_id', 'expected_turn_id': native_turn_id},
         }, **common)
-        exact = {**asdict(scope.session), 'binding_id': scope.binding_id, 'workspace_id': scope.workspace_id,
-                 'workspace_binding_id': scope.workspace_binding_id, 'agent_id': scope.agent_id,
-                 'session_owner_generation': scope.generation.value}
-        if any(resolved['scope'].get(key) != value for key, value in exact.items()):
+        if any(resolved['scope'].get(key) != value for key, value in _exact_scope(scope).items()):
             raise OktoNexusError(ErrorCode.CONFLICT, 'The interrupt belongs to a different session scope.', {})
         if not resolved['can_submit']:
             raise OktoNexusError(ErrorCode.CONFLICT, 'The exact interrupt is unavailable.', {'blockers': resolved['blockers']})
@@ -52,6 +63,8 @@ def request_exact_human_interrupt(*, factory, access, authority_fence, current_i
         control = (scope.session.session_id, scope.generation.value, author.authority_ref, author.surface,
                    capability_revision, native_turn_id)
         if existing is None:
+            if has_unresolved_interrupt(uow.connection, scope.session):
+                raise OktoNexusError(ErrorCode.CONFLICT, 'An interrupt is already pending in this session.', {})
             set_input_queue_paused(uow, scope=scope, paused=True, expected_queue_revision=expected_queue_revision,
                 capability_revision=capability_revision,
                 verify_authority=lambda: current_interrupt_revision(uow, scope, native_turn_id))
@@ -71,6 +84,37 @@ def request_exact_human_interrupt(*, factory, access, authority_fence, current_i
                     authority_ref,surface,capability_revision,native_turn_id) VALUES (?,?,?,?,?,?,?,?,?)
             """, (*identity, *control))
         return operation
+
+
+def read_human_interrupt_receipt(factory, *, access, resolve_human, scope, author, client_intent_id):
+    """Recover the original interrupt for this login and scope without admitting work."""
+    with factory.unit_of_work(write=False) as uow:
+        context = require_human_queue_control(uow, access=access, author=author, resolve_human=resolve_human)
+        view = read_execution_session(factory, server_id=scope.session.server_id,
+            executor_id=scope.session.executor_id, session_id=scope.session.session_id, context=context, access=access, _uow=uow)
+        exact = _exact_scope(scope)
+        if (view['scope']['session_owner_generation'] < scope.generation.value
+                or any(view['scope'][key] != value for key, value in exact.items() if key != 'session_owner_generation')):
+            raise OktoNexusError(ErrorCode.NOT_FOUND, 'The interrupt receipt was not found in this scope.', {})
+        row = uow.connection.execute("""
+            SELECT o.operation_id
+            FROM execution_client_intents i
+            JOIN execution_operations o ON o.server_id=i.server_id AND o.operation_id=i.operation_id
+              AND o.actor_agent_id=i.actor_agent_id
+            JOIN session_interaction_controls c ON c.server_id=o.server_id AND c.executor_id=o.executor_id
+              AND c.operation_id=o.operation_id
+            WHERE i.server_id=:server_id AND i.actor_agent_id='operator' AND i.client_intent_id=:intent
+              AND o.executor_id=:executor_id AND o.session_id=:session_id AND o.action='turn.interrupt'
+              AND o.binding_id=:binding_id AND o.workspace_id=:workspace_id
+              AND o.workspace_binding_id=:workspace_binding_id AND o.subject_agent_id=:agent_id
+              AND c.session_id=:session_id AND c.owner_generation=:session_owner_generation
+              AND c.authority_ref=:authority_ref AND c.surface=:surface
+        """, {**exact, 'intent': _intent_key(author, client_intent_id), **asdict(author)}).fetchone()
+        if row is None:
+            raise OktoNexusError(ErrorCode.NOT_FOUND, 'The interrupt receipt was not found in this scope.', {})
+        return read_execution_operation_history(DeliveryTransactionFactory(uow), server_id=scope.session.server_id,
+            executor_id=scope.session.executor_id, operation_id=row['operation_id'],
+            subject_agent_id=scope.agent_id).public_view()
 
 
 def require_interrupt_send_authority(uow, *, access, control, scope, semantic, resolve_human,

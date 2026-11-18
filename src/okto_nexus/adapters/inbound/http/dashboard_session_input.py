@@ -7,6 +7,10 @@ import anyio
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 
+from ....adapters.outbound.execution.core_inventory import protocol_info
+from ....adapters.outbound.sqlite.session_interaction_queue_controls import (
+    has_unresolved_interrupt,
+)
 from ....application.execution_session_views import read_execution_session
 from ....application.session_interaction_authority import (
     cancel_human_input,
@@ -14,11 +18,16 @@ from ....application.session_interaction_authority import (
     enqueue_human_input,
 )
 from ....application.session_interaction_capability import queue_pause_revision
+from ....application.session_interaction_controls import (
+    read_human_interrupt_receipt,
+    request_exact_human_interrupt,
+)
 from ....application.session_interaction_queue_view import (
     InputQueueCursor,
     read_session_input_queue,
 )
 from ....application.session_interaction_receipts import read_session_input_receipt
+from ....application.session_interaction_targets import active_native_turn
 from ....bootstrap.execution_authority import build_execution_access
 from ....domain.attention import digest
 from ....domain.session_interaction import InputAuthor
@@ -33,6 +42,10 @@ from .session_interaction_contract import (
     InputQueueSnapshot,
     InputQueueState,
     InputReceipt,
+    InterruptAvailability,
+    InterruptInput,
+    InterruptTargetView,
+    NativeTurnTarget,
     QueuePauseChange,
 )
 
@@ -78,6 +91,15 @@ def _queue_cursor(scope_digest, token):
     return int(sequence)
 
 
+def _exact_view(factory, uow, *, context, access, document, scope):
+    view = read_execution_session(factory, server_id=scope.session.server_id,
+        executor_id=scope.session.executor_id, session_id=scope.session.session_id, context=context, access=access, _uow=uow)
+    exact = {**document.model_dump(), 'session_owner_generation': scope.generation.value}
+    if any(view['scope'][key] != value for key, value in exact.items()):
+        raise OktoNexusError(ErrorCode.NOT_FOUND, 'The session is outside this scope.')
+    return exact
+
+
 def build_router():
     router = APIRouter(prefix='/runtime/sessions/{session_id}')
 
@@ -99,11 +121,7 @@ def build_router():
 
         def read():
             with factory.unit_of_work(write=False) as uow:
-                view = read_execution_session(factory, server_id=scope.session.server_id,
-                    executor_id=scope.session.executor_id, session_id=session_id, context=context, access=access, _uow=uow)
-                exact = {**document.model_dump(), 'session_owner_generation': scope.generation.value}
-                if any(view['scope'][key] != value for key, value in exact.items()):
-                    raise OktoNexusError(ErrorCode.NOT_FOUND, 'The session is outside this scope.')
+                exact = _exact_view(factory, uow, context=context, access=access, document=document, scope=scope)
                 epoch = uow.connection.execute(
                     'SELECT stream_epoch FROM execution_sessions WHERE server_id=? AND executor_id=? AND session_id=?',
                     (scope.session.server_id, scope.session.executor_id, session_id),
@@ -282,6 +300,99 @@ def build_router():
 
         try:
             return JSONResponse(await anyio.to_thread.run_sync(cancel), headers=_HEADERS)
+        except OktoNexusError as error:
+            return _runtime_error(error)
+
+    @router.get('/interrupt')
+    async def interrupt_target(session_id: str, request: Request):
+        if not getattr(request.state, 'operator_session', False):
+            return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to inspect the current turn.')
+        try:
+            document, scope = _read_scope(request, session_id)
+        except ValueError:
+            return _error(422, 'VALIDATION_ERROR', 'An exact session scope is required.')
+        state = request.app.state
+        factory = state.deps.connection_factory
+        context = runtime_request_context()
+        access = build_execution_access(state.deps)
+        next_turn = getattr(state, 'session_input_dispatch_options', {}).get('session_input_capability_revision')
+
+        def read():
+            with factory.unit_of_work(write=False) as uow:
+                _exact_view(factory, uow, context=context, access=access, document=document, scope=scope)
+                target = None
+                if next_turn is not None and not has_unresolved_interrupt(uow.connection, scope.session):
+                    target = active_native_turn(uow, scope, current_next_turn_revision=next_turn)
+                control = None
+                if target is not None:
+                    row = uow.connection.execute("""
+                        SELECT revision FROM session_interaction_queues
+                        WHERE server_id=? AND executor_id=? AND session_id=?
+                    """, (scope.session.server_id, scope.session.executor_id, session_id)).fetchone()
+                    control = InterruptTargetView(
+                        target=NativeTurnTarget(kind='native_turn', turn_id=target.native_id),
+                        capability_revision=target.revision, queue_revision=row[0] if row else 0)
+                return InterruptAvailability(scope=document, session_owner_generation=scope.generation.value,
+                                             control=control).model_dump(mode='json')
+
+        try:
+            return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)
+        except OktoNexusError as error:
+            return _runtime_error(error)
+
+    @router.post('/interrupt', status_code=202)
+    async def interrupt(session_id: str, body: InterruptInput, request: Request):
+        if not getattr(request.state, 'operator_session', False):
+            return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to interrupt a turn.')
+        if body.scope.session_id != session_id or request.query_params:
+            return _error(422, 'VALIDATION_ERROR', 'The interrupt must use the exact session scope.')
+        if not isinstance(body.target, NativeTurnTarget):
+            return _error(409, 'CONFLICT', 'An exact native turn is required by this control.')
+        state = request.app.state
+        options = getattr(state, 'session_input_dispatch_options', {})
+        if not options:
+            return _error(409, 'CONFLICT', 'Session interaction controls are disabled.')
+
+        def admit():
+            ref = state.operator_auth.authority_reference(request.cookies.get(COOKIE))
+            if ref is None:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The operator login has expired.')
+            return request_exact_human_interrupt(factory=state.deps.connection_factory,
+                access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
+                current_interrupt_revision=options['session_interrupt_capability_revision'], scope=body.input_scope(),
+                author=InputAuthor(ref, 'web'), client_intent_id=body.client_intent_id, native_turn_id=body.target.turn_id,
+                capability_revision=body.capability_revision, expected_queue_revision=body.expected_queue_revision,
+                fresh_publications=state.inventory_fresh_publications, remote_ready=protocol_info()['remote_execution_ready'])
+
+        try:
+            operation, reused = await anyio.to_thread.run_sync(admit)
+            return JSONResponse(operation, status_code=200 if reused else 202, headers=_HEADERS)
+        except OktoNexusError as error:
+            return _runtime_error(error)
+
+    @router.get('/interrupt/receipt')
+    async def interrupt_receipt(session_id: str, request: Request):
+        if not getattr(request.state, 'operator_session', False):
+            return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to recover an interrupt receipt.')
+        try:
+            _, scope = _read_scope(request, session_id, extra=('client_intent_id',))
+        except ValueError:
+            return _error(422, 'VALIDATION_ERROR', 'An exact session scope and interrupt intent are required.')
+        intent = request.query_params['client_intent_id']
+        if not 1 <= len(intent) <= 160 or not intent.isprintable():
+            return _error(422, 'VALIDATION_ERROR', 'The interrupt intent is invalid.')
+        state = request.app.state
+        auth = state.operator_auth
+
+        def read():
+            ref = auth.authority_reference(request.cookies.get(COOKIE), create=False)
+            if ref is None:
+                raise OktoNexusError(ErrorCode.NOT_FOUND, 'The interrupt receipt was not found in this scope.')
+            return read_human_interrupt_receipt(state.deps.connection_factory, access=build_execution_access(state.deps),
+                resolve_human=auth.resolve_authority, scope=scope, author=InputAuthor(ref, 'web'), client_intent_id=intent)
+
+        try:
+            return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)
         except OktoNexusError as error:
             return _runtime_error(error)
 

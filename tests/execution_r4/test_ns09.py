@@ -374,6 +374,13 @@ def assert_interrupt_commits_exact_target_with_barrier(deps, app, access, exact,
         authorized = begin_execution_send(borrowed, resolve_session_input_human=resolve,
             session_interrupt_capability_revision=options['current_interrupt_revision'], **send)
         assert authorized.frame['action'] == 'turn.interrupt' and authorized.frame['expected_turn_id'] == 'fixture-turn'
+        with pytest.raises(OktoNexusError, match='Wait for the interrupt outcome'):
+            set_input_queue_paused(uow, scope=exact, paused=False, expected_queue_revision=queue_revision + 1,
+                                   capability_revision='fixture-resume', verify_authority=lambda: 'fixture-resume')
+        assert is_input_queue_paused(uow.connection, exact.session)
+        uow.connection.execute("UPDATE execution_operations SET admission_state='RESOLVED_TERMINAL' "
+                               "WHERE server_id=? AND executor_id=? AND operation_id=?",
+                               (exact.session.server_id, exact.session.executor_id, operation_id))
         set_input_queue_paused(uow, scope=exact, paused=False, expected_queue_revision=queue_revision + 1,
                                capability_revision='fixture-resume', verify_authority=lambda: 'fixture-resume')
         same, reused = request_exact_human_interrupt(native_turn_id='fixture-turn', **options)

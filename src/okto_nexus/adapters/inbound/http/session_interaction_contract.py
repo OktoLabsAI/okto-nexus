@@ -128,6 +128,18 @@ class InterruptInput(QueueChange):
     target: TurnTarget
 
 
+class InterruptTargetView(_Document):
+    target: NativeTurnTarget
+    capability_revision: Identifier
+    queue_revision: Revision
+
+
+class InterruptAvailability(_Document):
+    scope: ExactSessionScope
+    session_owner_generation: Generation
+    control: InterruptTargetView | None
+
+
 class InputReceipt(_Document):
     scope: ExactSessionScope
     session_owner_generation: Generation

@@ -12,6 +12,10 @@ from test_embedded_dispatch import admit, connect_local, wait_receipt
 from okto_nexus.application.session_interaction_authority import enqueue_human_input
 from okto_nexus.application.session_interaction_capability import next_turn_revision
 from okto_nexus.application.session_interaction_capacity import advance_input_capacity
+from okto_nexus.application.session_interaction_targets import (
+    active_native_turn,
+    interrupt_revision,
+)
 from okto_nexus.bootstrap.execution_authority import build_execution_access
 from okto_nexus.domain.execution.keys import SessionKey, SessionOwnerGeneration
 from okto_nexus.domain.session_interaction import InputAuthor, InputScope
@@ -382,4 +386,150 @@ def test_dashboard_pauses_an_empty_queue_and_resumes_retained_inputs_in_order(in
     assert submitted == list(zip(retained, [operation for _action, operation in native.native.sent], strict=True))
     auth.logout(token)
     assert change(ready, True).status_code == 401
+    client.cookies.clear()
+
+
+def test_exact_control_target_requires_current_canonical_start_of_the_active_codex_turn(interactive_runtime):
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'exact-target-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    original = opened['scope']
+    server, executor, session = (original[key] for key in ('server_id', 'executor_id', 'session_id'))
+    scope = InputScope(SessionKey(server, executor, session),
+        SessionOwnerGeneration(original['session_owner_generation']), original['binding_id'], original['workspace_id'],
+        original['workspace_binding_id'], original['agent_id'])
+    factory = deps.connection_factory
+    next_turn = app.state.session_input_dispatch_options['session_input_capability_revision']
+
+    def active():
+        with factory.unit_of_work(write=False) as uow:
+            return active_native_turn(uow, scope, current_next_turn_revision=next_turn)
+
+    def capability():
+        with factory.unit_of_work(write=False) as uow:
+            return next_turn(uow, scope)
+
+    eventually(capability)
+    assert active() is None
+    submitted = admit(setup, binding, 'target-probe-work', 'turn.submit', session_id=session, text='Synthetic exact turn')
+    wait_receipt(setup, submitted)
+    assert active() is None
+    with factory.unit_of_work(write=False) as uow:
+        epoch = uow.connection.execute('SELECT stream_epoch FROM execution_local_streams WHERE session_id=?',
+                                       (session,)).fetchone()[0]
+
+    operation = submitted['operation_id']
+    native_turn = 'fixture-canonical-turn'
+    thread = native.native.native_id
+
+    def emit(kind, fields, operation_id=operation):
+        client.portal.call(native.native.queue.put, RuntimeEvent(
+            server, executor, session, epoch, 0, 'turn_state', kind,
+            fields, operation_id=operation_id))
+
+    emit('turn/started', {'thread_id': thread, 'threadId': thread, 'turn_id': native_turn,
+         'turn': {'id': native_turn, 'status': 'inProgress'}, 'delivery_phase': 'started'})
+    eventually(active)
+    proven = active()
+    assert proven.operation_id == operation and proven.native_id == native_turn
+    with factory.unit_of_work(write=False) as uow:
+        assert interrupt_revision(uow, scope, native_turn, current_next_turn_revision=next_turn)
+        assert interrupt_revision(uow, scope, 'different-turn', current_next_turn_revision=next_turn) is None
+        replaced = replace(scope, generation=SessionOwnerGeneration(scope.generation.value + 1))
+        assert active_native_turn(uow, replaced, current_next_turn_revision=next_turn) is None
+    assert active() == proven
+    emit('turn/completed', {'thread_id': thread, 'turn_id': native_turn,
+                            'delivery_phase': 'terminal', 'delivery_outcome': 'success'})
+    eventually(lambda: active() is None)
+    assert native.native.sent == [('send_turn', operation)]
+
+
+def test_dashboard_interrupt_admits_exact_target_and_recovers_its_receipt(interactive_runtime):
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'dashboard-interrupt-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    scope = opened['scope']
+    exact = {key: scope[key] for key in ('server_id', 'executor_id', 'binding_id', 'workspace_id',
+                                        'workspace_binding_id', 'agent_id', 'session_id')}
+    generation = scope['session_owner_generation']
+    server, executor, session = (exact[key] for key in ('server_id', 'executor_id', 'session_id'))
+    path = f'/api/v1/runtime-management/runtime/sessions/{session}'
+    query = {key: value for key, value in exact.items() if key != 'session_id'}
+    query['expected_session_generation'] = generation
+    assert client.get(path + '/interrupt', params=query).status_code == 401
+    auth = app.state.operator_auth
+    assert auth.configure('control-fixture', 'fixture-password-long', local=True)
+    token = auth.login('control-fixture', 'fixture-password-long')
+    client.cookies.set('nexus_operator_session', token)
+    receipt_query = query | {'client_intent_id': 'stop-this-turn'}
+    assert client.get(path + '/interrupt/receipt', params=receipt_query).status_code == 404
+    assert auth.authority_reference(token, create=False) is None
+
+    def target():
+        response = client.get(path + '/interrupt', params=query)
+        assert response.status_code == 200, response.text
+        return response.json()['control']
+
+    assert target() is None
+    submitted = admit(setup, binding, 'dashboard-interrupt-turn', 'turn.submit', session_id=session, text='Synthetic active turn')
+    wait_receipt(setup, submitted)
+    operation = submitted['operation_id']
+    factory = deps.connection_factory
+    with factory.unit_of_work(write=False) as uow:
+        epoch = uow.connection.execute('SELECT stream_epoch FROM execution_local_streams WHERE session_id=?',
+                                       (session,)).fetchone()[0]
+    thread = native.native.native_id
+    native_turn = native.native.active_turn_id
+    client.portal.call(native.native.queue.put, RuntimeEvent(server, executor, session, epoch, 0,
+        'turn_state', 'turn/started', {'turn_id': native_turn, 'thread_id': thread, 'threadId': thread,
+            'turn': {'id': native_turn, 'status': 'inProgress'}, 'delivery_phase': 'started'}, operation_id=operation))
+    eventually(target)
+    control = target()
+    assert control['target'] == {'kind': 'native_turn', 'turn_id': native_turn}
+    seen = []
+    send = native.native.send
+
+    async def observe_send(verb, payload, operation_id, *, expected_turn_id=None):
+        if verb == 'interrupt':
+            with factory.unit_of_work(write=False) as uow:
+                barrier = uow.connection.execute('SELECT paused_owner_generation FROM session_interaction_queues '
+                    'WHERE server_id=? AND executor_id=? AND session_id=?', (server, executor, session)).fetchone()[0]
+            seen.append((expected_turn_id, barrier, operation_id))
+        return await send(verb, payload, operation_id, expected_turn_id=expected_turn_id)
+
+    native.native.send = observe_send
+    ui = {'x-nexus-ui': '1'}
+    body = {'scope': exact, 'expected_session_generation': generation,
+        'capability_revision': control['capability_revision'], 'expected_queue_revision': control['queue_revision'],
+        'client_intent_id': 'stop-this-turn', 'target': control['target']}
+    response = client.post(path + '/interrupt', json=body | {'text': 'private-fixture-only'}, headers=ui)
+    assert response.status_code == 422 and 'private-fixture-only' not in response.text
+    assert client.post(path + '/interrupt', json=body, headers=ui | {'origin': 'https://foreign.invalid'}).status_code == 403
+    wrong = body | {'target': {'kind': 'native_turn', 'turn_id': 'another-turn'}}
+    assert client.post(path + '/interrupt', json=wrong, headers=ui).status_code == 409
+    assert client.post(path + '/interrupt', json=body | {'expected_queue_revision': 1}, headers=ui).status_code == 409
+    no_effect = client.get(path + '/inputs', params=query).json()
+    assert no_effect['paused'] is False and not seen
+
+    stopped = client.post(path + '/interrupt', json=body, headers=ui)
+    assert stopped.status_code == 202, stopped.text
+    control_op = stopped.json()['operation_id']
+    eventually(lambda: len(seen) == 1)
+    assert seen == [(native_turn, generation, control_op)]
+    retained = client.get(path + '/interrupt/receipt', params=receipt_query)
+    assert retained.status_code == 200, retained.text
+    assert retained.json()['operation_id'] == control_op
+    retry = client.post(path + '/interrupt', json=body, headers=ui)
+    assert retry.status_code == 200 and retry.json()['operation_id'] == control_op
+    assert client.get(path + '/inputs', params=query).json()['paused'] is True
+    assert native.native.sent == [('send_turn', operation), ('interrupt', control_op)]
+    other_login = auth.login('control-fixture', 'fixture-password-long')
+    client.cookies.set('nexus_operator_session', other_login)
+    assert client.get(path + '/interrupt/receipt', params=receipt_query).status_code == 404
+    assert auth.authority_reference(other_login, create=False) is None
+    client.cookies.set('nexus_operator_session', token)
+    auth.logout(token)
+    assert client.get(path + '/interrupt/receipt', params=receipt_query).status_code == 401
     client.cookies.clear()
