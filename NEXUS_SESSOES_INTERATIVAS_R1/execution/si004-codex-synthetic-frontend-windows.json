@@ -32,7 +32,10 @@
       "answered": true,
       "parameter_keys": [
         "threadId"
-      ]
+      ],
+      "parameter_shapes": {
+        "threadId": "exact_thread"
+      }
     },
     {
       "method": "thread/read",
@@ -40,7 +43,10 @@
       "answered": true,
       "parameter_keys": [
         "threadId"
-      ]
+      ],
+      "parameter_shapes": {
+        "threadId": "exact_thread"
+      }
     },
     {
       "method": "model/list",
@@ -86,7 +92,10 @@
       "answered": true,
       "parameter_keys": [
         "threadId"
-      ]
+      ],
+      "parameter_shapes": {
+        "threadId": "exact_thread"
+      }
     },
     {
       "method": "thread/resume",
@@ -110,7 +119,26 @@
         "runtimeWorkspaceRoots",
         "sandbox",
         "threadId"
-      ]
+      ],
+      "parameter_shapes": {
+        "threadId": "exact_thread",
+        "history": "none",
+        "path": "none",
+        "model": "none",
+        "modelProvider": "none",
+        "cwd": "none",
+        "runtimeWorkspaceRoots": "none",
+        "approvalPolicy": "none",
+        "approvalsReviewer": "none",
+        "sandbox": "none",
+        "permissions": "none",
+        "config": "none",
+        "baseInstructions": "none",
+        "developerInstructions": "none",
+        "personality": "none",
+        "excludeTurns": true,
+        "initialTurnsPage": "none"
+      }
     },
     {
       "method": "thread/list",
@@ -257,5 +285,5 @@
   ],
   "synthetic_history_rendered": true,
   "rejected_proxy_connections": 1,
-  "terminal_bytes": 3947
+  "terminal_bytes": 3979
 }
