@@ -6291,7 +6291,7 @@
       "when": "Inspecionar writes e comandos",
       "then": "Nenhum grant, ACK, claim, turno, decisão, sessão ou teste criado; metadados de auth existentes documentados à parte.",
       "level": "API/SQLite + browser adversarial",
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
         {
           "commit": "R3/R4/R5 evidence cuts and exact hashes identified by the review",
@@ -6301,9 +6301,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Read-only session selection browser plus SQLite snapshots exist; all snapshot/expand/RESULT-open adversarial writes/commands not covered together. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T00:04:25.864594+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/security-r9-batch/runs/hst-security-r9-s1-comment-only/qualification.json",
+          "environment": "Fresh installed R9; actual own-profile Chrome over owned HTTP fixture and canonical Core with inert protocol peer; provider PATH empty",
+          "command_or_procedure": "Snapshot thirty productive tables immediately before and after actual Home/card/result reads; independently revoke exact grant through canonical DELETE and inspect exact session controls before/after",
+          "result": "PASS20 focal browser checks; paired thirty-table read window has identical row/hash snapshots without ignored tables/columns; GET-only and no page errors; exact revoked session remains readable while its controls disappear; source1829/payload1031 drift0 and normal owner/browser exit with physical absence",
+          "limitations": "No forged URL, hostile DOM, wrong-recipient decision, uncertain retry or same-name successor browser qualification. Auth telemetry is outside thirty productive tables. After canonical revocation, last runtime.close was refused and closed=false is preserved; normal lifespan exit is not a successful close receipt. Inert protocol peer is not a real harness."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Read-only session selection browser plus SQLite snapshots exist; all snapshot/expand/RESULT-open adversarial writes/commands not covered together."
+      "execution_notes": "Actual browser/API reads and paired thirty productive table snapshots qualify passive Home/card/result inspection; auth metadata explicitly separate."
     },
     {
       "id": "HST-T-H02",
@@ -6478,9 +6487,18 @@
           "environment": "Windows; frozen R7 prefix;1828base+1test pins;1031payload files; isolated-I-B; no provider/browser/human",
           "result": "PASS7SOURCE/PASS7INSTALLED; first source6PASS/1invalid-seedFAIL retained; no runtime/pin/helper drift",
           "limitations": "A06 query-only private sibling proof. E08/E09/E16 are historical migrated read fixtures with real HTTP/SQLite; H02/H03 API only. H07 uses SQL negative grant revocation with canonical request/denied POST, not canonical revoke lifecycle. Full browser clauses remain unverified."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T00:04:25.864594+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/security-r9-batch/runs/hst-security-r9-s1-comment-only/qualification.json",
+          "environment": "Fresh installed R9; actual own-profile Chrome over owned HTTP fixture and canonical Core with inert protocol peer; provider PATH empty",
+          "command_or_procedure": "Snapshot thirty productive tables immediately before and after actual Home/card/result reads; independently revoke exact grant through canonical DELETE and inspect exact session controls before/after",
+          "result": "PASS20 focal browser checks; paired thirty-table read window has identical row/hash snapshots without ignored tables/columns; GET-only and no page errors; exact revoked session remains readable while its controls disappear; source1829/payload1031 drift0 and normal owner/browser exit with physical absence",
+          "limitations": "No forged URL, hostile DOM, wrong-recipient decision, uncertain retry or same-name successor browser qualification. Auth telemetry is outside thirty productive tables. After canonical revocation, last runtime.close was refused and closed=false is preserved; normal lifespan exit is not a successful close receipt. Inert protocol peer is not a real harness."
         }
       ],
-      "execution_notes": "PARTIAL literal scenario: Canonical native request/HTTP denial; grant revocation is SQL negative fixture, not canonical lifecycle. Missing browser/native clauses remain NOT_RUN; no suite-count promotion."
+      "execution_notes": "PARTIAL: canonical DELETE revokes exact session lease, same full tuple is retained and UI removes controls. Stale decision submission and same-name successor browser clauses remain unexecuted."
     },
     {
       "id": "HST-T-H08",
@@ -6522,9 +6540,18 @@
           "result": "Audit: PARTIAL",
           "artifact_path": "execution/scenario-final-review-r5-prepared.json",
           "limitations": "Reconnect remains unavailable; no adversarial card attempt proving daemon restart was never invoked in this cut. Historical review; later observed cuts below take precedence."
+        },
+        {
+          "commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+          "timestamp": "2026-11-18T00:04:25.864594+00:00",
+          "artifact_path": "execution/remaining-qualification-r7-next/security-r9-batch/runs/hst-security-r9-s1-comment-only/qualification.json",
+          "environment": "Fresh installed R9; actual own-profile Chrome over owned HTTP fixture and canonical Core with inert protocol peer; provider PATH empty",
+          "command_or_procedure": "Snapshot thirty productive tables immediately before and after actual Home/card/result reads; independently revoke exact grant through canonical DELETE and inspect exact session controls before/after",
+          "result": "PASS20 focal browser checks; paired thirty-table read window has identical row/hash snapshots without ignored tables/columns; GET-only and no page errors; exact revoked session remains readable while its controls disappear; source1829/payload1031 drift0 and normal owner/browser exit with physical absence",
+          "limitations": "No forged URL, hostile DOM, wrong-recipient decision, uncertain retry or same-name successor browser qualification. Auth telemetry is outside thirty productive tables. After canonical revocation, last runtime.close was refused and closed=false is preserved; normal lifespan exit is not a successful close receipt. Inert protocol peer is not a real harness."
         }
       ],
-      "execution_notes": "PARTIAL assertion coverage; full literal criterion not verified. Reconnect remains unavailable; no adversarial card attempt proving daemon restart was never invoked in this cut."
+      "execution_notes": "PARTIAL: API and real card do not invent individual reconnect when unavailable; the full adversarial detail/daemon-restart limitation clause remains unexecuted."
     },
     {
       "id": "HST-T-H10",
@@ -7530,7 +7557,7 @@
       "remaining_qualification": "Inspect literal NOT_RUN/BLOCKED rows and remaining-qualification-review-r7.md",
       "provisioning": "No short-lived human fixture until participant confirms availability",
       "pending_local_scopes": [
-        "passive/revocation/observation browser security",
+        "external observation browser security",
         "foreground CLI and active presentation rollback",
         "old-producer state read compatibility",
         "stream/validity and remaining literal supported clauses"
@@ -7693,6 +7720,19 @@
       "browser_reuse": false,
       "provider_calls": 0,
       "default_approved": false
+    },
+    "r9_security_s1": {
+      "status": "PASS_SCOPED_H01_AND_REVOCATION_SUBSET",
+      "source": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+      "qualification": "execution/remaining-qualification-r7-next/security-r9-batch/runs/hst-security-r9-s1-comment-only/qualification.json",
+      "browser_checks": 20,
+      "passive_tables": 30,
+      "ignored_tables": [],
+      "provider_calls": 0,
+      "canonical_runtime_close": "LAST_CLOSE_REFUSED_AFTER_REVOKE; CLOSED_FALSE_RETAINED",
+      "normal_owner_exit": true,
+      "physical_absence": true,
+      "other_security_scenarios_promoted": false
     }
   }
 }

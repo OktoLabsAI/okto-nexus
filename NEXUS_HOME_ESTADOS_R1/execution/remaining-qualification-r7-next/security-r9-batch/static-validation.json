@@ -1,0 +1,30 @@
+{
+  "status": "STATIC_AST_ONLY",
+  "python_files": [
+    "assert_captures.py",
+    "browser_driver.py",
+    "curate.py",
+    "drift.py",
+    "fixture_builder.py",
+    "preflight.py",
+    "prepare.py",
+    "prepare_static.py",
+    "run.py",
+    "security_controls.py"
+  ],
+  "input_pins": 33,
+  "cli_payload_files": 192,
+  "manifest_sha256": "a4709ef7f680c8fb61e9ac53ba005dfdd5885c0eb12e44cce69ad20ba2a6a43d",
+  "runtime_binding": {
+    "source_commit": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+    "wheel_sha256": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload_files": 1031,
+    "source_pin_count": 1829
+  },
+  "allocated": false,
+  "browser_started": false,
+  "javascript_syntax": {
+    "s1-passive.js": 0,
+    "s1-revocation.js": 0
+  }
+}

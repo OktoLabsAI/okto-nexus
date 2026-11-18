@@ -1,0 +1,44 @@
+{
+  "status": "READ_ONLY_PROFILE_RCA",
+  "literal_chrome_message": "DevTools remote debugging requires a non-default data directory. Specify this using --user-data-dir.",
+  "actual_profile_debug_arguments": [
+    "--user-data-dir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-diagnostic-829flnmp\\browser-profile",
+    "--remote-debugging-pipe about:blank"
+  ],
+  "headless": true,
+  "cli_profile_maps_to_userDataDir": true,
+  "profile_requires_persistent_flag": false,
+  "known_folder_api_result": "C:/Users/jpamb/AppData/Local",
+  "known_folder_after_metadata_process_LOCALAPPDATA_override": "C:/Users/jpamb/AppData/Local",
+  "own_profile_argument_differs_from_known_default": true,
+  "own_profile_argument_differs_from_sanitized_env_default": true,
+  "known_folder_tool_ref": "912591",
+  "known_folder_api_script_sha256": "244cfd6f22593e42f5532a032e4b3bc919a71b1eb2f684b8cc87e373a8384658",
+  "profile_names_only": [
+    "component_crx_cache",
+    "Crashpad",
+    "Default",
+    "extensions_crx_cache",
+    "GPUPersistentCache",
+    "GrShaderCache",
+    "Last Browser",
+    "Last Version",
+    "Local State",
+    "OptimizationGuideModelsManifest",
+    "Safe Browsing",
+    "segmentation_platform",
+    "ShaderCache",
+    "Variations",
+    "VariationsSafeSeedV2",
+    "VariationsSeedV2"
+  ],
+  "personal_profile_config_cookie_contents_read": false,
+  "default_classification_underlying_cause": "UNKNOWN; no policy/content access or inference",
+  "raw_debug_log": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-diagnostic-829flnmp\\localappdata\\ms-playwright\\daemon\\6056c61d888ab2f6\\hst-browser-only-direct-node-r8.err",
+    "bytes": 2133,
+    "sha256": "cfb9025a9d6c19855d8bc2932fdba2b6ac2ea53d9aaf49fa2ef960e40522dac9",
+    "copied": false
+  },
+  "runtime_or_browser_rerun": false
+}

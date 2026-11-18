@@ -147,7 +147,7 @@ browser or three real executions. The six PASS cases were not repeated.
 Prior attempts and the original6PASS/1FAIL remain preserved. Pytest retention
 left only two raw cleanup JSONs; all six passing teardown close assertions ran,
 and missing raw snapshots were not reconstructed. Current ledger counts are
-61PASS/47NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
+62PASS/46NOT_RUN/8BLOCKED. The real R8 F07/I02 failures below remain in their
 original evidence; fresh R9 focus predicates now pass. No timing target caused
 or resolved these functional qualifications.
 
@@ -206,6 +206,7 @@ dependency versions were compared, not all dependency file bytes.
 | Predecessor browser |21PASS: Working/independent request/full block/exact request-result sessions/partial source/logout;0POST |[R7 browser](browser-hst/r7-functional-report.md)|
 | Predecessor browser subset |44positive predicates on R8; actual singleton/multi-session context, external failure, preserved panel, normal notices and scoped keyboard/mobile evidence; final move/focus incomplete and cleanup unknown retained |[R8 browser subset](remaining-qualification-r7-next/experience-batch/experience-r8-session-role/qualification.json)|
 | Fresh focus regression |16PASS on R9: exact move/context/delivery and same canonical harness focus; original failure and A2 cleanup unknown retained |[R9 focus](remaining-qualification-r7-next/experience-batch/focus-r9-positive/qualification.json)|
+| Passive reads and scoped revocation |20actual R9 browser checks; thirty productive tables unchanged across Home/card/result reads; exact canonical revocation removes controls; refused runtime.close retained |[R9 security S1](remaining-qualification-r7-next/security-r9-batch/runs/hst-security-r9-s1-comment-only/qualification.json)|
 | Unchanged backend qualification |6PASS/1presentation-oracleFAIL on R8; seven literal backend scenarios qualified; byte equivalence to R9 is scoped to unchanged runtime; no provider/browser claim |[R8 installed batch](remaining-qualification-r7-next/backend-batch/attempt5-r8/qualification.json)|
 | Post-build supplement |7sourcePASS and7actually installedPASS, separate cuts;1828base+1exact additional test/1031payload files unchanged |[supplement](installed-supplement-r7/qualification.json)|
 | Recovery and paging |Same accepted decision after lost response; stale second-screen409; one durable write admission; actual paging409/current200 in the same panel |[scoped captured predicates](browser-hst/nextcuts-report.md)|
@@ -264,7 +265,7 @@ The [116-scenario audit](remaining-qualification-review-r7.md) records the
 unexecuted clauses and partial layers rather than treating every test count
 as qualification. The [ledger](../NEXUS_HOME_ESTADOS_LEDGER_R1.json) remains
 authoritative for individual task/scenario status. After the subsequent literal
-reviews it has61PASS,47NOT_RUN and8BLOCKED. The original menu and focus
+reviews it has62PASS,46NOT_RUN and8BLOCKED. The original menu and focus
 defects are corrected and have separate actual installed-browser evidence.
 Partial browser/native clauses remain NOT_RUN. This is not a whole-plan
 completion or default approval.
@@ -309,10 +310,16 @@ force-push, release, deployment, merge or default activation was performed.
 
 ## Next gate
 
-The selected recovery/isolation/context follow-ups are reviewed. Finish the
+The selected recovery/isolation/context follow-ups are reviewed. H01 now has
+actual passive browser reads paired with thirty unchanged productive tables;
+auth telemetry is outside that selected snapshot. Canonical revocation also
+removes controls for the exact session, without claiming the unexecuted stale
+decision/same-name-successor clauses. The last runtime.close was refused after
+revocation; its closed=false fact remains separate from normal owner/browser
+exit and physical absence. Finish the
 additional supported functional/security/compatibility increments before
 inviting a participant. The menu and focus corrections have actual browser
-proof; the passive/security, foreground CLI, rollback and old-state increments
+proof; the external-observation security, foreground CLI, rollback and old-state increments
 remain distinct pending qualifications.
 The useful-DOM
 observation and shared-machine limitation are already recorded above. No

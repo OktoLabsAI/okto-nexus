@@ -1,0 +1,19 @@
+{
+  "status": "STATIC_AST_AND_EFFECTIVE_PLACEHOLDER_CHECK",
+  "python_files": [
+    "curate.py",
+    "run.py"
+  ],
+  "effective_template_counts": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\remaining-qualification-r7-next\\security-r9-batch\\comment-only-v2\\s1-passive.js": 1,
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\NEXUS_HOME_ESTADOS_R1\\execution\\remaining-qualification-r7-next\\security-r9-batch\\s1-revocation.js": 1
+  },
+  "base_original_count_preserved": 2,
+  "manifest_sha256": "41fdcc2fb54589ed3b33f8075297fdb67e8269fa05a54bd59391afe3325355e5",
+  "effective_template_sha256": "926d0d6e881665727118b42a874f4489fc4c3c811dc931cac69a84c52b1ccaa5",
+  "runtime_started": false,
+  "node_syntax": {
+    "effective_s1_passive": 0,
+    "base_s1_revocation": 0
+  }
+}

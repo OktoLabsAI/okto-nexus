@@ -1,0 +1,20 @@
+{
+  "approved": true,
+  "approved_by": "root",
+  "manifest_sha256": "37f0fea6bd0b0363d0fb9292d9b277a6041355d8c1a182964288169bc5b7bf01",
+  "instrumentation_manifest_sha256": "580a1cf76438371f97a601629b3069d207ee6e93fb97cd1274d490abf05634ae",
+  "ready_sha256": "8195150a17182c2f651dd2c924372fab172a76645a8d7f098c3d47b0a002ffd5",
+  "case": "S1",
+  "runtime_mode": "baseline",
+  "cut_id": "hst-security-r8-s1-explicit-chrome",
+  "deadline_seconds": 180,
+  "provider_invocations": 0,
+  "allow_own_containment": true,
+  "allow_exact_observation_inserts": false,
+  "source_commit": "6eaa325ea3ddf1dec1b03475b27f373211c81e53",
+  "wheel_sha256": "fc2afcccdf55236db21071a132a353a13cf1c56399767ea5223a69e50162902e",
+  "source_additions": {},
+  "browser_executable_path": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "browser_executable_sha256": "5b835c10836045119334d9524e62437110e00e1bd20612c9072a0ae155f94a17",
+  "browser_config_sha256": "3f7fb017a61c32dbc7620e60094d60238c9ee50152294534bf39959f34df801d"
+}

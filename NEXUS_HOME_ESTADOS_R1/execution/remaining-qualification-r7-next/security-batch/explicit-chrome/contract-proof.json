@@ -1,0 +1,16 @@
+{
+  "status": "READ_ONLY_LOCAL_CLI_CONTRACT",
+  "files": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-v9yaiwl8\\npm-cache\\_npx\\31e32ef8478fbf80\\node_modules\\@playwright\\cli\\README.md": "96078c5413ff4c308482cb3abfeb9ae883c5c83c3c9a4ffd6fa30871cf2513d5",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-v9yaiwl8\\npm-cache\\_npx\\31e32ef8478fbf80\\node_modules\\@playwright\\cli\\package.json": "e3e3cb133131953521ed6adc01b1d5abe149f5f6bc35d36e7caf4ffb5abc420a",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-v9yaiwl8\\npm-cache\\_npx\\31e32ef8478fbf80\\node_modules\\playwright-core\\lib\\tools\\cli-client\\session.js": "ae7476752735dc990cf995f1948fd5f19b01eb4b23c3186b598d6ebbc687407c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-v9yaiwl8\\npm-cache\\_npx\\31e32ef8478fbf80\\node_modules\\playwright-core\\lib\\coreBundle.js": "f11cf49aa0658caecdb20525ce1e19e89201ecf157fbee18579e1ba061aee352"
+  },
+  "cli_version": "0.1.24",
+  "contract": {
+    "README": "--config; browser.launchOptions.executablePath",
+    "session_js": "forwards cliArgs.config to daemon",
+    "coreBundle": "JSON parser/resolves executablePath/merges launchOptions/launches with them"
+  },
+  "no_browser_or_version_command": true
+}

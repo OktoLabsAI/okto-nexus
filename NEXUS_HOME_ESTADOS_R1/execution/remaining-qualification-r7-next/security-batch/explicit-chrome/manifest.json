@@ -1,0 +1,19 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "base_manifest_sha256": "37f0fea6bd0b0363d0fb9292d9b277a6041355d8c1a182964288169bc5b7bf01",
+  "browser": {
+    "path": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "sha256": "5b835c10836045119334d9524e62437110e00e1bd20612c9072a0ae155f94a17"
+  },
+  "config_sha256": "3f7fb017a61c32dbc7620e60094d60238c9ee50152294534bf39959f34df801d",
+  "input_pins": {
+    "explicit-chrome/README.md": "241b2175fb2c7916283d94fba58325524d1c73830203e6bc89fbef8d8ec277fb",
+    "explicit-chrome/build_variant.py": "1bee2960c8f51378181da02c67c6985f435e6661cc84b45097c02b25de12c380",
+    "explicit-chrome/contract-proof.json": "ee93e627fbf33c5b3bc605bfd57229a4dad9adff52b8e7a3a3a454fb927a757d",
+    "explicit-chrome/curate.py": "b1d4ce310d2daa23a68a4b0a30c6e9d55efddab2e9ce15594a777818dfdb7cf7",
+    "explicit-chrome/playwright-cli.json": "3f7fb017a61c32dbc7620e60094d60238c9ee50152294534bf39959f34df801d",
+    "explicit-chrome/run.diff": "1f2d04fbb23f3c361c7cbc0b35eb2b935310e1d645f03b05ea6c4d194b5777d7",
+    "explicit-chrome/run.py": "54e108e5a6af881b22cfc4c72c9e7ef4adfbadd43433c5fe13ed7cfea2ddf590",
+    "explicit-chrome/validate.py": "19dffa86df84d4ebe9e840b96c472ce5b9135aa3969d82dc7467c6be1e2d55c9"
+  }
+}
