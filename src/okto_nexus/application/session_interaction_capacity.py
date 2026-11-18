@@ -11,11 +11,14 @@ from nexus_connector_core import (
 
 from ..adapters.outbound.sqlite.session_interaction import (
     confirm_dispatch_capacity,
+    has_unsent_capacity_proof,
     mark_dispatch_capacity_uncertain,
     read_dispatch_capacity,
+    record_unsent_capacity_release,
     retire_unconsumed_dispatch,
 )
 from ..adapters.outbound.sqlite.session_interaction_capacity_attempts import (
+    fence_prepared_capacity_release,
     read_capacity_attempt,
     retire_prepared_capacity_attempt,
 )
@@ -31,13 +34,20 @@ async def consume_input_capacity(*, factory, scope, operation_id, capacity,
 
     def read():
         with factory.unit_of_work(write=False) as uow:
-            return read_dispatch_capacity(uow, **key)
+            claim = read_dispatch_capacity(uow, **key)
+            return claim, claim.state == 'CONSUMED' and has_unsent_capacity_proof(uow, scope=scope, claim=claim)
 
     def apply(function, **options):
         with factory.unit_of_work() as uow:
             return function(uow, **key, **options)
 
-    claim = await anyio.to_thread.run_sync(read)
+    claim, release_pending = await anyio.to_thread.run_sync(read)
+    if release_pending:
+        # The refusal fenced the exact R4 attempt. A current authenticated host
+        # can release that historical slot without authorizing another send.
+        observed = await capacity.release_capacity(claim.reservation.request, claim.reservation.reservation_id, 'REVOKED')
+        await anyio.to_thread.run_sync(partial(apply, record_unsent_capacity_release, observed=observed))
+        return observed
     if claim.state in ('CONSUMED', 'CANCELLED_NO_EFFECT'):
         return claim.reservation
     if claim.state not in ('WAITING_CONSUMPTION', 'NEEDS_RECONCILIATION'):
@@ -77,9 +87,13 @@ async def advance_input_capacity(*, factory, access, host, scope, authority_fenc
     def pending_work():
         with factory.unit_of_work(write=False) as uow:
             operations = uow.connection.execute("""
-                SELECT operation_id FROM session_interaction_inputs
-                WHERE server_id=? AND executor_id=? AND session_id=? AND owner_generation=?
-                  AND capacity_state IN ('WAITING_CONSUMPTION','NEEDS_RECONCILIATION') LIMIT 2
+                SELECT i.operation_id FROM session_interaction_inputs i
+                WHERE i.server_id=? AND i.executor_id=? AND i.session_id=? AND i.owner_generation=?
+                  AND (i.capacity_state IN ('WAITING_CONSUMPTION','NEEDS_RECONCILIATION')
+                    OR (i.capacity_state='CONSUMED' AND i.status='REFUSED_BEFORE_SEND'
+                      AND EXISTS (SELECT 1 FROM execution_unsent_dispatch_proofs p
+                          WHERE p.server_id=i.server_id AND p.executor_id=i.executor_id
+                            AND p.operation_id=i.operation_id))) LIMIT 2
             """, (scope.session.server_id, scope.session.executor_id, scope.session.session_id,
                   scope.generation.value)).fetchall()
             if len(operations) > 1:
@@ -105,6 +119,23 @@ async def advance_input_capacity(*, factory, access, host, scope, authority_fenc
         with factory.unit_of_work() as uow:
             return retire_prepared_capacity_attempt(uow, scope=scope, observed=observation, now=stamp(access.clock.now_iso()))
 
+    async def release_if_fenced(*, authority_denied=False):
+        if previous is None or (observed is not None and observed.state != 'HELD'):
+            return None
+
+        def fence():
+            with factory.unit_of_work() as uow:
+                return fence_prepared_capacity_release(uow, scope=scope, request=previous.request,
+                                                       authority_denied=authority_denied)
+
+        if not await anyio.to_thread.run_sync(fence):
+            return None
+        request = previous.request
+        released = await host.port.release_capacity(request, capacity_reservation_id(request),
+                                                    'REVOKED' if authority_denied else 'CANCELLED')
+        await anyio.to_thread.run_sync(retire, released)
+        return released
+
     observed = None
     if previous is not None:
         request = previous.request
@@ -116,13 +147,19 @@ async def advance_input_capacity(*, factory, access, host, scope, authority_fenc
             await anyio.to_thread.run_sync(retire, observed)
             return observed
         if not current:
-            return None
+            return await release_if_fenced()
 
-    attempt = await anyio.to_thread.run_sync(prepare)
+    try:
+        attempt = await anyio.to_thread.run_sync(prepare)
+    except OktoNexusError as error:
+        if error.code != ErrorCode.PERMISSION_DENIED:
+            raise
+        released = await release_if_fenced(authority_denied=True)
+        if released is None:
+            raise
+        return released
     if attempt is None or attempt.resolved_at is not None:
-        # Another writer may just have staged the original request. Keep its
-        # hold until an exact terminal observation can prove no effect.
-        return None
+        return await release_if_fenced()
     request = attempt.request
     if not _current_host(host, request) or (previous is not None and request != previous.request):
         raise OktoNexusError(ErrorCode.CONFLICT, 'The capacity host or pending input changed.', {})

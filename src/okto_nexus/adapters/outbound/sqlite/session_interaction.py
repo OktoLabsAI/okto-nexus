@@ -412,3 +412,44 @@ def retire_unconsumed_dispatch(uow: SqliteUnitOfWork, *, scope: InputScope, oper
     if terminal != 1 or settled != 1:
         raise _conflict('INPUT_DISPATCH_CHANGED', 'The linked input changed before no-effect retirement.')
     record_input_delivery(conn, operation_key=key, state=InputDeliveryState.REFUSED_BEFORE_SEND, require_unsent=True)
+
+
+def has_unsent_capacity_proof(uow: SqliteUnitOfWork, *, scope: InputScope, claim: CapacityAdmission) -> bool:
+    """Identify a pre-send dispatch refusal, independently of the host's slot state."""
+    return uow.connection.execute("""
+        SELECT 1 FROM session_interaction_inputs i
+        JOIN execution_operations o USING (server_id,executor_id,operation_id)
+        JOIN execution_dispatch_outbox x USING (server_id,executor_id,operation_id)
+        JOIN execution_unsent_dispatch_proofs p USING (server_id,executor_id,operation_id,attempt_no)
+        WHERE i.server_id=:server_id AND i.executor_id=:executor_id AND i.session_id=:session_id
+          AND i.operation_id=:operation_id AND o.intent_hash=:intent_hash AND o.action='turn.submit'
+          AND i.owner_generation=:owner_generation AND i.binding_id=:binding_id AND i.workspace_id=:workspace_id
+          AND i.workspace_binding_id=:workspace_binding_id AND i.agent_id=:agent_id
+          AND i.status='REFUSED_BEFORE_SEND' AND i.possible_effect=0
+          AND i.capacity_state='CONSUMED' AND o.admission_state='RESOLVED_TERMINAL'
+          AND x.dispatch_state='RESOLVED_TERMINAL' AND x.attempt_token=p.attempt_token
+          AND x.reservation_owner=p.previous_owner AND x.reservation_generation=p.previous_generation
+          AND json_extract(x.last_error,'$.stage')='dispatch' AND json_extract(x.last_error,'$.possible_effect')=0
+          AND NOT EXISTS (SELECT 1 FROM execution_receipts r WHERE r.server_id=i.server_id
+              AND r.executor_id=i.executor_id AND r.operation_id=i.operation_id)
+    """, {**_scope_params(scope), 'operation_id': claim.operation_id,
+           'intent_hash': claim.consumption.turn_intent_hash}).fetchone() is not None
+
+
+def record_unsent_capacity_release(uow: SqliteUnitOfWork, *, scope: InputScope, operation_id: str,
+                                   observed: CapacityReservation) -> None:
+    """Keep the refusal and original R4 operation after release of its unused slot."""
+    uow.require_active_writer()
+    claim = read_dispatch_capacity(uow, scope=scope, operation_id=operation_id)
+    if (type(observed) is not CapacityReservation or observed.state != 'RELEASED'
+            or observed.request != claim.reservation.request or observed.reservation_id != claim.reservation.reservation_id
+            or observed.consumption != claim.consumption or observed.capacity_revision < claim.reservation.capacity_revision):
+        raise _conflict('INPUT_CAPACITY_CHANGED', 'The released slot does not match the refused input.')
+    if claim.state == 'CANCELLED_NO_EFFECT':
+        return
+    if not has_unsent_capacity_proof(uow, scope=scope, claim=claim):
+        raise _conflict('INPUT_UNSENT_PROOF_REQUIRED', 'The canonical operation has no matching pre-send refusal.')
+    uow.connection.execute("""
+        UPDATE session_interaction_inputs SET capacity_state='CANCELLED_NO_EFFECT',capacity_reservation_json=?
+        WHERE server_id=? AND executor_id=? AND operation_id=?
+    """, (canonical_json(observed.to_dict()).decode(), scope.session.server_id, scope.session.executor_id, operation_id))

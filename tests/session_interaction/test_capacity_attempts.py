@@ -16,9 +16,15 @@ from nexus_connector_core import (
 from nexus_connector_core.protocol import canonical_json
 
 from okto_nexus.adapters.outbound.sqlite.connection import ConnectionFactory
+from okto_nexus.adapters.outbound.sqlite.execution_dispatch_ownership import (
+    reject_unsent_dispatch,
+    release_dispatch_owner,
+)
 from okto_nexus.adapters.outbound.sqlite.session_interaction import (
     accept_input,
+    confirm_dispatch_capacity,
     prepare_dispatch_head,
+    read_dispatch_capacity,
     stage_dispatch,
 )
 from okto_nexus.adapters.outbound.sqlite.session_interaction_capacity_attempts import (
@@ -27,11 +33,12 @@ from okto_nexus.adapters.outbound.sqlite.session_interaction_capacity_attempts i
     record_staged_capacity_attempt,
 )
 from okto_nexus.application import session_interaction_capacity
+from okto_nexus.application.execution_dispatch import reserve_execution_dispatch
 from okto_nexus.application.execution_leases import ExecutionChannel
 from okto_nexus.application.execution_semantics import execution_intent_hash
 from okto_nexus.application.runtime_availability import CapacityHost
 from okto_nexus.domain.session_interaction import InputDeliveryState
-from okto_nexus.errors import OktoNexusError
+from okto_nexus.errors import ErrorCode, OktoNexusError
 from tests.session_interaction.test_queue_storage import ALICE, NOW
 from tests.session_interaction.test_queue_storage import database as queue_database
 
@@ -283,24 +290,120 @@ def test_replacement_host_only_observes_the_original_attempt(database, monkeypat
             assert uow.connection.execute('SELECT count(*) FROM execution_operations').fetchone()[0] == 0
 
 
-def test_missing_observation_retains_original_attempt_when_head_is_no_longer_ready(database, monkeypatch):
+@pytest.mark.parametrize('revoked', [False, True])
+def test_release_tombstone_recovers_abandoned_prepared_attempt(database, monkeypatch, revoked):
     factory, (scope, _) = database
     with factory.unit_of_work() as uow:
         _enqueue(uow, scope, 'first')
         head, request = _head_and_request(uow, scope)
         original = prepare_capacity_attempt(uow, scope=scope, head=head, request=request, now=NOW)
-        uow.connection.execute("UPDATE session_interaction_inputs SET status='EXPIRED' WHERE input_id=?", (head.input_id,))
+        if not revoked:
+            uow.connection.execute("UPDATE session_interaction_inputs SET status='EXPIRED' WHERE input_id=?", (head.input_id,))
+
+    released = CapacityReservation(capacity_reservation_id(request), request, 'RELEASED', 2, 0, None)
 
     class Peer:
-        async def get_capacity_reservation(self, supplied) -> None:
-            assert supplied == request
+        observation = None
+        calls = 0
 
-    monkeypatch.setattr(session_interaction_capacity, 'prepare_input_capacity', lambda *_, **__: None)
+        async def get_capacity_reservation(self, supplied):
+            assert supplied == request
+            return self.observation
+
+        async def release_capacity(self, supplied, reservation_id, reason):
+            assert (supplied, reservation_id, reason) == (request, released.reservation_id,
+                                                         'REVOKED' if revoked else 'CANCELLED')
+            with factory.unit_of_work() as uow:
+                expected = InputDeliveryState.BLOCKED_AUTH if revoked else InputDeliveryState.EXPIRED
+                assert _enqueue(uow, scope, 'first').status is expected
+                assert read_capacity_attempt(uow, session=scope.session) == original
+            self.calls += 1
+            self.observation = released
+            raise ConnectionError('fixture reply lost after tombstone')
+
+    def prepare(*args, **kwargs):
+        if revoked:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Fixture author expired.')
+
+    monkeypatch.setattr(session_interaction_capacity, 'prepare_input_capacity', prepare)
+    peer = Peer()
     host = CapacityHost(ExecutionChannel(scope.session.server_id, scope.session.executor_id, 'fixture-connection', 1),
-                        Peer(), request.scope.boot_id)
-    assert asyncio.run(session_interaction_capacity.advance_input_capacity(factory=factory, access=None,
-        host=host, scope=scope, authority_fence=lambda: nullcontext(lambda _: True),
-        current_capability_revision=lambda *_: None, fresh_publications={}, remote_ready=True)) is None
+                        peer, request.scope.boot_id)
+    access = SimpleNamespace(clock=SimpleNamespace(now_iso=lambda: NOW.isoformat()))
+    args = {'factory': factory, 'access': access, 'host': host, 'scope': scope,
+            'authority_fence': lambda: nullcontext(lambda _: True), 'current_capability_revision': lambda *_: None,
+            'fresh_publications': {}, 'remote_ready': True}
+    with pytest.raises(ConnectionError, match='reply lost'):
+        asyncio.run(session_interaction_capacity.advance_input_capacity(**args))
     with factory.unit_of_work(write=False) as uow:
         assert read_capacity_attempt(uow, session=scope.session) == original
+    assert asyncio.run(session_interaction_capacity.advance_input_capacity(**args)) == released
+    assert peer.calls == 1
+    with factory.unit_of_work(write=False) as uow:
+        assert read_capacity_attempt(uow, session=scope.session) is None
+        assert read_capacity_attempt(uow, session=scope.session, attempt_id=request.attempt_id).resolution == released
         assert uow.connection.execute('SELECT count(*) FROM execution_operations').fetchone()[0] == 0
+
+
+@pytest.mark.parametrize('crossed_send_cut', [False, True])
+def test_recovery_releases_consumed_slot_only_for_exact_unsent_refusal(database, crossed_send_cut):
+    factory, (scope, _) = database
+    channel = ExecutionChannel(scope.session.server_id, scope.session.executor_id, 'fixture-connection', 1)
+    with factory.unit_of_work() as uow:
+        queued = _enqueue(uow, scope, 'first')
+        uow.connection.execute('UPDATE execution_executors SET owner_instance_id=? WHERE executor_id=?',
+                               (channel.connection_id, channel.executor_id))
+        head, request = _head_and_request(uow, scope)
+        prepare_capacity_attempt(uow, scope=scope, head=head, request=request, now=NOW)
+        held, consumption = _stage(uow, scope, head, request)
+        operation_id = consumption.turn_operation_id
+        record_staged_capacity_attempt(uow, scope=scope, request=request, operation_id=operation_id)
+        consumed = replace(held, state='CONSUMED', capacity_revision=2, consumption=consumption)
+        confirm_dispatch_capacity(uow, scope=scope, operation_id=operation_id, observed=consumed)
+    reservation = reserve_execution_dispatch(factory, server_id=channel.server_id, executor_id=channel.executor_id,
+                                             remote_ready=True, channel=channel)
+    assert reservation is not None and reservation.operation_id == operation_id
+    if crossed_send_cut:
+        with factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE execution_dispatch_outbox SET dispatch_state='SENDING' WHERE operation_id=?",
+                                   (operation_id,))
+            uow.connection.execute('UPDATE session_interaction_inputs SET possible_effect=1 WHERE input_id=?',
+                                   (queued.input_id,))
+        release_dispatch_owner(factory, channel=channel)
+    else:
+        reject_unsent_dispatch(factory, reservation=reservation,
+            error=OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Fixture authority was revoked.'))
+
+    released = replace(consumed, state='RELEASED', capacity_revision=3, remaining_ms=0)
+
+    class Peer:
+        calls = 0
+
+        async def release_capacity(self, supplied, reservation_id, reason):
+            assert (supplied, reservation_id, reason) == (request, held.reservation_id, 'REVOKED')
+            self.calls += 1
+            if self.calls == 1:
+                raise ConnectionError('fixture reply lost after release')
+            return released
+
+    peer = Peer()
+    args = {'factory': factory, 'scope': scope, 'operation_id': operation_id, 'capacity': peer}
+    if crossed_send_cut:
+        assert asyncio.run(session_interaction_capacity.consume_input_capacity(**args)) == consumed
+        assert peer.calls == 0
+    else:
+        with pytest.raises(ConnectionError, match='reply lost'):
+            asyncio.run(session_interaction_capacity.consume_input_capacity(**args))
+        with factory.unit_of_work(write=False) as uow:
+            assert read_dispatch_capacity(uow, scope=scope, operation_id=operation_id).state == 'CONSUMED'
+        assert asyncio.run(session_interaction_capacity.consume_input_capacity(**args)) == released
+        assert asyncio.run(session_interaction_capacity.consume_input_capacity(**args)) == released
+        assert peer.calls == 2
+    with factory.unit_of_work() as uow:
+        receipt = _enqueue(uow, scope, 'first')
+        assert receipt.input_id == queued.input_id and receipt.operation_id == operation_id
+        assert receipt.status is (InputDeliveryState.DELIVERY_UNKNOWN if crossed_send_cut
+                                  else InputDeliveryState.REFUSED_BEFORE_SEND)
+        assert receipt.possible_effect == crossed_send_cut
+        assert uow.connection.execute('SELECT count(*) FROM execution_operations').fetchone()[0] == 1
+        assert uow.connection.execute('SELECT count(*) FROM runtime_execution_grants').fetchone()[0] == 0

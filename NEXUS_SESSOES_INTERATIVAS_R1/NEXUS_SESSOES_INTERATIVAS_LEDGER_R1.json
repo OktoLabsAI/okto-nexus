@@ -479,8 +479,10 @@
         "SI-T-B16",
         "SI-T-H16"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si008-capacity-recovery.md"
+      ]
     },
     {
       "id": "SI-009",

@@ -58,10 +58,13 @@ def reject_unsent_dispatch(factory, *, reservation, error):
             'SELECT server_id,executor_id,operation_id,attempt_no,attempt_token,reservation_owner,reservation_generation,'
             "reservation_owner,reservation_generation,strftime('%Y-%m-%dT%H:%M:%fZ','now') "
             'FROM execution_dispatch_outbox WHERE server_id=? AND executor_id=? AND operation_id=? '
-            'AND EXISTS (SELECT 1 FROM execution_domain_deliveries d JOIN execution_capacity_admissions a '
+            'AND (EXISTS (SELECT 1 FROM execution_domain_deliveries d JOIN execution_capacity_admissions a '
             'ON a.domain_operation_id=d.domain_operation_id WHERE d.server_id=execution_dispatch_outbox.server_id '
             'AND d.executor_id=execution_dispatch_outbox.executor_id AND d.operation_id=execution_dispatch_outbox.operation_id '
-            "AND a.state='CONSUMED')",
+            "AND a.state='CONSUMED') OR EXISTS (SELECT 1 FROM session_interaction_inputs i "
+            'WHERE i.server_id=execution_dispatch_outbox.server_id AND i.executor_id=execution_dispatch_outbox.executor_id '
+            'AND i.operation_id=execution_dispatch_outbox.operation_id '
+            "AND i.capacity_state='CONSUMED' AND i.status='REFUSED_BEFORE_SEND' AND i.possible_effect=0))",
             _key(reservation)[:3])
         from .capacity_admissions import SqliteCapacityAdmissionRepository
         SqliteCapacityAdmissionRepository().queue_unsent_release(uow, server_id=reservation.server_id,

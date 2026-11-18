@@ -186,3 +186,35 @@ def retire_prepared_capacity_attempt(uow: SqliteUnitOfWork, *, scope: InputScope
             WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
         """, params)
     return read_capacity_attempt(uow, session=scope.session, attempt_id=observed.request.attempt_id)
+
+
+def fence_prepared_capacity_release(uow: SqliteUnitOfWork, *, scope: InputScope, request: CapacityRequest,
+                                    authority_denied: bool = False) -> bool:
+    """Prove this request cannot stage before sending its exact release to Core."""
+    uow.require_active_writer()
+    if not _matches_scope(request, scope):
+        return False
+    attempt = read_capacity_attempt(uow, session=scope.session, attempt_id=request.attempt_id)
+    if attempt is None or attempt.request != request or attempt.state != 'PREPARED' or attempt.resolved_at is not None:
+        return False
+    conn = uow.connection
+    params = {**asdict(scope.session), 'input_id': attempt.input_id, 'input_revision': attempt.input_revision,
+              'owner_generation': scope.generation.value}
+    if authority_denied:
+        changed = conn.execute("""
+            UPDATE session_interaction_inputs SET status='BLOCKED_AUTH',input_revision=input_revision+1
+            WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id AND input_id=:input_id
+              AND input_revision=:input_revision AND owner_generation=:owner_generation
+              AND status='QUEUED' AND operation_id IS NULL AND possible_effect=0
+        """, params).rowcount
+        if changed:
+            conn.execute("""
+                UPDATE session_interaction_queues SET revision=revision+1
+                WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
+            """, params)
+    return conn.execute("""
+        SELECT 1 FROM session_interaction_inputs
+        WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id AND input_id=:input_id
+          AND owner_generation=:owner_generation AND operation_id IS NULL AND possible_effect=0
+          AND status IN ('BLOCKED_AUTH','BLOCKED_SESSION','CANCELLED','EXPIRED')
+    """, params).fetchone() is not None
