@@ -110,6 +110,10 @@ class QueueChange(ScopedInteraction):
     expected_queue_revision: Revision
 
 
+class QueuePauseChange(QueueChange):
+    paused: bool
+
+
 class CancelInput(QueueChange):
     expected_input_revision: Revision
 
@@ -154,12 +158,16 @@ class InputQueueEntry(InputReceipt):
     can_cancel: bool
 
 
-class InputQueueSnapshot(_Document):
+class InputQueueState(_Document):
     scope: ExactSessionScope
     session_owner_generation: Generation
     queue_revision: Revision
     paused: bool
+
+
+class InputQueueSnapshot(InputQueueState):
     cancel_capability_revision: Identifier | None
+    pause_capability_revision: Identifier | None
     items: Annotated[list[InputQueueEntry], Field(max_length=50)]
     next_cursor: str | None
 

@@ -14,10 +14,15 @@ export function SessionInputQueue({scope, onAccessLost, onCancelled}: {
   const [page, setPage] = useState<SessionInputQueuePage | null>(null);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState('');
+  const [confirmResume, setConfirmResume] = useState(false);
   const request = useRef<AbortController | null>(null);
   const summary = useRef<HTMLElement>(null);
+  const keepPaused = useRef<HTMLButtonElement>(null);
 
   useEffect(() => () => request.current?.abort(), []);
+  useEffect(() => {
+    if (confirmResume) keepPaused.current?.focus();
+  }, [confirmResume]);
 
   async function readPage(cursor: string | null, signal: AbortSignal) {
     const result = await runtimeApi.sessionInputQueue(scope, cursor, signal);
@@ -37,30 +42,37 @@ export function SessionInputQueue({scope, onAccessLost, onCancelled}: {
     return result;
   }
 
-  function showError(error: unknown, removing: boolean) {
+  function showError(error: unknown, action: 'read' | 'remove' | 'pause-change') {
     const status = (error as {status?: number})?.status;
-    if (status === 401 || status === 403) {
+    if (status === 401 || (status === 403 && action === 'read')) {
       setPage(null);
       onAccessLost();
       return;
     }
     setPage(null);
-    if (removing) summary.current?.focus();
-    setNotice(removing ? (status === 409
-      ? 'The queue changed. Refresh it before removing an entry.'
-      : 'Removal could not be confirmed. Refresh the queue to check its current state.')
-      : 'The message queue could not be refreshed.');
+    if (action !== 'read') summary.current?.focus();
+    if (action === 'pause-change') {
+      setNotice(status === 403 ? 'This queue change was refused. Refresh to review the current queue.'
+        : 'The queue change could not be confirmed. Refresh to review its current state.');
+    } else if (action === 'remove') {
+      setNotice(status === 409 ? 'The queue changed. Refresh it before removing an entry.'
+        : 'Removal could not be confirmed. Refresh the queue to check its current state.');
+    } else {
+      setNotice('The message queue could not be refreshed.');
+    }
   }
 
-  async function run({cursor = null, remove}: {cursor?: string | null; remove?: SessionInputQueueItem} = {}) {
+  async function run({cursor = null, remove, paused}: {cursor?: string | null; remove?: SessionInputQueueItem; paused?: boolean} = {}) {
     if (request.current) return;
     const capability = page?.cancel_capability_revision;
     if (remove && (!capability || !remove.can_cancel)) return;
+    if (paused !== undefined && (!page?.pause_capability_revision || page.paused === paused)) return;
     const controller = new AbortController();
     request.current = controller;
     setBusy(true);
+    setConfirmResume(false);
     setNotice('');
-    let removed = false;
+    let confirmed = '';
     try {
       if (remove && capability) {
         const receipt = await runtimeApi.cancelSessionInput(scope, remove, capability, controller.signal);
@@ -69,10 +81,20 @@ export function SessionInputQueue({scope, onAccessLost, onCancelled}: {
         if (receipt.input_id !== remove.input_id || receipt.status !== 'CANCELLED') {
           throw new Error('The removal could not be verified.');
         }
-        removed = true;
-        setPage(null);
-        setNotice('Message removed from the queue.');
+        confirmed = 'Message removed from the queue.';
         onCancelled(receipt);
+      } else if (page && paused !== undefined) {
+        const receipt = await runtimeApi.changeSessionQueuePause(scope, page, paused, controller.signal);
+        if (controller.signal.aborted) return;
+        assertInteractionScope({...receipt.scope, session_owner_generation: receipt.session_owner_generation}, scope);
+        if (receipt.paused !== paused || receipt.queue_revision !== page.queue_revision + 1) {
+          throw new Error('The queue change could not be verified.');
+        }
+        confirmed = paused ? 'Message queue paused.' : 'Message queue resumed.';
+      }
+      if (confirmed) {
+        setPage(null);
+        setNotice(confirmed);
         summary.current?.focus();
       }
       const next = await readPage(cursor, controller.signal);
@@ -87,8 +109,8 @@ export function SessionInputQueue({scope, onAccessLost, onCancelled}: {
       }
     } catch (error) {
       if (!controller.signal.aborted) {
-        showError(error, !!remove && !removed);
-        if (removed) setNotice('Message removed. Refresh to see the remaining queue.');
+        showError(error, confirmed ? 'read' : remove ? 'remove' : paused !== undefined ? 'pause-change' : 'read');
+        if (confirmed) setNotice(confirmed + ' Refresh to see the current queue.');
       }
     } finally {
       if (!controller.signal.aborted) {
@@ -104,6 +126,8 @@ export function SessionInputQueue({scope, onAccessLost, onCancelled}: {
     <summary ref={summary} className="cursor-pointer text-sm font-medium">View message queue</summary>
     <div className="mt-2 space-y-2" aria-busy={busy}>
       {page?.paused && <p className="text-sm">Queue paused. Pending messages will wait for an explicit resume.</p>}
+      {page?.paused && !page.pause_capability_revision &&
+        <p className="text-xs text-surface-500">Resume is unavailable until this session can send again and any interrupt is settled.</p>}
       {page && (!page.items.length ? <p className="text-sm">No pending messages.</p> :
         <ol className="space-y-1 text-sm" aria-label="Pending messages">
           {page.items.map((item, position) => <li key={item.input_id} className="flex flex-wrap items-center gap-2">
@@ -115,9 +139,22 @@ export function SessionInputQueue({scope, onAccessLost, onCancelled}: {
         </ol>)}
       <div className="flex flex-wrap gap-2">
         <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => void run()}>Refresh queue</button>
+        {page?.pause_capability_revision && !confirmResume && (page.paused
+          ? <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => setConfirmResume(true)}>Resume queue</button>
+          : <button type="button" className="btn btn-secondary" disabled={busy} onClick={() => void run({paused: true})}>Pause queue</button>)}
         {page?.next_cursor && <button type="button" className="btn btn-secondary" disabled={busy}
           onClick={() => void run({cursor: page.next_cursor})}>Load more entries</button>}
       </div>
+      {confirmResume && <div className="space-y-2 rounded-md border p-2">
+        <p className="text-sm">Pending messages can start sending at the next available turn.</p>
+        <div className="flex flex-wrap gap-2">
+          <button type="button" className="btn btn-primary" onClick={() => void run({paused: false})}>Resume sending</button>
+          <button ref={keepPaused} type="button" className="btn btn-secondary" onClick={() => {
+            setConfirmResume(false);
+            summary.current?.focus();
+          }}>Keep paused</button>
+        </div>
+      </div>}
     </div>
     <p className="text-sm" role="status">{notice || (busy ? 'Checking the queue…' : '')}</p>
   </details>;

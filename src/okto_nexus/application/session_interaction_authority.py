@@ -68,7 +68,11 @@ def change_human_queue_pause(*, factory, access, authority_fence, current_pause_
     """Apply an explicit pause or resume under a verified human login."""
     with authority_fence() as resolve_human, factory.unit_of_work() as uow:
         def verify():
-            require_human_queue_control(uow, access=access, author=author, resolve_human=resolve_human)
+            if paused:
+                require_human_queue_control(uow, access=access, author=author, resolve_human=resolve_human)
+            else:
+                require_session_input_authority(uow, factory=factory, access=access, scope=scope,
+                                                author=author, resolve_human=resolve_human)
             return current_pause_revision(uow, scope, paused)
 
         return set_input_queue_paused(uow, scope=scope, paused=paused, expected_queue_revision=expected_queue_revision,

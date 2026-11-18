@@ -1,6 +1,7 @@
 """Exercise the serve-owned queue against real R4/Core with a synthetic peer."""
 
 from dataclasses import replace
+from functools import partial
 
 import pytest
 import test_local_realization as local_realization
@@ -10,6 +11,7 @@ from test_embedded_dispatch import admit, connect_local, wait_receipt
 
 from okto_nexus.application.session_interaction_authority import enqueue_human_input
 from okto_nexus.application.session_interaction_capability import next_turn_revision
+from okto_nexus.application.session_interaction_capacity import advance_input_capacity
 from okto_nexus.bootstrap.execution_authority import build_execution_access
 from okto_nexus.domain.execution.keys import SessionKey, SessionOwnerGeneration
 from okto_nexus.domain.session_interaction import InputAuthor, InputScope
@@ -285,4 +287,99 @@ def test_dashboard_queue_pages_and_cancels_only_the_original_human_input(interac
     auth.logout(token)
     assert client.post(cancel_path, headers=ui, json=cancellation).status_code == 401
     assert client.get(path + '/inputs', params=query).status_code == 401
+    client.cookies.clear()
+
+
+def test_dashboard_pauses_an_empty_queue_and_resumes_retained_inputs_in_order(interactive_runtime):
+    setup, binding, native = interactive_runtime
+    deps, app, client, *_ = setup
+    opened = admit(setup, binding, 'dashboard-pause-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    original = opened['scope']
+    fields = ('server_id', 'executor_id', 'binding_id', 'workspace_id', 'workspace_binding_id', 'agent_id', 'session_id')
+    exact = {field: original[field] for field in fields}
+    generation = original['session_owner_generation']
+    session = exact['session_id']
+    scope = InputScope(SessionKey(exact['server_id'], exact['executor_id'], session),
+        SessionOwnerGeneration(generation), exact['binding_id'], exact['workspace_id'],
+        exact['workspace_binding_id'], exact['agent_id'])
+    path = f'/api/v1/runtime-management/runtime/sessions/{session}'
+    query = {field: exact[field] for field in fields if field != 'session_id'}
+    base = {'scope': exact, 'expected_session_generation': generation}
+    query['expected_session_generation'] = generation
+    ui = {'x-nexus-ui': '1'}
+    auth = app.state.operator_auth
+    assert auth.configure('pause-fixture', 'fixture-password-long', local=True)
+    token = auth.login('pause-fixture', 'fixture-password-long')
+
+    def queue():
+        response = client.get(path + '/inputs', params=query)
+        assert response.status_code == 200, response.text
+        return response.json()
+
+    def change(page, paused, *, headers=ui, **overrides):
+        return client.post(path + '/inputs/queue-state', headers=headers, json=base | {
+            'capability_revision': page['pause_capability_revision'], 'expected_queue_revision': page['queue_revision'],
+            'paused': paused,
+        } | overrides)
+
+    client.cookies.set('nexus_operator_session', token)
+    empty = queue()
+    assert empty['pause_capability_revision'] and not empty['paused'] and not empty['items']
+    assert change(empty, True, headers=ui | {'origin': 'https://foreign.invalid'}).status_code == 403
+    assert change(empty, True, expected_session_generation=generation + 1).status_code == 409
+    assert change(empty, 'true').status_code == 422
+    paused = change(empty, True)
+    assert paused.status_code == 200, paused.text
+    assert paused.headers['cache-control'] == 'no-store'
+    assert paused.json() == {'scope': exact, 'session_owner_generation': generation, 'paused': True, 'queue_revision': 1}
+    assert change(empty, True).status_code == 409
+
+    def capability():
+        response = client.get(path + '/interaction', params=query)
+        assert response.status_code == 200
+        return response.json()['next_turn']['capability_revision']
+
+    eventually(capability)
+    send_revision = capability()
+    retained = []
+    for intent in ('first-paused', 'second-paused'):
+        response = client.post(path + '/inputs', headers=ui, json=base | {
+            'capability_revision': send_revision, 'client_intent_id': intent,
+            'content': [{'type': 'text', 'text': intent}],
+        })
+        assert response.status_code == 202, response.text
+        retained.append(response.json()['input_id'])
+
+    ready = queue()
+    assert ready['paused'] and ready['queue_revision'] == 3
+    assert [item['input_id'] for item in ready['items']] == retained
+    assert change(ready, False, capability_revision=empty['pause_capability_revision']).status_code == 409
+    scheduler, = app.state.handoff_runtime_service._schedulers
+    client.portal.call(partial(advance_input_capacity, scope=scope, remote_ready=scheduler.execution_ready,
+                               **scheduler.options))
+    assert not native.native.sent and all(item['operation_id'] is None for item in queue()['items'])
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        grants = uow.connection.execute('SELECT grant_id, revision FROM runtime_execution_grants').fetchall()
+
+    resumed = change(ready, False)
+    assert resumed.status_code == 200, resumed.text
+    assert resumed.json()['paused'] is False and resumed.json()['queue_revision'] == 4
+    assert change(ready, False).status_code == 409
+    eventually(lambda: len(native.native.sent) == 1)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        stream = uow.connection.execute('SELECT stream_epoch FROM execution_local_streams WHERE session_id=?',
+                                        (session,)).fetchone()[0]
+    first_operation = native.native.sent[0][1]
+    client.portal.call(native.native.queue.put, RuntimeEvent(
+        exact['server_id'], exact['executor_id'], session, stream, 0, 'turn_state', 'fixture.pause.complete',
+        {'delivery_phase': 'terminal', 'delivery_outcome': 'success'}, operation_id=first_operation))
+    eventually(lambda: len(native.native.sent) == 2)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT grant_id, revision FROM runtime_execution_grants').fetchall() == grants
+        submitted = [tuple(row) for row in uow.connection.execute(
+            'SELECT input_id,operation_id FROM session_interaction_inputs ORDER BY enqueue_sequence')]
+    assert submitted == list(zip(retained, [operation for _action, operation in native.native.sent], strict=True))
+    auth.logout(token)
+    assert change(ready, True).status_code == 401
     client.cookies.clear()

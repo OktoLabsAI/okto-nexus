@@ -203,12 +203,16 @@ export interface SessionInputQueueItem extends SessionInputReceipt {
   can_cancel: boolean;
 }
 
-export interface SessionInputQueuePage {
+export interface SessionInputQueueState {
   scope: RuntimeScope;
   session_owner_generation: number;
   queue_revision: number;
   paused: boolean;
+}
+
+export interface SessionInputQueuePage extends SessionInputQueueState {
   cancel_capability_revision: string | null;
+  pause_capability_revision: string | null;
   items: SessionInputQueueItem[];
   next_cursor: string | null;
 }
@@ -412,6 +416,13 @@ export const runtimeApi = {
       scope: target.scope, expected_session_generation: scope.session_owner_generation,
       capability_revision: capability, expected_queue_revision: item.queue_revision,
       expected_input_revision: item.input_revision,
+    });
+  },
+  changeSessionQueuePause: (scope: InteractionScope, page: SessionInputQueuePage, paused: boolean, signal: AbortSignal) => {
+    const target = interactionTarget(scope);
+    return read<SessionInputQueueState>(`${target.path}/inputs/queue-state`, signal, {
+      scope: target.scope, expected_session_generation: scope.session_owner_generation,
+      expected_queue_revision: page.queue_revision, capability_revision: page.pause_capability_revision, paused,
     });
   },
   sessions: (agentId: string, binding: Pick<BindingView, 'executor_id' | 'binding_id'>, after: string, signal?: AbortSignal) => {

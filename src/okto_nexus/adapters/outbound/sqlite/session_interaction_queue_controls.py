@@ -28,6 +28,15 @@ def is_input_queue_paused(conn: Connection, session: SessionKey) -> bool:
     """, asdict(session)).fetchone() is not None
 
 
+def has_unresolved_interrupt(conn: Connection, session: SessionKey) -> bool:
+    return conn.execute("""
+        SELECT 1 FROM execution_operations
+        WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
+          AND action='turn.interrupt' AND admission_state NOT IN ('REJECTED','RESOLVED_TERMINAL')
+        LIMIT 1
+    """, asdict(session)).fetchone() is not None
+
+
 def set_input_queue_paused(
     uow: SqliteUnitOfWork,
     *,
@@ -65,6 +74,8 @@ def set_input_queue_paused(
         raise _conflict("INPUT_REVISION_CHANGED", "The queue changed. Review it before changing its pause state.")
     if current.paused == paused:
         return current
+    if not paused and has_unresolved_interrupt(conn, scope.session):
+        raise _conflict("INPUT_INTERRUPT_UNRESOLVED", "Wait for the interrupt outcome before resuming the queue.")
     if current.queue_revision == MAX_SQLITE_INTEGER:
         raise _conflict("INPUT_REVISION_LIMIT", "The queue revision limit was reached.")
 

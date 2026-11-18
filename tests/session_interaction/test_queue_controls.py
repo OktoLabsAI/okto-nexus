@@ -16,6 +16,7 @@ from okto_nexus.domain.session_interaction import MAX_SQLITE_INTEGER, InputDeliv
 from okto_nexus.errors import ErrorCode, OktoNexusError
 from tests.session_interaction.test_queue_storage import database as queue_database
 from tests.session_interaction.test_queue_storage import enqueue
+from tests.session_interaction.test_receipt_lookup import _store_operation
 
 database = queue_database
 
@@ -138,3 +139,23 @@ def test_pause_revision_limit_and_positive_generation_constraint(database):
                 conn.execute("UPDATE session_interaction_queues SET paused_owner_generation=?", (malformed,))
         assert _control(uow, scope, MAX_SQLITE_INTEGER) == QueuePauseReceipt(MAX_SQLITE_INTEGER, 1)
         assert tuple(conn.execute("SELECT next_sequence, paused_owner_generation FROM session_interaction_queues").fetchone()) == (1, 1)
+
+
+def test_resume_keeps_the_barrier_while_an_exact_session_interrupt_can_still_apply(database):
+    factory, (scope, sibling) = database
+    with factory.unit_of_work() as uow:
+        _set_active_lease(uow, scope)
+        assert _control(uow, scope, 0).paused
+        _store_operation(uow, scope, 'interrupt', 'turn.interrupt')
+        _store_operation(uow, sibling, 'other-interrupt', 'turn.interrupt')
+        conn = uow.connection
+        for stage in ('ACCEPTED', 'DISPATCHED', 'RECONCILING'):
+            conn.execute("UPDATE execution_operations SET admission_state=? WHERE operation_id='interrupt'", (stage,))
+            with pytest.raises(OktoNexusError) as error:
+                _control(uow, scope, 1, paused=False)
+            assert error.value.details["reason"] == "INPUT_INTERRUPT_UNRESOLVED"
+            assert is_input_queue_paused(conn, scope.session)
+
+        conn.execute("UPDATE execution_operations SET admission_state='RESOLVED_TERMINAL' WHERE operation_id='interrupt'")
+        assert _control(uow, scope, 1, paused=False) == QueuePauseReceipt(2, None)
+        assert not is_input_queue_paused(conn, scope.session)

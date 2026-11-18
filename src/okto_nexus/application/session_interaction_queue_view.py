@@ -40,6 +40,7 @@ class InputQueuePage:
     paused: bool
     items: tuple[InputQueueItem, ...]
     next_cursor: InputQueueCursor | None
+    pause_capability_revision: str | None = None
 
 
 def _unavailable() -> OktoNexusError:
@@ -49,6 +50,7 @@ def _unavailable() -> OktoNexusError:
 def read_session_input_queue(
     factory, *, access, resolve_human, scope: InputScope, author: InputAuthor | None,
     cursor: InputQueueCursor | None = None, limit: int = 25, pending_only: bool = False,
+    pause_revision_for=None,
 ) -> InputQueuePage:
     """Return metadata in FIFO order within one authorized database snapshot.
 
@@ -102,8 +104,12 @@ def read_session_input_queue(
         """, params).fetchone()
         if queue is None:
             raise _unavailable()
+        revision = queue["revision"] or 0
+        paused = queue["paused_owner_generation"] is not None
+        pause_revision = (pause_revision_for(uow, scope, not paused)
+                          if pause_revision_for is not None and revision < MAX_SQLITE_INTEGER else None)
         if queue["revision"] is None:
-            return InputQueuePage(0, False, (), None)
+            return InputQueuePage(0, False, (), None, pause_revision)
 
         rows = uow.connection.execute("""
             SELECT input_id, enqueue_sequence, input_revision, status, operation_id, possible_effect,
@@ -119,7 +125,6 @@ def read_session_input_queue(
                "after_sequence": cursor.after_sequence if cursor else 0, "fetch_limit": limit + 1,
                "pending_only": pending_only}).fetchall()
 
-        revision = queue["revision"]
         items = []
         for row in rows[:limit]:
             status = InputDeliveryState(row["status"])
@@ -129,4 +134,4 @@ def read_session_input_queue(
             items.append(InputQueueItem(row["input_id"], row["enqueue_sequence"], row["input_revision"],
                                         status, row["operation_id"], possible_effect, can_cancel))
         following = InputQueueCursor(scope, items[-1].sequence) if len(rows) > limit else None
-        return InputQueuePage(revision, queue["paused_owner_generation"] is not None, tuple(items), following)
+        return InputQueuePage(revision, paused, tuple(items), following, pause_revision)

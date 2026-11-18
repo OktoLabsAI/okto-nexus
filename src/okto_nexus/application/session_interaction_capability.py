@@ -10,11 +10,28 @@ from ..adapters.outbound.sqlite.session_interaction import (
     _current_session,
     _scope_params,
 )
+from ..adapters.outbound.sqlite.session_interaction_queue_controls import (
+    has_unresolved_interrupt,
+)
 from ..domain.attention import digest
 from ..domain.session_interaction import InputScope
 from .execution_inventory_freshness import inventory_is_fresh
 from .execution_inventory_revalidation import accepts_binding, selection
 from .executor_inventory import load_current_executor_inventory
+
+
+def queue_pause_revision(uow, scope: InputScope, paused: bool, *, current_next_turn_revision) -> str | None:
+    if not _current_session(uow.connection, _scope_params(scope), require_active_lease=not paused):
+        return None
+    next_turn = None
+    if not paused:
+        if has_unresolved_interrupt(uow.connection, scope.session):
+            return None
+        next_turn = current_next_turn_revision(uow, scope)
+        if next_turn is None:
+            return None
+    return 'sha256:' + digest({'action': 'queue.pause.v1' if paused else 'queue.resume.v1',
+                              'scope': _scope_params(scope), 'next_turn': next_turn})
 
 
 def next_turn_revision(uow, scope: InputScope, *, availability, fresh_publications) -> str | None:

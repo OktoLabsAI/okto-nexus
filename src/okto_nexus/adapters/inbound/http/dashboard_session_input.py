@@ -1,6 +1,7 @@
 """Dashboard interaction with one exact session under a real human login."""
 
 from dataclasses import asdict
+from functools import partial
 
 import anyio
 from fastapi import APIRouter, Request
@@ -9,8 +10,10 @@ from fastapi.responses import JSONResponse
 from ....application.execution_session_views import read_execution_session
 from ....application.session_interaction_authority import (
     cancel_human_input,
+    change_human_queue_pause,
     enqueue_human_input,
 )
+from ....application.session_interaction_capability import queue_pause_revision
 from ....application.session_interaction_queue_view import (
     InputQueueCursor,
     read_session_input_queue,
@@ -28,7 +31,9 @@ from .session_interaction_contract import (
     ExactSessionScope,
     InputQueueEntry,
     InputQueueSnapshot,
+    InputQueueState,
     InputReceipt,
+    QueuePauseChange,
 )
 
 _HEADERS = {'Cache-Control': 'no-store'}
@@ -191,7 +196,9 @@ def build_router():
         state = request.app.state
         auth = state.operator_auth
         token = request.cookies.get(COOKIE)
-        issue_cancel = bool(getattr(state, 'session_input_dispatch_options', {}))
+        dispatch = getattr(state, 'session_input_dispatch_options', {})
+        pause_revision_for = (partial(queue_pause_revision,
+            current_next_turn_revision=dispatch['session_input_capability_revision']) if dispatch else None)
 
         def read():
             ref = auth.authority_reference(token, create=False)
@@ -202,22 +209,52 @@ def build_router():
 
             page = read_session_input_queue(state.deps.connection_factory, access=build_execution_access(state.deps),
                 resolve_human=resolve, scope=scope, author=author, cursor=cursor, limit=limit,
-                pending_only=pending == 'true')
+                pending_only=pending == 'true', pause_revision_for=pause_revision_for)
             return InputQueueSnapshot(
                 scope=document, session_owner_generation=scope.generation.value,
                 queue_revision=page.queue_revision, paused=page.paused,
-                cancel_capability_revision=_cancel_revision(None, scope) if issue_cancel else None,
+                cancel_capability_revision=_cancel_revision(None, scope) if dispatch else None,
+                pause_capability_revision=page.pause_capability_revision,
                 items=[InputQueueEntry(
                     scope=document, session_owner_generation=scope.generation.value,
                     input_id=item.input_id, enqueue_sequence=item.sequence, input_revision=item.input_revision,
                     queue_revision=page.queue_revision, status=item.status, operation_id=item.operation_id,
-                    possible_effect=item.possible_effect, can_cancel=issue_cancel and item.can_cancel,
+                    possible_effect=item.possible_effect, can_cancel=bool(dispatch) and item.can_cancel,
                 ) for item in page.items],
                 next_cursor=f'{scope_digest}.{page.next_cursor.after_sequence}' if page.next_cursor else None,
             ).model_dump(mode='json')
 
         try:
             return JSONResponse(await anyio.to_thread.run_sync(read), headers=_HEADERS)
+        except OktoNexusError as error:
+            return _runtime_error(error)
+
+    @router.post('/inputs/queue-state')
+    async def set_queue_state(session_id: str, body: QueuePauseChange, request: Request):
+        if not getattr(request.state, 'operator_session', False):
+            return _error(401, 'AUTH_FAILED', 'Sign in as the human operator to change the session queue.')
+        if body.scope.session_id != session_id or request.query_params:
+            return _error(422, 'VALIDATION_ERROR', 'The queue control must use the exact session scope.')
+        state = request.app.state
+        options = getattr(state, 'session_input_dispatch_options', {})
+        if not options:
+            return _error(409, 'CONFLICT', 'Session queue controls are disabled.')
+
+        def change():
+            ref = state.operator_auth.authority_reference(request.cookies.get(COOKIE))
+            if ref is None:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The operator login has expired.')
+            receipt = change_human_queue_pause(factory=state.deps.connection_factory,
+                access=build_execution_access(state.deps), authority_fence=options['session_input_authority_fence'],
+                current_pause_revision=partial(queue_pause_revision,
+                    current_next_turn_revision=options['session_input_capability_revision']),
+                scope=body.input_scope(), author=InputAuthor(ref, 'web'), paused=body.paused,
+                capability_revision=body.capability_revision, expected_queue_revision=body.expected_queue_revision)
+            return InputQueueState(scope=body.scope, session_owner_generation=body.expected_session_generation,
+                                   queue_revision=receipt.queue_revision, paused=receipt.paused).model_dump(mode='json')
+
+        try:
+            return JSONResponse(await anyio.to_thread.run_sync(change), headers=_HEADERS)
         except OktoNexusError as error:
             return _runtime_error(error)
 
