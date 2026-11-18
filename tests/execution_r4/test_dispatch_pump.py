@@ -161,6 +161,42 @@ def test_confirmed_incompatible_inventory_still_rejects_unsent_dispatch(owner):
     release_unsent_dispatch(deps.connection_factory, reservation=reservation)
 
 
+def test_input_send_claim_holds_authority_fence_only_for_linked_work(monkeypatch):
+    from contextlib import contextmanager
+    from dataclasses import replace
+
+    from okto_nexus.application.execution_dispatch import DispatchReservation
+
+    held = False
+
+    @contextmanager
+    def fence():
+        nonlocal held
+        held = True
+        try:
+            yield lambda reference: reference == 'fixture-author'
+        finally:
+            held = False
+
+    def begin(**options):
+        assert held is options['reservation'].session_input
+        if held:
+            assert options['resolve_session_input_human']('fixture-author')
+            assert options['session_input_capability_revision'](None, None) == 'fixture-capability'
+        else:
+            assert 'resolve_session_input_human' not in options
+        return 'prepared-frame'
+
+    monkeypatch.setattr(pumps, 'begin_execution_send', begin)
+    pump = pumps.ExecutionDispatchPump(factory=None, channel=None, access=None, fresh_publications={},
+        send=None, send_lock=None, verify_link=None, close_link=None, session_input_authority_fence=fence,
+        session_input_capability_revision=lambda uow, scope: 'fixture-capability')
+    plain = DispatchReservation('server', 'executor', 'operation', 'attempt', 1, 'regular', 100)
+    assert pump._begin_send(reservation=plain) == 'prepared-frame'
+    assert pump._begin_send(reservation=replace(plain, session_input=True)) == 'prepared-frame'
+    assert not held
+
+
 async def wait_for_state(state, expected):
     async def wait():
         while True:

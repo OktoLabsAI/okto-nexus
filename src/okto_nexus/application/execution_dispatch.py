@@ -40,6 +40,7 @@ class DispatchReservation:
     reserved_bytes: int
     owner_connection_id: str | None = None
     owner_connection_generation: int | None = None
+    session_input: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -293,11 +294,14 @@ def reserve_execution_dispatch(
             if changed != 1:
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                       "The dispatch row changed during reservation.", {})
+            linked_input = conn.execute("SELECT 1 FROM session_interaction_inputs WHERE server_id=? "
+                "AND executor_id=? AND operation_id=?", (server_id, executor_id, row["operation_id"])).fetchone()
             return DispatchReservation(
                 server_id, executor_id, row["operation_id"], token,
                 row["attempt_no"] + 1, reservation_class, cost,
                 channel.connection_id if channel else None,
-                channel.connection_generation if channel else None)
+                channel.connection_generation if channel else None,
+                linked_input is not None)
     return None
 
 
@@ -331,6 +335,8 @@ def begin_execution_send(
     remote_ready: bool, fresh_publications: Mapping, access,
     channel: ExecutionChannel | None = None,
     resolve_native_input=None,
+    resolve_session_input_human=None,
+    session_input_capability_revision=None,
 ) -> AuthorizedDispatch | AuthorizedOpenBootstrap:
     """Revalidate after queue wait, then fence the exact attempt as SENDING.
 
@@ -381,8 +387,9 @@ def begin_execution_send(
                     "ACCEPTED", "DISPATCH_PENDING"}):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch reservation changed.", {})
-        if conn.execute("SELECT 1 FROM session_interaction_inputs WHERE server_id=? AND executor_id=? "
-                        "AND operation_id=? AND capacity_state IS NOT 'CONSUMED'", key).fetchone() is not None:
+        linked_input = conn.execute("SELECT * FROM session_interaction_inputs WHERE server_id=? AND executor_id=? "
+                                    "AND operation_id=?", key).fetchone()
+        if linked_input is not None and linked_input['capacity_state'] != 'CONSUMED':
             raise OktoNexusError(ErrorCode.CONFLICT, "Session input capacity is not confirmed.", {})
         from .execution_initial_turns import require_current_parent_readiness
         require_current_parent_readiness(conn, server_id=server_id,
@@ -599,6 +606,11 @@ def begin_execution_send(
                 channel=ExecutionChannel(server_id, reservation.executor_id,
                     connection_id, connection_generation), now=authority_now,
                 operator_containment=operator_containment)
+        if linked_input is not None:
+            from .session_interaction_dispatch import require_input_send_authority
+            require_input_send_authority(uow, factory=factory, access=access, linked=linked_input, scope=scope,
+                lease=lease, intent_hash=row['intent_hash'], resolve_human=resolve_session_input_human,
+                current_capability_revision=session_input_capability_revision)
         # The operator initiates and remains audited; execution still consumes
         # the represented subject's separately issued canonical grant.
         actor = access.agents.get(uow, row['subject_agent_id'])
@@ -653,6 +665,15 @@ def begin_execution_send(
         if changed != 1:
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch attempt changed before send.", {})
+        if linked_input is not None:
+            marked = conn.execute("UPDATE session_interaction_inputs SET possible_effect=1,input_revision=input_revision+1 "
+                "WHERE server_id=? AND executor_id=? AND operation_id=? AND capacity_state='CONSUMED' "
+                "AND status='DISPATCHING' AND possible_effect=0 AND input_revision=?",
+                (*key, linked_input['input_revision'])).rowcount
+            if marked != 1:
+                raise OktoNexusError(ErrorCode.CONFLICT, "The session input changed before send.", {})
+            conn.execute("UPDATE session_interaction_queues SET revision=revision+1 "
+                "WHERE server_id=? AND executor_id=? AND session_id=?", (*key[:2], linked_input['session_id']))
         from .one_shot_runtime import before_send
         before_send(conn, row)
         if bootstrap:

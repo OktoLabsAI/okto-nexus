@@ -264,3 +264,48 @@ def stage_dispatch(uow: SqliteUnitOfWork, *, scope: InputScope, head: PendingInp
         WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
     """, params)
     return consumption
+
+
+def confirm_dispatch_capacity(uow: SqliteUnitOfWork, *, scope: InputScope, operation_id: str,
+                              observed: CapacityReservation) -> None:
+    """Release the exact outbox hold after the authenticated host confirms it."""
+    uow.require_active_writer()
+    if type(observed) is not CapacityReservation or observed.state != 'CONSUMED':
+        raise _conflict('INPUT_CAPACITY_UNCONFIRMED', 'The host has not confirmed input capacity consumption.')
+    conn = uow.connection
+    params = {**_scope_params(scope), 'operation_id': operation_id}
+    linked = conn.execute("""
+        SELECT i.*,e.generation,e.control_state,e.revoked_at FROM session_interaction_inputs i
+        JOIN execution_executors e USING (server_id,executor_id)
+        WHERE i.server_id=:server_id AND i.executor_id=:executor_id AND i.session_id=:session_id
+          AND i.operation_id=:operation_id AND i.owner_generation=:owner_generation AND i.binding_id=:binding_id
+          AND i.workspace_id=:workspace_id AND i.workspace_binding_id=:workspace_binding_id AND i.agent_id=:agent_id
+    """, params).fetchone()
+    if linked is None or linked['capacity_state'] not in ('WAITING_CONSUMPTION', 'NEEDS_RECONCILIATION', 'CONSUMED'):
+        raise _conflict('INPUT_DISPATCH_CHANGED', 'The input has no matching staged capacity claim.')
+    expected = CapacityReservation.from_dict(json.loads(linked['capacity_reservation_json']))
+    consumption = CapacityConsumption.from_dict(json.loads(linked['capacity_consumption_json']))
+    if (observed.request != expected.request or observed.reservation_id != expected.reservation_id
+            or observed.consumption != consumption or observed.capacity_revision < expected.capacity_revision):
+        raise _conflict('INPUT_CAPACITY_CHANGED', 'The host confirmed a different input capacity claim.')
+    if linked['capacity_state'] == 'CONSUMED':
+        return
+    if (not _current_session(conn, params, require_active_lease=True) or linked['revoked_at'] is not None
+            or linked['control_state'] != 'CONTROL_READY' or linked['generation'] != observed.request.scope.connection_generation):
+        raise _conflict('INPUT_SESSION_CHANGED', 'The input session owner changed before dispatch.')
+    reopened = conn.execute("""
+        UPDATE execution_dispatch_outbox SET dispatch_state='PENDING'
+        WHERE server_id=:server_id AND executor_id=:executor_id AND operation_id=:operation_id
+          AND dispatch_state='WAITING_INTERACTION_CAPACITY' AND attempt_no=0
+    """, params).rowcount
+    if reopened != 1:
+        raise _conflict('INPUT_OPERATION_CHANGED', 'The held outbox entry changed before confirmation.')
+    conn.execute("""
+        UPDATE session_interaction_inputs SET capacity_state='CONSUMED',input_revision=input_revision+1,
+            capacity_reservation_json=:reservation
+        WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id AND operation_id=:operation_id
+    """, {**params, 'reservation': canonical_json(observed.to_dict()).decode()})
+    conn.execute("""
+        UPDATE session_interaction_queues SET revision=revision+1
+        WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
+    """, params)

@@ -26,7 +26,8 @@ class ExecutionDispatchPump:
 
     def __init__(self, *, factory, channel, access, fresh_publications,
                  send, send_lock, verify_link, close_link, poll_interval=0.1, resolve_native_input=None,
-                 retained_operations=None, wake_deliveries=None, idle_interval=1.0):
+                 retained_operations=None, wake_deliveries=None, idle_interval=1.0,
+                 session_input_authority_fence=None, session_input_capability_revision=None):
         self.factory, self.channel, self.access = factory, channel, access
         self.fresh_publications = fresh_publications
         self.send, self.send_lock = send, send_lock
@@ -37,6 +38,8 @@ class ExecutionDispatchPump:
         self.idle_interval = max(idle_interval, poll_interval)
         self._idle_version = self._idle_since = None
         self.resolve_native_input = resolve_native_input
+        self.session_input_authority_fence = session_input_authority_fence
+        self.session_input_capability_revision = session_input_capability_revision
         self.retained_operations = retained_operations or (lambda: ())
         self.wake_deliveries = wake_deliveries or (lambda: None)
         self._stopping = asyncio.Event()
@@ -90,6 +93,16 @@ class ExecutionDispatchPump:
             return True
         return self._store_version() != self._idle_version
 
+    def _begin_send(self, *, reservation):
+        begin = partial(begin_execution_send, factory=self.factory, reservation=reservation, remote_ready=True,
+            fresh_publications=self.fresh_publications, access=self.access, channel=self.channel,
+            resolve_native_input=self.resolve_native_input)
+        if reservation.session_input and self.session_input_authority_fence is not None:
+            with self.session_input_authority_fence() as resolve:
+                return begin(resolve_session_input_human=resolve,
+                             session_input_capability_revision=self.session_input_capability_revision)
+        return begin()
+
     async def _run(self):
         reservation = None
         try:
@@ -136,10 +149,7 @@ class ExecutionDispatchPump:
                     # both after the potentially blocking writer-lock wait.
                     await self._database(self.verify_link)
                     try:
-                        authorized = await self._database(begin_execution_send,
-                            factory=self.factory, reservation=reservation, remote_ready=True,
-                            fresh_publications=self.fresh_publications, access=self.access, channel=self.channel,
-                            resolve_native_input=self.resolve_native_input)
+                        authorized = await self._database(self._begin_send, reservation=reservation)
                     except OktoNexusError as error:
                         if (error.code == ErrorCode.CONFLICT and
                                 (error.details or {}).get('transient') == 'inventory_not_fresh'):

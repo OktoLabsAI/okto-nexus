@@ -214,7 +214,10 @@ def assert_staged_input_respects_shared_pump(deps, app, access, open_scope, exac
 
     from nexus_connector_core import CAPACITY_CONTRACT_REVISION, CapacityRequest, CapacityReservation, CapacityScope
 
-    from okto_nexus.adapters.outbound.sqlite.session_interaction import prepare_dispatch_head
+    from okto_nexus.adapters.outbound.sqlite.session_interaction import (
+        confirm_dispatch_capacity,
+        prepare_dispatch_head,
+    )
     from okto_nexus.application.execution_domain_delivery import DeliveryTransactionFactory
     from okto_nexus.application.execution_native_facts import stamp
     from okto_nexus.application.session_interaction_dispatch import admit_held_input
@@ -269,6 +272,32 @@ def assert_staged_input_respects_shared_pump(deps, app, access, open_scope, exac
         admit_turn('fixture-concurrent-r4', 'Concurrent text')
         assert reserve_execution_dispatch(borrowed, server_id=exact.session.server_id,
             executor_id=exact.session.executor_id, remote_ready=True) is None
+        confirmed = replace(held, state='CONSUMED', capacity_revision=2, consumption=consumption)
+        capacity_args = {'scope': exact, 'operation_id': consumption.turn_operation_id}
+        with pytest.raises(OktoNexusError, match='different input capacity claim'):
+            confirm_dispatch_capacity(uow, observed=replace(confirmed, reservation_id='other-reservation'), **capacity_args)
+        confirm_dispatch_capacity(uow, observed=confirmed, **capacity_args)
+        confirm_dispatch_capacity(uow, observed=confirmed, **capacity_args)
+        send_reservation = reserve_execution_dispatch(borrowed, server_id=exact.session.server_id,
+            executor_id=exact.session.executor_id, remote_ready=True)
+        assert send_reservation.operation_id == consumption.turn_operation_id
+        assert send_reservation.session_input
+        send_args = {'reservation': send_reservation, 'remote_ready': True, 'access': access,
+                     'fresh_publications': app.state.inventory_fresh_publications}
+        with pytest.raises(OktoNexusError, match='input author cannot be verified'):
+            begin_execution_send(borrowed, **send_args)
+        with pytest.raises(OktoNexusError, match='no longer signed in'):
+            begin_execution_send(borrowed, resolve_session_input_human=lambda _: None,
+                session_input_capability_revision=input_args['current_capability_revision'], **send_args)
+        assert uow.connection.execute('SELECT used_executions FROM runtime_execution_grants').fetchone()[0] == 0
+        authorized = begin_execution_send(borrowed, resolve_session_input_human=resolve,
+            session_input_capability_revision=input_args['current_capability_revision'], **send_args)
+        assert authorized.frame['operation_id'] == consumption.turn_operation_id
+        assert uow.connection.execute('SELECT possible_effect FROM session_interaction_inputs WHERE input_id=?',
+                                      (head.input_id,)).fetchone()[0] == 1
+        with pytest.raises(OktoNexusError, match='reservation changed'):
+            begin_execution_send(borrowed, resolve_session_input_human=resolve,
+                session_input_capability_revision=input_args['current_capability_revision'], **send_args)
         raise RuntimeError('rollback staged fixture')
 
 
