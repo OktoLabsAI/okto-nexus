@@ -1,6 +1,7 @@
 """Owned sender faults with actual admission, SQLite CAS, and retained barriers."""
 
 import asyncio
+from dataclasses import replace
 import json
 from pathlib import Path
 import threading
@@ -16,6 +17,7 @@ from okto_nexus.adapters.outbound.sqlite.execution_tickets import verify_executi
 from okto_nexus.application import execution_dispatch_pump as pumps
 from okto_nexus.application.execution_dispatch import begin_execution_send, reserve_execution_dispatch, release_unsent_dispatch
 from okto_nexus.application.execution_leases import ExecutionChannel
+from okto_nexus.application.execution_reconciliation import pending_unstarted_session
 from okto_nexus.errors import OktoNexusError
 
 from test_ns09 import setup_authority, negotiate, admit
@@ -346,3 +348,52 @@ def test_old_connection_cannot_send_after_owned_reservation_recovery(owner):
         row = uow.connection.execute('SELECT reservation_owner,attempt_token,reserved_bytes FROM execution_dispatch_outbox').fetchone()
         assert tuple(row) == (replacement.connection_id, new.attempt_token, new.reserved_bytes)
     release_unsent_dispatch(factory, reservation=new)
+
+
+@pytest.mark.parametrize('boundary', ['reserved', 'sending', 'ordinary_open'])
+def test_reconcile_saved_open_requires_proof_for_every_attempt(owner, boundary):
+    deps, app, access, _, _, channel, resolution, _ = owner
+    factory = deps.connection_factory
+    scope = channel.server_id, channel.executor_id
+    session_id = resolution['session_id']
+
+    def reserve():
+        return reserve_execution_dispatch(factory, server_id=scope[0], executor_id=scope[1],
+                                          remote_ready=True, channel=channel)
+
+    first = reserve()
+    if boundary == 'sending':
+        begin_execution_send(factory, reservation=first, remote_ready=True, access=access,
+            fresh_publications=app.state.inventory_fresh_publications, channel=channel)
+    if boundary != 'ordinary_open':
+        # Seed lineage before exercising reservation recovery. The dashboard
+        # tests separately verify admission with an actual saved source.
+        lineage = {'source_session_id': 'source', 'source_session_generation': 1,
+                   'source_close_operation_id': 'closed', 'source_release_digest': 'sha256:' + '0' * 64}
+        with factory.unit_of_work() as uow:
+            uow.connection.execute('UPDATE execution_sessions SET saved_resume_json=? '
+                'WHERE server_id=? AND executor_id=? AND session_id=?', (json.dumps(lineage), *scope, session_id))
+    if boundary == 'reserved':
+        release_unsent_dispatch(factory, reservation=first)
+        assert reserve().attempt_no == 2
+
+    replacement = replace(channel, connection_id='replacement', connection_generation=channel.connection_generation + 1)
+    with factory.unit_of_work() as uow:
+        uow.connection.execute('UPDATE execution_executors SET owner_instance_id=?,generation=? '
+            'WHERE server_id=? AND executor_id=?', (replacement.connection_id, replacement.connection_generation, *scope))
+    assert recover_fenced_reservations(factory, channel=replacement, saved_openings_only=True) == (boundary == 'reserved')
+    with factory.unit_of_work() as uow:
+        conn = uow.connection
+        assert pending_unstarted_session(conn, *scope, session_id) == (boundary == 'reserved')
+        proofs = conn.execute('SELECT attempt_no,fenced_by_generation FROM execution_unsent_dispatch_proofs '
+            'WHERE server_id=? AND executor_id=? AND operation_id=? ORDER BY attempt_no',
+            (*scope, resolution['operation_id'])).fetchall()
+        if boundary == 'reserved':
+            assert [tuple(proof) for proof in proofs] == [(1, channel.connection_generation),
+                                                        (2, replacement.connection_generation)]
+            conn.execute('DELETE FROM execution_unsent_dispatch_proofs '
+                'WHERE server_id=? AND executor_id=? AND operation_id=? AND attempt_no=1',
+                (*scope, resolution['operation_id']))
+            assert not pending_unstarted_session(conn, *scope, session_id)
+        else:
+            assert not proofs

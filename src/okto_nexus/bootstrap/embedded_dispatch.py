@@ -35,6 +35,7 @@ from pydantic import ValidationError
 
 from ..adapters.outbound.execution.core_inventory import protocol_info
 from ..adapters.outbound.execution.embedded import EmbeddedExecutor
+from ..adapters.outbound.sqlite.execution_dispatch_ownership import recover_fenced_reservations
 from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
 from ..adapters.outbound.sqlite.execution_receipts import append_execution_receipt
 from ..adapters.outbound.sqlite.session_interaction import (
@@ -432,6 +433,10 @@ class EmbeddedDispatchOwner:
             if not await asyncio.to_thread(self._activate): return
         self.recovery_failure=None
         try:
+            # Recover a saved opening's provably unsent reservation before
+            # pre-opening reconciliation can retire its admitted successor.
+            await asyncio.to_thread(recover_fenced_reservations, self.factory,
+                                    channel=self.channel, saved_openings_only=True)
             await self.agents.initialize()
             await self.agents.tick(manual=manual)
             await self.agents.observe()

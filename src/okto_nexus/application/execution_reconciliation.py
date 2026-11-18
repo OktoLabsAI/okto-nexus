@@ -23,19 +23,23 @@ def _receipt(row):
 
 
 def pending_unstarted_session(conn, server_id, executor_id, session_id):
-    """Server evidence for an admission that has never reserved a dispatch.
+    """Server evidence for an admission that is still waiting for its first send.
 
     The embedded caller must additionally prove absent Core history and slots.
     This predicate alone does not establish absence of native effects.
     """
     key = (server_id, executor_id, session_id)
-    opening = conn.execute("SELECT 1 FROM execution_sessions s JOIN execution_operations p "
+    opening = conn.execute("SELECT p.operation_id FROM execution_sessions s JOIN execution_operations p "
         "ON p.server_id=s.server_id AND p.executor_id=s.executor_id AND p.operation_id=s.open_operation_id "
         "JOIN execution_dispatch_outbox d USING(server_id,executor_id,operation_id) "
         "WHERE s.server_id=? AND s.executor_id=? AND s.session_id=? "
         "AND s.lifecycle_state='OPEN_PENDING' AND s.lease_state='NONE' "
         "AND p.session_id=s.session_id AND p.action='runtime.open' AND p.admission_state='ACCEPTED' "
-        "AND d.dispatch_state='PENDING' AND d.attempt_no=0 AND d.attempt_token IS NULL "
+        "AND d.dispatch_state='PENDING' AND d.attempt_token IS NULL "
+        "AND (d.attempt_no=0 OR (s.saved_resume_json IS NOT NULL AND d.attempt_no=( "
+        "SELECT COUNT(*) FROM execution_unsent_dispatch_proofs proof "
+        "WHERE proof.server_id=d.server_id AND proof.executor_id=d.executor_id AND proof.operation_id=d.operation_id "
+        "AND proof.attempt_no BETWEEN 1 AND d.attempt_no))) "
         "AND d.last_error IS NULL AND d.last_receipt_revision IS NULL", key).fetchone()
     if opening is None:
         return False
@@ -50,9 +54,9 @@ def pending_unstarted_session(conn, server_id, executor_id, session_id):
     return conn.execute("SELECT 1 FROM execution_operations p LEFT JOIN execution_dispatch_outbox d "
         "USING(server_id,executor_id,operation_id) WHERE p.server_id=? AND p.executor_id=? AND p.session_id=? "
         "AND (p.admission_state<>'ACCEPTED' OR p.action NOT IN ('runtime.open','turn.submit') "
-        "OR (d.operation_id IS NOT NULL AND (d.dispatch_state<>'PENDING' OR d.attempt_no<>0 "
+        "OR (d.operation_id IS NOT NULL AND (d.dispatch_state<>'PENDING' OR (d.attempt_no<>0 AND p.operation_id<>?) "
         "OR d.attempt_token IS NOT NULL OR d.last_error IS NOT NULL OR d.last_receipt_revision IS NOT NULL))) LIMIT 1",
-        key).fetchone() is None
+        (*key, opening['operation_id'])).fetchone() is None
 
 
 class ExecutionReconciliation:

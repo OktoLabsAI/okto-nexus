@@ -7,6 +7,15 @@ from ....errors import ErrorCode, OktoNexusError
 from .session_interaction import record_input_delivery
 
 
+_SAVED_OPENING = (
+    "AND EXISTS (SELECT 1 FROM execution_sessions s "
+    "WHERE s.server_id=execution_dispatch_outbox.server_id "
+    "AND s.executor_id=execution_dispatch_outbox.executor_id "
+    "AND s.open_operation_id=execution_dispatch_outbox.operation_id "
+    "AND s.lifecycle_state='OPEN_PENDING' AND s.saved_resume_json IS NOT NULL)"
+)
+
+
 def _key(reservation):
     return (reservation.server_id, reservation.executor_id, reservation.operation_id,
             reservation.attempt_token, reservation.attempt_no,
@@ -71,7 +80,25 @@ def reject_unsent_dispatch(factory, *, reservation, error):
             executor_id=reservation.executor_id, operation_id=reservation.operation_id)
 
 
-def recover_fenced_reservations(factory, *, channel):
+def _record_reservation_proofs(conn, connection_id, generation, eligible, scope):
+    conn.execute(
+        "INSERT INTO execution_unsent_dispatch_proofs SELECT server_id,executor_id,operation_id,attempt_no,"
+        "attempt_token,reservation_owner,reservation_generation,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now') "
+        "FROM execution_dispatch_outbox " + eligible + " AND attempt_token IS NOT NULL ON CONFLICT DO NOTHING",
+        (connection_id, generation, *scope))
+
+
+def record_saved_opening_reservation_release(conn, reservation):
+    """Keep a saved opening's no-send proof before clearing its exact token."""
+    if reservation.owner_connection_id is None or reservation.owner_connection_generation is None:
+        return
+    _record_reservation_proofs(conn, reservation.owner_connection_id, reservation.owner_connection_generation,
+        "WHERE server_id=? AND executor_id=? AND operation_id=? AND attempt_token=? AND attempt_no=? "
+        "AND reservation_owner=? AND reservation_generation=? AND dispatch_state='RESERVED' " + _SAVED_OPENING,
+        _key(reservation))
+
+
+def recover_fenced_reservations(factory, *, channel, saved_openings_only=False):
     """The current connection can recover RESERVED rows of fenced known owners.
 
     The old owner cannot commit SENDING after this CAS because dispatch checks
@@ -86,20 +113,19 @@ def recover_fenced_reservations(factory, *, channel):
             (channel.server_id, channel.executor_id, channel.connection_id, channel.connection_generation)).fetchone()
         if owner is None:
             raise OktoNexusError(ErrorCode.CONFLICT, 'The recovery connection is no longer the owner.', {})
-        conn.execute(
-            "INSERT INTO execution_unsent_dispatch_proofs SELECT server_id,executor_id,operation_id,attempt_no,"
-            "attempt_token,reservation_owner,reservation_generation,?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now') "
-            "FROM execution_dispatch_outbox WHERE server_id=? AND executor_id=? AND dispatch_state='RESERVED' "
+        eligible = (
+            "WHERE server_id=? AND executor_id=? AND dispatch_state='RESERVED' "
             "AND reservation_owner IS NOT NULL AND reservation_generation IS NOT NULL "
-            "AND attempt_token IS NOT NULL AND (reservation_owner<>? OR reservation_generation<>?) ON CONFLICT DO NOTHING",
-            (channel.connection_id, channel.connection_generation, channel.server_id, channel.executor_id,
-             channel.connection_id, channel.connection_generation))
+            "AND (reservation_owner<>? OR reservation_generation<>?)"
+        )
+        if saved_openings_only:
+            eligible += " AND attempt_token IS NOT NULL " + _SAVED_OPENING
+        scope = (channel.server_id, channel.executor_id, channel.connection_id, channel.connection_generation)
+        _record_reservation_proofs(conn, channel.connection_id, channel.connection_generation, eligible, scope)
         return conn.execute(
             "UPDATE execution_dispatch_outbox SET dispatch_state='PENDING',attempt_token=NULL,"
             "reservation_class=NULL,reserved_bytes=0,reserved_at=NULL,reservation_owner=NULL,reservation_generation=NULL "
-            "WHERE server_id=? AND executor_id=? AND dispatch_state='RESERVED' AND reservation_owner IS NOT NULL "
-            "AND reservation_generation IS NOT NULL AND (reservation_owner<>? OR reservation_generation<>?)",
-            (channel.server_id, channel.executor_id, channel.connection_id, channel.connection_generation)).rowcount
+            + eligible, scope).rowcount
 
 
 def release_dispatch_owner(factory, *, channel):
@@ -107,11 +133,13 @@ def release_dispatch_owner(factory, *, channel):
     with factory.unit_of_work() as uow:
         conn = uow.connection
         key = (channel.server_id, channel.executor_id, channel.connection_id, channel.connection_generation)
+        owned = "WHERE server_id=? AND executor_id=? AND reservation_owner=? AND reservation_generation=? "
+        _record_reservation_proofs(conn, channel.connection_id, channel.connection_generation,
+            owned + "AND dispatch_state='RESERVED' " + _SAVED_OPENING, key)
         conn.execute(
             "UPDATE execution_dispatch_outbox SET dispatch_state='PENDING',attempt_token=NULL,"
             "reservation_class=NULL,reserved_bytes=0,reserved_at=NULL,reservation_owner=NULL,reservation_generation=NULL "
-            "WHERE server_id=? AND executor_id=? AND reservation_owner=? AND reservation_generation=? "
-            "AND dispatch_state='RESERVED'", key)
+            + owned + "AND dispatch_state='RESERVED'", key)
         rows = conn.execute(
             "SELECT operation_id FROM execution_dispatch_outbox WHERE server_id=? AND executor_id=? "
             "AND reservation_owner=? AND reservation_generation=? AND dispatch_state='SENDING'", key).fetchall()

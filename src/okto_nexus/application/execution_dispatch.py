@@ -15,6 +15,7 @@ from nexus_connector_core.protocol import canonical_json
 
 from ..adapters.outbound.sqlite.connection import ConnectionFactory
 from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
+from ..adapters.outbound.sqlite.execution_dispatch_ownership import record_saved_opening_reservation_release
 from ..errors import ErrorCode, OktoNexusError
 from .execution_binding_proposals import _agent_guard
 from .execution_leases import ExecutionChannel, require_applied_dispatch_lease, require_execution_lane
@@ -320,6 +321,7 @@ def release_unsent_dispatch(factory: ConnectionFactory, *,
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                               "Invalid dispatch reservation.", {})
     with factory.unit_of_work() as uow:
+        record_saved_opening_reservation_release(uow.connection, reservation)
         changed = uow.connection.execute(
             "UPDATE execution_dispatch_outbox SET dispatch_state='PENDING',"
             "attempt_token=NULL,reservation_class=NULL,reserved_bytes=0,"

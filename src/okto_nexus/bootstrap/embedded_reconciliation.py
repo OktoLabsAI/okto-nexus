@@ -537,9 +537,8 @@ class EmbeddedReconciliation:
                     raise CoreError('RECONCILIATION_REQUIRED', 'embedded_preopen_receipt')
                 from ..application.execution_reconciliation import pending_unstarted_session
                 if proven_absent and pending_unstarted_session(conn, *key):
-                    # No reservation, lease, local binding, Core journal or
-                    # owned slot ever existed. Preserve the original durable
-                    # admission for its first dispatch under current authority.
+                    # Neither a lease nor a native opening exists, and any
+                    # reservation was proven unsent. Preserve the first send.
                     return True
                 operations = conn.execute("SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? "
                     "AND session_id=? AND admission_state<>'RESOLVED_TERMINAL'", key).fetchall()
