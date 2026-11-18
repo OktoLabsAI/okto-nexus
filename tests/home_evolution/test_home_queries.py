@@ -61,6 +61,32 @@ def test_workspace_pages_are_complete_and_cursor_bound(service, home_scenario):
     assert exc.value.code == 'CONFLICT'
 
 
+def test_operator_handoff_subject_labels_home_work_without_exposing_the_body(service, home_scenario):
+    subject = 'Review storefront accessibility'
+    private = 'PRIVATE_HANDOFF_BODY_MARKER'
+    scope = {'workspace_id': WORKSPACES[0]}
+    with home_scenario.factory.unit_of_work() as uow:
+        for suffix, payload in [
+            ('0000', json.dumps({'kind': 'meta_harness.request', 'subject': subject, 'body': private})),
+            ('0001', json.dumps({'kind': 'meta_harness.request', 'subject': {'private': private}})),
+            ('0002', 'legacy text payload'),
+        ]:
+            updated = uow.connection.execute('UPDATE handoffs SET from_agent_id=?,payload=? WHERE handoff_id=?',
+                ('operator', payload, 'fixture-handoff-' + suffix))
+            assert updated.rowcount == 1
+    before = home_scenario.counts()
+    page = service.read(context=OPERATOR, section='work')
+    titles = {item['source_ref']['id']: (item['title'], item['title_origin']) for item in page['items']}
+    assert titles['fixture-handoff-0000'] == (subject, 'canonical_title')
+    assert titles['fixture-handoff-0001'] == ('Handoff', 'fallback')
+    assert titles['fixture-handoff-0002'] == ('Handoff', 'fallback')
+    assert private not in json.dumps(page)
+    scoped = service.read(context=OPERATOR, section='work', filters=scope)
+    assert any(item['title'] == subject for item in scoped['items'])
+    assert all(item['workspace_id'] == WORKSPACES[0] for item in scoped['items'])
+    assert home_scenario.counts() == before
+
+
 def test_operator_authority_not_an_agent_name(service):
     with pytest.raises(OktoNexusError):
         service.read(context=RuntimeRequestContext(None, 'http_agent'))

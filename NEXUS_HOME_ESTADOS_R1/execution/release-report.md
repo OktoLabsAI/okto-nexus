@@ -325,6 +325,16 @@ acceptance and the earlier novice-user gate remain open.
 
 ## Effects, migration and rollback
 
+The usability follow-up removes raw session IDs from the basic work panel
+and removes the card's connection disclosure. Work cards show authorized
+task titles or subjects from canonical messages and titled operator handoffs.
+Direct turns without public subjects use their known state and inspection
+action. The bounded handoff projection takes only the explicit text subject
+and uses the same Home redaction as existing titles. Result cards format their
+received time in the browser's local time zone. Eligible sessions expose a
+copyable Nexus CLI command that selects the exact session through the saved
+connection. See [the focused follow-up](usability-polish.md).
+
 There is no database migration, service recreation, directory remapping,
 grant renewal or checkpoint rewrite. New handoff verification evidence adds
 delivery-reference metadata through existing events; historical receipts and

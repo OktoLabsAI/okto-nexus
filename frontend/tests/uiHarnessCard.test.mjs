@@ -32,7 +32,8 @@ test('registered harness preview uses friendly identity and Server events, witho
 test('work previews retain authorized subjects and omit the generic label for a direct turn',()=>{
   const turn={...event,kind:'work',target:{...target,kind:'execution'},title:'Work request',display_state:'running'};
   const named={...turn,id:'named',target:{kind:'handoff'},title:'Review storefront accessibility'};
-  const html=render({...card,events_preview:[turn,named]});
+  const delivered={...event,id:'delivered',title:turn.title,entry:turn};
+  const html=render({...card,events_preview:[turn,named,delivered]});
   assert.match(html,/Running/);
   assert.match(html,/View work/);
   assert.match(html,/Review storefront accessibility/);

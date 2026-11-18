@@ -18,6 +18,8 @@ from .attention import _SetDigest
 # projected_through is retained schema with no writer. Eligible session history
 # is scanned once. Malformed legacy JSON delegates to the old EXISTS so its
 # short-circuit/error behavior is preserved, rather than silently dropping it.
+# The work composer saves its explicit subject on the operator's structured
+# handoff. Project only that bounded label, never the message body or prompt.
 FACTS = """
 WITH links AS MATERIALIZED (
  SELECT server_id,executor_id,operation_id,domain_operation_id FROM execution_domain_deliveries
@@ -96,8 +98,15 @@ WITH links AS MATERIALIZED (
  FROM ranked GROUP BY group_key
 ), parents AS MATERIALIZED (
  SELECT 'handoff' AS kind,h.handoff_id AS source_id,h.workspace_id,h.status,h.created_at AS created,
-  h.updated_at AS changed,substr(t.title,1,160) AS title,
-  CASE WHEN t.title IS NULL OR t.title='' THEN 'fallback' ELSE 'canonical_title' END AS title_origin,
+  h.updated_at AS changed,
+  COALESCE(NULLIF(substr(t.title,1,160),''), CASE
+   WHEN h.from_agent_id='operator' AND length(CAST(h.payload AS BLOB))<=65536 THEN CASE
+    WHEN json_valid(h.payload) THEN CASE
+     WHEN json_extract(h.payload,'$.kind')='meta_harness.request' AND json_type(h.payload,'$.subject')='text'
+     THEN NULLIF(NULLIF(trim(substr(json_extract(h.payload,'$.subject'),1,160)),''),'Meta-harness handoff')
+    END
+   END
+  END) AS title,
   h.from_agent_id AS sender,COALESCE(h.claimed_by,json_extract(h.target,'$.agent_id')) AS recipient,
   NULL AS message_id,NULL AS executor_id,NULL AS session_id,
   json_array('handoff',h.handoff_id,h.claim_epoch) AS group_key,
@@ -108,18 +117,20 @@ WITH links AS MATERIALIZED (
  WHERE (:workspace_id IS NULL OR h.workspace_id=:workspace_id)
  UNION ALL
  SELECT 'conversation_turn',d.operation_id,d.workspace_id,d.status,d.created_at,NULL,
-  substr(m.subject,1,160),CASE WHEN m.subject IS NULL OR m.subject='' THEN 'fallback' ELSE 'message_subject' END,
+  substr(m.subject,1,160),
   m.from_agent_id,d.recipient_agent_id,m.message_id,NULL,NULL,json_array('conversation_turn',d.operation_id),0,0
  FROM delivery_outbox d JOIN messages m ON m.message_id=d.message_id
  WHERE (:workspace_id IS NULL OR d.workspace_id=:workspace_id)
    AND NOT EXISTS(SELECT 1 FROM runtime_handoff_bindings b WHERE b.operation_id=d.operation_id)
  UNION ALL
- SELECT 'direct_operation',o.operation_id,o.workspace_id,o.admission_state,o.created_at,NULL,NULL,'fallback',
+ SELECT 'direct_operation',o.operation_id,o.workspace_id,o.admission_state,o.created_at,NULL,NULL,
   o.actor_agent_id,o.subject_agent_id,NULL,o.executor_id,o.session_id,o.group_key,0,0
  FROM scoped_ops o WHERE o.domain_operation_id IS NULL
 ), facts AS MATERIALIZED (
  SELECT json_object('kind',p.kind,'source_id',p.source_id,'workspace_id',p.workspace_id,'status',p.status,
-  'created',p.created,'changed',p.changed,'title',p.title,'title_origin',p.title_origin,
+  'created',p.created,'changed',p.changed,'title',p.title,'title_origin',
+  CASE WHEN p.title IS NULL OR p.title='' THEN 'fallback'
+       WHEN p.kind='conversation_turn' THEN 'message_subject' ELSE 'canonical_title' END,
   'agent_ids',json_array(p.sender,p.recipient),'message_id',p.message_id,'executor_id',p.executor_id,
   'session_id',p.session_id,'blocked',p.blocked,'claim_expired',p.claim_expired,'running',COALESCE(g.running,0),
   'running_since',g.running_since,'latest',g.latest,'attempt_count',COALESCE(g.attempts,0),

@@ -1,0 +1,83 @@
+{
+  "status": "FAIL_PRESENTATION_GENERIC_RESULT_EVENT_TITLE_FIRST_FAILURE_PRESERVED",
+  "layer": "Real Chrome + real installed R9 API + Vite static-only overlay; not new installed package",
+  "runtime_exit": 1,
+  "checks_passed": 2,
+  "checks_failed": 1,
+  "failure": "Error: home-no-generic-work-request-heading",
+  "qualified": [
+    "Real Chrome loaded exact index-Cp1x7DiS.js static overlay",
+    "Home no Connection details or Evidence observed"
+  ],
+  "not_qualified": [
+    "Local timestamp/datetime rendering",
+    "View work exact target/session terminal",
+    "No IDs outside disclosure",
+    "READY/control command and Copy command affordance"
+  ],
+  "cause_evidence": "Captured AX shows idle card Activity preview paragraph Work request, Turn completed, View delivery; result-kind event retains generic title.",
+  "browser_writes": [],
+  "page_errors": [],
+  "provider_invocations": 0,
+  "before": {
+    "wheel": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload1031": true,
+    "backend_count": 729,
+    "backend_hash": "3bd0e2c61f340d8d9ff685bb4e63f2a0344423b0a3f1ef46a7cda85bc48d481d",
+    "assets": {
+      "/index.html": "0c20372ed3ebd423d2a86c16798fff7dae9ab00d8e67148921baac40ab6fc40d",
+      "/assets/index-Cp1x7DiS.js": "4de81033815e01a26224260a8b943f34b71e9369406a93ec39f96821e8a69e5e",
+      "/assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036"
+    }
+  },
+  "after": {
+    "wheel": "e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628",
+    "payload1031": true,
+    "backend_count": 729,
+    "backend_hash": "3bd0e2c61f340d8d9ff685bb4e63f2a0344423b0a3f1ef46a7cda85bc48d481d",
+    "assets": {
+      "/index.html": "0c20372ed3ebd423d2a86c16798fff7dae9ab00d8e67148921baac40ab6fc40d",
+      "/assets/index-Cp1x7DiS.js": "4de81033815e01a26224260a8b943f34b71e9369406a93ec39f96821e8a69e5e",
+      "/assets/index-Bh2ghaTD.css": "306ffe53fc9c4937e82c41b9549230e9dc90275e56c4cabd30543f94dc0e6036"
+    }
+  },
+  "before_after_equal": true,
+  "fixture_cleanup": {
+    "exit_code": 0,
+    "remaining_known_births": [],
+    "signals": [],
+    "status": "EXITED",
+    "sampling_limit": "0.25s cannot inventory every short-lived child",
+    "data_preserved": true
+  },
+  "containment": {
+    "forced_births": [],
+    "remaining": []
+  },
+  "physical": {
+    "remaining_births": [],
+    "profiles": [],
+    "listeners": [],
+    "port": 57418
+  },
+  "canonical_close": {
+    "unknown": true,
+    "sessions": [
+      {
+        "session_id": "ses_50022b1d1048399647826330559e5197",
+        "confirmed": true
+      },
+      {
+        "session_id": "ses_61800168e0bc79092d582b504b0e6a29",
+        "confirmed": false
+      },
+      {
+        "session_id": "ses_0a82af033803d988ae261fe07e69474e",
+        "confirmed": false
+      }
+    ]
+  },
+  "clipboard": "Not clicked; Windows clipboard untouched.",
+  "redactions": 0,
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-hst-browser-8j4p75a3"
+}

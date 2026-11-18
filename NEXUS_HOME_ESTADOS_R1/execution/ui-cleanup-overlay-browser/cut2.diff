@@ -1,0 +1,66 @@
+--- run.py
++++ run_cut2.py
+@@ -10,12 +10,13 @@
+  ready_path=REPO/'NEXUS_HOME_ESTADOS_R1/execution/package-hst-r9/READY.json';ready=json.loads(ready_path.read_text());assert ready['wheel_sha256']=='e870ea400435d5b736093990af9b56544661e205ad657bbff83f830421a3e628'and sha(ready['wheel'])==ready['wheel_sha256']
+  payload=json.loads((ready_path.parent/'evidence/payload-manifest.json').read_text());site=Path(ready['python']).parent.parent/'Lib/site-packages';assert sum(map(len,payload.values()))==1031
+  assert all(sha(site/p)==h for group in payload.values()for p,h in group.items())
+- sources=json.loads((ready_path.parent/'evidence/source-pins-after.json').read_text());backend={p:h for p,h in sources.items()if p.startswith('src/okto_nexus/')and'/static/'not in p};assert all(sha(REPO/p)==h for p,h in backend.items())
+- static=REPO/'src/okto_nexus/adapters/inbound/http/static';html=(static/'index.html').read_text();js=re.search(r'src="(/assets/[^" ]+\.js)',html)[1];css=re.search(r'href="(/assets/[^" ]+\.css)',html)[1];assert js=='/assets/index-Cp1x7DiS.js'
++ sources=json.loads((ready_path.parent/'evidence/source-pins-after.json').read_text());backend={p:h for p,h in sources.items()if p.startswith('src/okto_nexus/')and'/static/'not in p};exception='src/okto_nexus/adapters/outbound/sqlite/home.py';exception_sha='50835c0a009ba5b1d67dac8a01827aae57424c49d8812b2e6a3d1da287e42d25';assert sha(REPO/exception)==exception_sha
++ assert all(sha(REPO/p)==h for p,h in backend.items()if p!=exception)
++ static=REPO/'src/okto_nexus/adapters/inbound/http/static';html=(static/'index.html').read_text();js=re.search(r'src="(/assets/[^" ]+\.js)',html)[1];css=re.search(r'href="(/assets/[^" ]+\.css)',html)[1];assert js=='/assets/index-8qNwMfLq.js'
+  assets={name:sha(static/name.lstrip('/'))for name in ['/index.html',js,css]};manifest=json.loads((NEXT/'native-zoom-batch/prepared-bound-v2.json').read_text());tool=manifest['tooling'];assert sha(tool['node'])==tool['node_sha256']and sha(tool['chrome'])==tool['chrome_sha256']
+- return dict(wheel=ready['wheel_sha256'],payload1031=True,backend_count=len(backend),backend_hash=hashlib.sha256(json.dumps(backend,sort_keys=True).encode()).hexdigest(),assets=assets),ready,tool,static
++ return dict(wheel=ready['wheel_sha256'],payload1031=True,checkout_exception=dict(path=exception,sha256=exception_sha,runtime_uses_original_installed_home_py=True),backend_count=len(backend),backend_hash=hashlib.sha256(json.dumps(backend,sort_keys=True).encode()).hexdigest(),assets=assets),ready,tool,static
+ def main():
+- before,ready,tool,static=guard();write(HERE/'pins-before.json',before)
++ before,ready,tool,static=guard();write(HERE/'pins-before-cut2.json',before)
+  child=subprocess.run([sys.executable,'-B',str(BROWSER/'prepare_runtime.py'),'--package-ready',str(REPO/'NEXUS_HOME_ESTADOS_R1/execution/package-hst-r9/READY.json'),'--expected-source',ready['source_commit'],'--mode','scope_two','--browser-window-open'],input=b'',capture_output=True,timeout=25,check=True)
+  root=Path(json.loads(child.stdout)['root']);print(json.dumps(dict(event='ALLOCATED',root=str(root))),flush=True)
+  build=load('overlay_builder',NEXT/'experience-batch/builder.py');build.build(root);(root/'overlay/assets').mkdir(parents=True)
+@@ -34,7 +35,7 @@
+ """.replace('{__PATHS__}',repr({'/':'index.html',**{k:k.lstrip('/')for k in before['assets']if k!='/index.html'}}))
+  text=text.replace(anchor,wrap+anchor);fixture.write_text(text);runtime=json.loads((root/'runtime-ready.json').read_text());runtime['fixture_sha256']=sha(fixture);write(root/'runtime-ready.json',runtime)
+  shutil.copyfile(NEXT/'native-zoom-batch/playwright-cli.json',root/'playwright-cli.json');life=load('overlay_life',BROWSER/'containment.py');driver=load('overlay_env',NEXT/'security-r9-batch/browser_driver.py');manager=load('overlay_commands',NEXT/'security-r9-batch/run.py');owner=life.Owned(root);commands=manager.Commands(root,driver.environment(root),time.monotonic()+180);opened=False;failure=None;result=None
+- def cli(name,*args,cleanup=False):return commands.run(name,[shutil.which('rtk'),'proxy',tool['node'],tool['entry'],'--session=hst-overlay-cp1',*args],timeout=60,cleanup=cleanup)
++ def cli(name,*args,cleanup=False):return commands.run(name,[shutil.which('rtk'),'proxy',tool['node'],tool['entry'],'--session=hst-overlay-8qn',*args],timeout=60,cleanup=cleanup)
+  try:
+   owner.start(root/'runtime-ready.json',fixture);end=time.monotonic()+65
+   while not(root/'control/ready.json').exists():
+@@ -48,7 +49,7 @@
+    assert owner.process.poll()is None and time.monotonic()<end;owner.sample();time.sleep(.1)
+   active=json.loads((root/'control/exp-active.json').read_text());identity=json.loads((root/'control/exp-active-identities.json').read_text());cards=[v for c in active['board']['columns'].values()for v in c['items']if v['kind']=='harness'];card=next(c for c in cards if c['connection']['binding_id']==identity['a1']['reference']['binding_id']);events=[e for e in card['events_preview']if(e.get('target')or{}).get('operation_id')==identity['a1']['operation_id']];assert len(events)==1
+   session=next(s for s in active['sessions']if s['scope']['session_id']==identity['a1']['session_id']);cfg=dict(url=state['url'],card=card['id'],event=events[0]['id'],target=events[0]['target'],scope=session['scope'],output=str(root/'overlay'))
+-  (root/'browser.js').write_text((HERE/'browser.js').read_text().replace('__CONFIG__',json.dumps(cfg)));result=manager.cli_result(cli('focal','run-code','--filename='+str(root/'browser.js')));write(root/'result.private.json',result);assert result['status']=='PASS_OVERLAY_BROWSER_FOCAL'
++  (root/'browser.js').write_text((HERE/'browser-cut2.js').read_text().replace('__CONFIG__',json.dumps(cfg)));result=manager.cli_result(cli('focal','run-code','--filename='+str(root/'browser.js')));write(root/'result.private.json',result);assert result['status']=='PASS_OVERLAY_BROWSER_FOCAL'
+  except BaseException as e:failure=dict(type=type(e).__name__,message=str(e));print(json.dumps(dict(event='FAILURE',failure=failure)),flush=True)
+  finally:
+   if opened:
+@@ -58,6 +59,6 @@
+   while owner.process and owner.process.poll()is None and time.monotonic()<end:owner.sample();time.sleep(.2)
+   cleanup=owner.stop(force=owner.process is not None and owner.process.poll()is None);commands.sample();containment=commands.contain()if commands.remaining()else dict(forced_births=[],remaining=[]);after=guard()[0];assert before==after
+   write(root/'run.private.json',dict(before=before,after=after,result=result,failure=failure,cleanup=cleanup,containment=containment,known_births=list(commands.known.values()),commands=commands.commands,layer='Real Chrome + real installed R9 API + Vite static-only overlay; not new installed package'))
+-  write(HERE/'runtime.json',dict(root=str(root),result=result['status']if result else None,failure=failure,cleanup=cleanup,containment=containment));print(json.dumps(dict(event='FINISHED',root=str(root),failure=failure,result=result['status']if result else None)),flush=True)
++  write(HERE/'runtime-cut2.json',dict(root=str(root),result=result['status']if result else None,failure=failure,cleanup=cleanup,containment=containment));print(json.dumps(dict(event='FINISHED',root=str(root),failure=failure,result=result['status']if result else None)),flush=True)
+  return int(bool(failure))
+ if __name__=='__main__':raise SystemExit(main())
+--- browser.js
++++ browser-cut2.js
+@@ -4,7 +4,7 @@
+   page.__overlayWrites=[];page.__overlayErrors=[];page.on('request',r=>{if(!['GET','HEAD','OPTIONS'].includes(r.method()))page.__overlayWrites.push({method:r.method(),path:new URL(r.url()).pathname});});page.on('pageerror',e=>page.__overlayErrors.push(e.message));
+   await page.addInitScript(origin=>{if(location.origin!==origin)return;localStorage.setItem('okto-nexus-home-operational','enabled');localStorage.setItem('okto-nexus-workspace','all');localStorage.setItem('okto-nexus:metrics-opt-in-prompt-dismissed:1.0.0',new Date().toISOString());},new URL(cfg.url).origin);
+   await page.setViewportSize({width:1440,height:1000});await page.goto(cfg.url);await page.getByTestId('home-follow-up').waitFor({timeout:20000});
+-  check('actual-new-asset',await page.locator('script[src*="index-Cp1x7DiS.js"]').count()===1,true);
++  check('actual-new-asset',await page.locator('script[src*="index-8qNwMfLq.js"]').count()===1,true);
+   const home=page.getByTestId('home-follow-up');await home.locator('[data-home-harness='+JSON.stringify(cfg.card)+']').waitFor();
+   check('home-no-connection-details-or-evidence-time',!/(Connection details|Evidence observed)/.test(await home.innerText()),true);
+   check('home-no-generic-work-request-heading',await home.getByText('Work request',{exact:true}).count()===0,true);
+@@ -19,7 +19,7 @@
+   const output=modal.getByRole('region',{name:'Session execution output',exact:true});await output.waitFor();await output.getByText('Turn started',{exact:true}).first().waitFor({timeout:12000});
+   const visible=await modal.innerText(),ids=Object.values(cfg.scope).filter(v=>typeof v==='string'&&/^(ses_|srv_|exe_|bind_|wxb_|wsr_)/.test(v));
+   check('technical-identities-not-in-basic-visible-text',ids.every(id=>!visible.includes(id)),{checked:ids.length});
+-  check('real-READY-controls',data.lifecycle_state==='READY'&&data.control_available===true&&!data.durable_release_pending,{state:data.lifecycle_state,control:data.control_available,releasePending:data.durable_release_pending});
++  check('real-READY-controls',['READY','ACTIVE'].includes(data.lifecycle_state)&&data.control_available===true&&!data.durable_release_pending,{state:data.lifecycle_state,control:data.control_available,releasePending:data.durable_release_pending});
+   const disclosure=output.locator('details').filter({has:page.getByText('Open this session in a terminal',{exact:true})});
+   await disclosure.locator('summary').click();const expected='okto-nexus work chat --session-id '+cfg.scope.session_id;
+   check('exact-existing-session-command',await disclosure.locator('code').filter({hasText:expected}).count()===1,expected);

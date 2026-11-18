@@ -12,7 +12,7 @@ export interface SessionExecutionPanelProps {
 /** Build a shell-safe invocation of the Nexus CLI's existing-session prompt. */
 function terminalSessionCommand(session: RuntimeSession): string | null {
   const id = session.scope.session_id;
-  if (!session.control_available || session.durable_release_pending || session.lifecycle_state !== 'READY' ||
+  if (!session.control_available || session.durable_release_pending || !['READY','ACTIVE'].includes(session.lifecycle_state) ||
       !/^ses_[a-zA-Z0-9_-]+$/.test(id)) return null;
   return `okto-nexus work chat --session-id ${id}`;
 }
@@ -68,7 +68,7 @@ function ExecutionBody({session,harness,host,embedded=false}: SessionExecutionPa
       active={tab==='tail'&&!sessionReleased(current)} allowMaximize={!embedded} onAccessLost={clear}/>
     {command&&<details className="text-sm">
       <summary className="cursor-pointer">Open this session in a terminal</summary>
-      <p className="mt-2 text-surface-500">Run from this connection’s project folder. If the project has multiple connections, select the matching saved profile with <code>--profile</code>.</p>
+      <p className="mt-2 text-surface-500">Run from the project folder to open the Nexus prompt for this session. If you use a saved profile for this connection, include its name with <code>--profile</code>.</p>
       <div className="mt-2 flex flex-wrap items-center gap-2 rounded-md bg-surface-100 p-2 dark:bg-surface-800">
         <code className="min-w-0 break-all text-xs">{command}</code>
         <CopyMessageButton text={command} item="command"/>

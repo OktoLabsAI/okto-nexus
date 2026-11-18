@@ -1,0 +1,7 @@
+# 8q overlay focal —13/13 positive
+
+Real Chrome + unchanged installed R9 HTTP API + new Vite static-only overlay. This is not a newly installed package. The frozen prefix1031 payload and all original backend checkout bytes were checked except exactly sqlite/home.py, whose explicit new SHA is bound separately; the runtime still imports old R9 home.py. New SQL subject projection requires its separate SQLite/pytest evidence.
+
+Home generic Work request/Connection details/Evidence observed were absent. Received timestamp retained its raw datetime while rendering browser-local Sao Paulo text. Exact View work opened the canonical target with GET200/full12-field session scope, visible real Turn started output, technical IDs hidden in basic view, READY/control_available true/no release pending. The terminal disclosure contained the exact existing-session command and enabled Copy command affordance. Copy was not clicked: no proven isolated browser clipboard, Windows clipboard untouched. No browser POST/page errors/provider calls.
+
+Runner/CLI/fixture normal0; no signals or forced containment. All observed own process births/profile/listener absent. Canonical B1 close confirmed, A1/A2 UNKNOWN remains separate. Public screenshots were viewed and contain synthetic fixture UI only, with terminal command disclosure closed. No human acceptance, real provider or new installed-package qualification.

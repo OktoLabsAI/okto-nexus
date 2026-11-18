@@ -7989,6 +7989,19 @@
       "remaining_tasks": "NOT_RUN",
       "canonical_close": "ONE_CONFIRMED_TWO_UNCONFIRMED",
       "process_cleanup": "NORMAL_PHYSICAL_ABSENCE"
+    },
+    "human_usability_polish": {
+      "status": "FOCUSED_IMPLEMENTATION_VALIDATED",
+      "report": "execution/usability-polish.md",
+      "previous_human_candidate": "f07163ab7fd618b2ff4247ba6cdb2547b5d4e038",
+      "frontend_tests_passed": 407,
+      "sqlite_source_tests_passed": 21,
+      "browser_checks_passed": 13,
+      "browser_layer": "actual Chrome with new frontend bundle and R9 HTTP backend",
+      "package_validation": "build and twine check PASS; selected wheel bytes match checkout",
+      "wheel_sha256": "bec841b04c753b5ebc93369b05877b78cdc7e7d53f88ac09d59dad911ef6b09d",
+      "remaining_human": "NOT_RUN",
+      "default_approved": false
     }
   }
 }

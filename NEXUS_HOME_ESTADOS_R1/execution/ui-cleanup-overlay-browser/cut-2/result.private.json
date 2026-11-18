@@ -1,0 +1,112 @@
+{
+  "status": "PASS_OVERLAY_BROWSER_FOCAL",
+  "checks": [
+    {
+      "id": "actual-new-asset",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "home-no-connection-details-or-evidence-time",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "home-no-generic-work-request-heading",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "local-time-preserves-datetime",
+      "pass": true,
+      "actual": [
+        {
+          "datetime": "2026-11-18T02:54:21.983Z",
+          "text": "Nov 17, 11:54 PM",
+          "expected": "Nov 17, 11:54 PM",
+          "zone": "America/Sao_Paulo"
+        }
+      ]
+    },
+    {
+      "id": "exact-session-GET",
+      "pass": true,
+      "actual": true
+    },
+    {
+      "id": "full-scope-unchanged",
+      "pass": true,
+      "actual": {
+        "status": 200,
+        "scope": {
+          "server_id": "srv_bcd02d55ef243f93f9810b3df09cb0f8",
+          "executor_id": "exe_52f66a817c0043f4c6016ab55737f371",
+          "binding_id": "bind_53ff4e54157d9d0fdbbcc5016c9f5cfe",
+          "agent_id": "hst-a",
+          "workspace_id": "wsr_8730c5f5442ff3d45e47063077cbdb3b",
+          "workspace_binding_id": "wxb_c33478d9ba21e5ef3bf2b211fdafc27a",
+          "session_id": "ses_dbc966ee99d1e0c11a2a40dab566e112",
+          "session_owner_generation": 1,
+          "authorization_revision": 2,
+          "configuration_revision": 2,
+          "binding_revision": 1,
+          "credential_epoch": 1
+        }
+      }
+    },
+    {
+      "id": "View-work-exact-target",
+      "pass": true,
+      "actual": {
+        "executor_id": "exe_52f66a817c0043f4c6016ab55737f371",
+        "kind": "execution",
+        "operation_id": "op_3d609a8ee1251a2c4a69cee75406cc4c",
+        "server_id": "srv_bcd02d55ef243f93f9810b3df09cb0f8",
+        "session_id": "ses_dbc966ee99d1e0c11a2a40dab566e112",
+        "workspace_id": "wsr_8730c5f5442ff3d45e47063077cbdb3b"
+      }
+    },
+    {
+      "id": "technical-identities-not-in-basic-visible-text",
+      "pass": true,
+      "actual": {
+        "checked": 6
+      }
+    },
+    {
+      "id": "real-READY-controls",
+      "pass": true,
+      "actual": {
+        "state": "READY",
+        "control": true,
+        "releasePending": false
+      }
+    },
+    {
+      "id": "exact-existing-session-command",
+      "pass": true,
+      "actual": "okto-nexus work chat --session-id ses_dbc966ee99d1e0c11a2a40dab566e112"
+    },
+    {
+      "id": "Copy-command-present-enabled",
+      "pass": true,
+      "actual": {
+        "clipboard": "NOT_CLICKED: no proven browser-only clipboard isolation; Windows clipboard untouched"
+      }
+    },
+    {
+      "id": "zero-browser-POST",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "id": "zero-page-errors",
+      "pass": true,
+      "actual": []
+    }
+  ],
+  "limits": [
+    "Real Chrome + real installed R9 HTTP API + new Vite static-only overlay; not a new installed wheel",
+    "No clipboard click, provider or human acceptance"
+  ]
+}

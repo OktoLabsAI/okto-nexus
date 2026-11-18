@@ -26,12 +26,18 @@ okto-nexus work watch --timeout 300 --json
 okto-nexus work resume --json
 okto-nexus work send --message "Continue with the reviewed fix" --json
 okto-nexus work sessions --json
+okto-nexus work chat --session-id SESSION_ID
 okto-nexus work send --session-id SESSION_ID --message "Continue this session" --json
 okto-nexus work send --new-session --message "Begin a separate task" --json
 okto-nexus work interrupt --json
 okto-nexus work watch --control --json
 okto-nexus work close --json
 ```
+
+An eligible session in Home exposes **Open this session in a terminal** with
+the exact `work chat` command. Run it from the project directory with the
+matching saved connection profile. Opening the prompt lets you inspect and
+continue that session. Entering a new message is a separate action.
 
 `--request-id` supplies a stable client intent ID for an explicit submission.
 Reusing the retained ID with changed text or selection is refused. Submission

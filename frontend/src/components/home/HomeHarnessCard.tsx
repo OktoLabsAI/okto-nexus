@@ -50,7 +50,7 @@ export function HomeHarnessCard({card,column,blocked,onActivity,onEvent,onReques
     </header>
     {card.reminder_snoozed&&<p className="text-xs text-surface-500">Reminder snoozed. This does not resume the harness.</p>}
     <ul className="space-y-3" aria-label="Activity preview">{card.events_preview.map(event=><li key={event.id} className="border-l-2 border-surface-200 pl-3" data-home-event={event.id}>
-      {!isUntitledHomeWork(event)?<p className="text-sm font-medium break-words">{event.title}</p>:
+      {!isUntitledHomeWork(event.entry??event)?<p className="text-sm font-medium break-words">{event.title}</p>:
         event.attention&&<p className="text-sm font-medium break-words">{attentionDescription(event.attention).title}</p>}
       <p className="text-xs text-surface-500">{homeEntryStateLabel(event)}</p>
       {(event.target||event.attention)&&(event.kind!=='attention'||!status&&column==='needs_you')&&<button type="button" className={`text-sm underline ${homeFocus}`} disabled={blocked} onClick={()=>onEvent(event)}>{harnessEventAction(event)}</button>}

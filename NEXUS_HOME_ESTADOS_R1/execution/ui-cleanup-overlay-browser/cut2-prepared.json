@@ -1,0 +1,14 @@
+{
+  "layer": "Real Chrome + unchanged installed R9 HTTP API + Vite index-8qNwMfLq static-only overlay; not new installed wheel",
+  "exception": "Checkout SQLite home.py SHA50835c0a009ba5b1d67dac8a01827aae57424c49d8812b2e6a3d1da287e42d25 only; runtime stays old package",
+  "cut1_observed_lifecycle_states": [
+    "READY"
+  ],
+  "checks_condition": "READY or ACTIVE + control_available true + no durable release pending, as current UI contract",
+  "files": {
+    "run_cut2.py": "dfbc47a9c6dff7a4e82cb4dbc6c9c54782aa92453244ee000653bdc30a99a490",
+    "browser-cut2.js": "5753e74bd33ee24388333feccfb338e62a28ce536df5ba889c872afcbb890b72",
+    "cut2.diff": "abf60415ac53d25ba760fe4948bb5e1f0bb3a1ebcd007d796c04f571002ce8aa",
+    "prepare_cut2.py": "835e349f18dbb5e39002833b40c4b7d3051bc837eb4002c9859e055c45f36198"
+  }
+}

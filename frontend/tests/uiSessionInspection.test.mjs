@@ -59,7 +59,7 @@ test('an eligible embedded session offers an exact shell-safe terminal command o
   const markup=render({session:active,embedded:true});
   assert.match(markup,/<details[^>]*><summary[^>]*>Open this session in a terminal/);
   assert.match(markup,/okto-nexus work chat --session-id ses_exact_abc/);
-  assert.match(markup,/matching saved profile/);
+  assert.match(markup,/saved profile for this connection/);
   assert.match(markup,/Copy command/);
   assert.equal((markup.match(/ses_exact_abc/g)||[]).length,1);
   for (const patch of [{control_available:false},{durable_release_pending:true},{lifecycle_state:'CLOSED'},
