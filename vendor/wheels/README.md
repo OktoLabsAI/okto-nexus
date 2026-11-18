@@ -1,8 +1,8 @@
 # Current development dependency
 
-Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `97afbef88bb115909a010ad71f734d6b9b140cca`.
-The unpublished wheel SHA-256 is `51db0876d00d3225fa13c81dd92386520790d42ed8db512d5524300fcd775821`.
-The Core can return complete viewer metadata from an already owned Codex thread.
+Nexus 0.3.8 and Connector 0.0.15 pin Core 0.0.16 from `5d1f7c6233a550c60422d71dc042bc396ed4ae2a`.
+The unpublished wheel SHA-256 is `b6b7061288b536acb64b5afbc3043d7b740e3f70a4c28d715c45c4345d023b36`.
+The Pi adapter records owned process birth before starting protocol readers.
 The Nexus CI manifest also identifies the matching Connector wheel.
 
 ## Previous development dependency

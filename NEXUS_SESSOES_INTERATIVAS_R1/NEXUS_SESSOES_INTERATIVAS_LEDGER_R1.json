@@ -985,8 +985,10 @@
         "SI-T-H14",
         "SI-T-H17"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si020-pi-process-birth.md"
+      ]
     },
     {
       "id": "SI-021",
@@ -4530,7 +4532,7 @@
     },
     {
       "id": "SI-03",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "tasks": [
         "SI-018",
         "SI-019",
