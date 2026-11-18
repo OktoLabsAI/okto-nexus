@@ -1,0 +1,151 @@
+{
+  "recorded_on": "2026-11-18",
+  "task": "SI-024",
+  "environment": {
+    "platform": "Windows x64 build 26300",
+    "python": "3.13.1",
+    "nexus_commit": "0011d0627ff1d2f58244e2ae22ce683e8e63e225",
+    "nexus_wheel_sha256": "0791d34ae2f46e2b54689e8ef0db88fa6fef417b6fc373af40263e00f7978774",
+    "core_commit": "35b528cab6995bd0eea1dbec3f55f033a22d2a29",
+    "core_wheel_sha256": "0530b0c8c7f9b6916d30b5d98834431b07d11da313036575ca66eca9a32a772b",
+    "app_server": "Codex 0.157.0",
+    "app_server_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "viewer": "Codex 0.170.0 in Windows ConPTY",
+    "viewer_sha256": "8d06dc231dba649c7d48d3eecab239c452a1ac498c41dd6492a6f301b90a22ce",
+    "model_endpoint": "deterministic SSE on the local loopback, no external model, no credentials",
+    "setup": "isolated workspace, provider profile, Nexus database and canonical local executor"
+  },
+  "supporting_regressions": {
+    "installed_nexus_python": 38,
+    "installed_core_python": 3,
+    "node_render_and_contract": 16,
+    "browser": "not run in this increment"
+  },
+  "cases": {
+    "attach_active": {
+      "test_exit_code": 0,
+      "pytest_passed": 1,
+      "fixture_directory": "%TEMP%/nexus-si-owned-busy-a86c54ec24eb4b5bba3264c4c80113bf",
+      "fixture_sha256": "8646eb90f427b35929322968b1e6ec5e82e8b0ea4dd2eaad84ddcb63639a5f1a",
+      "command": "python -B -m pytest -q -s --tb=short --basetemp <scratch> test_owned_busy_attach.py",
+      "loopback_model_requests": 1,
+      "external_provider_calls": 0,
+      "sqlite_verified_after_shutdown": {
+        "operations": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.submit": 1
+        },
+        "attachments": {
+          "DETACHED": 3
+        },
+        "closed_sessions": 1
+      },
+      "observations": [
+        "one app-server and one thread",
+        "normal and forced viewer exits during the turn",
+        "third viewer rendered the same live result",
+        "canonical close"
+      ]
+    },
+    "attach_after_completion": {
+      "test_exit_code": 0,
+      "pytest_passed": 1,
+      "fixture_directory": "%TEMP%/nexus-si-offline-settle-77e951fb637c40ba98bf4b425da3447b",
+      "fixture_sha256": "7e68851518924176e4e2210454ea95ab04690df17365f9afb38829a356bfb1d7",
+      "command": "python -B -m pytest -q -s --tb=short --basetemp <scratch> test_owned_busy_attach.py",
+      "loopback_model_requests": 1,
+      "external_provider_calls": 0,
+      "sqlite_verified_after_shutdown": {
+        "operations": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.submit": 1
+        },
+        "attachments": {
+          "DETACHED": 3
+        },
+        "closed_sessions": 1
+      },
+      "observations": [
+        "session finished with every viewer detached",
+        "third viewer rendered retained history",
+        "no automatic native prompt",
+        "canonical close"
+      ]
+    },
+    "steer_exact": {
+      "test_exit_code": 0,
+      "pytest_passed": 1,
+      "fixture_directory": "%TEMP%/nexus-si-owned-steer-ada76d10640148b4956adfc5df739d8d",
+      "fixture_sha256": "1e528da4420ced89caabdb47eb30a58a9b0c13b568868e0028897d6b80dea19b",
+      "command": "python -B -m pytest -q -s --tb=short --basetemp <scratch> test_owned_busy_attach.py",
+      "loopback_model_requests": 2,
+      "external_provider_calls": 0,
+      "sqlite_verified_after_shutdown": {
+        "operations": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.steer": 1,
+          "turn.submit": 1
+        },
+        "attachments": {},
+        "closed_sessions": 1
+      },
+      "observations": [
+        "one exact native expectedTurnId",
+        "same receipt on repeat",
+        "completed turn returns 409 to a stale intent"
+      ]
+    },
+    "steer_stale_target": {
+      "test_exit_code": 0,
+      "pytest_passed": 1,
+      "fixture_directory": "%TEMP%/nexus-si-steer-stale-target-02529c8d34a2426a9deb84905cf88931",
+      "fixture_sha256": "1ebe392058489aff845b8b57b5485a1a4644855e5aa7915b4e57279375fb0f71",
+      "command": "python -B -m pytest -q -s --tb=short --basetemp <scratch> test_owned_busy_attach.py",
+      "loopback_model_requests": 3,
+      "external_provider_calls": 0,
+      "sqlite_verified_after_shutdown": {
+        "operations": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.steer": 1,
+          "turn.submit": 2
+        },
+        "attachments": {},
+        "closed_sessions": 1
+      },
+      "observations": [
+        "stale review of the first turn refused while the second turn was active",
+        "no durable input receipt for the refused request",
+        "second target unchanged",
+        "no fallback native turn"
+      ]
+    },
+    "steer_concurrent": {
+      "test_exit_code": 0,
+      "pytest_passed": 1,
+      "fixture_directory": "%TEMP%/nexus-si-steer-concurrent-ede52ca2a67245c9a1905aab8a137f40",
+      "fixture_sha256": "68cd9451b839acc0c0dd0c23dd5caeddebd4fe5d72980c05563a2f3adff5fe41",
+      "command": "python -B -m pytest -q -s --tb=short --basetemp <scratch> test_owned_busy_attach.py",
+      "loopback_model_requests": 3,
+      "external_provider_calls": 0,
+      "sqlite_verified_after_shutdown": {
+        "operations": {
+          "runtime.close": 1,
+          "runtime.open": 1,
+          "turn.steer": 1,
+          "turn.submit": 2
+        },
+        "attachments": {},
+        "closed_sessions": 1
+      },
+      "observations": [
+        "two concurrent authenticated HTTP posts returned the same input and operation",
+        "exactly one native steer targeted the first turn",
+        "late first-turn review refused during the second turn"
+      ]
+    }
+  }
+}

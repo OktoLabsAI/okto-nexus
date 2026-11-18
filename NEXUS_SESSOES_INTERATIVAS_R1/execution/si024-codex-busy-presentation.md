@@ -10,4 +10,16 @@ O frontend Codex 0.170.0 real, SHA-256 `8d06dc231dba649c7d48d3eecab239c452a1ac49
 
 Passaram 73 testes direcionados no checkout. O ensaio em ConPTY e 14 regressões de transporte e sessão passaram novamente com o wheel instalado em um ambiente temporário. Os oito módulos alterados conferem com o wheel de SHA-256 `0791d34ae2f46e2b54689e8ef0db88fa6fef417b6fc373af40263e00f7978774`. O wheel e a distribuição de código-fonte passaram na validação estrita.
 
-A etapa usa o schema 182 existente e pode ser revertida com o wheel anterior do Nexus. Ainda é preciso provar o fluxo completo com um turno produtivo no app-server real e qualificar entrada, reorientação, interrupção, reanexação e as demais combinações da matriz.
+A etapa usa o schema 182 existente e pode ser revertida com o wheel anterior do Nexus.
+
+## Turno real com resposta controlada em loopback
+
+O pacote instalado do Nexus iniciou o app-server real do Codex 0.157.0 em um projeto e perfil descartáveis. A operação canônica abriu uma thread e enviou um único turno. Um servidor HTTP local manteve a resposta em andamento até a abertura do visualizador. Os eventos de abertura, início e conclusão foram emitidos pelo app-server e chegaram pela ingestão normal do Nexus. O servidor local emitiu eventos SSE da Responses API com conteúdo sintético e uso zerado. [Formato dos eventos SSE](https://developers.openai.com/api/reference/resources/responses/streaming-events)
+
+No primeiro ensaio, o frontend Codex 0.170.0 abriu em Windows ConPTY e saiu com Ctrl+D enquanto o turno estava ativo. Uma segunda instância foi encerrada pelo handle do próprio visualizador, também durante o turno. O mesmo processo do app-server conservou o turno nas duas saídas. A terceira instância abriu a mesma thread, renderizou a resposta liberada pelo servidor local e mostrou o término. No outro ensaio, o turno terminou com todos os anexos já encerrados. Ao reabrir, o frontend mostrou o mesmo histórico e o resultado, com a mesma thread e sem outro envio. Cada ensaio observou uma única abertura e um único `turn/start`. Todos os anexos terminaram como `DETACHED` no SQLite. O encerramento canônico da sessão terminou o app-server após os testes.
+
+Também qualifiquei a reorientação pelo endpoint autenticado do Nexus. Duas confirmações HTTP simultâneas devolveram o mesmo recibo e enviaram `turn/steer` uma única vez, com `expectedTurnId` igual ao turno observado. A reorientação levou a duas solicitações HTTP ao servidor local dentro do mesmo turno. Depois do término, a solicitação com a revisão antiga recebeu HTTP 409, inclusive quando um segundo turno estava ativo. A recusa ficou sem recibo de entrada e preservou o segundo alvo, sem novo envio.
+
+Passaram 38 regressões com o Nexus instalado, três com o Core instalado e 16 testes de renderização e contrato em Node. SI-T-C02 passou com o app-server real e confirmações simultâneas. O efeito da revisão obsoleta em SI-T-C03 foi verificado no runtime real. A preservação do rascunho no navegador ainda precisa ser verificada neste candidato.
+
+Estes ensaios exercitam os binários reais, com respostas determinísticas em loopback e zero chamadas a provedores externos. SI-T-G01, SI-T-G02 e SI-T-G05 ainda requerem a campanha prevista no plano. Também permanecem abertas a escrita pelo visualizador nativo, a qualificação da interrupção e as outras combinações da matriz. [Comandos e observações](si024-codex-controlled-windows.json)
