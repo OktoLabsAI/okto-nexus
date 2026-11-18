@@ -29,6 +29,8 @@ def reusable_opening(uow, *, factory, access, context, server_id, executor_id,
     if len(rows) != 1:
         raise OktoNexusError(ErrorCode.CONFLICT, "Session selection is ambiguous; select a session or request a new one.", {})
     session = rows[0]
+    if session["saved_resume_json"] is not None:
+        raise OktoNexusError(ErrorCode.CONFLICT, "Select the resumed session for work or recover its original receipt.", {})
     scope = json.loads(session["expected_revisions_json"])
     semantic = json.loads(session["semantic_payload"])
     from .execution_operator_authority import require_operator_request

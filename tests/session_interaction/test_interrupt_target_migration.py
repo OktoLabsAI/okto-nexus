@@ -96,3 +96,10 @@ def test_upgrade_preserves_preexisting_interrupt_and_paused_messages(legacy_stor
     with factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT count(*) FROM embedded_codex_saved_contexts').fetchone()[0] == 0
         assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
+    schema_182 = MigrationRunner(factory, migrations_dir=_partial_migrations_dir(tmp_path, 182))
+    assert schema_182.apply() == [182]
+    assert schema_182.apply() == []
+    assert retained() == original
+    with factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT saved_resume_json FROM execution_sessions').fetchone()[0] is None
+        assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()

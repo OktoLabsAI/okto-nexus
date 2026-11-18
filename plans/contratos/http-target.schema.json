@@ -2774,6 +2774,7 @@
           "type": "string",
           "enum": [
             "runtime.start",
+            "runtime.resume_saved",
             "turn.submit",
             "turn.steer",
             "turn.interrupt",
@@ -2805,6 +2806,11 @@
         "new_session": {
           "type": "boolean"
         },
+        "source_session_generation": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
         "text": {
           "type": "string",
           "maxLength": 65536
@@ -2818,6 +2824,17 @@
         "intent",
         "binding_id",
         "workspace_binding_id"
+      ],
+      "allOf": [
+        {
+          "if": { "properties": { "intent": { "const": "runtime.resume_saved" } } },
+          "then": {
+            "required": ["agent_id", "session_id", "source_session_generation"],
+            "properties": { "session_id": { "type": "string" } },
+            "not": { "anyOf": [{"required": ["new_session"]}, {"required": ["text"]}, {"required": ["target"]}] }
+          },
+          "else": { "not": { "required": ["source_session_generation"] } }
+        }
       ],
       "additionalProperties": false
     },
@@ -2879,6 +2896,17 @@
         },
         "dispatch_owner": {
           "const": "server"
+        },
+        "saved_resume": {
+          "type": "object",
+          "properties": {
+            "source_session_id": { "type": "string", "minLength": 1, "maxLength": 160 },
+            "source_session_generation": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+            "source_close_operation_id": { "type": "string", "minLength": 1, "maxLength": 160 },
+            "source_release_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+          },
+          "required": ["source_session_id", "source_session_generation", "source_close_operation_id", "source_release_digest"],
+          "additionalProperties": false
         }
       },
       "required": [

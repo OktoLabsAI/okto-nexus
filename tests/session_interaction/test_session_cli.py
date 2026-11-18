@@ -147,3 +147,47 @@ def test_exact_attach_uses_reviewed_generation_and_leaves_checkout_untouched(mon
     assert collected == ['attach', ('att_fixture', 'reviewed-executable'), 'detach']
     output = capsys.readouterr().out
     assert 'Session session-a' in output and 'Viewer detached' in output and catalog.token not in output
+
+
+def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(monkeypatch, capsys):
+    class SavedCatalog(Catalog):
+        token = 'synthetic-cookie'
+        resolution = None
+        operation = None
+        submissions = 0
+
+        def __call__(self, method, url, body=None):
+            path = urlsplit(url).path
+            if path.startswith(session.PREFIX + '/runtime/intents/'):
+                if self.resolution is None:
+                    raise session.ConnectionError('NOT_FOUND', 'Missing intent.', http_status=404)
+                assert path.endswith('/' + self.resolution['client_intent_id'])
+                return {'resolution': self.resolution, 'operation': self.operation}
+            if path == session.PREFIX + '/runtime/intents:resolve':
+                assert method == 'POST'
+                assert body['intent'] == 'runtime.resume_saved' and body['session_id'] == 'session-b'
+                assert body['source_session_generation'] == 7 and 'text' not in body and 'new_session' not in body
+                self.resolution = {'client_intent_id': body['client_intent_id'], 'operation_id': 'saved-open',
+                    'resolution_revision': 1, 'intent_hash': 'sha256:' + 'a' * 64,
+                    'saved_resume': {'source_session_id': 'session-b', 'source_session_generation': 7},
+                    'scope': {key: value for key, value in BINDING.items() if key != 'endpoint_id'} |
+                             {'session_id': 'successor', 'session_owner_generation': 1}}
+                return self.resolution
+            if path == session.PREFIX + '/runtime/operations':
+                assert method == 'POST' and body['operation_id'] == 'saved-open'
+                self.submissions += 1
+                self.operation = {'operation_id': 'saved-open', 'scope': self.resolution['scope'], 'action': 'runtime.open',
+                                  'executor_stage': 'SUBMITTED'}
+                raise session.ConnectionError('OUTCOME_UNKNOWN', 'Simulated lost response.', possible_effect=True)
+            return super().__call__(method, url, body)
+
+    catalog = SavedCatalog()
+    service = SimpleNamespace(operator_http=catalog, inspect=lambda: {'state': 'ready', 'server_id': 'server'})
+    monkeypatch.setattr(session, 'resolve_terminal_target', lambda *args: service)
+    args = ['session', 'resume', '--id', 'reviewer', '--session-id', 'session-b', '--json']
+    assert main(args) != 0
+    assert json.loads(capsys.readouterr().out)['code'] == 'OUTCOME_UNKNOWN'
+    assert main(args) == 0
+    result = json.loads(capsys.readouterr().out)
+    assert result['session_id'] == 'successor' and result['source_session_id'] == 'session-b'
+    assert catalog.submissions == 1 and '/runtime/sessions' not in catalog.routes

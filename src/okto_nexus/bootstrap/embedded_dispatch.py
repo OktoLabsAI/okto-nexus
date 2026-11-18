@@ -692,6 +692,8 @@ class EmbeddedDispatchOwner:
             if session.get('recovering'):
                 raise CoreError('EVENT_STREAM_UNAVAILABLE', 'embedded_session_recovery')
             if action == "runtime.open" and not resuming:
+                from .embedded_codex_resume import resume_for_open
+                saved_resume = await asyncio.to_thread(resume_for_open, self, frame)
                 from .embedded_session_catalog import EmbeddedSessionCatalog
                 await asyncio.to_thread(EmbeddedSessionCatalog(self).register, key)
                 setup = await asyncio.to_thread(ApprovedLocalLaunch, self.inventory, session["scope"])
@@ -703,6 +705,7 @@ class EmbeddedDispatchOwner:
                     candidate=setup.candidate, workspace_root=setup.workspace_root,
                     environment=setup.environment, native_factory=self.native_factory,
                     native_action_factory=tool_config["native_factory"] if tool_config else None,
+                    saved_resume=saved_resume,
                     native_approvals_enabled=bool(self.deps.config.feature_hitl and
                         setup.candidate.adapter_id in {"codex_app_server", "claude_stream", "pi_rpc"}))
                 session["executor"] = executor
@@ -723,6 +726,8 @@ class EmbeddedDispatchOwner:
                         payload['adapter_id'], payload.get('harness_settings', {}))),context)
                 epoch = "stream_" + secrets.token_hex(16)
                 options = dict(prepared=prepared,stream_epoch=epoch)
+                if executor.saved_resume is not None:
+                    options['resume_thread_id'] = executor.saved_resume.thread_id
                 continuation['options'] = options
             elif action in ("approval.decide", "input.provide"):
                 native_operation = r4_native_decision_operation(frame)
@@ -742,7 +747,8 @@ class EmbeddedDispatchOwner:
                 try:
                     context = runtime.r4_operation_context(frame, connection_id=self.channel.connection_id,
                         connection_generation=self.channel.connection_generation)
-                    receipt = await runtime.open(OpenOperation(frame["operation_id"],key,epoch,prepared),context)
+                    receipt = await runtime.open(OpenOperation(frame["operation_id"], key, epoch, prepared,
+                        resume_thread_id=options.get('resume_thread_id')), context)
                 except OperationCapacityDeferred:
                     raise
                 except CoreError as error:

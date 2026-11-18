@@ -9,7 +9,6 @@ from dataclasses import asdict
 from pathlib import Path
 
 from nexus_connector_core import (
-    CodexRolloutEvidence,
     CoreError,
     OperationKey,
     SessionKey,
@@ -19,6 +18,7 @@ from nexus_connector_core import (
 from nexus_connector_core.native.codex_rollout import observe_rollout
 
 from ..application.execution_native_session_mapping import reviewed_codex_context
+from ..application.execution_saved_resume import rollout_evidence
 from ..domain.execution.keys import SessionKey as DomainSessionKey
 from ..domain.execution.keys import SessionOwnerGeneration
 from ..domain.session_interaction import InputScope
@@ -190,10 +190,7 @@ class EmbeddedCodexSavedContexts:
             return project_r4_resource_release(json.loads(candidate['opening_binding']), claim, slot, opening)
 
         fact = await host.with_history(executor_id=key.executor_id, session_id=key.session_id, read=retirement)
-        document = witness['rollout']
-        prior = CodexRolloutEvidence(**(document | {
-            name: tuple(document[name]) for name in ('relative_path', 'home_identity', 'file_identity')
-        }))
+        prior = rollout_evidence(witness['rollout'])
         path = Path(prior.state_home).joinpath(*prior.relative_path)
         checked = await asyncio.to_thread(observe_rollout, prior.state_home, str(path),
                                           prior.thread_id, witness['workspace_root'])

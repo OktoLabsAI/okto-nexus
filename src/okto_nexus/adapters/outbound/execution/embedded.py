@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Awaitable, Callable, Mapping
+from functools import partial
 from pathlib import Path
 
 from nexus_connector_core import (
@@ -40,6 +41,7 @@ class EmbeddedExecutor:
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
         request_grant: Callable[[dict], Awaitable[Mapping[str, object]]],
         native_factory=None, native_action_factory=None, native_approvals_enabled=False,
+        saved_resume=None,
     ) -> tuple[EmbeddedExecutor, R4LeaseApplication]:
         """Install canonical Server authority before prepare or native open.
 
@@ -54,12 +56,17 @@ class EmbeddedExecutor:
             if candidate != local_launch.candidate or workspace_root != local_launch.workspace_root:
                 raise CoreError("PROFILE_DRIFT", "embedded_selection")
             environment = local_launch.environment
+        resume_grant = {}
+        if saved_resume is not None:
+            environment = partial(saved_resume.environment, environment, local_launch)
+            resume_grant['codex_resume'] = saved_resume.grant
         runtime = await host.acquire(
             server_id=scope["server_id"], executor_id=scope["executor_id"], session_id=scope["session_id"],
             candidates={candidate.adapter_id: candidate},
             workspace_roots={scope["workspace_id"]: workspace_root},
             environment=environment, native_factory=native_factory,
-            native_action_factory=native_action_factory, native_approvals_enabled=native_approvals_enabled)
+            native_action_factory=native_action_factory, native_approvals_enabled=native_approvals_enabled,
+            **resume_grant)
         attempt = await runtime.begin_r4_lease_request(
             scope=scope, grant_id=grant_id, connection_id=connection_id,
             connection_generation=connection_generation, purpose="initial")
@@ -71,6 +78,7 @@ class EmbeddedExecutor:
             environment=environment, native_factory=native_factory,
             native_action_factory=native_action_factory, native_approvals_enabled=native_approvals_enabled)
         executor.local_launch = local_launch
+        executor.saved_resume = saved_resume
         executor.lease_request_started = attempt.sent_at_monotonic
         return executor, application
 
@@ -128,6 +136,7 @@ class EmbeddedExecutor:
         self.native_action_factory = native_action_factory
         self.native_approvals_enabled = native_approvals_enabled
         self.local_launch = None
+        self.saved_resume = None
 
     async def _runtime(self):
         return await self.host.acquire(
@@ -137,6 +146,7 @@ class EmbeddedExecutor:
             environment=self.environment, native_factory=self.native_factory,
             native_action_factory=self.native_action_factory,
             native_approvals_enabled=self.native_approvals_enabled,
+            **({'codex_resume': self.saved_resume.grant} if self.saved_resume is not None else {}),
         )
 
     async def open(self, *, operation_id: str, stream_epoch: str,

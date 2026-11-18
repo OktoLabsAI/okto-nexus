@@ -733,6 +733,62 @@ def test_saved_codex_context_requires_retirement_and_same_history(
         # End the injected observation failure before the fixture drains its
         # independent Core stores at service shutdown.
         monkeypatch.setattr(ledger, 'owned_slot_state', current)
+    if condition == 'intact':
+        _exercise_saved_resume_admission(setup, binding, source.scope, native)
+
+
+def _exercise_saved_resume_admission(setup, binding, scope, native):
+    from pathlib import Path
+
+    from jsonschema import Draft202012Validator
+
+    deps, app, client, headers, *_ = setup
+    request = {'client_intent_id': 'saved-resume', 'intent': 'runtime.resume_saved',
+               'agent_id': binding['agent_id'], 'binding_id': scope.binding_id,
+               'workspace_binding_id': scope.workspace_binding_id, 'session_id': scope.session.session_id,
+               'source_session_generation': scope.generation.value}
+    assert client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json=request).status_code == 403
+    auth = app.state.operator_auth
+    assert auth.configure('resume-fixture', 'fixture-resume-password', local=True)
+    token = auth.login('resume-fixture', 'fixture-resume-password')
+    human = {'cookie': f'nexus_operator_session={token}', 'x-nexus-ui': '1', 'origin': 'http://127.0.0.1'}
+    prefix = 'http://127.0.0.1/api/v1/runtime-management/runtime'
+    wrong = client.post(prefix + '/intents:resolve', headers=human,
+                        json=request | {'source_session_generation': scope.generation.value + 1})
+    assert wrong.status_code == 409, wrong.text
+    reviewed = client.post(prefix + '/intents:resolve', headers=human, json=request)
+    another = client.post(prefix + '/intents:resolve', headers=human, json=request | {'client_intent_id': 'another-resume'})
+    assert reviewed.status_code == another.status_code == 200, (reviewed.text, another.text)
+    schemas = json.loads((Path(__file__).resolve().parents[2] / 'plans/contratos/http-target.schema.json').read_text('utf-8'))
+    resolution = reviewed.json()
+    Draft202012Validator({'$defs': schemas['$defs'], '$ref': '#/$defs/ResolveIntentRequest'}).validate(request)
+    Draft202012Validator({'$defs': schemas['$defs'], '$ref': '#/$defs/IntentResolution'}).validate(resolution)
+    assert resolution['session_id'] != request['session_id'] and resolution['reuse'] is False
+    assert resolution['saved_resume']['source_session_id'] == request['session_id']
+    assert all(private not in reviewed.text for private in (CODEX_THREAD, 'rollout-fixture.jsonl', token))
+
+    def submit(resolved):
+        return client.post(prefix + '/operations', headers=human, json={
+            name: resolved[name] for name in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')
+        })
+
+    admission = submit(resolution)
+    assert admission.status_code == 202, admission.text
+    assert submit(resolution).status_code == 200
+    assert submit(another.json()).status_code == 409
+    recovered = client.get(prefix + '/intents/saved-resume', headers=human)
+    assert recovered.status_code == 200 and recovered.json()['resolution'] == resolution
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        conn = uow.connection
+        successor, retained = conn.execute("""
+            SELECT session_id, saved_resume_json FROM execution_sessions WHERE saved_resume_json IS NOT NULL
+        """).fetchone()
+        assert successor == resolution['session_id'] and json.loads(retained) == resolution['saved_resume']
+        assert conn.execute("SELECT count(*) FROM execution_operations WHERE session_id=? AND action<>'runtime.open'",
+                            (successor,)).fetchone()[0] == 0
+    # This source is a fake Core native and its declared build differs from the
+    # reviewed source metadata. Dispatch must contain it before a fresh open.
+    assert native.opens == 1
 
 
 def test_dashboard_interrupt_admits_exact_target_and_recovers_its_receipt(interactive_runtime):

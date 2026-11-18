@@ -23,7 +23,7 @@ from .execution_semantics import execution_intent_hash, validate_execution_targe
 def submit_execution_operation(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], fresh_publications: Mapping,
-    remote_ready: bool, access=None, context=None,
+    remote_ready: bool, access=None, context=None, saved_resume_enabled: bool = False,
 ) -> tuple[dict[str, Any], bool]:
     """Commit one operation, dispatch row and optional session claim before ACK.
 
@@ -68,6 +68,12 @@ def submit_execution_operation(
                                   "The operation does not match its resolution.", {})
         scope = resolved["scope"]
         subject_agent_id = scope['agent_id']
+        saved_resume = resolved.get('saved_resume')
+        if saved_resume is not None:
+            if intent['session_selection'] != 'explicit' or resolved['semantic_intent']['action'] != 'runtime.open':
+                raise OktoNexusError(ErrorCode.CONFLICT, 'The saved session intent has inconsistent lineage.', {})
+            from .execution_saved_resume import require_saved_resume_operator
+            require_saved_resume_operator(actor=actor_agent_id, context=context, enabled=saved_resume_enabled)
         operator_containment = (actor_agent_id != subject_agent_id and
             resolved['semantic_intent']['action'] in {'turn.interrupt', 'runtime.close'})
         from .execution_operator_authority import require_operator_request, require_recorded_operator
@@ -247,6 +253,15 @@ def submit_execution_operation(
                 ).fetchone() is not None:
                     raise OktoNexusError(ErrorCode.CONFLICT,
                                           "The session claim already exists.", {})
+                if saved_resume is not None:
+                    from .execution_saved_resume import (
+                        require_saved_source_exclusive, require_saved_source_settled, saved_source)
+                    current, _ = saved_source(conn, scope, saved_resume['source_session_id'],
+                                              saved_resume['source_session_generation'])
+                    if current != saved_resume:
+                        raise OktoNexusError(ErrorCode.CONFLICT, 'The saved session evidence changed.', {})
+                    require_saved_source_exclusive(conn, scope, saved_resume)
+                    require_saved_source_settled(conn, scope, saved_resume['source_session_id'])
             elif action in {"turn.submit", "turn.steer", "turn.interrupt", "runtime.close"}:
                 session = conn.execute(
                     "SELECT binding_id,workspace_id,workspace_binding_id,"
@@ -301,6 +316,10 @@ def submit_execution_operation(
                      "OPEN_PENDING", "NONE", canonical_json(resolved.get('_session_metadata', {})).decode('utf-8'),
                      canonical_json(launch_build).decode('utf-8') if launch_build else None),
                 )
+                if saved_resume is not None:
+                    conn.execute("UPDATE execution_sessions SET saved_resume_json=? WHERE server_id=? "
+                        "AND executor_id=? AND session_id=? AND open_operation_id=?",
+                        (canonical_json(saved_resume).decode(), server_id, executor_id, session_id, operation_id))
             conn.execute(
                 "INSERT INTO execution_dispatch_outbox(server_id,executor_id,"
                 "operation_id,dispatch_state,next_attempt_at) VALUES (?,?,?,'PENDING',?)",

@@ -169,6 +169,7 @@ class ResolveIntentRequest(BaseModel):
     binding_id: _Id
     workspace_binding_id: _Id
     session_id: _Id | None = None
+    source_session_generation: Annotated[int, Field(ge=1, le=9007199254740991, strict=True)] | None = None
     new_session: Annotated[bool, Field(strict=True)] | None = None
     text: Annotated[str, Field(max_length=65536, strict=True)] | None = None
     target: dict[str, object] | None = None
@@ -670,7 +671,8 @@ def build_router() -> APIRouter:
                     remote_ready=protocol_info()["remote_execution_ready"],
                     fresh_publications=request.app.state.inventory_fresh_publications,
                     access=build_execution_access(request.app.state.deps),
-                    context=runtime_request_context()))
+                    context=runtime_request_context(),
+                    saved_resume_enabled=request.app.state.deps.config.runtime_session_interaction_enabled))
         except OktoNexusError as error:
             return runtime_error(error, "intent.resolve")
         return JSONResponse(resolution, headers={"Cache-Control": "no-store"})
@@ -709,6 +711,7 @@ def build_router() -> APIRouter:
                     remote_ready=protocol_info()["remote_execution_ready"],
                     access=build_execution_access(request.app.state.deps),
                     context=runtime_request_context(),
+                    saved_resume_enabled=request.app.state.deps.config.runtime_session_interaction_enabled,
                 ))
         except OktoNexusError as error:
             return runtime_error(error, "operation.admit")

@@ -7,8 +7,16 @@ from pathlib import Path
 from urllib.parse import quote, urlsplit
 from uuid import uuid4
 
-from ....application.terminal_connection import PREFIX, ConnectionError
-from ....application.terminal_work import list_binding_sessions, read_binding_session
+from ....application.terminal_connection import (
+    PREFIX,
+    ConnectionError,
+    document_revision,
+)
+from ....application.terminal_work import (
+    SUBMISSION,
+    list_binding_sessions,
+    read_binding_session,
+)
 from ....domain.quick_connect import normalize_connect_id
 from ....errors import OktoNexusError
 from ...outbound.local_presenter_client import (
@@ -135,6 +143,51 @@ def attach_session(call, binding, *, session_id=None, interactive=False, viewer_
             'attach_strategy': 'codex_local_read', 'capability_revision': revision}
 
 
+def resume_saved_session(call, binding, session_id):
+    if not getattr(call, 'token', None):
+        raise ConnectionError('OPERATOR_LOGIN_REQUIRED', 'Sign in with operator login and pass --operator-profile.')
+    source = read_binding_session(call, binding, session_id)['scope']
+    generation = source.get('session_owner_generation')
+    if type(generation) is not int or generation < 1:
+        raise ConnectionError('SESSION_UNAVAILABLE', 'The exact source generation is unavailable.')
+    scope_fields = ('server_id', 'executor_id', 'binding_id', 'agent_id', 'workspace_id', 'workspace_binding_id')
+    identity = {field: source[field] for field in (*scope_fields, 'session_id', 'session_owner_generation')}
+    intent_id = 'saved_resume_' + document_revision(identity)
+    try:
+        durable = call('GET', PREFIX + '/runtime/intents/' + intent_id)
+    except ConnectionError as error:
+        if error.http_status != 404:
+            raise
+        body = {key: binding[key] for key in ('agent_id', 'binding_id', 'workspace_binding_id')}
+        resolution = call('POST', PREFIX + '/runtime/intents:resolve', body | {
+            'client_intent_id': intent_id, 'intent': 'runtime.resume_saved',
+            'session_id': session_id, 'source_session_generation': generation,
+        })
+        durable = {'resolution': resolution, 'operation': None}
+    resolution = durable.get('resolution') or {}
+    lineage = resolution.get('saved_resume') or {}
+    scope = resolution.get('scope') or {}
+    successor = scope.get('session_id')
+    if (resolution.get('client_intent_id') != intent_id
+            or lineage.get('source_session_id') != session_id or lineage.get('source_session_generation') != generation
+            or any(scope.get(field) != binding[field] for field in scope_fields)
+            or not isinstance(successor, str) or successor == session_id
+            or not all(field in resolution for field in SUBMISSION)):
+        raise ConnectionError('SAVED_RESUME_UNCONFIRMED', 'The resume receipt does not match the selected source.')
+    operation = durable.get('operation')
+    if operation is None:
+        operation = call('POST', PREFIX + '/runtime/operations', {field: resolution[field] for field in SUBMISSION})
+    if (operation.get('operation_id') != resolution['operation_id'] or operation.get('scope') != scope
+            or operation.get('action') != 'runtime.open'):
+        raise ConnectionError('SAVED_RESUME_UNCONFIRMED', 'The operation receipt does not match the selected successor.')
+    stage = operation.get('executor_stage')
+    return {'state': 'resume_requested', 'source_session_id': session_id, 'session_id': successor,
+            'operation_id': resolution['operation_id'], 'executor_stage': stage,
+            'message': f'Saved resume {display_text(stage or "pending")} for {display_text(session_id)}. '
+                       f'Successor session {display_text(successor)}. '
+                       f'Receipt {display_text(resolution["operation_id"])}.'}
+
+
 def _target(args, service_args, profile):
     if args.connect_id:
         return resolve_terminal_target(service_args, None, args.operator_profile, resolve_local_service)
@@ -146,15 +199,15 @@ def _target(args, service_args, profile):
 
 
 def run_session(argv):
-    parser = argparse.ArgumentParser(prog='okto-nexus session', description='List and inspect sessions in an existing connection.')
-    parser.add_argument('action', choices=('list', 'attach'))
+    parser = argparse.ArgumentParser(prog='okto-nexus session', description='List, attach to or resume an exact saved session.')
+    parser.add_argument('action', choices=('list', 'attach', 'resume'))
     connection = parser.add_mutually_exclusive_group()
     connection.add_argument('--id', dest='connect_id', help='public Harness ID in the selected workspace')
     connection.add_argument('--profile', help='existing project profile')
     parser.add_argument('--project', type=Path, help='existing local project folder')
     parser.add_argument('--workspace-id', help='exact workspace for a public Harness ID')
     parser.add_argument('--operator-profile', help='saved human operator login')
-    parser.add_argument('--session-id', help='exact runtime session for attach')
+    parser.add_argument('--session-id', help='exact runtime session for attach or saved resume')
     parser.add_argument('--viewer-executable', type=Path, help='absolute path to the reviewed local viewer')
     parser.add_argument('--json', action='store_true')
     args, service_args = parser.parse_known_args(argv)
@@ -162,8 +215,12 @@ def run_session(argv):
         parser.error('--workspace-id requires --id')
     if args.workspace_id and args.project is not None:
         parser.error('choose --workspace-id or --project')
-    if args.action != 'attach' and (args.session_id is not None or args.viewer_executable is not None):
-        parser.error('--session-id and --viewer-executable require attach')
+    if args.viewer_executable is not None and args.action != 'attach':
+        parser.error('--viewer-executable requires attach')
+    if args.action == 'list' and args.session_id is not None:
+        parser.error('--session-id requires attach or resume')
+    if args.action == 'resume' and args.session_id is None:
+        parser.error('resume requires the exact --session-id of a saved session')
     if args.session_id is not None and (not 1 <= len(args.session_id) <= 160 or not args.session_id.isprintable()):
         parser.error('invalid session ID')
     if args.connect_id is not None:
@@ -193,6 +250,12 @@ def run_session(argv):
             attach_session(call, binding, session_id=args.session_id, viewer_executable=args.viewer_executable,
                            interactive=not args.json and sys.stdin.isatty() and sys.stdout.isatty())
             return 0
+        if args.action == 'resume':
+            if not args.json:
+                print('Resume the saved conversation in a successor session. The source queue stays with the original session.')
+            result = resume_saved_session(call, binding, args.session_id)
+            _display(result, args.json)
+            return int(result['executor_stage'] in ('FAILED', 'CANCELLED', 'OUTCOME_UNKNOWN'))
         _display(_view(call, binding), args.json)
         return 0
     except ConnectionError as error:

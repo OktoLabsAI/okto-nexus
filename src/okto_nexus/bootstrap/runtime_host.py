@@ -48,7 +48,7 @@ class EmbeddedRuntimeHost:
         self._ledger_task: asyncio.Task[SQLiteOwnedSlotLedger] | None = None
         self._runtime_tasks: dict[tuple[str, str], asyncio.Task[
             tuple[RuntimeCore, SQLiteJournal]]] = {}
-        self._selections: dict[tuple[str, str], tuple[dict, dict, object, bool, str]] = {}
+        self._selections: dict[tuple[str, str], tuple[dict, dict, object, bool, str, object]] = {}
         self._closing = False
         self._draining = False
         self._history_closing = False
@@ -324,6 +324,7 @@ class EmbeddedRuntimeHost:
         workspace_roots: Mapping[str, str],
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
         native_factory=None, native_action_factory=None, native_approvals_enabled=False,
+        codex_resume=None,
     ) -> RuntimeCore:
         for value, label in ((server_id, "server"), (executor_id, "executor"), (session_id, "session")):
             if (not isinstance(value, str) or not value or len(value) > 160 or
@@ -339,7 +340,11 @@ class EmbeddedRuntimeHost:
             raise ValueError("A native action factory requires one approved Pi installation.")
         if type(native_approvals_enabled) is not bool:
             raise ValueError("Native approval capture must be a boolean.")
-        selection = (dict(candidates), dict(workspace_roots), native_action_factory, native_approvals_enabled, server_id)
+        if codex_resume is not None and (not callable(codex_resume)
+                or set(candidates) != {"codex_app_server"} or native_factory is not None):
+            raise CoreError("CAPABILITY_UNSUPPORTED", "saved_codex_resume", retry_safe=True)
+        selection = (dict(candidates), dict(workspace_roots), native_action_factory,
+                     native_approvals_enabled, server_id, codex_resume)
         key = (executor_id, session_id)
         async with self._lock:
             if self._closing:
@@ -379,6 +384,7 @@ class EmbeddedRuntimeHost:
                 capacity_enabled=self.capacity_enabled,
                 pi_native_action=native_launch if selection[2] is not None else None,
                 native_approvals_enabled=selection[3],
+                codex_resume=selection[5],
             )
             if selection[2] is not None:
                 from nexus_connector_core.native_action_socket import PiNativeActionOwner

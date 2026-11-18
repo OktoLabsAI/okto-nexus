@@ -21,7 +21,7 @@ from .execution_binding_proposals import _agent_guard
 from .execution_semantics import execution_intent_hash, validate_execution_target
 
 
-_INTENTS = {"runtime.start": "runtime.open", "turn.submit": "turn.submit",
+_INTENTS = {"runtime.start": "runtime.open", "runtime.resume_saved": "runtime.open", "turn.submit": "turn.submit",
             "turn.steer": "turn.steer", "turn.interrupt": "turn.interrupt",
             "runtime.close": "runtime.close"}
 
@@ -31,12 +31,12 @@ def resolve_execution_intent(
     request: Mapping[str, Any], remote_ready: bool = False,
     fresh_publications: Mapping | None = None, access=None, context=None,
     session_metadata: Mapping | None = None, one_shot_slot_id: str | None = None,
-    reserved_session_id: str | None = None,
+    reserved_session_id: str | None = None, saved_resume_enabled: bool = False,
 ) -> dict[str, Any]:
     """Store a stable resolution; never write an effect outbox or call Core."""
     required = {"client_intent_id", "intent", "binding_id",
                 "workspace_binding_id"}
-    allowed = required | {"agent_id", "session_id", "new_session", "text", "target"}
+    allowed = required | {"agent_id", "session_id", "source_session_generation", "new_session", "text", "target"}
     if (not isinstance(request, Mapping) or not required <= set(request) or
             not set(request) <= allowed or
             any(type(request[name]) is not str or
@@ -44,6 +44,17 @@ def resolve_execution_intent(
             request["intent"] not in _INTENTS):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                               "Invalid execution intent.", {})
+    saved_resume = request["intent"] == "runtime.resume_saved"
+    if saved_resume:
+        from .execution_saved_resume import require_saved_resume_operator
+        require_saved_resume_operator(actor=actor_agent_id, context=context, enabled=saved_resume_enabled)
+        generation = request.get('source_session_generation')
+        if (type(generation) is not int or not 1 <= generation <= 9007199254740991
+                or any(name in request for name in ('text', 'target', 'new_session'))
+                or not request.get('agent_id') or request['agent_id'] == actor_agent_id):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Select an exact saved session and owner generation.', {})
+    elif 'source_session_generation' in request:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'A source generation applies only to saved resume.', {})
     if ("new_session" in request and type(request["new_session"]) is not bool):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                               "Invalid session selection.", {})
@@ -242,6 +253,12 @@ def resolve_execution_intent(
             "binding_revision": binding["binding_revision"],
             "credential_epoch": revisions.credential_epoch,
         }
+        lineage = None
+        if saved_resume:
+            from .execution_saved_resume import require_saved_source_exclusive, require_saved_source_settled, saved_source
+            lineage, _ = saved_source(conn, scope, request['session_id'], request['source_session_generation'])
+            require_saved_source_exclusive(conn, scope, lineage)
+            require_saved_source_settled(conn, scope, lineage['source_session_id'])
         if containment and actor_agent_id != subject_agent_id:
             # A current operator may stop the existing authority, even after
             # its productive grant was revoked. Address the applied lease's
@@ -305,7 +322,7 @@ def resolve_execution_intent(
             "action": action, "target": dict(target), "payload": payload,
         }
         reuse = None
-        if action == "runtime.open" and request.get("new_session") is not True:
+        if action == "runtime.open" and not saved_resume and request.get("new_session") is not True:
             from .execution_session_reuse import reusable_opening
             reuse = reusable_opening(uow, factory=factory, access=access, context=context,
                 server_id=server_id, executor_id=binding["executor_id"], binding_id=binding["binding_id"],
@@ -338,6 +355,10 @@ def resolve_execution_intent(
         }
         if session_metadata is not None:
             resolved['_session_metadata'] = session_metadata
+        if lineage is not None:
+            if blockers:
+                raise OktoNexusError(ErrorCode.CONFLICT, 'The connection is not ready for saved session resume.', {})
+            resolved['saved_resume'] = lineage
         conn.execute(
             "INSERT INTO execution_client_intents(server_id,actor_agent_id,"
             "client_intent_id,body_hash,intent_id,operation_id,"
@@ -347,7 +368,8 @@ def resolve_execution_intent(
              body_hash, intent_id, operation_id,
              canonical_json(resolved).decode("utf-8"),
              _agent_guard(conn, subject_agent_id), "reuse" if reuse is not None else
-             "automatic" if action == "runtime.open" and request.get("new_session") is not True else "explicit", actor_guard),
+             "automatic" if action == "runtime.open" and not saved_resume and request.get("new_session") is not True
+             else "explicit", actor_guard),
         )
         if action == "runtime.open" and request.get("text") is not None:
             from .execution_initial_turns import plan_initial_turn
@@ -385,6 +407,9 @@ def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
     subject = resolution['scope']['agent_id']
     from .execution_operator_authority import require_operator_request
     with factory.unit_of_work(write=False) as uow:
+        if 'saved_resume' in resolution:
+            from .execution_saved_resume import require_saved_resume_operator
+            require_saved_resume_operator(actor=actor_agent_id, context=context, enabled=True)
         require_operator_request(uow, actor=actor_agent_id, subject=subject,
                                  access=access, context=context, require_feature=False,
                                  binding_id=resolution['scope']['binding_id'],
