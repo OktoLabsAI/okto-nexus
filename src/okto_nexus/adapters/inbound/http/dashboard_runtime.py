@@ -6,6 +6,7 @@ def build_router():
     from .connections_v1 import build_router as connections
     from .dashboard_session_commands import build_router as session_commands
     from .dashboard_session_input import build_router as session_inputs
+    from .dashboard_session_presentations import build_router as session_presentations
     from .dashboard_session_steer import build_router as session_steer
     from .dashboard_session_stream import build_router as session_stream
     from .runtime_v1 import build_router as runtime
@@ -35,4 +36,5 @@ def build_router():
     router.include_router(session_steer())
     router.include_router(session_commands())
     router.include_router(session_stream())
+    router.include_router(session_presentations())
     return router
