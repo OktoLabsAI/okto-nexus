@@ -204,6 +204,7 @@ def assert_session_input_authority(deps, app, access, scope, expected_grant, cha
         assert active_grant['used_executions'] == 0
     assert_staged_input_respects_shared_pump(deps, app, access, exact, channel)
     assert_interrupt_commits_exact_target_with_barrier(deps, app, access, exact, author, accepted.queue_revision)
+    assert_promotion_competes_with_next_turn(deps, app, access, exact, author, accepted, channel)
     assert enqueue_human_input(scope=exact, **args) == accepted
     auth.logout(token)
     with pytest.raises(OktoNexusError, match='no longer signed in'):
@@ -381,11 +382,99 @@ def assert_interrupt_commits_exact_target_with_barrier(deps, app, access, exact,
         raise RuntimeError('rollback control fixture')
 
 
+def assert_promotion_competes_with_next_turn(deps, app, access, exact, author, accepted, channel):
+    from contextlib import nullcontext
+
+    from okto_nexus.adapters.outbound.sqlite.session_interaction import (
+        prepare_dispatch_head,
+    )
+    from okto_nexus.adapters.outbound.sqlite.session_interaction_queue_controls import (
+        set_input_queue_paused,
+    )
+    from okto_nexus.application.execution_domain_delivery import (
+        DeliveryTransactionFactory,
+    )
+    from okto_nexus.application.execution_native_facts import stamp
+    from okto_nexus.application.runtime_availability import CapacityHost
+    from okto_nexus.application.session_interaction_dispatch import (
+        prepare_input_capacity,
+    )
+    from okto_nexus.application.session_interaction_promotion import (
+        promote_queued_human_input,
+    )
+    from okto_nexus.domain.session_interaction import InputDeliveryState
+
+    factory = deps.connection_factory
+    with (pytest.raises(RuntimeError, match='rollback promotion fixture'),
+          app.state.operator_auth.authority_fence() as resolve, factory.unit_of_work() as uow):
+        borrowed = DeliveryTransactionFactory(uow)
+        now = stamp(access.clock.now_iso())
+        revisions = ('fixture-steer', 'fixture-immediate-effect')
+        options = {'factory': borrowed, 'access': access, 'authority_fence': lambda: nullcontext(resolve),
+                   'current_steer_revisions': lambda *_: revisions, 'scope': exact, 'author': author,
+                   'input_id': accepted.input_id, 'native_turn_id': 'fixture-turn',
+                   'capability_revision': revisions[0], 'confirmed_effect_revision': revisions[1],
+                   'expected_queue_revision': accepted.queue_revision,
+                   'expected_input_revision': accepted.input_revision, 'remote_ready': True,
+                   'fresh_publications': app.state.inventory_fresh_publications}
+        with pytest.raises(OktoNexusError, match='input or queue changed'):
+            promote_queued_human_input(**(options | {'expected_input_revision': accepted.input_revision + 1}))
+        with pytest.raises(OktoNexusError, match='capability or effect changed'):
+            promote_queued_human_input(**(options | {'confirmed_effect_revision': 'stale-effect'}))
+        uow.connection.execute('SAVEPOINT prepare_first')
+        prepared = prepare_input_capacity(uow, factory=factory, access=access, resolve_human=resolve,
+            current_capability_revision=lambda *_: 'synthetic-capability', scope=exact,
+            host=CapacityHost(channel, None, 'fixture-boot'))
+        assert prepared.input_id == accepted.input_id
+        with pytest.raises(OktoNexusError, match='pending delivery must be resolved'):
+            promote_queued_human_input(**options)
+        uow.connection.execute('ROLLBACK TO prepare_first')
+        uow.connection.execute('RELEASE prepare_first')
+
+        promoted = promote_queued_human_input(**options)
+        assert promoted.input_id == accepted.input_id and promoted.sequence == accepted.sequence
+        assert promoted.status is InputDeliveryState.DISPATCHING and not promoted.possible_effect
+        assert promoted.input_revision == accepted.input_revision + 1
+        assert promoted.queue_revision == accepted.queue_revision + 1
+        assert promote_queued_human_input(**options) == promoted
+        with pytest.raises(OktoNexusError, match='retained reorientation targets a different effect'):
+            promote_queued_human_input(**(options | {'native_turn_id': 'replacement-turn'}))
+        assert prepare_dispatch_head(uow, scope=exact, now=now) is None
+        assert uow.connection.execute("SELECT count(*) FROM execution_operations WHERE action='turn.steer'").fetchone()[0] == 1
+
+        reserved = reserve_execution_dispatch(borrowed, server_id=exact.session.server_id,
+            executor_id=exact.session.executor_id, remote_ready=True)
+        assert reserved.operation_id == promoted.operation_id and reserved.session_control and reserved.session_input
+        send = {'reservation': reserved, 'access': access, 'remote_ready': True,
+                'fresh_publications': app.state.inventory_fresh_publications, 'resolve_session_input_human': resolve}
+        uow.connection.execute('SAVEPOINT pause_before_steer')
+        set_input_queue_paused(uow, scope=exact, paused=True, expected_queue_revision=promoted.queue_revision,
+                               capability_revision='pause', verify_authority=lambda: 'pause')
+        with pytest.raises(OktoNexusError, match='paused before reorientation'):
+            begin_execution_send(borrowed, session_steer_revisions=options['current_steer_revisions'], **send)
+        uow.connection.execute('ROLLBACK TO pause_before_steer')
+        uow.connection.execute('RELEASE pause_before_steer')
+        with pytest.raises(OktoNexusError, match='capability or effect changed'):
+            begin_execution_send(borrowed, session_steer_revisions=lambda *_: None, **send)
+        with pytest.raises(OktoNexusError, match='no longer signed in'):
+            begin_execution_send(borrowed, session_steer_revisions=options['current_steer_revisions'],
+                **(send | {'resolve_session_input_human': lambda _: None}))
+        authorized = begin_execution_send(borrowed, session_steer_revisions=options['current_steer_revisions'], **send)
+        assert authorized.frame['action'] == 'turn.steer' and authorized.frame['expected_turn_id'] == 'fixture-turn'
+        stored = uow.connection.execute('SELECT content,capacity_state FROM session_interaction_inputs WHERE input_id=?',
+                                        (promoted.input_id,)).fetchone()
+        assert authorized.frame['payload'] == {'text': stored['content']} and stored['capacity_state'] is None
+        retained = promote_queued_human_input(**options)
+        assert retained.operation_id == promoted.operation_id and retained.possible_effect
+        raise RuntimeError('rollback promotion fixture')
+
+
 def test_ns09_02_server_grant_core_application_and_replay(tmp_path, monkeypatch):
     connector = pytest.importorskip('okto_nexus_connector.transport.wss_r4')
     from okto_nexus_connector.transport.https_client import NexusHTTPClient
     from test_vertical_inventory import _NativeFactory
-    deps, app, access, operator, canonical, candidate, info, revisions, link_ticket, lane_ticket, server_id, executor_id = setup_authority(tmp_path, monkeypatch)
+    deps, app, access, operator, canonical, candidate, info, revisions, link_ticket, lane_ticket, server_id, executor_id = setup_authority(
+        tmp_path, monkeypatch, actions=['open', 'send', 'steer', 'interrupt', 'close'])
     path = f'wss://127.0.0.1:8202/v1/runtime/executors/{executor_id}/link'
     with TestClient(app, base_url='https://127.0.0.1:8202') as client:
         with client.websocket_connect(path, headers={'Authorization': f'Bearer {link_ticket}'}, subprotocols=['nxl.v1']) as ws:

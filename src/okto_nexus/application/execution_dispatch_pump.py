@@ -28,7 +28,7 @@ class ExecutionDispatchPump:
                  send, send_lock, verify_link, close_link, poll_interval=0.1, resolve_native_input=None,
                  retained_operations=None, wake_deliveries=None, idle_interval=1.0,
                  session_input_authority_fence=None, session_input_capability_revision=None,
-                 session_interrupt_capability_revision=None):
+                 session_interrupt_capability_revision=None, session_steer_revisions=None):
         self.factory, self.channel, self.access = factory, channel, access
         self.fresh_publications = fresh_publications
         self.send, self.send_lock = send, send_lock
@@ -42,6 +42,7 @@ class ExecutionDispatchPump:
         self.session_input_authority_fence = session_input_authority_fence
         self.session_input_capability_revision = session_input_capability_revision
         self.session_interrupt_capability_revision = session_interrupt_capability_revision
+        self.session_steer_revisions = session_steer_revisions
         self.retained_operations = retained_operations or (lambda: ())
         self.wake_deliveries = wake_deliveries or (lambda: None)
         self._stopping = asyncio.Event()
@@ -103,7 +104,8 @@ class ExecutionDispatchPump:
             with self.session_input_authority_fence() as resolve:
                 return begin(resolve_session_input_human=resolve,
                              session_input_capability_revision=self.session_input_capability_revision,
-                             session_interrupt_capability_revision=self.session_interrupt_capability_revision)
+                             session_interrupt_capability_revision=self.session_interrupt_capability_revision,
+                             session_steer_revisions=self.session_steer_revisions)
         return begin()
 
     async def _run(self):

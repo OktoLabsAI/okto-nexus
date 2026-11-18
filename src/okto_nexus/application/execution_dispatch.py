@@ -346,6 +346,7 @@ def begin_execution_send(
     resolve_session_input_human=None,
     session_input_capability_revision=None,
     session_interrupt_capability_revision=None,
+    session_steer_revisions=None,
 ) -> AuthorizedDispatch | AuthorizedOpenBootstrap:
     """Revalidate after queue wait, then fence the exact attempt as SENDING.
 
@@ -398,6 +399,7 @@ def begin_execution_send(
                                   "The dispatch reservation changed.", {})
         linked_input = conn.execute("SELECT * FROM session_interaction_inputs WHERE server_id=? AND executor_id=? "
                                     "AND operation_id=?", key).fetchone()
+        promoted_input = linked_input is not None and row['action'] == 'turn.steer'
         if linked_input is not None:
             from ..adapters.outbound.sqlite.session_interaction_queue_controls import (
                 is_input_queue_paused,
@@ -405,8 +407,10 @@ def begin_execution_send(
             from ..domain.execution.keys import SessionKey
 
             if is_input_queue_paused(conn, SessionKey(*key[:2], linked_input['session_id'])):
+                if promoted_input:
+                    raise OktoNexusError(ErrorCode.CONFLICT, 'The session queue was paused before reorientation.', {})
                 raise OktoNexusError(ErrorCode.CONFLICT, 'The session input queue is paused.', {'transient': 'session_input_paused'})
-            if linked_input['capacity_state'] != 'CONSUMED':
+            if not promoted_input and linked_input['capacity_state'] != 'CONSUMED':
                 raise OktoNexusError(ErrorCode.CONFLICT, "Session input capacity is not confirmed.", {})
         from .execution_initial_turns import require_current_parent_readiness
         require_current_parent_readiness(conn, server_id=server_id,
@@ -623,14 +627,19 @@ def begin_execution_send(
                 channel=ExecutionChannel(server_id, reservation.executor_id,
                     connection_id, connection_generation), now=authority_now,
                 operator_containment=operator_containment)
-        if linked_input is not None:
+        linked_control = conn.execute("SELECT * FROM session_interaction_controls WHERE server_id=? AND executor_id=? "
+                                      "AND operation_id=?", key).fetchone()
+        if promoted_input:
+            from .session_interaction_promotion import require_promoted_send_authority
+            require_promoted_send_authority(uow, factory=factory, access=access, linked=linked_input, control=linked_control,
+                scope=scope, semantic=semantic, resolve_human=resolve_session_input_human,
+                current_steer_revisions=session_steer_revisions)
+        elif linked_input is not None:
             from .session_interaction_dispatch import require_input_send_authority
             require_input_send_authority(uow, factory=factory, access=access, linked=linked_input, scope=scope,
                 lease=lease, intent_hash=row['intent_hash'], resolve_human=resolve_session_input_human,
                 current_capability_revision=session_input_capability_revision)
-        linked_control = conn.execute("SELECT * FROM session_interaction_controls WHERE server_id=? AND executor_id=? "
-                                      "AND operation_id=?", key).fetchone()
-        if linked_control is not None:
+        elif linked_control is not None:
             from .session_interaction_controls import require_interrupt_send_authority
             require_interrupt_send_authority(uow, access=access, control=linked_control, scope=scope,
                 semantic=semantic, resolve_human=resolve_session_input_human,
@@ -691,9 +700,9 @@ def begin_execution_send(
                                   "The dispatch attempt changed before send.", {})
         if linked_input is not None:
             marked = conn.execute("UPDATE session_interaction_inputs SET possible_effect=1,input_revision=input_revision+1 "
-                "WHERE server_id=? AND executor_id=? AND operation_id=? AND capacity_state='CONSUMED' "
+                "WHERE server_id=? AND executor_id=? AND operation_id=? AND capacity_state IS ? "
                 "AND status='DISPATCHING' AND possible_effect=0 AND input_revision=?",
-                (*key, linked_input['input_revision'])).rowcount
+                (*key, None if promoted_input else 'CONSUMED', linked_input['input_revision'])).rowcount
             if marked != 1:
                 raise OktoNexusError(ErrorCode.CONFLICT, "The session input changed before send.", {})
             conn.execute("UPDATE session_interaction_queues SET revision=revision+1 "
