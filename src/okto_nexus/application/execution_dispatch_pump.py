@@ -27,7 +27,8 @@ class ExecutionDispatchPump:
     def __init__(self, *, factory, channel, access, fresh_publications,
                  send, send_lock, verify_link, close_link, poll_interval=0.1, resolve_native_input=None,
                  retained_operations=None, wake_deliveries=None, idle_interval=1.0,
-                 session_input_authority_fence=None, session_input_capability_revision=None):
+                 session_input_authority_fence=None, session_input_capability_revision=None,
+                 session_interrupt_capability_revision=None):
         self.factory, self.channel, self.access = factory, channel, access
         self.fresh_publications = fresh_publications
         self.send, self.send_lock = send, send_lock
@@ -40,6 +41,7 @@ class ExecutionDispatchPump:
         self.resolve_native_input = resolve_native_input
         self.session_input_authority_fence = session_input_authority_fence
         self.session_input_capability_revision = session_input_capability_revision
+        self.session_interrupt_capability_revision = session_interrupt_capability_revision
         self.retained_operations = retained_operations or (lambda: ())
         self.wake_deliveries = wake_deliveries or (lambda: None)
         self._stopping = asyncio.Event()
@@ -97,10 +99,11 @@ class ExecutionDispatchPump:
         begin = partial(begin_execution_send, factory=self.factory, reservation=reservation, remote_ready=True,
             fresh_publications=self.fresh_publications, access=self.access, channel=self.channel,
             resolve_native_input=self.resolve_native_input)
-        if reservation.session_input and self.session_input_authority_fence is not None:
+        if (reservation.session_input or reservation.session_control) and self.session_input_authority_fence is not None:
             with self.session_input_authority_fence() as resolve:
                 return begin(resolve_session_input_human=resolve,
-                             session_input_capability_revision=self.session_input_capability_revision)
+                             session_input_capability_revision=self.session_input_capability_revision,
+                             session_interrupt_capability_revision=self.session_interrupt_capability_revision)
         return begin()
 
     async def _run(self):
@@ -152,7 +155,7 @@ class ExecutionDispatchPump:
                         authorized = await self._database(self._begin_send, reservation=reservation)
                     except OktoNexusError as error:
                         if (error.code == ErrorCode.CONFLICT and
-                                (error.details or {}).get('transient') == 'inventory_not_fresh'):
+                                (error.details or {}).get('transient') in {'inventory_not_fresh', 'session_input_paused'}):
                             await self._database(release_unsent_dispatch, factory=self.factory,
                                                  reservation=reservation)
                             reservation = None

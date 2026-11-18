@@ -594,8 +594,10 @@
         "SI-T-C18",
         "SI-T-C19"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si011-pause-and-exact-interrupt.md"
+      ]
     },
     {
       "id": "SI-012",

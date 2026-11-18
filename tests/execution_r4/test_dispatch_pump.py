@@ -161,7 +161,7 @@ def test_confirmed_incompatible_inventory_still_rejects_unsent_dispatch(owner):
     release_unsent_dispatch(deps.connection_factory, reservation=reservation)
 
 
-def test_input_send_claim_holds_authority_fence_only_for_linked_work(monkeypatch):
+def test_send_claim_holds_human_authority_fence_only_for_linked_work(monkeypatch):
     from contextlib import contextmanager
     from dataclasses import replace
 
@@ -179,10 +179,12 @@ def test_input_send_claim_holds_authority_fence_only_for_linked_work(monkeypatch
             held = False
 
     def begin(**options):
-        assert held is options['reservation'].session_input
+        reservation = options['reservation']
+        assert held is (reservation.session_input or reservation.session_control)
         if held:
             assert options['resolve_session_input_human']('fixture-author')
             assert options['session_input_capability_revision'](None, None) == 'fixture-capability'
+            assert options['session_interrupt_capability_revision'](None, None) == 'fixture-interrupt'
         else:
             assert 'resolve_session_input_human' not in options
         return 'prepared-frame'
@@ -190,10 +192,12 @@ def test_input_send_claim_holds_authority_fence_only_for_linked_work(monkeypatch
     monkeypatch.setattr(pumps, 'begin_execution_send', begin)
     pump = pumps.ExecutionDispatchPump(factory=None, channel=None, access=None, fresh_publications={},
         send=None, send_lock=None, verify_link=None, close_link=None, session_input_authority_fence=fence,
-        session_input_capability_revision=lambda uow, scope: 'fixture-capability')
+        session_input_capability_revision=lambda uow, scope: 'fixture-capability',
+        session_interrupt_capability_revision=lambda uow, scope: 'fixture-interrupt')
     plain = DispatchReservation('server', 'executor', 'operation', 'attempt', 1, 'regular', 100)
     assert pump._begin_send(reservation=plain) == 'prepared-frame'
     assert pump._begin_send(reservation=replace(plain, session_input=True)) == 'prepared-frame'
+    assert pump._begin_send(reservation=replace(plain, session_control=True)) == 'prepared-frame'
     assert not held
 
 

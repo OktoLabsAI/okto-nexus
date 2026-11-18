@@ -7,6 +7,9 @@ from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_r
 from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
 from ..adapters.outbound.sqlite.session_interaction import accept_input
 from ..adapters.outbound.sqlite.session_interaction_cancellation import cancel_input
+from ..adapters.outbound.sqlite.session_interaction_queue_controls import (
+    set_input_queue_paused,
+)
 from ..domain.runtime_context import RuntimeRequestContext
 from ..errors import ErrorCode, OktoNexusError
 from .execution_agent_recovery import require_agent_ready
@@ -50,16 +53,33 @@ def cancel_human_input(*, factory, access, authority_fence, current_cancel_revis
     """Cancel an owned input under the current human's cancellation authority."""
     with authority_fence() as resolve_human, factory.unit_of_work() as uow:
         def verify():
-            if not resolve_human(author.authority_ref):
-                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The session input author is no longer signed in.', {})
-            context = RuntimeRequestContext('operator', 'operator_session', trusted_local_operator=True)
-            if not access.authenticate(context, uow=uow, require_feature=False):
-                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Input cancellation requires operator authority.', {})
+            require_human_queue_control(uow, access=access, author=author, resolve_human=resolve_human)
             return current_cancel_revision(uow, scope)
 
         return cancel_input(uow, scope=scope, author=author, input_id=input_id, capability_revision=capability_revision,
                             expected_queue_revision=expected_queue_revision, expected_input_revision=expected_input_revision,
                             verify_authority=verify)
+
+
+def change_human_queue_pause(*, factory, access, authority_fence, current_pause_revision,
+                             scope, author, paused, capability_revision, expected_queue_revision):
+    """Apply an explicit pause or resume under a verified human login."""
+    with authority_fence() as resolve_human, factory.unit_of_work() as uow:
+        def verify():
+            require_human_queue_control(uow, access=access, author=author, resolve_human=resolve_human)
+            return current_pause_revision(uow, scope, paused)
+
+        return set_input_queue_paused(uow, scope=scope, paused=paused, expected_queue_revision=expected_queue_revision,
+                                      capability_revision=capability_revision, verify_authority=verify)
+
+
+def require_human_queue_control(uow, *, access, author, resolve_human):
+    if not resolve_human(author.authority_ref):
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The session input author is no longer signed in.', {})
+    context = RuntimeRequestContext('operator', 'operator_session', trusted_local_operator=True)
+    if not access.authenticate(context, uow=uow, require_feature=False):
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Queue control requires operator authority.', {})
+    return context
 
 
 def require_session_input_authority(uow, *, factory, access, scope, author, resolve_human):

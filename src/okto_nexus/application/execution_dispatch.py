@@ -41,6 +41,7 @@ class DispatchReservation:
     owner_connection_id: str | None = None
     owner_connection_generation: int | None = None
     session_input: bool = False
+    session_control: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -235,7 +236,9 @@ def reserve_execution_dispatch(
                 "AND (p.action<>'turn.submit' OR NOT EXISTS (SELECT 1 FROM session_interaction_inputs i "
                 "WHERE i.server_id=p.server_id AND i.executor_id=p.executor_id AND i.session_id=p.session_id "
                 "AND i.operation_id IS NOT NULL AND ("
-                "(i.operation_id=p.operation_id AND i.capacity_state IS NOT 'CONSUMED') OR "
+                "(i.operation_id=p.operation_id AND (i.capacity_state IS NOT 'CONSUMED' OR EXISTS ("
+                "SELECT 1 FROM session_interaction_queues q WHERE q.server_id=i.server_id AND q.executor_id=i.executor_id "
+                "AND q.session_id=i.session_id AND q.paused_owner_generation IS NOT NULL))) OR "
                 "(i.operation_id<>p.operation_id AND (i.status IN ('DISPATCHING','DELIVERY_UNKNOWN') OR "
                 "(i.status='ACCEPTED_NATIVE' AND EXISTS (SELECT 1 FROM execution_operations earlier_input "
                 "WHERE earlier_input.server_id=i.server_id AND earlier_input.executor_id=i.executor_id "
@@ -299,12 +302,14 @@ def reserve_execution_dispatch(
                                       "The dispatch row changed during reservation.", {})
             linked_input = conn.execute("SELECT 1 FROM session_interaction_inputs WHERE server_id=? "
                 "AND executor_id=? AND operation_id=?", (server_id, executor_id, row["operation_id"])).fetchone()
+            linked_control = conn.execute("SELECT 1 FROM session_interaction_controls WHERE server_id=? "
+                "AND executor_id=? AND operation_id=?", (server_id, executor_id, row["operation_id"])).fetchone()
             return DispatchReservation(
                 server_id, executor_id, row["operation_id"], token,
                 row["attempt_no"] + 1, reservation_class, cost,
                 channel.connection_id if channel else None,
                 channel.connection_generation if channel else None,
-                linked_input is not None)
+                linked_input is not None, linked_control is not None)
     return None
 
 
@@ -340,6 +345,7 @@ def begin_execution_send(
     resolve_native_input=None,
     resolve_session_input_human=None,
     session_input_capability_revision=None,
+    session_interrupt_capability_revision=None,
 ) -> AuthorizedDispatch | AuthorizedOpenBootstrap:
     """Revalidate after queue wait, then fence the exact attempt as SENDING.
 
@@ -392,8 +398,14 @@ def begin_execution_send(
                                   "The dispatch reservation changed.", {})
         linked_input = conn.execute("SELECT * FROM session_interaction_inputs WHERE server_id=? AND executor_id=? "
                                     "AND operation_id=?", key).fetchone()
-        if linked_input is not None and linked_input['capacity_state'] != 'CONSUMED':
-            raise OktoNexusError(ErrorCode.CONFLICT, "Session input capacity is not confirmed.", {})
+        if linked_input is not None:
+            from ..adapters.outbound.sqlite.session_interaction_queue_controls import is_input_queue_paused
+            from ..domain.execution.keys import SessionKey
+
+            if is_input_queue_paused(conn, SessionKey(*key[:2], linked_input['session_id'])):
+                raise OktoNexusError(ErrorCode.CONFLICT, 'The session input queue is paused.', {'transient': 'session_input_paused'})
+            if linked_input['capacity_state'] != 'CONSUMED':
+                raise OktoNexusError(ErrorCode.CONFLICT, "Session input capacity is not confirmed.", {})
         from .execution_initial_turns import require_current_parent_readiness
         require_current_parent_readiness(conn, server_id=server_id,
             executor_id=reservation.executor_id, operation_id=reservation.operation_id)
@@ -614,6 +626,13 @@ def begin_execution_send(
             require_input_send_authority(uow, factory=factory, access=access, linked=linked_input, scope=scope,
                 lease=lease, intent_hash=row['intent_hash'], resolve_human=resolve_session_input_human,
                 current_capability_revision=session_input_capability_revision)
+        linked_control = conn.execute("SELECT * FROM session_interaction_controls WHERE server_id=? AND executor_id=? "
+                                      "AND operation_id=?", key).fetchone()
+        if linked_control is not None:
+            from .session_interaction_controls import require_interrupt_send_authority
+            require_interrupt_send_authority(uow, access=access, control=linked_control, scope=scope,
+                semantic=semantic, resolve_human=resolve_session_input_human,
+                current_interrupt_revision=session_interrupt_capability_revision)
         # The operator initiates and remains audited; execution still consumes
         # the represented subject's separately issued canonical grant.
         actor = access.agents.get(uow, row['subject_agent_id'])

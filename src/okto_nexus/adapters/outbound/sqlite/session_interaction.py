@@ -26,6 +26,7 @@ from ....domain.session_interaction import (
 )
 from ....errors import ErrorCode, OktoNexusError
 from .connection import SqliteUnitOfWork
+from .session_interaction_queue_controls import is_input_queue_paused
 
 MAX_PENDING = 50
 PENDING_LIFETIME = timedelta(hours=24)
@@ -182,6 +183,8 @@ def prepare_dispatch_head(uow: SqliteUnitOfWork, *, scope: InputScope, now: date
             UPDATE session_interaction_queues SET revision=revision+1
             WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
         """, key)
+    if is_input_queue_paused(conn, scope.session):
+        return None
     head = conn.execute(f"""
         SELECT * FROM session_interaction_inputs
         WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id

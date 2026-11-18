@@ -203,6 +203,7 @@ def assert_session_input_authority(deps, app, access, scope, expected_grant, cha
         assert tuple(stored) == (author.authority_ref, expected_grant, active_grant['revision'])
         assert active_grant['used_executions'] == 0
     assert_staged_input_respects_shared_pump(deps, app, access, exact, channel)
+    assert_interrupt_commits_exact_target_with_barrier(deps, app, access, exact, author, accepted.queue_revision)
     assert enqueue_human_input(scope=exact, **args) == accepted
     auth.logout(token)
     with pytest.raises(OktoNexusError, match='no longer signed in'):
@@ -219,6 +220,8 @@ def assert_staged_input_respects_shared_pump(deps, app, access, exact, channel):
         prepare_dispatch_head,
         project_input_receipt,
     )
+    from okto_nexus.adapters.outbound.sqlite.session_interaction_queue_controls import set_input_queue_paused
+    from okto_nexus.application.execution_dispatch import release_unsent_dispatch
     from okto_nexus.application.execution_domain_delivery import DeliveryTransactionFactory
     from okto_nexus.application.execution_native_facts import stamp
     from okto_nexus.application.runtime_availability import CapacityHost
@@ -285,6 +288,20 @@ def assert_staged_input_respects_shared_pump(deps, app, access, exact, channel):
         assert send_reservation.session_input
         send_args = {'reservation': send_reservation, 'remote_ready': True, 'access': access,
                      'fresh_publications': app.state.inventory_fresh_publications}
+        revision = uow.connection.execute('SELECT revision FROM session_interaction_queues').fetchone()[0]
+        pause_args = {'scope': exact, 'capability_revision': 'pause', 'verify_authority': lambda: 'pause'}
+        paused = set_input_queue_paused(uow, paused=True, expected_queue_revision=revision, **pause_args)
+        with pytest.raises(OktoNexusError, match='queue is paused') as blocked:
+            begin_execution_send(borrowed, **send_args)
+        assert blocked.value.details['transient'] == 'session_input_paused'
+        release_unsent_dispatch(borrowed, reservation=send_reservation)
+        assert reserve_execution_dispatch(borrowed, server_id=exact.session.server_id,
+            executor_id=exact.session.executor_id, remote_ready=True) is None
+        set_input_queue_paused(uow, paused=False, expected_queue_revision=paused.queue_revision, **pause_args)
+        send_reservation = reserve_execution_dispatch(borrowed, server_id=exact.session.server_id,
+            executor_id=exact.session.executor_id, remote_ready=True)
+        assert send_reservation.operation_id == consumption.turn_operation_id and send_reservation.attempt_no == 2
+        send_args['reservation'] = send_reservation
         with pytest.raises(OktoNexusError, match='input author cannot be verified'):
             begin_execution_send(borrowed, **send_args)
         with pytest.raises(OktoNexusError, match='no longer signed in'):
@@ -314,6 +331,50 @@ def assert_staged_input_respects_shared_pump(deps, app, access, exact, channel):
             executor_id=exact.session.executor_id, remote_ready=True)
         assert following and following.operation_id != consumption.turn_operation_id
         raise RuntimeError('rollback staged fixture')
+
+
+def assert_interrupt_commits_exact_target_with_barrier(deps, app, access, exact, author, queue_revision):
+    from contextlib import nullcontext
+
+    from okto_nexus.adapters.outbound.sqlite.session_interaction_queue_controls import (
+        is_input_queue_paused,
+        set_input_queue_paused,
+    )
+    from okto_nexus.application.execution_domain_delivery import DeliveryTransactionFactory
+    from okto_nexus.application.session_interaction_controls import request_exact_human_interrupt
+
+    with (pytest.raises(RuntimeError, match='rollback control fixture'),
+          app.state.operator_auth.authority_fence() as resolve, deps.connection_factory.unit_of_work() as uow):
+        borrowed = DeliveryTransactionFactory(uow)
+        options = {'factory': borrowed, 'access': access, 'authority_fence': lambda: nullcontext(resolve),
+                   'current_interrupt_revision': lambda *_: 'fixture-interrupt', 'scope': exact, 'author': author,
+                   'client_intent_id': 'fixture-exact-interrupt', 'capability_revision': 'fixture-interrupt',
+                   'expected_queue_revision': queue_revision, 'remote_ready': True,
+                   'fresh_publications': app.state.inventory_fresh_publications}
+        operation, reused = request_exact_human_interrupt(native_turn_id='fixture-turn', **options)
+        operation_id = operation['operation_id']
+        assert not reused and is_input_queue_paused(uow.connection, exact.session)
+        with pytest.raises(OktoNexusError, match='different content'):
+            request_exact_human_interrupt(native_turn_id='replacement-turn', **options)
+        reserved = reserve_execution_dispatch(borrowed, server_id=exact.session.server_id,
+            executor_id=exact.session.executor_id, remote_ready=True)
+        assert reserved.operation_id == operation_id and reserved.session_control
+        send = {'reservation': reserved, 'access': access, 'remote_ready': True,
+                'fresh_publications': app.state.inventory_fresh_publications}
+        with pytest.raises(OktoNexusError, match='interrupt author cannot be verified'):
+            begin_execution_send(borrowed, **send)
+        with pytest.raises(OktoNexusError, match='no longer signed in'):
+            begin_execution_send(borrowed, resolve_session_input_human=lambda _: None,
+                session_interrupt_capability_revision=options['current_interrupt_revision'], **send)
+        authorized = begin_execution_send(borrowed, resolve_session_input_human=resolve,
+            session_interrupt_capability_revision=options['current_interrupt_revision'], **send)
+        assert authorized.frame['action'] == 'turn.interrupt' and authorized.frame['expected_turn_id'] == 'fixture-turn'
+        set_input_queue_paused(uow, scope=exact, paused=False, expected_queue_revision=queue_revision + 1,
+                               capability_revision='fixture-resume', verify_authority=lambda: 'fixture-resume')
+        same, reused = request_exact_human_interrupt(native_turn_id='fixture-turn', **options)
+        assert reused and same['operation_id'] == operation_id
+        assert not is_input_queue_paused(uow.connection, exact.session)
+        raise RuntimeError('rollback control fixture')
 
 
 def test_ns09_02_server_grant_core_application_and_replay(tmp_path, monkeypatch):
