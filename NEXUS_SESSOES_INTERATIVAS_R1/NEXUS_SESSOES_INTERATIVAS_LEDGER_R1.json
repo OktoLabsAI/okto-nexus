@@ -931,8 +931,10 @@
         "SI-T-H05",
         "SI-T-H06"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si019-presenter-credential-and-writer-fence.md"
+      ]
     },
     {
       "id": "SI-020",

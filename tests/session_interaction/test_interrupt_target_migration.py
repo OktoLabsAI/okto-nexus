@@ -84,3 +84,8 @@ def test_upgrade_preserves_preexisting_interrupt_and_paused_messages(legacy_stor
         assert conn.execute('SELECT native_launch_build_json FROM execution_sessions WHERE session_id=?',
                             (scope.session.session_id,)).fetchone()[0] is None
         assert not conn.execute('PRAGMA foreign_key_check').fetchall()
+    assert MigrationRunner(factory, migrations_dir=_partial_migrations_dir(tmp_path, 180)).apply() == [180]
+    assert retained() == original
+    with factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT count(*) FROM session_attachments').fetchone()[0] == 0
+        assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
