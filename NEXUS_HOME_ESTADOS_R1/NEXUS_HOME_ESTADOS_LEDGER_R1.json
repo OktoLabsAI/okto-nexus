@@ -7975,6 +7975,15 @@
       "public_origin": "literal hostile HTML label",
       "private_origin": "canonical turn.submit prompt plus ESC and synthetic Bearer token",
       "authorized_terminal_ANSI_sanitization": "NOT_CLAIMED"
+    },
+    "human_session_request": {
+      "status": "PROVISIONING_EXPLICIT_USER_REQUEST",
+      "record": "execution/human-session-request-2026-11-18.md",
+      "whole_plan_ready": false,
+      "result": "NOT_RUN",
+      "provider_usage": 0,
+      "other_test_runtimes": "STOPPED",
+      "prior_novice_gate": "PRESERVED"
     }
   }
 }
