@@ -1,6 +1,5 @@
 """Exercise the local presentation protocol across HTTP and WebSocket."""
 
-import json
 import socket
 import threading
 import time
@@ -12,15 +11,15 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
-from wsproto import ConnectionType, WSConnection
-from wsproto.events import AcceptConnection, CloseConnection, Request, TextMessage
 
 from okto_nexus.adapters.inbound.http import dashboard_session_presentations
 from okto_nexus.adapters.inbound.http.operator_auth import COOKIE, OperatorAuth
+from okto_nexus.adapters.outbound.local_presenter_client import open_local_presentation
 from okto_nexus.adapters.outbound.operator_client import RemoteOperatorHTTP
 from okto_nexus.application import codex_presenter_channel
 from okto_nexus.application.codex_presenter_history import CodexHistorySnapshot
 from okto_nexus.application.session_attachment_broker import SessionAttachmentBroker
+from okto_nexus.application.terminal_connection import ConnectionError
 from tests.session_interaction.test_queue_storage import database as queue_database
 
 database = queue_database
@@ -197,46 +196,17 @@ def test_loopback_network_carries_history_and_releases_on_eof(transport):
             while not server.started and thread.is_alive() and time.monotonic() < deadline:
                 time.sleep(.02)
             assert server.started
-            api = RemoteOperatorHTTP(f'http://{host}:{port}', token=transport.token)
-            offer = api('POST', PREFIX + f'/sessions/{transport.scope.session.session_id}/attachments:prepare',
-                {**document(transport.scope), 'capability_revision': 'capability-1', 'client_intent_id': 'loopback',
-                 'intent': 'attach_live', 'access': 'read'})
-            with socket.create_connection((host, port), timeout=5) as peer:
-                wire = WSConnection(ConnectionType.CLIENT)
-                peer.sendall(wire.send(Request(host=f'{host}:{port}',
-                    target=PREFIX + '/attachments/' + offer['attachment_id'] + '/stream',
-                    subprotocols=[SUBPROTOCOL], extra_headers=[
-                        (b'authorization', ('Bearer ' + offer['ticket']).encode()),
-                        (b'cookie', f'{COOKIE}={transport.token}'.encode()),
-                    ])))
-
-                def events():
-                    data = peer.recv(64 * 1024)
-                    assert data
-                    wire.receive_data(data)
-                    return list(wire.events())
-
-                def exchange(value):
-                    peer.sendall(wire.send(TextMessage(data=json.dumps(value))))
-                    response = ''
-                    while True:
-                        for event in events():
-                            assert not isinstance(event, CloseConnection)
-                            if isinstance(event, TextMessage):
-                                response += event.data
-                                if event.message_finished:
-                                    return json.loads(response)
-
-                candidates = events()
-                while not candidates:
-                    candidates = events()
-                assert len(candidates) == 1 and isinstance(candidates[0], AcceptConnection)
-                assert candidates[0].subprotocol == SUBPROTOCOL
-                challenge = exchange({'kind': 'hello', 'version': 1, **document(transport.scope)})
-                assert exchange({'kind': 'prove', 'challenge': challenge['challenge']})['kind'] == 'attached'
-                response = exchange({'kind': 'page', 'request_id': 1,
-                    'method': 'thread/turns/list', 'params': {'threadId': THREAD}})
-                assert response['kind'] == 'page' and response['page']['data'] == []
+            api = RemoteOperatorHTTP(f'http://{host}:{port}', token=transport.token,
+                                     server_id=transport.scope.session.server_id)
+            with open_local_presentation(api, **document(transport.scope),
+                                         capability_revision='capability-1', client_intent_id='loopback') as peer:
+                assert peer.page(method='thread/turns/list', params={'threadId': THREAD})['data'] == []
+                assert peer.page(method='thread/items/list', params={'threadId': THREAD})['data'] == []
+                with transport.factory.unit_of_work(write=False) as uow:
+                    offer = dict(uow.connection.execute(
+                        'SELECT attachment_id FROM session_attachments WHERE client_intent_id=?', ('loopback',)
+                    ).fetchone())
+                assert attachment_state(transport, offer)[0] == 'ACTIVE'
             deadline = time.monotonic() + 5
             while attachment_state(transport, offer)[0] != 'DETACHED' and time.monotonic() < deadline:
                 time.sleep(.02)
@@ -245,3 +215,16 @@ def test_loopback_network_carries_history_and_releases_on_eof(transport):
             server.should_exit = True
             thread.join(10)
             assert not thread.is_alive()
+
+
+def test_client_refuses_foreign_server_before_sending_the_operator_cookie(transport):
+    arguments = {**document(transport.scope), 'capability_revision': 'capability-1', 'client_intent_id': 'foreign'}
+    foreign = RemoteOperatorHTTP('https://example.test', token=transport.token,
+                                 server_id=transport.scope.session.server_id)
+    with pytest.raises(ConnectionError) as refused, open_local_presentation(foreign, **arguments):
+        pytest.fail('A nonlocal presentation must not be prepared')
+    assert refused.value.code == 'PRESENTATION_LOCAL_REQUIRED'
+    sibling = RemoteOperatorHTTP(ORIGIN, token=transport.token, server_id='another-server')
+    with pytest.raises(ConnectionError) as refused, open_local_presentation(sibling, **arguments):
+        pytest.fail('A foreign Server scope must not be prepared')
+    assert refused.value.code == 'PRESENTATION_UNAVAILABLE'

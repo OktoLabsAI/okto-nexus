@@ -17,6 +17,11 @@ from pydantic import Field
 from ....application.codex_presenter_channel import CodexPresenterHistoryChannel
 from ....application.execution_native_session_mapping import ManagedNativeSession
 from ....application.session_attachment_broker import SessionAttachmentBroker
+from ....domain.presentation_protocol import (
+    MAX_PRESENTATION_REQUEST_BYTES,
+    MAX_PRESENTATION_RESPONSE_BYTES,
+    PRESENTATION_SUBPROTOCOL,
+)
 from ....domain.session_interaction import InputAuthor, InputScope
 from ....errors import OktoNexusError
 from .dashboard_session_input import _HEADERS, _error, _runtime_error
@@ -31,9 +36,6 @@ from .session_interaction_contract import (
 )
 
 _AUDIENCE = 'nexus.local.codex.v1'
-_SUBPROTOCOL = 'nexus.presenter.v1'
-_MAX_REQUEST_BYTES = 64 * 1024
-_MAX_RESPONSE_BYTES = 512 * 1024
 _RENEW_SECONDS = 15
 
 
@@ -82,7 +84,7 @@ def _local_transport(request) -> bool:
 def _upgrade_allowed(ws: WebSocket) -> bool:
     if (not _local_transport(ws) or ws.query_params or ws.headers.get('sec-fetch-site') == 'cross-site'
             or len(ws.headers.getlist('origin')) > 1
-            or _SUBPROTOCOL not in ws.scope.get('subprotocols', ())):
+            or PRESENTATION_SUBPROTOCOL not in ws.scope.get('subprotocols', ())):
         return False
     try:
         return _safe_transport(ws)
@@ -108,14 +110,15 @@ async def _receive(ws: WebSocket):
     if message['type'] == 'websocket.disconnect':
         raise WebSocketDisconnect(message.get('code', 1000))
     wire = message.get('text')
-    if not isinstance(wire, str) or len(wire) > _MAX_REQUEST_BYTES or len(wire.encode()) > _MAX_REQUEST_BYTES:
+    if (not isinstance(wire, str) or len(wire) > MAX_PRESENTATION_REQUEST_BYTES
+            or len(wire.encode()) > MAX_PRESENTATION_REQUEST_BYTES):
         raise ValueError('Invalid presentation frame')
     return strict_json(wire)
 
 
 async def _send(ws: WebSocket, frame):
     raw = canonical_json(frame)
-    if len(raw) > _MAX_RESPONSE_BYTES:
+    if len(raw) > MAX_PRESENTATION_RESPONSE_BYTES:
         raise ValueError('Presentation frame too large')
     with anyio.fail_after(5):
         await ws.send_text(raw.decode())
@@ -129,7 +132,7 @@ async def _present(ws, services, author, attachment_id, ticket):
     broker = services.broker
     channel_id = 'viewer_' + secrets.token_hex(16)
     scope = None
-    await ws.accept(subprotocol=_SUBPROTOCOL)
+    await ws.accept(subprotocol=PRESENTATION_SUBPROTOCOL)
     try:
         with anyio.fail_after(10):
             hello = _Hello.model_validate(await _receive(ws))
