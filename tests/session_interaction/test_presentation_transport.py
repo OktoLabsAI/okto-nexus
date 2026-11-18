@@ -4,7 +4,7 @@ import json
 import socket
 import threading
 import time
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from types import SimpleNamespace
 from urllib.parse import urlsplit
 
@@ -90,10 +90,14 @@ def transport(database, tmp_path, monkeypatch):
         assert requested == scope
         return SimpleNamespace(codex_thread_id=THREAD), 'same-owner'
 
+    async def context(requested):
+        assert requested == scope
+        return viewer_context(tmp_path)
+
     monkeypatch.setattr(codex_presenter_channel, 'read_codex_history_snapshot',
                         lambda *_args, **_kwargs: CodexHistorySnapshot(0, 0, (), ()))
     app.state.local_codex_presentations = dashboard_session_presentations.LocalCodexPresentations(
-        broker, prove, object())
+        broker, prove, object(), read_context=context)
     app.include_router(dashboard_session_presentations.build_router(), prefix=PREFIX)
     with TestClient(app, base_url=ORIGIN, client=('127.0.0.1', 12345)) as client:
         client.cookies.set(COOKIE, token)
@@ -206,6 +210,35 @@ def test_disabled_and_unqualified_intents_are_refused(transport):
     assert prepare(transport).status_code == 409
 
 
+@pytest.mark.parametrize('change', ['different-thread', 'owner-replaced', 'operator-logout'])
+def test_context_requires_matching_thread_and_authority_throughout_read(transport, tmp_path, change):
+    service = transport.app.state.local_codex_presentations
+    current_owner = 'same-owner'
+
+    async def prove(scope):
+        mapping, _ = await service.prove_owner(scope)
+        return mapping, current_owner
+
+    async def context(scope):
+        nonlocal current_owner
+        assert scope == transport.scope
+        if change == 'operator-logout':
+            transport.auth.logout(transport.token)
+        if change == 'owner-replaced':
+            current_owner = 'replacement'
+        context = viewer_context(tmp_path)
+        return context.model_copy(update={'thread_id': 'sibling'}) if change == 'different-thread' else context
+
+    transport.app.state.local_codex_presentations = replace(service, prove_owner=prove, read_context=context)
+    offer = prepare(transport).json()
+    with stream(transport, offer) as ws:
+        attach(ws, transport.scope)
+        ws.send_json({'kind': 'context', 'request_id': 1})
+        with pytest.raises(WebSocketDisconnect):
+            ws.receive_json()
+    assert attachment_state(transport, offer) == ('DETACHED', None, None)
+
+
 def test_explicit_detach_requires_the_same_channel(transport):
     offer = prepare(transport).json()
     path = PREFIX + '/attachments/' + offer['attachment_id'] + '/detach'
@@ -224,7 +257,7 @@ def test_explicit_detach_requires_the_same_channel(transport):
 
 
 @pytest.mark.parametrize('quit_mode', ['eof', 'logout'])
-def test_loopback_network_carries_history_and_releases_on_eof(transport, quit_mode, tmp_path, monkeypatch):
+def test_loopback_network_carries_context_and_history_then_detaches(transport, quit_mode, tmp_path, monkeypatch):
     if quit_mode == 'logout':
         monkeypatch.setattr(dashboard_session_presentations, '_RENEW_SECONDS', 1)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
@@ -249,8 +282,7 @@ def test_loopback_network_carries_history_and_releases_on_eof(transport, quit_mo
                         'SELECT attachment_id FROM session_attachments WHERE client_intent_id=?', ('loopback',)
                     ).fetchone())
                 assert attachment_state(transport, offer)[0] == 'ACTIVE'
-                with local_codex_relay(peer, context=viewer_context(tmp_path), viewer_home=str(tmp_path),
-                                       platform_os='windows') as endpoint:
+                with local_codex_relay(peer, viewer_home=str(tmp_path), platform_os='windows') as endpoint:
                     port = urlsplit(endpoint.address).port
                     with socket.create_connection(('127.0.0.1', port), timeout=4) as foreign:
                         denied = open_viewer(endpoint, foreign, token=endpoint.token,
@@ -262,6 +294,7 @@ def test_loopback_network_carries_history_and_releases_on_eof(transport, quit_mo
                         assert rpc(viewer, wire, 1, 'initialize')['result']['platformOs'] == 'windows'
                         response = rpc(viewer, wire, 2, 'thread/resume', threadId=THREAD)
                         assert response['result']['thread']['id'] == THREAD
+                        assert response['result']['cwd'] == str(tmp_path)
                         for method in ['thread/turns/list', 'thread/items/list']:
                             assert rpc(viewer, wire, method, method, threadId=THREAD)['result']['data'] == []
                         assert rpc(viewer, wire, 3, 'thread/items/list', threadId='sibling')['error']['code'] == -32602

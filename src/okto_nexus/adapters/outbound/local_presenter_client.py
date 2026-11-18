@@ -21,6 +21,7 @@ from wsproto.events import (
 )
 from wsproto.utilities import ProtocolError
 
+from ...application.codex_viewer_protocol import CodexViewerContext
 from ...application.terminal_connection import PREFIX, ConnectionError
 from ...domain.presentation_protocol import (
     MAX_PRESENTATION_REQUEST_BYTES,
@@ -117,17 +118,26 @@ class _LocalPresenter:
     def page(self, *, method, params):
         if method not in _HISTORY_METHODS:
             raise ConnectionError('PRESENTATION_METHOD_UNAVAILABLE', 'Only scoped history can be read on this link.')
+        return self._request('page', method=method, params=params)
+
+    def viewer_context(self):
+        try:
+            return CodexViewerContext.model_validate(self._request('context'))
+        except ValueError:
+            raise _unavailable() from None
+
+    def _request(self, kind, **payload):
         self._request_id += 1
         try:
-            response = self.exchange({'kind': 'page', 'request_id': self._request_id,
-                                      'method': method, 'params': params})
-            if (response.get('kind') != 'page' or type(response.get('request_id')) is not int
+            response = self.exchange({'kind': kind, 'request_id': self._request_id, **payload})
+            if (response.keys() != {'kind', 'request_id', kind} or response['kind'] != kind
+                    or type(response['request_id']) is not int
                     or response['request_id'] != self._request_id
-                    or not isinstance(response.get('page'), dict)):
-                raise ValueError('The presentation page did not match the request')
+                    or not isinstance(response[kind], dict)):
+                raise ValueError('The presentation response did not match the request')
         except (OSError, TypeError, ValueError, ProtocolError, RecursionError):
             raise _unavailable() from None
-        return response['page']
+        return response[kind]
 
 
 def _unavailable():

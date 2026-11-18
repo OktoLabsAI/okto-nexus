@@ -12,9 +12,10 @@ from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from nexus_connector_core import CoreError, NativeSessionOwnerProof
 from nexus_connector_core.protocol import canonical_json, strict_json
-from pydantic import Field
+from pydantic import Field, TypeAdapter
 
 from ....application.codex_presenter_channel import CodexPresenterHistoryChannel
+from ....application.codex_viewer_protocol import CodexViewerContext
 from ....application.execution_native_session_mapping import ManagedNativeSession
 from ....application.session_attachment_broker import SessionAttachmentBroker
 from ....domain.presentation_protocol import (
@@ -46,6 +47,7 @@ class LocalCodexPresentations:
     broker: SessionAttachmentBroker
     prove_owner: Callable[[InputScope], Awaitable[tuple[ManagedNativeSession, NativeSessionOwnerProof]]]
     execution_access: object
+    read_context: Callable[[InputScope], Awaitable[CodexViewerContext | None]] | None = None
 
 
 class _Hello(ScopedSession):
@@ -63,6 +65,14 @@ class _HistoryRequest(_Document):
     request_id: Revision
     method: Literal['thread/turns/list', 'thread/items/list']
     params: Annotated[dict, Field(max_length=8)]
+
+
+class _ContextRequest(_Document):
+    kind: Literal['context']
+    request_id: Revision
+
+
+_REQUEST = TypeAdapter(Annotated[_HistoryRequest | _ContextRequest, Field(discriminator='kind')])
 
 
 class _Detach(ScopedSession):
@@ -160,11 +170,18 @@ async def _present(ws, services, author, attachment_id, ticket):
                 await _worker(broker.refresh, **active)
                 next_renewal = anyio.current_time() + _RENEW_SECONDS
                 continue
-            request = _HistoryRequest.model_validate(raw)
-            page = await history.page(method=request.method, params=request.params)
+            request = _REQUEST.validate_python(raw)
+            if isinstance(request, _ContextRequest):
+                if services.read_context is None:
+                    raise ValueError('Presentation context is unavailable')
+                context = await history.viewer_context(services.read_context)
+                reply = {'kind': 'context', 'context': context.model_dump(mode='json')}
+            else:
+                page = await history.page(method=request.method, params=request.params)
+                reply = {'kind': 'page', 'page': page}
             if _services(ws.app.state) is not services:
                 break
-            await _send(ws, {'kind': 'page', 'request_id': request.request_id, 'page': page})
+            await _send(ws, {'request_id': request.request_id, **reply})
         await ws.close(code=4409)
     except WebSocketDisconnect:
         return

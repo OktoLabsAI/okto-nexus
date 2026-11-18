@@ -137,8 +137,9 @@ def _serve_once(listener, *, host, secret, protocol, stop, link):
 
 
 @contextmanager
-def local_codex_relay(link, *, context, viewer_home, platform_os):
+def local_codex_relay(link, *, viewer_home, platform_os):
     """Own one loopback socket and its Server link. The viewer gets its own secret."""
+    context = link.viewer_context()
     with socket.create_server(('127.0.0.1', 0), backlog=2) as listener:
         listener.settimeout(_POLL_SECONDS)
         host = f'127.0.0.1:{listener.getsockname()[1]}'

@@ -1,34 +1,52 @@
 """Scoped read-only protocol presented to the Codex 0.170.0 terminal."""
 
-from dataclasses import dataclass
+from pathlib import PurePosixPath, PureWindowsPath
+from typing import Annotated, Literal
+
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field, JsonValue
 
 from ..errors import OktoNexusError
 from .codex_presenter_requests import codex_history_page, codex_thread_presentation
 
 HISTORY_METHODS = ('thread/turns/list', 'thread/items/list')
 THREAD_METHODS = ('thread/read', 'thread/resume')
-EFFORTS = ('none', 'minimal', 'low', 'medium', 'high', 'xhigh')
+def _printable(value: str) -> str:
+    if not value.isprintable():
+        raise ValueError('Invalid viewer metadata text.')
+    return value
 
 
-@dataclass(frozen=True, slots=True)
-class CodexViewerContext:
+def _absolute_path(value: str) -> str:
+    if not (PurePosixPath(value).is_absolute() or PureWindowsPath(value).is_absolute()):
+        raise ValueError('The viewer needs an absolute working directory.')
+    return value
+
+
+ShortText = Annotated[str, Field(min_length=1, max_length=256), AfterValidator(_printable)]
+EpochSeconds = Annotated[int, Field(ge=0, lt=2**53)]
+
+
+class CodexViewerContext(BaseModel):
     """Exact facts from an authorized owner, already projected for the viewer."""
 
-    thread_id: str
-    session_id: str
-    cwd: str
-    model: str
-    model_provider: str
-    status: str
-    created_at: int
-    updated_at: int
+    model_config = ConfigDict(extra='forbid', strict=True, frozen=True)
+
+    thread_id: ShortText
+    session_id: ShortText
+    cwd: Annotated[str, Field(min_length=1, max_length=4096), AfterValidator(_printable),
+                   AfterValidator(_absolute_path)]
+    model: ShortText
+    model_provider: ShortText
+    status: Literal['idle', 'active', 'systemError']
+    created_at: EpochSeconds
+    updated_at: EpochSeconds
     ephemeral: bool
-    cli_version: str
-    source: str
-    approval_policy: str | dict
-    approvals_reviewer: str
-    sandbox: dict
-    reasoning_effort: str
+    cli_version: ShortText
+    source: Literal['cli', 'vscode', 'exec', 'appServer', 'unknown']
+    approval_policy: Literal['untrusted', 'on-request', 'never'] | dict[Literal['granular'], dict[str, bool]]
+    approvals_reviewer: Literal['user', 'auto_review', 'guardian_subagent']
+    sandbox: dict[Literal['type', 'networkAccess', 'excludeSlashTmp', 'excludeTmpdirEnvVar', 'writableRoots'], JsonValue]
+    reasoning_effort: Literal['none', 'minimal', 'low', 'medium', 'high', 'xhigh']
 
     def thread(self):
         status = {'type': self.status}
@@ -109,8 +127,6 @@ class CodexViewerProtocol:
             return {'status': 'unsubscribed'}
         if method == 'model/list' and params.get('cursor') is None:
             effort = self.context.reasoning_effort
-            if effort not in EFFORTS:
-                return None
             model = self.context.model
             return {'data': [{'id': model, 'model': model, 'displayName': model, 'description': '',
                 'defaultReasoningEffort': effort,
