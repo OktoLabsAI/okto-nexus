@@ -2,12 +2,15 @@
 
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from threading import Barrier
 
 import pytest
 
-from okto_nexus.adapters.outbound.sqlite.session_interaction import accept_input
+from okto_nexus.adapters.outbound.sqlite.session_interaction import (
+    accept_input,
+    prepare_dispatch_head,
+)
 from okto_nexus.bootstrap.dependencies import bootstrap
 from okto_nexus.domain.execution.keys import SessionKey, SessionOwnerGeneration
 from okto_nexus.domain.session_interaction import (
@@ -65,9 +68,9 @@ def database(tmp_path):
     return factory, scopes
 
 
-def enqueue(uow, scope, *, intent="request", author=ALICE, text="Unmodified synthetic message."):
+def enqueue(uow, scope, *, intent="request", author=ALICE, text="Unmodified synthetic message.", now=NOW):
     return accept_input(uow, scope=scope, author=author, client_intent_id=intent,
-                        capability_revision="capability-v1", text=text, now=NOW)
+                        capability_revision="capability-v1", text=text, now=now)
 
 
 def test_atomic_storage_and_retry_do_not_create_r4_operations(database):
@@ -142,3 +145,50 @@ def test_pending_limit_rejects_new_intents_and_preserves_existing_receipts(datab
         assert enqueue(uow, scope) == accepted
         row = uow.connection.execute("SELECT expires_at FROM session_interaction_inputs").fetchone()
         assert row["expires_at"] == "2026-01-02T00:00:00+00:00"
+
+
+def test_acceptance_enforces_encoded_runtime_bound(database):
+    factory, (scope, _) = database
+    with factory.unit_of_work() as uow:
+        with pytest.raises(OktoNexusError) as error:
+            enqueue(uow, scope, text='"' * (32 * 1024))
+        assert error.value.details["reason"] == "INPUT_PAYLOAD_TOO_LARGE"
+        assert enqueue(uow, scope, text="a" * (64 * 1024 - len('{"text":""}'))).sequence == 1
+
+
+def test_preparation_expires_only_unsent_inputs_in_the_exact_session(database):
+    factory, (scope, sibling) = database
+    later = NOW + timedelta(hours=12)
+    with factory.unit_of_work() as uow:
+        first = enqueue(uow, scope, intent="first")
+        second = enqueue(uow, scope, intent="second", now=later, text="Second input")
+        enqueue(uow, sibling)
+        assert prepare_dispatch_head(uow, scope=scope, now=NOW) is None
+        uow.connection.execute("UPDATE execution_sessions SET lease_state='ACTIVE'")
+        assert prepare_dispatch_head(uow, scope=scope, now=later).input_id == first.input_id
+    with factory.unit_of_work() as uow:
+        head = prepare_dispatch_head(uow, scope=scope, now=NOW + timedelta(hours=24))
+        assert head.input_id == second.input_id and head.text == "Second input"
+        first_retry = enqueue(uow, scope, intent="first")
+        assert first_retry.status is InputDeliveryState.EXPIRED and first_retry.input_revision == 1
+        assert first_retry.queue_revision == 3
+        assert enqueue(uow, sibling).status is InputDeliveryState.QUEUED
+        assert prepare_dispatch_head(uow, scope=scope, now=NOW + timedelta(hours=24)) == head
+        assert enqueue(uow, scope, intent="first").queue_revision == 3
+
+
+def test_preparation_keeps_blocked_head_ahead_of_later_input(database):
+    factory, (scope, _) = database
+    with factory.unit_of_work() as uow:
+        first = enqueue(uow, scope, intent="first")
+        enqueue(uow, scope, intent="second", now=NOW + timedelta(hours=12))
+        uow.connection.execute("UPDATE execution_sessions SET lease_state='ACTIVE'")
+        uow.connection.execute("UPDATE session_interaction_inputs SET status='BLOCKED_AUTH' WHERE input_id=?",
+                               (first.input_id,))
+        assert prepare_dispatch_head(uow, scope=scope, now=NOW + timedelta(hours=24)) is None
+        assert enqueue(uow, scope, intent="first").status is InputDeliveryState.BLOCKED_AUTH
+        uow.connection.execute("UPDATE session_interaction_inputs SET status='CANCELLED' WHERE input_id=?",
+                               (first.input_id,))
+        uow.connection.execute("UPDATE execution_sessions SET owner_generation=2")
+        assert prepare_dispatch_head(uow, scope=scope, now=NOW) is None
+        assert prepare_dispatch_head(uow, scope=replace(scope, generation=SessionOwnerGeneration(2)), now=NOW) is None

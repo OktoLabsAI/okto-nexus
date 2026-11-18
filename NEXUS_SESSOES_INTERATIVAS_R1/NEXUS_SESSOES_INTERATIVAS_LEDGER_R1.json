@@ -437,8 +437,10 @@
         "SI-T-B11",
         "SI-T-B12"
       ],
-      "status": "TODO",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "execution/si007-queue-head.md"
+      ]
     },
     {
       "id": "SI-008",
