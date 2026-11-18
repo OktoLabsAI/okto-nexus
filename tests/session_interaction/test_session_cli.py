@@ -149,7 +149,14 @@ def test_exact_attach_uses_reviewed_generation_and_leaves_checkout_untouched(mon
     assert 'Session session-a' in output and 'Viewer detached' in output and catalog.token not in output
 
 
-def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(monkeypatch, capsys):
+@pytest.mark.parametrize(('stage', 'successor_state', 'exit_code'), [
+    ('SUBMITTED', None, 0),
+    ('SUBMISSION_STARTED', 'OPEN_PENDING', 0),
+    ('SUBMISSION_STARTED', 'CLOSED', 1),
+    ('OUTCOME_UNKNOWN', None, 1),
+])
+def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(
+        monkeypatch, capsys, stage, successor_state, exit_code):
     class SavedCatalog(Catalog):
         token = 'synthetic-cookie'
         resolution = None
@@ -177,8 +184,13 @@ def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(monkeyp
                 assert method == 'POST' and body['operation_id'] == 'saved-open'
                 self.submissions += 1
                 self.operation = {'operation_id': 'saved-open', 'scope': self.resolution['scope'], 'action': 'runtime.open',
-                                  'executor_stage': 'SUBMITTED'}
+                                  'executor_stage': stage}
                 raise session.ConnectionError('OUTCOME_UNKNOWN', 'Simulated lost response.', possible_effect=True)
+            if path == session.PREFIX + '/runtime/sessions/successor':
+                assert method == 'GET' and parse_qs(urlsplit(url).query) == {'executor_id': ['executor']}
+                assert stage == 'SUBMISSION_STARTED' and successor_state is not None
+                return {'scope': self.resolution['scope'], 'lifecycle_state': successor_state,
+                        'lease_state': 'CLOSED' if successor_state == 'CLOSED' else 'ACTIVE'}
             return super().__call__(method, url, body)
 
     catalog = SavedCatalog()
@@ -187,7 +199,12 @@ def test_saved_resume_recovers_its_exact_intent_after_unknown_submission(monkeyp
     args = ['session', 'resume', '--id', 'reviewer', '--session-id', 'session-b', '--json']
     assert main(args) != 0
     assert json.loads(capsys.readouterr().out)['code'] == 'OUTCOME_UNKNOWN'
-    assert main(args) == 0
+    assert main(args) == exit_code
     result = json.loads(capsys.readouterr().out)
     assert result['session_id'] == 'successor' and result['source_session_id'] == 'session-b'
+    assert result['operation_id'] == 'saved-open' and result['executor_stage'] == stage
+    if exit_code:
+        assert result['state'] == 'resume_unconfirmed' and 'outcome is unconfirmed' in result['message']
+    else:
+        assert result['state'] == 'resume_requested'
     assert catalog.submissions == 1 and '/runtime/sessions' not in catalog.routes

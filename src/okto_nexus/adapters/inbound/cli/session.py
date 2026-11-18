@@ -181,11 +181,21 @@ def resume_saved_session(call, binding, session_id):
             or operation.get('action') != 'runtime.open'):
         raise ConnectionError('SAVED_RESUME_UNCONFIRMED', 'The operation receipt does not match the selected successor.')
     stage = operation.get('executor_stage')
-    return {'state': 'resume_requested', 'source_session_id': session_id, 'session_id': successor,
+    unconfirmed = stage == 'OUTCOME_UNKNOWN'
+    if stage == 'SUBMISSION_STARTED':
+        # Recovery can retain only the opening fence after proving that the
+        # successor process exited. The receipt still describes a possible effect.
+        successor_view = read_binding_session(call, binding, successor)
+        if successor_view['scope'].get('session_owner_generation') != scope.get('session_owner_generation'):
+            raise ConnectionError('SAVED_RESUME_UNCONFIRMED', 'The stored successor generation changed.')
+        unconfirmed = (successor_view.get('lifecycle_state') in ('CLOSED', 'FAILED')
+                       and successor_view.get('lease_state') == 'CLOSED')
+    status = 'outcome is unconfirmed' if unconfirmed else display_text(stage or 'pending')
+    return {'state': 'resume_unconfirmed' if unconfirmed else 'resume_requested',
+            'source_session_id': session_id, 'session_id': successor,
             'operation_id': resolution['operation_id'], 'executor_stage': stage,
-            'message': f'Saved resume {display_text(stage or "pending")} for {display_text(session_id)}. '
-                       f'Successor session {display_text(successor)}. '
-                       f'Receipt {display_text(resolution["operation_id"])}.'}
+            'message': f'Saved resume {status} for {display_text(session_id)}. '
+                       f'Successor session {display_text(successor)}. Receipt {display_text(resolution["operation_id"])}.'}
 
 
 def _target(args, service_args, profile):
@@ -255,7 +265,7 @@ def run_session(argv):
                 print('Resume the saved conversation in a successor session. The source queue stays with the original session.')
             result = resume_saved_session(call, binding, args.session_id)
             _display(result, args.json)
-            return int(result['executor_stage'] in ('FAILED', 'CANCELLED', 'OUTCOME_UNKNOWN'))
+            return int(result['state'] == 'resume_unconfirmed' or result['executor_stage'] in ('FAILED', 'CANCELLED'))
         _display(_view(call, binding), args.json)
         return 0
     except ConnectionError as error:
