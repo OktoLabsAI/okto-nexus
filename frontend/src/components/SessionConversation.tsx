@@ -51,9 +51,10 @@ function errorStatus(error: unknown) {
   return (error as {status?: number})?.status;
 }
 
-export function SessionConversation({scope, active, onAccessLost}: {
+export function SessionConversation({scope, active, visible, onAccessLost}: {
   scope: InteractionScope;
   active: boolean;
+  visible: boolean;
   onAccessLost: () => void;
 }) {
   const key = interactionKey(scope);
@@ -80,6 +81,7 @@ export function SessionConversation({scope, active, onAccessLost}: {
   const recoverOnOpen = useRef(!!draft.uncertain);
   const scroll = useRef<HTMLDivElement>(null);
   const following = useRef(true);
+  const readingOffset = useRef(0);
   const revoke = useRef(onAccessLost);
   revoke.current = onAccessLost;
 
@@ -126,7 +128,6 @@ export function SessionConversation({scope, active, onAccessLost}: {
 
   useEffect(() => {
     const controller = new AbortController();
-    setBusy(false);
     let timer: number | undefined;
     let inFlight = false;
     let requestedPage = false;
@@ -179,7 +180,7 @@ export function SessionConversation({scope, active, onAccessLost}: {
         lastInteraction.current = next;
         setInteraction(next);
         const current = view.current.epoch === next.stream_epoch ? view.current : emptyHistory(next.stream_epoch);
-        if (includeNext || !current.ready || (!current.more && (!position || positionAdvanced(current)))) {
+        if (visible && (includeNext || !current.ready || (!current.more && (!position || positionAdvanced(current))))) {
           const page = await runtimeApi.sessionConversation(scope, current.after, current.epoch, signal);
           if (signal.aborted) return;
           assertConversationPage(page, scope, current.after, current.epoch);
@@ -222,7 +223,7 @@ export function SessionConversation({scope, active, onAccessLost}: {
       }
     };
 
-    if (active && typeof EventSource === 'function') {
+    if (active && visible && typeof EventSource === 'function') {
       stream = new EventSource(runtimeApi.sessionConversationStream(scope));
       stream.addEventListener('conversation-position', event => {
         if (signal.aborted) return;
@@ -266,14 +267,19 @@ export function SessionConversation({scope, active, onAccessLost}: {
       controller.abort();
       stream?.close();
       window.clearTimeout(timer);
-      mutation.current?.abort();
-      mutation.current = null;
     };
-  }, [key, active]);
+  }, [key, active, visible]);
+
+  useEffect(() => () => {
+    mutation.current?.abort();
+    mutation.current = null;
+  }, [key]);
 
   useLayoutEffect(() => {
-    if (scroll.current && following.current) scroll.current.scrollTop = scroll.current.scrollHeight;
-  }, [history]);
+    if (visible && scroll.current) {
+      scroll.current.scrollTop = following.current ? scroll.current.scrollHeight : readingOffset.current;
+    }
+  }, [history, visible]);
 
   const capability = interaction?.next_turn;
   const canSend = active && !!capability?.supported && !capability.human_login_required;
@@ -353,16 +359,18 @@ export function SessionConversation({scope, active, onAccessLost}: {
   }
 
   useEffect(() => {
-    if (!recoverOnOpen.current || capability?.human_login_required !== false) return;
+    if (!visible || !recoverOnOpen.current || capability?.human_login_required !== false) return;
     recoverOnOpen.current = false;
     void send(true);
-  }, [capability?.human_login_required]);
+  }, [capability?.human_login_required, visible]);
 
   return <section aria-label="Session conversation" className="space-y-3 min-w-0">
     <div ref={scroll} className="max-h-80 overflow-y-auto rounded-lg border p-3" tabIndex={0}
       role="region" aria-label="Conversation messages" data-modal-passive
       onScroll={event => {
+        if (!visible) return;
         const el = event.currentTarget;
+        readingOffset.current = el.scrollTop;
         following.current = el.scrollHeight - el.scrollTop - el.clientHeight < 24;
         if (following.current) setNewMessages(false);
       }}>
@@ -378,9 +386,13 @@ export function SessionConversation({scope, active, onAccessLost}: {
     {history.gap && <p className="text-xs" role="status">Some messages are still being recovered.</p>}
     {history.incomplete && <p className="text-xs text-surface-500">Earlier native history may be unavailable.</p>}
     {history.more && <button className="btn btn-secondary" type="button" onClick={() => polling.current()}>Load more messages</button>}
+    <p className="sr-only" role="status">{newMessages ? 'New messages available.' : ''}</p>
     {newMessages && <button className="btn btn-secondary" type="button" onClick={() => {
       following.current = true;
-      if (scroll.current) scroll.current.scrollTop = scroll.current.scrollHeight;
+      if (scroll.current) {
+        scroll.current.scrollTop = scroll.current.scrollHeight;
+        scroll.current.focus({preventScroll: true});
+      }
       setNewMessages(false);
     }}>New messages</button>}
     {reading && <p className="text-sm" role="status">{reading} <button type="button" className="btn btn-secondary"

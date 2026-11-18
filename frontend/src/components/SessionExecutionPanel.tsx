@@ -54,7 +54,9 @@ function ExecutionBody({session,harness,host,embedded=false,interactive=false,te
         else timer=window.setTimeout(()=>void poll(),2000);
       }catch(failure){
         if(controller.signal.aborted)return;
-        if([401,403].includes((failure as {status?:number}).status ?? 0)){revoke();return;}
+        const status=(failure as {status?:number}).status;
+        if([401,403].includes(status ?? 0)){revoke();return;}
+        if(status===404){stopObserving.current();setCurrent(null);setBlocked(true);setError('The exact session is unavailable. Reopen its context.');return;}
         setError('Session status could not be refreshed. Displayed status may be out of date.');
         timer=window.setTimeout(()=>void poll(),3000);
       }
@@ -95,8 +97,10 @@ function ExecutionBody({session,harness,host,embedded=false,interactive=false,te
       <button type="button" className="btn btn-secondary" aria-pressed={presentation === 'activity'}
         onClick={() => setPresentation('activity')}>Technical activity</button>
     </div>
-    {presentation === 'conversation'
-      ? <SessionConversation scope={scope} active={!sessionReleased(current) && !error} onAccessLost={clear}/>
-      : <>{activity}{technicalControls}</>}
+    <div hidden={presentation !== 'conversation'}>
+      <SessionConversation scope={scope} active={!sessionReleased(current) && !error}
+        visible={presentation === 'conversation'} onAccessLost={clear}/>
+    </div>
+    {presentation === 'activity' && <>{activity}{technicalControls}</>}
   </section>;
 }
