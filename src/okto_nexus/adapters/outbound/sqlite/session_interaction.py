@@ -4,12 +4,14 @@ Callers must hold a write unit of work and independently prove interactive
 authority. This storage layer never wakes a worker or writes to a harness.
 """
 
+import json
 from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime, timedelta
 from sqlite3 import Connection
 from uuid import uuid4
 
+from nexus_connector_core import CapacityConsumption, CapacityReservation
 from nexus_connector_core.frame_codec_r4 import MAX_OPERATION_PAYLOAD_BYTES
 from nexus_connector_core.protocol import canonical_json
 
@@ -193,3 +195,72 @@ def prepare_dispatch_head(uow: SqliteUnitOfWork, *, scope: InputScope, now: date
     source_grant = (head['source_grant_id'], head['source_grant_revision']) if head['source_grant_id'] else None
     return PendingInput(head["input_id"], head["input_revision"], InputAuthor(head["authority_ref"], head["surface"]),
                         head["capability_revision"], head["content"], source_grant)
+
+
+def stage_dispatch(uow: SqliteUnitOfWork, *, scope: InputScope, head: PendingInput,
+                   operation_id: str, reservation: CapacityReservation, now: datetime) -> CapacityConsumption:
+    """Link an unsent R4 operation and its held capacity in the admission writer.
+
+    The caller owns this transaction and rolls it back on error, including
+    the R4 operation. The host must confirm capacity consumption before the
+    operation can compete for the shared dispatch pump.
+    """
+    if (head.source_grant is None or prepare_dispatch_head(uow, scope=scope, now=now) != head
+            or type(reservation) is not CapacityReservation or reservation.state != 'HELD'
+            or reservation.remaining_ms <= 0 or reservation.consumption is not None
+            or reservation.request.unit != 'next_turn'
+            or reservation.request.attempt_id != f'{head.input_id}:{head.input_revision}'):
+        raise _conflict('INPUT_DISPATCH_CHANGED', 'The input or its capacity reservation changed.')
+    params = {**_scope_params(scope), 'operation_id': operation_id, 'input_id': head.input_id,
+              'input_revision': head.input_revision}
+    conn = uow.connection
+    operation = conn.execute("""
+        SELECT p.semantic_payload,p.expected_revisions_json,p.intent_hash,e.generation
+        FROM execution_operations p
+        JOIN execution_dispatch_outbox o USING (server_id,executor_id,operation_id)
+        JOIN execution_executors e USING (server_id,executor_id)
+        WHERE p.server_id=:server_id AND p.executor_id=:executor_id AND p.operation_id=:operation_id
+          AND p.session_id=:session_id AND p.binding_id=:binding_id AND p.workspace_id=:workspace_id
+          AND p.workspace_binding_id=:workspace_binding_id AND p.subject_agent_id=:agent_id
+          AND p.actor_agent_id='operator' AND p.action='turn.submit' AND p.admission_state='ACCEPTED'
+          AND o.dispatch_state='PENDING' AND o.attempt_no=0 AND e.control_state='CONTROL_READY'
+    """, params).fetchone()
+    if operation is None:
+        raise _conflict('INPUT_OPERATION_CHANGED', 'The input has no matching unsent R4 operation.')
+    if conn.execute("""
+        SELECT 1 FROM execution_operations
+        WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
+          AND operation_id<>:operation_id AND action IN ('turn.submit', 'runtime.close')
+          AND admission_state<>'RESOLVED_TERMINAL' LIMIT 1
+    """, params).fetchone() is not None:
+        raise _conflict('INPUT_EARLIER_WORK_PENDING', 'The session already has admitted work.')
+    operation_scope = json.loads(operation['expected_revisions_json'])
+    held_scope = reservation.request.scope.to_dict()
+    if (operation_scope != {key: value for key, value in held_scope.items() if key not in {'boot_id', 'connection_generation'}}
+            or held_scope['session_owner_generation'] != scope.generation.value
+            or held_scope['connection_generation'] != operation['generation']
+            or json.loads(operation['semantic_payload']).get('payload') != {'text': head.text}):
+        raise _conflict('INPUT_OPERATION_CHANGED', 'The R4 operation differs from the reserved session or input.')
+    consumption = CapacityConsumption(operation_id, operation['intent_hash'], None, None)
+    changed = conn.execute("""
+        UPDATE session_interaction_inputs SET operation_id=:operation_id, status='DISPATCHING',
+            input_revision=input_revision+1, capacity_reservation_json=:reservation,
+            capacity_consumption_json=:consumption, capacity_state='WAITING_CONSUMPTION'
+        WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id AND input_id=:input_id
+          AND input_revision=:input_revision AND status='QUEUED' AND operation_id IS NULL
+    """, {**params, 'reservation': canonical_json(reservation.to_dict()).decode(),
+           'consumption': canonical_json(consumption.to_dict()).decode()}).rowcount
+    if changed != 1:
+        raise _conflict('INPUT_DISPATCH_CHANGED', 'The input changed before it was linked to the R4 operation.')
+    held_outbox = conn.execute("""
+        UPDATE execution_dispatch_outbox SET dispatch_state='WAITING_INTERACTION_CAPACITY'
+        WHERE server_id=:server_id AND executor_id=:executor_id AND operation_id=:operation_id
+          AND dispatch_state='PENDING' AND attempt_no=0
+    """, params).rowcount
+    if held_outbox != 1:
+        raise _conflict('INPUT_OPERATION_CHANGED', 'The outbox entry changed before the capacity hold.')
+    conn.execute("""
+        UPDATE session_interaction_queues SET revision=revision+1
+        WHERE server_id=:server_id AND executor_id=:executor_id AND session_id=:session_id
+    """, params)
+    return consumption

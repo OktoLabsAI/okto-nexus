@@ -164,13 +164,14 @@ def admit(deps, app):
     return resolution
 
 
-def assert_session_input_authority(deps, auth, access, scope, expected_grant):
+def assert_session_input_authority(deps, app, access, scope, expected_grant, connection_generation):
     from dataclasses import replace
 
     from okto_nexus.application.session_interaction_authority import enqueue_human_input
     from okto_nexus.domain.execution.keys import SessionKey, SessionOwnerGeneration
     from okto_nexus.domain.session_interaction import InputAuthor, InputDeliveryState, InputScope
 
+    auth = app.state.operator_auth
     assert auth.configure('fixture-operator', 'fixture-password', local=True)
     token = auth.login('fixture-operator', 'fixture-password')
     author = InputAuthor(auth.authority_reference(token), 'web')
@@ -201,9 +202,74 @@ def assert_session_input_authority(deps, auth, access, scope, expected_grant):
                               ' WHERE input_id=?', (accepted.input_id,)).fetchone()
         assert tuple(stored) == (author.authority_ref, expected_grant, active_grant['revision'])
         assert active_grant['used_executions'] == 0
+    assert_staged_input_respects_shared_pump(deps, app, access, scope, exact, connection_generation)
+    assert enqueue_human_input(scope=exact, **args) == accepted
     auth.logout(token)
     with pytest.raises(OktoNexusError, match='no longer signed in'):
         enqueue_human_input(scope=exact, **args)
+
+
+def assert_staged_input_respects_shared_pump(deps, app, access, open_scope, exact, connection_generation):
+    from dataclasses import replace
+
+    from nexus_connector_core import CAPACITY_CONTRACT_REVISION, CapacityRequest, CapacityReservation, CapacityScope
+
+    from okto_nexus.adapters.outbound.sqlite.session_interaction import prepare_dispatch_head
+    from okto_nexus.application.execution_domain_delivery import DeliveryTransactionFactory
+    from okto_nexus.application.execution_native_facts import stamp
+    from okto_nexus.application.session_interaction_dispatch import admit_held_input
+    from okto_nexus.domain.attention import digest
+
+    context = RuntimeRequestContext('operator', 'operator_session', trusted_local_operator=True)
+    factory = deps.connection_factory
+    with (pytest.raises(RuntimeError, match='rollback staged fixture'),
+          app.state.operator_auth.authority_fence() as resolve, factory.unit_of_work() as uow):
+        borrowed = DeliveryTransactionFactory(uow)
+        now = stamp(access.clock.now_iso())
+        head = prepare_dispatch_head(uow, scope=exact, now=now)
+        assert head is not None and head.source_grant is not None
+        common = {'actor_agent_id': 'operator', 'context': context, 'access': access,
+                  'fresh_publications': app.state.inventory_fresh_publications, 'remote_ready': True}
+
+        def admit_turn(client_id, text):
+            resolution = resolve_execution_intent(borrowed, request={
+                'client_intent_id': client_id, 'intent': 'turn.submit', 'agent_id': exact.agent_id,
+                'binding_id': exact.binding_id, 'workspace_binding_id': exact.workspace_binding_id,
+                'session_id': exact.session.session_id, 'text': text,
+            }, **common)
+            assert resolution['can_submit'], resolution['blockers']
+            submit_execution_operation(borrowed, request={name: resolution[name] for name in (
+                'client_intent_id', 'operation_id', 'intent_hash', 'resolution_revision')}, **common)
+            return resolution
+
+        cap_scope = CapacityScope(**open_scope, connection_generation=connection_generation, boot_id='fixture-boot')
+        request = CapacityRequest(CAPACITY_CONTRACT_REVISION, f'{head.input_id}:{head.input_revision}', cap_scope,
+                                  'next_turn', 'sha256:' + digest(open_scope), 10000)
+        held = CapacityReservation('fixture-held', request, 'HELD', 1, 9000, None)
+        stale = replace(held, request=replace(request, scope=replace(cap_scope, connection_generation=connection_generation + 1)))
+        input_args = {'factory': factory, 'access': access, 'resolve_human': resolve, 'scope': exact,
+                      'current_capability_revision': lambda uow, scope: 'synthetic-capability',
+                      'fresh_publications': app.state.inventory_fresh_publications, 'remote_ready': True}
+        uow.connection.execute('SAVEPOINT stale_reservation')
+        with pytest.raises(OktoNexusError, match='differs from the reserved session'):
+            admit_held_input(uow, reservation=stale, **input_args)
+        uow.connection.execute('ROLLBACK TO stale_reservation')
+        uow.connection.execute('RELEASE stale_reservation')
+        consumption = admit_held_input(uow, reservation=held, **input_args)
+        linked = uow.connection.execute('SELECT operation_id,capacity_state FROM session_interaction_inputs WHERE input_id=?',
+                                        (head.input_id,)).fetchone()
+        assert tuple(linked) == (consumption.turn_operation_id, 'WAITING_CONSUMPTION')
+        operation = uow.connection.execute('SELECT intent_hash FROM execution_operations WHERE operation_id=?',
+                                           (consumption.turn_operation_id,)).fetchone()
+        assert operation['intent_hash'] == consumption.turn_intent_hash
+        outbox = uow.connection.execute('SELECT dispatch_state FROM execution_dispatch_outbox WHERE operation_id=?',
+                                        (consumption.turn_operation_id,)).fetchone()
+        assert outbox['dispatch_state'] == 'WAITING_INTERACTION_CAPACITY'
+        assert prepare_dispatch_head(uow, scope=exact, now=now) is None
+        admit_turn('fixture-concurrent-r4', 'Concurrent text')
+        assert reserve_execution_dispatch(borrowed, server_id=exact.session.server_id,
+            executor_id=exact.session.executor_id, remote_ready=True) is None
+        raise RuntimeError('rollback staged fixture')
 
 
 def test_ns09_02_server_grant_core_application_and_replay(tmp_path, monkeypatch):
@@ -309,7 +375,8 @@ def test_ns09_02_server_grant_core_application_and_replay(tmp_path, monkeypatch)
                                 stream_epoch='epoch', receipt_revision=1)
                             with deps.connection_factory.unit_of_work(write=False) as uow:
                                 assert uow.connection.execute('SELECT lifecycle_state FROM execution_sessions').fetchone()[0] == 'READY'
-                            assert_session_input_authority(deps, app.state.operator_auth, access, scope, canonical['grant_id'])
+                            assert_session_input_authority(deps, app, access, scope, canonical['grant_id'],
+                                                           channel.connection_generation)
                             for index in range(2):
                                 turn = resolve_execution_intent(deps.connection_factory, actor_agent_id='subject',
                                     request=dict(client_intent_id=f'turn-{index}', intent='turn.submit',

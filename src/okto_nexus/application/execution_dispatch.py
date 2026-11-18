@@ -231,6 +231,11 @@ def reserve_execution_dispatch(
                 + ("AND (" + pool_open + ") " if lane == 'opening' else
                    "AND NOT (" + pool_open + ") " if lane == 'regular' else "") +
                 "AND length(CAST(p.semantic_payload AS BLOB))<=? "
+                "AND (p.action<>'turn.submit' OR NOT EXISTS (SELECT 1 FROM session_interaction_inputs i "
+                "WHERE i.server_id=p.server_id AND i.executor_id=p.executor_id AND i.session_id=p.session_id "
+                "AND i.operation_id IS NOT NULL AND ("
+                "(i.operation_id=p.operation_id AND i.capacity_state IS NOT 'CONSUMED') OR "
+                "(i.operation_id<>p.operation_id AND i.status IN ('DISPATCHING','DELIVERY_UNKNOWN'))))) "
                 # Administrative turns have no domain-delivery mapping. They
                 # still share the native session with a delivery awaiting a
                 # proven-unsent retry. Its immutable failed attempt identifies
@@ -376,6 +381,9 @@ def begin_execution_send(
                     "ACCEPTED", "DISPATCH_PENDING"}):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch reservation changed.", {})
+        if conn.execute("SELECT 1 FROM session_interaction_inputs WHERE server_id=? AND executor_id=? "
+                        "AND operation_id=? AND capacity_state IS NOT 'CONSUMED'", key).fetchone() is not None:
+            raise OktoNexusError(ErrorCode.CONFLICT, "Session input capacity is not confirmed.", {})
         from .execution_initial_turns import require_current_parent_readiness
         require_current_parent_readiness(conn, server_id=server_id,
             executor_id=reservation.executor_id, operation_id=reservation.operation_id)
